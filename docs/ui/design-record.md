@@ -423,11 +423,15 @@ A lesson step that shows hole cards, including Suits and ranks “Tap the suited
 
 Hole-card choice bands (`_HoleCardBands` in `select_identify_activity.dart`) fill the lesson stage height and scale the felt and choice rails together so a short phone never overflows. On the lesson frame the coach shelf and street heading stay off — the speech bubble owns the instruction.
 
+Densified teach felts that ask for ~58% of screen height (`kTeachFeltHeightFactor` in `teach_felt_height.dart`) clamp to the stage when Nice! / Continue shrinks it. `LessonScreenLayout` rewrites MediaQuery height for every stage child, and `_feltShell` clamps again so blinds timing and other table scenes never bottom-overflow.
+
 A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
 
 ### Shipped
 
 Button and blinds (LPT-36) stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`). The next phase column copies that vertical stack.
+
+Teach felts clamp to the lesson stage when the answer dock is showing (`teach_felt_height.dart`, `LessonScreenLayout`, `_feltShell`). The next densified shell copies that clamp.
 
 `_HoleCardBands` (`lib/ui/course/activities/select_identify_activity.dart`) fills the stage and scales felt plus rails with available height. The next hole-card picker step copies that proportional column.
 

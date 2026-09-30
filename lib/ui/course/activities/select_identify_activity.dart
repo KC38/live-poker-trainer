@@ -16,6 +16,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
@@ -2665,7 +2666,8 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
       animation: widget.controller,
       builder: (context, _) {
         final status = _statusLine();
-        final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
+        final wantedHeight =
+            MediaQuery.sizeOf(context).height * kTeachFeltHeightFactor;
         final hint = _nextHintSuit();
         final realSuits = const [
           LessonSuitToken.hearts,
@@ -2685,60 +2687,68 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
                     fontWeight: FontWeight.w700,
                   ),
                 );
-        return Container(
-          key: const ValueKey('suit-tap-picker-felt'),
-          width: double.infinity,
-          height: feltHeight,
-          padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
-          child: Column(
-            children: [
-              Expanded(
-                flex: 5,
-                child: Row(
-                  children: [
-                    for (var i = 0; i < realSuits.length; i++) ...[
-                      if (i > 0) const SizedBox(width: 10),
-                      Expanded(
-                        child: _FamilySoftPulse(
-                          active:
-                              hint != null &&
-                              realSuits[i] == hint &&
-                              !widget.locked,
-                          child: SuitTapTile(
-                            token: realSuits[i],
-                            selected: _selected.contains(realSuits[i]),
-                            enabled: !widget.locked,
-                            densify: true,
-                            onPressed: () => _toggle(realSuits[i]),
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final feltHeight = clampTeachFeltHeight(
+              constraints,
+              preferred: wantedHeight,
+            );
+            return Container(
+              key: const ValueKey('suit-tap-picker-felt'),
+              width: double.infinity,
+              height: feltHeight,
+              padding: const EdgeInsets.fromLTRB(14, 16, 14, 16),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Row(
+                      children: [
+                        for (var i = 0; i < realSuits.length; i++) ...[
+                          if (i > 0) const SizedBox(width: 10),
+                          Expanded(
+                            child: _FamilySoftPulse(
+                              active:
+                                  hint != null &&
+                                  realSuits[i] == hint &&
+                                  !widget.locked,
+                              child: SuitTapTile(
+                                token: realSuits[i],
+                                selected: _selected.contains(realSuits[i]),
+                                enabled: !widget.locked,
+                                densify: true,
+                                onPressed: () => _toggle(realSuits[i]),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                flex: 3,
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: 0.92,
-                    child: SuitTapTile(
-                      token: LessonSuitToken.stars,
-                      selected: _selected.contains(LessonSuitToken.stars),
-                      enabled: !widget.locked,
-                      densify: true,
-                      onPressed: () => _toggle(LessonSuitToken.stars),
+                        ],
+                      ],
                     ),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    flex: 3,
+                    child: Center(
+                      child: AspectRatio(
+                        aspectRatio: 0.92,
+                        child: SuitTapTile(
+                          token: LessonSuitToken.stars,
+                          selected: _selected.contains(LessonSuitToken.stars),
+                          enabled: !widget.locked,
+                          densify: true,
+                          onPressed: () => _toggle(LessonSuitToken.stars),
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (statusText != null) ...[
+                    const SizedBox(height: 12),
+                    statusText,
+                  ],
+                ],
               ),
-              if (statusText != null) ...[
-                const SizedBox(height: 12),
-                statusText,
-              ],
-            ],
-          ),
+            );
+          },
         );
       },
     );

@@ -49,6 +49,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
@@ -3869,17 +3870,25 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
       ],
     );
 
-    return Container(
-      key: const ValueKey('suits-ranks-felt'),
-      width: double.infinity,
-      height: feltHeight,
-      padding: EdgeInsets.fromLTRB(
-        expandTeach ? 18 : 14,
-        expandTeach ? 18 : 16,
-        expandTeach ? 18 : 14,
-        expandTeach ? 18 : 16,
-      ),
-      child: body,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final effectiveHeight =
+            feltHeight == null
+                ? null
+                : clampTeachFeltHeight(constraints, preferred: feltHeight);
+        return Container(
+          key: const ValueKey('suits-ranks-felt'),
+          width: double.infinity,
+          height: effectiveHeight,
+          padding: EdgeInsets.fromLTRB(
+            expandTeach ? 18 : 14,
+            expandTeach ? 18 : 16,
+            expandTeach ? 18 : 14,
+            expandTeach ? 18 : 16,
+          ),
+          child: body,
+        );
+      },
     );
   }
 }
