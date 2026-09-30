@@ -5778,6 +5778,95 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
 }
 
 
+/// Range-update explain: ONE HAND / RANGE / UPDATE under the full poker table.
+class LessonRangeUpdateExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonRangeUpdateExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonRangeUpdateExplainTable> createState() =>
+      _LessonRangeUpdateExplainTableState();
+}
+
+class _LessonRangeUpdateExplainTableState
+    extends State<LessonRangeUpdateExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= RangeUpdateDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('range-update-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < RangeUpdateDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(RangeUpdateDemo.points[i].label) &&
+                      RangeUpdateDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: RangeUpdateDemo.points[i].label,
+                    caption: RangeUpdateDemo.points[i].caption,
+                    color: RangeUpdateDemo.points[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(RangeUpdateDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(RangeUpdateDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Explain-step demo: think in ranges, then update — not one hand.
 class RangeUpdateDemo extends StatefulWidget {
   /// Creates the demo.
