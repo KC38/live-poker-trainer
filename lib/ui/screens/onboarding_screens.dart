@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
+import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
@@ -32,19 +33,7 @@ class WelcomeScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Spacer(flex: 2),
-          Align(
-            child: Image.asset(
-              'assets/brand/logo_mark.png',
-              width: 72,
-              height: 72,
-              filterQuality: FilterQuality.medium,
-              errorBuilder: (_, _, _) => const Icon(
-                Icons.style,
-                size: 56,
-                color: AppColors.gold,
-              ),
-            ),
-          ),
+          const Align(child: BrandLogo(size: 72)),
           const SizedBox(height: 20),
           const Align(child: RexMascot(size: 148)),
           const SizedBox(height: 28),

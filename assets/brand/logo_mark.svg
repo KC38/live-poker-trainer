@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-label="Exploitative Poker Lab">
+  <!--
+    Brand mark for Exploitative Poker Lab.
+    Gold spade inside a precision square; dual arches spring from the frame
+    sides and meet at the top (lab hood / containment).
+    Transparent background; single #D4A84B (AppColors.gold) so the mark
+    scales from notification icons to splash art on any backdrop.
+  -->
+  <rect
+    x="12"
+    y="12"
+    width="104"
+    height="104"
+    rx="4"
+    stroke="#D4A84B"
+    stroke-width="5"
+  />
+  <!-- Outer arch: left frame → apex → right frame -->
+  <path
+    d="M14.5 66C28 66 40 30 64 30s36 36 49.5 36"
+    stroke="#D4A84B"
+    stroke-width="5"
+    stroke-linecap="butt"
+    stroke-linejoin="round"
+  />
+  <!-- Inner arch -->
+  <path
+    d="M14.5 66C32 66 44 38 64 38s32 28 49.5 28"
+    stroke="#D4A84B"
+    stroke-width="5"
+    stroke-linecap="butt"
+    stroke-linejoin="round"
+  />
+  <!-- Classic spade, point up, flared stem -->
+  <path
+    fill="#D4A84B"
+    d="M64 48C50 62 40 72 40 84c0 8.5 6.5 14.5 15 14.5 3 0 5.7-0.8 8-2.2L58 112h12l-5-15.7c2.3 1.4 5 2.2 8 2.2 8.5 0 15-6 15-14.5 0-12-10-22-24-36z"
+  />
+</svg>

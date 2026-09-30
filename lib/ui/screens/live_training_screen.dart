@@ -22,6 +22,7 @@ import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 import 'package:live_poker_trainer/models/live_access.dart';
 
 /// Live Training destination — full-hand simulator launcher and table setup.
@@ -225,18 +226,7 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset(
-                            'assets/brand/logo_mark.png',
-                            width: 76,
-                            height: 76,
-                            filterQuality: FilterQuality.medium,
-                            errorBuilder:
-                                (_, _, _) => const Icon(
-                                  Icons.style,
-                                  size: 56,
-                                  color: AppColors.gold,
-                                ),
-                          ),
+                          const BrandLogo(size: 76),
                           const SizedBox(height: 14),
                           Text(
                             'Live Training',
@@ -395,18 +385,7 @@ class _LiveAccessGate extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset(
-            'assets/brand/logo_mark.png',
-            width: 76,
-            height: 76,
-            filterQuality: FilterQuality.medium,
-            errorBuilder:
-                (_, _, _) => const Icon(
-                  Icons.style,
-                  size: 56,
-                  color: AppColors.gold,
-                ),
-          ),
+          const BrandLogo(size: 76),
           const SizedBox(height: 14),
           Text(
             'Live Training',

@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Generate app art with the Gemini image API and install platform icons.
+"""Legacy Gemini image generator for app art (prefer the SVG pipeline).
 
-Reads ``GEMINI_API_KEY`` from the environment or ``.env`` (never committed),
-asks Gemini for the source artwork, then writes:
+The brand mark source of truth is ``assets/brand/logo_mark.svg``. Prefer::
+
+    node tools/brand/render_logo_assets.mjs
+
+to rasterize UI, launcher, and notification icons from that SVG.
+
+This script remains for one-off Gemini artwork experiments and still writes:
 
 * ``assets/brand/app_icon.png``      - 1024x1024 master icon
-* ``assets/brand/logo_mark.png``     - transparent-ish mark used on Home
+* ``assets/brand/logo_mark.png``     - companion raster of the mark
 * ``ios/Runner/Assets.xcassets/AppIcon.appiconset/*.png`` - iOS icon set
 * ``android/app/src/main/res/mipmap-*/ic_launcher.png``   - Android icons
 

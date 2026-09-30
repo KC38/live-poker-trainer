@@ -131,7 +131,7 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 
 | Slot | Current | Reuse |
 | --- | --- | --- |
-| Logo | `assets/brand/logo_mark.png` | Welcome, Auth screen, and Live Training hub |
+| Logo | `assets/brand/logo_mark.svg` — gold mark, transparent background, via `BrandLogo` | Welcome, Auth screen, and Live Training hub. Rasterized to launcher / notification icons via `tools/brand/render_logo_assets.mjs` |
 | Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Welcome, Meet Rex, `RexCoachLine`, `RexCoachCard`, and the lesson coach band |
 | Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet`, the lesson coach band on accept, and the lesson-result ceremony |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
@@ -147,11 +147,11 @@ A missing slot (Rex still text-only, a deal with no motion, a table action
 with no `SoundService` call) is a ticket that names the slot. The walk does
 not generate the file. The implementer adds it and fills the row.
 
-The Live Training hub shows `assets/brand/logo_mark.png` above the lock or the table entry.
+The Live Training hub shows `assets/brand/logo_mark.svg` above the lock or the table entry.
 
 ### Shipped
 
-The Live Training hub shows `assets/brand/logo_mark.png` in `_LiveAccessGate` and the open table entry of `LiveTrainingScreen` (`lib/ui/screens/live_training_screen.dart`). Auth uses the same file in `lib/ui/screens/auth_screen.dart`. Welcome uses the same logo mark above `RexMascot` on `WelcomeScreen` (`lib/ui/screens/onboarding_screens.dart`).
+The Live Training hub shows `assets/brand/logo_mark.svg` in `_LiveAccessGate` and the open table entry of `LiveTrainingScreen` (`lib/ui/screens/live_training_screen.dart`). Auth uses the same file in `lib/ui/screens/auth_screen.dart`. Welcome uses the same logo mark above `RexMascot` on `WelcomeScreen` (`lib/ui/screens/onboarding_screens.dart`).
 
 The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with `RexMood.celebrate` (`assets/brand/mascot_celebrate.png`).
 

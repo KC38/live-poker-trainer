@@ -9,6 +9,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
+import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 
 /// Opens create-account so this guest can link the lesson on this device.
 void pushSaveProgressAuth(BuildContext context) {
@@ -248,17 +249,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Image.asset(
-                        'assets/brand/logo_mark.png',
-                        width: 64,
-                        height: 64,
-                        filterQuality: FilterQuality.medium,
-                        errorBuilder: (_, _, _) => const Icon(
-                          Icons.style,
-                          size: 48,
-                          color: AppColors.gold,
-                        ),
-                      ),
+                      const BrandLogo(size: 64),
                       const SizedBox(height: 14),
                       Text(
                         'Exploitative\nPoker Lab',

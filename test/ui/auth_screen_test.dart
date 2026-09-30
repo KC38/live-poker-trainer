@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/services/auth_service.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 
 class _FakeAuthService implements AuthService {
   String? resetEmail;
@@ -111,16 +112,7 @@ void main() {
     await pumpAuth(tester);
 
     expect(find.text('Forgot password?'), findsOneWidget);
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is Image &&
-            widget.image is AssetImage &&
-            (widget.image as AssetImage).assetName ==
-                'assets/brand/logo_mark.png',
-      ),
-      findsOneWidget,
-    );
+    expect(find.byType(BrandLogo), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Email'), '');
     await tester.tap(find.text('Forgot password?'));
