@@ -1785,7 +1785,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('think in ranges uses the lesson frame and the range tiles', (
+  testWidgets('think in ranges uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1819,6 +1819,8 @@ void main() {
     expect(find.textContaining('Tap One hand'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('range-update-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('ONE HAND'), findsOneWidget);
     expect(find.text('RANGE'), findsOneWidget);
     expect(find.text('UPDATE'), findsOneWidget);
