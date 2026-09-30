@@ -994,6 +994,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     livesMax: home?.livesMax ?? 5,
                     gems: home?.gems ?? 0,
                     livesNextRefillAtMs: home?.livesNextRefillAtMs,
+                    adClaimsRemainingToday: home?.adClaimsRemainingToday ?? 5,
+                    nextAdClaimAtMs: home?.nextAdClaimAtMs,
                   );
                   if (!mounted || action == null) return;
                   if (action == HeartRefillAction.gems) {

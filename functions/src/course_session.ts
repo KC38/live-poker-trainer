@@ -31,6 +31,7 @@ import {
 } from "./course_catalog";
 import {resolveLiveAccessForUser} from "./live_access";
 import {
+  adHeartAvailability,
   applyPassiveHeartRefill,
   DEFAULT_LESSON_LIVES,
   heartFieldsToFirestore,
@@ -113,6 +114,16 @@ export interface CourseProfile {
   livesMax: number;
   /** Epoch ms when the next passive +1 heart becomes available. */
   livesNextRefillAtMs?: number | null;
+  /** Local calendar date for [heartsAdClaimsToday]. */
+  heartsAdClaimsLocalDate?: string | null;
+  /** Rewarded-ad heart claims on [heartsAdClaimsLocalDate]. */
+  heartsAdClaimsToday?: number;
+  /** Epoch ms of the last rewarded-ad heart claim. */
+  lastHeartAdClaimAtMs?: number | null;
+  /** Remaining ad hearts today (derived). */
+  adClaimsRemainingToday?: number;
+  /** Epoch ms when the next ad heart claim is allowed (derived). */
+  nextAdClaimAtMs?: number | null;
   currentStreak: number;
   longestStreak: number;
   lastStudyLocalDate: string | null;
@@ -1401,22 +1412,31 @@ export async function getCourseStateForUser(options: {
     null;
   const nowMs = Date.now();
   if (profile && profileSnap.exists) {
-    const passive = applyPassiveHeartRefill(
-      heartStateFromData(profileSnap.data()),
-      nowMs,
-    );
+    const heartState = heartStateFromData(profileSnap.data());
+    const passive = applyPassiveHeartRefill(heartState, nowMs);
     if (passive.changed) {
       await courseProfileRef(db, options.uid).set({
         ...heartFieldsToFirestore(passive),
         updatedAt: FieldValue.serverTimestamp(),
       }, {merge: true});
-      profile = {
-        ...profile,
-        livesRemaining: passive.livesRemaining,
-        livesMax: passive.livesMax,
-        livesNextRefillAtMs: passive.livesNextRefillAtMs,
-      };
     }
+    const localDate = localDateString(nowMs, profile.timezone);
+    const availability = adHeartAvailability({
+      state: passive,
+      localDate,
+      nowMs,
+    });
+    profile = {
+      ...profile,
+      livesRemaining: passive.livesRemaining,
+      livesMax: passive.livesMax,
+      livesNextRefillAtMs: passive.livesNextRefillAtMs,
+      heartsAdClaimsLocalDate: passive.heartsAdClaimsLocalDate,
+      heartsAdClaimsToday: passive.heartsAdClaimsToday,
+      lastHeartAdClaimAtMs: passive.lastHeartAdClaimAtMs,
+      adClaimsRemainingToday: availability.adClaimsRemainingToday,
+      nextAdClaimAtMs: availability.nextAdClaimAtMs,
+    };
   }
   let openAttempt: CourseAttempt | null = null;
   if (profile?.resume?.attemptId) {
@@ -1789,6 +1809,7 @@ function profileFromData(data: DocumentData): CourseProfile {
   const acceptedAnswers = Number(data.acceptedAnswers ?? 0);
   const totalScoredAnswers = Number(data.totalScoredAnswers ?? 0);
   const lives = profileLivesFromData(data);
+  const hearts = heartStateFromData(data);
   return {
     catalogVersion: String(data.catalogVersion ?? courseBank.catalogVersion),
     lifetimeXp: Number(data.lifetimeXp ?? 0),
@@ -1799,6 +1820,9 @@ function profileFromData(data: DocumentData): CourseProfile {
       Number(data.livesNextRefillAtMs) > 0 ?
       Math.floor(Number(data.livesNextRefillAtMs)) :
       null,
+    heartsAdClaimsLocalDate: hearts.heartsAdClaimsLocalDate,
+    heartsAdClaimsToday: hearts.heartsAdClaimsToday,
+    lastHeartAdClaimAtMs: hearts.lastHeartAdClaimAtMs,
     currentStreak: Number(data.currentStreak ?? 0),
     longestStreak: Number(data.longestStreak ?? 0),
     lastStudyLocalDate: optionalString(data.lastStudyLocalDate) ?? null,

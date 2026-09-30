@@ -23,8 +23,8 @@ export const HEART_REFILL_INTERVAL_MS = 6 * 60 * 60 * 1000;
 /** Gems for a full heart refill outside a lesson (Duolingo-scale). */
 export const GEMS_FULL_HEART_REFILL = 650;
 
-/** Minimum gap between rewarded-ad heart claims. */
-export const AD_HEART_COOLDOWN_MS = 30 * 60 * 1000;
+/** Minimum gap between rewarded-ad heart claims (anti double-tap). */
+export const AD_HEART_COOLDOWN_MS = 15 * 1000;
 
 /** Cap rewarded-ad heart claims per local calendar day. */
 export const AD_HEART_DAILY_MAX = 5;
@@ -232,6 +232,29 @@ export function heartFieldsToFirestore(state: HeartState): DocumentData {
   };
 }
 
+/** Derived ad-heart availability for clients (Home refill sheet). */
+export function adHeartAvailability(options: {
+  state: HeartState;
+  localDate: string;
+  nowMs: number;
+}): {
+  adClaimsRemainingToday: number;
+  nextAdClaimAtMs: number | null;
+} {
+  const claimsToday = options.state.heartsAdClaimsLocalDate === options.localDate ?
+    options.state.heartsAdClaimsToday :
+    0;
+  const adClaimsRemainingToday = Math.max(0, AD_HEART_DAILY_MAX - claimsToday);
+  let nextAdClaimAtMs: number | null = null;
+  if (options.state.lastHeartAdClaimAtMs != null) {
+    const readyAt = options.state.lastHeartAdClaimAtMs + AD_HEART_COOLDOWN_MS;
+    if (readyAt > options.nowMs) {
+      nextAdClaimAtMs = readyAt;
+    }
+  }
+  return {adClaimsRemainingToday, nextAdClaimAtMs};
+}
+
 export interface RefillCourseHeartsResult {
   method: HeartRefillMethod;
   livesRemaining: number;
@@ -373,6 +396,11 @@ export async function refillCourseHeartsForUser(options: {
       };
     }
 
+    const availability = adHeartAvailability({
+      state: next,
+      localDate: options.localDate,
+      nowMs,
+    });
     const result: RefillCourseHeartsResult = {
       method,
       livesRemaining: next.livesRemaining,
@@ -382,17 +410,8 @@ export async function refillCourseHeartsForUser(options: {
       gems: next.gems,
       gemsSpent,
       duplicate: false,
-      nextAdClaimAtMs: next.lastHeartAdClaimAtMs == null ?
-        null :
-        next.lastHeartAdClaimAtMs + AD_HEART_COOLDOWN_MS,
-      adClaimsRemainingToday: Math.max(
-        0,
-        AD_HEART_DAILY_MAX - (
-          next.heartsAdClaimsLocalDate === options.localDate ?
-            next.heartsAdClaimsToday :
-            0
-        ),
-      ),
+      nextAdClaimAtMs: availability.nextAdClaimAtMs,
+      adClaimsRemainingToday: availability.adClaimsRemainingToday,
     };
 
     const profilePatch: DocumentData = {
