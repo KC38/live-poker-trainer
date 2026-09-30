@@ -49,6 +49,7 @@ class _ScriptedCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -720,7 +721,7 @@ void main() {
     for (
       var i = 0;
       i < 40 &&
-          find.textContaining('made hand from high card').evaluate().isEmpty;
+          find.textContaining('Tap seats from weakest').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -730,7 +731,7 @@ void main() {
     expect(find.text('Hand ranks'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('made hand from high card'), findsOneWidget);
+    expect(find.textContaining('Tap seats from weakest'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
     expect(find.byKey(const ValueKey('lesson-table-stage')), findsOneWidget);
@@ -4952,6 +4953,7 @@ class _SameStepStaleCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5021,6 +5023,7 @@ class _StaleThenResumeCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5117,6 +5120,7 @@ class _PermissionDeniedStartCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5148,6 +5152,7 @@ class _PermissionDeniedOnceCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5182,6 +5187,7 @@ class _PrerequisiteLockedCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5214,6 +5220,7 @@ class _HungStartCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5301,6 +5308,7 @@ class _TinyLessonService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
