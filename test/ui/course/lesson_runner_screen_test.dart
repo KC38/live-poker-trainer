@@ -1010,7 +1010,8 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.textContaining('strongest hand').evaluate().isEmpty;
+      i < 40 &&
+          find.textContaining('from strongest to weakest').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -1020,7 +1021,7 @@ void main() {
     expect(find.text('Section 1 jump check'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('strongest hand'), findsOneWidget);
+    expect(find.textContaining('from strongest to weakest'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
     expect(find.text('Flush'), findsOneWidget);
