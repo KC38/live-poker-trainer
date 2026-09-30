@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Change plans by pot type explain: LIMPED / SRP / 3-4BET under the full poker table.
+class LessonPotTypePlansExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonPotTypePlansExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonPotTypePlansExplainTable> createState() =>
+      _LessonPotTypePlansExplainTableState();
+}
+
+class _LessonPotTypePlansExplainTableState
+    extends State<LessonPotTypePlansExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= PotTypePlansDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('pot-type-plans-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < PotTypePlansDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _PotTypePlansSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        PotTypePlansDemo.points[i].label,
+                      ) &&
+                      PotTypePlansDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _PotTypePlansTile(
+                    label: PotTypePlansDemo.points[i].label,
+                    caption: PotTypePlansDemo.points[i].caption,
+                    color: PotTypePlansDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      PotTypePlansDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  PotTypePlansDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Limped / SRP / 3-4bet tiles for pot-type plans explain demos.
 class PotTypePlansDemo extends StatefulWidget {

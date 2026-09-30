@@ -360,6 +360,8 @@ Map turn barrels before you bet flop uses the full poker table for every step: e
 
 Compose river value and bluffs uses the full poker table for every step: explain taps Value, Bluff, and Hold under the felt.
 
+Change plans by pot type uses the full poker table for every step: explain taps Limped, SRP, and 3-4bet under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -709,9 +711,7 @@ check stays a list, and the station, nit, and LAG spots sit face up on
 the full table. Section 6 checkpoint uses the same frame: the
 advantage, cap, polar, TAG, and LAG checks stay lists. Carry a preflop plan onto the flop uses the same frame and the full table: explain taps Reason, Confirm, and Cancel under the felt, and the plan quizzes stay lists. Map turn barrels before you bet flop uses the same frame and the full table: explain taps Barrel, Give-up, and Map under the felt, the no-plan and definition checks stay lists, and the
 continue and brick spots sit face up on the full table. Compose river value and bluffs uses the same frame and the full table: explain taps Value, Bluff, and Hold under the felt, the blocker, empty, and rule checks stay lists, and the
-top-set value spot sits face up on the full table. Change plans by
-pot type uses the same frame: limped, SRP, and 3-4bet stay in the
-stage, and the pot-type quizzes stay lists. Switch gears between HU
+top-set value spot sits face up on the full table. Change plans by pot type uses the same frame and the full table: explain taps Limped, SRP, and 3-4bet under the felt, and the pot-type quizzes stay lists. Switch gears between HU
 and multiway uses the same frame: fewer, thicker, and widen stay in
 the stage, and the player-count quizzes stay lists. Rewrite plans
 when stacks change uses the same frame: short, deep, and effective
