@@ -907,7 +907,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('how pots are won uses the lesson frame and the three paths', (
+  testWidgets('how pots are won uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -941,6 +941,8 @@ void main() {
     expect(find.textContaining('Tap each path'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('winning-paths-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('FOLD WIN'), findsOneWidget);
     expect(find.text('SHOWDOWN'), findsOneWidget);
     expect(find.text('SIDE POT'), findsOneWidget);
