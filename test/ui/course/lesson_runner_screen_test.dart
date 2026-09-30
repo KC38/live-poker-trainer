@@ -2960,6 +2960,8 @@ void main() {
     expect(find.textContaining('Tap Range'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('range-advantage-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('RANGE'), findsOneWidget);
     expect(find.text('NUT'), findsOneWidget);
     expect(find.text('ADVANTAGE'), findsOneWidget);
