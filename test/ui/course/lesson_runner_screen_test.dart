@@ -2710,6 +2710,8 @@ void main() {
     expect(find.textContaining('Tap X/R'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('line-stories-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('X/R'), findsOneWidget);
     expect(find.text('PROBE'), findsOneWidget);
     expect(find.text('DELAY'), findsOneWidget);
