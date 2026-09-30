@@ -141,6 +141,37 @@ describe("grantHearts and practice", () => {
   });
 });
 
+describe("adHeartAvailability", () => {
+  it("counts remaining claims for today and cooldown", async () => {
+    const {adHeartAvailability, AD_HEART_COOLDOWN_MS} =
+      await import("./course_hearts");
+    const nowMs = 1_000_000;
+    const state = heartStateFromData({
+      livesRemaining: 2,
+      livesMax: 5,
+      heartsAdClaimsLocalDate: "2026-09-30",
+      heartsAdClaimsToday: 1,
+      lastHeartAdClaimAtMs: nowMs - 1_000,
+    });
+    expect(adHeartAvailability({
+      state,
+      localDate: "2026-09-30",
+      nowMs,
+    })).toEqual({
+      adClaimsRemainingToday: 4,
+      nextAdClaimAtMs: nowMs - 1_000 + AD_HEART_COOLDOWN_MS,
+    });
+    expect(adHeartAvailability({
+      state,
+      localDate: "2026-09-30",
+      nowMs: nowMs - 1_000 + AD_HEART_COOLDOWN_MS + 1,
+    })).toEqual({
+      adClaimsRemainingToday: 4,
+      nextAdClaimAtMs: null,
+    });
+  });
+});
+
 describe("openAttemptRefFromProfile", () => {
   it("returns null without a resume attempt id", async () => {
     const {openAttemptRefFromProfile} = await import("./course_hearts");

@@ -99,6 +99,8 @@ class CourseHomeSnapshot {
     this.hearts = 5,
     this.livesMax = 5,
     this.livesNextRefillAtMs,
+    this.adClaimsRemainingToday = 5,
+    this.nextAdClaimAtMs,
     this.acceptedAccuracy = 0,
     this.nextLessonId,
     this.resume,
@@ -124,6 +126,12 @@ class CourseHomeSnapshot {
 
   /// Epoch ms when the next passive heart arrives.
   final int? livesNextRefillAtMs;
+
+  /// Rewarded-ad hearts still available today.
+  final int adClaimsRemainingToday;
+
+  /// Epoch ms when the next ad heart claim is allowed.
+  final int? nextAdClaimAtMs;
   final double acceptedAccuracy;
   final String? nextLessonId;
   final CourseResumePointer? resume;
@@ -160,6 +168,8 @@ class CourseProfileView {
     this.livesRemaining = 5,
     this.livesMax = 5,
     this.livesNextRefillAtMs,
+    this.adClaimsRemainingToday = 5,
+    this.nextAdClaimAtMs,
     this.resume,
     this.recommendedLessonId,
   });
@@ -177,6 +187,12 @@ class CourseProfileView {
 
   /// Epoch ms when the next passive heart arrives, if any.
   final int? livesNextRefillAtMs;
+
+  /// Rewarded-ad hearts still available today.
+  final int adClaimsRemainingToday;
+
+  /// Epoch ms when the next ad heart claim is allowed.
+  final int? nextAdClaimAtMs;
   final List<String> completedLessonIds;
   final Map<String, double> masteryByLessonId;
   final String catalogVersion;
@@ -228,6 +244,9 @@ class CourseProfileView {
       livesRemaining: livesRemaining,
       livesMax: livesMax > 0 ? livesMax : 5,
       livesNextRefillAtMs: (json['livesNextRefillAtMs'] as num?)?.toInt(),
+      adClaimsRemainingToday:
+          (json['adClaimsRemainingToday'] as num?)?.toInt() ?? 5,
+      nextAdClaimAtMs: (json['nextAdClaimAtMs'] as num?)?.toInt(),
       resume: resume,
       recommendedLessonId: json['recommendedLessonId']?.toString(),
     );
@@ -403,6 +422,8 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
       hearts: profile?.livesRemaining ?? 5,
       livesMax: profile?.livesMax ?? 5,
       livesNextRefillAtMs: profile?.livesNextRefillAtMs,
+      adClaimsRemainingToday: profile?.adClaimsRemainingToday ?? 5,
+      nextAdClaimAtMs: profile?.nextAdClaimAtMs,
       acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
       rexLine:
           'No lessons published yet. Check back after the next content wave.',
@@ -461,6 +482,8 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
     hearts: profile?.livesRemaining ?? 5,
     livesMax: profile?.livesMax ?? 5,
     livesNextRefillAtMs: profile?.livesNextRefillAtMs,
+    adClaimsRemainingToday: profile?.adClaimsRemainingToday ?? 5,
+    nextAdClaimAtMs: profile?.nextAdClaimAtMs,
     acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
     nextLessonId: nextId,
     resume: resume,

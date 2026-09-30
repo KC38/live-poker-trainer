@@ -209,6 +209,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       livesMax: snapshot.livesMax,
       gems: snapshot.gems,
       livesNextRefillAtMs: snapshot.livesNextRefillAtMs,
+      adClaimsRemainingToday: snapshot.adClaimsRemainingToday,
+      nextAdClaimAtMs: snapshot.nextAdClaimAtMs,
     );
     if (!mounted || action == null) return;
     switch (action) {
