@@ -2636,6 +2636,7 @@ class _HoleCardBands extends StatelessWidget {
           child: FeltTableView(
             game: table,
             chipDisplayMode: ChipDisplayMode.dollars,
+            includeHero: false,
           ),
         ),
         for (var i = 0; i < activity.choices.length; i++)

@@ -20,6 +20,7 @@ import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 /// Signed-out value proposition with Get started / I already have an account.
 class WelcomeScreen extends ConsumerWidget {
@@ -372,16 +373,21 @@ class RecommendedStartScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 14),
             Expanded(
-              child: PokerTableBands(
-                game: lessonBandGame(
-                  heroCodes: const ['Ah', 'Kd'],
-                  boardCodes: const ['Qs', 'Jh', '2c'],
-                  villainSeatCount: 1,
+              child: TableFeaturesScope(
+                features: TableFeatures.forLessonId(
+                  recommendation.startLessonId,
                 ),
-                // Preview only. The rail is not a lesson answer.
-                feedback: const CoachFeedback(
-                  message:
-                      'Qs Jh 2c on the flop. Your cards stay on the rail.',
+                child: PokerTableBands(
+                  game: lessonBandGame(
+                    heroCodes: const ['Ah', 'Kd'],
+                    boardCodes: const ['Qs', 'Jh', '2c'],
+                    villainSeatCount: 1,
+                  ),
+                  // Preview only. Your seat is not a lesson answer.
+                  feedback: const CoachFeedback(
+                    message:
+                        'Qs Jh 2c on the flop. Your cards sit at the bottom of the table.',
+                  ),
                 ),
               ),
             ),

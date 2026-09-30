@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 /// Six-max ring for Button and blinds. Index 3 is the dealer.
 const int lessonBlindsVillainCount = 5;
@@ -34,6 +35,7 @@ const int lessonBlindsRightOfButtonIndex = 2;
 /// [sbIndex] or [bbIndex] is set, and no seat glows unless [activeSeatIndex]
 /// is set. [positionLabels] renames the ring EP, HJ, CO, BTN, SB, BB.
 /// The table plays [smallBlind]/[bigBlind] with 100 big blind stacks.
+/// [villainArchetypes] gives the opponents, in seat order, real player types.
 GameState lessonTableStageGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
@@ -46,6 +48,7 @@ GameState lessonTableStageGame({
   bool positionLabels = false,
   double smallBlind = lessonSmallBlind,
   double bigBlind = lessonBigBlind,
+  List<PlayerArchetype>? villainArchetypes,
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -66,9 +69,13 @@ GameState lessonTableStageGame({
       continue;
     }
     final showHoles = villain == 0 && villainCodes.length >= 2;
+    final types = villainArchetypes;
     players.add(
       player.copyWith(
         name: names[villain % names.length],
+        archetype: types == null || types.isEmpty
+            ? null
+            : types[villain % types.length],
         holeCards: showHoles
             ? [
                 for (final code in villainCodes.take(2))
@@ -126,6 +133,8 @@ class LessonTableStage extends StatelessWidget {
     this.positionLabels = false,
     this.smallBlind = lessonSmallBlind,
     this.bigBlind = lessonBigBlind,
+    this.villainArchetypes,
+    this.features,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -183,6 +192,14 @@ class LessonTableStage extends StatelessWidget {
   /// See [smallBlind].
   final double bigBlind;
 
+  /// Opponent player types, in seat order. Without them every opponent is a
+  /// plain player: no type tag, no VPIP/PFR, whatever the section.
+  final List<PlayerArchetype>? villainArchetypes;
+
+  /// Layers this step draws. Null takes the section preset from
+  /// [TableFeaturesScope].
+  final TableFeatures? features;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -195,11 +212,16 @@ class LessonTableStage extends StatelessWidget {
     positionLabels: positionLabels,
     smallBlind: smallBlind,
     bigBlind: bigBlind,
+    villainArchetypes: villainArchetypes,
   );
 
   @override
   Widget build(BuildContext context) {
     final game = _game;
+    final preset = features ?? TableFeaturesScope.of(context);
+    final table = villainArchetypes == null
+        ? preset.copyWith(playerTypes: false, stats: false)
+        : preset;
     return LayoutBuilder(
       builder: (context, constraints) {
         final height = constraints.maxHeight.isFinite
@@ -211,7 +233,7 @@ class LessonTableStage extends StatelessWidget {
           child: FeltTableView(
             game: game,
             chipDisplayMode: ChipDisplayMode.dollars,
-            includeHero: true,
+            features: table,
             showHoleCardBacks: true,
             heroCardsFaceUp: heroFaceUp,
             faceUpPlayerIds: {

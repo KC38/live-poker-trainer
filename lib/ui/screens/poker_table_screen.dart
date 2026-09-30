@@ -19,20 +19,19 @@ import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/archetype_legend_sheet.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
-import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/tendency_profile_sheet.dart';
 
 /// Smartphone-first poker table with teaching-forward chrome.
 ///
 /// The screen is a strict [Column] of non-overlapping bands:
-/// header → felt (flexible) → hero rail → coach shelf → action dock. The felt
-/// gets whatever is left over, so a tall coach shelf can shrink the felt but
-/// can never draw on top of the hero's hole cards.
+/// header → felt (flexible) → coach shelf → action dock. The hero sits at the
+/// bottom of the felt, so a tall coach shelf shrinks the felt but can never
+/// draw on top of the hero's hole cards.
 ///
 /// When the hero has no decision to make — villains acting, hero folded, hand
 /// over — the dock band is not dimmed, it is removed. The freed height is
 /// handed to the coach shelf (taller cap, auto-opened review copy) and to the
-/// felt and hero rail, which animate into it rather than jumping.
+/// felt, which animates into it rather than jumping.
 ///
 /// After a hand ends, coaching stays in the shelf — no auto Hand Review sheet.
 /// The header **Next** control deals again: quiet while the hero is done early
@@ -312,6 +311,7 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                           awardingChips: session.awardingChips,
                                           review: handOver,
                                           waitingOnSeat: session.waitingOnSeat,
+                                          heroStatus: _heroStatus(session),
                                           onPlayerTap:
                                               (player) =>
                                                   TendencyProfileSheet.show(
@@ -319,18 +319,6 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                                                     player,
                                                   ),
                                         ),
-                                      ),
-                                      HeroRailWidget(
-                                        game: game,
-                                        chipDisplayMode: tableChipMode,
-                                        isThinking: session.replaying,
-                                        canAct: session.heroCanAct,
-                                        review: handOver,
-                                        isWinner:
-                                            handOver &&
-                                            game.winnerIds.contains(
-                                              game.hero.id,
-                                            ),
                                       ),
                                       if (showResolving)
                                         const _TableActingBanner(),
@@ -381,22 +369,13 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
                               awardingChips: session.awardingChips,
                               review: handOver,
                               waitingOnSeat: session.waitingOnSeat,
+                              heroStatus: _heroStatus(session),
                               onPlayerTap:
                                   (player) => TendencyProfileSheet.show(
                                     context,
                                     player,
                                   ),
                             ),
-                          ),
-                          HeroRailWidget(
-                            game: game,
-                            chipDisplayMode: tableChipMode,
-                            isThinking: session.replaying,
-                            canAct: session.heroCanAct,
-                            review: handOver,
-                            isWinner:
-                                handOver &&
-                                game.winnerIds.contains(game.hero.id),
                           ),
                           if (showResolving) const _TableActingBanner(),
                           // Null-aware collection elements are not enabled by
@@ -432,6 +411,16 @@ class _PokerTableScreenState extends ConsumerState<PokerTableScreen> {
       ),
     );
   }
+}
+
+/// Hero state under the hero's seat box.
+String? _heroStatus(TableSession session) {
+  final game = session.game;
+  if (game == null || game.isHandOver) return null;
+  if (game.hero.folded) return 'FOLDED';
+  if (session.heroCanAct) return 'YOUR TURN';
+  if (session.replaying) return 'ACTION…';
+  return null;
 }
 
 class _ServerErrorBanner extends StatelessWidget {

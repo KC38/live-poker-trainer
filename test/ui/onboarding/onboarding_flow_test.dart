@@ -23,7 +23,7 @@ import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
-import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -364,29 +364,33 @@ void main() {
     );
     expect(find.text('Start lesson'), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.byType(HeroRailWidget), findsOneWidget);
+    final heroSeat = find.byWidgetPredicate(
+      (w) => w is PlayerSeatWidget && w.player.isHero,
+    );
+    expect(heroSeat, findsOneWidget);
     expect(find.byType(CoachShelfWidget), findsOneWidget);
     expect(find.byType(ActionDockWidget), findsNothing);
     expect(find.byType(LessonTableContext), findsNothing);
     expect(find.text('Tap your cards'), findsNothing);
     expect(find.textContaining('Tap them'), findsNothing);
     expect(find.textContaining('in the lesson'), findsOneWidget);
-    expect(find.text('FLOP'), findsOneWidget);
+    expect(find.textContaining('FLOP'), findsOneWidget);
+    expect(find.text('TAG'), findsNothing, reason: 'Section 1 has no types');
     expect(
-      find.text('Qs Jh 2c on the flop. Your cards stay on the rail.'),
+      find.text('Qs Jh 2c on the flop. Your cards sit at the bottom of the table.'),
       findsOneWidget,
     );
     await tester.pump(const Duration(milliseconds: 400));
-    final rail = tester.getRect(find.byType(HeroRailWidget));
+    final rail = tester.getRect(heroSeat);
     final shelf = tester.getRect(
-      find.text('Qs Jh 2c on the flop. Your cards stay on the rail.'),
+      find.text('Qs Jh 2c on the flop. Your cards sit at the bottom of the table.'),
     );
     final button = tester.getRect(find.text('Start lesson'));
     expect(rail.bottom, lessThanOrEqualTo(shelf.top + 1));
     expect(shelf.bottom, lessThanOrEqualTo(button.top));
     expect(rail.bottom, lessThan(button.top));
     final board = tester.getRect(find.byType(CommunityCardsView));
-    final pot = tester.getRect(find.textContaining(r'$10'));
+    final pot = tester.getRect(find.textContaining(r'POT $10'));
     final bb = tester.getRect(find.text('BB'));
     expect(pot.overlaps(bb), isFalse, reason: 'BB covers the pot');
     expect(board.overlaps(bb), isFalse, reason: 'BB covers the board');

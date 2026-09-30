@@ -29,6 +29,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 /// Runs one catalog lesson through Plan 03 course callables.
 class LessonRunnerScreen extends ConsumerStatefulWidget {
@@ -860,6 +861,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return TableFeaturesScope(
+      features: TableFeatures.forLessonId(_lesson?.id ?? widget.lessonId),
+      child: _buildScaffold(),
+    );
+  }
+
+  Widget _buildScaffold() {
     if (_usesLessonFrame) {
       return Scaffold(
         backgroundColor: AppColors.bgDark,

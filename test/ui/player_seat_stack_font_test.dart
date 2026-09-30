@@ -22,7 +22,6 @@ void main() {
             bigBlind: 2,
             chipDisplayMode: ChipDisplayMode.dollars,
             isActive: false,
-            isDealer: true,
           ),
         ),
       ),

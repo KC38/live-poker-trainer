@@ -2,9 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
-import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
@@ -13,7 +11,6 @@ import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
-import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 
 /// Small blind a lesson table posts unless the step sets its own stakes.
 const double lessonSmallBlind = 1;
@@ -21,7 +18,7 @@ const double lessonSmallBlind = 1;
 /// Big blind a lesson table posts unless the step sets its own stakes.
 const double lessonBigBlind = 2;
 
-/// Builds a hand the poker bands can draw.
+/// Builds a hand the poker table can draw.
 ///
 /// [villainSeatCount] seats sit on the ring with face-down cards. Stacks
 /// start at [stackBb] big blinds. The button is [dealerIndex]. The small
@@ -107,10 +104,10 @@ GameState lessonBandGame({
   );
 }
 
-/// Header, felt, hero rail, coach shelf, and an action dock only on a decision.
+/// Felt, coach shelf, and an action dock only on a decision.
 ///
 /// The felt is flexible inside a bounded height so the column can sit in a
-/// scroll view. Hero hole cards are on [HeroRailWidget], not the felt.
+/// scroll view. The hero sits on the felt, like every other table.
 class PokerTableBands extends StatelessWidget {
   /// Creates the band column.
   const PokerTableBands({
@@ -124,7 +121,7 @@ class PokerTableBands extends StatelessWidget {
     this.heightFactor = 0.58,
   });
 
-  /// Hand drawn on the felt and the hero rail.
+  /// Hand drawn on the felt.
   final GameState game;
 
   /// Coach shelf copy. A none-verdict still shows the Coach header.
@@ -133,7 +130,7 @@ class PokerTableBands extends StatelessWidget {
   /// Currency mode for stacks and the pot.
   final ChipDisplayMode chipDisplayMode;
 
-  /// Acknowledges a tap on the hero rail or the coach shelf.
+  /// Acknowledges a tap on the hero seat or the coach shelf.
   final VoidCallback? onHeroTap;
 
   /// Button name for [onHeroTap]. Omit when the hand is only a preview.
@@ -152,59 +149,50 @@ class PokerTableBands extends StatelessWidget {
       builder: (context, constraints) {
         final wanted = MediaQuery.sizeOf(context).height * heightFactor;
         // A bounded parent (Your start, above Start lesson) wins so the
-        // rail and shelf stay inside the column and the button sits below.
+        // shelf stays inside the column and the button sits below.
         final height =
             constraints.maxHeight.isFinite && constraints.maxHeight < wanted
-            ? constraints.maxHeight
-            : wanted;
+                ? constraints.maxHeight
+                : wanted;
         return _column(height);
       },
     );
   }
 
   Widget _column(double height) {
-    final rail = HeroRailWidget(game: game, chipDisplayMode: chipDisplayMode);
     final shelf = CoachShelfWidget(
       feedback: feedback,
       bigBlind: game.bigBlind,
       chipDisplayMode: chipDisplayMode,
     );
-    final coachAndRail = onHeroTap == null
-        ? Column(mainAxisSize: MainAxisSize.min, children: [rail, shelf])
-        : Semantics(
-            button: true,
-            label: heroTapLabel,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: onHeroTap,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [rail, shelf],
-              ),
-            ),
-          );
-
+    final felt = FeltTableView(
+      game: game,
+      chipDisplayMode: chipDisplayMode,
+      onSeatTap:
+          onHeroTap == null
+              ? null
+              : (player) {
+                if (player.isHero) onHeroTap!();
+              },
+    );
     return SizedBox(
       height: height,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-            child: Text(
-              game.street.label,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.jetBrainsMono(
-                color: AppColors.gold,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.2,
-              ),
-            ),
-          ),
           Expanded(
-            child: FeltTableView(game: game, chipDisplayMode: chipDisplayMode),
+            child:
+                onHeroTap == null
+                    ? felt
+                    : Semantics(button: true, label: heroTapLabel, child: felt),
           ),
-          coachAndRail,
+          if (onHeroTap == null)
+            shelf
+          else
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onHeroTap,
+              child: shelf,
+            ),
           if (game.waitingForHero && onAction != null)
             ActionDockWidget(game: game, onAction: onAction!),
         ],

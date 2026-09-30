@@ -7,6 +7,7 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 
@@ -191,5 +192,19 @@ void main() {
     expect(game.bbIndex, 1);
     expect(game.hero.currentBet, 1);
     expect(game.players[1].currentBet, 2);
+  });
+
+  test('opponents carry player types only when the step names them', () {
+    final plain = lessonTableStageGame();
+    final typed = lessonTableStageGame(
+      villainArchetypes: const [PlayerArchetype.nit, PlayerArchetype.maniac],
+    );
+
+    expect(plain.players[1].archetype, PlayerArchetype.tag);
+    expect(typed.players.skip(1).map((p) => p.archetype), [
+      PlayerArchetype.nit,
+      PlayerArchetype.maniac,
+      PlayerArchetype.nit,
+    ]);
   });
 }

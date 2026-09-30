@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
+import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 
 void main() {
   test('lesson mascot expressions map to Rex moods', () {
@@ -226,17 +227,20 @@ void main() {
     );
     await tester.pump();
 
+    final aceOfHearts = find.byWidgetPredicate(
+      (w) => w is TableCard && w.card.display == 'A♥',
+    );
     expect(find.text('A'), findsNothing);
     await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-1')));
     await tester.pump();
     expect(misses, 1);
     expect(peeks, 0);
-    expect(find.textContaining('A♥'), findsNothing);
+    expect(aceOfHearts, findsNothing);
 
     await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
     await tester.pump();
     expect(peeks, 1);
-    expect(find.textContaining('A♥'), findsWidgets);
+    expect(aceOfHearts, findsWidgets);
     expect(tester.takeException(), isNull);
   });
 
