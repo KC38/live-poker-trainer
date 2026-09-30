@@ -19,6 +19,69 @@ import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 @visibleForTesting
 Random? debugLessonCardDealRandom;
 
+/// When true, dealt scene/action helpers skip suit remap.
+@visibleForTesting
+bool debugFreezeLessonSuitRemap = false;
+
+/// Whether production remappers should permute suits.
+bool get lessonSuitRemapEnabled => !debugFreezeLessonSuitRemap;
+
+/// RNG for a lesson attempt: explicit, test hook, or stable activity seed.
+Random resolveLessonDealRandom({
+  String? activityId,
+  int generation = 0,
+  Random? random,
+}) {
+  if (random != null) return random;
+  final hooked = debugLessonCardDealRandom;
+  if (hooked != null) return hooked;
+  if (activityId != null) return Random(lessonDealSeed(activityId, generation));
+  return Random();
+}
+
+/// FNV-1a seed from an activity id (and optional generation) for stable deals.
+int lessonDealSeed(String activityId, [int generation = 0]) {
+  var hash = 0x811c9dc5;
+  final key = '$activityId#$generation';
+  for (final unit in key.codeUnits) {
+    hash ^= unit;
+    hash = (hash * 0x01000193) & 0xffffffff;
+  }
+  return hash;
+}
+
+/// Applies one random suit permutation to every code in [codes].
+List<String> permuteCardSuits(List<String> codes, Random rng) {
+  if (codes.isEmpty) return const [];
+  final map = _freshSuitMap(rng);
+  return [for (final code in codes) _applySuitMap(code, map)];
+}
+
+/// Remaps several code lists with the **same** suit permutation.
+List<List<String>> permuteCardSuitGroups(
+  List<List<String>> groups,
+  Random rng,
+) {
+  final map = _freshSuitMap(rng);
+  return [
+    for (final codes in groups)
+      [for (final code in codes) _applySuitMap(code, map)],
+  ];
+}
+
+Map<String, String> _freshSuitMap(Random rng) {
+  final perm = List<String>.of(_suits)..shuffle(rng);
+  return {for (var i = 0; i < _suits.length; i++) _suits[i]: perm[i]};
+}
+
+String _applySuitMap(String code, Map<String, String> map) {
+  if (code.isEmpty) return code;
+  final suit = code[code.length - 1];
+  final mapped = map[suit];
+  if (mapped == null) return code;
+  return '${code.substring(0, code.length - 1)}$mapped';
+}
+
 /// Starting-hand attribute used when dealing two hole cards.
 enum LessonHoleKind {
   /// Two cards, same suit, different ranks.
@@ -316,14 +379,15 @@ class ShowdownOrderDeal {
 
 /// Randomized Hand ranks showdown layout for [activityId], or null if unknown.
 ///
-/// Seat ids and [correctOrder] stay authored (`you` / `sam` / `jo`) so server
-/// sequence grading still matches. Only the faces change.
+/// Role ids stay authored (`you` / `sam` / `jo` = strength tiers) and
+/// [correctOrder] is unchanged for server grading. Card faces vary, and which
+/// physical seat holds each role is shuffled.
 ShowdownOrderDeal? dealShowdownOrderCards(
   String activityId, {
   Random? random,
 }) {
   final rng = random ?? debugLessonCardDealRandom ?? Random();
-  return switch (activityId) {
+  final dealt = switch (activityId) {
     'act-01-02-01-explain-ladder' ||
     'act-01-02-01-guided-ladder' =>
       _dealHighPairFlushWeakToStrong(rng),
@@ -332,6 +396,36 @@ ShowdownOrderDeal? dealShowdownOrderCards(
     'act-01-02-01-checkpoint-winner' => _dealFlushStraightHighStrongToWeak(rng),
     _ => null,
   };
+  if (dealt == null) return null;
+  return _shuffleShowdownSeatRoles(dealt, rng);
+}
+
+/// Shuffles which seat (You/Sam/Jo) holds each strength role.
+ShowdownOrderDeal _shuffleShowdownSeatRoles(
+  ShowdownOrderDeal deal,
+  Random rng,
+) {
+  final hands = <List<String>>[
+    deal.heroCodes,
+    deal.villainHoleCodes[0],
+    deal.villainHoleCodes[1],
+  ];
+  final roles = List<String>.of(deal.seatIds);
+  final order = [0, 1, 2]..shuffle(rng);
+  return ShowdownOrderDeal(
+    boardCodes: deal.boardCodes,
+    heroCodes: List<String>.unmodifiable(hands[order[0]]),
+    villainHoleCodes: List<List<String>>.unmodifiable([
+      List<String>.unmodifiable(hands[order[1]]),
+      List<String>.unmodifiable(hands[order[2]]),
+    ]),
+    seatIds: List<String>.unmodifiable([
+      roles[order[0]],
+      roles[order[1]],
+      roles[order[2]],
+    ]),
+    correctOrder: deal.correctOrder,
+  );
 }
 
 ShowdownOrderDeal _dealFullTripsTwoPairStrongToWeak(Random rng) {

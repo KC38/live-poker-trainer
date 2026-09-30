@@ -172,7 +172,7 @@ class SelectIdentifyActivity extends StatelessWidget {
       );
     }
 
-    final scene = resolveLessonTableScene(activity);
+    final scene = dealtLessonTableScene(activity, generation: controller.bindGeneration);
     final resolved = resolveLessonCoachPrompt(
       activity: activity,
       fallback: _coachFallback(presentation, scene != null),
@@ -470,7 +470,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       mapped,
       autoSubmit: true,
       seatLabel: seatLabelForTableTap(
-        resolveLessonTableScene(widget.activity),
+        dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration),
         target,
       ),
     );
@@ -1065,7 +1065,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
 
   @override
   Widget build(BuildContext context) {
-    final scene = resolveLessonTableScene(widget.activity);
+    final scene = dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration);
     return AnimatedBuilder(
       animation: widget.controller,
       builder: (context, _) {
@@ -1772,7 +1772,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scene = resolveLessonTableScene(activity);
+    final scene = dealtLessonTableScene(activity, generation: controller.bindGeneration);
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
@@ -2186,7 +2186,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
   }
 
   void _chooseRegion(LessonTableRegion region) {
-    final scene = resolveLessonTableScene(widget.activity);
+    final scene = dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration);
     final target = LessonTableTapTarget(region);
     final mapped = mapTableRegionToChoiceId(
       activityId: widget.activity.id,
@@ -2204,7 +2204,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
 
   @override
   Widget build(BuildContext context) {
-    final scene = resolveLessonTableScene(widget.activity);
+    final scene = dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration);
     final feltInteractive =
         scene != null &&
         (scene.villainCodes.isNotEmpty || scene.heroCodes.isNotEmpty);

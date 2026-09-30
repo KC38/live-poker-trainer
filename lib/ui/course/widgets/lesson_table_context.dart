@@ -1,6 +1,8 @@
 /// Compact felt + cards context for lesson select/identify activities.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
@@ -2137,6 +2139,61 @@ class LessonTableScene {
   /// Hide "Posts 1/2" under SB/BB when the quiz asks who posts — otherwise the
   /// subtitle prints the answer on the tile.
   final bool quietBlindPostCaptions;
+
+  /// Copy with remapped hole / board / villain codes.
+  LessonTableScene copyWithCodes({
+    List<String>? heroCodes,
+    List<String>? boardCodes,
+    List<String>? villainCodes,
+  }) {
+    return LessonTableScene(
+      heroCodes: heroCodes ?? this.heroCodes,
+      boardCodes: boardCodes ?? this.boardCodes,
+      villainCodes: villainCodes ?? this.villainCodes,
+      villainSeatCount: villainSeatCount,
+      highlight: highlight,
+      caption: caption,
+      showMuck: showMuck,
+      showDealerChip: showDealerChip,
+      layout: layout,
+      seatCount: seatCount,
+      buttonSeat: buttonSeat,
+      numberSeats: numberSeats,
+      showSeatNeverMatters: showSeatNeverMatters,
+      showRoleLabels: showRoleLabels,
+      quietBlindPostCaptions: quietBlindPostCaptions,
+    );
+  }
+}
+
+/// Authored scene with suits permuted for this attempt (stable within [generation]).
+LessonTableScene? dealtLessonTableScene(
+  CourseActivity activity, {
+  int generation = 0,
+  Random? random,
+}) {
+  final scene = resolveLessonTableScene(activity);
+  if (scene == null) return null;
+  if (!lessonSuitRemapEnabled) return scene;
+  if (scene.heroCodes.isEmpty &&
+      scene.boardCodes.isEmpty &&
+      scene.villainCodes.isEmpty) {
+    return scene;
+  }
+  final rng = resolveLessonDealRandom(
+    activityId: activity.id,
+    generation: generation,
+    random: random,
+  );
+  final remapped = permuteCardSuitGroups(
+    [scene.heroCodes, scene.boardCodes, scene.villainCodes],
+    rng,
+  );
+  return scene.copyWithCodes(
+    heroCodes: remapped[0],
+    boardCodes: remapped[1],
+    villainCodes: remapped[2],
+  );
 }
 
 /// Which region of the mini-table should read as the teaching target.

@@ -27,7 +27,7 @@ class PokerActionSizingActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spot = resolveLessonActionSpot(activity);
+    final spot = dealtLessonActionSpot(activity, generation: controller.bindGeneration);
     final tableMode = isLessonActionTableActivity(activity) && spot != null;
     final villainType = lessonNamedVillainType([
       spot?.villainLine,

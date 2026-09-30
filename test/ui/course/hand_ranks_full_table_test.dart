@@ -32,13 +32,18 @@ Widget _frame(Widget child) {
   );
 }
 
-Future<void> _tapShowdownWeakToStrong(WidgetTester tester) async {
-  await tester.tap(find.byKey(const ValueKey('lesson-seat-hero')));
-  await tester.pump();
-  await tester.tap(find.byKey(const ValueKey('lesson-seat-1')));
-  await tester.pump();
-  await tester.tap(find.byKey(const ValueKey('lesson-seat-2')));
-  await tester.pump();
+Future<void> _tapShowdownInCorrectOrder(WidgetTester tester) async {
+  final table = tester.widget<LessonShowdownOrderTable>(
+    find.byType(LessonShowdownOrderTable),
+  );
+  for (final id in table.spot.correctOrder) {
+    final seat = table.spot.seatIds.indexOf(id);
+    final key = seat == 0
+        ? const ValueKey<String>('lesson-seat-hero')
+        : ValueKey<String>('lesson-seat-$seat');
+    await tester.tap(find.byKey(key));
+    await tester.pump();
+  }
 }
 
 void main() {
@@ -85,7 +90,7 @@ void main() {
     expect(find.byType(HandRankLadderDemo), findsNothing);
     expect(find.byType(LessonHandLadderExplainTable), findsNothing);
 
-    await _tapShowdownWeakToStrong(tester);
+    await _tapShowdownInCorrectOrder(tester);
     expect(ack, 1);
   });
 
@@ -128,7 +133,7 @@ void main() {
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.byKey(const ValueKey('hand-order-felt')), findsNothing);
 
-    await _tapShowdownWeakToStrong(tester);
+    await _tapShowdownInCorrectOrder(tester);
     expect(controller.draft.orderedIds, ['you', 'sam', 'jo']);
     expect(autoSubmits, 1);
   });

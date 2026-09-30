@@ -2839,7 +2839,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('your two') ||
       blob.contains('yours alone') ||
       blob.contains('nobody else sees')) {
-    final scene = resolveLessonTableScene(activity);
+    final scene = dealtLessonTableScene(activity, generation: 0);
     final codes =
         scene != null && scene.heroCodes.length >= 2
             ? scene.heroCodes.take(2).toList(growable: false)
