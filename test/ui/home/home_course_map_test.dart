@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
+import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
 import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/screens/home_screen.dart';
@@ -146,13 +147,13 @@ void _expectHomeThemeMetrics(WidgetTester tester) {
   }
   expect(find.byType(RexCoachCard), findsNothing);
   expect(find.byType(RexMascot), findsOneWidget);
-  expect(find.text('NEXT'), findsOneWidget);
+  expect(find.text('START'), findsOneWidget);
   final marked = find.ancestor(
     of: find.byType(RexMascot),
     matching: find.byType(Column),
   ).first;
   expect(
-    find.descendant(of: marked, matching: find.text('NEXT')),
+    find.descendant(of: marked, matching: find.text('START')),
     findsOneWidget,
   );
   expect(
@@ -170,13 +171,14 @@ void main() {
     final analytics = _RecordingAnalytics();
     await _pumpHome(tester, snapshot: _readySnapshot(), analytics: analytics);
 
-    expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Streak'), findsOneWidget);
+    expect(find.byType(CourseStatusBar), findsOneWidget);
+    expect(find.text('2'), findsOneWidget);
     expect(find.byType(RexCoachCard), findsNothing);
     expect(find.byType(RexMascot), findsOneWidget);
     expect(find.byType(CoursePathView), findsOneWidget);
     expect(find.text('Lesson A'), findsOneWidget);
-    expect(find.text('NEXT'), findsOneWidget);
+    expect(find.text('START'), findsOneWidget);
+    expect(find.textContaining('SECTION'), findsWidgets);
     expect(analytics.events, contains('home_course_view:ready'));
     _expectHomeThemeMetrics(tester);
   });
@@ -271,7 +273,7 @@ void main() {
       textScale: 1.6,
     );
     expect(find.byType(HomeScreen), findsOneWidget);
-    expect(find.text('Home'), findsWidgets);
+    expect(find.byType(CourseStatusBar), findsOneWidget);
     expect(find.byType(RexCoachCard), findsNothing);
     expect(find.byType(CustomScrollView), findsOneWidget);
     // Path nodes live in a lower sliver; scroll until the next node paints.
@@ -281,7 +283,7 @@ void main() {
       const Offset(0, -120),
     );
     expect(find.text('Lesson A'), findsOneWidget);
-    expect(find.text('NEXT'), findsOneWidget);
+    expect(find.text('START'), findsOneWidget);
   });
 
   testWidgets('every node exposes a semantic label', (tester) async {
@@ -326,6 +328,52 @@ void main() {
     expect(find.text('Lesson A'), findsWidgets);
     expect(find.widgetWithText(TextButton, 'Resume'), findsNothing);
     expect(find.widgetWithText(TextButton, 'Start'), findsNothing);
+  });
+
+  testWidgets('unit banner opens organized section picker', (tester) async {
+    final analytics = _RecordingAnalytics();
+    final sections = [
+      const CourseSection(
+        id: 'sec-1',
+        order: 1,
+        title: 'Section One',
+        summary: 'Learn the basics of the live cash table.',
+        experienceBand: 'never_played',
+        units: [],
+      ),
+      const CourseSection(
+        id: 'sec-2',
+        order: 2,
+        title: 'Section Two',
+        summary: 'Build a disciplined baseline.',
+        experienceBand: 'rules_known',
+        units: [],
+      ),
+    ];
+    final base = _readySnapshot();
+    await _pumpHome(
+      tester,
+      snapshot: CourseHomeSnapshot(
+        status: base.status,
+        nodes: base.nodes,
+        sections: sections,
+        streak: base.streak,
+        lifetimeXp: base.lifetimeXp,
+        acceptedAccuracy: base.acceptedAccuracy,
+        nextLessonId: base.nextLessonId,
+        rexLine: base.rexLine,
+      ),
+      analytics: analytics,
+    );
+
+    expect(find.textContaining('SECTION 1'), findsOneWidget);
+    await tester.tap(find.textContaining('SECTION 1'));
+    await tester.pumpAndSettle();
+    expect(find.text('Sections'), findsOneWidget);
+    expect(find.text('CURRENT SECTION'), findsOneWidget);
+    expect(find.text('LOCKED'), findsOneWidget);
+    expect(find.textContaining('NEVER PLAYED'), findsOneWidget);
+    expect(find.textContaining('RULES KNOWN'), findsOneWidget);
   });
 
   test('enabled flags helper still parses for snapshot mapper', () {

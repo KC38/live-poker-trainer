@@ -21,6 +21,7 @@ import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
+import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
 import 'package:live_poker_trainer/ui/screens/home_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
@@ -267,12 +268,12 @@ void main() {
     expect(harness.course.lastSessionId, 'sess-calibration-1');
 
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilledButton, 'CONTINUE'));
+    await tester.tap(find.widgetWithText(ElevatedButton, 'CONTINUE'));
     await tester.pumpAndSettle();
 
     expect(find.byType(LessonResultScreen), findsNothing);
     expect(find.byType(HomeScreen), findsOneWidget);
-    expect(find.text('Home'), findsWidgets);
+    expect(find.byType(CourseStatusBar), findsOneWidget);
     expect(harness.course.completeCalls, 1);
   });
 
@@ -313,7 +314,8 @@ void main() {
     expect(find.byType(PokerTableScreen), findsNothing);
     expect(find.byType(LessonResultScreen), findsNothing);
     expect(find.byType(LessonRunnerScreen), findsNothing);
-    expect(find.text('Home'), findsWidgets);
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.byType(CourseStatusBar), findsOneWidget);
     expect(harness.course.completeCalls, 0);
   });
 }
