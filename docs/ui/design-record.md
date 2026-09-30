@@ -87,7 +87,8 @@ The table is built for a phone held upright:
   every seat. The action badge hangs from the bottom of the box.
 - **Center.** The pot pill (`FLOP · POT $10`) above the board, five large
   board cards, and `Blinds $1/$2 NLH` under them (`CommunityCardsView`). The
-  board takes the largest scale that no seat, puck, or bet reaches.
+  board leaves clear side margins on the felt (`TableLayout.boardSideInset`)
+  and takes the largest scale that no seat, puck, or bet reaches.
 
 The Live Training screen is a column of non-overlapping bands:
 

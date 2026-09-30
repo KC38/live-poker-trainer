@@ -16,9 +16,12 @@ import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
+import 'package:live_poker_trainer/core/constants/chip_format.dart';
 
 /// The smallest screen we support (iPhone SE logical size).
 const _smallPhone = Size(320, 568);
@@ -414,6 +417,31 @@ void _expectNoFeltCollisions(
 }
 
 void main() {
+  test('board row leaves side inset on the felt', () {
+    for (final size in const [_smallPhone, _modernPhone]) {
+      final layout = TableLayout.resolve(
+        size: size,
+        game: _nineHandedGame(street: Street.flop),
+        features: TableFeatures.full,
+        includeHero: true,
+        review: false,
+        awarding: false,
+        chipDisplayMode: ChipDisplayMode.dollars,
+      );
+      final boardWidth =
+          CommunityCardsView.naturalWidth * layout.board.scale;
+      final maxWidth = layout.felt.width - TableLayout.boardSideInset * 2;
+      expect(
+        boardWidth,
+        lessThanOrEqualTo(maxWidth + 0.5),
+        reason:
+            'board ${boardWidth.toStringAsFixed(1)} exceeds felt side inset '
+            'on ${size.width}x${size.height} (max ${maxWidth.toStringAsFixed(1)})',
+      );
+      expect(TableLayout.boardSideInset, greaterThanOrEqualTo(24));
+    }
+  });
+
   const longCoach = CoachFeedback(
     verdict: CoachVerdict.incorrect,
     message:

@@ -560,6 +560,12 @@ class TableLayout {
   /// Smallest board that still reads at arm's length.
   static const double boardScaleMin = 0.55;
 
+  /// Breathing room between the board row and each felt side.
+  ///
+  /// Width-limited scale keeps the five cards inside this inset so the
+  /// row does not hug the oval rail.
+  static const double boardSideInset = 28;
+
   /// Seat slots for 1–9 players as `(x, y)` in -1..1, hero first, clockwise.
   static const Map<int, List<Offset>> templates = {
     1: [Offset(0, 1)],
@@ -950,7 +956,8 @@ class TableLayout {
         CommunityCardsView.cardsHeight +
         CommunityCardsView.bandAbove(features, awarding: awarding) +
         CommunityCardsView.bandBelow(features);
-    final byWidth = (felt.width - 16) / CommunityCardsView.naturalWidth;
+    final byWidth =
+        (felt.width - boardSideInset * 2) / CommunityCardsView.naturalWidth;
     final byHeight = (heroTop - freeTop - 8) / natural;
     var scale = math.min(byWidth, byHeight);
     scale = scale.clamp(boardScaleMin, review ? 1.3 : 1.2);
