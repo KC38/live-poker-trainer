@@ -9796,6 +9796,92 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
   }
 }
 
+
+/// Versus-LAG explain: CALL / TRAP / FANCY LESS under the full poker table.
+class LessonVsLagsExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonVsLagsExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonVsLagsExplainTable> createState() =>
+      _LessonVsLagsExplainTableState();
+}
+
+class _LessonVsLagsExplainTableState extends State<LessonVsLagsExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= VsLagsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('vs-lags-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < VsLagsDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(VsLagsDemo.points[i].label) &&
+                      VsLagsDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: VsLagsDemo.points[i].label,
+                    caption: VsLagsDemo.points[i].caption,
+                    color: VsLagsDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(VsLagsDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(VsLagsDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Versus LAG: trap more, call wider, invent fewer fancy bluffs.
 class VsLagsDemo extends StatefulWidget {
   /// Creates the demo.

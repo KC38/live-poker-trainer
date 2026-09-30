@@ -3596,6 +3596,8 @@ void main() {
     expect(find.textContaining('Tap Call'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('vs-lags-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CALL'), findsOneWidget);
     expect(find.text('TRAP'), findsOneWidget);
     expect(find.text('FANCY LESS'), findsOneWidget);
