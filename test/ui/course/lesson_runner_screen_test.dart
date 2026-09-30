@@ -2626,6 +2626,8 @@ void main() {
     expect(find.textContaining('Tap Implied'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('implied-odds-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('IMPLIED'), findsOneWidget);
     expect(find.text('REVERSE'), findsOneWidget);
     expect(find.text('SECOND'), findsOneWidget);
