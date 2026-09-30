@@ -98,6 +98,43 @@ GameState lessonTableStageGame({
   return named.copyWith(activePlayerIndex: activeSeatIndex ?? -1);
 }
 
+/// Player type a step names for its opponent, read from [texts] in order.
+///
+/// "Calling Station", "station", and "sticky" read as the Calling Station.
+/// Nit, Maniac, TAG, and LAG read as themselves. A text that says "unknown"
+/// names no type, because having no read is that step's point.
+PlayerArchetype? lessonNamedVillainType(List<String?> texts) {
+  for (final text in texts) {
+    if (text == null || text.isEmpty) continue;
+    final words = _words(text);
+    if (words.contains('unknown')) return null;
+    if (words.contains('station') || words.contains('sticky')) {
+      return PlayerArchetype.callingStation;
+    }
+    if (words.contains('nit')) return PlayerArchetype.nit;
+    if (words.contains('maniac')) return PlayerArchetype.maniac;
+    if (words.contains('lag')) return PlayerArchetype.lag;
+    if (words.contains('tag')) return PlayerArchetype.tag;
+  }
+  return null;
+}
+
+Set<String> _words(String text) {
+  final words = <String>{};
+  final word = StringBuffer();
+  for (final unit in text.toLowerCase().codeUnits) {
+    final letter = unit >= 0x61 && unit <= 0x7a;
+    if (letter) {
+      word.writeCharCode(unit);
+    } else if (word.isNotEmpty) {
+      words.add(word.toString());
+      word.clear();
+    }
+  }
+  if (word.isNotEmpty) words.add(word.toString());
+  return words;
+}
+
 /// Where the stage draws its arrows.
 enum LessonTableCue {
   /// No arrow.
