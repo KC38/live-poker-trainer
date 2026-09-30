@@ -220,6 +220,7 @@ class CoursePathView extends StatelessWidget {
     this.sectionOrders = const {},
     this.sectionKeys = const {},
     this.unitKeys = const {},
+    this.focusLessonKey,
   });
 
   final List<CourseMapNode> nodes;
@@ -233,6 +234,9 @@ class CoursePathView extends StatelessWidget {
 
   /// Scroll / visibility anchors for each unit id (sticky banner).
   final Map<String, GlobalKey> unitKeys;
+
+  /// Scroll anchor for the next / in-progress lesson (`isNext`).
+  final GlobalKey? focusLessonKey;
 
   @override
   Widget build(BuildContext context) {
@@ -279,15 +283,18 @@ class CoursePathView extends StatelessWidget {
         );
       }
 
+      final row = _PathNodeRow(
+        node: node,
+        pathIndex: pathIndex,
+        accent: bannerColor,
+        showConnector: i < nodes.length - 1 &&
+            nodes[i + 1].unitId == node.unitId,
+        onTap: () => onNodeTap(node),
+      );
       children.add(
-        _PathNodeRow(
-          node: node,
-          pathIndex: pathIndex,
-          accent: bannerColor,
-          showConnector: i < nodes.length - 1 &&
-              nodes[i + 1].unitId == node.unitId,
-          onTap: () => onNodeTap(node),
-        ),
+        node.isNext && focusLessonKey != null
+            ? KeyedSubtree(key: focusLessonKey, child: row)
+            : row,
       );
       pathIndex += 1;
     }

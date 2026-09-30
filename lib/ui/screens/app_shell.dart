@@ -25,6 +25,7 @@ class AppShell extends ConsumerStatefulWidget {
 
 class _AppShellState extends ConsumerState<AppShell> {
   int _index = 0;
+  final ValueNotifier<int> _homeFocusRequests = ValueNotifier<int>(0);
 
   static const _tabs = <({
     String label,
@@ -54,6 +55,12 @@ class _AppShellState extends ConsumerState<AppShell> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _syncShellBgm());
   }
 
+  @override
+  void dispose() {
+    _homeFocusRequests.dispose();
+    super.dispose();
+  }
+
   Future<void> _syncShellBgm() async {
     if (!mounted) return;
     final settings = ref.read(settingsProvider);
@@ -68,7 +75,13 @@ class _AppShellState extends ConsumerState<AppShell> {
   }
 
   void _selectTab(int index) {
-    if (index == _index || index < 0 || index >= _tabs.length) return;
+    if (index < 0 || index >= _tabs.length) return;
+    // Home always scrolls back to the next / in-progress lesson — including
+    // when the user is already on Home and re-taps the tab after scrolling.
+    if (index == 0) {
+      _homeFocusRequests.value++;
+    }
+    if (index == _index) return;
     setState(() => _index = index);
     final screen = _tabs[index].screen;
     unawaited(ref.read(analyticsServiceProvider).logScreenView(screen));
@@ -88,7 +101,7 @@ class _AppShellState extends ConsumerState<AppShell> {
       body: IndexedStack(
         index: _index,
         children: [
-          const HomeScreen(),
+          HomeScreen(focusRequests: _homeFocusRequests),
           LiveTrainingScreen(onOpenHome: () => _selectTab(0)),
           const ProfileScreen(),
         ],

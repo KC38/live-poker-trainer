@@ -1,9 +1,10 @@
-/// Home: course path, status, resume, and Rex coach.
+/// Home: course path, status, and Rex coach.
 library;
 
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
@@ -18,7 +19,6 @@ import 'package:live_poker_trainer/providers/game_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
-import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
 import 'package:live_poker_trainer/ui/home/course_section_picker.dart';
 import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
 import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
@@ -31,7 +31,11 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 /// Home tab — interactive live-cash course path.
 class HomeScreen extends ConsumerStatefulWidget {
   /// Creates the Home course root.
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.focusRequests});
+
+  /// Incremented by [AppShell] when the Home tab is selected or re-tapped so
+  /// the path scrolls back to the next / in-progress lesson.
+  final ValueNotifier<int>? focusRequests;
 
   /// Section 7 capstone. Tapping it opens the calibration table, not activity 0.
   static const calibrationLessonId = 'lesson-07-11-01-live-warmup-prep';
@@ -46,6 +50,81 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   String? _loggedStatus;
+  final GlobalKey _focusLessonKey = GlobalKey();
+  String? _autoFocusedLessonId;
+  bool _autoFocusQueued = false;
+  int _lastFocusRequest = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _lastFocusRequest = widget.focusRequests?.value ?? 0;
+    widget.focusRequests?.addListener(_onFocusRequest);
+  }
+
+  @override
+  void didUpdateWidget(covariant HomeScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.focusRequests != widget.focusRequests) {
+      oldWidget.focusRequests?.removeListener(_onFocusRequest);
+      _lastFocusRequest = widget.focusRequests?.value ?? 0;
+      widget.focusRequests?.addListener(_onFocusRequest);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.focusRequests?.removeListener(_onFocusRequest);
+    super.dispose();
+  }
+
+  void _onFocusRequest() {
+    final tick = widget.focusRequests?.value ?? 0;
+    if (tick == _lastFocusRequest) return;
+    _lastFocusRequest = tick;
+    unawaited(_scrollFocusLessonIntoView(force: true));
+  }
+
+  void _scheduleAutoFocus(CourseHomeSnapshot snapshot) {
+    if (snapshot.status != CourseHomeLoadStatus.ready) return;
+    final id = snapshot.nextLessonId;
+    if (id == null || id == _autoFocusedLessonId || _autoFocusQueued) return;
+    _autoFocusQueued = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoFocusQueued = false;
+      if (!mounted) return;
+      final focusId =
+          ref.read(courseHomeProvider).asData?.value.nextLessonId;
+      if (focusId == null || focusId == _autoFocusedLessonId) return;
+      _autoFocusedLessonId = focusId;
+      unawaited(_scrollFocusLessonIntoView());
+    });
+  }
+
+  Future<void> _scrollFocusLessonIntoView({bool force = false}) async {
+    final target = _focusLessonKey.currentContext;
+    if (target == null) return;
+    if (!force && _isFocusLessonComfortablyVisible(target)) return;
+    await Scrollable.ensureVisible(
+      target,
+      duration: const Duration(milliseconds: 420),
+      curve: Curves.easeOutCubic,
+      alignment: 0.28,
+    );
+  }
+
+  /// True when the focus lesson is already on the first screen of the path.
+  bool _isFocusLessonComfortablyVisible(BuildContext target) {
+    final renderObject = target.findRenderObject();
+    if (renderObject == null || !renderObject.attached) return false;
+    final viewport = RenderAbstractViewport.maybeOf(renderObject);
+    if (viewport == null) return true;
+    final scrollable = Scrollable.maybeOf(target);
+    final pixels = scrollable?.position.pixels ?? 0;
+    final reveal = viewport.getOffsetToReveal(renderObject, 0.28).offset;
+    if (pixels <= 1 && reveal <= 160) return true;
+    return (reveal - pixels).abs() < 48;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +134,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       final snap = next.asData?.value;
       if (snap == null) return;
       final status = snap.status.name;
-      if (_loggedStatus == status) return;
-      _loggedStatus = status;
-      unawaited(
-        ref.read(analyticsServiceProvider).logHomeCourseView(status: status),
-      );
+      if (_loggedStatus != status) {
+        _loggedStatus = status;
+        unawaited(
+          ref.read(analyticsServiceProvider).logHomeCourseView(status: status),
+        );
+      }
+      _scheduleAutoFocus(snap);
     });
 
     return Scaffold(
@@ -87,27 +168,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onAction:
                       () => ref.read(courseHomeProvider.notifier).refresh(),
                 ),
-            data:
-                (snapshot) => _HomeBody(
-                  snapshot: snapshot,
-                  guestSession:
-                      ref.watch(appAuthProvider).asData?.value.isAnonymous ==
-                      true,
-                  onRetry:
-                      () => ref.read(courseHomeProvider.notifier).refresh(),
-                  onNodeTap: (node) => _onNodeTap(snapshot, node),
-                  onOpenSections: () => _openSections(snapshot),
-                  onResume: () {
-                    final resume = snapshot.resume;
-                    if (resume == null) return;
-                    unawaited(
-                      ref
-                          .read(analyticsServiceProvider)
-                          .logHomeResume(lessonId: resume.lessonId),
-                    );
-                    _openLesson(resume.lessonId);
-                  },
-                ),
+            data: (snapshot) {
+              _scheduleAutoFocus(snapshot);
+              return _HomeBody(
+                snapshot: snapshot,
+                guestSession:
+                    ref.watch(appAuthProvider).asData?.value.isAnonymous ==
+                    true,
+                focusLessonKey: _focusLessonKey,
+                onRetry:
+                    () => ref.read(courseHomeProvider.notifier).refresh(),
+                onNodeTap: (node) => _onNodeTap(snapshot, node),
+                onOpenSections: () => _openSections(snapshot),
+              );
+            },
           ),
         ),
       ),
@@ -154,6 +228,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         nodeState: node.state.name,
       ),
     );
+    if (snapshot.resume?.lessonId == node.lessonId) {
+      unawaited(analytics.logHomeResume(lessonId: node.lessonId));
+    }
     _openLesson(node.lessonId);
   }
 
@@ -273,17 +350,17 @@ class _HomeBody extends StatefulWidget {
     required this.snapshot,
     required this.onRetry,
     required this.onNodeTap,
-    required this.onResume,
     required this.onOpenSections,
     required this.guestSession,
+    required this.focusLessonKey,
   });
 
   final CourseHomeSnapshot snapshot;
   final bool guestSession;
   final VoidCallback onRetry;
   final void Function(CourseMapNode node) onNodeTap;
-  final VoidCallback onResume;
   final VoidCallback onOpenSections;
+  final GlobalKey focusLessonKey;
 
   static final Map<String, GlobalKey> _sectionKeys = <String, GlobalKey>{};
   static final Map<String, GlobalKey> _unitKeys = <String, GlobalKey>{};
@@ -381,15 +458,6 @@ class _HomeBodyState extends State<_HomeBody> {
       );
     }
 
-    final resumeLessonTitle = () {
-      final resume = snapshot.resume;
-      if (resume == null) return null;
-      for (final node in snapshot.nodes) {
-        if (node.lessonId == resume.lessonId) return node.title;
-      }
-      return resume.lessonId;
-    }();
-
     final sectionOrders = <String, int>{
       for (final section in snapshot.sections) section.id: section.order,
     };
@@ -472,30 +540,16 @@ class _HomeBodyState extends State<_HomeBody> {
                       const SizedBox(height: 2),
                       RexCoachCard(
                         line: snapshot.rexLine!,
-                        // The resume card is the one Resume control. Rex still
-                        // says what to do, without a second button for the
-                        // same lesson.
                         onContinue:
-                            snapshot.resume != null
+                            snapshot.nextLessonId == null ||
+                                    !snapshot.startsEnabled
                                 ? null
-                                : (snapshot.nextLessonId == null ||
-                                        !snapshot.startsEnabled
-                                    ? null
-                                    : () {
-                                      final next = snapshot.nextNode;
-                                      if (next == null) return;
-                                      widget.onNodeTap(next);
-                                    }),
+                                : () {
+                                  final next = snapshot.nextNode;
+                                  if (next == null) return;
+                                  widget.onNodeTap(next);
+                                },
                         continueLabel: 'Start',
-                      ),
-                    ],
-                    if (snapshot.resume != null &&
-                        resumeLessonTitle != null) ...[
-                      const SizedBox(height: 12),
-                      CourseResumeCard(
-                        resume: snapshot.resume!,
-                        lessonTitle: resumeLessonTitle,
-                        onResume: widget.onResume,
                       ),
                     ],
                     const SizedBox(height: 4),
@@ -511,6 +565,7 @@ class _HomeBodyState extends State<_HomeBody> {
                     sectionOrders: sectionOrders,
                     sectionKeys: sectionKeys,
                     unitKeys: unitKeys,
+                    focusLessonKey: widget.focusLessonKey,
                   ),
                 ),
               ),

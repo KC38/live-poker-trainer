@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
-import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
 import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
@@ -301,14 +300,30 @@ void main() {
     );
   });
 
-  testWidgets('resume shows one Resume control under Rex', (tester) async {
+  testWidgets('open attempt has no Resume card; next node stays marked', (
+    tester,
+  ) async {
     final analytics = _RecordingAnalytics();
     final snapshot = _readySnapshot();
     await _pumpHome(
       tester,
       snapshot: CourseHomeSnapshot(
         status: snapshot.status,
-        nodes: snapshot.nodes,
+        nodes: [
+          const CourseMapNode(
+            lessonId: 'lesson-a',
+            title: 'Lesson A',
+            summary: 'First',
+            kind: CourseNodeKind.lesson,
+            state: CourseNodeState.active,
+            sectionId: 'sec-1',
+            sectionTitle: 'Section One',
+            unitId: 'unit-1',
+            unitTitle: 'Unit One',
+            isNext: true,
+          ),
+          snapshot.nodes[1],
+        ],
         sections: snapshot.sections,
         streak: snapshot.streak,
         lifetimeXp: snapshot.lifetimeXp,
@@ -325,11 +340,81 @@ void main() {
       analytics: analytics,
     );
 
-    expect(find.byType(CourseResumeCard), findsOneWidget);
-    expect(find.text('Resume'), findsOneWidget);
-    expect(find.text('Lesson A'), findsWidgets);
-    expect(find.widgetWithText(TextButton, 'Resume'), findsNothing);
-    expect(find.widgetWithText(TextButton, 'Start'), findsNothing);
+    expect(find.text('Resume'), findsNothing);
+    expect(find.text('START'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.text('Lesson A'), findsOneWidget);
+  });
+
+  testWidgets('Home re-focus scrolls the next lesson back into view', (
+    tester,
+  ) async {
+    final focusRequests = ValueNotifier<int>(0);
+    addTearDown(focusRequests.dispose);
+
+    final nodes = <CourseMapNode>[
+      for (var i = 0; i < 12; i++)
+        CourseMapNode(
+          lessonId: 'lesson-$i',
+          title: 'Lesson $i',
+          summary: 'Node $i',
+          kind: CourseNodeKind.lesson,
+          state: i < 11 ? CourseNodeState.completed : CourseNodeState.available,
+          sectionId: 'sec-1',
+          sectionTitle: 'Section One',
+          unitId: 'unit-1',
+          unitTitle: 'Unit One',
+          isNext: i == 11,
+        ),
+    ];
+
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          courseHomeProvider.overrideWith(
+            () => _FixedHome(
+              CourseHomeSnapshot(
+                status: CourseHomeLoadStatus.ready,
+                nodes: nodes,
+                sections: const [],
+                nextLessonId: 'lesson-11',
+                streak: 1,
+                lifetimeXp: 10,
+              ),
+            ),
+          ),
+          analyticsServiceProvider.overrideWithValue(_RecordingAnalytics()),
+          appAuthProvider.overrideWith(
+            (ref) => const AsyncData(AppAuthSnapshot()),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: HomeScreen(focusRequests: focusRequests),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Lesson 11').hitTestable(), findsOneWidget);
+    expect(find.text('START').hitTestable(), findsOneWidget);
+
+    await tester.dragUntilVisible(
+      find.text('Lesson 0'),
+      find.byType(CustomScrollView),
+      const Offset(0, 300),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Lesson 11').hitTestable(), findsNothing);
+
+    focusRequests.value++;
+    await tester.pumpAndSettle();
+    expect(find.text('Lesson 11').hitTestable(), findsOneWidget);
+    expect(find.text('START').hitTestable(), findsOneWidget);
   });
 
   testWidgets('unit banner opens organized section picker', (tester) async {
