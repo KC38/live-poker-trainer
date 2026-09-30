@@ -39,6 +39,19 @@ enum ExperienceBand {
 /// Daily study goal options (minutes).
 const kDailyGoalChoices = <int>[5, 10, 15, 20];
 
+/// Duolingo-style intensity label for a daily goal choice.
+///
+/// Returns an empty string for unknown minute values.
+String dailyGoalIntensityLabel(int minutes) {
+  return switch (minutes) {
+    5 => 'Casual',
+    10 => 'Regular',
+    15 => 'Serious',
+    20 => 'Intense',
+    _ => '',
+  };
+}
+
 /// Recommendation computed from catalog + flags for an experience band.
 class OnboardingRecommendation {
   /// Creates a recommendation.
