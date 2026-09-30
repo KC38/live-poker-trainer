@@ -6,7 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 /// Felt context for a poker-action teaching spot.
 class LessonActionSpot {
@@ -1670,6 +1672,107 @@ bool isLessonActionTableActivity(CourseActivity activity) {
   }
   return (id.startsWith('act-01-03-01-') || id.startsWith('act-01-03-02-')) &&
       activity.renderer == ActivityRenderer.pokerActionSizing;
+}
+
+/// Features for Fold / Check / Call explain on the full table.
+TableFeatures get lessonPassiveActionsTableFeatures => const TableFeatures(
+  stacks: false,
+  pot: false,
+  street: false,
+  blinds: false,
+  positions: false,
+  bets: false,
+  actions: false,
+  opponentCards: false,
+  playerTypes: false,
+  stats: false,
+  boardSlots: false,
+);
+
+/// Full table: Fold / Check / Call teach taps under the felt.
+class LessonPassiveActionsExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonPassiveActionsExplainTable({
+    super.key,
+    required this.onAllActionsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  /// Every passive button has been tapped.
+  final VoidCallback? onAllActionsTapped;
+
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonPassiveActionsExplainTable> createState() =>
+      _LessonPassiveActionsExplainTableState();
+}
+
+class _LessonPassiveActionsExplainTableState
+    extends State<LessonPassiveActionsExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllActionsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= PassiveActionsDemo.actions.length) {
+      widget.onAllActionsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching =
+        widget.enabled && widget.onAllActionsTapped != null;
+    return Column(
+      key: const ValueKey<String>('passive-actions-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
+              if (i > 0) const SizedBox(width: 10),
+              Expanded(
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(PassiveActionsDemo.actions[i].$1) &&
+                      PassiveActionsDemo.actions
+                          .take(i)
+                          .every((a) => _tapped.contains(a.$1)),
+                  child: _DemoActionCard(
+                    label: PassiveActionsDemo.actions[i].$1,
+                    caption: PassiveActionsDemo.actions[i].$2,
+                    color: PassiveActionsDemo.actions[i].$3,
+                    densify: false,
+                    selected: _tapped.contains(PassiveActionsDemo.actions[i].$1),
+                    enabled: teaching,
+                    onPressed: teaching
+                        ? () => _onTap(PassiveActionsDemo.actions[i].$1)
+                        : null,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 /// Explain-step demo: Fold / Check / Call meanings on a mini felt.
