@@ -23,7 +23,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/main.dart' as app;
 import 'package:live_poker_trainer/providers/service_providers.dart';
 
