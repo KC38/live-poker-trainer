@@ -7663,6 +7663,98 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
   }
 }
 
+/// Versus-station explain: VALUE / BLUFFS / CITE under the full poker table.
+class LessonVsStationExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonVsStationExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonVsStationExplainTable> createState() =>
+      _LessonVsStationExplainTableState();
+}
+
+class _LessonVsStationExplainTableState
+    extends State<LessonVsStationExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= VsStationDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('vs-station-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < VsStationDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        VsStationDemo.points[i].label,
+                      ) &&
+                      VsStationDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: VsStationDemo.points[i].label,
+                    caption: VsStationDemo.points[i].caption,
+                    color: VsStationDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      VsStationDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  VsStationDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Value / bluffs / cite tiles for versus-station explain demos.
 class VsStationDemo extends StatefulWidget {
   /// Creates the demo.
