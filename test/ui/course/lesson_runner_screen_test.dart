@@ -1576,7 +1576,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('turn card uses the lesson frame and the turn tiles', (
+  testWidgets('turn card uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1610,6 +1610,8 @@ void main() {
     expect(find.textContaining('Tap Brick'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('turn-story-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('BRICK'), findsOneWidget);
     expect(find.text('CHANGE'), findsOneWidget);
     expect(find.text('BARREL'), findsOneWidget);
