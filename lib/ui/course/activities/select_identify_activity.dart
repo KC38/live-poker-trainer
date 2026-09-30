@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_outs_picker.dart';
@@ -189,26 +190,15 @@ class SelectIdentifyActivity extends StatelessWidget {
         }
         if (framed &&
             presentation == SelectIdentifyPresentation.holeCards &&
-            _holeHandSeatPlan(activity) != null) {
-          final plan = _holeHandSeatPlan(activity)!;
-          return LessonHoleHandTable(
+            supportsHoleHandSeatDeal(activity)) {
+          return _RandomizedHoleHandTable(
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}',
             ),
-            heroCodes: plan.heroCodes,
-            villainHoleCodes: plan.villainHoleCodes,
-            correctSeatIndex: plan.correctSeatIndex,
+            activity: activity,
+            controller: controller,
             enabled: !locked,
             showGuidance: showGuidance,
-            onSeatChoice: (seat) {
-              final choiceId = plan.choiceIdForSeat(seat) ??
-                  wrongSeatFallbackChoiceId(
-                    activityId: activity.id,
-                    choices: activity.choices,
-                  );
-              if (choiceId == null) return;
-              controller.selectChoice(choiceId, autoSubmit: true);
-            },
           );
         }
         final holeBands = _HoleCardBands(
@@ -2468,47 +2458,64 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
   }
 }
 
-/// Seat plan for Suits and ranks hole-card steps on the full table.
-({
-  List<String> heroCodes,
-  List<List<String>> villainHoleCodes,
-  int correctSeatIndex,
-  String? Function(int seat) choiceIdForSeat,
-})?
-_holeHandSeatPlan(CourseActivity activity) {
+/// True when [activity] uses a three-seat randomized hole-hand identify table.
+bool supportsHoleHandSeatDeal(CourseActivity activity) {
   switch (activity.id) {
     case 'act-01-01-02-unguided-suited':
-      return (
-        heroCodes: const ['Ah', 'Kh'],
-        villainHoleCodes: const [
-          ['Ac', 'Kd'],
-          ['7c', '7d'],
-        ],
-        correctSeatIndex: 0,
-        choiceIdForSeat: (seat) => switch (seat) {
-          0 => 'suited-ah-kh',
-          1 => 'offsuit-ah-kd',
-          2 => 'pair-77',
-          _ => null,
-        },
-      );
     case 'act-01-01-02-checkpoint-pair':
-      return (
-        heroCodes: const ['9h', '9d'],
-        villainHoleCodes: const [
-          ['Ah', 'Kh'],
-          ['Ac', 'Kd'],
-        ],
-        correctSeatIndex: 0,
-        choiceIdForSeat: (seat) => switch (seat) {
-          0 => 'pocket-pair',
-          1 => 'suited-nine',
-          2 => 'two-high',
-          _ => null,
-        },
-      );
+      return true;
     default:
-      return null;
+      return false;
+  }
+}
+
+/// Deals fresh hole hands / seat placement once per mount (redo remounts).
+class _RandomizedHoleHandTable extends StatefulWidget {
+  const _RandomizedHoleHandTable({
+    super.key,
+    required this.activity,
+    required this.controller,
+    required this.enabled,
+    required this.showGuidance,
+  });
+
+  final CourseActivity activity;
+  final LessonActivityController controller;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<_RandomizedHoleHandTable> createState() =>
+      _RandomizedHoleHandTableState();
+}
+
+class _RandomizedHoleHandTableState extends State<_RandomizedHoleHandTable> {
+  late final HoleHandSeatDeal _deal;
+
+  @override
+  void initState() {
+    super.initState();
+    _deal = dealHoleHandSeatPlan(widget.activity)!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LessonHoleHandTable(
+      heroCodes: _deal.heroCodes,
+      villainHoleCodes: _deal.villainHoleCodes,
+      correctSeatIndex: _deal.correctSeatIndex,
+      enabled: widget.enabled,
+      showGuidance: widget.showGuidance,
+      onSeatChoice: (seat) {
+        final choiceId = _deal.choiceIdForSeat(seat) ??
+            wrongSeatFallbackChoiceId(
+              activityId: widget.activity.id,
+              choices: widget.activity.choices,
+            );
+        if (choiceId == null) return;
+        widget.controller.selectChoice(choiceId, autoSubmit: true);
+      },
+    );
   }
 }
 

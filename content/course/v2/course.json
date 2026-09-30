@@ -476,7 +476,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the seat with pocket nines.",
+                  "accessibilityText": "Tap the seat with a pocket pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
