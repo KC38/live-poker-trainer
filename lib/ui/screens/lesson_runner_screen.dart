@@ -811,12 +811,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           expression: expression,
           canUndo: controller.canUndo,
           canRedo: controller.canRedo,
-          canHint: _frameCanHint(activity),
+          canHint: _frameCanHint(activity) && !controller.hintUsed,
           onUndo: controller.undoDraft,
           onRedo: controller.redoDraft,
           onHint: () {
-            controller.toggleHint();
-            if (!controller.hintVisible) return;
+            if (controller.hintUsed) return;
+            controller.revealHint();
             unawaited(
               ref
                   .read(analyticsServiceProvider)
@@ -1015,11 +1015,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             livesRemaining: attempt.livesRemaining,
             livesMax: attempt.livesMax,
             acceptedStreak: _acceptedStreak,
-            hintEnabled: hint != null && !controller.hintVisible,
+            hintEnabled: hint != null && !controller.hintUsed,
             onHint:
                 hint == null
                     ? null
                     : () {
+                      if (controller.hintUsed) return;
                       controller.revealHint();
                       setState(() {});
                       final attempt = _attempt;
