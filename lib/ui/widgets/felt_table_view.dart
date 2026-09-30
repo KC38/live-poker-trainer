@@ -817,7 +817,13 @@ class TableLayout {
       final labels = [
         if (features.positions && game.dealerIndex == i) 'D',
         if (features.positions && game.sbIndex == i) 'SB',
-        if (features.positions && game.bbIndex == i) 'BB',
+        // Hide the BB puck while that seat has not posted yet (preflop quiz
+        // that reveals the big blind after a correct tap).
+        if (features.positions &&
+            game.bbIndex == i &&
+            (game.street != Street.preflop ||
+                game.players[i].currentBet > Money.epsilon))
+          'BB',
       ];
       final puckX = puckDir > 0 ? pod.right + 3 : pod.left - 3 - puckD;
       final stackH = labels.length * puckD + (labels.length - 1) * 2;

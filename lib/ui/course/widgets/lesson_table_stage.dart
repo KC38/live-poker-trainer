@@ -40,7 +40,7 @@ const int lessonBlindsRightOfButtonIndex = 2;
 /// unless [activeSeatIndex] is set. [positionLabels] renames the ring EP, HJ,
 /// CO, BTN, SB, BB. The table plays [smallBlind]/[bigBlind] with 100 big blind
 /// stacks. [villainArchetypes] gives the opponents, in seat order, real player
-/// types.
+/// types. [postBigBlind] false leaves the BB unposted until a quiz reveals it.
 GameState lessonTableStageGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
@@ -55,6 +55,7 @@ GameState lessonTableStageGame({
   double smallBlind = lessonSmallBlind,
   double bigBlind = lessonBigBlind,
   List<PlayerArchetype>? villainArchetypes,
+  bool postBigBlind = true,
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -65,6 +66,7 @@ GameState lessonTableStageGame({
     dealerIndex: dealerIndex ?? 0,
     sbIndex: sbIndex,
     bbIndex: bbIndex,
+    postBigBlind: postBigBlind,
   );
   const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
   final holesByVillain = <int, List<String>>{
@@ -196,6 +198,7 @@ class LessonTableStage extends StatelessWidget {
     this.bigBlind = lessonBigBlind,
     this.villainArchetypes,
     this.features,
+    this.postBigBlind = true,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -297,6 +300,10 @@ class LessonTableStage extends StatelessWidget {
   /// [TableFeaturesScope].
   final TableFeatures? features;
 
+  /// When false, the big blind seat has no chips out yet (reveal-on-tap
+  /// quizzes). The BB seat index and SoftPulse target stay the same.
+  final bool postBigBlind;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -311,6 +318,7 @@ class LessonTableStage extends StatelessWidget {
     smallBlind: smallBlind,
     bigBlind: bigBlind,
     villainArchetypes: villainArchetypes,
+    postBigBlind: postBigBlind,
   );
 
   @override

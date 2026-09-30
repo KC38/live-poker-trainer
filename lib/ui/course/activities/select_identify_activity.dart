@@ -1387,6 +1387,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     dealerIndex: lessonBlindsButtonIndex,
                     sbIndex: lessonBlindsSmallBlindIndex,
                     bbIndex: lessonBlindsBigBlindIndex,
+                    // Ask who posts BB without showing $2 already out —
+                    // post + animate as soon as the learner taps the BB seat.
+                    postBigBlind:
+                        widget.activity.id !=
+                            'act-01-01-03-scaffolded-blinds' ||
+                        widget.controller.draft.choiceId == 'bb-two' ||
+                        (widget.controller.lastResult?.accepted ?? false),
                     activeSeatIndex: switch (scene.highlight) {
                       LessonTableHighlight.button => lessonBlindsButtonIndex,
                       LessonTableHighlight.smallBlind =>
