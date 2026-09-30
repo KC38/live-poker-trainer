@@ -8,8 +8,250 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
+
+/// Features for Streets explain / order on the full table.
+TableFeatures get lessonStreetsTableFeatures => const TableFeatures(
+  stacks: false,
+  pot: false,
+  street: false,
+  blinds: false,
+  positions: false,
+  bets: false,
+  actions: false,
+  opponentCards: false,
+  playerTypes: false,
+  stats: false,
+  boardSlots: true,
+);
+
+/// Board codes for a guided street sequence id.
+List<String> lessonStreetBoardForId(String id) {
+  return switch (id) {
+    'st-pre' => const <String>[],
+    'st-flop' => const ['Qs', '7c', '2d'],
+    'st-turn' => const ['Qs', '7c', '2d', 'Ah'],
+    'st-river' => const ['Qs', '7c', '2d', 'Ah', '9s'],
+    _ => const <String>[],
+  };
+}
+
+/// Full table: tap each street under the felt while the board advances.
+class LessonStreetsExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonStreetsExplainTable({
+    super.key,
+    required this.onAllStreetsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllStreetsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonStreetsExplainTable> createState() =>
+      _LessonStreetsExplainTableState();
+}
+
+class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String title) {
+    if (!widget.enabled || widget.onAllStreetsTapped == null) return;
+    setState(() => _tapped.add(title));
+    if (_tapped.length >= StreetsTimelineDemo.streets.length) {
+      widget.onAllStreetsTapped!();
+    }
+  }
+
+  String? get _nextStreet {
+    for (final street in StreetsTimelineDemo.streets) {
+      if (!_tapped.contains(street.title)) return street.title;
+    }
+    return null;
+  }
+
+  List<String> get _board {
+    // Show the furthest street reached (or the next one while teaching).
+    final next = _nextStreet;
+    if (next != null) {
+      for (final street in StreetsTimelineDemo.streets) {
+        if (street.title == next) return street.board;
+      }
+    }
+    return StreetsTimelineDemo.streets.last.board;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllStreetsTapped != null;
+    final next = _nextStreet;
+    return Column(
+      key: const ValueKey<String>('streets-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: _board,
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonStreetsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (final street in StreetsTimelineDemo.streets)
+              _SoftPulseTarget(
+                active:
+                    teaching &&
+                    widget.showGuidance &&
+                    next == street.title,
+                child: _UnderFeltStreetChip(
+                  label: street.title,
+                  selected: _tapped.contains(street.title),
+                  enabled: teaching,
+                  onPressed: teaching ? () => _onTap(street.title) : null,
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Full table: order streets under the felt while the board follows.
+class LessonStreetsOrderTable extends StatelessWidget {
+  /// Creates the order stage.
+  const LessonStreetsOrderTable({
+    super.key,
+    required this.sequenceItems,
+    required this.orderedIds,
+    required this.onPick,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final List<({String id, String label})> sequenceItems;
+  final List<String> orderedIds;
+  final ValueChanged<String> onPick;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  Widget build(BuildContext context) {
+    final remaining = [
+      for (final item in sequenceItems)
+        if (!orderedIds.contains(item.id)) item,
+    ];
+    final nextId =
+        showGuidance &&
+                enabled &&
+                orderedIds.length < sequenceItems.length
+            ? sequenceItems[orderedIds.length].id
+            : null;
+    final previewId = nextId ??
+        (orderedIds.isNotEmpty ? orderedIds.last : sequenceItems.first.id);
+    return Column(
+      key: const ValueKey<String>('streets-order-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: lessonStreetBoardForId(previewId),
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonStreetsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (final item in remaining)
+              _SoftPulseTarget(
+                active: showGuidance && enabled && item.id == nextId,
+                child: _UnderFeltStreetChip(
+                  label: item.label,
+                  selected: false,
+                  enabled: enabled,
+                  onPressed: enabled ? () => onPick(item.id) : null,
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _UnderFeltStreetChip extends StatelessWidget {
+  const _UnderFeltStreetChip({
+    required this.label,
+    required this.selected,
+    required this.enabled,
+    required this.onPressed,
+  });
+
+  final String label;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final border =
+        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+    final child = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color:
+            selected
+                ? AppColors.gold.withValues(alpha: 0.18)
+                : AppColors.bgDark.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: border, width: selected ? 2 : 1),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.manrope(
+          color: AppColors.cream,
+          fontSize: 14,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
 
 /// Whether this order-sequence activity uses street progression tiles.
 bool isStreetSequenceActivity(CourseActivity activity) {
