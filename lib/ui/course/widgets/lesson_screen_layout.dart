@@ -692,7 +692,7 @@ class LessonCoachBand extends StatelessWidget {
     required this.expression,
   });
 
-  /// Width of Rex in the coach band. Height follows the full-body drawing.
+  /// Width of Rex in the coach band. Height is the upper-body crop.
   static const double mascotSize = 78;
 
   /// Bubble copy. Empty hides the words and keeps the mascot box.
@@ -708,7 +708,11 @@ class LessonCoachBand extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RexMascot(size: mascotSize, mood: expression.rexMood),
+          RexMascot(
+            size: mascotSize,
+            mood: expression.rexMood,
+            crop: RexMascotCrop.upperBody,
+          ),
           const SizedBox(width: 2),
           Expanded(child: _SpeechBubble(text: speech)),
         ],

@@ -445,7 +445,7 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 | Slot | Current | Reuse |
 | --- | --- | --- |
 | Logo | `assets/brand/logo_mark.svg` — gold mark, transparent background, via `BrandLogo` | Welcome, Auth screen, and Live Training hub. Rasterized to launcher / notification icons via `tools/brand/render_logo_assets.mjs` |
-| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Welcome, Meet Rex, `RexCoachLine`, `RexCoachCard`, and the lesson coach band |
+| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Welcome, Meet Rex, `RexCoachLine`, `RexCoachCard`; lesson coach band uses the same slot with `RexMascotCrop.upperBody` |
 | Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet`, the lesson coach band on accept, and the lesson-result ceremony |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
 | Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
@@ -512,8 +512,10 @@ One row, height 36.
 ### 2. Coach band
 
 The mascot and one speech bubble share a row directly under the chrome.
-The mascot is `RexMascot` at width 78 (height follows the full-body
-drawing), the same coach as Meet Rex and the lesson-result ceremony.
+The mascot is `RexMascot` at width 78 with `RexMascotCrop.upperBody`
+(head through torso; legs clipped), the same coach as Meet Rex and the
+lesson-result ceremony. Full-body stays for Meet Rex, Home, and the
+lesson-result ceremony.
 The bubble is a rounded rectangle with a tail aimed at the
 coach's mouth. A plain rectangle is not the bubble. The bubble's top
 and that tail stay in the same place on every step. More text grows
