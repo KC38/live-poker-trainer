@@ -231,6 +231,14 @@ enum OnboardingStep {
   experience,
   dailyGoal,
   rexIntro,
+
+  /// First Duolingo-style Rex motivation beat after Meet Rex.
+  motivationHook,
+
+  /// Second motivation beat; Continue starts the first lesson directly.
+  motivationPitch,
+
+  /// Jump-test offer / legacy "Your start" CTA.
   recommendedStart,
   firstLesson,
   saveProgress,

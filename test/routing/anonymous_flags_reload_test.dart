@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_flags_repository.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
+import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 
 const _guestFlags = CourseFlags(
   courseEnabled: true,
@@ -131,9 +132,11 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    // firstLesson cold start lands on Recommended start (stable home widget).
-    expect(find.text('Start lesson'), findsOneWidget);
-    expect(find.text('Your start'), findsOneWidget);
+    // firstLesson cold start lands on the motivation pitch (stable home).
+    expect(find.text(MotivationPitchScreen.speech), findsOneWidget);
+    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.text('Start lesson'), findsNothing);
+    expect(find.text('Your start'), findsNothing);
     expect(repo.loads, 1);
     expect(container.read(courseFlagsProvider).asData?.value, _guestFlags);
 
@@ -277,7 +280,9 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.text('Start lesson'), findsOneWidget);
+    expect(find.text(MotivationPitchScreen.speech), findsOneWidget);
+    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.text('Start lesson'), findsNothing);
 
     tester
         .state<NavigatorState>(find.byType(Navigator))
@@ -298,6 +303,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('In progress: your two cards'), findsNothing);
+    expect(find.text('CONTINUE'), findsNothing);
     expect(find.text('Start lesson'), findsNothing);
     expect(tester.takeException(), isNull);
   });
@@ -305,6 +311,10 @@ void main() {
   testWidgets('recommended start drops a pushed Meet Rex route', (
     tester,
   ) async {
+    // Phone-sized surface: default 800x600 overflows Welcome under a pushed
+    // route before the motivation remount settles.
+    await tester.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     final onboarding = OnboardingController(null);
     final container = ProviderContainer(
       overrides: [
@@ -351,7 +361,9 @@ void main() {
     await tester.pump();
 
     expect(find.text('Meet Rex'), findsNothing);
-    expect(find.text('Your start'), findsOneWidget);
-    expect(find.text('Start lesson'), findsOneWidget);
+    expect(find.text(MotivationHookScreen.speech), findsOneWidget);
+    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.text('Your start'), findsNothing);
+    expect(find.text('Start lesson'), findsNothing);
   });
 }

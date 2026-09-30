@@ -63,7 +63,10 @@ String rootStackToken({
   }
   if (destination == AppRootDestination.guestCourse &&
       (onboarding.step == OnboardingStep.recommendedStart ||
+          onboarding.step == OnboardingStep.motivationPitch ||
           onboarding.step == OnboardingStep.firstLesson)) {
+    // Pitch and firstLesson share a navigator so Continue can push the
+    // lesson without remounting home and disposing LessonRunner.
     return '-course';
   }
   // Rewind from Your start remounts onto the earlier step. Each step has its
@@ -71,6 +74,7 @@ String rootStackToken({
   // on '' until the learner leaves Welcome.
   if (destination == AppRootDestination.guestCourse) {
     return switch (onboarding.step) {
+      OnboardingStep.motivationHook => '-motivation',
       OnboardingStep.rexIntro => '-rex',
       OnboardingStep.dailyGoal => '-goal',
       OnboardingStep.experience => '-experience',
@@ -118,6 +122,8 @@ AppRootDestination resolveAppRoot({
     // goal, or Your experience. Welcome itself stays the signed-out home.
     if (onboarding.step == OnboardingStep.firstLesson ||
         onboarding.step == OnboardingStep.recommendedStart ||
+        onboarding.step == OnboardingStep.motivationPitch ||
+        onboarding.step == OnboardingStep.motivationHook ||
         onboarding.step == OnboardingStep.rexIntro ||
         onboarding.step == OnboardingStep.dailyGoal ||
         onboarding.step == OnboardingStep.experience) {

@@ -274,6 +274,30 @@ void main() {
         anonymous: false,
         flagsReady: true,
         flags: enabled,
+        onboarding: const OnboardingDraft(
+          step: OnboardingStep.motivationHook,
+        ),
+      ),
+      AppRootDestination.guestCourse,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
+        onboarding: const OnboardingDraft(
+          step: OnboardingStep.motivationPitch,
+        ),
+      ),
+      AppRootDestination.guestCourse,
+    );
+    expect(
+      resolveAppRoot(
+        signedIn: false,
+        anonymous: false,
+        flagsReady: true,
+        flags: enabled,
         onboarding: const OnboardingDraft(step: OnboardingStep.experience),
       ),
       AppRootDestination.guestCourse,
@@ -326,6 +350,8 @@ void main() {
   test('guest stack token drops welcome routes without restoring them', () {
     const welcome = OnboardingDraft();
     const start = OnboardingDraft(step: OnboardingStep.recommendedStart);
+    const pitch = OnboardingDraft(step: OnboardingStep.motivationPitch);
+    const hook = OnboardingDraft(step: OnboardingStep.motivationHook);
     const lesson = OnboardingDraft(step: OnboardingStep.firstLesson);
     const save = OnboardingDraft(
       step: OnboardingStep.saveProgress,
@@ -356,10 +382,26 @@ void main() {
     expect(
       rootStackToken(
         destination: AppRootDestination.guestCourse,
+        onboarding: pitch,
+        anonymous: false,
+      ),
+      '-course',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.guestCourse,
         onboarding: lesson,
         anonymous: true,
       ),
       '-course',
+    );
+    expect(
+      rootStackToken(
+        destination: AppRootDestination.guestCourse,
+        onboarding: hook,
+        anonymous: false,
+      ),
+      '-motivation',
     );
     expect(
       rootStackToken(

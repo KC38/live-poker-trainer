@@ -488,6 +488,72 @@ void main() {
     expect(find.textContaining('can be lost'), findsOneWidget);
   });
 
+  testWidgets('motivation screens show Rex speech and CONTINUE', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const MotivationHookScreen(),
+        ),
+      ),
+    );
+    expect(find.text(MotivationHookScreen.speech), findsOneWidget);
+    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.text('Start lesson'), findsNothing);
+    _expectElevatedMetrics(tester, 'CONTINUE');
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const MotivationPitchScreen(),
+        ),
+      ),
+    );
+    expect(find.text(MotivationPitchScreen.speech), findsOneWidget);
+    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.text('Start lesson'), findsNothing);
+  });
+
+  test('setRecommendation routes to motivation unless jump test offered',
+      () async {
+    final controller = OnboardingController(null);
+    await controller.setRecommendation(
+      lessonId: kFirstCourseLessonId,
+      jumpTestOffered: false,
+    );
+    expect(controller.state.step, OnboardingStep.motivationHook);
+
+    await controller.advanceMotivationHook();
+    expect(controller.state.step, OnboardingStep.motivationPitch);
+
+    await controller.setRecommendation(
+      lessonId: 'lesson-jump',
+      jumpTestOffered: true,
+    );
+    expect(controller.state.step, OnboardingStep.recommendedStart);
+  });
+
   testWidgets('Nice work shows the lesson XP total and streak', (tester) async {
     await tester.pumpWidget(
       ProviderScope(

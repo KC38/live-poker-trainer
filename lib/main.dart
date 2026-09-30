@@ -246,6 +246,16 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       case AppRootDestination.saveProgress:
         return const SaveProgressScreen();
       case AppRootDestination.guestCourse:
+        if (onboarding.step == OnboardingStep.motivationHook) {
+          return const MotivationHookScreen();
+        }
+        if (onboarding.step == OnboardingStep.motivationPitch ||
+            (onboarding.step == OnboardingStep.firstLesson &&
+                !onboarding.jumpTestOffered)) {
+          // Same widget for pitch + firstLesson so markEnteringFirstLesson
+          // does not remount MaterialApp.home and dispose LessonRunner.
+          return const MotivationPitchScreen();
+        }
         if (onboarding.step == OnboardingStep.firstLesson ||
             onboarding.step == OnboardingStep.recommendedStart) {
           // Same widget type for both steps so markEnteringFirstLesson does not

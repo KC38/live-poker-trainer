@@ -19,6 +19,7 @@ import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_flags_repository.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
+import 'package:live_poker_trainer/ui/screens/onboarding_screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _flags = CourseFlags(
@@ -202,14 +203,21 @@ void main() {
 
     await _tapContinue(tester);
 
-    expect(find.text('Your start'), findsOneWidget);
-    expect(find.text('Your two cards'), findsOneWidget);
-    expect(find.text('Start lesson'), findsOneWidget);
+    expect(find.text(MotivationHookScreen.speech), findsOneWidget);
+    expect(find.text('CONTINUE'), findsOneWidget);
+    expect(find.text('Your start'), findsNothing);
+    expect(find.text('Start lesson'), findsNothing);
     expect(find.text('Home'), findsNothing);
     expect(onboarding.state.experienceBand, ExperienceBand.rulesKnown);
-    expect(onboarding.state.step, OnboardingStep.recommendedStart);
+    expect(onboarding.state.step, OnboardingStep.motivationHook);
 
-    await tester.tap(find.text('Start lesson'));
+    await tester.tap(find.text('CONTINUE'));
+    await tester.pumpAndSettle();
+
+    expect(find.text(MotivationPitchScreen.speech), findsOneWidget);
+    expect(onboarding.state.step, OnboardingStep.motivationPitch);
+
+    await tester.tap(find.text('CONTINUE'));
     await tester.pump();
     await tester.pump();
 
