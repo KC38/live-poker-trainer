@@ -2332,6 +2332,8 @@ void main() {
     expect(find.textContaining('Tap Maniac'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('maniac-model-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('MANIAC'), findsOneWidget);
     expect(find.text('ENTRY'), findsOneWidget);
     expect(find.text('AGGRO'), findsOneWidget);
