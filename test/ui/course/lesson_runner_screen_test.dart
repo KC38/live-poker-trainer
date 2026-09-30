@@ -4008,6 +4008,8 @@ void main() {
     expect(find.textContaining('Tap Type'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('type-board-line-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('TYPE'), findsOneWidget);
     expect(find.text('BOARD'), findsOneWidget);
     expect(find.text('LINE'), findsOneWidget);
