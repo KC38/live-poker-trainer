@@ -7196,6 +7196,114 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets(
+    'blinds timing fits the lesson frame under Nice! without overflow',
+    (tester) async {
+      // iPhone 13 mini — the device that showed BOTTOM OVERFLOWED BY 61 PIXELS
+      // when the answer dock replaced the tool row.
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final activity = CourseActivity(
+        id: 'act-01-01-03-unguided-when',
+        order: 4,
+        stage: ActivityStage.unguided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Tap the hand phase when blinds are posted.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap when the blinds go in.',
+        choices: const [
+          CourseChoice(
+            id: 'before-deal',
+            label: 'Before any hole cards are dealt',
+          ),
+          CourseChoice(id: 'after-flop', label: 'After the flop'),
+          CourseChoice(
+            id: 'only-showdown',
+            label: 'Only if the hand reaches showdown',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      final base = buildPokerTheme();
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+          ],
+          child: MaterialApp(
+            theme: base.copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: Scaffold(
+              backgroundColor: AppColors.bgDark,
+              body: SafeArea(
+                child: LessonScreenLayout(
+                  progress: 0.5,
+                  livesRemaining: 3,
+                  livesMax: 3,
+                  onClose: () {},
+                  speech: 'Tap when the blinds go in.',
+                  expression: LessonMascotExpression.happy,
+                  onUndo: () {},
+                  onRedo: () {},
+                  onHint: () {},
+                  canUndo: false,
+                  canRedo: false,
+                  canHint: true,
+                  result: const SubmitCourseStepResult(
+                    attemptId: 'a1',
+                    activityId: 'act-01-01-03-unguided-when',
+                    grade: SoftGrade.recommended,
+                    feedback: 'Blinds first, then cards.',
+                    accepted: true,
+                    lifeLost: false,
+                    livesRemaining: 3,
+                    xpAwarded: 10,
+                    remediationRequired: false,
+                    resume: CourseResumePointer(
+                      attemptId: 'a1',
+                      lessonId: 'lesson-01-01-03',
+                      activityId: 'act-01-01-03-unguided-when',
+                      activityIndex: 3,
+                    ),
+                    duplicate: false,
+                  ),
+                  onContinue: () {},
+                  stage: LessonFrameScope(
+                    onLocalMiss: (_) {},
+                    child: SelectIdentifyActivity(
+                      activity: activity,
+                      controller: controller,
+                      showGuidance: false,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('Nice!'), findsOneWidget);
+      expect(find.text('Continue'), findsOneWidget);
+      expect(find.byKey(const ValueKey('blinds-timing-felt')), findsOneWidget);
+      final feltHeight =
+          tester.getSize(find.byKey(const ValueKey('blinds-timing-felt'))).height;
+      final layoutHeight =
+          tester.getSize(find.byType(LessonScreenLayout)).height;
+      expect(feltHeight, lessThan(layoutHeight));
+      expect(feltHeight, greaterThan(120));
+
+      controller.dispose();
+    },
+  );
+
   test('resolveLessonTableScene covers first-lesson select activities', () {
     final privacy = CourseActivity(
       id: 'act-01-01-01-scaffolded-private',

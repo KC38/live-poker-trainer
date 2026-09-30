@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 
@@ -5975,31 +5976,41 @@ class LessonTableContext extends StatelessWidget {
     double? height,
     bool centerChild = false,
   }) {
-    return Semantics(
-      label: semanticsLabel,
-      child: Container(
-        key: key,
-        width: double.infinity,
-        height: height,
-        constraints:
-            height == null && minHeight != null
-                ? BoxConstraints(minHeight: minHeight)
-                : null,
-        alignment: centerChild ? Alignment.center : null,
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [AppColors.feltLight, AppColors.feltDark],
+    // Densify asks for ~58% of screen; when Nice! / Continue shrinks the
+    // stage, clamp so the shell never overflows the Expanded parent.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final effectiveHeight =
+            height == null
+                ? null
+                : clampTeachFeltHeight(constraints, preferred: height);
+        return Semantics(
+          label: semanticsLabel,
+          child: Container(
+            key: key,
+            width: double.infinity,
+            height: effectiveHeight,
+            constraints:
+                effectiveHeight == null && minHeight != null
+                    ? BoxConstraints(minHeight: minHeight)
+                    : null,
+            alignment: centerChild ? Alignment.center : null,
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [AppColors.feltLight, AppColors.feltDark],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: AppColors.feltBorder.withValues(alpha: 0.85),
+              ),
+            ),
+            child: child,
           ),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: AppColors.feltBorder.withValues(alpha: 0.85),
-          ),
-        ),
-        child: child,
-      ),
+        );
+      },
     );
   }
 

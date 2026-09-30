@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Lessons that use [LessonScreenLayout] instead of the app-bar runner.
@@ -1196,7 +1197,31 @@ class LessonScreenLayout extends StatelessWidget {
             ),
           ),
         LessonCoachBand(speech: speech, expression: expression),
-        Expanded(child: stage),
+        Expanded(
+          // Teach felts request ~58% of screen height. When the answer dock
+          // shrinks the stage below that, rewrite MediaQuery height so every
+          // densified shell (blinds timing, SoftPulse demos, suit pickers)
+          // still fits without a bottom overflow.
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final mq = MediaQuery.of(context);
+              final mediaHeight = teachStageMediaHeight(
+                screenHeight: mq.size.height,
+                stageMaxHeight: constraints.maxHeight,
+              );
+              final stageChild =
+                  mediaHeight == mq.size.height
+                      ? stage
+                      : MediaQuery(
+                        data: mq.copyWith(
+                          size: Size(mq.size.width, mediaHeight),
+                        ),
+                        child: stage,
+                      );
+              return stageChild;
+            },
+          ),
+        ),
         if (graded)
           LessonAnswerDock(
             result: result!,
