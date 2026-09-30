@@ -2,8 +2,8 @@
 description: >-
   Implement every open Jira ticket in the Live Poker Trainer project, one at
   a time, on a branch and worktree named for that ticket. Validate each
-  change live on the iPhone 17, then close the ticket with a comment and
-  screenshots.
+  change live on the iPhone 13 mini, then close the ticket with a comment
+  and screenshots.
 ---
 
 # Implement open Jira tickets
@@ -35,7 +35,7 @@ session. Do not launch a subagent. Do not edit `~/live-poker-trainer`.
 - Ship the smallest change that makes every criterion true. Fix the cause.
   Leave behavior the ticket does not mention alone. No bundled fixes.
 - One ticket, one branch, one PR. Tests lock the criteria. A green suite
-  is not done: each criterion is shown on the iPhone 17, on the
+  is not done: each criterion is shown on the iPhone 13 mini, on the
   worktree before merge and again on `origin/main` after.
 - If a criterion cannot be shown, comment the gap and leave the ticket
   open. Do not close it.
@@ -92,8 +92,9 @@ BRANCH="fix/$SLUG"                # Bug → fix. Story or Task → feature.
 ```
 
 Worktree: `~/live-poker-trainer/.worktrees/$SLUG`.
-Simulator tmux session: `flutter-iphone17-$SLUG`.
-Device: iPhone 17 `20ACECD5-FBEE-4663-9044-E11D5F0A26FC`.
+Simulator tmux session: `flutter-iphone-13-mini-$SLUG`.
+Device: iPhone 13 mini — resolve with `DEVICE="$(tools/iphone_13_mini_udid.sh)"`.
+Never hardcode the UDID. Do not use any other simulator.
 
 Pass that `BRANCH` and `SLUG` into make-change step 1. Do not drop the
 issue key. Do not reuse another ticket's worktree.
@@ -117,34 +118,30 @@ Otherwise run make-change in this session for this ticket only:
    In Progress when it exists (`transitionJiraIssue`).
 2. Implement only that ticket, against its acceptance criteria.
 3. Add or update tests that lock those criteria.
-4. Before merge, validate the worktree build live on the iPhone 17
-   (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`). Drive the UI with
+4. Before merge, validate the worktree build live on the iPhone 13 mini.
+   Resolve `DEVICE="$(tools/iphone_13_mini_udid.sh)"`. Drive the UI with
    `tools/agent_tap.py --log "$LOG_FILE"` for this session's log
-   (`/tmp/flutter-$SLUG.log` before merge). Do not use the default log:
-   that drives the iPhone 17 Pro. Do not boot, uninstall, terminate, kill,
-   hot-restart, screenshot, or tap the Pro
-   (`F1AE4938-D9BE-4EA1-8C98-58555A0DE62A`). Screenshot with
-   `xcrun simctl io 20ACECD5-FBEE-4663-9044-E11D5F0A26FC screenshot …`.
-   Other device details are in
+   (`/tmp/flutter-$SLUG.log` before merge). Screenshot with
+   `xcrun simctl io "$DEVICE" screenshot …`. Other device details are in
    [docs/agent-ios-simulator.md](../../docs/agent-ios-simulator.md).
    Walk the ticket's own steps, including **Validate before closing**,
    and the six charter checks above. Meet the path precondition from
    [docs/agent-paths.md](../../docs/agent-paths.md): `fresh-install` means
-   uninstall and relaunch this worktree on the iPhone 17 only; `guest-home`
-   means do not uninstall. A hot restart of a signed-in session is not a
-   fresh-install check.
+   uninstall and relaunch this worktree on the iPhone 13 mini only;
+   `guest-home` means do not uninstall. A hot restart of a signed-in
+   session is not a fresh-install check.
 5. Review `git diff origin/main...HEAD` against the ticket. Remove anything
    the criteria do not require.
 6. PR test plan is those same criteria. Merge and deploy Cloud Functions
-   via make-change, then refresh the iPhone 17 only
-   (`refresh-simulator.sh implement`). That refresh must not restart the Pro.
+   via make-change, then refresh the mini
+   (`.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh`).
 7. After that refresh, walk the same steps again on `origin/main` on the
-   iPhone 17 and save the closeout screenshots to
+   iPhone 13 mini and save the closeout screenshots to
    `~/live-poker-trainer/.cursor/tmp/<KEY>-*.png`. Those shots are the
    evidence for the Jira comment. The post-merge log is
-   `/tmp/flutter-live-poker-trainer-iphone17.run.log`. A backend-only
-   ticket still needs a live check on that iPhone 17 session (the screen
-   or log that shows the behavior). Do not walk it on the Pro.
+   `/tmp/flutter-live-poker-trainer.run.log`. A backend-only ticket still
+   needs a live check on that mini session (the screen or log that shows
+   the behavior).
 
 If implement, test, sim validation, or merge fails, comment the failure and
 the blocker on the ticket. Do not transition it to Done. Stop the queue and
@@ -152,8 +149,8 @@ report the remaining keys.
 
 ## Close
 
-Close a ticket only after the post-merge iPhone 17 walk succeeded and the
-closeout screenshots exist. Every acceptance criterion and the six
+Close a ticket only after the post-merge iPhone 13 mini walk succeeded and
+the closeout screenshots exist. Every acceptance criterion and the six
 charter checks were checked on that walk.
 
 1. Upload each screenshot with `executeWrite` operation
@@ -167,7 +164,7 @@ charter checks were checked on that walk.
    - what shipped
    - branch name and PR URL
    - each acceptance criterion and the six charter checks, and how each
-     was checked on the iPhone 17 after merge
+     was checked on the iPhone 13 mini after merge
    - that the images are from that live session
    Do not put the comment on `transitionJiraIssue` `update`. That path
    drops the comment.

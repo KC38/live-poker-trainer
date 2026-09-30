@@ -118,7 +118,7 @@ Never force-push `main`. If `gh` fails, stop and report.
 
 ### 7. Delete the branch and worktree, then sync primary
 
-Return to `~/live-poker-trainer`, force-remove the ticket worktree, sync `origin/main`, and only then delete the remote and local branches. Leave `.worktrees/iphone17-main` in place:
+Return to `~/live-poker-trainer`, force-remove the ticket worktree, sync `origin/main`, and only then delete the remote and local branches:
 
 ```bash
 cd ~/live-poker-trainer

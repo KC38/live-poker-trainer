@@ -51,7 +51,7 @@ Goal: the next lesson Home offers can be finished, and the status bar moves with
 Goal: killing the app mid-lesson restores the same lesson and activity.
 
 1. Start a lesson from Home. Submit at least one step. Record the lesson title and the activity you are on.
-2. There is no leave control on the runner. Terminate the app on the simulator this workflow is driving (`xcrun simctl terminate <that UDID> com.pokerlab.livePokerTrainer`). The Pro session uses the iPhone 17 Pro. `/implement-open-jira` uses the iPhone 17. Do not terminate the other phone. Do not uninstall.
+2. There is no leave control on the runner. Terminate the app on the iPhone 13 mini (`DEVICE="$(tools/iphone_13_mini_udid.sh)"; xcrun simctl terminate "$DEVICE" com.pokerlab.livePokerTrainer`). Do not uninstall.
 3. Launch again. Home shows a **Resume** card with that lesson title and activity index.
 4. Open it. The runner continues that lesson, including the catch-up notice when the product shows one. Finish or leave after the restored step is visible.
 

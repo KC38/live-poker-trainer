@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Drive the debug app via ext.poker.agent (tap / openlesson / type).
 
-The default log is the iPhone 17 Pro session. /implement-open-jira
-passes --log for the iPhone 17 session so the two roles do not tap each
-other's app.
+The default log is the iPhone 13 mini session
+(`/tmp/flutter-live-poker-trainer.run.log`). Ticket worktree sessions pass
+`--log /tmp/flutter-$SLUG.log`.
 """
 
 from __future__ import annotations
@@ -16,9 +16,10 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-QA_LOG = Path("/tmp/flutter-live-poker-trainer.run.log")
-IMPLEMENT_LOG = Path("/tmp/flutter-live-poker-trainer-iphone17.run.log")
-LOG = QA_LOG
+DEFAULT_LOG = Path("/tmp/flutter-live-poker-trainer.run.log")
+# Back-compat alias for older callers/tests.
+QA_LOG = DEFAULT_LOG
+LOG = DEFAULT_LOG
 
 
 def vm_base(log: Path | None = None) -> tuple[str, str]:
@@ -54,18 +55,18 @@ def agent(cmd: str, log: Path | None = None, **extra: str) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    """CLI parser. The default log is the Pro session."""
+    """CLI parser. The default log is the iPhone 13 mini session."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("cmd", help="Agent command (tap, openlesson, type, ...)")
     parser.add_argument("--text", default="", help="Label/text for tap/type/openlesson")
     parser.add_argument(
         "--log",
         type=Path,
-        default=QA_LOG,
+        default=DEFAULT_LOG,
         help=(
             "Flutter run log to read the Dart VM URI from. "
-            f"Default {QA_LOG} (Pro). "
-            f"/implement-open-jira uses {IMPLEMENT_LOG} or its worktree log."
+            f"Default {DEFAULT_LOG} (iPhone 13 mini). "
+            "Ticket worktrees pass /tmp/flutter-$SLUG.log."
         ),
     )
     return parser
