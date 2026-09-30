@@ -765,13 +765,32 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     Navigator.of(context).maybePop();
   }
 
+  /// Hearts for the lesson chrome while bootstrapping or after an error.
+  ///
+  /// Prefer the open attempt, then Home profile — never invent a full bar of
+  /// five while the real count (e.g. 4) is already known on Home.
+  (int remaining, int max) _frameLivesWhilePending() {
+    final attempt = _attempt;
+    if (attempt != null) {
+      return (attempt.livesRemaining, attempt.livesMax);
+    }
+    final homeAsync = ref.watch(courseHomeProvider);
+    final home = homeAsync.asData?.value ?? homeAsync.valueOrNull;
+    if (home != null) {
+      final max = home.livesMax > 0 ? home.livesMax : 5;
+      return (home.hearts.clamp(0, max), max);
+    }
+    return (5, 5);
+  }
+
   Widget _buildLessonFrameBody() {
     final onClose = _closeLesson;
     if (_bootstrapping || _error != null) {
+      final (livesRemaining, livesMax) = _frameLivesWhilePending();
       return LessonScreenLayout(
         progress: 0,
-        livesRemaining: 5,
-        livesMax: 5,
+        livesRemaining: livesRemaining,
+        livesMax: livesMax,
         onClose: onClose,
         speech: '',
         expression: LessonMascotExpression.thinking,
