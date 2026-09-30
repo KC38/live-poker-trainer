@@ -201,6 +201,10 @@ Play a full toy hand uses the full poker table for every step: explain
 taps Blinds, You act, and Ending under the felt, and each street uses
 that table.
 
+Hand families uses the full poker table for every step: explain taps
+Pairs, Broadways, Suited aces, and Connectors under the felt while
+holes update, and each classify spot uses that table.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -402,8 +406,9 @@ seat order stay lists, and the action spot and the toy hand use the
 full table. Position labels uses the same frame: the six-max seats
 are labeled on the full table. Acting order uses the same frame:
 preflop order is EP, then HJ, then BTN on that table. Hand families
-uses the same frame: the family list stays in the stage, and a
-starting hand sits face up on the full table. Open or fold baseline
+uses the same frame and the full table: explain taps Pairs, Broadways,
+Suited aces, and Connectors under the felt while holes update, and a
+starting hand sits face up on that table. Open or fold baseline
 uses the same frame: early, button, and live size stay in the stage,
 and each open sits face up on the full table. Versus an open uses
 the same frame: fold, call, and 3-bet stay in the stage, and each

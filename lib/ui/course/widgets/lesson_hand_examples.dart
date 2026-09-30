@@ -8,7 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 /// Demo cards + short caption for a hand-category teaching token.
 class LessonHandExample {
@@ -1075,6 +1077,157 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
+  }
+}
+
+/// Features for Hand families explain on the full table.
+TableFeatures get lessonHandFamiliesTableFeatures => const TableFeatures(
+  stacks: false,
+  pot: false,
+  street: false,
+  blinds: false,
+  positions: false,
+  bets: false,
+  actions: false,
+  opponentCards: false,
+  playerTypes: false,
+  stats: false,
+  boardSlots: false,
+);
+
+/// Full table: tap each family under the felt while holes update.
+class LessonHandFamiliesExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonHandFamiliesExplainTable({
+    super.key,
+    required this.onAllFamiliesTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllFamiliesTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonHandFamiliesExplainTable> createState() =>
+      _LessonHandFamiliesExplainTableState();
+}
+
+class _LessonHandFamiliesExplainTableState
+    extends State<LessonHandFamiliesExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(LessonHandExample family) {
+    if (!widget.enabled || widget.onAllFamiliesTapped == null) return;
+    setState(() => _tapped.add(family.id));
+    if (_tapped.length >= HandFamiliesDemo.families.length) {
+      widget.onAllFamiliesTapped!();
+    }
+  }
+
+  LessonHandExample? get _nextFamily {
+    for (final family in HandFamiliesDemo.families) {
+      if (!_tapped.contains(family.id)) return family;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllFamiliesTapped != null;
+    final next = _nextFamily;
+    final preview = next ?? HandFamiliesDemo.families.last;
+    return Column(
+      key: const ValueKey<String>('hand-families-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: preview.codes,
+            boardCodes: const [],
+            villainCount: 2,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonHandFamiliesTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (final family in HandFamiliesDemo.families)
+              _SoftPulseTarget(
+                active:
+                    teaching &&
+                    widget.showGuidance &&
+                    next?.id == family.id,
+                child: _UnderFeltFamilyChip(
+                  label: family.title,
+                  selected: _tapped.contains(family.id),
+                  enabled: teaching,
+                  onPressed: teaching ? () => _onTap(family) : null,
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _UnderFeltFamilyChip extends StatelessWidget {
+  const _UnderFeltFamilyChip({
+    required this.label,
+    required this.selected,
+    required this.enabled,
+    required this.onPressed,
+  });
+
+  final String label;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final border =
+        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+    final child = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color:
+            selected
+                ? AppColors.gold.withValues(alpha: 0.18)
+                : AppColors.bgDark.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: border, width: selected ? 2 : 1),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.manrope(
+          color: AppColors.cream,
+          fontSize: 13,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
   }
 }
 
