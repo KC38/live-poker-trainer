@@ -2225,6 +2225,96 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
   }
 }
 
+/// Full table: Early / Button / Live 3x teach taps under the felt.
+class LessonOpenRangeExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonOpenRangeExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonOpenRangeExplainTable> createState() =>
+      _LessonOpenRangeExplainTableState();
+}
+
+class _LessonOpenRangeExplainTableState
+    extends State<LessonOpenRangeExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= OpenRangeDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('open-range-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: lessonBlindsVillainCount,
+            dealerIndex: lessonBlindsButtonIndex,
+            sbIndex: lessonBlindsSmallBlindIndex,
+            bbIndex: lessonBlindsBigBlindIndex,
+            heroFaceUp: true,
+            positionLabels: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              positions: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
+              if (i > 0) const SizedBox(width: 10),
+              Expanded(
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(OpenRangeDemo.points[i].label) &&
+                      OpenRangeDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: OpenRangeDemo.points[i].label,
+                    caption: OpenRangeDemo.points[i].caption,
+                    color: OpenRangeDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(OpenRangeDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(OpenRangeDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Explain-step demo: early vs button opens and a live ~3x size.
 class OpenRangeDemo extends StatefulWidget {
   /// Creates the demo.
