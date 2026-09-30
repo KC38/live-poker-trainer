@@ -57,6 +57,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_pots.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
@@ -7342,6 +7343,7 @@ await tester.tap(find.text('NIT'));
       CourseChoice(id: 'bb-two', label: 'BB'),
       CourseChoice(id: 'sb-one', label: 'SB'),
       CourseChoice(id: 'btn-posts', label: 'Button'),
+      CourseChoice(id: 'empty-seat', label: 'Any other seat'),
     ];
     expect(
       mapTableRegionToChoiceId(
@@ -7358,6 +7360,33 @@ await tester.tap(find.text('NIT'));
         choices: blindsChoices,
       ),
       'sb-one',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: 'act-01-01-03-scaffolded-blinds',
+        region: LessonTableRegion.emptySeat,
+        choices: blindsChoices,
+      ),
+      'empty-seat',
+    );
+    expect(
+      lessonBlindsFrameTarget('act-01-01-03-scaffolded-blinds', 0)?.region,
+      LessonTableRegion.emptySeat,
+    );
+    expect(
+      lessonBlindsFrameTarget('act-01-01-03-scaffolded-blinds', 1)?.region,
+      LessonTableRegion.emptySeat,
+    );
+    expect(
+      lessonBlindsFrameTarget(
+        'act-01-01-03-scaffolded-blinds',
+        lessonBlindsBigBlindIndex,
+      )?.region,
+      LessonTableRegion.bigBlind,
+    );
+    expect(
+      lessonBlindsFrameTarget('act-01-01-03-checkpoint-layout', 0)?.seatIndex,
+      4,
     );
 
     const whenChoices = [

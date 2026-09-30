@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "1e368ec9cb697abc08bed738e17a4300791e7a0e6b404f1564f366556dc55218",
+  "contentChecksum": "79e751abd1c51b51a5d25e5f25ea4fb30a91cb17b95919119cbad6c441e8fb51",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -666,6 +666,16 @@
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Button deals later; blinds post to the left.",
+                        "betterChoiceId": "bb-two"
+                      }
+                    },
+                    {
+                      "id": "empty-seat",
+                      "label": "Any other seat",
+                      "accessibilityText": "Any other seat",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That seat does not post the big blind.",
                         "betterChoiceId": "bb-two"
                       }
                     }
@@ -21780,6 +21790,11 @@
         "btn-posts": {
           "grade": "clear_mistake",
           "feedback": "Button deals later; blinds post to the left.",
+          "betterChoiceId": "bb-two"
+        },
+        "empty-seat": {
+          "grade": "clear_mistake",
+          "feedback": "That seat does not post the big blind.",
           "betterChoiceId": "bb-two"
         }
       }

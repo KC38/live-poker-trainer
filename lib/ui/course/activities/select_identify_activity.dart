@@ -48,7 +48,8 @@ LessonTableTapTarget? lessonBlindsFrameTarget(String activityId, int seatIndex) 
       if (seatIndex == lessonBlindsButtonIndex) {
         return const LessonTableTapTarget(LessonTableRegion.button);
       }
-      return null;
+      // Jo / Sam / You / etc. — still a graded wrong answer.
+      return const LessonTableTapTarget(LessonTableRegion.emptySeat);
     case 'act-01-01-03-checkpoint-layout':
       // The numbered diagram called the small blind seat 0 and the big blind
       // seat 1. The seat to the right of the button was seat 4.
@@ -70,7 +71,11 @@ LessonTableTapTarget? lessonBlindsFrameTarget(String activityId, int seatIndex) 
           seatIndex: 4,
         );
       }
-      return null;
+      // Button, hero, and remaining seats remain wrong guesses.
+      return const LessonTableTapTarget(
+        LessonTableRegion.emptySeat,
+        seatIndex: 4,
+      );
     default:
       return null;
   }
@@ -195,7 +200,11 @@ class SelectIdentifyActivity extends StatelessWidget {
             enabled: !locked,
             showGuidance: showGuidance,
             onSeatChoice: (seat) {
-              final choiceId = plan.choiceIdForSeat(seat);
+              final choiceId = plan.choiceIdForSeat(seat) ??
+                  wrongSeatFallbackChoiceId(
+                    activityId: activity.id,
+                    choices: activity.choices,
+                  );
               if (choiceId == null) return;
               controller.selectChoice(choiceId, autoSubmit: true);
             },
@@ -413,12 +422,20 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   };
 
   void _submitRegion(LessonTableTapTarget target) {
-    final mapped = mapTableRegionToChoiceId(
+    var mapped = mapTableRegionToChoiceId(
       activityId: widget.activity.id,
       region: target.region,
       seatIndex: target.seatIndex,
       choices: widget.activity.choices,
     );
+    // Seat taps that are off-script still grade as a wrong choice so the
+    // learner can pick any player — never silently ignore a felt seat.
+    if (mapped == null && isPlayerSeatRegion(target.region)) {
+      mapped = wrongSeatFallbackChoiceId(
+        activityId: widget.activity.id,
+        choices: widget.activity.choices,
+      );
+    }
     if (mapped == null) return;
     setState(() {
       _selectedRegion = target.region;
@@ -1331,9 +1348,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                   LessonTableRegion.smallBlind,
                                 lessonBlindsBigBlindIndex =>
                                   LessonTableRegion.bigBlind,
-                                _ => null,
+                                _ => LessonTableRegion.emptySeat,
                               };
-                              if (region == null) return;
                               _submitRegion(LessonTableTapTarget(region));
                             },
                   ),
@@ -1510,9 +1526,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                         LessonTableRegion.smallBlind,
                                       lessonBlindsBigBlindIndex =>
                                         LessonTableRegion.bigBlind,
-                                      _ => null,
+                                      _ => LessonTableRegion.emptySeat,
                                     };
-                                    if (region == null) return;
                                     _submitRegion(LessonTableTapTarget(region));
                                   },
                         ),
