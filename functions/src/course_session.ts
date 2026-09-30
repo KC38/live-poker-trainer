@@ -31,9 +31,29 @@ import {
 } from "./course_catalog";
 import {resolveLiveAccessForUser} from "./live_access";
 
+/** Max hearts on a course profile. Shared by new users and attempt ceilings. */
 export const DEFAULT_LESSON_LIVES = 3;
 export const XP_PER_ACCEPTED_STEP = 10;
 export const XP_LESSON_COMPLETE = 25;
+
+/**
+ * Hearts are per user (course profile), not reset per lesson.
+ * Missing / invalid profile values fall back to a full set.
+ */
+export function profileLivesFromData(data: DocumentData | undefined): {
+  livesRemaining: number;
+  livesMax: number;
+} {
+  const livesMaxRaw = Number(data?.livesMax ?? DEFAULT_LESSON_LIVES);
+  const livesMax = Number.isFinite(livesMaxRaw) && livesMaxRaw > 0 ?
+    Math.floor(livesMaxRaw) :
+    DEFAULT_LESSON_LIVES;
+  const remainingRaw = Number(data?.livesRemaining ?? livesMax);
+  const livesRemaining = Number.isFinite(remainingRaw) ?
+    Math.max(0, Math.min(livesMax, Math.floor(remainingRaw))) :
+    livesMax;
+  return {livesRemaining, livesMax};
+}
 
 /** Gems granted the first time a learner studies on a local calendar day. */
 export const GEMS_DAILY_QUEST = 5;
@@ -89,6 +109,10 @@ export interface CourseProfile {
   catalogVersion: string;
   lifetimeXp: number;
   gems: number;
+  /** Hearts left for this user across lessons. */
+  livesRemaining: number;
+  /** Heart ceiling for this user (usually [DEFAULT_LESSON_LIVES]). */
+  livesMax: number;
   currentStreak: number;
   longestStreak: number;
   lastStudyLocalDate: string | null;
@@ -698,6 +722,11 @@ export async function startCourseLessonForUser(options: {
       nowMs,
     });
 
+    // Carry user hearts into the attempt — never reset to full per lesson.
+    const profileLives = profileLivesFromData(
+      profileSnap.exists ? profileSnap.data() : undefined,
+    );
+
     const first = activities[0];
     const attempt: CourseAttempt = {
       attemptId: newAttemptId,
@@ -707,8 +736,8 @@ export async function startCourseLessonForUser(options: {
       status: "in_progress",
       activityIndex: 0,
       currentActivityId: first.id,
-      livesRemaining: DEFAULT_LESSON_LIVES,
-      livesMax: DEFAULT_LESSON_LIVES,
+      livesRemaining: profileLives.livesRemaining,
+      livesMax: profileLives.livesMax,
       startRequestId,
       acceptedCount: 0,
       scoredCount: 0,
@@ -739,6 +768,9 @@ export async function startCourseLessonForUser(options: {
       resume: resumeFromAttempt(attempt),
       catalogVersion,
       timezone,
+      // Backfill lives on legacy profiles that never stored them.
+      livesRemaining: profileLives.livesRemaining,
+      livesMax: profileLives.livesMax,
       updatedAt: FieldValue.serverTimestamp(),
     }, {merge: true});
     return {
@@ -977,6 +1009,9 @@ export async function submitCourseStepForUser(options: {
       longestStreak: streak.longestStreak,
       lastStudyLocalDate: streak.lastStudyLocalDate,
       timezone,
+      // Keep user hearts in sync when a life is spent (and backfill max).
+      livesRemaining,
+      livesMax: attempt.livesMax > 0 ? attempt.livesMax : DEFAULT_LESSON_LIVES,
       updatedAt: FieldValue.serverTimestamp(),
     };
     if (scored) {
@@ -1598,6 +1633,8 @@ function emptyProfile(options: {
     catalogVersion: options.catalogVersion,
     lifetimeXp: 0,
     gems: 0,
+    livesRemaining: DEFAULT_LESSON_LIVES,
+    livesMax: DEFAULT_LESSON_LIVES,
     currentStreak: 0,
     longestStreak: 0,
     lastStudyLocalDate: null,
@@ -1627,6 +1664,8 @@ function profileToFirestore(profile: CourseProfile): DocumentData {
     catalogVersion: profile.catalogVersion,
     lifetimeXp: profile.lifetimeXp,
     gems: profile.gems,
+    livesRemaining: profile.livesRemaining,
+    livesMax: profile.livesMax,
     currentStreak: profile.currentStreak,
     longestStreak: profile.longestStreak,
     lastStudyLocalDate: profile.lastStudyLocalDate,
@@ -1652,10 +1691,13 @@ function profileToFirestore(profile: CourseProfile): DocumentData {
 function profileFromData(data: DocumentData): CourseProfile {
   const acceptedAnswers = Number(data.acceptedAnswers ?? 0);
   const totalScoredAnswers = Number(data.totalScoredAnswers ?? 0);
+  const lives = profileLivesFromData(data);
   return {
     catalogVersion: String(data.catalogVersion ?? courseBank.catalogVersion),
     lifetimeXp: Number(data.lifetimeXp ?? 0),
     gems: Number(data.gems ?? 0),
+    livesRemaining: lives.livesRemaining,
+    livesMax: lives.livesMax,
     currentStreak: Number(data.currentStreak ?? 0),
     longestStreak: Number(data.longestStreak ?? 0),
     lastStudyLocalDate: optionalString(data.lastStudyLocalDate) ?? null,

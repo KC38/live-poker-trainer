@@ -66,6 +66,25 @@ describe("mergeCourseProfiles", () => {
     expect(merged.transferredXp).toBe(0);
     expect(merged.profile.lifetimeXp).toBe(100);
   });
+  it("keeps the fuller heart count when merging profiles", () => {
+    const merged = mergeCourseProfiles(
+      {
+        lifetimeXp: 10,
+        completedLessonIds: ["lesson-a"],
+        livesRemaining: 1,
+        livesMax: 3,
+      },
+      {
+        lifetimeXp: 20,
+        completedLessonIds: ["lesson-a"],
+        livesRemaining: 2,
+        livesMax: 3,
+      },
+      "2.0.0",
+    );
+    expect(merged.profile.livesRemaining).toBe(2);
+    expect(merged.profile.livesMax).toBe(3);
+  });
 });
 
 describe("inProgressAttemptForDestination", () => {

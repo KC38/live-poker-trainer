@@ -23,6 +23,7 @@ import {
   lessonXpTotal,
   localDateString,
   parseCourseFlags,
+  profileLivesFromData,
   shouldAdvanceActivityAfterSubmit,
   XP_LESSON_COMPLETE,
   XP_PER_ACCEPTED_STEP,
@@ -40,6 +41,34 @@ const enabledFlags: CourseFlags = {
 };
 
 const unusedDb = {} as Firestore;
+
+describe("profile lives (per user)", () => {
+  it("defaults missing profile hearts to a full set", () => {
+    expect(profileLivesFromData(undefined)).toEqual({
+      livesRemaining: 3,
+      livesMax: 3,
+    });
+    expect(profileLivesFromData({})).toEqual({
+      livesRemaining: 3,
+      livesMax: 3,
+    });
+  });
+
+  it("clamps remaining hearts into [0, livesMax]", () => {
+    expect(profileLivesFromData({livesRemaining: 2, livesMax: 3})).toEqual({
+      livesRemaining: 2,
+      livesMax: 3,
+    });
+    expect(profileLivesFromData({livesRemaining: -1, livesMax: 3})).toEqual({
+      livesRemaining: 0,
+      livesMax: 3,
+    });
+    expect(profileLivesFromData({livesRemaining: 9, livesMax: 3})).toEqual({
+      livesRemaining: 3,
+      livesMax: 3,
+    });
+  });
+});
 
 describe("course flags", () => {
   it("fails closed on missing or invalid documents", () => {

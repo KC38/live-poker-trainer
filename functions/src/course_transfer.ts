@@ -512,6 +512,25 @@ export function mergeCourseProfiles(
     optionalString(source.recommendedLessonId) ??
     null;
 
+  const DEFAULT_LIVES = 3;
+  const destLivesMax = Number.isFinite(Number(destination.livesMax)) &&
+    Number(destination.livesMax) > 0 ?
+    Math.floor(Number(destination.livesMax)) :
+    DEFAULT_LIVES;
+  const sourceLivesMax = Number.isFinite(Number(source.livesMax)) &&
+    Number(source.livesMax) > 0 ?
+    Math.floor(Number(source.livesMax)) :
+    DEFAULT_LIVES;
+  const livesMax = Math.max(destLivesMax, sourceLivesMax);
+  const destLives = Number.isFinite(Number(destination.livesRemaining)) ?
+    Math.max(0, Math.floor(Number(destination.livesRemaining))) :
+    livesMax;
+  const sourceLives = Number.isFinite(Number(source.livesRemaining)) ?
+    Math.max(0, Math.floor(Number(source.livesRemaining))) :
+    livesMax;
+  // Keep the fuller heart count so linking an account does not punish either.
+  const livesRemaining = Math.min(livesMax, Math.max(destLives, sourceLives));
+
   return {
     profile: {
       catalogVersion:
@@ -544,6 +563,8 @@ export function mergeCourseProfiles(
       experienceBand,
       dailyGoalMinutes,
       recommendedLessonId,
+      livesRemaining,
+      livesMax,
       firstLessonCompletedAtMs:
         Number(destination.firstLessonCompletedAtMs ?? 0) ||
         Number(source.firstLessonCompletedAtMs ?? 0) ||
