@@ -189,6 +189,10 @@ Bet, raise, all-in uses the full poker table for every step: explain taps
 Bet, Raise, and All-in under a flop on the felt, and each action spot uses
 that table with the dock under it.
 
+Streets and action order uses the full poker table for every step: explain
+and street order advance the board with street labels under the felt, and
+postflop order taps seats on that table.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -378,8 +382,9 @@ each action spot uses that table. Bet, raise,
 all-in uses the same frame and the full table: explain shows a flop on
 the felt with Bet, Raise, and All-in under it, and each action spot
 uses that table. Streets and action
-order uses the same frame: the street timeline stays in the stage, and
-postflop order uses the full table. How pots are won uses the same
+order uses the same frame and the full table: explain and street order
+advance the board under Preflop / Flop / Turn / River labels, and
+postflop seat order uses that table. How pots are won uses the same
 frame: the three paths stay in the stage, and a fold-win or a called
 river uses the full table. Play a full toy hand uses the same frame:
 the three beats stay in the stage, and each street of the hand uses

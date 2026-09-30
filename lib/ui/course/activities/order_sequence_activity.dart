@@ -218,6 +218,26 @@ class OrderSequenceActivity extends StatelessWidget {
             ),
           );
         }
+        if (framed && isStreetSequenceActivity(activity)) {
+          return LessonStreetsOrderTable(
+            key: ValueKey<String>(
+              '${activity.id}-${controller.bindGeneration}',
+            ),
+            sequenceItems: [
+              for (final item in activity.sequenceItems)
+                (id: item.id, label: item.label),
+            ],
+            orderedIds: ordered,
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onPick: (id) => appendOrderedId(
+              controller: controller,
+              activity: activity,
+              ordered: ordered,
+              id: id,
+            ),
+          );
+        }
         if (framed && _handMode) {
           final remaining =
               shuffledSequencePalette(
