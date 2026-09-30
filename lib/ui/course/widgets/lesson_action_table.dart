@@ -1775,6 +1775,97 @@ class _LessonPassiveActionsExplainTableState
   }
 }
 
+/// Features for Bet / Raise / All-in explain on the full table.
+TableFeatures get lessonAggressiveActionsTableFeatures =>
+    lessonPassiveActionsTableFeatures;
+
+/// Full table: Bet / Raise / All-in teach taps under the felt.
+class LessonAggressiveActionsExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonAggressiveActionsExplainTable({
+    super.key,
+    required this.onAllActionsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  /// Every aggressive button has been tapped.
+  final VoidCallback? onAllActionsTapped;
+
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonAggressiveActionsExplainTable> createState() =>
+      _LessonAggressiveActionsExplainTableState();
+}
+
+class _LessonAggressiveActionsExplainTableState
+    extends State<LessonAggressiveActionsExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllActionsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= AggressiveActionsDemo.actions.length) {
+      widget.onAllActionsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching =
+        widget.enabled && widget.onAllActionsTapped != null;
+    return Column(
+      key: const ValueKey<String>('aggressive-actions-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Qd'],
+            boardCodes: const ['As', '7c', '2d'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonAggressiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
+              if (i > 0) const SizedBox(width: 10),
+              Expanded(
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(AggressiveActionsDemo.actions[i].$1) &&
+                      AggressiveActionsDemo.actions
+                          .take(i)
+                          .every((a) => _tapped.contains(a.$1)),
+                  child: _DemoActionCard(
+                    label: AggressiveActionsDemo.actions[i].$1,
+                    caption: AggressiveActionsDemo.actions[i].$2,
+                    color: AggressiveActionsDemo.actions[i].$3,
+                    densify: false,
+                    selected:
+                        _tapped.contains(AggressiveActionsDemo.actions[i].$1),
+                    enabled: teaching,
+                    onPressed: teaching
+                        ? () => _onTap(AggressiveActionsDemo.actions[i].$1)
+                        : null,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Explain-step demo: Fold / Check / Call meanings on a mini felt.
 class PassiveActionsDemo extends StatefulWidget {
   /// Creates the demo.
