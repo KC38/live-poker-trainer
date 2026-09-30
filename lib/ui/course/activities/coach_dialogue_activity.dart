@@ -371,17 +371,10 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.exploitEvidence) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return ExploitEvidenceDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllPointsTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+          return LessonExploitEvidenceExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllPointsTapped: locked ? null : onFeltAcknowledge,
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.multiwayNuts) {
