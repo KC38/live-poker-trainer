@@ -181,6 +181,10 @@ Best five and kickers uses the full poker table for every step: explain
 and build-five taps hit hero holes and board cards; kicker and board-plays
 steps tap You / Them / Board on that table.
 
+Fold, check, call uses the full poker table for every step: explain taps
+Fold, Check, and Call under a flop on the felt, and each action spot uses
+that table with the dock under it.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -364,8 +368,9 @@ and kickers uses the same frame and the full table: explain taps the
 five cards that play on hero holes and the board, guided and checkpoint
 build the best five by tapping those seven cards, and a kicker battle
 or a board-plays pot uses that table.
-Fold, check, call uses the same frame: the three buttons stay the
-explain stage, and each action spot uses the full table. Bet, raise,
+Fold, check, call uses the same frame and the full table: explain
+shows a flop on the felt with Fold, Check, and Call under it, and
+each action spot uses that table. Bet, raise,
 all-in uses that same frame: Bet, Raise, and All-in stay the explain
 stage, and each action spot uses the full table. Streets and action
 order uses the same frame: the street timeline stays in the stage, and

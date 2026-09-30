@@ -779,7 +779,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('fold check call uses the lesson frame and the three buttons', (
+  testWidgets('fold check call uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -813,6 +813,8 @@ void main() {
     expect(find.textContaining('Tap Fold'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('passive-actions-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('FOLD'), findsOneWidget);
     expect(find.text('CHECK'), findsOneWidget);
     expect(find.text('CALL'), findsOneWidget);
