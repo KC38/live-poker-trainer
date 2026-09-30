@@ -47,11 +47,13 @@ Onboarding primary actions use the elevated button (gold on bgDark, height 54, r
 
 Save progress (`SaveProgressScreen`) uses the same radial felt gradient as other onboarding scaffolds. CREATE A PROFILE uses the elevated button. LATER uses the outlined button. “I already have an account” is a gold-bright Manrope text link. Nice work and XP/streak chips use `AppColors` gold/warning on `bgElevated` with JetBrains Mono values — no Duolingo sky blue, Nunito, or slab buttons.
 
+After the first guest lesson and before Save progress, the celebration chain is Day streak → Streak goal → Daily quests → Gems reward (`DayStreakScreen`, `StreakGoalScreen`, `DailyQuestsCompleteScreen`, `GemsRewardScreen` in `lib/ui/screens/onboarding_screens.dart`). CONTINUE / I CAN DO IT use the elevated button. Streak accents use `warning` / gold; gems use diamond cyan (`#5EC8FF`). No Duo sky-blue CTAs.
+
+Home status values (streak, XP, gems) use JetBrains Mono. The Rex card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no elevation). Start uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
+
 Lesson feedback Continue uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
 
 Lesson result CONTINUE uses the elevated button (radius 14).
-
-Home status values (streak, XP, accepted accuracy) use JetBrains Mono. The Rex card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no elevation). Start uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
 
 The Settings Chip display segments ($, BB, Both) use JetBrains Mono.
 
@@ -69,6 +71,11 @@ Lesson result CONTINUE uses the elevated button (radius 14). `LessonResultScreen
 Save progress CTAs and celebration chips are `SaveProgressScreen` in
 `lib/ui/screens/onboarding_screens.dart`. The next guest conversion screen
 copies those elevated / outlined / gold-bright link roles.
+
+Post-first-lesson streak / quest / gem beats are the same file
+(`DayStreakScreen`, `StreakGoalScreen`, `DailyQuestsCompleteScreen`,
+`GemsRewardScreen`). Home gems are `CourseStatusBar` in
+`lib/ui/home/course_status_bar.dart`.
 
 ## Poker table
 

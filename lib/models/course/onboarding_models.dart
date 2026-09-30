@@ -39,6 +39,15 @@ enum ExperienceBand {
 /// Daily study goal options (minutes).
 const kDailyGoalChoices = <int>[5, 10, 15, 20];
 
+/// Streak commitment options after the first lesson (days).
+const kStreakGoalChoices = <int>[7, 14, 30, 50];
+
+/// XP target for the first-day daily quest card.
+const kDailyQuestXpTarget = 10;
+
+/// Gems granted when the daily quest chest opens.
+const kDailyQuestGemReward = 5;
+
 /// Duolingo-style intensity label for a daily goal choice.
 ///
 /// Returns an empty string for unknown minute values.
@@ -48,6 +57,19 @@ String dailyGoalIntensityLabel(int minutes) {
     10 => 'Regular',
     15 => 'Serious',
     20 => 'Intense',
+    _ => '',
+  };
+}
+
+/// Intensity label for a streak-goal choice.
+///
+/// Returns an empty string for unknown day values.
+String streakGoalIntensityLabel(int days) {
+  return switch (days) {
+    7 => 'Good',
+    14 => 'Great',
+    30 => 'Incredible',
+    50 => 'Unstoppable',
     _ => '',
   };
 }
@@ -138,6 +160,7 @@ class OnboardingDraft {
     this.step = OnboardingStep.welcome,
     this.experienceBand,
     this.dailyGoalMinutes,
+    this.streakGoalDays,
     this.recommendedLessonId,
     this.jumpTestOffered = false,
     this.firstLessonCompleted = false,
@@ -146,11 +169,16 @@ class OnboardingDraft {
     this.lastXpAwarded,
     this.lastMastery,
     this.lastStreak,
+    this.lastGemsAwarded,
+    this.gems = 0,
   });
 
   final OnboardingStep step;
   final ExperienceBand? experienceBand;
   final int? dailyGoalMinutes;
+
+  /// Chosen streak commitment (7 / 14 / 30 / 50).
+  final int? streakGoalDays;
   final String? recommendedLessonId;
   final bool jumpTestOffered;
   final bool firstLessonCompleted;
@@ -160,10 +188,27 @@ class OnboardingDraft {
   final double? lastMastery;
   final int? lastStreak;
 
+  /// Gems granted for the daily-quest chest on this celebration pass.
+  final int? lastGemsAwarded;
+
+  /// Guest gem balance until the account is linked.
+  final int gems;
+
+  /// True while the post-first-lesson streak / quest / gem beat is showing.
+  bool get isPostLessonCelebration => switch (step) {
+        OnboardingStep.dayStreak ||
+        OnboardingStep.streakGoal ||
+        OnboardingStep.dailyQuests ||
+        OnboardingStep.gemsReward =>
+          true,
+        _ => false,
+      };
+
   OnboardingDraft copyWith({
     OnboardingStep? step,
     ExperienceBand? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
     bool? jumpTestOffered,
     bool? firstLessonCompleted,
@@ -172,12 +217,15 @@ class OnboardingDraft {
     int? lastXpAwarded,
     double? lastMastery,
     int? lastStreak,
+    int? lastGemsAwarded,
+    int? gems,
     bool clearLessonResult = false,
   }) {
     return OnboardingDraft(
       step: step ?? this.step,
       experienceBand: experienceBand ?? this.experienceBand,
       dailyGoalMinutes: dailyGoalMinutes ?? this.dailyGoalMinutes,
+      streakGoalDays: streakGoalDays ?? this.streakGoalDays,
       recommendedLessonId: recommendedLessonId ?? this.recommendedLessonId,
       jumpTestOffered: jumpTestOffered ?? this.jumpTestOffered,
       firstLessonCompleted: firstLessonCompleted ?? this.firstLessonCompleted,
@@ -188,6 +236,10 @@ class OnboardingDraft {
           clearLessonResult ? null : (lastXpAwarded ?? this.lastXpAwarded),
       lastMastery: clearLessonResult ? null : (lastMastery ?? this.lastMastery),
       lastStreak: clearLessonResult ? null : (lastStreak ?? this.lastStreak),
+      lastGemsAwarded: clearLessonResult
+          ? null
+          : (lastGemsAwarded ?? this.lastGemsAwarded),
+      gems: gems ?? this.gems,
     );
   }
 
@@ -195,6 +247,7 @@ class OnboardingDraft {
         'step': step.name,
         'experienceBand': experienceBand?.wireValue,
         'dailyGoalMinutes': dailyGoalMinutes,
+        'streakGoalDays': streakGoalDays,
         'recommendedLessonId': recommendedLessonId,
         'jumpTestOffered': jumpTestOffered,
         'firstLessonCompleted': firstLessonCompleted,
@@ -203,6 +256,8 @@ class OnboardingDraft {
         'lastXpAwarded': lastXpAwarded,
         'lastMastery': lastMastery,
         'lastStreak': lastStreak,
+        'lastGemsAwarded': lastGemsAwarded,
+        'gems': gems,
       };
 
   factory OnboardingDraft.fromPrefs(Map<String, Object?> data) {
@@ -211,6 +266,7 @@ class OnboardingDraft {
       orElse: () => OnboardingStep.welcome,
     );
     // Legacy Meet Rex drafts resume on Daily goal (coach intro moved earlier).
+    // Legacy drafts that jumped straight to save progress keep that step.
     final step = parsedStep == OnboardingStep.rexIntro
         ? OnboardingStep.dailyGoal
         : parsedStep;
@@ -218,6 +274,7 @@ class OnboardingDraft {
       step: step,
       experienceBand: ExperienceBand.tryParse(data['experienceBand'] as String?),
       dailyGoalMinutes: data['dailyGoalMinutes'] as int?,
+      streakGoalDays: data['streakGoalDays'] as int?,
       recommendedLessonId: data['recommendedLessonId'] as String?,
       jumpTestOffered: data['jumpTestOffered'] == true,
       firstLessonCompleted: data['firstLessonCompleted'] == true,
@@ -226,6 +283,8 @@ class OnboardingDraft {
       lastXpAwarded: data['lastXpAwarded'] as int?,
       lastMastery: (data['lastMastery'] as num?)?.toDouble(),
       lastStreak: data['lastStreak'] as int?,
+      lastGemsAwarded: data['lastGemsAwarded'] as int?,
+      gems: (data['gems'] as num?)?.toInt() ?? 0,
     );
   }
 }
@@ -248,6 +307,19 @@ enum OnboardingStep {
   /// Jump-test offer / legacy "Your start" CTA.
   recommendedStart,
   firstLesson,
+
+  /// Flame + weekday streak celebration after the first lesson.
+  dayStreak,
+
+  /// Choose a multi-day streak commitment.
+  streakGoal,
+
+  /// Daily quest complete card (chest leads to gems).
+  dailyQuests,
+
+  /// Gem reward reveal before create-profile.
+  gemsReward,
+
   saveProgress,
   done,
 }

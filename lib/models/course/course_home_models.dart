@@ -95,6 +95,7 @@ class CourseHomeSnapshot {
     required this.sections,
     this.streak = 0,
     this.lifetimeXp = 0,
+    this.gems = 0,
     this.acceptedAccuracy = 0,
     this.nextLessonId,
     this.resume,
@@ -110,6 +111,7 @@ class CourseHomeSnapshot {
   final List<CourseSection> sections;
   final int streak;
   final int lifetimeXp;
+  final int gems;
   final double acceptedAccuracy;
   final String? nextLessonId;
   final CourseResumePointer? resume;
@@ -137,6 +139,7 @@ class CourseProfileView {
   /// Creates a profile view.
   const CourseProfileView({
     required this.lifetimeXp,
+    required this.gems,
     required this.currentStreak,
     required this.acceptedAccuracy,
     required this.completedLessonIds,
@@ -147,6 +150,7 @@ class CourseProfileView {
   });
 
   final int lifetimeXp;
+  final int gems;
   final int currentStreak;
   final double acceptedAccuracy;
   final List<String> completedLessonIds;
@@ -188,6 +192,7 @@ class CourseProfileView {
     }
     return CourseProfileView(
       lifetimeXp: (json['lifetimeXp'] as num?)?.toInt() ?? 0,
+      gems: (json['gems'] as num?)?.toInt() ?? 0,
       currentStreak: (json['currentStreak'] as num?)?.toInt() ?? 0,
       acceptedAccuracy: (json['acceptedAccuracy'] as num?)?.toDouble() ?? 0,
       completedLessonIds: List.unmodifiable(completed),
@@ -364,6 +369,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
       sections: catalog.sections,
       streak: profile?.currentStreak ?? 0,
       lifetimeXp: profile?.lifetimeXp ?? 0,
+      gems: profile?.gems ?? 0,
       acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
       rexLine:
           'No lessons published yet. Check back after the next content wave.',
@@ -418,6 +424,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
     sections: catalog.sections,
     streak: profile?.currentStreak ?? 0,
     lifetimeXp: profile?.lifetimeXp ?? 0,
+    gems: profile?.gems ?? 0,
     acceptedAccuracy: profile?.acceptedAccuracy ?? 0,
     nextLessonId: nextId,
     resume: resume,

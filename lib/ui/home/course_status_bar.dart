@@ -1,4 +1,4 @@
-/// Home status bar: streak, XP, accepted accuracy.
+/// Home status bar: streak, XP, gems.
 library;
 
 import 'package:flutter/material.dart';
@@ -12,19 +12,21 @@ class CourseStatusBar extends StatelessWidget {
     super.key,
     required this.streak,
     required this.lifetimeXp,
-    required this.acceptedAccuracy,
+    required this.gems,
+    this.acceptedAccuracy,
   });
 
   final int streak;
   final int lifetimeXp;
-  final double acceptedAccuracy;
+  final int gems;
+
+  /// Kept for callers that still pass accuracy; no longer shown in the bar.
+  final double? acceptedAccuracy;
 
   @override
   Widget build(BuildContext context) {
-    final accuracyPct = (acceptedAccuracy * 100).clamp(0, 100).round();
     return Semantics(
-      label:
-          'Streak $streak days, $lifetimeXp XP, $accuracyPct percent accepted accuracy',
+      label: 'Streak $streak days, $lifetimeXp XP, $gems gems',
       child: Row(
         children: [
           Expanded(
@@ -45,9 +47,10 @@ class CourseStatusBar extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: _StatChip(
-              icon: Icons.verified_outlined,
-              label: 'Accepted',
-              value: '$accuracyPct%',
+              icon: Icons.diamond_outlined,
+              label: 'Gems',
+              value: '$gems',
+              iconColor: const Color(0xFF5EC8FF),
             ),
           ),
         ],
@@ -61,11 +64,13 @@ class _StatChip extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.value,
+    this.iconColor,
   });
 
   final IconData icon;
   final String label;
   final String value;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +83,7 @@ class _StatChip extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: AppColors.gold),
+          Icon(icon, size: 18, color: iconColor ?? AppColors.gold),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

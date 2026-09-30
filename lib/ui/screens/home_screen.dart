@@ -337,6 +337,7 @@ class _HomeBody extends StatelessWidget {
               CourseStatusBar(
                 streak: snapshot.streak,
                 lifetimeXp: snapshot.lifetimeXp,
+                gems: snapshot.gems,
                 acceptedAccuracy: snapshot.acceptedAccuracy,
               ),
               if (snapshot.rexLine != null &&

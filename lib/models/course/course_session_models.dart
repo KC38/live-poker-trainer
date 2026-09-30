@@ -182,6 +182,8 @@ class CompleteCourseLessonResult {
     required this.liveTrainingGranted,
     required this.duplicate,
     this.resume,
+    this.gemsAwarded = 0,
+    this.gems = 0,
   });
 
   final String attemptId;
@@ -200,6 +202,12 @@ class CompleteCourseLessonResult {
   final bool duplicate;
   final CourseResumePointer? resume;
 
+  /// Gems granted for completing today's daily quest (0 when already claimed).
+  final int gemsAwarded;
+
+  /// Wallet balance after this completion.
+  final int gems;
+
   factory CompleteCourseLessonResult.fromJson(Map<String, dynamic> json) {
     final resumeRaw = json['resume'];
     return CompleteCourseLessonResult(
@@ -215,6 +223,8 @@ class CompleteCourseLessonResult {
       resume: resumeRaw is Map
           ? CourseResumePointer.fromJson(Map<String, dynamic>.from(resumeRaw))
           : null,
+      gemsAwarded: (json['gemsAwarded'] as num?)?.toInt() ?? 0,
+      gems: (json['gems'] as num?)?.toInt() ?? 0,
     );
   }
 }

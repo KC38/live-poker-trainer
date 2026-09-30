@@ -10,6 +10,7 @@ class CourseProgress {
     required this.loaded,
     required this.available,
     required this.lifetimeXp,
+    required this.gems,
     required this.currentStreak,
     required this.acceptedAccuracy,
     required this.mastery,
@@ -24,6 +25,7 @@ class CourseProgress {
     : loaded = false,
       available = false,
       lifetimeXp = 0,
+      gems = 0,
       currentStreak = 0,
       acceptedAccuracy = 0,
       mastery = 0,
@@ -66,6 +68,7 @@ class CourseProgress {
       loaded: true,
       available: state['available'] == true,
       lifetimeXp: (profile['lifetimeXp'] as num?)?.toInt() ?? 0,
+      gems: (profile['gems'] as num?)?.toInt() ?? 0,
       currentStreak: (profile['currentStreak'] as num?)?.toInt() ?? 0,
       acceptedAccuracy: (profile['acceptedAccuracy'] as num?)?.toDouble() ?? 0,
       mastery: mastery,
@@ -82,6 +85,7 @@ class CourseProgress {
   final bool loaded;
   final bool available;
   final int lifetimeXp;
+  final int gems;
   final int currentStreak;
   final double acceptedAccuracy;
   final double mastery;
