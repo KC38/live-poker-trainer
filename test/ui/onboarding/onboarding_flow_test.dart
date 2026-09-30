@@ -452,7 +452,7 @@ void main() {
       findsNothing,
     );
     expect(
-      find.bySemanticsLabel('Onboarding progress 25 percent'),
+      find.bySemanticsLabel('Onboarding progress 20 percent'),
       findsOneWidget,
     );
   });
