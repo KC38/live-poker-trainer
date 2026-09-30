@@ -1,10 +1,10 @@
-# QA paths
+# Agent validation paths
 
-One row in the coverage log per chartered path. Add a path here when the
-product grows a journey. Do not invent a path during a session.
+Journeys that tickets and `/implement-open-jira` may name. Add a path here
+when the product grows a journey. Do not invent a path during a session.
 
-`requires` is the simulator precondition from the skill. `watch` prefixes
-mark a covered path due again when `origin/main` changes those files.
+`requires` is the simulator precondition. `watch` prefixes mark when
+`origin/main` changes those files matter for re-validation.
 
 Phases run in order: `bootstrap`, `guest-home`, `fresh-variant`,
 `destructive`. Inside a phase, lower `order` is first.
@@ -51,7 +51,7 @@ Goal: the next lesson Home offers can be finished, and the status bar moves with
 Goal: killing the app mid-lesson restores the same lesson and activity.
 
 1. Start a lesson from Home. Submit at least one step. Record the lesson title and the activity you are on.
-2. There is no leave control on the runner. Terminate the app on the simulator this skill is driving (`xcrun simctl terminate <that UDID> com.pokerlab.livePokerTrainer`). new-user-qa uses the iPhone 17 Pro. implement-open-jira uses the iPhone 17. Do not terminate the other skill's simulator. Do not uninstall.
+2. There is no leave control on the runner. Terminate the app on the simulator this workflow is driving (`xcrun simctl terminate <that UDID> com.pokerlab.livePokerTrainer`). The Pro session uses the iPhone 17 Pro. `/implement-open-jira` uses the iPhone 17. Do not terminate the other phone. Do not uninstall.
 3. Launch again. Home shows a **Resume** card with that lesson title and activity index.
 4. Open it. The runner continues that lesson, including the catch-up notice when the product shows one. Finish or leave after the restored step is visible.
 

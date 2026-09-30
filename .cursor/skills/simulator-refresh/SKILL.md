@@ -1,17 +1,16 @@
 ---
 name: simulator-refresh
 description: >-
-  Hot-restart one skill's simulator from origin/main. qa is the iPhone 17
+  Hot-restart one role's simulator from origin/main. qa is the iPhone 17
   Pro in the primary clone. implement is the iPhone 17 in
   .worktrees/iphone17-main. Never touch the other device. Never a feature
-  worktree. Use after that skill's merge, or when its device is already
-  booted and should return to origin/main.
+  worktree. Use after /implement-open-jira merge, or when a device is
+  already booted and should return to origin/main.
 ---
 
 # Simulator refresh
 
-Refresh **one** role. The other skill may be running on the other phone.
-Do not restart both.
+Refresh **one** role. The other phone may be running. Do not restart both.
 
 ```bash
 .cursor/skills/simulator-refresh/scripts/refresh-simulator.sh qa
@@ -20,21 +19,18 @@ Do not restart both.
 
 | Role | Who | Device | Checkout | Log |
 |------|-----|--------|----------|-----|
-| `qa` | new-user-qa | iPhone 17 Pro `F1AE4938-D9BE-4EA1-8C98-58555A0DE62A` | `~/live-poker-trainer` | `/tmp/flutter-live-poker-trainer.run.log` |
-| `implement` | implement-open-jira | iPhone 17 `20ACECD5-FBEE-4663-9044-E11D5F0A26FC` | `~/live-poker-trainer/.worktrees/iphone17-main` | `/tmp/flutter-live-poker-trainer-iphone17.run.log` |
+| `qa` | launch-simulator / Pro session | iPhone 17 Pro `F1AE4938-D9BE-4EA1-8C98-58555A0DE62A` | `~/live-poker-trainer` | `/tmp/flutter-live-poker-trainer.run.log` |
+| `implement` | /implement-open-jira | iPhone 17 `20ACECD5-FBEE-4663-9044-E11D5F0A26FC` | `~/live-poker-trainer/.worktrees/iphone17-main` | `/tmp/flutter-live-poker-trainer-iphone17.run.log` |
 
-[make-change](../make-change/SKILL.md) calls `implement` after a merge.
-[new-user-qa](../new-user-qa/SKILL.md) and
-[launch-simulator](../launch-simulator/SKILL.md) call `qa` only when the
-Pro is already up. If the Pro is shut down, launch-simulator boots it.
-A booted iPhone 17 does not block that.
-
-[ui-consistency-qa](../ui-consistency-qa/SKILL.md) is not a refresh role.
-Do not pass `qa` or `implement` for that walk. It has its own Pro Max.
+[make-change](../make-change/SKILL.md) does not refresh simulators.
+[/implement-open-jira](../../commands/implement-open-jira.md) calls
+`implement` after a merge. [launch-simulator](../launch-simulator/SKILL.md)
+calls `qa` only when the Pro is already up. If the Pro is shut down,
+launch-simulator boots it. A booted iPhone 17 does not block that.
 
 Always refresh from `origin/main`. Do not hot-restart a feature worktree
-and pretend it is main. make-change previews a ticket worktree with
-`flutter run` on the iPhone 17; this skill runs after that session is
+and pretend it is main. `/implement-open-jira` previews a ticket worktree
+with `flutter run` on the iPhone 17; this skill runs after that session is
 stopped, and starts origin/main on the iPhone 17 from `.worktrees/iphone17-main`.
 That second checkout keeps its `build/` off the Pro session in the primary
 clone. The script creates the worktree when it is missing, fast-forwards

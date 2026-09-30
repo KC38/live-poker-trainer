@@ -24,7 +24,7 @@ agent_tap = _load_agent_tap()
 
 
 class AgentTapLogTest(unittest.TestCase):
-    """Log selection keeps new-user-qa and implement-open-jira apart."""
+    """Log selection keeps Pro and /implement-open-jira sessions apart."""
 
     def test_default_log_is_the_pro_qa_session(self) -> None:
         args = agent_tap.build_parser().parse_args(["tap", "--text", "Continue"])

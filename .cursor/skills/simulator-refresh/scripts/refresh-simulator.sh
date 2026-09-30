@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Refresh one skill's simulator from origin/main.
+# Refresh one role's simulator from origin/main.
 #
-# qa        → iPhone 17 Pro, primary clone (new-user-qa)
-# implement → iPhone 17, .worktrees/iphone17-main (implement-open-jira)
+# qa        → iPhone 17 Pro, primary clone (launch-simulator)
+# implement → iPhone 17, .worktrees/iphone17-main (/implement-open-jira)
 #
 # The other device's flutter run is left running. A second checkout is used
 # for the iPhone 17 origin/main session so it does not share build/ with the

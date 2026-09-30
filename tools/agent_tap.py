@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Drive the debug app via ext.poker.agent (tap / openlesson / type).
 
-The default log is the new-user-qa iPhone 17 Pro session. implement-open-jira
-passes --log for the iPhone 17 session so the two skills do not tap each
+The default log is the iPhone 17 Pro session. /implement-open-jira
+passes --log for the iPhone 17 session so the two roles do not tap each
 other's app.
 """
 
@@ -54,7 +54,7 @@ def agent(cmd: str, log: Path | None = None, **extra: str) -> None:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    """CLI parser. The default log is the new-user-qa Pro session."""
+    """CLI parser. The default log is the Pro session."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("cmd", help="Agent command (tap, openlesson, type, ...)")
     parser.add_argument("--text", default="", help="Label/text for tap/type/openlesson")
@@ -64,8 +64,8 @@ def build_parser() -> argparse.ArgumentParser:
         default=QA_LOG,
         help=(
             "Flutter run log to read the Dart VM URI from. "
-            f"Default {QA_LOG} (new-user-qa). "
-            f"implement-open-jira uses {IMPLEMENT_LOG} or its worktree log."
+            f"Default {QA_LOG} (Pro). "
+            f"/implement-open-jira uses {IMPLEMENT_LOG} or its worktree log."
         ),
     )
     return parser

@@ -1,35 +1,29 @@
 ---
-name: implement-open-jira
 description: >-
   Implement every open Jira ticket in the Live Poker Trainer project, one at
   a time, on a branch and worktree named for that ticket. Validate each
-  change live on the iPhone 17, then close the ticket with a
-  comment and screenshots. Use when the user invokes /implement-open-jira or
-  asks to implement, ship, and close open tickets in that project.
-disable-model-invocation: true
+  change live on the iPhone 17, then close the ticket with a comment and
+  screenshots.
 ---
 
 # Implement open Jira tickets
 
-Slash command. You are the engineer who owns each ticket from the board
-through production. Ship one open ticket at a time, prove it on the agent
-simulator, then close it. Do not start the next ticket until this one is
-closed or recorded as skipped or blocked.
+You are the engineer who owns each ticket from the board through production.
+Ship one open ticket at a time, prove it on the agent simulator, then close
+it. Do not start the next ticket until this one is closed or recorded as
+skipped or blocked.
 
-Code changes go through [make-change](../make-change/SKILL.md) in this
+Code changes go through [make-change](../skills/make-change/SKILL.md) in this
 session. Do not launch a subagent. Do not edit `~/live-poker-trainer`.
 
 ## Professional standard
-
-Same charter as [new-user QA](../new-user-qa/SKILL.md), applied as the
-engineer who ships the ticket:
 
 - The ticket is the spec. Read the summary, description, acceptance
   criteria, **Validate before closing**, comments, and links before any
   edit. The outcome is those checks, in the ticket's words.
 - When the ticket names a path id, that path in
-  [paths.md](../new-user-qa/paths.md) is the journey, including its
-  precondition. Do not prove the fix on a different path.
+  [docs/agent-paths.md](../../docs/agent-paths.md) is the journey, including
+  its precondition. Do not prove the fix on a different path.
 - On the screens the ticket touches, the same six checks hold:
   1. The step the screen is for can be finished, or you record the control that still stops it.
   2. State this step set is still true on the next screen.
@@ -53,16 +47,16 @@ engineer who ships the ticket:
 
 When the ticket has the `ui` label, or it names `docs/ui/design-record.md`:
 
-- Read [flutter-ui-ux](../flutter-ui-ux/SKILL.md) and
-  [docs/ui/design-record.md](../../../docs/ui/design-record.md) before editing.
+- Read [flutter-ui-ux](../skills/flutter-ui-ux/SKILL.md) and
+  [docs/ui/design-record.md](../../docs/ui/design-record.md) before editing.
 - A lesson screen uses
-  [lesson-screen-layout](../../rules/lesson-screen-layout.mdc). The frame stays
+  [lesson-screen-layout](../rules/lesson-screen-layout.mdc). The frame stays
   the same when the step has no poker table.
 - Reuse the poker-table bands and the asset slot the ticket names. Do not
   add a second table, palette, or sound for the same role.
 - When the ticket names Gamified learning or
   `docs/ui/references/duolingo-chess/`, read
-  [PATTERNS.md](../../../docs/ui/references/duolingo-chess/PATTERNS.md)
+  [PATTERNS.md](../../docs/ui/references/duolingo-chess/PATTERNS.md)
   and keep the poker theme. Do not copy Duolingo art into the app.
 - Update the design-record section named in the ticket in the same change
   as the widget or asset. The file must say what the ticket said it would
@@ -98,7 +92,7 @@ BRANCH="fix/$SLUG"                # Bug → fix. Story or Task → feature.
 ```
 
 Worktree: `~/live-poker-trainer/.worktrees/$SLUG`.
-Simulator tmux session from make-change: `flutter-iphone17-$SLUG`.
+Simulator tmux session: `flutter-iphone17-$SLUG`.
 Device: iPhone 17 `20ACECD5-FBEE-4663-9044-E11D5F0A26FC`.
 
 Pass that `BRANCH` and `SLUG` into make-change step 1. Do not drop the
@@ -127,24 +121,23 @@ Otherwise run make-change in this session for this ticket only:
    (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`). Drive the UI with
    `tools/agent_tap.py --log "$LOG_FILE"` for this session's log
    (`/tmp/flutter-$SLUG.log` before merge). Do not use the default log:
-   that drives the iPhone 17 Pro, which belongs to
-   [new-user-qa](../new-user-qa/SKILL.md). Do not boot, uninstall,
-   terminate, kill, hot-restart, screenshot, or tap the Pro
+   that drives the iPhone 17 Pro. Do not boot, uninstall, terminate, kill,
+   hot-restart, screenshot, or tap the Pro
    (`F1AE4938-D9BE-4EA1-8C98-58555A0DE62A`). Screenshot with
    `xcrun simctl io 20ACECD5-FBEE-4663-9044-E11D5F0A26FC screenshot …`.
    Other device details are in
-   [docs/agent-ios-simulator.md](../../../docs/agent-ios-simulator.md).
+   [docs/agent-ios-simulator.md](../../docs/agent-ios-simulator.md).
    Walk the ticket's own steps, including **Validate before closing**,
    and the six charter checks above. Meet the path precondition from
-   [paths.md](../new-user-qa/paths.md): `fresh-install` means uninstall and
-   relaunch this worktree on the iPhone 17 only; `guest-home` means do not
-   uninstall. A hot restart of a signed-in session is not a fresh-install
-   check.
+   [docs/agent-paths.md](../../docs/agent-paths.md): `fresh-install` means
+   uninstall and relaunch this worktree on the iPhone 17 only; `guest-home`
+   means do not uninstall. A hot restart of a signed-in session is not a
+   fresh-install check.
 5. Review `git diff origin/main...HEAD` against the ticket. Remove anything
    the criteria do not require.
-6. PR test plan is those same criteria. Merge, deploy Cloud Functions, and
-   refresh the iPhone 17 only (`refresh-simulator.sh implement`,
-   make-change steps 6–9). That refresh must not restart the Pro.
+6. PR test plan is those same criteria. Merge and deploy Cloud Functions
+   via make-change, then refresh the iPhone 17 only
+   (`refresh-simulator.sh implement`). That refresh must not restart the Pro.
 7. After that refresh, walk the same steps again on `origin/main` on the
    iPhone 17 and save the closeout screenshots to
    `~/live-poker-trainer/.cursor/tmp/<KEY>-*.png`. Those shots are the
