@@ -342,6 +342,8 @@ Defend enough without frequency theater uses the full poker table for every step
 
 Mix with a reason uses the full poker table for every step: explain taps Mix, Purpose, and Strong under the felt.
 
+Navigate 3-bet and 4-bet pots by depth uses the full poker table for every step: explain taps 3-Bet, 4-Bet, and Depth under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -674,9 +676,8 @@ the full table. Defend enough without frequency theater uses the same frame and 
 table: explain taps Defend, Bluff, and Enough under the felt, the continue, intuition, and punish checks stay lists,
 and the third-pair fold sits face up on the full table. Mix with a reason uses the same frame and the full table: explain taps
 Mix, Purpose, and Strong under the felt, the station, reason, and purpose checks stay lists, and the
-set check sits face up on the full table. Navigate 3-bet and 4-bet
-pots by depth uses the same frame: 3-bet, 4-bet, and depth stay in
-the stage, the commit, ego, and SPR checks stay lists, and the missed
+set check sits face up on the full table. Navigate 3-bet and 4-bet pots by depth uses the same frame and the full
+table: explain taps 3-Bet, 4-Bet, and Depth under the felt, the commit, ego, and SPR checks stay lists, and the missed
 AQo flop sits face up on the full table. Make difficult folds;
 review coolers fairly uses the same frame: hard, cooler, and ego stay
 in the stage, the cooler, ego, and review checks stay lists, and the
