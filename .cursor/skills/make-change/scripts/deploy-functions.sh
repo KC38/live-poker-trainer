@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Deploy Cloud Functions from origin/main.
 # Used by make-change after merge so production matches origin/main.
-# The detached checkout lives in ~/live-poker-trainer/.worktrees and is removed
+# The detached checkout lives in <primary>/.worktrees and is removed
 # afterward. It does not edit the primary working tree.
 #
 # Non-interactive auth (first match):
@@ -10,7 +10,11 @@
 #   FIREBASE_TOKEN — from `npx -y firebase-tools@15.30.2 login:ci`
 set -euo pipefail
 
-PRIMARY="${PRIMARY:-$HOME/live-poker-trainer}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+# shellcheck source=../../../../tools/primary_checkout.sh
+source "$REPO_ROOT/tools/primary_checkout.sh"
+PRIMARY="$(resolve_primary_checkout)"
 NODE22_BIN="$(brew --prefix node@22 2>/dev/null)/bin"
 if [[ -d "$NODE22_BIN" ]]; then
   export PATH="$NODE22_BIN:$PATH"

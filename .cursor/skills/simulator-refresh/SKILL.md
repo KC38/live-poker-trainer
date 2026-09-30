@@ -19,19 +19,21 @@ hardcode it.
 | Item | Value |
 |------|-------|
 | Device | iPhone 13 mini (UDID from `tools/iphone_13_mini_udid.sh`) |
-| Checkout | `~/live-poker-trainer` on `origin/main` |
+| Checkout | primary clone from `tools/primary_checkout.sh` on `origin/main` |
 | Log | `/tmp/flutter-live-poker-trainer.run.log` |
 | Pid file | `/tmp/flutter-live-poker-trainer.pid` |
 
-[make-change](../make-change/SKILL.md) does not refresh the simulator.
+[make-change](../make-change/SKILL.md) calls this in step 9 after a
+successful primary `git pull --ff-only`. Skip when that pull failed.
 [/implement-open-jira](../../commands/implement-open-jira.md) and
-[launch-simulator](../launch-simulator/SKILL.md) call this when the mini
-should show `origin/main`.
+[launch-simulator](../launch-simulator/SKILL.md) also call this when the
+mini should show `origin/main`.
 
-Always refresh from `origin/main` in the primary clone. Do not hot-restart a
-feature worktree and pretend it is main. The script fast-forwards the
-primary clone when it is clean and on `main`, and copies gitignored Firebase
-files when they are missing.
+Always refresh from `origin/main` in the primary clone (resolved via
+`tools/primary_checkout.sh` — `~/live-poker-trainer` or
+`~/live_poker_trainer`). Do not hot-restart a feature worktree and pretend
+it is main. The script fast-forwards the primary clone when it is clean
+and on `main`, and copies gitignored Firebase files when they are missing.
 
 **First-time / no GUI window:** Xcode 27+ uses **Device Hub**, not
 `Simulator.app`. See [docs/agent-ios-simulator.md](../../../docs/agent-ios-simulator.md).

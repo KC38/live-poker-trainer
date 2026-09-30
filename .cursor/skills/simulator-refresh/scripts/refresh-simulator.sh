@@ -12,6 +12,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 # shellcheck source=../../../../tools/iphone_13_mini_udid.sh
 source "$REPO_ROOT/tools/iphone_13_mini_udid.sh"
+# shellcheck source=../../../../tools/primary_checkout.sh
+source "$REPO_ROOT/tools/primary_checkout.sh"
 
 cmdline_targets_device() {
   local cmd="$1" device="$2"
@@ -25,17 +27,7 @@ fi
 DEVICE_ID="$(resolve_iphone_13_mini_udid)"
 PID_FILE="/tmp/flutter-live-poker-trainer.pid"
 LOG_FILE="/tmp/flutter-live-poker-trainer.run.log"
-PRIMARY="${PRIMARY:-$HOME/live-poker-trainer}"
-
-if [[ ! -f "$PRIMARY/pubspec.yaml" ]]; then
-  # Prefer the repo that owns this script when PRIMARY is wrong.
-  if [[ -f "$REPO_ROOT/pubspec.yaml" ]]; then
-    PRIMARY="$REPO_ROOT"
-  else
-    echo "abort: no pubspec.yaml in $PRIMARY"
-    exit 1
-  fi
-fi
+PRIMARY="$(resolve_primary_checkout)"
 
 copy_firebase() {
   local src="$1" dest="$2" rel

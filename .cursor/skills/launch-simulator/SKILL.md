@@ -33,9 +33,12 @@ Continue below when the mini is shut down and no flutter run targets it.
 
 ## 2. Latest origin/main
 
-Launch from the primary clone (`~/live-poker-trainer`), not a feature worktree.
+Launch from the primary clone, not a feature worktree. Resolve the path
+(machines use `~/live-poker-trainer` or `~/live_poker_trainer`):
 
 ```bash
+PRIMARY="$(tools/primary_checkout.sh)"
+cd "$PRIMARY"
 git fetch origin main
 git checkout main
 git pull --ff-only origin main
@@ -59,7 +62,7 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/Applications/flutt
 export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 
 DEVICE="$(tools/iphone_13_mini_udid.sh)"
-PRIMARY="$HOME/live-poker-trainer"
+PRIMARY="$(tools/primary_checkout.sh)"
 SESSION=flutter-iphone-13-mini
 
 open -a /Applications/Xcode.app/Contents/Applications/DeviceHub.app

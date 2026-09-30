@@ -2,13 +2,21 @@
 name: make-change
 description: >-
   Implement a bug fix or feature in a .worktrees worktree directly in this session,
-  then commit, PR, merge, and deploy Cloud Functions.
-  Use when the user asks for a code change. Never edit ~/live-poker-trainer.
+  then commit, PR, merge, sync the primary checkout, hot-restart the simulator,
+  and deploy Cloud Functions. Use when the user asks for a code change. Never
+  edit the primary checkout.
 ---
 
 # Make a change
 
-The primary checkout `~/live-poker-trainer` stays untouched. 
+The primary checkout stays untouched while you implement. Resolve it once per
+run (machines differ — `~/live-poker-trainer` or `~/live_poker_trainer`):
+
+```bash
+PRIMARY="$(tools/primary_checkout.sh)"
+```
+
+Do not hardcode either home path. `PRIMARY=...` still overrides when set.
 
 CRITICAL: Do NOT spawn background subagents. Execute all steps sequentially in the current agent session.
 
@@ -22,13 +30,14 @@ Change progress:
 - [ ] 6. Push, open PR, squash merge (keep remote branch alive)
 - [ ] 7. Dismantle worktree, sync primary main, delete branches
 - [ ] 8. Deploy Cloud Functions
+- [ ] 9. Refresh the iPhone 13 mini (only after a successful primary pull)
 ```
 
 Work only inside the worktree directory `.worktrees/<slug>`. Do not edit the primary checkout.
 
 ### 1. Worktree off origin/main
 
-From `~/live-poker-trainer`:
+From the primary checkout:
 
 Determine the branch name: `feature/<slug>` or `fix/<slug>`. `<slug>` is kebab-case.
 
@@ -48,9 +57,10 @@ Ensure the primary checkout is cleanly on `main`, clean up any stale worktree/br
 ```bash
 BRANCH="feature/<slug>"  # or fix/<slug>
 SLUG="<slug>"
-WT="$HOME/live-poker-trainer/.worktrees/$SLUG"
+PRIMARY="$(tools/primary_checkout.sh)"
+WT="$PRIMARY/.worktrees/$SLUG"
 
-cd ~/live-poker-trainer
+cd "$PRIMARY"
 git checkout main 2>/dev/null || true
 git fetch origin main
 git worktree prune
@@ -63,7 +73,7 @@ git worktree add -b "$BRANCH" ".worktrees/$SLUG" origin/main
 cd "$WT"
 git commit --allow-empty -m "chore: initialize $BRANCH"
 git push -u origin "$BRANCH"
-cd ~/live-poker-trainer
+cd "$PRIMARY"
 ```
 
 Copy untracked Firebase config files into the worktree:
@@ -78,7 +88,7 @@ Copy untracked Firebase config files into the worktree:
 
 Keep the diff scoped to the request. Run targeted checks (`dart analyze`, relevant tests). Note: If `flutter pub get` encounters a lock conflict from another process, wait 5 seconds and retry.
 
-Do not boot simulators, take screenshots, drive the UI, or call `simulator-refresh` as part of this skill. Verification is analyze and tests only.
+Do not boot simulators, take screenshots, drive the UI, or call `simulator-refresh` during implement/verify. Verification in this step is analyze and tests only. Simulator refresh happens only in step 9, after a successful primary pull.
 
 ### 3. Logical commits
 
@@ -118,10 +128,12 @@ Never force-push `main`. If `gh` fails, stop and report.
 
 ### 7. Delete the branch and worktree, then sync primary
 
-Return to `~/live-poker-trainer`, force-remove the ticket worktree, sync `origin/main`, and only then delete the remote and local branches:
+Return to the primary checkout, force-remove the ticket worktree, sync
+`origin/main`, and only then delete the remote and local branches:
 
 ```bash
-cd ~/live-poker-trainer
+PRIMARY="$(tools/primary_checkout.sh)"
+cd "$PRIMARY"
 
 # Force-remove worktree directory before deleting refs
 git worktree remove --force ".worktrees/$SLUG"
@@ -137,7 +149,27 @@ git branch -D "$BRANCH" 2>/dev/null || true
 git fetch --prune
 ```
 
-`git pull` only when the primary tree is clean and on `main`. If it is dirty or diverged, stop and report. Do not reset, stash, or discard those changes.
+`git pull` only when the primary tree is clean and on `main`.
+
+#### When the primary pull fails
+
+If primary is dirty, diverged, or not on `main`, **stop the sync** and
+report `git status -sb` (and behind/ahead counts). Do **not** reset, stash,
+or discard those changes. Still finish worktree/branch cleanup above when
+safe.
+
+Then:
+
+- Skip step 9 (`simulator-refresh`). Refresh itself requires a clean
+  primary on `main`, and the mini would still be on the pre-merge
+  checkout.
+- Continue step 8 (functions deploy) when credentials allow — deploy uses
+  a detached worktree of `origin/main`, not the dirty primary tree.
+- In the report: primary is **not** at tip, the simulator was **not**
+  refreshed, and the user must clean or keep the local dirt before a
+  later pull + refresh can land the merge on disk and on the mini.
+
+Ask before discarding local dirt. Never discard it on your own.
 
 ### 8. Deploy Cloud Functions (always)
 
@@ -149,6 +181,23 @@ The script deploys `origin/main` from `.worktrees/deploy-<pid>` and removes that
 
 If none of those are set, skip the local script and report that production depends on `.github/workflows/deploy-functions.yml`. Do not run `firebase login`. If the local deploy fails, report the error.
 
+### 9. Refresh the iPhone 13 mini (successful primary pull only)
+
+Only after step 7's `git pull --ff-only origin main` succeeded:
+
+```bash
+.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
+```
+
+That hot-restarts an existing primary `flutter run` on the iPhone 13 mini
+when one is attached, or starts one from the primary checkout when none is.
+Skip this step when the primary pull failed (see above). If the mini cannot
+boot, skip and report — do not fail the ship.
+
+Do not drive the UI or take screenshots as part of this skill.
+
 ## Report
 
-One short block: worktree path, branch, PR URL, merge status, functions deploy result.
+One short block: worktree path, branch, PR URL, merge status, primary sync
+result (pulled SHA or dirty/skipped), simulator refresh result, functions
+deploy result.

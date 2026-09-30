@@ -4,6 +4,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 UDID_SCRIPT="$ROOT/tools/iphone_13_mini_udid.sh"
+PRIMARY_SCRIPT="$ROOT/tools/primary_checkout.sh"
 REFRESH="$ROOT/.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh"
 
 fail() {
@@ -14,6 +15,13 @@ fail() {
 udid="$("$UDID_SCRIPT")"
 [[ "$udid" =~ ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$ ]] \
   || fail "resolver returned non-UDID: $udid"
+
+primary="$("$PRIMARY_SCRIPT")"
+[[ -f "$primary/pubspec.yaml" ]] || fail "primary_checkout missing pubspec: $primary"
+case "$primary" in
+  */live-poker-trainer|*/live_poker_trainer) ;;
+  *) fail "primary_checkout unexpected path: $primary" ;;
+esac
 
 # Must not embed legacy hard-coded device IDs.
 if grep -E 'F1AE4938|20ACECD5|7CB7DDCF' "$REFRESH" "$UDID_SCRIPT" \

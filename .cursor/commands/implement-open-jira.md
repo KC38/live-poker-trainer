@@ -14,7 +14,8 @@ it. Do not start the next ticket until this one is closed or recorded as
 skipped or blocked.
 
 Code changes go through [make-change](../skills/make-change/SKILL.md) in this
-session. Do not launch a subagent. Do not edit `~/live-poker-trainer`.
+session. Do not launch a subagent. Do not edit the primary checkout
+(`PRIMARY="$(tools/primary_checkout.sh)"`).
 
 ## Professional standard
 
@@ -91,7 +92,8 @@ SLUG="LPT-12-action-dock-clips"   # KEY, hyphen, short kebab summary
 BRANCH="fix/$SLUG"                # Bug → fix. Story or Task → feature.
 ```
 
-Worktree: `~/live-poker-trainer/.worktrees/$SLUG`.
+Worktree: `$PRIMARY/.worktrees/$SLUG` where
+`PRIMARY="$(tools/primary_checkout.sh)"`.
 Simulator tmux session: `flutter-iphone-13-mini-$SLUG`.
 Device: iPhone 13 mini — resolve with `DEVICE="$(tools/iphone_13_mini_udid.sh)"`.
 Never hardcode the UDID. Do not use any other simulator.
@@ -137,7 +139,7 @@ Otherwise run make-change in this session for this ticket only:
    (`.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh`).
 7. After that refresh, walk the same steps again on `origin/main` on the
    iPhone 13 mini and save the closeout screenshots to
-   `~/live-poker-trainer/.cursor/tmp/<KEY>-*.png`. Those shots are the
+   `$PRIMARY/.cursor/tmp/<KEY>-*.png`. Those shots are the
    evidence for the Jira comment. The post-merge log is
    `/tmp/flutter-live-poker-trainer.run.log`. A backend-only ticket still
    needs a live check on that mini session (the screen or log that shows
@@ -173,7 +175,7 @@ charter checks were checked on that walk.
    category is Done (`transitionId` from that list). `transitionName` is
    the transition's own name, which often differs from the status name.
    Confirm the status the tool returns.
-4. Delete `~/live-poker-trainer/.cursor/tmp/<KEY>-*.png`.
+4. Delete `$PRIMARY/.cursor/tmp/<KEY>-*.png`.
 
 ## Report
 
