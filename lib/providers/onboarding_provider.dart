@@ -58,7 +58,7 @@ class OnboardingController extends StateNotifier<OnboardingDraft> {
   Future<void> setDailyGoal(int minutes) async {
     state = state.copyWith(
       dailyGoalMinutes: minutes,
-      step: OnboardingStep.rexIntro,
+      step: OnboardingStep.dailyGoal,
     );
     await _persist();
   }

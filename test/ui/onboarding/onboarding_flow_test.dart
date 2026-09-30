@@ -49,6 +49,14 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> tapCoachContinue(WidgetTester tester) async {
+    final finder = find.widgetWithText(FilledButton, 'CONTINUE');
+    await tester.ensureVisible(finder);
+    await tester.pumpAndSettle();
+    await tester.tap(finder);
+    await tester.pumpAndSettle();
+  }
+
   test('regular recommends first lesson when no placement jump exists', () {
     final catalog = CourseCatalog.fromJson({
       'catalogVersion': '2.0.0',
@@ -148,19 +156,20 @@ void main() {
     _expectOutlinedMetrics(tester, 'I already have an account');
   });
 
-  testWidgets('meet rex continue uses the elevated button metrics', (
+  testWidgets('coach intro continue uses the elevated button metrics', (
     tester,
   ) async {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
           theme: buildPokerTheme(),
-          home: const RexIntroScreen(),
+          home: const CoachIntroScreen(pageIndex: 0),
         ),
       ),
     );
-    _expectElevatedMetrics(tester, 'Continue');
+    _expectElevatedMetrics(tester, 'CONTINUE');
     expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.text("Hi — I'm Rex, your coach."), findsOneWidget);
   });
 
   testWidgets('existing account Back returns to Welcome without signing in', (
@@ -256,7 +265,9 @@ void main() {
     expect(find.widgetWithText(FilledButton, 'Continue'), findsOneWidget);
   });
 
-  testWidgets('new to poker Meet Rex says coach, not live-reg', (tester) async {
+  testWidgets('get started shows two coach screens before experience', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(402, 874));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
@@ -278,61 +289,70 @@ void main() {
 
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
+    expect(find.text("Hi — I'm Rex, your coach."), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.byType(LinearProgressIndicator), findsNothing);
+    expect(find.text('Where are you starting?'), findsNothing);
+
+    await tapCoachContinue(tester);
+    expect(find.text("Let's find where you should start."), findsOneWidget);
+    expect(find.text("Hi — I'm Rex, your coach."), findsNothing);
+
+    await tapCoachContinue(tester);
+    expect(find.text('Where are you starting?'), findsOneWidget);
+    expect(find.text("Let's find where you should start."), findsNothing);
+    expect(
+      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
+      1 / kOnboardingProgressSteps,
+    );
+  });
+
+  testWidgets('daily goal continue skips Meet Rex', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const WelcomeScreen(),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Get started'));
+    await tester.pumpAndSettle();
+    await tapCoachContinue(tester);
+    await tapCoachContinue(tester);
     await tapLabel(tester, 'New to poker');
     await tapContinue(tester);
     await tapLabel(tester, '10 minutes');
     await tapContinue(tester);
 
-    expect(find.text('Your coach'), findsOneWidget);
-    expect(find.textContaining('live-reg'), findsNothing);
     expect(find.text('Meet Rex'), findsNothing);
-    expect(
-      find.text(
-        'One short sentence at a time. No lectures — just the next decision.',
-      ),
-      findsNothing,
-    );
-    expect(find.byType(LinearProgressIndicator), findsOneWidget);
-    expect(
-      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
-      3 / kOnboardingProgressSteps,
-    );
+    expect(find.text('Your coach'), findsNothing);
+    expect(find.text('Your live-reg coach'), findsNothing);
+    // Recommendation remounts via AppRoot; in this isolated navigator the
+    // draft advances and Meet Rex is no longer pushed.
+    expect(find.text('How much time per day?'), findsOneWidget);
   });
 
-  testWidgets('regular Meet Rex keeps the live-reg coach line', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(402, 874));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          analyticsServiceProvider.overrideWithValue(
-            AnalyticsService(enabled: false),
-          ),
-          onboardingControllerProvider.overrideWith(
-            (ref) => OnboardingController(null),
-          ),
-        ],
-        child: MaterialApp(
-          theme: buildPokerTheme(),
-          home: const WelcomeScreen(),
-        ),
-      ),
-    );
-
-    await tester.tap(find.text('Get started'));
-    await tester.pumpAndSettle();
-    await tapLabel(tester, 'Regular live cash player');
-    await tapContinue(tester);
-    await tapLabel(tester, '10 minutes');
-    await tapContinue(tester);
-
-    expect(find.text('Your live-reg coach'), findsOneWidget);
-    expect(
-      find.text(
-        'One short sentence at a time. No lectures — just the next decision.',
-      ),
-      findsNothing,
-    );
+  test('legacy Meet Rex drafts hydrate as daily goal', () {
+    final draft = OnboardingDraft.fromPrefs({
+      'step': 'rexIntro',
+      'experienceBand': 'never_played',
+      'dailyGoalMinutes': 10,
+    });
+    expect(draft.step, OnboardingStep.dailyGoal);
+    expect(draft.experienceBand, ExperienceBand.neverPlayed);
+    expect(draft.dailyGoalMinutes, 10);
   });
 
   testWidgets('onboarding back returns one screen without step labels', (
@@ -363,29 +383,28 @@ void main() {
 
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
-    expect(find.text('Where are you starting?'), findsOneWidget);
-    expect(find.text('Your experience'), findsNothing);
-    expect(
-      find.textContaining('We use this to recommend'),
-      findsNothing,
-    );
+    expect(find.text("Hi — I'm Rex, your coach."), findsOneWidget);
+    expect(find.byType(LinearProgressIndicator), findsNothing);
     expect(find.text('Step 2 of 4'), findsNothing);
     expect(find.byTooltip('Back'), findsOneWidget);
     expect(find.bySemanticsLabel('Back'), findsOneWidget);
-    expect(
-      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
-      1 / kOnboardingProgressSteps,
-    );
 
     await tester.tap(find.bySemanticsLabel('Back'));
     await tester.pumpAndSettle();
     expect(find.text('Get started'), findsOneWidget);
     expect(find.text('I already have an account'), findsOneWidget);
-    expect(find.text('Where are you starting?'), findsNothing);
+    expect(find.text("Hi — I'm Rex, your coach."), findsNothing);
 
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
+    await tapCoachContinue(tester);
+    expect(find.text("Let's find where you should start."), findsOneWidget);
+    await tapCoachContinue(tester);
     expect(find.text('Where are you starting?'), findsOneWidget);
+    expect(
+      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
+      1 / kOnboardingProgressSteps,
+    );
 
     await tester.tap(find.text('New to poker'));
     await tester.pumpAndSettle();
@@ -418,18 +437,9 @@ void main() {
     await tapLabel(tester, '10 minutes');
     expect(find.text('Your live-reg coach'), findsNothing);
     await tapContinue(tester);
-    expect(find.text('Your live-reg coach'), findsOneWidget);
     expect(find.text('Meet Rex'), findsNothing);
-    expect(find.text('Step 4 of 4'), findsNothing);
-    expect(
-      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
-      3 / kOnboardingProgressSteps,
-    );
-
-    await tester.tap(find.byTooltip('Back'));
-    await tester.pumpAndSettle();
-    expect(find.text('How much time per day?'), findsOneWidget);
     expect(find.text('Your live-reg coach'), findsNothing);
+    expect(find.text('How much time per day?'), findsOneWidget);
     expect(find.text('Home'), findsNothing);
   });
 
@@ -452,7 +462,7 @@ void main() {
       findsNothing,
     );
     expect(
-      find.bySemanticsLabel('Onboarding progress 20 percent'),
+      find.bySemanticsLabel('Onboarding progress 25 percent'),
       findsOneWidget,
     );
   });

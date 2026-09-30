@@ -1,4 +1,4 @@
-/// Your start can rewind to Meet Rex, Daily goal, and Your experience.
+/// Your start can rewind to Daily goal and Your experience.
 library;
 
 import 'dart:convert';
@@ -163,26 +163,19 @@ void main() {
     expect(find.textContaining('Step '), findsNothing);
     expect(
       tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
-      4 / kOnboardingProgressSteps,
+      3 / kOnboardingProgressSteps,
     );
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Your coach'), findsOneWidget);
+    expect(find.text('How much time per day?'), findsOneWidget);
     expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('Your coach'), findsNothing);
     expect(find.text('Home'), findsNothing);
     expect(find.text('Start lesson'), findsNothing);
     expect(onboarding.state.dailyGoalMinutes, 10);
     expect(onboarding.state.experienceBand, ExperienceBand.neverPlayed);
-
-    await tester.tap(find.byTooltip('Back'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('How much time per day?'), findsOneWidget);
-    expect(find.text('Daily goal'), findsNothing);
-    expect(find.text('Your coach'), findsNothing);
-    expect(find.text('Home'), findsNothing);
     expect(_tileSelected(tester, '10 minutes'), isTrue);
     expect(_tileSelected(tester, '5 minutes'), isFalse);
 
@@ -204,10 +197,8 @@ void main() {
     await _tapLabel(tester, '10 minutes');
     expect(find.text('Your live-reg coach'), findsNothing);
     await _tapContinue(tester);
-    expect(find.text('Your live-reg coach'), findsOneWidget);
     expect(find.text('Meet Rex'), findsNothing);
-
-    await _tapContinue(tester);
+    expect(find.text('Your live-reg coach'), findsNothing);
 
     expect(find.text(MotivationHookScreen.speech), findsOneWidget);
     expect(find.text('CONTINUE'), findsOneWidget);
@@ -262,15 +253,11 @@ void main() {
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Your coach'), findsOneWidget);
+    expect(find.text('How much time per day?'), findsOneWidget);
     expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('Your coach'), findsNothing);
     expect(find.text('Home'), findsNothing);
     expect(find.text('Start lesson'), findsNothing);
-
-    await tester.tap(find.byTooltip('Back'));
-    await tester.pumpAndSettle();
-    expect(find.text('How much time per day?'), findsOneWidget);
-    expect(find.text('Daily goal'), findsNothing);
     expect(_tileSelected(tester, '10 minutes'), isTrue);
   });
 }

@@ -1,4 +1,4 @@
-/// Guest welcome, experience, goal, Rex intro, motivation, and start screens.
+/// Guest welcome, coach intro, experience, goal, motivation, and start screens.
 library;
 
 import 'dart:async';
@@ -53,7 +53,7 @@ class WelcomeScreen extends ConsumerWidget {
               );
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (_) => const ExperienceChoiceScreen(),
+                  builder: (_) => const CoachIntroScreen(pageIndex: 0),
                 ),
               );
             },
@@ -218,52 +218,6 @@ class _DailyGoalScreenState extends ConsumerState<DailyGoalScreen> {
                   .read(onboardingControllerProvider.notifier)
                   .setDailyGoal(minutes);
               if (!context.mounted) return;
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const RexIntroScreen(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// Rex coach introduction.
-class RexIntroScreen extends ConsumerWidget {
-  /// Creates the Rex intro screen.
-  const RexIntroScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isNew =
-        ref.watch(onboardingControllerProvider).experienceBand ==
-        ExperienceBand.neverPlayed;
-    final role = isNew ? 'Your coach' : 'Your live-reg coach';
-    return _OnboardingScaffold(
-      progress: _onboardingProgress(3),
-      onBack: () {
-        unawaited(
-          ref
-              .read(onboardingControllerProvider.notifier)
-              .setStep(OnboardingStep.dailyGoal),
-        );
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _OnboardingCoachPrompt(speech: role),
-          const Spacer(),
-          _ContinueBar(
-            enabled: true,
-            onPressed: () async {
-              unawaited(
-                ref
-                    .read(analyticsServiceProvider)
-                    .logOnboardingStep(step: 'rex_intro'),
-              );
               final draft = ref.read(onboardingControllerProvider);
               final band = draft.experienceBand ?? ExperienceBand.neverPlayed;
               final catalog = await ref.read(courseCatalogProvider.future);
@@ -290,6 +244,50 @@ class RexIntroScreen extends ConsumerWidget {
   }
 }
 
+/// Duolingo-style Rex coach lines shown right after Get started.
+class CoachIntroScreen extends ConsumerWidget {
+  /// Creates one coach intro page. [pageIndex] is 0 or 1.
+  const CoachIntroScreen({super.key, required this.pageIndex});
+
+  /// Zero-based page in the two-screen coach sequence.
+  final int pageIndex;
+
+  static const _lines = <String>[
+    "Hi — I'm Rex, your coach.",
+    "Let's find where you should start.",
+  ];
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final line = _lines[pageIndex.clamp(0, _lines.length - 1)];
+    final isLast = pageIndex >= _lines.length - 1;
+    return _RexMotivationScaffold(
+      speech: line,
+      onContinue: () async {
+        unawaited(
+          ref.read(analyticsServiceProvider).logOnboardingStep(
+                step: isLast ? 'coach_intro_2' : 'coach_intro_1',
+              ),
+        );
+        if (!context.mounted) return;
+        if (isLast) {
+          await Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => const ExperienceChoiceScreen(),
+            ),
+          );
+          return;
+        }
+        await Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const CoachIntroScreen(pageIndex: 1),
+          ),
+        );
+      },
+    );
+  }
+}
+
 /// First post-onboarding Rex motivation beat (Duolingo-style).
 class MotivationHookScreen extends ConsumerWidget {
   /// Creates the first motivation screen.
@@ -301,12 +299,12 @@ class MotivationHookScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return _RexMotivationScaffold(
       speech: speech,
-      progress: _onboardingProgress(4),
+      progress: _onboardingProgress(3),
       onBack: () {
         unawaited(
           ref
               .read(onboardingControllerProvider.notifier)
-              .setStep(OnboardingStep.rexIntro),
+              .setStep(OnboardingStep.dailyGoal),
         );
       },
       onContinue: () async {
@@ -337,7 +335,7 @@ class MotivationPitchScreen extends ConsumerWidget {
     final lessonId = draft.recommendedLessonId ?? kFirstCourseLessonId;
     return _RexMotivationScaffold(
       speech: speech,
-      progress: _onboardingProgress(5),
+      progress: _onboardingProgress(4),
       onBack: () {
         unawaited(
           ref
@@ -386,12 +384,12 @@ class RecommendedStartScreen extends ConsumerWidget {
           orElse: () => null,
         );
     return _OnboardingScaffold(
-      progress: _onboardingProgress(4),
+      progress: _onboardingProgress(3),
       onBack: () {
         unawaited(
           ref
               .read(onboardingControllerProvider.notifier)
-              .setStep(OnboardingStep.rexIntro),
+              .setStep(OnboardingStep.dailyGoal),
         );
       },
       child: Column(
@@ -990,8 +988,8 @@ class _DuoSlabButtonState extends State<_DuoSlabButton> {
   }
 }
 
-/// Experience → daily goal → Meet Rex → motivation (or jump-test start).
-const int kOnboardingProgressSteps = 5;
+/// Experience → daily goal → motivation (or jump-test start).
+const int kOnboardingProgressSteps = 4;
 
 double _onboardingProgress(int stepIndex) {
   assert(stepIndex >= 1 && stepIndex <= kOnboardingProgressSteps);
@@ -1002,13 +1000,13 @@ class _RexMotivationScaffold extends StatelessWidget {
   const _RexMotivationScaffold({
     required this.speech,
     required this.onContinue,
-    required this.progress,
+    this.progress,
     this.onBack,
   });
 
   final String speech;
   final Future<void> Function() onContinue;
-  final double progress;
+  final double? progress;
   final VoidCallback? onBack;
 
   @override
