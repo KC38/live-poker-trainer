@@ -85,7 +85,7 @@ export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:$PATH"
 export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 
 DEVICE="$(tools/iphone_13_mini_udid.sh)"
-PRIMARY="${PRIMARY:-$HOME/live-poker-trainer}"
+PRIMARY="$(tools/primary_checkout.sh)"
 CHECKOUT="$PRIMARY"
 SESSION=flutter-iphone-13-mini
 PID_FILE=/tmp/flutter-live-poker-trainer.pid

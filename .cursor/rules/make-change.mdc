@@ -1,11 +1,12 @@
 ---
-description: Code changes go through a .worktrees worktree in the current session, never by editing ~/live-poker-trainer
+description: Code changes go through a .worktrees worktree in the current session, never by editing the primary checkout
 alwaysApply: true
 ---
 
 # Changes go through a worktree
 
-Never edit, commit, or switch branches in `~/live-poker-trainer`.
+Never edit, commit, or switch branches in the primary checkout
+(`tools/primary_checkout.sh` — `~/live-poker-trainer` or `~/live_poker_trainer`).
 
 For a new feature, bug fix, or any other requested code change, follow `.cursor/skills/make-change/SKILL.md` in this session.
 
