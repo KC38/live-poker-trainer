@@ -259,17 +259,10 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.commonLeaks) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return CommonLeaksDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllLeaksTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+          return LessonCommonLeaksExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllLeaksTapped: locked ? null : onFeltAcknowledge,
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.rangeUpdate) {

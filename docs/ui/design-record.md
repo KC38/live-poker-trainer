@@ -244,6 +244,9 @@ taps Value, Bluff, Catch, and Fold under the felt.
 Play tighter multiway uses the full poker table for every step: explain taps
 Stronger, Fewer, and Nuts under the felt.
 
+Patch the common leaks uses the full poker table for every step: explain taps
+Top pair, Prices, Passive, and Crowds under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -478,9 +481,9 @@ the same frame and the full table: explain taps Value, Bluff, Catch,
 and Fold under the felt, and each river sits face up on that table.
 Play tighter multiway uses the same frame and the full table: explain
 taps Stronger, Fewer, and Nuts under the felt, and each multiway spot
-sits face up on that table. Patch the common leaks uses the same frame: top
-pair, prices, passive, and crowds stay in the stage, and each leak
-spot sits face up on the full table. Section 3 jump check uses the
+sits face up on that table. Patch the common leaks uses the same frame
+and the full table: explain taps Top pair, Prices, Passive, and Crowds
+under the felt, and each leak spot sits face up on that table. Section 3 jump check uses the
 same frame: the table-read stays a list, the flop class and the
 bad-price draw sit face up on the full table, and the multiway fold
 and the value bet use that table. Think in ranges uses the same

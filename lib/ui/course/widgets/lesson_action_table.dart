@@ -5496,6 +5496,95 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
 }
 
 
+/// Common-leaks explain: TOP PAIR / PRICES / PASSIVE / CROWDS under the table.
+class LessonCommonLeaksExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonCommonLeaksExplainTable({
+    super.key,
+    required this.onAllLeaksTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllLeaksTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonCommonLeaksExplainTable> createState() =>
+      _LessonCommonLeaksExplainTableState();
+}
+
+class _LessonCommonLeaksExplainTableState
+    extends State<LessonCommonLeaksExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllLeaksTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= CommonLeaksDemo.leaks.length) {
+      widget.onAllLeaksTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllLeaksTapped != null;
+    return Column(
+      key: const ValueKey<String>('common-leaks-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['As', '7c', '2d'],
+            villainCount: 2,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < CommonLeaksDemo.leaks.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(CommonLeaksDemo.leaks[i].label) &&
+                      CommonLeaksDemo.leaks
+                          .take(i)
+                          .every((l) => _tapped.contains(l.label)),
+                  child: _DemoActionCard(
+                    label: CommonLeaksDemo.leaks[i].label,
+                    caption: CommonLeaksDemo.leaks[i].caption,
+                    color: CommonLeaksDemo.leaks[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(CommonLeaksDemo.leaks[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(CommonLeaksDemo.leaks[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Explain-step demo: four common live leaks to recognize and avoid.
 class CommonLeaksDemo extends StatefulWidget {
   /// Creates the demo.
