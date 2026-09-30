@@ -3,7 +3,11 @@
 
 Creates several takes per asset, scores them with ffmpeg loudness/silence
 heuristics, and writes the winners into ``assets/sounds`` under the filenames
-``SoundService`` already loads. Old matching assets are removed first.
+``SoundService`` already loads.
+
+Lounge ambient is built from multiple Sound Effects pad prompts (and optional
+layered mixes). The Music API requires a paid ElevenLabs plan, so free-tier
+runs stay on text-to-sound with ``loop=true``.
 
 Credentials (never commit)::
 
@@ -13,7 +17,8 @@ Credentials (never commit)::
 Usage::
 
     python3 tool/gen_audio_ai.py
-    python3 tool/gen_audio_ai.py --takes 3 --dry-run
+    python3 tool/gen_audio_ai.py --only lounge_ambient --takes 2
+    python3 tool/gen_audio_ai.py --dry-run
 """
 
 from __future__ import annotations
@@ -24,10 +29,10 @@ import os
 import pathlib
 import shutil
 import subprocess
-import sys
 import tempfile
 import urllib.error
 import urllib.request
+import wave
 from dataclasses import dataclass
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
@@ -49,6 +54,41 @@ class AssetSpec:
     loop: bool = False
     target_lufs: float = -16.0
     prompt_influence: float = 0.45
+
+
+# Distinct musical beds — avoid "casino floor" noise prompts that read as SFX.
+AMBIENT_VARIANTS: tuple[tuple[str, str], ...] = (
+    (
+        "rhodes",
+        "Seamless looping soft Rhodes electric piano ambient pad in A minor, "
+        "warm sustained chords only, no melody line, no riffs, no percussion, "
+        "no drums, no vocals, gentle tape warmth, calm focus music, infinite loop",
+    ),
+    (
+        "analog_pad",
+        "Seamless looping warm analog synthesizer pad, deep soft low-mid drone "
+        "with very slow filter movement, dark ambient soundtrack bed, no drums, "
+        "no melody, no voices, no sound effects, infinite loop",
+    ),
+    (
+        "muted_strings",
+        "Seamless looping soft muted string ensemble pad, quiet cinematic "
+        "underscore bed, warm and calm, no melody, no percussion, no vocals, "
+        "no sound effects, infinite loop",
+    ),
+    (
+        "jazz_bed",
+        "Seamless looping extremely soft jazz lounge music bed, distant muted "
+        "piano chords and soft upright bass notes barely audible, intimate "
+        "late-night club underscore, no solos, no vocals, no drums, no crowd "
+        "noise, no chip sounds, infinite loop",
+    ),
+)
+
+ROOM_TONE_PROMPT = (
+    "Seamless looping very quiet brown room tone with soft air, empty calm "
+    "interior, no voices, no footsteps, no machinery, no music, infinite loop"
+)
 
 
 ASSETS: tuple[AssetSpec, ...] = (
@@ -118,16 +158,11 @@ ASSETS: tuple[AssetSpec, ...] = (
         name="lounge_ambient",
         out_name="lounge_ambient.mp3",
         kind="ambient",
-        text=(
-            "Seamless looping soft poker lounge ambient pad, warm low drone, "
-            "quiet brown room tone, calm evening casino atmosphere, "
-            "instrumental only, no melody hook, no percussion hits, no vocals, "
-            "designed to loop forever"
-        ),
-        duration_seconds=8.0,
+        text=AMBIENT_VARIANTS[0][1],
+        duration_seconds=14.0,
         loop=True,
         target_lufs=-22.0,
-        prompt_influence=0.4,
+        prompt_influence=0.55,
     ),
 )
 
@@ -186,7 +221,7 @@ def generate_sfx_mp3(
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=120) as resp:
+        with urllib.request.urlopen(req, timeout=180) as resp:
             dest.write_bytes(resp.read())
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode(errors="replace")
@@ -208,15 +243,9 @@ def convert_to_wav(
     dest_wav: pathlib.Path,
     target_lufs: float,
 ) -> None:
-    """Converts MP3 to mono 22.05 kHz WAV with peak-safe gain for short SFX.
-
-    Single-pass ``loudnorm`` under-boosts sub-second clips, so short table
-    sounds are peak-normalized to ``-1.5 dBTP`` instead. ``target_lufs`` is
-    kept for API symmetry with ambient normalization.
-    """
-    del target_lufs  # ambient uses LUFS; SFX use true-peak targeting.
+    """Converts MP3 to mono 22.05 kHz WAV with peak-safe gain for short SFX."""
+    del target_lufs
     dest_wav.parent.mkdir(parents=True, exist_ok=True)
-    # First write a temp WAV, measure peak, then apply gain.
     with tempfile.TemporaryDirectory() as tmp:
         raw = pathlib.Path(tmp) / "raw.wav"
         run_ffmpeg(
@@ -235,7 +264,6 @@ def convert_to_wav(
             ]
         )
         metrics = measure(raw)
-        # Raise quiet Foley toward -1.5 dBTP; never boost already-hot clips.
         gain_db = max(0.0, min(24.0, -1.5 - metrics["true_peak"]))
         run_ffmpeg(
             [
@@ -252,28 +280,118 @@ def convert_to_wav(
         )
 
 
-def normalize_mp3(src: pathlib.Path, dest: pathlib.Path, target_lufs: float) -> None:
-    """Loudness-normalizes an MP3 for ambient playback."""
-    dest.parent.mkdir(parents=True, exist_ok=True)
+def decode_mono_wav(src: pathlib.Path, dest: pathlib.Path, sample_rate: int = 44100) -> None:
+    """Decodes any audio file to mono PCM WAV."""
     run_ffmpeg(
         [
             "ffmpeg",
             "-y",
             "-i",
             str(src),
-            "-af",
-            f"loudnorm=I={target_lufs}:TP=-1.5:LRA=11",
+            "-ac",
+            "1",
+            "-ar",
+            str(sample_rate),
             "-c:a",
-            "libmp3lame",
-            "-qscale:a",
-            "4",
+            "pcm_s16le",
+            str(dest),
+        ]
+    )
+
+
+def crossfade_loop_wav(src: pathlib.Path, dest: pathlib.Path, xfade_sec: float = 2.0) -> None:
+    """Crossfades the end of ``src`` into its start for cleaner looping."""
+    with wave.open(str(src), "rb") as handle:
+        n_channels = handle.getnchannels()
+        sampwidth = handle.getsampwidth()
+        rate = handle.getframerate()
+        frames = handle.readframes(handle.getnframes())
+    if n_channels != 1 or sampwidth != 2:
+        raise RuntimeError(f"expected mono 16-bit wav, got {n_channels}ch {sampwidth}B")
+
+    import array
+    import struct
+
+    samples = array.array("h")
+    samples.frombytes(frames)
+    xfade = min(len(samples) // 4, int(xfade_sec * rate))
+    if xfade < 8:
+        dest.write_bytes(src.read_bytes())
+        return
+    out = samples[:]
+    for i in range(xfade):
+        alpha = i / xfade
+        end_i = len(samples) - xfade + i
+        blended = int(out[end_i] * (1.0 - alpha) + samples[i] * alpha)
+        out[end_i] = max(-32767, min(32767, blended))
+    with wave.open(str(dest), "wb") as handle:
+        handle.setnchannels(1)
+        handle.setsampwidth(2)
+        handle.setframerate(rate)
+        handle.writeframes(struct.pack(f"<{len(out)}h", *out))
+
+
+def polish_ambient_mp3(src: pathlib.Path, dest: pathlib.Path, target_lufs: float) -> None:
+    """Softens harsh highs, crossfades the loop point, and loudness-normalizes."""
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = pathlib.Path(tmp)
+        raw = tmp_path / "raw.wav"
+        looped = tmp_path / "looped.wav"
+        decode_mono_wav(src, raw)
+        crossfade_loop_wav(raw, looped, xfade_sec=2.0)
+        run_ffmpeg(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(looped),
+                "-af",
+                (
+                    "highpass=f=45,lowpass=f=6500,"
+                    "acompressor=threshold=-24dB:ratio=2.5:attack=25:release=250,"
+                    f"loudnorm=I={target_lufs}:TP=-2.0:LRA=8"
+                ),
+                "-c:a",
+                "libmp3lame",
+                "-qscale:a",
+                "4",
+                str(dest),
+            ]
+        )
+
+
+def mix_wavs(paths: list[pathlib.Path], dest: pathlib.Path, gains_db: list[float]) -> None:
+    """Mixes mono WAVs with per-input gain into ``dest``."""
+    if len(paths) != len(gains_db):
+        raise ValueError("paths/gains length mismatch")
+    inputs: list[str] = []
+    filters = []
+    for index, (path, gain) in enumerate(zip(paths, gains_db)):
+        inputs.extend(["-i", str(path)])
+        filters.append(f"[{index}:a]volume={gain}dB[a{index}]")
+    mix_inputs = "".join(f"[a{i}]" for i in range(len(paths)))
+    filters.append(
+        f"{mix_inputs}amix=inputs={len(paths)}:normalize=0:duration=longest[out]"
+    )
+    run_ffmpeg(
+        [
+            "ffmpeg",
+            "-y",
+            *inputs,
+            "-filter_complex",
+            ";".join(filters),
+            "-map",
+            "[out]",
+            "-c:a",
+            "pcm_s16le",
             str(dest),
         ]
     )
 
 
 def measure(path: pathlib.Path) -> dict[str, float]:
-    """Returns duration, integrated LUFS, true peak, and leading silence ratio."""
+    """Returns duration, LUFS, true peak, leading silence, and HF energy proxy."""
     probe = run_ffmpeg(
         [
             "ffprobe",
@@ -288,7 +406,6 @@ def measure(path: pathlib.Path) -> dict[str, float]:
     )
     duration = float(probe.stdout.strip() or "0")
 
-    # ebur128 gives integrated loudness; silence detect estimates dead air.
     ebu = subprocess.run(
         [
             "ffmpeg",
@@ -308,7 +425,6 @@ def measure(path: pathlib.Path) -> dict[str, float]:
     true_peak = -70.0
     for line in (ebu.stderr or "").splitlines():
         if "I:" in line and "LUFS" in line:
-            # e.g. "    I:         -23.4 LUFS"
             try:
                 lufs = float(line.split("I:")[1].split("LUFS")[0].strip())
             except ValueError:
@@ -351,16 +467,41 @@ def measure(path: pathlib.Path) -> dict[str, float]:
             except ValueError:
                 pass
 
+    # Mean absolute sample energy after a 4 kHz high-pass ≈ hiss/noise proxy.
+    hf = subprocess.run(
+        [
+            "ffmpeg",
+            "-i",
+            str(path),
+            "-af",
+            "highpass=f=4000,astats=metadata=1:reset=1",
+            "-f",
+            "null",
+            "-",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    hf_rms = 0.0
+    for line in (hf.stderr or "").splitlines():
+        if "RMS level dB" in line:
+            try:
+                hf_rms = float(line.rsplit(":", 1)[1].strip())
+            except ValueError:
+                pass
+
     return {
         "duration": duration,
         "lufs": lufs,
         "true_peak": true_peak,
         "leading_silence": leading_silence,
+        "hf_rms": hf_rms,
     }
 
 
 def score_take(spec: AssetSpec, path: pathlib.Path) -> float:
-    """Higher is better. Prefers target loudness, tight leading silence, length."""
+    """Higher is better. Ambient also prefers less high-frequency noise."""
     m = measure(path)
     if m["duration"] < 0.15:
         return -1e9
@@ -372,18 +513,23 @@ def score_take(spec: AssetSpec, path: pathlib.Path) -> float:
         peak_pen = (m["true_peak"] + 1.0) * 8.0
 
     length_pen = abs(m["duration"] - spec.duration_seconds) * 6.0
-    # Ambient should fill most of the requested window.
     if spec.kind == "ambient" and m["duration"] < spec.duration_seconds * 0.7:
         length_pen += 25.0
 
-    return 100.0 - loud_err * 3.0 - silence_pen - peak_pen - length_pen
+    hf_pen = 0.0
+    if spec.kind == "ambient":
+        # Quieter HF is better for a lounge pad; -60 dB is ideal-ish.
+        hf_pen = max(0.0, m["hf_rms"] + 55.0) * 1.8
+
+    return 100.0 - loud_err * 3.0 - silence_pen - peak_pen - length_pen - hf_pen
 
 
-def clear_old_assets() -> None:
-    """Removes previously bundled sound files so winners fully replace them."""
+def clear_assets(names: set[str]) -> None:
+    """Removes only the named bundled assets before rewriting winners."""
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    for path in OUT_DIR.iterdir():
-        if path.suffix.lower() in {".wav", ".mp3", ".ogg", ".m4a"}:
+    for name in names:
+        path = OUT_DIR / name
+        if path.exists():
             path.unlink()
             print(f"removed {path.relative_to(REPO)}")
 
@@ -395,57 +541,160 @@ def write_winner(spec: AssetSpec, src: pathlib.Path) -> pathlib.Path:
     if spec.kind == "sfx":
         convert_to_wav(src, dest, spec.target_lufs)
     else:
-        normalize_mp3(src, dest, spec.target_lufs)
+        polish_ambient_mp3(src, dest, spec.target_lufs)
     print(f"wrote {dest.relative_to(REPO)} ({dest.stat().st_size} bytes)")
     return dest
 
 
-def generate_all(*, takes: int, dry_run: bool) -> None:
-    """Generates, scores, and installs every asset."""
+def generate_lounge_candidates(
+    api_key: str,
+    *,
+    spec: AssetSpec,
+    takes_per_variant: int,
+) -> list[pathlib.Path]:
+    """Generates pad variants, room tone, and layered mixes for ambient."""
+    CANDIDATE_DIR.mkdir(parents=True, exist_ok=True)
+    candidates: list[pathlib.Path] = []
+    pad_wavs: dict[str, pathlib.Path] = {}
+
+    for variant_name, prompt in AMBIENT_VARIANTS:
+        for take in range(1, takes_per_variant + 1):
+            raw = CANDIDATE_DIR / f"lounge_{variant_name}_t{take}.mp3"
+            print(f"  generating {variant_name} take {take}…")
+            generate_sfx_mp3(
+                api_key,
+                text=prompt,
+                duration_seconds=spec.duration_seconds,
+                prompt_influence=spec.prompt_influence,
+                loop=True,
+                dest=raw,
+            )
+            candidates.append(raw)
+            if take == 1:
+                wav = CANDIDATE_DIR / f"lounge_{variant_name}_t{take}.wav"
+                decode_mono_wav(raw, wav)
+                pad_wavs[variant_name] = wav
+
+    room_mp3 = CANDIDATE_DIR / "lounge_room_t1.mp3"
+    print("  generating soft room tone…")
+    generate_sfx_mp3(
+        api_key,
+        text=ROOM_TONE_PROMPT,
+        duration_seconds=spec.duration_seconds,
+        prompt_influence=0.5,
+        loop=True,
+        dest=room_mp3,
+    )
+    room_wav = CANDIDATE_DIR / "lounge_room_t1.wav"
+    decode_mono_wav(room_mp3, room_wav)
+    candidates.append(room_mp3)
+
+    # Layered mixes tend to sound more like music beds than raw Foley pads.
+    mixes = (
+        ("mix_rhodes_room", ["rhodes"], [0.0], -12.0),
+        ("mix_analog_room", ["analog_pad"], [0.0], -11.0),
+        ("mix_jazz_room", ["jazz_bed"], [0.0], -13.0),
+        ("mix_rhodes_analog", ["rhodes", "analog_pad"], [-3.0, -5.0], None),
+        ("mix_strings_room", ["muted_strings"], [0.0], -12.0),
+    )
+    for mix_name, keys, gains, room_gain in mixes:
+        paths = [pad_wavs[key] for key in keys if key in pad_wavs]
+        gain_list = list(gains[: len(paths)])
+        if not paths:
+            continue
+        if room_gain is not None:
+            paths.append(room_wav)
+            gain_list.append(room_gain)
+        mixed_wav = CANDIDATE_DIR / f"lounge_{mix_name}.wav"
+        mixed_mp3 = CANDIDATE_DIR / f"lounge_{mix_name}.mp3"
+        print(f"  mixing {mix_name}…")
+        mix_wavs(paths, mixed_wav, gain_list)
+        run_ffmpeg(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(mixed_wav),
+                "-c:a",
+                "libmp3lame",
+                "-qscale:a",
+                "4",
+                str(mixed_mp3),
+            ]
+        )
+        candidates.append(mixed_mp3)
+
+    return candidates
+
+
+def generate_all(*, takes: int, dry_run: bool, only: set[str] | None) -> None:
+    """Generates, scores, and installs selected assets."""
     api_key = load_api_key()
     before = credit_count(api_key)
     print(f"credits used before: {before}")
 
+    selected = [spec for spec in ASSETS if only is None or spec.name in only]
+    if not selected:
+        raise SystemExit(f"No assets matched --only {sorted(only or [])}")
+
     if dry_run:
-        for spec in ASSETS:
-            print(f"[dry-run] {spec.out_name}: {takes} takes, {spec.duration_seconds}s")
+        for spec in selected:
+            if spec.kind == "ambient":
+                print(
+                    f"[dry-run] {spec.out_name}: "
+                    f"{len(AMBIENT_VARIANTS)} variants x {takes} takes + mixes"
+                )
+            else:
+                print(
+                    f"[dry-run] {spec.out_name}: {takes} takes, "
+                    f"{spec.duration_seconds}s"
+                )
         return
 
     CANDIDATE_DIR.mkdir(parents=True, exist_ok=True)
     winners: dict[str, pathlib.Path] = {}
 
-    for spec in ASSETS:
+    for spec in selected:
+        print(f"\n=== {spec.name} ===")
+        if spec.kind == "ambient":
+            candidates = generate_lounge_candidates(
+                api_key, spec=spec, takes_per_variant=takes
+            )
+        else:
+            candidates = []
+            for take in range(1, takes + 1):
+                raw = CANDIDATE_DIR / f"{spec.name}_t{take}.mp3"
+                print(f"  generating take {take}…")
+                generate_sfx_mp3(
+                    api_key,
+                    text=spec.text,
+                    duration_seconds=spec.duration_seconds,
+                    prompt_influence=spec.prompt_influence,
+                    loop=spec.loop,
+                    dest=raw,
+                )
+                candidates.append(raw)
+
         best_path: pathlib.Path | None = None
         best_score = -1e18
-        print(f"\n=== {spec.name} ({takes} takes) ===")
-        for take in range(1, takes + 1):
-            raw = CANDIDATE_DIR / f"{spec.name}_t{take}.mp3"
-            print(f"  generating take {take}…")
-            generate_sfx_mp3(
-                api_key,
-                text=spec.text,
-                duration_seconds=spec.duration_seconds,
-                prompt_influence=spec.prompt_influence,
-                loop=spec.loop,
-                dest=raw,
-            )
-            scored = score_take(spec, raw)
-            metrics = measure(raw)
+        for candidate in candidates:
+            scored = score_take(spec, candidate)
+            metrics = measure(candidate)
             print(
-                f"  take {take}: score={scored:.1f} "
+                f"  {candidate.name}: score={scored:.1f} "
                 f"lufs={metrics['lufs']:.1f} "
-                f"dur={metrics['duration']:.2f}s "
-                f"lead_sil={metrics['leading_silence']:.2f}s"
+                f"hf={metrics['hf_rms']:.1f} "
+                f"dur={metrics['duration']:.2f}s"
             )
             if scored > best_score:
                 best_score = scored
-                best_path = raw
+                best_path = candidate
         assert best_path is not None
         winners[spec.name] = best_path
         print(f"  winner: {best_path.name} (score={best_score:.1f})")
 
-    clear_old_assets()
-    for spec in ASSETS:
+    clear_assets({spec.out_name for spec in selected})
+    for spec in selected:
         write_winner(spec, winners[spec.name])
 
     after = credit_count(api_key)
@@ -459,8 +708,14 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument(
         "--takes",
         type=int,
-        default=3,
-        help="Number of candidates per asset (default: 3)",
+        default=2,
+        help="Takes per SFX asset / per ambient variant (default: 2)",
+    )
+    parser.add_argument(
+        "--only",
+        action="append",
+        default=None,
+        help="Asset name to generate (repeatable). Example: lounge_ambient",
     )
     parser.add_argument(
         "--dry-run",
@@ -472,7 +727,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit("--takes must be >= 1")
     if shutil.which("ffmpeg") is None or shutil.which("ffprobe") is None:
         raise SystemExit("ffmpeg and ffprobe are required on PATH")
-    generate_all(takes=args.takes, dry_run=args.dry_run)
+    only = set(args.only) if args.only else None
+    generate_all(takes=args.takes, dry_run=args.dry_run, only=only)
 
 
 if __name__ == "__main__":
