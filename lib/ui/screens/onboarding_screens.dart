@@ -100,8 +100,6 @@ class ExperienceChoiceScreen extends ConsumerWidget {
     final selected = ref.watch(onboardingControllerProvider).experienceBand;
     return _OnboardingScaffold(
       title: 'Your experience',
-      step: 2,
-      stepCount: 4,
       onBack: () {
         unawaited(
           ref
@@ -172,8 +170,6 @@ class DailyGoalScreen extends ConsumerWidget {
         .dailyGoalMinutes;
     return _OnboardingScaffold(
       title: 'Daily goal',
-      step: 3,
-      stepCount: 4,
       onBack: () {
         unawaited(
           ref
@@ -241,8 +237,6 @@ class RexIntroScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return _OnboardingScaffold(
       title: 'Meet Rex',
-      step: 4,
-      stepCount: 4,
       onBack: () {
         unawaited(
           ref
@@ -578,18 +572,11 @@ class _OnboardingScaffold extends StatelessWidget {
   const _OnboardingScaffold({
     required this.child,
     this.title,
-    this.step,
-    this.stepCount,
     this.onBack,
   });
 
   final Widget child;
   final String? title;
-
-  /// 1-based position in the welcome → Meet Rex sequence.
-  final int? step;
-
-  final int? stepCount;
 
   /// Used when this screen is the root, so [Navigator.canPop] is false.
   ///
@@ -601,7 +588,6 @@ class _OnboardingScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final canPop = Navigator.of(context).canPop();
     final showBack = canPop || onBack != null;
-    final showStep = step != null && stepCount != null;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -618,39 +604,27 @@ class _OnboardingScaffold extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (showBack || showStep)
+                if (showBack)
                   Row(
                     children: [
-                      if (showBack)
-                        IconButton(
-                          tooltip: 'Back',
-                          onPressed: () {
-                            if (canPop) {
-                              Navigator.of(context).pop();
-                              return;
-                            }
-                            onBack?.call();
-                          },
-                          icon: const Icon(
-                            Icons.arrow_back,
-                            semanticLabel: 'Back',
-                            color: AppColors.cream,
-                          ),
-                        )
-                      else
-                        const SizedBox(width: 48),
-                      if (showStep)
-                        Text(
-                          'Step $step of $stepCount',
-                          style: GoogleFonts.manrope(
-                            color: AppColors.slate,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      IconButton(
+                        tooltip: 'Back',
+                        onPressed: () {
+                          if (canPop) {
+                            Navigator.of(context).pop();
+                            return;
+                          }
+                          onBack?.call();
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          semanticLabel: 'Back',
+                          color: AppColors.cream,
                         ),
+                      ),
                     ],
                   ),
-                if (showBack || showStep) const SizedBox(height: 8),
+                if (showBack) const SizedBox(height: 8),
                 if (title != null)
                   Text(
                     title!,

@@ -276,7 +276,7 @@ void main() {
     );
   });
 
-  testWidgets('onboarding steps show position and back returns one screen', (
+  testWidgets('onboarding back returns one screen without step labels', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -302,7 +302,7 @@ void main() {
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
     expect(find.text('Your experience'), findsOneWidget);
-    expect(find.text('Step 2 of 4'), findsOneWidget);
+    expect(find.text('Step 2 of 4'), findsNothing);
     expect(find.byTooltip('Back'), findsOneWidget);
     expect(find.bySemanticsLabel('Back'), findsOneWidget);
 
@@ -319,7 +319,7 @@ void main() {
     await tester.tap(find.text('New to poker'));
     await tester.pumpAndSettle();
     expect(find.text('Daily goal'), findsOneWidget);
-    expect(find.text('Step 3 of 4'), findsOneWidget);
+    expect(find.text('Step 3 of 4'), findsNothing);
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
@@ -333,7 +333,7 @@ void main() {
     await tester.tap(find.text('10 minutes'));
     await tester.pumpAndSettle();
     expect(find.text('Meet Rex'), findsOneWidget);
-    expect(find.text('Step 4 of 4'), findsOneWidget);
+    expect(find.text('Step 4 of 4'), findsNothing);
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
