@@ -53,6 +53,7 @@ class LessonActivityController extends ChangeNotifier {
   ActivityDraft? _redoDraft;
   bool _submitting = false;
   bool _hintVisible = false;
+  bool _hintUsed = false;
   int _hintRequests = 0;
   String? _pendingIdempotencyKey;
   int _bindGeneration = 0;
@@ -69,6 +70,8 @@ class LessonActivityController extends ChangeNotifier {
   SubmitCourseStepResult? get lastResult => _lastResult;
   bool get submitting => _submitting;
   bool get hintVisible => _hintVisible;
+  /// True after the learner taps Hint once on the current activity node.
+  bool get hintUsed => _hintUsed;
   int get hintRequests => _hintRequests;
   String? get pendingIdempotencyKey => _pendingIdempotencyKey;
 
@@ -96,6 +99,7 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     _submitting = false;
     _hintVisible = false;
+    _hintUsed = false;
     _pendingIdempotencyKey = null;
     _tappedSeatLabel = null;
     _bindGeneration += 1;
@@ -220,12 +224,17 @@ class LessonActivityController extends ChangeNotifier {
   /// Shows or hides the hint in the speech bubble.
   void toggleHint() {
     _hintVisible = !_hintVisible;
-    if (_hintVisible) _hintRequests += 1;
+    if (_hintVisible) {
+      _hintUsed = true;
+      _hintRequests += 1;
+    }
     notifyListeners();
   }
 
+  /// Reveals the hint once for this activity node.
   void revealHint() {
     _hintVisible = true;
+    _hintUsed = true;
     _hintRequests += 1;
     notifyListeners();
   }
