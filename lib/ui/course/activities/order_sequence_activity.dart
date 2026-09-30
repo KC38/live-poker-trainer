@@ -67,12 +67,18 @@ bool _sameIdOrder(List<String> a, List<String> b) {
 /// Whether this activity asks for strongest → weakest (vs low → high).
 bool ordersStrongestFirst(CourseActivity activity) {
   if (activity.id == 'act-01-06-02-jump-ranks') return true;
+  if (activity.id == 'act-01-02-01-unguided-compare' ||
+      activity.id == 'act-01-02-01-checkpoint-winner') {
+    return true;
+  }
   final prompt = (activity.prompt ?? '').toLowerCase();
   final a11y = activity.accessibilityText.toLowerCase();
   return prompt.contains('strongest to weakest') ||
       prompt.contains('strongest first') ||
+      prompt.contains('highest to lowest') ||
       a11y.contains('strongest to weakest') ||
-      a11y.contains('strongest first');
+      a11y.contains('strongest first') ||
+      a11y.contains('highest to lowest');
 }
 
 /// Whether Rex already owns the tap-order instruction for [activity].
@@ -82,6 +88,7 @@ bool coachOwnsOrderHint(CourseActivity activity) {
       activity.sequenceItems.every((item) => _rankOnly.hasMatch(item.label));
   return isStreetSequenceActivity(activity) ||
       isSeatOrderSequenceActivity(activity) ||
+      isShowdownOrderSequenceActivity(activity.id) ||
       ordersStrongestFirst(activity) ||
       isHandExampleSequenceActivity(activity) ||
       rankMode;
@@ -148,6 +155,11 @@ String orderSequenceStatusLine({
   }
   if (rankMode) return 'Pick low → high';
   if (ordersStrongestFirst(activity)) return 'Pick strong → weak';
+  if (isShowdownOrderSequenceActivity(activity.id)) {
+    return ordersStrongestFirst(activity)
+        ? 'Pick strong → weak'
+        : 'Pick weak → strong';
+  }
   if (isHandExampleSequenceActivity(activity)) return 'Pick low → high';
   return 'Pick next';
 }
@@ -217,6 +229,26 @@ class OrderSequenceActivity extends StatelessWidget {
               id: id,
             ),
           );
+        }
+        if (framed && isShowdownOrderSequenceActivity(activity.id)) {
+          final spot = handRanksShowdownSpot(activity.id);
+          if (spot != null) {
+            return LessonShowdownOrderTable(
+              key: ValueKey<String>(
+                '${activity.id}-${controller.bindGeneration}-showdown-order',
+              ),
+              spot: spot,
+              orderedIds: ordered,
+              enabled: !locked,
+              showGuidance: showGuidance,
+              onPick: (id) => appendOrderedId(
+                controller: controller,
+                activity: activity,
+                ordered: ordered,
+                id: id,
+              ),
+            );
+          }
         }
         if (framed && isStreetSequenceActivity(activity)) {
           return LessonStreetsOrderTable(

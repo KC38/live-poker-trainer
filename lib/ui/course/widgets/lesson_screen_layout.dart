@@ -308,11 +308,10 @@ String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
   }
   if (activity.id == 'act-01-02-01-explain-ladder') {
     return 'Pair beats high card. Flush beats straight. '
-        'Tap each made hand from high card up to flush.';
+        'Tap seats from weakest hand to strongest.';
   }
   if (activity.id == 'act-01-02-01-checkpoint-winner') {
-    return 'Showdown. Tap your cards if the flush wins, their cards if '
-        'the straight wins, or the board to chop.';
+    return 'Showdown. Tap seats from strongest hand to weakest.';
   }
   if (activity.id == 'act-01-02-02-explain-five') {
     return 'Only five cards count. Tap each card that plays.';

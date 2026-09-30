@@ -606,10 +606,8 @@ frame and the full table: one community card per suit, board ranks for
 order, and face-up seats for suited / pair. Button and blinds uses the
 same frame; its stage is the full table, with the dealer button, small
 blind, and big blind on the seats. Hand ranks uses the same frame and the
-full table: the explain ladder cycles made hands on the felt, order steps
-show a made hand on the table with category answers under the felt, the
-spot sits face up on the table, and the showdown taps You / Them on that
-table. Best five
+full table: every step is a multiway showdown with face-up seats, and the
+learner taps seats from weakest to strongest or strongest to weakest. Best five
 and kickers uses the same frame and the full table: explain taps the
 five cards that play on hero holes and the board, guided and checkpoint
 build the best five by tapping those seven cards, and a kicker battle
