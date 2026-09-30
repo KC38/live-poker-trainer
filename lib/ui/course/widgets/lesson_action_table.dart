@@ -10425,6 +10425,98 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
   }
 }
 
+/// Multiway-nuts explain: NUTTED / AIR / DOMINATION under the full poker table.
+class LessonMultiwayNutsExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonMultiwayNutsExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonMultiwayNutsExplainTable> createState() =>
+      _LessonMultiwayNutsExplainTableState();
+}
+
+class _LessonMultiwayNutsExplainTableState
+    extends State<LessonMultiwayNutsExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= MultiwayNutsDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('multiway-nuts-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < MultiwayNutsDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        MultiwayNutsDemo.points[i].label,
+                      ) &&
+                      MultiwayNutsDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: MultiwayNutsDemo.points[i].label,
+                    caption: MultiwayNutsDemo.points[i].caption,
+                    color: MultiwayNutsDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      MultiwayNutsDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  MultiwayNutsDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Nutted / air / domination tiles for multiway-nuts explain demos.
 class MultiwayNutsDemo extends StatefulWidget {
   /// Creates the demo.
