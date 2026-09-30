@@ -1,4 +1,4 @@
-/// Winding lesson path with section/unit banners and node states.
+/// Winding lesson path with Duolingo-style unit banners and circular nodes.
 library;
 
 import 'package:flutter/material.dart';
@@ -7,6 +7,21 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
+/// Accent colors for unit banners, keyed by section order (1-based).
+Color unitBannerColorForSection(int sectionOrder) {
+  const palette = <Color>[
+    Color(0xFF1CB0A0), // teal felt
+    Color(0xFFC46B8A), // lag rose
+    Color(0xFF3AA8B8), // station
+    Color(0xFFE07A3A), // maniac
+    Color(0xFF6B7FD7), // tag
+    Color(0xFFD4A84B), // gold
+    Color(0xFF2DB87A), // success emerald
+  ];
+  if (sectionOrder < 1) return palette.first;
+  return palette[(sectionOrder - 1) % palette.length];
+}
+
 /// Vertical winding path of course nodes.
 class CoursePathView extends StatelessWidget {
   /// Creates the path.
@@ -14,10 +29,22 @@ class CoursePathView extends StatelessWidget {
     super.key,
     required this.nodes,
     required this.onNodeTap,
+    this.onUnitBannerTap,
+    this.sectionOrders = const {},
+    this.sectionKeys = const {},
   });
 
   final List<CourseMapNode> nodes;
   final void Function(CourseMapNode node) onNodeTap;
+
+  /// Opens the section picker when a unit banner is tapped.
+  final void Function(CourseMapNode node)? onUnitBannerTap;
+
+  /// Catalog `order` for each [CourseMapNode.sectionId], used for banner color.
+  final Map<String, int> sectionOrders;
+
+  /// Scroll anchors for each section id.
+  final Map<String, GlobalKey> sectionKeys;
 
   @override
   Widget build(BuildContext context) {
@@ -28,53 +55,53 @@ class CoursePathView extends StatelessWidget {
     final children = <Widget>[];
     String? lastSectionId;
     String? lastUnitId;
+    var pathIndex = 0;
 
     for (var i = 0; i < nodes.length; i++) {
       final node = nodes[i];
+      final sectionOrder = sectionOrders[node.sectionId] ?? 1;
+      final bannerColor = unitBannerColorForSection(sectionOrder);
+
       if (node.sectionId != lastSectionId) {
         lastSectionId = node.sectionId;
         lastUnitId = null;
         children.add(
-          Padding(
-            padding: EdgeInsets.only(top: i == 0 ? 0 : 22, bottom: 8),
-            child: Text(
-              node.sectionTitle,
-              style: GoogleFonts.cinzel(
-                color: AppColors.goldBright,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+          KeyedSubtree(
+            key: sectionKeys[node.sectionId],
+            child: const SizedBox(height: 4),
           ),
         );
       }
+
       if (node.unitId != lastUnitId) {
         lastUnitId = node.unitId;
         children.add(
           Padding(
-            padding: const EdgeInsets.only(bottom: 10, top: 4),
-            child: Text(
-              node.unitTitle.toUpperCase(),
-              style: GoogleFonts.manrope(
-                color: AppColors.slate,
-                fontSize: 11,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.1,
-              ),
+            padding: EdgeInsets.only(top: i == 0 ? 0 : 28, bottom: 18),
+            child: _UnitBanner(
+              sectionOrder: sectionOrder,
+              unitTitle: node.unitTitle,
+              sectionTitle: node.sectionTitle,
+              color: bannerColor,
+              onTap: onUnitBannerTap == null
+                  ? null
+                  : () => onUnitBannerTap!(node),
             ),
           ),
         );
       }
 
-      final alignLeft = i.isEven;
       children.add(
         _PathNodeRow(
           node: node,
-          alignLeft: alignLeft,
-          showConnector: i < nodes.length - 1,
+          pathIndex: pathIndex,
+          accent: bannerColor,
+          showConnector: i < nodes.length - 1 &&
+              nodes[i + 1].unitId == node.unitId,
           onTap: () => onNodeTap(node),
         ),
       );
+      pathIndex += 1;
     }
 
     return Column(
@@ -84,275 +111,364 @@ class CoursePathView extends StatelessWidget {
   }
 }
 
-class _PathNodeRow extends StatelessWidget {
-  const _PathNodeRow({
-    required this.node,
-    required this.alignLeft,
-    required this.showConnector,
-    required this.onTap,
+class _UnitBanner extends StatelessWidget {
+  const _UnitBanner({
+    required this.sectionOrder,
+    required this.unitTitle,
+    required this.sectionTitle,
+    required this.color,
+    this.onTap,
   });
 
-  final CourseMapNode node;
-  final bool alignLeft;
-  final bool showConnector;
-  final VoidCallback onTap;
+  final int sectionOrder;
+  final String unitTitle;
+  final String sectionTitle;
+  final Color color;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final bubble = _NodeBubble(node: node, onTap: onTap);
-    final marked = node.isNext
-        ? Column(
-            children: [
-              const RexMascot(size: 56),
-              Transform.translate(
-                offset: const Offset(0, -16),
-                child: bubble,
-              ),
-            ],
-          )
-        : bubble;
-    return Column(
-      children: [
-        Row(
-          children: [
-            if (!alignLeft) const Spacer(flex: 2),
-            Expanded(flex: 5, child: marked),
-            if (alignLeft) const Spacer(flex: 2),
-          ],
-        ),
-        if (showConnector)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: CustomPaint(
-              size: const Size(double.infinity, 28),
-              painter: _PathConnectorPainter(
-                toLeft: !alignLeft,
-                emphasized: node.isNext,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _NodeBubble extends StatelessWidget {
-  const _NodeBubble({required this.node, required this.onTap});
-
-  final CourseMapNode node;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = _colorsFor(node.state);
-    final icon = _iconFor(node.kind);
-    final locked = node.state == CourseNodeState.locked;
+    final base = color;
+    final shadow = Color.lerp(base, Colors.black, 0.28)!;
 
     return Semantics(
-      button: true,
-      enabled: true,
-      label: node.semanticsLabel,
-      hint: locked ? node.lockReason : null,
+      button: onTap != null,
+      label: 'Section $sectionOrder, $unitTitle. $sectionTitle',
+      hint: onTap == null ? null : 'Open section list',
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(16),
           child: Ink(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
             decoration: BoxDecoration(
-              color: colors.background,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: node.isNext ? AppColors.gold : colors.border,
-                width: node.isNext ? 2 : 1,
-              ),
-              boxShadow: node.isNext
-                  ? [
-                      BoxShadow(
-                        color: AppColors.gold.withValues(alpha: 0.18),
-                        blurRadius: 16,
-                        offset: const Offset(0, 6),
-                      ),
-                    ]
-                  : null,
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 56),
-              child: Row(
-                children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: colors.iconBackground,
-                  ),
-                  child: Icon(icon, color: colors.icon, size: 22),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (node.isNext)
-                        Text(
-                          'NEXT',
-                          style: GoogleFonts.manrope(
-                            color: AppColors.goldBright,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 1.0,
-                          ),
-                        ),
-                      Text(
-                        node.title,
-                        style: GoogleFonts.manrope(
-                          color: colors.title,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          height: 1.25,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        locked
-                            ? (node.lockReason ?? 'Locked')
-                            : _stateCaption(node),
-                        style: GoogleFonts.manrope(
-                          color: AppColors.slate,
-                          fontSize: 12,
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
-                  ),
+              color: base,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: shadow,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(18, 14, 14, 14),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'SECTION $sectionOrder · ${sectionTitle.toUpperCase()}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.manrope(
+                            color: Colors.white.withValues(alpha: 0.88),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          unitTitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.manrope(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w800,
+                            height: 1.15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (onTap != null)
+                    Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: Colors.white.withValues(alpha: 0.9),
+                      size: 28,
+                    ),
+                ],
+              ),
             ),
           ),
         ),
       ),
     );
   }
+}
 
-  static String _stateCaption(CourseMapNode node) {
-    return switch (node.state) {
-      CourseNodeState.available => _kindCaption(node.kind),
-      CourseNodeState.active => 'In progress',
-      CourseNodeState.completed => 'Completed',
-      CourseNodeState.mastered => 'Mastered',
-      CourseNodeState.reviewDue => 'Review due',
-      CourseNodeState.locked => 'Locked',
+class _PathNodeRow extends StatelessWidget {
+  const _PathNodeRow({
+    required this.node,
+    required this.pathIndex,
+    required this.accent,
+    required this.showConnector,
+    required this.onTap,
+  });
+
+  final CourseMapNode node;
+  final int pathIndex;
+  final Color accent;
+  final bool showConnector;
+  final VoidCallback onTap;
+
+  /// Zig-zag: center, right, center, left, …
+  double get _alignmentX {
+    return switch (pathIndex % 4) {
+      0 => 0.0,
+      1 => 0.42,
+      2 => 0.0,
+      _ => -0.42,
     };
   }
 
-  static String _kindCaption(CourseNodeKind kind) {
-    return switch (kind) {
-      CourseNodeKind.lesson => 'Lesson',
-      CourseNodeKind.practice => 'Practice',
-      CourseNodeKind.checkpoint => 'Checkpoint',
-      CourseNodeKind.reward => 'Reward',
-      CourseNodeKind.jumpTest => 'Jump test',
-      CourseNodeKind.handLab => 'Hand lab',
-    };
+  @override
+  Widget build(BuildContext context) {
+    final bubble = _NodeCircle(node: node, accent: accent);
+    final labeled = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (node.isNext) ...[
+          _StartChip(color: accent),
+          const SizedBox(height: 6),
+        ],
+        if (node.isNext)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: RexMascot(
+              size: 52,
+              mood: node.state == CourseNodeState.active
+                  ? RexMood.celebrate
+                  : RexMood.calm,
+            ),
+          ),
+        bubble,
+        const SizedBox(height: 8),
+        SizedBox(
+          width: 120,
+          child: Text(
+            node.title,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.manrope(
+              color: node.state == CourseNodeState.locked
+                  ? AppColors.slate
+                  : AppColors.cream,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              height: 1.2,
+            ),
+          ),
+        ),
+      ],
+    );
+
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment(_alignmentX, 0),
+          child: Semantics(
+            button: true,
+            enabled: true,
+            label: node.semanticsLabel,
+            hint: node.state == CourseNodeState.locked ? node.lockReason : null,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(20),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: labeled,
+                ),
+              ),
+            ),
+          ),
+        ),
+        if (showConnector)
+          SizedBox(
+            height: 22,
+            width: double.infinity,
+            child: CustomPaint(
+              painter: _PathDotPainter(
+                fromX: _alignmentX,
+                toX: _nextAlignmentX,
+                color: node.isNext
+                    ? accent.withValues(alpha: 0.55)
+                    : AppColors.slateDark,
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
-  static IconData _iconFor(CourseNodeKind kind) {
-    return switch (kind) {
-      CourseNodeKind.lesson => Icons.menu_book_outlined,
-      CourseNodeKind.practice => Icons.fitness_center_outlined,
-      CourseNodeKind.checkpoint => Icons.flag_outlined,
-      CourseNodeKind.reward => Icons.emoji_events_outlined,
-      CourseNodeKind.jumpTest => Icons.bolt_outlined,
-      CourseNodeKind.handLab => Icons.table_restaurant_outlined,
-    };
-  }
-
-  static ({
-    Color background,
-    Color border,
-    Color icon,
-    Color iconBackground,
-    Color title,
-  }) _colorsFor(CourseNodeState state) {
-    return switch (state) {
-      CourseNodeState.locked => (
-          background: AppColors.bgElevated.withValues(alpha: 0.35),
-          border: AppColors.slateDark,
-          icon: AppColors.slate,
-          iconBackground: AppColors.slateDark.withValues(alpha: 0.55),
-          title: AppColors.slate,
-        ),
-      CourseNodeState.available => (
-          background: AppColors.bgElevated.withValues(alpha: 0.72),
-          border: AppColors.slateDark,
-          icon: AppColors.cream,
-          iconBackground: AppColors.feltLight.withValues(alpha: 0.55),
-          title: AppColors.cream,
-        ),
-      CourseNodeState.active => (
-          background: AppColors.feltDark.withValues(alpha: 0.65),
-          border: AppColors.gold,
-          icon: AppColors.goldBright,
-          iconBackground: AppColors.gold.withValues(alpha: 0.2),
-          title: AppColors.cream,
-        ),
-      CourseNodeState.completed => (
-          background: AppColors.bgElevated.withValues(alpha: 0.6),
-          border: AppColors.success.withValues(alpha: 0.45),
-          icon: AppColors.success,
-          iconBackground: AppColors.success.withValues(alpha: 0.15),
-          title: AppColors.cream,
-        ),
-      CourseNodeState.mastered => (
-          background: AppColors.bgElevated.withValues(alpha: 0.7),
-          border: AppColors.gold.withValues(alpha: 0.55),
-          icon: AppColors.goldBright,
-          iconBackground: AppColors.gold.withValues(alpha: 0.18),
-          title: AppColors.cream,
-        ),
-      CourseNodeState.reviewDue => (
-          background: AppColors.warning.withValues(alpha: 0.12),
-          border: AppColors.warning.withValues(alpha: 0.55),
-          icon: AppColors.warning,
-          iconBackground: AppColors.warning.withValues(alpha: 0.18),
-          title: AppColors.cream,
-        ),
+  double get _nextAlignmentX {
+    return switch ((pathIndex + 1) % 4) {
+      0 => 0.0,
+      1 => 0.42,
+      2 => 0.0,
+      _ => -0.42,
     };
   }
 }
 
-class _PathConnectorPainter extends CustomPainter {
-  _PathConnectorPainter({required this.toLeft, required this.emphasized});
+class _StartChip extends StatelessWidget {
+  const _StartChip({required this.color});
 
-  final bool toLeft;
-  final bool emphasized;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.bgDark,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.55)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.35),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Text(
+        'START',
+        style: GoogleFonts.manrope(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 1.1,
+        ),
+      ),
+    );
+  }
+}
+
+class _NodeCircle extends StatelessWidget {
+  const _NodeCircle({
+    required this.node,
+    required this.accent,
+  });
+
+  final CourseMapNode node;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final locked = node.state == CourseNodeState.locked;
+    final completed = node.state == CourseNodeState.completed ||
+        node.state == CourseNodeState.mastered;
+    final active = node.isNext ||
+        node.state == CourseNodeState.active ||
+        node.state == CourseNodeState.available ||
+        node.state == CourseNodeState.reviewDue;
+
+    final fill = locked
+        ? AppColors.slateDark.withValues(alpha: 0.75)
+        : completed
+            ? accent.withValues(alpha: 0.85)
+            : active
+                ? accent
+                : AppColors.slateDark;
+    final shadow = Color.lerp(fill, Colors.black, 0.35)!;
+    final iconColor = locked ? AppColors.slate : Colors.white;
+
+    return SizedBox(
+      width: 72,
+      height: 70,
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Positioned(
+            top: 6,
+            child: Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: shadow,
+              ),
+            ),
+          ),
+          Container(
+            width: 64,
+            height: 64,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: fill,
+              border: node.isNext
+                  ? Border.all(
+                      color: Colors.white.withValues(alpha: 0.35),
+                      width: 3,
+                    )
+                  : null,
+            ),
+            child: Icon(_iconFor(node), color: iconColor, size: 28),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static IconData _iconFor(CourseMapNode node) {
+    if (node.state == CourseNodeState.mastered) {
+      return Icons.star_rounded;
+    }
+    if (node.state == CourseNodeState.completed) {
+      return Icons.check_rounded;
+    }
+    return switch (node.kind) {
+      CourseNodeKind.lesson => Icons.star_rounded,
+      CourseNodeKind.practice => Icons.fitness_center_rounded,
+      CourseNodeKind.checkpoint => Icons.flag_rounded,
+      CourseNodeKind.reward => Icons.redeem_rounded,
+      CourseNodeKind.jumpTest => Icons.bolt_rounded,
+      CourseNodeKind.handLab => Icons.table_restaurant_rounded,
+    };
+  }
+}
+
+class _PathDotPainter extends CustomPainter {
+  _PathDotPainter({
+    required this.fromX,
+    required this.toX,
+    required this.color,
+  });
+
+  final double fromX;
+  final double toX;
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = emphasized
-          ? AppColors.gold.withValues(alpha: 0.55)
-          : AppColors.slateDark
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..strokeCap = StrokeCap.round;
-
-    final start = Offset(size.width * (toLeft ? 0.72 : 0.28), 0);
-    final end = Offset(size.width * (toLeft ? 0.28 : 0.72), size.height);
-    final control = Offset(size.width * 0.5, size.height * 0.5);
-    final path = Path()
-      ..moveTo(start.dx, start.dy)
-      ..quadraticBezierTo(control.dx, control.dy, end.dx, end.dy);
-    canvas.drawPath(path, paint);
+      ..color = color
+      ..style = PaintingStyle.fill;
+    final start = Offset(size.width * (0.5 + fromX * 0.5), 2);
+    final end = Offset(size.width * (0.5 + toX * 0.5), size.height - 2);
+    for (var t = 0.15; t <= 0.85; t += 0.2) {
+      final dx = start.dx + (end.dx - start.dx) * t;
+      final dy = start.dy + (end.dy - start.dy) * t;
+      canvas.drawCircle(Offset(dx, dy), 2.2, paint);
+    }
   }
 
   @override
-  bool shouldRepaint(covariant _PathConnectorPainter oldDelegate) {
-    return oldDelegate.toLeft != toLeft ||
-        oldDelegate.emphasized != emphasized;
+  bool shouldRepaint(covariant _PathDotPainter oldDelegate) {
+    return oldDelegate.fromX != fromX ||
+        oldDelegate.toX != toX ||
+        oldDelegate.color != color;
   }
 }
