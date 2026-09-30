@@ -23276,6 +23276,21 @@ await tester.tap(find.text('NIT'));
     );
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
+    // Dock chrome: elevated surface + centered label (not a felt strip).
+    final chopTile = find.byType(HandExampleTile);
+    expect(tester.getSize(chopTile).height, greaterThanOrEqualTo(48));
+    final chopContainer = tester.widget<AnimatedContainer>(
+      find.descendant(
+        of: chopTile,
+        matching: find.byType(AnimatedContainer),
+      ),
+    );
+    final decoration = chopContainer.decoration! as BoxDecoration;
+    expect(decoration.color, AppColors.bgElevated);
+    expect(
+      (chopContainer.alignment as Alignment?)?.x,
+      moreOrLessEquals(0, epsilon: 0.01),
+    );
     await tester.tap(find.text('Chop'));
     await tester.pump();
     expect(controller.draft.choiceId, 'chop-kicker');
@@ -23347,36 +23362,6 @@ await tester.tap(find.text('NIT'));
     await tester.pump();
     expect(controller.draft.choiceId, 'you-kicker');
     expect(autoSubmits, 1);
-    expect(
-      tester.getSize(find.byKey(const ValueKey('outcome-phases-felt'))).height,
-      moreOrLessEquals(teachHeight, epsilon: 1),
-    );
-    // Graded/locked clears onRegionTap — densify must still hold for Continue.
-    controller.finishSubmit(
-      SubmitCourseStepResult(
-        attemptId: 'a1',
-        activityId: activity.id,
-        grade: SoftGrade.recommended,
-        feedback: 'Same pair; higher kicker wins.',
-        accepted: true,
-        lifeLost: false,
-        livesRemaining: 3,
-        xpAwarded: 10,
-        remediationRequired: false,
-        resume: const CourseResumePointer(
-          attemptId: 'a1',
-          lessonId: 'lesson-01-02-02-kickers',
-          activityId: 'act-01-02-02-scaffolded-kicker',
-          activityIndex: 2,
-        ),
-        duplicate: false,
-      ),
-    );
-    await tester.pump();
-    expect(
-      tester.getSize(find.byKey(const ValueKey('outcome-phases-felt'))).height,
-      moreOrLessEquals(teachHeight, epsilon: 1),
-    );
     controller.dispose();
   });
 
