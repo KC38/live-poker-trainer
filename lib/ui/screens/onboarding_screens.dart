@@ -1,4 +1,4 @@
-/// Guest welcome, experience, goal, Rex intro, and recommended-start screens.
+/// Guest welcome, experience, goal, Rex intro, motivation, and start screens.
 library;
 
 import 'dart:async';
@@ -294,15 +294,93 @@ class RexIntroScreen extends ConsumerWidget {
                     lessonId: recommendation.startLessonId,
                     jumpTestOffered: recommendation.jumpTestOffered,
                   );
-              // AppRoot remounts onto RecommendedStartScreen for this step.
-              // Do not push a second copy — the welcome stack is a different
-              // navigator and would cover Your start.
+              // AppRoot remounts onto MotivationHookScreen (or Your start when
+              // a jump test is offered). Do not push a second copy — the
+              // welcome stack is a different navigator and would cover it.
             },
             style: _primaryButton,
             child: const Text('Continue'),
           ),
         ],
       ),
+    );
+  }
+}
+
+/// First post-onboarding Rex motivation beat (Duolingo-style).
+class MotivationHookScreen extends ConsumerWidget {
+  /// Creates the first motivation screen.
+  const MotivationHookScreen({super.key});
+
+  static const speech = 'It can be hard to stay motivated...';
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return _RexMotivationScaffold(
+      speech: speech,
+      onBack: () {
+        unawaited(
+          ref
+              .read(onboardingControllerProvider.notifier)
+              .setStep(OnboardingStep.rexIntro),
+        );
+      },
+      onContinue: () async {
+        unawaited(
+          ref
+              .read(analyticsServiceProvider)
+              .logOnboardingStep(step: 'motivation_hook'),
+        );
+        await ref
+            .read(onboardingControllerProvider.notifier)
+            .advanceMotivationHook();
+      },
+    );
+  }
+}
+
+/// Second motivation beat; Continue starts the first lesson with no CTA gate.
+class MotivationPitchScreen extends ConsumerWidget {
+  /// Creates the second motivation screen.
+  const MotivationPitchScreen({super.key});
+
+  static const speech =
+      '...so Exploitative Poker Lab is designed to be fun like a game!';
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final draft = ref.watch(onboardingControllerProvider);
+    final lessonId = draft.recommendedLessonId ?? kFirstCourseLessonId;
+    return _RexMotivationScaffold(
+      speech: speech,
+      onBack: () {
+        unawaited(
+          ref
+              .read(onboardingControllerProvider.notifier)
+              .setStep(OnboardingStep.motivationHook),
+        );
+      },
+      onContinue: () async {
+        unawaited(
+          ref
+              .read(analyticsServiceProvider)
+              .logOnboardingStep(step: 'motivation_pitch'),
+        );
+        await ref
+            .read(onboardingControllerProvider.notifier)
+            .markEnteringFirstLesson();
+        if (!context.mounted) return;
+        // Push (not replace) so LessonResult CONTINUE can pop back to a
+        // real first route if AppRoot has not remounted yet.
+        await Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => LessonRunnerScreen(
+              lessonId: lessonId,
+              embeddedInShell: false,
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -562,6 +640,199 @@ class SaveProgressScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class _RexMotivationScaffold extends StatelessWidget {
+  const _RexMotivationScaffold({
+    required this.speech,
+    required this.onContinue,
+    this.onBack,
+  });
+
+  final String speech;
+  final Future<void> Function() onContinue;
+  final VoidCallback? onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    final canPop = Navigator.of(context).canPop();
+    final showBack = canPop || onBack != null;
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment(0, -0.55),
+            radius: 1.15,
+            colors: [Color(0xFF1A2E28), AppColors.bgMid, AppColors.bgDark],
+            stops: [0.0, 0.45, 1.0],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (showBack)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    tooltip: 'Back',
+                    onPressed: () {
+                      if (canPop) {
+                        Navigator.of(context).pop();
+                        return;
+                      }
+                      onBack?.call();
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      semanticLabel: 'Back',
+                      color: AppColors.cream,
+                    ),
+                  ),
+                ),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // RexMascot height is size * 1.5; budget height first.
+                    final mascotSize =
+                        ((constraints.maxHeight * 0.42) / 1.5)
+                            .clamp(96.0, 168.0);
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 28),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 420),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _MotivationSpeechBubble(text: speech),
+                                const SizedBox(height: 20),
+                                RexMascot(size: mascotSize),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const Divider(height: 1, thickness: 1, color: AppColors.slateDark),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
+                child: FilledButton(
+                  onPressed: () => unawaited(onContinue()),
+                  style: _primaryButton,
+                  child: const Text('CONTINUE'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Rounded bubble with a downward pointer aimed at Rex.
+class _MotivationSpeechBubble extends StatelessWidget {
+  const _MotivationSpeechBubble({required this.text});
+
+  final String text;
+
+  static const double _radius = 16;
+  static const double _tailWidth = 18;
+  static const double _tailHeight = 10;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Rex says: $text',
+      child: CustomPaint(
+        painter: const _MotivationBubblePainter(
+          fill: AppColors.bgElevated,
+          border: AppColors.slateDark,
+          radius: _radius,
+          tailWidth: _tailWidth,
+          tailHeight: _tailHeight,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 16, 18, 16 + _tailHeight),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 18,
+              height: 1.35,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MotivationBubblePainter extends CustomPainter {
+  const _MotivationBubblePainter({
+    required this.fill,
+    required this.border,
+    required this.radius,
+    required this.tailWidth,
+    required this.tailHeight,
+  });
+
+  final Color fill;
+  final Color border;
+  final double radius;
+  final double tailWidth;
+  final double tailHeight;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final body = RRect.fromLTRBR(
+      0,
+      0,
+      size.width,
+      size.height - tailHeight,
+      Radius.circular(radius),
+    );
+    final path = Path()..addRRect(body);
+    final tipX = size.width / 2;
+    final tipY = size.height;
+    path.moveTo(tipX - tailWidth / 2, size.height - tailHeight - 0.5);
+    path.lineTo(tipX, tipY);
+    path.lineTo(tipX + tailWidth / 2, size.height - tailHeight - 0.5);
+    path.close();
+
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = fill
+        ..style = PaintingStyle.fill,
+    );
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = border
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.4,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _MotivationBubblePainter oldDelegate) {
+    return oldDelegate.fill != fill ||
+        oldDelegate.border != border ||
+        oldDelegate.radius != radius ||
+        oldDelegate.tailWidth != tailWidth ||
+        oldDelegate.tailHeight != tailHeight;
   }
 }
 

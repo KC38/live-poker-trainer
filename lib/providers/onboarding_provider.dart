@@ -70,8 +70,18 @@ class OnboardingController extends StateNotifier<OnboardingDraft> {
     state = state.copyWith(
       recommendedLessonId: lessonId,
       jumpTestOffered: jumpTestOffered,
-      step: OnboardingStep.recommendedStart,
+      // Jump-test guests still land on Your start. Everyone else gets the
+      // two Rex motivation beats, then starts the lesson with no CTA gate.
+      step: jumpTestOffered
+          ? OnboardingStep.recommendedStart
+          : OnboardingStep.motivationHook,
     );
+    await _persist();
+  }
+
+  /// Advances from the first motivation beat to the second.
+  Future<void> advanceMotivationHook() async {
+    state = state.copyWith(step: OnboardingStep.motivationPitch);
     await _persist();
   }
 
