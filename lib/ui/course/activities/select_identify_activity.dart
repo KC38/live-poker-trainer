@@ -83,6 +83,37 @@ LessonTableTapTarget? lessonBlindsFrameTarget(String activityId, int seatIndex) 
   }
 }
 
+/// Arrow / SoftPulse target for hole-card frame steps (`act-01-01-01-*`).
+///
+/// Teaching stages use the authored scene highlight. Quieter stages clear it;
+/// a revealed hint restores the answer cue (hero holes, or the board on mix).
+LessonTableCue _holeCardsFrameCue({
+  required CourseActivity activity,
+  required LessonTableScene scene,
+  required bool showGuidance,
+  required bool hintVisible,
+}) {
+  if (!showGuidance) return LessonTableCue.none;
+  switch (scene.highlight) {
+    case LessonTableHighlight.hero:
+      return LessonTableCue.hero;
+    case LessonTableHighlight.board:
+      return LessonTableCue.board;
+    case LessonTableHighlight.none:
+    case LessonTableHighlight.button:
+    case LessonTableHighlight.smallBlind:
+    case LessonTableHighlight.bigBlind:
+    case LessonTableHighlight.earlyPosition:
+    case LessonTableHighlight.hijack:
+    case LessonTableHighlight.cutoff:
+      if (!hintVisible) return LessonTableCue.none;
+      if (activity.id == 'act-01-01-01-unguided-mix') {
+        return LessonTableCue.board;
+      }
+      return LessonTableCue.hero;
+  }
+}
+
 /// Multiple-choice identify activity with optional guided highlight.
 class SelectIdentifyActivity extends StatelessWidget {
   /// Creates the activity.
@@ -1553,11 +1584,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     villainCount:
                         scene.villainSeatCount < 3 ? 3 : scene.villainSeatCount,
                     heroFaceUp: true,
-                    cue: switch (scene.highlight) {
-                      LessonTableHighlight.hero => LessonTableCue.hero,
-                      LessonTableHighlight.board => LessonTableCue.board,
-                      _ => LessonTableCue.none,
-                    },
+                    cue: _holeCardsFrameCue(
+                      activity: widget.activity,
+                      scene: scene,
+                      showGuidance: widget.showGuidance,
+                      hintVisible: widget.controller.hintVisible,
+                    ),
                     enabled: !locked,
                     onHeroTap:
                         locked

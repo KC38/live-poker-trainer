@@ -7,9 +7,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
+import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 
 CourseCatalog _catalog() {
   final raw = File('assets/course/v2/catalog.json').readAsStringSync();
@@ -139,5 +143,115 @@ void main() {
     await tester.pump();
     expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('framed find-holes shows CueArrows on face-up hero holes', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-01-guided-find-holes',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap your hole cards',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [
+        CourseChoice(id: 'choice-hero-holes', label: 'Ah Kd in front of you'),
+        CourseChoice(id: 'choice-board', label: 'The flop cards in the middle'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(390, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: LessonFrameScope(
+            onLocalMiss: (_) {},
+            child: SizedBox(
+              height: 520,
+              child: SelectIdentifyActivity(
+                activity: activity,
+                controller: controller,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey<String>('lesson-table-stage')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(2));
+    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsWidgets);
+    controller.dispose();
+  });
+
+  testWidgets('hint restores CueArrows on quieter hole-card frame steps', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-01-scaffolded-private',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap your private cards',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'h',
+          kind: 'hint',
+          text: 'Your two cards sit at your seat — not the board.',
+        ),
+      ],
+      choices: const [
+        CourseChoice(id: 'choice-only-you', label: 'Only you'),
+        CourseChoice(id: 'choice-everyone', label: 'Everyone'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(390, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: LessonFrameScope(
+            onLocalMiss: (_) {},
+            child: AnimatedBuilder(
+              animation: controller,
+              builder: (context, _) {
+                return SizedBox(
+                  height: 520,
+                  child: SelectIdentifyActivity(
+                    activity: activity,
+                    controller: controller,
+                    showGuidance: controller.showTargetCue,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    // Scaffolded scene clears highlight — no arrows until Hint.
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
+
+    controller.revealHint();
+    await tester.pump();
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(2));
+    expect(find.byType(CuePulse), findsWidgets);
+    controller.dispose();
   });
 }

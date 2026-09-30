@@ -343,7 +343,10 @@ class LessonTableStage extends StatelessWidget {
             showHoleCardBacks: true,
             heroCardsFaceUp: heroFaceUp,
             faceUpPlayerIds: faceUp,
-            highlightHero: cue == LessonTableCue.hero && !heroFaceUp,
+            // Face-up holes still need CueArrows + CuePulse — the old
+            // `&& !heroFaceUp` gate hid every "tap your cards" cue in the
+            // lesson frame (guided find-holes, etc.).
+            highlightHero: cue == LessonTableCue.hero,
             highlightBoard: cue == LessonTableCue.board &&
                 highlightBoardIndexes.isEmpty,
             selectedBoardIndexes: selectedBoardIndexes,
@@ -351,7 +354,12 @@ class LessonTableStage extends StatelessWidget {
             dimmedBoardIndexes: dimmedBoardIndexes,
             boardOrderBadges: boardOrderBadges,
             selectedHeroIndexes: selectedHeroIndexes,
-            highlightHeroIndexes: highlightHeroIndexes,
+            highlightHeroIndexes:
+                highlightHeroIndexes.isNotEmpty
+                    ? highlightHeroIndexes
+                    : (cue == LessonTableCue.hero && heroFaceUp
+                        ? const {0, 1}
+                        : const <int>{}),
             dimmedHeroIndexes: dimmedHeroIndexes,
             seatOrderBadges: seatOrderBadges,
             cueSeatIndex: cueSeatIndex,
