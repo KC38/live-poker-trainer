@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -553,9 +554,12 @@ class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
 }
 
 /// One face-up board card per suit. Used by Suits and ranks.
+///
+/// Prefer [dealOneOfEachSuitBoard] at mount time so ranks vary per attempt.
+/// This constant remains as a documented default / fallback example.
 const List<String> lessonSuitBoardCodes = ['Ah', 'Kd', '7c', '2s'];
 
-/// Suit for each [lessonSuitBoardCodes] index.
+/// Suit for each board index (hearts, diamonds, clubs, spades).
 const List<String> lessonSuitBoardSuitLetters = ['h', 'd', 'c', 's'];
 
 /// Features for early Suits and ranks steps: seats, cards, board only.
@@ -573,7 +577,7 @@ TableFeatures get lessonSuitsRanksTableFeatures => const TableFeatures(
   boardSlots: false,
 );
 
-/// Maps a board-card index on [lessonSuitBoardCodes] to a suit letter.
+/// Maps a board-card index on a one-of-each-suit board to a suit letter.
 String? lessonSuitLetterForBoardIndex(int index) {
   if (index < 0 || index >= lessonSuitBoardSuitLetters.length) return null;
   return lessonSuitBoardSuitLetters[index];
@@ -616,10 +620,12 @@ class LessonSuitBoardTable extends StatefulWidget {
 
 class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
   final Set<String> _selected = <String>{};
+  late final List<String> _boardCodes;
 
   @override
   void initState() {
     super.initState();
+    _boardCodes = dealOneOfEachSuitBoard();
     _selected.addAll(widget.selectedSuitLetters);
   }
 
@@ -655,7 +661,7 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
   @override
   Widget build(BuildContext context) {
     final selectedIndexes = <int>{
-      for (var i = 0; i < lessonSuitBoardCodes.length; i++)
+      for (var i = 0; i < _boardCodes.length; i++)
         if (_selected.contains(lessonSuitBoardSuitLetters[i])) i,
     };
     int? nextIndex;
@@ -669,7 +675,7 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
     }
     return LessonTableStage(
       heroCodes: const ['Ah', 'Kd'],
-      boardCodes: lessonSuitBoardCodes,
+      boardCodes: _boardCodes,
       villainCount: 3,
       heroFaceUp: false,
       enabled: widget.enabled,

@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 
@@ -7465,23 +7466,6 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildHandFamilyGuidedOutcomes() {
-    Widget miniPair(String a, String b) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MiniCard(
-            card: CardModel.fromCode(a),
-            size: MiniCardSize.tiny,
-          ),
-          const SizedBox(width: 2),
-          MiniCard(
-            card: CardModel.fromCode(b),
-            size: MiniCardSize.tiny,
-          ),
-        ],
-      );
-    }
 
     return _buildOutcomePhases(
       semanticsInteractive:
@@ -7496,42 +7480,25 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.handFamilyPair,
           title: 'Pocket pair',
           detail: 'Matching ranks',
-          visual: miniPair('8h', '8c'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.pocketPair),
         ),
         (
           region: LessonTableRegion.handFamilySuitedAce,
           title: 'Suited ace',
           detail: 'Ace + suited',
-          visual: miniPair('Ah', '9h'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.suitedAce),
         ),
         (
           region: LessonTableRegion.handFamilyBroadway,
           title: 'Broadway',
           detail: 'Ten or better',
-          visual: miniPair('As', 'Kd'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.broadway),
         ),
       ],
     );
   }
 
   Widget _buildHandFamilyScaffoldedOutcomes() {
-    Widget miniPair(String a, String b) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MiniCard(
-            card: CardModel.fromCode(a),
-            size: MiniCardSize.tiny,
-          ),
-          const SizedBox(width: 2),
-          MiniCard(
-            card: CardModel.fromCode(b),
-            size: MiniCardSize.tiny,
-          ),
-        ],
-      );
-    }
 
     return _buildOutcomePhases(
       semanticsInteractive:
@@ -7546,42 +7513,25 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.handFamilyScBroadway,
           title: 'Broadway',
           detail: 'Ten or better',
-          visual: miniPair('As', 'Kd'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.broadway),
         ),
         (
           region: LessonTableRegion.handFamilyScPair,
           title: 'Pocket pair',
           detail: 'Matching ranks',
-          visual: miniPair('8h', '8c'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.pocketPair),
         ),
         (
           region: LessonTableRegion.handFamilyScTrash,
           title: 'Offsuit trash',
           detail: 'Weak offsuit',
-          visual: miniPair('7c', '2d'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.offsuitTrash),
         ),
       ],
     );
   }
 
   Widget _buildHandFamilyUnguidedOutcomes() {
-    Widget miniPair(String a, String b) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MiniCard(
-            card: CardModel.fromCode(a),
-            size: MiniCardSize.tiny,
-          ),
-          const SizedBox(width: 2),
-          MiniCard(
-            card: CardModel.fromCode(b),
-            size: MiniCardSize.tiny,
-          ),
-        ],
-      );
-    }
 
     return _buildOutcomePhases(
       semanticsInteractive:
@@ -7593,42 +7543,25 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.handFamilyUgSc,
           title: 'Suited conn',
           detail: 'Connected suited',
-          visual: miniPair('7h', '6h'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.suitedConnector),
         ),
         (
           region: LessonTableRegion.handFamilyUgOffsuitConn,
           title: 'Offsuit conn',
           detail: 'Connected only',
-          visual: miniPair('7h', '6d'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.offsuitConnector),
         ),
         (
           region: LessonTableRegion.handFamilyUgTrash,
           title: 'Offsuit trash',
           detail: 'Weak offsuit',
-          visual: miniPair('7c', '2d'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.offsuitTrash),
         ),
       ],
     );
   }
 
   Widget _buildHandFamilyCheckpointOutcomes() {
-    Widget miniPair(String a, String b) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MiniCard(
-            card: CardModel.fromCode(a),
-            size: MiniCardSize.tiny,
-          ),
-          const SizedBox(width: 2),
-          MiniCard(
-            card: CardModel.fromCode(b),
-            size: MiniCardSize.tiny,
-          ),
-        ],
-      );
-    }
 
     return _buildOutcomePhases(
       semanticsInteractive:
@@ -7640,42 +7573,25 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.handFamilyCpTrash,
           title: 'Offsuit trash',
           detail: 'Fold early',
-          visual: miniPair('7c', '2d'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.offsuitTrash),
         ),
         (
           region: LessonTableRegion.handFamilyCpPair,
           title: 'Pocket pair',
           detail: 'Matching ranks?',
-          visual: miniPair('8h', '8c'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.pocketPair),
         ),
         (
           region: LessonTableRegion.handFamilyCpSuitedAce,
           title: 'Suited ace',
           detail: 'Ace + suited?',
-          visual: miniPair('Ah', '9h'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.suitedAce),
         ),
       ],
     );
   }
 
   Widget _buildJumpFamilyOutcomes() {
-    Widget miniPair(String a, String b) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MiniCard(
-            card: CardModel.fromCode(a),
-            size: MiniCardSize.tiny,
-          ),
-          const SizedBox(width: 2),
-          MiniCard(
-            card: CardModel.fromCode(b),
-            size: MiniCardSize.tiny,
-          ),
-        ],
-      );
-    }
 
     return _buildOutcomePhases(
       semanticsInteractive:
@@ -7688,19 +7604,19 @@ class LessonTableContext extends StatelessWidget {
           title: 'Suited ace',
           detail: 'Ace + suited',
           // Example family — not hero Ah5h (that would spoil the jump).
-          visual: miniPair('As', '9s'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.suitedAce),
         ),
         (
           region: LessonTableRegion.jumpFamilyPair,
           title: 'Pocket pair',
           detail: 'Matching ranks',
-          visual: miniPair('8h', '8c'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.pocketPair),
         ),
         (
           region: LessonTableRegion.jumpFamilyTrash,
           title: 'Offsuit trash',
           detail: 'Weak offsuit',
-          visual: miniPair('7c', '2d'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.offsuitTrash),
         ),
       ],
     );
@@ -7756,23 +7672,6 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildHandRankShowdownOutcomes() {
-    Widget miniPair(String a, String b) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MiniCard(
-            card: CardModel.fromCode(a),
-            size: MiniCardSize.tiny,
-          ),
-          const SizedBox(width: 2),
-          MiniCard(
-            card: CardModel.fromCode(b),
-            size: MiniCardSize.tiny,
-          ),
-        ],
-      );
-    }
 
     // Checkpoint: densify without SoftPulse spoiler on the correct seat.
     return _buildOutcomePhases(
@@ -7785,13 +7684,13 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.handRankYouWin,
           title: 'You',
           detail: 'Club flush',
-          visual: miniPair('Ac', 'Kc'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.suitedNonPair),
         ),
         (
           region: LessonTableRegion.handRankTheyWin,
           title: 'Them',
           detail: 'Straight?',
-          visual: miniPair('6s', '5h'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.offsuitConnector),
         ),
         (
           region: LessonTableRegion.handRankChop,
@@ -7808,23 +7707,6 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildKickerShowdownOutcomes() {
-    Widget miniPair(String a, String b) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MiniCard(
-            card: CardModel.fromCode(a),
-            size: MiniCardSize.tiny,
-          ),
-          const SizedBox(width: 2),
-          MiniCard(
-            card: CardModel.fromCode(b),
-            size: MiniCardSize.tiny,
-          ),
-        ],
-      );
-    }
 
     return _buildOutcomePhases(
       semanticsInteractive:
@@ -7839,13 +7721,13 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.handRankYouWin,
           title: 'You',
           detail: 'Queen kicker',
-          visual: miniPair('Ah', 'Qd'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.broadway),
         ),
         (
           region: LessonTableRegion.handRankTheyWin,
           title: 'Them',
           detail: 'Jack kicker?',
-          visual: miniPair('As', 'Jd'),
+          visual: const DealtMiniPair(kind: LessonHoleKind.broadway),
         ),
         (
           region: LessonTableRegion.handRankChop,

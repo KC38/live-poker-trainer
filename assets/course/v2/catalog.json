@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "79e751abd1c51b51a5d25e5f25ea4fb30a91cb17b95919119cbad6c441e8fb51",
+  "contentChecksum": "db22ec6c0ba5e6cea901ddbdb792daa87b49756c8160166108c5040f12bc1b50",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -389,7 +389,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the seat with pocket nines.",
+                  "accessibilityText": "Tap the seat with a pocket pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
