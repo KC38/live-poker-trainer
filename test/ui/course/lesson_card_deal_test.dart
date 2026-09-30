@@ -30,6 +30,7 @@ bool _isPair(List<String> codes) {
 void main() {
   tearDown(() {
     debugLessonCardDealRandom = null;
+    debugFreezeLessonSuitRemap = false;
   });
 
   test('dealHoleHand preserves attributes across kinds', () {
@@ -133,7 +134,7 @@ void main() {
     }
   });
 
-  test('showdown order deals vary cards but keep category ladder', () {
+  test('showdown order deals vary cards and seat roles but keep ladder', () {
     const cases = <String, List<String>>{
       'act-01-02-01-unguided-compare': [
         'Full House',
@@ -155,8 +156,24 @@ void main() {
         greaterThan(1),
         reason: entry.key,
       );
+      expect(
+        deals.map((d) => d.seatIds.join(',')).toSet().length,
+        greaterThan(1),
+        reason: '${entry.key} seat shuffle',
+      );
       for (final deal in deals) {
         expect(deal.correctOrder, ['you', 'sam', 'jo'], reason: entry.key);
+        expect(
+          deal.seatIds.toSet(),
+          {'you', 'sam', 'jo'},
+          reason: entry.key,
+        );
+        List<String> codesForRole(String role) {
+          final idx = deal.seatIds.indexOf(role);
+          if (idx == 0) return deal.heroCodes;
+          return deal.villainHoleCodes[idx - 1];
+        }
+
         String name(List<String> holes) {
           final cards = [
             for (final code in [...holes, ...deal.boardCodes])
@@ -165,18 +182,22 @@ void main() {
           return DeckEvaluator.evaluate7Cards(cards).rankName;
         }
 
-        expect(name(deal.heroCodes), entry.value[0], reason: entry.key);
-        expect(
-          name(deal.villainHoleCodes[0]),
-          entry.value[1],
-          reason: entry.key,
-        );
-        expect(
-          name(deal.villainHoleCodes[1]),
-          entry.value[2],
-          reason: entry.key,
-        );
+        expect(name(codesForRole('you')), entry.value[0], reason: entry.key);
+        expect(name(codesForRole('sam')), entry.value[1], reason: entry.key);
+        expect(name(codesForRole('jo')), entry.value[2], reason: entry.key);
       }
     }
+  });
+
+  test('suit remap keeps relative suits across hole and board', () {
+    final remapped = permuteCardSuitGroups(
+      [
+        ['Ah', 'Kd'],
+        ['Kh', '7c', '2d'],
+      ],
+      Random(3),
+    );
+    // Original hearts (Ah, Kh) share a suit after remap.
+    expect(remapped[0][0][1], remapped[1][0][1]);
   });
 }
