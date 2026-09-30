@@ -382,6 +382,8 @@ Capstone: 4-bet pot uses the full poker table for every step: explain taps SPR, 
 
 Prep a coached Live warm-up hand uses the full poker table for every step: explain taps Checklist, Defaults, and One hand under the felt.
 
+Capstone: multiway deep uses the full poker table for every step: explain taps Nuts, Deep, and No-bluff under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -735,8 +737,7 @@ top-set value spot sits face up on the full table. Change plans by pot type uses
 station, TAG, and LAG spots sit face up on the full table. Integrate type, board, line, and sizing uses the same frame and the full table: explain taps Type, Board, Line, and Size under the felt, the integration check stays a list, and
 the maniac, nit, and TAG spots sit face up on the full table. Write your default strategy book uses the same frame and the full table: explain taps Leak, Book, and Review under the felt, and the book quizzes stay lists. Capstone: single-raised pot uses the same frame and the full table: explain taps Plan, Update, and Finish under the felt, and the three streets sit face up on the full table.
 Capstone: 3-bet pot uses the same frame and the full table: explain taps SPR, Turn, and Close under the felt, and the three streets sit face up on the full table.
-Capstone: multiway deep uses the same frame: nuts, deep, and no-bluff
-stay in the stage, and the three streets sit face up on the full table.
+Capstone: multiway deep uses the same frame and the full table: explain taps Nuts, Deep, and No-bluff under the felt, and the three streets sit face up on the full table.
 Capstone: limped pot uses the same frame and the full table: explain taps Nuts, Value, and Thin under the felt, and the three streets sit face up on the full table.
 Capstone: 4-bet pot uses the same frame and the full table: explain taps SPR, Commit, and No Hero under the felt, and the three streets sit face up on the full table.
 Prep a coached Live warm-up hand uses the same frame and the full table: explain taps Checklist, Defaults, and One hand under the felt, and the warm-up quizzes stay
