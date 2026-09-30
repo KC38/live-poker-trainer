@@ -1000,7 +1000,6 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final controller = _activityController!;
     final activity = controller.activity;
     final attempt = _attempt!;
-    final showGuidance = controller.showTargetCue;
     final hint =
         activity.hintMedia.isNotEmpty ? activity.hintMedia.first : null;
 
@@ -1083,7 +1082,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         child: activityRegistry.build(
                           activity: activity,
                           controller: controller,
-                          showGuidance: showGuidance,
+                          // Re-read inside AnimatedBuilder so Hint toggles SoftPulse.
+                          showGuidance: controller.showTargetCue,
                           onFeltAcknowledge: feltAck,
                         ),
                       ),
