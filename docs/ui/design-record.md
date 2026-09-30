@@ -182,11 +182,15 @@ The first lesson’s hole-card explain uses that same column. Other teaching fel
 
 A lesson step that shows hole cards, including Suits and ranks “Tap the suited hole cards,” places those cards on the hero seat of the Poker table. Retire `_HoleCardFeltTray` for that step.
 
+Hole-card choice bands (`_HoleCardBands` in `select_identify_activity.dart`) fill the lesson stage height and scale the felt and choice rails together so a short phone never overflows. On the lesson frame the coach shelf and street heading stay off — the speech bubble owns the instruction.
+
 A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
 
 ### Shipped
 
 Button and blinds (LPT-36) stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`). The next phase column copies that vertical stack.
+
+`_HoleCardBands` (`lib/ui/course/activities/select_identify_activity.dart`) fills the stage and scales felt plus rails with available height. The next hole-card picker step copies that proportional column.
 
 File one ticket per layout you still see, not one ticket per activity id.
 

@@ -19,6 +19,7 @@ import 'package:live_poker_trainer/ui/course/activities/select_identify_activity
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/equity_realize_demo.dart';
@@ -8294,6 +8295,90 @@ await tester.tap(find.text('NIT'));
       tester.getSize(find.byKey(const ValueKey('hole-card-bands'))).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
     );
+    controller.dispose();
+    semantics.dispose();
+  });
+
+  testWidgets('hole-card bands fit a short phone frame without overflow', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    // iPhone 13 mini logical size — the device that showed the overflow.
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-01-02-unguided-suited',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the hole-card pair that shares a suit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the suited hole cards.',
+      choices: const [
+        CourseChoice(id: 'suited-ah-kh', label: 'Ah Kh'),
+        CourseChoice(id: 'offsuit-ah-kd', label: 'Ah Kd'),
+        CourseChoice(id: 'pair-77', label: '7c 7d'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    final base = buildPokerTheme();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: base.copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            backgroundColor: AppColors.bgDark,
+            body: SafeArea(
+              child: LessonScreenLayout(
+                progress: 0.5,
+                livesRemaining: 3,
+                livesMax: 3,
+                onClose: () {},
+                speech: 'Tap the suited hole cards.',
+                expression: LessonMascotExpression.thinking,
+                onUndo: () {},
+                onRedo: () {},
+                onHint: () {},
+                canUndo: false,
+                canRedo: false,
+                canHint: true,
+                stage: LessonFrameScope(
+                  onLocalMiss: (_) {},
+                  child: SelectIdentifyActivity(
+                    activity: activity,
+                    controller: controller,
+                    showGuidance: false,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byKey(const ValueKey('hole-card-bands')), findsOneWidget);
+    expect(find.byType(HeroRailWidget), findsNWidgets(3));
+    expect(find.byType(CoachShelfWidget), findsNothing);
+    expect(find.text('PREFLOP'), findsNothing);
+    final bandsHeight =
+        tester.getSize(find.byKey(const ValueKey('hole-card-bands'))).height;
+    final layoutHeight =
+        tester.getSize(find.byType(LessonScreenLayout)).height;
+    expect(bandsHeight, lessThan(layoutHeight));
+    expect(bandsHeight, greaterThan(200));
+
     controller.dispose();
     semantics.dispose();
   });

@@ -152,6 +152,14 @@ class SelectIdentifyActivity extends StatelessWidget {
       builder: (context, _) {
         final selected = controller.draft.choiceId;
         final locked = controller.submitting || controller.lastResult != null;
+        final framed = LessonFrameScope.maybeOf(context) != null;
+        final holeBands = _HoleCardBands(
+          activity: activity,
+          selectedId: selected,
+          locked: locked,
+          showGuidance: showGuidance,
+          onSelect: (id) => controller.selectChoice(id, autoSubmit: true),
+        );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -172,7 +180,7 @@ class SelectIdentifyActivity extends StatelessWidget {
                 ),
               ),
             ],
-            const SizedBox(height: 16),
+            if (!framed) const SizedBox(height: 16),
             if (presentation == SelectIdentifyPresentation.suitTapPicker)
               SuitTapPicker(
                 key: ValueKey<String>(
@@ -183,13 +191,7 @@ class SelectIdentifyActivity extends StatelessWidget {
                 locked: locked,
               )
             else if (presentation == SelectIdentifyPresentation.holeCards)
-              _HoleCardBands(
-                activity: activity,
-                selectedId: selected,
-                locked: locked,
-                showGuidance: showGuidance,
-                onSelect: (id) => controller.selectChoice(id, autoSubmit: true),
-              )
+              framed ? Expanded(child: holeBands) : holeBands
             else
               for (var i = 0; i < activity.choices.length; i++) ...[
                 if (i > 0) const SizedBox(height: 10),
@@ -2594,6 +2596,10 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
 ///
 /// Each hand is a [HeroRailWidget]. The felt does not draw those cards, and
 /// there is no action dock: picking a hand is not a betting decision.
+///
+/// The felt and rails share the available height so a short phone never
+/// overflows. On the lesson frame the speech bubble owns the instruction, so
+/// the street heading and coach shelf stay off.
 class _HoleCardBands extends StatelessWidget {
   const _HoleCardBands({
     required this.activity,
@@ -2602,6 +2608,15 @@ class _HoleCardBands extends StatelessWidget {
     required this.showGuidance,
     required this.onSelect,
   });
+
+  /// Felt share of the flexible column (vs each choice rail).
+  static const int _feltFlex = 5;
+
+  /// One choice rail's share of the flexible column.
+  static const int _railFlex = 2;
+
+  /// Screen-height fraction when the parent does not bound the height.
+  static const double _unboundedHeightFactor = 0.72;
 
   final CourseActivity activity;
   final String? selectedId;
@@ -2614,39 +2629,73 @@ class _HoleCardBands extends StatelessWidget {
     final table = lessonBandGame(heroCodes: const []);
     final prompt = activity.prompt?.trim();
     final message = (prompt == null || prompt.isEmpty) ? 'Tap a hand.' : prompt;
-    return Column(
-      key: const ValueKey('hole-card-bands'),
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-          child: Text(
-            table.street.label,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.jetBrainsMono(
-              color: AppColors.gold,
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.2,
-            ),
+    final framed = LessonFrameScope.maybeOf(context) != null;
+    final screen = MediaQuery.sizeOf(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bounded =
+            constraints.maxHeight.isFinite ? constraints.maxHeight : null;
+        final height = bounded ?? screen.height * _unboundedHeightFactor;
+        final width =
+            constraints.maxWidth.isFinite ? constraints.maxWidth : screen.width;
+
+        return SizedBox(
+          key: const ValueKey('hole-card-bands'),
+          height: height,
+          width: width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (!framed)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                  child: Text(
+                    table.street.label,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.jetBrainsMono(
+                      color: AppColors.gold,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+              Expanded(
+                flex: _feltFlex,
+                child: FeltTableView(
+                  game: table,
+                  chipDisplayMode: ChipDisplayMode.dollars,
+                  includeHero: false,
+                ),
+              ),
+              for (var i = 0; i < activity.choices.length; i++)
+                Expanded(
+                  flex: _railFlex,
+                  child: Align(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: SizedBox(
+                        height: HeroRailWidget.height,
+                        width: width,
+                        child: _choiceRail(
+                          index: i,
+                          choice: activity.choices[i],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              if (!framed)
+                CoachShelfWidget(
+                  feedback: CoachFeedback(message: message),
+                  bigBlind: table.bigBlind,
+                  chipDisplayMode: ChipDisplayMode.dollars,
+                ),
+            ],
           ),
-        ),
-        SizedBox(
-          height: 200,
-          child: FeltTableView(
-            game: table,
-            chipDisplayMode: ChipDisplayMode.dollars,
-            includeHero: false,
-          ),
-        ),
-        for (var i = 0; i < activity.choices.length; i++)
-          _choiceRail(index: i, choice: activity.choices[i]),
-        CoachShelfWidget(
-          feedback: CoachFeedback(message: message),
-          bigBlind: table.bigBlind,
-          chipDisplayMode: ChipDisplayMode.dollars,
-        ),
-      ],
+        );
+      },
     );
   }
 
