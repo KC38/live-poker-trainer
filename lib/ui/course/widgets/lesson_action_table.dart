@@ -6044,6 +6044,98 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
 }
 
 
+/// 3-bet / squeeze explain: 3-BET / RANGES / SQUEEZE under the full table.
+class LessonThreeBetSqueezeExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonThreeBetSqueezeExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonThreeBetSqueezeExplainTable> createState() =>
+      _LessonThreeBetSqueezeExplainTableState();
+}
+
+class _LessonThreeBetSqueezeExplainTableState
+    extends State<LessonThreeBetSqueezeExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ThreeBetSqueezeDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('three-bet-squeeze-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 2,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < ThreeBetSqueezeDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        ThreeBetSqueezeDemo.points[i].label,
+                      ) &&
+                      ThreeBetSqueezeDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: ThreeBetSqueezeDemo.points[i].label,
+                    caption: ThreeBetSqueezeDemo.points[i].caption,
+                    color: ThreeBetSqueezeDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      ThreeBetSqueezeDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  ThreeBetSqueezeDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Explain-step demo: 3-bets define ranges; squeezes punish multiway flats.
 class ThreeBetSqueezeDemo extends StatefulWidget {
   /// Creates the demo.

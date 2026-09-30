@@ -250,6 +250,9 @@ Top pair, Prices, Passive, and Crowds under the felt.
 Think in ranges uses the full poker table for every step: explain taps
 One hand, Range, and Update under the felt.
 
+Navigate 3-bet pots uses the full poker table for every step: explain taps
+3-bet, Ranges, and Squeeze under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -492,9 +495,9 @@ bad-price draw sit face up on the full table, and the multiway fold
 and the value bet use that table. Think in ranges uses the same
 frame and the full table: explain taps One hand, Range, and Update
 under the felt, and the bet-twice and same-board spots sit face up
-on that table. Navigate 3-bet pots uses the same frame: 3-bet, ranges, and squeeze
-stay in the stage, and each 3-bet spot sits face up on the full
-table. Plan beyond the flop uses the same frame: flop, turn, and
+on that table. Navigate 3-bet pots uses the same frame and the full
+table: explain taps 3-bet, Ranges, and Squeeze under the felt, and
+each 3-bet spot sits face up on that table. Plan beyond the flop uses the same frame: flop, turn, and
 river stay in the stage, and each street of the plan sits face up
 on the full table. Size with a message uses the same frame: value,
 pressure, and size stay in the stage, and each sizing spot sits face
