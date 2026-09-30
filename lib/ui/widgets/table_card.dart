@@ -116,19 +116,6 @@ class TableCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Positioned(
-                  right: width * 0.08,
-                  bottom: width * 0.04,
-                  child: Text(
-                    card.suit.symbol,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: width * 0.52,
-                      height: 1,
-                      color: color.withValues(alpha: 0.9),
-                    ),
-                  ),
-                ),
                 if (orderBadge != null)
                   Positioned(
                     right: width * 0.06,
