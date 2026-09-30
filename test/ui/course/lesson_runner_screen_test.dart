@@ -2248,6 +2248,8 @@ void main() {
     expect(find.textContaining('Tap Steal'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('vs-nits-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('STEAL'), findsOneWidget);
     expect(find.text('CREDIT'), findsOneWidget);
     expect(find.text('EXPLODE'), findsOneWidget);
