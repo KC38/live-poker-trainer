@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Carry a preflop plan onto the flop explain: REASON / CONFIRM / CANCEL under the full poker table.
+class LessonPreflopFlopPlanExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonPreflopFlopPlanExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonPreflopFlopPlanExplainTable> createState() =>
+      _LessonPreflopFlopPlanExplainTableState();
+}
+
+class _LessonPreflopFlopPlanExplainTableState
+    extends State<LessonPreflopFlopPlanExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= PreflopFlopPlanDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('preflop-flop-plan-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < PreflopFlopPlanDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _PreflopFlopPlanSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        PreflopFlopPlanDemo.points[i].label,
+                      ) &&
+                      PreflopFlopPlanDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _PreflopFlopPlanTile(
+                    label: PreflopFlopPlanDemo.points[i].label,
+                    caption: PreflopFlopPlanDemo.points[i].caption,
+                    color: PreflopFlopPlanDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      PreflopFlopPlanDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  PreflopFlopPlanDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Reason / confirm / cancel tiles for preflop→flop plan explain demos.
 class PreflopFlopPlanDemo extends StatefulWidget {
