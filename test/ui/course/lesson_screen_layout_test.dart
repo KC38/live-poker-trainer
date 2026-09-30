@@ -10,8 +10,15 @@ import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 void main() {
+  test('lesson mascot expressions map to Rex moods', () {
+    expect(LessonMascotExpression.thinking.rexMood, RexMood.calm);
+    expect(LessonMascotExpression.happy.rexMood, RexMood.celebrate);
+    expect(LessonMascotExpression.wrong.rexMood, RexMood.think);
+  });
+
   test('design record names the six lesson regions', () {
     final text = File('docs/ui/design-record.md').readAsStringSync();
     expect(text, contains('## Lesson screen layout'));
@@ -53,7 +60,7 @@ void main() {
       await tester.pump();
       final bubble = find.byKey(const ValueKey<String>('lesson-speech-bubble'));
       return (
-        mascot: tester.getTopLeft(find.bySemanticsLabel('Coach, thinking')).dy,
+        mascot: tester.getTopLeft(find.bySemanticsLabel('Rex, calm')).dy,
         bubble: tester.getTopLeft(bubble).dy,
         text: tester.getTopLeft(find.text(speech)).dy,
         height: tester.getSize(bubble).height,
@@ -106,6 +113,8 @@ void main() {
     expect(find.text('Your two cards'), findsNothing);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
     expect(find.textContaining('Tap your cards to peek.'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.bySemanticsLabel('Rex, calm'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Redo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
@@ -146,7 +155,10 @@ void main() {
     expect(find.text('Nice!'), findsOneWidget);
     expect(find.text('Continue'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsNothing);
-    expect(find.bySemanticsLabel('Coach, happy'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
+    expect(mascot.mood, RexMood.celebrate);
+    expect(find.bySemanticsLabel('Rex, celebrating'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -184,7 +196,9 @@ void main() {
 
     expect(find.text("Oops, that's not correct"), findsOneWidget);
     expect(find.text('Continue'), findsOneWidget);
-    expect(find.bySemanticsLabel('Coach, wrong'), findsOneWidget);
+    expect(find.bySemanticsLabel('Rex, thinking'), findsOneWidget);
+    final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
+    expect(mascot.mood, RexMood.think);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
     expect(tester.takeException(), isNull);
   });

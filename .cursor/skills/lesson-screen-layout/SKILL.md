@@ -22,12 +22,12 @@ footer.
 Top to bottom. These do not move between steps or lessons.
 
 1. **Chrome.** `LessonChromeBar`. Close (`X`), the lesson progress bar, one heart per life. No lesson title. No back chevron.
-2. **Coach band.** `LessonCoachBand`. Mascot placeholder (104×118) and one speech bubble. The bubble top and the tail stay fixed on the coach's mouth. More text grows the bubble downward. The first line does not jump. The bubble is the only instruction. Do not repeat it on the stage.
+2. **Coach band.** `LessonCoachBand`. `RexMascot` (width 78) and one speech bubble. The bubble top and the tail stay fixed on the coach's mouth. More text grows the bubble downward. The first line does not jump. The bubble is the only instruction. Do not repeat it on the stage.
 3. **Stage.** The only region that changes. See below.
 4. **Tools.** `LessonToolRow`. Undo, redo, hint, under the stage, until the step is graded. Hint text replaces the bubble until hint is tapped again. A step with no hint keeps the button and disables it.
 5. **Answer dock.** `LessonAnswerDock` replaces the tool row. Accepted: happy face, "Nice!", Continue in `AppColors.success`. Miss: wrong face, "Oops, that's not correct", Continue in `AppColors.danger`. Continue is the only button. A miss stays on the step. An accept advances.
 
-Expression is `LessonMascotExpression`: thinking before an answer, happy when accepted, wrong on a miss. The dock does not draw a second face.
+Expression is `LessonMascotExpression` mapped to `RexMood`: calm before an answer, celebrate when accepted, think on a miss. The dock does not draw a second face.
 
 ## Stage
 

@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Lessons that use [LessonScreenLayout] instead of the app-bar runner.
 bool isLessonScreenFrameLesson(String lessonId) {
@@ -558,149 +559,27 @@ String? lessonFrameHintFallback(CourseActivity activity) {
   return null;
 }
 
-/// Face the placeholder shows. Real Rex art replaces this widget later.
+/// Coach-band mood for the current lesson beat.
 enum LessonMascotExpression {
-  /// Prompt, before an answer.
+  /// Prompt, before an answer. Calm teaching pose.
   thinking,
 
-  /// Accepted answer.
+  /// Accepted answer. Celebrate pose.
   happy,
 
-  /// Miss.
+  /// Miss. Thinking pose.
   wrong,
 }
 
-/// Oscar-sized stand-in. 104 by 118 matches the coach-band area on a phone.
-class LessonMascotPlaceholder extends StatelessWidget {
-  /// Creates the placeholder for [expression].
-  const LessonMascotPlaceholder({super.key, required this.expression});
-
-  /// Width of the bust, in logical pixels.
-  static const double width = 104;
-
-  /// Height of the bust, in logical pixels.
-  static const double height = 118;
-
-  /// Which face to draw.
-  final LessonMascotExpression expression;
-
-  String get _label {
-    return switch (expression) {
-      LessonMascotExpression.thinking => 'Coach, thinking',
-      LessonMascotExpression.happy => 'Coach, happy',
-      LessonMascotExpression.wrong => 'Coach, wrong',
+/// Maps the lesson beat to the shared [RexMood] slot.
+extension LessonMascotExpressionMood on LessonMascotExpression {
+  /// Rex pose for this beat.
+  RexMood get rexMood {
+    return switch (this) {
+      LessonMascotExpression.thinking => RexMood.calm,
+      LessonMascotExpression.happy => RexMood.celebrate,
+      LessonMascotExpression.wrong => RexMood.think,
     };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      image: true,
-      label: _label,
-      child: CustomPaint(
-        size: const Size(width, height),
-        painter: _MascotPlaceholderPainter(expression),
-      ),
-    );
-  }
-}
-
-class _MascotPlaceholderPainter extends CustomPainter {
-  _MascotPlaceholderPainter(this.expression);
-
-  final LessonMascotExpression expression;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final body = Paint()..color = const Color(0xFF3D4A63);
-    final skin = Paint()..color = const Color(0xFFC4A484);
-    final ink =
-        Paint()
-          ..color = const Color(0xFF1A120C)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.2
-          ..strokeCap = StrokeCap.round;
-    final shirt = Paint()..color = const Color(0xFFE7A3B8);
-
-    final shoulder = RRect.fromRectAndRadius(
-      Rect.fromLTWH(8, size.height * 0.62, size.width - 16, size.height * 0.4),
-      const Radius.circular(18),
-    );
-    canvas.drawRRect(shoulder, shirt);
-
-    final head = Offset(size.width / 2, size.height * 0.36);
-    canvas.drawCircle(head, 28, skin);
-    canvas.drawCircle(head, 28, ink..strokeWidth = 1.4);
-
-    final hair =
-        Path()
-          ..moveTo(head.dx - 26, head.dy - 4)
-          ..quadraticBezierTo(head.dx, head.dy - 40, head.dx + 26, head.dy - 2)
-          ..quadraticBezierTo(head.dx + 18, head.dy - 18, head.dx, head.dy - 16)
-          ..quadraticBezierTo(
-            head.dx - 16,
-            head.dy - 18,
-            head.dx - 26,
-            head.dy - 4,
-          );
-    canvas.drawPath(hair, body);
-
-    final eyeY = head.dy - 2;
-    if (expression == LessonMascotExpression.wrong) {
-      canvas.drawLine(
-        Offset(head.dx - 14, eyeY),
-        Offset(head.dx - 4, eyeY + 3),
-        ink,
-      );
-      canvas.drawCircle(
-        Offset(head.dx + 10, eyeY),
-        2.4,
-        Paint()..color = ink.color,
-      );
-    } else {
-      canvas.drawCircle(
-        Offset(head.dx - 9, eyeY),
-        2.4,
-        Paint()..color = ink.color,
-      );
-      canvas.drawCircle(
-        Offset(head.dx + 9, eyeY),
-        2.4,
-        Paint()..color = ink.color,
-      );
-    }
-
-    final mouth = Path();
-    if (expression == LessonMascotExpression.happy) {
-      mouth
-        ..moveTo(head.dx - 8, head.dy + 10)
-        ..quadraticBezierTo(head.dx, head.dy + 18, head.dx + 8, head.dy + 10);
-    } else if (expression == LessonMascotExpression.wrong) {
-      mouth
-        ..moveTo(head.dx - 7, head.dy + 16)
-        ..quadraticBezierTo(head.dx, head.dy + 9, head.dx + 7, head.dy + 16);
-    } else {
-      mouth
-        ..moveTo(head.dx - 6, head.dy + 12)
-        ..lineTo(head.dx + 6, head.dy + 12);
-      final hand =
-          Path()
-            ..moveTo(head.dx + 4, head.dy + 20)
-            ..quadraticBezierTo(
-              head.dx + 16,
-              head.dy + 22,
-              head.dx + 10,
-              head.dy + 8,
-            );
-      canvas.drawPath(hand, ink);
-    }
-    canvas.drawPath(mouth, ink);
-  }
-
-  @override
-  bool shouldRepaint(covariant _MascotPlaceholderPainter oldDelegate) {
-    return oldDelegate.expression != expression;
   }
 }
 
@@ -712,6 +591,9 @@ class LessonCoachBand extends StatelessWidget {
     required this.speech,
     required this.expression,
   });
+
+  /// Width of Rex in the coach band. Height follows the full-body drawing.
+  static const double mascotSize = 78;
 
   /// Bubble copy. Empty hides the words and keeps the mascot box.
   final String speech;
@@ -726,7 +608,7 @@ class LessonCoachBand extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LessonMascotPlaceholder(expression: expression),
+          RexMascot(size: mascotSize, mood: expression.rexMood),
           const SizedBox(width: 2),
           Expanded(child: _SpeechBubble(text: speech)),
         ],
@@ -745,8 +627,8 @@ class _SpeechBubble extends StatelessWidget {
 
   final String text;
 
-  /// How far the tail tip sits from the top, lined up with the placeholder mouth.
-  static const double tailCenterY = 52;
+  /// How far the tail tip sits from the top, lined up with Rex's mouth.
+  static const double tailCenterY = 36;
 
   static const double tailWidth = 12;
   static const double tailHeight = 16;
