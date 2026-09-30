@@ -4051,6 +4051,8 @@ void main() {
     expect(find.textContaining('Tap Leak'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('leak-review-book-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('LEAK'), findsOneWidget);
     expect(find.text('BOOK'), findsOneWidget);
     expect(find.text('REVIEW'), findsOneWidget);
