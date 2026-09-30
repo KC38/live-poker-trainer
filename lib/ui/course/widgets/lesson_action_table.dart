@@ -4117,7 +4117,6 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
 }
 
 
-/// Explain-step demo: clean outs, dirty outs, and pricing the call.
 /// Outs-and-price explain: CLEAN / DIRTY / PRICE under the full poker table.
 class LessonOutsPriceExplainTable extends StatefulWidget {
   /// Creates the explain stage.
@@ -4382,6 +4381,95 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
   }
 }
 
+
+/// Flop-lines explain: VALUE through RAISE under the full poker table.
+class LessonFlopLinesExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonFlopLinesExplainTable({
+    super.key,
+    required this.onAllLinesTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllLinesTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonFlopLinesExplainTable> createState() =>
+      _LessonFlopLinesExplainTableState();
+}
+
+class _LessonFlopLinesExplainTableState
+    extends State<LessonFlopLinesExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllLinesTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= FlopLinesDemo.lines.length) {
+      widget.onAllLinesTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllLinesTapped != null;
+    return Column(
+      key: const ValueKey<String>('flop-lines-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < FlopLinesDemo.lines.length; i++)
+              SizedBox(
+                width: 110,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(FlopLinesDemo.lines[i].label) &&
+                      FlopLinesDemo.lines
+                          .take(i)
+                          .every((l) => _tapped.contains(l.label)),
+                  child: _DemoActionCard(
+                    label: FlopLinesDemo.lines[i].label,
+                    caption: FlopLinesDemo.lines[i].caption,
+                    color: FlopLinesDemo.lines[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(FlopLinesDemo.lines[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(FlopLinesDemo.lines[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Explain-step demo: flop line menu (value through raise) — one plan.
 class FlopLinesDemo extends StatefulWidget {
