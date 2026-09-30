@@ -123,12 +123,30 @@ Future<void> _pumpGuest(
   await tester.pump();
 }
 
+Future<void> _tapLabel(WidgetTester tester, String label) async {
+  final finder = find.text(label);
+  await tester.ensureVisible(finder);
+  await tester.pumpAndSettle();
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
+}
+
+Future<void> _tapContinue(WidgetTester tester) async {
+  final finder = find.widgetWithText(FilledButton, 'Continue');
+  await tester.ensureVisible(finder);
+  await tester.pumpAndSettle();
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets('back from Your start rewinds band and goal without Home', (
     tester,
   ) async {
+    await tester.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     SharedPreferences.setMockInitialValues({});
     final onboarding = _YourStartOnboarding();
     await _pumpGuest(
@@ -170,18 +188,19 @@ void main() {
     expect(find.text('Home'), findsNothing);
     expect(_tileSelected(tester, 'New to poker'), isTrue);
 
-    await tester.tap(find.text('Know the rules / home games'));
-    await tester.pumpAndSettle();
+    await _tapLabel(tester, 'Know the rules / home games');
+    expect(find.text('Daily goal'), findsNothing);
+    await _tapContinue(tester);
     expect(find.text('Daily goal'), findsOneWidget);
     expect(_tileSelected(tester, '10 minutes'), isTrue);
 
-    await tester.tap(find.text('10 minutes'));
-    await tester.pumpAndSettle();
+    await _tapLabel(tester, '10 minutes');
+    expect(find.text('Meet Rex'), findsNothing);
+    await _tapContinue(tester);
     expect(find.text('Meet Rex'), findsOneWidget);
     expect(find.text('Your live-reg coach'), findsOneWidget);
 
-    await tester.tap(find.text('Continue'));
-    await tester.pumpAndSettle();
+    await _tapContinue(tester);
 
     expect(find.text('Your start'), findsOneWidget);
     expect(find.text('Your two cards'), findsOneWidget);
@@ -207,6 +226,8 @@ void main() {
   testWidgets('relaunch on Your start keeps the screen and back', (
     tester,
   ) async {
+    await tester.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     SharedPreferences.setMockInitialValues({
       'onboarding_draft_v1': jsonEncode(
         const OnboardingDraft(
