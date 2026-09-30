@@ -133,4 +133,48 @@ void main() {
     expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
   });
+
+  testWidgets('highlightHeroIndexes puts one arrow on that hole card', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: _peekGame(),
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              heroCardsFaceUp: true,
+              highlightHeroIndexes: const {0},
+              onHeroCardTap: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsNothing);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsOneWidget);
+
+    final arrow = tester.getCenter(
+      find.byKey(const ValueKey<String>('hero-cue-arrow-0')),
+    );
+    final leftCard = tester.getCenter(
+      find.byKey(const ValueKey<String>('lesson-hero-card-0')),
+    );
+    final rightCard = tester.getCenter(
+      find.byKey(const ValueKey<String>('lesson-hero-card-1')),
+    );
+    expect(arrow.dx, closeTo(leftCard.dx, 1));
+    expect((arrow.dx - rightCard.dx).abs(), greaterThan(20));
+  });
 }
