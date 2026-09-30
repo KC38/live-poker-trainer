@@ -3836,6 +3836,95 @@ class _TableReadDemoState extends State<TableReadDemo> {
 
 
 /// Explain-step demo: label the flop as made, draw, SDV, or air.
+/// Flop-class explain: MADE / DRAW / SDV / AIR under the full poker table.
+class LessonFlopLabelExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonFlopLabelExplainTable({
+    super.key,
+    required this.onAllLabelsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllLabelsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonFlopLabelExplainTable> createState() =>
+      _LessonFlopLabelExplainTableState();
+}
+
+class _LessonFlopLabelExplainTableState
+    extends State<LessonFlopLabelExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllLabelsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= FlopLabelDemo.labels.length) {
+      widget.onAllLabelsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllLabelsTapped != null;
+    return Column(
+      key: const ValueKey<String>('flop-label-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Kh', 'Qh'],
+            boardCodes: const ['Ks', '9d', '2c'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < FlopLabelDemo.labels.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(FlopLabelDemo.labels[i].label) &&
+                      FlopLabelDemo.labels
+                          .take(i)
+                          .every((l) => _tapped.contains(l.label)),
+                  child: _DemoActionCard(
+                    label: FlopLabelDemo.labels[i].label,
+                    caption: FlopLabelDemo.labels[i].caption,
+                    color: FlopLabelDemo.labels[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(FlopLabelDemo.labels[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(FlopLabelDemo.labels[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class FlopLabelDemo extends StatefulWidget {
   /// Creates the demo.
   const FlopLabelDemo({

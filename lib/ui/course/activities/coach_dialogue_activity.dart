@@ -217,17 +217,10 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.flopLabel) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return FlopLabelDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllLabelsTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+          return LessonFlopLabelExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllLabelsTapped: locked ? null : onFeltAcknowledge,
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.outsPrice) {
