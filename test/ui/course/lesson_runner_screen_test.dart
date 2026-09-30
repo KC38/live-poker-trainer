@@ -1279,7 +1279,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('live table habits uses the lesson frame and the habit tiles', (
+  testWidgets('live table habits uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1313,6 +1313,8 @@ void main() {
     expect(find.textContaining('Tap Watch'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('table-habits-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('WATCH'), findsOneWidget);
     expect(find.text('SAY'), findsOneWidget);
     expect(find.text('COVER'), findsOneWidget);

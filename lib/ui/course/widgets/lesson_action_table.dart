@@ -3012,6 +3012,94 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
 }
 
 /// Explain-step demo: live-table habits (watch, say, cover, wait).
+/// Full table: Watch / Say / Cover / Wait teach taps under the felt.
+class LessonTableHabitsExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonTableHabitsExplainTable({
+    super.key,
+    required this.onAllHabitsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllHabitsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonTableHabitsExplainTable> createState() =>
+      _LessonTableHabitsExplainTableState();
+}
+
+class _LessonTableHabitsExplainTableState
+    extends State<LessonTableHabitsExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllHabitsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TableHabitsDemo.habits.length) {
+      widget.onAllHabitsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllHabitsTapped != null;
+    return Column(
+      key: const ValueKey<String>('table-habits-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d'],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < TableHabitsDemo.habits.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(TableHabitsDemo.habits[i].label) &&
+                      TableHabitsDemo.habits
+                          .take(i)
+                          .every((h) => _tapped.contains(h.label)),
+                  child: _DemoActionCard(
+                    label: TableHabitsDemo.habits[i].label,
+                    caption: TableHabitsDemo.habits[i].caption,
+                    color: TableHabitsDemo.habits[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(TableHabitsDemo.habits[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(TableHabitsDemo.habits[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Explain-step demo: watch, say, cover, wait at a live table.
 class TableHabitsDemo extends StatefulWidget {
   /// Creates the demo.
   const TableHabitsDemo({
