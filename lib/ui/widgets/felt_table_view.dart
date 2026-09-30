@@ -301,7 +301,7 @@ class FeltTableView extends StatelessWidget {
             heroLayer.add(
               Positioned(
                 left: slot.box.left,
-                top: _clamp(slot.box.top - 26, 0, math.max(0.0, h - 24)),
+                top: _clamp(slot.box.top - 30, 0, math.max(0.0, h - 28)),
                 width: slot.box.width,
                 child: const _CueArrows(count: 2),
               ),
@@ -904,20 +904,85 @@ class _WinnerBadgeState extends State<_WinnerBadge> {
   }
 }
 
-/// Downward arrows that mark the tap the step is teaching.
-class _CueArrows extends StatelessWidget {
+/// Bouncing gold arrows that mark the tap the step is teaching.
+class _CueArrows extends StatefulWidget {
   const _CueArrows({required this.count});
 
   final int count;
 
   @override
+  State<_CueArrows> createState() => _CueArrowsState();
+}
+
+class _CueArrowsState extends State<_CueArrows>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _motion;
+  late final Animation<double> _bounce;
+  late final Animation<double> _glow;
+
+  @override
+  void initState() {
+    super.initState();
+    _motion = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _bounce = CurvedAnimation(parent: _motion, curve: Curves.easeInOut);
+    _glow = CurvedAnimation(parent: _motion, curve: Curves.easeInOut);
+  }
+
+  @override
+  void dispose() {
+    _motion.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        for (var i = 0; i < count; i++)
-          const Icon(Icons.arrow_downward, size: 18, color: AppColors.cream),
-      ],
+    return AnimatedBuilder(
+      animation: _motion,
+      builder: (context, child) {
+        final dip = 2.0 + (_bounce.value * 8.0);
+        final glow = 0.35 + (_glow.value * 0.55);
+        return Transform.translate(
+          offset: Offset(0, dip),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.goldBright.withValues(alpha: glow * 0.75),
+                  blurRadius: 10 + (8 * _glow.value),
+                  spreadRadius: 1 + (2 * _glow.value),
+                ),
+              ],
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: Row(
+        key: const ValueKey<String>('felt-cue-arrows'),
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (var i = 0; i < widget.count; i++)
+            Padding(
+              padding: EdgeInsets.only(left: i == 0 ? 0 : 2),
+              child: Icon(
+                Icons.arrow_downward_rounded,
+                size: 22,
+                color: AppColors.goldBright,
+                shadows: [
+                  Shadow(
+                    color: AppColors.gold.withValues(alpha: 0.9),
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
