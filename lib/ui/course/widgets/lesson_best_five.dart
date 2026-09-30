@@ -788,42 +788,21 @@ class SelectableBestFiveCard extends StatelessWidget {
     } catch (_) {
       card = null;
     }
-    final border =
-        selected
-            ? AppColors.gold
-            : highlighted
-            ? AppColors.gold.withValues(alpha: 0.75)
-            : AppColors.slateDark.withValues(alpha: 0.7);
-    final radius = size == MiniCardSize.hero ? 10.0 : 8.0;
-    final pad = (size == MiniCardSize.hero ? 4.0 : 3.0) * scale.clamp(1.0, 1.4);
-    final child = AnimatedOpacity(
-      duration: const Duration(milliseconds: 140),
-      opacity: dimmed && !selected ? 0.38 : 1,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 140),
-        padding: EdgeInsets.all(pad),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius * scale.clamp(1.0, 1.3)),
-          border: Border.all(
-            color: border,
-            width: selected ? 2.4 : highlighted ? 2 : 1,
-          ),
-          color:
-              selected
-                  ? AppColors.gold.withValues(alpha: 0.18)
-                  : highlighted
-                  ? AppColors.gold.withValues(alpha: 0.1)
-                  : Colors.transparent,
-        ),
-        child:
-            card == null
-                ? SizedBox(
-                  width: size.dimensions.width * scale,
-                  height: size.dimensions.height * scale,
-                )
-                : MiniCard(card: card, size: size, scale: scale),
-      ),
-    );
+    final radius = size.dimensions.width * scale * 0.12;
+    final child =
+        card == null
+            ? SizedBox(
+              width: size.dimensions.width * scale,
+              height: size.dimensions.height * scale,
+            )
+            : MiniCard(
+              card: card,
+              size: size,
+              scale: scale,
+              selected: selected,
+              highlighted: highlighted,
+              dimmed: dimmed,
+            );
     if (onPressed == null) return child;
     return Semantics(
       button: true,

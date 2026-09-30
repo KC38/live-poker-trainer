@@ -610,6 +610,9 @@ class _SeatWaitTimerState extends State<_SeatWaitTimer> {
 }
 
 /// Card back used by lesson widgets that draw [MiniCard] rows.
+///
+/// Matches [TableCardBack] so face-down cards share one design with the
+/// live table.
 class CardBack extends StatelessWidget {
   /// Creates a card back.
   const CardBack({super.key, this.size = MiniCardSize.tiny});
@@ -619,19 +622,6 @@ class CardBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dims = size.dimensions;
-    return Container(
-      width: dims.width,
-      height: dims.height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF7C1D2B), Color(0xFF4A0F1B)],
-        ),
-        border: Border.all(color: AppColors.cream.withValues(alpha: 0.5)),
-      ),
-    );
+    return TableCardBack(width: size.dimensions.width);
   }
 }
