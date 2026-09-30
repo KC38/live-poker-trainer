@@ -277,6 +277,9 @@ Rare, Enter, and Mean It under the felt.
 Meet the Nit uses the full poker table for every step: explain taps Nit,
 Narrow, and Respect under the felt.
 
+Adjust versus Nit uses the full poker table for every step: explain taps Steal,
+Credit, and Explode under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -542,10 +545,10 @@ narrow players uses the same frame and the full table: explain taps
 Rare, Enter, and Mean It under the felt, and the entry quizzes stay
 lists. Meet the Nit uses the same frame and the full table: explain taps
 Nit, Narrow, and Respect under the felt, and the label quizzes stay lists.
-Adjust versus Nit uses the same frame: steal, credit, and explode stay
-in the stage,
-each nit spot sits face up on the full table, and the respect reason
-stays a list. Observe wild aggressors uses the same frame: raise,
+Adjust versus Nit uses the same frame and the full table: explain taps
+Steal, Credit, and Explode under the felt, each nit spot sits face up on
+that table, and the respect reason stays a list. Observe wild aggressors
+uses the same frame: raise,
 barrel, and count stay in the stage, and the entry quizzes stay lists.
 Meet the Maniac uses the same frame: maniac, entry, and aggro stay in
 the stage, and the label quizzes stay lists. Adjust versus Maniac
