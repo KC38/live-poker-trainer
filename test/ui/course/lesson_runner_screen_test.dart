@@ -4093,6 +4093,8 @@ void main() {
     expect(find.textContaining('Tap Plan'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('capstone-srp-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('PLAN'), findsOneWidget);
     expect(find.text('UPDATE'), findsOneWidget);
     expect(find.text('FINISH'), findsOneWidget);

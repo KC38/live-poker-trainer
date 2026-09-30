@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Capstone: single-raised pot explain: PLAN / UPDATE / FINISH under the full poker table.
+class LessonCapstoneSrpExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonCapstoneSrpExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonCapstoneSrpExplainTable> createState() =>
+      _LessonCapstoneSrpExplainTableState();
+}
+
+class _LessonCapstoneSrpExplainTableState
+    extends State<LessonCapstoneSrpExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= CapstoneSrpDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('capstone-srp-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < CapstoneSrpDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _CapstoneSrpSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        CapstoneSrpDemo.points[i].label,
+                      ) &&
+                      CapstoneSrpDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _CapstoneSrpTile(
+                    label: CapstoneSrpDemo.points[i].label,
+                    caption: CapstoneSrpDemo.points[i].caption,
+                    color: CapstoneSrpDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      CapstoneSrpDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  CapstoneSrpDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Plan / update / finish tiles for SRP capstone explain demos.
 class CapstoneSrpDemo extends StatefulWidget {
