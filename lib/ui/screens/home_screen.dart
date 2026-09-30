@@ -12,7 +12,6 @@ import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/models/course_table_return.dart';
 import 'package:live_poker_trainer/models/live_access.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
-import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
@@ -22,7 +21,6 @@ import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 import 'package:live_poker_trainer/ui/home/course_section_picker.dart';
 import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
 import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
-import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
@@ -172,9 +170,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _scheduleAutoFocus(snapshot);
               return _HomeBody(
                 snapshot: snapshot,
-                guestSession:
-                    ref.watch(appAuthProvider).asData?.value.isAnonymous ==
-                    true,
                 focusLessonKey: _focusLessonKey,
                 onRetry:
                     () => ref.read(courseHomeProvider.notifier).refresh(),
@@ -351,12 +346,10 @@ class _HomeBody extends StatefulWidget {
     required this.onRetry,
     required this.onNodeTap,
     required this.onOpenSections,
-    required this.guestSession,
     required this.focusLessonKey,
   });
 
   final CourseHomeSnapshot snapshot;
-  final bool guestSession;
   final VoidCallback onRetry;
   final void Function(CourseMapNode node) onNodeTap;
   final VoidCallback onOpenSections;
@@ -515,26 +508,6 @@ class _HomeBodyState extends State<_HomeBody> {
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
-                    if (widget.guestSession) ...[
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.slate,
-                          padding: EdgeInsets.zero,
-                          minimumSize: Size.zero,
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          alignment: Alignment.centerLeft,
-                        ),
-                        onPressed: () => pushSaveProgressAuth(context),
-                        child: Text(
-                          'Guest progress stays on this device until you create an account.',
-                          style: GoogleFonts.manrope(
-                            color: AppColors.slate,
-                            fontSize: 13,
-                            height: 1.35,
-                          ),
-                        ),
-                      ),
-                    ],
                     if (snapshot.rexLine != null &&
                         !snapshot.nodes.any((node) => node.isNext)) ...[
                       const SizedBox(height: 2),

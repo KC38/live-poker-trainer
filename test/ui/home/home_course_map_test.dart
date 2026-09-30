@@ -180,8 +180,41 @@ void main() {
     expect(find.text('START'), findsOneWidget);
     expect(find.textContaining('SECTION'), findsWidgets);
     expect(find.text('SECTION 1, UNIT 1'), findsOneWidget);
+    expect(
+      find.textContaining('Guest progress stays on this device'),
+      findsNothing,
+    );
     expect(analytics.events, contains('home_course_view:ready'));
     _expectHomeThemeMetrics(tester);
+  });
+
+  testWidgets('anonymous Home omits guest progress banner', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          courseHomeProvider.overrideWith(
+            () => _FixedHome(_readySnapshot()),
+          ),
+          analyticsServiceProvider.overrideWithValue(_RecordingAnalytics()),
+          appAuthProvider.overrideWith(
+            (ref) => const AsyncData(
+              AppAuthSnapshot(uid: 'guest', isAnonymous: true),
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const HomeScreen(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.textContaining('Guest progress stays on this device'),
+      findsNothing,
+    );
+    expect(find.byType(CoursePathView), findsOneWidget);
   });
 
   testWidgets('Rex stands on the only marked next node', (tester) async {
