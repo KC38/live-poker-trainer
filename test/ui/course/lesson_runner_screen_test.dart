@@ -1111,7 +1111,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('hand families uses the lesson frame and the family list', (
+  testWidgets('hand families uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1145,6 +1145,8 @@ void main() {
     expect(find.textContaining('Tap each family'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('hand-families-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('Pairs'), findsOneWidget);
     expect(find.text('Broadways'), findsOneWidget);
     expect(find.text('Connectors'), findsOneWidget);
