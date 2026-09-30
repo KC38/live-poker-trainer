@@ -3086,6 +3086,8 @@ void main() {
     expect(find.textContaining('Tap Polar'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('polar-merged-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('POLAR'), findsOneWidget);
     expect(find.text('MERGED'), findsOneWidget);
     expect(find.text('SIZE'), findsOneWidget);
