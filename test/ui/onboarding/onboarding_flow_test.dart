@@ -142,6 +142,8 @@ void main() {
     );
     expect(find.byType(RexMascot), findsOneWidget);
     expect(find.byType(BrandLogo), findsOneWidget);
+    final appName = tester.widget<Text>(find.text('Exploitative\nPoker Lab'));
+    expect(appName.textAlign, TextAlign.center);
     _expectElevatedMetrics(tester, 'Get started');
     _expectOutlinedMetrics(tester, 'I already have an account');
   });
