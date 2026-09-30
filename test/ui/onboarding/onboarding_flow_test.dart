@@ -481,11 +481,11 @@ void main() {
         ),
       ),
     );
-    expect(
-      find.textContaining('Create an account to save your progress'),
-      findsWidgets,
-    );
+    expect(find.text('Time to create a profile!'), findsOneWidget);
+    expect(find.text('CREATE A PROFILE'), findsOneWidget);
+    expect(find.text('LATER'), findsOneWidget);
     expect(find.textContaining('can be lost'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
   });
 
   testWidgets('motivation screens show Rex speech and CONTINUE', (
@@ -568,7 +568,12 @@ void main() {
     );
     expect(find.text('Nice work'), findsOneWidget);
     expect(find.text('Your two cards'), findsOneWidget);
-    expect(find.text('+75 XP · streak 1'), findsOneWidget);
+    expect(find.text('+75 XP'), findsOneWidget);
+    expect(find.text('streak 1'), findsOneWidget);
+    expect(find.text('Time to create a profile!'), findsOneWidget);
+    expect(find.text('CREATE A PROFILE'), findsOneWidget);
+    expect(find.text('LATER'), findsOneWidget);
+    expect(find.text('I already have an account'), findsOneWidget);
   });
 }
 
