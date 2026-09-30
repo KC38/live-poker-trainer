@@ -356,6 +356,8 @@ Meet the LAG uses the full poker table for every step: explain taps Wide, Pressu
 
 Carry a preflop plan onto the flop uses the full poker table for every step: explain taps Reason, Confirm, and Cancel under the felt.
 
+Map turn barrels before you bet flop uses the full poker table for every step: explain taps Barrel, Give-up, and Map under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -703,9 +705,7 @@ sit face up on the full table. Same cards, five type models uses the
 same frame: cards, seats, and evidence stay in the stage, the label
 check stays a list, and the station, nit, and LAG spots sit face up on
 the full table. Section 6 checkpoint uses the same frame: the
-advantage, cap, polar, TAG, and LAG checks stay lists. Carry a preflop plan onto the flop uses the same frame and the full table: explain taps Reason, Confirm, and Cancel under the felt, and the plan quizzes stay lists. Map turn barrels
-before you bet flop uses the same frame: barrel, give-up, and map stay
-in the stage, the no-plan and definition checks stay lists, and the
+advantage, cap, polar, TAG, and LAG checks stay lists. Carry a preflop plan onto the flop uses the same frame and the full table: explain taps Reason, Confirm, and Cancel under the felt, and the plan quizzes stay lists. Map turn barrels before you bet flop uses the same frame and the full table: explain taps Barrel, Give-up, and Map under the felt, the no-plan and definition checks stay lists, and the
 continue and brick spots sit face up on the full table. Compose river
 value and bluffs uses the same frame: value, bluff, and hold stay in
 the stage, the blocker, empty, and rule checks stay lists, and the

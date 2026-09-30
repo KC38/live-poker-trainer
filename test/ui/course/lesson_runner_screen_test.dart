@@ -3753,6 +3753,8 @@ void main() {
     expect(find.textContaining('Tap Barrel'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('turn-map-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('BARREL'), findsOneWidget);
     expect(find.text('GIVE-UP'), findsOneWidget);
     expect(find.text('MAP'), findsOneWidget);
