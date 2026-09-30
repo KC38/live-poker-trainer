@@ -28,26 +28,31 @@ class WelcomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return _OnboardingScaffold(
-      step: 1,
-      stepCount: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Spacer(),
+          const Spacer(flex: 2),
+          Align(
+            child: Image.asset(
+              'assets/brand/logo_mark.png',
+              width: 72,
+              height: 72,
+              filterQuality: FilterQuality.medium,
+              errorBuilder: (_, _, _) => const Icon(
+                Icons.style,
+                size: 56,
+                color: AppColors.gold,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          const Align(child: RexMascot(size: 148)),
+          const SizedBox(height: 28),
           Text(
             'Exploitative\nPoker Lab',
             style: Theme.of(context).textTheme.displayMedium,
           ),
-          const SizedBox(height: 14),
-          Text(
-            'Learn live cash No-Limit Hold\'em by doing — one short lesson at a time.',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 16,
-              height: 1.45,
-            ),
-          ),
-          const Spacer(),
+          const Spacer(flex: 3),
           FilledButton(
             onPressed: () {
               unawaited(
