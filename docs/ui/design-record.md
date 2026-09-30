@@ -271,6 +271,9 @@ Station, High, and Low under the felt.
 Adjust versus Calling Station uses the full poker table for every step: explain
 taps Value, Bluffs, and Cite under the felt.
 
+Observe narrow players uses the full poker table for every step: explain taps
+Rare, Enter, and Mean It under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -532,8 +535,8 @@ High, and Low under the felt, and the label quizzes stay lists. Adjust
 versus Calling Station uses the same frame and the full table: explain
 taps Value, Bluffs, and Cite under the felt, each adjustment spot sits
 face up on that table, and the bluff-less reason stays a list. Observe
-narrow players uses the same frame:
-rare, enter, and mean it stay in the stage, and the entry quizzes stay
+narrow players uses the same frame and the full table: explain taps
+Rare, Enter, and Mean It under the felt, and the entry quizzes stay
 lists. Meet the Nit uses the same frame: nit, narrow, and respect stay
 in the stage, and the label quizzes stay lists. Adjust versus Nit
 uses the same frame: steal, credit, and explode stay in the stage,
