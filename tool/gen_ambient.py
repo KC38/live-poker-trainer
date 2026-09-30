@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Synthesize a short looping poker-lounge ambient pad.
 
+Prefer ``tool/gen_audio_ai.py`` (ElevenLabs multi-take) when an API key
+is available; this script remains the deterministic offline fallback.
+
 Soft drones and quiet room tone — calm felt atmosphere for the Home screen,
 not table SFX. Writes a WAV then (when ffmpeg is available) a compact MP3.
 

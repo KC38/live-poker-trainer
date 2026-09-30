@@ -71,3 +71,5 @@ __pycache__/
 
 # Feature worktrees created by the make-change skill
 .worktrees/
+tool/.env*
+tool/.audio_candidates/
