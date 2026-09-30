@@ -231,24 +231,21 @@ class OrderSequenceActivity extends StatelessWidget {
           );
         }
         if (framed && isShowdownOrderSequenceActivity(activity.id)) {
-          final spot = handRanksShowdownSpot(activity.id);
-          if (spot != null) {
-            return LessonShowdownOrderTable(
-              key: ValueKey<String>(
-                '${activity.id}-${controller.bindGeneration}-showdown-order',
-              ),
-              spot: spot,
-              orderedIds: ordered,
-              enabled: !locked,
-              showGuidance: showGuidance,
-              onPick: (id) => appendOrderedId(
-                controller: controller,
-                activity: activity,
-                ordered: ordered,
-                id: id,
-              ),
-            );
-          }
+          return RandomizedLessonShowdownOrderTable(
+            key: ValueKey<String>(
+              '${activity.id}-${controller.bindGeneration}-showdown-order',
+            ),
+            activityId: activity.id,
+            orderedIds: ordered,
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onPick: (id) => appendOrderedId(
+              controller: controller,
+              activity: activity,
+              ordered: ordered,
+              id: id,
+            ),
+          );
         }
         if (framed && isStreetSequenceActivity(activity)) {
           return LessonStreetsOrderTable(

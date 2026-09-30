@@ -1,6 +1,8 @@
 /// Full poker table used as the lesson stage.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
@@ -934,6 +936,8 @@ class LessonShowdownOrderSpot {
 }
 
 /// Shared board spots for Hand ranks showdown ordering.
+///
+/// Prefer [dealtHandRanksShowdownSpot] at mount time so faces vary per attempt.
 LessonShowdownOrderSpot? handRanksShowdownSpot(String activityId) {
   switch (activityId) {
     case 'act-01-02-01-explain-ladder':
@@ -990,10 +994,78 @@ LessonShowdownOrderSpot? handRanksShowdownSpot(String activityId) {
   }
 }
 
+/// Fresh showdown layout for [activityId] (cards vary; seat order preserved).
+LessonShowdownOrderSpot? dealtHandRanksShowdownSpot(
+  String activityId, {
+  Random? random,
+}) {
+  final deal = dealShowdownOrderCards(activityId, random: random);
+  if (deal == null) return handRanksShowdownSpot(activityId);
+  return LessonShowdownOrderSpot(
+    boardCodes: deal.boardCodes,
+    heroCodes: deal.heroCodes,
+    villainHoleCodes: deal.villainHoleCodes,
+    seatIds: deal.seatIds,
+    correctOrder: deal.correctOrder,
+  );
+}
+
 /// Whether this activity orders face-up showdown seats by hand strength.
 bool isShowdownOrderSequenceActivity(String activityId) {
   return handRanksShowdownSpot(activityId) != null &&
       activityId != 'act-01-02-01-explain-ladder';
+}
+
+/// Deals a fresh showdown layout once per mount, then hosts the order table.
+class RandomizedLessonShowdownOrderTable extends StatefulWidget {
+  /// Creates a randomized showdown-order stage.
+  const RandomizedLessonShowdownOrderTable({
+    super.key,
+    required this.activityId,
+    required this.orderedIds,
+    required this.onPick,
+    this.enabled = true,
+    this.showGuidance = true,
+    this.strictOrder = false,
+    this.onMiss,
+  });
+
+  final String activityId;
+  final List<String> orderedIds;
+  final ValueChanged<String> onPick;
+  final bool enabled;
+  final bool showGuidance;
+  final bool strictOrder;
+  final VoidCallback? onMiss;
+
+  @override
+  State<RandomizedLessonShowdownOrderTable> createState() =>
+      _RandomizedLessonShowdownOrderTableState();
+}
+
+class _RandomizedLessonShowdownOrderTableState
+    extends State<RandomizedLessonShowdownOrderTable> {
+  late final LessonShowdownOrderSpot _spot;
+
+  @override
+  void initState() {
+    super.initState();
+    _spot = dealtHandRanksShowdownSpot(widget.activityId) ??
+        handRanksShowdownSpot(widget.activityId)!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LessonShowdownOrderTable(
+      spot: _spot,
+      orderedIds: widget.orderedIds,
+      onPick: widget.onPick,
+      enabled: widget.enabled,
+      showGuidance: widget.showGuidance,
+      strictOrder: widget.strictOrder,
+      onMiss: widget.onMiss,
+    );
+  }
 }
 
 /// Full table: tap face-up showdown seats in hand-strength order.
@@ -1082,14 +1154,15 @@ class LessonShowdownOrderExplainTable extends StatefulWidget {
   /// Creates the explain stage.
   const LessonShowdownOrderExplainTable({
     super.key,
-    required this.spot,
+    required this.activityId,
     required this.onComplete,
     this.onMiss,
     this.enabled = true,
     this.showGuidance = true,
   });
 
-  final LessonShowdownOrderSpot spot;
+  /// Activity whose showdown pattern should be dealt.
+  final String activityId;
   final VoidCallback? onComplete;
   final VoidCallback? onMiss;
   final bool enabled;
@@ -1103,21 +1176,28 @@ class LessonShowdownOrderExplainTable extends StatefulWidget {
 class _LessonShowdownOrderExplainTableState
     extends State<LessonShowdownOrderExplainTable> {
   final List<String> _ordered = <String>[];
+  late final LessonShowdownOrderSpot _spot;
+
+  @override
+  void initState() {
+    super.initState();
+    _spot = dealtHandRanksShowdownSpot(widget.activityId) ??
+        handRanksShowdownSpot(widget.activityId)!;
+  }
 
   void _pick(String id) {
     if (!widget.enabled || widget.onComplete == null) return;
     setState(() => _ordered.add(id));
-    if (_ordered.length >= widget.spot.correctOrder.length) {
+    if (_ordered.length >= _spot.correctOrder.length) {
       widget.onComplete!();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final teaching =
-        widget.enabled && _ordered.length < widget.spot.correctOrder.length;
+    final teaching = widget.enabled && _ordered.length < _spot.correctOrder.length;
     return LessonShowdownOrderTable(
-      spot: widget.spot,
+      spot: _spot,
       orderedIds: _ordered,
       enabled: teaching,
       showGuidance: widget.showGuidance,
