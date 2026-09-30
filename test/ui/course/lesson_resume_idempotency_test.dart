@@ -192,6 +192,52 @@ void main() {
     controller.dispose();
   });
 
+  test('next hand street re-enables Hint on the same activity', () {
+    final activity = CourseActivity(
+      id: 'multi',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 60,
+      accessibilityText: 'Play two streets',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Size small'),
+      ],
+      handSteps: const [
+        CourseHandStep(
+          id: 'pre',
+          street: 'preflop',
+          prompt: 'Open',
+          choices: [
+            CourseChoice(id: 'open', label: 'Open'),
+            CourseChoice(id: 'fold', label: 'Fold'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'flop',
+          street: 'flop',
+          prompt: 'C-bet',
+          choices: [
+            CourseChoice(id: 'bet', label: 'Bet'),
+            CourseChoice(id: 'check', label: 'Check'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    expect(controller.currentNodeKey, 'multi#0');
+    controller.revealHint();
+    expect(controller.hintUsed, isTrue);
+    controller.advanceToNextHandStep();
+    expect(controller.currentNodeKey, 'multi#1');
+    expect(controller.hintUsed, isFalse);
+    expect(controller.hintVisible, isFalse);
+    controller.revealHint();
+    expect(controller.hintUsed, isTrue);
+    controller.dispose();
+  });
+
   test('revealing a hint enables tap cues on unguided steps', () {
     final activity = CourseActivity(
       id: 'a',

@@ -53,7 +53,8 @@ class LessonActivityController extends ChangeNotifier {
   ActivityDraft? _redoDraft;
   bool _submitting = false;
   bool _hintVisible = false;
-  bool _hintUsed = false;
+  /// Node key (`activityId#handStepIndex`) for which Hint was already used.
+  String? _hintUsedNodeKey;
   int _hintRequests = 0;
   String? _pendingIdempotencyKey;
   int _bindGeneration = 0;
@@ -70,8 +71,15 @@ class LessonActivityController extends ChangeNotifier {
   SubmitCourseStepResult? get lastResult => _lastResult;
   bool get submitting => _submitting;
   bool get hintVisible => _hintVisible;
-  /// True after the learner taps Hint once on the current activity node.
-  bool get hintUsed => _hintUsed;
+
+  /// One lesson screen: activity id plus the active hand-street index.
+  String get currentNodeKey => '${_activity.id}#${_draft.handStepIndex}';
+
+  /// True after the learner taps Hint once on [currentNodeKey].
+  ///
+  /// Scoped per screen (activity + hand step), not for the whole lesson —
+  /// advancing to the next activity or street re-enables Hint.
+  bool get hintUsed => _hintUsedNodeKey == currentNodeKey;
   int get hintRequests => _hintRequests;
   String? get pendingIdempotencyKey => _pendingIdempotencyKey;
 
@@ -99,7 +107,7 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     _submitting = false;
     _hintVisible = false;
-    _hintUsed = false;
+    _hintUsedNodeKey = null;
     _pendingIdempotencyKey = null;
     _tappedSeatLabel = null;
     _bindGeneration += 1;
@@ -225,16 +233,16 @@ class LessonActivityController extends ChangeNotifier {
   void toggleHint() {
     _hintVisible = !_hintVisible;
     if (_hintVisible) {
-      _hintUsed = true;
+      _hintUsedNodeKey = currentNodeKey;
       _hintRequests += 1;
     }
     notifyListeners();
   }
 
-  /// Reveals the hint once for this activity node.
+  /// Reveals the hint once for the current lesson screen.
   void revealHint() {
     _hintVisible = true;
-    _hintUsed = true;
+    _hintUsedNodeKey = currentNodeKey;
     _hintRequests += 1;
     notifyListeners();
   }
@@ -245,6 +253,8 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     _pendingIdempotencyKey = null;
     _hintVisible = false;
+    // New hand street = new screen; Hint becomes available again because
+    // [hintUsed] compares against [currentNodeKey].
     _draft = ActivityDraft(handStepIndex: _draft.handStepIndex + 1);
     notifyListeners();
   }
