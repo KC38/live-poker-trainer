@@ -425,6 +425,8 @@ Hole-card choice bands (`_HoleCardBands` in `select_identify_activity.dart`) fil
 
 Densified teach felts that ask for ~58% of screen height (`kTeachFeltHeightFactor` in `teach_felt_height.dart`) clamp to the stage when Nice! / Continue shrinks it. `LessonScreenLayout` rewrites MediaQuery height for every stage child, and `_feltShell` clamps again so blinds timing and other table scenes never bottom-overflow.
 
+Playing cards use one face everywhere: `TableCard` (corner rank, one centered suit). `MiniCard` and `CardBack` are size presets over `TableCard` / `TableCardBack` for densified lesson trays — they must not invent a second face.
+
 A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
 
 ### Shipped
