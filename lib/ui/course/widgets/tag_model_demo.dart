@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Adjust versus TAG explain: TIGHT / AGGRO / MODEL under the full poker table.
+class LessonTagModelExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonTagModelExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonTagModelExplainTable> createState() =>
+      _LessonTagModelExplainTableState();
+}
+
+class _LessonTagModelExplainTableState
+    extends State<LessonTagModelExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TagModelDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('tag-model-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < TagModelDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _TagSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        TagModelDemo.points[i].label,
+                      ) &&
+                      TagModelDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _TagModelTile(
+                    label: TagModelDemo.points[i].label,
+                    caption: TagModelDemo.points[i].caption,
+                    color: TagModelDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      TagModelDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  TagModelDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Tight / aggro / model tiles for TAG player-type explain demos.
 class TagModelDemo extends StatefulWidget {
