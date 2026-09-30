@@ -105,9 +105,10 @@ The table is built for a phone held upright:
   so the felt spends its area on the board. Side seats sit above or below
   the board row, not beside it.
 - **Seat box.** One box per seat: a generic player icon, the name, and the
-  stack in large JetBrains Mono. Face-down cards tuck behind the top of the
-  box. The icon ring is colored by player type when player types are on,
-  and a type tag sits on the box's top edge.
+  stack in large JetBrains Mono. Hole cards nest slightly over the top of
+  the box and always paint above it so faces stay fully visible. The icon
+  ring is colored by player type when player types are on, and a type tag
+  sits on the box's top edge.
 - **Around a seat.** Dealer, SB, and BB pucks sit beside the box, facing the
   felt. A street bet sits on the line from the seat toward the pot, clear of
   every seat. The action badge hangs from the bottom of the box.

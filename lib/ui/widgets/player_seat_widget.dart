@@ -51,6 +51,8 @@ class SeatMetrics {
           (hero ? (compact ? 52.0 : 58.0) : (compact ? 26.0 : 30.0)) *
           (hero && review ? _reviewGrowth : 1) *
           scale,
+      // Slight tuck under the box top; cards paint above the box so faces
+      // stay fully visible (and lesson taps hit the card, not the plate).
       cardTuck: hero ? 0.24 : 0.3,
       cardGap: (hero ? 4.0 : 2.0) * scale,
       scale: scale,
@@ -66,7 +68,9 @@ class SeatMetrics {
   /// Face-up hole card width.
   final double cardWidth;
 
-  /// Share of a hole card's height hidden behind the top of the box.
+  /// Share of a hole card's height that sits over the top of the box.
+  ///
+  /// Cards paint above the box, so this is nesting — not covering faces.
   final double cardTuck;
 
   /// Gap between the two hole cards.
@@ -81,7 +85,7 @@ class SeatMetrics {
   /// Face-up hole card height.
   double get cardHeight => cardWidth * tableCardAspect;
 
-  /// Pixels of a face-up card tucked behind the box.
+  /// Pixels of a face-up card nested over the top of the box.
   double get tuck => cardHeight * cardTuck;
 
   /// Card height visible above the box.
@@ -103,7 +107,7 @@ class SeatMetrics {
   );
 }
 
-/// One seat: hole cards tucked behind a box with the icon, name, and stack.
+/// One seat: hole cards nested over a box with the icon, name, and stack.
 ///
 /// Pucks, bets, and action badges are placed by the felt around [SeatMetrics.podIn].
 class PlayerSeatWidget extends StatelessWidget {
@@ -200,8 +204,21 @@ class PlayerSeatWidget extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
+            Positioned.fromRect(
+              key: ValueKey<String>('seat-box-layer-${player.id}'),
+              rect: pod,
+              child: _box(m),
+            ),
+            if (_typed)
+              Positioned(
+                left: pod.left + 4 * scale,
+                top: pod.top - 7 * scale,
+                child: _TypeTag(archetype: player.archetype, scale: scale),
+              ),
+            // Cards paint after the box so nothing covers hole-card faces.
             if (cards != null)
               Positioned(
+                key: ValueKey<String>('seat-cards-layer-${player.id}'),
                 left: 0,
                 right: 0,
                 bottom: pod.height - m.tuck,
@@ -212,13 +229,6 @@ class PlayerSeatWidget extends StatelessWidget {
                           : Alignment.bottomCenter,
                   child: cards,
                 ),
-              ),
-            Positioned.fromRect(rect: pod, child: _box(m)),
-            if (_typed)
-              Positioned(
-                left: pod.left + 4 * scale,
-                top: pod.top - 7 * scale,
-                child: _TypeTag(archetype: player.archetype, scale: scale),
               ),
           ],
         ),
