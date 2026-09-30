@@ -386,6 +386,8 @@ Capstone: multiway deep uses the full poker table for every step: explain taps N
 
 Adjust versus TAG uses the full poker table for every step: explain taps Credit, Tighter, and No light under the felt.
 
+Adjust versus LAG uses the full poker table for every step: explain taps Call, Trap, and Fancy less under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -724,8 +726,7 @@ AQo flop sits face up on the full table. Make difficult folds; review coolers fa
 weak-kicker fold sits face up on the full table. Observe selective aggression uses the same frame and the full table: explain taps Tight, Barrel, and Sample under the felt, and the entry quizzes stay lists. Meet the TAG uses the same frame and the full table: explain taps
 Tight, Aggro, and Model under the felt, and the label quizzes stay
 lists. Adjust versus TAG uses the same frame and the full table: explain taps Credit, Tighter, and No light under the felt, the respect check stays a list, and the heat, steal, and thin-value spots sit face up on the full table. Observe wide sustained pressure uses the same frame and the full table: explain taps Wide, Pressure, and Sample under the felt, and the entry quizzes stay
-lists. Meet the LAG uses the same frame and the full table: explain taps Wide, Pressure, and Model under the felt, and the label quizzes stay lists. Adjust versus LAG uses
-the same frame: call, trap, and fancy less stay in the stage, the
+lists. Meet the LAG uses the same frame and the full table: explain taps Wide, Pressure, and Model under the felt, and the label quizzes stay lists. Adjust versus LAG uses the same frame and the full table: explain taps Call, Trap, and Fancy less under the felt, the
 avoid and cite checks stay lists, and the call-wider and trap spots
 sit face up on the full table. Same cards, five type models uses the
 same frame: cards, seats, and evidence stay in the stage, the label
