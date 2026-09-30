@@ -2489,6 +2489,95 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
 }
 
 /// Explain-step demo: fold / call / 3-bet responses versus an open.
+/// Full table: Fold / Call / 3-bet teach taps under the felt.
+class LessonVsOpenExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonVsOpenExplainTable({
+    super.key,
+    required this.onAllResponsesTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllResponsesTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonVsOpenExplainTable> createState() =>
+      _LessonVsOpenExplainTableState();
+}
+
+class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllResponsesTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= VsOpenResponseDemo.responses.length) {
+      widget.onAllResponsesTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllResponsesTapped != null;
+    return Column(
+      key: const ValueKey<String>('vs-open-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
+              if (i > 0) const SizedBox(width: 10),
+              Expanded(
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        VsOpenResponseDemo.responses[i].label,
+                      ) &&
+                      VsOpenResponseDemo.responses
+                          .take(i)
+                          .every((r) => _tapped.contains(r.label)),
+                  child: _DemoActionCard(
+                    label: VsOpenResponseDemo.responses[i].label,
+                    caption: VsOpenResponseDemo.responses[i].caption,
+                    color: VsOpenResponseDemo.responses[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      VsOpenResponseDemo.responses[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                              VsOpenResponseDemo.responses[i].label,
+                            )
+                            : null,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class VsOpenResponseDemo extends StatefulWidget {
   /// Creates the demo.
   const VsOpenResponseDemo({

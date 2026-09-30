@@ -209,6 +209,10 @@ Open or fold uses the full poker table for every step: explain taps
 Early, Button, and Live 3x under the felt, and each open spot uses that
 table.
 
+Versus an open uses the full poker table for every step: explain taps
+Fold, Call, and 3-bet under the felt, and each response spot uses that
+table.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -415,8 +419,8 @@ Suited aces, and Connectors under the felt while holes update, and a
 starting hand sits face up on that table. Open or fold baseline
 uses the same frame and the full table: explain taps Early, Button, and
 Live 3x under the felt, and each open sits face up on that table. Versus an open uses
-the same frame: fold, call, and 3-bet stay in the stage, and each
-response sits face up on the full table. Effective stacks uses the
+the same frame and the full table: explain taps Fold, Call, and 3-bet
+under the felt, and each response sits face up on that table. Effective stacks uses the
 same frame: chips to big blinds, the shorter stack, and depth stay
 in the stage. Live table habits uses the same frame: watch, say,
 cover, and wait stay in the stage. Full-ring baseline hand uses the
