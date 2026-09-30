@@ -49,7 +49,11 @@ Save progress (`SaveProgressScreen`) uses the same radial felt gradient as other
 
 After the first guest lesson and before Save progress, the celebration chain is Day streak → Streak goal → Daily quests → Gems reward (`DayStreakScreen`, `StreakGoalScreen`, `DailyQuestsCompleteScreen`, `GemsRewardScreen` in `lib/ui/screens/onboarding_screens.dart`). CONTINUE / I CAN DO IT use the elevated button. Streak accents use `warning` / gold; gems use diamond cyan (`#5EC8FF`). No Duo sky-blue CTAs.
 
-Home status values (streak, XP, gems) use JetBrains Mono. The Rex card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no elevation). Start uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
+Home status values (streak, XP, gems) use JetBrains Mono in a compact icon
+strip (`CourseStatusBar`). The course mark opens the section picker. The Rex
+card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no
+elevation). Start uses the elevated button (gold on bgDark, height 54,
+radius 14, Manrope 16 w800).
 
 Lesson feedback Continue uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
 
@@ -58,6 +62,11 @@ Lesson result CONTINUE uses the elevated button (radius 14).
 The Settings Chip display segments ($, BB, Both) use JetBrains Mono.
 
 ### Shipped
+
+Home status is an icon strip in `CourseStatusBar`
+(`lib/ui/home/course_status_bar.dart`): flame + streak, bolt + XP, diamond +
+gems. JetBrains Mono for the numbers. The felt course mark opens
+`CourseSectionPickerSheet`.
 
 Chip display segments on `SettingsScreen`
 (`lib/ui/screens/settings_screen.dart`) use JetBrains Mono. The next screen
@@ -776,7 +785,8 @@ Do not copy their palette, owl, or words.
 | Wrong | The coach brings both arms in. The dock says Think again or Not quite. Continue stays on the step. |
 | Hint | Hint replaces the speech bubble until it is tapped again. |
 | Payoff | Lesson XP and the daily goal before Home. |
-| Home | A path. The next lesson is the marked node. Rex stands on it. |
+| Home | A winding path of circular nodes. Colored unit banners name section + unit. The next lesson is the marked node with a START chip. Rex stands on it. |
+| Section list | Tapping the unit banner or course mark opens section cards: summary bubble, experience band, progress or JUMP HERE. Jump scrolls the path to that section. |
 
 On Home, Rex stands on the marked next-lesson node. A Rex card above the path is not that beat.
 | Section end | One ceremony: character, title, one button. |
@@ -792,6 +802,11 @@ right or wrong answer is a gap in the mascot slot and in this section.
 File one ticket per missing beat.
 
 ### Shipped
+
+Home path nodes are circles on a zig-zag in `CoursePathView`
+(`lib/ui/home/course_path_view.dart`). Unit banners use
+`unitBannerColorForSection`. Section cards live in
+`CourseSectionPickerSheet` (`lib/ui/home/course_section_picker.dart`).
 
 A right answer shows the same coach in a celebrating mood beside the short line. `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`) uses `RexMascot` with `RexMood.celebrate` (`assets/brand/mascot_celebrate.png`). That drawing is the same coach as `assets/brand/mascot_idle.png`.
 

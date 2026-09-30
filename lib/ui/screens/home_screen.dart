@@ -20,6 +20,7 @@ import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 import 'package:live_poker_trainer/ui/home/course_resume_card.dart';
+import 'package:live_poker_trainer/ui/home/course_section_picker.dart';
 import 'package:live_poker_trainer/ui/home/course_status_bar.dart';
 import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
@@ -96,6 +97,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   onRetry:
                       () => ref.read(courseHomeProvider.notifier).refresh(),
                   onNodeTap: (node) => _onNodeTap(snapshot, node),
+                  onOpenSections: () => _openSections(snapshot),
                   onResume: () {
                     final resume = snapshot.resume;
                     if (resume == null) return;
@@ -110,6 +112,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _openSections(CourseHomeSnapshot snapshot) async {
+    final sectionId = await CourseSectionPickerSheet.show(
+      context,
+      snapshot: snapshot,
+    );
+    if (!mounted || sectionId == null) return;
+    final key = _HomeBody.sectionKeyFor(sectionId);
+    final target = key.currentContext;
+    if (target == null) return;
+    await Scrollable.ensureVisible(
+      target,
+      duration: const Duration(milliseconds: 420),
+      curve: Curves.easeOutCubic,
+      alignment: 0.08,
     );
   }
 
@@ -258,6 +277,7 @@ class _HomeBody extends StatelessWidget {
     required this.onRetry,
     required this.onNodeTap,
     required this.onResume,
+    required this.onOpenSections,
     required this.guestSession,
   });
 
@@ -266,6 +286,13 @@ class _HomeBody extends StatelessWidget {
   final VoidCallback onRetry;
   final void Function(CourseMapNode node) onNodeTap;
   final VoidCallback onResume;
+  final VoidCallback onOpenSections;
+
+  static final Map<String, GlobalKey> _sectionKeys = <String, GlobalKey>{};
+
+  static GlobalKey sectionKeyFor(String sectionId) {
+    return _sectionKeys.putIfAbsent(sectionId, GlobalKey.new);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -293,27 +320,31 @@ class _HomeBody extends StatelessWidget {
       return resume.lessonId;
     }();
 
+    final sectionOrders = <String, int>{
+      for (final section in snapshot.sections) section.id: section.order,
+    };
+    final sectionKeys = <String, GlobalKey>{
+      for (final section in snapshot.sections)
+        section.id: sectionKeyFor(section.id),
+    };
+
     return CustomScrollView(
       key: const PageStorageKey<String>('home_course_scroll'),
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              Text('Home', style: Theme.of(context).textTheme.displayLarge),
-              const SizedBox(height: 6),
-              Text(
-                'Your live cash path — one clear next step.',
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 15,
-                  height: 1.4,
-                  fontWeight: FontWeight.w500,
-                ),
+              CourseStatusBar(
+                streak: snapshot.streak,
+                lifetimeXp: snapshot.lifetimeXp,
+                gems: snapshot.gems,
+                acceptedAccuracy: snapshot.acceptedAccuracy,
+                onCourseTap: onOpenSections,
               ),
               if (guestSession) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 TextButton(
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.slate,
@@ -333,13 +364,6 @@ class _HomeBody extends StatelessWidget {
                   ),
                 ),
               ],
-              const SizedBox(height: 16),
-              CourseStatusBar(
-                streak: snapshot.streak,
-                lifetimeXp: snapshot.lifetimeXp,
-                gems: snapshot.gems,
-                acceptedAccuracy: snapshot.acceptedAccuracy,
-              ),
               if (snapshot.rexLine != null &&
                   !snapshot.nodes.any((node) => node.isNext)) ...[
                 const SizedBox(height: 14),
@@ -369,14 +393,20 @@ class _HomeBody extends StatelessWidget {
                   onResume: onResume,
                 ),
               ],
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
             ]),
           ),
         ),
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
           sliver: SliverToBoxAdapter(
-            child: CoursePathView(nodes: snapshot.nodes, onNodeTap: onNodeTap),
+            child: CoursePathView(
+              nodes: snapshot.nodes,
+              onNodeTap: onNodeTap,
+              onUnitBannerTap: (_) => onOpenSections(),
+              sectionOrders: sectionOrders,
+              sectionKeys: sectionKeys,
+            ),
           ),
         ),
       ],
