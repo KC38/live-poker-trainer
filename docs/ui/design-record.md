@@ -336,6 +336,8 @@ explain taps Polar, Merged, and Size under the felt.
 
 Use overbets and geometric pressure uses the full poker table for every step: explain taps Overbet, Polar, and Geo under the felt.
 
+Use blockers without solver theater uses the full poker table for every step: explain taps Block, Use, and No EV under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -661,10 +663,10 @@ under the felt, the overbet, mismatch, and aim checks stay lists, and the
 merged-size spot sits face up on the full table. Use overbets and geometric pressure uses the same frame and the full
 table: explain taps Overbet, Polar, and Geo under the felt, the
 candidate, avoid, and plan checks stay lists, and the geometric turn
-sits face up on the full table. Use blockers without
-solver theater uses the same frame: block, use, and no EV stay in the
-stage, the unblock, tweak, and EV checks stay lists, and the flush
-board sits face up on the full table. Defend enough without
+sits face up on the full table. Use blockers without solver theater uses the same frame and the full
+table: explain taps Block, Use, and No EV under the felt, the unblock,
+tweak, and EV checks stay lists, and the flush board sits face up on
+the full table. Defend enough without
 frequency theater uses the same frame: defend, bluff, and enough stay
 in the stage, the continue, intuition, and punish checks stay lists,
 and the third-pair fold sits face up on the full table. Mix with a

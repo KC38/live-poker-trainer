@@ -3170,6 +3170,8 @@ void main() {
     expect(find.textContaining('Tap Block'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('blockers-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('BLOCK'), findsOneWidget);
     expect(find.text('USE'), findsOneWidget);
     expect(find.text('NO EV'), findsOneWidget);
