@@ -64,13 +64,13 @@ void main() {
 
     await tester.tap(find.text('open-result'));
     await tester.pumpAndSettle();
-    expect(find.text('LESSON COMPLETE'), findsOneWidget);
+    expect(find.text('Lesson Complete!'), findsOneWidget);
 
     await tester.ensureVisible(find.widgetWithText(ElevatedButton, 'CONTINUE'));
     await tester.tap(find.widgetWithText(ElevatedButton, 'CONTINUE'));
     await tester.pumpAndSettle();
 
-    expect(find.text('LESSON COMPLETE'), findsNothing);
+    expect(find.text('Lesson Complete!'), findsNothing);
     expect(find.text('open-result'), findsOneWidget);
   });
 
@@ -95,14 +95,14 @@ void main() {
       ),
     );
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(milliseconds: 1000));
 
     await tester.tap(find.widgetWithText(ElevatedButton, 'CONTINUE'));
     await tester.pump();
 
     // Sole-route escape is handled by PokerLabApp remounting on saveProgress
     // and by onboarding pushing (not replacing) the runner.
-    expect(find.text('LESSON COMPLETE'), findsOneWidget);
+    expect(find.text('Lesson Complete!'), findsOneWidget);
   });
 
   testWidgets('ceremony uses Rex face, not a letter R, at phone width', (
@@ -126,15 +126,16 @@ void main() {
         ),
       );
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 600));
+      await tester.pump(const Duration(milliseconds: 1000));
     }
 
     for (final title in ['Suits and ranks', 'Button and blinds']) {
       await pumpResult(title);
       expect(tester.takeException(), isNull);
-      expect(find.text('LESSON COMPLETE'), findsOneWidget);
+      expect(find.text('Lesson Complete!'), findsOneWidget);
       expect(find.text(title), findsOneWidget);
-      expect(find.text('Clean work. That skill sticks.'), findsOneWidget);
+      expect(find.text('TOTAL XP'), findsOneWidget);
+      expect(find.text('AMAZING'), findsOneWidget);
       expect(find.text('R'), findsNothing);
       expect(find.widgetWithText(ElevatedButton, 'CONTINUE'), findsOneWidget);
 
@@ -153,7 +154,7 @@ void main() {
     }
   });
 
-  testWidgets('lesson result shows this lesson XP and the daily goal', (
+  testWidgets('lesson result shows XP and accuracy side by side', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(402, 874);
@@ -168,19 +169,21 @@ void main() {
           home: const LessonResultScreen(
             lessonTitle: 'Suits and ranks',
             result: _complete,
-            dailyGoalMinutes: 10,
           ),
         ),
       ),
     );
     await tester.pump();
-    await tester.pump(const Duration(milliseconds: 600));
+    await tester.pump(const Duration(milliseconds: 1000));
 
     expect(tester.takeException(), isNull);
-    expect(find.text('XP earned'), findsOneWidget);
-    expect(find.text('+25'), findsOneWidget);
-    expect(find.text('Daily goal'), findsOneWidget);
-    expect(find.text('10 minutes'), findsOneWidget);
+    expect(find.text('TOTAL XP'), findsOneWidget);
+    expect(find.text('25'), findsOneWidget);
+    expect(find.text('AMAZING'), findsOneWidget);
+    expect(find.text('100%'), findsOneWidget);
+    expect(find.text('Daily goal'), findsNothing);
+    expect(find.text('Mastery'), findsNothing);
+    expect(find.text('Study streak'), findsNothing);
     expect(find.widgetWithText(ElevatedButton, 'CONTINUE'), findsOneWidget);
 
     final button = tester.widget<ElevatedButton>(

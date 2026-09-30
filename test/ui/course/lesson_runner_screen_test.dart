@@ -4636,7 +4636,7 @@ void main() {
     expect(service.completeCalls, 1);
     expect(service.lastCompleteCatalogVersion, '2.0.1');
     expect(find.byType(LessonResultScreen), findsOneWidget);
-    expect(find.text('LESSON COMPLETE'), findsOneWidget);
+    expect(find.text('Lesson Complete!'), findsOneWidget);
   });
 
   testWidgets(
@@ -4718,7 +4718,7 @@ void main() {
 
       expect(service.completeCalls, 1);
       expect(find.byType(LessonResultScreen), findsOneWidget);
-      expect(find.text('LESSON COMPLETE'), findsOneWidget);
+      expect(find.text('Lesson Complete!'), findsOneWidget);
       // One accepted step (10) plus the completion bonus (25).
       expect(find.text('+35'), findsOneWidget);
       // Must not flip pendingSaveProgress again from a later map lesson.

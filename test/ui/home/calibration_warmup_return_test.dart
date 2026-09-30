@@ -260,7 +260,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.byType(LessonResultScreen), findsOneWidget);
-    expect(find.text('LESSON COMPLETE'), findsOneWidget);
+    expect(find.text('Lesson Complete!'), findsOneWidget);
     expect(find.byType(LessonRunnerScreen), findsNothing);
     expect(find.text('Warm-up checklist must include?'), findsNothing);
     expect(harness.course.completeCalls, 1);
@@ -291,7 +291,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.text('LESSON COMPLETE'), findsOneWidget);
+    expect(find.text('Lesson Complete!'), findsOneWidget);
     expect(find.byType(LessonRunnerScreen), findsNothing);
     expect(harness.course.completeCalls, 1);
   });

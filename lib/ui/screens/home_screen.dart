@@ -15,7 +15,6 @@ import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/game_provider.dart';
-import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
@@ -244,8 +243,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               (_) => LessonResultScreen(
                 lessonTitle: title,
                 result: result,
-                dailyGoalMinutes:
-                    ref.read(onboardingControllerProvider).dailyGoalMinutes,
               ),
         ),
       );
