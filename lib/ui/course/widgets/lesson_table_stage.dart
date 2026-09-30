@@ -177,10 +177,15 @@ class LessonTableStage extends StatelessWidget {
     this.onVillainTap,
     this.onBoardTap,
     this.onBoardCardTap,
+    this.onHeroCardTap,
     this.onSeatIndexTap,
     this.selectedBoardIndexes = const {},
     this.highlightBoardIndexes = const {},
+    this.dimmedBoardIndexes = const {},
     this.boardOrderBadges = const {},
+    this.selectedHeroIndexes = const {},
+    this.highlightHeroIndexes = const {},
+    this.dimmedHeroIndexes = const {},
     this.positionLabels = false,
     this.smallBlind = lessonSmallBlind,
     this.bigBlind = lessonBigBlind,
@@ -236,6 +241,9 @@ class LessonTableStage extends StatelessWidget {
   /// Learner tapped one board card by index.
   final ValueChanged<int>? onBoardCardTap;
 
+  /// Learner tapped one hero hole card by index.
+  final ValueChanged<int>? onHeroCardTap;
+
   /// Learner tapped a seat. The value is that seat's index in the hand.
   final ValueChanged<int>? onSeatIndexTap;
 
@@ -245,8 +253,20 @@ class LessonTableStage extends StatelessWidget {
   /// Board indexes that bounce a cue arrow.
   final Set<int> highlightBoardIndexes;
 
+  /// Board indexes faded as leftovers.
+  final Set<int> dimmedBoardIndexes;
+
   /// 1-based order badge drawn on a selected board card.
   final Map<int, int> boardOrderBadges;
+
+  /// Hero hole indexes with a selected gold ring.
+  final Set<int> selectedHeroIndexes;
+
+  /// Hero hole indexes that cue the next tap.
+  final Set<int> highlightHeroIndexes;
+
+  /// Hero hole indexes faded as leftovers.
+  final Set<int> dimmedHeroIndexes;
 
   /// Rename the six-max ring EP, HJ, CO, BTN, SB, BB.
   final bool positionLabels;
@@ -319,7 +339,11 @@ class LessonTableStage extends StatelessWidget {
                 highlightBoardIndexes.isEmpty,
             selectedBoardIndexes: selectedBoardIndexes,
             highlightBoardIndexes: highlightBoardIndexes,
+            dimmedBoardIndexes: dimmedBoardIndexes,
             boardOrderBadges: boardOrderBadges,
+            selectedHeroIndexes: selectedHeroIndexes,
+            highlightHeroIndexes: highlightHeroIndexes,
+            dimmedHeroIndexes: dimmedHeroIndexes,
             onBoardTap: !enabled || onBoardTap == null || onBoardCardTap != null
                 ? null
                 : () {
@@ -332,9 +356,16 @@ class LessonTableStage extends StatelessWidget {
                     HapticFeedback.selectionClick();
                     onBoardCardTap!(index);
                   },
+            onHeroCardTap: !enabled || onHeroCardTap == null
+                ? null
+                : (index) {
+                    HapticFeedback.selectionClick();
+                    onHeroCardTap!(index);
+                  },
             onSeatTap: !enabled
                 ? null
                 : (PlayerModel player) {
+                    if (player.isHero && onHeroCardTap != null) return;
                     HapticFeedback.selectionClick();
                     if (onSeatIndexTap != null) {
                       final index = game.players.indexWhere(

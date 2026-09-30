@@ -7,7 +7,24 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
+
+/// Features for Best five table demos: seats, cards, board, no blinds.
+TableFeatures get lessonBestFiveTableFeatures => const TableFeatures(
+  stacks: false,
+  pot: false,
+  street: false,
+  blinds: false,
+  positions: false,
+  bets: false,
+  actions: false,
+  opponentCards: false,
+  playerTypes: false,
+  stats: false,
+  boardSlots: false,
+);
 
 /// Hole + board codes for a best-five spot, plus choice → five-card sets.
 class BestFiveSpot {
@@ -89,6 +106,308 @@ bool bestFiveSelectionIsReady({
         choices: choices,
       ) !=
       null;
+}
+
+/// Full table: tap each playing card on hero holes + board.
+class LessonBestFiveExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonBestFiveExplainTable({
+    super.key,
+    required this.onAllPlayingTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  /// Every playing card has been tapped.
+  final VoidCallback? onAllPlayingTapped;
+
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonBestFiveExplainTable> createState() =>
+      _LessonBestFiveExplainTableState();
+}
+
+class _LessonBestFiveExplainTableState
+    extends State<LessonBestFiveExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  /// Visual left→right among the five that play (hero row, then board).
+  static const _playOrder = ['Ah', 'Kd', 'As', '7c', '9h'];
+
+  String? get _nextCode {
+    for (final code in _playOrder) {
+      if (!_tapped.contains(code)) return code;
+    }
+    return null;
+  }
+
+  void _tapCode(String code) {
+    if (!widget.enabled || widget.onAllPlayingTapped == null) return;
+    if (!BestFiveDemo.playing.contains(code)) return;
+    if (_tapped.contains(code)) return;
+    setState(() => _tapped.add(code));
+    if (_tapped.containsAll(BestFiveDemo.playing)) {
+      widget.onAllPlayingTapped!();
+    }
+  }
+
+  void _tapHero(int index) {
+    if (index < 0 || index >= BestFiveDemo.hero.length) return;
+    _tapCode(BestFiveDemo.hero[index]);
+  }
+
+  void _tapBoard(int index) {
+    if (index < 0 || index >= BestFiveDemo.board.length) return;
+    _tapCode(BestFiveDemo.board[index]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final next = _nextCode;
+    final selectedHero = <int>{
+      for (var i = 0; i < BestFiveDemo.hero.length; i++)
+        if (_tapped.contains(BestFiveDemo.hero[i])) i,
+    };
+    final selectedBoard = <int>{
+      for (var i = 0; i < BestFiveDemo.board.length; i++)
+        if (_tapped.contains(BestFiveDemo.board[i])) i,
+    };
+    final dimmedHero = <int>{
+      for (var i = 0; i < BestFiveDemo.hero.length; i++)
+        if (!BestFiveDemo.playing.contains(BestFiveDemo.hero[i])) i,
+    };
+    final dimmedBoard = <int>{
+      for (var i = 0; i < BestFiveDemo.board.length; i++)
+        if (!BestFiveDemo.playing.contains(BestFiveDemo.board[i])) i,
+    };
+    final highlightHero = <int>{};
+    final highlightBoard = <int>{};
+    if (widget.showGuidance && widget.enabled && next != null) {
+      final heroIdx = BestFiveDemo.hero.indexOf(next);
+      if (heroIdx >= 0) {
+        highlightHero.add(heroIdx);
+      } else {
+        final boardIdx = BestFiveDemo.board.indexOf(next);
+        if (boardIdx >= 0) highlightBoard.add(boardIdx);
+      }
+    }
+    return LessonTableStage(
+      key: const ValueKey<String>('best-five-table'),
+      heroCodes: BestFiveDemo.hero,
+      boardCodes: BestFiveDemo.board,
+      villainCount: 2,
+      heroFaceUp: true,
+      enabled: widget.enabled && widget.onAllPlayingTapped != null,
+      features: lessonBestFiveTableFeatures,
+      selectedHeroIndexes: selectedHero,
+      selectedBoardIndexes: selectedBoard,
+      highlightHeroIndexes: highlightHero,
+      highlightBoardIndexes: highlightBoard,
+      dimmedHeroIndexes: dimmedHero,
+      dimmedBoardIndexes: dimmedBoard,
+      onHeroCardTap: _tapHero,
+      onBoardCardTap: _tapBoard,
+    );
+  }
+}
+
+/// Full table: tap five of seven cards to assemble the best hand.
+class LessonBestFivePickerTable extends StatefulWidget {
+  /// Creates the picker stage.
+  const LessonBestFivePickerTable({
+    super.key,
+    required this.activity,
+    required this.controller,
+    required this.spot,
+    required this.locked,
+  });
+
+  final CourseActivity activity;
+  final LessonActivityController controller;
+  final BestFiveSpot spot;
+  final bool locked;
+
+  @override
+  State<LessonBestFivePickerTable> createState() =>
+      _LessonBestFivePickerTableState();
+}
+
+class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
+  final Set<String> _selected = <String>{};
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_syncFromController);
+    _hydrateFromChoice(widget.controller.draft.choiceId);
+  }
+
+  @override
+  void didUpdateWidget(covariant LessonBestFivePickerTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_syncFromController);
+      widget.controller.addListener(_syncFromController);
+      _hydrateFromChoice(widget.controller.draft.choiceId);
+      return;
+    }
+    if (oldWidget.activity.id != widget.activity.id) {
+      _hydrateFromChoice(widget.controller.draft.choiceId);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_syncFromController);
+    super.dispose();
+  }
+
+  void _syncFromController() {
+    final choiceId = widget.controller.draft.choiceId;
+    if (choiceId == null) {
+      final mapped = mapBestFiveSelectionToChoiceId(
+        selected: _selected,
+        spot: widget.spot,
+        choices: widget.activity.choices,
+      );
+      if (mapped != null && _selected.isNotEmpty && !widget.locked) {
+        setState(_selected.clear);
+      }
+      return;
+    }
+    final fromChoice = _codesForChoice(choiceId);
+    if (fromChoice.isNotEmpty && !_setEquals(fromChoice, _selected)) {
+      final mapped = mapBestFiveSelectionToChoiceId(
+        selected: _selected,
+        spot: widget.spot,
+        choices: widget.activity.choices,
+      );
+      if (mapped != choiceId) {
+        setState(() {
+          _selected
+            ..clear()
+            ..addAll(fromChoice);
+        });
+      }
+    }
+  }
+
+  void _hydrateFromChoice(String? choiceId) {
+    _selected
+      ..clear()
+      ..addAll(_codesForChoice(choiceId));
+  }
+
+  Set<String> _codesForChoice(String? choiceId) {
+    if (choiceId == null) return {};
+    final codes = widget.spot.choiceSets[choiceId];
+    if (codes == null) return {};
+    return codes.toSet();
+  }
+
+  void _toggle(String code) {
+    if (widget.locked) return;
+    setState(() {
+      if (_selected.contains(code)) {
+        _selected.remove(code);
+      } else if (_selected.length < 5) {
+        _selected.add(code);
+      }
+    });
+    final mapped = mapBestFiveSelectionToChoiceId(
+      selected: _selected,
+      spot: widget.spot,
+      choices: widget.activity.choices,
+    );
+    if (mapped != null) {
+      widget.controller.selectChoice(mapped, autoSubmit: true);
+    } else if (widget.controller.draft.choiceId != null) {
+      widget.controller.undoDraft();
+    }
+  }
+
+  void _tapHero(int index) {
+    if (index < 0 || index >= widget.spot.heroCodes.length) return;
+    _toggle(widget.spot.heroCodes[index]);
+  }
+
+  void _tapBoard(int index) {
+    if (index < 0 || index >= widget.spot.boardCodes.length) return;
+    _toggle(widget.spot.boardCodes[index]);
+  }
+
+  bool _setEquals(Set<String> a, Set<String> b) {
+    if (a.length != b.length) return false;
+    for (final x in a) {
+      if (!b.contains(x)) return false;
+    }
+    return true;
+  }
+
+  String _statusLine() {
+    if (widget.controller.lastResult != null) return '';
+    if (widget.controller.submitting) return 'Checking…';
+    if (_selected.length == 5) {
+      return mapBestFiveSelectionToChoiceId(
+                selected: _selected,
+                spot: widget.spot,
+                choices: widget.activity.choices,
+              ) !=
+              null
+          ? 'Checking…'
+          : 'Five tapped — try a stronger five.';
+    }
+    return '${_selected.length}/5 selected';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final spot = widget.spot;
+    final selectedHero = <int>{
+      for (var i = 0; i < spot.heroCodes.length; i++)
+        if (_selected.contains(spot.heroCodes[i])) i,
+    };
+    final selectedBoard = <int>{
+      for (var i = 0; i < spot.boardCodes.length; i++)
+        if (_selected.contains(spot.boardCodes[i])) i,
+    };
+    final status = _statusLine();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            key: const ValueKey<String>('best-five-picker-table'),
+            heroCodes: spot.heroCodes,
+            boardCodes: spot.boardCodes,
+            villainCount: 2,
+            heroFaceUp: true,
+            enabled: !widget.locked,
+            features: lessonBestFiveTableFeatures,
+            selectedHeroIndexes: selectedHero,
+            selectedBoardIndexes: selectedBoard,
+            onHeroCardTap: widget.locked ? null : _tapHero,
+            onBoardCardTap: widget.locked ? null : _tapBoard,
+          ),
+        ),
+        if (status.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              status,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: AppColors.slate,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 /// Explain-step demo: seven cards with five highlighted as "these play".

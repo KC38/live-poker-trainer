@@ -2334,40 +2334,31 @@ class _BestFiveCardTapActivity extends StatelessWidget {
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
         final framed = LessonFrameScope.maybeOf(context) != null;
-        final picker = BestFiveCardPicker(
-          key: ValueKey<String>('${activity.id}-${controller.bindGeneration}'),
-          activity: activity,
-          controller: controller,
-          spot: spot,
-          locked: locked,
-        );
+        if (framed) {
+          return LessonBestFivePickerTable(
+            key: ValueKey<String>(
+              '${activity.id}-${controller.bindGeneration}',
+            ),
+            activity: activity,
+            controller: controller,
+            spot: spot,
+            locked: locked,
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             RexCoachLine(text: _coachFallback),
-            if (!framed) const SizedBox(height: 14),
-            if (framed)
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return BestFiveCardPicker(
-                      key: ValueKey<String>(
-                        '${activity.id}-${controller.bindGeneration}',
-                      ),
-                      activity: activity,
-                      controller: controller,
-                      spot: spot,
-                      locked: locked,
-                      height:
-                          constraints.maxHeight.isFinite
-                              ? constraints.maxHeight
-                              : null,
-                    );
-                  },
-                ),
-              )
-            else
-              picker,
+            const SizedBox(height: 14),
+            BestFiveCardPicker(
+              key: ValueKey<String>(
+                '${activity.id}-${controller.bindGeneration}',
+              ),
+              activity: activity,
+              controller: controller,
+              spot: spot,
+              locked: locked,
+            ),
           ],
         );
       },

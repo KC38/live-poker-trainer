@@ -20,6 +20,8 @@ class TableCard extends StatelessWidget {
     required this.card,
     required this.width,
     this.selected = false,
+    this.highlighted = false,
+    this.dimmed = false,
     this.orderBadge,
   });
 
@@ -29,6 +31,12 @@ class TableCard extends StatelessWidget {
   /// Gold ring when the learner has tapped this card.
   final bool selected;
 
+  /// Soft gold cue for the next card to tap.
+  final bool highlighted;
+
+  /// Fade leftover cards that do not play.
+  final bool dimmed;
+
   /// Optional 1-based order badge drawn on a selected card.
   final int? orderBadge;
 
@@ -36,107 +44,120 @@ class TableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = card.suit.color;
     final radius = width * 0.12;
+    final borderColor = selected
+        ? AppColors.gold
+        : highlighted
+        ? AppColors.gold.withValues(alpha: 0.75)
+        : AppColors.slateDark.withValues(alpha: 0.35);
+    final borderWidth = selected
+        ? 2.2
+        : highlighted
+        ? 2.0
+        : 0.6;
     return Semantics(
       label: card.display,
       selected: selected,
-      child: Container(
-        width: width,
-        height: width * tableCardAspect,
-        decoration: BoxDecoration(
-          color: AppColors.cream,
-          borderRadius: BorderRadius.circular(radius),
-          border: Border.all(
-            color: selected
-                ? AppColors.gold
-                : AppColors.slateDark.withValues(alpha: 0.35),
-            width: selected ? 2.2 : 0.6,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.35),
-              blurRadius: 4,
-              offset: const Offset(0, 1.5),
+      child: Opacity(
+        opacity: dimmed && !selected ? 0.38 : 1,
+        child: Container(
+          width: width,
+          height: width * tableCardAspect,
+          decoration: BoxDecoration(
+            color: AppColors.cream,
+            borderRadius: BorderRadius.circular(radius),
+            border: Border.all(
+              color: borderColor,
+              width: borderWidth,
             ),
-            if (selected)
+            boxShadow: [
               BoxShadow(
-                color: AppColors.gold.withValues(alpha: 0.45),
-                blurRadius: 10,
-                spreadRadius: 1,
+                color: Colors.black.withValues(alpha: 0.35),
+                blurRadius: 4,
+                offset: const Offset(0, 1.5),
               ),
-          ],
-        ),
-        child: ExcludeSemantics(
-          child: Stack(
-            children: [
-              Positioned(
-                left: width * 0.1,
-                top: width * 0.06,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      card.rankLabel,
-                      maxLines: 1,
-                      style: GoogleFonts.manrope(
-                        fontSize: width * 0.5,
-                        height: 1,
-                        fontWeight: FontWeight.w800,
-                        color: color,
-                      ),
-                    ),
-                    Text(
-                      card.suit.symbol,
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontSize: width * 0.36,
-                        height: 1,
-                        color: color,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: width * 0.08,
-                bottom: width * 0.04,
-                child: Text(
-                  card.suit.symbol,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: width * 0.52,
-                    height: 1,
-                    color: color.withValues(alpha: 0.9),
+              if (selected || highlighted)
+                BoxShadow(
+                  color: AppColors.gold.withValues(
+                    alpha: selected ? 0.45 : 0.28,
                   ),
-                ),
-              ),
-              if (orderBadge != null)
-                Positioned(
-                  right: width * 0.06,
-                  top: width * 0.06,
-                  child: Container(
-                    width: width * 0.34,
-                    height: width * 0.34,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: AppColors.gold,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColors.bgDark,
-                        width: 1,
-                      ),
-                    ),
-                    child: Text(
-                      '$orderBadge',
-                      style: GoogleFonts.manrope(
-                        color: AppColors.bgDark,
-                        fontSize: width * 0.2,
-                        fontWeight: FontWeight.w800,
-                        height: 1,
-                      ),
-                    ),
-                  ),
+                  blurRadius: selected ? 10 : 8,
+                  spreadRadius: selected ? 1 : 0.5,
                 ),
             ],
+          ),
+          child: ExcludeSemantics(
+            child: Stack(
+              children: [
+                Positioned(
+                  left: width * 0.1,
+                  top: width * 0.06,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        card.rankLabel,
+                        maxLines: 1,
+                        style: GoogleFonts.manrope(
+                          fontSize: width * 0.5,
+                          height: 1,
+                          fontWeight: FontWeight.w800,
+                          color: color,
+                        ),
+                      ),
+                      Text(
+                        card.suit.symbol,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: width * 0.36,
+                          height: 1,
+                          color: color,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  right: width * 0.08,
+                  bottom: width * 0.04,
+                  child: Text(
+                    card.suit.symbol,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: width * 0.52,
+                      height: 1,
+                      color: color.withValues(alpha: 0.9),
+                    ),
+                  ),
+                ),
+                if (orderBadge != null)
+                  Positioned(
+                    right: width * 0.06,
+                    top: width * 0.06,
+                    child: Container(
+                      width: width * 0.34,
+                      height: width * 0.34,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: AppColors.gold,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.bgDark,
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        '$orderBadge',
+                        style: GoogleFonts.manrope(
+                          color: AppColors.bgDark,
+                          fontSize: width * 0.2,
+                          fontWeight: FontWeight.w800,
+                          height: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

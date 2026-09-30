@@ -739,7 +739,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('best five uses the lesson frame and the five-card picker', (
+  testWidgets('best five uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -773,7 +773,9 @@ void main() {
     expect(find.textContaining('Tap each card that plays'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('best-five-felt')), findsOneWidget);
+    expect(find.byKey(const ValueKey('best-five-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byKey(const ValueKey('best-five-felt')), findsNothing);
     expect(tester.takeException(), isNull);
   });
 

@@ -50,9 +50,14 @@ class FeltTableView extends StatelessWidget {
     this.onSeatTap,
     this.onBoardTap,
     this.onBoardCardTap,
+    this.onHeroCardTap,
     this.selectedBoardIndexes = const {},
     this.highlightBoardIndexes = const {},
+    this.dimmedBoardIndexes = const {},
     this.boardOrderBadges = const {},
+    this.selectedHeroIndexes = const {},
+    this.highlightHeroIndexes = const {},
+    this.dimmedHeroIndexes = const {},
     this.features,
     this.heroStatus,
   });
@@ -108,14 +113,30 @@ class FeltTableView extends StatelessWidget {
   /// when the lesson needs a single card.
   final ValueChanged<int>? onBoardCardTap;
 
+  /// Tap on one hero hole card by index. Prefer this over [onSeatTap]
+  /// when the lesson needs a single hero card.
+  final ValueChanged<int>? onHeroCardTap;
+
   /// Board indexes with a selected gold ring.
   final Set<int> selectedBoardIndexes;
 
   /// Board indexes that bounce a cue arrow.
   final Set<int> highlightBoardIndexes;
 
+  /// Board indexes faded as leftovers.
+  final Set<int> dimmedBoardIndexes;
+
   /// 1-based order badge drawn on a selected board card.
   final Map<int, int> boardOrderBadges;
+
+  /// Hero hole indexes with a selected gold ring.
+  final Set<int> selectedHeroIndexes;
+
+  /// Hero hole indexes that cue the next tap.
+  final Set<int> highlightHeroIndexes;
+
+  /// Hero hole indexes faded as leftovers.
+  final Set<int> dimmedHeroIndexes;
 
   /// Optional layers. Null reads [TableFeaturesScope].
   final TableFeatures? features;
@@ -169,27 +190,31 @@ class FeltTableView extends StatelessWidget {
               ? showHoleCardBacks
               : (showHoleCardBacks || f.opponentCards) && !player.folded);
 
+      final heroCardTaps =
+          player.isHero && onHeroCardTap != null && faceUp;
+      final seatTap =
+          heroCardTaps ? null : _seatTap(player);
       seatLayer.add(
         Positioned.fromRect(
           rect: slot.footprint,
           child: GestureDetector(
             behavior:
-                onSeatTap == null
+                seatTap == null
                     ? HitTestBehavior.deferToChild
                     : HitTestBehavior.opaque,
             key:
-                onSeatTap == null
+                seatTap == null
                     ? null
                     : ValueKey<String>(
                       player.isHero
                           ? 'lesson-seat-hero'
                           : 'lesson-seat-${player.id}',
                     ),
-            onTap: _seatTap(player),
+            onTap: seatTap,
             child: Semantics(
-              button: onSeatTap != null,
+              button: seatTap != null,
               label:
-                  onSeatTap == null
+                  seatTap == null
                       ? null
                       : player.isHero
                       ? (faceUp
@@ -211,6 +236,13 @@ class FeltTableView extends StatelessWidget {
                 showCards: showdown,
                 revealHoleCards: faceUp,
                 showHoleBacks: backs,
+                onHeroCardTap: heroCardTaps ? onHeroCardTap : null,
+                selectedHeroIndexes:
+                    player.isHero ? selectedHeroIndexes : const {},
+                highlightHeroIndexes:
+                    player.isHero ? highlightHeroIndexes : const {},
+                dimmedHeroIndexes:
+                    player.isHero ? dimmedHeroIndexes : const {},
               ),
             ),
           ),
@@ -393,6 +425,7 @@ class FeltTableView extends StatelessWidget {
                             onBoardCardTap: onBoardCardTap,
                             selectedBoardIndexes: selectedBoardIndexes,
                             highlightBoardIndexes: highlightBoardIndexes,
+                            dimmedBoardIndexes: dimmedBoardIndexes,
                             boardOrderBadges: boardOrderBadges,
                           ),
                     ),
