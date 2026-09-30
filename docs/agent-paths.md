@@ -46,7 +46,7 @@ Goal: the next lesson Home offers can be finished, and the status bar moves with
 - phase: `guest-home`
 - order: 3
 - requires: `guest-home`
-- watch: `lib/ui/screens/home_screen.dart`, `lib/ui/home/course_resume_card.dart`, `lib/ui/screens/lesson_runner_screen.dart`, `lib/models/course/course_home_models.dart`, `lib/models/course/course_session_models.dart`
+- watch: `lib/ui/screens/home_screen.dart`, `lib/ui/home/course_path_view.dart`, `lib/ui/screens/app_shell.dart`, `lib/ui/screens/lesson_runner_screen.dart`, `lib/models/course/course_home_models.dart`, `lib/models/course/course_session_models.dart`
 
 Goal: killing the app mid-lesson restores the same lesson and activity.
 
