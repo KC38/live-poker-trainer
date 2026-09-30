@@ -210,17 +210,10 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.tableRead) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return TableReadDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllPointsTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+          return LessonTableReadExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllPointsTapped: locked ? null : onFeltAcknowledge,
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.flopLabel) {

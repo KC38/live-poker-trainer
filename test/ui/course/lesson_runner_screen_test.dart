@@ -1405,7 +1405,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('read the table uses the lesson frame and the read tiles', (
+  testWidgets('read the table uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1439,6 +1439,8 @@ void main() {
     expect(find.textContaining('Tap Pot'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('table-read-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('POT'), findsOneWidget);
     expect(find.text('STACKS'), findsOneWidget);
     expect(find.text('BUTTON'), findsOneWidget);
