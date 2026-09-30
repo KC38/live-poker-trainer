@@ -20,6 +20,38 @@ cmdline_targets_device() {
   [[ "$cmd" == *"flutter_tools.snapshot run -d ${device}"* || "$cmd" == *"flutter run -d ${device}"* ]]
 }
 
+# Xcode / CocoaPods noise that appears in the primary clone and is never
+# intentional agent work. Discard before requiring a clean tree.
+discard_ios_machine_dirt() {
+  local dir="$1"
+  local restored=0 removed=0
+  local path
+  for path in \
+    ios/Podfile.lock \
+    ios/Runner.xcodeproj/project.pbxproj
+  do
+    if ! git -C "$dir" diff --quiet -- "$path" 2>/dev/null ||
+      ! git -C "$dir" diff --cached --quiet -- "$path" 2>/dev/null
+    then
+      git -C "$dir" checkout -- "$path"
+      restored=$((restored + 1))
+    fi
+  done
+  for path in \
+    ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm \
+    ios/Runner.xcworkspace/xcshareddata/swiftpm
+  do
+    # Untracked Xcode SPM metadata only — never delete tracked paths.
+    if [[ -e "$dir/$path" && -z "$(git -C "$dir" ls-files -- "$path")" ]]; then
+      rm -rf "$dir/$path"
+      removed=$((removed + 1))
+    fi
+  done
+  if [[ "$restored" -gt 0 || "$removed" -gt 0 ]]; then
+    echo "discarded iOS machine dirt (restored=$restored removed=$removed) in $dir"
+  fi
+}
+
 if [[ "${REFRESH_SIMULATOR_SOURCE_ONLY:-}" == "1" ]]; then
   return 0 2>/dev/null || exit 0
 fi
@@ -51,6 +83,7 @@ ensure_clean_ff() {
     echo "abort: $dir is on '$branch', not main. Refresh uses origin/main."
     exit 1
   fi
+  discard_ios_machine_dirt "$dir"
   if [[ -n "$(git -C "$dir" status --porcelain)" ]]; then
     echo "abort: $dir has uncommitted changes. Refresh uses origin/main."
     exit 1
