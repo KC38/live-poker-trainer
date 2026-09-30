@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Prep a coached Live warm-up hand explain: CHECKLIST / DEFAULTS / ONE HAND under the full poker table.
+class LessonLiveWarmupPrepExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonLiveWarmupPrepExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonLiveWarmupPrepExplainTable> createState() =>
+      _LessonLiveWarmupPrepExplainTableState();
+}
+
+class _LessonLiveWarmupPrepExplainTableState
+    extends State<LessonLiveWarmupPrepExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= LiveWarmupPrepDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('live-warmup-prep-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < LiveWarmupPrepDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _WarmupSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        LiveWarmupPrepDemo.points[i].label,
+                      ) &&
+                      LiveWarmupPrepDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _LiveWarmupPrepTile(
+                    label: LiveWarmupPrepDemo.points[i].label,
+                    caption: LiveWarmupPrepDemo.points[i].caption,
+                    color: LiveWarmupPrepDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      LiveWarmupPrepDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  LiveWarmupPrepDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Checklist / defaults / one-hand tiles for live warm-up prep explain demos.
 class LiveWarmupPrepDemo extends StatefulWidget {

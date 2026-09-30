@@ -380,6 +380,8 @@ Capstone: limped pot uses the full poker table for every step: explain taps Nuts
 
 Capstone: 4-bet pot uses the full poker table for every step: explain taps SPR, Commit, and No Hero under the felt.
 
+Prep a coached Live warm-up hand uses the full poker table for every step: explain taps Checklist, Defaults, and One hand under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -737,8 +739,7 @@ Capstone: multiway deep uses the same frame: nuts, deep, and no-bluff
 stay in the stage, and the three streets sit face up on the full table.
 Capstone: limped pot uses the same frame and the full table: explain taps Nuts, Value, and Thin under the felt, and the three streets sit face up on the full table.
 Capstone: 4-bet pot uses the same frame and the full table: explain taps SPR, Commit, and No Hero under the felt, and the three streets sit face up on the full table.
-Prep a coached Live warm-up hand uses the same frame: checklist,
-defaults, and one hand stay in the stage, and the warm-up quizzes stay
+Prep a coached Live warm-up hand uses the same frame and the full table: explain taps Checklist, Defaults, and One hand under the felt, and the warm-up quizzes stay
 lists. Final: all five player types uses the same frame: the station,
 nit, maniac, TAG, LAG, certainty, and retire checks stay lists. The procedure for the
 next lesson is

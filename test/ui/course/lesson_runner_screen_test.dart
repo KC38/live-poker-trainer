@@ -4301,6 +4301,8 @@ void main() {
     expect(find.textContaining('Tap Checklist'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('live-warmup-prep-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CHECKLIST'), findsOneWidget);
     expect(find.text('DEFAULTS'), findsOneWidget);
     expect(find.text('ONE HAND'), findsOneWidget);
