@@ -205,6 +205,10 @@ Hand families uses the full poker table for every step: explain taps
 Pairs, Broadways, Suited aces, and Connectors under the felt while
 holes update, and each classify spot uses that table.
 
+Open or fold uses the full poker table for every step: explain taps
+Early, Button, and Live 3x under the felt, and each open spot uses that
+table.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -409,8 +413,8 @@ preflop order is EP, then HJ, then BTN on that table. Hand families
 uses the same frame and the full table: explain taps Pairs, Broadways,
 Suited aces, and Connectors under the felt while holes update, and a
 starting hand sits face up on that table. Open or fold baseline
-uses the same frame: early, button, and live size stay in the stage,
-and each open sits face up on the full table. Versus an open uses
+uses the same frame and the full table: explain taps Early, Button, and
+Live 3x under the felt, and each open sits face up on that table. Versus an open uses
 the same frame: fold, call, and 3-bet stay in the stage, and each
 response sits face up on the full table. Effective stacks uses the
 same frame: chips to big blinds, the shorter stack, and depth stay

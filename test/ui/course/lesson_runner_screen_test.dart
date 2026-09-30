@@ -1153,7 +1153,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('open or fold uses the lesson frame and the range tiles', (
+  testWidgets('open or fold uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1187,6 +1187,8 @@ void main() {
     expect(find.textContaining('Tap Early'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('open-range-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('EARLY'), findsOneWidget);
     expect(find.text('BUTTON'), findsOneWidget);
     expect(find.text('LIVE 3x'), findsOneWidget);
