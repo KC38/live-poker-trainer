@@ -132,8 +132,8 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 | Slot | Current | Reuse |
 | --- | --- | --- |
 | Logo | `assets/brand/logo_mark.png` | Auth screen and Live Training hub |
-| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Meet Rex, `RexCoachLine`, and `RexCoachCard` |
-| Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet` and the lesson-result ceremony |
+| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Meet Rex, `RexCoachLine`, `RexCoachCard`, and the lesson coach band |
+| Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet`, the lesson coach band on accept, and the lesson-result ceremony |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
 | Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
 | Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` | Table actions call these. Do not add a second chip sound |
@@ -199,8 +199,9 @@ One row, height 36.
 ### 2. Coach band
 
 The mascot and one speech bubble share a row directly under the chrome.
-The mascot box is 104 by 118, about the area Oscar takes on a phone
-lesson. The bubble is a rounded rectangle with a tail aimed at the
+The mascot is `RexMascot` at width 78 (height follows the full-body
+drawing), the same coach as Meet Rex and the lesson-result ceremony.
+The bubble is a rounded rectangle with a tail aimed at the
 coach's mouth. A plain rectangle is not the bubble. The bubble's top
 and that tail stay in the same place on every step. More text grows
 the bubble downward. Less text does not move the tail or the first line.
@@ -210,14 +211,13 @@ is not repeated on the table, under the table, or in a second coach
 line. Your two cards' first step says: "These two are your cards alone.
 Nobody else sees them. Tap your cards to peek."
 
-The mascot is a placeholder until Rex art for these expressions ships.
-`LessonMascotExpression` picks the face:
+`LessonMascotExpression` picks the Rex mood:
 
-| Moment | Expression |
-| --- | --- |
-| Prompt, before an answer | Thinking |
-| Accepted answer | Happy |
-| Miss | Wrong (the disappointed face) |
+| Moment | Expression | Rex mood |
+| --- | --- | --- |
+| Prompt, before an answer | Thinking | Calm |
+| Accepted answer | Happy | Celebrate |
+| Miss | Wrong | Think |
 
 The answer dock does not draw a second face.
 
@@ -516,6 +516,8 @@ File one ticket per missing beat.
 A right answer shows the same coach in a celebrating mood beside the short line. `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`) uses `RexMascot` with `RexMood.celebrate` (`assets/brand/mascot_celebrate.png`). That drawing is the same coach as `assets/brand/mascot_idle.png`.
 
 A miss shows that coach thinking beside the short line. `LessonFeedbackSheet` uses `RexMascot` with `RexMood.think`. It does not celebrate.
+
+The lesson coach band uses the same `RexMascot` slot. `LessonCoachBand` (`lib/ui/course/widgets/lesson_screen_layout.dart`) maps `LessonMascotExpression` to calm, celebrate, or think. It does not draw a placeholder face.
 
 The locked Live Training hub names Baseline jump check in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That title is the Home node for `lesson-02-07-02-section-two-jump`.
 
