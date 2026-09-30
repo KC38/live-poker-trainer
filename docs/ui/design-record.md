@@ -241,6 +241,9 @@ Brick, Change, Barrel, and Delay under the felt.
 Close the river correctly uses the full poker table for every step: explain
 taps Value, Bluff, Catch, and Fold under the felt.
 
+Play tighter multiway uses the full poker table for every step: explain taps
+Stronger, Fewer, and Nuts under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -473,9 +476,9 @@ explain taps Brick, Change, Barrel, and Delay under the felt, and
 each turn sits face up on that table. Close the river correctly uses
 the same frame and the full table: explain taps Value, Bluff, Catch,
 and Fold under the felt, and each river sits face up on that table.
-Play tighter multiway uses the same frame: stronger, fewer,
-and nuts stay in the stage, and each multiway spot sits face up on
-the full table. Patch the common leaks uses the same frame: top
+Play tighter multiway uses the same frame and the full table: explain
+taps Stronger, Fewer, and Nuts under the felt, and each multiway spot
+sits face up on that table. Patch the common leaks uses the same frame: top
 pair, prices, passive, and crowds stay in the stage, and each leak
 spot sits face up on the full table. Section 3 jump check uses the
 same frame: the table-read stays a list, the flop class and the

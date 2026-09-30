@@ -1662,7 +1662,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('multiway tight uses the lesson frame and the plan tiles', (
+  testWidgets('multiway tight uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1696,6 +1696,8 @@ void main() {
     expect(find.textContaining('Tap Stronger'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('multiway-plan-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('STRONGER'), findsOneWidget);
     expect(find.text('FEWER'), findsOneWidget);
     expect(find.text('NUTS'), findsOneWidget);
