@@ -262,6 +262,9 @@ Value, Pressure, and Size under the felt.
 SPR decides commitment uses the full poker table for every step: explain taps
 SPR, Low, and High under the felt.
 
+Observe sticky callers uses the full poker table for every step: explain taps
+Enters, Calls, and Folds under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -514,10 +517,10 @@ explain taps Value, Pressure, and Size under the felt, and each
 sizing spot sits face up on that table. SPR decides commitment uses
 the same frame and the full table: explain taps SPR, Low, and High
 under the felt, and each commitment spot sits face up on that table.
-Observe sticky callers uses the same
-frame: enters, calls, and folds stay in the stage, the participation
-note and the observation bundle stay lists, and the sticky-call and
-low-confidence spots sit face up on the full table. Meet the Calling
+Observe sticky callers uses the same frame and the full table: explain
+taps Enters, Calls, and Folds under the felt, the participation note
+and the observation bundle stay lists, and the sticky-call and
+low-confidence spots sit face up on that table. Meet the Calling
 Station uses the same frame: station, high, and low stay in the stage,
 and the label quizzes stay lists. Adjust versus Calling Station uses
 the same frame: value, bluffs, and cite stay in the stage, each

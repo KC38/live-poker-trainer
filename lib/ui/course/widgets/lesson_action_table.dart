@@ -7128,6 +7128,98 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
   }
 }
 
+/// Player-observe explain: ENTERS / CALLS / FOLDS under the full poker table.
+class LessonPlayerObserveExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonPlayerObserveExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonPlayerObserveExplainTable> createState() =>
+      _LessonPlayerObserveExplainTableState();
+}
+
+class _LessonPlayerObserveExplainTableState
+    extends State<LessonPlayerObserveExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= PlayerObserveDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('player-observe-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < PlayerObserveDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        PlayerObserveDemo.points[i].label,
+                      ) &&
+                      PlayerObserveDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: PlayerObserveDemo.points[i].label,
+                    caption: PlayerObserveDemo.points[i].caption,
+                    color: PlayerObserveDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      PlayerObserveDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  PlayerObserveDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Enters / calls / folds tiles for player-observe explain demos.
 class PlayerObserveDemo extends StatefulWidget {
   /// Creates the demo.
