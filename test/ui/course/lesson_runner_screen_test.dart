@@ -2416,6 +2416,11 @@ void main() {
     expect(find.textContaining('Tap Observe'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('observation-certainty-table')),
+      findsOneWidget,
+    );
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('OBSERVE'), findsOneWidget);
     expect(find.text('SAMPLES'), findsOneWidget);
     expect(find.text('SHOWDOWNS'), findsOneWidget);
