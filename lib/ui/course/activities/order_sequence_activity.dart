@@ -218,6 +218,80 @@ class OrderSequenceActivity extends StatelessWidget {
             ),
           );
         }
+        if (framed && _handMode) {
+          final remaining =
+              shuffledSequencePalette(
+                    activityId: activity.id,
+                    items: activity.sequenceItems,
+                  )
+                  .where((item) => !ordered.contains(item.id))
+                  .toList(growable: false);
+          final nextId =
+              showGuidance &&
+                      !locked &&
+                      ordered.length < activity.sequenceItems.length
+                  ? activity.sequenceItems[ordered.length].id
+                  : null;
+          final previewItem = () {
+            if (nextId != null) {
+              for (final item in activity.sequenceItems) {
+                if (item.id == nextId) return item;
+              }
+            }
+            if (remaining.isNotEmpty) return remaining.first;
+            if (activity.sequenceItems.isNotEmpty) {
+              return activity.sequenceItems.first;
+            }
+            return null;
+          }();
+          final previewCodes =
+              previewItem == null
+                  ? const ['Ah', 'Kd', '9c', '7s', '3h']
+                  : (resolveHandExample(
+                        id: previewItem.id,
+                        label: previewItem.label,
+                      )?.codes ??
+                      const ['Ah', 'Kd', '9c', '7s', '3h']);
+          return Column(
+            key: ValueKey<String>(
+              '${activity.id}-${controller.bindGeneration}-hand-order',
+            ),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: LessonMadeHandTable(
+                  codes: previewCodes,
+                  enabled: !locked,
+                  cueHero: showGuidance && nextId != null && !locked,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    for (final item in remaining)
+                      _SoftPulseTarget(
+                        active: showGuidance && !locked && item.id == nextId,
+                        child: _UnderFeltHandChoice(
+                          label: item.label,
+                          enabled: !locked,
+                          onPressed: () => appendOrderedId(
+                            controller: controller,
+                            activity: activity,
+                            ordered: ordered,
+                            id: item.id,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }
         final remaining =
             shuffledSequencePalette(
                   activityId: activity.id,
@@ -1316,6 +1390,46 @@ class _RankTile extends StatelessWidget {
         onTap: onPressed,
         borderRadius: BorderRadius.circular(8),
         child: child,
+      ),
+    );
+  }
+}
+
+/// Compact answer chip under the felt for hand-category order steps.
+class _UnderFeltHandChoice extends StatelessWidget {
+  const _UnderFeltHandChoice({
+    required this.label,
+    required this.enabled,
+    required this.onPressed,
+  });
+
+  final String label;
+  final bool enabled;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: label,
+      child: Material(
+        color: AppColors.surfaceMuted.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            child: Text(
+              label,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

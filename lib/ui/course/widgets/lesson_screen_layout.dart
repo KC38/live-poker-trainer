@@ -208,7 +208,8 @@ String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
         'one seat to its left.';
   }
   if (activity.id == 'act-01-02-01-explain-ladder') {
-    return 'Pair beats high card. Flush beats straight. Tap each rung.';
+    return 'Pair beats high card. Flush beats straight. '
+        'Tap each made hand from high card up to flush.';
   }
   if (activity.id == 'act-01-02-01-checkpoint-winner') {
     return 'Showdown. Tap your cards if the flush wins, their cards if '
