@@ -1259,16 +1259,13 @@ class LessonScreenLayout extends StatelessWidget {
                 screenHeight: mq.size.height,
                 stageMaxHeight: constraints.maxHeight,
               );
-              final stageChild =
-                  mediaHeight == mq.size.height
-                      ? stage
-                      : MediaQuery(
-                        data: mq.copyWith(
-                          size: Size(mq.size.width, mediaHeight),
-                        ),
-                        child: stage,
-                      );
-              return stageChild;
+              // Always wrap — swapping a bare [stage] for MediaQuery when
+              // Nice! shrinks the stage remounts stateful felts (peek face-up,
+              // blinds step, suit taps) and resets their local state.
+              return MediaQuery(
+                data: mq.copyWith(size: Size(mq.size.width, mediaHeight)),
+                child: stage,
+              );
             },
           ),
         ),

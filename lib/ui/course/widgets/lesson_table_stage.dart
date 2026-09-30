@@ -444,10 +444,13 @@ class _LessonPeekTableState extends State<LessonPeekTable> {
 
   @override
   Widget build(BuildContext context) {
+    // Keep faces up after a successful peek even if this state remounts while
+    // locked (answer dock / MediaQuery clamp). Locked means the peek graded.
+    final revealed = _faceUp || !widget.enabled;
     return LessonTableStage(
       villainCount: 3,
-      heroFaceUp: _faceUp,
-      cue: LessonTableCue.hero,
+      heroFaceUp: revealed,
+      cue: revealed ? LessonTableCue.none : LessonTableCue.hero,
       enabled: widget.enabled && !_faceUp,
       onHeroTap: () {
         setState(() => _faceUp = true);
