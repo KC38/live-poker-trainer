@@ -173,6 +173,7 @@ class LessonTableStage extends StatelessWidget {
     this.sbIndex,
     this.bbIndex,
     this.activeSeatIndex,
+    this.cueSeatIndex,
     this.onHeroTap,
     this.onVillainTap,
     this.onBoardTap,
@@ -228,6 +229,9 @@ class LessonTableStage extends StatelessWidget {
 
   /// Seat that glows. Null glows nobody when [dealerIndex] is set.
   final int? activeSeatIndex;
+
+  /// Seat the step asks the learner to tap: a gold ring and a bouncing arrow.
+  final int? cueSeatIndex;
 
   /// Learner tapped their own cards.
   final VoidCallback? onHeroTap;
@@ -344,6 +348,7 @@ class LessonTableStage extends StatelessWidget {
             selectedHeroIndexes: selectedHeroIndexes,
             highlightHeroIndexes: highlightHeroIndexes,
             dimmedHeroIndexes: dimmedHeroIndexes,
+            cueSeatIndex: cueSeatIndex,
             onBoardTap: !enabled || onBoardTap == null || onBoardCardTap != null
                 ? null
                 : () {
@@ -475,6 +480,7 @@ class _LessonBlindsClockwiseTableState
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
       activeSeatIndex: teaching ? _order[_step] : null,
+      cueSeatIndex: teaching ? _order[_step] : null,
       enabled: teaching,
       onSeatIndexTap: _tap,
     );
@@ -523,6 +529,7 @@ class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
       bbIndex: lessonBlindsBigBlindIndex,
       positionLabels: true,
       activeSeatIndex: teaching ? _order[_step] : null,
+      cueSeatIndex: teaching ? _order[_step] : null,
       enabled: teaching,
       onSeatIndexTap: _tap,
     );
@@ -832,7 +839,7 @@ class LessonHoleHandTable extends StatelessWidget {
       cue: showGuidance && correctSeatIndex == 0
           ? LessonTableCue.hero
           : LessonTableCue.none,
-      activeSeatIndex:
+      cueSeatIndex:
           showGuidance && correctSeatIndex > 0 ? correctSeatIndex : null,
       onSeatIndexTap: enabled ? onSeatChoice : null,
     );

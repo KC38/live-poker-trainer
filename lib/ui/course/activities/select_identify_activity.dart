@@ -385,6 +385,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
     super.dispose();
   }
 
+  /// Guided steps light the answer seat. Later stages keep the highlight as
+  /// context only, because it can point at a reference seat.
+  bool _cuesAnswerSeat(bool locked) =>
+      !locked &&
+      widget.showGuidance &&
+      widget.activity.stage == ActivityStage.guided;
+
   void _onController() {
     if (widget.controller.draft.choiceId == null &&
         (_selectedRegion != null || _selectedSeatIndex != null)) {
@@ -1347,6 +1354,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         lessonBlindsBigBlindIndex,
                       _ => null,
                     },
+                    cueSeatIndex:
+                        _cuesAnswerSeat(locked) &&
+                                scene.highlight == LessonTableHighlight.button
+                            ? lessonBlindsButtonIndex
+                            : null,
                     enabled: !locked,
                     onSeatIndexTap:
                         locked
@@ -1477,6 +1489,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                             LessonTableHighlight.earlyPosition => 0,
                             _ => null,
                           },
+                          cueSeatIndex:
+                              _cuesAnswerSeat(locked) &&
+                                      scene.highlight ==
+                                          LessonTableHighlight.button
+                                  ? lessonBlindsButtonIndex
+                                  : null,
                           enabled: !locked,
                           onSeatIndexTap:
                               locked

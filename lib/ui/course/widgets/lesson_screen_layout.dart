@@ -194,10 +194,108 @@ bool isLessonScreenFrameLesson(String lessonId) {
 }
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
+///
+/// Every line ends by saying what to tap. Authored copy that only sets the
+/// scene ("Button with A9s. Folds to you.") gets the step's tap instruction.
 String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
+  return withLessonTapInstruction(
+    _lessonFrameLine(activity, handStepIndex: handStepIndex),
+    lessonTapInstruction(activity, handStepIndex: handStepIndex),
+  );
+}
+
+/// What to tap on a step whose copy does not already say it.
+///
+/// Empty for explain steps: each one authors its own tap line.
+String lessonTapInstruction(CourseActivity activity, {int handStepIndex = 0}) {
+  switch (activity.renderer) {
+    case ActivityRenderer.coachDialogue:
+      return '';
+    case ActivityRenderer.pokerActionSizing:
+    case ActivityRenderer.fullTableHandLab:
+      return _dockInstruction(activity.choices);
+    case ActivityRenderer.authoredMultiStepHand:
+      final steps = activity.handSteps;
+      if (steps.isEmpty) return _dockInstruction(activity.choices);
+      final index = handStepIndex.clamp(0, steps.length - 1);
+      return _dockInstruction(steps[index].choices);
+    case ActivityRenderer.orderSequence:
+    case ActivityRenderer.compareRank:
+      return 'Tap them in order.';
+    default:
+      return _seatAnswerActivityIds.contains(activity.id)
+          ? 'Tap that seat on the table.'
+          : 'Tap the best answer.';
+  }
+}
+
+/// Questions answered by tapping a seat on the position table.
+const Set<String> _seatAnswerActivityIds = {
+  'act-02-01-02-checkpoint-full',
+  'act-02-07-02-jump-pos',
+  'act-03-01-01-scaffolded',
+};
+
+String _dockInstruction(List<CourseChoice> choices) {
+  final actions = choices.any((choice) => choice.action != null);
+  return actions
+      ? 'Tap your action below the table.'
+      : 'Tap your answer below the table.';
+}
+
+final RegExp _tapWord = RegExp(r'\btap\b', caseSensitive: false);
+final RegExp _pickVerb = RegExp(r'\b([Pp]ick|[Cc]hoose)\b');
+final RegExp _nameVerb = RegExp(r'(^|[.?!]\s+)Name\b');
+final RegExp _actionQuestion = RegExp(
+  r'(^|\s)(Action|Best action|What do you do)\?$',
+);
+
+/// [line] with [instruction] folded in, unless [line] already says "tap".
+///
+/// "Pick", "Choose", and a leading "Name" become "Tap". A bare trailing
+/// "Action?" is replaced by [instruction]. Anything else gets [instruction]
+/// appended.
+String withLessonTapInstruction(String line, String instruction) {
+  final text = line.trim();
+  if (instruction.isEmpty || _tapWord.hasMatch(text)) return text;
+  final verbs = text
+      .replaceAllMapped(
+        _pickVerb,
+        (m) => m.group(1)!.startsWith(RegExp('[PC]')) ? 'Tap' : 'tap',
+      )
+      .replaceAllMapped(_nameVerb, (m) => '${m.group(1)}Tap');
+  if (verbs != text) return verbs;
+  final question = _actionQuestion.firstMatch(text);
+  if (question != null) {
+    final lead = text.substring(0, question.start).trimRight();
+    return lead.isEmpty ? instruction : '$lead $instruction';
+  }
+  return text.isEmpty ? instruction : '$text $instruction';
+}
+
+String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
   if (activity.id == 'act-01-01-01-explain-hole-cards') {
     return 'These two are your cards alone. Nobody else sees them. '
         'Tap your cards to peek.';
+  }
+  if (activity.id == 'act-01-01-02-explain-suits') {
+    return 'Four suits, thirteen ranks. Ace is high here. '
+        'Tap one board card of each suit.';
+  }
+  if (activity.id == 'act-01-02-01-unguided-compare' ||
+      activity.id == 'act-01-06-02-jump-ranks') {
+    return 'Tap the hands from strongest to weakest.';
+  }
+  if (activity.id == 'act-01-06-02-jump-order') {
+    return 'Tap the seats in the order they act.';
+  }
+  if (activity.id == 'act-02-01-02-guided-pre') {
+    return 'An open folds around to the late seats. '
+        'Tap the seats in the order they act preflop.';
+  }
+  if (activity.id == 'act-02-01-02-scaffolded-post') {
+    return 'Heads-up flop: SB versus BTN. '
+        'Tap the seats in the order they act.';
   }
   if (activity.id == 'act-01-01-03-explain-button') {
     return 'Button marks the dealer. Blinds sit left of it. '

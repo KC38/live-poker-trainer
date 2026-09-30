@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -240,26 +241,30 @@ class PlayerSeatWidget extends StatelessWidget {
               button: true,
               selected: selectedHeroIndexes.contains(i),
               label: player.holeCards[i].display,
-              child: TableCard(
-                card: player.holeCards[i],
-                width: m.cardWidth,
-                selected: selectedHeroIndexes.contains(i),
-                highlighted: highlightHeroIndexes.contains(i),
-                dimmed: dimmedHeroIndexes.contains(i),
-              ),
+              child: _cuedCard(m, i),
             ),
           )
         else
-          TableCard(
-            card: player.holeCards[i],
-            width: m.cardWidth,
-            selected: selectedHeroIndexes.contains(i),
-            highlighted: highlightHeroIndexes.contains(i),
-            dimmed: dimmedHeroIndexes.contains(i),
-          ),
+          _cuedCard(m, i),
       ],
     ],
   );
+
+  Widget _cuedCard(SeatMetrics m, int i) {
+    final selected = selectedHeroIndexes.contains(i);
+    final highlighted = highlightHeroIndexes.contains(i);
+    return CuePulse(
+      active: highlighted && !selected,
+      borderRadius: m.cardWidth * 0.12,
+      child: TableCard(
+        card: player.holeCards[i],
+        width: m.cardWidth,
+        selected: selected,
+        highlighted: highlighted,
+        dimmed: dimmedHeroIndexes.contains(i),
+      ),
+    );
+  }
 
   Widget _backCards(SeatMetrics m) {
     final width = m.backWidth(hero: player.isHero);
