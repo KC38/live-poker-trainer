@@ -1704,7 +1704,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('leak repair uses the lesson frame and the leak tiles', (
+  testWidgets('leak repair uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1738,6 +1738,8 @@ void main() {
     expect(find.textContaining('Tap Top pair'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('common-leaks-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('TOP PAIR'), findsOneWidget);
     expect(find.text('PRICES'), findsOneWidget);
     expect(find.text('PASSIVE'), findsOneWidget);
