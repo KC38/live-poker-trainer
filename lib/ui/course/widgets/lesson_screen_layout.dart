@@ -1024,7 +1024,7 @@ class LessonAnswerDock extends StatelessWidget {
 ///
 /// Every lesson uses this widget. A hand step passes `LessonTableStage`.
 /// A step with no hand passes its own teaching widget. See
-/// `.cursor/skills/lesson-screen-layout/SKILL.md`.
+/// `.cursor/rules/lesson-screen-layout.mdc`.
 class LessonScreenLayout extends StatelessWidget {
   /// Creates the frame.
   const LessonScreenLayout({

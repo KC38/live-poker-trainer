@@ -479,7 +479,7 @@ defaults, and one hand stay in the stage, and the warm-up quizzes stay
 lists. Final: all five player types uses the same frame: the station,
 nit, maniac, TAG, LAG, certainty, and retire checks stay lists. The procedure for the
 next lesson is
-[lesson-screen-layout](../../.cursor/skills/lesson-screen-layout/SKILL.md).
+[lesson-screen-layout](../../.cursor/rules/lesson-screen-layout.mdc).
 
 ## Gamified learning
 
