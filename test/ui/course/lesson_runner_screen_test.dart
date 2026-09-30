@@ -2753,6 +2753,8 @@ void main() {
     expect(find.textContaining('Tap Action'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('range-rewrite-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('ACTION'), findsOneWidget);
     expect(find.text('REWRITE'), findsOneWidget);
     expect(find.text('UPDATE'), findsOneWidget);

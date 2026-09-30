@@ -11779,6 +11779,98 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
   }
 }
 
+/// Range-rewrite explain: ACTION / REWRITE / UPDATE under the full poker table.
+class LessonRangeRewriteExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonRangeRewriteExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonRangeRewriteExplainTable> createState() =>
+      _LessonRangeRewriteExplainTableState();
+}
+
+class _LessonRangeRewriteExplainTableState
+    extends State<LessonRangeRewriteExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= RangeRewriteDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('range-rewrite-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < RangeRewriteDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        RangeRewriteDemo.points[i].label,
+                      ) &&
+                      RangeRewriteDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: RangeRewriteDemo.points[i].label,
+                    caption: RangeRewriteDemo.points[i].caption,
+                    color: RangeRewriteDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      RangeRewriteDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  RangeRewriteDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Action / rewrite / update tiles for range-rewrite explain demos.
 class RangeRewriteDemo extends StatefulWidget {
   /// Creates the demo.
