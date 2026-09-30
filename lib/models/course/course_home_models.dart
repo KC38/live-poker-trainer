@@ -152,6 +152,39 @@ class CourseHomeSnapshot {
     }
     return null;
   }
+
+  /// Updates only heart / gem fields so the course map stays mounted.
+  CourseHomeSnapshot withHeartState({
+    required int hearts,
+    required int livesMax,
+    required int gems,
+    int? livesNextRefillAtMs,
+    int? nextAdClaimAtMs,
+    int? adClaimsRemainingToday,
+  }) {
+    return CourseHomeSnapshot(
+      status: status,
+      nodes: nodes,
+      sections: sections,
+      streak: streak,
+      lifetimeXp: lifetimeXp,
+      gems: gems,
+      hearts: hearts,
+      livesMax: livesMax,
+      livesNextRefillAtMs: livesNextRefillAtMs,
+      adClaimsRemainingToday:
+          adClaimsRemainingToday ?? this.adClaimsRemainingToday,
+      nextAdClaimAtMs: nextAdClaimAtMs,
+      acceptedAccuracy: acceptedAccuracy,
+      nextLessonId: nextLessonId,
+      resume: resume,
+      rexLine: rexLine,
+      errorMessage: errorMessage,
+      catalogVersion: catalogVersion,
+      serverCatalogVersion: serverCatalogVersion,
+      startsEnabled: startsEnabled,
+    );
+  }
 }
 
 /// Server course profile fields needed by Home (subset of getCourseState).
