@@ -4259,6 +4259,8 @@ void main() {
     expect(find.textContaining('Tap SPR'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('capstone4bet-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('SPR'), findsOneWidget);
     expect(find.text('COMMIT'), findsOneWidget);
     expect(find.text('NO HERO'), findsOneWidget);

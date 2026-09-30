@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Capstone: 4-bet pot explain: SPR / COMMIT / NO HERO under the full poker table.
+class LessonCapstone4betExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonCapstone4betExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonCapstone4betExplainTable> createState() =>
+      _LessonCapstone4betExplainTableState();
+}
+
+class _LessonCapstone4betExplainTableState
+    extends State<LessonCapstone4betExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= Capstone4betDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('capstone4bet-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < Capstone4betDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _FourBetSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        Capstone4betDemo.points[i].label,
+                      ) &&
+                      Capstone4betDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _Capstone4betTile(
+                    label: Capstone4betDemo.points[i].label,
+                    caption: Capstone4betDemo.points[i].caption,
+                    color: Capstone4betDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      Capstone4betDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  Capstone4betDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// SPR / Commit / No-hero tiles for capstone 4-bet-pot explain demos.
 class Capstone4betDemo extends StatefulWidget {
