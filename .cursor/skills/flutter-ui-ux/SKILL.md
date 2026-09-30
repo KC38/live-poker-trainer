@@ -4,7 +4,7 @@ description: >-
   Create beautiful, responsive, and animated Flutter applications with
   widget composition, adaptive layouts, purposeful motion, and a branded
   theme. Use when building or reviewing Flutter screens, widgets,
-  animations, or themes, and when /ui-consistency-qa charters a screen.
+  animations, or themes.
 disable-model-invocation: true
 ---
 

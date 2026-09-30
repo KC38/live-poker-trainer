@@ -4,11 +4,11 @@ Visual contract for Live Poker Trainer. A screen matches this file, or a
 ticket names the section the change will update. Later work copies the
 section. It does not invent a second button, type ramp, or table.
 
-`/ui-consistency-qa` files the tickets.
+Tickets name the design-record section they will change.
 `/implement-open-jira` updates this file in the same change as the widgets.
 Read [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) and the
 [Duolingo Chess patterns](references/duolingo-chess/PATTERNS.md) before
-either one.
+editing.
 
 ## How a change is recorded
 

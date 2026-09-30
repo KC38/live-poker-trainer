@@ -1,20 +1,20 @@
 ---
 name: launch-simulator
 description: >-
-  Boot the new-user-qa iPhone 17 Pro and launch the latest origin/main
-  build when that Pro is not already running. A booted iPhone 17 does not
-  count. If the Pro is already up, refresh only that device.
+  Boot the iPhone 17 Pro and launch the latest origin/main build when that
+  Pro is not already running. A booted iPhone 17 does not count. If the Pro
+  is already up, refresh only that device.
 ---
 
-# Launch the new-user-qa simulator
+# Launch the Pro simulator
 
-Boot the iPhone 17 Pro and start the latest `origin/main` on it. This is
-the [new-user-qa](../new-user-qa/SKILL.md) device.
+Boot the iPhone 17 Pro and start the latest `origin/main` on it.
 
 The iPhone 17 (`20ACECD5-FBEE-4663-9044-E11D5F0A26FC`) belongs to
-[implement-open-jira](../implement-open-jira/SKILL.md). A booted iPhone 17,
-or a flutter run on it, is not "a simulator is already running" for this
-skill. Do not refresh it, stop it, or skip booting the Pro because of it.
+[/implement-open-jira](../../commands/implement-open-jira.md). A booted
+iPhone 17, or a flutter run on it, is not "a simulator is already running"
+for this skill. Do not refresh it, stop it, or skip booting the Pro because
+of it.
 
 If the Pro is already booted, or a Pro `flutter run` is already up, follow
 [simulator-refresh](../simulator-refresh/SKILL.md) for `qa` only.

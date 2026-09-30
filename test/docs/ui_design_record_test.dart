@@ -1,4 +1,4 @@
-/// Locks the UI design record and the skills that cite it.
+/// Locks the UI design record and the command/skills that cite it.
 library;
 
 import 'dart:io';
@@ -69,23 +69,21 @@ void main() {
     expect(text, contains('duolingo-chess/PATTERNS.md'));
   });
 
-  test('ui walk cites the design record and the Flutter UI skill', () {
-    final skill =
-        File('.cursor/skills/ui-consistency-qa/SKILL.md').readAsStringSync();
-    expect(skill, contains('docs/ui/design-record.md'));
-    expect(skill, contains('flutter-ui-ux'));
-    expect(skill, contains('7CB7DDCF-CBEA-414F-8A92-D490C7AAE35F'));
-    expect(skill, contains('## Design record'));
-    expect(skill, contains('duolingo-chess/PATTERNS.md'));
-    expect(skill, contains('**Game loop.**'));
-    expect(skill, contains('An overflow stripe is a Bug, including under 2px.'));
+  test('implement-open-jira command cites the design record and overflow rule', () {
+    final command =
+        File('.cursor/commands/implement-open-jira.md').readAsStringSync();
+    expect(command, contains('docs/ui/design-record.md'));
+    expect(command, contains('flutter-ui-ux'));
+    expect(command, contains('fails on overflow'));
+    expect(command, contains('Button and blinds (LPT-36)'));
+    expect(command, contains('lesson-screen-layout.mdc'));
     expect(
-      File('.cursor/skills/implement-open-jira/SKILL.md').readAsStringSync(),
-      contains('fails on overflow'),
+      File('.cursor/skills/new-user-qa/SKILL.md').existsSync(),
+      isFalse,
     );
     expect(
-      File('.cursor/skills/implement-open-jira/SKILL.md').readAsStringSync(),
-      contains('Button and blinds (LPT-36)'),
+      File('.cursor/skills/ui-consistency-qa/SKILL.md').existsSync(),
+      isFalse,
     );
     expect(
       File('docs/ui/references/duolingo-chess/frames/001.png').existsSync(),
