@@ -667,6 +667,16 @@
                         "feedback": "Button deals later; blinds post to the left.",
                         "betterChoiceId": "bb-two"
                       }
+                    },
+                    {
+                      "id": "empty-seat",
+                      "label": "Any other seat",
+                      "accessibilityText": "Any other seat",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That seat does not post the big blind.",
+                        "betterChoiceId": "bb-two"
+                      }
                     }
                   ]
                 },

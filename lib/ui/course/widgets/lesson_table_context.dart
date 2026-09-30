@@ -3635,6 +3635,53 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
   );
 }
 
+/// Whether [region] is a player seat (vs board / pot / outcome tiles).
+bool isPlayerSeatRegion(LessonTableRegion region) {
+  return switch (region) {
+    LessonTableRegion.hero ||
+    LessonTableRegion.villain ||
+    LessonTableRegion.button ||
+    LessonTableRegion.smallBlind ||
+    LessonTableRegion.bigBlind ||
+    LessonTableRegion.earlyPosition ||
+    LessonTableRegion.hijack ||
+    LessonTableRegion.cutoff ||
+    LessonTableRegion.emptySeat =>
+      true,
+    _ => false,
+  };
+}
+
+/// Wrong-answer choice when the learner taps a seat that is not authored.
+///
+/// Prefers an explicit empty/other distractor, then activity-specific
+/// fallbacks, then the last authored choice (almost always a distractor).
+String? wrongSeatFallbackChoiceId({
+  required String activityId,
+  required List<CourseChoice> choices,
+}) {
+  if (choices.isEmpty) return null;
+  final ids = {for (final c in choices) c.id};
+  for (final id in const ['empty-seat', 'other-seat', 'any-other']) {
+    if (ids.contains(id)) return id;
+  }
+  final preferred = switch (activityId) {
+    'act-01-01-03-scaffolded-blinds' => 'btn-posts',
+    'act-01-01-03-checkpoint-layout' => 'sb-seat4',
+    'act-01-04-01-checkpoint-postflop' => 'btn-first',
+    'act-02-01-01-guided-btn' => 'pos-ep',
+    'act-02-01-01-unguided-co' => 'label-ep',
+    'act-02-01-01-checkpoint-edge' => 'prefer-ep',
+    'act-02-01-02-checkpoint-full' => 'last-utg',
+    'act-02-07-02-jump-pos' => 'j2-hj',
+    'act-03-01-01-scaffolded' => 'btn-first',
+    _ => null,
+  };
+  if (preferred != null && ids.contains(preferred)) return preferred;
+  if (choices.length >= 2) return choices.last.id;
+  return choices.first.id;
+}
+
 /// Maps a table region tap onto an authored choice id.
 String? mapTableRegionToChoiceId({
   required String activityId,
@@ -3690,6 +3737,8 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.bigBlind => pick('bb-two'),
         LessonTableRegion.smallBlind => pick('sb-one'),
         LessonTableRegion.button => pick('btn-posts'),
+        LessonTableRegion.emptySeat =>
+          pick('empty-seat') ?? pick('btn-posts'),
         _ => null,
       };
     case 'act-01-01-03-unguided-when':
@@ -3706,7 +3755,8 @@ String? mapTableRegionToChoiceId({
         0 => pick('sb-seat0'),
         4 => pick('sb-seat4'),
         1 => pick('sb-seat1'),
-        _ => null,
+        // Any other felt seat is still a wrong guess.
+        _ => pick('sb-seat4'),
       };
     case 'act-01-02-02-unguided-board':
       // Broadway board plays for everyone — tap the shared cards to chop.
@@ -3742,6 +3792,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.smallBlind => pick('sb-first'),
         LessonTableRegion.button => pick('btn-first'),
         LessonTableRegion.bigBlind => pick('bb-first-always'),
+        LessonTableRegion.emptySeat ||
+        LessonTableRegion.earlyPosition ||
+        LessonTableRegion.hijack ||
+        LessonTableRegion.cutoff ||
+        LessonTableRegion.hero ||
+        LessonTableRegion.villain =>
+          pick('btn-first'),
         _ => null,
       };
     case 'act-01-05-01-guided-fold-win':
@@ -3777,6 +3834,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.button => pick('pos-btn'),
         LessonTableRegion.bigBlind => pick('pos-bb'),
         LessonTableRegion.earlyPosition => pick('pos-ep'),
+        LessonTableRegion.emptySeat ||
+        LessonTableRegion.smallBlind ||
+        LessonTableRegion.hijack ||
+        LessonTableRegion.cutoff ||
+        LessonTableRegion.hero ||
+        LessonTableRegion.villain =>
+          pick('pos-ep'),
         _ => null,
       };
     case 'act-02-01-01-scaffolded-blinds':
@@ -3788,6 +3852,10 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.hijack ||
         LessonTableRegion.cutoff =>
           pick('ep-only'),
+        LessonTableRegion.emptySeat ||
+        LessonTableRegion.hero ||
+        LessonTableRegion.villain =>
+          pick('ep-only'),
         _ => null,
       };
     case 'act-02-01-01-unguided-co':
@@ -3795,6 +3863,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.cutoff => pick('label-co'),
         LessonTableRegion.hijack => pick('label-hj'),
         LessonTableRegion.earlyPosition => pick('label-ep'),
+        LessonTableRegion.emptySeat ||
+        LessonTableRegion.button ||
+        LessonTableRegion.smallBlind ||
+        LessonTableRegion.bigBlind ||
+        LessonTableRegion.hero ||
+        LessonTableRegion.villain =>
+          pick('label-ep'),
         _ => null,
       };
     case 'act-02-01-01-checkpoint-edge':
@@ -3802,6 +3877,14 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.button => pick('prefer-btn'),
         LessonTableRegion.earlyPosition => pick('prefer-ep'),
         LessonTableRegion.seatNeverMatters => pick('same-always'),
+        LessonTableRegion.emptySeat ||
+        LessonTableRegion.smallBlind ||
+        LessonTableRegion.bigBlind ||
+        LessonTableRegion.hijack ||
+        LessonTableRegion.cutoff ||
+        LessonTableRegion.hero ||
+        LessonTableRegion.villain =>
+          pick('prefer-ep'),
         _ => null,
       };
     case 'act-02-01-02-unguided-wait':
@@ -3816,6 +3899,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.button => pick('last-btn'),
         LessonTableRegion.bigBlind => pick('last-bb'),
         LessonTableRegion.earlyPosition => pick('last-utg'),
+        LessonTableRegion.emptySeat ||
+        LessonTableRegion.smallBlind ||
+        LessonTableRegion.hijack ||
+        LessonTableRegion.cutoff ||
+        LessonTableRegion.hero ||
+        LessonTableRegion.villain =>
+          pick('last-utg'),
         _ => null,
       };
     case 'act-02-07-01-checkpoint-habit':
@@ -3858,6 +3948,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.cutoff => pick('j2-co'),
         LessonTableRegion.hijack => pick('j2-hj'),
         LessonTableRegion.smallBlind => pick('j2-sb'),
+        LessonTableRegion.emptySeat ||
+        LessonTableRegion.button ||
+        LessonTableRegion.bigBlind ||
+        LessonTableRegion.earlyPosition ||
+        LessonTableRegion.hero ||
+        LessonTableRegion.villain =>
+          pick('j2-hj'),
         _ => null,
       };
     case 'act-02-07-02-jump-stack':
@@ -4124,6 +4221,13 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.earlyPosition => pick('utg-first'),
         LessonTableRegion.button => pick('btn-first'),
         LessonTableRegion.smallBlind => pick('sb-first'),
+        LessonTableRegion.emptySeat ||
+        LessonTableRegion.bigBlind ||
+        LessonTableRegion.hijack ||
+        LessonTableRegion.cutoff ||
+        LessonTableRegion.hero ||
+        LessonTableRegion.villain =>
+          pick('btn-first'),
         _ => null,
       };
     case 'act-03-01-01-unguided':
@@ -5089,6 +5193,14 @@ String? mapTableRegionToChoiceId({
         LessonTableRegion.fiveTypeFreeze => pick('freeze'),
         _ => null,
       };
+  }
+  // Off-script seat taps still submit a wrong authored choice so every
+  // player seat is interactive — never silently ignore a felt tap.
+  if (isPlayerSeatRegion(region)) {
+    return wrongSeatFallbackChoiceId(
+      activityId: activityId,
+      choices: choices,
+    );
   }
   return null;
 }

@@ -106,6 +106,11 @@ class CoachDialogueActivity extends StatelessWidget {
           return LessonBlindsClockwiseTable(
             enabled: !locked,
             onComplete: locked ? null : onFeltAcknowledge,
+            onMiss: () {
+              LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                'Tap clockwise — button, then small blind, then big blind.',
+              );
+            },
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.handLadder) {
@@ -165,6 +170,11 @@ class CoachDialogueActivity extends StatelessWidget {
           return LessonPreflopOrderTable(
             enabled: !locked,
             onComplete: locked ? null : onFeltAcknowledge,
+            onMiss: () {
+              LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                'Preflop order — tap EP, then HJ, then the button.',
+              );
+            },
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.handFamilies) {
@@ -3921,7 +3931,13 @@ class _DealerButtonDemoState extends State<_DealerButtonDemo> {
   void _onRegionTap(LessonTableTapTarget target) {
     if (!widget.enabled || widget.onAllClockwiseTapped == null) return;
     final next = _next;
-    if (next == null || target.region != next) return;
+    if (next == null) return;
+    if (target.region != next) {
+      LessonFrameScope.maybeOf(context)?.onLocalMiss(
+        'Tap clockwise — button, then small blind, then big blind.',
+      );
+      return;
+    }
     setState(() => _tapped.add(target.region));
     if (_tapped.length >= _DealerButtonDemo._order.length) {
       widget.onAllClockwiseTapped!();

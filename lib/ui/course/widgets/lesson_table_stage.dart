@@ -434,17 +434,21 @@ class _LessonPeekTableState extends State<LessonPeekTable> {
   }
 }
 
-/// Button, then small blind, then big blind. A wrong seat does not count.
+/// Button, then small blind, then big blind. A wrong seat is a miss.
 class LessonBlindsClockwiseTable extends StatefulWidget {
   /// Creates the clockwise blinds stage.
   const LessonBlindsClockwiseTable({
     super.key,
     required this.onComplete,
+    this.onMiss,
     this.enabled = true,
   });
 
   /// The learner tapped the button, the small blind, and the big blind.
   final VoidCallback? onComplete;
+
+  /// A seat other than the next required one was tapped.
+  final VoidCallback? onMiss;
 
   /// Taps are ignored when false.
   final bool enabled;
@@ -466,7 +470,11 @@ class _LessonBlindsClockwiseTableState
 
   void _tap(int index) {
     if (!widget.enabled || widget.onComplete == null) return;
-    if (_step >= _order.length || index != _order[_step]) return;
+    if (_step >= _order.length) return;
+    if (index != _order[_step]) {
+      widget.onMiss?.call();
+      return;
+    }
     setState(() => _step += 1);
     if (_step >= _order.length) widget.onComplete!.call();
   }
@@ -487,17 +495,21 @@ class _LessonBlindsClockwiseTableState
   }
 }
 
-/// Preflop order: EP, then HJ, then the button. A wrong seat does not count.
+/// Preflop order: EP, then HJ, then the button. A wrong seat is a miss.
 class LessonPreflopOrderTable extends StatefulWidget {
   /// Creates the order stage.
   const LessonPreflopOrderTable({
     super.key,
     required this.onComplete,
+    this.onMiss,
     this.enabled = true,
   });
 
   /// The learner tapped EP, HJ, and the button in that order.
   final VoidCallback? onComplete;
+
+  /// A seat other than the next required one was tapped.
+  final VoidCallback? onMiss;
 
   /// Taps are ignored when false.
   final bool enabled;
@@ -514,7 +526,11 @@ class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
 
   void _tap(int index) {
     if (!widget.enabled || widget.onComplete == null) return;
-    if (_step >= _order.length || index != _order[_step]) return;
+    if (_step >= _order.length) return;
+    if (index != _order[_step]) {
+      widget.onMiss?.call();
+      return;
+    }
     setState(() => _step += 1);
     if (_step >= _order.length) widget.onComplete!.call();
   }
