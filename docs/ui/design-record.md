@@ -197,6 +197,10 @@ How pots are won uses the full poker table for every step: explain taps
 Fold win, Showdown, and Side pot under the felt, and each decision spot
 uses that table.
 
+Play a full toy hand uses the full poker table for every step: explain
+taps Blinds, You act, and Ending under the felt, and each street uses
+that table.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -391,9 +395,9 @@ advance the board under Preflop / Flop / Turn / River labels, and
 postflop seat order uses that table. How pots are won uses the same
 frame and the full table: explain taps Fold win, Showdown, and Side pot
 under the felt while the board updates, and a fold-win or a called
-river uses that table. Play a full toy hand uses the same frame:
-the three beats stay in the stage, and each street of the hand uses
-the full table. Section 1 jump check uses the same frame: rank and
+river uses that table. Play a full toy hand uses the same frame and the full table:
+explain taps Blinds, You act, and Ending under the felt, and each
+street of the hand uses that table. Section 1 jump check uses the same frame: rank and
 seat order stay lists, and the action spot and the toy hand use the
 full table. Position labels uses the same frame: the six-max seats
 are labeled on the full table. Acting order uses the same frame:
