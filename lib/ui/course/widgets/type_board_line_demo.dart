@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Integrate type, board, line, and sizing explain: TYPE / BOARD / LINE / SIZE under the full poker table.
+class LessonTypeBoardLineExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonTypeBoardLineExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonTypeBoardLineExplainTable> createState() =>
+      _LessonTypeBoardLineExplainTableState();
+}
+
+class _LessonTypeBoardLineExplainTableState
+    extends State<LessonTypeBoardLineExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TypeBoardLineDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('type-board-line-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < TypeBoardLineDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _TypeBoardLineSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        TypeBoardLineDemo.points[i].label,
+                      ) &&
+                      TypeBoardLineDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _TypeBoardLineTile(
+                    label: TypeBoardLineDemo.points[i].label,
+                    caption: TypeBoardLineDemo.points[i].caption,
+                    color: TypeBoardLineDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      TypeBoardLineDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  TypeBoardLineDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Type / board / line / size tiles for type-board-line explain demos.
 class TypeBoardLineDemo extends StatefulWidget {
