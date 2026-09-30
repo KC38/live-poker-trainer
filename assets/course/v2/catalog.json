@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "79e751abd1c51b51a5d25e5f25ea4fb30a91cb17b95919119cbad6c441e8fb51",
+  "contentChecksum": "80ef4f5dc70199a6c5c75ad81c8679511daadb45134b49e8759dfb1ae5ca188f",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -538,11 +538,6 @@
                       "id": "btn-posts",
                       "label": "The button posts both blinds",
                       "accessibilityText": "The button posts both blinds"
-                    },
-                    {
-                      "id": "empty-seat",
-                      "label": "Any other seat",
-                      "accessibilityText": "Any other seat"
                     }
                   ]
                 },
@@ -654,7 +649,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Pair beats high card. Flush beats straight. Remember the ladder.",
+                  "accessibilityText": "Pair beats high card. Flush beats straight. Tap seats weakest to strongest.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -663,7 +658,7 @@
                     {
                       "id": "act-01-02-01-explain-ladder-media",
                       "kind": "dialogue",
-                      "text": "Pair beats high card. Flush beats straight. Remember the ladder."
+                      "text": "Pair beats high card. Flush beats straight. Tap seats weakest to strongest."
                     }
                   ],
                   "objectives": [
@@ -676,7 +671,7 @@
                   "stage": "guided",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Tap high card, then pair, then flush from weakest to strongest.",
+                  "accessibilityText": "Showdown — tap You (high card), Sam (pair), then Jo (flush).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -689,16 +684,16 @@
                   "prompt": "Tap weakest to strongest.",
                   "sequenceItems": [
                     {
-                      "id": "hr-high",
-                      "label": "High card"
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "hr-pair",
-                      "label": "One pair"
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "hr-flush",
-                      "label": "Flush"
+                      "id": "jo",
+                      "label": "Jo"
                     }
                   ]
                 },
@@ -706,9 +701,9 @@
                   "id": "act-01-02-01-scaffolded-spot",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the hand category with ace-high clubs.",
+                  "renderer": "compare_rank",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Showdown — tap You (pair), Sam (straight), then Jo (flush).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -718,22 +713,19 @@
                   "objectives": [
                     "Recognize pairs, straights, and flushes"
                   ],
-                  "prompt": "Look at the board and your holes — tap what you made.",
-                  "choices": [
+                  "prompt": "Tap weakest to strongest.",
+                  "sequenceItems": [
                     {
-                      "id": "cat-flush",
-                      "label": "Flush",
-                      "accessibilityText": "Flush"
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "cat-pair",
-                      "label": "One pair",
-                      "accessibilityText": "One pair"
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "cat-straight",
-                      "label": "Straight",
-                      "accessibilityText": "Straight"
+                      "id": "jo",
+                      "label": "Jo"
                     }
                   ]
                 },
@@ -743,7 +735,7 @@
                   "stage": "unguided",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Tap full house, then trips, then two pair.",
+                  "accessibilityText": "Showdown — tap You (full house), Sam (trips), then Jo (two pair).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -753,19 +745,19 @@
                   "objectives": [
                     "Compare two finished hands"
                   ],
-                  "prompt": "Pick strongest to weakest.",
+                  "prompt": "Tap highest to lowest.",
                   "sequenceItems": [
                     {
-                      "id": "fh",
-                      "label": "Full house"
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "trips",
-                      "label": "Three of a kind"
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "two",
-                      "label": "Two pair"
+                      "id": "jo",
+                      "label": "Jo"
                     }
                   ]
                 },
@@ -773,9 +765,9 @@
                   "id": "act-01-02-01-checkpoint-winner",
                   "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the winning hand: flush versus straight.",
+                  "renderer": "compare_rank",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Showdown — tap You (flush), Sam (straight), then Jo (high card).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -786,22 +778,19 @@
                     "Compare two finished hands",
                     "Order common hand ranks"
                   ],
-                  "prompt": "Showdown — tap who wins.",
-                  "choices": [
+                  "prompt": "Tap highest to lowest.",
+                  "sequenceItems": [
                     {
-                      "id": "you-win",
-                      "label": "You win with the flush",
-                      "accessibilityText": "You win with the flush"
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "they-win",
-                      "label": "They win with the straight",
-                      "accessibilityText": "They win with the straight"
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "split",
-                      "label": "Chop the pot",
-                      "accessibilityText": "Chop the pot"
+                      "id": "jo",
+                      "label": "Jo"
                     }
                   ]
                 }
