@@ -5230,6 +5230,95 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
 }
 
 
+/// Multiway-plan explain: STRONGER / FEWER / NUTS under the full poker table.
+class LessonMultiwayPlanExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonMultiwayPlanExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonMultiwayPlanExplainTable> createState() =>
+      _LessonMultiwayPlanExplainTableState();
+}
+
+class _LessonMultiwayPlanExplainTableState
+    extends State<LessonMultiwayPlanExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= MultiwayPlanDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('multiway-plan-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d'],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < MultiwayPlanDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(MultiwayPlanDemo.points[i].label) &&
+                      MultiwayPlanDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: MultiwayPlanDemo.points[i].label,
+                    caption: MultiwayPlanDemo.points[i].caption,
+                    color: MultiwayPlanDemo.points[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(MultiwayPlanDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(MultiwayPlanDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Explain-step demo: multiway adjustments (stronger / fewer bluffs / nuts).
 class MultiwayPlanDemo extends StatefulWidget {
   /// Creates the demo.
