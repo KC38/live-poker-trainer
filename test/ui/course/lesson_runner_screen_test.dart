@@ -2290,6 +2290,8 @@ void main() {
     expect(find.textContaining('Tap Raise'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('extreme-entry-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('RAISE'), findsOneWidget);
     expect(find.text('BARREL'), findsOneWidget);
     expect(find.text('COUNT'), findsOneWidget);
