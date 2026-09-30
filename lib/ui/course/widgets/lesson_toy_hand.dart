@@ -5,7 +5,169 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
+
+/// Features for toy-hand explain on the full table.
+TableFeatures get lessonToyHandTableFeatures => const TableFeatures(
+  stacks: false,
+  pot: true,
+  street: false,
+  blinds: true,
+  positions: true,
+  bets: false,
+  actions: false,
+  opponentCards: false,
+  playerTypes: false,
+  stats: false,
+  boardSlots: false,
+);
+
+/// Full table: tap Blinds / You act / Ending under the felt.
+class LessonToyHandExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonToyHandExplainTable({
+    super.key,
+    required this.onAllStepsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllStepsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  static const steps = ['BLINDS', 'YOU ACT', 'ENDING'];
+
+  @override
+  State<LessonToyHandExplainTable> createState() =>
+      _LessonToyHandExplainTableState();
+}
+
+class _LessonToyHandExplainTableState extends State<LessonToyHandExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String title) {
+    if (!widget.enabled || widget.onAllStepsTapped == null) return;
+    setState(() => _tapped.add(title));
+    if (_tapped.length >= LessonToyHandExplainTable.steps.length) {
+      widget.onAllStepsTapped!();
+    }
+  }
+
+  int? get _nextIndex {
+    for (var i = 0; i < LessonToyHandExplainTable.steps.length; i++) {
+      if (!_tapped.contains(LessonToyHandExplainTable.steps[i])) return i;
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllStepsTapped != null;
+    final next = _nextIndex;
+    final stepIndex = next ?? LessonToyHandExplainTable.steps.length - 1;
+    final board = switch (stepIndex) {
+      0 => const <String>[],
+      1 => const <String>[],
+      _ => const ['Qs', '7c', '2d'],
+    };
+    return Column(
+      key: const ValueKey<String>('toy-hand-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: board,
+            villainCount: lessonBlindsVillainCount,
+            dealerIndex: lessonBlindsButtonIndex,
+            sbIndex: lessonBlindsSmallBlindIndex,
+            bbIndex: lessonBlindsBigBlindIndex,
+            heroFaceUp: stepIndex >= 1,
+            enabled: false,
+            features: lessonToyHandTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < LessonToyHandExplainTable.steps.length; i++)
+              _SoftPulseTarget(
+                active: teaching && widget.showGuidance && next == i,
+                child: _UnderFeltBeatChip(
+                  label: LessonToyHandExplainTable.steps[i],
+                  selected: _tapped.contains(LessonToyHandExplainTable.steps[i]),
+                  enabled: teaching,
+                  onPressed:
+                      teaching
+                          ? () => _onTap(LessonToyHandExplainTable.steps[i])
+                          : null,
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _UnderFeltBeatChip extends StatelessWidget {
+  const _UnderFeltBeatChip({
+    required this.label,
+    required this.selected,
+    required this.enabled,
+    required this.onPressed,
+  });
+
+  final String label;
+  final bool selected;
+  final bool enabled;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final border =
+        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+    final child = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color:
+            selected
+                ? AppColors.gold.withValues(alpha: 0.18)
+                : AppColors.bgDark.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: border, width: selected ? 2 : 1),
+      ),
+      child: Text(
+        label,
+        style: GoogleFonts.manrope(
+          color: AppColors.cream,
+          fontSize: 13,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+    if (onPressed == null) return child;
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: enabled ? onPressed : null,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
 
 /// Explain-step demo: one short hand from blinds to a finish.
 class ToyHandRunDemo extends StatefulWidget {

@@ -949,7 +949,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('toy hand uses the lesson frame and the three beats', (
+  testWidgets('toy hand uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -983,6 +983,8 @@ void main() {
     expect(find.textContaining('Tap Blinds'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('toy-hand-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('BLINDS'), findsOneWidget);
     expect(find.text('YOU ACT'), findsOneWidget);
     expect(find.text('ENDING'), findsOneWidget);
