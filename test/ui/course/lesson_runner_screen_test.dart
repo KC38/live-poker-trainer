@@ -3470,6 +3470,8 @@ void main() {
     expect(find.textContaining('Tap Credit'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('vs-tags-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CREDIT'), findsOneWidget);
     expect(find.text('TIGHTER'), findsOneWidget);
     expect(find.text('NO LIGHT'), findsOneWidget);
