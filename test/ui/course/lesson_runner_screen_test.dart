@@ -12,12 +12,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
+import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
@@ -4379,6 +4381,59 @@ void main() {
     expect(find.textContaining('taking too long'), findsOneWidget);
   });
 
+  testWidgets('bootstrap chrome keeps Home hearts instead of flashing full', (
+    tester,
+  ) async {
+    const home = CourseHomeSnapshot(
+      status: CourseHomeLoadStatus.ready,
+      nodes: [],
+      sections: [],
+      hearts: 4,
+      livesMax: 5,
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => catalog),
+          courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: LessonRunnerScreen(
+            lessonId: kFirstCourseLessonId,
+            courseService: _HungStartCourseService(catalog),
+            startRequestId: 'start_hearts_boot',
+            bootstrapTimeout: const Duration(milliseconds: 80),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    final loading = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(loading.livesRemaining, 4);
+    expect(loading.livesMax, 5);
+    expect(find.byIcon(Icons.favorite), findsNWidgets(5));
+
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump();
+    final errored = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(errored.livesRemaining, 4);
+    expect(errored.livesMax, 5);
+  });
+
   testWidgets('stale activity submit resyncs to server resume cursor', (
     tester,
   ) async {
@@ -5233,6 +5288,15 @@ class _HungStartCourseService extends CourseService {
   }) {
     return Completer<StartCourseLessonResult>().future;
   }
+}
+
+class _FixedHomeHearts extends CourseHomeController {
+  _FixedHomeHearts(this.snapshot);
+
+  final CourseHomeSnapshot snapshot;
+
+  @override
+  Future<CourseHomeSnapshot> build() async => snapshot;
 }
 
 Future<void> _pumpUntil(WidgetTester tester, Finder finder) async {
