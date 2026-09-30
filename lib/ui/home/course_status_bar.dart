@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
 /// Default hearts shown on Home (matches per-lesson lives max).
-const int kHomeDefaultHearts = 3;
+const int kHomeDefaultHearts = 5;
 
 /// Compact course stats strip for Home.
 ///
@@ -22,6 +22,7 @@ class CourseStatusBar extends StatelessWidget {
     this.lifetimeXp,
     this.acceptedAccuracy,
     this.onCourseTap,
+    this.onHeartsTap,
   });
 
   final int streak;
@@ -38,6 +39,9 @@ class CourseStatusBar extends StatelessWidget {
 
   /// Opens the section picker (course map).
   final VoidCallback? onCourseTap;
+
+  /// Opens the heart refill sheet.
+  final VoidCallback? onHeartsTap;
 
   static const Color _gemColor = Color(0xFF5EC8FF);
 
@@ -74,6 +78,7 @@ class CourseStatusBar extends StatelessWidget {
                     label: 'Hearts',
                     value: '$hearts',
                     valueColor: AppColors.hearts,
+                    onTap: onHeartsTap,
                   ),
                 ],
               ),
@@ -132,6 +137,7 @@ class _StatIcon extends StatelessWidget {
     required this.label,
     required this.value,
     required this.valueColor,
+    this.onTap,
   });
 
   final IconData icon;
@@ -139,27 +145,38 @@ class _StatIcon extends StatelessWidget {
   final String label;
   final String value;
   final Color valueColor;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
+    final row = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 24, color: iconColor),
+        const SizedBox(width: 5),
+        Text(
+          value,
+          style: GoogleFonts.jetBrainsMono(
+            color: valueColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            height: 1,
+          ),
+        ),
+      ],
+    );
     return Tooltip(
       message: label,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 24, color: iconColor),
-          const SizedBox(width: 5),
-          Text(
-            value,
-            style: GoogleFonts.jetBrainsMono(
-              color: valueColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-              height: 1,
+      child: onTap == null
+          ? row
+          : InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              child: row,
             ),
           ),
-        ],
-      ),
     );
   }
 }
