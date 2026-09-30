@@ -328,6 +328,9 @@ step: explain taps Range, Nut, and Advantage under the felt.
 Realize equity in and out of position uses the full poker table for every
 step: explain taps Equity, Cash, and Pos under the felt.
 
+Recognize capped versus uncapped ranges uses the full poker table for every
+step: explain taps Capped, Uncapped, and Nuts under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -644,10 +647,10 @@ dry-board, paired-board, and press checks stay lists, and the c-bet
 spot sits face up on that table. Realize equity in and out of
 position uses the same frame and the full table: explain taps Equity,
 Cash, and Pos under the felt, and the realization quizzes stay lists.
-Recognize capped versus
-uncapped ranges uses the same frame: capped, uncapped, and nuts stay
-in the stage, the check-turn, bomb, and attack checks stay lists, and
-the thin-value spot sits face up on the full table. Choose polarized
+Recognize capped versus uncapped ranges uses the same frame and the full
+table: explain taps Capped, Uncapped, and Nuts under the felt, the
+check-turn, bomb, and attack checks stay lists, and the thin-value spot
+sits face up on the full table. Choose polarized
 or merged betting uses the same frame: polar, merged, and size stay in
 the stage, the overbet, mismatch, and aim checks stay lists, and the
 merged-size spot sits face up on the full table. Use overbets and
