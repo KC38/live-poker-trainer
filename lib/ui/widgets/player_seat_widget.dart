@@ -122,6 +122,10 @@ class PlayerSeatWidget extends StatelessWidget {
     this.features = TableFeatures.full,
     this.scale = 1,
     this.review = false,
+    this.onHeroCardTap,
+    this.selectedHeroIndexes = const {},
+    this.highlightHeroIndexes = const {},
+    this.dimmedHeroIndexes = const {},
   });
 
   final PlayerModel player;
@@ -151,6 +155,18 @@ class PlayerSeatWidget extends StatelessWidget {
 
   /// The hand is over; the hero's cards grow.
   final bool review;
+
+  /// Tap one hero hole card by index (0 or 1).
+  final ValueChanged<int>? onHeroCardTap;
+
+  /// Hero hole indexes with a selected gold ring.
+  final Set<int> selectedHeroIndexes;
+
+  /// Hero hole indexes that cue the next tap.
+  final Set<int> highlightHeroIndexes;
+
+  /// Hero hole indexes faded as leftovers.
+  final Set<int> dimmedHeroIndexes;
 
   /// Geometry this seat draws with.
   SeatMetrics get metrics => SeatMetrics.of(
@@ -215,7 +231,32 @@ class PlayerSeatWidget extends StatelessWidget {
     children: [
       for (var i = 0; i < player.holeCards.length && i < 2; i++) ...[
         if (i > 0) SizedBox(width: m.cardGap),
-        TableCard(card: player.holeCards[i], width: m.cardWidth),
+        if (player.isHero && onHeroCardTap != null)
+          GestureDetector(
+            key: ValueKey<String>('lesson-hero-card-$i'),
+            behavior: HitTestBehavior.opaque,
+            onTap: () => onHeroCardTap!(i),
+            child: Semantics(
+              button: true,
+              selected: selectedHeroIndexes.contains(i),
+              label: player.holeCards[i].display,
+              child: TableCard(
+                card: player.holeCards[i],
+                width: m.cardWidth,
+                selected: selectedHeroIndexes.contains(i),
+                highlighted: highlightHeroIndexes.contains(i),
+                dimmed: dimmedHeroIndexes.contains(i),
+              ),
+            ),
+          )
+        else
+          TableCard(
+            card: player.holeCards[i],
+            width: m.cardWidth,
+            selected: selectedHeroIndexes.contains(i),
+            highlighted: highlightHeroIndexes.contains(i),
+            dimmed: dimmedHeroIndexes.contains(i),
+          ),
       ],
     ],
   );

@@ -32,6 +32,7 @@ class CommunityCardsView extends StatelessWidget {
     this.onBoardCardTap,
     this.selectedBoardIndexes = const {},
     this.highlightBoardIndexes = const {},
+    this.dimmedBoardIndexes = const {},
     this.boardOrderBadges = const {},
   });
 
@@ -65,6 +66,9 @@ class CommunityCardsView extends StatelessWidget {
 
   /// Board indexes that bounce a cue arrow (teach-by-doing).
   final Set<int> highlightBoardIndexes;
+
+  /// Board indexes faded as leftovers.
+  final Set<int> dimmedBoardIndexes;
 
   /// 1-based order badge drawn on a selected board card.
   final Map<int, int> boardOrderBadges;
@@ -234,6 +238,7 @@ class CommunityCardsView extends StatelessWidget {
                             reserveCue: highlightBoardIndexes.isNotEmpty,
                             selected: selectedBoardIndexes.contains(i),
                             highlight: highlightBoardIndexes.contains(i),
+                            dimmed: dimmedBoardIndexes.contains(i),
                             orderBadge: boardOrderBadges[i],
                             onTap: onBoardCardTap == null
                                 ? null
@@ -297,12 +302,16 @@ class _RevealedCard extends StatefulWidget {
     required this.card,
     required this.width,
     this.selected = false,
+    this.highlighted = false,
+    this.dimmed = false,
     this.orderBadge,
   });
 
   final CardModel card;
   final double width;
   final bool selected;
+  final bool highlighted;
+  final bool dimmed;
   final int? orderBadge;
 
   @override
@@ -333,6 +342,8 @@ class _RevealedCardState extends State<_RevealedCard> {
           card: widget.card,
           width: widget.width,
           selected: widget.selected,
+          highlighted: widget.highlighted,
+          dimmed: widget.dimmed,
           orderBadge: widget.orderBadge,
         ),
       ),
@@ -351,6 +362,7 @@ class _BoardCardTarget extends StatelessWidget {
     required this.reserveCue,
     required this.selected,
     required this.highlight,
+    required this.dimmed,
     required this.orderBadge,
     required this.onTap,
   });
@@ -362,6 +374,7 @@ class _BoardCardTarget extends StatelessWidget {
   final bool reserveCue;
   final bool selected;
   final bool highlight;
+  final bool dimmed;
   final int? orderBadge;
   final VoidCallback? onTap;
 
@@ -371,6 +384,8 @@ class _BoardCardTarget extends StatelessWidget {
       card: card,
       width: width,
       selected: selected,
+      highlighted: highlight,
+      dimmed: dimmed,
       orderBadge: orderBadge,
     );
     final column = Column(
