@@ -17,10 +17,24 @@ enum RexMood {
   think,
 }
 
+/// How much of the full-body drawing the slot shows.
+enum RexMascotCrop {
+  /// Head through shoes. Default for Meet Rex, Home, and ceremonies.
+  fullBody,
+
+  /// Head through torso. Lesson coach band uses this to free stage height.
+  upperBody,
+}
+
 /// Full-body Rex. Calm stands still, celebrate raises an arm, think folds both.
 class RexMascot extends StatefulWidget {
   /// Creates Rex. Defaults to the calm standing drawing.
-  const RexMascot({super.key, this.size = 36, this.mood = RexMood.calm});
+  const RexMascot({
+    super.key,
+    this.size = 36,
+    this.mood = RexMood.calm,
+    this.crop = RexMascotCrop.fullBody,
+  });
 
   /// Full idle drawing, kept for the asset contract.
   static const asset = 'assets/brand/mascot_idle.png';
@@ -40,11 +54,27 @@ class RexMascot extends StatefulWidget {
   /// Open smile placed on the calm face.
   static const mouthAsset = 'assets/brand/mascot_mouth_happy.png';
 
-  /// Width of the figure. Height follows the full-body drawing.
+  /// Fraction of full-body height kept for [RexMascotCrop.upperBody].
+  /// Cuts below the torso so legs do not spend vertical space.
+  static const double upperBodyHeightFactor = 0.58;
+
+  /// Width of the figure. Height follows the full-body drawing, then [crop].
   final double size;
 
   /// Which pose to play.
   final RexMood mood;
+
+  /// Whether to show the full figure or only the upper body.
+  final RexMascotCrop crop;
+
+  /// Laid-out height for [size] under [crop].
+  static double heightFor(double size, [RexMascotCrop crop = RexMascotCrop.fullBody]) {
+    final full = size * 1.5;
+    return switch (crop) {
+      RexMascotCrop.fullBody => full,
+      RexMascotCrop.upperBody => full * upperBodyHeightFactor,
+    };
+  }
 
   @override
   State<RexMascot> createState() => _RexMascotState();
@@ -109,31 +139,50 @@ class _RexMascotState extends State<RexMascot> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final fullHeight = widget.size * 1.5;
+    final figure = SizedBox(
+      width: widget.size,
+      height: fullHeight,
+      child: AnimatedBuilder(
+        animation: Listenable.merge([_pose, _blink]),
+        builder: (context, _) {
+          final t = _pose.value;
+          final blink = _blink.value < 0.5
+              ? _blink.value * 2
+              : (1 - _blink.value) * 2;
+          return _Rig(
+            leftAngle: _leftTarget() * t,
+            rightAngle: _rightTarget() * t,
+            mouthOpacity: widget.mood == RexMood.celebrate ? t : 0,
+            blink: blink,
+          );
+        },
+      ),
+    );
+    final slot = switch (widget.crop) {
+      RexMascotCrop.fullBody => figure,
+      RexMascotCrop.upperBody => SizedBox(
+          width: widget.size,
+          height: RexMascot.heightFor(widget.size, RexMascotCrop.upperBody),
+          child: ClipRect(
+            child: OverflowBox(
+              alignment: Alignment.topCenter,
+              maxWidth: widget.size,
+              minWidth: widget.size,
+              maxHeight: fullHeight,
+              minHeight: fullHeight,
+              child: figure,
+            ),
+          ),
+        ),
+    };
     return Semantics(
       container: true,
       image: true,
       label: _label,
       child: _CelebrateEntrance(
         enabled: widget.mood == RexMood.celebrate,
-        child: SizedBox(
-          width: widget.size,
-          height: widget.size * 1.5,
-          child: AnimatedBuilder(
-            animation: Listenable.merge([_pose, _blink]),
-            builder: (context, _) {
-              final t = _pose.value;
-              final blink = _blink.value < 0.5
-                  ? _blink.value * 2
-                  : (1 - _blink.value) * 2;
-              return _Rig(
-                leftAngle: _leftTarget() * t,
-                rightAngle: _rightTarget() * t,
-                mouthOpacity: widget.mood == RexMood.celebrate ? t : 0,
-                blink: blink,
-              );
-            },
-          ),
-        ),
+        child: slot,
       ),
     );
   }

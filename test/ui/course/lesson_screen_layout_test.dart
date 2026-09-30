@@ -81,6 +81,40 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('coach band crops Rex to the upper body', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: const Scaffold(
+          body: LessonCoachBand(
+            speech: 'Tap your cards to peek.',
+            expression: LessonMascotExpression.thinking,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
+    expect(mascot.crop, RexMascotCrop.upperBody);
+    expect(mascot.size, LessonCoachBand.mascotSize);
+    final laidOut = tester.getSize(find.byType(RexMascot));
+    expect(
+      laidOut.height,
+      closeTo(
+        RexMascot.heightFor(LessonCoachBand.mascotSize, RexMascotCrop.upperBody),
+        0.5,
+      ),
+    );
+    expect(
+      laidOut.height,
+      lessThan(RexMascot.heightFor(LessonCoachBand.mascotSize)),
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('frame keeps close, hearts, one bubble, tools, and no title', (
     tester,
   ) async {
