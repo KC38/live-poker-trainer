@@ -116,6 +116,18 @@ void main() {
     );
     expect(find.text('Get started'), findsOneWidget);
     expect(find.text('I already have an account'), findsOneWidget);
+    expect(find.text('Step 1 of 4'), findsNothing);
+    expect(
+      find.text(
+        'Learn live cash No-Limit Hold\'em by doing — one short lesson at a time.',
+      ),
+      findsNothing,
+    );
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(
+      find.image(const AssetImage('assets/brand/logo_mark.png')),
+      findsOneWidget,
+    );
     _expectElevatedMetrics(tester, 'Get started');
     _expectOutlinedMetrics(tester, 'I already have an account');
   });
@@ -283,8 +295,9 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Step 1 of 4'), findsOneWidget);
+    expect(find.text('Step 1 of 4'), findsNothing);
     expect(find.byTooltip('Back'), findsNothing);
+    expect(find.byType(RexMascot), findsOneWidget);
 
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
