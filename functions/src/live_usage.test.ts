@@ -5,10 +5,12 @@
 import {describe, expect, it} from "vitest";
 import {generationUsageFromMetadata} from "./generation_usage";
 import {
+  LiveUsageError,
   addLiveUsage,
   averageLatencyMs,
   emptyLiveUsageBreakdown,
   liveGenerationMetricsIncrements,
+  liveUsageFromError,
   liveUsageFromPurpose,
   liveUsageFirestoreFields,
 } from "./live_usage";
@@ -97,5 +99,46 @@ describe("live usage", () => {
     expect(increments.totalDurationMs).toBeTruthy();
     expect(increments.dealDurationMs).toBeTruthy();
     expect(increments.expandDurationMs).toBeTruthy();
+  });
+
+  it("preserves paid usage from LiveUsageError and drops other failures", () => {
+    const paid = liveUsageFromPurpose(
+      generationUsageFromMetadata({
+        promptTokenCount: 40,
+        candidatesTokenCount: 10,
+      }),
+      "villain",
+      900,
+    );
+
+    expect(liveUsageFromError(new LiveUsageError("partial", paid))).toBe(paid);
+    expect(liveUsageFromError(new Error("network")).total.modelRequestCount)
+      .toBe(0);
+    expect(liveUsageFromError("nope").total.estimatedCostUsdMicros).toBe(0);
+    expect(liveUsageFromError(undefined).byPurpose.villain.modelRequestCount)
+      .toBe(0);
+  });
+
+  it("clamps negative latency and skips an average when nothing was timed", () => {
+    const usage = generationUsageFromMetadata({
+      promptTokenCount: 10,
+      candidatesTokenCount: 1,
+    });
+    expect(liveUsageFromPurpose(usage, "deal", -12.4).latency).toEqual({
+      callCount: 1,
+      totalDurationMs: 0,
+      maxDurationMs: 0,
+    });
+    expect(liveUsageFromPurpose(usage, "coach_critique", 10.6).latency)
+      .toMatchObject({
+        callCount: 1,
+        totalDurationMs: 11,
+        maxDurationMs: 11,
+      });
+    expect(averageLatencyMs({
+      callCount: 0,
+      totalDurationMs: 500,
+      maxDurationMs: 500,
+    })).toBe(0);
   });
 });

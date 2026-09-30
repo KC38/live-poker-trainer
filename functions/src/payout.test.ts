@@ -34,4 +34,19 @@ describe("splitPotBySeat", () => {
   ])("returns the assigned share for hero seat %i", (heroSeat, expected) => {
     expect(potShareForSeat(10, [5, 0, 2], heroSeat)).toBe(expected);
   });
+
+  it("awards a single winner the whole pot, including a zero pot", () => {
+    expect(splitPotBySeat(10.01, [3])).toEqual([{seat: 3, amount: 10.01}]);
+    expect(splitPotBySeat(0, [2])).toEqual([{seat: 2, amount: 0}]);
+    expect(potShareForSeat(10.01, [3], 3)).toBe(10.01);
+  });
+
+  it("returns nothing for an empty field or a non-finite pot", () => {
+    expect(splitPotBySeat(10, [])).toEqual([]);
+    expect(splitPotBySeat(-1, [1])).toEqual([]);
+    expect(splitPotBySeat(Number.NaN, [1])).toEqual([]);
+    expect(splitPotBySeat(Number.POSITIVE_INFINITY, [1])).toEqual([]);
+    expect(potShareForSeat(10, [1, 2], 9)).toBe(0);
+    expect(potShareForSeat(Number.NaN, [1], 1)).toBe(0);
+  });
 });

@@ -44,6 +44,20 @@ void main() {
     });
   });
 
+  group('Money.splitPot', () {
+    test('fails closed on an empty field or a non-finite pot', () {
+      expect(Money.splitPot(10, const <int>[]), isEmpty);
+      expect(Money.splitPot(-1, [1]), isEmpty);
+      expect(Money.splitPot(double.nan, [1]), isEmpty);
+      expect(Money.splitPot(double.infinity, [1]), isEmpty);
+    });
+
+    test('gives one winner the whole pot, including a zero pot', () {
+      expect(Money.splitPot(10.01, [3]), {3: 10.01});
+      expect(Money.splitPot(0, [2]), {2: 0});
+    });
+  });
+
   group('Money comparisons', () {
     test('same is cent tolerant', () {
       expect(Money.same(10.0, 10.0000001), isTrue);
