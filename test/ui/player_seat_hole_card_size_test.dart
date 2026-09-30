@@ -63,7 +63,9 @@ void main() {
     final cards = find.byType(TableCard);
     expect(cards, findsNWidgets(2));
     final size = tester.getSize(cards.first);
+    expect(size.width, SeatMetrics.of(hero: true).cardWidth);
     expect(size.width, greaterThan(CommunityCardsView.cardWidth));
+    expect(size.width, lessThan(66));
     expect(size.height, closeTo(size.width * tableCardAspect, 0.01));
   });
 

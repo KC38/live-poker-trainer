@@ -48,7 +48,7 @@ class SeatMetrics {
     return SeatMetrics._(
       pod: Size(base.width * scale, (base.height + extra) * scale),
       cardWidth:
-          (hero ? (compact ? 58.0 : 66.0) : (compact ? 26.0 : 30.0)) *
+          (hero ? (compact ? 52.0 : 58.0) : (compact ? 26.0 : 30.0)) *
           (hero && review ? _reviewGrowth : 1) *
           scale,
       cardTuck: hero ? 0.24 : 0.3,
