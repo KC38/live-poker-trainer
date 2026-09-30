@@ -1,4 +1,4 @@
-/// Seat on the felt: hole cards over one box with the icon, name, and stack.
+/// Seat on the felt: hole cards above one box with the icon, name, and stack.
 library;
 
 import 'dart:async';
@@ -51,9 +51,8 @@ class SeatMetrics {
           (hero ? (compact ? 52.0 : 58.0) : (compact ? 26.0 : 30.0)) *
           (hero && review ? _reviewGrowth : 1) *
           scale,
-      // Slight tuck under the box top; cards paint above the box so faces
-      // stay fully visible (and lesson taps hit the card, not the plate).
-      cardTuck: hero ? 0.24 : 0.3,
+      // No tuck — hole cards and the name box must not cover each other.
+      cardTuck: 0,
       cardGap: (hero ? 4.0 : 2.0) * scale,
       scale: scale,
     );
@@ -62,15 +61,16 @@ class SeatMetrics {
   /// Hero card growth while a finished hand is reviewed.
   static const double _reviewGrowth = 1.12;
 
+  /// Clear air between the hole-card bottoms and the seat-box top.
+  static const double cardBoxGap = 2;
+
   /// The seat box.
   final Size pod;
 
   /// Face-up hole card width.
   final double cardWidth;
 
-  /// Share of a hole card's height that sits over the top of the box.
-  ///
-  /// Cards paint above the box, so this is nesting — not covering faces.
+  /// Share of a hole card's height that may sit over the box (always zero).
   final double cardTuck;
 
   /// Gap between the two hole cards.
@@ -85,11 +85,11 @@ class SeatMetrics {
   /// Face-up hole card height.
   double get cardHeight => cardWidth * tableCardAspect;
 
-  /// Pixels of a face-up card nested over the top of the box.
+  /// Pixels of a face-up card that may sit over the box (always zero).
   double get tuck => cardHeight * cardTuck;
 
-  /// Card height visible above the box.
-  double get cardsAbove => cardHeight - tuck;
+  /// Vertical space reserved above the box for hole cards (+ gap).
+  double get cardsAbove => cardHeight - tuck + cardBoxGap * scale;
 
   /// Width of a face-up pair.
   double get cardsWidth => cardWidth * 2 + cardGap;
@@ -107,7 +107,7 @@ class SeatMetrics {
   );
 }
 
-/// One seat: hole cards nested over a box with the icon, name, and stack.
+/// One seat: hole cards fully above a box with the icon, name, and stack.
 ///
 /// Pucks, bets, and action badges are placed by the felt around [SeatMetrics.podIn].
 class PlayerSeatWidget extends StatelessWidget {
@@ -204,6 +204,14 @@ class PlayerSeatWidget extends StatelessWidget {
         child: Stack(
           clipBehavior: Clip.none,
           children: [
+            if (cards != null)
+              Positioned(
+                key: ValueKey<String>('seat-cards-layer-${player.id}'),
+                left: 0,
+                right: 0,
+                bottom: pod.height + SeatMetrics.cardBoxGap * scale - m.tuck,
+                child: Align(alignment: Alignment.bottomCenter, child: cards),
+              ),
             Positioned.fromRect(
               key: ValueKey<String>('seat-box-layer-${player.id}'),
               rect: pod,
@@ -211,24 +219,10 @@ class PlayerSeatWidget extends StatelessWidget {
             ),
             if (_typed)
               Positioned(
+                // Keep the type tag on the box face so it never covers cards.
                 left: pod.left + 4 * scale,
-                top: pod.top - 7 * scale,
+                top: pod.top + 2 * scale,
                 child: _TypeTag(archetype: player.archetype, scale: scale),
-              ),
-            // Cards paint after the box so nothing covers hole-card faces.
-            if (cards != null)
-              Positioned(
-                key: ValueKey<String>('seat-cards-layer-${player.id}'),
-                left: 0,
-                right: 0,
-                bottom: pod.height - m.tuck,
-                child: Align(
-                  alignment:
-                      _typed
-                          ? const Alignment(0.35, 1)
-                          : Alignment.bottomCenter,
-                  child: cards,
-                ),
               ),
           ],
         ),
