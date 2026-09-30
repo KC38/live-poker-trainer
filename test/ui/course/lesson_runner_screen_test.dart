@@ -1619,7 +1619,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('river close uses the lesson frame and the river tiles', (
+  testWidgets('river close uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1653,6 +1653,8 @@ void main() {
     expect(find.textContaining('Tap Value'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('river-binary-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('VALUE'), findsOneWidget);
     expect(find.text('BLUFF'), findsOneWidget);
     expect(find.text('CATCH'), findsOneWidget);
