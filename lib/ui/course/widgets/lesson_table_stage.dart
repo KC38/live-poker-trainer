@@ -33,6 +33,7 @@ const int lessonBlindsRightOfButtonIndex = 2;
 /// big blind sit one and two seats clockwise from the button, unless
 /// [sbIndex] or [bbIndex] is set, and no seat glows unless [activeSeatIndex]
 /// is set. [positionLabels] renames the ring EP, HJ, CO, BTN, SB, BB.
+/// The table plays [smallBlind]/[bigBlind] with 100 big blind stacks.
 GameState lessonTableStageGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
@@ -43,11 +44,18 @@ GameState lessonTableStageGame({
   int? bbIndex,
   int? activeSeatIndex,
   bool positionLabels = false,
+  double smallBlind = lessonSmallBlind,
+  double bigBlind = lessonBigBlind,
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
     villainSeatCount: villainCount,
+    smallBlind: smallBlind,
+    bigBlind: bigBlind,
+    dealerIndex: dealerIndex ?? 0,
+    sbIndex: sbIndex,
+    bbIndex: bbIndex,
   );
   const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
   var villain = 0;
@@ -80,13 +88,7 @@ GameState lessonTableStageGame({
       : players;
   final named = base.copyWith(players: seated);
   if (dealerIndex == null) return named;
-  final seats = named.players.length;
-  return named.copyWith(
-    dealerIndex: dealerIndex,
-    sbIndex: sbIndex ?? (dealerIndex + 1) % seats,
-    bbIndex: bbIndex ?? (dealerIndex + 2) % seats,
-    activePlayerIndex: activeSeatIndex ?? -1,
-  );
+  return named.copyWith(activePlayerIndex: activeSeatIndex ?? -1);
 }
 
 /// Where the stage draws its arrows.
@@ -122,6 +124,8 @@ class LessonTableStage extends StatelessWidget {
     this.onBoardTap,
     this.onSeatIndexTap,
     this.positionLabels = false,
+    this.smallBlind = lessonSmallBlind,
+    this.bigBlind = lessonBigBlind,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -172,6 +176,13 @@ class LessonTableStage extends StatelessWidget {
   /// Rename the six-max ring EP, HJ, CO, BTN, SB, BB.
   final bool positionLabels;
 
+  /// Stakes this step plays. `Blinds $1/$2 NLH` unless the step teaches
+  /// another level.
+  final double smallBlind;
+
+  /// See [smallBlind].
+  final double bigBlind;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -182,6 +193,8 @@ class LessonTableStage extends StatelessWidget {
     bbIndex: bbIndex,
     activeSeatIndex: activeSeatIndex,
     positionLabels: positionLabels,
+    smallBlind: smallBlind,
+    bigBlind: bigBlind,
   );
 
   @override

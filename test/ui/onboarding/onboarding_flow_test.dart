@@ -386,11 +386,11 @@ void main() {
     expect(shelf.bottom, lessThanOrEqualTo(button.top));
     expect(rail.bottom, lessThan(button.top));
     final board = tester.getRect(find.byType(CommunityCardsView));
-    final pot = tester.getRect(find.textContaining(r'$5'));
+    final pot = tester.getRect(find.textContaining(r'$10'));
     final bb = tester.getRect(find.text('BB'));
     expect(pot.overlaps(bb), isFalse, reason: 'BB covers the pot');
     expect(board.overlaps(bb), isFalse, reason: 'BB covers the board');
-    for (final element in find.text(r'$100').evaluate()) {
+    for (final element in find.text(r'$200').evaluate()) {
       final stack = tester.getRect(find.byWidget(element.widget));
       expect(stack.overlaps(board), isFalse, reason: 'stack covers the board');
       expect(stack.overlaps(pot), isFalse, reason: 'stack covers the pot');

@@ -15,16 +15,31 @@ import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 
+/// Small blind a lesson table posts unless the step sets its own stakes.
+const double lessonSmallBlind = 1;
+
+/// Big blind a lesson table posts unless the step sets its own stakes.
+const double lessonBigBlind = 2;
+
 /// Builds a hand the poker bands can draw.
 ///
-/// Hero cards stay off the felt. [villainSeatCount] seats sit on the ring
-/// with face-down cards. The action dock appears only when
-/// [waitingForHero] is true and the caller supplies [onAction].
+/// [villainSeatCount] seats sit on the ring with face-down cards. Stacks
+/// start at [stackBb] big blinds. The button is [dealerIndex]. The small
+/// and big blind default to the next seats clockwise; heads-up, the button
+/// is the small blind. Preflop, both blinds are posted as bets in front of
+/// their seats; a table with only the hero has them in the pot. From the
+/// flop on, the pot holds five big blinds.
 GameState lessonBandGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
   int villainSeatCount = 0,
   bool waitingForHero = false,
+  double smallBlind = lessonSmallBlind,
+  double bigBlind = lessonBigBlind,
+  double stackBb = 100,
+  int dealerIndex = 0,
+  int? sbIndex,
+  int? bbIndex,
 }) {
   final board = [for (final code in boardCodes) CardModel.fromCode(code)];
   final street = switch (board.length) {
@@ -33,37 +48,61 @@ GameState lessonBandGame({
     4 => Street.turn,
     _ => Street.river,
   };
-  final villains = <PlayerModel>[
-    for (var i = 0; i < villainSeatCount; i++)
+  final seats = 1 + villainSeatCount;
+  final sb = sbIndex ?? (seats <= 2 ? dealerIndex : (dealerIndex + 1) % seats);
+  final bb =
+      bbIndex ??
+      (seats == 1
+          ? dealerIndex
+          : seats == 2
+          ? (dealerIndex + 1) % seats
+          : (dealerIndex + 2) % seats);
+  final preflop = street == Street.preflop;
+  final stack = stackBb * bigBlind;
+  double posted(int seat) {
+    if (!preflop || sb == bb) return 0;
+    if (seat == sb) return smallBlind;
+    if (seat == bb) return bigBlind;
+    return 0;
+  }
+
+  final players = <PlayerModel>[
+    PlayerModel(
+      id: 0,
+      name: 'You',
+      archetype: PlayerArchetype.hero,
+      stack: stack - posted(0),
+      currentBet: posted(0),
+      isHero: true,
+      holeCards: [for (final code in heroCodes) CardModel.fromCode(code)],
+    ),
+    for (var i = 1; i < seats; i++)
       PlayerModel(
-        id: i + 1,
+        id: i,
         name: 'Alex',
         archetype: PlayerArchetype.tag,
-        stack: 100,
+        stack: stack - posted(i),
+        currentBet: posted(i),
       ),
   ];
-  final seats = 1 + villains.length;
   return GameState(
-    players: [
-      PlayerModel(
-        id: 0,
-        name: 'You',
-        archetype: PlayerArchetype.hero,
-        stack: 100,
-        isHero: true,
-        holeCards: [for (final code in heroCodes) CardModel.fromCode(code)],
-      ),
-      ...villains,
-    ],
+    players: players,
     mode: GameMode.training,
     community: board,
     street: street,
-    mainPot: board.isEmpty ? 1.5 : 5,
-    smallBlind: 0.5,
-    bigBlind: 1,
-    dealerIndex: 0,
-    sbIndex: 0,
-    bbIndex: seats == 1 ? 0 : 1,
+    mainPot:
+        !preflop
+            ? 5 * bigBlind
+            : sb == bb
+            ? smallBlind + bigBlind
+            : 0,
+    highestBet: preflop ? bigBlind : 0,
+    minRaise: bigBlind,
+    smallBlind: smallBlind,
+    bigBlind: bigBlind,
+    dealerIndex: dealerIndex,
+    sbIndex: sb,
+    bbIndex: bb,
     waitingForHero: waitingForHero,
   );
 }
