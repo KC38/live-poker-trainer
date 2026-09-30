@@ -688,10 +688,30 @@ class TableLayout {
     final heroIndex = game.players.indexWhere((p) => p.isHero);
     final anchor = heroIndex < 0 ? 0 : heroIndex;
     final compact = n >= 7 || w < 340;
-    final seatScale = math.min(
-      (w / 390).clamp(0.82, 1.2),
-      (h / 440).clamp(0.8, 1.2),
+    const margin = 4.0;
+    // Full-height hole cards above every seat (no tuck) need a smaller
+    // scale on short/crowded felts so stacked side seats stay clear.
+    var seatScale = math.min(
+      (w / 390).clamp(0.76, 1.2),
+      (h / 560).clamp(0.66, 1.2),
     );
+    // Nine-handed side columns stack three villains; shrink until their
+    // footprints fit the vertical band with a small gutter.
+    if (n >= 7) {
+      for (var step = 0; step < 12; step++) {
+        final trial = SeatMetrics.of(
+          hero: false,
+          compact: compact,
+          stats: features.stats,
+          scale: seatScale,
+        );
+        final badgeH = 9 * seatScale;
+        final band = h - 2 * margin - badgeH;
+        final need = trial.footprint.height * 3 + 4;
+        if (need <= band || seatScale <= 0.62) break;
+        seatScale = (seatScale * 0.96).clamp(0.62, 1.2);
+      }
+    }
     final villainM = SeatMetrics.of(
       hero: false,
       compact: compact,
@@ -704,7 +724,6 @@ class TableLayout {
       review: review,
       scale: seatScale,
     );
-    const margin = 4.0;
     final badge = 9 * seatScale;
     final cx = w / 2;
 
