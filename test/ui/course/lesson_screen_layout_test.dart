@@ -13,11 +13,105 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 
+CourseActivity _hintActivity({
+  required String id,
+  required ActivityStage stage,
+  required String accessibilityText,
+  String? prompt,
+}) {
+  return CourseActivity(
+    id: id,
+    order: 1,
+    stage: stage,
+    renderer: ActivityRenderer.selectIdentify,
+    estimatedSeconds: 30,
+    accessibilityText: accessibilityText,
+    acceptedGrades: const [SoftGrade.recommended],
+    prompt: prompt,
+  );
+}
+
 void main() {
   test('lesson mascot expressions map to Rex moods', () {
     expect(LessonMascotExpression.thinking.rexMood, RexMood.calm);
     expect(LessonMascotExpression.happy.rexMood, RexMood.celebrate);
     expect(LessonMascotExpression.wrong.rexMood, RexMood.think);
+  });
+
+  test('hint fallback uses accessibility text on interactive steps', () {
+    final scaffolded = _hintActivity(
+      id: 'act-01-01-01-scaffolded-private',
+      stage: ActivityStage.scaffolded,
+      accessibilityText:
+          'Tap your private hole cards — not the board or other seats.',
+      prompt: 'Tap the cards only you can see.',
+    );
+    expect(
+      lessonFrameHintFallback(scaffolded),
+      'Tap your private hole cards — not the board or other seats.',
+    );
+
+    final unguided = _hintActivity(
+      id: 'act-01-01-01-unguided-mix',
+      stage: ActivityStage.unguided,
+      accessibilityText: 'Tap the shared community cards on the flop.',
+      prompt: 'Tap the community cards.',
+    );
+    expect(
+      lessonFrameHintFallback(unguided),
+      'Tap the shared community cards on the flop.',
+    );
+
+    final guided = _hintActivity(
+      id: 'act-01-02-01-guided-ladder',
+      stage: ActivityStage.guided,
+      accessibilityText:
+          'Showdown — tap You (high card), Sam (pair), then Jo (flush).',
+      prompt: 'Tap weakest to strongest.',
+    );
+    expect(
+      lessonFrameHintFallback(guided),
+      'Showdown — tap You (high card), Sam (pair), then Jo (flush).',
+    );
+  });
+
+  test('hint fallback stays off for explain, jump tests, and no-hint caps', () {
+    final explain = _hintActivity(
+      id: 'act-01-01-02-explain-suits',
+      stage: ActivityStage.explain,
+      accessibilityText: 'You found all four suits. Ace is still the high card.',
+    );
+    expect(lessonFrameHintFallback(explain), isNull);
+
+    final jump = _hintActivity(
+      id: 'act-01-06-02-jump-legal',
+      stage: ActivityStage.jumpTest,
+      accessibilityText: 'Jump test: check is illegal facing a bet.',
+      prompt: 'A bet faces you. Pick the action you cannot take.',
+    );
+    expect(lessonFrameHintsDisabled(jump), isTrue);
+    expect(lessonFrameHintFallback(jump), isNull);
+
+    final capstone = _hintActivity(
+      id: 'act-07-10-01-hand',
+      stage: ActivityStage.unguided,
+      accessibilityText: 'Capstone single-raised pot. No hints. Trust your map.',
+      prompt: 'Play the street.',
+    );
+    expect(lessonFrameHintsDisabled(capstone), isTrue);
+    expect(lessonFrameHintFallback(capstone), isNull);
+  });
+
+  test('hole-cards explain keeps its authored seat hint', () {
+    final activity = _hintActivity(
+      id: 'act-01-01-01-explain-hole-cards',
+      stage: ActivityStage.explain,
+      accessibilityText: 'These two are yours alone. Nobody else sees them.',
+    );
+    expect(
+      lessonFrameHintFallback(activity),
+      'Your two cards are at your seat, along the bottom of the table.',
+    );
   });
 
   test('design record names the six lesson regions', () {
