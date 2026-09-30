@@ -1322,7 +1322,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('full-ring baseline uses the lesson frame and the ring tiles', (
+  testWidgets('full-ring baseline uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1356,6 +1356,8 @@ void main() {
     expect(find.textContaining('Tap Nine'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('full-ring-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('NINE'), findsOneWidget);
     expect(find.text('SAME'), findsOneWidget);
     expect(find.text('POSITION'), findsOneWidget);
