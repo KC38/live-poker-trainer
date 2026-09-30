@@ -172,7 +172,7 @@ class SelectIdentifyActivity extends StatelessWidget {
       );
     }
 
-    final scene = resolveLessonTableScene(activity);
+    final scene = dealtLessonTableScene(activity, generation: controller.bindGeneration);
     final resolved = resolveLessonCoachPrompt(
       activity: activity,
       fallback: _coachFallback(presentation, scene != null),
@@ -470,7 +470,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       mapped,
       autoSubmit: true,
       seatLabel: seatLabelForTableTap(
-        resolveLessonTableScene(widget.activity),
+        dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration),
         target,
       ),
     );
@@ -554,9 +554,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns You — don’t gold-tip the winner.
       'act-01-02-01-checkpoint-winner' =>
         'Flush vs straight on the river — stronger category takes it.',
-      // SoftPulse owns You — don’t gold-tip the kicker winner.
+      // SoftPulse owns your holes — don’t gold-tip the kicker winner.
       'act-01-02-02-scaffolded-kicker' =>
-        'Same pair of kings — the higher kicker breaks the tie.',
+        'Same pair of kings — tap your cards, their cards, or Chop.',
       // Jump densify — SoftPulse off; pick without gold-tipping 55bb.
       'act-02-07-02-jump-stack' =>
         'You 120bb · villain 55bb — pick the effective stack.',
@@ -1065,7 +1065,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
 
   @override
   Widget build(BuildContext context) {
-    final scene = resolveLessonTableScene(widget.activity);
+    final scene = dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration);
     return AnimatedBuilder(
       animation: widget.controller,
       builder: (context, _) {
@@ -1317,6 +1317,68 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             ],
             if (scene != null) ...[
               if (LessonFrameScope.maybeOf(context) != null &&
+                  widget.activity.id == 'act-01-02-02-scaffolded-kicker')
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: LessonTableStage(
+                          heroCodes: scene.heroCodes,
+                          boardCodes: scene.boardCodes,
+                          villainCodes: scene.villainCodes,
+                          villainCount: 1,
+                          heroFaceUp: true,
+                          cue:
+                              widget.showGuidance ||
+                                      widget.controller.hintVisible
+                                  ? LessonTableCue.hero
+                                  : LessonTableCue.none,
+                          enabled: !locked,
+                          onHeroTap:
+                              locked
+                                  ? null
+                                  : () => _submitRegion(
+                                    const LessonTableTapTarget(
+                                      LessonTableRegion.hero,
+                                    ),
+                                  ),
+                          onVillainTap:
+                              locked
+                                  ? null
+                                  : (_) => _submitRegion(
+                                    const LessonTableTapTarget(
+                                      LessonTableRegion.villain,
+                                    ),
+                                  ),
+                        ),
+                      ),
+                      if (!locked) ...[
+                        const SizedBox(height: 10),
+                        HandExampleTile(
+                          example:
+                              resolveHandExample(
+                                id: 'chop-kicker',
+                                label: 'Chop',
+                              ) ??
+                              const LessonHandExample(
+                                id: 'chop-kicker',
+                                title: 'Chop',
+                                codes: [],
+                              ),
+                          selected: selected == 'chop-kicker',
+                          enabled: !locked,
+                          expand: true,
+                          onPressed: () => widget.controller.selectChoice(
+                            'chop-kicker',
+                            autoSubmit: true,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                )
+              else if (LessonFrameScope.maybeOf(context) != null &&
                   widget.activity.id == 'act-01-02-02-unguided-board')
                 Expanded(
                   child: LessonTableStage(
@@ -1387,6 +1449,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     dealerIndex: lessonBlindsButtonIndex,
                     sbIndex: lessonBlindsSmallBlindIndex,
                     bbIndex: lessonBlindsBigBlindIndex,
+                    // Ask who posts BB without showing $2 already out —
+                    // post + animate as soon as the learner taps the BB seat.
+                    postBigBlind:
+                        widget.activity.id !=
+                            'act-01-01-03-scaffolded-blinds' ||
+                        widget.controller.draft.choiceId == 'bb-two' ||
+                        (widget.controller.lastResult?.accepted ?? false),
                     activeSeatIndex: switch (scene.highlight) {
                       LessonTableHighlight.button => lessonBlindsButtonIndex,
                       LessonTableHighlight.smallBlind =>
@@ -1637,6 +1706,33 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                   enabled: !locked,
                   onRegionTap: locked ? null : _submitRegion,
                 ),
+              if (!locked &&
+                  widget.activity.id == 'act-01-02-02-scaffolded-kicker' &&
+                  LessonFrameScope.maybeOf(context) == null) ...[
+                const SizedBox(height: 10),
+                HandExampleTile(
+                  example:
+                      resolveHandExample(
+                        id: 'chop-kicker',
+                        label: 'Chop',
+                      ) ??
+                      const LessonHandExample(
+                        id: 'chop-kicker',
+                        title: 'Chop',
+                        codes: [],
+                      ),
+                  selected: selected == 'chop-kicker',
+                  enabled: !locked,
+                  expand: true,
+                  onPressed:
+                      locked
+                          ? null
+                          : () => widget.controller.selectChoice(
+                            'chop-kicker',
+                            autoSubmit: true,
+                          ),
+                ),
+              ],
             ],
             if (!locked &&
                 (widget.controller.submitting ||
@@ -1772,7 +1868,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scene = resolveLessonTableScene(activity);
+    final scene = dealtLessonTableScene(activity, generation: controller.bindGeneration);
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
@@ -2143,8 +2239,8 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
 
   String get _coachFallback {
     if (widget.activity.id == 'act-01-02-02-scaffolded-kicker') {
-      // SoftPulse owns You — don’t gold-tip the kicker winner.
-      return 'Same pair of kings — the higher kicker breaks the tie.';
+      // SoftPulse owns your holes — don’t gold-tip the kicker winner.
+      return 'Same pair of kings — tap your cards, their cards, or Chop.';
     }
     if (widget.activity.id == 'act-01-02-02-unguided-board') {
       // SoftPulse owns the board — don’t gold-tip Chop.
@@ -2186,7 +2282,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
   }
 
   void _chooseRegion(LessonTableRegion region) {
-    final scene = resolveLessonTableScene(widget.activity);
+    final scene = dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration);
     final target = LessonTableTapTarget(region);
     final mapped = mapTableRegionToChoiceId(
       activityId: widget.activity.id,
@@ -2204,7 +2300,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
 
   @override
   Widget build(BuildContext context) {
-    final scene = resolveLessonTableScene(widget.activity);
+    final scene = dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration);
     final feltInteractive =
         scene != null &&
         (scene.villainCodes.isNotEmpty || scene.heroCodes.isNotEmpty);
@@ -2255,17 +2351,11 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                   onHeroTap:
                       locked
                           ? null
-                          : () => _chooseRegion(LessonTableRegion.handRankYouWin),
+                          : () => _chooseRegion(LessonTableRegion.hero),
                   onVillainTap:
                       locked
                           ? null
-                          : (_) => _chooseRegion(
-                            LessonTableRegion.handRankTheyWin,
-                          ),
-                  onBoardTap:
-                      locked
-                          ? null
-                          : () => _chooseRegion(LessonTableRegion.handRankChop),
+                          : (_) => _chooseRegion(LessonTableRegion.villain),
                 ),
               )
             else if (scene != null) ...[
@@ -2305,12 +2395,14 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
               if (i > 0) const SizedBox(height: 8),
               Builder(
                 builder: (context) {
-                  if (framedShowdown) return const SizedBox.shrink();
                   final choice = widget.activity.choices[i];
-                  // Felt already teaches You vs Them — keep chop docks only.
+                  // Hole taps teach You / Them — keep a Chop dock only.
                   if (feltInteractive &&
                       !choice.id.contains('chop') &&
                       choice.id != 'split') {
+                    return const SizedBox.shrink();
+                  }
+                  if (!feltInteractive && framedShowdown) {
                     return const SizedBox.shrink();
                   }
                   final example =

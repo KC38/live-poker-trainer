@@ -72,18 +72,18 @@ describe("mergeCourseProfiles", () => {
         lifetimeXp: 10,
         completedLessonIds: ["lesson-a"],
         livesRemaining: 1,
-        livesMax: 3,
+        livesMax: 5,
       },
       {
         lifetimeXp: 20,
         completedLessonIds: ["lesson-a"],
         livesRemaining: 2,
-        livesMax: 3,
+        livesMax: 5,
       },
       "2.0.0",
     );
     expect(merged.profile.livesRemaining).toBe(2);
-    expect(merged.profile.livesMax).toBe(3);
+    expect(merged.profile.livesMax).toBe(5);
   });
 });
 

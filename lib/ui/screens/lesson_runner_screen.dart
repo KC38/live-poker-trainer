@@ -20,6 +20,7 @@ import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/course/activity_registry.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/heart_refill_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
@@ -764,13 +765,32 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     Navigator.of(context).maybePop();
   }
 
+  /// Hearts for the lesson chrome while bootstrapping or after an error.
+  ///
+  /// Prefer the open attempt, then Home profile — never invent a full bar of
+  /// five while the real count (e.g. 4) is already known on Home.
+  (int remaining, int max) _frameLivesWhilePending() {
+    final attempt = _attempt;
+    if (attempt != null) {
+      return (attempt.livesRemaining, attempt.livesMax);
+    }
+    final homeAsync = ref.watch(courseHomeProvider);
+    final home = homeAsync.asData?.value ?? homeAsync.valueOrNull;
+    if (home != null) {
+      final max = home.livesMax > 0 ? home.livesMax : 5;
+      return (home.hearts.clamp(0, max), max);
+    }
+    return (5, 5);
+  }
+
   Widget _buildLessonFrameBody() {
     final onClose = _closeLesson;
     if (_bootstrapping || _error != null) {
+      final (livesRemaining, livesMax) = _frameLivesWhilePending();
       return LessonScreenLayout(
         progress: 0,
-        livesRemaining: 3,
-        livesMax: 3,
+        livesRemaining: livesRemaining,
+        livesMax: livesMax,
         onClose: onClose,
         speech: '',
         expression: LessonMascotExpression.thinking,
@@ -983,6 +1003,57 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               ),
               const SizedBox(height: 12),
             ],
+            if (_error!.toLowerCase().contains('out of hearts')) ...[
+              FilledButton(
+                onPressed: () async {
+                  final home = ref.read(courseHomeProvider).asData?.value;
+                  final action = await showHeartRefillSheet(
+                    context: context,
+                    livesRemaining: home?.hearts ?? 0,
+                    livesMax: home?.livesMax ?? 5,
+                    gems: home?.gems ?? 0,
+                    livesNextRefillAtMs: home?.livesNextRefillAtMs,
+                    adClaimsRemainingToday: home?.adClaimsRemainingToday ?? 5,
+                    nextAdClaimAtMs: home?.nextAdClaimAtMs,
+                  );
+                  if (!mounted || action == null) return;
+                  if (action == HeartRefillAction.gems) {
+                    try {
+                      await _service.refillHearts(
+                        method: 'gems',
+                        idempotencyKey:
+                            CourseService.newRequestKey('heart_gems'),
+                      );
+                      if (!mounted) return;
+                      _retryBootstrap();
+                    } catch (error) {
+                      if (!mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('$error')),
+                      );
+                    }
+                  } else if (action == HeartRefillAction.ad) {
+                    try {
+                      await watchAdAndClaimHeart(
+                        context: context,
+                        service: _service,
+                      );
+                      if (!mounted) return;
+                      _retryBootstrap();
+                    } catch (error) {
+                      if (!mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('$error')),
+                      );
+                    }
+                  } else if (action == HeartRefillAction.practice) {
+                    if (mounted) Navigator.of(context).maybePop();
+                  }
+                },
+                child: const Text('Restore hearts'),
+              ),
+              const SizedBox(height: 12),
+            ],
             _errorDetail?.toLowerCase().contains('failed-precondition') == true
                 ? OutlinedButton(
                   onPressed: _retryBootstrap,
@@ -1000,8 +1071,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final controller = _activityController!;
     final activity = controller.activity;
     final attempt = _attempt!;
-    final hint =
-        activity.hintMedia.isNotEmpty ? activity.hintMedia.first : null;
+    final hasHint = _frameCanHint(activity);
 
     final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
     return Padding(
@@ -1015,9 +1085,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             livesRemaining: attempt.livesRemaining,
             livesMax: attempt.livesMax,
             acceptedStreak: _acceptedStreak,
-            hintEnabled: hint != null && !controller.hintUsed,
+            hintEnabled: hasHint && !controller.hintUsed,
             onHint:
-                hint == null
+                !hasHint
                     ? null
                     : () {
                       if (controller.hintUsed) return;
@@ -1089,11 +1159,17 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         ),
                       ),
                     );
+                    final hintText =
+                        activity.hintMedia.isNotEmpty
+                            ? activity.hintMedia.first.text
+                            : lessonFrameHintFallback(activity);
                     final hintLine =
-                        controller.hintVisible && hint != null
+                        controller.hintVisible &&
+                                hintText != null &&
+                                hintText.trim().isNotEmpty
                             ? <Widget>[
                               const SizedBox(height: 10),
-                              RexCoachLine(text: hint!.text, label: 'Hint'),
+                              RexCoachLine(text: hintText, label: 'Hint'),
                             ]
                             : const <Widget>[];
                     if (!fillFelt) {

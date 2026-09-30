@@ -22,9 +22,12 @@ import {
   completeCourseLessonForUser,
   getCourseStateForUser,
   initializeCourseProfileForUser,
+  localDateString,
+  refillCourseHeartsForUser,
   startCourseLessonForUser,
   submitCourseStepForUser,
 } from "./course_session";
+import {getFirestore} from "firebase-admin/firestore";
 import {
   cleanupExpiredCourseTransfers,
   issueAnonymousProgressTransferForUser,
@@ -289,6 +292,32 @@ export const getCourseState = onCall(
       });
     } catch (error) {
       throw callableError("getCourseState", error);
+    }
+  },
+);
+
+/** Refills hearts via gems, rewarded ad claim, or practice claim. */
+export const refillCourseHearts = onCall(
+  {
+    region: "us-central1",
+    timeoutSeconds: 30,
+    memory: "256MiB",
+  },
+  async (request) => {
+    const uid = requireAuth(request.auth?.uid, "Sign in required for course.");
+    try {
+      const profileSnap = await getFirestore()
+        .collection("users").doc(uid)
+        .collection("course").doc("main")
+        .get();
+      const timezone = String(profileSnap.data()?.timezone ?? "UTC");
+      return await refillCourseHeartsForUser({
+        uid,
+        raw: request.data,
+        localDate: localDateString(Date.now(), timezone),
+      });
+    } catch (error) {
+      throw callableError("refillCourseHearts", error);
     }
   },
 );

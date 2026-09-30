@@ -174,6 +174,25 @@ void main() {
     ]);
   });
 
+  test('postBigBlind false leaves only the small blind out', () {
+    final game = lessonTableStageGame(
+      villainCount: lessonBlindsVillainCount,
+      dealerIndex: lessonBlindsButtonIndex,
+      sbIndex: lessonBlindsSmallBlindIndex,
+      bbIndex: lessonBlindsBigBlindIndex,
+      postBigBlind: false,
+    );
+
+    final sb = game.players[lessonBlindsSmallBlindIndex];
+    final bb = game.players[lessonBlindsBigBlindIndex];
+    expect(sb.currentBet, 1);
+    expect(bb.currentBet, 0);
+    expect(bb.stack, 200);
+    expect(game.bbIndex, lessonBlindsBigBlindIndex);
+    expect(game.displayPot, 1);
+    expect(game.highestBet, 1);
+  });
+
   test('a step can teach other stakes; stacks stay 100 big blinds', () {
     final game = lessonTableStageGame(smallBlind: 0.5, bigBlind: 1);
 

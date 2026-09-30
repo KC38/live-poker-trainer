@@ -30,30 +30,29 @@ import {
   type SoftGrade,
 } from "./course_catalog";
 import {resolveLiveAccessForUser} from "./live_access";
+import {
+  adHeartAvailability,
+  applyPassiveHeartRefill,
+  DEFAULT_LESSON_LIVES,
+  heartFieldsToFirestore,
+  heartStateFromData,
+  practiceHeartGrantFromCompletion,
+  profileLivesFromData,
+  scheduleHeartRefillAfterLoss,
+} from "./course_hearts";
 
-/** Max hearts on a course profile. Shared by new users and attempt ceilings. */
-export const DEFAULT_LESSON_LIVES = 3;
+export {
+  AD_HEART_COOLDOWN_MS,
+  AD_HEART_DAILY_MAX,
+  DEFAULT_LESSON_LIVES,
+  GEMS_FULL_HEART_REFILL,
+  HEART_REFILL_INTERVAL_MS,
+  profileLivesFromData,
+  refillCourseHeartsForUser,
+} from "./course_hearts";
+
 export const XP_PER_ACCEPTED_STEP = 10;
 export const XP_LESSON_COMPLETE = 25;
-
-/**
- * Hearts are per user (course profile), not reset per lesson.
- * Missing / invalid profile values fall back to a full set.
- */
-export function profileLivesFromData(data: DocumentData | undefined): {
-  livesRemaining: number;
-  livesMax: number;
-} {
-  const livesMaxRaw = Number(data?.livesMax ?? DEFAULT_LESSON_LIVES);
-  const livesMax = Number.isFinite(livesMaxRaw) && livesMaxRaw > 0 ?
-    Math.floor(livesMaxRaw) :
-    DEFAULT_LESSON_LIVES;
-  const remainingRaw = Number(data?.livesRemaining ?? livesMax);
-  const livesRemaining = Number.isFinite(remainingRaw) ?
-    Math.max(0, Math.min(livesMax, Math.floor(remainingRaw))) :
-    livesMax;
-  return {livesRemaining, livesMax};
-}
 
 /** Gems granted the first time a learner studies on a local calendar day. */
 export const GEMS_DAILY_QUEST = 5;
@@ -113,6 +112,18 @@ export interface CourseProfile {
   livesRemaining: number;
   /** Heart ceiling for this user (usually [DEFAULT_LESSON_LIVES]). */
   livesMax: number;
+  /** Epoch ms when the next passive +1 heart becomes available. */
+  livesNextRefillAtMs?: number | null;
+  /** Local calendar date for [heartsAdClaimsToday]. */
+  heartsAdClaimsLocalDate?: string | null;
+  /** Rewarded-ad heart claims on [heartsAdClaimsLocalDate]. */
+  heartsAdClaimsToday?: number;
+  /** Epoch ms of the last rewarded-ad heart claim. */
+  lastHeartAdClaimAtMs?: number | null;
+  /** Remaining ad hearts today (derived). */
+  adClaimsRemainingToday?: number;
+  /** Epoch ms when the next ad heart claim is allowed (derived). */
+  nextAdClaimAtMs?: number | null;
   currentStreak: number;
   longestStreak: number;
   lastStudyLocalDate: string | null;
@@ -211,6 +222,11 @@ export interface CompleteCourseLessonResult {
   gemsAwarded?: number;
   /** Wallet balance after this completion. */
   gems?: number;
+  /** Hearts restored by completing a practice/replay lesson. */
+  heartsRestored?: number;
+  livesRemaining?: number;
+  livesMax?: number;
+  livesNextRefillAtMs?: number | null;
 }
 
 /** Parses course flags; missing/invalid docs fail closed (course disabled). */
@@ -677,15 +693,43 @@ export async function startCourseLessonForUser(options: {
         attempt.lessonId === lessonId &&
         (attempt.status === "in_progress" || attempt.status === "remediation")
       ) {
+        const passive = applyPassiveHeartRefill(
+          heartStateFromData(
+            profileSnap.exists ? profileSnap.data() : undefined,
+          ),
+          nowMs,
+        );
+        const synced: CourseAttempt = {
+          ...attempt,
+          livesRemaining: passive.livesRemaining,
+          livesMax: passive.livesMax,
+          status: attempt.status === "remediation" &&
+              passive.livesRemaining > 0 ?
+            "in_progress" :
+            attempt.status,
+        };
+        if (passive.changed || synced.livesRemaining !== attempt.livesRemaining ||
+          synced.status !== attempt.status) {
+          tx.set(profileRef, {
+            ...heartFieldsToFirestore(passive),
+            updatedAt: FieldValue.serverTimestamp(),
+          }, {merge: true});
+          tx.set(priorAttemptSnap.ref, {
+            livesRemaining: synced.livesRemaining,
+            livesMax: synced.livesMax,
+            status: synced.status,
+            updatedAt: FieldValue.serverTimestamp(),
+          }, {merge: true});
+        }
         tx.set(requestRef, {
           status: "ready",
-          attemptId: attempt.attemptId,
+          attemptId: synced.attemptId,
           lessonId,
           updatedAt: FieldValue.serverTimestamp(),
         }, {merge: true});
         return {
-          attempt,
-          resume: resumeFromAttempt(attempt),
+          attempt: synced,
+          resume: resumeFromAttempt(synced),
           duplicate: true,
         };
       }
@@ -723,9 +767,18 @@ export async function startCourseLessonForUser(options: {
     });
 
     // Carry user hearts into the attempt — never reset to full per lesson.
-    const profileLives = profileLivesFromData(
-      profileSnap.exists ? profileSnap.data() : undefined,
+    // Accrue any time-based hearts before the attempt snapshot is taken.
+    const passive = applyPassiveHeartRefill(
+      heartStateFromData(profileSnap.exists ? profileSnap.data() : undefined),
+      nowMs,
     );
+    const isPracticeReplay = completedForPrereqs.includes(lessonId);
+    if (passive.livesRemaining <= 0 && !isPracticeReplay) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Out of hearts. Refill before starting a lesson.",
+      );
+    }
 
     const first = activities[0];
     const attempt: CourseAttempt = {
@@ -736,8 +789,8 @@ export async function startCourseLessonForUser(options: {
       status: "in_progress",
       activityIndex: 0,
       currentActivityId: first.id,
-      livesRemaining: profileLives.livesRemaining,
-      livesMax: profileLives.livesMax,
+      livesRemaining: passive.livesRemaining,
+      livesMax: passive.livesMax,
       startRequestId,
       acceptedCount: 0,
       scoredCount: 0,
@@ -768,9 +821,7 @@ export async function startCourseLessonForUser(options: {
       resume: resumeFromAttempt(attempt),
       catalogVersion,
       timezone,
-      // Backfill lives on legacy profiles that never stored them.
-      livesRemaining: profileLives.livesRemaining,
-      livesMax: profileLives.livesMax,
+      ...heartFieldsToFirestore(passive),
       updatedAt: FieldValue.serverTimestamp(),
     }, {merge: true});
     return {
@@ -888,9 +939,18 @@ export async function submitCourseStepForUser(options: {
 
     let livesRemaining = attempt.livesRemaining;
     let lifeLost = false;
+    let livesNextRefillAtMs: number | null = heartStateFromData(
+      profileSnap.data(),
+    ).livesNextRefillAtMs;
     if (outcome.lifeLost && livesRemaining > 0) {
       livesRemaining -= 1;
       lifeLost = true;
+      livesNextRefillAtMs = scheduleHeartRefillAfterLoss({
+        livesRemaining,
+        livesMax: attempt.livesMax > 0 ? attempt.livesMax : DEFAULT_LESSON_LIVES,
+        livesNextRefillAtMs,
+        nowMs,
+      });
     }
     const remediationRequired = lifeLost && livesRemaining <= 0;
     const scored = activity.stage !== "explain";
@@ -1012,6 +1072,7 @@ export async function submitCourseStepForUser(options: {
       // Keep user hearts in sync when a life is spent (and backfill max).
       livesRemaining,
       livesMax: attempt.livesMax > 0 ? attempt.livesMax : DEFAULT_LESSON_LIVES,
+      livesNextRefillAtMs,
       updatedAt: FieldValue.serverTimestamp(),
     };
     if (scored) {
@@ -1156,6 +1217,13 @@ export async function completeCourseLessonForUser(options: {
       );
     }
 
+    const priorCompleted = Array.isArray(profileSnap.data()?.completedLessonIds) ?
+      profileSnap.data()!.completedLessonIds as string[] :
+      [];
+    const isPracticeOrReplay =
+      priorCompleted.includes(attempt.lessonId) ||
+      isPracticeLesson(located.lesson);
+
     const mastery = masteryRatio(attempt);
     const xpAwarded = XP_LESSON_COMPLETE;
     const lessonXpAwarded = lessonXpTotal(attempt.xpEarned);
@@ -1170,6 +1238,17 @@ export async function completeCourseLessonForUser(options: {
     });
     const gemsAwarded = streak.credited ? GEMS_DAILY_QUEST : 0;
     const gemsBalance = Number(profileSnap.data()?.gems ?? 0) + gemsAwarded;
+
+    const passiveHearts = applyPassiveHeartRefill(
+      heartStateFromData(profileSnap.data()),
+      nowMs,
+    );
+    const practiceGrant = practiceHeartGrantFromCompletion({
+      state: {...passiveHearts, gems: gemsBalance},
+      nowMs,
+      isPracticeOrReplay,
+    });
+    const heartState = practiceGrant ?? passiveHearts;
 
     const shouldGrantLive = lessonGrantsLiveTrainingEntitlement(located) &&
       attempt.jumpTestPassed;
@@ -1192,9 +1271,7 @@ export async function completeCourseLessonForUser(options: {
     }
 
     const completedLessonIds = uniqueStrings([
-      ...(Array.isArray(profileSnap.data()?.completedLessonIds) ?
-        profileSnap.data()!.completedLessonIds as string[] :
-        []),
+      ...priorCompleted,
       attempt.lessonId,
     ]);
     const masteryByLessonId = {
@@ -1262,6 +1339,7 @@ export async function completeCourseLessonForUser(options: {
       currentLessonId: null,
       resume: null,
       acceptedAccuracy,
+      ...heartFieldsToFirestore(heartState),
       ...(firstLessonCompletedAtMs ?
         {firstLessonCompletedAtMs} :
         {}),
@@ -1281,6 +1359,10 @@ export async function completeCourseLessonForUser(options: {
       resume: null,
       gemsAwarded,
       gems: gemsBalance,
+      heartsRestored: practiceGrant?.heartsRestored ?? 0,
+      livesRemaining: heartState.livesRemaining,
+      livesMax: heartState.livesMax,
+      livesNextRefillAtMs: heartState.livesNextRefillAtMs,
     };
     tx.create(receiptRef, {
       idempotencyKey,
@@ -1325,9 +1407,37 @@ export async function getCourseStateForUser(options: {
   }
 
   const profileSnap = await courseProfileRef(db, options.uid).get();
-  const profile = profileSnap.exists ?
+  let profile = profileSnap.exists ?
     profileFromData(profileSnap.data()!) :
     null;
+  const nowMs = Date.now();
+  if (profile && profileSnap.exists) {
+    const heartState = heartStateFromData(profileSnap.data());
+    const passive = applyPassiveHeartRefill(heartState, nowMs);
+    if (passive.changed) {
+      await courseProfileRef(db, options.uid).set({
+        ...heartFieldsToFirestore(passive),
+        updatedAt: FieldValue.serverTimestamp(),
+      }, {merge: true});
+    }
+    const localDate = localDateString(nowMs, profile.timezone);
+    const availability = adHeartAvailability({
+      state: passive,
+      localDate,
+      nowMs,
+    });
+    profile = {
+      ...profile,
+      livesRemaining: passive.livesRemaining,
+      livesMax: passive.livesMax,
+      livesNextRefillAtMs: passive.livesNextRefillAtMs,
+      heartsAdClaimsLocalDate: passive.heartsAdClaimsLocalDate,
+      heartsAdClaimsToday: passive.heartsAdClaimsToday,
+      lastHeartAdClaimAtMs: passive.lastHeartAdClaimAtMs,
+      adClaimsRemainingToday: availability.adClaimsRemainingToday,
+      nextAdClaimAtMs: availability.nextAdClaimAtMs,
+    };
+  }
   let openAttempt: CourseAttempt | null = null;
   if (profile?.resume?.attemptId) {
     const snap = await attemptRef(db, options.uid, profile.resume.attemptId)
@@ -1335,11 +1445,16 @@ export async function getCourseStateForUser(options: {
     if (snap.exists) {
       const attempt = attemptFromData(snap.data()!);
       if (attempt.status === "in_progress" || attempt.status === "remediation") {
-        openAttempt = attempt;
+        openAttempt = profile ?
+          {
+            ...attempt,
+            livesRemaining: profile.livesRemaining,
+            livesMax: profile.livesMax,
+          } :
+          attempt;
       }
     }
   }
-  const nowMs = Date.now();
   const reviewsSnap = await db
     .collection("users")
     .doc(options.uid)
@@ -1635,6 +1750,7 @@ function emptyProfile(options: {
     gems: 0,
     livesRemaining: DEFAULT_LESSON_LIVES,
     livesMax: DEFAULT_LESSON_LIVES,
+    livesNextRefillAtMs: null,
     currentStreak: 0,
     longestStreak: 0,
     lastStudyLocalDate: null,
@@ -1666,6 +1782,7 @@ function profileToFirestore(profile: CourseProfile): DocumentData {
     gems: profile.gems,
     livesRemaining: profile.livesRemaining,
     livesMax: profile.livesMax,
+    livesNextRefillAtMs: profile.livesNextRefillAtMs ?? null,
     currentStreak: profile.currentStreak,
     longestStreak: profile.longestStreak,
     lastStudyLocalDate: profile.lastStudyLocalDate,
@@ -1692,12 +1809,20 @@ function profileFromData(data: DocumentData): CourseProfile {
   const acceptedAnswers = Number(data.acceptedAnswers ?? 0);
   const totalScoredAnswers = Number(data.totalScoredAnswers ?? 0);
   const lives = profileLivesFromData(data);
+  const hearts = heartStateFromData(data);
   return {
     catalogVersion: String(data.catalogVersion ?? courseBank.catalogVersion),
     lifetimeXp: Number(data.lifetimeXp ?? 0),
     gems: Number(data.gems ?? 0),
     livesRemaining: lives.livesRemaining,
     livesMax: lives.livesMax,
+    livesNextRefillAtMs: Number.isFinite(Number(data.livesNextRefillAtMs)) &&
+      Number(data.livesNextRefillAtMs) > 0 ?
+      Math.floor(Number(data.livesNextRefillAtMs)) :
+      null,
+    heartsAdClaimsLocalDate: hearts.heartsAdClaimsLocalDate,
+    heartsAdClaimsToday: hearts.heartsAdClaimsToday,
+    lastHeartAdClaimAtMs: hearts.lastHeartAdClaimAtMs,
     currentStreak: Number(data.currentStreak ?? 0),
     longestStreak: Number(data.longestStreak ?? 0),
     lastStudyLocalDate: optionalString(data.lastStudyLocalDate) ?? null,
@@ -1803,6 +1928,13 @@ function sortedActivities(lesson: CourseLesson): CourseActivity[] {
 function masteryRatio(attempt: CourseAttempt): number {
   if (attempt.masteryWeight <= 0) return 0;
   return attempt.masteryPoints / attempt.masteryWeight;
+}
+
+/** Practice nodes (title/id) restore a heart on completion like Duo practice. */
+function isPracticeLesson(lesson: CourseLesson): boolean {
+  const id = lesson.id.toLowerCase();
+  const title = lesson.title.toLowerCase();
+  return id.includes("-practice-") || title.includes("practice");
 }
 
 function sanitizeEntitlement(data: DocumentData): Record<string, unknown> {

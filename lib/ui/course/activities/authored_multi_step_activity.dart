@@ -120,9 +120,10 @@ class AuthoredMultiStepActivity extends StatelessWidget {
         final step = steps[index];
         final locked = controller.submitting || controller.lastResult != null;
         final selected = controller.draft.choiceId;
-        final spot = resolveToyHandStepSpot(
+        final spot = dealtToyHandStepSpot(
           activityId: activity.id,
           stepId: step.id,
+          generation: controller.bindGeneration,
         );
         final tableMode = isLessonActionTableActivity(activity) && spot != null;
         final coachText = _coachTextFor(step);

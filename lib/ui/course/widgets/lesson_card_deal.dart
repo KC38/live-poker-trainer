@@ -10,6 +10,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:live_poker_trainer/core/constants/poker_constants.dart';
+import 'package:live_poker_trainer/engine/deck_evaluator.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
@@ -17,6 +18,69 @@ import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 /// Test hook: when set, hole-hand and suit-board deals use this RNG.
 @visibleForTesting
 Random? debugLessonCardDealRandom;
+
+/// When true, dealt scene/action helpers skip suit remap.
+@visibleForTesting
+bool debugFreezeLessonSuitRemap = false;
+
+/// Whether production remappers should permute suits.
+bool get lessonSuitRemapEnabled => !debugFreezeLessonSuitRemap;
+
+/// RNG for a lesson attempt: explicit, test hook, or stable activity seed.
+Random resolveLessonDealRandom({
+  String? activityId,
+  int generation = 0,
+  Random? random,
+}) {
+  if (random != null) return random;
+  final hooked = debugLessonCardDealRandom;
+  if (hooked != null) return hooked;
+  if (activityId != null) return Random(lessonDealSeed(activityId, generation));
+  return Random();
+}
+
+/// FNV-1a seed from an activity id (and optional generation) for stable deals.
+int lessonDealSeed(String activityId, [int generation = 0]) {
+  var hash = 0x811c9dc5;
+  final key = '$activityId#$generation';
+  for (final unit in key.codeUnits) {
+    hash ^= unit;
+    hash = (hash * 0x01000193) & 0xffffffff;
+  }
+  return hash;
+}
+
+/// Applies one random suit permutation to every code in [codes].
+List<String> permuteCardSuits(List<String> codes, Random rng) {
+  if (codes.isEmpty) return const [];
+  final map = _freshSuitMap(rng);
+  return [for (final code in codes) _applySuitMap(code, map)];
+}
+
+/// Remaps several code lists with the **same** suit permutation.
+List<List<String>> permuteCardSuitGroups(
+  List<List<String>> groups,
+  Random rng,
+) {
+  final map = _freshSuitMap(rng);
+  return [
+    for (final codes in groups)
+      [for (final code in codes) _applySuitMap(code, map)],
+  ];
+}
+
+Map<String, String> _freshSuitMap(Random rng) {
+  final perm = List<String>.of(_suits)..shuffle(rng);
+  return {for (var i = 0; i < _suits.length; i++) _suits[i]: perm[i]};
+}
+
+String _applySuitMap(String code, Map<String, String> map) {
+  if (code.isEmpty) return code;
+  final suit = code[code.length - 1];
+  final mapped = map[suit];
+  if (mapped == null) return code;
+  return '${code.substring(0, code.length - 1)}$mapped';
+}
 
 /// Starting-hand attribute used when dealing two hole cards.
 enum LessonHoleKind {
@@ -293,6 +357,356 @@ String _code(int rank, String suit) =>
 
 const List<String> _suits = ['h', 'd', 'c', 's'];
 const List<int> _broadwayRanks = [10, 11, 12, 13, 14];
+
+/// Cards for a Hand ranks showdown-order step (seat strength order preserved).
+@immutable
+class ShowdownOrderDeal {
+  /// Creates a dealt showdown layout.
+  const ShowdownOrderDeal({
+    required this.boardCodes,
+    required this.heroCodes,
+    required this.villainHoleCodes,
+    required this.seatIds,
+    required this.correctOrder,
+  });
+
+  final List<String> boardCodes;
+  final List<String> heroCodes;
+  final List<List<String>> villainHoleCodes;
+  final List<String> seatIds;
+  final List<String> correctOrder;
+}
+
+/// Randomized Hand ranks showdown layout for [activityId], or null if unknown.
+///
+/// Role ids stay authored (`you` / `sam` / `jo` = strength tiers) and
+/// [correctOrder] is unchanged for server grading. Card faces vary, and which
+/// physical seat holds each role is shuffled.
+ShowdownOrderDeal? dealShowdownOrderCards(
+  String activityId, {
+  Random? random,
+}) {
+  final rng = random ?? debugLessonCardDealRandom ?? Random();
+  final dealt = switch (activityId) {
+    'act-01-02-01-explain-ladder' ||
+    'act-01-02-01-guided-ladder' =>
+      _dealHighPairFlushWeakToStrong(rng),
+    'act-01-02-01-scaffolded-spot' => _dealPairStraightFlushWeakToStrong(rng),
+    'act-01-02-01-unguided-compare' => _dealFullTripsTwoPairStrongToWeak(rng),
+    'act-01-02-01-checkpoint-winner' => _dealFlushStraightHighStrongToWeak(rng),
+    _ => null,
+  };
+  if (dealt == null) return null;
+  return _shuffleShowdownSeatRoles(dealt, rng);
+}
+
+/// Shuffles which seat (You/Sam/Jo) holds each strength role.
+ShowdownOrderDeal _shuffleShowdownSeatRoles(
+  ShowdownOrderDeal deal,
+  Random rng,
+) {
+  final hands = <List<String>>[
+    deal.heroCodes,
+    deal.villainHoleCodes[0],
+    deal.villainHoleCodes[1],
+  ];
+  final roles = List<String>.of(deal.seatIds);
+  final order = [0, 1, 2]..shuffle(rng);
+  return ShowdownOrderDeal(
+    boardCodes: deal.boardCodes,
+    heroCodes: List<String>.unmodifiable(hands[order[0]]),
+    villainHoleCodes: List<List<String>>.unmodifiable([
+      List<String>.unmodifiable(hands[order[1]]),
+      List<String>.unmodifiable(hands[order[2]]),
+    ]),
+    seatIds: List<String>.unmodifiable([
+      roles[order[0]],
+      roles[order[1]],
+      roles[order[2]],
+    ]),
+    correctOrder: deal.correctOrder,
+  );
+}
+
+ShowdownOrderDeal _dealFullTripsTwoPairStrongToWeak(Random rng) {
+  for (var attempt = 0; attempt < 80; attempt++) {
+    final ranks = List<int>.generate(13, (i) => i + 2)..shuffle(rng);
+    final trip = ranks[0];
+    final pair = ranks[1];
+    final k1 = ranks[2];
+    final k2 = ranks[3];
+    final k3 = ranks[4];
+    final suits = List<String>.of(_suits)..shuffle(rng);
+    final board = [
+      _code(trip, suits[0]),
+      _code(trip, suits[1]),
+      _code(pair, suits[2]),
+      _code(k1, suits[3]),
+      _code(k2, suits[0]),
+    ];
+    final hero = [_code(trip, suits[2]), _code(pair, suits[1])];
+    final sam = [_code(trip, suits[3]), _code(k3, suits[0])];
+    final jo = [_code(pair, suits[0]), _code(k1, suits[1])];
+    if (!_uniqueCards([...board, ...hero, ...sam, ...jo])) continue;
+    if (!_namesMatch(
+      board: board,
+      hero: hero,
+      sam: sam,
+      jo: jo,
+      expected: const ['Full House', 'Three of a Kind', 'Two Pair'],
+    )) {
+      continue;
+    }
+    return ShowdownOrderDeal(
+      boardCodes: List<String>.unmodifiable(board),
+      heroCodes: List<String>.unmodifiable(hero),
+      villainHoleCodes: List<List<String>>.unmodifiable([
+        List<String>.unmodifiable(sam),
+        List<String>.unmodifiable(jo),
+      ]),
+      seatIds: const ['you', 'sam', 'jo'],
+      correctOrder: const ['you', 'sam', 'jo'],
+    );
+  }
+  return const ShowdownOrderDeal(
+    boardCodes: ['Qh', 'Qd', '9c', '4s', '2d'],
+    heroCodes: ['Qs', '9h'],
+    villainHoleCodes: [
+      ['Qc', 'Jh'],
+      ['9d', '4h'],
+    ],
+    seatIds: ['you', 'sam', 'jo'],
+    correctOrder: ['you', 'sam', 'jo'],
+  );
+}
+
+ShowdownOrderDeal _dealFlushStraightHighStrongToWeak(Random rng) {
+  // Structure-preserving remap of the authored template so straights survive.
+  const templateBoard = ['9c', '8h', '7d', '4c', '2c'];
+  const templateHero = ['Ac', 'Kc'];
+  const templateSam = ['6s', '5h'];
+  const templateJo = ['Ah', 'Kd'];
+  for (var attempt = 0; attempt < 40; attempt++) {
+    final remapped = _remapSpotCards(
+      board: templateBoard,
+      hero: templateHero,
+      sam: templateSam,
+      jo: templateJo,
+      rng: rng,
+      preserveStraightGaps: true,
+    );
+    if (remapped == null) continue;
+    if (!_namesMatch(
+      board: remapped.board,
+      hero: remapped.hero,
+      sam: remapped.sam,
+      jo: remapped.jo,
+      expected: const ['Flush', 'Straight', 'High Card'],
+    )) {
+      continue;
+    }
+    return ShowdownOrderDeal(
+      boardCodes: List<String>.unmodifiable(remapped.board),
+      heroCodes: List<String>.unmodifiable(remapped.hero),
+      villainHoleCodes: List<List<String>>.unmodifiable([
+        List<String>.unmodifiable(remapped.sam),
+        List<String>.unmodifiable(remapped.jo),
+      ]),
+      seatIds: const ['you', 'sam', 'jo'],
+      correctOrder: const ['you', 'sam', 'jo'],
+    );
+  }
+  return const ShowdownOrderDeal(
+    boardCodes: ['9c', '8h', '7d', '4c', '2c'],
+    heroCodes: ['Ac', 'Kc'],
+    villainHoleCodes: [
+      ['6s', '5h'],
+      ['Ah', 'Kd'],
+    ],
+    seatIds: ['you', 'sam', 'jo'],
+    correctOrder: ['you', 'sam', 'jo'],
+  );
+}
+
+ShowdownOrderDeal _dealHighPairFlushWeakToStrong(Random rng) {
+  const templateBoard = ['9c', '7c', '3c', '2h', '5d'];
+  const templateHero = ['Ah', 'Kd'];
+  const templateSam = ['9h', '8s'];
+  const templateJo = ['Ac', 'Kc'];
+  for (var attempt = 0; attempt < 40; attempt++) {
+    final remapped = _remapSpotCards(
+      board: templateBoard,
+      hero: templateHero,
+      sam: templateSam,
+      jo: templateJo,
+      rng: rng,
+      preserveStraightGaps: false,
+    );
+    if (remapped == null) continue;
+    if (!_namesMatch(
+      board: remapped.board,
+      hero: remapped.hero,
+      sam: remapped.sam,
+      jo: remapped.jo,
+      expected: const ['High Card', 'One Pair', 'Flush'],
+    )) {
+      continue;
+    }
+    return ShowdownOrderDeal(
+      boardCodes: List<String>.unmodifiable(remapped.board),
+      heroCodes: List<String>.unmodifiable(remapped.hero),
+      villainHoleCodes: List<List<String>>.unmodifiable([
+        List<String>.unmodifiable(remapped.sam),
+        List<String>.unmodifiable(remapped.jo),
+      ]),
+      seatIds: const ['you', 'sam', 'jo'],
+      correctOrder: const ['you', 'sam', 'jo'],
+    );
+  }
+  return const ShowdownOrderDeal(
+    boardCodes: ['9c', '7c', '3c', '2h', '5d'],
+    heroCodes: ['Ah', 'Kd'],
+    villainHoleCodes: [
+      ['9h', '8s'],
+      ['Ac', 'Kc'],
+    ],
+    seatIds: ['you', 'sam', 'jo'],
+    correctOrder: ['you', 'sam', 'jo'],
+  );
+}
+
+ShowdownOrderDeal _dealPairStraightFlushWeakToStrong(Random rng) {
+  const templateBoard = ['Tc', '8c', '6d', '5h', '2c'];
+  const templateHero = ['Ah', 'Td'];
+  const templateSam = ['9s', '7d'];
+  const templateJo = ['Ac', 'Kc'];
+  for (var attempt = 0; attempt < 40; attempt++) {
+    final remapped = _remapSpotCards(
+      board: templateBoard,
+      hero: templateHero,
+      sam: templateSam,
+      jo: templateJo,
+      rng: rng,
+      preserveStraightGaps: true,
+    );
+    if (remapped == null) continue;
+    if (!_namesMatch(
+      board: remapped.board,
+      hero: remapped.hero,
+      sam: remapped.sam,
+      jo: remapped.jo,
+      expected: const ['One Pair', 'Straight', 'Flush'],
+    )) {
+      continue;
+    }
+    return ShowdownOrderDeal(
+      boardCodes: List<String>.unmodifiable(remapped.board),
+      heroCodes: List<String>.unmodifiable(remapped.hero),
+      villainHoleCodes: List<List<String>>.unmodifiable([
+        List<String>.unmodifiable(remapped.sam),
+        List<String>.unmodifiable(remapped.jo),
+      ]),
+      seatIds: const ['you', 'sam', 'jo'],
+      correctOrder: const ['you', 'sam', 'jo'],
+    );
+  }
+  return const ShowdownOrderDeal(
+    boardCodes: ['Tc', '8c', '6d', '5h', '2c'],
+    heroCodes: ['Ah', 'Td'],
+    villainHoleCodes: [
+      ['9s', '7d'],
+      ['Ac', 'Kc'],
+    ],
+    seatIds: ['you', 'sam', 'jo'],
+    correctOrder: ['you', 'sam', 'jo'],
+  );
+}
+
+({
+  List<String> board,
+  List<String> hero,
+  List<String> sam,
+  List<String> jo,
+})? _remapSpotCards({
+  required List<String> board,
+  required List<String> hero,
+  required List<String> sam,
+  required List<String> jo,
+  required Random rng,
+  required bool preserveStraightGaps,
+}) {
+  final all = [...board, ...hero, ...sam, ...jo];
+  final ranks = <int>{
+    for (final code in all) CardModel.fromCode(code).rank,
+  }.toList()
+    ..sort();
+  final suitPerm = List<String>.of(_suits)..shuffle(rng);
+  final suitMap = <String, String>{
+    for (var i = 0; i < _suits.length; i++) _suits[i]: suitPerm[i],
+  };
+
+  late final Map<int, int> rankMap;
+  if (preserveStraightGaps) {
+    // Shift the whole rank set by a random offset while keeping relative gaps.
+    final minR = ranks.first;
+    final maxR = ranks.last;
+    final span = maxR - minR;
+    if (span > 12) return null;
+    final maxStart = 14 - span;
+    final newStart = rng.nextInt(maxStart - 1) + 2; // 2..(maxStart)
+    final delta = newStart - minR;
+    rankMap = {for (final r in ranks) r: r + delta};
+    if (rankMap.values.any((r) => r < 2 || r > 14)) return null;
+  } else {
+    final targets = List<int>.generate(13, (i) => i + 2)..shuffle(rng);
+    rankMap = {
+      for (var i = 0; i < ranks.length; i++) ranks[i]: targets[i],
+    };
+  }
+
+  List<String> mapCodes(List<String> codes) => [
+        for (final code in codes)
+          _code(
+            rankMap[CardModel.fromCode(code).rank]!,
+            suitMap[CardModel.fromCode(code).suit.code]!,
+          ),
+      ];
+
+  final mappedBoard = mapCodes(board);
+  final mappedHero = mapCodes(hero);
+  final mappedSam = mapCodes(sam);
+  final mappedJo = mapCodes(jo);
+  if (!_uniqueCards([...mappedBoard, ...mappedHero, ...mappedSam, ...mappedJo])) {
+    return null;
+  }
+  return (
+    board: mappedBoard,
+    hero: mappedHero,
+    sam: mappedSam,
+    jo: mappedJo,
+  );
+}
+
+bool _uniqueCards(List<String> codes) => codes.toSet().length == codes.length;
+
+bool _namesMatch({
+  required List<String> board,
+  required List<String> hero,
+  required List<String> sam,
+  required List<String> jo,
+  required List<String> expected,
+}) {
+  String name(List<String> holes) {
+    final cards = [
+      for (final code in [...holes, ...board]) CardModel.fromCode(code),
+    ];
+    return DeckEvaluator.evaluate7Cards(cards).rankName;
+  }
+
+  return name(hero) == expected[0] &&
+      name(sam) == expected[1] &&
+      name(jo) == expected[2];
+}
 
 /// Two tiny hole cards dealt once for a hand-family teaching tile.
 class DealtMiniPair extends StatefulWidget {

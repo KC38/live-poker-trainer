@@ -49,18 +49,6 @@ const _villain = PlayerModel(
   stack: 200,
 );
 
-/// True when [laterKey] is a later sibling than [earlierKey] under one Stack.
-bool _paintsAfter(WidgetTester tester, Key earlierKey, Key laterKey) {
-  final earlier = tester.widget(find.byKey(earlierKey));
-  final later = tester.widget(find.byKey(laterKey));
-  final stack = tester.widgetList<Stack>(find.byType(Stack)).firstWhere(
-    (s) => s.children.contains(earlier) && s.children.contains(later),
-  );
-  final earlierIndex = stack.children.indexOf(earlier);
-  final laterIndex = stack.children.indexOf(later);
-  return laterIndex > earlierIndex;
-}
-
 void main() {
   testWidgets('hero face-up cards are wider than a board card', (tester) async {
     await tester.pumpWidget(
@@ -129,7 +117,9 @@ void main() {
     expect(stackStyle.fontSize, greaterThan(nameStyle.fontSize!));
   });
 
-  testWidgets('hero hole cards paint above the seat box', (tester) async {
+  testWidgets('hero hole cards clear the seat box with no overlap', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _seat(
         _hero.copyWith(
@@ -140,26 +130,20 @@ void main() {
     );
 
     final box = tester.getRect(find.byKey(const ValueKey('seat-box-0')));
-    final card = tester.getRect(find.byType(TableCard).first);
-    expect(card.bottom, greaterThan(box.top), reason: 'cards nest into the box');
-    expect(card.top, lessThan(box.top), reason: 'most of the card is above');
-
-    // Overlap strip must hit the card face, not the name plate underneath.
-    final overlap = Offset(card.center.dx, (card.bottom + box.top) / 2);
-    expect(box.contains(overlap), isTrue);
-    expect(card.contains(overlap), isTrue);
-    expect(
-      _paintsAfter(
-        tester,
-        const ValueKey('seat-box-layer-0'),
-        const ValueKey('seat-cards-layer-0'),
-      ),
-      isTrue,
-      reason: 'hole cards must paint after the seat box',
-    );
+    for (final card in find.byType(TableCard).evaluate()) {
+      final cardRect = tester.getRect(find.byWidget(card.widget));
+      expect(
+        cardRect.overlaps(box),
+        isFalse,
+        reason: 'hole card $cardRect must not cover seat box $box',
+      );
+      expect(cardRect.bottom, lessThanOrEqualTo(box.top));
+    }
   });
 
-  testWidgets('villain hole cards paint above the seat box', (tester) async {
+  testWidgets('villain hole cards clear the seat box with no overlap', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _seat(
         _villain.copyWith(
@@ -170,28 +154,49 @@ void main() {
     );
 
     final box = tester.getRect(find.byKey(const ValueKey('seat-box-1')));
-    final card = tester.getRect(find.byType(TableCard).first);
-    expect(card.bottom, greaterThan(box.top));
-    expect(card.top, lessThan(box.top));
-    expect(
-      _paintsAfter(
-        tester,
-        const ValueKey('seat-box-layer-1'),
-        const ValueKey('seat-cards-layer-1'),
-      ),
-      isTrue,
-      reason: 'hole cards must paint after the seat box',
-    );
+    for (final card in find.byType(TableCard).evaluate()) {
+      final cardRect = tester.getRect(find.byWidget(card.widget));
+      expect(
+        cardRect.overlaps(box),
+        isFalse,
+        reason: 'hole card $cardRect must not cover seat box $box',
+      );
+      expect(cardRect.bottom, lessThanOrEqualTo(box.top));
+    }
   });
 
-  test('seat metrics keep a nest tuck without hiding faces', () {
-    final hero = SeatMetrics.of(hero: true);
-    final villain = SeatMetrics.of(hero: false);
-    expect(hero.cardTuck, 0.24);
-    expect(villain.cardTuck, 0.3);
-    expect(hero.tuck, greaterThan(0));
-    expect(villain.tuck, greaterThan(0));
-    expect(hero.cardsAbove, lessThan(hero.cardHeight));
+  testWidgets('type tag stays on the box and does not cover hole cards', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _seat(
+        _villain.copyWith(
+          holeCards: [CardModel.fromCode('9h'), CardModel.fromCode('8s')],
+        ),
+        reveal: true,
+      ),
+    );
+
+    final tag = tester.getRect(find.text('NIT'));
+    final box = tester.getRect(find.byKey(const ValueKey('seat-box-1')));
+    expect(box.overlaps(tag) || box.contains(tag.center), isTrue);
+    for (final card in find.byType(TableCard).evaluate()) {
+      final cardRect = tester.getRect(find.byWidget(card.widget));
+      expect(
+        cardRect.overlaps(tag),
+        isFalse,
+        reason: 'type tag $tag must not cover hole card $cardRect',
+      );
+    }
+  });
+
+  test('seat metrics keep hole cards fully above the box', () {
+    for (final hero in [true, false]) {
+      final m = SeatMetrics.of(hero: hero);
+      expect(m.cardTuck, 0);
+      expect(m.tuck, 0);
+      expect(m.cardsAbove, m.cardHeight + SeatMetrics.cardBoxGap * m.scale);
+    }
   });
 
   testWidgets('player type and stats show only when the preset has them', (

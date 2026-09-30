@@ -1,6 +1,8 @@
 /// Full poker table used as the lesson stage.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
@@ -38,7 +40,7 @@ const int lessonBlindsRightOfButtonIndex = 2;
 /// unless [activeSeatIndex] is set. [positionLabels] renames the ring EP, HJ,
 /// CO, BTN, SB, BB. The table plays [smallBlind]/[bigBlind] with 100 big blind
 /// stacks. [villainArchetypes] gives the opponents, in seat order, real player
-/// types.
+/// types. [postBigBlind] false leaves the BB unposted until a quiz reveals it.
 GameState lessonTableStageGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
@@ -53,6 +55,7 @@ GameState lessonTableStageGame({
   double smallBlind = lessonSmallBlind,
   double bigBlind = lessonBigBlind,
   List<PlayerArchetype>? villainArchetypes,
+  bool postBigBlind = true,
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -63,6 +66,7 @@ GameState lessonTableStageGame({
     dealerIndex: dealerIndex ?? 0,
     sbIndex: sbIndex,
     bbIndex: bbIndex,
+    postBigBlind: postBigBlind,
   );
   const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
   final holesByVillain = <int, List<String>>{
@@ -194,6 +198,7 @@ class LessonTableStage extends StatelessWidget {
     this.bigBlind = lessonBigBlind,
     this.villainArchetypes,
     this.features,
+    this.postBigBlind = true,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -295,6 +300,10 @@ class LessonTableStage extends StatelessWidget {
   /// [TableFeaturesScope].
   final TableFeatures? features;
 
+  /// When false, the big blind seat has no chips out yet (reveal-on-tap
+  /// quizzes). The BB seat index and SoftPulse target stay the same.
+  final bool postBigBlind;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -309,6 +318,7 @@ class LessonTableStage extends StatelessWidget {
     smallBlind: smallBlind,
     bigBlind: bigBlind,
     villainArchetypes: villainArchetypes,
+    postBigBlind: postBigBlind,
   );
 
   @override
@@ -434,10 +444,13 @@ class _LessonPeekTableState extends State<LessonPeekTable> {
 
   @override
   Widget build(BuildContext context) {
+    // Keep faces up after a successful peek even if this state remounts while
+    // locked (answer dock / MediaQuery clamp). Locked means the peek graded.
+    final revealed = _faceUp || !widget.enabled;
     return LessonTableStage(
       villainCount: 3,
-      heroFaceUp: _faceUp,
-      cue: LessonTableCue.hero,
+      heroFaceUp: revealed,
+      cue: revealed ? LessonTableCue.none : LessonTableCue.hero,
       enabled: widget.enabled && !_faceUp,
       onHeroTap: () {
         setState(() => _faceUp = true);
@@ -934,6 +947,8 @@ class LessonShowdownOrderSpot {
 }
 
 /// Shared board spots for Hand ranks showdown ordering.
+///
+/// Prefer [dealtHandRanksShowdownSpot] at mount time so faces vary per attempt.
 LessonShowdownOrderSpot? handRanksShowdownSpot(String activityId) {
   switch (activityId) {
     case 'act-01-02-01-explain-ladder':
@@ -990,10 +1005,78 @@ LessonShowdownOrderSpot? handRanksShowdownSpot(String activityId) {
   }
 }
 
+/// Fresh showdown layout for [activityId] (cards vary; seat order preserved).
+LessonShowdownOrderSpot? dealtHandRanksShowdownSpot(
+  String activityId, {
+  Random? random,
+}) {
+  final deal = dealShowdownOrderCards(activityId, random: random);
+  if (deal == null) return handRanksShowdownSpot(activityId);
+  return LessonShowdownOrderSpot(
+    boardCodes: deal.boardCodes,
+    heroCodes: deal.heroCodes,
+    villainHoleCodes: deal.villainHoleCodes,
+    seatIds: deal.seatIds,
+    correctOrder: deal.correctOrder,
+  );
+}
+
 /// Whether this activity orders face-up showdown seats by hand strength.
 bool isShowdownOrderSequenceActivity(String activityId) {
   return handRanksShowdownSpot(activityId) != null &&
       activityId != 'act-01-02-01-explain-ladder';
+}
+
+/// Deals a fresh showdown layout once per mount, then hosts the order table.
+class RandomizedLessonShowdownOrderTable extends StatefulWidget {
+  /// Creates a randomized showdown-order stage.
+  const RandomizedLessonShowdownOrderTable({
+    super.key,
+    required this.activityId,
+    required this.orderedIds,
+    required this.onPick,
+    this.enabled = true,
+    this.showGuidance = true,
+    this.strictOrder = false,
+    this.onMiss,
+  });
+
+  final String activityId;
+  final List<String> orderedIds;
+  final ValueChanged<String> onPick;
+  final bool enabled;
+  final bool showGuidance;
+  final bool strictOrder;
+  final VoidCallback? onMiss;
+
+  @override
+  State<RandomizedLessonShowdownOrderTable> createState() =>
+      _RandomizedLessonShowdownOrderTableState();
+}
+
+class _RandomizedLessonShowdownOrderTableState
+    extends State<RandomizedLessonShowdownOrderTable> {
+  late final LessonShowdownOrderSpot _spot;
+
+  @override
+  void initState() {
+    super.initState();
+    _spot = dealtHandRanksShowdownSpot(widget.activityId) ??
+        handRanksShowdownSpot(widget.activityId)!;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LessonShowdownOrderTable(
+      spot: _spot,
+      orderedIds: widget.orderedIds,
+      onPick: widget.onPick,
+      enabled: widget.enabled,
+      showGuidance: widget.showGuidance,
+      strictOrder: widget.strictOrder,
+      onMiss: widget.onMiss,
+    );
+  }
 }
 
 /// Full table: tap face-up showdown seats in hand-strength order.
@@ -1082,14 +1165,15 @@ class LessonShowdownOrderExplainTable extends StatefulWidget {
   /// Creates the explain stage.
   const LessonShowdownOrderExplainTable({
     super.key,
-    required this.spot,
+    required this.activityId,
     required this.onComplete,
     this.onMiss,
     this.enabled = true,
     this.showGuidance = true,
   });
 
-  final LessonShowdownOrderSpot spot;
+  /// Activity whose showdown pattern should be dealt.
+  final String activityId;
   final VoidCallback? onComplete;
   final VoidCallback? onMiss;
   final bool enabled;
@@ -1103,21 +1187,28 @@ class LessonShowdownOrderExplainTable extends StatefulWidget {
 class _LessonShowdownOrderExplainTableState
     extends State<LessonShowdownOrderExplainTable> {
   final List<String> _ordered = <String>[];
+  late final LessonShowdownOrderSpot _spot;
+
+  @override
+  void initState() {
+    super.initState();
+    _spot = dealtHandRanksShowdownSpot(widget.activityId) ??
+        handRanksShowdownSpot(widget.activityId)!;
+  }
 
   void _pick(String id) {
     if (!widget.enabled || widget.onComplete == null) return;
     setState(() => _ordered.add(id));
-    if (_ordered.length >= widget.spot.correctOrder.length) {
+    if (_ordered.length >= _spot.correctOrder.length) {
       widget.onComplete!();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final teaching =
-        widget.enabled && _ordered.length < widget.spot.correctOrder.length;
+    final teaching = widget.enabled && _ordered.length < _spot.correctOrder.length;
     return LessonShowdownOrderTable(
-      spot: widget.spot,
+      spot: _spot,
       orderedIds: _ordered,
       enabled: teaching,
       showGuidance: widget.showGuidance,

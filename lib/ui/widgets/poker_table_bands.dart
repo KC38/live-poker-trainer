@@ -26,6 +26,9 @@ const double lessonBigBlind = 2;
 /// is the small blind. Preflop, both blinds are posted as bets in front of
 /// their seats; a table with only the hero has them in the pot. From the
 /// flop on, the pot holds five big blinds.
+///
+/// Set [postBigBlind] false to leave the big blind unposted (quiz steps that
+/// ask the learner to tap who posts, then animate the chips in on a hit).
 GameState lessonBandGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
@@ -37,6 +40,7 @@ GameState lessonBandGame({
   int dealerIndex = 0,
   int? sbIndex,
   int? bbIndex,
+  bool postBigBlind = true,
 }) {
   final board = [for (final code in boardCodes) CardModel.fromCode(code)];
   final street = switch (board.length) {
@@ -59,7 +63,7 @@ GameState lessonBandGame({
   double posted(int seat) {
     if (!preflop || sb == bb) return 0;
     if (seat == sb) return smallBlind;
-    if (seat == bb) return bigBlind;
+    if (seat == bb) return postBigBlind ? bigBlind : 0;
     return 0;
   }
 
@@ -82,18 +86,17 @@ GameState lessonBandGame({
         currentBet: posted(i),
       ),
   ];
+  final heroOnlyBlinds =
+      preflop && sb == bb
+          ? (postBigBlind ? smallBlind + bigBlind : smallBlind)
+          : 0.0;
   return GameState(
     players: players,
     mode: GameMode.training,
     community: board,
     street: street,
-    mainPot:
-        !preflop
-            ? 5 * bigBlind
-            : sb == bb
-            ? smallBlind + bigBlind
-            : 0,
-    highestBet: preflop ? bigBlind : 0,
+    mainPot: !preflop ? 5 * bigBlind : heroOnlyBlinds,
+    highestBet: preflop ? (postBigBlind ? bigBlind : smallBlind) : 0,
     minRaise: bigBlind,
     smallBlind: smallBlind,
     bigBlind: bigBlind,
