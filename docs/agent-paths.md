@@ -24,7 +24,7 @@ Goal: a brand-new guest finishes the recommended first lesson and lands on Home.
 4. Rex intro — **Continue**.
 5. Recommended start — take the recommended lesson. Leave **Start from the beginning instead** for `guest-from-beginning`.
 6. Play that lesson to the end. Grade, coach copy, layout, and poker on each step.
-7. Save progress — open **Create an account to save your progress**, inspect, dismiss. Do not submit. Then **Continue learning**.
+7. Save progress — open **CREATE A PROFILE**, inspect, dismiss. Do not submit. Then **LATER**.
 8. Confirm Home shows guest progress on this device. Stop. Profile, Settings, and Live Training are later paths.
 
 ## home-continue
@@ -110,7 +110,7 @@ Goal: **Start from the beginning instead** runs a real lesson and still reaches 
 
 1. Same Welcome, experience, daily goal, and Rex steps as `fresh-guest-recommended`. Record the labels.
 2. On recommended start, tap **Start from the beginning instead**.
-3. Finish that lesson. Save-progress: inspect **Create an account to save your progress**, dismiss, **Continue learning**.
+3. Finish that lesson. Save-progress: inspect **CREATE A PROFILE**, dismiss, **LATER**.
 4. Home is the guest shell. The lesson title on the result must be the from-the-beginning lesson, not the recommended one you declined.
 
 ## onboarding-change-answers

@@ -555,96 +555,469 @@ class RecommendedStartScreen extends ConsumerWidget {
   }
 }
 
-/// Post-lesson celebration + create-account CTA.
+/// Post-lesson celebration + create-account CTA (Duolingo create-profile layout).
 class SaveProgressScreen extends ConsumerWidget {
   /// Creates the save-progress screen.
   const SaveProgressScreen({super.key});
 
+  static const Color _canvas = Color(0xFF131F24);
+  static const Color _hare = Color(0xFFAFAFAF);
+  static const Color _sky = Color(0xFF1CB0F6);
+  static const Color _skyLedge = Color(0xFF1899D6);
+  static const Color _ghostBorder = Color(0xFF37464F);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final draft = ref.watch(onboardingControllerProvider);
-    return _OnboardingScaffold(
-      title: 'Nice work',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            draft.lastLessonTitle ?? 'Lesson complete',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 16),
-          if (draft.lastXpAwarded != null)
-            Text(
-              '+${draft.lastXpAwarded} XP · streak ${draft.lastStreak ?? 0}',
-              style: GoogleFonts.manrope(
-                color: AppColors.gold,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
+    final lessonTitle = draft.lastLessonTitle ?? 'Lesson complete';
+    return Scaffold(
+      backgroundColor: _canvas,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final mascotSize =
+                        (constraints.maxHeight * 0.28).clamp(112.0, 168.0);
+                    return SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _SaveProgressHero(
+                              mascotSize: mascotSize,
+                              xpAwarded: draft.lastXpAwarded,
+                              streak: draft.lastStreak,
+                              lessonTitle: lessonTitle,
+                            ),
+                            const SizedBox(height: 28),
+                            Text(
+                              'Time to create a profile!',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.nunito(
+                                color: Colors.white,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800,
+                                height: 1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Create a profile to save your progress '
+                              'and continue learning. Guest progress can '
+                              'be lost if this session is cleared.',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.nunito(
+                                color: _hare,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
-            ),
-          const SizedBox(height: 18),
-          Text(
-            'Create an account to save your progress. Guest progress can be lost if this session is cleared.',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 15,
-              height: 1.45,
-            ),
-          ),
-          const Spacer(),
-          FilledButton(
-            onPressed: () {
-              unawaited(
-                ref
-                    .read(analyticsServiceProvider)
-                    .logAccountConversion(
-                      method: 'save_progress',
-                      outcome: 'started',
+              _DuoSlabButton(
+                label: 'CREATE A PROFILE',
+                onPressed: () {
+                  unawaited(
+                    ref
+                        .read(analyticsServiceProvider)
+                        .logAccountConversion(
+                          method: 'save_progress',
+                          outcome: 'started',
+                        ),
+                  );
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const AuthScreen(
+                        saveProgressMode: true,
+                        initialRegisterMode: true,
+                      ),
                     ),
-              );
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const AuthScreen(
-                    saveProgressMode: true,
-                    initialRegisterMode: true,
+                  );
+                },
+                face: _sky,
+                ledge: _skyLedge,
+                foreground: _canvas,
+              ),
+              const SizedBox(height: 12),
+              _DuoSlabButton(
+                label: 'LATER',
+                onPressed: () {
+                  unawaited(
+                    ref
+                        .read(onboardingControllerProvider.notifier)
+                        .continueLearningAsGuest(),
+                  );
+                },
+                face: _canvas,
+                ledge: _ghostBorder,
+                foreground: _hare,
+                border: _ghostBorder,
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const AuthScreen(
+                        saveProgressMode: true,
+                        initialRegisterMode: false,
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'I already have an account',
+                  style: GoogleFonts.nunito(
+                    color: _sky,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15,
                   ),
                 ),
-              );
-            },
-            style: _primaryButton,
-            child: const Text('Create an account to save your progress'),
+              ),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Celebrating Rex with a phone prop, confetti, and XP / streak chips.
+class _SaveProgressHero extends StatelessWidget {
+  const _SaveProgressHero({
+    required this.mascotSize,
+    required this.lessonTitle,
+    this.xpAwarded,
+    this.streak,
+  });
+
+  final double mascotSize;
+  final String lessonTitle;
+  final int? xpAwarded;
+  final int? streak;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: mascotSize * 1.55,
+          width: mascotSize * 1.55,
+          child: Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+            children: [
+              const Positioned(
+                top: 8,
+                left: 10,
+                child: _ConfettiDot(color: Color(0xFFFF4B4B), size: 10),
+              ),
+              const Positioned(
+                top: 0,
+                right: 18,
+                child: _ConfettiDot(color: Color(0xFFFFC800), size: 8),
+              ),
+              const Positioned(
+                top: 36,
+                right: 4,
+                child: _ConfettiDot(color: Color(0xFF1CB0F6), size: 9),
+              ),
+              const Positioned(
+                bottom: 28,
+                left: 4,
+                child: _ConfettiDot(color: Color(0xFF58CC02), size: 8),
+              ),
+              Positioned(
+                top: 4,
+                right: mascotSize * 0.08,
+                child: const _ProgressPhone(),
+              ),
+              RexMascot(size: mascotSize, mood: RexMood.celebrate),
+              Positioned(
+                bottom: 0,
+                left: mascotSize * 0.18,
+                right: mascotSize * 0.18,
+                child: Container(
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.85),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Nice work',
+          style: GoogleFonts.nunito(
+            color: const Color(0xFFFFC800),
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.4,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          lessonTitle,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.nunito(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (xpAwarded != null) ...[
           const SizedBox(height: 12),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const AuthScreen(
-                    saveProgressMode: true,
-                    initialRegisterMode: false,
-                  ),
-                ),
-              );
-            },
-            child: const Text('I already have an account'),
-          ),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: () {
-              unawaited(
-                ref
-                    .read(onboardingControllerProvider.notifier)
-                    .continueLearningAsGuest(),
-              );
-            },
-            child: const Text('Continue learning'),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 10,
+            runSpacing: 8,
+            children: [
+              _StatChip(
+                icon: Icons.bolt_rounded,
+                label: '+$xpAwarded XP',
+                color: const Color(0xFFFFC800),
+              ),
+              _StatChip(
+                icon: Icons.local_fire_department_rounded,
+                label: 'streak ${streak ?? 0}',
+                color: const Color(0xFFFF9600),
+              ),
+            ],
           ),
         ],
+      ],
+    );
+  }
+}
+
+class _ProgressPhone extends StatelessWidget {
+  const _ProgressPhone();
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.rotate(
+      angle: -0.18,
+      child: Container(
+        width: 44,
+        height: 72,
+        padding: const EdgeInsets.fromLTRB(6, 10, 6, 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xFFE5E5E5), width: 2),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x33000000),
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: const [
+                _ConfettiDot(color: Color(0xFFFF4B4B), size: 7),
+                _ConfettiDot(color: Color(0xFFFFC800), size: 7),
+                _ConfettiDot(color: Color(0xFF1CB0F6), size: 7),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              height: 6,
+              decoration: BoxDecoration(
+                color: const Color(0xFF58CC02),
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Container(
+              height: 6,
+              width: 18,
+              decoration: BoxDecoration(
+                color: const Color(0xFFD9D9D9),
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ConfettiDot extends StatelessWidget {
+  const _ConfettiDot({required this.color, required this.size});
+
+  final Color color;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(2),
+      ),
+    );
+  }
+}
+
+class _StatChip extends StatelessWidget {
+  const _StatChip({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: label,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1F2C34),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: const Color(0xFF37464F)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 16, color: color),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: GoogleFonts.nunito(
+                color: color,
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Duolingo-style 3D slab button with a solid bottom ledge.
+class _DuoSlabButton extends StatefulWidget {
+  const _DuoSlabButton({
+    required this.label,
+    required this.onPressed,
+    required this.face,
+    required this.ledge,
+    required this.foreground,
+    this.border,
+  });
+
+  final String label;
+  final VoidCallback onPressed;
+  final Color face;
+  final Color ledge;
+  final Color foreground;
+  final Color? border;
+
+  @override
+  State<_DuoSlabButton> createState() => _DuoSlabButtonState();
+}
+
+class _DuoSlabButtonState extends State<_DuoSlabButton> {
+  static const double _ledge = 4;
+  static const double _radius = 16;
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final border = widget.border;
+    return Semantics(
+      button: true,
+      label: widget.label,
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _pressed = true),
+        onTapCancel: () => setState(() => _pressed = false),
+        onTapUp: (_) {
+          setState(() => _pressed = false);
+          widget.onPressed();
+        },
+        child: SizedBox(
+          height: 54 + _ledge,
+          width: double.infinity,
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0,
+                right: 0,
+                top: _ledge,
+                bottom: 0,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: widget.ledge,
+                    borderRadius: BorderRadius.circular(_radius),
+                    border: border == null
+                        ? null
+                        : Border.all(color: border, width: 2),
+                  ),
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 60),
+                curve: Curves.easeOut,
+                left: 0,
+                right: 0,
+                top: _pressed ? _ledge : 0,
+                bottom: _pressed ? 0 : _ledge,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: widget.face,
+                    borderRadius: BorderRadius.circular(_radius),
+                    border: border == null
+                        ? null
+                        : Border.all(color: border, width: 2),
+                  ),
+                  child: Center(
+                    child: Text(
+                      widget.label,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.nunito(
+                        color: widget.foreground,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.6,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -298,10 +298,8 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(
-      find.text('Create an account to save your progress'),
-      findsOneWidget,
-    );
+    expect(find.text('CREATE A PROFILE'), findsOneWidget);
+    expect(find.text('Time to create a profile!'), findsOneWidget);
     expect(find.text('In progress: your two cards'), findsNothing);
     expect(find.text('CONTINUE'), findsNothing);
     expect(find.text('Start lesson'), findsNothing);
