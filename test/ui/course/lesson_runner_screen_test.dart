@@ -3254,6 +3254,8 @@ void main() {
     expect(find.textContaining('Tap Mix'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('mixed-strategy-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('MIX'), findsOneWidget);
     expect(find.text('PURPOSE'), findsOneWidget);
     expect(find.text('STRONG'), findsOneWidget);

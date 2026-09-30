@@ -340,6 +340,8 @@ Use blockers without solver theater uses the full poker table for every step: ex
 
 Defend enough without frequency theater uses the full poker table for every step: explain taps Defend, Bluff, and Enough under the felt.
 
+Mix with a reason uses the full poker table for every step: explain taps Mix, Purpose, and Strong under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -670,9 +672,8 @@ table: explain taps Block, Use, and No EV under the felt, the unblock,
 tweak, and EV checks stay lists, and the flush board sits face up on
 the full table. Defend enough without frequency theater uses the same frame and the full
 table: explain taps Defend, Bluff, and Enough under the felt, the continue, intuition, and punish checks stay lists,
-and the third-pair fold sits face up on the full table. Mix with a
-reason uses the same frame: mix, purpose, and strong stay in the
-stage, the station, reason, and purpose checks stay lists, and the
+and the third-pair fold sits face up on the full table. Mix with a reason uses the same frame and the full table: explain taps
+Mix, Purpose, and Strong under the felt, the station, reason, and purpose checks stay lists, and the
 set check sits face up on the full table. Navigate 3-bet and 4-bet
 pots by depth uses the same frame: 3-bet, 4-bet, and depth stay in
 the stage, the commit, ego, and SPR checks stay lists, and the missed
