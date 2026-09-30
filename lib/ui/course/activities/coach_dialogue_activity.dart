@@ -385,17 +385,10 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.deepStacks) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return DeepStacksDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllPointsTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+          return LessonDeepStacksExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllPointsTapped: locked ? null : onFeltAcknowledge,
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.impliedOdds) {
