@@ -3128,6 +3128,8 @@ void main() {
     expect(find.textContaining('Tap Overbet'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('overbet-geometry-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('OVERBET'), findsOneWidget);
     expect(find.text('POLAR'), findsOneWidget);
     expect(find.text('GEO'), findsOneWidget);

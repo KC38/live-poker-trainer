@@ -334,6 +334,8 @@ step: explain taps Capped, Uncapped, and Nuts under the felt.
 Choose polarized or merged betting uses the full poker table for every step:
 explain taps Polar, Merged, and Size under the felt.
 
+Use overbets and geometric pressure uses the full poker table for every step: explain taps Overbet, Polar, and Geo under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -656,10 +658,10 @@ check-turn, bomb, and attack checks stay lists, and the thin-value spot
 sits face up on the full table. Choose polarized or merged betting uses
 the same frame and the full table: explain taps Polar, Merged, and Size
 under the felt, the overbet, mismatch, and aim checks stay lists, and the
-merged-size spot sits face up on the full table. Use overbets and
-geometric pressure uses the same frame: overbet, polar, and geo stay in
-the stage, the candidate, avoid, and plan checks stay lists, and the
-geometric turn sits face up on the full table. Use blockers without
+merged-size spot sits face up on the full table. Use overbets and geometric pressure uses the same frame and the full
+table: explain taps Overbet, Polar, and Geo under the felt, the
+candidate, avoid, and plan checks stay lists, and the geometric turn
+sits face up on the full table. Use blockers without
 solver theater uses the same frame: block, use, and no EV stay in the
 stage, the unblock, tweak, and EV checks stay lists, and the flush
 board sits face up on the full table. Defend enough without
