@@ -33,7 +33,8 @@ class SoundService {
   static const double _bgmBaseVolume = 0.28;
 
   /// Asset path relative to the Flutter `assets/` folder.
-  static const String _bgmAsset = 'sounds/lounge_ambient.mp3';
+  /// WAV (not MP3) so iOS/Android can loop without encoder-delay gaps.
+  static const String _bgmAsset = 'sounds/lounge_ambient.wav';
 
   /// Call after a user gesture to unlock audio (required on web; helpful on iOS).
   Future<void> unlock() async {
