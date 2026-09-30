@@ -11,9 +11,9 @@ const double tableCardAspect = 1.4;
 
 /// Face-up card with a corner rank and a large centered suit.
 ///
-/// Rank stays in the top-left so a seat box may tuck the bottom of a hole
-/// card without hiding identity. A single suit glyph fills the face below
-/// the rank (no second overlapping suit).
+/// Rank stays in the top-left; a single suit glyph fills the face below
+/// the rank (no second overlapping suit). Hole cards paint above their
+/// seat box so nesting never hides the face.
 class TableCard extends StatelessWidget {
   /// Creates a card face [width] wide.
   const TableCard({

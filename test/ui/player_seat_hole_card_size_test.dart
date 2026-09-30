@@ -49,6 +49,18 @@ const _villain = PlayerModel(
   stack: 200,
 );
 
+/// True when [laterKey] is a later sibling than [earlierKey] under one Stack.
+bool _paintsAfter(WidgetTester tester, Key earlierKey, Key laterKey) {
+  final earlier = tester.widget(find.byKey(earlierKey));
+  final later = tester.widget(find.byKey(laterKey));
+  final stack = tester.widgetList<Stack>(find.byType(Stack)).firstWhere(
+    (s) => s.children.contains(earlier) && s.children.contains(later),
+  );
+  final earlierIndex = stack.children.indexOf(earlier);
+  final laterIndex = stack.children.indexOf(later);
+  return laterIndex > earlierIndex;
+}
+
 void main() {
   testWidgets('hero face-up cards are wider than a board card', (tester) async {
     await tester.pumpWidget(
@@ -115,6 +127,71 @@ void main() {
     final nameStyle = tester.widget<Text>(find.text('Sam')).style!;
     final stackStyle = tester.widget<Text>(find.text(r'$200')).style!;
     expect(stackStyle.fontSize, greaterThan(nameStyle.fontSize!));
+  });
+
+  testWidgets('hero hole cards paint above the seat box', (tester) async {
+    await tester.pumpWidget(
+      _seat(
+        _hero.copyWith(
+          holeCards: [CardModel.fromCode('Ah'), CardModel.fromCode('Kd')],
+        ),
+        reveal: true,
+      ),
+    );
+
+    final box = tester.getRect(find.byKey(const ValueKey('seat-box-0')));
+    final card = tester.getRect(find.byType(TableCard).first);
+    expect(card.bottom, greaterThan(box.top), reason: 'cards nest into the box');
+    expect(card.top, lessThan(box.top), reason: 'most of the card is above');
+
+    // Overlap strip must hit the card face, not the name plate underneath.
+    final overlap = Offset(card.center.dx, (card.bottom + box.top) / 2);
+    expect(box.contains(overlap), isTrue);
+    expect(card.contains(overlap), isTrue);
+    expect(
+      _paintsAfter(
+        tester,
+        const ValueKey('seat-box-layer-0'),
+        const ValueKey('seat-cards-layer-0'),
+      ),
+      isTrue,
+      reason: 'hole cards must paint after the seat box',
+    );
+  });
+
+  testWidgets('villain hole cards paint above the seat box', (tester) async {
+    await tester.pumpWidget(
+      _seat(
+        _villain.copyWith(
+          holeCards: [CardModel.fromCode('9h'), CardModel.fromCode('8s')],
+        ),
+        reveal: true,
+      ),
+    );
+
+    final box = tester.getRect(find.byKey(const ValueKey('seat-box-1')));
+    final card = tester.getRect(find.byType(TableCard).first);
+    expect(card.bottom, greaterThan(box.top));
+    expect(card.top, lessThan(box.top));
+    expect(
+      _paintsAfter(
+        tester,
+        const ValueKey('seat-box-layer-1'),
+        const ValueKey('seat-cards-layer-1'),
+      ),
+      isTrue,
+      reason: 'hole cards must paint after the seat box',
+    );
+  });
+
+  test('seat metrics keep a nest tuck without hiding faces', () {
+    final hero = SeatMetrics.of(hero: true);
+    final villain = SeatMetrics.of(hero: false);
+    expect(hero.cardTuck, 0.24);
+    expect(villain.cardTuck, 0.3);
+    expect(hero.tuck, greaterThan(0));
+    expect(villain.tuck, greaterThan(0));
+    expect(hero.cardsAbove, lessThan(hero.cardHeight));
   });
 
   testWidgets('player type and stats show only when the preset has them', (
