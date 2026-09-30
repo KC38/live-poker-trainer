@@ -4118,6 +4118,96 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
 
 
 /// Explain-step demo: clean outs, dirty outs, and pricing the call.
+/// Outs-and-price explain: CLEAN / DIRTY / PRICE under the full poker table.
+class LessonOutsPriceExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonOutsPriceExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonOutsPriceExplainTable> createState() =>
+      _LessonOutsPriceExplainTableState();
+}
+
+class _LessonOutsPriceExplainTableState
+    extends State<LessonOutsPriceExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= OutsPriceDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('outs-price-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Jh'],
+            boardCodes: const ['Kh', '7h', '2c'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+              pot: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < OutsPriceDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(OutsPriceDemo.points[i].label) &&
+                      OutsPriceDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: OutsPriceDemo.points[i].label,
+                    caption: OutsPriceDemo.points[i].caption,
+                    color: OutsPriceDemo.points[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(OutsPriceDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(OutsPriceDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 class OutsPriceDemo extends StatefulWidget {
   /// Creates the demo.
   const OutsPriceDemo({

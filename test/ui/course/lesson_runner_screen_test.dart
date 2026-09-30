@@ -1491,7 +1491,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('outs and price uses the lesson frame and the price tiles', (
+  testWidgets('outs and price uses the lesson frame and the full table', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -1525,6 +1525,8 @@ void main() {
     expect(find.textContaining('Tap Clean'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('outs-price-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CLEAN'), findsOneWidget);
     expect(find.text('DIRTY'), findsOneWidget);
     expect(find.text('PRICE'), findsOneWidget);
