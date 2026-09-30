@@ -23146,7 +23146,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('kicker showdown taps You on densified felt', (tester) async {
+  testWidgets('kicker showdown taps hole cards; Chop stays a dock button', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-01-02-02-scaffolded-kicker',
       order: 3,
@@ -23169,16 +23171,25 @@ await tester.tap(find.text('NIT'));
     expect(isTableRegionTapActivity(activity), isTrue);
     expect(
       resolveLessonTableScene(activity)?.layout,
-      LessonTableLayout.kickerShowdownOutcomes,
+      LessonTableLayout.holeCards,
     );
     expect(resolveLessonTableScene(activity)?.villainCodes, ['As', 'Jd']);
+    expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', 'Qd']);
     expect(
       mapTableRegionToChoiceId(
         activityId: activity.id,
-        region: LessonTableRegion.handRankYouWin,
+        region: LessonTableRegion.hero,
         choices: activity.choices,
       ),
       'you-kicker',
+    );
+    expect(
+      mapTableRegionToChoiceId(
+        activityId: activity.id,
+        region: LessonTableRegion.villain,
+        choices: activity.choices,
+      ),
+      'they-kicker',
     );
 
     final controller = LessonActivityController(activity: activity);
@@ -23192,26 +23203,27 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same pair of kings — the higher kicker breaks the tie.'),
+      find.text('Same pair of kings — tap your cards, their cards, or Chop.'),
       findsOneWidget,
     );
     expect(
-      find.text('Same pair of kings — tap who wins on kickers.'),
+      find.text('Same pair of kings — the higher kicker breaks the tie.'),
       findsNothing,
     );
     expect(find.text('Tap who wins.'), findsNothing);
-    expect(find.text('Chop the pot'), findsNothing);
+    expect(find.text('Queen kicker'), findsNothing);
+    expect(find.text('Jack kicker?'), findsNothing);
+    expect(find.text('Same pair ties?'), findsNothing);
     expect(find.text('Tap You or Them on the felt.'), findsNothing);
-    expect(find.byType(HandExampleTile), findsNothing);
-    expect(find.text('Queen kicker'), findsOneWidget);
-    expect(find.text('Jack kicker?'), findsOneWidget);
-    expect(find.text('Same pair ties?'), findsOneWidget);
-    // SoftPulse + Rex own the cue — no Tap You. footer under the felt.
-    expect(find.text('Tap You.'), findsNothing);
+    // Single Chop dock — not You / Them outcome tiles.
+    expect(find.byType(HandExampleTile), findsOneWidget);
+    expect(find.text('Chop'), findsOneWidget);
     expect(find.text('Them'), findsWidgets);
+    expect(find.byKey(const ValueKey('hole-cards-felt')), findsOneWidget);
+    expect(find.byKey(const ValueKey('outcome-phases-felt')), findsNothing);
 
     final teachHeight = tester
-        .getSize(find.byKey(const ValueKey('outcome-phases-felt')))
+        .getSize(find.byKey(const ValueKey('hole-cards-felt')))
         .height;
     expect(
       teachHeight,
@@ -23225,7 +23237,113 @@ await tester.tap(find.text('NIT'));
 
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
-    await tester.tap(find.text('Queen kicker'));
+    final heroCards = find.bySemanticsLabel(
+      RegExp(r'Your hole cards'),
+    );
+    expect(heroCards, findsOneWidget);
+    await tester.tap(heroCards);
+    await tester.pump();
+    expect(controller.draft.choiceId, 'you-kicker');
+    expect(autoSubmits, 1);
+    controller.dispose();
+  });
+
+  testWidgets('kicker showdown Chop dock submits chop-kicker', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-scaffolded-kicker',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap who wins',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap who wins.',
+      choices: const [
+        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'they-kicker', label: 'They win'),
+        CourseChoice(id: 'chop-kicker', label: 'Chop'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+    await tester.tap(find.text('Chop'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'chop-kicker');
+    expect(autoSubmits, 1);
+    controller.dispose();
+  });
+
+  testWidgets('framed kicker showdown taps hero holes on LessonTableStage', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-scaffolded-kicker',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap who wins',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap who wins.',
+      choices: const [
+        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'they-kicker', label: 'They win'),
+        CourseChoice(id: 'chop-kicker', label: 'Chop'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: Column(
+              children: [
+                Expanded(
+                  child: TableFeaturesScope(
+                    features: TableFeatures.forLessonId(
+                      'lesson-01-02-02-best-five-kickers',
+                    ),
+                    child: LessonFrameScope(
+                      onLocalMiss: (_) {},
+                      child: SelectIdentifyActivity(
+                        activity: activity,
+                        controller: controller,
+                        showGuidance: true,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(find.byType(LessonTableStage), findsOneWidget);
+    expect(find.text('Queen kicker'), findsNothing);
+    expect(find.byType(HandExampleTile), findsOneWidget);
+    expect(find.text('Chop'), findsOneWidget);
+
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+    final heroSeat = find.byKey(const ValueKey('lesson-seat-hero'));
+    expect(heroSeat, findsOneWidget);
+    await tester.ensureVisible(heroSeat);
+    await tester.tap(heroSeat);
     await tester.pump();
     expect(controller.draft.choiceId, 'you-kicker');
     expect(autoSubmits, 1);

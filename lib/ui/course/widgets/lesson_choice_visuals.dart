@@ -91,7 +91,7 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-01-02-02-scaffolded-kicker') {
-    // Kicker showdown: tap You / Them / Chop on densified felt.
+    // Kicker showdown: tap your holes / their holes; Chop is a dock button.
     return SelectIdentifyPresentation.tableRegionTap;
   }
   if (activity.id == 'act-02-07-02-jump-family') {

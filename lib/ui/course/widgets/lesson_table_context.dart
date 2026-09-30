@@ -3541,14 +3541,14 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-01-02-02-explain-five':
       return null;
     case 'act-01-02-02-scaffolded-kicker':
+      // Tap your holes / their holes on the felt; Chop is a dock button.
       return const LessonTableScene(
-        layout: LessonTableLayout.kickerShowdownOutcomes,
         heroCodes: ['Ah', 'Qd'],
         boardCodes: ['Kh', 'Kd', '7c', '3s', '2d'],
         villainCodes: ['As', 'Jd'],
         villainSeatCount: 0,
-        highlight: LessonTableHighlight.none,
-        caption: 'Your holes',
+        highlight: LessonTableHighlight.hero,
+        caption: 'You',
       );
     case 'act-01-02-02-unguided-board':
       return const LessonTableScene(
@@ -3777,9 +3777,8 @@ String? mapTableRegionToChoiceId({
       };
     case 'act-01-02-02-scaffolded-kicker':
       return switch (region) {
-        LessonTableRegion.handRankYouWin => pick('you-kicker'),
-        LessonTableRegion.handRankTheyWin => pick('they-kicker'),
-        LessonTableRegion.handRankChop => pick('chop-kicker'),
+        LessonTableRegion.hero => pick('you-kicker'),
+        LessonTableRegion.villain => pick('they-kicker'),
         _ => null,
       };
     case 'act-01-04-01-unguided-end':
