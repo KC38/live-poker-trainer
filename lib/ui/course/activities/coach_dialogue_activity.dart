@@ -91,15 +91,13 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.suitsRanks) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return _SuitsRanksDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllSuitsTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
+          return LessonSuitBoardTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllSuitsSelected: locked ? null : onFeltAcknowledge,
+            onMiss: () {
+              LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                'Tap the community cards — one of each suit.',
               );
             },
           );
@@ -2023,7 +2021,8 @@ class CoachDialogueVisual {
       useTable
           ? 'Tap your two cards on the felt.'
           : 'Tap Continue when you have looked at your two cards.',
-    CoachDialogueVisualKind.suitsRanks => 'Tap each of the four suits.',
+    CoachDialogueVisualKind.suitsRanks =>
+      'Tap one community card of each suit.',
     CoachDialogueVisualKind.dealerButton =>
       'Tap the dealer button on the table.',
     CoachDialogueVisualKind.positionLabels =>

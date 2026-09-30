@@ -49,6 +49,10 @@ class FeltTableView extends StatelessWidget {
     this.highlightBoard = false,
     this.onSeatTap,
     this.onBoardTap,
+    this.onBoardCardTap,
+    this.selectedBoardIndexes = const {},
+    this.highlightBoardIndexes = const {},
+    this.boardOrderBadges = const {},
     this.features,
     this.heroStatus,
   });
@@ -99,6 +103,19 @@ class FeltTableView extends StatelessWidget {
 
   /// Tap on the community cards.
   final VoidCallback? onBoardTap;
+
+  /// Tap on one dealt board card by index. Prefer this over [onBoardTap]
+  /// when the lesson needs a single card.
+  final ValueChanged<int>? onBoardCardTap;
+
+  /// Board indexes with a selected gold ring.
+  final Set<int> selectedBoardIndexes;
+
+  /// Board indexes that bounce a cue arrow.
+  final Set<int> highlightBoardIndexes;
+
+  /// 1-based order badge drawn on a selected board card.
+  final Map<int, int> boardOrderBadges;
 
   /// Optional layers. Null reads [TableFeaturesScope].
   final TableFeatures? features;
@@ -333,7 +350,8 @@ class FeltTableView extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: board.columnTop - (highlightBoard ? 30 : 0),
+          top: board.columnTop -
+              (highlightBoard || highlightBoardIndexes.isNotEmpty ? 30 : 0),
           child: Center(
             child: GestureDetector(
               key:
@@ -341,14 +359,18 @@ class FeltTableView extends StatelessWidget {
                       ? null
                       : const ValueKey<String>('lesson-board'),
               behavior: HitTestBehavior.translucent,
-              onTap: onBoardTap,
+              // Per-card taps own the hit target; whole-board tap stays for
+              // steps that treat the board as one answer.
+              onTap: onBoardCardTap == null ? onBoardTap : null,
               child: Semantics(
-                button: onBoardTap != null,
-                label: onBoardTap == null ? null : 'Community cards',
+                button: onBoardTap != null && onBoardCardTap == null,
+                label: onBoardTap == null || onBoardCardTap != null
+                    ? null
+                    : 'Community cards',
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (highlightBoard)
+                    if (highlightBoard && highlightBoardIndexes.isEmpty)
                       const SizedBox(height: 30, child: _CueArrows(count: 1)),
                     TweenAnimationBuilder<double>(
                       tween: Tween<double>(end: board.scale),
@@ -368,6 +390,10 @@ class FeltTableView extends StatelessWidget {
                             features: f,
                             resultMessage:
                                 game.isHandOver ? game.resultMessage : null,
+                            onBoardCardTap: onBoardCardTap,
+                            selectedBoardIndexes: selectedBoardIndexes,
+                            highlightBoardIndexes: highlightBoardIndexes,
+                            boardOrderBadges: boardOrderBadges,
                           ),
                     ),
                   ],

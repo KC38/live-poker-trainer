@@ -29,17 +29,20 @@ const int lessonBlindsRightOfButtonIndex = 2;
 /// Hand drawn by [LessonTableStage].
 ///
 /// Villains take the names Sam, Jo, Rio, Max, and Kai, then repeat. The first
-/// opponent shows [villainCodes] only when that list has two cards. A null
-/// [dealerIndex] leaves the hero on the button. Otherwise the small blind and
-/// big blind sit one and two seats clockwise from the button, unless
-/// [sbIndex] or [bbIndex] is set, and no seat glows unless [activeSeatIndex]
-/// is set. [positionLabels] renames the ring EP, HJ, CO, BTN, SB, BB.
-/// The table plays [smallBlind]/[bigBlind] with 100 big blind stacks.
-/// [villainArchetypes] gives the opponents, in seat order, real player types.
+/// opponent shows [villainCodes] only when that list has two cards.
+/// [villainHoleCodes] can face-up several opponents at once (each entry two
+/// codes, in seat order). A null [dealerIndex] leaves the hero on the button.
+/// Otherwise the small blind and big blind sit one and two seats clockwise
+/// from the button, unless [sbIndex] or [bbIndex] is set, and no seat glows
+/// unless [activeSeatIndex] is set. [positionLabels] renames the ring EP, HJ,
+/// CO, BTN, SB, BB. The table plays [smallBlind]/[bigBlind] with 100 big blind
+/// stacks. [villainArchetypes] gives the opponents, in seat order, real player
+/// types.
 GameState lessonTableStageGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
   List<String> villainCodes = const [],
+  List<List<String>> villainHoleCodes = const [],
   int villainCount = 3,
   int? dealerIndex,
   int? sbIndex,
@@ -61,6 +64,13 @@ GameState lessonTableStageGame({
     bbIndex: bbIndex,
   );
   const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
+  final holesByVillain = <int, List<String>>{
+    for (var i = 0; i < villainHoleCodes.length; i++)
+      if (villainHoleCodes[i].length >= 2) i: villainHoleCodes[i],
+  };
+  if (holesByVillain.isEmpty && villainCodes.length >= 2) {
+    holesByVillain[0] = villainCodes;
+  }
   var villain = 0;
   final players = <PlayerModel>[];
   for (final player in base.players) {
@@ -68,7 +78,7 @@ GameState lessonTableStageGame({
       players.add(player);
       continue;
     }
-    final showHoles = villain == 0 && villainCodes.length >= 2;
+    final holes = holesByVillain[villain];
     final types = villainArchetypes;
     players.add(
       player.copyWith(
@@ -76,12 +86,11 @@ GameState lessonTableStageGame({
         archetype: types == null || types.isEmpty
             ? null
             : types[villain % types.length],
-        holeCards: showHoles
-            ? [
-                for (final code in villainCodes.take(2))
-                  CardModel.fromCode(code),
-              ]
-            : player.holeCards,
+        holeCards: holes == null
+            ? player.holeCards
+            : [
+                for (final code in holes.take(2)) CardModel.fromCode(code),
+              ],
       ),
     );
     villain += 1;
@@ -155,6 +164,7 @@ class LessonTableStage extends StatelessWidget {
     this.heroCodes = const ['Ah', 'Kd'],
     this.boardCodes = const [],
     this.villainCodes = const [],
+    this.villainHoleCodes = const [],
     this.villainCount = 3,
     this.heroFaceUp = false,
     this.cue = LessonTableCue.none,
@@ -166,7 +176,11 @@ class LessonTableStage extends StatelessWidget {
     this.onHeroTap,
     this.onVillainTap,
     this.onBoardTap,
+    this.onBoardCardTap,
     this.onSeatIndexTap,
+    this.selectedBoardIndexes = const {},
+    this.highlightBoardIndexes = const {},
+    this.boardOrderBadges = const {},
     this.positionLabels = false,
     this.smallBlind = lessonSmallBlind,
     this.bigBlind = lessonBigBlind,
@@ -182,6 +196,9 @@ class LessonTableStage extends StatelessWidget {
 
   /// First opponent's hole cards, shown face up when this is two codes.
   final List<String> villainCodes;
+
+  /// Face-up hole cards for several opponents, in seat order.
+  final List<List<String>> villainHoleCodes;
 
   /// Other seats. The hero is always an extra seat.
   final int villainCount;
@@ -216,8 +233,20 @@ class LessonTableStage extends StatelessWidget {
   /// Learner tapped the community cards.
   final VoidCallback? onBoardTap;
 
+  /// Learner tapped one board card by index.
+  final ValueChanged<int>? onBoardCardTap;
+
   /// Learner tapped a seat. The value is that seat's index in the hand.
   final ValueChanged<int>? onSeatIndexTap;
+
+  /// Board indexes with a selected gold ring.
+  final Set<int> selectedBoardIndexes;
+
+  /// Board indexes that bounce a cue arrow.
+  final Set<int> highlightBoardIndexes;
+
+  /// 1-based order badge drawn on a selected board card.
+  final Map<int, int> boardOrderBadges;
 
   /// Rename the six-max ring EP, HJ, CO, BTN, SB, BB.
   final bool positionLabels;
@@ -241,6 +270,7 @@ class LessonTableStage extends StatelessWidget {
     heroCodes: heroCodes,
     boardCodes: boardCodes,
     villainCodes: villainCodes,
+    villainHoleCodes: villainHoleCodes,
     villainCount: villainCount,
     dealerIndex: dealerIndex,
     sbIndex: sbIndex,
@@ -259,6 +289,16 @@ class LessonTableStage extends StatelessWidget {
     final table = villainArchetypes == null
         ? preset.copyWith(playerTypes: false, stats: false)
         : preset;
+    final faceUp = <int>{if (heroFaceUp) 0};
+    if (villainHoleCodes.isNotEmpty) {
+      for (var i = 0; i < villainHoleCodes.length; i++) {
+        if (villainHoleCodes[i].length >= 2 && i + 1 < game.players.length) {
+          faceUp.add(game.players[i + 1].id);
+        }
+      }
+    } else if (villainCodes.length >= 2) {
+      faceUp.add(1);
+    }
     return LayoutBuilder(
       builder: (context, constraints) {
         final height = constraints.maxHeight.isFinite
@@ -273,17 +313,24 @@ class LessonTableStage extends StatelessWidget {
             features: table,
             showHoleCardBacks: true,
             heroCardsFaceUp: heroFaceUp,
-            faceUpPlayerIds: {
-              if (heroFaceUp) 0,
-              if (villainCodes.length >= 2) 1,
-            },
+            faceUpPlayerIds: faceUp,
             highlightHero: cue == LessonTableCue.hero && !heroFaceUp,
-            highlightBoard: cue == LessonTableCue.board,
-            onBoardTap: !enabled || onBoardTap == null
+            highlightBoard: cue == LessonTableCue.board &&
+                highlightBoardIndexes.isEmpty,
+            selectedBoardIndexes: selectedBoardIndexes,
+            highlightBoardIndexes: highlightBoardIndexes,
+            boardOrderBadges: boardOrderBadges,
+            onBoardTap: !enabled || onBoardTap == null || onBoardCardTap != null
                 ? null
                 : () {
                     HapticFeedback.selectionClick();
                     onBoardTap!();
+                  },
+            onBoardCardTap: !enabled || onBoardCardTap == null
+                ? null
+                : (index) {
+                    HapticFeedback.selectionClick();
+                    onBoardCardTap!(index);
                   },
             onSeatTap: !enabled
                 ? null
@@ -447,6 +494,316 @@ class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
       activeSeatIndex: teaching ? _order[_step] : null,
       enabled: teaching,
       onSeatIndexTap: _tap,
+    );
+  }
+}
+
+/// One face-up board card per suit. Used by Suits and ranks.
+const List<String> lessonSuitBoardCodes = ['Ah', 'Kd', '7c', '2s'];
+
+/// Suit for each [lessonSuitBoardCodes] index.
+const List<String> lessonSuitBoardSuitLetters = ['h', 'd', 'c', 's'];
+
+/// Features for early Suits and ranks steps: seats, cards, board only.
+TableFeatures get lessonSuitsRanksTableFeatures => const TableFeatures(
+  stacks: false,
+  pot: false,
+  street: false,
+  blinds: false,
+  positions: false,
+  bets: false,
+  actions: false,
+  opponentCards: true,
+  playerTypes: false,
+  stats: false,
+  boardSlots: false,
+);
+
+/// Maps a board-card index on [lessonSuitBoardCodes] to a suit letter.
+String? lessonSuitLetterForBoardIndex(int index) {
+  if (index < 0 || index >= lessonSuitBoardSuitLetters.length) return null;
+  return lessonSuitBoardSuitLetters[index];
+}
+
+/// Full table: tap each suit on the board. Completes when all four are in.
+class LessonSuitBoardTable extends StatefulWidget {
+  /// Creates the suit board stage.
+  const LessonSuitBoardTable({
+    super.key,
+    required this.onAllSuitsSelected,
+    this.onMiss,
+    this.enabled = true,
+    this.showGuidance = true,
+    this.selectedSuitLetters = const {},
+    this.syncSelection = false,
+  });
+
+  /// All four real suits are selected.
+  final VoidCallback? onAllSuitsSelected;
+
+  /// A seat was tapped instead of a board card.
+  final VoidCallback? onMiss;
+
+  /// Taps are ignored when false.
+  final bool enabled;
+
+  /// SoftPulse the next untapped suit.
+  final bool showGuidance;
+
+  /// External selection (guided grade draft). Empty starts fresh.
+  final Set<String> selectedSuitLetters;
+
+  /// When true, [selectedSuitLetters] owns the selection.
+  final bool syncSelection;
+
+  @override
+  State<LessonSuitBoardTable> createState() => _LessonSuitBoardTableState();
+}
+
+class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
+  final Set<String> _selected = <String>{};
+
+  @override
+  void initState() {
+    super.initState();
+    _selected.addAll(widget.selectedSuitLetters);
+  }
+
+  @override
+  void didUpdateWidget(covariant LessonSuitBoardTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.syncSelection &&
+        !_setEquals(_selected, widget.selectedSuitLetters)) {
+      setState(() {
+        _selected
+          ..clear()
+          ..addAll(widget.selectedSuitLetters);
+      });
+    }
+  }
+
+  bool _setEquals(Set<String> a, Set<String> b) =>
+      a.length == b.length && a.containsAll(b);
+
+  void _tapCard(int index) {
+    if (!widget.enabled || widget.onAllSuitsSelected == null) return;
+    final suit = lessonSuitLetterForBoardIndex(index);
+    if (suit == null) return;
+    setState(() {
+      if (!_selected.add(suit)) _selected.remove(suit);
+    });
+    if (_selected.length >= 4 &&
+        _selected.containsAll(const {'h', 'd', 'c', 's'})) {
+      widget.onAllSuitsSelected!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedIndexes = <int>{
+      for (var i = 0; i < lessonSuitBoardCodes.length; i++)
+        if (_selected.contains(lessonSuitBoardSuitLetters[i])) i,
+    };
+    int? nextIndex;
+    if (widget.showGuidance && widget.enabled) {
+      for (var i = 0; i < lessonSuitBoardSuitLetters.length; i++) {
+        if (!_selected.contains(lessonSuitBoardSuitLetters[i])) {
+          nextIndex = i;
+          break;
+        }
+      }
+    }
+    return LessonTableStage(
+      heroCodes: const ['Ah', 'Kd'],
+      boardCodes: lessonSuitBoardCodes,
+      villainCount: 3,
+      heroFaceUp: false,
+      enabled: widget.enabled,
+      features: lessonSuitsRanksTableFeatures,
+      selectedBoardIndexes: selectedIndexes,
+      highlightBoardIndexes: {if (nextIndex != null) nextIndex},
+      onBoardCardTap: _tapCard,
+      onHeroTap: widget.onMiss,
+      onVillainTap: (_) => widget.onMiss?.call(),
+    );
+  }
+}
+
+/// Board codes for a rank-order step, shuffled by [activityId].
+List<String> lessonRankOrderBoardCodes({
+  required String activityId,
+  required List<String> rankLabels,
+}) {
+  final suitCycle = ['h', 'd', 'c', 's'];
+  final items = [
+    for (var i = 0; i < rankLabels.length; i++)
+      '${rankLabels[i].toUpperCase()}${suitCycle[i % suitCycle.length]}',
+  ];
+  // Stable shuffle so mid-answer rebuilds keep the same board.
+  var hash = 0x811c9dc5;
+  for (final unit in activityId.codeUnits) {
+    hash ^= unit;
+    hash = (hash * 0x01000193) & 0xffffffff;
+  }
+  final out = List<String>.of(items);
+  for (var i = out.length - 1; i > 0; i--) {
+    hash = (hash * 1664525 + 1013904223) & 0xffffffff;
+    final j = hash % (i + 1);
+    final tmp = out[i];
+    out[i] = out[j];
+    out[j] = tmp;
+  }
+  if (out.length > 1 && _sameStringOrder(out, items)) {
+    final tmp = out[0];
+    out[0] = out[1];
+    out[1] = tmp;
+  }
+  return List<String>.unmodifiable(out);
+}
+
+bool _sameStringOrder(List<String> a, List<String> b) {
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
+/// Full table: tap board ranks low → high (or any order, then grade).
+class LessonRankOrderTable extends StatefulWidget {
+  /// Creates the rank-order stage.
+  const LessonRankOrderTable({
+    super.key,
+    required this.activityId,
+    required this.sequenceItems,
+    required this.orderedIds,
+    required this.onPick,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final String activityId;
+  final List<({String id, String label})> sequenceItems;
+  final List<String> orderedIds;
+  final ValueChanged<String> onPick;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonRankOrderTable> createState() => _LessonRankOrderTableState();
+}
+
+class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
+  late final List<String> _board;
+
+  @override
+  void initState() {
+    super.initState();
+    _board = lessonRankOrderBoardCodes(
+      activityId: widget.activityId,
+      rankLabels: [
+        for (final item in widget.sequenceItems) item.label,
+      ],
+    );
+  }
+
+  String? _idForBoardIndex(int index) {
+    if (index < 0 || index >= _board.length) return null;
+    final rank = _board[index][0];
+    for (final item in widget.sequenceItems) {
+      if (item.label.toUpperCase() == rank) return item.id;
+    }
+    return null;
+  }
+
+  void _tap(int index) {
+    if (!widget.enabled) return;
+    final id = _idForBoardIndex(index);
+    if (id == null || widget.orderedIds.contains(id)) return;
+    widget.onPick(id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final selected = <int>{};
+    final badges = <int, int>{};
+    for (var order = 0; order < widget.orderedIds.length; order++) {
+      final id = widget.orderedIds[order];
+      for (var i = 0; i < _board.length; i++) {
+        if (_idForBoardIndex(i) == id) {
+          selected.add(i);
+          badges[i] = order + 1;
+        }
+      }
+    }
+    int? nextIndex;
+    if (widget.showGuidance &&
+        widget.enabled &&
+        widget.orderedIds.length < widget.sequenceItems.length) {
+      final nextId = widget.sequenceItems[widget.orderedIds.length].id;
+      for (var i = 0; i < _board.length; i++) {
+        if (_idForBoardIndex(i) == nextId) {
+          nextIndex = i;
+          break;
+        }
+      }
+    }
+    return LessonTableStage(
+      heroCodes: const ['Ah', 'Kd'],
+      boardCodes: _board,
+      villainCount: 3,
+      heroFaceUp: false,
+      enabled: widget.enabled,
+      features: lessonSuitsRanksTableFeatures,
+      selectedBoardIndexes: selected,
+      highlightBoardIndexes: {if (nextIndex != null) nextIndex},
+      boardOrderBadges: badges,
+      onBoardCardTap: _tap,
+    );
+  }
+}
+
+/// Full table: tap the seat whose face-up holes match the answer.
+class LessonHoleHandTable extends StatelessWidget {
+  /// Creates the hole-hand choice stage.
+  const LessonHoleHandTable({
+    super.key,
+    required this.heroCodes,
+    required this.villainHoleCodes,
+    required this.onSeatChoice,
+    this.enabled = true,
+    this.showGuidance = false,
+    this.correctSeatIndex = 0,
+  });
+
+  /// Hero holes (seat 0).
+  final List<String> heroCodes;
+
+  /// Face-up holes for Sam, Jo, … in seat order.
+  final List<List<String>> villainHoleCodes;
+
+  /// Seat index in the hand (0 = hero).
+  final ValueChanged<int> onSeatChoice;
+
+  final bool enabled;
+  final bool showGuidance;
+  final int correctSeatIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return LessonTableStage(
+      heroCodes: heroCodes,
+      villainHoleCodes: villainHoleCodes,
+      villainCount: villainHoleCodes.length,
+      heroFaceUp: true,
+      enabled: enabled,
+      features: lessonSuitsRanksTableFeatures.copyWith(opponentCards: true),
+      cue: showGuidance && correctSeatIndex == 0
+          ? LessonTableCue.hero
+          : LessonTableCue.none,
+      activeSeatIndex:
+          showGuidance && correctSeatIndex > 0 ? correctSeatIndex : null,
+      onSeatIndexTap: enabled ? onSeatChoice : null,
     );
   }
 }

@@ -168,13 +168,14 @@ Two older layouts still draw hands inside the lesson runner:
 `FullTableHandLabActivity` still builds `PokerActionSizingActivity` and
 `LessonActionSpot`. The name is not the full table above.
 
-Contract: a lesson step that shows hole cards, a board, a pot, or an action
-uses the Poker table (`FeltTableView`, with `CoachShelfWidget` and
-`ActionDockWidget` where the step has them). Retire the mini-table for that
-step. A step with no hand (welcome, a list, settings, a number with no
-cards) stays on the Theme section and does not grow a felt.
+Contract: every lesson step uses the Poker table (`FeltTableView`, with
+`CoachShelfWidget` and `ActionDockWidget` where the step has them). Retire
+mini felts, suit tiles, and rank slots. When no table object fits the
+answer, put choices in the action space under the felt.
 
-Suit taps and rank order in Suits and ranks stay on the Theme section. They do not use a felt. A felt is only for a step that shows hole cards, a board, a pot, or an action, and that step uses the Poker table bands.
+Suits and ranks uses the full poker table for every step: suit taps hit
+community cards (one of each suit), rank order taps board ranks low to high,
+and suited / pair picks tap the seat whose holes match.
 
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
@@ -315,9 +316,10 @@ Tapping your cards turns them face up. Tapping another seat's cards is
 a miss: a buzz, the wrong face, and the answer dock. Those cards stay
 face down.
 
-A step with no hand (suits, a rank order, a number, a list) still uses
-this frame. Its own widget fills the stage slot. It does not grow a
-felt, and it does not replace the frame with the old app-bar runner.
+Every step uses this frame and the full poker table in the stage. Tap
+table objects when the answer is on the felt. When no table object fits,
+answers sit in the action space under the felt. Do not replace the frame
+with the old app-bar runner, a mini felt, suit tiles, or rank slots.
 
 ### 4. Tools
 
@@ -345,11 +347,11 @@ primary button everywhere except this dock.
 
 `LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
-is the stage when the step is a hand. Your two cards uses both. Suits
-and ranks uses the same frame; its stage is the suits-and-ranks widget,
-not a felt. Button and blinds uses the same frame; its stage is the
-full table, with the dealer button, small blind, and big blind on the
-seats. Hand ranks uses the same frame: the ladder stays the rank
+is the stage. Your two cards uses both. Suits and ranks uses the same
+frame and the full table: one community card per suit, board ranks for
+order, and face-up seats for suited / pair. Button and blinds uses the
+same frame; its stage is the full table, with the dealer button, small
+blind, and big blind on the seats. Hand ranks uses the same frame: the ladder stays the rank
 widget, and a made hand or a showdown uses the full table. Best five
 and kickers uses the same frame: the five-card picker stays in the
 stage, and a kicker battle or a board-plays pot uses the full table.

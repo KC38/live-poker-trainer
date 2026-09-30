@@ -15,25 +15,41 @@ const double tableCardAspect = 1.4;
 /// hole card behind it without hiding what the card is.
 class TableCard extends StatelessWidget {
   /// Creates a card face [width] wide.
-  const TableCard({super.key, required this.card, required this.width});
+  const TableCard({
+    super.key,
+    required this.card,
+    required this.width,
+    this.selected = false,
+    this.orderBadge,
+  });
 
   final CardModel card;
   final double width;
 
+  /// Gold ring when the learner has tapped this card.
+  final bool selected;
+
+  /// Optional 1-based order badge drawn on a selected card.
+  final int? orderBadge;
+
   @override
   Widget build(BuildContext context) {
     final color = card.suit.color;
+    final radius = width * 0.12;
     return Semantics(
       label: card.display,
+      selected: selected,
       child: Container(
         width: width,
         height: width * tableCardAspect,
         decoration: BoxDecoration(
           color: AppColors.cream,
-          borderRadius: BorderRadius.circular(width * 0.12),
+          borderRadius: BorderRadius.circular(radius),
           border: Border.all(
-            color: AppColors.slateDark.withValues(alpha: 0.35),
-            width: 0.6,
+            color: selected
+                ? AppColors.gold
+                : AppColors.slateDark.withValues(alpha: 0.35),
+            width: selected ? 2.2 : 0.6,
           ),
           boxShadow: [
             BoxShadow(
@@ -41,6 +57,12 @@ class TableCard extends StatelessWidget {
               blurRadius: 4,
               offset: const Offset(0, 1.5),
             ),
+            if (selected)
+              BoxShadow(
+                color: AppColors.gold.withValues(alpha: 0.45),
+                blurRadius: 10,
+                spreadRadius: 1,
+              ),
           ],
         ),
         child: ExcludeSemantics(
@@ -87,6 +109,33 @@ class TableCard extends StatelessWidget {
                   ),
                 ),
               ),
+              if (orderBadge != null)
+                Positioned(
+                  right: width * 0.06,
+                  top: width * 0.06,
+                  child: Container(
+                    width: width * 0.34,
+                    height: width * 0.34,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.gold,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.bgDark,
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      '$orderBadge',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.bgDark,
+                        fontSize: width * 0.2,
+                        fontWeight: FontWeight.w800,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

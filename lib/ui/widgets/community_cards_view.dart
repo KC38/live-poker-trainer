@@ -29,6 +29,10 @@ class CommunityCardsView extends StatelessWidget {
     this.isSplit = false,
     this.resultMessage,
     this.features = TableFeatures.full,
+    this.onBoardCardTap,
+    this.selectedBoardIndexes = const {},
+    this.highlightBoardIndexes = const {},
+    this.boardOrderBadges = const {},
   });
 
   final List<CardModel> community;
@@ -52,6 +56,18 @@ class CommunityCardsView extends StatelessWidget {
 
   /// Which of the pot, street, blinds, and empty slots to draw.
   final TableFeatures features;
+
+  /// Tap on one dealt board card by index. Null leaves cards inert.
+  final ValueChanged<int>? onBoardCardTap;
+
+  /// Board indexes with a selected gold ring.
+  final Set<int> selectedBoardIndexes;
+
+  /// Board indexes that bounce a cue arrow (teach-by-doing).
+  final Set<int> highlightBoardIndexes;
+
+  /// 1-based order badge drawn on a selected board card.
+  final Map<int, int> boardOrderBadges;
 
   /// Board card width at scale 1.
   static const double cardWidth = 52;
@@ -198,22 +214,40 @@ class CommunityCardsView extends StatelessWidget {
         ],
         SizedBox(
           key: const ValueKey<String>('felt-board-row'),
-          height: cardsHeight * scale,
+          height: cardsHeight * scale +
+              (highlightBoardIndexes.isNotEmpty ? 30 * scale : 0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               for (var i = 0; i < 5; i++)
                 Padding(
                   padding: EdgeInsets.only(left: i == 0 ? 0 : cardGap * scale),
                   child:
                       i < community.length
-                          ? _RevealedCard(
-                            key: ValueKey(community[i].code),
+                          ? _BoardCardTarget(
+                            key: ValueKey('board-card-$i-${community[i].code}'),
+                            index: i,
                             card: community[i],
                             width: w,
+                            scale: scale,
+                            reserveCue: highlightBoardIndexes.isNotEmpty,
+                            selected: selectedBoardIndexes.contains(i),
+                            highlight: highlightBoardIndexes.contains(i),
+                            orderBadge: boardOrderBadges[i],
+                            onTap: onBoardCardTap == null
+                                ? null
+                                : () => onBoardCardTap!(i),
                           )
                           : features.boardSlots
-                          ? TableCardSlot(width: w)
+                          ? Padding(
+                            padding: EdgeInsets.only(
+                              top: highlightBoardIndexes.isNotEmpty
+                                  ? 30 * scale
+                                  : 0,
+                            ),
+                            child: TableCardSlot(width: w),
+                          )
                           : SizedBox(width: w),
                 ),
             ],
@@ -258,10 +292,18 @@ class _PinnedToLabelWidth extends StatelessWidget {
 
 /// A board card that fades and scales in when it is first dealt.
 class _RevealedCard extends StatefulWidget {
-  const _RevealedCard({super.key, required this.card, required this.width});
+  const _RevealedCard({
+    super.key,
+    required this.card,
+    required this.width,
+    this.selected = false,
+    this.orderBadge,
+  });
 
   final CardModel card;
   final double width;
+  final bool selected;
+  final int? orderBadge;
 
   @override
   State<_RevealedCard> createState() => _RevealedCardState();
@@ -287,7 +329,77 @@ class _RevealedCardState extends State<_RevealedCard> {
         scale: 0.82 + 0.18 * _progress,
         duration: const Duration(milliseconds: 260),
         curve: Curves.easeOutBack,
-        child: TableCard(card: widget.card, width: widget.width),
+        child: TableCard(
+          card: widget.card,
+          width: widget.width,
+          selected: widget.selected,
+          orderBadge: widget.orderBadge,
+        ),
+      ),
+    );
+  }
+}
+
+/// One tappable board card with an optional cue arrow above it.
+class _BoardCardTarget extends StatelessWidget {
+  const _BoardCardTarget({
+    super.key,
+    required this.index,
+    required this.card,
+    required this.width,
+    required this.scale,
+    required this.reserveCue,
+    required this.selected,
+    required this.highlight,
+    required this.orderBadge,
+    required this.onTap,
+  });
+
+  final int index;
+  final CardModel card;
+  final double width;
+  final double scale;
+  final bool reserveCue;
+  final bool selected;
+  final bool highlight;
+  final int? orderBadge;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final cardFace = _RevealedCard(
+      card: card,
+      width: width,
+      selected: selected,
+      orderBadge: orderBadge,
+    );
+    final column = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (reserveCue)
+          SizedBox(
+            height: 30 * scale,
+            child: highlight
+                ? Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: AppColors.gold,
+                  size: 28 * scale,
+                )
+                : null,
+          ),
+        cardFace,
+      ],
+    );
+    if (onTap == null) return column;
+    return Semantics(
+      button: true,
+      label: card.display,
+      selected: selected,
+      child: GestureDetector(
+        key: ValueKey<String>('lesson-board-card-$index'),
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: column,
       ),
     );
   }

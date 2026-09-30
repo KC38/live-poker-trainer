@@ -29,6 +29,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 class _ScriptedCourseService extends CourseService {
@@ -635,8 +636,12 @@ void main() {
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Redo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('suits-ranks-felt')), findsOneWidget);
-    expect(find.byType(SuitTapTile), findsNWidgets(4));
+    expect(find.byKey(const ValueKey('lesson-table-stage')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byType(SuitTapTile), findsNothing);
+    expect(find.byKey(const ValueKey('suits-ranks-felt')), findsNothing);
+    expect(find.byKey(const ValueKey('lesson-board-card-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey('lesson-board-card-3')), findsOneWidget);
 
     final bubble = find.byKey(const ValueKey<String>('lesson-speech-bubble'));
     final speech = find.textContaining('Ace is high here.');
@@ -645,7 +650,7 @@ void main() {
       greaterThan(tester.getTopLeft(bubble).dy),
     );
     expect(
-      tester.getSize(find.byKey(const ValueKey('suits-ranks-felt'))).height,
+      tester.getSize(find.byKey(const ValueKey('lesson-table-stage'))).height,
       lessThanOrEqualTo(tester.getSize(find.byType(LessonScreenLayout)).height),
     );
     expect(tester.takeException(), isNull);

@@ -31,10 +31,9 @@ Expression is `LessonMascotExpression` mapped to `RexMood`: calm before an answe
 
 | The step shows | What fills the stage |
 | --- | --- |
-| Hole cards, a board, a pot, seats, or an action | `LessonTableStage`, the same table as Live Training. Fewer seats, a shorter board, or no actions, so the step can focus. Hero sits at the bottom of the felt. No street heading, no coach shelf. |
-| No hand (suits, rank order, a number, a list) | That step's own widget, inside this same frame. Do not add a felt to match Your two cards. |
+| Any lesson step | `LessonTableStage`, the same table as Live Training. Fewer seats, a shorter board, or no actions, so the step can focus. Hero sits at the bottom of the felt. No street heading, no coach shelf. Tap table objects when the answer is on the felt; use the action space under the felt only when no table object fits. |
 
-Do not use a mini felt, a loose card row, `LessonTableScene`, or the app-bar runner for a new or edited step. A hand step that still uses those is a gap. Move that step onto `LessonTableStage` in the same change. A non-hand step only needs the frame; leave its teaching widget in the stage slot.
+Do not use a mini felt, a loose card row, `LessonTableScene`, suit tiles, rank slots, or the app-bar runner for a new or edited step. A step that still uses those is a gap. Move that step onto `LessonTableStage` in the same change.
 
 ## Table layers and stakes
 
