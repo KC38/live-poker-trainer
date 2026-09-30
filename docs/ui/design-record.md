@@ -238,6 +238,9 @@ Value, C-bet, Check, Call, Fold, and Raise under the felt.
 Plan the turn card uses the full poker table for every step: explain taps
 Brick, Change, Barrel, and Delay under the felt.
 
+Close the river correctly uses the full poker table for every step: explain
+taps Value, Bluff, Catch, and Fold under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -468,9 +471,9 @@ Raise under the felt, and each flop decision sits face up on that
 table. Plan the turn card uses the same frame and the full table:
 explain taps Brick, Change, Barrel, and Delay under the felt, and
 each turn sits face up on that table. Close the river correctly uses
-the same frame: value, bluff, catch,
-and fold stay in the stage, and each river sits face up on the full
-table. Play tighter multiway uses the same frame: stronger, fewer,
+the same frame and the full table: explain taps Value, Bluff, Catch,
+and Fold under the felt, and each river sits face up on that table.
+Play tighter multiway uses the same frame: stronger, fewer,
 and nuts stay in the stage, and each multiway spot sits face up on
 the full table. Patch the common leaks uses the same frame: top
 pair, prices, passive, and crowds stay in the stage, and each leak

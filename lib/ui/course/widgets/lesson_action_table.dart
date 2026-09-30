@@ -4948,6 +4948,95 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
 }
 
 
+/// River-binary explain: VALUE / BLUFF / CATCH / FOLD under the full table.
+class LessonRiverBinaryExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonRiverBinaryExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonRiverBinaryExplainTable> createState() =>
+      _LessonRiverBinaryExplainTableState();
+}
+
+class _LessonRiverBinaryExplainTableState
+    extends State<LessonRiverBinaryExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= RiverBinaryDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('river-binary-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d', '3h', '9c'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < RiverBinaryDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(RiverBinaryDemo.points[i].label) &&
+                      RiverBinaryDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: RiverBinaryDemo.points[i].label,
+                    caption: RiverBinaryDemo.points[i].caption,
+                    color: RiverBinaryDemo.points[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(RiverBinaryDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(RiverBinaryDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Explain-step demo: river is binary — value, bluff, catch, or fold.
 class RiverBinaryDemo extends StatefulWidget {
   /// Creates the demo.
