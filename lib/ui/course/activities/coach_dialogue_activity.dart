@@ -120,17 +120,10 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.bestFive) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return BestFiveDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllPlayingTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+          return LessonBestFiveExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllPlayingTapped: locked ? null : onFeltAcknowledge,
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.passiveActions) {

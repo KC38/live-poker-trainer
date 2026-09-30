@@ -177,6 +177,10 @@ Suits and ranks uses the full poker table for every step: suit taps hit
 community cards (one of each suit), rank order taps board ranks low to high,
 and suited / pair picks tap the seat whose holes match.
 
+Best five and kickers uses the full poker table for every step: explain
+and build-five taps hit hero holes and board cards; kicker and board-plays
+steps tap You / Them / Board on that table.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -356,8 +360,10 @@ full table: the explain ladder cycles made hands on the felt, order steps
 show a made hand on the table with category answers under the felt, the
 spot sits face up on the table, and the showdown taps You / Them on that
 table. Best five
-and kickers uses the same frame: the five-card picker stays in the
-stage, and a kicker battle or a board-plays pot uses the full table.
+and kickers uses the same frame and the full table: explain taps the
+five cards that play on hero holes and the board, guided and checkpoint
+build the best five by tapping those seven cards, and a kicker battle
+or a board-plays pot uses that table.
 Fold, check, call uses the same frame: the three buttons stay the
 explain stage, and each action spot uses the full table. Bet, raise,
 all-in uses that same frame: Bet, Raise, and All-in stay the explain
