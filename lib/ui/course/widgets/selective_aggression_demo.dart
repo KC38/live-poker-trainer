@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Observe selective aggression explain: TIGHT / BARREL / SAMPLE under the full poker table.
+class LessonSelectiveAggressionExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonSelectiveAggressionExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonSelectiveAggressionExplainTable> createState() =>
+      _LessonSelectiveAggressionExplainTableState();
+}
+
+class _LessonSelectiveAggressionExplainTableState
+    extends State<LessonSelectiveAggressionExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= SelectiveAggressionDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('selective-aggression-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < SelectiveAggressionDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _SelectiveSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        SelectiveAggressionDemo.points[i].label,
+                      ) &&
+                      SelectiveAggressionDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _SelectiveAggressionTile(
+                    label: SelectiveAggressionDemo.points[i].label,
+                    caption: SelectiveAggressionDemo.points[i].caption,
+                    color: SelectiveAggressionDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      SelectiveAggressionDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  SelectiveAggressionDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Tight / barrel / sample tiles for selective-aggression explain demos.
 class SelectiveAggressionDemo extends StatefulWidget {
