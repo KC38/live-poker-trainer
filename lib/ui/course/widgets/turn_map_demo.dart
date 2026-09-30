@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Map turn barrels before you bet flop explain: BARREL / GIVE-UP / MAP under the full poker table.
+class LessonTurnMapExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonTurnMapExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonTurnMapExplainTable> createState() =>
+      _LessonTurnMapExplainTableState();
+}
+
+class _LessonTurnMapExplainTableState
+    extends State<LessonTurnMapExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= TurnMapDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('turn-map-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < TurnMapDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _TurnMapSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        TurnMapDemo.points[i].label,
+                      ) &&
+                      TurnMapDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _TurnMapTile(
+                    label: TurnMapDemo.points[i].label,
+                    caption: TurnMapDemo.points[i].caption,
+                    color: TurnMapDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      TurnMapDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  TurnMapDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Barrel / give-up / map tiles for turn-map explain demos.
 class TurnMapDemo extends StatefulWidget {
