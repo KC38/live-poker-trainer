@@ -2373,6 +2373,8 @@ void main() {
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
     expect(find.textContaining('Tap Wider'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
+    expect(find.byKey(const ValueKey('vs-maniacs-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
     expect(find.text('WIDER'), findsOneWidget);
     expect(find.text('HANG'), findsOneWidget);
