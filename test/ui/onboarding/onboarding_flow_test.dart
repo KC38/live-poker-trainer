@@ -439,7 +439,7 @@ void main() {
     expect(find.text('Tap your cards'), findsNothing);
     expect(find.textContaining('Tap them'), findsNothing);
     expect(find.textContaining('in the lesson'), findsOneWidget);
-    expect(find.textContaining('FLOP'), findsOneWidget);
+    expect(find.byKey(const ValueKey('felt-board-row')), findsOneWidget);
     expect(find.text('TAG'), findsNothing, reason: 'Section 1 has no types');
     expect(
       find.text('Qs Jh 2c on the flop. Your cards sit at the bottom of the table.'),
@@ -454,15 +454,17 @@ void main() {
     expect(rail.bottom, lessThanOrEqualTo(shelf.top + 1));
     expect(shelf.bottom, lessThanOrEqualTo(button.top));
     expect(rail.bottom, lessThan(button.top));
+    // The first lesson teaches cards, not blinds or chips: the preview of it
+    // leaves out the pot, the blinds, the pucks, the bets, and the stacks.
     final board = tester.getRect(find.byType(CommunityCardsView));
-    final pot = tester.getRect(find.textContaining(r'POT $10'));
-    final bb = tester.getRect(find.text('BB'));
-    expect(pot.overlaps(bb), isFalse, reason: 'BB covers the pot');
-    expect(board.overlaps(bb), isFalse, reason: 'BB covers the board');
-    for (final element in find.text(r'$200').evaluate()) {
-      final stack = tester.getRect(find.byWidget(element.widget));
-      expect(stack.overlaps(board), isFalse, reason: 'stack covers the board');
-      expect(stack.overlaps(pot), isFalse, reason: 'stack covers the pot');
+    expect(find.textContaining('POT'), findsNothing);
+    expect(find.textContaining('Blinds'), findsNothing);
+    expect(find.text('BB'), findsNothing);
+    expect(find.text('D'), findsNothing);
+    expect(find.textContaining(r'$'), findsNothing);
+    for (final seat in find.byType(PlayerSeatWidget).evaluate()) {
+      final rect = tester.getRect(find.byWidget(seat.widget));
+      expect(rect.overlaps(board), isFalse, reason: 'a seat covers the board');
     }
     _expectElevatedMetrics(tester, 'Start lesson');
     expect(find.byType(RexMascot), findsOneWidget);

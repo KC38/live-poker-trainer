@@ -123,7 +123,10 @@ void main() {
     expect(find.text('13/10'), findsOneWidget);
 
     await tester.pumpWidget(
-      _seat(_villain, features: TableFeatures.fundamentals),
+      _seat(
+        _villain,
+        features: const TableFeatures(playerTypes: false, stats: false),
+      ),
     );
     expect(find.text('NIT'), findsNothing);
     expect(find.text('13/10'), findsNothing);
