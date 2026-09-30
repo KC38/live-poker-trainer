@@ -348,7 +348,7 @@ Make difficult folds; review coolers fairly uses the full poker table for every 
 
 Observe selective aggression uses the full poker table for every step: explain taps Tight, Barrel, and Sample under the felt.
 
-Adjust versus TAG uses the full poker table for every step: explain taps Tight, Aggro, and Model under the felt.
+Meet the TAG uses the full poker table for every step: explain taps Tight, Aggro, and Model under the felt.
 
 Observe wide sustained pressure uses the full poker table for every step: explain taps Wide, Pressure, and Sample under the felt.
 
@@ -687,11 +687,11 @@ Mix, Purpose, and Strong under the felt, the station, reason, and purpose checks
 set check sits face up on the full table. Navigate 3-bet and 4-bet pots by depth uses the same frame and the full
 table: explain taps 3-Bet, 4-Bet, and Depth under the felt, the commit, ego, and SPR checks stay lists, and the missed
 AQo flop sits face up on the full table. Make difficult folds; review coolers fairly uses the same frame and the full table: explain taps Hard, Cooler, and Ego under the felt, the cooler, ego, and review checks stay lists, and the
-weak-kicker fold sits face up on the full table. Observe selective aggression uses the same frame and the full table: explain taps Tight, Barrel, and Sample under the felt, and the entry quizzes stay lists. Meet the TAG uses the same
-frame: tight, aggro, and model stay in the stage, and the label
-quizzes stay lists. Adjust versus TAG uses the same frame and the full table: explain taps Tight, Aggro, and Model under the felt, the respect check stays a
-list, and the heat, steal, and thin-value spots sit face up on the
-full table. Observe wide sustained pressure uses the same frame and the full table: explain taps Wide, Pressure, and Sample under the felt, and the entry quizzes stay
+weak-kicker fold sits face up on the full table. Observe selective aggression uses the same frame and the full table: explain taps Tight, Barrel, and Sample under the felt, and the entry quizzes stay lists. Meet the TAG uses the same frame and the full table: explain taps
+Tight, Aggro, and Model under the felt, and the label quizzes stay
+lists. Adjust versus TAG uses the same frame: credit, tighter, and no
+light stay in the stage, the respect check stays a list, and the heat,
+steal, and thin-value spots sit face up on the full table. Observe wide sustained pressure uses the same frame and the full table: explain taps Wide, Pressure, and Sample under the felt, and the entry quizzes stay
 lists. Meet the LAG uses the same frame: wide, pressure, and model stay
 in the stage, and the label quizzes stay lists. Adjust versus LAG uses
 the same frame: call, trap, and fancy less stay in the stage, the
