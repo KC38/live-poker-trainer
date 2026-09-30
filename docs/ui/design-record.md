@@ -298,6 +298,9 @@ taps Cards, Seats, and Evidence under the felt.
 Build multiway ranges with nut potential uses the full poker table for every
 step: explain taps Nutted, Air, and Domination under the felt.
 
+Play 150–300bb stacks with a plan uses the full poker table for every step:
+explain taps Deep, Realize, and Stack under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -584,9 +587,10 @@ with nut potential uses the same frame and the full table: explain taps
 Nutted, Air, and Domination under the felt, the continue and priority
 checks stay lists, and the connector and the set spots sit face up on
 that table. Play
-150–300bb stacks with a plan uses the same frame: deep, realize, and
-stack stay in the stage, the implied, plan, and reward checks stay
-lists, and the wet-flop fold sits face up on the full table. Implied
+150–300bb stacks with a plan uses the same frame and the full table:
+explain taps Deep, Realize, and Stack under the felt, the implied, plan,
+and reward checks stay lists, and the wet-flop fold sits face up on that
+table. Implied
 and reverse odds uses the same frame: implied, reverse, and second stay
 in the stage, each price spot sits face up on the full table, and the
 rise check stays a list. Thin value and bluff-catches uses the same

@@ -2584,6 +2584,8 @@ void main() {
     expect(find.textContaining('Tap Deep'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('deep-stacks-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('DEEP'), findsOneWidget);
     expect(find.text('REALIZE'), findsOneWidget);
     expect(find.text('STACK'), findsOneWidget);
