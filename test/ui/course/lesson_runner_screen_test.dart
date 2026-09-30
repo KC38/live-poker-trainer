@@ -3386,6 +3386,8 @@ void main() {
     expect(find.textContaining('Tap Tight'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('selective-aggression-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('TIGHT'), findsOneWidget);
     expect(find.text('BARREL'), findsOneWidget);
     expect(find.text('SAMPLE'), findsOneWidget);
