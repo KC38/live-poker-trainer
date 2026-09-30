@@ -29,6 +29,10 @@ class PokerActionSizingActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     final spot = resolveLessonActionSpot(activity);
     final tableMode = isLessonActionTableActivity(activity) && spot != null;
+    final villainType = lessonNamedVillainType([
+      spot?.villainLine,
+      activity.prompt,
+    ]);
 
     return AnimatedBuilder(
       animation: controller,
@@ -182,6 +186,8 @@ class PokerActionSizingActivity extends StatelessWidget {
                         boardCodes: spot.boardCodes,
                         villainCount: 1,
                         heroFaceUp: true,
+                        villainArchetypes:
+                            villainType == null ? null : [villainType],
                       )
                       : null;
               return Column(

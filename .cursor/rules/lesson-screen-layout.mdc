@@ -38,10 +38,12 @@ Do not use a mini felt, a loose card row, `LessonTableScene`, or the app-bar run
 
 ## Table layers and stakes
 
-The runner gives each lesson its section's `TableFeatures` preset: Sections
-1–3 leave out player types and VPIP/PFR. To hide more on one step, pass
-`features` to `LessonTableStage`; do not fork the table. Seats show a player
-type only when the step passes `villainArchetypes`.
+The runner gives each lesson `TableFeatures.forLessonId`: each layer
+switches on at the lesson that teaches it (see the design record's Table
+features table). A new layer names its switch-on lesson there. To hide more
+on one step, pass `features` to `LessonTableStage`; do not fork the table.
+Seats show a player type only when the step passes `villainArchetypes`; an
+action spot reads it from its table label with `lessonNamedVillainType`.
 
 Lesson tables play `Blinds $1/$2 NLH`, with the blinds posted preflop. A step
 that teaches another level passes `smallBlind` and `bigBlind`.

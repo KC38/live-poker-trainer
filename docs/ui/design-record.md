@@ -116,17 +116,30 @@ layers on or off: stacks, pot, street name, blinds line, position pucks,
 street bets, action badges, opponents' face-down cards, player types,
 VPIP/PFR, and empty board slots. Seats, the board, and your cards always draw.
 
-The lesson runner puts each lesson under `TableFeaturesScope` with its
-section's preset (`TableFeatures.forLessonId`):
+The lesson runner puts each lesson under `TableFeaturesScope` with
+`TableFeatures.forLessonId`. Each layer switches on at the lesson that
+teaches it and stays on for the rest of the course. Cards, seats, opponents'
+face-down cards, and the board slots are on from the first lesson.
 
-| Sections | Preset | Off |
+| Layer | On from | Constant |
 | --- | --- | --- |
-| 1–3 | `TableFeatures.fundamentals` | Player types, VPIP/PFR |
-| 4–7, Live Training | `TableFeatures.full` | Nothing |
+| Pucks, blinds line, posted chips, pot | 1.1.3 Button and blinds | `blindsLesson` |
+| Action badges | 1.3.1 Fold, check, call | `actionsLesson` |
+| Stack amounts | 1.3.2 Bet, raise, all-in | `stacksLesson` |
+| Street name in the pot pill | 1.4.1 Streets and action order | `streetLesson` |
+| Player types, VPIP/PFR | 4.6.1 Observe sticky callers | `playerTypesLesson` |
+
+Your two cards and Suits and ranks show only seats, cards, and the board.
+Live Training and an id that is not `lesson-SS-UU-LL` get
+`TableFeatures.full`. Your start uses the preset of the lesson it recommends.
 
 A step can pass its own `features` to `LessonTableStage` to hide more. A
 lesson seat shows a player type only when the step names it
-(`villainArchetypes`); a seat never shows a made-up type.
+(`villainArchetypes`); a seat never shows a made-up type. An action spot
+reads the type from its table label, then its prompt
+(`lessonNamedVillainType`): Calling Station, station, or sticky caller is
+the Calling Station; Nit, Maniac, TAG, and LAG are themselves. A spot that
+says "unknown" stays a plain seat, because having no read is its point.
 
 ### Stakes
 

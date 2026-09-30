@@ -1,4 +1,5 @@
-/// Table layers: section presets, per-step overrides, and dynamic blinds.
+/// Table layers: the lesson switch-on schedule, named opponent types,
+/// per-step overrides, and dynamic blinds.
 library;
 
 import 'package:flutter/material.dart';
@@ -24,37 +25,71 @@ Widget _frame(Widget child, {TableFeatures? scope}) {
 }
 
 void main() {
-  group('presets', () {
-    test('sections 1 to 3 leave out player types and stats', () {
-      for (final section in [1, 2, 3]) {
-        final f = TableFeatures.forSection(section);
-        expect(f.playerTypes, isFalse, reason: 'section $section');
-        expect(f.stats, isFalse, reason: 'section $section');
-        expect(f.stacks && f.pot && f.blinds && f.positions, isTrue);
-        expect(f.bets && f.actions && f.opponentCards, isTrue);
+  group('switch-on schedule', () {
+    TableFeatures at(String id) => TableFeatures.forLessonId(id);
+
+    test('the first lessons show only cards, seats, and the board', () {
+      for (final id in [
+        'lesson-01-01-01-your-two-cards',
+        'lesson-01-01-02-suits-and-ranks',
+      ]) {
+        final f = at(id);
+        expect(f.opponentCards && f.boardSlots, isTrue, reason: id);
+        expect(
+          [
+            f.pot,
+            f.blinds,
+            f.positions,
+            f.bets,
+            f.actions,
+            f.stacks,
+            f.street,
+            f.playerTypes,
+            f.stats,
+          ],
+          everyElement(isFalse),
+          reason: id,
+        );
       }
     });
 
-    test('section 4 on draws every layer', () {
-      for (final section in [4, 5, 6, 7]) {
-        expect(TableFeatures.forSection(section), TableFeatures.full);
-      }
+    test('Button and blinds turns on pucks, blinds, chips, and the pot', () {
+      final f = at('lesson-01-01-03-blinds-and-button');
+      expect(f.positions && f.blinds && f.bets && f.pot, isTrue);
+      expect(f.actions || f.stacks || f.street, isFalse);
     });
 
-    test('a lesson id picks its section preset', () {
+    test('actions, stacks, and the street each start at their lesson', () {
+      expect(at('lesson-01-02-02-best-five-kickers').actions, isFalse);
+      expect(at('lesson-01-03-01-fold-check-call').actions, isTrue);
+      expect(at('lesson-01-03-01-fold-check-call').stacks, isFalse);
+      expect(at('lesson-01-03-02-bet-raise-allin').stacks, isTrue);
+      expect(at('lesson-01-03-02-bet-raise-allin').street, isFalse);
+      expect(at('lesson-01-04-01-streets-and-order').street, isTrue);
+    });
+
+    test('player types and stats start at Observe sticky callers', () {
+      final before = at('lesson-04-05-01-spr-commitment');
+      final from = at('lesson-04-06-01-observe-sticky-caller');
+      expect(before.playerTypes || before.stats, isFalse);
+      expect(before, TableFeatures.full.copyWith(playerTypes: false, stats: false));
+      expect(from, TableFeatures.full);
+      expect(at('lesson-07-12-01-five-type-final'), TableFeatures.full);
+    });
+
+    test('a layer stays on once it is taught', () {
+      expect(at('lesson-02-01-01').stacks, isTrue);
+      expect(at('lesson-03-08-02-section-three-jump-test').pot, isTrue);
+    });
+
+    test('short ids parse; other ids get every layer', () {
+      expect(at('lesson-01-01-01'), at('lesson-01-01-01-your-two-cards'));
+      expect(at('warmup'), TableFeatures.full);
+      expect(at('lesson-x'), TableFeatures.full);
       expect(
-        TableFeatures.forLessonId('lesson-01-01-01-your-two-cards'),
-        TableFeatures.fundamentals,
+        parseLessonPosition('lesson-04-06-02-meet-calling-station'),
+        (section: 4, unit: 6, lesson: 2),
       );
-      expect(
-        TableFeatures.forLessonId('lesson-03-08-01'),
-        TableFeatures.fundamentals,
-      );
-      expect(
-        TableFeatures.forLessonId('lesson-04-06-02-meet-calling-station'),
-        TableFeatures.full,
-      );
-      expect(TableFeatures.forLessonId('warmup'), TableFeatures.full);
     });
 
     test('copyWith changes only the named layers', () {
@@ -65,12 +100,49 @@ void main() {
     });
   });
 
+  group('named opponent type', () {
+    test('reads the table label, then the prompt', () {
+      expect(
+        lessonNamedVillainType(['Nit in BB · folds often', null]),
+        PlayerArchetype.nit,
+      );
+      expect(
+        lessonNamedVillainType([null, 'River second pair. Versus Calling Station.']),
+        PlayerArchetype.callingStation,
+      );
+      expect(
+        lessonNamedVillainType(['Sticky caller · checked to you']),
+        PlayerArchetype.callingStation,
+      );
+      expect(
+        lessonNamedVillainType(['Calling station · checked']),
+        PlayerArchetype.callingStation,
+      );
+      expect(
+        lessonNamedVillainType(['Maniac barrels river']),
+        PlayerArchetype.maniac,
+      );
+      expect(lessonNamedVillainType(['TAG check-raises']), PlayerArchetype.tag);
+      expect(lessonNamedVillainType(['LAG barrels turn']), PlayerArchetype.lag);
+    });
+
+    test('unknown or unnamed opponents stay plain', () {
+      expect(lessonNamedVillainType(['Unknown · no maniac samples']), isNull);
+      expect(
+        lessonNamedVillainType(['Unknown BB · no samples', 'Nit in BB']),
+        isNull,
+      );
+      expect(lessonNamedVillainType(['Checked to you', 'Pot 30.']), isNull);
+      expect(lessonNamedVillainType(['CO opens to 6', 'Unit test stage']), isNull);
+    });
+  });
+
   group('lesson stage', () {
     testWidgets('an early lesson draws plain seats', (tester) async {
       await tester.pumpWidget(
         _frame(
           const LessonTableStage(villainArchetypes: [PlayerArchetype.nit]),
-          scope: TableFeatures.forSection(1),
+          scope: TableFeatures.forLessonId('lesson-01-01-03'),
         ),
       );
       expect(find.text('NIT'), findsNothing);
@@ -82,7 +154,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        _frame(const LessonTableStage(), scope: TableFeatures.forSection(4)),
+        _frame(const LessonTableStage(), scope: TableFeatures.full),
       );
       expect(find.text('TAG'), findsNothing, reason: 'no fake types');
 
@@ -95,7 +167,7 @@ void main() {
               PlayerArchetype.callingStation,
             ],
           ),
-          scope: TableFeatures.forSection(4),
+          scope: TableFeatures.full,
         ),
       );
       expect(find.text('NIT'), findsOneWidget);

@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 /// Switches for every optional layer of [FeltTableView].
 ///
 /// Seats, the board, and the hero's cards always draw. Everything else is a
-/// concept a lesson can leave out until the course teaches it.
+/// concept a lesson leaves out until the course teaches it.
 @immutable
 class TableFeatures {
   /// Creates a feature set. Every layer is on unless turned off.
@@ -57,35 +57,56 @@ class TableFeatures {
   /// Empty outlines where the rest of the board will be dealt.
   final bool boardSlots;
 
-  /// Every layer. Live Training and later lessons.
+  /// Every layer. Live Training and lessons past the last switch-on point.
   static const TableFeatures full = TableFeatures();
 
-  /// Sections 1–3: the table without player-type reads.
-  ///
-  /// Player types and VPIP/PFR are taught from Section 4, so earlier lessons
-  /// draw every seat as a plain player.
-  static const TableFeatures fundamentals = TableFeatures(
-    playerTypes: false,
-    stats: false,
+  /// Lesson that first teaches the button, the blinds, and the pot they
+  /// start. Pucks, the blinds line, posted chips, and the pot switch on here.
+  static const LessonPosition blindsLesson = (section: 1, unit: 1, lesson: 3);
+
+  /// Lesson that first teaches fold, check, and call. Action badges start.
+  static const LessonPosition actionsLesson = (section: 1, unit: 3, lesson: 1);
+
+  /// Lesson that first needs a stack size (all-in). Stack amounts start.
+  static const LessonPosition stacksLesson = (section: 1, unit: 3, lesson: 2);
+
+  /// Lesson that names the streets. The street joins the pot pill.
+  static const LessonPosition streetLesson = (section: 1, unit: 4, lesson: 1);
+
+  /// Lesson that first reads player types. Types and VPIP/PFR start.
+  static const LessonPosition playerTypesLesson = (
+    section: 4,
+    unit: 6,
+    lesson: 1,
   );
 
-  /// First course section that teaches player types.
-  static const int playerTypesSection = 4;
-
-  /// Preset for course section [order] (1-based).
-  static TableFeatures forSection(int order) =>
-      order < playerTypesSection ? fundamentals : full;
-
-  /// Preset for [lessonId], read from its `lesson-SS-` section prefix.
+  /// Layers a learner has been taught by [at].
   ///
-  /// An id without that prefix gets [full].
+  /// Each layer switches on at the lesson that teaches it and stays on for
+  /// the rest of the course. Cards, seats, opponents' face-down cards, and
+  /// the board slots are on from the first lesson.
+  static TableFeatures forLesson(LessonPosition at) {
+    bool from(LessonPosition start) => compareLessons(at, start) >= 0;
+    final blinds = from(blindsLesson);
+    final types = from(playerTypesLesson);
+    return TableFeatures(
+      pot: blinds,
+      blinds: blinds,
+      positions: blinds,
+      bets: blinds,
+      actions: from(actionsLesson),
+      stacks: from(stacksLesson),
+      street: from(streetLesson),
+      playerTypes: types,
+      stats: types,
+    );
+  }
+
+  /// Layers for [lessonId] (`lesson-SS-UU-LL…`). An id that does not parse
+  /// gets [full].
   static TableFeatures forLessonId(String lessonId) {
-    const prefix = 'lesson-';
-    if (!lessonId.startsWith(prefix)) return full;
-    final rest = lessonId.substring(prefix.length);
-    final end = rest.indexOf('-');
-    final order = int.tryParse(end < 0 ? rest : rest.substring(0, end));
-    return order == null ? full : forSection(order);
+    final at = parseLessonPosition(lessonId);
+    return at == null ? full : forLesson(at);
   }
 
   /// Copy with the given layers changed.
@@ -148,10 +169,33 @@ class TableFeatures {
   );
 }
 
+/// A lesson's place in the course, read from `lesson-SS-UU-LL`.
+typedef LessonPosition = ({int section, int unit, int lesson});
+
+/// Negative when [a] comes before [b] in the course.
+int compareLessons(LessonPosition a, LessonPosition b) {
+  if (a.section != b.section) return a.section - b.section;
+  if (a.unit != b.unit) return a.unit - b.unit;
+  return a.lesson - b.lesson;
+}
+
+/// Position of `lesson-SS-UU-LL…`, or null for any other id.
+LessonPosition? parseLessonPosition(String lessonId) {
+  const prefix = 'lesson-';
+  if (!lessonId.startsWith(prefix)) return null;
+  final parts = lessonId.substring(prefix.length).split('-');
+  if (parts.length < 3) return null;
+  final section = int.tryParse(parts[0]);
+  final unit = int.tryParse(parts[1]);
+  final lesson = int.tryParse(parts[2]);
+  if (section == null || unit == null || lesson == null) return null;
+  return (section: section, unit: unit, lesson: lesson);
+}
+
 /// Hands a [TableFeatures] preset to every table below it.
 ///
-/// The lesson runner wraps each lesson in its section's preset. A table with
-/// no scope above it draws [TableFeatures.full].
+/// The lesson runner wraps each lesson in [TableFeatures.forLessonId]. A
+/// table with no scope above it draws [TableFeatures.full].
 class TableFeaturesScope extends InheritedWidget {
   /// Creates the scope.
   const TableFeaturesScope({
