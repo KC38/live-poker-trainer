@@ -2320,7 +2320,7 @@ void main() {
       ),
     );
     expect(
-      find.text('Early seat with junk — weak trash rarely belongs in the open.'),
+      find.text('Early seat with junk — pick the family that fits.'),
       findsOneWidget,
     );
     expect(find.text('Offsuit trash'), findsOneWidget);

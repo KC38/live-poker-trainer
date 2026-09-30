@@ -6395,6 +6395,105 @@ class LessonTableContext extends StatelessWidget {
     );
   }
 
+  /// Icon-left / copy-right option row for timing + outcome pickers.
+  ///
+  /// Stacked full-width rows read better than narrow vertical columns when
+  /// each choice has an icon plus a title/detail pair.
+  Widget _horizontalOptionTile({
+    required String title,
+    required String detail,
+    required Widget visual,
+    required bool selected,
+    required bool densify,
+    bool highlighted = false,
+    int? maxTitleLines,
+    int maxDetailLines = 1,
+    VoidCallback? onTap,
+  }) {
+    final body = Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: densify ? 14 : 8,
+        vertical: densify ? 12 : 8,
+      ),
+      child: Row(
+        children: [
+          visual,
+          SizedBox(width: densify ? 14 : 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: densify ? MainAxisSize.max : MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  maxLines: maxTitleLines,
+                  overflow:
+                      maxTitleLines != null ? TextOverflow.ellipsis : null,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: densify ? 16 : 12,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(height: densify ? 4 : 2),
+                Text(
+                  detail,
+                  maxLines: maxDetailLines,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.slate,
+                    fontSize: densify ? 13 : 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    final tile = _TappableRegion(
+      label: title,
+      selected: selected,
+      highlighted: highlighted,
+      enabled: enabled && _interactive,
+      expand: densify,
+      onTap: onTap,
+      child: body,
+    );
+    if (!densify) return tile;
+    return SizedBox.expand(child: tile);
+  }
+
+  /// Stack [tiles] as equal-height rows (densify) or a compact column.
+  Widget _horizontalOptionStack({
+    required bool densify,
+    required List<Widget> tiles,
+  }) {
+    if (densify) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var i = 0; i < tiles.length; i++) ...[
+            if (i > 0) const SizedBox(height: 10),
+            Expanded(child: tiles[i]),
+          ],
+        ],
+      );
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (var i = 0; i < tiles.length; i++) ...[
+          if (i > 0) const SizedBox(height: 6),
+          tiles[i],
+        ],
+      ],
+    );
+  }
+
   Widget _buildBlindsTiming(BuildContext context) {
     final densifyShell = true;
     final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
@@ -6407,52 +6506,17 @@ class LessonTableContext extends StatelessWidget {
       bool pulse = false,
     }) {
       final selected = selectedRegion == region;
-      return Expanded(
-        child: _TappableRegion(
-          label: title,
-          selected: selected,
-          highlighted: pulse && !selected,
-          enabled: enabled && _interactive,
-          expand: densifyShell,
-          onTap:
-              _interactive
-                  ? () => onRegionTap!(LessonTableTapTarget(region))
-                  : null,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              densifyShell ? 10 : 6,
-              densifyShell ? 14 : 8,
-              densifyShell ? 10 : 6,
-              densifyShell ? 14 : 8,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                visual,
-                SizedBox(height: densifyShell ? 12 : 6),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: densifyShell ? 15 : 12,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                SizedBox(height: densifyShell ? 4 : 2),
-                Text(
-                  detail,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: densifyShell ? 12 : 10,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      return _horizontalOptionTile(
+        title: title,
+        detail: detail,
+        visual: visual,
+        selected: selected,
+        densify: densifyShell,
+        highlighted: pulse && !selected,
+        onTap:
+            _interactive
+                ? () => onRegionTap!(LessonTableTapTarget(region))
+                : null,
       );
     }
 
@@ -6467,9 +6531,9 @@ class LessonTableContext extends StatelessWidget {
               : 'Hand timing phases',
       height: feltHeight,
       centerChild: densifyShell,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+      child: _horizontalOptionStack(
+        densify: densifyShell,
+        tiles: [
           phase(
             region: LessonTableRegion.beforeDeal,
             title: 'Before deal',
@@ -6477,16 +6541,15 @@ class LessonTableContext extends StatelessWidget {
             pulse: pulseBefore,
             visual: const _BlindChipStack(amount: 2, densify: true),
           ),
-          const SizedBox(width: 10),
           phase(
             region: LessonTableRegion.afterFlop,
             title: 'After flop',
             detail: 'Board out',
-            visual: Column(
+            visual: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 for (final code in const ['Qs', 'Jh', '2c']) ...[
-                  if (code != 'Qs') const SizedBox(height: 3),
+                  if (code != 'Qs') const SizedBox(width: 3),
                   MiniCard(
                     card: CardModel.fromCode(code),
                     size: MiniCardSize.small,
@@ -6495,16 +6558,15 @@ class LessonTableContext extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 10),
           phase(
             region: LessonTableRegion.showdown,
             title: 'Showdown',
             detail: 'Cards up',
-            visual: const Column(
+            visual: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 CardBack(size: MiniCardSize.small),
-                SizedBox(height: 3),
+                SizedBox(width: 3),
                 CardBack(size: MiniCardSize.small),
               ],
             ),
@@ -6527,55 +6589,17 @@ class LessonTableContext extends StatelessWidget {
       required Widget visual,
     }) {
       final selected = selectedRegion == region;
-      return Expanded(
-        child: _TappableRegion(
-          label: title,
-          selected: selected,
-          enabled: enabled && _interactive,
-          expand: densifyShell,
-          onTap:
-              _interactive
-                  ? () => onRegionTap!(LessonTableTapTarget(region))
-                  : null,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              densifyShell ? 8 : 6,
-              densifyShell ? 14 : 8,
-              densifyShell ? 8 : 6,
-              densifyShell ? 14 : 8,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                visual,
-                SizedBox(height: densifyShell ? 12 : 6),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: densifyShell ? 15 : 12,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                SizedBox(height: densifyShell ? 4 : 2),
-                Text(
-                  detail,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.slate,
-                    fontSize: densifyShell ? 12 : 10,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      return _horizontalOptionTile(
+        title: title,
+        detail: detail,
+        visual: visual,
+        selected: selected,
+        densify: densifyShell,
+        maxTitleLines: 2,
+        onTap:
+            _interactive
+                ? () => onRegionTap!(LessonTableTapTarget(region))
+                : null,
       );
     }
 
@@ -6587,16 +6611,15 @@ class LessonTableContext extends StatelessWidget {
               : 'Street end phases',
       height: feltHeight,
       centerChild: densifyShell,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+      child: _horizontalOptionStack(
+        densify: densifyShell,
+        tiles: [
           phase(
             region: LessonTableRegion.streetActionMatched,
             title: 'Bets matched',
             detail: 'Action equal',
             visual: const _BlindChipStack(amount: 3, densify: true),
           ),
-          const SizedBox(width: 8),
           phase(
             region: LessonTableRegion.streetFlopDealt,
             title: 'Flop appears',
@@ -6605,7 +6628,6 @@ class LessonTableContext extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   for (final code in const ['Qs', 'Jh', '2c']) ...[
                     MiniCard(
@@ -6618,15 +6640,14 @@ class LessonTableContext extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
           phase(
             region: LessonTableRegion.streetSomeoneFolds,
             title: 'Someone folds',
             detail: 'Others act',
-            visual: Icon(
+            visual: const Icon(
               Icons.person_off_outlined,
               color: AppColors.slate,
-              size: densifyShell ? 36 : 24,
+              size: 36,
             ),
           ),
         ],
