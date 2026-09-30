@@ -8,8 +8,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 final _rankOnly = RegExp(r'^[2-9TJQKA]$', caseSensitive: false);
@@ -194,6 +196,28 @@ class OrderSequenceActivity extends StatelessWidget {
       builder: (context, _) {
         final ordered = controller.draft.orderedIds;
         final locked = controller.submitting || controller.lastResult != null;
+        final framed = LessonFrameScope.maybeOf(context) != null;
+        if (framed && _rankMode) {
+          return LessonRankOrderTable(
+            key: ValueKey<String>(
+              '${activity.id}-${controller.bindGeneration}',
+            ),
+            activityId: activity.id,
+            sequenceItems: [
+              for (final item in activity.sequenceItems)
+                (id: item.id, label: item.label),
+            ],
+            orderedIds: ordered,
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onPick: (id) => appendOrderedId(
+              controller: controller,
+              activity: activity,
+              ordered: ordered,
+              id: id,
+            ),
+          );
+        }
         final remaining =
             shuffledSequencePalette(
                   activityId: activity.id,

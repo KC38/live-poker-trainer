@@ -153,6 +153,54 @@ class SelectIdentifyActivity extends StatelessWidget {
         final selected = controller.draft.choiceId;
         final locked = controller.submitting || controller.lastResult != null;
         final framed = LessonFrameScope.maybeOf(context) != null;
+        if (framed &&
+            presentation == SelectIdentifyPresentation.suitTapPicker) {
+          return LessonSuitBoardTable(
+            key: ValueKey<String>(
+              '${activity.id}-${controller.bindGeneration}',
+            ),
+            enabled: !locked,
+            showGuidance: showGuidance,
+            syncSelection: true,
+            selectedSuitLetters: selected == 'suits-full'
+                ? const {'h', 'd', 'c', 's'}
+                : const {},
+            onAllSuitsSelected: locked
+                ? null
+                : () {
+                  final match = activity.choices.where(
+                    (c) => c.id == 'suits-full',
+                  );
+                  if (match.isEmpty) return;
+                  controller.selectChoice(match.first.id, autoSubmit: true);
+                },
+            onMiss: () {
+              LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                'Tap the community cards — one of each suit.',
+              );
+            },
+          );
+        }
+        if (framed &&
+            presentation == SelectIdentifyPresentation.holeCards &&
+            _holeHandSeatPlan(activity) != null) {
+          final plan = _holeHandSeatPlan(activity)!;
+          return LessonHoleHandTable(
+            key: ValueKey<String>(
+              '${activity.id}-${controller.bindGeneration}',
+            ),
+            heroCodes: plan.heroCodes,
+            villainHoleCodes: plan.villainHoleCodes,
+            correctSeatIndex: plan.correctSeatIndex,
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onSeatChoice: (seat) {
+              final choiceId = plan.choiceIdForSeat(seat);
+              if (choiceId == null) return;
+              controller.selectChoice(choiceId, autoSubmit: true);
+            },
+          );
+        }
         final holeBands = _HoleCardBands(
           activity: activity,
           selectedId: selected,
@@ -215,7 +263,7 @@ class SelectIdentifyActivity extends StatelessWidget {
   ) {
     return switch (presentation) {
       SelectIdentifyPresentation.suitTapPicker =>
-        'Tap every suit that belongs in a standard deck.',
+        'Tap one community card of each suit.',
       SelectIdentifyPresentation.holeCards =>
         'Look at the cards — pick the matching pair.',
       SelectIdentifyPresentation.suitSets =>
@@ -2347,6 +2395,50 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+/// Seat plan for Suits and ranks hole-card steps on the full table.
+({
+  List<String> heroCodes,
+  List<List<String>> villainHoleCodes,
+  int correctSeatIndex,
+  String? Function(int seat) choiceIdForSeat,
+})?
+_holeHandSeatPlan(CourseActivity activity) {
+  switch (activity.id) {
+    case 'act-01-01-02-unguided-suited':
+      return (
+        heroCodes: const ['Ah', 'Kh'],
+        villainHoleCodes: const [
+          ['Ac', 'Kd'],
+          ['7c', '7d'],
+        ],
+        correctSeatIndex: 0,
+        choiceIdForSeat: (seat) => switch (seat) {
+          0 => 'suited-ah-kh',
+          1 => 'offsuit-ah-kd',
+          2 => 'pair-77',
+          _ => null,
+        },
+      );
+    case 'act-01-01-02-checkpoint-pair':
+      return (
+        heroCodes: const ['9h', '9d'],
+        villainHoleCodes: const [
+          ['Ah', 'Kh'],
+          ['Ac', 'Kd'],
+        ],
+        correctSeatIndex: 0,
+        choiceIdForSeat: (seat) => switch (seat) {
+          0 => 'pocket-pair',
+          1 => 'suited-nine',
+          2 => 'two-high',
+          _ => null,
+        },
+      );
+    default:
+      return null;
   }
 }
 

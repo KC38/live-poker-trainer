@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "d0e23823bab7f2c0c1a6a9f355e71685decbbe35b41d67f7b6dc8a61f16c171c",
+  "contentChecksum": "1e368ec9cb697abc08bed738e17a4300791e7a0e6b404f1564f366556dc55218",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -346,7 +346,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap hearts, diamonds, clubs, and spades. Skip decoys.",
+                  "accessibilityText": "Tap hearts, diamonds, clubs, and spades on the board.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -356,7 +356,7 @@
                   "objectives": [
                     "Name the four suits"
                   ],
-                  "prompt": "Tap every suit in a standard deck.",
+                  "prompt": "Tap one community card of each suit.",
                   "choices": [
                     {
                       "id": "suits-full",
@@ -366,33 +366,13 @@
                         "grade": "recommended",
                         "feedback": "Those four cover the deck."
                       }
-                    },
-                    {
-                      "id": "suits-missing",
-                      "label": "Hearts, diamonds, clubs",
-                      "accessibilityText": "Hearts, diamonds, clubs",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Spades are missing.",
-                        "betterChoiceId": "suits-full"
-                      }
-                    },
-                    {
-                      "id": "suits-extra",
-                      "label": "Hearts, diamonds, clubs, spades, stars",
-                      "accessibilityText": "Hearts, diamonds, clubs, spades, stars",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No stars. Just the four suits.",
-                        "betterChoiceId": "suits-full"
-                      }
                     }
                   ],
                   "coachMedia": [
                     {
                       "id": "act-01-01-02-guided-suits-hint",
                       "kind": "hint",
-                      "text": "Four suits only — hearts, diamonds, clubs, spades."
+                      "text": "Four suits — one card of each on the board."
                     }
                   ]
                 },
@@ -402,7 +382,7 @@
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Put deuce, ten, and ace in ascending rank order.",
+                  "accessibilityText": "Tap deuce, ten, and ace on the board in ascending order.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -412,7 +392,7 @@
                   "objectives": [
                     "Order ranks from deuce to ace"
                   ],
-                  "prompt": "Order these ranks from lowest to highest.",
+                  "prompt": "Tap these ranks from lowest to highest.",
                   "sequenceItems": [
                     {
                       "id": "rank-2",
@@ -449,7 +429,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the hole-card pair that shares a suit.",
+                  "accessibilityText": "Tap the seat whose hole cards share a suit.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -472,8 +452,8 @@
                     },
                     {
                       "id": "offsuit-ah-kd",
-                      "label": "Ah Kd",
-                      "accessibilityText": "Ah Kd",
+                      "label": "Ac Kd",
+                      "accessibilityText": "Ac Kd",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Different suits. That is offsuit.",
@@ -486,7 +466,7 @@
                       "accessibilityText": "7c 7d",
                       "grading": {
                         "grade": "questionable",
-                        "feedback": "That is a pair, not suited connectors. Look for matching suits."
+                        "feedback": "That is a pair, not suited. Look for matching suits."
                       }
                     }
                   ]
@@ -497,7 +477,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the pocket nines among the hole-card options.",
+                  "accessibilityText": "Tap the seat with pocket nines.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -530,8 +510,8 @@
                     },
                     {
                       "id": "two-high",
-                      "label": "Ah Kd",
-                      "accessibilityText": "Ah Kd",
+                      "label": "Ac Kd",
+                      "accessibilityText": "Ac Kd",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "High cards, not a pair. Matching ranks make a pair.",
@@ -21659,16 +21639,6 @@
         "suits-full": {
           "grade": "recommended",
           "feedback": "Those four cover the deck."
-        },
-        "suits-missing": {
-          "grade": "clear_mistake",
-          "feedback": "Spades are missing.",
-          "betterChoiceId": "suits-full"
-        },
-        "suits-extra": {
-          "grade": "clear_mistake",
-          "feedback": "No stars. Just the four suits.",
-          "betterChoiceId": "suits-full"
         }
       }
     },
@@ -21720,7 +21690,7 @@
         },
         "pair-77": {
           "grade": "questionable",
-          "feedback": "That is a pair, not suited connectors. Look for matching suits."
+          "feedback": "That is a pair, not suited. Look for matching suits."
         }
       }
     },
