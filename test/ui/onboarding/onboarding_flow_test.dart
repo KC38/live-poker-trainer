@@ -548,6 +548,12 @@ void main() {
     expect(find.text('LATER'), findsOneWidget);
     expect(find.textContaining('can be lost'), findsOneWidget);
     expect(find.byType(RexMascot), findsOneWidget);
+    _expectElevatedMetrics(tester, 'CREATE A PROFILE');
+    _expectOutlinedMetrics(tester, 'LATER');
+    final account = tester.widget<Text>(
+      find.text('I already have an account'),
+    );
+    expect(account.style?.color, AppColors.goldBright);
   });
 
   testWidgets('motivation screens show Rex speech and CONTINUE', (
@@ -635,6 +641,10 @@ void main() {
     expect(find.text('CREATE A PROFILE'), findsOneWidget);
     expect(find.text('LATER'), findsOneWidget);
     expect(find.text('I already have an account'), findsOneWidget);
+    _expectElevatedMetrics(tester, 'CREATE A PROFILE');
+    _expectOutlinedMetrics(tester, 'LATER');
+    final niceWork = tester.widget<Text>(find.text('Nice work'));
+    expect(niceWork.style?.color, AppColors.goldBright);
   });
 }
 

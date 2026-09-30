@@ -43,7 +43,9 @@ primary, cream text. Display type is Cinzel. UI type is Manrope. Data
 New controls use `Theme.of(context).colorScheme` and these metrics. Do not
 hard-code a second gold or a second radius for the same role.
 
-Onboarding primary actions use the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800). “I already have an account” uses the outlined button (gold-bright label, gold-muted border, height 50, radius 14).
+Onboarding primary actions use the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800). On Welcome, “I already have an account” uses the outlined button (gold-bright label, gold-muted border, height 50, radius 14).
+
+Save progress (`SaveProgressScreen`) uses the same radial felt gradient as other onboarding scaffolds. CREATE A PROFILE uses the elevated button. LATER uses the outlined button. “I already have an account” is a gold-bright Manrope text link. Nice work and XP/streak chips use `AppColors` gold/warning on `bgElevated` with JetBrains Mono values — no Duolingo sky blue, Nunito, or slab buttons.
 
 Lesson feedback Continue uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
 
@@ -63,6 +65,10 @@ Lesson feedback Continue is `_FeedbackFooter` in
 `lib/ui/screens/lesson_runner_screen.dart`.
 
 Lesson result CONTINUE uses the elevated button (radius 14). `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) uses `ElevatedButton`, so the Theme elevated button supplies radius 14.
+
+Save progress CTAs and celebration chips are `SaveProgressScreen` in
+`lib/ui/screens/onboarding_screens.dart`. The next guest conversion screen
+copies those elevated / outlined / gold-bright link roles.
 
 ## Poker table
 
