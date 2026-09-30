@@ -54,6 +54,12 @@ void main() {
         findsOneWidget,
         reason: '$code should draw ${card.suit.symbol} once',
       );
+      final suitText = tester.widget<Text>(find.text(card.suit.symbol));
+      expect(
+        suitText.style?.color,
+        card.suit.color,
+        reason: '$code suit ink should match ${card.suit.name}',
+      );
     }
   });
 
