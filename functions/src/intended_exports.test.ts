@@ -18,6 +18,7 @@ const INTENDED = [
   "completeCalibrationWarmUp",
   "getLiveAccess",
   "getCourseState",
+  "refillCourseHearts",
   "issueAnonymousProgressTransfer",
   "redeemAnonymousProgressTransfer",
   "refillLiveHandPool",

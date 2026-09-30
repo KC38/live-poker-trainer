@@ -512,7 +512,7 @@ export function mergeCourseProfiles(
     optionalString(source.recommendedLessonId) ??
     null;
 
-  const DEFAULT_LIVES = 3;
+  const DEFAULT_LIVES = 5;
   const destLivesMax = Number.isFinite(Number(destination.livesMax)) &&
     Number(destination.livesMax) > 0 ?
     Math.floor(Number(destination.livesMax)) :
@@ -521,7 +521,7 @@ export function mergeCourseProfiles(
     Number(source.livesMax) > 0 ?
     Math.floor(Number(source.livesMax)) :
     DEFAULT_LIVES;
-  const livesMax = Math.max(destLivesMax, sourceLivesMax);
+  const livesMax = Math.max(destLivesMax, sourceLivesMax, DEFAULT_LIVES);
   const destLives = Number.isFinite(Number(destination.livesRemaining)) ?
     Math.max(0, Math.floor(Number(destination.livesRemaining))) :
     livesMax;

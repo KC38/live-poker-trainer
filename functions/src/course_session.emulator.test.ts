@@ -156,7 +156,7 @@ describe("course session integration", () => {
       db,
     });
     expect(questionable.lifeLost).toBe(false);
-    expect(questionable.livesRemaining).toBe(3);
+    expect(questionable.livesRemaining).toBe(5);
 
     // Accept guided, then questionable scaffolded (still no life loss).
     await submitCourseStepForUser({
@@ -207,10 +207,10 @@ describe("course session integration", () => {
     });
     expect(clearMistake.grade).toBe("clear_mistake");
     expect(clearMistake.lifeLost).toBe(true);
-    expect(clearMistake.livesRemaining).toBe(2);
+    expect(clearMistake.livesRemaining).toBe(4);
 
     const profileAfterLoss = await db.doc("users/life-user/course/main").get();
-    expect(profileAfterLoss.data()?.livesRemaining).toBe(2);
+    expect(profileAfterLoss.data()?.livesRemaining).toBe(4);
   });
 
   test("new lesson starts carry profile hearts (not a fresh set)", async () => {
@@ -222,7 +222,7 @@ describe("course session integration", () => {
     });
     await db.doc("users/hearts-user/course/main").set({
       livesRemaining: 1,
-      livesMax: 3,
+      livesMax: 5,
     }, {merge: true});
 
     const started = await startCourseLessonForUser({
@@ -235,7 +235,7 @@ describe("course session integration", () => {
       db,
     });
     expect(started.attempt.livesRemaining).toBe(1);
-    expect(started.attempt.livesMax).toBe(3);
+    expect(started.attempt.livesMax).toBe(5);
 
     const profile = await db.doc("users/hearts-user/course/main").get();
     expect(profile.data()?.livesRemaining).toBe(1);

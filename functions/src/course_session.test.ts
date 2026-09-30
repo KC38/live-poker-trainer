@@ -45,27 +45,27 @@ const unusedDb = {} as Firestore;
 describe("profile lives (per user)", () => {
   it("defaults missing profile hearts to a full set", () => {
     expect(profileLivesFromData(undefined)).toEqual({
-      livesRemaining: 3,
-      livesMax: 3,
+      livesRemaining: 5,
+      livesMax: 5,
     });
     expect(profileLivesFromData({})).toEqual({
-      livesRemaining: 3,
-      livesMax: 3,
+      livesRemaining: 5,
+      livesMax: 5,
     });
   });
 
   it("clamps remaining hearts into [0, livesMax]", () => {
-    expect(profileLivesFromData({livesRemaining: 2, livesMax: 3})).toEqual({
+    expect(profileLivesFromData({livesRemaining: 2, livesMax: 5})).toEqual({
       livesRemaining: 2,
-      livesMax: 3,
+      livesMax: 5,
     });
-    expect(profileLivesFromData({livesRemaining: -1, livesMax: 3})).toEqual({
+    expect(profileLivesFromData({livesRemaining: -1, livesMax: 5})).toEqual({
       livesRemaining: 0,
-      livesMax: 3,
+      livesMax: 5,
     });
-    expect(profileLivesFromData({livesRemaining: 9, livesMax: 3})).toEqual({
-      livesRemaining: 3,
-      livesMax: 3,
+    expect(profileLivesFromData({livesRemaining: 9, livesMax: 5})).toEqual({
+      livesRemaining: 5,
+      livesMax: 5,
     });
   });
 });
