@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Capstone: 3-bet pot explain: SPR / TURN / CLOSE under the full poker table.
+class LessonCapstone3betExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonCapstone3betExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonCapstone3betExplainTable> createState() =>
+      _LessonCapstone3betExplainTableState();
+}
+
+class _LessonCapstone3betExplainTableState
+    extends State<LessonCapstone3betExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= Capstone3betDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('capstone3bet-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < Capstone3betDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _Capstone3betSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        Capstone3betDemo.points[i].label,
+                      ) &&
+                      Capstone3betDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _Capstone3betTile(
+                    label: Capstone3betDemo.points[i].label,
+                    caption: Capstone3betDemo.points[i].caption,
+                    color: Capstone3betDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      Capstone3betDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  Capstone3betDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// SPR / turn / close tiles for 3-bet capstone explain demos.
 class Capstone3betDemo extends StatefulWidget {
