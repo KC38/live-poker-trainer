@@ -3212,6 +3212,8 @@ void main() {
     expect(find.textContaining('Tap Defend'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('defend-enough-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('DEFEND'), findsOneWidget);
     expect(find.text('BLUFF'), findsOneWidget);
     expect(find.text('ENOUGH'), findsOneWidget);
