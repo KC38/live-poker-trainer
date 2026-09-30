@@ -101,7 +101,7 @@ class _ExperienceChoiceScreenState
         ref.watch(onboardingControllerProvider).experienceBand;
     final selected = _selected ?? draftSelected;
     return _OnboardingScaffold(
-      title: 'Your experience',
+      progress: _onboardingProgress(1),
       onBack: () {
         unawaited(
           ref
@@ -113,14 +113,6 @@ class _ExperienceChoiceScreenState
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _OnboardingCoachPrompt(speech: 'Where are you starting?'),
-          Text(
-            'We use this to recommend a start — it never unlocks content alone.',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 14,
-              height: 1.4,
-            ),
-          ),
           const SizedBox(height: 16),
           Expanded(
             child: ListView(
@@ -183,7 +175,7 @@ class _DailyGoalScreenState extends ConsumerState<DailyGoalScreen> {
         ref.watch(onboardingControllerProvider).dailyGoalMinutes;
     final selectedMinutes = _selectedMinutes ?? draftMinutes;
     return _OnboardingScaffold(
-      title: 'Daily goal',
+      progress: _onboardingProgress(2),
       onBack: () {
         unawaited(
           ref
@@ -195,14 +187,6 @@ class _DailyGoalScreenState extends ConsumerState<DailyGoalScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _OnboardingCoachPrompt(speech: 'How much time per day?'),
-          Text(
-            'A small daily habit beats occasional cramming.',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 14,
-              height: 1.4,
-            ),
-          ),
           const SizedBox(height: 16),
           Expanded(
             child: ListView(
@@ -259,7 +243,7 @@ class RexIntroScreen extends ConsumerWidget {
         ExperienceBand.neverPlayed;
     final role = isNew ? 'Your coach' : 'Your live-reg coach';
     return _OnboardingScaffold(
-      title: 'Meet Rex',
+      progress: _onboardingProgress(3),
       onBack: () {
         unawaited(
           ref
@@ -271,14 +255,6 @@ class RexIntroScreen extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _OnboardingCoachPrompt(speech: role),
-          Text(
-            'One short sentence at a time. No lectures — just the next decision.',
-            style: GoogleFonts.manrope(
-              color: AppColors.slate,
-              fontSize: 15,
-              height: 1.45,
-            ),
-          ),
           const Spacer(),
           _ContinueBar(
             enabled: true,
@@ -325,6 +301,7 @@ class MotivationHookScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return _RexMotivationScaffold(
       speech: speech,
+      progress: _onboardingProgress(4),
       onBack: () {
         unawaited(
           ref
@@ -360,6 +337,7 @@ class MotivationPitchScreen extends ConsumerWidget {
     final lessonId = draft.recommendedLessonId ?? kFirstCourseLessonId;
     return _RexMotivationScaffold(
       speech: speech,
+      progress: _onboardingProgress(5),
       onBack: () {
         unawaited(
           ref
@@ -408,7 +386,7 @@ class RecommendedStartScreen extends ConsumerWidget {
           orElse: () => null,
         );
     return _OnboardingScaffold(
-      title: 'Your start',
+      progress: _onboardingProgress(4),
       onBack: () {
         unawaited(
           ref
@@ -419,17 +397,6 @@ class RecommendedStartScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            recommendation.jumpTestOffered
-                ? 'Optional jump test'
-                : 'Recommended first lesson',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.0,
-            ),
-          ),
-          const SizedBox(height: 12),
           Text(
             lesson?.title ?? 'Your two cards',
             style: GoogleFonts.manrope(
@@ -1023,15 +990,25 @@ class _DuoSlabButtonState extends State<_DuoSlabButton> {
   }
 }
 
+/// Experience → daily goal → Meet Rex → motivation (or jump-test start).
+const int kOnboardingProgressSteps = 5;
+
+double _onboardingProgress(int stepIndex) {
+  assert(stepIndex >= 1 && stepIndex <= kOnboardingProgressSteps);
+  return stepIndex / kOnboardingProgressSteps;
+}
+
 class _RexMotivationScaffold extends StatelessWidget {
   const _RexMotivationScaffold({
     required this.speech,
     required this.onContinue,
+    required this.progress,
     this.onBack,
   });
 
   final String speech;
   final Future<void> Function() onContinue;
+  final double progress;
   final VoidCallback? onBack;
 
   @override
@@ -1052,25 +1029,20 @@ class _RexMotivationScaffold extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (showBack)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    tooltip: 'Back',
-                    onPressed: () {
-                      if (canPop) {
-                        Navigator.of(context).pop();
-                        return;
-                      }
-                      onBack?.call();
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      semanticLabel: 'Back',
-                      color: AppColors.cream,
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
+                child: _OnboardingTopBar(
+                  progress: progress,
+                  showBack: showBack,
+                  onBack: () {
+                    if (canPop) {
+                      Navigator.of(context).pop();
+                      return;
+                    }
+                    onBack?.call();
+                  },
                 ),
+              ),
               Expanded(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
@@ -1219,12 +1191,14 @@ class _MotivationBubblePainter extends CustomPainter {
 class _OnboardingScaffold extends StatelessWidget {
   const _OnboardingScaffold({
     required this.child,
-    this.title,
+    this.progress,
     this.onBack,
   });
 
   final Widget child;
-  final String? title;
+
+  /// Fraction complete across the guest questionnaire (null hides the bar).
+  final double? progress;
 
   /// Used when this screen is the root, so [Navigator.canPop] is false.
   ///
@@ -1236,6 +1210,7 @@ class _OnboardingScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final canPop = Navigator.of(context).canPop();
     final showBack = canPop || onBack != null;
+    final progressValue = progress;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -1252,44 +1227,78 @@ class _OnboardingScaffold extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (showBack)
-                  Row(
-                    children: [
-                      IconButton(
-                        tooltip: 'Back',
-                        onPressed: () {
-                          if (canPop) {
-                            Navigator.of(context).pop();
-                            return;
-                          }
-                          onBack?.call();
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          semanticLabel: 'Back',
-                          color: AppColors.cream,
-                        ),
-                      ),
-                    ],
+                if (progressValue != null || showBack)
+                  _OnboardingTopBar(
+                    progress: progressValue,
+                    showBack: showBack,
+                    onBack: () {
+                      if (canPop) {
+                        Navigator.of(context).pop();
+                        return;
+                      }
+                      onBack?.call();
+                    },
                   ),
-                if (showBack) const SizedBox(height: 8),
-                if (title != null)
-                  Text(
-                    title!,
-                    style: GoogleFonts.manrope(
-                      color: AppColors.gold,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.1,
-                    ),
-                  ),
-                if (title != null) const SizedBox(height: 18),
+                if (progressValue != null || showBack) const SizedBox(height: 16),
                 Expanded(child: child),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _OnboardingTopBar extends StatelessWidget {
+  const _OnboardingTopBar({
+    required this.showBack,
+    required this.onBack,
+    this.progress,
+  });
+
+  final double? progress;
+  final bool showBack;
+  final VoidCallback onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    final progressValue = progress;
+    return Row(
+      children: [
+        if (showBack)
+          IconButton(
+            tooltip: 'Back',
+            onPressed: onBack,
+            icon: const Icon(
+              Icons.arrow_back,
+              semanticLabel: 'Back',
+              color: AppColors.cream,
+            ),
+          )
+        else
+          const SizedBox(width: 48),
+        if (progressValue != null) ...[
+          const SizedBox(width: 4),
+          Expanded(
+            child: Semantics(
+              label:
+                  'Onboarding progress ${(progressValue * 100).round()} percent',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(999),
+                child: LinearProgressIndicator(
+                  value: progressValue.clamp(0.0, 1.0),
+                  minHeight: 8,
+                  backgroundColor: AppColors.slateDark,
+                  color: AppColors.gold,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 48),
+        ] else
+          const Spacer(),
+      ],
     );
   }
 }

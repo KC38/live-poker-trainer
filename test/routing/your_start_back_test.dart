@@ -157,26 +157,31 @@ void main() {
       ],
     );
 
-    expect(find.text('Your start'), findsOneWidget);
     expect(find.text('Start lesson'), findsOneWidget);
+    expect(find.text('Your start'), findsNothing);
     expect(find.text('Home'), findsNothing);
     expect(find.textContaining('Step '), findsNothing);
+    expect(
+      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
+      4 / kOnboardingProgressSteps,
+    );
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Meet Rex'), findsOneWidget);
     expect(find.text('Your coach'), findsOneWidget);
+    expect(find.text('Meet Rex'), findsNothing);
     expect(find.text('Home'), findsNothing);
-    expect(find.text('Your start'), findsNothing);
+    expect(find.text('Start lesson'), findsNothing);
     expect(onboarding.state.dailyGoalMinutes, 10);
     expect(onboarding.state.experienceBand, ExperienceBand.neverPlayed);
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Daily goal'), findsOneWidget);
-    expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('How much time per day?'), findsOneWidget);
+    expect(find.text('Daily goal'), findsNothing);
+    expect(find.text('Your coach'), findsNothing);
     expect(find.text('Home'), findsNothing);
     expect(_tileSelected(tester, '10 minutes'), isTrue);
     expect(_tileSelected(tester, '5 minutes'), isFalse);
@@ -184,22 +189,23 @@ void main() {
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Your experience'), findsOneWidget);
-    expect(find.text('Daily goal'), findsNothing);
+    expect(find.text('Where are you starting?'), findsOneWidget);
+    expect(find.text('Your experience'), findsNothing);
+    expect(find.text('How much time per day?'), findsNothing);
     expect(find.text('Home'), findsNothing);
     expect(_tileSelected(tester, 'New to poker'), isTrue);
 
     await _tapLabel(tester, 'Know the rules / home games');
-    expect(find.text('Daily goal'), findsNothing);
+    expect(find.text('How much time per day?'), findsNothing);
     await _tapContinue(tester);
-    expect(find.text('Daily goal'), findsOneWidget);
+    expect(find.text('How much time per day?'), findsOneWidget);
     expect(_tileSelected(tester, '10 minutes'), isTrue);
 
     await _tapLabel(tester, '10 minutes');
-    expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('Your live-reg coach'), findsNothing);
     await _tapContinue(tester);
-    expect(find.text('Meet Rex'), findsOneWidget);
     expect(find.text('Your live-reg coach'), findsOneWidget);
+    expect(find.text('Meet Rex'), findsNothing);
 
     await _tapContinue(tester);
 
@@ -250,19 +256,21 @@ void main() {
     await _pumpGuest(tester, overrides: const []);
     await tester.pumpAndSettle();
 
-    expect(find.text('Your start'), findsOneWidget);
     expect(find.text('Start lesson'), findsOneWidget);
-
-    await tester.tap(find.byTooltip('Back'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Meet Rex'), findsOneWidget);
-    expect(find.text('Home'), findsNothing);
     expect(find.text('Your start'), findsNothing);
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
-    expect(find.text('Daily goal'), findsOneWidget);
+
+    expect(find.text('Your coach'), findsOneWidget);
+    expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('Home'), findsNothing);
+    expect(find.text('Start lesson'), findsNothing);
+
+    await tester.tap(find.byTooltip('Back'));
+    await tester.pumpAndSettle();
+    expect(find.text('How much time per day?'), findsOneWidget);
+    expect(find.text('Daily goal'), findsNothing);
     expect(_tileSelected(tester, '10 minutes'), isTrue);
   });
 }
