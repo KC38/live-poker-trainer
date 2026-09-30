@@ -344,6 +344,8 @@ Mix with a reason uses the full poker table for every step: explain taps Mix, Pu
 
 Navigate 3-bet and 4-bet pots by depth uses the full poker table for every step: explain taps 3-Bet, 4-Bet, and Depth under the felt.
 
+Make difficult folds; review coolers fairly uses the full poker table for every step: explain taps Hard, Cooler, and Ego under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -678,9 +680,7 @@ and the third-pair fold sits face up on the full table. Mix with a reason uses t
 Mix, Purpose, and Strong under the felt, the station, reason, and purpose checks stay lists, and the
 set check sits face up on the full table. Navigate 3-bet and 4-bet pots by depth uses the same frame and the full
 table: explain taps 3-Bet, 4-Bet, and Depth under the felt, the commit, ego, and SPR checks stay lists, and the missed
-AQo flop sits face up on the full table. Make difficult folds;
-review coolers fairly uses the same frame: hard, cooler, and ego stay
-in the stage, the cooler, ego, and review checks stay lists, and the
+AQo flop sits face up on the full table. Make difficult folds; review coolers fairly uses the same frame and the full table: explain taps Hard, Cooler, and Ego under the felt, the cooler, ego, and review checks stay lists, and the
 weak-kicker fold sits face up on the full table. Observe selective
 aggression uses the same frame: tight, barrel, and sample stay in the
 stage, and the entry quizzes stay lists. Meet the TAG uses the same

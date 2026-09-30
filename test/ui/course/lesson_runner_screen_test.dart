@@ -3344,6 +3344,8 @@ void main() {
     expect(find.textContaining('Tap Hard'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('hard-fold-cooler-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('HARD'), findsOneWidget);
     expect(find.text('COOLER'), findsOneWidget);
     expect(find.text('EGO'), findsOneWidget);
