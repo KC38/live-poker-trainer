@@ -3879,6 +3879,8 @@ void main() {
     expect(find.textContaining('Tap Fewer'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('hu-vs-multiway-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('FEWER'), findsOneWidget);
     expect(find.text('THICKER'), findsOneWidget);
     expect(find.text('WIDEN'), findsOneWidget);

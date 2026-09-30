@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Switch gears between HU and multiway explain: FEWER / THICKER / WIDEN under the full poker table.
+class LessonHuVsMultiwayExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonHuVsMultiwayExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonHuVsMultiwayExplainTable> createState() =>
+      _LessonHuVsMultiwayExplainTableState();
+}
+
+class _LessonHuVsMultiwayExplainTableState
+    extends State<LessonHuVsMultiwayExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= HuVsMultiwayDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('hu-vs-multiway-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < HuVsMultiwayDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _HuVsMultiwaySoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        HuVsMultiwayDemo.points[i].label,
+                      ) &&
+                      HuVsMultiwayDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _HuVsMultiwayTile(
+                    label: HuVsMultiwayDemo.points[i].label,
+                    caption: HuVsMultiwayDemo.points[i].caption,
+                    color: HuVsMultiwayDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      HuVsMultiwayDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  HuVsMultiwayDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Fewer / thicker / widen tiles for HU vs multiway explain demos.
 class HuVsMultiwayDemo extends StatefulWidget {
