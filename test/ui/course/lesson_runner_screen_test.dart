@@ -2879,6 +2879,8 @@ void main() {
     expect(find.textContaining('Tap Quit'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('guardrails-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('QUIT'), findsOneWidget);
     expect(find.text('GUARD'), findsOneWidget);
     expect(find.text('FIRST'), findsOneWidget);
