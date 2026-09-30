@@ -412,8 +412,9 @@ class _HomeBodyState extends State<_HomeBody> {
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
           child: CourseStatusBar(
             streak: snapshot.streak,
-            lifetimeXp: snapshot.lifetimeXp,
             gems: snapshot.gems,
+            hearts: snapshot.hearts,
+            lifetimeXp: snapshot.lifetimeXp,
             acceptedAccuracy: snapshot.acceptedAccuracy,
             onCourseTap: widget.onOpenSections,
           ),
@@ -429,8 +430,8 @@ class _HomeBodyState extends State<_HomeBody> {
               child: CourseUnitBanner(
                 key: ValueKey<String>(activeUnit.unitId),
                 sectionOrder: activeUnit.sectionOrder,
+                unitOrder: activeUnit.unitOrder,
                 unitTitle: activeUnit.unitTitle,
-                sectionTitle: activeUnit.sectionTitle,
                 color: activeUnit.bannerColor,
                 onTap: widget.onOpenSections,
               ),

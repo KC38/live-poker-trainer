@@ -139,7 +139,8 @@ class _FixedHome extends CourseHomeController {
 }
 
 void _expectHomeThemeMetrics(WidgetTester tester) {
-  for (final value in ['2', '40', '0']) {
+  // Streak 2, gems 0, hearts 3 — Duo strip uses JetBrains Mono for counts.
+  for (final value in ['2', '0', '3']) {
     expect(
       tester.widget<Text>(find.text(value)).style?.fontFamily,
       contains('JetBrains'),
@@ -179,6 +180,7 @@ void main() {
     expect(find.text('Lesson A'), findsOneWidget);
     expect(find.text('START'), findsOneWidget);
     expect(find.textContaining('SECTION'), findsWidgets);
+    expect(find.text('SECTION 1, UNIT 1'), findsOneWidget);
     expect(analytics.events, contains('home_course_view:ready'));
     _expectHomeThemeMetrics(tester);
   });

@@ -49,8 +49,10 @@ Save progress (`SaveProgressScreen`) uses the same radial felt gradient as other
 
 After the first guest lesson and before Save progress, the celebration chain is Day streak → Streak goal → Daily quests → Gems reward (`DayStreakScreen`, `StreakGoalScreen`, `DailyQuestsCompleteScreen`, `GemsRewardScreen` in `lib/ui/screens/onboarding_screens.dart`). CONTINUE / I CAN DO IT use the elevated button. Streak accents use `warning` / gold; gems use diamond cyan (`#5EC8FF`). No Duo sky-blue CTAs.
 
-Home status values (streak, XP, gems) use JetBrains Mono in a compact icon
-strip (`CourseStatusBar`). The course mark opens the section picker. The Rex
+Home status values (streak, gems, hearts) use JetBrains Mono in a compact
+Duolingo-style strip (`CourseStatusBar`): course mark on the left, then
+streak / gems / hearts spaced evenly with matching accent colors. The course
+mark opens the section picker. The Rex
 card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no
 elevation). Start uses the elevated button (gold on bgDark, height 54,
 radius 14, Manrope 16 w800).
@@ -64,9 +66,11 @@ The Settings Chip display segments ($, BB, Both) use JetBrains Mono.
 ### Shipped
 
 Home status is an icon strip in `CourseStatusBar`
-(`lib/ui/home/course_status_bar.dart`): flame + streak, bolt + XP, diamond +
-gems. JetBrains Mono for the numbers. The felt course mark opens
-`CourseSectionPickerSheet`.
+(`lib/ui/home/course_status_bar.dart`): course mark, flame + streak, diamond +
+gems, heart + hearts. JetBrains Mono for the numbers; each count uses its
+accent color. The felt course mark opens `CourseSectionPickerSheet`. A sticky
+unit banner under the strip reads `SECTION N, UNIT M` with the unit title
+underneath and swaps as the path scrolls.
 
 Chip display segments on `SettingsScreen`
 (`lib/ui/screens/settings_screen.dart`) use JetBrains Mono. The next screen
@@ -797,7 +801,7 @@ Do not copy their palette, owl, or words.
 | Wrong | The coach brings both arms in. The dock says Think again or Not quite. Continue stays on the step. |
 | Hint | Hint replaces the speech bubble until it is tapped again. |
 | Payoff | Lesson XP and the daily goal before Home. |
-| Home | A winding path of circular nodes. Colored unit banners name section + unit. The next lesson is the marked node with a START chip. Rex stands on it. |
+| Home | Status strip: course mark, streak, gems, hearts. One sticky unit banner (`SECTION N, UNIT M` + title) swaps on scroll. A winding path of circular nodes follows; the next lesson is the marked node with a START chip and Rex on it. |
 | Section list | Tapping the unit banner or course mark opens section cards: summary bubble, experience band, progress or JUMP HERE. Jump scrolls the path to that section. |
 
 On Home, Rex stands on the marked next-lesson node. A Rex card above the path is not that beat.

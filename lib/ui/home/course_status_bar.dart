@@ -1,25 +1,37 @@
-/// Home status bar: streak, XP, gems — Duolingo-style strip.
+/// Home status bar: sections, streak, gems, hearts — Duolingo-style strip.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 
+/// Default hearts shown on Home (matches per-lesson lives max).
+const int kHomeDefaultHearts = 3;
+
 /// Compact course stats strip for Home.
+///
+/// Layout mirrors Duolingo chess: course mark on the left, then streak, gems,
+/// and hearts spaced evenly across the row with matching accent colors.
 class CourseStatusBar extends StatelessWidget {
   /// Creates the status bar.
   const CourseStatusBar({
     super.key,
     required this.streak,
-    required this.lifetimeXp,
     required this.gems,
+    this.hearts = kHomeDefaultHearts,
+    this.lifetimeXp,
     this.acceptedAccuracy,
     this.onCourseTap,
   });
 
   final int streak;
-  final int lifetimeXp;
   final int gems;
+
+  /// Remaining hearts / lives for the learner.
+  final int hearts;
+
+  /// Kept for callers that still pass XP; the strip no longer shows it.
+  final int? lifetimeXp;
 
   /// Kept for callers that still pass accuracy; gems replace it in the strip.
   final double? acceptedAccuracy;
@@ -27,48 +39,43 @@ class CourseStatusBar extends StatelessWidget {
   /// Opens the section picker (course map).
   final VoidCallback? onCourseTap;
 
+  static const Color _gemColor = Color(0xFF5EC8FF);
+
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Streak $streak days, $lifetimeXp XP, $gems gems',
+      label: 'Streak $streak days, $gems gems, $hearts hearts',
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
         child: Row(
           children: [
             _CourseMark(onTap: onCourseTap),
-            const SizedBox(width: 8),
             Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _StatIcon(
-                      icon: Icons.local_fire_department_rounded,
-                      iconColor: AppColors.warning,
-                      label: 'Streak',
-                      value: '$streak',
-                      valueColor: AppColors.cream,
-                    ),
-                    const SizedBox(width: 14),
-                    _StatIcon(
-                      icon: Icons.bolt_rounded,
-                      iconColor: AppColors.goldBright,
-                      label: 'XP',
-                      value: '$lifetimeXp',
-                      valueColor: AppColors.goldBright,
-                    ),
-                    const SizedBox(width: 14),
-                    _StatIcon(
-                      icon: Icons.diamond_rounded,
-                      iconColor: const Color(0xFF5EC8FF),
-                      label: 'Gems',
-                      value: '$gems',
-                      valueColor: const Color(0xFF5EC8FF),
-                    ),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _StatIcon(
+                    icon: Icons.local_fire_department_rounded,
+                    iconColor: AppColors.warning,
+                    label: 'Streak',
+                    value: '$streak',
+                    valueColor: AppColors.warning,
+                  ),
+                  _StatIcon(
+                    icon: Icons.diamond_rounded,
+                    iconColor: _gemColor,
+                    label: 'Gems',
+                    value: '$gems',
+                    valueColor: _gemColor,
+                  ),
+                  _StatIcon(
+                    icon: Icons.favorite_rounded,
+                    iconColor: AppColors.hearts,
+                    label: 'Hearts',
+                    value: '$hearts',
+                    valueColor: AppColors.hearts,
+                  ),
+                ],
               ),
             ),
           ],
@@ -140,14 +147,15 @@ class _StatIcon extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 22, color: iconColor),
-          const SizedBox(width: 4),
+          Icon(icon, size: 24, color: iconColor),
+          const SizedBox(width: 5),
           Text(
             value,
             style: GoogleFonts.jetBrainsMono(
               color: valueColor,
               fontSize: 16,
               fontWeight: FontWeight.w800,
+              height: 1,
             ),
           ),
         ],

@@ -31,6 +31,7 @@ class CoursePathUnit {
     required this.sectionId,
     required this.sectionTitle,
     required this.sectionOrder,
+    required this.unitOrder,
   });
 
   final String unitId;
@@ -38,6 +39,9 @@ class CoursePathUnit {
   final String sectionId;
   final String sectionTitle;
   final int sectionOrder;
+
+  /// 1-based unit index within the section (Duolingo "UNIT N").
+  final int unitOrder;
 
   /// Accent for this unit's sticky banner and path nodes.
   Color get bannerColor => unitBannerColorForSection(sectionOrder);
@@ -50,9 +54,16 @@ List<CoursePathUnit> coursePathUnits({
 }) {
   final units = <CoursePathUnit>[];
   String? lastUnitId;
+  String? lastSectionId;
+  var unitOrderInSection = 0;
   for (final node in nodes) {
     if (node.unitId == lastUnitId) continue;
+    if (node.sectionId != lastSectionId) {
+      lastSectionId = node.sectionId;
+      unitOrderInSection = 0;
+    }
     lastUnitId = node.unitId;
+    unitOrderInSection += 1;
     units.add(
       CoursePathUnit(
         unitId: node.unitId,
@@ -60,6 +71,7 @@ List<CoursePathUnit> coursePathUnits({
         sectionId: node.sectionId,
         sectionTitle: node.sectionTitle,
         sectionOrder: sectionOrders[node.sectionId] ?? 1,
+        unitOrder: unitOrderInSection,
       ),
     );
   }
@@ -72,15 +84,15 @@ class CourseUnitBanner extends StatelessWidget {
   const CourseUnitBanner({
     super.key,
     required this.sectionOrder,
+    required this.unitOrder,
     required this.unitTitle,
-    required this.sectionTitle,
     required this.color,
     this.onTap,
   });
 
   final int sectionOrder;
+  final int unitOrder;
   final String unitTitle;
-  final String sectionTitle;
   final Color color;
   final VoidCallback? onTap;
 
@@ -88,74 +100,113 @@ class CourseUnitBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final base = color;
     final shadow = Color.lerp(base, Colors.black, 0.28)!;
+    final eyebrow = 'SECTION $sectionOrder, UNIT $unitOrder';
 
     return Semantics(
       button: onTap != null,
-      label: 'Section $sectionOrder, $unitTitle. $sectionTitle',
+      label: '$eyebrow. $unitTitle',
       hint: onTap == null ? null : 'Open section list',
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(16),
-          child: Ink(
-            decoration: BoxDecoration(
-              color: base,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: shadow,
-                  offset: const Offset(0, 4),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Ink(
+                decoration: BoxDecoration(
+                  color: base,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: shadow,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(18, 14, 14, 14),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'SECTION $sectionOrder · ${sectionTitle.toUpperCase()}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.manrope(
-                            color: Colors.white.withValues(alpha: 0.88),
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.8,
-                          ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 14, 14, 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              eyebrow,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.manrope(
+                                color: Colors.white.withValues(alpha: 0.92),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.6,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              unitTitle,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.manrope(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                height: 1.15,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          unitTitle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.manrope(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
-                            height: 1.15,
-                          ),
+                      ),
+                      if (onTap != null)
+                        Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          color: Colors.white.withValues(alpha: 0.9),
+                          size: 28,
                         ),
-                      ],
-                    ),
+                    ],
                   ),
-                  if (onTap != null)
-                    Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: Colors.white.withValues(alpha: 0.9),
-                      size: 28,
-                    ),
-                ],
+                ),
               ),
-            ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: -7,
+                child: Center(
+                  child: CustomPaint(
+                    size: const Size(18, 8),
+                    painter: _BannerNotchPainter(color: base),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+}
+
+/// Downward tab under the sticky unit banner (Duolingo path cue).
+class _BannerNotchPainter extends CustomPainter {
+  const _BannerNotchPainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width / 2, size.height)
+      ..lineTo(size.width, 0)
+      ..close();
+    canvas.drawPath(path, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(covariant _BannerNotchPainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }
 
