@@ -3044,6 +3044,8 @@ void main() {
     expect(find.textContaining('Tap Capped'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('capped-uncapped-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CAPPED'), findsOneWidget);
     expect(find.text('UNCAPPED'), findsOneWidget);
     expect(find.text('NUTS'), findsOneWidget);

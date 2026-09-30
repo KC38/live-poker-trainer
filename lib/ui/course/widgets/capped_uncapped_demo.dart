@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// Capped-range explain: CAPPED / UNCAPPED / NUTS under the full poker table.
+class LessonCappedUncappedExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonCappedUncappedExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonCappedUncappedExplainTable> createState() =>
+      _LessonCappedUncappedExplainTableState();
+}
+
+class _LessonCappedUncappedExplainTableState
+    extends State<LessonCappedUncappedExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= CappedUncappedDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('capped-uncapped-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < CappedUncappedDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _CappedSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        CappedUncappedDemo.points[i].label,
+                      ) &&
+                      CappedUncappedDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _CappedTile(
+                    label: CappedUncappedDemo.points[i].label,
+                    caption: CappedUncappedDemo.points[i].caption,
+                    color: CappedUncappedDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      CappedUncappedDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  CappedUncappedDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// Capped / uncapped / nuts tiles for capped-range explain demos.
 class CappedUncappedDemo extends StatefulWidget {
