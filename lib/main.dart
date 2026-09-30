@@ -173,7 +173,7 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
     _logRootScreen(analytics, _screenName(destination));
 
     // Remount when the guest stack must be dropped. Updating `home` alone
-    // leaves pushed routes (Meet Rex, the first lesson) on the old navigator.
+    // leaves pushed routes (coach intro, the first lesson) on the old navigator.
     // `-course` stays put from Your start through the lesson so anonymous
     // sign-in and flag reloads do not dispose an in-progress runner.
     // `-save` / `-home` are new navigators so Save progress and Home are not
@@ -273,8 +273,8 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
         // Back from Your start rewinds the step. The new navigator's home is
         // that step, with the stored band and daily goal still selected.
         return switch (onboarding.step) {
-          OnboardingStep.rexIntro => const RexIntroScreen(),
-          OnboardingStep.dailyGoal => const DailyGoalScreen(),
+          OnboardingStep.dailyGoal || OnboardingStep.rexIntro =>
+            const DailyGoalScreen(),
           OnboardingStep.experience => const ExperienceChoiceScreen(),
           _ => const ExperienceChoiceScreen(),
         };

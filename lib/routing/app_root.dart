@@ -42,13 +42,12 @@ String rootNavigatorKeyFor({
   return identity;
 }
 
-/// Extra navigator identity so a home swap actually drops the old stack.
-///
-/// Welcome pushes (experience, daily goal, Meet Rex) share `guest`. Changing
-/// `home` to Your start does not pop that stack, so Meet Rex stayed on screen.
-/// `-course` is a new navigator for Your start and the first lesson, and it
-/// stays stable across anonymous sign-in. `-save` and `-home` are new again so
-/// returning to `guest` cannot restore the lesson over Save progress or Home.
+/// Welcome pushes (coach intro, experience, daily goal) share `guest`. Changing
+/// `home` to Your start / motivation does not pop that stack, so the prior
+/// screen stayed on. `-course` is a new navigator for Your start and the first
+/// lesson, and it stays stable across anonymous sign-in. `-save` and `-home`
+/// are new again so returning to `guest` cannot restore the lesson over Save
+/// progress or Home.
 String rootStackToken({
   required AppRootDestination destination,
   required OnboardingDraft onboarding,
@@ -75,8 +74,7 @@ String rootStackToken({
   if (destination == AppRootDestination.guestCourse) {
     return switch (onboarding.step) {
       OnboardingStep.motivationHook => '-motivation',
-      OnboardingStep.rexIntro => '-rex',
-      OnboardingStep.dailyGoal => '-goal',
+      OnboardingStep.dailyGoal || OnboardingStep.rexIntro => '-goal',
       OnboardingStep.experience => '-experience',
       _ => '',
     };
@@ -118,8 +116,8 @@ AppRootDestination resolveAppRoot({
       return AppRootDestination.saveProgress;
     }
     // Your start, the first lesson, and the steps Back returns to stay on the
-    // guest course root. A fresh navigator per step shows Meet Rex, Daily
-    // goal, or Your experience. Welcome itself stays the signed-out home.
+    // guest course root. A fresh navigator per step shows Daily goal or Your
+    // experience. Welcome itself stays the signed-out home.
     if (onboarding.step == OnboardingStep.firstLesson ||
         onboarding.step == OnboardingStep.recommendedStart ||
         onboarding.step == OnboardingStep.motivationPitch ||

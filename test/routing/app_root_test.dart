@@ -433,7 +433,7 @@ void main() {
         onboarding: const OnboardingDraft(step: OnboardingStep.rexIntro),
         anonymous: false,
       ),
-      '-rex',
+      '-goal',
     );
     expect(
       rootStackToken(

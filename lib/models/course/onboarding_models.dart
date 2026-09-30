@@ -206,11 +206,16 @@ class OnboardingDraft {
       };
 
   factory OnboardingDraft.fromPrefs(Map<String, Object?> data) {
+    final parsedStep = OnboardingStep.values.firstWhere(
+      (value) => value.name == data['step'],
+      orElse: () => OnboardingStep.welcome,
+    );
+    // Legacy Meet Rex drafts resume on Daily goal (coach intro moved earlier).
+    final step = parsedStep == OnboardingStep.rexIntro
+        ? OnboardingStep.dailyGoal
+        : parsedStep;
     return OnboardingDraft(
-      step: OnboardingStep.values.firstWhere(
-        (value) => value.name == data['step'],
-        orElse: () => OnboardingStep.welcome,
-      ),
+      step: step,
       experienceBand: ExperienceBand.tryParse(data['experienceBand'] as String?),
       dailyGoalMinutes: data['dailyGoalMinutes'] as int?,
       recommendedLessonId: data['recommendedLessonId'] as String?,
@@ -230,9 +235,11 @@ enum OnboardingStep {
   welcome,
   experience,
   dailyGoal,
+
+  /// Legacy Meet Rex step. Hydration maps this to [dailyGoal].
   rexIntro,
 
-  /// First Duolingo-style Rex motivation beat after Meet Rex.
+  /// First Duolingo-style Rex motivation beat after daily goal.
   motivationHook,
 
   /// Second motivation beat; Continue starts the first lesson directly.

@@ -306,7 +306,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('recommended start drops a pushed Meet Rex route', (
+  testWidgets('recommended start drops a pushed coach intro route', (
     tester,
   ) async {
     // Phone-sized surface: default 800x600 overflows Welcome under a pushed
@@ -345,11 +345,11 @@ void main() {
         .state<NavigatorState>(find.byType(Navigator))
         .push(
           MaterialPageRoute<void>(
-            builder: (_) => const Scaffold(body: Text('Meet Rex')),
+            builder: (_) => const Scaffold(body: Text('Coach intro')),
           ),
         );
     await tester.pumpAndSettle();
-    expect(find.text('Meet Rex'), findsOneWidget);
+    expect(find.text('Coach intro'), findsOneWidget);
 
     await onboarding.setRecommendation(
       lessonId: kFirstCourseLessonId,
@@ -358,7 +358,7 @@ void main() {
     await tester.pump();
     await tester.pump();
 
-    expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('Coach intro'), findsNothing);
     expect(find.text(MotivationHookScreen.speech), findsOneWidget);
     expect(find.text('CONTINUE'), findsOneWidget);
     expect(find.text('Your start'), findsNothing);
