@@ -7,6 +7,8 @@ import {
   FieldValue,
   getFirestore,
   type DocumentData,
+  type DocumentReference,
+  type DocumentSnapshot,
   type Firestore,
   type Transaction,
 } from "firebase-admin/firestore";
@@ -266,10 +268,9 @@ export async function refillCourseHeartsForUser(options: {
     .collection("courseHeartRefills").doc(idempotencyKey);
 
   return db.runTransaction(async (tx) => {
-    const [receiptSnap, profileSnap] = await Promise.all([
-      tx.get(receiptRef),
-      tx.get(profileRef),
-    ]);
+    // Firestore requires every read before any write in a transaction.
+    const receiptSnap = await tx.get(receiptRef);
+    const profileSnap = await tx.get(profileRef);
     if (receiptSnap.exists) {
       const prior = receiptSnap.data()?.result as
         | RefillCourseHeartsResult
@@ -289,8 +290,18 @@ export async function refillCourseHeartsForUser(options: {
       );
     }
 
+    const profileData = profileSnap.data() ?? {};
+    const openAttemptRef = openAttemptRefFromProfile({
+      db,
+      uid: options.uid,
+      profileData,
+    });
+    const openAttemptSnap = openAttemptRef ?
+      await tx.get(openAttemptRef) :
+      null;
+
     const passive = applyPassiveHeartRefill(
-      heartStateFromData(profileSnap.data()),
+      heartStateFromData(profileData),
       nowMs,
     );
     let next = passive;
@@ -390,11 +401,10 @@ export async function refillCourseHeartsForUser(options: {
       updatedAt: FieldValue.serverTimestamp(),
     };
     tx.set(profileRef, profilePatch, {merge: true});
-    await syncOpenAttemptHearts({
+    writeOpenAttemptHearts({
       tx,
-      db,
-      uid: options.uid,
-      profileSnapData: profileSnap.data() ?? {},
+      attemptRef: openAttemptRef,
+      attemptSnap: openAttemptSnap,
       livesRemaining: next.livesRemaining,
       livesMax: next.livesMax,
     });
@@ -423,22 +433,31 @@ export function practiceHeartGrantFromCompletion(options: {
   return grantHearts({state: options.state, amount: 1, nowMs: options.nowMs});
 }
 
-async function syncOpenAttemptHearts(options: {
-  tx: Transaction;
+/** Resolves the open attempt doc from profile.resume, if any. */
+export function openAttemptRefFromProfile(options: {
   db: Firestore;
   uid: string;
-  profileSnapData: DocumentData;
+  profileData: DocumentData;
+}): DocumentReference | null {
+  const resume = options.profileData.resume;
+  if (!resume || typeof resume !== "object") return null;
+  const attemptId = String((resume as DocumentData).attemptId ?? "").trim();
+  if (!attemptId) return null;
+  return options.db.collection("users").doc(options.uid)
+    .collection("courseAttempts").doc(attemptId);
+}
+
+/** Writes heart fields onto an already-read open attempt (write phase only). */
+function writeOpenAttemptHearts(options: {
+  tx: Transaction;
+  attemptRef: DocumentReference | null;
+  attemptSnap: DocumentSnapshot | null;
   livesRemaining: number;
   livesMax: number;
-}): Promise<void> {
-  const resume = options.profileSnapData.resume;
-  if (!resume || typeof resume !== "object") return;
-  const attemptId = String((resume as DocumentData).attemptId ?? "").trim();
-  if (!attemptId) return;
-  const attemptRef = options.db.collection("users").doc(options.uid)
-    .collection("courseAttempts").doc(attemptId);
-  const attemptSnap = await options.tx.get(attemptRef);
-  if (!attemptSnap.exists) return;
+}): void {
+  const attemptRef = options.attemptRef;
+  const attemptSnap = options.attemptSnap;
+  if (!attemptRef || !attemptSnap?.exists) return;
   const status = String(attemptSnap.data()?.status ?? "");
   if (status !== "in_progress" && status !== "remediation") return;
   const patch: DocumentData = {
