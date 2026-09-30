@@ -928,6 +928,118 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('hint highlights the first text choice on unguided identify', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-hint-identify',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'Pick the board',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Tap Board'),
+      ],
+      choices: const [
+        CourseChoice(id: 'board', label: 'Board'),
+        CourseChoice(id: 'holes', label: 'Holes'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+
+    await tester.pumpWidget(
+      _wrap(
+        AnimatedBuilder(
+          animation: controller,
+          builder: (context, _) {
+            return SelectIdentifyActivity(
+              activity: activity,
+              controller: controller,
+              showGuidance: controller.showTargetCue,
+            );
+          },
+        ),
+      ),
+    );
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is LessonChoiceButton && w.highlighted,
+      ),
+      findsNothing,
+    );
+
+    controller.revealHint();
+    await tester.pump();
+    expect(
+      find.byWidgetPredicate(
+        (w) => w is LessonChoiceButton && w.highlighted && w.label == 'Board',
+      ),
+      findsOneWidget,
+    );
+    controller.dispose();
+  });
+
+  testWidgets('hint SoftPulses Fold on an unguided open-fold dock', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-02-03-01-unguided-btn',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Button open decision',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Folds to you on the button — pick Fold, Open, or Limp.',
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Steal or leave — open or fold.'),
+      ],
+      choices: const [
+        CourseChoice(id: 'open-k9s', label: 'Open to 6', action: 'RAISE'),
+        CourseChoice(id: 'fold-k9s', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'limp-k9s', label: 'Limp', action: 'CALL'),
+      ],
+    );
+    expect(isLessonActionTableActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+
+    await tester.pumpWidget(
+      _wrap(
+        AnimatedBuilder(
+          animation: controller,
+          builder: (context, _) {
+            return PokerActionSizingActivity(
+              activity: activity,
+              controller: controller,
+              showGuidance: controller.showTargetCue,
+            );
+          },
+        ),
+      ),
+    );
+    expect(find.byType(LessonActionDock), findsOneWidget);
+    expect(controller.showTargetCue, isFalse);
+
+    controller.revealHint();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    expect(controller.showTargetCue, isTrue);
+    // SoftPulse wraps the first choice (open) with a 2.5 gold border.
+    expect(
+      find.byWidgetPredicate((w) {
+        if (w is! DecoratedBox) return false;
+        final decoration = w.decoration;
+        if (decoration is! BoxDecoration) return false;
+        final border = decoration.border;
+        return border is Border && border.top.width == 2.5;
+      }),
+      findsWidgets,
+    );
+    controller.dispose();
+  });
+
   testWidgets('streets explain taps each street instead of Continue', (
     tester,
   ) async {

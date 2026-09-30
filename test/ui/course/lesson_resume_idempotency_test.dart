@@ -134,6 +134,30 @@ void main() {
     controller.dispose();
   });
 
+  test('revealing a hint enables tap cues on unguided steps', () {
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Tap the board'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    expect(controller.showTargetCue, isFalse);
+    controller.revealHint();
+    expect(controller.hintVisible, isTrue);
+    expect(controller.showTargetCue, isTrue);
+    controller.toggleHint();
+    expect(controller.hintVisible, isFalse);
+    expect(controller.showTargetCue, isFalse);
+    controller.dispose();
+  });
+
   test('duplicate submit result must not animate a fresh life loss', () {
     final result = SubmitCourseStepResult(
       attemptId: 'att',

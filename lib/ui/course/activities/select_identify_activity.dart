@@ -216,6 +216,7 @@ class SelectIdentifyActivity extends StatelessWidget {
           selectedId: selected,
           locked: locked,
           showGuidance: showGuidance,
+          hintVisible: controller.hintVisible,
           onSelect: (id) => controller.selectChoice(id, autoSubmit: true),
         );
         return Column(
@@ -304,7 +305,7 @@ class SelectIdentifyActivity extends StatelessWidget {
   }) {
     final highlight =
         showGuidance &&
-        activity.stage == ActivityStage.guided &&
+        (activity.stage == ActivityStage.guided || controller.hintVisible) &&
         index == 0 &&
         controller.draft.choiceId == null;
     final onPressed =
@@ -396,11 +397,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   }
 
   /// Guided steps light the answer seat. Later stages keep the highlight as
-  /// context only, because it can point at a reference seat.
+  /// context only, because it can point at a reference seat — unless the
+  /// learner asked for a hint, which restores the answer cue.
   bool _cuesAnswerSeat(bool locked) =>
       !locked &&
       widget.showGuidance &&
-      widget.activity.stage == ActivityStage.guided;
+      (widget.activity.stage == ActivityStage.guided ||
+          widget.controller.hintVisible);
 
   void _onController() {
     if (widget.controller.draft.choiceId == null &&
@@ -1605,7 +1608,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                   widget.activity.stage ==
                                       ActivityStage.scaffolded ||
                                   widget.activity.stage ==
-                                      ActivityStage.checkpoint)) ||
+                                      ActivityStage.checkpoint ||
+                                  widget.controller.hintVisible)) ||
                           widget.activity.id == 'act-01-02-02-unguided-board'),
                   showInviteCue: !feltFirstSelect,
                   enabled: !locked,
@@ -1912,18 +1916,21 @@ class _HandCategoryTapActivity extends StatelessWidget {
                               );
                           final pulseNext =
                               showGuidance &&
-                              activity.stage == ActivityStage.guided &&
+                              (activity.stage == ActivityStage.guided ||
+                                  controller.hintVisible) &&
                               i == 0 &&
                               selected == null &&
                               !locked &&
                               (activity.id.startsWith('act-02-02-01-') ||
-                                  activity.id == 'act-03-05-01-guided');
+                                  activity.id.startsWith('act-03-05-01-'));
                           final invitePulse =
                               showGuidance &&
                               selected == null &&
                               !locked &&
                               (activity.id.startsWith('act-01-02-01-') ||
-                                  activity.id == 'act-03-03-01-guided');
+                                  activity.id == 'act-03-03-01-guided' ||
+                                  (controller.hintVisible &&
+                                      activity.id.startsWith('act-03-03-01-')));
                           return _FamilySoftPulse(
                             active: pulseNext || invitePulse,
                             child: HandExampleTile(
@@ -2248,7 +2255,8 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                     widget.showGuidance &&
                     selected == null &&
                     !locked &&
-                    widget.activity.stage == ActivityStage.guided,
+                    (widget.activity.stage == ActivityStage.guided ||
+                        widget.controller.hintVisible),
                 enabled: !locked,
                 onRegionTap:
                     feltInteractive && !locked
@@ -2769,6 +2777,7 @@ class _HoleCardBands extends StatelessWidget {
     required this.selectedId,
     required this.locked,
     required this.showGuidance,
+    required this.hintVisible,
     required this.onSelect,
   });
 
@@ -2785,6 +2794,7 @@ class _HoleCardBands extends StatelessWidget {
   final String? selectedId;
   final bool locked;
   final bool showGuidance;
+  final bool hintVisible;
   final ValueChanged<String> onSelect;
 
   @override
@@ -2872,7 +2882,7 @@ class _HoleCardBands extends StatelessWidget {
     return _FamilySoftPulse(
       active:
           showGuidance &&
-          activity.stage == ActivityStage.guided &&
+          (activity.stage == ActivityStage.guided || hintVisible) &&
           index == 0 &&
           selectedId == null &&
           !locked,

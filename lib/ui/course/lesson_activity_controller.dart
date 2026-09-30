@@ -78,8 +78,12 @@ class LessonActivityController extends ChangeNotifier {
   /// Bumps when [bindActivity] runs so activity widgets can remount cleanly.
   int get bindGeneration => _bindGeneration;
 
-  /// Whether guided/scaffolded cues should remain visible.
+  /// Whether SoftPulse / tap cues should remain visible.
+  ///
+  /// Teaching stages keep their authored cues. Revealing a hint unlocks the
+  /// same highlights on quieter stages (unguided / checkpoint / jump-test).
   bool get showTargetCue =>
+      _hintVisible ||
       activity.stage == ActivityStage.explain ||
       activity.stage == ActivityStage.guided ||
       activity.stage == ActivityStage.scaffolded;
