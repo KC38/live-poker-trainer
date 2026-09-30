@@ -2668,6 +2668,8 @@ void main() {
     expect(find.textContaining('Tap Thin'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('thin-value-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('THIN'), findsOneWidget);
     expect(find.text('CATCH'), findsOneWidget);
     expect(find.text('BARRELS'), findsOneWidget);

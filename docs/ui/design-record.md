@@ -304,6 +304,9 @@ explain taps Deep, Realize, and Stack under the felt.
 Implied and reverse odds uses the full poker table for every step: explain
 taps Implied, Reverse, and Second under the felt.
 
+Thin value and bluff-catches uses the full poker table for every step: explain
+taps Thin, Catch, and Barrels under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -596,9 +599,9 @@ and reward checks stay lists, and the wet-flop fold sits face up on that
 table. Implied
 and reverse odds uses the same frame and the full table: explain taps
 Implied, Reverse, and Second under the felt, each price spot sits face
-up on that table, and the rise check stays a list. Thin value and bluff-catches uses the same
-frame: thin, catch, and barrels stay in the stage, each thin-value spot
-sits face up on the full table, and the read check stays a list.
+up on that table, and the rise check stays a list. Thin value and bluff-catches uses the same frame and the full table:
+explain taps Thin, Catch, and Barrels under the felt, each thin-value
+spot sits face up on that table, and the read check stays a list.
 Advanced flop lines uses the same frame: check-raise, probe, delay, and
 donk stay in the stage, the nit, donk, and delay checks stay lists, and
 the probe spot sits face up on the full table. Street-by-street
