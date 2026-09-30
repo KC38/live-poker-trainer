@@ -40,6 +40,7 @@ class WelcomeScreen extends ConsumerWidget {
           const SizedBox(height: 28),
           Text(
             'Exploitative\nPoker Lab',
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.displayMedium,
           ),
           const Spacer(flex: 3),
