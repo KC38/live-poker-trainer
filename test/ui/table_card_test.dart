@@ -1,4 +1,4 @@
-/// TableCard face: one rank and one suit glyph, no duplicates.
+/// TableCard face: corner rank, one centered suit, no duplicates.
 library;
 
 import 'package:flutter/material.dart';
@@ -55,5 +55,31 @@ void main() {
         reason: '$code should draw ${card.suit.symbol} once',
       );
     }
+  });
+
+  testWidgets('suit sits below the corner rank and near horizontal center', (
+    tester,
+  ) async {
+    const width = 52.0;
+    final card = CardModel.fromCode('Qs');
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: TableCard(card: card, width: width),
+          ),
+        ),
+      ),
+    );
+
+    final rank = tester.getRect(find.text(card.rankLabel));
+    final suit = tester.getRect(find.text(card.suit.symbol));
+    final cardBox = tester.getRect(find.byType(TableCard));
+
+    expect(suit.top, greaterThan(rank.bottom));
+    expect(
+      (suit.center.dx - cardBox.center.dx).abs(),
+      lessThan(width * 0.08),
+    );
   });
 }
