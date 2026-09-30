@@ -154,6 +154,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         child: SafeArea(
           child: asyncHome.when(
+            skipLoadingOnReload: true,
+            skipLoadingOnRefresh: true,
             loading:
                 () => const _HomeMessage(
                   title: 'Loading course',
@@ -233,8 +235,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             service: service,
           );
           if (!mounted) return;
-          await ref.read(courseHomeProvider.notifier).refresh();
-          if (!mounted) return;
+          final home = ref.read(courseHomeProvider.notifier);
+          home.applyHeartRefill(result);
+          unawaited(home.refresh());
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -258,8 +261,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             idempotencyKey: CourseService.newRequestKey('heart_gems'),
           );
           if (!mounted) return;
-          await ref.read(courseHomeProvider.notifier).refresh();
-          if (!mounted) return;
+          final home = ref.read(courseHomeProvider.notifier);
+          home.applyHeartRefill(result);
+          unawaited(home.refresh());
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(

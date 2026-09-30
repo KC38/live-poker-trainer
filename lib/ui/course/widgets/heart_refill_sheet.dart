@@ -12,9 +12,6 @@ import 'package:live_poker_trainer/services/firestore/course_service.dart';
 /// Cost of a full gem refill (matches server [GEMS_FULL_HEART_REFILL]).
 const int kGemsFullHeartRefill = 650;
 
-/// Passive refill interval shown in the sheet (matches server 6h).
-const Duration kHeartRefillInterval = Duration(hours: 6);
-
 /// Result of a refill action chosen in the sheet.
 enum HeartRefillAction {
   /// Start a practice/replay lesson for +1 heart on completion.
