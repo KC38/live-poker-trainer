@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/course/activities/authored_multi_step_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
+import 'package:live_poker_trainer/ui/course/activities/compare_rank_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/full_table_hand_lab_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/numeric_pot_price_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
@@ -69,6 +70,7 @@ import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 CourseActivity _activity({
   String id = 'act-test',
@@ -9215,28 +9217,43 @@ await tester.tap(find.text('NIT'));
       stage: ActivityStage.unguided,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Tap strongest to weakest',
+      accessibilityText: 'Showdown — tap highest to lowest.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Pick strongest to weakest.',
+      prompt: 'Tap highest to lowest.',
       sequenceItems: const [
-        CourseChoice(id: 'hr-trips', label: 'Three of a kind'),
-        CourseChoice(id: 'hr-full', label: 'Full house'),
-        CourseChoice(id: 'hr-two', label: 'Two pair'),
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
-      _wrap(
-        OrderSequenceActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: false,
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId('lesson-01-02-01-hand-ranks'),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: CompareRankActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: false,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
-    expect(find.text('Pick strongest to weakest.'), findsOneWidget);
+    await tester.pump();
+    expect(find.byType(LessonShowdownOrderTable), findsOneWidget);
     expect(find.text('Tap to place'), findsNothing);
-    expect(find.byKey(const ValueKey('hand-order-felt')), findsOneWidget);
+    expect(find.byKey(const ValueKey('hand-order-felt')), findsNothing);
     controller.dispose();
   });
 
@@ -22661,97 +22678,65 @@ await tester.tap(find.text('NIT'));
     await tester.pumpAndSettle();
   });
 
-  test('hand ranks presentations resolve to visual modes', () {
+  test('hand ranks presentations resolve to showdown seat order', () {
     final ladder = CourseActivity(
       id: 'act-01-02-01-guided-ladder',
       order: 2,
       stage: ActivityStage.guided,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Tap high card, then pair, then flush',
+      accessibilityText: 'Showdown — tap You, Sam, then Jo.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap weakest to strongest.',
       sequenceItems: const [
-        CourseChoice(id: 'hr-high', label: 'High card'),
-        CourseChoice(id: 'hr-pair', label: 'One pair'),
-        CourseChoice(id: 'hr-flush', label: 'Flush'),
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
-    expect(isHandExampleSequenceActivity(ladder), isTrue);
-    expect(resolveHandExample(id: 'hr-high')?.codes.length, 5);
+    expect(isShowdownOrderSequenceActivity(ladder.id), isTrue);
+    expect(isHandExampleSequenceActivity(ladder), isFalse);
+    expect(handRanksShowdownSpot(ladder.id)?.correctOrder, [
+      'you',
+      'sam',
+      'jo',
+    ]);
 
     final spot = CourseActivity(
       id: 'act-01-02-01-scaffolded-spot',
       order: 3,
       stage: ActivityStage.scaffolded,
-      renderer: ActivityRenderer.selectIdentify,
+      renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Tap flush',
+      accessibilityText: 'Showdown — tap You, Sam, then Jo.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Tap what you made.',
-      choices: const [
-        CourseChoice(id: 'cat-flush', label: 'Flush'),
-        CourseChoice(id: 'cat-pair', label: 'One pair'),
-        CourseChoice(id: 'cat-straight', label: 'Straight'),
+      prompt: 'Tap weakest to strongest.',
+      sequenceItems: const [
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
-    expect(
-      resolveSelectIdentifyPresentation(spot),
-      SelectIdentifyPresentation.tableRegionTap,
-    );
-    expect(isTableRegionTapActivity(spot), isTrue);
-    final scene = resolveLessonTableScene(spot);
-    expect(scene?.layout, LessonTableLayout.handRankSpotOutcomes);
-    expect(scene?.heroCodes, ['Ac', '3d']);
-    expect(scene?.boardCodes, ['Kc', '9c', '4c', '7c', '2s']);
-    expect(
-      mapTableRegionToChoiceId(
-        activityId: spot.id,
-        region: LessonTableRegion.handRankFlush,
-        choices: spot.choices,
-      ),
-      'cat-flush',
-    );
-    expect(resolveHandExample(id: 'cat-flush')?.codes, [
-      'Ac',
-      'Kc',
-      '9c',
-      '4c',
-      '7c',
-    ]);
+    expect(isShowdownOrderSequenceActivity(spot.id), isTrue);
+    expect(ordersStrongestFirst(spot), isFalse);
 
     final showdown = CourseActivity(
       id: 'act-01-02-01-checkpoint-winner',
       order: 5,
       stage: ActivityStage.checkpoint,
-      renderer: ActivityRenderer.selectIdentify,
+      renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Tap who wins',
+      accessibilityText: 'Showdown — tap highest to lowest.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Showdown — tap who wins.',
-      choices: const [
-        CourseChoice(id: 'you-win', label: 'You win with the flush'),
-        CourseChoice(id: 'they-win', label: 'They win with the straight'),
-        CourseChoice(id: 'split', label: 'Chop the pot'),
+      prompt: 'Tap highest to lowest.',
+      sequenceItems: const [
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
-    expect(
-      resolveSelectIdentifyPresentation(showdown),
-      SelectIdentifyPresentation.tableRegionTap,
-    );
-    expect(isTableRegionTapActivity(showdown), isTrue);
-    expect(
-      resolveLessonTableScene(showdown)?.layout,
-      LessonTableLayout.handRankShowdownOutcomes,
-    );
-    expect(
-      mapTableRegionToChoiceId(
-        activityId: showdown.id,
-        region: LessonTableRegion.handRankYouWin,
-        choices: showdown.choices,
-      ),
-      'you-win',
-    );
+    expect(isShowdownOrderSequenceActivity(showdown.id), isTrue);
+    expect(ordersStrongestFirst(showdown), isTrue);
 
     expect(
       resolveCoachDialogueVisual(
@@ -22770,7 +22755,7 @@ await tester.tap(find.text('NIT'));
     );
   });
 
-  testWidgets('hand ranks order taps hand tiles not text chips', (
+  testWidgets('hand ranks order taps showdown seats not text chips', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -22779,67 +22764,58 @@ await tester.tap(find.text('NIT'));
       stage: ActivityStage.guided,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Tap weakest to strongest',
+      accessibilityText: 'Showdown — tap You, Sam, then Jo.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap weakest to strongest.',
       sequenceItems: const [
-        CourseChoice(id: 'hr-high', label: 'High card'),
-        CourseChoice(id: 'hr-pair', label: 'One pair'),
-        CourseChoice(id: 'hr-flush', label: 'Flush'),
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
-      _wrap(
-        OrderSequenceActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId('lesson-01-02-01-hand-ranks'),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: CompareRankActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: true,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
-    // Rex owns "Tap weakest to strongest" — SoftPulse owns the next tile.
-    expect(find.text('Tap weakest to strongest.'), findsOneWidget);
-    expect(find.text('Tap to place'), findsNothing);
-    expect(find.text('Tap High card'), findsNothing);
-    expect(find.byType(HandExampleTile), findsNWidgets(3));
+    await tester.pump();
+    expect(find.byType(LessonShowdownOrderTable), findsOneWidget);
+    expect(find.byType(HandExampleTile), findsNothing);
     expect(find.byType(ActionChip), findsNothing);
-    final teachHeight = tester
-        .getSize(find.byKey(const ValueKey('hand-order-felt')))
-        .height;
-    expect(
-      teachHeight,
-      moreOrLessEquals(
-        tester.view.physicalSize.height /
-            tester.view.devicePixelRatio *
-            0.58,
-        epsilon: 1,
-      ),
-    );
 
-    await tester.tap(find.text('High card'));
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-hero')));
     await tester.pump();
-    expect(find.text('Tap One pair'), findsNothing);
-    await tester.tap(find.text('One pair'));
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-1')));
     await tester.pump();
-    expect(find.text('Tap Flush'), findsNothing);
-    await tester.tap(find.text('Flush'));
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-2')));
     await tester.pump();
-    expect(controller.draft.orderedIds, ['hr-high', 'hr-pair', 'hr-flush']);
-    expect(find.text('Checking…'), findsOneWidget);
-    // Densified shell stays filled through Checking…
-    expect(
-      tester.getSize(find.byKey(const ValueKey('hand-order-felt'))).height,
-      moreOrLessEquals(teachHeight, epsilon: 1),
-    );
-    // Mid-submit: ignore re-taps / duplicate appends.
+    expect(controller.draft.orderedIds, ['you', 'sam', 'jo']);
     appendOrderedId(
       controller: controller,
       activity: activity,
       ordered: controller.draft.orderedIds,
-      id: 'hr-high',
+      id: 'you',
     );
-    expect(controller.draft.orderedIds, ['hr-high', 'hr-pair', 'hr-flush']);
+    expect(controller.draft.orderedIds, ['you', 'sam', 'jo']);
     controller.dispose();
   });
 
@@ -22908,156 +22884,115 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('hand ranks spot taps Flush on densified felt', (tester) async {
+  testWidgets('hand ranks scaffolded taps seats weak to strong', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-02-01-scaffolded-spot',
       order: 3,
       stage: ActivityStage.scaffolded,
-      renderer: ActivityRenderer.selectIdentify,
+      renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Tap flush',
+      accessibilityText: 'Showdown — tap You, Sam, then Jo.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Tap what you made.',
-      choices: const [
-        CourseChoice(id: 'cat-flush', label: 'Flush'),
-        CourseChoice(id: 'cat-pair', label: 'One pair'),
-        CourseChoice(id: 'cat-straight', label: 'Straight'),
+      prompt: 'Tap weakest to strongest.',
+      sequenceItems: const [
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
-    expect(
-      resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.tableRegionTap,
-    );
-    expect(isTableRegionTapActivity(activity), isTrue);
-    expect(
-      resolveLessonTableScene(activity)?.layout,
-      LessonTableLayout.handRankSpotOutcomes,
-    );
-    expect(
-      mapTableRegionToChoiceId(
-        activityId: activity.id,
-        region: LessonTableRegion.handRankFlush,
-        choices: activity.choices,
-      ),
-      'cat-flush',
-    );
-
+    expect(isShowdownOrderSequenceActivity(activity.id), isTrue);
     final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
     await tester.pumpWidget(
-      _wrap(
-        SelectIdentifyActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId('lesson-01-02-01-hand-ranks'),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: CompareRankActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: true,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
-    expect(
-      find.text('Board and holes show five clubs — name the category.'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Board and holes show five clubs — tap what you made.'),
-      findsNothing,
-    );
-    expect(find.text('Tap what you made.'), findsNothing);
-    expect(find.byType(HandExampleTile), findsNothing);
-    expect(find.text('Flush'), findsOneWidget);
-    expect(find.text('Five clubs'), findsOneWidget);
-    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
-    expect(find.text('Tap Flush.'), findsNothing);
-    expect(find.text('One pair'), findsOneWidget);
-    expect(find.text('Straight'), findsOneWidget);
-    expect(
-      find.textContaining('Look at the board and your holes'),
-      findsNothing,
-    );
-
-    await tester.tap(find.text('Flush'));
     await tester.pump();
-    expect(controller.draft.choiceId, 'cat-flush');
+    expect(find.byType(LessonShowdownOrderTable), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-hero')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-1')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-2')));
+    await tester.pump();
+    expect(controller.draft.orderedIds, ['you', 'sam', 'jo']);
+    expect(autoSubmits, 1);
     controller.dispose();
   });
 
-  testWidgets('hand ranks showdown taps You on densified felt', (tester) async {
+  testWidgets('hand ranks checkpoint taps seats highest to lowest', (tester) async {
     final activity = CourseActivity(
       id: 'act-01-02-01-checkpoint-winner',
       order: 5,
       stage: ActivityStage.checkpoint,
-      renderer: ActivityRenderer.selectIdentify,
+      renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Tap who wins',
+      accessibilityText: 'Showdown — tap highest to lowest.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Showdown — tap who wins.',
-      choices: const [
-        CourseChoice(id: 'you-win', label: 'You win with the flush'),
-        CourseChoice(id: 'they-win', label: 'They win with the straight'),
-        CourseChoice(id: 'split', label: 'Chop the pot'),
+      prompt: 'Tap highest to lowest.',
+      sequenceItems: const [
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
-    expect(
-      resolveSelectIdentifyPresentation(activity),
-      SelectIdentifyPresentation.tableRegionTap,
-    );
-    expect(isTableRegionTapActivity(activity), isTrue);
-    expect(
-      resolveLessonTableScene(activity)?.layout,
-      LessonTableLayout.handRankShowdownOutcomes,
-    );
-    expect(
-      mapTableRegionToChoiceId(
-        activityId: activity.id,
-        region: LessonTableRegion.handRankYouWin,
-        choices: activity.choices,
-      ),
-      'you-win',
-    );
-    expect(
-      mapTableRegionToChoiceId(
-        activityId: activity.id,
-        region: LessonTableRegion.handRankChop,
-        choices: activity.choices,
-      ),
-      'split',
-    );
-
+    expect(isShowdownOrderSequenceActivity(activity.id), isTrue);
+    expect(ordersStrongestFirst(activity), isTrue);
     final controller = LessonActivityController(activity: activity);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
     await tester.pumpWidget(
-      _wrap(
-        SelectIdentifyActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId('lesson-01-02-01-hand-ranks'),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: CompareRankActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: false,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
-    expect(
-      find.text('Flush vs straight on the river — stronger category takes it.'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Flush vs straight on the river — tap who wins.'),
-      findsNothing,
-    );
-    expect(find.text('Showdown — tap who wins.'), findsNothing);
-    expect(find.text('Chop the pot'), findsNothing);
-    expect(find.text('Tap You or Them on the felt.'), findsNothing);
-    expect(find.byType(HandExampleTile), findsNothing);
-    // Spot rail + outcome tile both label You / Them.
-    expect(find.text('You'), findsWidgets);
-    expect(find.text('Them'), findsWidgets);
-    expect(find.text('Chop'), findsOneWidget);
-    expect(find.text('Club flush'), findsOneWidget);
-    expect(find.text('Straight?'), findsOneWidget);
-    expect(find.text('Split pot?'), findsOneWidget);
-    // Checkpoint: no SoftPulse spoiler cue.
-    expect(find.text('Tap You.'), findsNothing);
-
-    var autoSubmits = 0;
-    controller.onAutoSubmit = () => autoSubmits += 1;
-    await tester.tap(find.text('Club flush'));
     await tester.pump();
-    expect(controller.draft.choiceId, 'you-win');
+    expect(find.byType(LessonShowdownOrderTable), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-hero')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-1')));
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey('lesson-seat-2')));
+    await tester.pump();
+    expect(controller.draft.orderedIds, ['you', 'sam', 'jo']);
     expect(autoSubmits, 1);
     controller.dispose();
   });

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "db22ec6c0ba5e6cea901ddbdb792daa87b49756c8160166108c5040f12bc1b50",
+  "contentChecksum": "6d1c263a82206a1fcda793722d6d17f1f2ac6388d0ea5a1bb5f96cf9e1fba9ef",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -668,16 +668,6 @@
                         "feedback": "Button deals later; blinds post to the left.",
                         "betterChoiceId": "bb-two"
                       }
-                    },
-                    {
-                      "id": "empty-seat",
-                      "label": "Any other seat",
-                      "accessibilityText": "Any other seat",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "That seat does not post the big blind.",
-                        "betterChoiceId": "bb-two"
-                      }
                     }
                   ]
                 },
@@ -817,7 +807,7 @@
                   "stage": "explain",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Pair beats high card. Flush beats straight. Remember the ladder.",
+                  "accessibilityText": "Pair beats high card. Flush beats straight. Tap seats weakest to strongest.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -826,7 +816,7 @@
                     {
                       "id": "act-01-02-01-explain-ladder-media",
                       "kind": "dialogue",
-                      "text": "Pair beats high card. Flush beats straight. Remember the ladder."
+                      "text": "Pair beats high card. Flush beats straight. Tap seats weakest to strongest."
                     }
                   ],
                   "objectives": [
@@ -839,7 +829,7 @@
                   "stage": "guided",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Tap high card, then pair, then flush from weakest to strongest.",
+                  "accessibilityText": "Showdown — tap You (high card), Sam (pair), then Jo (flush).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -852,22 +842,22 @@
                   "prompt": "Tap weakest to strongest.",
                   "sequenceItems": [
                     {
-                      "id": "hr-high",
-                      "label": "High card"
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "hr-pair",
-                      "label": "One pair"
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "hr-flush",
-                      "label": "Flush"
+                      "id": "jo",
+                      "label": "Jo"
                     }
                   ],
                   "correctSequence": [
-                    "hr-high",
-                    "hr-pair",
-                    "hr-flush"
+                    "you",
+                    "sam",
+                    "jo"
                   ],
                   "sequenceGrading": {
                     "correct": {
@@ -884,9 +874,9 @@
                   "id": "act-01-02-01-scaffolded-spot",
                   "order": 3,
                   "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the hand category with ace-high clubs.",
+                  "renderer": "compare_rank",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Showdown — tap You (pair), Sam (straight), then Jo (flush).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -896,38 +886,36 @@
                   "objectives": [
                     "Recognize pairs, straights, and flushes"
                   ],
-                  "prompt": "Look at the board and your holes — tap what you made.",
-                  "choices": [
+                  "prompt": "Tap weakest to strongest.",
+                  "sequenceItems": [
                     {
-                      "id": "cat-flush",
-                      "label": "Flush",
-                      "accessibilityText": "Flush",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Ace plus four clubs on board make a flush."
-                      }
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "cat-pair",
-                      "label": "One pair",
-                      "accessibilityText": "One pair",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "You have five clubs — that is a flush, not a pair.",
-                        "betterChoiceId": "cat-flush"
-                      }
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "cat-straight",
-                      "label": "Straight",
-                      "accessibilityText": "Straight",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No five consecutive ranks here.",
-                        "betterChoiceId": "cat-flush"
-                      }
+                      "id": "jo",
+                      "label": "Jo"
                     }
-                  ]
+                  ],
+                  "correctSequence": [
+                    "you",
+                    "sam",
+                    "jo"
+                  ],
+                  "sequenceGrading": {
+                    "correct": {
+                      "grade": "recommended",
+                      "feedback": "Pair, then straight, then flush."
+                    },
+                    "incorrect": {
+                      "grade": "clear_mistake",
+                      "feedback": "Flush beats straight; straight beats pair."
+                    }
+                  }
                 },
                 {
                   "id": "act-01-02-01-unguided-compare",
@@ -935,7 +923,7 @@
                   "stage": "unguided",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Tap full house, then trips, then two pair.",
+                  "accessibilityText": "Showdown — tap You (full house), Sam (trips), then Jo (two pair).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -945,25 +933,25 @@
                   "objectives": [
                     "Compare two finished hands"
                   ],
-                  "prompt": "Pick strongest to weakest.",
+                  "prompt": "Tap highest to lowest.",
                   "sequenceItems": [
                     {
-                      "id": "fh",
-                      "label": "Full house"
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "trips",
-                      "label": "Three of a kind"
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "two",
-                      "label": "Two pair"
+                      "id": "jo",
+                      "label": "Jo"
                     }
                   ],
                   "correctSequence": [
-                    "fh",
-                    "trips",
-                    "two"
+                    "you",
+                    "sam",
+                    "jo"
                   ],
                   "sequenceGrading": {
                     "correct": {
@@ -980,9 +968,9 @@
                   "id": "act-01-02-01-checkpoint-winner",
                   "order": 5,
                   "stage": "checkpoint",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the winning hand: flush versus straight.",
+                  "renderer": "compare_rank",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Showdown — tap You (flush), Sam (straight), then Jo (high card).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -993,38 +981,36 @@
                     "Compare two finished hands",
                     "Order common hand ranks"
                   ],
-                  "prompt": "Showdown — tap who wins.",
-                  "choices": [
+                  "prompt": "Tap highest to lowest.",
+                  "sequenceItems": [
                     {
-                      "id": "you-win",
-                      "label": "You win with the flush",
-                      "accessibilityText": "You win with the flush",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Flush beats straight every time."
-                      }
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "they-win",
-                      "label": "They win with the straight",
-                      "accessibilityText": "They win with the straight",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Straight loses to flush.",
-                        "betterChoiceId": "you-win"
-                      }
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "split",
-                      "label": "Chop the pot",
-                      "accessibilityText": "Chop the pot",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Different categories do not chop.",
-                        "betterChoiceId": "you-win"
-                      }
+                      "id": "jo",
+                      "label": "Jo"
                     }
-                  ]
+                  ],
+                  "correctSequence": [
+                    "you",
+                    "sam",
+                    "jo"
+                  ],
+                  "sequenceGrading": {
+                    "correct": {
+                      "grade": "recommended",
+                      "feedback": "Flush beats straight; straight beats high card."
+                    },
+                    "incorrect": {
+                      "grade": "clear_mistake",
+                      "feedback": "Flush is strongest; high card is weakest."
+                    }
+                  }
                 }
               ]
             },
@@ -21791,11 +21777,6 @@
           "grade": "clear_mistake",
           "feedback": "Button deals later; blinds post to the left.",
           "betterChoiceId": "bb-two"
-        },
-        "empty-seat": {
-          "grade": "clear_mistake",
-          "feedback": "That seat does not post the big blind.",
-          "betterChoiceId": "bb-two"
         }
       }
     },
@@ -21873,9 +21854,9 @@
       ],
       "lifeLossEligible": false,
       "correctSequence": [
-        "hr-high",
-        "hr-pair",
-        "hr-flush"
+        "you",
+        "sam",
+        "jo"
       ],
       "sequenceGrading": {
         "correct": {
@@ -21891,27 +21872,26 @@
     "act-01-02-01-scaffolded-spot": {
       "activityId": "act-01-02-01-scaffolded-spot",
       "stage": "scaffolded",
-      "renderer": "select_identify",
+      "renderer": "compare_rank",
       "acceptedGrades": [
         "recommended",
         "strong",
         "reasonable"
       ],
       "lifeLossEligible": false,
-      "choiceGrading": {
-        "cat-flush": {
+      "correctSequence": [
+        "you",
+        "sam",
+        "jo"
+      ],
+      "sequenceGrading": {
+        "correct": {
           "grade": "recommended",
-          "feedback": "Ace plus four clubs on board make a flush."
+          "feedback": "Pair, then straight, then flush."
         },
-        "cat-pair": {
+        "incorrect": {
           "grade": "clear_mistake",
-          "feedback": "You have five clubs — that is a flush, not a pair.",
-          "betterChoiceId": "cat-flush"
-        },
-        "cat-straight": {
-          "grade": "clear_mistake",
-          "feedback": "No five consecutive ranks here.",
-          "betterChoiceId": "cat-flush"
+          "feedback": "Flush beats straight; straight beats pair."
         }
       }
     },
@@ -21926,9 +21906,9 @@
       ],
       "lifeLossEligible": true,
       "correctSequence": [
-        "fh",
-        "trips",
-        "two"
+        "you",
+        "sam",
+        "jo"
       ],
       "sequenceGrading": {
         "correct": {
@@ -21944,27 +21924,26 @@
     "act-01-02-01-checkpoint-winner": {
       "activityId": "act-01-02-01-checkpoint-winner",
       "stage": "checkpoint",
-      "renderer": "select_identify",
+      "renderer": "compare_rank",
       "acceptedGrades": [
         "recommended",
         "strong",
         "reasonable"
       ],
       "lifeLossEligible": true,
-      "choiceGrading": {
-        "you-win": {
+      "correctSequence": [
+        "you",
+        "sam",
+        "jo"
+      ],
+      "sequenceGrading": {
+        "correct": {
           "grade": "recommended",
-          "feedback": "Flush beats straight every time."
+          "feedback": "Flush beats straight; straight beats high card."
         },
-        "they-win": {
+        "incorrect": {
           "grade": "clear_mistake",
-          "feedback": "Straight loses to flush.",
-          "betterChoiceId": "you-win"
-        },
-        "split": {
-          "grade": "clear_mistake",
-          "feedback": "Different categories do not chop.",
-          "betterChoiceId": "you-win"
+          "feedback": "Flush is strongest; high card is weakest."
         }
       }
     },

@@ -59,6 +59,7 @@ class FeltTableView extends StatelessWidget {
     this.selectedHeroIndexes = const {},
     this.highlightHeroIndexes = const {},
     this.dimmedHeroIndexes = const {},
+    this.seatOrderBadges = const {},
     this.cueSeatIndex,
     this.features,
     this.heroStatus,
@@ -139,6 +140,9 @@ class FeltTableView extends StatelessWidget {
 
   /// Hero hole indexes faded as leftovers.
   final Set<int> dimmedHeroIndexes;
+
+  /// 1-based order badge drawn on a seat (showdown rank order).
+  final Map<int, int> seatOrderBadges;
 
   /// Seat index in the hand that a lesson cues with a ring and an arrow.
   final int? cueSeatIndex;
@@ -319,6 +323,21 @@ class FeltTableView extends StatelessWidget {
             child: _WinnerBadge(
               key: ValueKey('win-${player.id}-${game.handCount}'),
               label: game.isSplitPot ? 'SPLIT' : 'WINS',
+            ),
+          ),
+        );
+      }
+
+      final seatOrder = seatOrderBadges[slot.index];
+      if (seatOrder != null && !isWinner) {
+        decoLayer.add(
+          Positioned(
+            left: slot.pod.left,
+            top: badgeTop,
+            width: slot.pod.width,
+            child: _SeatOrderBadge(
+              key: ValueKey<String>('seat-order-${player.id}-$seatOrder'),
+              order: seatOrder,
             ),
           ),
         );
@@ -1298,6 +1317,38 @@ class _HeroStatusChip extends StatelessWidget {
             fontWeight: FontWeight.w800,
             letterSpacing: 0.4,
             color: turn ? AppColors.bgDark : AppColors.slate,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 1-based order badge under a seat during showdown ranking taps.
+class _SeatOrderBadge extends StatelessWidget {
+  const _SeatOrderBadge({super.key, required this.order});
+
+  final int order;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 22,
+        height: 22,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.gold,
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.bgDark, width: 1.2),
+        ),
+        child: Text(
+          '$order',
+          style: GoogleFonts.manrope(
+            color: AppColors.bgDark,
+            fontSize: 12,
+            fontWeight: FontWeight.w800,
+            height: 1,
           ),
         ),
       ),

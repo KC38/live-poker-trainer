@@ -115,6 +115,20 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.handLadder) {
+          final spot = handRanksShowdownSpot('act-01-02-01-explain-ladder');
+          if (spot != null) {
+            return LessonShowdownOrderExplainTable(
+              enabled: !locked,
+              showGuidance: showGuidance,
+              spot: spot,
+              onComplete: locked ? null : onFeltAcknowledge,
+              onMiss: () {
+                LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                  'Tap seats from weakest hand to strongest.',
+                );
+              },
+            );
+          }
           return LessonHandLadderExplainTable(
             enabled: !locked,
             showGuidance: showGuidance,
@@ -1504,7 +1518,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.positionLabels =>
       'Tap the button (BTN) — the latest seat.',
     CoachDialogueVisualKind.handLadder =>
-      'Tap each made hand from high card up to flush.',
+      'Tap seats from weakest hand to strongest.',
     CoachDialogueVisualKind.bestFive =>
       'Tap each playing card — only five of seven play.',
     CoachDialogueVisualKind.passiveActions => 'Tap Fold, Check, and Call.',

@@ -188,6 +188,7 @@ class LessonTableStage extends StatelessWidget {
     this.selectedHeroIndexes = const {},
     this.highlightHeroIndexes = const {},
     this.dimmedHeroIndexes = const {},
+    this.seatOrderBadges = const {},
     this.positionLabels = false,
     this.smallBlind = lessonSmallBlind,
     this.bigBlind = lessonBigBlind,
@@ -273,6 +274,9 @@ class LessonTableStage extends StatelessWidget {
   /// Hero hole indexes faded as leftovers.
   final Set<int> dimmedHeroIndexes;
 
+  /// 1-based order badge drawn on a seat during showdown ranking.
+  final Map<int, int> seatOrderBadges;
+
   /// Rename the six-max ring EP, HJ, CO, BTN, SB, BB.
   final bool positionLabels;
 
@@ -349,6 +353,7 @@ class LessonTableStage extends StatelessWidget {
             selectedHeroIndexes: selectedHeroIndexes,
             highlightHeroIndexes: highlightHeroIndexes,
             dimmedHeroIndexes: dimmedHeroIndexes,
+            seatOrderBadges: seatOrderBadges,
             cueSeatIndex: cueSeatIndex,
             onBoardTap: !enabled || onBoardTap == null || onBoardCardTap != null
                 ? null
@@ -896,6 +901,225 @@ TableFeatures get lessonHandRanksTableFeatures => const TableFeatures(
   boardSlots: false,
 );
 
+/// One Hand ranks showdown: shared board, face-up seats, tap order by strength.
+class LessonShowdownOrderSpot {
+  /// Creates a showdown ranking spot.
+  const LessonShowdownOrderSpot({
+    required this.boardCodes,
+    required this.heroCodes,
+    required this.villainHoleCodes,
+    required this.seatIds,
+    required this.correctOrder,
+  });
+
+  final List<String> boardCodes;
+  final List<String> heroCodes;
+
+  /// Face-up holes for Sam, Jo, … in seat order.
+  final List<List<String>> villainHoleCodes;
+
+  /// Sequence item id per seat index (0 = hero).
+  final List<String> seatIds;
+
+  /// Correct tap order of [seatIds].
+  final List<String> correctOrder;
+}
+
+/// Shared board spots for Hand ranks showdown ordering.
+LessonShowdownOrderSpot? handRanksShowdownSpot(String activityId) {
+  switch (activityId) {
+    case 'act-01-02-01-explain-ladder':
+    case 'act-01-02-01-guided-ladder':
+      // Weak → strong: You high card, Sam pair, Jo flush.
+      return const LessonShowdownOrderSpot(
+        boardCodes: ['9c', '7c', '3c', '2h', '5d'],
+        heroCodes: ['Ah', 'Kd'],
+        villainHoleCodes: [
+          ['9h', '8s'],
+          ['Ac', 'Kc'],
+        ],
+        seatIds: ['you', 'sam', 'jo'],
+        correctOrder: ['you', 'sam', 'jo'],
+      );
+    case 'act-01-02-01-scaffolded-spot':
+      // Weak → strong: You pair, Sam straight, Jo flush.
+      return const LessonShowdownOrderSpot(
+        boardCodes: ['Tc', '8c', '6d', '5h', '2c'],
+        heroCodes: ['Ah', 'Td'],
+        villainHoleCodes: [
+          ['9s', '7d'],
+          ['Ac', 'Kc'],
+        ],
+        seatIds: ['you', 'sam', 'jo'],
+        correctOrder: ['you', 'sam', 'jo'],
+      );
+    case 'act-01-02-01-unguided-compare':
+      // Strong → weak: You full house, Sam trips, Jo two pair.
+      return const LessonShowdownOrderSpot(
+        boardCodes: ['Qh', 'Qd', '9c', '4s', '2d'],
+        heroCodes: ['Qs', '9h'],
+        villainHoleCodes: [
+          ['Qc', 'Jh'],
+          ['9d', '4h'],
+        ],
+        seatIds: ['you', 'sam', 'jo'],
+        correctOrder: ['you', 'sam', 'jo'],
+      );
+    case 'act-01-02-01-checkpoint-winner':
+      // Strong → weak: You flush, Sam straight, Jo high card.
+      return const LessonShowdownOrderSpot(
+        boardCodes: ['9c', '8h', '7d', '4c', '2c'],
+        heroCodes: ['Ac', 'Kc'],
+        villainHoleCodes: [
+          ['6s', '5h'],
+          ['Ah', 'Kd'],
+        ],
+        seatIds: ['you', 'sam', 'jo'],
+        correctOrder: ['you', 'sam', 'jo'],
+      );
+    default:
+      return null;
+  }
+}
+
+/// Whether this activity orders face-up showdown seats by hand strength.
+bool isShowdownOrderSequenceActivity(String activityId) {
+  return handRanksShowdownSpot(activityId) != null &&
+      activityId != 'act-01-02-01-explain-ladder';
+}
+
+/// Full table: tap face-up showdown seats in hand-strength order.
+class LessonShowdownOrderTable extends StatelessWidget {
+  /// Creates the showdown order stage.
+  const LessonShowdownOrderTable({
+    super.key,
+    required this.spot,
+    required this.orderedIds,
+    required this.onPick,
+    this.enabled = true,
+    this.showGuidance = true,
+    this.strictOrder = false,
+    this.onMiss,
+  });
+
+  final LessonShowdownOrderSpot spot;
+  final List<String> orderedIds;
+  final ValueChanged<String> onPick;
+  final bool enabled;
+  final bool showGuidance;
+
+  /// When true, only the next correct seat is accepted; others call [onMiss].
+  final bool strictOrder;
+  final VoidCallback? onMiss;
+
+  int? _seatIndexForId(String id) {
+    for (var i = 0; i < spot.seatIds.length; i++) {
+      if (spot.seatIds[i] == id) return i;
+    }
+    return null;
+  }
+
+  String? _idForSeatIndex(int index) {
+    if (index < 0 || index >= spot.seatIds.length) return null;
+    return spot.seatIds[index];
+  }
+
+  void _tap(int seatIndex) {
+    if (!enabled) return;
+    final id = _idForSeatIndex(seatIndex);
+    if (id == null || orderedIds.contains(id)) return;
+    if (strictOrder) {
+      final nextIndex = orderedIds.length;
+      if (nextIndex >= spot.correctOrder.length ||
+          id != spot.correctOrder[nextIndex]) {
+        onMiss?.call();
+        return;
+      }
+    }
+    onPick(id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final badges = <int, int>{};
+    for (var order = 0; order < orderedIds.length; order++) {
+      final seat = _seatIndexForId(orderedIds[order]);
+      if (seat != null) badges[seat] = order + 1;
+    }
+    int? nextSeat;
+    if (showGuidance &&
+        enabled &&
+        orderedIds.length < spot.correctOrder.length) {
+      nextSeat = _seatIndexForId(spot.correctOrder[orderedIds.length]);
+    }
+    return LessonTableStage(
+      key: const ValueKey<String>('showdown-order-felt'),
+      heroCodes: spot.heroCodes,
+      boardCodes: spot.boardCodes,
+      villainHoleCodes: spot.villainHoleCodes,
+      villainCount: spot.villainHoleCodes.length,
+      heroFaceUp: true,
+      enabled: enabled,
+      features: lessonHandRanksTableFeatures,
+      seatOrderBadges: badges,
+      cue: nextSeat == 0 ? LessonTableCue.hero : LessonTableCue.none,
+      cueSeatIndex: nextSeat != null && nextSeat > 0 ? nextSeat : null,
+      onSeatIndexTap: _tap,
+    );
+  }
+}
+
+/// Explain: tap showdown seats weak → strong; a wrong seat is a miss.
+class LessonShowdownOrderExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonShowdownOrderExplainTable({
+    super.key,
+    required this.spot,
+    required this.onComplete,
+    this.onMiss,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final LessonShowdownOrderSpot spot;
+  final VoidCallback? onComplete;
+  final VoidCallback? onMiss;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonShowdownOrderExplainTable> createState() =>
+      _LessonShowdownOrderExplainTableState();
+}
+
+class _LessonShowdownOrderExplainTableState
+    extends State<LessonShowdownOrderExplainTable> {
+  final List<String> _ordered = <String>[];
+
+  void _pick(String id) {
+    if (!widget.enabled || widget.onComplete == null) return;
+    setState(() => _ordered.add(id));
+    if (_ordered.length >= widget.spot.correctOrder.length) {
+      widget.onComplete!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching =
+        widget.enabled && _ordered.length < widget.spot.correctOrder.length;
+    return LessonShowdownOrderTable(
+      spot: widget.spot,
+      orderedIds: _ordered,
+      enabled: teaching,
+      showGuidance: widget.showGuidance,
+      strictOrder: true,
+      onMiss: widget.onMiss,
+      onPick: _pick,
+    );
+  }
+}
+
 /// Full table showing one made hand (two holes + board).
 class LessonMadeHandTable extends StatelessWidget {
   /// Creates the made-hand stage.
@@ -934,6 +1158,9 @@ class LessonMadeHandTable extends StatelessWidget {
 }
 
 /// Explain ladder: tap through made hands weak → strong on the full table.
+///
+/// Prefer [LessonShowdownOrderExplainTable] for Hand ranks. Kept for tests and
+/// any residual ladder demos.
 class LessonHandLadderExplainTable extends StatefulWidget {
   /// Creates the ladder explain stage.
   const LessonHandLadderExplainTable({

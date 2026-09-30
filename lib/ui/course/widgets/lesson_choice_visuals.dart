@@ -90,14 +90,6 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
           activity.id == 'act-02-01-02-checkpoint-full')) {
     return SelectIdentifyPresentation.tableRegionTap;
   }
-  if (activity.id == 'act-01-02-01-scaffolded-spot') {
-    // Hand ranks spot: tap Flush / One pair / Straight on densified felt.
-    return SelectIdentifyPresentation.tableRegionTap;
-  }
-  if (activity.id == 'act-01-02-01-checkpoint-winner') {
-    // Hand ranks showdown: tap You / Them / Chop on densified felt.
-    return SelectIdentifyPresentation.tableRegionTap;
-  }
   if (activity.id == 'act-01-02-02-scaffolded-kicker') {
     // Kicker showdown: tap You / Them / Chop on densified felt.
     return SelectIdentifyPresentation.tableRegionTap;
