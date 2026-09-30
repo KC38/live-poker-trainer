@@ -4,6 +4,7 @@ library;
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/engine/deck_evaluator.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
@@ -129,6 +130,53 @@ void main() {
     for (final board in boards) {
       expect(board.map((c) => c[c.length - 1]).toList(), ['h', 'd', 'c', 's']);
       expect(board.map((c) => c.substring(0, c.length - 1)).toSet().length, 4);
+    }
+  });
+
+  test('showdown order deals vary cards but keep category ladder', () {
+    const cases = <String, List<String>>{
+      'act-01-02-01-unguided-compare': [
+        'Full House',
+        'Three of a Kind',
+        'Two Pair',
+      ],
+      'act-01-02-01-checkpoint-winner': ['Flush', 'Straight', 'High Card'],
+      'act-01-02-01-explain-ladder': ['High Card', 'One Pair', 'Flush'],
+      'act-01-02-01-scaffolded-spot': ['One Pair', 'Straight', 'Flush'],
+    };
+
+    for (final entry in cases.entries) {
+      final deals = [
+        for (var seed = 0; seed < 12; seed++)
+          dealShowdownOrderCards(entry.key, random: Random(seed))!,
+      ];
+      expect(
+        deals.map((d) => d.boardCodes.join(' ')).toSet().length,
+        greaterThan(1),
+        reason: entry.key,
+      );
+      for (final deal in deals) {
+        expect(deal.correctOrder, ['you', 'sam', 'jo'], reason: entry.key);
+        String name(List<String> holes) {
+          final cards = [
+            for (final code in [...holes, ...deal.boardCodes])
+              CardModel.fromCode(code),
+          ];
+          return DeckEvaluator.evaluate7Cards(cards).rankName;
+        }
+
+        expect(name(deal.heroCodes), entry.value[0], reason: entry.key);
+        expect(
+          name(deal.villainHoleCodes[0]),
+          entry.value[1],
+          reason: entry.key,
+        );
+        expect(
+          name(deal.villainHoleCodes[1]),
+          entry.value[2],
+          reason: entry.key,
+        );
+      }
     }
   });
 }

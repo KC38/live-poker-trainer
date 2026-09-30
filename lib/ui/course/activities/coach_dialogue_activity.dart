@@ -115,12 +115,14 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.handLadder) {
-          final spot = handRanksShowdownSpot('act-01-02-01-explain-ladder');
-          if (spot != null) {
+          if (handRanksShowdownSpot('act-01-02-01-explain-ladder') != null) {
             return LessonShowdownOrderExplainTable(
+              key: ValueKey<String>(
+                'act-01-02-01-explain-ladder-${controller.bindGeneration}',
+              ),
+              activityId: 'act-01-02-01-explain-ladder',
               enabled: !locked,
               showGuidance: showGuidance,
-              spot: spot,
               onComplete: locked ? null : onFeltAcknowledge,
               onMiss: () {
                 LessonFrameScope.maybeOf(context)?.onLocalMiss(
