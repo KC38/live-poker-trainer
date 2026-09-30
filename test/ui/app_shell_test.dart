@@ -29,6 +29,7 @@ import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/screens/profile_screen.dart';
 import 'package:live_poker_trainer/ui/screens/settings_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/shell_bottom_nav.dart';
 
 class _FixedHomeController extends CourseHomeController {
   @override
@@ -87,8 +88,8 @@ class _TrackingController extends GameController {
   }
 }
 
-Finder _navLabel(String label) =>
-    find.descendant(of: find.byType(NavigationBar), matching: find.text(label));
+Finder _navTab(String label) => find.bySemanticsLabel(label);
+
 
 List<Override> _shellOverrides() {
   final users = _FakeUserRepository();
@@ -136,16 +137,16 @@ Future<void> _pumpShell(
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('bottom navigation has exactly three destinations', (
+  testWidgets('bottom navigation has exactly three illustrated destinations', (
     tester,
   ) async {
     await _pumpShell(tester);
 
-    expect(find.byType(NavigationBar), findsOneWidget);
-    expect(find.byType(NavigationDestination), findsNWidgets(3));
-    expect(_navLabel('Home'), findsOneWidget);
-    expect(_navLabel('Live Training'), findsOneWidget);
-    expect(_navLabel('Profile'), findsOneWidget);
+    expect(find.byType(ShellBottomNav), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
+    expect(_navTab('Home'), findsOneWidget);
+    expect(_navTab('Live Training'), findsOneWidget);
+    expect(_navTab('Profile'), findsOneWidget);
     // IndexedStack keeps inactive tabs offstage; include them in the search.
     expect(find.byType(HomeScreen, skipOffstage: false), findsOneWidget);
     expect(
@@ -155,14 +156,14 @@ void main() {
     expect(find.byType(ProfileScreen, skipOffstage: false), findsOneWidget);
   });
 
-  testWidgets('small-phone layout still shows all three tab labels', (
+  testWidgets('small-phone layout still exposes all three tab semantics', (
     tester,
   ) async {
     await _pumpShell(tester, size: const Size(320, 568));
 
-    expect(_navLabel('Home'), findsOneWidget);
-    expect(_navLabel('Live Training'), findsOneWidget);
-    expect(_navLabel('Profile'), findsOneWidget);
+    expect(_navTab('Home'), findsOneWidget);
+    expect(_navTab('Live Training'), findsOneWidget);
+    expect(_navTab('Profile'), findsOneWidget);
   });
 
   testWidgets('switching tabs preserves Live Training setup expansion', (
@@ -170,7 +171,7 @@ void main() {
   ) async {
     await _pumpShell(tester);
 
-    await tester.tap(_navLabel('Live Training'));
+    await tester.tap(_navTab('Live Training'));
     await tester.pumpAndSettle();
 
     expect(find.text('Start training'), findsOneWidget);
@@ -178,11 +179,11 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Seats'), findsOneWidget);
 
-    await tester.tap(_navLabel('Home'));
+    await tester.tap(_navTab('Home'));
     await tester.pumpAndSettle();
     expect(find.textContaining('Your live cash path'), findsWidgets);
 
-    await tester.tap(_navLabel('Live Training'));
+    await tester.tap(_navTab('Live Training'));
     await tester.pumpAndSettle();
     // IndexedStack kept the expanded setup section mounted.
     expect(find.text('Seats'), findsOneWidget);
@@ -202,7 +203,7 @@ void main() {
       ],
     );
 
-    await tester.tap(_navLabel('Live Training'));
+    await tester.tap(_navTab('Live Training'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Start training'));
@@ -225,7 +226,7 @@ void main() {
   ) async {
     await _pumpShell(tester, size: const Size(390, 1600));
 
-    await tester.tap(_navLabel('Profile'));
+    await tester.tap(_navTab('Profile'));
     await tester.pumpAndSettle();
 
     expect(find.byType(ProfileScreen), findsOneWidget);

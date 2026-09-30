@@ -67,12 +67,9 @@ void main() {
     await _settle(tester);
 
     // Shell opens on Home; Live Training owns the simulator launcher.
-    final liveTab = find.descendant(
-      of: find.byType(NavigationBar),
-      matching: find.text('Live Training'),
-    );
-    expect(liveTab, findsOneWidget);
-    await tester.tap(liveTab);
+    final liveTab = find.bySemanticsLabel('Live Training');
+    expect(liveTab, findsWidgets);
+    await tester.tap(liveTab.first);
     await _settle(tester);
     expect(find.text('Start training'), findsOneWidget);
     await _tapText(tester, 'Start training');
