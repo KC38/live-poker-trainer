@@ -140,3 +140,47 @@ describe("grantHearts and practice", () => {
     expect(AD_HEART_DAILY_MAX).toBe(5);
   });
 });
+
+describe("openAttemptRefFromProfile", () => {
+  it("returns null without a resume attempt id", async () => {
+    const {openAttemptRefFromProfile} = await import("./course_hearts");
+    const db = {
+      collection: () => ({
+        doc: () => ({
+          collection: () => ({
+            doc: (id: string) => ({path: `users/u/courseAttempts/${id}`}),
+          }),
+        }),
+      }),
+    } as unknown as import("firebase-admin/firestore").Firestore;
+    expect(openAttemptRefFromProfile({
+      db,
+      uid: "u",
+      profileData: {},
+    })).toBeNull();
+    expect(openAttemptRefFromProfile({
+      db,
+      uid: "u",
+      profileData: {resume: {attemptId: "  "}},
+    })).toBeNull();
+  });
+
+  it("points at the resume attempt document", async () => {
+    const {openAttemptRefFromProfile} = await import("./course_hearts");
+    const db = {
+      collection: () => ({
+        doc: () => ({
+          collection: () => ({
+            doc: (id: string) => ({id, path: `users/u/courseAttempts/${id}`}),
+          }),
+        }),
+      }),
+    } as unknown as import("firebase-admin/firestore").Firestore;
+    const ref = openAttemptRefFromProfile({
+      db,
+      uid: "u",
+      profileData: {resume: {attemptId: "attempt-9"}},
+    });
+    expect(ref?.id).toBe("attempt-9");
+  });
+});
