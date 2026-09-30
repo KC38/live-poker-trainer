@@ -1050,8 +1050,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final controller = _activityController!;
     final activity = controller.activity;
     final attempt = _attempt!;
-    final hint =
-        activity.hintMedia.isNotEmpty ? activity.hintMedia.first : null;
+    final hasHint = _frameCanHint(activity);
 
     final largeText = MediaQuery.textScalerOf(context).scale(1) > 1.15;
     return Padding(
@@ -1065,9 +1064,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             livesRemaining: attempt.livesRemaining,
             livesMax: attempt.livesMax,
             acceptedStreak: _acceptedStreak,
-            hintEnabled: hint != null && !controller.hintUsed,
+            hintEnabled: hasHint && !controller.hintUsed,
             onHint:
-                hint == null
+                !hasHint
                     ? null
                     : () {
                       if (controller.hintUsed) return;
@@ -1139,11 +1138,17 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         ),
                       ),
                     );
+                    final hintText =
+                        activity.hintMedia.isNotEmpty
+                            ? activity.hintMedia.first.text
+                            : lessonFrameHintFallback(activity);
                     final hintLine =
-                        controller.hintVisible && hint != null
+                        controller.hintVisible &&
+                                hintText != null &&
+                                hintText.trim().isNotEmpty
                             ? <Widget>[
                               const SizedBox(height: 10),
-                              RexCoachLine(text: hint!.text, label: 'Hint'),
+                              RexCoachLine(text: hintText, label: 'Hint'),
                             ]
                             : const <Widget>[];
                     if (!fillFelt) {
