@@ -176,7 +176,9 @@ void main() {
     expect(find.text('I already have an account'), findsOneWidget);
   });
 
-  testWidgets('experience choices cover all bands', (tester) async {
+  testWidgets('experience choices cover all bands with leading icons', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
@@ -188,9 +190,15 @@ void main() {
     for (final band in ExperienceBand.values) {
       expect(find.text(band.label), findsOneWidget);
     }
+    expect(find.byIcon(Icons.person_outline), findsOneWidget);
+    expect(find.byIcon(Icons.home_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.casino_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.style_outlined), findsOneWidget);
   });
 
-  testWidgets('daily goal choices render', (tester) async {
+  testWidgets('daily goal choices render with intensity labels', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
@@ -201,7 +209,12 @@ void main() {
     );
     for (final minutes in kDailyGoalChoices) {
       expect(find.text('$minutes minutes'), findsOneWidget);
+      expect(find.text(dailyGoalIntensityLabel(minutes)), findsOneWidget);
     }
+    expect(find.text('Casual'), findsOneWidget);
+    expect(find.text('Regular'), findsOneWidget);
+    expect(find.text('Serious'), findsOneWidget);
+    expect(find.text('Intense'), findsOneWidget);
   });
 
   testWidgets('new to poker Meet Rex says coach, not live-reg', (tester) async {

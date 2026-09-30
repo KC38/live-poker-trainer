@@ -121,6 +121,7 @@ class ExperienceChoiceScreen extends ConsumerWidget {
           for (final band in ExperienceBand.values) ...[
             _ChoiceTile(
               label: band.label,
+              icon: _experienceIcon(band),
               selected: selected == band,
               onTap: () async {
                 unawaited(
@@ -191,6 +192,7 @@ class DailyGoalScreen extends ConsumerWidget {
           for (final minutes in kDailyGoalChoices) ...[
             _ChoiceTile(
               label: '$minutes minutes',
+              trailingLabel: dailyGoalIntensityLabel(minutes),
               selected: selectedMinutes == minutes,
               onTap: () async {
                 unawaited(
@@ -635,19 +637,35 @@ class _OnboardingScaffold extends StatelessWidget {
   }
 }
 
+/// Leading icon for each experience band (Duolingo-style choice row).
+IconData _experienceIcon(ExperienceBand band) {
+  return switch (band) {
+    ExperienceBand.neverPlayed => Icons.person_outline,
+    ExperienceBand.rulesKnown => Icons.home_outlined,
+    ExperienceBand.firstCasino => Icons.casino_outlined,
+    ExperienceBand.regularLive => Icons.style_outlined,
+  };
+}
+
 class _ChoiceTile extends StatelessWidget {
   const _ChoiceTile({
     required this.label,
     required this.onTap,
     this.selected = false,
+    this.icon,
+    this.trailingLabel,
   });
 
   final String label;
   final VoidCallback onTap;
   final bool selected;
+  final IconData? icon;
+  final String? trailingLabel;
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = selected ? AppColors.gold : AppColors.slate;
+    final trailingColor = selected ? AppColors.cream : AppColors.slate;
     return Material(
       color: AppColors.bgElevated,
       shape: RoundedRectangleBorder(
@@ -662,13 +680,32 @@ class _ChoiceTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-          child: Text(
-            label,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
+          child: Row(
+            children: [
+              if (icon != null) ...[
+                Icon(icon, size: 26, color: iconColor),
+                const SizedBox(width: 14),
+              ],
+              Expanded(
+                child: Text(
+                  label,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.cream,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              if (trailingLabel != null && trailingLabel!.isNotEmpty)
+                Text(
+                  trailingLabel!,
+                  style: GoogleFonts.manrope(
+                    color: trailingColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+            ],
           ),
         ),
       ),
