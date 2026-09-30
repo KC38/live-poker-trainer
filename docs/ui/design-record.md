@@ -220,6 +220,9 @@ table.
 Live table habits uses the full poker table for every step: explain taps
 Watch, Say, Cover, and Wait under the felt.
 
+Full-ring baseline uses the full poker table for every step: explain taps
+Nine, Same, and Position under the felt on a nine-max ring.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -431,9 +434,9 @@ under the felt, and each response sits face up on that table. Effective stacks u
 same frame and the full table: explain taps Chips→BB, Shorter, and Depth
 under the felt. Live table habits uses the same frame and the full
 table: explain taps Watch, Say, Cover, and Wait under the felt.
-Full-ring baseline hand uses the
-same frame: nine seats, the same rules, and position stay in the
-stage, and each decision sits face up on the full table. Baseline
+Full-ring baseline hand uses the same frame and the full table:
+explain taps Nine, Same, and Position under the felt on a nine-max
+ring, and each decision sits face up on that table. Baseline
 jump check uses the same frame: the seat map and the starting hand
 sit on the full table, the open and the 3-bet use that table, and
 the stack check stays a list. Read the table first uses the same
