@@ -372,6 +372,8 @@ Integrate type, board, line, and sizing uses the full poker table for every step
 
 Write your default strategy book uses the full poker table for every step: explain taps Leak, Book, and Review under the felt.
 
+Capstone: single-raised pot uses the full poker table for every step: explain taps Plan, Update, and Finish under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -723,9 +725,7 @@ advantage, cap, polar, TAG, and LAG checks stay lists. Carry a preflop plan onto
 continue and brick spots sit face up on the full table. Compose river value and bluffs uses the same frame and the full table: explain taps Value, Bluff, and Hold under the felt, the blocker, empty, and rule checks stay lists, and the
 top-set value spot sits face up on the full table. Change plans by pot type uses the same frame and the full table: explain taps Limped, SRP, and 3-4bet under the felt, and the pot-type quizzes stay lists. Switch gears between HU and multiway uses the same frame and the full table: explain taps Fewer, Thicker, and Widen under the felt, and the player-count quizzes stay lists. Rewrite plans when stacks change uses the same frame and the full table: explain taps Short, Deep, and Effective under the felt, and the depth quizzes stay lists. Replay the same hand versus each type uses the same frame and the full table: explain taps Cards, Models, and Cite under the felt, the no-evidence check stays a list, and the
 station, TAG, and LAG spots sit face up on the full table. Integrate type, board, line, and sizing uses the same frame and the full table: explain taps Type, Board, Line, and Size under the felt, the integration check stays a list, and
-the maniac, nit, and TAG spots sit face up on the full table. Write your default strategy book uses the same frame and the full table: explain taps Leak, Book, and Review under the felt, and the book quizzes stay lists. Capstone:
-single-raised pot uses the same frame: plan, update, and finish stay
-in the stage, and the three streets sit face up on the full table.
+the maniac, nit, and TAG spots sit face up on the full table. Write your default strategy book uses the same frame and the full table: explain taps Leak, Book, and Review under the felt, and the book quizzes stay lists. Capstone: single-raised pot uses the same frame and the full table: explain taps Plan, Update, and Finish under the felt, and the three streets sit face up on the full table.
 Capstone: 3-bet pot uses the same frame: SPR, turn, and close stay in
 the stage, and the three streets sit face up on the full table.
 Capstone: multiway deep uses the same frame: nuts, deep, and no-bluff
