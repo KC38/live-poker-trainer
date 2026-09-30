@@ -1,6 +1,100 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+/// 3-bet/4-bet SPR explain: 3BET / 4BET / DEPTH under the full poker table.
+class LessonThreeBetFourBetSprExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonThreeBetFourBetSprExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonThreeBetFourBetSprExplainTable> createState() =>
+      _LessonThreeBetFourBetSprExplainTableState();
+}
+
+class _LessonThreeBetFourBetSprExplainTableState
+    extends State<LessonThreeBetFourBetSprExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ThreeBetFourBetSprDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('threebet-fourbet-spr-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < ThreeBetFourBetSprDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _SprSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        ThreeBetFourBetSprDemo.points[i].label,
+                      ) &&
+                      ThreeBetFourBetSprDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _SprTile(
+                    label: ThreeBetFourBetSprDemo.points[i].label,
+                    caption: ThreeBetFourBetSprDemo.points[i].caption,
+                    color: ThreeBetFourBetSprDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      ThreeBetFourBetSprDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  ThreeBetFourBetSprDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
 
 /// 3BET / 4BET / DEPTH tiles for 3-bet/4-bet SPR explain demos.
 class ThreeBetFourBetSprDemo extends StatefulWidget {

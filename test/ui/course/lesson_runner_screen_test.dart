@@ -3299,6 +3299,8 @@ void main() {
     expect(find.textContaining('Tap 3-Bet'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('threebet-fourbet-spr-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('3BET'), findsOneWidget);
     expect(find.text('4BET'), findsOneWidget);
     expect(find.text('DEPTH'), findsOneWidget);
