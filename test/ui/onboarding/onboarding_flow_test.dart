@@ -283,14 +283,19 @@ void main() {
     await tapLabel(tester, '10 minutes');
     await tapContinue(tester);
 
-    expect(find.text('Meet Rex'), findsOneWidget);
     expect(find.text('Your coach'), findsOneWidget);
     expect(find.textContaining('live-reg'), findsNothing);
+    expect(find.text('Meet Rex'), findsNothing);
     expect(
       find.text(
         'One short sentence at a time. No lectures — just the next decision.',
       ),
-      findsOneWidget,
+      findsNothing,
+    );
+    expect(find.byType(LinearProgressIndicator), findsOneWidget);
+    expect(
+      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
+      3 / kOnboardingProgressSteps,
     );
   });
 
@@ -326,7 +331,7 @@ void main() {
       find.text(
         'One short sentence at a time. No lectures — just the next decision.',
       ),
-      findsOneWidget,
+      findsNothing,
     );
   });
 
@@ -353,56 +358,103 @@ void main() {
     );
     expect(find.text('Step 1 of 4'), findsNothing);
     expect(find.byTooltip('Back'), findsNothing);
+    expect(find.byType(LinearProgressIndicator), findsNothing);
     expect(find.byType(RexMascot), findsOneWidget);
 
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
-    expect(find.text('Your experience'), findsOneWidget);
+    expect(find.text('Where are you starting?'), findsOneWidget);
+    expect(find.text('Your experience'), findsNothing);
+    expect(
+      find.textContaining('We use this to recommend'),
+      findsNothing,
+    );
     expect(find.text('Step 2 of 4'), findsNothing);
     expect(find.byTooltip('Back'), findsOneWidget);
     expect(find.bySemanticsLabel('Back'), findsOneWidget);
+    expect(
+      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
+      1 / kOnboardingProgressSteps,
+    );
 
     await tester.tap(find.bySemanticsLabel('Back'));
     await tester.pumpAndSettle();
     expect(find.text('Get started'), findsOneWidget);
     expect(find.text('I already have an account'), findsOneWidget);
-    expect(find.text('Your experience'), findsNothing);
+    expect(find.text('Where are you starting?'), findsNothing);
 
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
-    expect(find.text('Your experience'), findsOneWidget);
+    expect(find.text('Where are you starting?'), findsOneWidget);
 
     await tester.tap(find.text('New to poker'));
     await tester.pumpAndSettle();
-    expect(find.text('Daily goal'), findsNothing);
+    expect(find.text('How much time per day?'), findsNothing);
     expect(find.byType(RexMascot), findsWidgets);
     expect(find.text('Where are you starting?'), findsOneWidget);
     await tapContinue(tester);
-    expect(find.text('Daily goal'), findsOneWidget);
-    expect(find.text('Step 3 of 4'), findsNothing);
     expect(find.text('How much time per day?'), findsOneWidget);
+    expect(find.text('Daily goal'), findsNothing);
+    expect(
+      find.textContaining('A small daily habit'),
+      findsNothing,
+    );
+    expect(find.text('Step 3 of 4'), findsNothing);
+    expect(
+      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
+      2 / kOnboardingProgressSteps,
+    );
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
-    expect(find.text('Your experience'), findsOneWidget);
+    expect(find.text('Where are you starting?'), findsOneWidget);
     expect(find.text('New to poker'), findsOneWidget);
 
     await tapLabel(tester, 'Know the rules / home games');
-    expect(find.text('Daily goal'), findsNothing);
+    expect(find.text('How much time per day?'), findsNothing);
     await tapContinue(tester);
-    expect(find.text('Daily goal'), findsOneWidget);
+    expect(find.text('How much time per day?'), findsOneWidget);
 
     await tapLabel(tester, '10 minutes');
-    expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('Your live-reg coach'), findsNothing);
     await tapContinue(tester);
-    expect(find.text('Meet Rex'), findsOneWidget);
+    expect(find.text('Your live-reg coach'), findsOneWidget);
+    expect(find.text('Meet Rex'), findsNothing);
     expect(find.text('Step 4 of 4'), findsNothing);
+    expect(
+      tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
+      3 / kOnboardingProgressSteps,
+    );
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
-    expect(find.text('Daily goal'), findsOneWidget);
-    expect(find.text('Meet Rex'), findsNothing);
+    expect(find.text('How much time per day?'), findsOneWidget);
+    expect(find.text('Your live-reg coach'), findsNothing);
     expect(find.text('Home'), findsNothing);
+  });
+
+  testWidgets('experience screen keeps the coach bubble without helper copy', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const ExperienceChoiceScreen(),
+        ),
+      ),
+    );
+    expect(find.text('Where are you starting?'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.text('Your experience'), findsNothing);
+    expect(
+      find.textContaining('never unlocks content alone'),
+      findsNothing,
+    );
+    expect(
+      find.bySemanticsLabel('Onboarding progress 25 percent'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('your start preview does not ask for a tap on this screen', (
@@ -566,7 +618,6 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Nice work'), findsOneWidget);
     expect(find.text('Your two cards'), findsOneWidget);
     expect(find.text('+75 XP'), findsOneWidget);
     expect(find.text('streak 1'), findsOneWidget);
