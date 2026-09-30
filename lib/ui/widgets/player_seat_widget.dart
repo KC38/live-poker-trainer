@@ -167,30 +167,52 @@ class PlayerSeatWidget extends StatelessWidget {
                     player.holeCards.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 2),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        for (final card in player.holeCards)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 1),
-                            child: MiniCard(
-                              card: card,
-                              size: MiniCardSize.tiny,
+                    // Hero footprint can exceed a compact seat; scale the pair
+                    // to the seat width instead of overflowing the row.
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (final card in player.holeCards)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 1,
+                              ),
+                              child: MiniCard(
+                                card: card,
+                                // Hero holes must read at arm's length — match
+                                // the rail / board footprint, not villain tiny.
+                                size: player.isHero
+                                    ? MiniCardSize.hero
+                                    : MiniCardSize.tiny,
+                              ),
                             ),
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                 else if (showHoleBacks)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 2),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CardBack(size: MiniCardSize.tiny),
-                        SizedBox(width: 2),
-                        CardBack(size: MiniCardSize.tiny),
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CardBack(
+                            size: player.isHero
+                                ? MiniCardSize.hero
+                                : MiniCardSize.tiny,
+                          ),
+                          SizedBox(width: player.isHero ? 4 : 2),
+                          CardBack(
+                            size: player.isHero
+                                ? MiniCardSize.hero
+                                : MiniCardSize.tiny,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
               ],
