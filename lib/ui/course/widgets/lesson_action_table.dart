@@ -6862,6 +6862,97 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
   }
 }
 
+/// SPR-depth explain: SPR / LOW / HIGH under the full poker table.
+class LessonSprDepthExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonSprDepthExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonSprDepthExplainTable> createState() =>
+      _LessonSprDepthExplainTableState();
+}
+
+class _LessonSprDepthExplainTableState
+    extends State<LessonSprDepthExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= SprDepthDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('spr-depth-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+              pot: true,
+              stacks: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < SprDepthDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(SprDepthDemo.points[i].label) &&
+                      SprDepthDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: SprDepthDemo.points[i].label,
+                    caption: SprDepthDemo.points[i].caption,
+                    color: SprDepthDemo.points[i].color,
+                    densify: false,
+                    selected:
+                        _tapped.contains(SprDepthDemo.points[i].label),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(SprDepthDemo.points[i].label)
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// SPR / low / high tiles for stack-to-pot explain demos.
 class SprDepthDemo extends StatefulWidget {
   /// Creates the demo.
