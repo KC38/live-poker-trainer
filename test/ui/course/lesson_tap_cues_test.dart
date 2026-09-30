@@ -188,7 +188,10 @@ void main() {
       find.byKey(const ValueKey<String>('lesson-table-stage')),
       findsOneWidget,
     );
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
+    // One arrow above each face-up hole card (not a centered pair).
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(2));
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsOneWidget);
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(2));
     expect(find.byKey(const ValueKey<String>('cue-pulse')), findsWidgets);
     controller.dispose();
@@ -249,7 +252,7 @@ void main() {
 
     controller.revealHint();
     await tester.pump();
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(2));
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(2));
     expect(find.byType(CuePulse), findsWidgets);
     controller.dispose();

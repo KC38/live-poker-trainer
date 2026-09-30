@@ -90,6 +90,72 @@ void main() {
     expect(ack, 1);
   });
 
+  testWidgets('explain cues the next hero card, not the hole-card center', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-02-02-explain-five',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Only five of seven cards play.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'You use five cards. Two are leftovers.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(
+      _frame(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () {},
+        ),
+      ),
+    );
+    await tester.pump();
+
+    // First playing card is Ah (hero index 0). Arrow sits on that card.
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
+
+    final arrow = tester.getCenter(
+      find.byKey(const ValueKey<String>('hero-cue-arrow-0')),
+    );
+    final ah = tester.getCenter(
+      find.byKey(const ValueKey<String>('lesson-hero-card-0')),
+    );
+    final kd = tester.getCenter(
+      find.byKey(const ValueKey<String>('lesson-hero-card-1')),
+    );
+    expect(arrow.dx, closeTo(ah.dx, 1));
+    expect((arrow.dx - kd.dx).abs(), greaterThan(20));
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-hero-card-0')));
+    await tester.pump();
+
+    // Next hero card is Kd — arrow moves to index 1.
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsOneWidget);
+    final kdArrow = tester.getCenter(
+      find.byKey(const ValueKey<String>('hero-cue-arrow-1')),
+    );
+    expect(kdArrow.dx, closeTo(kd.dx, 1));
+  });
+
   testWidgets('guided picker selects five on the full table', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;

@@ -343,17 +343,47 @@ class FeltTableView extends StatelessWidget {
         );
       }
 
-      final heroCardCue =
-          player.isHero && faceUp && highlightHeroIndexes.isNotEmpty;
-      if ((highlightHero || heroCardCue) && player.isHero) {
+      // Face-down "tap your cards" keeps a centered pair. Face-up taps put
+      // one arrow on each cued hole card — same as board-card cues.
+      if (highlightHero &&
+          player.isHero &&
+          highlightHeroIndexes.isEmpty) {
         heroDecorations.add(
           Positioned(
             left: slot.footprint.left,
             top: _clamp(slot.footprint.top - 30, 0, math.max(0.0, h - 28)),
             width: slot.footprint.width,
-            child: CueArrows(count: highlightHero ? 2 : 1),
+            child: const CueArrows(count: 2),
           ),
         );
+      } else if (player.isHero &&
+          faceUp &&
+          highlightHeroIndexes.isNotEmpty) {
+        final metrics = SeatMetrics.of(
+          hero: true,
+          compact: layout.compact,
+          scale: layout.seatScale,
+          review: review,
+        );
+        final cardsLeft =
+            slot.footprint.center.dx - metrics.cardsWidth / 2;
+        final arrowTop =
+            _clamp(slot.footprint.top - 30, 0, math.max(0.0, h - 28));
+        final indexes = highlightHeroIndexes.toList()..sort();
+        for (final i in indexes) {
+          if (i < 0 || i > 1 || selectedHeroIndexes.contains(i)) {
+            continue;
+          }
+          heroDecorations.add(
+            Positioned(
+              key: ValueKey<String>('hero-cue-arrow-$i'),
+              left: cardsLeft + i * (metrics.cardWidth + metrics.cardGap),
+              top: arrowTop,
+              width: metrics.cardWidth,
+              child: CueArrows(size: 20 * layout.seatScale),
+            ),
+          );
+        }
       }
 
       if (cueSeatIndex == slot.index && !player.isHero) {
