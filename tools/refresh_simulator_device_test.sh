@@ -59,4 +59,36 @@ then
   fail "other device command must not match the mini"
 fi
 
+tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/refresh-ios-dirt.XXXXXX")"
+cleanup_tmpdir() { rm -rf "$tmpdir"; }
+trap cleanup_tmpdir EXIT
+
+git -C "$tmpdir" init -q
+git -C "$tmpdir" config user.email "test@example.com"
+git -C "$tmpdir" config user.name "test"
+mkdir -p \
+  "$tmpdir/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata" \
+  "$tmpdir/ios/Runner.xcworkspace/xcshareddata"
+printf 'PODS:\n  - keep-me\n' >"$tmpdir/ios/Podfile.lock"
+printf '// keep pbx\n' >"$tmpdir/ios/Runner.xcodeproj/project.pbxproj"
+git -C "$tmpdir" add ios/Podfile.lock ios/Runner.xcodeproj/project.pbxproj
+git -C "$tmpdir" commit -qm "seed"
+
+printf 'PODS:\n  - wiped\n' >"$tmpdir/ios/Podfile.lock"
+printf '// wiped pbx\n' >"$tmpdir/ios/Runner.xcodeproj/project.pbxproj"
+mkdir -p \
+  "$tmpdir/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm" \
+  "$tmpdir/ios/Runner.xcworkspace/xcshareddata/swiftpm"
+printf '{}\n' >"$tmpdir/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+printf '{}\n' >"$tmpdir/ios/Runner.xcworkspace/xcshareddata/swiftpm/Package.resolved"
+
+discard_ios_machine_dirt "$tmpdir" >/dev/null
+grep -q 'keep-me' "$tmpdir/ios/Podfile.lock" || fail "Podfile.lock not restored"
+grep -q 'keep pbx' "$tmpdir/ios/Runner.xcodeproj/project.pbxproj" \
+  || fail "project.pbxproj not restored"
+[[ ! -e "$tmpdir/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/swiftpm" ]] \
+  || fail "project.xcworkspace swiftpm not removed"
+[[ ! -e "$tmpdir/ios/Runner.xcworkspace/xcshareddata/swiftpm" ]] \
+  || fail "Runner.xcworkspace swiftpm not removed"
+
 echo "iphone 13 mini simulator helpers ok (udid=$udid)"
