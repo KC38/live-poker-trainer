@@ -2080,6 +2080,8 @@ void main() {
     expect(find.textContaining('Tap Station'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('calling-station-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('STATION'), findsOneWidget);
     expect(find.text('HIGH'), findsOneWidget);
     expect(find.text('LOW'), findsOneWidget);
