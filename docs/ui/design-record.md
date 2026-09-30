@@ -226,6 +226,9 @@ Nine, Same, and Position under the felt on a nine-max ring.
 Read the table first uses the full poker table for every step: explain taps
 Pot, Stacks, Button, and Who Acts under the felt.
 
+Name your flop class uses the full poker table for every step: explain taps
+Made, Draw, SDV, and Air under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -445,9 +448,9 @@ sit on the full table, the open and the 3-bet use that table, and
 the stack check stays a list. Read the table first uses the same
 frame and the full table: explain taps Pot, Stacks, Button, and Who
 Acts under the felt, and the first-to-act seat is tapped on that
-table. Name your flop class
-uses the same frame: made, draw, showdown value, and air stay in the
-stage, and each flop sits face up on the full table. Count outs,
+table. Name your flop class uses the same frame and the full table:
+explain taps Made, Draw, SDV, and Air under the felt, and each flop
+sits face up on that table. Count outs,
 pay the right price uses the same frame: clean, dirty, and price
 stay in the stage, the clean aces stay a card picker, and a priced
 draw sits face up on the full table. Choose a flop line uses the
