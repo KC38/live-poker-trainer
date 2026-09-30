@@ -2206,6 +2206,8 @@ void main() {
     expect(find.textContaining('Tap Nit'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('nit-model-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('NIT'), findsOneWidget);
     expect(find.text('NARROW'), findsOneWidget);
     expect(find.text('RESPECT'), findsOneWidget);
