@@ -6171,6 +6171,100 @@ class ThreeBetSqueezeDemo extends StatefulWidget {
   State<ThreeBetSqueezeDemo> createState() => _ThreeBetSqueezeDemoState();
 }
 
+/// Multi-street plan explain: FLOP / TURN / RIVER under the full poker table.
+class LessonMultiStreetPlanExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonMultiStreetPlanExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonMultiStreetPlanExplainTable> createState() =>
+      _LessonMultiStreetPlanExplainTableState();
+}
+
+class _LessonMultiStreetPlanExplainTableState
+    extends State<LessonMultiStreetPlanExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= MultiStreetPlanDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('multi-street-plan-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures.copyWith(
+              boardSlots: true,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < MultiStreetPlanDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        MultiStreetPlanDemo.points[i].label,
+                      ) &&
+                      MultiStreetPlanDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: MultiStreetPlanDemo.points[i].label,
+                    caption: MultiStreetPlanDemo.points[i].caption,
+                    color: MultiStreetPlanDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      MultiStreetPlanDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  MultiStreetPlanDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Flop / turn / river plan tiles for multi-street explain demos.
 class MultiStreetPlanDemo extends StatefulWidget {
   /// Creates the demo.
