@@ -325,6 +325,9 @@ taps Quit, Guard, and First under the felt.
 Spot range advantage and nut advantage uses the full poker table for every
 step: explain taps Range, Nut, and Advantage under the felt.
 
+Realize equity in and out of position uses the full poker table for every
+step: explain taps Equity, Cash, and Pos under the felt.
+
 Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
 
 The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
@@ -639,8 +642,9 @@ up on the full table. Spot range advantage and nut advantage uses the same frame
 table: explain taps Range, Nut, and Advantage under the felt, the
 dry-board, paired-board, and press checks stay lists, and the c-bet
 spot sits face up on that table. Realize equity in and out of
-position uses the same frame: equity, cash, and pos stay in the stage,
-and the realization quizzes stay lists. Recognize capped versus
+position uses the same frame and the full table: explain taps Equity,
+Cash, and Pos under the felt, and the realization quizzes stay lists.
+Recognize capped versus
 uncapped ranges uses the same frame: capped, uncapped, and nuts stay
 in the stage, the check-turn, bomb, and attack checks stay lists, and
 the thin-value spot sits face up on the full table. Choose polarized
