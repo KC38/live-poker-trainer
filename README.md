@@ -14,9 +14,9 @@ flutter run
 ```
 
 **Agents / iOS simulator (Xcode 27+):** `Simulator.app` was replaced by
-**Device Hub**. `/implement-open-jira` uses the iPhone 17; the Pro is for
-launch-simulator and day-to-day Pro sessions. Boot, tmux, and `agent_tap`
-instructions: [docs/agent-ios-simulator.md](docs/agent-ios-simulator.md).
+**Device Hub**. Agents use the **iPhone 13 mini** only; resolve its UDID with
+`tools/iphone_13_mini_udid.sh` (never hardcode it). Boot, tmux, and
+`agent_tap` instructions: [docs/agent-ios-simulator.md](docs/agent-ios-simulator.md).
 
 The launch default is random six-max $1/$2 with a 200 BB maximum. Every hand
 gets a new ordered lineup of bounded player tendencies, visible by tapping a

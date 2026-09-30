@@ -24,43 +24,39 @@ agent_tap = _load_agent_tap()
 
 
 class AgentTapLogTest(unittest.TestCase):
-    """Log selection keeps Pro and /implement-open-jira sessions apart."""
+    """Log selection defaults to the iPhone 13 mini session."""
 
-    def test_default_log_is_the_pro_qa_session(self) -> None:
+    def test_default_log_is_the_mini_session(self) -> None:
         args = agent_tap.build_parser().parse_args(["tap", "--text", "Continue"])
-        self.assertEqual(args.log, agent_tap.QA_LOG)
+        self.assertEqual(args.log, agent_tap.DEFAULT_LOG)
         self.assertEqual(
-            agent_tap.QA_LOG,
+            agent_tap.DEFAULT_LOG,
             Path("/tmp/flutter-live-poker-trainer.run.log"),
         )
 
-    def test_implement_log_flag_does_not_read_the_pro_log(self) -> None:
-        implement = Path("/tmp/flutter-live-poker-trainer-iphone17.run.log")
+    def test_log_flag_overrides_default(self) -> None:
+        worktree = Path("/tmp/flutter-LPT-12.log")
         args = agent_tap.build_parser().parse_args(
-            ["tap", "--log", str(implement), "--text", "Fold"]
+            ["tap", "--log", str(worktree), "--text", "Fold"]
         )
-        self.assertEqual(args.log, implement)
-        self.assertEqual(agent_tap.IMPLEMENT_LOG, implement)
+        self.assertEqual(args.log, worktree)
 
     def test_vm_base_uses_the_log_it_is_given(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
-            qa_log = Path(tmp) / "qa.log"
-            implement_log = Path(tmp) / "iphone17.log"
-            qa_log.write_text(
-                "A Dart VM Service on iPhone 17 Pro is available at: "
-                "http://127.0.0.1:1111/qaToken/\n",
+            default_log = Path(tmp) / "mini.log"
+            other_log = Path(tmp) / "worktree.log"
+            default_log.write_text(
+                "A Dart VM Service on iPhone 13 mini is available at: "
+                "http://127.0.0.1:1111/miniToken/\n",
                 encoding="utf-8",
             )
-            implement_log.write_text(
-                "A Dart VM Service on iPhone 17 is available at: "
-                "http://127.0.0.1:2222/iphoneToken/\n",
+            other_log.write_text(
+                "A Dart VM Service on iPhone 13 mini is available at: "
+                "http://127.0.0.1:2222/workToken/\n",
                 encoding="utf-8",
             )
-            self.assertEqual(agent_tap.vm_base(qa_log), ("1111", "qaToken"))
-            self.assertEqual(
-                agent_tap.vm_base(implement_log),
-                ("2222", "iphoneToken"),
-            )
+            self.assertEqual(agent_tap.vm_base(default_log), ("1111", "miniToken"))
+            self.assertEqual(agent_tap.vm_base(other_log), ("2222", "workToken"))
 
 
 if __name__ == "__main__":

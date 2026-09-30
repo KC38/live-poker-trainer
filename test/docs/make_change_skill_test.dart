@@ -26,9 +26,9 @@ void main() {
     expect(skill, isNot(contains('xcrun simctl io')));
     expect(skill, isNot(contains('kill -USR2')));
     expect(skill, isNot(contains('flutter run -d')));
-    expect(
-      skill,
-      isNot(contains('Validate on the iPhone 17')),
-    );
+    expect(skill, isNot(contains('Validate on the iPhone 17')));
+    expect(skill, isNot(contains('iphone17-main')));
+    expect(skill, isNot(contains('F1AE4938')));
+    expect(skill, isNot(contains('20ACECD5')));
   });
 }

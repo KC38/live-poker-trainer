@@ -1,23 +1,20 @@
 # Agent guide: launch iOS simulator + Flutter
 
-How agents should boot the Live Poker Trainer app on the Mac mini iOS simulator.
-Follow this instead of hunting for `Simulator.app` (gone on Xcode 27+).
+How agents should boot the Live Poker Trainer app on the Mac mini iOS
+simulator. Follow this instead of hunting for `Simulator.app` (gone on
+Xcode 27+).
 
-## Two phones
+## One simulator: iPhone 13 mini
 
-The Pro and the iPhone 17 can run at the same time. Drive only the device
-your workflow owns.
+This project uses **one** simulator: the **iPhone 13 mini**. Resolve its
+UDID every time — never hardcode it:
 
-| Role | Device | UDID |
-|------|--------|------|
-| **launch-simulator / Pro** | iPhone 17 Pro | `F1AE4938-D9BE-4EA1-8C98-58555A0DE62A` |
-| **/implement-open-jira** | iPhone 17 | `20ACECD5-FBEE-4663-9044-E11D5F0A26FC` |
+```bash
+DEVICE="$(tools/iphone_13_mini_udid.sh)"
+```
 
-Do not boot, uninstall, terminate, kill, hot-restart, screenshot, or tap the
-other role's phone unless that workflow says so. A `flutter run` on one
-device is not a reason to skip starting the other. `/implement-open-jira`
-uses `.worktrees/iphone17-main` (or a ticket worktree) so its `build/` stays
-off the Pro session in the primary clone.
+Do not boot, uninstall, terminate, kill, hot-restart, screenshot, or tap any
+other simulator for agent work.
 
 ## Xcode 27+: Device Hub (not Simulator.app)
 
@@ -58,17 +55,17 @@ sudo xcodebuild -runFirstLaunch
 xcrun simctl help >/dev/null && echo "simctl OK"
 ```
 
-`flutter doctor` may warn that the **iOS 27** simulator runtime is missing.
-An **iOS 26.5** Pro device is enough for day-to-day agent work. To install the
-matching platform runtime:
+`flutter doctor` may warn that a newer iOS simulator runtime is missing.
+An available **iPhone 13 mini** is enough for day-to-day agent work. To install
+a matching platform runtime:
 
 ```bash
 xcodebuild -downloadPlatform iOS
 # or Xcode → Settings → Components / Platforms → GET for iOS
 ```
 
-Android SDK / Chrome warnings are unrelated to the iOS Pro walk — ignore them
-unless you need those targets.
+Android SDK / Chrome warnings are unrelated — ignore them unless you need
+those targets.
 
 ## Firebase secrets in worktrees
 
@@ -79,31 +76,26 @@ before `flutter run`:
 - `ios/Runner/GoogleService-Info.plist`
 - `android/app/google-services.json` (if present)
 
-## Boot one phone + run Flutter (durable)
+## Boot the mini + run Flutter (durable)
 
-Long builds belong in **tmux** so they survive agent disconnects. Start the
-phone this workflow owns. Leave the other phone's tmux session up.
+Long builds belong in **tmux** so they survive agent disconnects.
 
 ```bash
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:$PATH"
 export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 
-# Pro (launch-simulator)
-DEVICE=F1AE4938-D9BE-4EA1-8C98-58555A0DE62A
+DEVICE="$(tools/iphone_13_mini_udid.sh)"
 PRIMARY="${PRIMARY:-$HOME/live-poker-trainer}"
 CHECKOUT="$PRIMARY"
-SESSION=flutter-pro-lessons
+SESSION=flutter-iphone-13-mini
 PID_FILE=/tmp/flutter-live-poker-trainer.pid
 LOG_FILE=/tmp/flutter-live-poker-trainer.run.log
 
-# /implement-open-jira uses the other phone. Before merge, CHECKOUT is the
-# ticket worktree and the log is /tmp/flutter-$SLUG.log. After merge, refresh
-# uses a second origin/main checkout so the two flutter runs do not share build/:
-# DEVICE=20ACECD5-FBEE-4663-9044-E11D5F0A26FC
-# CHECKOUT="$PRIMARY/.worktrees/iphone17-main"
-# SESSION=flutter-iphone17-$SLUG
-# PID_FILE=/tmp/flutter-live-poker-trainer-iphone17.pid
-# LOG_FILE=/tmp/flutter-live-poker-trainer-iphone17.run.log
+# /implement-open-jira ticket worktree before merge may use:
+# CHECKOUT="$PRIMARY/.worktrees/$SLUG"
+# SESSION=flutter-iphone-13-mini-$SLUG
+# PID_FILE=/tmp/flutter-$SLUG.pid
+# LOG_FILE=/tmp/flutter-$SLUG.log
 
 open -a /Applications/Xcode.app/Contents/Applications/DeviceHub.app
 xcrun simctl bootstatus "$DEVICE" -b || xcrun simctl boot "$DEVICE"
@@ -120,33 +112,23 @@ tmux send-keys -t "$SESSION" "cd '$CHECKOUT' && flutter run -d $DEVICE --pid-fil
 Success markers in that session's log:
 
 - `Flutter run key commands.`
-- Pro: `A Dart VM Service on iPhone 17 Pro is available at: http://127.0.0.1:…`
-- iPhone 17: `A Dart VM Service on iPhone 17 is available at: http://127.0.0.1:…`
+- `A Dart VM Service on iPhone 13 mini is available at: http://127.0.0.1:…`
 
 | File | Purpose |
 |------|---------|
-| `/tmp/flutter-live-poker-trainer.pid` | Pro `flutter run` |
-| `/tmp/flutter-live-poker-trainer.run.log` | Pro stdout. `agent_tap.py` default |
-| `/tmp/flutter-live-poker-trainer-iphone17.pid` | /implement-open-jira iPhone 17 `flutter run` on origin/main |
-| `/tmp/flutter-live-poker-trainer-iphone17.run.log` | iPhone 17 origin/main stdout. Pass `--log` |
-| `/tmp/flutter-$SLUG.pid` and `.log` | Ticket worktree session on the iPhone 17, before merge |
-| `/tmp/flutter-live-poker-trainer-user.pid` | Legacy iPhone 17 pid file. Refresh treats it as implement, and only if the process is on that device |
+| `/tmp/flutter-live-poker-trainer.pid` | origin/main `flutter run` on the mini |
+| `/tmp/flutter-live-poker-trainer.run.log` | stdout. `agent_tap.py` default |
+| `/tmp/flutter-$SLUG.pid` and `.log` | Ticket worktree session on the mini, before merge |
 
-Refresh one role after its merge. Do not refresh both:
+Refresh after a merge (or when the mini should show `origin/main`):
 
 ```bash
-.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh qa
-.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh implement
+.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
 ```
 
-`implement` fast-forwards `.worktrees/iphone17-main` and does not pull or
-restart the primary clone. Hot-restart only that role's pane (`R` in
-`flutter-pro-lessons` for the Pro, or `flutter-iphone17-$SLUG` while a ticket
-worktree is on the iPhone 17).
+That fast-forwards the primary clone and hot-restarts (or starts) the mini.
 
 ## Drive the UI (no OS clicks required)
-
-Pro (default log):
 
 ```bash
 python3 tools/agent_tap.py openlesson --text lesson-01-01-01-your-two-cards
@@ -154,23 +136,22 @@ python3 tools/agent_tap.py tap --text "Continue"
 python3 tools/agent_tap.py tap --text "Your hole cards"
 ```
 
-/implement-open-jira (pass that phone's log, or the ticket worktree log):
+Ticket worktree before merge (pass that session's log):
 
 ```bash
-python3 tools/agent_tap.py --log /tmp/flutter-live-poker-trainer-iphone17.run.log tap --text "Continue"
+python3 tools/agent_tap.py --log /tmp/flutter-$SLUG.log tap --text "Continue"
 ```
 
 - The default VM URI comes from `/tmp/flutter-live-poker-trainer.run.log`.
-  `--log` is required for the iPhone 17, or taps hit the Pro.
 - Isolate IDs change after hot restart — the script re-resolves each call.
 - Prefer **exact lesson labels** (e.g. `Your hole cards`). Broad needles like
   `Continue` can match **home course map** controls under the lesson route and
   fire lock snackbars (`Finish "…" first.`).
-- Screenshots, one device per role:
+- Screenshot:
 
 ```bash
-xcrun simctl io F1AE4938-D9BE-4EA1-8C98-58555A0DE62A screenshot /tmp/pro.png
-xcrun simctl io 20ACECD5-FBEE-4663-9044-E11D5F0A26FC screenshot /tmp/iphone17.png
+DEVICE="$(tools/iphone_13_mini_udid.sh)"
+xcrun simctl io "$DEVICE" screenshot /tmp/mini.png
 ```
 
 ## Common failures
@@ -178,6 +159,7 @@ xcrun simctl io 20ACECD5-FBEE-4663-9044-E11D5F0A26FC screenshot /tmp/iphone17.pn
 | Symptom | Fix |
 |---------|-----|
 | `Unable to find application named 'Simulator'` / missing `Simulator.app` | Use **Device Hub** (paths above). |
+| `error: no available iPhone 13 mini simulator found` | Create or download an iPhone 13 mini in Device Hub / Xcode Platforms. |
 | `xcode-select` → Command Line Tools only | `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer` |
 | Unsigned / license errors | `sudo xcodebuild -license accept` then `-runFirstLaunch` |
 | `sandbox is not in sync with the Podfile.lock` | `cd ios && pod install`; ensure `Podfile.lock` ↔ `Pods/Manifest.lock` match |
@@ -187,8 +169,9 @@ xcrun simctl io 20ACECD5-FBEE-4663-9044-E11D5F0A26FC screenshot /tmp/iphone17.pn
 
 ## Related
 
-- Boot a simulator when none is running: [`.cursor/skills/launch-simulator/SKILL.md`](../.cursor/skills/launch-simulator/SKILL.md)
+- Boot when none is running: [`.cursor/skills/launch-simulator/SKILL.md`](../.cursor/skills/launch-simulator/SKILL.md)
 - Post-merge refresh: [`.cursor/skills/simulator-refresh/SKILL.md`](../.cursor/skills/simulator-refresh/SKILL.md)
 - Ship open tickets: [`.cursor/commands/implement-open-jira.md`](../.cursor/commands/implement-open-jira.md)
 - Code changes: [`.cursor/skills/make-change/SKILL.md`](../.cursor/skills/make-change/SKILL.md)
 - Named journeys: [agent-paths.md](agent-paths.md)
+- UDID resolver: [`tools/iphone_13_mini_udid.sh`](../tools/iphone_13_mini_udid.sh)

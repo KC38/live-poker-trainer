@@ -1,61 +1,54 @@
 #!/usr/bin/env bash
-# The refresh script must target one skill's simulator and ignore the other.
+# UDID resolver and refresh helpers target the iPhone 13 mini only.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SCRIPT="$ROOT/.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh"
-
-export REFRESH_SIMULATOR_SOURCE_ONLY=1
-# shellcheck disable=SC1090
-source "$SCRIPT"
+UDID_SCRIPT="$ROOT/tools/iphone_13_mini_udid.sh"
+REFRESH="$ROOT/.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh"
 
 fail() {
   echo "FAIL: $*" >&2
   exit 1
 }
 
+udid="$("$UDID_SCRIPT")"
+[[ "$udid" =~ ^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$ ]] \
+  || fail "resolver returned non-UDID: $udid"
+
+# Must not embed legacy hard-coded device IDs.
+if grep -E 'F1AE4938|20ACECD5|7CB7DDCF' "$REFRESH" "$UDID_SCRIPT" \
+  "$ROOT/.cursor/skills/launch-simulator/SKILL.md" \
+  "$ROOT/.cursor/skills/simulator-refresh/SKILL.md" \
+  "$ROOT/.cursor/commands/implement-open-jira.md" \
+  "$ROOT/docs/agent-ios-simulator.md" >/dev/null
+then
+  fail "hard-coded legacy simulator UDIDs still present"
+fi
+
+if grep -E 'iPhone 17|Pro Max|iphone17-main|flutter-pro-lessons|flutter-ui-pro-max' \
+  "$REFRESH" \
+  "$ROOT/.cursor/skills/launch-simulator/SKILL.md" \
+  "$ROOT/.cursor/skills/simulator-refresh/SKILL.md" \
+  "$ROOT/.cursor/commands/implement-open-jira.md" \
+  "$ROOT/docs/agent-ios-simulator.md" >/dev/null
+then
+  fail "legacy multi-simulator wording still present"
+fi
+
+export REFRESH_SIMULATOR_SOURCE_ONLY=1
+# shellcheck disable=SC1090
+source "$REFRESH"
+
+other="00000000-0000-0000-0000-000000000000"
 cmdline_targets_device \
-  "dartvm flutter_tools.snapshot run -d ${QA_DEVICE} --pid-file /tmp/flutter-live-poker-trainer.pid" \
-  "$QA_DEVICE" || fail "Pro command should match qa"
+  "dartvm flutter_tools.snapshot run -d ${udid} --pid-file /tmp/flutter-live-poker-trainer.pid" \
+  "$udid" || fail "mini command should match"
 
 if cmdline_targets_device \
-  "dartvm flutter_tools.snapshot run -d ${IMPLEMENT_DEVICE}" \
-  "$QA_DEVICE"
+  "dartvm flutter_tools.snapshot run -d ${other}" \
+  "$udid"
 then
-  fail "iPhone 17 command must not match the Pro"
+  fail "other device command must not match the mini"
 fi
 
-selected="$(
-  printf '%s\t%s\n' \
-    11 "flutter_tools.snapshot run -d ${QA_DEVICE}" \
-    22 "flutter_tools.snapshot run -d ${IMPLEMENT_DEVICE}" \
-    | select_device_pids "$QA_DEVICE"
-)"
-[[ "$selected" == "11" ]] || fail "qa select returned '$selected'"
-
-selected="$(
-  printf '%s\t%s\n' \
-    11 "flutter_tools.snapshot run -d ${QA_DEVICE}" \
-    22 "flutter run -d ${IMPLEMENT_DEVICE}" \
-    | select_device_pids "$IMPLEMENT_DEVICE"
-)"
-[[ "$selected" == "22" ]] || fail "implement select returned '$selected'"
-
-resolve_role qa
-[[ "$DEVICE_ID" == "$QA_DEVICE" ]] || fail "qa device"
-[[ "$CHECKOUT_KIND" == "primary" ]] || fail "qa checkout"
-[[ "$PID_FILE" == "/tmp/flutter-live-poker-trainer.pid" ]] || fail "qa pid file"
-[[ "$LOG_FILE" == "/tmp/flutter-live-poker-trainer.run.log" ]] || fail "qa log"
-
-resolve_role implement
-[[ "$DEVICE_ID" == "$IMPLEMENT_DEVICE" ]] || fail "implement device"
-[[ "$CHECKOUT_KIND" == "iphone17-main" ]] || fail "implement checkout"
-[[ "$PID_FILE" == "/tmp/flutter-live-poker-trainer-iphone17.pid" ]] || fail "implement pid"
-[[ "$LOG_FILE" == "/tmp/flutter-live-poker-trainer-iphone17.run.log" ]] || fail "implement log"
-[[ " ${EXTRA_PID_FILES[*]} " == *" /tmp/flutter-live-poker-trainer-user.pid "* ]] || fail "legacy pid"
-
-if resolve_role both; then
-  fail "missing role should fail"
-fi
-
-echo "refresh device isolation ok"
+echo "iphone 13 mini simulator helpers ok (udid=$udid)"
