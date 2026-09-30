@@ -2542,6 +2542,8 @@ void main() {
     expect(find.textContaining('Tap Nutted'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('multiway-nuts-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('NUTTED'), findsOneWidget);
     expect(find.text('AIR'), findsOneWidget);
     expect(find.text('DOMINATION'), findsOneWidget);
