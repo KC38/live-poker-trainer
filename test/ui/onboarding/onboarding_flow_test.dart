@@ -33,6 +33,22 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
+  Future<void> tapLabel(WidgetTester tester, String label) async {
+    final finder = find.text(label);
+    await tester.ensureVisible(finder);
+    await tester.pumpAndSettle();
+    await tester.tap(finder);
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> tapContinue(WidgetTester tester) async {
+    final finder = find.widgetWithText(FilledButton, 'Continue');
+    await tester.ensureVisible(finder);
+    await tester.pumpAndSettle();
+    await tester.tap(finder);
+    await tester.pumpAndSettle();
+  }
+
   test('regular recommends first lesson when no placement jump exists', () {
     final catalog = CourseCatalog.fromJson({
       'catalogVersion': '2.0.0',
@@ -194,6 +210,24 @@ void main() {
     expect(find.byIcon(Icons.home_outlined), findsOneWidget);
     expect(find.byIcon(Icons.casino_outlined), findsOneWidget);
     expect(find.byIcon(Icons.style_outlined), findsOneWidget);
+    expect(find.text('Where are you starting?'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Continue'), findsOneWidget);
+    expect(
+      tester
+          .widget<FilledButton>(find.widgetWithText(FilledButton, 'Continue'))
+          .onPressed,
+      isNull,
+    );
+
+    await tester.tap(find.text('New to poker'));
+    await tester.pumpAndSettle();
+    expect(
+      tester
+          .widget<FilledButton>(find.widgetWithText(FilledButton, 'Continue'))
+          .onPressed,
+      isNotNull,
+    );
   });
 
   testWidgets('daily goal choices render with intensity labels', (
@@ -215,9 +249,14 @@ void main() {
     expect(find.text('Regular'), findsOneWidget);
     expect(find.text('Serious'), findsOneWidget);
     expect(find.text('Intense'), findsOneWidget);
+    expect(find.text('How much time per day?'), findsOneWidget);
+    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Continue'), findsOneWidget);
   });
 
   testWidgets('new to poker Meet Rex says coach, not live-reg', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -237,10 +276,10 @@ void main() {
 
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('New to poker'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('10 minutes'));
-    await tester.pumpAndSettle();
+    await tapLabel(tester, 'New to poker');
+    await tapContinue(tester);
+    await tapLabel(tester, '10 minutes');
+    await tapContinue(tester);
 
     expect(find.text('Meet Rex'), findsOneWidget);
     expect(find.text('Your coach'), findsOneWidget);
@@ -254,6 +293,8 @@ void main() {
   });
 
   testWidgets('regular Meet Rex keeps the live-reg coach line', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -273,10 +314,10 @@ void main() {
 
     await tester.tap(find.text('Get started'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Regular live cash player'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('10 minutes'));
-    await tester.pumpAndSettle();
+    await tapLabel(tester, 'Regular live cash player');
+    await tapContinue(tester);
+    await tapLabel(tester, '10 minutes');
+    await tapContinue(tester);
 
     expect(find.text('Your live-reg coach'), findsOneWidget);
     expect(
@@ -290,6 +331,8 @@ void main() {
   testWidgets('onboarding back returns one screen without step labels', (
     tester,
   ) async {
+    await tester.binding.setSurfaceSize(const Size(402, 874));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -329,20 +372,27 @@ void main() {
 
     await tester.tap(find.text('New to poker'));
     await tester.pumpAndSettle();
+    expect(find.text('Daily goal'), findsNothing);
+    expect(find.byType(RexMascot), findsWidgets);
+    expect(find.text('Where are you starting?'), findsOneWidget);
+    await tapContinue(tester);
     expect(find.text('Daily goal'), findsOneWidget);
     expect(find.text('Step 3 of 4'), findsNothing);
+    expect(find.text('How much time per day?'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
     expect(find.text('Your experience'), findsOneWidget);
     expect(find.text('New to poker'), findsOneWidget);
 
-    await tester.tap(find.text('Know the rules / home games'));
-    await tester.pumpAndSettle();
+    await tapLabel(tester, 'Know the rules / home games');
+    expect(find.text('Daily goal'), findsNothing);
+    await tapContinue(tester);
     expect(find.text('Daily goal'), findsOneWidget);
 
-    await tester.tap(find.text('10 minutes'));
-    await tester.pumpAndSettle();
+    await tapLabel(tester, '10 minutes');
+    expect(find.text('Meet Rex'), findsNothing);
+    await tapContinue(tester);
     expect(find.text('Meet Rex'), findsOneWidget);
     expect(find.text('Step 4 of 4'), findsNothing);
 

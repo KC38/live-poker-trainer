@@ -81,13 +81,24 @@ class WelcomeScreen extends ConsumerWidget {
 }
 
 /// Experience band picker.
-class ExperienceChoiceScreen extends ConsumerWidget {
+class ExperienceChoiceScreen extends ConsumerStatefulWidget {
   /// Creates the experience screen.
   const ExperienceChoiceScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selected = ref.watch(onboardingControllerProvider).experienceBand;
+  ConsumerState<ExperienceChoiceScreen> createState() =>
+      _ExperienceChoiceScreenState();
+}
+
+class _ExperienceChoiceScreenState
+    extends ConsumerState<ExperienceChoiceScreen> {
+  ExperienceBand? _selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final draftSelected =
+        ref.watch(onboardingControllerProvider).experienceBand;
+    final selected = _selected ?? draftSelected;
     return _OnboardingScaffold(
       title: 'Your experience',
       onBack: () {
@@ -100,49 +111,53 @@ class ExperienceChoiceScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Where are you starting?',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 10),
+          const _OnboardingCoachPrompt(speech: 'Where are you starting?'),
           Text(
             'We use this to recommend a start — it never unlocks content alone.',
             style: GoogleFonts.manrope(
               color: AppColors.slate,
-              fontSize: 15,
+              fontSize: 14,
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 28),
-          for (final band in ExperienceBand.values) ...[
-            _ChoiceTile(
-              label: band.label,
-              icon: _experienceIcon(band),
-              selected: selected == band,
-              onTap: () async {
-                unawaited(
-                  ref
-                      .read(analyticsServiceProvider)
-                      .logOnboardingStep(step: 'experience'),
-                );
-                await ref
-                    .read(onboardingControllerProvider.notifier)
-                    .setExperience(band);
-                if (!context.mounted) return;
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const DailyGoalScreen(),
+          const SizedBox(height: 16),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                for (final band in ExperienceBand.values) ...[
+                  _ChoiceTile(
+                    label: band.label,
+                    icon: _experienceIcon(band),
+                    selected: selected == band,
+                    onTap: () => setState(() => _selected = band),
                   ),
-                );
-              },
+                  const SizedBox(height: 10),
+                ],
+              ],
             ),
-            const SizedBox(height: 10),
-          ],
+          ),
+          _ContinueBar(
+            enabled: selected != null,
+            onPressed: () async {
+              final band = selected;
+              if (band == null) return;
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'experience'),
+              );
+              await ref
+                  .read(onboardingControllerProvider.notifier)
+                  .setExperience(band);
+              if (!context.mounted) return;
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const DailyGoalScreen(),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -150,15 +165,22 @@ class ExperienceChoiceScreen extends ConsumerWidget {
 }
 
 /// Daily study goal picker.
-class DailyGoalScreen extends ConsumerWidget {
+class DailyGoalScreen extends ConsumerStatefulWidget {
   /// Creates the daily goal screen.
   const DailyGoalScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedMinutes = ref
-        .watch(onboardingControllerProvider)
-        .dailyGoalMinutes;
+  ConsumerState<DailyGoalScreen> createState() => _DailyGoalScreenState();
+}
+
+class _DailyGoalScreenState extends ConsumerState<DailyGoalScreen> {
+  int? _selectedMinutes;
+
+  @override
+  Widget build(BuildContext context) {
+    final draftMinutes =
+        ref.watch(onboardingControllerProvider).dailyGoalMinutes;
+    final selectedMinutes = _selectedMinutes ?? draftMinutes;
     return _OnboardingScaffold(
       title: 'Daily goal',
       onBack: () {
@@ -171,49 +193,53 @@ class DailyGoalScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'How much time per day?',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 10),
+          const _OnboardingCoachPrompt(speech: 'How much time per day?'),
           Text(
             'A small daily habit beats occasional cramming.',
             style: GoogleFonts.manrope(
               color: AppColors.slate,
-              fontSize: 15,
+              fontSize: 14,
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 28),
-          for (final minutes in kDailyGoalChoices) ...[
-            _ChoiceTile(
-              label: '$minutes minutes',
-              trailingLabel: dailyGoalIntensityLabel(minutes),
-              selected: selectedMinutes == minutes,
-              onTap: () async {
-                unawaited(
-                  ref
-                      .read(analyticsServiceProvider)
-                      .logOnboardingStep(step: 'daily_goal'),
-                );
-                await ref
-                    .read(onboardingControllerProvider.notifier)
-                    .setDailyGoal(minutes);
-                if (!context.mounted) return;
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const RexIntroScreen(),
+          const SizedBox(height: 16),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                for (final minutes in kDailyGoalChoices) ...[
+                  _ChoiceTile(
+                    label: '$minutes minutes',
+                    trailingLabel: dailyGoalIntensityLabel(minutes),
+                    selected: selectedMinutes == minutes,
+                    onTap: () => setState(() => _selectedMinutes = minutes),
                   ),
-                );
-              },
+                  const SizedBox(height: 10),
+                ],
+              ],
             ),
-            const SizedBox(height: 10),
-          ],
+          ),
+          _ContinueBar(
+            enabled: selectedMinutes != null,
+            onPressed: () async {
+              final minutes = selectedMinutes;
+              if (minutes == null) return;
+              unawaited(
+                ref
+                    .read(analyticsServiceProvider)
+                    .logOnboardingStep(step: 'daily_goal'),
+              );
+              await ref
+                  .read(onboardingControllerProvider.notifier)
+                  .setDailyGoal(minutes);
+              if (!context.mounted) return;
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const RexIntroScreen(),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -227,6 +253,10 @@ class RexIntroScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isNew =
+        ref.watch(onboardingControllerProvider).experienceBand ==
+        ExperienceBand.neverPlayed;
+    final role = isNew ? 'Your coach' : 'Your live-reg coach';
     return _OnboardingScaffold(
       title: 'Meet Rex',
       onBack: () {
@@ -239,40 +269,18 @@ class RexIntroScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Align(child: RexMascot(size: 128)),
-          const SizedBox(height: 16),
-          Text(
-            'Rex',
-            style: GoogleFonts.manrope(
-              color: AppColors.gold,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.2,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            ref.watch(onboardingControllerProvider).experienceBand ==
-                    ExperienceBand.neverPlayed
-                ? 'Your coach'
-                : 'Your live-reg coach',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 12),
+          _OnboardingCoachPrompt(speech: role),
           Text(
             'One short sentence at a time. No lectures — just the next decision.',
             style: GoogleFonts.manrope(
               color: AppColors.slate,
-              fontSize: 16,
+              fontSize: 15,
               height: 1.45,
             ),
           ),
           const Spacer(),
-          FilledButton(
+          _ContinueBar(
+            enabled: true,
             onPressed: () async {
               unawaited(
                 ref
@@ -298,8 +306,6 @@ class RexIntroScreen extends ConsumerWidget {
               // Do not push a second copy — the welcome stack is a different
               // navigator and would cover Your start.
             },
-            style: _primaryButton,
-            child: const Text('Continue'),
           ),
         ],
       ),
@@ -653,6 +659,156 @@ IconData _experienceIcon(ExperienceBand band) {
   };
 }
 
+class _OnboardingCoachPrompt extends StatelessWidget {
+  const _OnboardingCoachPrompt({required this.speech});
+
+  final String speech;
+
+  static const double _mascotSize = 72;
+  static const double _tailWidth = 10;
+  static const double _tailHeight = 14;
+  static const double _tailCenterY = 30;
+  static const double _radius = 16;
+  static const double _minHeight = _tailCenterY + _tailHeight / 2 + _radius + 12;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Semantics(
+        label: 'Rex says: $speech',
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const RexMascot(size: _mascotSize),
+            const SizedBox(width: 4),
+            Expanded(
+              child: CustomPaint(
+                painter: const _OnboardingSpeechBubblePainter(
+                  fill: AppColors.bgElevated,
+                  border: AppColors.slateDark,
+                  tailCenterY: _tailCenterY,
+                  tailWidth: _tailWidth,
+                  tailHeight: _tailHeight,
+                  radius: _radius,
+                ),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: _minHeight),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      _tailWidth + 12,
+                      12,
+                      12,
+                      12,
+                    ),
+                    child: Text(
+                      speech,
+                      style: GoogleFonts.manrope(
+                        color: AppColors.cream,
+                        fontSize: 16,
+                        height: 1.3,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OnboardingSpeechBubblePainter extends CustomPainter {
+  const _OnboardingSpeechBubblePainter({
+    required this.fill,
+    required this.border,
+    required this.tailCenterY,
+    required this.tailWidth,
+    required this.tailHeight,
+    required this.radius,
+  });
+
+  final Color fill;
+  final Color border;
+  final double tailCenterY;
+  final double tailWidth;
+  final double tailHeight;
+  final double radius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = _path(size);
+    canvas.drawPath(path, Paint()..color = fill);
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = border
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.2
+        ..strokeJoin = StrokeJoin.round,
+    );
+  }
+
+  Path _path(Size size) {
+    final left = tailWidth;
+    final right = size.width;
+    final bottom = size.height;
+    final half = tailHeight / 2;
+    final tipY = tailCenterY;
+    final tailTop = tipY - half;
+    final tailBot = tipY + half;
+    final r = Radius.circular(radius);
+
+    return Path()
+      ..moveTo(left + radius, 0)
+      ..lineTo(right - radius, 0)
+      ..arcToPoint(Offset(right, radius), radius: r)
+      ..lineTo(right, bottom - radius)
+      ..arcToPoint(Offset(right - radius, bottom), radius: r)
+      ..lineTo(left + radius, bottom)
+      ..arcToPoint(Offset(left, bottom - radius), radius: r)
+      ..lineTo(left, tailBot)
+      ..lineTo(0, tipY)
+      ..lineTo(left, tailTop)
+      ..lineTo(left, radius)
+      ..arcToPoint(Offset(left + radius, 0), radius: r)
+      ..close();
+  }
+
+  @override
+  bool shouldRepaint(covariant _OnboardingSpeechBubblePainter oldDelegate) =>
+      false;
+}
+
+class _ContinueBar extends StatelessWidget {
+  const _ContinueBar({
+    required this.enabled,
+    required this.onPressed,
+  });
+
+  final bool enabled;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const Divider(height: 1, color: AppColors.slateDark),
+        const SizedBox(height: 16),
+        FilledButton(
+          onPressed: enabled ? onPressed : null,
+          style: _primaryButton,
+          child: const Text('Continue'),
+        ),
+      ],
+    );
+  }
+}
+
 class _ChoiceTile extends StatelessWidget {
   const _ChoiceTile({
     required this.label,
@@ -677,8 +833,8 @@ class _ChoiceTile extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
         side: BorderSide(
-          color: selected ? AppColors.gold : Colors.transparent,
-          width: 1.5,
+          color: selected ? AppColors.gold : AppColors.slateDark,
+          width: selected ? 1.5 : 1,
         ),
       ),
       child: InkWell(
