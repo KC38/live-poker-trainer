@@ -420,17 +420,10 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.timingClues) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final bounded =
-                  constraints.maxHeight.isFinite ? constraints.maxHeight : null;
-              return TimingCluesDemo(
-                interactive: true,
-                enabled: !locked,
-                onAllPointsTapped: locked ? null : onFeltAcknowledge,
-                height: bounded,
-              );
-            },
+          return LessonTimingCluesExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllPointsTapped: locked ? null : onFeltAcknowledge,
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.tablesChange) {

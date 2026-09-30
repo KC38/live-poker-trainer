@@ -2795,6 +2795,8 @@ void main() {
     expect(find.textContaining('Tap Timing'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('timing-clues-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('TIMING'), findsOneWidget);
     expect(find.text('SIZING'), findsOneWidget);
     expect(find.text('CLUES'), findsOneWidget);
