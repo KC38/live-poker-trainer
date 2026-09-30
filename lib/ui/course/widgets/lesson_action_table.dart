@@ -9002,6 +9002,98 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
   }
 }
 
+/// Maniac-model explain: MANIAC / ENTRY / AGGRO under the full poker table.
+class LessonManiacModelExplainTable extends StatefulWidget {
+  /// Creates the explain stage.
+  const LessonManiacModelExplainTable({
+    super.key,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonManiacModelExplainTable> createState() =>
+      _LessonManiacModelExplainTableState();
+}
+
+class _LessonManiacModelExplainTableState
+    extends State<LessonManiacModelExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    setState(() => _tapped.add(label));
+    if (_tapped.length >= ManiacModelDemo.points.length) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: const ValueKey<String>('maniac-model-table'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const [],
+            villainCount: 3,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < ManiacModelDemo.points.length; i++)
+              SizedBox(
+                width: 150,
+                child: _DemoSoftPulse(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(
+                        ManiacModelDemo.points[i].label,
+                      ) &&
+                      ManiacModelDemo.points
+                          .take(i)
+                          .every((p) => _tapped.contains(p.label)),
+                  child: _DemoActionCard(
+                    label: ManiacModelDemo.points[i].label,
+                    caption: ManiacModelDemo.points[i].caption,
+                    color: ManiacModelDemo.points[i].color,
+                    densify: false,
+                    selected: _tapped.contains(
+                      ManiacModelDemo.points[i].label,
+                    ),
+                    enabled: teaching,
+                    onPressed:
+                        teaching
+                            ? () => _onTap(
+                                  ManiacModelDemo.points[i].label,
+                                )
+                            : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 /// Maniac / entry / aggro tiles for Maniac-model explain demos.
 class ManiacModelDemo extends StatefulWidget {
   /// Creates the demo.
