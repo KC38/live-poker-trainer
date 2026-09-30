@@ -3711,6 +3711,8 @@ void main() {
     expect(find.textContaining('Tap Reason'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey('preflop-flop-plan-table')), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('REASON'), findsOneWidget);
     expect(find.text('CONFIRM'), findsOneWidget);
     expect(find.text('CANCEL'), findsOneWidget);
