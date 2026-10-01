@@ -236,6 +236,23 @@ void main() {
     expect(analytics.events, isNot(contains('home_node_open:lesson-a')));
   });
 
+  testWidgets('next-node pulse keeps path label positions stable', (
+    tester,
+  ) async {
+    await _pumpHome(
+      tester,
+      snapshot: _readySnapshot(),
+      analytics: _RecordingAnalytics(),
+    );
+    final lessonA = tester.getTopLeft(find.text('Lesson A'));
+    final lessonB = tester.getTopLeft(find.text('Lesson B'));
+    // Advance frames; the ring must paint outside a fixed box.
+    await tester.pump(const Duration(milliseconds: 450));
+    await tester.pump(const Duration(milliseconds: 450));
+    expect(tester.getTopLeft(find.text('Lesson A')), lessonA);
+    expect(tester.getTopLeft(find.text('Lesson B')), lessonB);
+  });
+
   testWidgets('completed node shows REVIEW bubble at 25 percent XP', (
     tester,
   ) async {
