@@ -1127,10 +1127,12 @@ export async function submitCourseStepForUser(options: {
       result.reversalRead = outcome.reversalRead;
     }
 
-    tx.set(attemptDoc, {
+    // Drop optional undefined fields (e.g. lessonXpAwarded mid-lesson).
+    // Firestore rejects undefined document values.
+    tx.set(attemptDoc, omitUndefined({
       ...nextAttempt,
       updatedAt: FieldValue.serverTimestamp(),
-    }, {merge: true});
+    }), {merge: true});
     tx.create(receiptRef, {
       idempotencyKey,
       attemptId,
@@ -1958,7 +1960,8 @@ function profileFromData(data: DocumentData): CourseProfile {
 }
 
 function attemptFromData(data: DocumentData): CourseAttempt {
-  return {
+  // Omit undefined optionals so later spreads are safe to write to Firestore.
+  return omitUndefined({
     attemptId: String(data.attemptId),
     uid: String(data.uid),
     lessonId: String(data.lessonId),
@@ -1986,7 +1989,7 @@ function attemptFromData(data: DocumentData): CourseAttempt {
     createdAtMs: optionalNumber(data.createdAtMs),
     updatedAtMs: optionalNumber(data.updatedAtMs),
     completedAtMs: optionalNumber(data.completedAtMs) ?? null,
-  };
+  }) as CourseAttempt;
 }
 
 function resumeFromAttempt(attempt: CourseAttempt): CourseResumePointer {
@@ -2113,6 +2116,20 @@ function optionalStringArray(value: unknown): string[] | undefined {
 function optionalNumber(value: unknown): number | undefined {
   if (typeof value !== "number" || !Number.isFinite(value)) return undefined;
   return value;
+}
+
+/**
+ * Drops keys whose value is `undefined` (Firestore rejects those).
+ * Keeps `null`, `0`, and empty string.
+ */
+export function omitUndefined<T extends Record<string, unknown>>(
+  value: T,
+): {[K in keyof T]?: Exclude<T[K], undefined>} {
+  const out: Record<string, unknown> = {};
+  for (const [key, entry] of Object.entries(value)) {
+    if (entry !== undefined) out[key] = entry;
+  }
+  return out as {[K in keyof T]?: Exclude<T[K], undefined>};
 }
 
 function safeKey(value: unknown, field: string): string {
