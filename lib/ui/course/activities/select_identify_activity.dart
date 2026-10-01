@@ -1548,20 +1548,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                           enabled: !locked,
                         ),
                       ),
-                      for (final choice in widget.activity.choices)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: TextButton(
-                            onPressed:
-                                locked
-                                    ? null
-                                    : () => widget.controller.selectChoice(
-                                      choice.id,
-                                      autoSubmit: true,
-                                    ),
-                            child: Text(choice.label),
-                          ),
-                        ),
+                      _LessonChoiceStack(
+                        choices: widget.activity.choices,
+                        selectedId: selected,
+                        locked: locked,
+                        onSelect:
+                            (id) => widget.controller.selectChoice(
+                              id,
+                              autoSubmit: true,
+                            ),
+                      ),
                     ],
                   ),
                 )
@@ -1603,20 +1599,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                           enabled: !locked,
                         ),
                       ),
-                      for (final choice in widget.activity.choices)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: TextButton(
-                            onPressed:
-                                locked
-                                    ? null
-                                    : () => widget.controller.selectChoice(
-                                      choice.id,
-                                      autoSubmit: true,
-                                    ),
-                            child: Text(choice.label),
-                          ),
-                        ),
+                      _LessonChoiceStack(
+                        choices: widget.activity.choices,
+                        selectedId: selected,
+                        locked: locked,
+                        onSelect:
+                            (id) => widget.controller.selectChoice(
+                              id,
+                              autoSubmit: true,
+                            ),
+                      ),
                     ],
                   ),
                 )
@@ -1663,18 +1655,17 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                   },
                         ),
                       ),
-                      for (final choice in widget.activity.choices)
-                        if (choice.id == 'same-always')
-                          TextButton(
-                            onPressed:
-                                locked
-                                    ? null
-                                    : () => widget.controller.selectChoice(
-                                      choice.id,
-                                      autoSubmit: true,
-                                    ),
-                            child: Text(choice.label),
-                          ),
+                      _LessonChoiceStack(
+                        choices: widget.activity.choices,
+                        selectedId: selected,
+                        locked: locked,
+                        includeChoiceId: 'same-always',
+                        onSelect:
+                            (id) => widget.controller.selectChoice(
+                              id,
+                              autoSubmit: true,
+                            ),
+                      ),
                     ],
                   ),
                 )
@@ -3066,6 +3057,53 @@ class _HoleCardBands extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Framed (live-table) choice dock — always [LessonChoiceButton], never
+/// per-lesson TextButtons or ad-hoc chips.
+class _LessonChoiceStack extends StatelessWidget {
+  /// Creates a vertical stack of shared choice buttons.
+  const _LessonChoiceStack({
+    required this.choices,
+    required this.selectedId,
+    required this.locked,
+    required this.onSelect,
+    this.includeChoiceId,
+  });
+
+  final List<CourseChoice> choices;
+  final String? selectedId;
+  final bool locked;
+  final ValueChanged<String> onSelect;
+
+  /// When set, only this choice id is shown (e.g. dock-only `same-always`).
+  final String? includeChoiceId;
+
+  @override
+  Widget build(BuildContext context) {
+    final visible =
+        includeChoiceId == null
+            ? choices
+            : choices
+                .where((choice) => choice.id == includeChoiceId)
+                .toList(growable: false);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final choice in visible)
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: LessonChoiceButton(
+              label: choice.label,
+              accessibilityText: choice.accessibilityText,
+              selected: selectedId == choice.id,
+              enabled: !locked,
+              onPressed: locked ? null : () => onSelect(choice.id),
+            ),
+          ),
+      ],
     );
   }
 }

@@ -9879,6 +9879,59 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets(
+    'framed fold-win dock uses LessonChoiceButton, not TextButton',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-01-05-01-guided-fold-win',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'fold',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'You bet. Everyone folds. Tap how you take the pot.',
+        choices: const [
+          CourseChoice(id: 'no-show', label: 'Take pot'),
+          CourseChoice(id: 'must-show', label: 'Must show'),
+          CourseChoice(id: 'dealer-shows', label: 'Dealer shows'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme().copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: Scaffold(
+              body: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: SelectIdentifyActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: true,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(LessonTableStage), findsOneWidget);
+      expect(find.byType(LessonChoiceButton), findsNWidgets(3));
+      expect(find.byType(TextButton), findsNothing);
+      await tester.tap(find.widgetWithText(LessonChoiceButton, 'Take pot'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'no-show');
+      controller.dispose();
+    },
+  );
+
   testWidgets('how pots unguided pot densifies without decoy Them', (
     tester,
   ) async {
