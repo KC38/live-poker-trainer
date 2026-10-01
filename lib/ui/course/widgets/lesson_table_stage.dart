@@ -139,7 +139,7 @@ GameState _applyLessonStageStreetMoney(
   ];
   final streetSum = bets.fold<double>(0, (sum, b) => sum + b);
   final total = potTotal ?? (base.mainPot + streetSum);
-    final mainPot = (total - streetSum).clamp(0, double.infinity).toDouble();
+  final mainPot = (total - streetSum).clamp(0, double.infinity).toDouble();
   final highest = bets.fold<double>(0, (m, b) => b > m ? b : m);
   final players = <PlayerModel>[
     for (var i = 0; i < n; i++)
