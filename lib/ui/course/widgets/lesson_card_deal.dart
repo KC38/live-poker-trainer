@@ -278,6 +278,40 @@ List<String> dealOneOfEachSuitBoard({Random? random}) {
   ]);
 }
 
+/// Suit board for Suits and ranks, optionally with a middle star distractor.
+List<String> dealSuitLessonBoard({
+  required bool withStarDistractor,
+  Random? random,
+}) {
+  final rng = random ?? debugLessonCardDealRandom ?? Random();
+  final real = List<String>.of(dealOneOfEachSuitBoard(random: rng));
+  if (!withStarDistractor) {
+    return List<String>.unmodifiable(real);
+  }
+  final usedRanks = {
+    for (final code in real) code.substring(0, code.length - 1),
+  };
+  const rankLabels = [
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'T',
+    'J',
+    'Q',
+    'K',
+    'A',
+  ];
+  final free = [for (final r in rankLabels) if (!usedRanks.contains(r)) r];
+  final starRank = free.isEmpty ? '5' : free[rng.nextInt(free.length)];
+  real.insert(real.length ~/ 2, '$starRank*');
+  return List<String>.unmodifiable(real);
+}
+
 List<String> _dealSuitedNonPair(Random rng) {
   final suit = _suits[rng.nextInt(_suits.length)];
   final ranks = _twoDistinctRanks(rng);

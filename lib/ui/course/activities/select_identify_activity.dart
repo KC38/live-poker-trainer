@@ -200,6 +200,7 @@ class SelectIdentifyActivity extends StatelessWidget {
             enabled: !locked,
             showGuidance: showGuidance,
             syncSelection: true,
+            withStarDistractor: true,
             selectedSuitLetters: selected == 'suits-full'
                 ? const {'h', 'd', 'c', 's'}
                 : const {},
@@ -214,7 +215,7 @@ class SelectIdentifyActivity extends StatelessWidget {
                 },
             onMiss: () {
               LessonFrameScope.maybeOf(context)?.onLocalMiss(
-                'Tap the community cards — one of each suit.',
+                'Four real suits only — skip the star.',
               );
             },
           );

@@ -210,6 +210,8 @@ class OrderSequenceActivity extends StatelessWidget {
         final locked = controller.submitting || controller.lastResult != null;
         final framed = LessonFrameScope.maybeOf(context) != null;
         if (framed && _rankMode) {
+          final useDistractor =
+              activity.id == 'act-01-01-02-scaffolded-ranks';
           return LessonRankOrderTable(
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}',
@@ -222,6 +224,15 @@ class OrderSequenceActivity extends StatelessWidget {
             orderedIds: ordered,
             enabled: !locked,
             showGuidance: showGuidance,
+            distractorCode:
+                useDistractor ? lessonRankOrderDistractorCode : null,
+            onMiss: useDistractor
+                ? () {
+                    LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                      'H is not a rank — tap 2, then T, then A.',
+                    );
+                  }
+                : null,
             onPick: (id) => appendOrderedId(
               controller: controller,
               activity: activity,

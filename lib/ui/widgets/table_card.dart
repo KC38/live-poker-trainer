@@ -43,7 +43,7 @@ class TableCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = card.suit.color;
+    final color = card.displayColor;
     final radius = width * 0.12;
     final height = width * tableCardAspect;
     final borderColor = selected
@@ -113,7 +113,7 @@ class TableCard extends StatelessWidget {
                   bottom: width * 0.06,
                   child: Center(
                     child: Text(
-                      card.suit.symbol,
+                      card.suitSymbol,
                       maxLines: 1,
                       textAlign: TextAlign.center,
                       style: TextStyle(

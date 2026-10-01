@@ -19,7 +19,7 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
-Widget _frame(Widget child) {
+Widget _frame(Widget child, {void Function(String)? onMiss}) {
   return ProviderScope(
     child: MaterialApp(
       theme: buildPokerTheme().copyWith(
@@ -32,7 +32,7 @@ Widget _frame(Widget child) {
             'lesson-01-01-02-suits-and-ranks',
           ),
           child: LessonFrameScope(
-            onLocalMiss: (_) {},
+            onLocalMiss: onMiss ?? (_) {},
             child: child,
           ),
         ),
@@ -84,6 +84,7 @@ void main() {
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.byType(SuitTapTile), findsNothing);
     expect(find.byKey(const ValueKey('suits-ranks-felt')), findsNothing);
+    expect(find.text('★'), findsNothing);
 
     for (var i = 0; i < 4; i++) {
       await tester.tap(find.byKey(ValueKey('lesson-board-card-$i')));
@@ -132,17 +133,62 @@ void main() {
     await tester.pump();
     expect(find.byType(LessonSuitBoardTable), findsOneWidget);
     expect(find.byType(SuitTapPicker), findsNothing);
+    expect(find.text('★'), findsOneWidget);
 
-    for (var i = 0; i < 3; i++) {
+    // Board is Ah, Kd, 5★, 7c, 2s — skip the star at index 2.
+    for (final i in [0, 1, 3]) {
       await tester.tap(find.byKey(ValueKey('lesson-board-card-$i')));
       await tester.pump();
     }
     expect(autoSubmits, 0);
 
-    await tester.tap(find.byKey(const ValueKey('lesson-board-card-3')));
+    await tester.tap(find.byKey(const ValueKey('lesson-board-card-4')));
     await tester.pump();
     expect(controller.draft.choiceId, 'suits-full');
     expect(autoSubmits, 1);
+  });
+
+  testWidgets('guided suits star distractor is a miss', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-01-02-guided-suits',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap hearts, diamonds, clubs, and spades on the board.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap one community card of each suit.',
+      choices: const [
+        CourseChoice(
+          id: 'suits-full',
+          label: 'Hearts, diamonds, clubs, spades',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+    final misses = <String>[];
+
+    await tester.pumpWidget(
+      _frame(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+        onMiss: misses.add,
+      ),
+    );
+    await tester.pump();
+
+    await tester.tap(find.byKey(const ValueKey('lesson-board-card-2')));
+    await tester.pump();
+    expect(misses, isNotEmpty);
+    expect(controller.draft.choiceId, isNull);
   });
 
   testWidgets('rank order taps board cards low to high on the full table', (
@@ -184,11 +230,15 @@ void main() {
     await tester.pump();
     expect(find.byType(LessonRankOrderTable), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.text('H'), findsOneWidget);
 
     final board = lessonRankOrderBoardCodes(
       activityId: activity.id,
       rankLabels: const ['2', 'T', 'A'],
+      distractorCode: lessonRankOrderDistractorCode,
     );
+    expect(board.length, 4);
+    expect(board.contains(lessonRankOrderDistractorCode), isTrue);
     for (final rank in ['2', 'T', 'A']) {
       final index = board.indexWhere((code) => code.startsWith(rank));
       await tester.tap(find.byKey(ValueKey('lesson-board-card-$index')));
@@ -196,6 +246,56 @@ void main() {
     }
     expect(controller.draft.orderedIds, ['rank-2', 'rank-T', 'rank-A']);
     expect(autoSubmits, 1);
+  });
+
+  testWidgets('rank order H of spades distractor is a miss', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-01-02-scaffolded-ranks',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 50,
+      accessibilityText: 'Tap deuce, ten, and ace on the board.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap these ranks from lowest to highest.',
+      sequenceItems: const [
+        CourseChoice(id: 'rank-2', label: '2'),
+        CourseChoice(id: 'rank-T', label: 'T'),
+        CourseChoice(id: 'rank-A', label: 'A'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+    final misses = <String>[];
+
+    await tester.pumpWidget(
+      _frame(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+        onMiss: misses.add,
+      ),
+    );
+    await tester.pump();
+
+    final board = lessonRankOrderBoardCodes(
+      activityId: activity.id,
+      rankLabels: const ['2', 'T', 'A'],
+      distractorCode: lessonRankOrderDistractorCode,
+    );
+    final distractorIndex = board.indexOf(lessonRankOrderDistractorCode);
+    await tester.tap(
+      find.byKey(ValueKey('lesson-board-card-$distractorIndex')),
+    );
+    await tester.pump();
+    expect(misses, isNotEmpty);
+    expect(controller.draft.orderedIds, isEmpty);
   });
 
   testWidgets('suited hole cards are tapped on a face-up seat', (tester) async {
@@ -255,13 +355,20 @@ void main() {
     final board = lessonRankOrderBoardCodes(
       activityId: 'act-01-01-02-scaffolded-ranks',
       rankLabels: const ['2', 'T', 'A'],
+      distractorCode: lessonRankOrderDistractorCode,
     );
-    expect(board.length, 3);
-    expect(board.map((c) => c[0]).toList(), isNot(['2', 'T', 'A']));
+    expect(board.length, 4);
+    expect(board.contains(lessonRankOrderDistractorCode), isTrue);
+    final real = [
+      for (final code in board)
+        if (code != lessonRankOrderDistractorCode) code[0],
+    ];
+    expect(real, isNot(['2', 'T', 'A']));
     expect(
       lessonRankOrderBoardCodes(
         activityId: 'act-01-01-02-scaffolded-ranks',
         rankLabels: const ['2', 'T', 'A'],
+        distractorCode: lessonRankOrderDistractorCode,
       ),
       board,
     );
