@@ -51,4 +51,37 @@ void main() {
       expect(shadow.blurRadius, 0);
     },
   );
+
+  testWidgets(
+    'unit banner stretches to the parent width like Duo',
+    (tester) async {
+      const parentWidth = 360.0;
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: parentWidth,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: CourseUnitBanner(
+                  sectionOrder: 1,
+                  unitOrder: 1,
+                  unitTitle: 'Cards and the table',
+                  color: Color(0xFF1CB0A0),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final bannerSize = tester.getSize(find.byType(CourseUnitBanner));
+      expect(bannerSize.width, parentWidth - 32);
+
+      final titleLeft = tester.getTopLeft(find.text('Cards and the table')).dx;
+      final bannerLeft = tester.getTopLeft(find.byType(CourseUnitBanner)).dx;
+      // Left-aligned title inset by the plate padding (16), not centered.
+      expect(titleLeft, closeTo(bannerLeft + 16, 0.5));
+    },
+  );
 }
