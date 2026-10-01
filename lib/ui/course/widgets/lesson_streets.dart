@@ -108,8 +108,8 @@ class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (final street in StreetsTimelineDemo.streets)
@@ -180,8 +180,8 @@ class LessonStreetsOrderTable extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (final item in remaining)
@@ -907,7 +907,7 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (var i = 0; i < _palette.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           GlowHighlight(
             active:
                 widget.interactive &&

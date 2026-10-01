@@ -171,12 +171,18 @@ void main() {
 
     expect(find.byType(GlowHighlight), findsWidgets);
     final betRect = tester.getRect(find.text('BET'));
+    final raiseRect = tester.getRect(find.text('RAISE'));
     final undoRect = tester.getRect(find.byTooltip('Undo'));
     expect(
       undoRect.top - betRect.bottom,
       greaterThanOrEqualTo(
         LessonAnswerDock.stageGlowInset + LessonAnswerDock.stageClearance,
       ),
+    );
+    // SoftPulse sibling gap clears both rings' outset.
+    expect(
+      raiseRect.left - betRect.right,
+      greaterThanOrEqualTo(GlowHighlight.gutter),
     );
     expect(tester.takeException(), isNull);
   });

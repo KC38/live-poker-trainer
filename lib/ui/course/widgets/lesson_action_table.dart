@@ -1835,7 +1835,7 @@ class _LessonPassiveActionsExplainTableState
         Row(
           children: [
             for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
-              if (i > 0) const SizedBox(width: 10),
+              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
               Expanded(
                 child: GlowHighlight(
                   active:
@@ -1925,7 +1925,7 @@ class _LessonAggressiveActionsExplainTableState
         Row(
           children: [
             for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
-              if (i > 0) const SizedBox(width: 10),
+              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
               Expanded(
                 child: GlowHighlight(
                   active:
@@ -2025,7 +2025,7 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -2204,7 +2204,7 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -2374,7 +2374,7 @@ class _LessonOpenRangeExplainTableState
         Row(
           children: [
             for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
-              if (i > 0) const SizedBox(width: 10),
+              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
               Expanded(
                 child: GlowHighlight(
                   active:
@@ -2471,7 +2471,7 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -2631,7 +2631,7 @@ class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
         Row(
           children: [
             for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
-              if (i > 0) const SizedBox(width: 10),
+              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
               Expanded(
                 child: GlowHighlight(
                   active:
@@ -2733,7 +2733,7 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -2896,7 +2896,7 @@ class _LessonBbStackDepthExplainTableState
         Row(
           children: [
             for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
-              if (i > 0) const SizedBox(width: 10),
+              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
               Expanded(
                 child: GlowHighlight(
                   active:
@@ -2994,7 +2994,7 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -3153,8 +3153,8 @@ class _LessonTableHabitsExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < TableHabitsDemo.habits.length; i++)
@@ -3280,7 +3280,7 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
             : CrossAxisAlignment.center,
         children: [
           habitTile(row * 2),
-          SizedBox(width: expandTeach ? 12 : 8),
+          SizedBox(width: GlowHighlight.gutter),
           habitTile(row * 2 + 1),
         ],
       );
@@ -3428,8 +3428,8 @@ class _LessonFullRingExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < FullRingDemo.points.length; i++)
@@ -3530,7 +3530,7 @@ class _FullRingDemoState extends State<FullRingDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < FullRingDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -3697,8 +3697,8 @@ class _LessonTableReadExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < TableReadDemo.points.length; i++)
@@ -3825,7 +3825,7 @@ class _TableReadDemoState extends State<TableReadDemo> {
             : CrossAxisAlignment.center,
         children: [
           pointTile(row * 2),
-          SizedBox(width: expandTeach ? 12 : 8),
+          SizedBox(width: GlowHighlight.gutter),
           pointTile(row * 2 + 1),
         ],
       );
@@ -3979,8 +3979,8 @@ class _LessonFlopLabelExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < FlopLabelDemo.labels.length; i++)
@@ -4106,7 +4106,7 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
             : CrossAxisAlignment.center,
         children: [
           labelTile(row * 2),
-          SizedBox(width: expandTeach ? 12 : 8),
+          SizedBox(width: GlowHighlight.gutter),
           labelTile(row * 2 + 1),
         ],
       );
@@ -4261,8 +4261,8 @@ class _LessonOutsPriceExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < OutsPriceDemo.points.length; i++)
@@ -4362,7 +4362,7 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < OutsPriceDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -4525,8 +4525,8 @@ class _LessonFlopLinesExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < FlopLinesDemo.lines.length; i++)
@@ -4655,7 +4655,7 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
             : CrossAxisAlignment.center,
         children: [
           for (var col = 0; col < 3; col++) ...[
-            if (col > 0) SizedBox(width: expandTeach ? 12 : 8),
+            if (col > 0) SizedBox(width: GlowHighlight.gutter),
             lineTile(row * 3 + col),
           ],
         ],
@@ -4809,8 +4809,8 @@ class _LessonTurnStoryExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < TurnStoryDemo.points.length; i++)
@@ -4937,7 +4937,7 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
             : CrossAxisAlignment.center,
         children: [
           pointTile(row * 2),
-          SizedBox(width: expandTeach ? 12 : 8),
+          SizedBox(width: GlowHighlight.gutter),
           pointTile(row * 2 + 1),
         ],
       );
@@ -5091,8 +5091,8 @@ class _LessonRiverBinaryExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < RiverBinaryDemo.points.length; i++)
@@ -5219,7 +5219,7 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
             : CrossAxisAlignment.center,
         children: [
           pointTile(row * 2),
-          SizedBox(width: expandTeach ? 12 : 8),
+          SizedBox(width: GlowHighlight.gutter),
           pointTile(row * 2 + 1),
         ],
       );
@@ -5373,8 +5373,8 @@ class _LessonMultiwayPlanExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < MultiwayPlanDemo.points.length; i++)
@@ -5475,7 +5475,7 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < MultiwayPlanDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -5639,8 +5639,8 @@ class _LessonCommonLeaksExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < CommonLeaksDemo.leaks.length; i++)
@@ -5767,7 +5767,7 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
             : CrossAxisAlignment.center,
         children: [
           leakTile(row * 2),
-          SizedBox(width: expandTeach ? 12 : 8),
+          SizedBox(width: GlowHighlight.gutter),
           leakTile(row * 2 + 1),
         ],
       );
@@ -5921,8 +5921,8 @@ class _LessonRangeUpdateExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < RangeUpdateDemo.points.length; i++)
@@ -6023,7 +6023,7 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < RangeUpdateDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -6185,8 +6185,8 @@ class _LessonThreeBetSqueezeExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < ThreeBetSqueezeDemo.points.length; i++)
@@ -6314,8 +6314,8 @@ class _LessonMultiStreetPlanExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < MultiStreetPlanDemo.points.length; i++)
@@ -6421,7 +6421,7 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < ThreeBetSqueezeDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -6567,7 +6567,7 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < MultiStreetPlanDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -6732,8 +6732,8 @@ class _LessonSizingLanguageExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < SizingLanguageDemo.points.length; i++)
@@ -6842,7 +6842,7 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < SizingLanguageDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -7007,8 +7007,8 @@ class _LessonSprDepthExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < SprDepthDemo.points.length; i++)
@@ -7109,7 +7109,7 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < SprDepthDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -7269,8 +7269,8 @@ class _LessonPlayerObserveExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < PlayerObserveDemo.points.length; i++)
@@ -7376,7 +7376,7 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < PlayerObserveDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -7537,8 +7537,8 @@ class _LessonCallingStationExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < CallingStationDemo.points.length; i++)
@@ -7644,7 +7644,7 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < CallingStationDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -7804,8 +7804,8 @@ class _LessonVsStationExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < VsStationDemo.points.length; i++)
@@ -7911,7 +7911,7 @@ class _VsStationDemoState extends State<VsStationDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < VsStationDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -8073,8 +8073,8 @@ class _LessonTightSeatsExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < TightSeatsDemo.points.length; i++)
@@ -8180,7 +8180,7 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < TightSeatsDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -8339,8 +8339,8 @@ class _LessonNitModelExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < NitModelDemo.points.length; i++)
@@ -8450,7 +8450,7 @@ class _NitModelDemoState extends State<NitModelDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < NitModelDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -8609,8 +8609,8 @@ class _LessonVsNitsExplainTableState extends State<LessonVsNitsExplainTable> {
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < VsNitsDemo.points.length; i++)
@@ -8716,7 +8716,7 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < VsNitsDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -8876,8 +8876,8 @@ class _LessonExtremeEntryExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < ExtremeEntryDemo.points.length; i++)
@@ -8983,7 +8983,7 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < ExtremeEntryDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -9143,8 +9143,8 @@ class _LessonManiacModelExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < ManiacModelDemo.points.length; i++)
@@ -9250,7 +9250,7 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < ManiacModelDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -9409,8 +9409,8 @@ class _LessonVsManiacsExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < VsManiacsDemo.points.length; i++)
@@ -9516,7 +9516,7 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < VsManiacsDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -9676,8 +9676,8 @@ class _LessonVsTagsExplainTableState extends State<LessonVsTagsExplainTable> {
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < VsTagsDemo.points.length; i++)
@@ -9777,7 +9777,7 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < VsTagsDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -9937,8 +9937,8 @@ class _LessonVsLagsExplainTableState extends State<LessonVsLagsExplainTable> {
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < VsLagsDemo.points.length; i++)
@@ -10038,7 +10038,7 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < VsLagsDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -10198,8 +10198,8 @@ class _LessonObservationCertaintyExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < ObservationCertaintyDemo.points.length; i++)
@@ -10306,7 +10306,7 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < ObservationCertaintyDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -10468,8 +10468,8 @@ class _LessonExploitEvidenceExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < ExploitEvidenceDemo.points.length; i++)
@@ -10579,7 +10579,7 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < ExploitEvidenceDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -10738,8 +10738,8 @@ class _LessonMultiwayNutsExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < MultiwayNutsDemo.points.length; i++)
@@ -10849,7 +10849,7 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < MultiwayNutsDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -11008,8 +11008,8 @@ class _LessonDeepStacksExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < DeepStacksDemo.points.length; i++)
@@ -11115,7 +11115,7 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < DeepStacksDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -11274,8 +11274,8 @@ class _LessonImpliedOddsExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < ImpliedOddsDemo.points.length; i++)
@@ -11381,7 +11381,7 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < ImpliedOddsDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -11541,8 +11541,8 @@ class _LessonThinValueExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < ThinValueDemo.points.length; i++)
@@ -11648,7 +11648,7 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < ThinValueDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -11809,8 +11809,8 @@ class _LessonLineStoriesExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < LineStoriesDemo.points.length; i++)
@@ -12092,8 +12092,8 @@ class _LessonRangeRewriteExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < RangeRewriteDemo.points.length; i++)
@@ -12199,7 +12199,7 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < RangeRewriteDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -12358,8 +12358,8 @@ class _LessonTimingCluesExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < TimingCluesDemo.points.length; i++)
@@ -12465,7 +12465,7 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < TimingCluesDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
@@ -12625,8 +12625,8 @@ class _LessonTablesChangeExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < TablesChangeDemo.points.length; i++)
@@ -12732,7 +12732,7 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < TablesChangeDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:

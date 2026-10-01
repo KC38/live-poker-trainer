@@ -8,6 +8,7 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 final _cardCodeToken = RegExp(r'\b([2-9TJQKA][shdc])\b', caseSensitive: false);
 
@@ -868,7 +869,7 @@ class HoleCardChoiceButton extends StatelessWidget {
                     densify ? MainAxisAlignment.center : MainAxisAlignment.start,
                 children: [
                   for (var i = 0; i < cards.length; i++) ...[
-                    if (i > 0) SizedBox(width: densify ? 12 : 8),
+                    if (i > 0) SizedBox(width: GlowHighlight.gutter),
                     MiniCard(card: cards[i], size: MiniCardSize.hero),
                   ],
                   if (cards.isEmpty)

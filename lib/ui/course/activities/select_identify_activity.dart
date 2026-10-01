@@ -2862,7 +2862,7 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
                     child: Row(
                       children: [
                         for (var i = 0; i < realSuits.length; i++) ...[
-                          if (i > 0) const SizedBox(width: 10),
+                          if (i > 0) const SizedBox(width: GlowHighlight.gutter),
                           Expanded(
                             child: GlowHighlight(
                               active:

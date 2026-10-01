@@ -1179,8 +1179,8 @@ class _LessonHandFamiliesExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (final family in HandFamiliesDemo.families)

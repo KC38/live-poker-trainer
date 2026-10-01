@@ -32,6 +32,10 @@ class GlowHighlight extends StatefulWidget {
   /// beside a SoftPulse target must clear at least this much.
   static const double outset = 6;
 
+  /// Minimum clear space between neighboring SoftPulse targets so each
+  /// side's [outset] ring does not collide with its neighbor.
+  static const double gutter = outset * 2;
+
   /// Content to highlight — a card, a name tag, a row of cards, etc.
   final Widget child;
 

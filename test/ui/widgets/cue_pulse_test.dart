@@ -36,6 +36,7 @@ void main() {
     );
 
     expect(GlowHighlight.outset, 6);
+    expect(GlowHighlight.gutter, GlowHighlight.outset * 2);
     expect(ring.top, closeTo(child.top - pad.top, 0.5));
     expect(ring.left, closeTo(child.left - pad.left, 0.5));
     expect(ring.right, closeTo(child.right + pad.right, 0.5));
