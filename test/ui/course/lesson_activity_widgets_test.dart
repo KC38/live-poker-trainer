@@ -11791,6 +11791,28 @@ await tester.tap(find.text('NIT'));
       ],
     );
     expect(resolveLessonActionSpot(allIn)!.stackLabel, 'Stack 12');
+    expect(resolveLessonActionSpot(allIn)!.heroStackAmount, 12);
+    expect(resolveLessonActionSpot(allIn)!.appliesStackToVillains, isFalse);
+    expect(resolveLessonActionSpot(allIn)!.villainStackChips, isNull);
+
+    final stacksLeft = CourseActivity(
+      id: 'act-04-05-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Weigh SPR',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Facing a jam — pick the right plan.',
+      choices: const [
+        CourseChoice(id: 'call-jam', label: 'Call', action: 'CALL'),
+        CourseChoice(id: 'fold-jam', label: 'Fold', action: 'FOLD'),
+      ],
+    );
+    expect(resolveLessonActionSpot(stacksLeft)!.stackLabel, 'Stacks left 55');
+    expect(resolveLessonActionSpot(stacksLeft)!.heroStackAmount, 55);
+    expect(resolveLessonActionSpot(stacksLeft)!.appliesStackToVillains, isTrue);
+    expect(resolveLessonActionSpot(stacksLeft)!.villainStackChips, 55);
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
@@ -12007,7 +12029,9 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.byType(LessonActionTable), findsOneWidget);
+    // Section 1 unit 3 lesson 2 uses the full framed felt, not the mini table.
+    expect(find.byType(LessonTableStage), findsOneWidget);
+    expect(find.byType(LessonActionTable), findsNothing);
     // SoftPulse + Rex own the cue — no generic felt gold status mid-teach.
     expect(find.text('Pot is open to a bet'), findsNothing);
     expect(find.text('RAISE (off)'), findsOneWidget);
@@ -12050,7 +12074,7 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Villain bets 5'), findsOneWidget);
+    expect(find.byType(LessonTableStage), findsOneWidget);
     expect(find.text('BET (off)'), findsOneWidget);
     expect(find.text('CHECK (off)'), findsNothing);
     expect(
@@ -12087,11 +12111,15 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Stack 12'), findsOneWidget);
+    // Spot stackLabel drives the hero seat — not a floating "Stack 12" chip.
+    expect(find.byType(LessonTableStage), findsOneWidget);
+    expect(find.text('\$12'), findsOneWidget);
     expect(find.text('ALL-IN 12'), findsOneWidget);
     // Call 20 exceeds the 12-chip stack — live dock marks it off.
     expect(find.text('CALL (off)'), findsOneWidget);
     expect(find.text('CALL 20'), findsNothing);
+    // Villain bet 20 comes out of the default 100bb stack ($200 → $180).
+    expect(find.text('\$180'), findsOneWidget);
     await tester.tap(find.text('ALL-IN 12'));
     await tester.pump();
     expect(allInController.draft.choiceId, 'shove-12');

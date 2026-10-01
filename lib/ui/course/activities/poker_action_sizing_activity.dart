@@ -225,6 +225,8 @@ class PokerActionSizingActivity extends StatelessWidget {
                             applyFeltMoney
                                 ? feltMoney.villainActionLabel
                                 : null,
+                        heroStackChips: spot.heroStackAmount?.toDouble(),
+                        villainStackChips: spot.villainStackChips,
                       )
                       : null;
               return Column(

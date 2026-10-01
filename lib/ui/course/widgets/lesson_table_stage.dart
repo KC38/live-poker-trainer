@@ -60,6 +60,12 @@ GameState lessonTableStageGame({
   double? potTotal,
   String? heroActionLabel,
   String? villainActionLabel,
+
+  /// Remaining chips for the hero seat. Null keeps the default band stack.
+  double? heroStackChips,
+
+  /// Remaining chips for every non-hero seat. Null keeps the default band stack.
+  double? villainStackChips,
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -119,6 +125,20 @@ GameState lessonTableStageGame({
       potTotal: potTotal,
       heroActionLabel: heroActionLabel,
       villainActionLabel: villainActionLabel,
+    );
+  }
+  if (heroStackChips != null || villainStackChips != null) {
+    named = named.copyWith(
+      players: [
+        for (final player in named.players)
+          player.isHero
+              ? (heroStackChips == null
+                  ? player
+                  : player.copyWith(stack: heroStackChips))
+              : (villainStackChips == null
+                  ? player
+                  : player.copyWith(stack: villainStackChips)),
+      ],
     );
   }
   if (dealerIndex == null) return named;
@@ -255,6 +275,8 @@ class LessonTableStage extends StatelessWidget {
     this.potTotal,
     this.heroActionLabel,
     this.villainActionLabel,
+    this.heroStackChips,
+    this.villainStackChips,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -372,6 +394,13 @@ class LessonTableStage extends StatelessWidget {
   /// Last-action badge on the first villain when a bet faces the hero.
   final String? villainActionLabel;
 
+  /// Remaining chips drawn on the hero seat. Null keeps the default band stack.
+  final double? heroStackChips;
+
+  /// Remaining chips drawn on each villain seat. Null keeps the default band
+  /// stack.
+  final double? villainStackChips;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -391,6 +420,8 @@ class LessonTableStage extends StatelessWidget {
     potTotal: potTotal,
     heroActionLabel: heroActionLabel,
     villainActionLabel: villainActionLabel,
+    heroStackChips: heroStackChips,
+    villainStackChips: villainStackChips,
   );
 
   @override
