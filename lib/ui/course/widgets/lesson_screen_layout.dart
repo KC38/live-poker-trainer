@@ -8,6 +8,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Lessons that use [LessonScreenLayout] instead of the app-bar runner.
@@ -1019,7 +1020,7 @@ class LessonToolRow extends StatelessWidget {
     // paint edge-to-edge; tools still clear the home indicator.
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, 6, 16, 10 + bottomInset),
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 10 + bottomInset),
       child: Row(
         children: [
           _ToolButton(
@@ -1122,8 +1123,16 @@ class LessonAnswerDock extends StatelessWidget {
     this.recovery,
   });
 
-  /// Dark gap between the stage and the top of this banner.
-  static const double stageClearance = 12;
+  /// Dark gap between the stage clip and the top of this banner / tool row.
+  ///
+  /// Separate from [stageGlowInset]; together they keep SoftPulse targets
+  /// clear of undo / redo / hint and the Nice! dock.
+  static const double stageClearance = 14;
+
+  /// Empty air inside the stage [ClipRect] for [GlowHighlight.outset] plus a
+  /// little soft-shadow bleed so under-felt rings are not truncated flush
+  /// against [stageClearance].
+  static const double stageGlowInset = GlowHighlight.outset + 8;
 
   final SubmitCourseStepResult result;
   final VoidCallback onContinue;
@@ -1303,28 +1312,36 @@ class LessonScreenLayout extends StatelessWidget {
           // densified shell (blinds timing, SoftPulse demos, suit pickers)
           // still fits without a bottom overflow. ClipRect keeps any stray
           // paint from the stage from covering the answer dock below.
+          // Bottom inset reserves layout for GlowHighlight overflow so every
+          // under-felt SoftPulse (streets, aggressives, demos) clears tools.
           child: ClipRect(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final mq = MediaQuery.of(context);
-                final mediaHeight = teachStageMediaHeight(
-                  screenHeight: mq.size.height,
-                  stageMaxHeight: constraints.maxHeight,
-                );
-                // Always wrap — swapping a bare [stage] for MediaQuery when
-                // Nice! shrinks the stage remounts stateful felts (peek face-up,
-                // blinds step, suit taps) and resets their local state.
-                return MediaQuery(
-                  data: mq.copyWith(size: Size(mq.size.width, mediaHeight)),
-                  child: stage,
-                );
-              },
+            child: Padding(
+              padding: const EdgeInsets.only(
+                bottom: LessonAnswerDock.stageGlowInset,
+              ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final mq = MediaQuery.of(context);
+                  final mediaHeight = teachStageMediaHeight(
+                    screenHeight: mq.size.height,
+                    stageMaxHeight: constraints.maxHeight,
+                  );
+                  // Always wrap — swapping a bare [stage] for MediaQuery when
+                  // Nice! shrinks the stage remounts stateful felts (peek
+                  // face-up, blinds step, suit taps) and resets local state.
+                  return MediaQuery(
+                    data: mq.copyWith(
+                      size: Size(mq.size.width, mediaHeight),
+                    ),
+                    child: stage,
+                  );
+                },
+              ),
             ),
           ),
         ),
-        // Free margin of scaffold bg so stage controls (and their glow
-        // highlights) never sit on the tool row or answer dock; Expanded
-        // above shrinks so content scales upward.
+        // Free margin of scaffold bg under the stage clip so controls never
+        // sit on the tool row or answer dock; Expanded above shrinks upward.
         const SizedBox(height: LessonAnswerDock.stageClearance),
         if (graded)
           LessonAnswerDock(

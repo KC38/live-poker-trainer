@@ -6,16 +6,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 void main() {
-  testWidgets('active GlowHighlight expands the gold ring 4px on every side', (
+  testWidgets('active GlowHighlight expands the gold ring by outset on every side', (
     tester,
   ) async {
-    const pad = EdgeInsets.all(4);
+    const pad = EdgeInsets.all(GlowHighlight.outset);
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
           body: Center(
             child: GlowHighlight(
-              padding: pad,
               child: SizedBox(
                 key: ValueKey<String>('pulse-child'),
                 width: 80,
@@ -36,6 +35,7 @@ void main() {
       find.byKey(const ValueKey<String>('glow-highlight-ring')),
     );
 
+    expect(GlowHighlight.outset, 6);
     expect(ring.top, closeTo(child.top - pad.top, 0.5));
     expect(ring.left, closeTo(child.left - pad.left, 0.5));
     expect(ring.right, closeTo(child.right + pad.right, 0.5));
