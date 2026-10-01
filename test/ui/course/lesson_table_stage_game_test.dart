@@ -137,6 +137,27 @@ void main() {
     expect(game.hero.holeCards.map((card) => card.code), ['Ah', 'Kd']);
   });
 
+  test('action-order seat names label UTG around the ring', () {
+    final game = lessonTableStageGame(
+      villainCount: lessonBlindsVillainCount,
+      seatNames: lessonActionOrderSeatNames,
+    );
+
+    expect(game.players.map((player) => player.name), [
+      'UTG',
+      'HJ',
+      'CO',
+      'BTN',
+      'SB',
+      'BB',
+    ]);
+    expect(lessonActionOrderSeatIndex('UTG'), 0);
+    expect(lessonActionOrderSeatIndex('ep'), 0);
+    expect(lessonActionOrderSeatIndex('BTN'), 3);
+    expect(lessonActionOrderSeatIndex('SB'), 4);
+    expect(lessonActionOrderSeatIndex('unknown'), isNull);
+  });
+
   test('explicit blinds replace the clockwise default', () {
     final game = lessonTableStageGame(
       villainCount: lessonBlindsVillainCount,
