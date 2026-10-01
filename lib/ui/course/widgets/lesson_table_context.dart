@@ -2166,7 +2166,7 @@ class LessonTableScene {
   }
 }
 
-/// Authored scene with suits permuted for this attempt (stable within [generation]).
+/// Authored scene with hand-class isomorphic cards for this attempt.
 LessonTableScene? dealtLessonTableScene(
   CourseActivity activity, {
   int generation = 0,
@@ -2185,7 +2185,7 @@ LessonTableScene? dealtLessonTableScene(
     generation: generation,
     random: random,
   );
-  final remapped = permuteCardSuitGroups(
+  final remapped = isomorphicLessonCardGroups(
     [scene.heroCodes, scene.boardCodes, scene.villainCodes],
     rng,
   );
