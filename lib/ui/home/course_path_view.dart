@@ -751,7 +751,7 @@ class _NodeCircle extends StatelessWidget {
   /// Matches the next-node white border weight, then a bit heavier for the pulse.
   static const double _pulseStroke = 5.5;
   /// How far the ring travels outward from the lesson's outer edge.
-  static const double _pulseMaxOutset = 10.0;
+  static const double _pulseMaxOutset = 5.0;
 
   @override
   Widget build(BuildContext context) {
