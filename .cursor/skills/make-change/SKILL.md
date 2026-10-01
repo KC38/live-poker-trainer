@@ -35,6 +35,24 @@ Change progress:
 
 Work only inside the worktree directory `.worktrees/<slug>`. Do not edit the primary checkout.
 
+Keep the agent workspace rooted on the primary checkout. Do **not** call
+`move_agent_to_root` (or equivalent) into `.worktrees/<slug>`. Edit and run
+git with absolute paths under `$WT` (or `cd "$WT"` in shell commands).
+
+#### Expected Cursor toast (safe to ignore)
+
+If Cursor still shows a toast like:
+
+> Failed to move agent root: … fatal: 'main' is already used by worktree at
+> '…/live_poker_trainer'
+
+that is expected: primary holds `main`, and Git will not check out `main`
+again in the feature worktree. Dismiss it. It is not a repo or skill failure.
+
+Do not stop the run, wait on the user, or treat the toast as blocking. A
+failed agent-root move can bury the chat with no unread badge — keep
+working in `$WT` immediately so the session does not stall.
+
 ### 1. Worktree off origin/main
 
 From the primary checkout:
