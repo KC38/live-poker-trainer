@@ -552,11 +552,32 @@ class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
   }
 }
 
-/// One face-up board card per suit. Used by Suits and ranks.
+/// One face-up board card per suit. Used by Suits and ranks explain.
 const List<String> lessonSuitBoardCodes = ['Ah', 'Kd', '7c', '2s'];
 
 /// Suit for each [lessonSuitBoardCodes] index.
-const List<String> lessonSuitBoardSuitLetters = ['h', 'd', 'c', 's'];
+const List<String?> lessonSuitBoardSuitLetters = ['h', 'd', 'c', 's'];
+
+/// Guided suits board: star fifth-suit distractor in the middle.
+const List<String> lessonGuidedSuitBoardCodes = [
+  'Ah',
+  'Kd',
+  '5*',
+  '7c',
+  '2s',
+];
+
+/// Suit letter per [lessonGuidedSuitBoardCodes] index; null = distractor.
+const List<String?> lessonGuidedSuitBoardSuitLetters = [
+  'h',
+  'd',
+  null,
+  'c',
+  's',
+];
+
+/// Fake rank distractor for the Suits and ranks order step.
+const String lessonRankOrderDistractorCode = 'Hs';
 
 /// Features for early Suits and ranks steps: seats, cards, board only.
 TableFeatures get lessonSuitsRanksTableFeatures => const TableFeatures(
@@ -573,10 +594,16 @@ TableFeatures get lessonSuitsRanksTableFeatures => const TableFeatures(
   boardSlots: false,
 );
 
-/// Maps a board-card index on [lessonSuitBoardCodes] to a suit letter.
-String? lessonSuitLetterForBoardIndex(int index) {
-  if (index < 0 || index >= lessonSuitBoardSuitLetters.length) return null;
-  return lessonSuitBoardSuitLetters[index];
+/// Maps a board-card index to a suit letter for the given board.
+String? lessonSuitLetterForBoardIndex(
+  int index, {
+  bool withStarDistractor = false,
+}) {
+  final letters = withStarDistractor
+      ? lessonGuidedSuitBoardSuitLetters
+      : lessonSuitBoardSuitLetters;
+  if (index < 0 || index >= letters.length) return null;
+  return letters[index];
 }
 
 /// Full table: tap each suit on the board. Completes when all four are in.
@@ -590,12 +617,13 @@ class LessonSuitBoardTable extends StatefulWidget {
     this.showGuidance = true,
     this.selectedSuitLetters = const {},
     this.syncSelection = false,
+    this.withStarDistractor = false,
   });
 
   /// All four real suits are selected.
   final VoidCallback? onAllSuitsSelected;
 
-  /// A seat was tapped instead of a board card.
+  /// A seat or the star distractor was tapped.
   final VoidCallback? onMiss;
 
   /// Taps are ignored when false.
@@ -610,12 +638,23 @@ class LessonSuitBoardTable extends StatefulWidget {
   /// When true, [selectedSuitLetters] owns the selection.
   final bool syncSelection;
 
+  /// Place a star fifth-suit wrong card in the middle of the board.
+  final bool withStarDistractor;
+
   @override
   State<LessonSuitBoardTable> createState() => _LessonSuitBoardTableState();
 }
 
 class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
   final Set<String> _selected = <String>{};
+
+  List<String> get _boardCodes => widget.withStarDistractor
+      ? lessonGuidedSuitBoardCodes
+      : lessonSuitBoardCodes;
+
+  List<String?> get _suitLetters => widget.withStarDistractor
+      ? lessonGuidedSuitBoardSuitLetters
+      : lessonSuitBoardSuitLetters;
 
   @override
   void initState() {
@@ -641,8 +680,14 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
 
   void _tapCard(int index) {
     if (!widget.enabled || widget.onAllSuitsSelected == null) return;
-    final suit = lessonSuitLetterForBoardIndex(index);
-    if (suit == null) return;
+    final suit = lessonSuitLetterForBoardIndex(
+      index,
+      withStarDistractor: widget.withStarDistractor,
+    );
+    if (suit == null) {
+      widget.onMiss?.call();
+      return;
+    }
     setState(() {
       if (!_selected.add(suit)) _selected.remove(suit);
     });
@@ -654,14 +699,17 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
 
   @override
   Widget build(BuildContext context) {
+    final board = _boardCodes;
+    final letters = _suitLetters;
     final selectedIndexes = <int>{
-      for (var i = 0; i < lessonSuitBoardCodes.length; i++)
-        if (_selected.contains(lessonSuitBoardSuitLetters[i])) i,
+      for (var i = 0; i < board.length; i++)
+        if (letters[i] != null && _selected.contains(letters[i])) i,
     };
     int? nextIndex;
     if (widget.showGuidance && widget.enabled) {
-      for (var i = 0; i < lessonSuitBoardSuitLetters.length; i++) {
-        if (!_selected.contains(lessonSuitBoardSuitLetters[i])) {
+      for (var i = 0; i < letters.length; i++) {
+        final suit = letters[i];
+        if (suit != null && !_selected.contains(suit)) {
           nextIndex = i;
           break;
         }
@@ -669,7 +717,7 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
     }
     return LessonTableStage(
       heroCodes: const ['Ah', 'Kd'],
-      boardCodes: lessonSuitBoardCodes,
+      boardCodes: board,
       villainCount: 3,
       heroFaceUp: false,
       enabled: widget.enabled,
@@ -684,9 +732,13 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
 }
 
 /// Board codes for a rank-order step, shuffled by [activityId].
+///
+/// When [distractorCode] is set (e.g. `Hs`), it is inserted in the middle
+/// after the real ranks are shuffled.
 List<String> lessonRankOrderBoardCodes({
   required String activityId,
   required List<String> rankLabels,
+  String? distractorCode,
 }) {
   final suitCycle = ['h', 'd', 'c', 's'];
   final items = [
@@ -712,6 +764,9 @@ List<String> lessonRankOrderBoardCodes({
     out[0] = out[1];
     out[1] = tmp;
   }
+  if (distractorCode != null && distractorCode.isNotEmpty) {
+    out.insert(out.length ~/ 2, distractorCode);
+  }
   return List<String>.unmodifiable(out);
 }
 
@@ -732,16 +787,25 @@ class LessonRankOrderTable extends StatefulWidget {
     required this.sequenceItems,
     required this.orderedIds,
     required this.onPick,
+    this.onMiss,
     this.enabled = true,
     this.showGuidance = true,
+    this.distractorCode,
   });
 
   final String activityId;
   final List<({String id, String label})> sequenceItems;
   final List<String> orderedIds;
   final ValueChanged<String> onPick;
+
+  /// Tapped a distractor or non-rank board card.
+  final VoidCallback? onMiss;
+
   final bool enabled;
   final bool showGuidance;
+
+  /// Optional fake-rank code inserted in the middle (e.g. `Hs`).
+  final String? distractorCode;
 
   @override
   State<LessonRankOrderTable> createState() => _LessonRankOrderTableState();
@@ -758,12 +822,17 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
       rankLabels: [
         for (final item in widget.sequenceItems) item.label,
       ],
+      distractorCode: widget.distractorCode,
     );
   }
 
   String? _idForBoardIndex(int index) {
     if (index < 0 || index >= _board.length) return null;
-    final rank = _board[index][0];
+    final code = _board[index];
+    if (widget.distractorCode != null && code == widget.distractorCode) {
+      return null;
+    }
+    final rank = code[0];
     for (final item in widget.sequenceItems) {
       if (item.label.toUpperCase() == rank) return item.id;
     }
@@ -773,7 +842,11 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
   void _tap(int index) {
     if (!widget.enabled) return;
     final id = _idForBoardIndex(index);
-    if (id == null || widget.orderedIds.contains(id)) return;
+    if (id == null) {
+      widget.onMiss?.call();
+      return;
+    }
+    if (widget.orderedIds.contains(id)) return;
     widget.onPick(id);
   }
 

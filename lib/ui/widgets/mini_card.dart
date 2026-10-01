@@ -77,7 +77,7 @@ class MiniCard extends StatelessWidget {
         style: GoogleFonts.jetBrainsMono(
           fontSize: size.fontSize * scale,
           fontWeight: FontWeight.w800,
-          color: card.suit == Suit.spades ? AppColors.spades : card.suit.color,
+          color: card.displayColor,
         ),
       ),
     );

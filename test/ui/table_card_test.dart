@@ -22,7 +22,7 @@ void main() {
     );
 
     expect(find.text(card.rankLabel), findsOneWidget);
-    expect(find.text(card.suit.symbol), findsOneWidget);
+    expect(find.text(card.suitSymbol), findsOneWidget);
   });
 
   testWidgets('each suit board code shows a single suit glyph', (tester) async {
@@ -50,10 +50,46 @@ void main() {
     for (final code in codes) {
       final card = CardModel.fromCode(code);
       expect(
-        find.text(card.suit.symbol),
+        find.text(card.suitSymbol),
         findsOneWidget,
-        reason: '$code should draw ${card.suit.symbol} once',
+        reason: '$code should draw ${card.suitSymbol} once',
       );
     }
+  });
+
+  testWidgets('star distractor draws a gold star suit', (tester) async {
+    final card = CardModel.fromCode('5*');
+    expect(card.isTeachingDistractor, isTrue);
+    expect(card.suitSymbol, '★');
+    expect(card.rankLabel, '5');
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(child: TableCard(card: card, width: 52)),
+        ),
+      ),
+    );
+
+    expect(find.text('5'), findsOneWidget);
+    expect(find.text('★'), findsOneWidget);
+  });
+
+  testWidgets('H of spades distractor draws fake rank H', (tester) async {
+    final card = CardModel.fromCode('Hs');
+    expect(card.isTeachingDistractor, isTrue);
+    expect(card.rankLabel, 'H');
+    expect(card.suitSymbol, '♠');
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(child: TableCard(card: card, width: 52)),
+        ),
+      ),
+    );
+
+    expect(find.text('H'), findsOneWidget);
+    expect(find.text('♠'), findsOneWidget);
   });
 }

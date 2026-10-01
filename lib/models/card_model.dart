@@ -39,21 +39,55 @@ enum Suit {
 }
 
 /// A single playing card. Rank is 2–14 (Ace high).
+///
+/// Teaching distractors may set [rankLabelOverride] (fake rank letter) or
+/// [suitSymbolOverride] (e.g. a star fifth suit). Those cards are display-only
+/// and must not enter the evaluator or a live deck.
 @immutable
 class CardModel {
   /// Creates a card with [rank] (2–14) and [suit].
-  const CardModel({required this.rank, required this.suit});
+  const CardModel({
+    required this.rank,
+    required this.suit,
+    this.rankLabelOverride,
+    this.suitSymbolOverride,
+    this.suitColorOverride,
+  });
 
   final int rank;
   final Suit suit;
 
-  /// Short code like `As`, `Td`.
-  String get code =>
-      '${PokerConstants.rankLabels[rank] ?? rank}${suit.code}';
+  /// Fake rank glyph for teaching distractors (e.g. `H`).
+  final String? rankLabelOverride;
 
-  String get rankLabel => PokerConstants.rankLabels[rank] ?? '$rank';
+  /// Fake suit glyph for teaching distractors (e.g. `★`).
+  final String? suitSymbolOverride;
 
-  String get display => '$rankLabel${suit.symbol}';
+  /// Color for [suitSymbolOverride], else [suit.color].
+  final Color? suitColorOverride;
+
+  /// Whether this card is a lesson-only distractor, not a real deck card.
+  bool get isTeachingDistractor =>
+      rankLabelOverride != null || suitSymbolOverride != null;
+
+  /// Short code like `As`, `Td`, `5*`, or `Hs`.
+  String get code {
+    final rankPart = rankLabelOverride ??
+        (PokerConstants.rankLabels[rank] ?? '$rank');
+    final suitPart = suitSymbolOverride != null ? '*' : suit.code;
+    return '$rankPart$suitPart';
+  }
+
+  String get rankLabel =>
+      rankLabelOverride ?? PokerConstants.rankLabels[rank] ?? '$rank';
+
+  /// Suit glyph drawn on the face.
+  String get suitSymbol => suitSymbolOverride ?? suit.symbol;
+
+  /// Ink color for rank and suit on the face.
+  Color get displayColor => suitColorOverride ?? suit.color;
+
+  String get display => '$rankLabel$suitSymbol';
 
   factory CardModel.fromCode(String raw) {
     final trimmed = raw.trim();
@@ -62,7 +96,32 @@ class CardModel {
     }
     final suitCode = trimmed.substring(trimmed.length - 1).toLowerCase();
     final rankRaw = trimmed.substring(0, trimmed.length - 1).toUpperCase();
-    final rank = switch (rankRaw) {
+
+    // Star fifth-suit distractor: e.g. `5*`.
+    if (suitCode == '*') {
+      final rank = _parseRank(rankRaw);
+      return CardModel(
+        rank: rank,
+        suit: Suit.spades,
+        suitSymbolOverride: '★',
+        suitColorOverride: AppColors.goldMuted,
+      );
+    }
+
+    // Fake rank letter distractor: e.g. `Hs` (H of spades).
+    if (rankRaw == 'H') {
+      return CardModel(
+        rank: 0,
+        suit: Suit.fromCode(suitCode),
+        rankLabelOverride: 'H',
+      );
+    }
+
+    return CardModel(rank: _parseRank(rankRaw), suit: Suit.fromCode(suitCode));
+  }
+
+  static int _parseRank(String rankRaw) {
+    return switch (rankRaw) {
       'A' => 14,
       'K' => 13,
       'Q' => 12,
@@ -70,7 +129,6 @@ class CardModel {
       'T' || '10' => 10,
       _ => int.parse(rankRaw),
     };
-    return CardModel(rank: rank, suit: Suit.fromCode(suitCode));
   }
 
   factory CardModel.fromJson(Map<String, dynamic> json) {
@@ -89,10 +147,21 @@ class CardModel {
 
   @override
   bool operator ==(Object other) =>
-      other is CardModel && other.rank == rank && other.suit == suit;
+      other is CardModel &&
+      other.rank == rank &&
+      other.suit == suit &&
+      other.rankLabelOverride == rankLabelOverride &&
+      other.suitSymbolOverride == suitSymbolOverride &&
+      other.suitColorOverride == suitColorOverride;
 
   @override
-  int get hashCode => Object.hash(rank, suit);
+  int get hashCode => Object.hash(
+        rank,
+        suit,
+        rankLabelOverride,
+        suitSymbolOverride,
+        suitColorOverride,
+      );
 
   @override
   String toString() => code;
