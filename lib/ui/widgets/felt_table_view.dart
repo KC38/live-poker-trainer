@@ -148,7 +148,8 @@ class FeltTableView extends StatelessWidget {
   /// 1-based order badge drawn on a seat (showdown rank order).
   final Map<int, int> seatOrderBadges;
 
-  /// Seat index in the hand that a lesson cues with a ring and an arrow.
+  /// Seat index SoftPulsed with shared [CuePulse] + [CueArrows] (same as
+  /// hole / board card cues). Null leaves every seat unmarked.
   final int? cueSeatIndex;
 
   /// Optional layers. Null reads [TableFeaturesScope].
@@ -234,30 +235,34 @@ class FeltTableView extends StatelessWidget {
                           ? 'Your hole cards, face up'
                           : 'Your hole cards')
                       : "${player.name}'s hole cards",
-              child: PlayerSeatWidget(
-                player: player,
-                bigBlind: game.bigBlind,
-                chipDisplayMode: chipDisplayMode,
-                isActive:
-                    (game.activePlayerIndex == slot.index &&
-                        !game.isHandOver) ||
-                    cueSeatIndex == slot.index,
-                isWinner: isWinner,
-                isWaitingOnLlm: waitingOnSeat == player.id,
-                compact: layout.compact,
-                scale: layout.seatScale,
-                review: review,
-                features: f,
-                showCards: showdown,
-                revealHoleCards: faceUp,
-                showHoleBacks: backs,
-                onHeroCardTap: heroCardTaps ? onHeroCardTap : null,
-                selectedHeroIndexes:
-                    player.isHero ? selectedHeroIndexes : const {},
-                highlightHeroIndexes:
-                    player.isHero ? highlightHeroIndexes : const {},
-                dimmedHeroIndexes:
-                    player.isHero ? dimmedHeroIndexes : const {},
+              // SoftPulse seats the same way as cards: CuePulse ring here,
+              // CueArrows in the deco layer — never the action-turn gold tip.
+              child: CuePulse(
+                active: cueSeatIndex == slot.index,
+                borderRadius: 12 * layout.seatScale,
+                child: PlayerSeatWidget(
+                  player: player,
+                  bigBlind: game.bigBlind,
+                  chipDisplayMode: chipDisplayMode,
+                  isActive:
+                      game.activePlayerIndex == slot.index && !game.isHandOver,
+                  isWinner: isWinner,
+                  isWaitingOnLlm: waitingOnSeat == player.id,
+                  compact: layout.compact,
+                  scale: layout.seatScale,
+                  review: review,
+                  features: f,
+                  showCards: showdown,
+                  revealHoleCards: faceUp,
+                  showHoleBacks: backs,
+                  onHeroCardTap: heroCardTaps ? onHeroCardTap : null,
+                  selectedHeroIndexes:
+                      player.isHero ? selectedHeroIndexes : const {},
+                  highlightHeroIndexes:
+                      player.isHero ? highlightHeroIndexes : const {},
+                  dimmedHeroIndexes:
+                      player.isHero ? dimmedHeroIndexes : const {},
+                ),
               ),
             ),
           ),
