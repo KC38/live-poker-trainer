@@ -306,6 +306,9 @@ int previewLessonXp(int activityCount) {
 }
 
 /// XP shown on the Home path REVIEW CTA (25% of a perfect-run preview).
+///
+/// Matches server `reviewLessonXp`: the end-of-lesson total for a replay is
+/// 25% of what that run actually earned; this preview is 25% of a perfect run.
 int reviewLessonXp(int previewXp) {
   if (previewXp <= 0) return 0;
   return (previewXp * 0.25).round();
@@ -314,11 +317,12 @@ int reviewLessonXp(int previewXp) {
 /// XP to show for a finished lesson.
 ///
 /// [completionBonus] is the completion grant in
-/// [CompleteCourseLessonResult.xpAwarded]. [stepXpAwarded] is the sum of
-/// accepted-step grants in this session. [lessonXpFromServer] is that same
-/// total when the function stored step XP on the attempt, including steps
-/// from before a resume. The larger figure is what Nice work and Home share
-/// for a guest with no earlier course XP.
+/// [CompleteCourseLessonResult.xpAwarded] (first run: completion bonus only;
+/// review: the full review-scaled total). [stepXpAwarded] is the sum of
+/// accepted-step grants in this session (0 on reviews — steps defer to
+/// completion). [lessonXpFromServer] is the attempt total when stored,
+/// including steps from before a resume. The larger figure is what Nice work
+/// and Home share for a guest with no earlier course XP.
 int displayedLessonXp({
   required int stepXpAwarded,
   required int completionBonus,

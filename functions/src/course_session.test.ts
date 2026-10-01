@@ -27,6 +27,7 @@ import {
   localDateString,
   parseCourseFlags,
   profileLivesFromData,
+  reviewLessonXp,
   shouldAdvanceActivityAfterSubmit,
   XP_LESSON_COMPLETE,
   XP_PER_ACCEPTED_STEP,
@@ -620,6 +621,16 @@ describe("lesson completion cursor", () => {
     expect(lessonXpTotal(XP_PER_ACCEPTED_STEP)).toBe(
       XP_PER_ACCEPTED_STEP + XP_LESSON_COMPLETE,
     );
+  });
+
+  it("reviewLessonXp is one quarter of the earned first-run total", () => {
+    expect(reviewLessonXp(0)).toBe(0);
+    expect(reviewLessonXp(-3)).toBe(0);
+    expect(reviewLessonXp(Number.NaN)).toBe(0);
+    expect(reviewLessonXp(40)).toBe(10);
+    expect(reviewLessonXp(25)).toBe(6);
+    expect(reviewLessonXp(35)).toBe(9);
+    expect(reviewLessonXp(75)).toBe(19);
   });
 
   it("blocks completion during remediation", () => {

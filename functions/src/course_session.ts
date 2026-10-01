@@ -68,6 +68,15 @@ export function lessonXpTotal(stepXp: number): number {
   return steps + XP_LESSON_COMPLETE;
 }
 
+/**
+ * Review / replay XP: one quarter of a first-run total.
+ * Matches client `reviewLessonXp` (Home REVIEW CTA and end-of-lesson total).
+ */
+export function reviewLessonXp(earnedXp: number): number {
+  if (!Number.isFinite(earnedXp) || earnedXp <= 0) return 0;
+  return Math.round(earnedXp * 0.25);
+}
+
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
 const RATE_LIMIT_START_MAX = 20;
 const RATE_LIMIT_SUBMIT_MAX = 60;
@@ -179,8 +188,15 @@ export interface CourseAttempt {
   masteryWeight: number;
   jumpTestPassed: boolean;
   stepCount: number;
-  /** Accepted-step XP already granted for this attempt. Not the completion bonus. */
+  /**
+   * Full (first-run rate) accepted-step XP accrued on this attempt.
+   * Review runs still accumulate here at the first-run rate so completion
+   * can grant [reviewLessonXp] of the total; lifetime ledger may lag until
+   * complete when [isLessonReview].
+   */
   xpEarned: number;
+  /** Total XP granted for this completed attempt (review-scaled when applicable). */
+  lessonXpAwarded?: number;
   createdAtMs?: number;
   updatedAtMs?: number;
   completedAtMs?: number | null;
@@ -1040,7 +1056,14 @@ export async function submitCourseStepForUser(options: {
       currentIndex;
     const nextActivityId = activities[nextIndex]?.id ?? activityId;
 
-    const xpAwarded = outcome.accepted ? XP_PER_ACCEPTED_STEP : 0;
+    // Track full first-run step XP on the attempt. Reviews defer the ledger
+    // grant to completion so TOTAL XP can be 25% of what this run earned.
+    const priorCompleted = Array.isArray(profileSnap.data()?.completedLessonIds) ?
+      profileSnap.data()!.completedLessonIds as string[] :
+      [];
+    const isReview = priorCompleted.includes(attempt.lessonId);
+    const fullStepXp = outcome.accepted ? XP_PER_ACCEPTED_STEP : 0;
+    const xpAwarded = isReview ? 0 : fullStepXp;
     const timezone = String(profileSnap.data()?.timezone ?? "UTC");
     const today = localDateString(nowMs, timezone);
     const streak = applyStudyDayStreak({
@@ -1071,7 +1094,7 @@ export async function submitCourseStepForUser(options: {
       masteryWeight,
       jumpTestPassed,
       stepCount: attempt.stepCount + 1,
-      xpEarned: attempt.xpEarned + xpAwarded,
+      xpEarned: attempt.xpEarned + fullStepXp,
       status: nextStatus,
       updatedAtMs: nowMs,
     };
@@ -1247,11 +1270,13 @@ export async function completeCourseLessonForUser(options: {
     if (attempt.status === "completed") {
       const profile = profileFromData(profileSnap.data() ?? {});
       const locatedCompleted = findLesson(attempt.lessonId);
+      const storedLessonXp = optionalNumber(attemptSnap.data()?.lessonXpAwarded);
+      const lessonXpAwardedDup = storedLessonXp ?? lessonXpTotal(attempt.xpEarned);
       return {
         attemptId,
         lessonId: attempt.lessonId,
         xpAwarded: 0,
-        lessonXpAwarded: lessonXpTotal(attempt.xpEarned),
+        lessonXpAwarded: lessonXpAwardedDup,
         mastery: masteryRatio(attempt),
         streak: profile.currentStreak,
         acceptedAccuracy: locatedCompleted ?
@@ -1285,13 +1310,18 @@ export async function completeCourseLessonForUser(options: {
     const priorCompleted = Array.isArray(profileSnap.data()?.completedLessonIds) ?
       profileSnap.data()!.completedLessonIds as string[] :
       [];
+    const isReview = priorCompleted.includes(attempt.lessonId);
     const isPracticeOrReplay =
-      priorCompleted.includes(attempt.lessonId) ||
-      isPracticeLesson(located.lesson);
+      isReview || isPracticeLesson(located.lesson);
 
     const mastery = masteryRatio(attempt);
-    const xpAwarded = XP_LESSON_COMPLETE;
-    const lessonXpAwarded = lessonXpTotal(attempt.xpEarned);
+    const fullLessonXp = lessonXpTotal(attempt.xpEarned);
+    // Reviews grant 25% of what this run earned (steps + completion).
+    // First runs keep the completion bonus separate from step ledger rows.
+    const xpAwarded = isReview ?
+      reviewLessonXp(fullLessonXp) :
+      XP_LESSON_COMPLETE;
+    const lessonXpAwarded = isReview ? xpAwarded : fullLessonXp;
     const timezone = String(profileSnap.data()?.timezone ?? "UTC");
     const today = localDateString(nowMs, timezone);
     const streak = applyStudyDayStreak({
@@ -1364,6 +1394,7 @@ export async function completeCourseLessonForUser(options: {
       status: "completed",
       completedAtMs: nowMs,
       updatedAtMs: nowMs,
+      lessonXpAwarded,
       updatedAt: FieldValue.serverTimestamp(),
       completedAt: FieldValue.serverTimestamp(),
     }, {merge: true});
@@ -1375,7 +1406,7 @@ export async function completeCourseLessonForUser(options: {
       {
         entryId: ledgerId,
         amount: xpAwarded,
-        reason: "lesson_complete",
+        reason: isReview ? "lesson_review" : "lesson_complete",
         attemptId,
         lessonId: attempt.lessonId,
         idempotencyKey,
@@ -1951,6 +1982,7 @@ function attemptFromData(data: DocumentData): CourseAttempt {
     jumpTestPassed: data.jumpTestPassed === true,
     stepCount: Number(data.stepCount ?? 0),
     xpEarned: Number(data.xpEarned ?? 0),
+    lessonXpAwarded: optionalNumber(data.lessonXpAwarded),
     createdAtMs: optionalNumber(data.createdAtMs),
     updatedAtMs: optionalNumber(data.updatedAtMs),
     completedAtMs: optionalNumber(data.completedAtMs) ?? null,
