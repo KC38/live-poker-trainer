@@ -636,6 +636,7 @@ class _HomeBodyState extends State<_HomeBody> {
                   child: CoursePathView(
                     nodes: snapshot.nodes,
                     onNodeTap: widget.onNodeTap,
+                    startsEnabled: snapshot.startsEnabled,
                     sectionOrders: sectionOrders,
                     sectionKeys: sectionKeys,
                     unitKeys: unitKeys,

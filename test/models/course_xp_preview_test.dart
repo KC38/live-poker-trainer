@@ -12,6 +12,13 @@ void main() {
     expect(previewLessonXp(5), 5 * kXpPerAcceptedStep + kXpLessonComplete);
   });
 
+  test('reviewLessonXp is one quarter of the perfect-run preview', () {
+    expect(reviewLessonXp(0), 0);
+    expect(reviewLessonXp(40), 10);
+    expect(reviewLessonXp(25), 6);
+    expect(reviewLessonXp(35), 9);
+  });
+
   test('displayedLessonXp prefers the larger local or server total', () {
     expect(
       displayedLessonXp(stepXpAwarded: 20, completionBonus: 25),
