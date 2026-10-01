@@ -989,8 +989,11 @@ class LessonToolRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Frame scaffold uses SafeArea(bottom: false) so the answer dock can
+    // paint edge-to-edge; tools still clear the home indicator.
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+      padding: EdgeInsets.fromLTRB(16, 6, 16, 10 + bottomInset),
       child: Row(
         children: [
           _ToolButton(
@@ -1079,6 +1082,10 @@ class _ToolButton extends StatelessWidget {
 }
 
 /// Bottom beat that replaces the tool row after a grade.
+///
+/// Duolingo-style: opaque full-bleed bar edge-to-edge (including the home
+/// indicator), not a floating inset card. Stage content sits above a clear
+/// gap ([stageClearance]) and never paints over or under this banner.
 class LessonAnswerDock extends StatelessWidget {
   /// Creates the dock for [result].
   const LessonAnswerDock({
@@ -1088,6 +1095,9 @@ class LessonAnswerDock extends StatelessWidget {
     this.busy = false,
     this.recovery,
   });
+
+  /// Dark gap between the stage and the top of this banner.
+  static const double stageClearance = 12;
 
   final SubmitCourseStepResult result;
   final VoidCallback onContinue;
@@ -1099,10 +1109,12 @@ class LessonAnswerDock extends StatelessWidget {
     final accepted = result.accepted;
     final accent = accepted ? AppColors.success : AppColors.danger;
     final title = accepted ? 'Nice!' : "Oops, that's not correct";
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
     return Material(
       color: AppColors.bgElevated,
+      elevation: 0,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+        padding: EdgeInsets.fromLTRB(20, 18, 20, 16 + bottomInset),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
@@ -1281,14 +1293,17 @@ class LessonScreenLayout extends StatelessWidget {
             },
           ),
         ),
-        if (graded)
+        if (graded) ...[
+          // Free margin of scaffold bg so stage controls never sit on the
+          // banner; Expanded above shrinks so content scales upward.
+          const SizedBox(height: LessonAnswerDock.stageClearance),
           LessonAnswerDock(
             result: result!,
             onContinue: onContinue!,
             busy: answerBusy,
             recovery: recovery,
-          )
-        else
+          ),
+        ] else
           LessonToolRow(
             onUndo: onUndo,
             onRedo: onRedo,
