@@ -56,6 +56,10 @@ GameState lessonTableStageGame({
   double bigBlind = lessonBigBlind,
   List<PlayerArchetype>? villainArchetypes,
   bool postBigBlind = true,
+  List<double>? streetBets,
+  double? potTotal,
+  String? heroActionLabel,
+  String? villainActionLabel,
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -107,9 +111,57 @@ GameState lessonTableStageGame({
             players[i].copyWith(name: positions[i % positions.length]),
         ]
       : players;
-  final named = base.copyWith(players: seated);
+  var named = base.copyWith(players: seated);
+  if (streetBets != null || potTotal != null) {
+    named = _applyLessonStageStreetMoney(
+      named,
+      streetBets: streetBets ?? const <double>[],
+      potTotal: potTotal,
+      heroActionLabel: heroActionLabel,
+      villainActionLabel: villainActionLabel,
+    );
+  }
   if (dealerIndex == null) return named;
   return named.copyWith(activePlayerIndex: activeSeatIndex ?? -1);
+}
+
+/// Posts authored street bets and sets main pot from a display [potTotal].
+GameState _applyLessonStageStreetMoney(
+  GameState base, {
+  required List<double> streetBets,
+  double? potTotal,
+  String? heroActionLabel,
+  String? villainActionLabel,
+}) {
+  final n = base.players.length;
+  final bets = [
+    for (var i = 0; i < n; i++) i < streetBets.length ? streetBets[i] : 0.0,
+  ];
+  final streetSum = bets.fold<double>(0, (sum, b) => sum + b);
+  final total = potTotal ?? (base.mainPot + streetSum);
+    final mainPot = (total - streetSum).clamp(0, double.infinity).toDouble();
+  final highest = bets.fold<double>(0, (m, b) => b > m ? b : m);
+  final players = <PlayerModel>[
+    for (var i = 0; i < n; i++)
+      base.players[i].copyWith(
+        currentBet: bets[i],
+        stack: (base.players[i].stack + base.players[i].currentBet - bets[i])
+            .clamp(0, double.infinity)
+            .toDouble(),
+        lastActionLabel: i == 0
+            ? heroActionLabel
+            : (i == 1 ? villainActionLabel : null),
+        clearLastAction:
+            (i == 0 && heroActionLabel == null) ||
+            (i == 1 && villainActionLabel == null) ||
+            i > 1,
+      ),
+  ];
+  return base.copyWith(
+    players: players,
+    mainPot: mainPot,
+    highestBet: highest,
+  );
 }
 
 /// Player type a step names for its opponent, read from [texts] in order.
@@ -199,6 +251,10 @@ class LessonTableStage extends StatelessWidget {
     this.villainArchetypes,
     this.features,
     this.postBigBlind = true,
+    this.streetBets,
+    this.potTotal,
+    this.heroActionLabel,
+    this.villainActionLabel,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -304,6 +360,18 @@ class LessonTableStage extends StatelessWidget {
   /// quizzes). The BB seat index and SoftPulse target stay the same.
   final bool postBigBlind;
 
+  /// Per-seat street bets (hero at 0). Null keeps [lessonBandGame] defaults.
+  final List<double>? streetBets;
+
+  /// Display pot including [streetBets]. Null keeps the band default pot.
+  final double? potTotal;
+
+  /// Last-action badge on the hero after a Call / Bet / Raise.
+  final String? heroActionLabel;
+
+  /// Last-action badge on the first villain when a bet faces the hero.
+  final String? villainActionLabel;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -319,6 +387,10 @@ class LessonTableStage extends StatelessWidget {
     bigBlind: bigBlind,
     villainArchetypes: villainArchetypes,
     postBigBlind: postBigBlind,
+    streetBets: streetBets,
+    potTotal: potTotal,
+    heroActionLabel: heroActionLabel,
+    villainActionLabel: villainActionLabel,
   );
 
   @override

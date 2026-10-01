@@ -13025,12 +13025,24 @@ class LessonActionTable extends StatelessWidget {
     super.key,
     required this.spot,
     this.coachOwnsCue = false,
+    this.potLabelOverride,
+    this.facingBetAmount,
+    this.heroBetAmount,
   });
 
   final LessonActionSpot spot;
 
   /// SoftPulse + Rex own the next-action cue — suppress felt gold status.
   final bool coachOwnsCue;
+
+  /// Live pot label after Call / Bet / Raise (e.g. `Pot 15`).
+  final String? potLabelOverride;
+
+  /// Facing bet chips to show beside the pot when a bet is out.
+  final double? facingBetAmount;
+
+  /// Hero street bet chips after the learner puts money in.
+  final double? heroBetAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -13139,7 +13151,26 @@ class LessonActionTable extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                _PotChip(label: spot.potLabel),
+                _PotChip(label: potLabelOverride ?? spot.potLabel),
+                if (facingBetAmount != null && facingBetAmount! > 0)
+                  _PotChip(
+                    label: facingBetAmount == facingBetAmount!.roundToDouble()
+                        ? 'Bet ${facingBetAmount!.round()}'
+                        : 'Bet $facingBetAmount',
+                  ),
+                if (heroBetAmount != null && heroBetAmount! > 0)
+                  _PotChip(
+                    label: () {
+                      final n = heroBetAmount == heroBetAmount!.roundToDouble()
+                          ? '${heroBetAmount!.round()}'
+                          : '$heroBetAmount';
+                      // Open-pot hero bet uses the same "Bet" word as live.
+                      if (facingBetAmount == null || facingBetAmount! <= 0) {
+                        return 'Bet $n';
+                      }
+                      return 'You $n';
+                    }(),
+                  ),
                 if (spot.stackLabel != null) _PotChip(label: spot.stackLabel!),
               ],
             ),
