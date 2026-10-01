@@ -48,6 +48,80 @@ void main() {
       expect(result.heartsRestored, 0);
       expect(result.changed, isTrue);
     });
+
+    test('does not restore before the scheduled instant', () {
+      final result = applyPassiveHeartRefill(
+        livesRemaining: 3,
+        livesMax: 5,
+        livesNextRefillAtMs: 1000,
+        nowMs: 999,
+      );
+      expect(result.livesRemaining, 3);
+      expect(result.heartsRestored, 0);
+      expect(result.livesNextRefillAtMs, 1000);
+      expect(result.changed, isFalse);
+    });
+
+    test(
+      'restores one heart per crossed interval and keeps the next timer ahead',
+      () {
+        final interval = kHeartRefillInterval.inMilliseconds;
+        final result = applyPassiveHeartRefill(
+          livesRemaining: 0,
+          livesMax: 5,
+          livesNextRefillAtMs: 1000,
+          nowMs: 1000 + interval * 2 - 1,
+        );
+        expect(result.heartsRestored, 2);
+        expect(result.livesRemaining, 2);
+        expect(result.livesNextRefillAtMs, 1000 + interval * 2);
+        expect(result.changed, isTrue);
+      },
+    );
+
+    test('replaces a non-positive ceiling and clamps a negative count', () {
+      for (final max in <int>[0, -1]) {
+        final result = applyPassiveHeartRefill(
+          livesRemaining: -2,
+          livesMax: max,
+          livesNextRefillAtMs: null,
+          nowMs: 20,
+        );
+        expect(result.livesMax, kDefaultLessonLives);
+        expect(result.livesRemaining, 0);
+        expect(
+          result.livesNextRefillAtMs,
+          20 + kHeartRefillInterval.inMilliseconds,
+        );
+        expect(result.heartsRestored, 0);
+        expect(result.changed, isTrue);
+      }
+    });
+
+    test('clamps a count above the ceiling and clears the timer', () {
+      final result = applyPassiveHeartRefill(
+        livesRemaining: 9,
+        livesMax: 5,
+        livesNextRefillAtMs: 40,
+        nowMs: 0,
+      );
+      expect(result.livesRemaining, 5);
+      expect(result.livesNextRefillAtMs, isNull);
+      expect(result.heartsRestored, 0);
+      expect(result.changed, isTrue);
+    });
+
+    test('reports unchanged when already full with no timer', () {
+      final result = applyPassiveHeartRefill(
+        livesRemaining: 5,
+        livesMax: 5,
+        livesNextRefillAtMs: null,
+        nowMs: 0,
+      );
+      expect(result.changed, isFalse);
+      expect(result.heartsRestored, 0);
+      expect(result.livesNextRefillAtMs, isNull);
+    });
   });
 
   group('CourseHomeSnapshot.withHeartState', () {

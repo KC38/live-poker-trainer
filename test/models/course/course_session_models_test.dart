@@ -99,6 +99,78 @@ void main() {
     expect(complete.liveTrainingGranted, isTrue);
     expect(complete.xpAwarded, 25);
     expect(complete.lessonXpAwarded, isNull);
+    expect(complete.heartsRestored, 0);
+    expect(complete.gems, 0);
+    expect(complete.gemsAwarded, 0);
+    expect(complete.livesRemaining, isNull);
+    expect(complete.livesMax, isNull);
+    expect(complete.livesNextRefillAtMs, isNull);
+  });
+
+  test('complete result parses a practice heart restore', () {
+    final complete = CompleteCourseLessonResult.fromJson(<String, dynamic>{
+      'attemptId': 'att-1',
+      'lessonId': 'lesson-1',
+      'xpAwarded': 19,
+      'lessonXpAwarded': 19,
+      'mastery': 1,
+      'streak': 1,
+      'acceptedAccuracy': 1,
+      'liveTrainingGranted': false,
+      'duplicate': false,
+      'gemsAwarded': 0,
+      'gems': 40.8,
+      'heartsRestored': 1.9,
+      'livesRemaining': 1,
+      'livesMax': 5,
+      'livesNextRefillAtMs': 900.6,
+    });
+    expect(complete.heartsRestored, 1);
+    expect(complete.gems, 40);
+    expect(complete.livesRemaining, 1);
+    expect(complete.livesMax, 5);
+    expect(complete.livesNextRefillAtMs, 900);
+    expect(complete.lessonXpAwarded, 19);
+  });
+
+  test('refill result defaults missing heart fields', () {
+    final result = RefillCourseHeartsResult.fromJson(<String, dynamic>{
+      'method': 'ad',
+    });
+    expect(result.method, 'ad');
+    expect(result.livesRemaining, 0);
+    expect(result.livesMax, 5);
+    expect(result.heartsRestored, 0);
+    expect(result.gems, 0);
+    expect(result.gemsSpent, 0);
+    expect(result.duplicate, isFalse);
+    expect(result.livesNextRefillAtMs, isNull);
+    expect(result.nextAdClaimAtMs, isNull);
+    expect(result.adClaimsRemainingToday, 0);
+  });
+
+  test('refill result truncates fractional counts', () {
+    final result = RefillCourseHeartsResult.fromJson(<String, dynamic>{
+      'method': 'gems',
+      'livesRemaining': 4.9,
+      'livesMax': 5,
+      'heartsRestored': 3.2,
+      'gems': 100.8,
+      'gemsSpent': 650,
+      'duplicate': true,
+      'livesNextRefillAtMs': 12.6,
+      'nextAdClaimAtMs': 40.1,
+      'adClaimsRemainingToday': 2.7,
+    });
+    expect(result.method, 'gems');
+    expect(result.livesRemaining, 4);
+    expect(result.heartsRestored, 3);
+    expect(result.gems, 100);
+    expect(result.gemsSpent, 650);
+    expect(result.duplicate, isTrue);
+    expect(result.livesNextRefillAtMs, 12);
+    expect(result.nextAdClaimAtMs, 40);
+    expect(result.adClaimsRemainingToday, 2);
   });
 
   test('complete result keeps the server lesson total', () {

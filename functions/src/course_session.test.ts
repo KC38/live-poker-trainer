@@ -296,14 +296,22 @@ describe("soft grading and life loss", () => {
     });
   });
 
-  it("accepts the authored sequence and rejects permutations", () => {
+  it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",
     )!;
     expect(gradeCourseResponse({
       activity: scaffolded,
-      orderedIds: ["seat-utg", "seat-hj", "seat-btn"],
+      orderedIds: ["seat-utg", "seat-hj", "seat-co", "seat-btn"],
     })).toMatchObject({accepted: true, lifeLost: false});
+    expect(gradeCourseResponse({
+      activity: scaffolded,
+      orderedIds: ["seat-utg", "seat-hj", "seat-btn"],
+    })).toMatchObject({
+      grade: "clear_mistake",
+      accepted: false,
+      lifeLost: false,
+    });
   });
 
   it("rejects unknown choices and empty scored payloads", () => {
@@ -686,6 +694,24 @@ describe("shouldBlockSubmitForHearts", () => {
       shouldBlockSubmitForHearts({
         livesRemaining: 1,
         isPracticeOrReplay: false,
+      }),
+    ).toBe(false);
+  });
+
+  it("blocks a first-run lesson when the stored count is negative", () => {
+    expect(
+      shouldBlockSubmitForHearts({
+        livesRemaining: -1,
+        isPracticeOrReplay: false,
+      }),
+    ).toBe(true);
+  });
+
+  it("still allows practice when the stored count is negative", () => {
+    expect(
+      shouldBlockSubmitForHearts({
+        livesRemaining: -1,
+        isPracticeOrReplay: true,
       }),
     ).toBe(false);
   });
