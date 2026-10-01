@@ -22453,7 +22453,28 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('feedback sheet never shows life loss for questionable', (
+  testWidgets('feedback sheet shows life loss for questionable when server marks it', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(
+        LessonFeedbackSheet(
+          result: _result(
+            grade: SoftGrade.questionable,
+            accepted: false,
+            lifeLost: true,
+          ),
+          onContinue: () {},
+          onRetry: () {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Life −1'), findsOneWidget);
+    expect(find.text('Think again'), findsOneWidget);
+  });
+
+  testWidgets('feedback sheet hides life loss when server did not deduct', (
     tester,
   ) async {
     await tester.pumpWidget(

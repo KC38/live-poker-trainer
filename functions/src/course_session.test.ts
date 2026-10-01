@@ -99,19 +99,14 @@ describe("soft grading and life loss", () => {
   const streets = findLesson("lesson-01-04-01-streets-and-order")!.lesson;
   const pots = findLesson("lesson-01-05-01-winning-pots")!.lesson;
 
-  it("never loses a life on reasonable or questionable answers", () => {
-    for (const grade of ["reasonable", "questionable"] as const) {
-      const outcome = evaluateLifeAndAcceptance({
-        grade,
+  it("loses a life on any non-accepted grade when stage is eligible", () => {
+    expect(
+      evaluateLifeAndAcceptance({
+        grade: "questionable",
         stage: "unguided",
         lifeLossEligible: true,
-      });
-      expect(outcome.lifeLost).toBe(false);
-      expect(outcome.accepted).toBe(grade === "reasonable");
-    }
-  });
-
-  it("loses a life only on clear_mistake when stage is eligible", () => {
+      }),
+    ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
@@ -135,17 +130,24 @@ describe("soft grading and life loss", () => {
     ).toBe(false);
     expect(
       evaluateLifeAndAcceptance({
-        grade: "clear_mistake",
+        grade: "questionable",
         stage: "unguided",
         lifeLossEligible: false,
       }).lifeLost,
     ).toBe(false);
   });
 
-  it("loses a life on jump_test clear_mistake when eligible", () => {
+  it("loses a life on jump_test mistakes when eligible", () => {
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
+        stage: "jump_test",
+        lifeLossEligible: true,
+      }),
+    ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
+    expect(
+      evaluateLifeAndAcceptance({
+        grade: "questionable",
         stage: "jump_test",
         lifeLossEligible: true,
       }),
@@ -224,6 +226,18 @@ describe("soft grading and life loss", () => {
       choiceId: "jam-ato",
     })).toMatchObject({
       grade: "clear_mistake",
+      accepted: false,
+      lifeLost: true,
+    });
+
+    const holesCheckpoint = lesson.activities.find(
+      (activity) => activity.id === "act-01-01-01-checkpoint-table",
+    )!;
+    expect(gradeCourseResponse({
+      activity: holesCheckpoint,
+      choiceId: "choice-checkpoint-all",
+    })).toMatchObject({
+      grade: "questionable",
       accepted: false,
       lifeLost: true,
     });
