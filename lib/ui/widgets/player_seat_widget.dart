@@ -447,7 +447,7 @@ class _TypeTag extends StatelessWidget {
   }
 }
 
-/// Dealer, small-blind, or big-blind puck beside a seat box.
+/// Dealer, small-blind, or big-blind puck on a seat's felt lane.
 class SeatPuck extends StatefulWidget {
   /// Creates a puck reading [label] (`D`, `SB`, or `BB`).
   const SeatPuck({super.key, required this.label, this.scale = 1});
