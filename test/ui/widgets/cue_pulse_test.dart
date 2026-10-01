@@ -37,12 +37,12 @@ void main() {
 
     expect(GlowHighlight.outset, 6);
     expect(GlowHighlight.softBleed, 8);
-    expect(GlowHighlight.gutter, GlowHighlight.outset * 2);
+    // SoftPulse cues one tile at a time — gutter clears a single outset.
+    expect(GlowHighlight.gutter, GlowHighlight.outset);
     expect(ring.top, closeTo(child.top - pad.top, 0.5));
     expect(ring.left, closeTo(child.left - pad.left, 0.5));
     expect(ring.right, closeTo(child.right + pad.right, 0.5));
     expect(ring.bottom, closeTo(child.bottom + pad.bottom, 0.5));
-    // softBleed is reserved outside the ring so neighbors stay clear.
     expect(ring.width, closeTo(80 + pad.horizontal, 0.5));
     expect(ring.height, closeTo(60 + pad.vertical, 0.5));
   });
@@ -79,9 +79,9 @@ void main() {
     final off = await pumpActive(false);
     final on = await pumpActive(true);
     expect(on, off);
-    // Face is inset by outset on each side inside the fixed outer box.
-    expect(off.width, closeTo(120 - 2 * GlowHighlight.softBleed - 2 * GlowHighlight.outset, 0.5));
-    expect(off.height, closeTo(80 - 2 * GlowHighlight.softBleed - 2 * GlowHighlight.outset, 0.5));
+    // Face is inset by outset only (no per-tile softBleed).
+    expect(off.width, closeTo(120 - 2 * GlowHighlight.outset, 0.5));
+    expect(off.height, closeTo(80 - 2 * GlowHighlight.outset, 0.5));
   });
 
   testWidgets('felt SoftPulse paints the ring outside the child box', (

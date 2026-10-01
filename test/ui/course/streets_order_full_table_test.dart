@@ -173,20 +173,38 @@ void main() {
     final betRect = tester.getRect(find.text('BET'));
     final raiseRect = tester.getRect(find.text('RAISE'));
     final undoRect = tester.getRect(find.byTooltip('Undo'));
-    // SoftPulse sibling gap clears reserved rings (outset + softBleed each).
+    // SoftPulse cues one tile — gutter clears a single outset.
     expect(
       raiseRect.left - betRect.right,
       greaterThanOrEqualTo(GlowHighlight.gutter),
     );
-    // Each SoftPulse reserves outset+softBleed under the face.
+    // Equal-height SoftPulse row + stage inset/clearance under the face.
     expect(
       undoRect.top - betRect.bottom,
       greaterThanOrEqualTo(
         GlowHighlight.outset +
-            GlowHighlight.softBleed +
             LessonAnswerDock.stageGlowInset +
             LessonAnswerDock.stageClearance,
       ),
+    );
+    Size cardSize(String label) {
+      return tester.getSize(
+        find
+            .ancestor(
+              of: find.text(label),
+              matching: find.byType(InkWell),
+            )
+            .first,
+      );
+    }
+
+    expect(
+      cardSize('BET').height,
+      moreOrLessEquals(cardSize('RAISE').height, epsilon: 0.5),
+    );
+    expect(
+      cardSize('BET').height,
+      moreOrLessEquals(cardSize('ALL-IN').height, epsilon: 0.5),
     );
     expect(tester.takeException(), isNull);
   });

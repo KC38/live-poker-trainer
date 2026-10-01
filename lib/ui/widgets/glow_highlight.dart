@@ -18,8 +18,9 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 /// (Bet/Raise/All-in, streets, demos) do not paint over neighbors or the
 /// tool row. That reserved box is present whether SoftPulse is on or off,
 /// so the button face does not resize when hint / guidance toggles the
-/// ring. Felt seats and cards pass [reserveLayout] false so their
-/// footprint stays tight under [Positioned] constraints.
+/// ring. SoftPulse cues one target at a time, so [gutter] clears a single
+/// [outset], not two. Felt seats and cards pass [reserveLayout] false so
+/// their footprint stays tight under [Positioned] constraints.
 class GlowHighlight extends StatefulWidget {
   /// Wraps [child] in the shared gold highlight.
   const GlowHighlight({
@@ -35,13 +36,13 @@ class GlowHighlight extends StatefulWidget {
   /// Outward paint past [child] on each side (ring pad).
   static const double outset = 6;
 
-  /// Extra layout air past the ring for soft-shadow so neighboring SoftPulse
-  /// tiles stay clear of the glow.
+  /// Soft-shadow bleed past the ring. Used by the lesson stage inset under
+  /// SoftPulse rows — not double-counted into every tile face.
   static const double softBleed = 8;
 
-  /// Minimum clear space between neighboring SoftPulse targets after each
-  /// has reserved its own [outset] + [softBleed].
-  static const double gutter = outset * 2;
+  /// Clear space between SoftPulse siblings. SoftPulse highlights one tile
+  /// at a time, so this clears a single [outset], not two.
+  static const double gutter = outset;
 
   /// Content to highlight — a card, a name tag, a row of cards, etc.
   final Widget child;
@@ -142,26 +143,23 @@ class _GlowHighlightState extends State<GlowHighlight>
     );
 
     if (widget.reserveLayout) {
-      // SoftPulse tiles: always keep outset + softBleed in layout so the
-      // face size is stable when SoftPulse turns on (hint / guidance).
-      // Breath is glow opacity only — no Transform.scale.
+      // SoftPulse tiles: reserve only [outset] so faces stay large. Soft
+      // shadow may soft-bleed into [gutter] / stage inset; SoftPulse cues
+      // one tile at a time so that is enough. Breath is glow opacity only.
       return AnimatedBuilder(
         animation: _motion,
         builder: (context, child) {
           final t = widget.animated ? _beat.value : 0.55;
-          return Padding(
-            padding: const EdgeInsets.all(GlowHighlight.softBleed),
-            child: DecoratedBox(
-              key: const ValueKey<String>('glow-highlight-ring'),
-              decoration:
-                  widget.active
-                      ? _ringDecoration(t, radius)
-                      : const BoxDecoration(),
-              child: Padding(
-                key: const ValueKey<String>('glow-highlight'),
-                padding: pad,
-                child: child,
-              ),
+          return DecoratedBox(
+            key: const ValueKey<String>('glow-highlight-ring'),
+            decoration:
+                widget.active
+                    ? _ringDecoration(t, radius)
+                    : const BoxDecoration(),
+            child: Padding(
+              key: const ValueKey<String>('glow-highlight'),
+              padding: pad,
+              child: child,
             ),
           );
         },
