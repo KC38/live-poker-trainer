@@ -22,6 +22,7 @@ import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 bool isLessonBlindsFrameActivity(String activityId) {
   return activityId == 'act-01-01-03-guided-button' ||
@@ -32,7 +33,7 @@ bool isLessonBlindsFrameActivity(String activityId) {
 /// Felt seat SoftPulse should mark for [highlight], if any.
 ///
 /// Shared by blinds / position frame steps so answer cues always go through
-/// [LessonTableStage.cueSeatIndex] (CuePulse + CueArrows) — never the action
+/// [LessonTableStage.cueSeatIndex] ([GlowHighlight]) — never the action
 /// glow from [LessonTableStage.activeSeatIndex].
 int? lessonSeatIndexForHighlight(LessonTableHighlight highlight) {
   return switch (highlight) {
@@ -2009,7 +2010,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
                       alignment: WrapAlignment.center,
                       children: [
                         for (final choice in displayChoices)
-                          _FamilySoftPulse(
+                          GlowHighlight(
                             active:
                                 showGuidance &&
                                 selected == null &&
@@ -2069,7 +2070,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
                                   activity.id == 'act-03-03-01-guided' ||
                                   (controller.hintVisible &&
                                       activity.id.startsWith('act-03-03-01-')));
-                          return _FamilySoftPulse(
+                          return GlowHighlight(
                             active: pulseNext || invitePulse,
                             child: HandExampleTile(
                               example: example,
@@ -2164,76 +2165,6 @@ class _HandCategoryTapActivity extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-/// Soft gold pulse on the next guided family tile.
-class _FamilySoftPulse extends StatefulWidget {
-  const _FamilySoftPulse({required this.active, required this.child});
-
-  final bool active;
-  final Widget child;
-
-  @override
-  State<_FamilySoftPulse> createState() => _FamilySoftPulseState();
-}
-
-class _FamilySoftPulseState extends State<_FamilySoftPulse>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    if (widget.active) {
-      _pulse.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _FamilySoftPulse oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.active && !_pulse.isAnimating) {
-      _pulse.repeat(reverse: true);
-    } else if (!widget.active && _pulse.isAnimating) {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.active) return widget.child;
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final glow = 0.22 + (_pulse.value * 0.38);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.55),
-                blurRadius: 10 + (_pulse.value * 6),
-                spreadRadius: 0.4,
-              ),
-            ],
-          ),
-          child: child,
-        );
-      },
-      child: widget.child,
     );
   }
 }
@@ -2881,7 +2812,7 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
                         for (var i = 0; i < realSuits.length; i++) ...[
                           if (i > 0) const SizedBox(width: 10),
                           Expanded(
-                            child: _FamilySoftPulse(
+                            child: GlowHighlight(
                               active:
                                   hint != null &&
                                   realSuits[i] == hint &&
@@ -3050,7 +2981,7 @@ class _HoleCardBands extends StatelessWidget {
       game: lessonBandGame(heroCodes: codes),
       chipDisplayMode: ChipDisplayMode.dollars,
     );
-    return _FamilySoftPulse(
+    return GlowHighlight(
       active:
           showGuidance &&
           (activity.stage == ActivityStage.guided || hintVisible) &&
