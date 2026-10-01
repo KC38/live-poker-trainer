@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "d9f818e52d5956b4dbb73322f0b7085c62cbdc01fb6085f2137c4d2089e9c334",
+  "contentChecksum": "f1f256b5ef3748cc9b17b4e509d5ccd37fb616e90ed8af72fd22a03de7bd503a",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -322,7 +322,7 @@
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Tap deuce, ten, and ace on the board in ascending order.",
+                  "accessibilityText": "Tap the three board ranks from lowest to highest.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -330,7 +330,7 @@
                   ],
                   "lifeLossEligible": false,
                   "objectives": [
-                    "Order ranks from deuce to ace"
+                    "Order ranks from lowest to highest"
                   ],
                   "prompt": "Tap these ranks from lowest to highest.",
                   "sequenceItems": [
@@ -368,18 +368,18 @@
                   "choices": [
                     {
                       "id": "suited-ah-kh",
-                      "label": "Ah Kh",
-                      "accessibilityText": "Ah Kh"
+                      "label": "Suited",
+                      "accessibilityText": "Suited"
                     },
                     {
                       "id": "offsuit-ah-kd",
-                      "label": "Ac Kd",
-                      "accessibilityText": "Ac Kd"
+                      "label": "Offsuit",
+                      "accessibilityText": "Offsuit"
                     },
                     {
                       "id": "pair-77",
-                      "label": "7c 7d",
-                      "accessibilityText": "7c 7d"
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair"
                     }
                   ]
                 },
@@ -389,7 +389,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the seat with pocket nines.",
+                  "accessibilityText": "Tap the seat with a pocket pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -403,18 +403,18 @@
                   "choices": [
                     {
                       "id": "pocket-pair",
-                      "label": "9h 9d",
-                      "accessibilityText": "9h 9d"
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair"
                     },
                     {
                       "id": "suited-nine",
-                      "label": "Ah Kh",
-                      "accessibilityText": "Ah Kh"
+                      "label": "Suited",
+                      "accessibilityText": "Suited"
                     },
                     {
                       "id": "two-high",
-                      "label": "Ac Kd",
-                      "accessibilityText": "Ac Kd"
+                      "label": "Offsuit",
+                      "accessibilityText": "Offsuit"
                     }
                   ]
                 }
@@ -845,7 +845,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the five cards for aces with king kicker.",
+                  "accessibilityText": "Tap the five cards for top pair with the best kicker.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -859,25 +859,25 @@
                   "choices": [
                     {
                       "id": "best-pair-k",
-                      "label": "Pair of aces with king kicker",
-                      "accessibilityText": "Pair of aces with king kicker"
+                      "label": "Top pair with best kicker",
+                      "accessibilityText": "Top pair with best kicker"
                     },
                     {
                       "id": "weak-kickers",
-                      "label": "Aces with nine — leave the king out",
-                      "accessibilityText": "Aces with nine — leave the king out"
+                      "label": "Pair with a weaker kicker",
+                      "accessibilityText": "Pair with a weaker kicker"
                     },
                     {
                       "id": "ignore-ace",
-                      "label": "King-high only",
-                      "accessibilityText": "King-high only"
+                      "label": "High card only",
+                      "accessibilityText": "High card only"
                     }
                   ],
                   "coachMedia": [
                     {
                       "id": "act-01-02-02-guided-seven-hint",
                       "kind": "hint",
-                      "text": "You only need one ace from the board for top pair."
+                      "text": "Use your pair plus the strongest kickers."
                     }
                   ]
                 },
@@ -957,7 +957,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap three eights and two kings for eights full of kings.",
+                  "accessibilityText": "Tap three of a kind plus a pair for a full house.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -972,18 +972,18 @@
                   "choices": [
                     {
                       "id": "fh-eights",
-                      "label": "Full house — eights full of kings",
-                      "accessibilityText": "Full house — eights full of kings"
+                      "label": "Full house — trips over the higher pair",
+                      "accessibilityText": "Full house — trips over the higher pair"
                     },
                     {
                       "id": "fh-deuces",
-                      "label": "Full house — eights full of deuces",
-                      "accessibilityText": "Full house — eights full of deuces"
+                      "label": "Full house — trips over the lower pair",
+                      "accessibilityText": "Full house — trips over the lower pair"
                     },
                     {
                       "id": "two-pair-only",
-                      "label": "Two pair, eights and kings",
-                      "accessibilityText": "Two pair, eights and kings"
+                      "label": "Two pair only",
+                      "accessibilityText": "Two pair only"
                     }
                   ]
                 }
@@ -2722,7 +2722,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Look at pocket eights on the felt — tap Pocket pair.",
+                  "accessibilityText": "Look at the pocket pair on the felt — tap Pocket pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2764,7 +2764,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Look at ace-king on the felt — tap Broadway.",
+                  "accessibilityText": "Look at the broadway holes on the felt — tap Broadway.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3982,7 +3982,7 @@
                   "objectives": [
                     "Confirm starting-hand family"
                   ],
-                  "prompt": "Ah 5h belongs to which family?",
+                  "prompt": "These holes belong to which family?",
                   "choices": [
                     {
                       "id": "j2-sa",
@@ -4562,7 +4562,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Three remaining aces are the clean outs.",
+                  "accessibilityText": "Tap the three clean outs on the felt.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -4572,17 +4572,17 @@
                   "objectives": [
                     "Count clean versus dirty outs"
                   ],
-                  "prompt": "Board Kc 8h 2d. You hold Ah Qh. Clean outs to the best hand?",
+                  "prompt": "Clean outs to the best hand?",
                   "choices": [
                     {
                       "id": "outs-3",
-                      "label": "About 3 — the aces",
-                      "accessibilityText": "About 3 — the aces"
+                      "label": "About 3 — clean overs",
+                      "accessibilityText": "About 3 — clean overs"
                     },
                     {
                       "id": "outs-6",
-                      "label": "6 — aces and queens",
-                      "accessibilityText": "6 — aces and queens"
+                      "label": "6 — clean and dirty",
+                      "accessibilityText": "6 — clean and dirty"
                     },
                     {
                       "id": "outs-0",
