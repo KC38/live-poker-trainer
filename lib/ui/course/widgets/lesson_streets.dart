@@ -135,16 +135,24 @@ class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
 /// Full table: order streets under the felt while the board follows.
 class LessonStreetsOrderTable extends StatelessWidget {
   /// Creates the order stage.
+  ///
+  /// [sequenceItems] is the answer key (chronological). [paletteItems] is the
+  /// under-felt chip order — pass a shuffled copy so teach-by-doing stays real.
   const LessonStreetsOrderTable({
     super.key,
     required this.sequenceItems,
     required this.orderedIds,
     required this.onPick,
+    List<({String id, String label})>? paletteItems,
     this.enabled = true,
     this.showGuidance = true,
-  });
+  }) : paletteItems = paletteItems ?? sequenceItems;
 
+  /// Chronological answer key (SoftPulse / board preview).
   final List<({String id, String label})> sequenceItems;
+
+  /// Display order for remaining chips (shuffled when authored by the runner).
+  final List<({String id, String label})> paletteItems;
   final List<String> orderedIds;
   final ValueChanged<String> onPick;
   final bool enabled;
@@ -153,7 +161,7 @@ class LessonStreetsOrderTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final remaining = [
-      for (final item in sequenceItems)
+      for (final item in paletteItems)
         if (!orderedIds.contains(item.id)) item,
     ];
     final nextId =
@@ -180,6 +188,7 @@ class LessonStreetsOrderTable extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Wrap(
+          key: const ValueKey<String>('street-order-palette'),
           spacing: GlowHighlight.gutter,
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,

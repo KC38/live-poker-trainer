@@ -226,8 +226,28 @@ void main() {
 
     expect(find.byType(LessonStreetsOrderTable), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byKey(const ValueKey('street-order-palette')), findsOneWidget);
 
-    for (final label in const ['Preflop', 'Flop', 'Turn', 'River']) {
+    // Palette is shuffled — not chronological left-to-right.
+    const labels = ['Preflop', 'Flop', 'Turn', 'River'];
+    final expectedPalette =
+        shuffledSequencePalette(
+          activityId: activity.id,
+          items: activity.sequenceItems,
+        ).map((item) => item.label).toList();
+    expect(expectedPalette, isNot(labels));
+    final shown = tester
+        .widgetList<Text>(
+          find.descendant(
+            of: find.byKey(const ValueKey('street-order-palette')),
+            matching: find.byType(Text),
+          ),
+        )
+        .map((text) => text.data)
+        .toList();
+    expect(shown, expectedPalette);
+
+    for (final label in labels) {
       await tester.tap(find.text(label));
       await tester.pump();
     }
@@ -238,6 +258,38 @@ void main() {
       'st-river',
     ]);
     expect(autoSubmits, 1);
+  });
+
+  test('shuffledSequencePalette never leaves streets in authored order', () {
+    const items = [
+      CourseChoice(id: 'st-pre', label: 'Preflop'),
+      CourseChoice(id: 'st-flop', label: 'Flop'),
+      CourseChoice(id: 'st-turn', label: 'Turn'),
+      CourseChoice(id: 'st-river', label: 'River'),
+    ];
+    final out = shuffledSequencePalette(
+      activityId: 'act-01-04-01-guided-streets',
+      items: items,
+    );
+    expect(out.map((item) => item.id).toList(), isNot([
+      'st-pre',
+      'st-flop',
+      'st-turn',
+      'st-river',
+    ]));
+    expect(out.map((item) => item.id).toSet(), {
+      'st-pre',
+      'st-flop',
+      'st-turn',
+      'st-river',
+    });
+    expect(
+      shuffledSequencePalette(
+        activityId: 'act-01-04-01-guided-streets',
+        items: items,
+      ).map((item) => item.id).toList(),
+      out.map((item) => item.id).toList(),
+    );
   });
 
   testWidgets('scaffolded seat order taps seats on the full table', (
