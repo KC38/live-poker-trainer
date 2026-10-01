@@ -27,6 +27,7 @@ import {
   localDateString,
   parseCourseFlags,
   profileLivesFromData,
+  omitUndefined,
   reviewLessonXp,
   shouldAdvanceActivityAfterSubmit,
   XP_LESSON_COMPLETE,
@@ -631,6 +632,22 @@ describe("lesson completion cursor", () => {
     expect(reviewLessonXp(25)).toBe(6);
     expect(reviewLessonXp(35)).toBe(9);
     expect(reviewLessonXp(75)).toBe(19);
+  });
+
+  it("omitUndefined drops undefined keys so Firestore writes stay valid", () => {
+    const payload = omitUndefined({
+      xpEarned: 10,
+      lessonXpAwarded: undefined,
+      completedAtMs: null,
+      stepCount: 0,
+    });
+    expect(payload).toEqual({
+      xpEarned: 10,
+      completedAtMs: null,
+      stepCount: 0,
+    });
+    expect(Object.prototype.hasOwnProperty.call(payload, "lessonXpAwarded"))
+      .toBe(false);
   });
 
   it("blocks completion during remediation", () => {
