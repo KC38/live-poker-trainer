@@ -99,7 +99,8 @@ class CourseUnitBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final base = color;
-    final shadow = Color.lerp(base, Colors.black, 0.28)!;
+    // Duo-style extruded lip: darker plate under a same-radius face.
+    final lip = Color.lerp(base, Colors.black, 0.22)!;
     final eyebrow = 'SECTION $sectionOrder, UNIT $unitOrder';
     const radius = BorderRadius.all(Radius.circular(16));
 
@@ -107,52 +108,50 @@ class CourseUnitBanner extends StatelessWidget {
       button: onTap != null,
       label: '$eyebrow. $unitTitle',
       hint: onTap == null ? null : 'Open section list',
-      child: Material(
-        color: Colors.transparent,
-        shape: const RoundedRectangleBorder(borderRadius: radius),
-        child: InkWell(
-          onTap: onTap,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: lip,
           borderRadius: radius,
-          child: Ink(
-            decoration: BoxDecoration(
-              color: base,
+        ),
+        child: Padding(
+          // Reveals the lip only along the bottom curve — no caret/notch.
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Material(
+            color: base,
+            borderRadius: radius,
+            child: InkWell(
+              onTap: onTap,
               borderRadius: radius,
-              boxShadow: [
-                BoxShadow(
-                  color: shadow,
-                  offset: const Offset(0, 4),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      eyebrow,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.manrope(
+                        color: Colors.white.withValues(alpha: 0.92),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.6,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      unitTitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.manrope(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        height: 1.15,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    eyebrow,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.manrope(
-                      color: Colors.white.withValues(alpha: 0.92),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.6,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    unitTitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.manrope(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      height: 1.15,
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
