@@ -281,7 +281,7 @@ export function buildSectionThree() {
               }),
               actionAct({
                 id: "act-03-04-01-scaffolded", order: 3, stage: "scaffolded",
-                prompt: "You opened BTN, BB called. Flop As 7d 2c. You have KQo. Action?",
+                prompt: "You opened BTN, BB called. Flop Ace-high rainbow. You have offsuit broadway. Action?",
                 a11y: "High-card air can c-bet a dry ace-high board selectively.",
                 objectives: ["C-bet selectively as the preflop aggressor"],
                 choices: [
@@ -827,7 +827,7 @@ export function buildSectionFour() {
               }),
               actionAct({
                 id: "act-04-02-01-scaffolded", order: 3, stage: "scaffolded",
-                prompt: "You open BTN to 6. BB 3-bets to 20. You have 72o. Action?",
+                prompt: "You open BTN to 6. BB 3-bets to 20. You have trash offsuit. Action?",
                 a11y: "Fold trash to a 3-bet.",
                 objectives: ["Fold or continue correctly versus 3-bets"],
                 choices: [
@@ -836,7 +836,7 @@ export function buildSectionFour() {
                   choice("call-72", "Call", "clear_mistake",
                     "Dominated trash.", {action: "CALL", betterChoiceId: "fold-72"}),
                   choice("4bet-72", "4-bet bluff", "clear_mistake",
-                    "Not with 72o.", {action: "RAISE", amountBb: 50, betterChoiceId: "fold-72"})
+                    "Not with trash offsuit.", {action: "RAISE", amountBb: 50, betterChoiceId: "fold-72"})
                 ],
               }),
               actionAct({
@@ -857,7 +857,7 @@ export function buildSectionFour() {
               }),
               actionAct({
                 id: "act-04-02-01-checkpoint", order: 5, stage: "checkpoint",
-                prompt: "Live open is 6. Choose a value 3-bet size with KK.",
+                prompt: "Live open is 6. Choose a value 3-bet size with a premium pair.",
                 a11y: "Soft-grade nearby live 3-bet sizes.",
                 objectives: ["Recognize squeeze spots multiway"], lifeLoss: true,
                 choices: [
@@ -1864,7 +1864,7 @@ export function buildSectionFour() {
               }),
               actionAct({
                 id: "act-04-10-02-jump-3bet", order: 2, stage: "jump_test",
-                prompt: "CO opens 6. You have KK on BTN. Action?",
+                prompt: "CO opens 6. You have a premium pair on BTN. Action?",
                 a11y: "Jump: value 3-bet.",
                 objectives: ["Confirm ranges and 3-bet basics"],
                 lifeLoss: true,
