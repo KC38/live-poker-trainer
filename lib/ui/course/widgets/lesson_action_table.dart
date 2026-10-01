@@ -77,7 +77,7 @@ class LessonActionSpot {
   }
 }
 
-/// Authored spot with suits permuted for this attempt (stable within [generation]).
+/// Authored spot with hand-class isomorphic cards for this attempt.
 LessonActionSpot? dealtLessonActionSpot(
   CourseActivity activity, {
   int generation = 0,
@@ -91,7 +91,7 @@ LessonActionSpot? dealtLessonActionSpot(
     generation: generation,
     random: random,
   );
-  final remapped = permuteCardSuitGroups(
+  final remapped = isomorphicLessonCardGroups(
     [spot.heroCodes, spot.boardCodes],
     rng,
   );
@@ -1199,7 +1199,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
   return null;
 }
 
-/// Toy-hand step with suits permuted for this attempt.
+/// Toy-hand step with suits permuted for this attempt (ranks fixed for runouts).
 LessonActionSpot? dealtToyHandStepSpot({
   required String activityId,
   required String stepId,
@@ -1217,9 +1217,11 @@ LessonActionSpot? dealtToyHandStepSpot({
     generation: generation,
     random: random,
   );
-  final remapped = permuteCardSuitGroups(
+  // Multi-street toy hands keep ranks so each street stays coherent.
+  final remapped = isomorphicLessonCardGroups(
     [spot.heroCodes, spot.boardCodes],
     rng,
+    suitOnly: true,
   );
   return spot.copyWithCodes(
     heroCodes: remapped[0],

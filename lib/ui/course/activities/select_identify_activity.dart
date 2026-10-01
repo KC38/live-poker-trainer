@@ -259,8 +259,16 @@ class SelectIdentifyActivity extends StatelessWidget {
           locked: locked,
           showGuidance: showGuidance,
           hintVisible: controller.hintVisible,
+          bindGeneration: controller.bindGeneration,
           onSelect: (id) => controller.selectChoice(id, autoSubmit: true),
         );
+        final displayChoices = shuffledLessonChoices(
+          activity.choices,
+          activityId: activity.id,
+          generation: controller.bindGeneration,
+        );
+        final pulseChoiceId =
+            activity.choices.isEmpty ? null : activity.choices.first.id;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -294,13 +302,13 @@ class SelectIdentifyActivity extends StatelessWidget {
             else if (presentation == SelectIdentifyPresentation.holeCards)
               framed ? Expanded(child: holeBands) : holeBands
             else
-              for (var i = 0; i < activity.choices.length; i++) ...[
+              for (var i = 0; i < displayChoices.length; i++) ...[
                 if (i > 0) const SizedBox(height: 10),
                 _buildChoice(
                   presentation: presentation,
-                  choice: activity.choices[i],
-                  index: i,
-                  selected: selected == activity.choices[i].id,
+                  choice: displayChoices[i],
+                  pulseChoiceId: pulseChoiceId,
+                  selected: selected == displayChoices[i].id,
                   locked: locked,
                 ),
               ],
@@ -341,14 +349,15 @@ class SelectIdentifyActivity extends StatelessWidget {
   Widget _buildChoice({
     required SelectIdentifyPresentation presentation,
     required CourseChoice choice,
-    required int index,
+    required String? pulseChoiceId,
     required bool selected,
     required bool locked,
   }) {
     final highlight =
         showGuidance &&
         (activity.stage == ActivityStage.guided || controller.hintVisible) &&
-        index == 0 &&
+        pulseChoiceId != null &&
+        choice.id == pulseChoiceId &&
         controller.draft.choiceId == null;
     final onPressed =
         locked
@@ -1983,6 +1992,15 @@ class _HandCategoryTapActivity extends StatelessWidget {
                   }
                   return 'Checking…';
                 }();
+                final displayChoices = shuffledLessonChoices(
+                  activity.choices,
+                  activityId: activity.id,
+                  generation: controller.bindGeneration,
+                );
+                final pulseChoiceId =
+                    activity.choices.isEmpty
+                        ? null
+                        : activity.choices.first.id;
                 final tiles = <Widget>[
                   if (framedSpot)
                     Wrap(
@@ -1990,25 +2008,25 @@ class _HandCategoryTapActivity extends StatelessWidget {
                       runSpacing: 8,
                       alignment: WrapAlignment.center,
                       children: [
-                        for (var i = 0; i < activity.choices.length; i++)
+                        for (final choice in displayChoices)
                           _FamilySoftPulse(
                             active:
                                 showGuidance &&
                                 selected == null &&
                                 !locked &&
-                                i == 0,
+                                pulseChoiceId != null &&
+                                choice.id == pulseChoiceId,
                             child: LessonChoiceButton(
-                              label: activity.choices[i].label,
-                              accessibilityText:
-                                  activity.choices[i].accessibilityText,
-                              selected: selected == activity.choices[i].id,
+                              label: choice.label,
+                              accessibilityText: choice.accessibilityText,
+                              selected: selected == choice.id,
                               highlighted: false,
                               enabled: !locked,
                               onPressed:
                                   locked
                                       ? null
                                       : () => controller.selectChoice(
-                                        activity.choices[i].id,
+                                        choice.id,
                                         autoSubmit: true,
                                       ),
                             ),
@@ -2016,11 +2034,11 @@ class _HandCategoryTapActivity extends StatelessWidget {
                       ],
                     )
                   else
-                    for (var i = 0; i < activity.choices.length; i++) ...[
+                    for (var i = 0; i < displayChoices.length; i++) ...[
                       if (i > 0) const SizedBox(height: 10),
                       Builder(
                         builder: (context) {
-                          final choice = activity.choices[i];
+                          final choice = displayChoices[i];
                           final example =
                               resolveHandExample(
                                 id: choice.id,
@@ -2035,7 +2053,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                               showGuidance &&
                               (activity.stage == ActivityStage.guided ||
                                   controller.hintVisible) &&
-                              i == 0 &&
+                              pulseChoiceId != null &&
+                              choice.id == pulseChoiceId &&
                               selected == null &&
                               !locked &&
                               (activity.id.startsWith('act-02-02-01-') ||
@@ -2044,6 +2063,8 @@ class _HandCategoryTapActivity extends StatelessWidget {
                               showGuidance &&
                               selected == null &&
                               !locked &&
+                              pulseChoiceId != null &&
+                              choice.id == pulseChoiceId &&
                               (activity.id.startsWith('act-01-02-01-') ||
                                   activity.id == 'act-03-03-01-guided' ||
                                   (controller.hintVisible &&
@@ -2390,44 +2411,56 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
               ),
             ],
             const SizedBox(height: 12),
-            for (var i = 0; i < widget.activity.choices.length; i++) ...[
-              if (i > 0) const SizedBox(height: 8),
-              Builder(
-                builder: (context) {
-                  final choice = widget.activity.choices[i];
-                  // Hole taps teach You / Them — keep a Chop dock only.
-                  if (feltInteractive &&
-                      !choice.id.contains('chop') &&
-                      choice.id != 'split') {
-                    return const SizedBox.shrink();
-                  }
-                  if (!feltInteractive && framedShowdown) {
-                    return const SizedBox.shrink();
-                  }
-                  final example =
-                      resolveHandExample(id: choice.id, label: choice.label) ??
-                      LessonHandExample(
-                        id: choice.id,
-                        title: choice.label,
-                        codes: const [],
+            ...() {
+              final displayChoices = shuffledLessonChoices(
+                widget.activity.choices,
+                activityId: widget.activity.id,
+                generation: widget.controller.bindGeneration,
+              );
+              return [
+                for (var i = 0; i < displayChoices.length; i++) ...[
+                  if (i > 0) const SizedBox(height: 8),
+                  Builder(
+                    builder: (context) {
+                      final choice = displayChoices[i];
+                      // Hole taps teach You / Them — keep a Chop dock only.
+                      if (feltInteractive &&
+                          !choice.id.contains('chop') &&
+                          choice.id != 'split') {
+                        return const SizedBox.shrink();
+                      }
+                      if (!feltInteractive && framedShowdown) {
+                        return const SizedBox.shrink();
+                      }
+                      final example =
+                          resolveHandExample(
+                            id: choice.id,
+                            label: choice.label,
+                          ) ??
+                          LessonHandExample(
+                            id: choice.id,
+                            title: choice.label,
+                            codes: const [],
+                          );
+                      return HandExampleTile(
+                        example: example,
+                        selected: selected == choice.id,
+                        enabled: !locked,
+                        compact: false,
+                        expand: true,
+                        onPressed:
+                            locked
+                                ? null
+                                : () => widget.controller.selectChoice(
+                                  choice.id,
+                                  autoSubmit: true,
+                                ),
                       );
-                  return HandExampleTile(
-                    example: example,
-                    selected: selected == choice.id,
-                    enabled: !locked,
-                    compact: false,
-                    expand: true,
-                    onPressed:
-                        locked
-                            ? null
-                            : () => widget.controller.selectChoice(
-                              choice.id,
-                              autoSubmit: true,
-                            ),
-                  );
-                },
-              ),
-            ],
+                    },
+                  ),
+                ],
+              ];
+            }(),
             const SizedBox(height: 10),
             Builder(
               builder: (context) {
@@ -2908,6 +2941,7 @@ class _HoleCardBands extends StatelessWidget {
     required this.locked,
     required this.showGuidance,
     required this.hintVisible,
+    required this.bindGeneration,
     required this.onSelect,
   });
 
@@ -2925,6 +2959,7 @@ class _HoleCardBands extends StatelessWidget {
   final bool locked;
   final bool showGuidance;
   final bool hintVisible;
+  final int bindGeneration;
   final ValueChanged<String> onSelect;
 
   @override
@@ -2972,7 +3007,11 @@ class _HoleCardBands extends StatelessWidget {
                   includeHero: false,
                 ),
               ),
-              for (var i = 0; i < activity.choices.length; i++)
+              for (final choice in shuffledLessonChoices(
+                activity.choices,
+                activityId: activity.id,
+                generation: bindGeneration,
+              ))
                 Expanded(
                   flex: _railFlex,
                   child: Align(
@@ -2981,10 +3020,7 @@ class _HoleCardBands extends StatelessWidget {
                       child: SizedBox(
                         height: HeroRailWidget.height,
                         width: width,
-                        child: _choiceRail(
-                          index: i,
-                          choice: activity.choices[i],
-                        ),
+                        child: _choiceRail(choice: choice),
                       ),
                     ),
                   ),
@@ -3002,9 +3038,11 @@ class _HoleCardBands extends StatelessWidget {
     );
   }
 
-  Widget _choiceRail({required int index, required CourseChoice choice}) {
+  Widget _choiceRail({required CourseChoice choice}) {
     final codes = parseCardCodes(choice.label);
     final selected = selectedId == choice.id;
+    final pulseChoiceId =
+        activity.choices.isEmpty ? null : activity.choices.first.id;
     final rail = HeroRailWidget(
       game: lessonBandGame(heroCodes: codes),
       chipDisplayMode: ChipDisplayMode.dollars,
@@ -3013,7 +3051,8 @@ class _HoleCardBands extends StatelessWidget {
       active:
           showGuidance &&
           (activity.stage == ActivityStage.guided || hintVisible) &&
-          index == 0 &&
+          pulseChoiceId != null &&
+          choice.id == pulseChoiceId &&
           selectedId == null &&
           !locked,
       child: Semantics(

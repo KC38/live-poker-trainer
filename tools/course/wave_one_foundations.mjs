@@ -671,11 +671,11 @@ export function buildSectionOne() {
                 hint: "Trash hands fold to raises.",
                 choices: [
                   choice("fold-72", "Fold", "recommended",
-                    "No reason to continue with 72o.", {action: "FOLD"}),
+                    "No reason to continue with trash offsuit.", {action: "FOLD"}),
                   choice("call-72", "Call 6", "clear_mistake",
                     "Calling with junk burns chips.", {action: "CALL", betterChoiceId: "fold-72"}),
                   choice("raise-72", "Raise to 18", "clear_mistake",
-                    "Do not invent aggression with 72o.",
+                    "Do not invent aggression with trash offsuit.",
                     {action: "RAISE", amountBb: 9, betterChoiceId: "fold-72"}),
                 ],
               }),
@@ -1011,14 +1011,14 @@ export function buildSectionOne() {
                 {objectives: ["Follow a hand from blinds to a terminal state"]}),
               multiStepAct({
                 id: "act-01-06-01-guided-steps", order: 2, stage: "guided",
-                a11y: "Button with A9s — open to 6, then take the pot when blinds fold.",
+                a11y: "Button with a suited ace — open to 6, then take the pot when blinds fold.",
                 objectives: ["Choose legal actions on more than one street"],
                 lifeLoss: false,
                 steps: [
                   {
                     id: "step-01-06-pre",
                     street: "preflop",
-                    prompt: "Button with A9s. Folds to you. Blinds 1/2.",
+                    prompt: "Button with a suited ace. Folds to you. Blinds 1/2.",
                     accessibilityText: "Open to 6 from the button with ace-nine suited.",
                     choices: [
                       choice("open-6", "Raise to 6", "recommended",
@@ -1070,7 +1070,7 @@ export function buildSectionOne() {
                   {
                     id: "step-01-06-flop-cbet",
                     street: "flop",
-                    prompt: "Flop A72 rainbow. BB checks. You hold A9s.",
+                    prompt: "Flop Ace-high rainbow. BB checks. You hold a suited ace.",
                     accessibilityText: "Bet 6 into 13 with top pair.",
                     choices: [
                       choice("cbet", "Bet 6", "recommended",
@@ -1086,19 +1086,19 @@ export function buildSectionOne() {
               }),
               handLabAct({
                 id: "act-01-06-01-unguided-lab", order: 4, stage: "unguided",
-                prompt: "BTN opens to 6. You hold A7o in the big blind.",
+                prompt: "BTN opens to 6. You hold a weak ace offsuit in the big blind.",
                 a11y: "Big blind vs button open — call, fold, or jam.",
                 objectives: ["Finish without freezing on basic decisions"],
                 lifeLoss: true,
                 choices: [
                   choice("fold-bb", "Fold", "reasonable",
-                    "Folding A7o is fine; defending is optional this deep.",
+                    "Folding a weak ace offsuit is fine; defending is optional this deep.",
                     {action: "FOLD"}),
                   choice("call-bb", "Call 4", "strong",
                     "A call keeps the hand playable in position later.",
                     {action: "CALL"}),
                   choice("shove-bb", "Jam 100bb", "clear_mistake",
-                    "Jamming A7o for 100bb is a clear mistake.",
+                    "Jamming a weak ace offsuit for 100bb is a clear mistake.",
                     {action: "ALL_IN", betterChoiceId: "call-bb"}),
                 ],
                 lab: {
@@ -1121,16 +1121,16 @@ export function buildSectionOne() {
                   decisionPoints: [{
                     id: "dp-bb-vs-btn-open",
                     street: "preflop",
-                    prompt: "BTN opens to 6. You hold A7o in the big blind. What do you do?",
+                    prompt: "BTN opens to 6. You hold a weak ace offsuit in the big blind. What do you do?",
                     choices: [
                       choice("fold-bb", "Fold", "reasonable",
-                        "Folding A7o is fine; defending is optional this deep.",
+                        "Folding a weak ace offsuit is fine; defending is optional this deep.",
                         {action: "FOLD"}),
                       choice("call-bb", "Call 4", "strong",
                         "A call keeps the hand playable in position later.",
                         {action: "CALL"}),
                       choice("shove-bb", "Jam 100bb", "clear_mistake",
-                        "Jamming A7o for 100bb is a clear mistake.",
+                        "Jamming a weak ace offsuit for 100bb is a clear mistake.",
                         {action: "ALL_IN", betterChoiceId: "call-bb"}),
                     ],
                   }],
@@ -1138,7 +1138,7 @@ export function buildSectionOne() {
               }),
               multiStepAct({
                 id: "act-01-06-01-checkpoint-finish", order: 5, stage: "checkpoint",
-                a11y: "Button with KQo — open, then take the blinds when they fold.",
+                a11y: "Button with offsuit broadway — open, then take the blinds when they fold.",
                 objectives: [
                   "Follow a hand from blinds to a terminal state",
                   "Finish without freezing on basic decisions",
@@ -1148,16 +1148,16 @@ export function buildSectionOne() {
                   {
                     id: "step-01-06-cp-open",
                     street: "preflop",
-                    prompt: "Button with KQo. CO folds. Blinds 1/2.",
+                    prompt: "Button with offsuit broadway. CO folds. Blinds 1/2.",
                     accessibilityText: "Open to 6 with king-queen offsuit on the button.",
                     choices: [
                       choice("open-kq", "Raise to 6", "recommended",
                         "Strong button open.", {action: "RAISE", amountBb: 3}),
                       choice("fold-kq", "Fold", "clear_mistake",
-                        "Do not fold KQo on the button.",
+                        "Do not fold offsuit broadway on the button.",
                         {action: "FOLD", betterChoiceId: "open-kq"}),
                       choice("limp-kq", "Limp", "questionable",
-                        "Prefer a raise with KQo here.", {action: "CALL"}),
+                        "Prefer a raise with offsuit broadway here.", {action: "CALL"}),
                     ],
                   },
                   {
@@ -1530,7 +1530,7 @@ export function buildSectionTwo() {
                   choice("hf-trash", "Offsuit trash", "recommended",
                     "Worst starting shape — fold early."),
                   choice("hf-pair", "Pocket pair", "clear_mistake",
-                    "Ranks do not match — premium pairs look like QQ.",
+                    "Ranks do not match — premium pairs look like matching face cards.",
                     {betterChoiceId: "hf-trash"}),
                   choice("hf-suited-ace", "Suited ace", "clear_mistake",
                     "Suited ace has playability — this is offsuit junk.",
@@ -1558,7 +1558,7 @@ export function buildSectionTwo() {
                 {objectives: ["Fold trash from early position"]}),
               actionAct({
                 id: "act-02-03-01-guided-utg", order: 2, stage: "guided",
-                prompt: "You are UTG with 72o at 1/2. What do you do?",
+                prompt: "You are UTG with trash offsuit at 1/2. What do you do?",
                 a11y: "Fold seven-two offsuit under the gun.",
                 objectives: ["Fold trash from early position"],
                 hint: "Trash from early position is an easy fold.",
@@ -1575,7 +1575,7 @@ export function buildSectionTwo() {
               }),
               actionAct({
                 id: "act-02-03-01-scaffolded-qq", order: 3, stage: "scaffolded",
-                prompt: "UTG with QQ at 1/2. Action?",
+                prompt: "UTG with a premium pair at 1/2. Action?",
                 a11y: "Open queens to a live size.",
                 objectives: ["Open strong hands for a live size"],
                 choices: [
@@ -1643,13 +1643,13 @@ export function buildSectionTwo() {
                 {objectives: ["Fold weak hands to an open"]}),
               actionAct({
                 id: "act-02-04-01-guided-fold", order: 2, stage: "guided",
-                prompt: "UTG opens to 6. You have J3o in the big blind. Action?",
+                prompt: "UTG opens to 6. You have junk offsuit in the big blind. Action?",
                 a11y: "Fold jack-three offsuit versus an open.",
                 objectives: ["Fold weak hands to an open"],
                 hint: "Dominated junk folds.",
                 choices: [
                   choice("fold-j3", "Fold", "recommended",
-                    "No defend with J3o.", {action: "FOLD"}),
+                    "No defend with junk offsuit.", {action: "FOLD"}),
                   choice("call-j3", "Call", "clear_mistake",
                     "Too weak and dominated.", {action: "CALL", betterChoiceId: "fold-j3"}),
                   choice("3bet-j3", "3-bet to 18", "clear_mistake",
@@ -1674,7 +1674,7 @@ export function buildSectionTwo() {
               }),
               actionAct({
                 id: "act-02-04-01-unguided-3bet", order: 4, stage: "unguided",
-                prompt: "BTN opens to 6. You have KK in the small blind. Action?",
+                prompt: "BTN opens to 6. You have a premium pair in the small blind. Action?",
                 a11y: "Value three-bet kings.",
                 objectives: ["Value 3-bet strong hands"],
                 lifeLoss: true,
@@ -1894,7 +1894,7 @@ export function buildSectionTwo() {
                 {objectives: ["Make a baseline open on a full ring"]}),
               actionAct({
                 id: "act-02-07-01-guided-ep", order: 2, stage: "guided",
-                prompt: "Nine-handed. UTG with AJs. Action?",
+                prompt: "Nine-handed. UTG with suited broadway. Action?",
                 a11y: "Open ace-jack suited under the gun full ring.",
                 objectives: ["Make a baseline open on a full ring"],
                 hint: "Suited broadway opens from early seats.",
@@ -1902,7 +1902,7 @@ export function buildSectionTwo() {
                   choice("open-ajs", "Open to 6", "recommended",
                     "Standard full-ring early open.", {action: "RAISE", amountBb: 3}),
                   choice("fold-ajs", "Fold", "questionable",
-                    "Tight, but AJs is an open.", {action: "FOLD"}),
+                    "Tight, but suited broadway is an open.", {action: "FOLD"}),
                   choice("limp-ajs", "Limp", "clear_mistake",
                     "Raise or fold — do not limp.",
                     {action: "CALL", betterChoiceId: "open-ajs"}),
@@ -1935,10 +1935,10 @@ export function buildSectionTwo() {
                 lifeLoss: true,
                 choices: [
                   choice("lab-fold", "Fold", "clear_mistake",
-                    "KQo on the button calls or 3-bets; folding is too tight.",
+                    "Offsuit broadway on the button calls or 3-bets; folding is too tight.",
                     {action: "FOLD", betterChoiceId: "lab-call"}),
                   choice("lab-call", "Call", "reasonable",
-                    "Calling keeps KQo in position.", {action: "CALL"}),
+                    "Calling keeps offsuit broadway in position.", {action: "CALL"}),
                   choice("lab-3bet", "3-bet to 18", "recommended",
                     "Strong offsuit broadway — value 3-bet is clean.",
                     {action: "RAISE", amountBb: 9}),
@@ -1963,13 +1963,13 @@ export function buildSectionTwo() {
                   decisionPoints: [{
                     id: "dp-btn-vs-co",
                     street: "preflop",
-                    prompt: "CO opens to 6. You hold KQo on the button. Action?",
+                    prompt: "CO opens to 6. You hold offsuit broadway on the button. Action?",
                     choices: [
                       choice("lab-fold", "Fold", "clear_mistake",
-                        "KQo on the button calls or 3-bets; folding is too tight.",
+                        "Offsuit broadway on the button calls or 3-bets; folding is too tight.",
                         {action: "FOLD", betterChoiceId: "lab-call"}),
                       choice("lab-call", "Call", "reasonable",
-                        "Calling keeps KQo in position.", {action: "CALL"}),
+                        "Calling keeps offsuit broadway in position.", {action: "CALL"}),
                       choice("lab-3bet", "3-bet to 18", "recommended",
                         "Strong offsuit broadway — value 3-bet is clean.",
                         {action: "RAISE", amountBb: 9}),
@@ -2038,7 +2038,7 @@ export function buildSectionTwo() {
               }),
               actionAct({
                 id: "act-02-07-02-jump-open", order: 3, stage: "jump_test",
-                prompt: "UTG with 72o. Action?",
+                prompt: "UTG with trash offsuit. Action?",
                 a11y: "Jump test: fold trash early.",
                 objectives: ["Confirm open or fold"],
                 lifeLoss: true,

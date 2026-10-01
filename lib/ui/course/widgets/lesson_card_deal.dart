@@ -11,6 +11,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/engine/deck_evaluator.dart';
+import 'package:live_poker_trainer/engine/fast_evaluator.dart';
+import 'package:live_poker_trainer/engine/hand_class.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
@@ -69,6 +71,17 @@ List<List<String>> permuteCardSuitGroups(
   ];
 }
 
+/// Applies one suit map to every code group (same permutation).
+List<List<String>> applyCardSuitMap(
+  List<List<String>> groups,
+  Map<String, String> map,
+) {
+  return [
+    for (final codes in groups)
+      [for (final code in codes) _applySuitMap(code, map)],
+  ];
+}
+
 Map<String, String> _freshSuitMap(Random rng) {
   final perm = List<String>.of(_suits)..shuffle(rng);
   return {for (var i = 0; i < _suits.length; i++) _suits[i]: perm[i]};
@@ -80,6 +93,328 @@ String _applySuitMap(String code, Map<String, String> map) {
   final mapped = map[suit];
   if (mapped == null) return code;
   return '${code.substring(0, code.length - 1)}$mapped';
+}
+
+/// Strategy-preserving starting-hand bucket for isomorphic preflop deals.
+enum LessonStartingHandFamily {
+  /// Pocket pairs QQ+.
+  premiumPair,
+
+  /// Pocket pairs 77–JJ.
+  mediumPair,
+
+  /// Pocket pairs 22–66.
+  smallPair,
+
+  /// Two distinct broadway ranks, same suit.
+  suitedBroadway,
+
+  /// Two distinct broadway ranks, different suits.
+  offsuitBroadway,
+
+  /// Ace plus a non-broadway kicker, same suit.
+  suitedAce,
+
+  /// Ace plus nine-or-worse offsuit.
+  weakAceOffsuit,
+
+  /// Consecutive ranks, same suit.
+  suitedConnector,
+
+  /// Consecutive ranks, different suits.
+  offsuitConnector,
+
+  /// Suited non-pair that is not broadway / ace / connector.
+  suitedTrash,
+
+  /// Low disconnected offsuit (gap ≥ 3, both ranks ≤ 9).
+  junkOffsuit,
+
+  /// Other suited non-pairs.
+  suitedNonPair,
+
+  /// Other offsuit non-pairs.
+  offsuitNonPair,
+}
+
+/// Classifies two hole codes into a [LessonStartingHandFamily].
+LessonStartingHandFamily startingHandFamilyFromCodes(List<String> hero) {
+  if (hero.length < 2) return LessonStartingHandFamily.offsuitNonPair;
+  final a = CardModel.fromCode(hero[0]);
+  final b = CardModel.fromCode(hero[1]);
+  final high = a.rank >= b.rank ? a : b;
+  final low = a.rank >= b.rank ? b : a;
+  final suited = a.suit == b.suit;
+  final gap = high.rank - low.rank;
+
+  if (a.rank == b.rank) {
+    if (a.rank >= 12) return LessonStartingHandFamily.premiumPair;
+    if (a.rank >= 7) return LessonStartingHandFamily.mediumPair;
+    return LessonStartingHandFamily.smallPair;
+  }
+
+  final bothBroadway = high.rank >= 10 && low.rank >= 10;
+  if (bothBroadway) {
+    return suited
+        ? LessonStartingHandFamily.suitedBroadway
+        : LessonStartingHandFamily.offsuitBroadway;
+  }
+
+  if (high.rank == 14) {
+    if (suited) return LessonStartingHandFamily.suitedAce;
+    return LessonStartingHandFamily.weakAceOffsuit;
+  }
+
+  if (gap == 1) {
+    return suited
+        ? LessonStartingHandFamily.suitedConnector
+        : LessonStartingHandFamily.offsuitConnector;
+  }
+
+  if (suited) {
+    if (high.rank <= 9) return LessonStartingHandFamily.suitedTrash;
+    return LessonStartingHandFamily.suitedNonPair;
+  }
+
+  if (high.rank <= 9 && gap >= 3) {
+    return LessonStartingHandFamily.junkOffsuit;
+  }
+  return LessonStartingHandFamily.offsuitNonPair;
+}
+
+/// Deals two hole cards in [family], avoiding [used] codes.
+List<String> dealStartingHandFamily(
+  LessonStartingHandFamily family,
+  Random rng, {
+  Set<String>? used,
+}) {
+  final blocked = used ?? <String>{};
+  for (var attempt = 0; attempt < 80; attempt++) {
+    final codes = switch (family) {
+      LessonStartingHandFamily.premiumPair =>
+        _dealPocketPairInRange(rng, minRank: 12, maxRank: 14),
+      LessonStartingHandFamily.mediumPair =>
+        _dealPocketPairInRange(rng, minRank: 7, maxRank: 11),
+      LessonStartingHandFamily.smallPair =>
+        _dealPocketPairInRange(rng, minRank: 2, maxRank: 6),
+      LessonStartingHandFamily.suitedBroadway => _dealBroadway(rng, suited: true),
+      LessonStartingHandFamily.offsuitBroadway =>
+        _dealBroadway(rng, suited: false),
+      LessonStartingHandFamily.suitedAce => _dealSuitedAceNonBroadway(rng),
+      LessonStartingHandFamily.weakAceOffsuit =>
+        _dealAceOffsuit(rng: rng, minKicker: 2, maxKicker: 9),
+      LessonStartingHandFamily.suitedConnector =>
+        _dealConnector(rng, suited: true),
+      LessonStartingHandFamily.offsuitConnector =>
+        _dealConnector(rng, suited: false),
+      LessonStartingHandFamily.suitedTrash => _dealSuitedTrash(rng),
+      LessonStartingHandFamily.junkOffsuit => _dealOffsuitTrash(rng),
+      LessonStartingHandFamily.suitedNonPair => _dealSuitedNonPair(rng),
+      LessonStartingHandFamily.offsuitNonPair => _dealOffsuitNonPair(rng),
+    };
+    if (codes.any(blocked.contains)) continue;
+    if (startingHandFamilyFromCodes(codes) != family) continue;
+    blocked.addAll(codes);
+    return List<String>.unmodifiable(codes);
+  }
+  // Last resort: attribute deal that is closest, then accept.
+  final fallbackKind = switch (family) {
+    LessonStartingHandFamily.premiumPair ||
+    LessonStartingHandFamily.mediumPair ||
+    LessonStartingHandFamily.smallPair =>
+      LessonHoleKind.pocketPair,
+    LessonStartingHandFamily.suitedBroadway ||
+    LessonStartingHandFamily.suitedAce ||
+    LessonStartingHandFamily.suitedConnector ||
+    LessonStartingHandFamily.suitedTrash ||
+    LessonStartingHandFamily.suitedNonPair =>
+      LessonHoleKind.suitedNonPair,
+    LessonStartingHandFamily.offsuitBroadway => LessonHoleKind.broadway,
+    LessonStartingHandFamily.junkOffsuit => LessonHoleKind.offsuitTrash,
+    _ => LessonHoleKind.offsuitNonPair,
+  };
+  return dealHoleHand(fallbackKind, rng, used: blocked);
+}
+
+/// Hand-class isomorphic remap of hero / board / optional villain groups.
+///
+/// Preflop (board length &lt; 3): re-deal hero inside its starting-hand family,
+/// then apply one shared suit permutation to every group.
+///
+/// Postflop: suit-permute board (and villains), then resample hero holes until
+/// [HandClassifier] matches the authored class (capped retries → suit-only).
+///
+/// When [suitOnly] is true (multi-step / toy runouts), only suits change.
+List<List<String>> isomorphicLessonCardGroups(
+  List<List<String>> groups,
+  Random rng, {
+  bool suitOnly = false,
+}) {
+  if (groups.isEmpty) return const [];
+  if (!lessonSuitRemapEnabled) {
+    return [for (final g in groups) List<String>.of(g)];
+  }
+  if (suitOnly) {
+    return permuteCardSuitGroups(groups, rng);
+  }
+
+  final hero = groups[0];
+  final board = groups.length > 1 ? groups[1] : const <String>[];
+  final rest = groups.length > 2 ? groups.sublist(2) : const <List<String>>[];
+
+  if (hero.length < 2) {
+    return permuteCardSuitGroups(groups, rng);
+  }
+
+  if (board.length < 3) {
+    return _isomorphicPreflopGroups(groups, rng);
+  }
+  return _isomorphicPostflopGroups(
+    hero: hero,
+    board: board,
+    rest: rest,
+    rng: rng,
+  );
+}
+
+List<List<String>> _isomorphicPreflopGroups(
+  List<List<String>> groups,
+  Random rng,
+) {
+  final hero = groups[0];
+  final family = startingHandFamilyFromCodes(hero);
+  final blocked = <String>{
+    for (final g in groups.skip(1))
+      for (final code in g) code,
+  };
+
+  for (var attempt = 0; attempt < 48; attempt++) {
+    final used = Set<String>.of(blocked);
+    final newHero = dealStartingHandFamily(family, rng, used: used);
+    final candidate = [newHero, ...groups.skip(1)];
+    final remapped = permuteCardSuitGroups(candidate, rng);
+    if (_groupsHaveUniqueCards(remapped)) {
+      return [
+        for (final g in remapped) List<String>.unmodifiable(g),
+      ];
+    }
+  }
+  return permuteCardSuitGroups(groups, rng);
+}
+
+List<List<String>> _isomorphicPostflopGroups({
+  required List<String> hero,
+  required List<String> board,
+  required List<List<String>> rest,
+  required Random rng,
+}) {
+  final suitMap = _freshSuitMap(rng);
+  final mappedBoard = [
+    for (final code in board) _applySuitMap(code, suitMap),
+  ];
+  final mappedRest = [
+    for (final g in rest)
+      [for (final code in g) _applySuitMap(code, suitMap)],
+  ];
+  final targetClass = _handClassFor(hero, board);
+  final targetOuts = _drawOutsFor(hero, board);
+  final used = <String>{
+    ...mappedBoard,
+    for (final g in mappedRest)
+      for (final code in g) code,
+  };
+
+  for (var attempt = 0; attempt < 120; attempt++) {
+    final candidate = _dealRandomHoleAvoiding(rng, used);
+    if (candidate == null) break;
+    if (_handClassFor(candidate, mappedBoard) != targetClass) continue;
+    // Keep flush-draw vs straight-draw vs combo distinct for teach spots.
+    if (_drawOutsFor(candidate, mappedBoard) != targetOuts) continue;
+    return [
+      List<String>.unmodifiable(candidate),
+      List<String>.unmodifiable(mappedBoard),
+      for (final g in mappedRest) List<String>.unmodifiable(g),
+    ];
+  }
+
+  final mappedHero = [
+    for (final code in hero) _applySuitMap(code, suitMap),
+  ];
+  return [
+    List<String>.unmodifiable(mappedHero),
+    List<String>.unmodifiable(mappedBoard),
+    for (final g in mappedRest) List<String>.unmodifiable(g),
+  ];
+}
+
+HandClass _handClassFor(List<String> hero, List<String> board) {
+  final encoded = _encodeHeroBoard(hero, board);
+  return HandClassifier.classify(encoded.a, encoded.b, encoded.board);
+}
+
+int _drawOutsFor(List<String> hero, List<String> board) {
+  final encoded = _encodeHeroBoard(hero, board);
+  return HandClassifier.drawOuts(encoded.a, encoded.b, encoded.board);
+}
+
+({int a, int b, List<int> board}) _encodeHeroBoard(
+  List<String> hero,
+  List<String> board,
+) {
+  return (
+    a: FastEvaluator.encode(CardModel.fromCode(hero[0])),
+    b: FastEvaluator.encode(CardModel.fromCode(hero[1])),
+    board: [
+      for (final code in board) FastEvaluator.encode(CardModel.fromCode(code)),
+    ],
+  );
+}
+
+List<String>? _dealRandomHoleAvoiding(Random rng, Set<String> used) {
+  final deck = <String>[
+    for (final rank in PokerConstants.rankLabels.keys)
+      for (final suit in _suits)
+        if (!used.contains('${PokerConstants.rankLabels[rank]}$suit'))
+          '${PokerConstants.rankLabels[rank]}$suit',
+  ];
+  if (deck.length < 2) return null;
+  final i = rng.nextInt(deck.length);
+  var j = rng.nextInt(deck.length);
+  while (j == i) {
+    j = rng.nextInt(deck.length);
+  }
+  final a = CardModel.fromCode(deck[i]);
+  final b = CardModel.fromCode(deck[j]);
+  if (a.rank >= b.rank) return [deck[i], deck[j]];
+  return [deck[j], deck[i]];
+}
+
+bool _groupsHaveUniqueCards(List<List<String>> groups) {
+  final all = [for (final g in groups) for (final c in g) c];
+  return all.toSet().length == all.length;
+}
+
+/// Seeded Fisher–Yates shuffle of [choices] for within-step presentation.
+List<CourseChoice> shuffledLessonChoices(
+  List<CourseChoice> choices, {
+  String? activityId,
+  int generation = 0,
+  Random? random,
+}) {
+  if (choices.length <= 1) return List<CourseChoice>.of(choices);
+  final rng = resolveLessonDealRandom(
+    activityId: activityId == null ? null : '$activityId#choices',
+    generation: generation,
+    random: random,
+  );
+  final out = List<CourseChoice>.of(choices);
+  for (var i = out.length - 1; i > 0; i--) {
+    final j = rng.nextInt(i + 1);
+    final tmp = out[i];
+    out[i] = out[j];
+    out[j] = tmp;
+  }
+  return out;
 }
 
 /// Starting-hand attribute used when dealing two hole cards.
@@ -336,15 +671,50 @@ List<String> _dealSuitedAce(Random rng) {
   return [_code(14, suit), _code(kicker, suit)];
 }
 
-List<String> _dealBroadway(Random rng) {
-  final ranks = _broadwayRanks.toList(growable: true)..shuffle(rng);
+List<String> _dealSuitedAceNonBroadway(Random rng) {
+  final suit = _suits[rng.nextInt(_suits.length)];
+  final kicker = rng.nextInt(8) + 2; // 2–9
+  return [_code(14, suit), _code(kicker, suit)];
+}
+
+List<String> _dealAceOffsuit({
+  required Random rng,
+  required int minKicker,
+  required int maxKicker,
+}) {
+  final span = maxKicker - minKicker + 1;
+  final kicker = rng.nextInt(span) + minKicker;
   final suits = _twoDistinctSuits(rng);
-  return [_code(ranks[0], suits[0]), _code(ranks[1], suits[1])];
+  return [_code(14, suits[0]), _code(kicker, suits[1])];
+}
+
+List<String> _dealPocketPairInRange(
+  Random rng, {
+  required int minRank,
+  required int maxRank,
+}) {
+  final span = maxRank - minRank + 1;
+  final rank = rng.nextInt(span) + minRank;
+  final suits = _twoDistinctSuits(rng);
+  return [_code(rank, suits[0]), _code(rank, suits[1])];
+}
+
+List<String> _dealBroadway(Random rng, {bool suited = false}) {
+  final ranks = _broadwayRanks.toList(growable: true)..shuffle(rng);
+  final r0 = ranks[0];
+  final r1 = ranks[1];
+  if (suited) {
+    final suit = _suits[rng.nextInt(_suits.length)];
+    return [_code(r0, suit), _code(r1, suit)];
+  }
+  final suits = _twoDistinctSuits(rng);
+  return [_code(r0, suits[0]), _code(r1, suits[1])];
 }
 
 List<String> _dealConnector(Random rng, {required bool suited}) {
   // Low of the connector: 2–Q so high stays ≤ A.
-  final low = rng.nextInt(12) + 2;
+  // Prefer non-broadway connectors so family classify stays connector.
+  final low = rng.nextInt(8) + 2; // 2–9 → high 3–T
   final high = low + 1;
   if (suited) {
     final suit = _suits[rng.nextInt(_suits.length)];
@@ -352,6 +722,20 @@ List<String> _dealConnector(Random rng, {required bool suited}) {
   }
   final suits = _twoDistinctSuits(rng);
   return [_code(high, suits[0]), _code(low, suits[1])];
+}
+
+List<String> _dealSuitedTrash(Random rng) {
+  for (var attempt = 0; attempt < 32; attempt++) {
+    final a = rng.nextInt(8) + 2; // 2–9
+    final b = rng.nextInt(8) + 2;
+    if (a == b) continue;
+    if ((a - b).abs() < 2) continue; // not connector
+    final suit = _suits[rng.nextInt(_suits.length)];
+    final high = a >= b ? a : b;
+    final low = a >= b ? b : a;
+    return [_code(high, suit), _code(low, suit)];
+  }
+  return const ['8h', '2h'];
 }
 
 List<String> _dealOffsuitTrash(Random rng) {

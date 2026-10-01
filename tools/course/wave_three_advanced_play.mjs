@@ -2798,7 +2798,7 @@ export function buildSectionSeven() {
                 {objectives: ["Respect short SPR commitment"]}),
               multiStepAct({
                 id: "act-07-10-05-hand", order: 2, stage: "unguided",
-                a11y: "100bb 4-bet pot; you hold KK after 4-betting.",
+                a11y: "100bb 4-bet pot; you hold a premium pair after 4-betting.",
                 objectives: ["Respect short SPR commitment", "Avoid ego bluffs in 4-bet pots", "Close river without hero calls"],
                 lifeLoss: true,
                 steps: [
@@ -2823,7 +2823,7 @@ export function buildSectionSeven() {
                       choice("barrel", "Continue / commit", "recommended",
                         "Overpair in a short-SPR pot.", {action: "BET", amountBb: 28}),
                       choice("check-t", "Check/give up", "questionable",
-                        "Too weak with KK here often.", {action: "CHECK"}),
+                        "Too weak with this premium pair here often.", {action: "CHECK"}),
                     ],
                   },
                   {

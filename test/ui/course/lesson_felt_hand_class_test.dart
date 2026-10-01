@@ -119,8 +119,9 @@ void main() {
   test('flop-class and river one-pair felts match their captions', () {
     const expected = <String, (HandClass, String)>{
       'act-03-02-01-guided': (HandClass.topPair, 'your holes'),
-      'act-03-02-01-scaffolded': (HandClass.strongDraw, 'nut flush draw'),
-      'act-03-02-01-checkpoint': (HandClass.strongDraw, 'open-ender'),
+      // Caption stays non-spoiling; Rex / SoftPulse own the draw cue.
+      'act-03-02-01-scaffolded': (HandClass.strongDraw, 'your holes'),
+      'act-03-02-01-checkpoint': (HandClass.strongDraw, 'Flop'),
       'act-03-06-01-checkpoint': (HandClass.topPair, 'Medium one pair'),
       'act-03-08-02-jump-class': (HandClass.strongDraw, 'class?'),
     };

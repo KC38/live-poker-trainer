@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "6d1c263a82206a1fcda793722d6d17f1f2ac6388d0ea5a1bb5f96cf9e1fba9ef",
+  "contentChecksum": "0e215886124ce1919be1cc03a49a4cc71ad48bf4930c8f72accb701c51e9df2b",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -477,7 +477,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the seat with a pocket pair.",
+                  "accessibilityText": "Tap the seat with pocket nines.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1338,7 +1338,7 @@
                       "accessibilityText": "Fold",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "No reason to continue with 72o."
+                        "feedback": "No reason to continue with trash offsuit."
                       },
                       "action": "FOLD"
                     },
@@ -1359,7 +1359,7 @@
                       "accessibilityText": "Raise to 18",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Do not invent aggression with 72o.",
+                        "feedback": "Do not invent aggression with trash offsuit.",
                         "betterChoiceId": "fold-72"
                       },
                       "action": "RAISE",
@@ -2361,7 +2361,7 @@
                   "stage": "guided",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "Button with A9s — open to 6, then take the pot when blinds fold.",
+                  "accessibilityText": "Button with a suited ace — open to 6, then take the pot when blinds fold.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2375,7 +2375,7 @@
                     {
                       "id": "step-01-06-pre",
                       "street": "preflop",
-                      "prompt": "Button with A9s. Folds to you. Blinds 1/2.",
+                      "prompt": "Button with a suited ace. Folds to you. Blinds 1/2.",
                       "accessibilityText": "Open to 6 from the button with ace-nine suited.",
                       "choices": [
                         {
@@ -2497,7 +2497,7 @@
                     {
                       "id": "step-01-06-flop-cbet",
                       "street": "flop",
-                      "prompt": "Flop A72 rainbow. BB checks. You hold A9s.",
+                      "prompt": "Flop Ace-high rainbow. BB checks. You hold a suited ace.",
                       "accessibilityText": "Bet 6 into 13 with top pair.",
                       "choices": [
                         {
@@ -2552,7 +2552,7 @@
                   "objectives": [
                     "Finish without freezing on basic decisions"
                   ],
-                  "prompt": "BTN opens to 6. You hold A7o in the big blind.",
+                  "prompt": "BTN opens to 6. You hold a weak ace offsuit in the big blind.",
                   "choices": [
                     {
                       "id": "fold-bb",
@@ -2560,7 +2560,7 @@
                       "accessibilityText": "Fold",
                       "grading": {
                         "grade": "reasonable",
-                        "feedback": "Folding A7o is fine; defending is optional this deep."
+                        "feedback": "Folding a weak ace offsuit is fine; defending is optional this deep."
                       },
                       "action": "FOLD"
                     },
@@ -2580,7 +2580,7 @@
                       "accessibilityText": "Jam 100bb",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Jamming A7o for 100bb is a clear mistake.",
+                        "feedback": "Jamming a weak ace offsuit for 100bb is a clear mistake.",
                         "betterChoiceId": "call-bb"
                       },
                       "action": "ALL_IN"
@@ -2631,7 +2631,7 @@
                       {
                         "id": "dp-bb-vs-btn-open",
                         "street": "preflop",
-                        "prompt": "BTN opens to 6. You hold A7o in the big blind. What do you do?",
+                        "prompt": "BTN opens to 6. You hold a weak ace offsuit in the big blind. What do you do?",
                         "choices": [
                           {
                             "id": "fold-bb",
@@ -2639,7 +2639,7 @@
                             "accessibilityText": "Fold",
                             "grading": {
                               "grade": "reasonable",
-                              "feedback": "Folding A7o is fine; defending is optional this deep."
+                              "feedback": "Folding a weak ace offsuit is fine; defending is optional this deep."
                             },
                             "action": "FOLD"
                           },
@@ -2659,7 +2659,7 @@
                             "accessibilityText": "Jam 100bb",
                             "grading": {
                               "grade": "clear_mistake",
-                              "feedback": "Jamming A7o for 100bb is a clear mistake.",
+                              "feedback": "Jamming a weak ace offsuit for 100bb is a clear mistake.",
                               "betterChoiceId": "call-bb"
                             },
                             "action": "ALL_IN"
@@ -2675,7 +2675,7 @@
                   "stage": "checkpoint",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "Button with KQo — open, then take the blinds when they fold.",
+                  "accessibilityText": "Button with offsuit broadway — open, then take the blinds when they fold.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2690,7 +2690,7 @@
                     {
                       "id": "step-01-06-cp-open",
                       "street": "preflop",
-                      "prompt": "Button with KQo. CO folds. Blinds 1/2.",
+                      "prompt": "Button with offsuit broadway. CO folds. Blinds 1/2.",
                       "accessibilityText": "Open to 6 with king-queen offsuit on the button.",
                       "choices": [
                         {
@@ -2710,7 +2710,7 @@
                           "accessibilityText": "Fold",
                           "grading": {
                             "grade": "clear_mistake",
-                            "feedback": "Do not fold KQo on the button.",
+                            "feedback": "Do not fold offsuit broadway on the button.",
                             "betterChoiceId": "open-kq"
                           },
                           "action": "FOLD"
@@ -2721,7 +2721,7 @@
                           "accessibilityText": "Limp",
                           "grading": {
                             "grade": "questionable",
-                            "feedback": "Prefer a raise with KQo here."
+                            "feedback": "Prefer a raise with offsuit broadway here."
                           },
                           "action": "CALL"
                         }
@@ -3739,7 +3739,7 @@
                       "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Ranks do not match — premium pairs look like QQ.",
+                        "feedback": "Ranks do not match — premium pairs look like matching face cards.",
                         "betterChoiceId": "hf-trash"
                       }
                     },
@@ -3824,7 +3824,7 @@
                   "objectives": [
                     "Fold trash from early position"
                   ],
-                  "prompt": "You are UTG with 72o at 1/2. What do you do?",
+                  "prompt": "You are UTG with trash offsuit at 1/2. What do you do?",
                   "choices": [
                     {
                       "id": "fold",
@@ -3883,7 +3883,7 @@
                   "objectives": [
                     "Open strong hands for a live size"
                   ],
-                  "prompt": "UTG with QQ at 1/2. Action?",
+                  "prompt": "UTG with a premium pair at 1/2. Action?",
                   "choices": [
                     {
                       "id": "open-qq",
@@ -4093,7 +4093,7 @@
                   "objectives": [
                     "Fold weak hands to an open"
                   ],
-                  "prompt": "UTG opens to 6. You have J3o in the big blind. Action?",
+                  "prompt": "UTG opens to 6. You have junk offsuit in the big blind. Action?",
                   "choices": [
                     {
                       "id": "fold-j3",
@@ -4101,7 +4101,7 @@
                       "accessibilityText": "Fold",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "No defend with J3o."
+                        "feedback": "No defend with junk offsuit."
                       },
                       "action": "FOLD"
                     },
@@ -4204,7 +4204,7 @@
                   "objectives": [
                     "Value 3-bet strong hands"
                   ],
-                  "prompt": "BTN opens to 6. You have KK in the small blind. Action?",
+                  "prompt": "BTN opens to 6. You have a premium pair in the small blind. Action?",
                   "choices": [
                     {
                       "id": "3bet-kk",
@@ -4866,7 +4866,7 @@
                   "objectives": [
                     "Make a baseline open on a full ring"
                   ],
-                  "prompt": "Nine-handed. UTG with AJs. Action?",
+                  "prompt": "Nine-handed. UTG with suited broadway. Action?",
                   "choices": [
                     {
                       "id": "open-ajs",
@@ -4885,7 +4885,7 @@
                       "accessibilityText": "Fold",
                       "grading": {
                         "grade": "questionable",
-                        "feedback": "Tight, but AJs is an open."
+                        "feedback": "Tight, but suited broadway is an open."
                       },
                       "action": "FOLD"
                     },
@@ -4985,7 +4985,7 @@
                       "accessibilityText": "Fold",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "KQo on the button calls or 3-bets; folding is too tight.",
+                        "feedback": "Offsuit broadway on the button calls or 3-bets; folding is too tight.",
                         "betterChoiceId": "lab-call"
                       },
                       "action": "FOLD"
@@ -4996,7 +4996,7 @@
                       "accessibilityText": "Call",
                       "grading": {
                         "grade": "reasonable",
-                        "feedback": "Calling keeps KQo in position."
+                        "feedback": "Calling keeps offsuit broadway in position."
                       },
                       "action": "CALL"
                     },
@@ -5057,7 +5057,7 @@
                       {
                         "id": "dp-btn-vs-co",
                         "street": "preflop",
-                        "prompt": "CO opens to 6. You hold KQo on the button. Action?",
+                        "prompt": "CO opens to 6. You hold offsuit broadway on the button. Action?",
                         "choices": [
                           {
                             "id": "lab-fold",
@@ -5065,7 +5065,7 @@
                             "accessibilityText": "Fold",
                             "grading": {
                               "grade": "clear_mistake",
-                              "feedback": "KQo on the button calls or 3-bets; folding is too tight.",
+                              "feedback": "Offsuit broadway on the button calls or 3-bets; folding is too tight.",
                               "betterChoiceId": "lab-call"
                             },
                             "action": "FOLD"
@@ -5076,7 +5076,7 @@
                             "accessibilityText": "Call",
                             "grading": {
                               "grade": "reasonable",
-                              "feedback": "Calling keeps KQo in position."
+                              "feedback": "Calling keeps offsuit broadway in position."
                             },
                             "action": "CALL"
                           },
@@ -5284,7 +5284,7 @@
                   "objectives": [
                     "Confirm open or fold"
                   ],
-                  "prompt": "UTG with 72o. Action?",
+                  "prompt": "UTG with trash offsuit. Action?",
                   "choices": [
                     {
                       "id": "j2-fold",
@@ -6283,7 +6283,7 @@
                   "objectives": [
                     "C-bet selectively as the preflop aggressor"
                   ],
-                  "prompt": "You opened BTN, BB called. Flop As 7d 2c. You have KQo. Action?",
+                  "prompt": "You opened BTN, BB called. Flop Ace-high rainbow. You have offsuit broadway. Action?",
                   "choices": [
                     {
                       "id": "cbet",
@@ -8084,7 +8084,7 @@
                   "objectives": [
                     "Fold or continue correctly versus 3-bets"
                   ],
-                  "prompt": "You open BTN to 6. BB 3-bets to 20. You have 72o. Action?",
+                  "prompt": "You open BTN to 6. BB 3-bets to 20. You have trash offsuit. Action?",
                   "choices": [
                     {
                       "id": "fold-72",
@@ -8113,7 +8113,7 @@
                       "accessibilityText": "4-bet bluff",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Not with 72o.",
+                        "feedback": "Not with trash offsuit.",
                         "betterChoiceId": "fold-72"
                       },
                       "action": "RAISE",
@@ -8190,7 +8190,7 @@
                   "objectives": [
                     "Recognize squeeze spots multiway"
                   ],
-                  "prompt": "Live open is 6. Choose a value 3-bet size with KK.",
+                  "prompt": "Live open is 6. Choose a value 3-bet size with a premium pair.",
                   "choices": [
                     {
                       "id": "size-18",
@@ -11563,7 +11563,7 @@
                   "objectives": [
                     "Confirm ranges and 3-bet basics"
                   ],
-                  "prompt": "CO opens 6. You have KK on BTN. Action?",
+                  "prompt": "CO opens 6. You have a premium pair on BTN. Action?",
                   "choices": [
                     {
                       "id": "j4-3bet",
@@ -20818,7 +20818,7 @@
                   "stage": "unguided",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "100bb 4-bet pot; you hold KK after 4-betting.",
+                  "accessibilityText": "100bb 4-bet pot; you hold a premium pair after 4-betting.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -20895,7 +20895,7 @@
                           "accessibilityText": "Check/give up",
                           "grading": {
                             "grade": "questionable",
-                            "feedback": "Too weak with KK here often."
+                            "feedback": "Too weak with this premium pair here often."
                           },
                           "action": "CHECK"
                         }
@@ -22086,7 +22086,7 @@
       "choiceGrading": {
         "fold-72": {
           "grade": "recommended",
-          "feedback": "No reason to continue with 72o."
+          "feedback": "No reason to continue with trash offsuit."
         },
         "call-72": {
           "grade": "clear_mistake",
@@ -22095,7 +22095,7 @@
         },
         "raise-72": {
           "grade": "clear_mistake",
-          "feedback": "Do not invent aggression with 72o.",
+          "feedback": "Do not invent aggression with trash offsuit.",
           "betterChoiceId": "fold-72"
         }
       }
@@ -22644,7 +22644,7 @@
       "choiceGrading": {
         "fold-bb": {
           "grade": "reasonable",
-          "feedback": "Folding A7o is fine; defending is optional this deep."
+          "feedback": "Folding a weak ace offsuit is fine; defending is optional this deep."
         },
         "call-bb": {
           "grade": "strong",
@@ -22652,7 +22652,7 @@
         },
         "shove-bb": {
           "grade": "clear_mistake",
-          "feedback": "Jamming A7o for 100bb is a clear mistake.",
+          "feedback": "Jamming a weak ace offsuit for 100bb is a clear mistake.",
           "betterChoiceId": "call-bb"
         }
       },
@@ -22678,12 +22678,12 @@
             },
             "fold-kq": {
               "grade": "clear_mistake",
-              "feedback": "Do not fold KQo on the button.",
+              "feedback": "Do not fold offsuit broadway on the button.",
               "betterChoiceId": "open-kq"
             },
             "limp-kq": {
               "grade": "questionable",
-              "feedback": "Prefer a raise with KQo here."
+              "feedback": "Prefer a raise with offsuit broadway here."
             }
           }
         },
@@ -23160,7 +23160,7 @@
         },
         "hf-pair": {
           "grade": "clear_mistake",
-          "feedback": "Ranks do not match — premium pairs look like QQ.",
+          "feedback": "Ranks do not match — premium pairs look like matching face cards.",
           "betterChoiceId": "hf-trash"
         },
         "hf-suited-ace": {
@@ -23305,7 +23305,7 @@
       "choiceGrading": {
         "fold-j3": {
           "grade": "recommended",
-          "feedback": "No defend with J3o."
+          "feedback": "No defend with junk offsuit."
         },
         "call-j3": {
           "grade": "clear_mistake",
@@ -23653,7 +23653,7 @@
         },
         "fold-ajs": {
           "grade": "questionable",
-          "feedback": "Tight, but AJs is an open."
+          "feedback": "Tight, but suited broadway is an open."
         },
         "limp-ajs": {
           "grade": "clear_mistake",
@@ -23700,12 +23700,12 @@
       "choiceGrading": {
         "lab-fold": {
           "grade": "clear_mistake",
-          "feedback": "KQo on the button calls or 3-bets; folding is too tight.",
+          "feedback": "Offsuit broadway on the button calls or 3-bets; folding is too tight.",
           "betterChoiceId": "lab-call"
         },
         "lab-call": {
           "grade": "reasonable",
-          "feedback": "Calling keeps KQo in position."
+          "feedback": "Calling keeps offsuit broadway in position."
         },
         "lab-3bet": {
           "grade": "recommended",
@@ -25086,7 +25086,7 @@
         },
         "4bet-72": {
           "grade": "clear_mistake",
-          "feedback": "Not with 72o.",
+          "feedback": "Not with trash offsuit.",
           "betterChoiceId": "fold-72"
         }
       }
@@ -30778,7 +30778,7 @@
             },
             "check-t": {
               "grade": "questionable",
-              "feedback": "Too weak with KK here often."
+              "feedback": "Too weak with this premium pair here often."
             }
           }
         },
@@ -31107,7 +31107,7 @@
         {
           "id": "dp-bb-vs-btn-open",
           "street": "preflop",
-          "prompt": "BTN opens to 6. You hold A7o in the big blind. What do you do?",
+          "prompt": "BTN opens to 6. You hold a weak ace offsuit in the big blind. What do you do?",
           "choices": [
             {
               "id": "fold-bb",
@@ -31115,7 +31115,7 @@
               "accessibilityText": "Fold",
               "grading": {
                 "grade": "reasonable",
-                "feedback": "Folding A7o is fine; defending is optional this deep."
+                "feedback": "Folding a weak ace offsuit is fine; defending is optional this deep."
               },
               "action": "FOLD"
             },
@@ -31135,7 +31135,7 @@
               "accessibilityText": "Jam 100bb",
               "grading": {
                 "grade": "clear_mistake",
-                "feedback": "Jamming A7o for 100bb is a clear mistake.",
+                "feedback": "Jamming a weak ace offsuit for 100bb is a clear mistake.",
                 "betterChoiceId": "call-bb"
               },
               "action": "ALL_IN"
@@ -31189,7 +31189,7 @@
         {
           "id": "dp-btn-vs-co",
           "street": "preflop",
-          "prompt": "CO opens to 6. You hold KQo on the button. Action?",
+          "prompt": "CO opens to 6. You hold offsuit broadway on the button. Action?",
           "choices": [
             {
               "id": "lab-fold",
@@ -31197,7 +31197,7 @@
               "accessibilityText": "Fold",
               "grading": {
                 "grade": "clear_mistake",
-                "feedback": "KQo on the button calls or 3-bets; folding is too tight.",
+                "feedback": "Offsuit broadway on the button calls or 3-bets; folding is too tight.",
                 "betterChoiceId": "lab-call"
               },
               "action": "FOLD"
@@ -31208,7 +31208,7 @@
               "accessibilityText": "Call",
               "grading": {
                 "grade": "reasonable",
-                "feedback": "Calling keeps KQo in position."
+                "feedback": "Calling keeps offsuit broadway in position."
               },
               "action": "CALL"
             },

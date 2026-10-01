@@ -5,6 +5,8 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/engine/deck_evaluator.dart';
+import 'package:live_poker_trainer/engine/fast_evaluator.dart';
+import 'package:live_poker_trainer/engine/hand_class.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
@@ -199,5 +201,188 @@ void main() {
     );
     // Original hearts (Ah, Kh) share a suit after remap.
     expect(remapped[0][0][1], remapped[1][0][1]);
+  });
+
+  test('startingHandFamilyFromCodes buckets strategy holdings', () {
+    expect(
+      startingHandFamilyFromCodes(['7h', '2d']),
+      LessonStartingHandFamily.junkOffsuit,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Kh', 'Kd']),
+      LessonStartingHandFamily.premiumPair,
+    );
+    expect(
+      startingHandFamilyFromCodes(['2h', '2d']),
+      LessonStartingHandFamily.smallPair,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Ah', 'Kd']),
+      LessonStartingHandFamily.offsuitBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Ah', '7d']),
+      LessonStartingHandFamily.weakAceOffsuit,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Ah', '9h']),
+      LessonStartingHandFamily.suitedAce,
+    );
+  });
+
+  test('dealStartingHandFamily stays in the requested family', () {
+    final rng = Random(11);
+    for (final family in LessonStartingHandFamily.values) {
+      for (var i = 0; i < 12; i++) {
+        final dealt = dealStartingHandFamily(family, rng);
+        expect(
+          startingHandFamilyFromCodes(dealt),
+          family,
+          reason: '$family deal $dealt',
+        );
+      }
+    }
+  });
+
+  test('preflop isomorphic deal varies ranks inside family', () {
+    final families = <String>{};
+    final ranks = <String>{};
+    for (var seed = 0; seed < 24; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [
+          ['7h', '2d'],
+          <String>[],
+        ],
+        Random(seed),
+      );
+      families.add(startingHandFamilyFromCodes(groups[0]).name);
+      ranks.add(
+        [
+          for (final c in groups[0]) CardModel.fromCode(c).rank,
+        ].join(','),
+      );
+    }
+    expect(families, {'junkOffsuit'});
+    expect(ranks.length, greaterThan(1));
+  });
+
+  test('postflop isomorphic deal preserves HandClass and draw outs', () {
+    const cases = <List<List<String>>>[
+      [
+        ['Ah', 'Kd'],
+        ['Qs', '7c', '2d'],
+      ],
+      [
+        ['Ah', '9h'],
+        ['Jh', '8h', '3c'],
+      ],
+    ];
+
+    for (final spot in cases) {
+      final hero = spot[0];
+      final board = spot[1];
+      final targetClass = HandClassifier.classify(
+        FastEvaluator.encode(CardModel.fromCode(hero[0])),
+        FastEvaluator.encode(CardModel.fromCode(hero[1])),
+        [
+          for (final code in board)
+            FastEvaluator.encode(CardModel.fromCode(code)),
+        ],
+      );
+      final targetOuts = HandClassifier.drawOuts(
+        FastEvaluator.encode(CardModel.fromCode(hero[0])),
+        FastEvaluator.encode(CardModel.fromCode(hero[1])),
+        [
+          for (final code in board)
+            FastEvaluator.encode(CardModel.fromCode(code)),
+        ],
+      );
+
+      for (var seed = 0; seed < 16; seed++) {
+        final groups = isomorphicLessonCardGroups(
+          [hero, board],
+          Random(seed),
+        );
+        final gotClass = HandClassifier.classify(
+          FastEvaluator.encode(CardModel.fromCode(groups[0][0])),
+          FastEvaluator.encode(CardModel.fromCode(groups[0][1])),
+          [
+            for (final code in groups[1])
+              FastEvaluator.encode(CardModel.fromCode(code)),
+          ],
+        );
+        final gotOuts = HandClassifier.drawOuts(
+          FastEvaluator.encode(CardModel.fromCode(groups[0][0])),
+          FastEvaluator.encode(CardModel.fromCode(groups[0][1])),
+          [
+            for (final code in groups[1])
+              FastEvaluator.encode(CardModel.fromCode(code)),
+          ],
+        );
+        expect(
+          gotClass,
+          targetClass,
+          reason: 'seed $seed → ${groups[0]} on ${groups[1]}',
+        );
+        expect(
+          gotOuts,
+          targetOuts,
+          reason: 'outs seed $seed → ${groups[0]} on ${groups[1]}',
+        );
+        final all = [...groups[0], ...groups[1]];
+        expect(all.toSet().length, all.length);
+      }
+    }
+  });
+
+  test('suitOnly isomorphic path keeps ranks', () {
+    final groups = isomorphicLessonCardGroups(
+      [
+        ['Ah', '9d'],
+        ['As', '7c', '2h'],
+      ],
+      Random(5),
+      suitOnly: true,
+    );
+    expect(
+      [for (final c in groups[0]) CardModel.fromCode(c).rank]..sort(),
+      [9, 14],
+    );
+    expect(
+      [for (final c in groups[1]) CardModel.fromCode(c).rank]..sort(),
+      [2, 7, 14],
+    );
+  });
+
+  test('shuffledLessonChoices is seeded and id-stable', () {
+    const choices = [
+      CourseChoice(id: 'fold', label: 'Fold'),
+      CourseChoice(id: 'call', label: 'Call'),
+      CourseChoice(id: 'raise', label: 'Raise'),
+    ];
+    final a = shuffledLessonChoices(
+      choices,
+      activityId: 'act-test',
+      generation: 1,
+    );
+    final b = shuffledLessonChoices(
+      choices,
+      activityId: 'act-test',
+      generation: 1,
+    );
+    expect(a.map((c) => c.id).toList(), b.map((c) => c.id).toList());
+    expect(a.map((c) => c.id).toSet(), {'fold', 'call', 'raise'});
+
+    final orders = <String>{};
+    for (var gen = 0; gen < 16; gen++) {
+      orders.add(
+        shuffledLessonChoices(
+          choices,
+          activityId: 'act-test',
+          generation: gen,
+        ).map((c) => c.id).join(','),
+      );
+    }
+    expect(orders.length, greaterThan(1));
   });
 }

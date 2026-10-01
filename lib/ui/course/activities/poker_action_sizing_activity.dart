@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
@@ -29,6 +30,11 @@ class PokerActionSizingActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     final spot = dealtLessonActionSpot(activity, generation: controller.bindGeneration);
     final tableMode = isLessonActionTableActivity(activity) && spot != null;
+    final dockChoices = shuffledLessonChoices(
+      activity.choices,
+      activityId: activity.id,
+      generation: controller.bindGeneration,
+    );
     final villainType = lessonNamedVillainType([
       spot?.villainLine,
       activity.prompt,
@@ -86,7 +92,7 @@ class PokerActionSizingActivity extends StatelessWidget {
           // Nice! too (locked drops showCoach / SoftPulse, not ownership).
           final coachOwnsCue = showGuidance && pulseTarget != null;
           final dock = LessonActionDock(
-            choices: activity.choices,
+            choices: dockChoices,
             selectedId: selected,
             enabled: !locked,
             identifyUnavailable: spot.identifyUnavailable,
@@ -255,7 +261,7 @@ class PokerActionSizingActivity extends StatelessWidget {
               spacing: 10,
               runSpacing: 10,
               children: [
-                for (final choice in activity.choices)
+                for (final choice in dockChoices)
                   _ActionPill(
                     label: choice.label,
                     accessibilityText:
