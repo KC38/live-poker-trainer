@@ -1,4 +1,4 @@
-/// Home status bar: sections, streak, gems, hearts — Duolingo-style strip.
+/// Home status bar: streak, gems, hearts — centered Duolingo-style strip.
 library;
 
 import 'package:flutter/material.dart';
@@ -10,8 +10,8 @@ const int kHomeDefaultHearts = 5;
 
 /// Compact course stats strip for Home.
 ///
-/// Layout mirrors Duolingo chess: course mark on the left, then streak, gems,
-/// and hearts spaced evenly across the row with matching accent colors.
+/// Layout: streak, gems, and hearts centered as a group with matching
+/// accent colors. Section picker stays on the unit banner.
 class CourseStatusBar extends StatelessWidget {
   /// Creates the status bar.
   const CourseStatusBar({
@@ -21,7 +21,6 @@ class CourseStatusBar extends StatelessWidget {
     this.hearts = kHomeDefaultHearts,
     this.lifetimeXp,
     this.acceptedAccuracy,
-    this.onCourseTap,
     this.onHeartsTap,
   });
 
@@ -37,13 +36,13 @@ class CourseStatusBar extends StatelessWidget {
   /// Kept for callers that still pass accuracy; gems replace it in the strip.
   final double? acceptedAccuracy;
 
-  /// Opens the section picker (course map).
-  final VoidCallback? onCourseTap;
-
   /// Opens the heart refill sheet.
   final VoidCallback? onHeartsTap;
 
   static const Color _gemColor = Color(0xFF5EC8FF);
+
+  /// Gap between the three centered stats.
+  static const double _statGap = 36;
 
   @override
   Widget build(BuildContext context) {
@@ -52,78 +51,33 @@ class CourseStatusBar extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _CourseMark(onTap: onCourseTap),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _StatIcon(
-                    icon: Icons.local_fire_department_rounded,
-                    iconColor: AppColors.warning,
-                    label: 'Streak',
-                    value: '$streak',
-                    valueColor: AppColors.warning,
-                  ),
-                  _StatIcon(
-                    icon: Icons.diamond_rounded,
-                    iconColor: _gemColor,
-                    label: 'Gems',
-                    value: '$gems',
-                    valueColor: _gemColor,
-                  ),
-                  _StatIcon(
-                    icon: Icons.favorite_rounded,
-                    iconColor: AppColors.hearts,
-                    label: 'Hearts',
-                    value: '$hearts',
-                    valueColor: AppColors.hearts,
-                    onTap: onHeartsTap,
-                  ),
-                ],
-              ),
+            _StatIcon(
+              icon: Icons.local_fire_department_rounded,
+              iconColor: AppColors.warning,
+              label: 'Streak',
+              value: '$streak',
+              valueColor: AppColors.warning,
+            ),
+            const SizedBox(width: _statGap),
+            _StatIcon(
+              icon: Icons.diamond_rounded,
+              iconColor: _gemColor,
+              label: 'Gems',
+              value: '$gems',
+              valueColor: _gemColor,
+            ),
+            const SizedBox(width: _statGap),
+            _StatIcon(
+              icon: Icons.favorite_rounded,
+              iconColor: AppColors.hearts,
+              label: 'Hearts',
+              value: '$hearts',
+              valueColor: AppColors.hearts,
+              onTap: onHeartsTap,
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CourseMark extends StatelessWidget {
-  const _CourseMark({this.onTap});
-
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: onTap != null,
-      label: 'Course sections',
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Ink(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.feltLight,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0xFF053528),
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.style_rounded,
-              color: Colors.white,
-              size: 22,
-            ),
-          ),
         ),
       ),
     );
@@ -170,13 +124,13 @@ class _StatIcon extends StatelessWidget {
       child: onTap == null
           ? row
           : InkWell(
-            onTap: onTap,
-            borderRadius: BorderRadius.circular(8),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-              child: row,
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                child: row,
+              ),
             ),
-          ),
     );
   }
 }

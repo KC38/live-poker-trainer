@@ -568,7 +568,6 @@ class _HomeBodyState extends State<_HomeBody> {
             hearts: snapshot.hearts,
             lifetimeXp: snapshot.lifetimeXp,
             acceptedAccuracy: snapshot.acceptedAccuracy,
-            onCourseTap: widget.onOpenSections,
             onHeartsTap: widget.onHeartsTap,
           ),
         ),

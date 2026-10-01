@@ -1,4 +1,4 @@
-/// CourseStatusBar layout matches Duolingo: sections, streak, gems, hearts.
+/// CourseStatusBar shows centered streak, gems, and hearts only.
 library;
 
 import 'package:flutter/material.dart';
@@ -10,10 +10,9 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('status bar shows course mark, streak, gems, and hearts', (
+  testWidgets('status bar shows streak, gems, and hearts without course mark', (
     tester,
   ) async {
-    var openedSections = false;
     await tester.pumpWidget(
       MaterialApp(
         theme: buildPokerTheme(),
@@ -22,13 +21,12 @@ void main() {
             streak: 7,
             gems: 42,
             hearts: 3,
-            onCourseTap: () => openedSections = true,
           ),
         ),
       ),
     );
 
-    expect(find.byIcon(Icons.style_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.style_rounded), findsNothing);
     expect(find.text('7'), findsOneWidget);
     expect(find.text('42'), findsOneWidget);
     expect(find.text('3'), findsOneWidget);
@@ -47,10 +45,6 @@ void main() {
 
     final heartsText = tester.widget<Text>(find.text('3'));
     expect(heartsText.style?.color, AppColors.hearts);
-
-    await tester.tap(find.byIcon(Icons.style_rounded));
-    await tester.pump();
-    expect(openedSections, isTrue);
   });
 
   testWidgets('defaults hearts to the lesson lives max', (tester) async {
@@ -66,9 +60,7 @@ void main() {
     expect(find.text('$kHomeDefaultHearts'), findsOneWidget);
   });
 
-  testWidgets('stats sit in an evenly spaced row beside the course mark', (
-    tester,
-  ) async {
+  testWidgets('stats are centered as an evenly spaced group', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: buildPokerTheme(),
@@ -81,19 +73,25 @@ void main() {
       ),
     );
 
-    final course = tester.getCenter(find.byIcon(Icons.style_rounded));
     final streak = tester.getCenter(
       find.byIcon(Icons.local_fire_department_rounded),
     );
     final gems = tester.getCenter(find.byIcon(Icons.diamond_rounded));
     final hearts = tester.getCenter(find.byIcon(Icons.favorite_rounded));
 
-    expect(course.dx, lessThan(streak.dx));
     expect(streak.dx, lessThan(gems.dx));
     expect(gems.dx, lessThan(hearts.dx));
 
     final gapStreakGems = gems.dx - streak.dx;
     final gapGemsHearts = hearts.dx - gems.dx;
     expect((gapStreakGems - gapGemsHearts).abs(), lessThan(12));
+
+    // Content spans left icon through right-hand value; midpoint near bar center.
+    final bar = tester.getRect(find.byType(CourseStatusBar));
+    final leftBound =
+        tester.getTopLeft(find.byIcon(Icons.local_fire_department_rounded)).dx;
+    final rightBound = tester.getTopRight(find.text('3')).dx;
+    final contentMid = (leftBound + rightBound) / 2;
+    expect((contentMid - bar.center.dx).abs(), lessThan(8));
   });
 }
