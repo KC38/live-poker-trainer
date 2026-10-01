@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
@@ -201,7 +202,11 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                         ),
                   const SizedBox(height: 14),
                   LessonActionDock(
-                    choices: step.choices,
+                    choices: shuffledLessonChoices(
+                      step.choices,
+                      activityId: '${activity.id}/${step.id}',
+                      generation: controller.bindGeneration,
+                    ),
                     selectedId: selected,
                     enabled: !locked,
                     facingBet: spot.facingBet,
