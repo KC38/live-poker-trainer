@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
@@ -301,6 +302,75 @@ void main() {
     final mascot = tester.widget<RexMascot>(find.byType(RexMascot));
     expect(mascot.mood, RexMood.celebrate);
     expect(find.bySemanticsLabel('Rex, celebrating'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('answer dock is full-bleed with clearance above the stage', (
+    tester,
+  ) async {
+    const size = Size(390, 844);
+    const bottomInset = 34.0;
+    await tester.binding.setSurfaceSize(size);
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: MediaQuery(
+          data: const MediaQueryData(
+            size: size,
+            padding: EdgeInsets.only(bottom: bottomInset),
+          ),
+          child: Scaffold(
+            backgroundColor: AppColors.bgDark,
+            body: SafeArea(
+              bottom: false,
+              child: LessonScreenLayout(
+                progress: 0.4,
+                livesRemaining: 3,
+                livesMax: 3,
+                onClose: _noop,
+                speech: 'Those two stay private.',
+                expression: LessonMascotExpression.happy,
+                stage: const ColoredBox(
+                  key: ValueKey<String>('lesson-stage-probe'),
+                  color: Color(0xFF112233),
+                  child: SizedBox.expand(),
+                ),
+                onUndo: _noop,
+                onRedo: _noop,
+                onHint: _noop,
+                canUndo: false,
+                canRedo: false,
+                canHint: false,
+                onContinue: _noop,
+                result: _result(
+                  accepted: true,
+                  feedback: 'You must fold, call, or raise — check is off.',
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final dockRect = tester.getRect(find.byType(LessonAnswerDock));
+    expect(dockRect.left, 0);
+    expect(dockRect.right, size.width);
+    expect(dockRect.bottom, size.height);
+
+    // Home-indicator inset stays inside the banner, not as a dark gutter.
+    final continueRect = tester.getRect(find.text('Continue'));
+    expect(continueRect.bottom, lessThanOrEqualTo(size.height - bottomInset));
+
+    final stageRect = tester.getRect(
+      find.byKey(const ValueKey<String>('lesson-stage-probe')),
+    );
+    expect(
+      dockRect.top - stageRect.bottom,
+      LessonAnswerDock.stageClearance,
+    );
     expect(tester.takeException(), isNull);
   });
 

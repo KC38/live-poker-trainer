@@ -891,7 +891,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     if (_usesLessonFrame) {
       return Scaffold(
         backgroundColor: AppColors.bgDark,
-        body: SafeArea(child: _buildLessonFrameBody()),
+        // bottom: false so LessonAnswerDock paints edge-to-edge into the
+        // home-indicator inset (Duolingo-style full-bleed feedback bar).
+        body: SafeArea(bottom: false, child: _buildLessonFrameBody()),
       );
     }
     final body = _buildBody();

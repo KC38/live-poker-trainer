@@ -590,6 +590,11 @@ no hint leaves the button visible and disabled.
 ### 5. Answer dock
 
 A graded answer replaces the tool row. It does not push a new route.
+The dock is a Duolingo-style full-bleed bar: opaque elevated color from
+left edge to right edge, extending under the home indicator, with a
+clear dark gap (`LessonAnswerDock.stageClearance`) above so stage
+controls never sit on or under the banner. The stage `Expanded` shrinks
+when the dock appears so content moves up with the layout.
 
 | Answer | Title | Button |
 | --- | --- | --- |
