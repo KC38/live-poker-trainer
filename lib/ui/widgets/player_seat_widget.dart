@@ -530,15 +530,22 @@ class StreetBetPill extends StatefulWidget {
         color: AppColors.cream,
       );
 
-  /// Pill size for [label], measured the way it paints.
+  /// Pill size for [label] used by felt layout.
+  ///
+  /// Uses a stable monospace estimate so google_fonts load failures in tests
+  /// cannot inflate the keepout and shove chips into the board. The painted
+  /// pill [FittedBox]es down if the live font is wider.
   static Size sizeFor(String label, {required bool compact}) {
-    final text = TextPainter(
-      text: TextSpan(text: label, style: textStyle(compact: compact)),
-      textDirection: TextDirection.ltr,
-      maxLines: 1,
-    )..layout();
     final pad = compact ? 5.0 : 7.0;
-    return Size(text.width + pad * 2 + 8 + 4 + 2, math.max(text.height, 8) + 6);
+    final charW = compact ? 6.2 : 6.8;
+    final textW = label.length * charW;
+    final width = textW + pad * 2 + 8 + 4 + 2;
+    // Cap keepout so long multiway amounts still fit beside the board on
+    // short felts; FittedBox scales the painted glyphs to match.
+    return Size(
+      math.min(width, compact ? 48.0 : 56.0),
+      (compact ? 10.0 : 11.0) + 6,
+    );
   }
 
   /// Formatted chip amount for the current street.
@@ -571,6 +578,7 @@ class _StreetBetPillState extends State<StreetBetPill> {
   @override
   Widget build(BuildContext context) {
     final compact = widget.compact;
+    final size = StreetBetPill.sizeFor(widget.label, compact: compact);
     return AnimatedOpacity(
       opacity: _opacity,
       duration: const Duration(milliseconds: 200),
@@ -579,41 +587,45 @@ class _StreetBetPillState extends State<StreetBetPill> {
         scale: _pop,
         duration: const Duration(milliseconds: 280),
         curve: Curves.easeOutBack,
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: compact ? 5 : 7,
-              vertical: 2,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.bgDark.withValues(alpha: 0.9),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: AppColors.gold.withValues(alpha: 0.85),
-                width: 1,
+        child: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: compact ? 5 : 7,
+                vertical: 2,
               ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.danger,
-                    border: Border.all(color: AppColors.cream, width: 1.2),
+              decoration: BoxDecoration(
+                color: AppColors.bgDark.withValues(alpha: 0.9),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: AppColors.gold.withValues(alpha: 0.85),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.danger,
+                      border: Border.all(color: AppColors.cream, width: 1.2),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  widget.label,
-                  maxLines: 1,
-                  softWrap: false,
-                  style: StreetBetPill.textStyle(compact: compact),
-                ),
-              ],
+                  const SizedBox(width: 4),
+                  Text(
+                    widget.label,
+                    maxLines: 1,
+                    softWrap: false,
+                    style: StreetBetPill.textStyle(compact: compact),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

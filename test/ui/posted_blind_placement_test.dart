@@ -1,5 +1,7 @@
-/// Posted blinds stay beside their seats, not deep on the felt.
+/// Posted blinds stay on each seat's potward felt home.
 library;
+
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +14,7 @@ import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('posted blinds sit beside their seats on a phone felt', () {
+  test('posted blinds sit on the potward home beside their seats', () {
     final game = lessonBandGame(
       villainSeatCount: lessonBlindsVillainCount,
       dealerIndex: lessonBlindsButtonIndex,
@@ -43,35 +45,33 @@ void main() {
     expect(sb.pucks, isNotEmpty);
     expect(bb.pucks, isNotEmpty);
 
-    // Same vertical band as the seat box — beside the hole cards, not past
-    // them toward the pot (the old radial walk parked the BB near the hero).
-    expect(
-      (bb.bet!.rect.center.dy - bb.pod.center.dy).abs(),
-      lessThan(20),
-      reason: 'BB bet should sit at pod height, not past the hole cards',
-    );
-    expect(
-      (sb.bet!.rect.center.dy - sb.pod.center.dy).abs(),
-      lessThan(20),
-      reason: 'SB bet should sit at pod height, not past the hole cards',
-    );
+    final center = Offset(layout.size.width / 2, layout.size.height / 2);
 
-    // Just inward of the position puck, not floating mid-felt.
-    final bbPuck = bb.pucks.first.rect;
-    final sbPuck = sb.pucks.first.rect;
-    expect(
-      (bb.bet!.rect.center - bbPuck.center).distance,
-      lessThan(56),
-      reason: 'BB bet should sit next to its BB puck',
-    );
-    expect(
-      (sb.bet!.rect.center - sbPuck.center).distance,
-      lessThan(56),
-      reason: 'SB bet should sit next to its SB puck',
-    );
+    for (final seat in [sb, bb]) {
+      final toward = center - seat.pod.center;
+      final inward = toward / toward.distance;
+      final claim = Rect.fromLTRB(
+        math.min(seat.footprint.left, seat.pod.left),
+        math.min(seat.footprint.top, seat.pod.top),
+        math.max(seat.footprint.right, seat.pod.right),
+        seat.pod.bottom + kSeatBadgeBelowPod,
+      );
+      final edge = SeatFeltSpots.exitPoint(claim, seat.pod.center, inward);
+      final puck = seat.pucks.first.rect.center;
+      final bet = seat.bet!.rect.center;
 
-    // Still on Kai's side of the felt, not drifting past the board midline
-    // toward the hero.
+      expect((puck - edge).distance, lessThan(40));
+      expect((bet - edge).distance, lessThan(56));
+      expect((bet - puck).distance, lessThan(56));
+
+      final puckAlong =
+          (puck - edge).dx * inward.dx + (puck - edge).dy * inward.dy;
+      final betAlong =
+          (bet - edge).dx * inward.dx + (bet - edge).dy * inward.dy;
+      expect(betAlong, greaterThan(puckAlong));
+    }
+
+    // Still on the right half for Max/Kai in the blinds lesson lineup.
     expect(bb.bet!.rect.center.dx, greaterThan(layout.size.width * 0.5));
     expect(sb.bet!.rect.center.dx, greaterThan(layout.size.width * 0.5));
   });

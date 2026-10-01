@@ -20,6 +20,30 @@ class ActionBadge extends StatefulWidget {
     return trimmed.toUpperCase().replaceAll('_', '-');
   }
 
+  /// Text style used by the painted pill.
+  static TextStyle textStyle() => GoogleFonts.jetBrainsMono(
+    fontSize: 8.5,
+    fontWeight: FontWeight.w800,
+    letterSpacing: 0.3,
+    color: AppColors.bgDark,
+  );
+
+  /// Pill size for [label], measured the way it paints.
+  static Size sizeFor(String label) {
+    final text = TextPainter(
+      text: TextSpan(text: displayLabel(label), style: textStyle()),
+      textDirection: TextDirection.ltr,
+      maxLines: 1,
+    )..layout();
+    return Size(text.width + 12, text.height + 2);
+  }
+
+  /// True when [label] is a check (no chips — belongs on the bet spot).
+  static bool isCheck(String? label) {
+    if (label == null) return false;
+    return displayLabel(label) == 'CHECK';
+  }
+
   @override
   State<ActionBadge> createState() => _ActionBadgeState();
 }
@@ -61,12 +85,7 @@ class _ActionBadgeState extends State<ActionBadge> {
           child: Text(
             label,
             maxLines: 1,
-            style: GoogleFonts.jetBrainsMono(
-              fontSize: 8.5,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 0.3,
-              color: AppColors.bgDark,
-            ),
+            style: ActionBadge.textStyle(),
           ),
         ),
       ),

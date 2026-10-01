@@ -1,4 +1,4 @@
-/// Fixed felt lanes for position pucks and street bets (2–9 seats).
+/// Fixed potward felt lanes for pucks, bets, and CHECK (2–9 seats).
 library;
 
 import 'dart:math' as math;
@@ -6,7 +6,10 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
+import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -22,6 +25,56 @@ GameState _ring({
     boardCodes: street == Street.preflop
         ? const []
         : const ['Ac', 'Kd', '7h'],
+  );
+}
+
+GameState _actionRing({
+  required int seats,
+  required List<String?> actions,
+  required List<double> bets,
+}) {
+  final players = <PlayerModel>[
+    PlayerModel(
+      id: 0,
+      name: 'You',
+      archetype: PlayerArchetype.hero,
+      stack: 200 - bets[0],
+      currentBet: bets[0],
+      isHero: true,
+      lastActionLabel: actions[0],
+      holeCards: [
+        CardModel.fromCode('Ah'),
+        CardModel.fromCode('Kd'),
+      ],
+    ),
+    for (var i = 1; i < seats; i++)
+      PlayerModel(
+        id: i,
+        name: 'P$i',
+        archetype: PlayerArchetype.tag,
+        stack: 200 - bets[i],
+        currentBet: bets[i],
+        lastActionLabel: actions[i],
+        holeCards: [
+          CardModel.fromCode('2c'),
+          CardModel.fromCode('7d'),
+        ],
+      ),
+  ];
+  return GameState(
+    players: players,
+    mode: GameMode.training,
+    community: const [],
+    street: Street.flop,
+    mainPot: 12,
+    highestBet: bets.fold<double>(0, math.max),
+    minRaise: 2,
+    smallBlind: 1,
+    bigBlind: 2,
+    dealerIndex: 0,
+    sbIndex: seats <= 2 ? 0 : 1,
+    bbIndex: seats <= 2 ? 1 : 2,
+    waitingForHero: true,
   );
 }
 
@@ -41,33 +94,43 @@ TableLayout _layout(
   );
 }
 
+double _along(Offset from, Offset point, Offset inward) {
+  final d = point - from;
+  return d.dx * inward.dx + d.dy * inward.dy;
+}
+
+/// Nearest point of the seat claim facing the pot (past cards / box).
+Offset _claimEdge(SeatSlot seat, Offset center) {
+  final toward = center - seat.pod.center;
+  final inward =
+      toward.distance < 1 ? const Offset(0, -1) : toward / toward.distance;
+  final claim = Rect.fromLTRB(
+    math.min(seat.footprint.left, seat.pod.left),
+    math.min(seat.footprint.top, seat.pod.top),
+    math.max(seat.footprint.right, seat.pod.right),
+    seat.pod.bottom + kSeatBadgeBelowPod,
+  );
+  return SeatFeltSpots.exitPoint(claim, seat.pod.center, inward);
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('SeatFeltSpots', () {
-    test('side seats point horizontally onto the felt', () {
-      expect(SeatFeltSpots.inwardFor(const Offset(1, 0.55)), const Offset(-1, 0));
-      expect(SeatFeltSpots.inwardFor(const Offset(-1, -0.55)), const Offset(1, 0));
+    test('template slots point toward the table origin', () {
+      expect(SeatFeltSpots.inwardFor(const Offset(0, 1)).dy, lessThan(0));
+      expect(SeatFeltSpots.inwardFor(const Offset(0, -1)).dy, greaterThan(0));
+      expect(SeatFeltSpots.inwardFor(const Offset(1, 0)).dx, lessThan(0));
+      expect(SeatFeltSpots.inwardFor(const Offset(-1, 0.55)).dx, greaterThan(0));
     });
 
-    test('mid-side seats drop below the box to clear the board', () {
-      final inward = SeatFeltSpots.inwardFor(const Offset(1, 0.02));
-      expect(inward.dx, lessThan(0));
-      expect(inward.dy, greaterThan(0.5));
-    });
-
-    test('top and bottom seats point vertically onto the felt', () {
-      expect(SeatFeltSpots.inwardFor(const Offset(0, -1)), const Offset(0, 1));
-      expect(SeatFeltSpots.inwardFor(const Offset(0, 1)), const Offset(0, -1));
-    });
-
-    test('bet sits further along the lane than the puck', () {
-      const pod = Rect.fromLTWH(200, 100, 100, 40);
-      const footprint = Rect.fromLTWH(200, 40, 100, 100);
+    test('bet sits further along the potward lane than the puck', () {
+      const pod = Rect.fromLTWH(250, 300, 100, 40);
+      const footprint = Rect.fromLTWH(250, 240, 100, 100);
       final spots = SeatFeltSpots.forSeat(
-        slot: const Offset(1, 0.55),
         pod: pod,
         footprint: footprint,
+        boardCenter: const Offset(196, 260),
         seatScale: 1,
       );
       const puckD = 18.0;
@@ -78,93 +141,109 @@ void main() {
         puckDiameter: puckD,
         hasPucks: true,
       );
-      final along = (bet - puck).dx; // inward is left for right seat
-      expect(along, lessThan(0));
-      expect(along.abs(), greaterThan(puckD / 2));
+      expect(
+        _along(spots.edge, bet, spots.inward),
+        greaterThan(_along(spots.edge, puck, spots.inward)),
+      );
     });
 
-    test('distances scale with seatScale', () {
-      const pod = Rect.fromLTWH(100, 200, 100, 40);
-      const footprint = Rect.fromLTWH(100, 140, 100, 100);
-      Offset betAt(double scale) {
-        final spots = SeatFeltSpots.forSeat(
-          slot: const Offset(0, 1),
-          pod: pod,
-          footprint: footprint,
-          seatScale: scale,
-        );
-        return spots.betCenter(
-          pill: const Size(40, 18),
-          puckDiameter: 18 * scale,
-          hasPucks: false,
-        );
-      }
-
-      final a = betAt(1);
-      final b = betAt(1.2);
-      // Hero lane is upward; larger scale moves the bet further from the edge.
-      expect(b.dy, lessThan(a.dy));
-      expect((a.dy - b.dy).abs(), greaterThan(2));
+    test('clearances scale with seatScale', () {
+      final a = SeatFeltSpots.forSeat(
+        pod: const Rect.fromLTWH(100, 200, 100, 40),
+        footprint: const Rect.fromLTWH(100, 140, 100, 100),
+        boardCenter: const Offset(196, 200),
+        seatScale: 1,
+      );
+      final b = SeatFeltSpots.forSeat(
+        pod: const Rect.fromLTWH(100, 200, 100, 40),
+        footprint: const Rect.fromLTWH(100, 140, 100, 100),
+        boardCenter: const Offset(196, 200),
+        seatScale: 1.2,
+      );
+      expect(b.puckClearance, greaterThan(a.puckClearance));
+      expect(b.maxBetTravel, greaterThan(a.maxBetTravel));
     });
   });
 
   group('TableLayout fixed felt spots', () {
     for (var n = 2; n <= 9; n++) {
-      test('$n-handed pucks and bets stay on each seat inward lane', () {
+      test('$n-handed markers stay on the potward lane near each seat', () {
         final game = _ring(seats: n, dealerIndex: n > 2 ? 1 : 0);
         final layout = _layout(game);
         final center = Offset(layout.size.width / 2, layout.size.height / 2);
 
         for (final seat in layout.seats) {
-          final slot = TableLayout.slotFor(
-            ((seat.index - game.players.indexWhere((p) => p.isHero)) % n + n) %
-                n,
-            n,
-          );
-          final inward = SeatFeltSpots.inwardFor(slot);
-
           for (final puck in seat.pucks) {
-            final fromPod = puck.rect.center - seat.pod.center;
-            final along = fromPod.dx * inward.dx + fromPod.dy * inward.dy;
-            expect(
-              along,
-              greaterThan(0),
-              reason: 'puck ${puck.label} seat ${seat.index} must sit '
-                  'onto the felt (along=$along, inward=$inward)',
-            );
+            // Closest to its own seat, not a neighbor.
+            final own = (puck.rect.center - seat.pod.center).distance;
+            for (final other in layout.seats) {
+              if (other.index == seat.index) continue;
+              expect(
+                own,
+                lessThan((puck.rect.center - other.pod.center).distance),
+                reason: 'puck ${puck.label} seat ${seat.index} nearer neighbor',
+              );
+            }
           }
 
           final bet = seat.bet;
           if (bet == null) continue;
-          final fromPod = bet.rect.center - seat.pod.center;
-          final along = fromPod.dx * inward.dx + fromPod.dy * inward.dy;
+          final own = (bet.rect.center - seat.pod.center).distance;
           expect(
-            along,
-            greaterThan(0),
-            reason: 'bet seat ${seat.index} must sit onto the felt',
+            own,
+            lessThan((center - seat.pod.center).distance),
+            reason: 'bet seat ${seat.index} nearer pot than seat',
           );
-
-          if (seat.pucks.isEmpty) continue;
-          final puckAlong = seat.pucks
-              .map((p) {
-                final d = p.rect.center - seat.pod.center;
-                return d.dx * inward.dx + d.dy * inward.dy;
-              })
-              .reduce(math.max);
-          expect(
-            along,
-            greaterThan(puckAlong),
-            reason: 'bet should sit further inward than the puck',
-          );
-
-          // Stay nearer the seat than the board center.
-          expect(
-            (bet.rect.center - seat.pod.center).distance,
-            lessThan((center - seat.pod.center).distance * 0.85),
-          );
+          for (final other in layout.seats) {
+            if (other.index == seat.index) continue;
+            expect(
+              own,
+              lessThan((bet.rect.center - other.pod.center).distance + 8),
+              reason: 'bet seat ${seat.index} nearer neighbor ${other.index}',
+            );
+          }
         }
       });
     }
+
+    test('raise and call bets use the same potward home as blinds', () {
+      final game = _actionRing(
+        seats: 6,
+        actions: [null, 'FOLD', 'CALL', 'RAISE', 'CHECK', 'CALL'],
+        bets: [0, 0, 6, 18, 0, 6],
+      );
+      final layout = _layout(game);
+      final center = Offset(layout.size.width / 2, layout.size.height / 2);
+
+      for (final seat in layout.seats) {
+        final player = game.players[seat.index];
+        if (player.currentBet <= 0) continue;
+        expect(seat.bet, isNotNull, reason: 'seat ${seat.index}');
+        final own = (seat.bet!.rect.center - seat.pod.center).distance;
+        expect(own, lessThan((center - seat.pod.center).distance));
+      }
+    });
+
+    test('CHECK parks on the bet home, not under the seat box', () {
+      final game = _actionRing(
+        seats: 4,
+        actions: [null, 'CHECK', 'CHECK', 'BET'],
+        bets: [0, 0, 0, 8],
+      );
+      final layout = _layout(game);
+
+      for (final seat in layout.seats) {
+        final player = game.players[seat.index];
+        if (!ActionBadge.isCheck(player.lastActionLabel)) continue;
+        expect(seat.feltAction, isNotNull, reason: 'seat ${seat.index}');
+        expect(seat.feltAction!.label, 'CHECK');
+        // Not the under-pod action band.
+        expect(
+          seat.feltAction!.rect.center.dy,
+          isNot(closeTo(seat.pod.bottom - kSeatBadgeOverlapPod, 6)),
+        );
+      }
+    });
 
     test('spots move when the felt scales', () {
       final game = _ring(seats: 6, dealerIndex: 3);
@@ -178,56 +257,25 @@ void main() {
       final sbLarge = seatOf(large, game.sbIndex);
       expect(sbSmall.bet, isNotNull);
       expect(sbLarge.bet, isNotNull);
-      expect(sbSmall.pucks, isNotEmpty);
-      expect(sbLarge.pucks, isNotEmpty);
-
-      // Absolute positions change with the felt size.
       expect(
         (sbLarge.bet!.rect.center - sbSmall.bet!.rect.center).distance,
         greaterThan(8),
       );
-
-      // Relative lane geometry stays the same: bet is further inward than puck.
-      Offset inwardOf(TableLayout layout, SeatSlot seat) {
-        final hero = game.players.indexWhere((p) => p.isHero);
-        final r = ((seat.index - hero) % game.players.length +
-                game.players.length) %
-            game.players.length;
-        return SeatFeltSpots.inwardFor(
-          TableLayout.slotFor(r, game.players.length),
-        );
-      }
-
-      double along(SeatSlot seat, Offset point, Offset inward) {
-        final d = point - seat.pod.center;
-        return d.dx * inward.dx + d.dy * inward.dy;
-      }
-
-      for (final layout in [small, large]) {
-        final seat = seatOf(layout, game.sbIndex);
-        final inward = inwardOf(layout, seat);
-        final puckAlong = along(seat, seat.pucks.first.rect.center, inward);
-        final betAlong = along(seat, seat.bet!.rect.center, inward);
-        expect(betAlong, greaterThan(puckAlong));
-      }
     });
 
-    test('dealer puck on the top seat sits below the box, not beside it', () {
+    test('dealer puck on the top seat sits potward of the box', () {
       final game = _ring(seats: 6, dealerIndex: 3);
       final layout = _layout(game);
       final dealer = layout.seats.firstWhere((s) => s.index == 3);
       expect(dealer.pucks, isNotEmpty);
       final puck = dealer.pucks.firstWhere((p) => p.label == 'D');
-      expect(puck.rect.center.dy, greaterThan(dealer.pod.bottom));
-      expect(
-        (puck.rect.center.dx - dealer.pod.center.dx).abs(),
-        lessThan(dealer.pod.width * 0.35),
-      );
+      expect(puck.rect.center.dy, greaterThan(dealer.pod.bottom - 4));
+      final center = Offset(layout.size.width / 2, layout.size.height / 2);
+      final edge = _claimEdge(dealer, center);
+      expect((puck.rect.center - edge).distance, lessThan(40));
     });
 
     test('hero pod leaves room for the showdown order badge', () {
-      // Short stage heights (Nice! dock) used to reserve only ~9px under the
-      // hero while the gold order badge is 22px — Nice! covered the "2".
       for (final size in const [
         Size(390, 320),
         Size(390, 420),
@@ -239,7 +287,6 @@ void main() {
         expect(
           hero.pod.bottom + kSeatBadgeBelowPod,
           lessThanOrEqualTo(size.height),
-          reason: 'felt ${size.height}: order badge must fit under hero',
         );
       }
     });
