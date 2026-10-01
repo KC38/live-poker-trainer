@@ -748,6 +748,10 @@ class _NodeCircle extends StatelessWidget {
   static const double _boxWidth = 72;
   static const double _boxHeight = 70;
   static const double _faceSize = 64;
+  /// Matches the next-node white border weight, then a bit heavier for the pulse.
+  static const double _pulseStroke = 5.5;
+  /// How far the ring travels outward from the lesson's outer edge.
+  static const double _pulseMaxOutset = 10.0;
 
   @override
   Widget build(BuildContext context) {
@@ -813,14 +817,17 @@ class _NodeCircle extends StatelessWidget {
                 child: AnimatedBuilder(
                   animation: pulseAnim,
                   builder: (context, _) {
-                    // Ring grows outside the fixed box; layout size stays put.
-                    final expand = 4.0 + (pulseAnim.value * 6.0);
+                    // value 0 → flush with the lesson outer ring; 1 → expanded out.
+                    final outset = pulseAnim.value * _pulseMaxOutset;
+                    // Centered stroke: path sits half a stroke outside the face
+                    // edge so the ring's inner edge starts on the lesson ring.
+                    final pathRadius =
+                        (_faceSize / 2) + (_pulseStroke / 2) + outset;
                     return CustomPaint(
                       painter: _PulseRingPainter(
-                        color: accent.withValues(alpha: 0.45),
-                        strokeWidth: 3,
-                        diameter: _faceSize + expand * 2,
-                        // Match the top-aligned 64px face inside the 72x70 box.
+                        color: accent.withValues(alpha: 0.55),
+                        strokeWidth: _pulseStroke,
+                        radius: pathRadius,
                         center: const Offset(_boxWidth / 2, _faceSize / 2),
                       ),
                     );
@@ -856,13 +863,13 @@ class _PulseRingPainter extends CustomPainter {
   _PulseRingPainter({
     required this.color,
     required this.strokeWidth,
-    required this.diameter,
+    required this.radius,
     required this.center,
   });
 
   final Color color;
   final double strokeWidth;
-  final double diameter;
+  final double radius;
   final Offset center;
 
   @override
@@ -870,15 +877,16 @@ class _PulseRingPainter extends CustomPainter {
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
-    canvas.drawCircle(center, diameter / 2, paint);
+      ..strokeWidth = strokeWidth
+      ..strokeCap = StrokeCap.round;
+    canvas.drawCircle(center, radius, paint);
   }
 
   @override
   bool shouldRepaint(covariant _PulseRingPainter oldDelegate) {
     return oldDelegate.color != color ||
         oldDelegate.strokeWidth != strokeWidth ||
-        oldDelegate.diameter != diameter ||
+        oldDelegate.radius != radius ||
         oldDelegate.center != center;
   }
 }
