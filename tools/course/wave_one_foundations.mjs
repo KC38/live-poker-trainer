@@ -596,13 +596,13 @@ export function buildSectionOne() {
               selectAct({
                 id: "act-01-02-02-scaffolded-kicker", order: 3, stage: "scaffolded",
                 prompt: "Same pair — tap who wins on kickers.",
-                a11y: "Tap the winner of the king-pair kicker battle.",
+                a11y: "Tap who wins when kickers break a tied pair.",
                 objectives: ["Use kickers when categories tie"],
                 choices: [
                   choice("you-kicker", "You win — better kicker", "recommended",
                     "Same pair; higher kicker wins."),
                   choice("they-kicker", "They win — their kicker", "clear_mistake",
-                    "Queen beats jack as kicker.", {betterChoiceId: "you-kicker"}),
+                    "Higher kicker takes it — look again.", {betterChoiceId: "you-kicker"}),
                   choice("chop-kicker", "Chop — same pair always ties", "clear_mistake",
                     "Kickers decide when pairs match.", {betterChoiceId: "you-kicker"}),
                 ],

@@ -356,30 +356,6 @@ void main() {
     );
   });
 
-  test('postflop with face-up villain keeps kicker ranks', () {
-    // act-01-02-02-scaffolded-kicker: you win on queen over jack.
-    // Re-dealing hero to any one-pair hole (e.g. 98) would invert the winner
-    // while choice copy still says "queen kicker".
-    List<int> ranksOf(List<String> codes) =>
-        [for (final c in codes) CardModel.fromCode(c).rank]..sort();
-
-    for (var seed = 0; seed < 32; seed++) {
-      final groups = isomorphicLessonCardGroups(
-        [
-          ['Ah', 'Qd'],
-          ['Kh', 'Kd', '7c', '3s', '2d'],
-          ['As', 'Jd'],
-        ],
-        Random(seed),
-      );
-      expect(ranksOf(groups[0]), [12, 14], reason: 'hero seed $seed');
-      expect(ranksOf(groups[1]), [2, 3, 7, 13, 13], reason: 'board seed $seed');
-      expect(ranksOf(groups[2]), [11, 14], reason: 'villain seed $seed');
-      final all = [...groups[0], ...groups[1], ...groups[2]];
-      expect(all.toSet().length, all.length, reason: 'unique seed $seed');
-    }
-  });
-
   test('shuffledLessonChoices is seeded and id-stable', () {
     const choices = [
       CourseChoice(id: 'fold', label: 'Fold'),

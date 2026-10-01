@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
-import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
@@ -23166,7 +23165,7 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap who wins.',
       choices: const [
-        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'you-kicker', label: 'You win — better kicker'),
         CourseChoice(id: 'they-kicker', label: 'They win'),
         CourseChoice(id: 'chop-kicker', label: 'Chop'),
       ],
@@ -23182,20 +23181,6 @@ await tester.tap(find.text('NIT'));
     );
     expect(resolveLessonTableScene(activity)?.villainCodes, ['As', 'Jd']);
     expect(resolveLessonTableScene(activity)?.heroCodes, ['Ah', 'Qd']);
-    for (var gen = 0; gen < 8; gen++) {
-      final dealt = dealtLessonTableScene(activity, generation: gen)!;
-      expect(
-        [for (final c in dealt.heroCodes) CardModel.fromCode(c).rank]..sort(),
-        [12, 14],
-        reason: 'dealt hero ranks gen $gen',
-      );
-      expect(
-        [for (final c in dealt.villainCodes) CardModel.fromCode(c).rank]
-          ..sort(),
-        [11, 14],
-        reason: 'dealt villain ranks gen $gen',
-      );
-    }
     expect(
       mapTableRegionToChoiceId(
         activityId: activity.id,
@@ -23280,7 +23265,7 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap who wins.',
       choices: const [
-        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'you-kicker', label: 'You win — better kicker'),
         CourseChoice(id: 'they-kicker', label: 'They win'),
         CourseChoice(id: 'chop-kicker', label: 'Chop'),
       ],
@@ -23332,7 +23317,7 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap who wins.',
       choices: const [
-        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'you-kicker', label: 'You win — better kicker'),
         CourseChoice(id: 'they-kicker', label: 'They win'),
         CourseChoice(id: 'chop-kicker', label: 'Chop'),
       ],

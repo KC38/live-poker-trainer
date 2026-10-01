@@ -1118,7 +1118,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the winner of the king-pair kicker battle.",
+                  "accessibilityText": "Tap who wins when kickers break a tied pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1145,7 +1145,7 @@
                       "accessibilityText": "They win — their kicker",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Queen beats jack as kicker.",
+                        "feedback": "Higher kicker takes it — look again.",
                         "betterChoiceId": "you-kicker"
                       }
                     },

@@ -19,6 +19,7 @@ import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/course/activity_registry.dart';
+import 'package:live_poker_trainer/ui/course/kicker_showdown.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/heart_refill_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
@@ -367,7 +368,23 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         numericValue: controller.draft.numericValue,
       );
       if (!mounted) return;
-      controller.finishSubmit(result);
+      final displayResult = () {
+        if (controller.activity.id != kickerShowdownActivityId) {
+          return result;
+        }
+        final scene = dealtLessonTableScene(
+          controller.activity,
+          generation: controller.bindGeneration,
+        );
+        if (scene == null) return result;
+        return rewriteKickerShowdownResult(
+          result: result,
+          heroCodes: scene.heroCodes,
+          boardCodes: scene.boardCodes,
+          villainCodes: scene.villainCodes,
+        );
+      }();
+      controller.finishSubmit(displayResult);
       final gradedIndex = _activities.indexWhere(
         (a) => a.id == controller.activity.id,
       );
@@ -1398,6 +1415,9 @@ String? tableChoiceRecoveryLabel(String choiceId) {
     'chop-broadway' => 'chop — board plays',
     'button-wins' => 'button wins',
     'high-card-wins' => 'higher hole card',
+    'you-kicker' => 'You win — better kicker',
+    'they-kicker' => 'They win — their kicker',
+    'chop-kicker' => 'Chop',
     _ => null,
   };
 }
