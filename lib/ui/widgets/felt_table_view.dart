@@ -27,7 +27,9 @@ import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 ///
 /// 1. Seats take their slots. Each seat claims its box, its hole cards,
 ///    its position pucks, its street bet, and its action badge.
-/// 2. The board takes the largest scale that no seat claim reaches.
+/// 2. Position pucks and street bets park on that seat's fixed felt lane
+///    ([SeatFeltSpots]) so markers stay consistent as the table scales.
+/// 3. The board takes the largest scale that no seat claim reaches.
 ///
 /// [features] (or the nearest [TableFeaturesScope]) turns optional layers
 /// off for lessons that have not taught them yet.
@@ -554,7 +556,7 @@ class FeltTableView extends StatelessWidget {
       Money.clamp(v, lo, math.max(lo, hi));
 }
 
-/// A position puck beside a seat box.
+/// A position puck on a seat's felt lane.
 @immutable
 class SeatPuckSlot {
   const SeatPuckSlot(this.label, this.rect);
@@ -564,13 +566,142 @@ class SeatPuckSlot {
   final Rect rect;
 }
 
-/// A street bet beside a seat box.
+/// A street bet on a seat's felt lane.
 @immutable
 class SeatBetSlot {
   const SeatBetSlot(this.label, this.rect);
 
   final String label;
   final Rect rect;
+}
+
+/// Fixed felt parking spots for one seat's position pucks and street bet.
+///
+/// Every seat uses the same inward lane onto the felt. Distances scale with
+/// [seatScale] so markers move with the table for 2–9 players instead of
+/// drifting from per-frame collision walks.
+@immutable
+class SeatFeltSpots {
+  /// Creates spots from a laid-out seat.
+  factory SeatFeltSpots.forSeat({
+    required Offset slot,
+    required Rect pod,
+    required Rect footprint,
+    required double seatScale,
+    double badgeHeight = 0,
+  }) {
+    final inward = inwardFor(slot);
+    return SeatFeltSpots._(
+      edge: edgePoint(
+        pod: pod,
+        footprint: footprint,
+        inward: inward,
+        badgeHeight: badgeHeight,
+      ),
+      inward: inward,
+      seatScale: seatScale,
+    );
+  }
+
+  const SeatFeltSpots._({
+    required this.edge,
+    required this.inward,
+    required this.seatScale,
+  });
+
+  /// Unit inward direction onto the felt for a template [slot].
+  static Offset inwardFor(Offset slot) {
+    if (slot.dx.abs() >= 0.9 && slot.dy.abs() < 0.35) {
+      // Mid-side seats sit beside the board — drop below the box and
+      // slightly toward center instead of walking into the card row.
+      final raw = Offset(-slot.dx.sign * 0.4, 1);
+      return raw / raw.distance;
+    }
+    if (slot.dx.abs() >= 0.9) {
+      return Offset(-slot.dx.sign, 0);
+    }
+    if (slot.dy <= -0.5) {
+      return const Offset(0, 1);
+    }
+    return const Offset(0, -1);
+  }
+
+  /// Point on the seat's inward face where the marker lane starts.
+  static Offset edgePoint({
+    required Rect pod,
+    required Rect footprint,
+    required Offset inward,
+    double badgeHeight = 0,
+  }) {
+    if (inward.dx.abs() >= 0.9) {
+      return Offset(inward.dx < 0 ? pod.left : pod.right, pod.center.dy);
+    }
+    if (inward.dy > 0 && inward.dx.abs() > 0.1) {
+      // Mid-side diagonal: leave from the bottom-inward corner.
+      return Offset(
+        inward.dx < 0 ? pod.left : pod.right,
+        pod.bottom + badgeHeight,
+      );
+    }
+    if (inward.dy > 0) {
+      // Top seat: leave below the action-badge band onto the felt.
+      return Offset(pod.center.dx, pod.bottom + badgeHeight);
+    }
+    // Bottom / hero: leave above the hole cards toward the pot.
+    return Offset(pod.center.dx, footprint.top);
+  }
+
+  /// Start of the marker lane on the seat's inward face.
+  final Offset edge;
+
+  /// Unit direction from [edge] onto the felt.
+  final Offset inward;
+
+  /// Felt seat scale — clears and gaps track this.
+  final double seatScale;
+
+  /// Gap from the seat edge to the first puck center.
+  double get puckClearance => 6 * seatScale;
+
+  /// Gap between a puck rim and the bet pill along the lane.
+  double get puckToBetGap => 4 * seatScale;
+
+  /// Bet-only clearance when the seat has no position puck.
+  double get betOnlyClearance => 12 * seatScale;
+
+  /// Half-extent of [size] along [inward].
+  static double alongHalf(Size size, Offset inward) =>
+      inward.dx.abs() >= inward.dy.abs() ? size.width / 2 : size.height / 2;
+
+  /// Center for puck [index] of [count], stacked across the lane.
+  Offset puckCenter({
+    required double puckDiameter,
+    required int index,
+    required int count,
+  }) {
+    final home = edge + inward * (puckClearance + puckDiameter / 2);
+    if (count <= 1) return home;
+    final perp = Offset(-inward.dy, inward.dx);
+    final step = puckDiameter + 2 * seatScale;
+    final total = count * puckDiameter + (count - 1) * 2 * seatScale;
+    final start = -total / 2 + puckDiameter / 2;
+    return home + perp * (start + index * step);
+  }
+
+  /// Center for a street bet, further along the same lane as the pucks.
+  Offset betCenter({
+    required Size pill,
+    required double puckDiameter,
+    required bool hasPucks,
+  }) {
+    final half = alongHalf(pill, inward);
+    if (!hasPucks) {
+      return edge + inward * (betOnlyClearance + half);
+    }
+    final puckHome = edge + inward * (puckClearance + puckDiameter / 2);
+    return puckHome +
+        inward * (puckDiameter / 2 + puckToBetGap + half);
+  }
 }
 
 /// Where one seat draws and everything it claims.
@@ -817,22 +948,13 @@ class TableLayout {
       final footprint = Rect.fromLTWH(left, top, fp.width, fp.height);
       final pod = m.podIn(footprint);
 
-      // Side seats put pucks toward the felt. A seat in the top row has a
-      // neighbor on its inward side, so its pucks go outward. The hero and a
-      // lone top seat use the right.
-      final side = slot.dx.abs() >= 0.9;
-      final toward =
-          slot.dx > 0.1
-              ? -1.0
-              : slot.dx < -0.1
-              ? 1.0
-              : 0.0;
-      final puckDir =
-          side
-              ? toward
-              : toward == 0
-              ? 1.0
-              : -toward;
+      final spots = SeatFeltSpots.forSeat(
+        slot: slot,
+        pod: pod,
+        footprint: footprint,
+        seatScale: seatScale,
+        badgeHeight: badge,
+      );
       final puckD = SeatPuck.diameter * seatScale;
       final labels = [
         if (features.positions && game.dealerIndex == i) 'D',
@@ -845,17 +967,18 @@ class TableLayout {
                 game.players[i].currentBet > Money.epsilon))
           'BB',
       ];
-      final puckX = puckDir > 0 ? pod.right + 3 : pod.left - 3 - puckD;
-      final stackH = labels.length * puckD + (labels.length - 1) * 2;
       final pucks = [
         for (var k = 0; k < labels.length; k++)
           SeatPuckSlot(
             labels[k],
-            Rect.fromLTWH(
-              puckX,
-              pod.center.dy - stackH / 2 + k * (puckD + 2),
-              puckD,
-              puckD,
+            Rect.fromCenter(
+              center: spots.puckCenter(
+                puckDiameter: puckD,
+                index: k,
+                count: labels.length,
+              ),
+              width: puckD,
+              height: puckD,
             ),
           ),
       ];
@@ -865,6 +988,7 @@ class TableLayout {
           slot: slot,
           footprint: footprint,
           pod: pod,
+          spots: spots,
           pucks: pucks,
           body: Rect.fromLTRB(
             footprint.left,
@@ -879,7 +1003,6 @@ class TableLayout {
     final bodies = [
       for (final p in placed) ...[p.body, for (final k in p.pucks) k.rect],
     ];
-    final boardCenter = Offset(cx, midY);
     final seats = <SeatSlot>[];
     final bets = <Rect>[];
     for (final p in placed) {
@@ -894,10 +1017,8 @@ class TableLayout {
         final rect = _placeBet(
           seat: p,
           pill: StreetBetPill.sizeFor(label, compact: compact),
-          boardCenter: boardCenter,
           blocked: [...bodies, ...bets],
           bounds: Offset.zero & size,
-          badge: badge,
         );
         bets.add(rect);
         bet = SeatBetSlot(label, rect);
@@ -956,10 +1077,8 @@ class TableLayout {
       final rect = _placeBet(
         seat: seat,
         pill: bet.rect.size,
-        boardCenter: boardCenter,
         blocked: [...bodies, ...others, ...boardRects],
         bounds: Offset.zero & size,
-        badge: badge,
       );
       seats[k] = SeatSlot(
         index: seats[k].index,
@@ -1113,20 +1232,16 @@ class TableLayout {
     }
   }
 
-  /// Street bet position for [seat], kept visually tied to that seat.
+  /// Street bet on [seat]'s fixed felt lane ([SeatFeltSpots]).
   ///
-  /// Hole cards sit above every box, so a pure walk from the pod toward the
-  /// pot runs through the seat's own cards (and its inward pucks) and pushes
-  /// the chip deep onto the felt — especially the lower-right big blind.
-  /// Prefer a home spot beside the box at pod height, then short nudges,
-  /// before walking farther in.
+  /// Parks at the deterministic bet spot. If that rect is blocked, nudge
+  /// across the lane first, then pull back toward the seat — never deeper
+  /// into the pot — so chips stay tied to the seat on crowded felts.
   static Rect _placeBet({
     required _PlacedSeat seat,
     required Size pill,
-    required Offset boardCenter,
     required List<Rect> blocked,
     required Rect bounds,
-    required double badge,
   }) {
     bool clear(Rect r) =>
         r.left >= bounds.left &&
@@ -1141,124 +1256,59 @@ class TableLayout {
       height: pill.height,
     );
 
-    final pod = seat.pod;
-    final inward =
-        seat.slot.dx > 0.1
-            ? -1.0
-            : seat.slot.dx < -0.1
-            ? 1.0
-            : 0.0;
-    final under = Rect.fromLTWH(
-      inward > 0
-          ? pod.right - pill.width
-          : inward < 0
-          ? pod.left
-          : pod.center.dx - pill.width / 2,
-      pod.bottom + badge + 2,
-      pill.width,
-      pill.height,
+    final spots = seat.spots;
+    final puckD = SeatPuck.diameter * spots.seatScale;
+    final home = spots.betCenter(
+      pill: pill,
+      puckDiameter: puckD,
+      hasPucks: seat.pucks.isNotEmpty,
     );
-    if (seat.slot.dx.abs() >= 0.9 && seat.slot.dy.abs() < 0.3 && clear(under)) {
-      return under;
-    }
-
-    const gap = 3.0;
-    final puckLeft =
-        seat.pucks.isEmpty
-            ? pod.left
-            : seat.pucks.map((p) => p.rect.left).reduce(math.min);
-    final puckRight =
-        seat.pucks.isEmpty
-            ? pod.right
-            : seat.pucks.map((p) => p.rect.right).reduce(math.max);
-
-    // Side seats: sit beside the inward puck at pod height so the chip reads
-    // with the SB/BB marker instead of past the hole cards toward the pot.
-    // Top/bottom: on the pot-facing edge of the box (or past the cards).
-    final homes = <Offset>[];
-    if (inward != 0) {
-      final sideX =
-          inward < 0
-              ? puckLeft - gap - pill.width / 2
-              : puckRight + gap + pill.width / 2;
-      homes.addAll([
-        Offset(sideX, pod.center.dy),
-        Offset(sideX, pod.center.dy - 12),
-        Offset(sideX, pod.center.dy + 12),
-        Offset(sideX, pod.top + pill.height / 2),
-        Offset(sideX, pod.bottom - pill.height / 2),
-      ]);
-    } else if (seat.slot.dy < 0) {
-      homes.add(
-        Offset(pod.center.dx, pod.bottom + badge + gap + pill.height / 2),
-      );
-    } else {
-      homes.add(
-        Offset(pod.center.dx, seat.footprint.top - gap - pill.height / 2),
-      );
-    }
-
-    final nudges = <Offset>[
-      Offset.zero,
-      for (final d in [6.0, 12.0, 18.0, 24.0, 32.0, 40.0]) ...[
-        Offset(0, -d),
-        Offset(0, d),
-        Offset(-d, 0),
-        Offset(d, 0),
-        Offset(-d, -d),
-        Offset(d, -d),
-        Offset(-d, d),
-        Offset(d, d),
-      ],
+    final inward = spots.inward;
+    final perp = Offset(-inward.dy, inward.dx);
+    final scale = spots.seatScale;
+    final laterals = [
+      0.0,
+      6 * scale,
+      -6 * scale,
+      12 * scale,
+      -12 * scale,
+      18 * scale,
+      -18 * scale,
+      24 * scale,
+      -24 * scale,
+      32 * scale,
+      -32 * scale,
     ];
-    for (final home in homes) {
-      var anchor = home;
-      final towardPot = boardCenter - anchor;
-      if (towardPot.distance > 1) {
-        anchor += towardPot / towardPot.distance * 4;
-      }
-      for (final nudge in nudges) {
-        final r = centered(anchor + nudge);
+    final pullbacks = [
+      0.0,
+      6 * scale,
+      12 * scale,
+      18 * scale,
+      24 * scale,
+      32 * scale,
+    ];
+    for (final back in pullbacks) {
+      for (final lat in laterals) {
+        final r = centered(home + perp * lat - inward * back);
         if (clear(r)) return r;
       }
     }
-
-    final from = pod.center;
-    final delta = boardCenter - from;
-    final dir =
-        delta.distance < 1 ? const Offset(0, -1) : delta / delta.distance;
-    final perp = Offset(-dir.dy, dir.dx);
-    final limit = math.min(math.max(48.0, delta.distance * 0.45), 96.0);
-    for (var d = 24.0; d <= limit; d += 4) {
-      for (final lat in [0.0, 12.0, -12.0, 24.0, -24.0, 36.0, -36.0]) {
-        final r = centered(from + dir * d + perp * lat);
-        if (clear(r)) return r;
-      }
-    }
-    if (clear(under)) return under;
-
-    // Crowded short felt: nearest clear spot, preferring seat-tied radius.
-    Rect? bestNear;
-    Rect? bestAny;
-    var bestNearDistance = double.infinity;
-    var bestAnyDistance = double.infinity;
-    final maxR2 = math.pow(math.max(pod.width, 72.0) * 1.5, 2).toDouble();
-    for (var y = bounds.top; y + pill.height <= bounds.bottom; y += 6) {
-      for (var x = bounds.left; x + pill.width <= bounds.right; x += 6) {
-        final r = Rect.fromLTWH(x, y, pill.width, pill.height);
+    // Last resort on a crowded short felt: search near the seat edge.
+    final from = spots.edge;
+    Rect? best;
+    var bestDistance = double.infinity;
+    for (var d = 8.0; d <= 56 * scale; d += 4) {
+      for (final lat in laterals) {
+        final r = centered(from + inward * d + perp * lat);
         if (!clear(r)) continue;
         final distance = (r.center - from).distanceSquared;
-        if (distance < bestAnyDistance) {
-          bestAny = r;
-          bestAnyDistance = distance;
-        }
-        if (distance <= maxR2 && distance < bestNearDistance) {
-          bestNear = r;
-          bestNearDistance = distance;
+        if (distance < bestDistance) {
+          best = r;
+          bestDistance = distance;
         }
       }
     }
-    return bestNear ?? bestAny ?? under;
+    return best ?? centered(home);
   }
 
   static double _clamp(double v, double lo, double hi) =>
@@ -1272,6 +1322,7 @@ class _PlacedSeat {
     required this.slot,
     required this.footprint,
     required this.pod,
+    required this.spots,
     required this.pucks,
     required this.body,
   });
@@ -1280,6 +1331,7 @@ class _PlacedSeat {
   final Offset slot;
   final Rect footprint;
   final Rect pod;
+  final SeatFeltSpots spots;
   final List<SeatPuckSlot> pucks;
 
   /// Footprint down to the bottom of the action badge.
