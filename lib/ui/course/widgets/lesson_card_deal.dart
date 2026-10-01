@@ -611,6 +611,21 @@ LessonStartingHandFamily startingHandFamilyForHoleKind(LessonHoleKind kind) {
   };
 }
 
+/// True when [activity] teaches by tapping a face-up seat on the full table.
+///
+/// Catalog choice labels may be words (`Suited`, `Pocket pair`) rather than
+/// card codes — presentation still routes to [LessonHoleHandTable], never an
+/// invented Them/You felt plus text docks (that overflowed short phones).
+bool supportsHoleHandSeatDeal(CourseActivity activity) {
+  switch (activity.id) {
+    case 'act-01-01-02-unguided-suited':
+    case 'act-01-01-02-checkpoint-pair':
+      return true;
+    default:
+      return false;
+  }
+}
+
 /// Returns a randomized seat plan for suits/ranks hole-hand identify steps.
 HoleHandSeatDeal? dealHoleHandSeatPlan(
   CourseActivity activity, {

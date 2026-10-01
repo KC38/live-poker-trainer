@@ -15,6 +15,8 @@ import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
@@ -418,6 +420,119 @@ void main() {
     expect(controller.draft.choiceId, 'suited-ah-kh');
     expect(autoSubmits, 1);
   });
+
+  testWidgets(
+    'catalog word labels still seat-tap without Them/You overflow',
+    (tester) async {
+      // iPhone 13 mini — catalog labels Suited/Offsuit/Pocket pair used to
+      // invent a densified Them/You felt + text docks and bottom-overflow.
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      addTearDown(() => debugLessonCardDealRandom = null);
+      debugLessonCardDealRandom = Random(3);
+
+      final activity = CourseActivity(
+        id: 'act-01-01-02-unguided-suited',
+        order: 4,
+        stage: ActivityStage.unguided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Tap the seat whose hole cards share a suit.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap the suited hole cards.',
+        choices: const [
+          CourseChoice(
+            id: 'suited-ah-kh',
+            label: 'Suited',
+            accessibilityText: 'Suited',
+          ),
+          CourseChoice(
+            id: 'offsuit-ah-kd',
+            label: 'Offsuit',
+            accessibilityText: 'Offsuit',
+          ),
+          CourseChoice(
+            id: 'pair-77',
+            label: 'Pocket pair',
+            accessibilityText: 'Pocket pair',
+          ),
+        ],
+      );
+      expect(supportsHoleHandSeatDeal(activity), isTrue);
+      expect(
+        resolveSelectIdentifyPresentation(activity),
+        SelectIdentifyPresentation.holeCards,
+      );
+      expect(resolveLessonTableScene(activity), isNull);
+
+      final expected = dealHoleHandSeatPlan(
+        activity,
+        random: Random(3),
+      )!;
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+      var autoSubmits = 0;
+      controller.onAutoSubmit = () => autoSubmits += 1;
+
+      final base = buildPokerTheme();
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            theme: base.copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: Scaffold(
+              backgroundColor: const Color(0xFF0B1220),
+              body: SafeArea(
+                child: LessonScreenLayout(
+                  progress: 0.4,
+                  livesRemaining: 5,
+                  livesMax: 5,
+                  onClose: () {},
+                  speech: 'Tap the suited hole cards.',
+                  expression: LessonMascotExpression.thinking,
+                  onUndo: () {},
+                  onRedo: () {},
+                  onHint: () {},
+                  canUndo: false,
+                  canRedo: false,
+                  canHint: true,
+                  stage: TableFeaturesScope(
+                    features: TableFeatures.forLessonId(
+                      'lesson-01-01-02-suits-and-ranks',
+                    ),
+                    child: LessonFrameScope(
+                      onLocalMiss: (_) {},
+                      child: SelectIdentifyActivity(
+                        activity: activity,
+                        controller: controller,
+                        showGuidance: false,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(LessonHoleHandTable), findsOneWidget);
+      expect(find.text('Pocket pair'), findsNothing);
+      expect(find.text('Them'), findsNothing);
+      expect(find.byKey(const ValueKey('hole-card-bands')), findsNothing);
+
+      const seatNames = ['You', 'Sam', 'Jo'];
+      await tester.tap(find.text(seatNames[expected.correctSeatIndex]));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'suited-ah-kh');
+      expect(autoSubmits, 1);
+    },
+  );
 
   test('rank order deal varies ranks and stays id-stable', () {
     const authored = [

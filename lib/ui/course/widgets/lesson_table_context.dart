@@ -3625,9 +3625,11 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       );
   }
 
-  // Hole-card choice quizzes already render MiniCards as answers. Never invent
-  // a felt from prompt keywords ("suited hole cards") — that defaulted to Ah/Kd
-  // and spoiled or confused the puzzle.
+  // Hole-card choice quizzes already render MiniCards / seat taps as answers.
+  // Never invent a felt from prompt keywords ("suited hole cards") — that
+  // defaulted to Ah/Kd + text docks and overflowed short phones (catalog
+  // labels are Suited / Offsuit / Pocket pair, not card codes).
+  if (supportsHoleHandSeatDeal(activity)) return null;
   final allHoleCardChoices =
       activity.choices.isNotEmpty &&
       activity.choices.every(
