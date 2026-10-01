@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
@@ -34,6 +35,16 @@ Widget _frame(Widget child) {
 }
 
 void main() {
+  setUp(() {
+    debugFreezeLessonSuitRemap = true;
+    lessonDealAttemptSalt = '';
+  });
+  tearDown(() {
+    debugFreezeLessonSuitRemap = false;
+    lessonDealAttemptSalt = '';
+    debugLessonCardDealRandom = null;
+  });
+
   testWidgets('explain taps playing cards on the full table', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;

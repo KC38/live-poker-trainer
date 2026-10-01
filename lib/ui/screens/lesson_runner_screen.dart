@@ -22,6 +22,7 @@ import 'package:live_poker_trainer/ui/course/activity_registry.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/heart_refill_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_progress_header.dart';
@@ -103,7 +104,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     _resumeNoticeTimer?.cancel();
     _activityController?.removeListener(_onActivityChanged);
     _activityController?.dispose();
+    lessonDealAttemptSalt = '';
     super.dispose();
+  }
+
+  void _setDealSalt(String attemptId) {
+    lessonDealAttemptSalt = attemptId;
   }
 
   void _onActivityChanged() {
@@ -217,6 +223,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       orElse: () => activities.first,
     );
     _bindActivityController(LessonActivityController(activity: current));
+    _setDealSalt(started.attempt.attemptId);
     if (!mounted) return;
     setState(() {
       _lesson = lesson;
@@ -494,6 +501,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       );
       final jumped = current.id != priorActivityId;
       controller.bindActivity(current);
+      _setDealSalt(started.attempt.attemptId);
       setState(() {
         _activities = activities;
         _attempt = started.attempt;

@@ -317,13 +317,12 @@ String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
     return 'Only five cards count. Tap each card that plays.';
   }
   if (activity.id == 'act-01-02-02-scaffolded-kicker') {
-    return 'Same pair of kings. Tap your cards if the queen kicker wins, '
-        'their cards if the jack wins, or Chop if they tie.';
+    return 'Same pair on the board. Tap your cards if your kicker wins, '
+        'their cards if theirs wins, or Chop if you tie.';
   }
   if (activity.id == 'act-01-02-02-unguided-board') {
     return 'Both checked down. Tap the board if both play it, your cards '
-        'if a higher hole card wins, or their cards if the button wins '
-        'automatically.';
+        'if a higher hole card wins, or their cards if they win.';
   }
   if (activity.id == 'act-01-03-01-explain-passive') {
     return 'Three quiet buttons. Tap Fold, then Check, then Call.';

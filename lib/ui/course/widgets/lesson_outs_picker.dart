@@ -8,6 +8,7 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 /// Felt picker: tap the three remaining aces (clean outs) on the king-high flop.
@@ -35,7 +36,7 @@ class OutsCleanAcesPicker extends StatefulWidget {
   /// Null keeps the standalone teach shell at 58% of the screen.
   final double? height;
 
-  /// Spot cards — hero already holds Ah.
+  /// Authored template — hero already holds Ah.
   static const heroCodes = ['Ah', 'Qh'];
   static const boardCodes = ['Kc', '8h', '2d'];
 
@@ -51,11 +52,34 @@ class OutsCleanAcesPicker extends StatefulWidget {
 
 class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
   final Set<String> _tappedClean = <String>{};
+  late final List<String> _heroCodes;
+  late final List<String> _boardCodes;
+  late final List<String> _cleanOrder;
+  late final List<String> _dirtyCodes;
 
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(_onController);
+    final template = [
+      OutsCleanAcesPicker.heroCodes,
+      OutsCleanAcesPicker.boardCodes,
+      OutsCleanAcesPicker.cleanOrder,
+      OutsCleanAcesPicker.dirtyCodes,
+    ];
+    // Suit-only: ranks must stay aces / king-high for the outs teach.
+    final remapped = isomorphicLessonCardGroups(
+      template,
+      resolveLessonDealRandom(
+        activityId: widget.activity.id,
+        generation: widget.controller.bindGeneration,
+      ),
+      suitOnly: true,
+    );
+    _heroCodes = remapped[0];
+    _boardCodes = remapped[1];
+    _cleanOrder = remapped[2];
+    _dirtyCodes = remapped[3];
   }
 
   @override
@@ -85,7 +109,7 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
   }
 
   String? get _nextClean {
-    for (final code in OutsCleanAcesPicker.cleanOrder) {
+    for (final code in _cleanOrder) {
       if (!_tappedClean.contains(code)) return code;
     }
     return null;
@@ -93,10 +117,10 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
 
   void _onCleanTap(String code) {
     if (widget.locked) return;
-    if (!OutsCleanAcesPicker.cleanOrder.contains(code)) return;
+    if (!_cleanOrder.contains(code)) return;
     if (_tappedClean.contains(code)) return;
     setState(() => _tappedClean.add(code));
-    if (_tappedClean.length >= OutsCleanAcesPicker.cleanOrder.length) {
+    if (_tappedClean.length >= _cleanOrder.length) {
       _submit('outs-3');
     }
   }
@@ -162,8 +186,8 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
 
     Widget outsRow() {
       final codes = [
-        ...OutsCleanAcesPicker.cleanOrder,
-        ...OutsCleanAcesPicker.dirtyCodes,
+        ..._cleanOrder,
+        ..._dirtyCodes,
       ];
       return FittedBox(
         fit: BoxFit.scaleDown,
@@ -175,8 +199,7 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
               Builder(
                 builder: (context) {
                   final code = codes[i];
-                  final isClean =
-                      OutsCleanAcesPicker.cleanOrder.contains(code);
+                  final isClean = _cleanOrder.contains(code);
                   final selected = _tappedClean.contains(code);
                   final isNext = guide && isClean && code == next;
                   return _SoftPulseTarget(
@@ -246,7 +269,7 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
       children: [
         spotRow(
           label: 'BOARD · shared',
-          codes: OutsCleanAcesPicker.boardCodes,
+          codes: _boardCodes,
           size: MiniCardSize.small,
         ),
         const SizedBox(height: 8),
@@ -261,7 +284,7 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
         const SizedBox(height: 8),
         spotRow(
           label: 'You',
-          codes: OutsCleanAcesPicker.heroCodes,
+          codes: _heroCodes,
           size: MiniCardSize.small,
         ),
         const SizedBox(height: 12),

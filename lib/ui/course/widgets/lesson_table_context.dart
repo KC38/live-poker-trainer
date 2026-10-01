@@ -7797,13 +7797,13 @@ class LessonTableContext extends StatelessWidget {
         (
           region: LessonTableRegion.handRankYouWin,
           title: 'You',
-          detail: 'Queen kicker',
+          detail: 'Better kicker',
           visual: const DealtMiniPair(kind: LessonHoleKind.broadway),
         ),
         (
           region: LessonTableRegion.handRankTheyWin,
           title: 'Them',
-          detail: 'Jack kicker?',
+          detail: 'Worse kicker?',
           visual: const DealtMiniPair(kind: LessonHoleKind.broadway),
         ),
         (

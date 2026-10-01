@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "0e215886124ce1919be1cc03a49a4cc71ad48bf4930c8f72accb701c51e9df2b",
+  "contentChecksum": "270ff25f28d0bbe208845a2300fc88ae1f836f46733949a619d21c4b25dc3a40",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -901,13 +901,13 @@
                   "choices": [
                     {
                       "id": "you-kicker",
-                      "label": "You win — queen kicker",
-                      "accessibilityText": "You win — queen kicker"
+                      "label": "You win — better kicker",
+                      "accessibilityText": "You win — better kicker"
                     },
                     {
                       "id": "they-kicker",
-                      "label": "They win — jack is live",
-                      "accessibilityText": "They win — jack is live"
+                      "label": "They win — their kicker",
+                      "accessibilityText": "They win — their kicker"
                     },
                     {
                       "id": "chop-kicker",
