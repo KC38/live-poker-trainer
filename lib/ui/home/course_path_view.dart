@@ -745,6 +745,10 @@ class _NodeCircle extends StatelessWidget {
   final Color accent;
   final Animation<double>? pulse;
 
+  static const double _boxWidth = 72;
+  static const double _boxHeight = 70;
+  static const double _faceSize = 64;
+
   @override
   Widget build(BuildContext context) {
     final locked = node.state == CourseNodeState.locked;
@@ -765,71 +769,69 @@ class _NodeCircle extends StatelessWidget {
     final shadow = Color.lerp(fill, Colors.black, 0.35)!;
     final iconColor = locked ? AppColors.slate : Colors.white;
 
-    Widget circle = SizedBox(
-      width: 72,
-      height: 70,
+    final face = <Widget>[
+      Positioned(
+        top: 6,
+        child: Container(
+          width: _faceSize,
+          height: _faceSize,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: shadow,
+          ),
+        ),
+      ),
+      Container(
+        width: _faceSize,
+        height: _faceSize,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: fill,
+          border: node.isNext
+              ? Border.all(
+                  color: Colors.white.withValues(alpha: 0.35),
+                  width: 3,
+                )
+              : null,
+        ),
+        child: Icon(_iconFor(node), color: iconColor, size: 28),
+      ),
+    ];
+
+    final pulseAnim = pulse;
+    return SizedBox(
+      width: _boxWidth,
+      height: _boxHeight,
       child: Stack(
         alignment: Alignment.topCenter,
         clipBehavior: Clip.none,
         children: [
-          Positioned(
-            top: 6,
-            child: Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: shadow,
+          if (pulseAnim != null)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AnimatedBuilder(
+                  animation: pulseAnim,
+                  builder: (context, _) {
+                    // Ring grows outside the fixed box; layout size stays put.
+                    final expand = 4.0 + (pulseAnim.value * 6.0);
+                    return CustomPaint(
+                      painter: _PulseRingPainter(
+                        color: accent.withValues(alpha: 0.45),
+                        strokeWidth: 3,
+                        diameter: _faceSize + expand * 2,
+                        // Match the top-aligned 64px face inside the 72x70 box.
+                        center: const Offset(_boxWidth / 2, _faceSize / 2),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-          Container(
-            width: 64,
-            height: 64,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: fill,
-              border: node.isNext
-                  ? Border.all(
-                      color: Colors.white.withValues(alpha: 0.35),
-                      width: 3,
-                    )
-                  : null,
-            ),
-            child: Icon(_iconFor(node), color: iconColor, size: 28),
-          ),
+          ...face,
         ],
       ),
     );
-
-    final pulseAnim = pulse;
-    if (pulseAnim != null) {
-      circle = AnimatedBuilder(
-        animation: pulseAnim,
-        builder: (context, child) {
-          // Grow / shrink the highlight ring by a few pixels.
-          final expand = 4.0 + (pulseAnim.value * 6.0);
-          return Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              CustomPaint(
-                size: Size(64 + expand * 2, 64 + expand * 2),
-                painter: _PulseRingPainter(
-                  color: accent.withValues(alpha: 0.45),
-                  strokeWidth: 3,
-                ),
-              ),
-              child!,
-            ],
-          );
-        },
-        child: circle,
-      );
-    }
-
-    return circle;
   }
 
   static IconData _iconFor(CourseMapNode node) {
@@ -854,10 +856,14 @@ class _PulseRingPainter extends CustomPainter {
   _PulseRingPainter({
     required this.color,
     required this.strokeWidth,
+    required this.diameter,
+    required this.center,
   });
 
   final Color color;
   final double strokeWidth;
+  final double diameter;
+  final Offset center;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -865,17 +871,15 @@ class _PulseRingPainter extends CustomPainter {
       ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
-    final inset = strokeWidth / 2;
-    canvas.drawCircle(
-      Offset(size.width / 2, size.height / 2),
-      (size.shortestSide / 2) - inset,
-      paint,
-    );
+    canvas.drawCircle(center, diameter / 2, paint);
   }
 
   @override
   bool shouldRepaint(covariant _PulseRingPainter oldDelegate) {
-    return oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
+    return oldDelegate.color != color ||
+        oldDelegate.strokeWidth != strokeWidth ||
+        oldDelegate.diameter != diameter ||
+        oldDelegate.center != center;
   }
 }
 
