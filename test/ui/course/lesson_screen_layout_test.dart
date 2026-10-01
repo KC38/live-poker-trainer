@@ -61,7 +61,9 @@ void main() {
       lessonFrameHintFallback(unguided),
       'Tap the shared community cards on the flop.',
     );
+  });
 
+  test('guided SoftPulse leaves Hint disabled — cues are already on', () {
     final guided = _hintActivity(
       id: 'act-01-02-01-guided-ladder',
       stage: ActivityStage.guided,
@@ -69,10 +71,18 @@ void main() {
           'Showdown — tap You (high card), Sam (pair), then Jo (flush).',
       prompt: 'Tap weakest to strongest.',
     );
-    expect(
-      lessonFrameHintFallback(guided),
-      'Showdown — tap You (high card), Sam (pair), then Jo (flush).',
+    expect(lessonFrameHintShownByDefault(guided), isTrue);
+    expect(lessonFrameHintsDisabled(guided), isTrue);
+    expect(lessonFrameHintFallback(guided), isNull);
+
+    final scaffolded = _hintActivity(
+      id: 'act-01-01-01-scaffolded-private',
+      stage: ActivityStage.scaffolded,
+      accessibilityText: 'Tap your private hole cards.',
+      prompt: 'Tap the cards only you can see.',
     );
+    expect(lessonFrameHintShownByDefault(scaffolded), isFalse);
+    expect(lessonFrameHintsDisabled(scaffolded), isFalse);
   });
 
   test('hint fallback stays off for explain, jump tests, and no-hint caps', () {

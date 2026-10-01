@@ -653,6 +653,9 @@ String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
 /// Whether this step intentionally leaves Hint disabled.
 bool lessonFrameHintsDisabled(CourseActivity activity) {
   if (activity.stage == ActivityStage.jumpTest) return true;
+  // Guided SoftPulse / tap cues are already on for new concepts — tapping
+  // Hint would only re-show what the learner already sees.
+  if (lessonFrameHintShownByDefault(activity)) return true;
   final blob =
       '${activity.id} ${activity.accessibilityText} ${activity.prompt ?? ''}'
           .toLowerCase();
@@ -671,6 +674,14 @@ bool lessonFrameHintsDisabled(CourseActivity activity) {
     'act-07-10-05-hand',
   };
   return noHintIds.contains(activity.id);
+}
+
+/// Whether SoftPulse / answer cues are already visible without Hint.
+///
+/// Guided (new-concept) steps SoftPulse the answer by default, so Hint would
+/// be a no-op. Quieter stages keep Hint so learners can unlock those cues.
+bool lessonFrameHintShownByDefault(CourseActivity activity) {
+  return activity.stage == ActivityStage.guided;
 }
 
 /// Hint copy when the catalog step has no hint media.
