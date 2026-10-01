@@ -308,6 +308,13 @@ List<List<String>> _isomorphicPostflopGroups({
   required List<List<String>> rest,
   required Random rng,
 }) {
+  // Face-up villains encode relative showdown outcomes (kickers, chops, etc.).
+  // Re-dealing hero ranks to "same HandClass" can invent a weaker/stronger
+  // hole while feedback still names the authored kicker — suit-permute only.
+  if (rest.any((g) => g.isNotEmpty)) {
+    return permuteCardSuitGroups([hero, board, ...rest], rng);
+  }
+
   final suitMap = _freshSuitMap(rng);
   final mappedBoard = [
     for (final code in board) _applySuitMap(code, suitMap),
