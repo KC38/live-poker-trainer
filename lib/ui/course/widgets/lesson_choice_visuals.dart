@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 
 final _cardCodeToken = RegExp(r'\b([2-9TJQKA][shdc])\b', caseSensitive: false);
@@ -587,6 +588,10 @@ SelectIdentifyPresentation resolveSelectIdentifyPresentation(
   if (activity.id == 'act-01-01-02-guided-suits' ||
       activity.choices.any((c) => c.id == 'suits-full')) {
     return SelectIdentifyPresentation.suitTapPicker;
+  }
+  // Word labels (Suited / Pocket pair) still teach via face-up seat taps.
+  if (supportsHoleHandSeatDeal(activity)) {
+    return SelectIdentifyPresentation.holeCards;
   }
   if (activity.choices.isNotEmpty &&
       activity.choices.every((c) => parseSuitTokens(c.label).isNotEmpty)) {

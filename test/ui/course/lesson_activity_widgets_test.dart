@@ -7500,6 +7500,29 @@ await tester.tap(find.text('NIT'));
       ],
     );
     expect(resolveLessonTableScene(suited), isNull);
+
+    // Catalog ships word labels — still holeCards / no invented felt.
+    final catalogSuited = CourseActivity(
+      id: 'act-01-01-02-unguided-suited',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the seat whose hole cards share a suit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the suited hole cards.',
+      choices: const [
+        CourseChoice(id: 'suited-ah-kh', label: 'Suited'),
+        CourseChoice(id: 'offsuit-ah-kd', label: 'Offsuit'),
+        CourseChoice(id: 'pair-77', label: 'Pocket pair'),
+      ],
+    );
+    expect(supportsHoleHandSeatDeal(catalogSuited), isTrue);
+    expect(resolveLessonTableScene(catalogSuited), isNull);
+    expect(
+      resolveSelectIdentifyPresentation(catalogSuited),
+      SelectIdentifyPresentation.holeCards,
+    );
   });
 
   test('table region mapping covers Your two cards activities', () {
@@ -8553,11 +8576,12 @@ await tester.tap(find.text('NIT'));
     semantics.dispose();
   });
 
-  testWidgets('hole-card bands fit a short phone frame without overflow', (
+  testWidgets('framed suited seat table fits a short phone without overflow', (
     tester,
   ) async {
     final semantics = tester.ensureSemantics();
-    // iPhone 13 mini logical size — the device that showed the overflow.
+    // iPhone 13 mini logical size — catalog word labels used to invent a
+    // Them/You felt + text docks and bottom-overflow here.
     tester.view.physicalSize = const Size(375, 812);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -8572,9 +8596,9 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap the suited hole cards.',
       choices: const [
-        CourseChoice(id: 'suited-ah-kh', label: 'Ah Kh'),
-        CourseChoice(id: 'offsuit-ah-kd', label: 'Ah Kd'),
-        CourseChoice(id: 'pair-77', label: '7c 7d'),
+        CourseChoice(id: 'suited-ah-kh', label: 'Suited'),
+        CourseChoice(id: 'offsuit-ah-kd', label: 'Offsuit'),
+        CourseChoice(id: 'pair-77', label: 'Pocket pair'),
       ],
     );
     final controller = LessonActivityController(activity: activity);
@@ -8622,16 +8646,17 @@ await tester.tap(find.text('NIT'));
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
-    expect(find.byKey(const ValueKey('hole-card-bands')), findsOneWidget);
-    expect(find.byType(HeroRailWidget), findsNWidgets(3));
+    expect(find.byType(LessonHoleHandTable), findsOneWidget);
+    expect(find.byKey(const ValueKey('hole-card-bands')), findsNothing);
+    expect(find.text('Pocket pair'), findsNothing);
+    expect(find.text('Them'), findsNothing);
     expect(find.byType(CoachShelfWidget), findsNothing);
-    expect(find.text('PREFLOP'), findsNothing);
-    final bandsHeight =
-        tester.getSize(find.byKey(const ValueKey('hole-card-bands'))).height;
+    final stageHeight =
+        tester.getSize(find.byKey(const ValueKey('lesson-table-stage'))).height;
     final layoutHeight =
         tester.getSize(find.byType(LessonScreenLayout)).height;
-    expect(bandsHeight, lessThan(layoutHeight));
-    expect(bandsHeight, greaterThan(200));
+    expect(stageHeight, lessThan(layoutHeight));
+    expect(stageHeight, greaterThan(200));
 
     controller.dispose();
     semantics.dispose();

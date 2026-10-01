@@ -242,9 +242,10 @@ class SelectIdentifyActivity extends StatelessWidget {
             },
           );
         }
-        if (framed &&
-            presentation == SelectIdentifyPresentation.holeCards &&
-            supportsHoleHandSeatDeal(activity)) {
+        // Seat-deal steps ignore label shape (catalog uses Suited / Pocket
+        // pair words). On the lesson frame, always host the full table —
+        // never an invented Them/You felt plus text docks.
+        if (framed && supportsHoleHandSeatDeal(activity)) {
           return _RandomizedHoleHandTable(
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}',
@@ -2607,17 +2608,6 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
         );
       },
     );
-  }
-}
-
-/// True when [activity] uses a three-seat randomized hole-hand identify table.
-bool supportsHoleHandSeatDeal(CourseActivity activity) {
-  switch (activity.id) {
-    case 'act-01-01-02-unguided-suited':
-    case 'act-01-01-02-checkpoint-pair':
-      return true;
-    default:
-      return false;
   }
 }
 
