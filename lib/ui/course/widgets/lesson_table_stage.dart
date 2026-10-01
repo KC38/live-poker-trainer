@@ -149,15 +149,15 @@ Set<String> _words(String text) {
   return words;
 }
 
-/// Where the stage draws its arrows.
+/// Where the stage draws its SoftPulse cues.
 enum LessonTableCue {
-  /// No arrow.
+  /// No cue.
   none,
 
-  /// Arrows on the hero's hole cards.
+  /// CuePulse + arrows on the hero's hole cards.
   hero,
 
-  /// Arrow on the community cards.
+  /// CuePulse + arrows on every dealt community card.
   board,
 }
 
@@ -356,11 +356,20 @@ class LessonTableStage extends StatelessWidget {
             // Face-up holes still need CueArrows + CuePulse — the old
             // `&& !heroFaceUp` gate hid every "tap your cards" cue in the
             // lesson frame (guided find-holes, etc.).
+            // Board region cues expand to every dealt card the same way —
+            // a lone centered arrow over five slots lands on the rightmost
+            // flop card and skips CuePulse.
             highlightHero: cue == LessonTableCue.hero,
             highlightBoard: cue == LessonTableCue.board &&
-                highlightBoardIndexes.isEmpty,
+                highlightBoardIndexes.isEmpty &&
+                boardCodes.isEmpty,
             selectedBoardIndexes: selectedBoardIndexes,
-            highlightBoardIndexes: highlightBoardIndexes,
+            highlightBoardIndexes:
+                highlightBoardIndexes.isNotEmpty
+                    ? highlightBoardIndexes
+                    : (cue == LessonTableCue.board
+                        ? {for (var i = 0; i < boardCodes.length; i++) i}
+                        : const <int>{}),
             dimmedBoardIndexes: dimmedBoardIndexes,
             boardOrderBadges: boardOrderBadges,
             selectedHeroIndexes: selectedHeroIndexes,
