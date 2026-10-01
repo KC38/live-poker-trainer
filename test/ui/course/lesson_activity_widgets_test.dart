@@ -1938,7 +1938,7 @@ void main() {
     );
   });
 
-  testWidgets('action-order explain taps UTG HJ BTN instead of Continue', (
+  testWidgets('action-order explain taps UTG HJ CO BTN instead of Continue', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -1977,6 +1977,7 @@ void main() {
     expect(find.text('Tap each seat in preflop order'), findsNothing);
     expect(find.text('Tap UTG, then HJ, then BTN.'), findsNothing);
     expect(find.text('Tap UTG, then HJ, then BTN'), findsNothing);
+    expect(find.text('Tap UTG, then HJ, CO, then BTN.'), findsNothing);
     expect(find.text('Postflop starts left of the button'), findsNothing);
     expect(find.text('First'), findsNothing);
     expect(resolveCoachDialogueVisual(activity).requiresFeltTap, isTrue);
@@ -2005,12 +2006,15 @@ void main() {
     await tester.tap(find.text('HJ'));
     await tester.pump();
     expect(feltAck, 0);
+    await tester.tap(find.text('CO'));
+    await tester.pump();
+    expect(feltAck, 0);
     expect(find.text('Tap BTN next'), findsNothing);
     await tester.tap(find.text('BTN'));
     await tester.pump();
     expect(feltAck, 1);
     // Lock clears enabled / ack — densified shell must stay filled.
-    expect(find.text('UTG → HJ → BTN'), findsOneWidget);
+    expect(find.text('UTG → HJ → CO → BTN'), findsOneWidget);
     expect(
       tester.getSize(find.byKey(const ValueKey('action-order-felt'))).height,
       moreOrLessEquals(teachHeight, epsilon: 1),
@@ -9106,6 +9110,7 @@ await tester.tap(find.text('NIT'));
       sequenceItems: const [
         CourseChoice(id: 'utg', label: 'UTG'),
         CourseChoice(id: 'hj', label: 'HJ'),
+        CourseChoice(id: 'co', label: 'CO'),
         CourseChoice(id: 'btn', label: 'BTN'),
       ],
     );
@@ -9122,6 +9127,7 @@ await tester.tap(find.text('NIT'));
     expect(find.byKey(const ValueKey('seat-order-felt')), findsOneWidget);
     expect(find.text('UTG'), findsWidgets);
     expect(find.text('HJ'), findsWidgets);
+    expect(find.text('CO'), findsWidgets);
     expect(find.text('BTN'), findsWidgets);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('seat-order-felt')))
@@ -9787,6 +9793,7 @@ await tester.tap(find.text('NIT'));
       sequenceItems: const [
         CourseChoice(id: 'j-utg', label: 'UTG'),
         CourseChoice(id: 'j-hj', label: 'HJ'),
+        CourseChoice(id: 'j-co', label: 'CO'),
         CourseChoice(id: 'j-btn', label: 'BTN'),
       ],
     );

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "f1f256b5ef3748cc9b17b4e509d5ccd37fb616e90ed8af72fd22a03de7bd503a",
+  "contentChecksum": "7ae5185918ed1bdd6c4060bc145d320553ec70db48f457559dfed74c26c86646",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1507,7 +1507,7 @@
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Put UTG, HJ, and BTN in preflop action order.",
+                  "accessibilityText": "Put UTG, HJ, CO, and BTN in preflop action order.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1526,6 +1526,10 @@
                     {
                       "id": "seat-hj",
                       "label": "HJ"
+                    },
+                    {
+                      "id": "seat-co",
+                      "label": "CO"
                     },
                     {
                       "id": "seat-btn",
@@ -2175,6 +2179,10 @@
                     {
                       "id": "j-hj",
                       "label": "HJ"
+                    },
+                    {
+                      "id": "j-co",
+                      "label": "CO"
                     },
                     {
                       "id": "j-btn",

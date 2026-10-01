@@ -189,7 +189,7 @@ class CoachDialogueActivity extends StatelessWidget {
             onComplete: locked ? null : onFeltAcknowledge,
             onMiss: () {
               LessonFrameScope.maybeOf(context)?.onLocalMiss(
-                'Preflop order — tap UTG, then HJ, then the button.',
+                'Preflop order — tap UTG, then HJ, CO, then the button.',
               );
             },
           );
@@ -1280,7 +1280,7 @@ enum CoachDialogueVisualKind {
   /// Blinds → you act → ending toy hand.
   toyHandRun,
 
-  /// Preflop seats left-of-BB in order (UTG → HJ → BTN).
+  /// Preflop seats left-of-BB in order (UTG → HJ → CO → BTN).
   actionOrder,
 
   /// Starting-hand families (pairs, broadways, suited aces, connectors).
@@ -1727,7 +1727,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.toyHandRun =>
       'Toy hand timeline: blinds, you act, ending',
     CoachDialogueVisualKind.actionOrder =>
-      'Preflop action order tiles UTG, HJ, and BTN',
+      'Preflop action order tiles UTG, HJ, CO, and BTN',
     CoachDialogueVisualKind.handFamilies =>
       'Starting-hand family tiles: pairs, broadways, suited aces, connectors',
     CoachDialogueVisualKind.openRange =>

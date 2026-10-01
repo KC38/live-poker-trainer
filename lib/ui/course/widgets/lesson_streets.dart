@@ -834,7 +834,7 @@ class SeatOrderTile extends StatelessWidget {
   }
 }
 
-/// Explain-step demo: tap preflop seats left-of-BB in order (UTG → HJ → BTN).
+/// Explain-step demo: tap preflop seats left-of-BB in order (UTG → HJ → CO → BTN).
 class ActionOrderDemo extends StatefulWidget {
   /// Creates the demo.
   const ActionOrderDemo({
@@ -851,6 +851,7 @@ class ActionOrderDemo extends StatefulWidget {
   static const seats = <({String label, String detail})>[
     (label: 'UTG', detail: 'Left of BB'),
     (label: 'HJ', detail: 'Next'),
+    (label: 'CO', detail: 'Before BTN'),
     (label: 'BTN', detail: 'Last preflop'),
   ];
 
@@ -861,7 +862,7 @@ class ActionOrderDemo extends StatefulWidget {
 class _ActionOrderDemoState extends State<ActionOrderDemo> {
   final List<String> _ordered = <String>[];
 
-  static const _correct = ['UTG', 'HJ', 'BTN'];
+  static const _correct = ['UTG', 'HJ', 'CO', 'BTN'];
 
   late final List<({String label, String detail})> _palette = () {
     final seats = List<({String label, String detail})>.of(ActionOrderDemo.seats);
@@ -956,7 +957,7 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
               ),
               child: Text(
                 widget.interactive
-                    ? 'UTG → HJ → BTN'
+                    ? 'UTG → HJ → CO → BTN'
                     : 'Left of BB preflop · left of button postflop',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
