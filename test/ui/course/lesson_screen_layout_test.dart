@@ -238,6 +238,55 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('out of hearts replaces tools with restore dock and blocks stage', (
+    tester,
+  ) async {
+    var restoreTaps = 0;
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: LessonScreenLayout(
+            progress: 0.2,
+            livesRemaining: 0,
+            livesMax: 5,
+            onClose: _noop,
+            speech: 'Out of hearts — restore to keep going.',
+            expression: LessonMascotExpression.thinking,
+            stage: ElevatedButton(
+              key: const ValueKey<String>('blocked-stage-tap'),
+              onPressed: () => restoreTaps += 100,
+              child: const Text('Stage action'),
+            ),
+            onUndo: _noop,
+            onRedo: _noop,
+            onHint: _noop,
+            canUndo: false,
+            canRedo: false,
+            canHint: false,
+            onRestoreHearts: () => restoreTaps += 1,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Out of hearts'), findsOneWidget);
+    expect(find.text('Restore hearts'), findsOneWidget);
+    expect(find.byTooltip('Undo'), findsNothing);
+    await tester.tap(
+      find.byKey(const ValueKey<String>('blocked-stage-tap')),
+      warnIfMissed: false,
+    );
+    await tester.pump();
+    expect(restoreTaps, 0);
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-restore-hearts')));
+    await tester.pump();
+    expect(restoreTaps, 1);
+  });
+
   testWidgets('frame keeps close, hearts, one bubble, tools, and no title', (
     tester,
   ) async {

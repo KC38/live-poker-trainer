@@ -1121,6 +1121,7 @@ class LessonAnswerDock extends StatelessWidget {
     required this.onContinue,
     this.busy = false,
     this.recovery,
+    this.continueLabel = 'Continue',
   });
 
   /// Dark gap between the stage clip and the top of this banner / tool row.
@@ -1138,6 +1139,9 @@ class LessonAnswerDock extends StatelessWidget {
   final VoidCallback onContinue;
   final bool busy;
   final String? recovery;
+
+  /// Primary CTA label (e.g. Restore hearts when lives hit zero).
+  final String continueLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -1214,7 +1218,93 @@ class LessonAnswerDock extends StatelessWidget {
                         ),
                       )
                       : Text(
-                        'Continue',
+                        continueLabel,
+                        style: GoogleFonts.manrope(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Full-bleed dock when the lesson is paused at zero hearts.
+class LessonOutOfHeartsDock extends StatelessWidget {
+  /// Creates the out-of-hearts restore dock.
+  const LessonOutOfHeartsDock({
+    super.key,
+    required this.onRestoreHearts,
+    this.busy = false,
+  });
+
+  final VoidCallback onRestoreHearts;
+  final bool busy;
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    return Material(
+      color: AppColors.bgElevated,
+      elevation: 0,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(20, 18, 20, 16 + bottomInset),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Out of hearts',
+              style: GoogleFonts.manrope(
+                color: AppColors.danger,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Restore hearts to keep going in this lesson.',
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontSize: 15,
+                height: 1.3,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 14),
+            FilledButton(
+              key: const ValueKey<String>('lesson-restore-hearts'),
+              onPressed: busy ? null : onRestoreHearts,
+              style: FilledButton.styleFrom(
+                backgroundColor: AppColors.gold,
+                foregroundColor: AppColors.bgDark,
+                disabledBackgroundColor: AppColors.gold.withValues(alpha: 0.72),
+                minimumSize: const Size.fromHeight(54),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                textStyle: GoogleFonts.manrope(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                  letterSpacing: 0.8,
+                ),
+              ),
+              child:
+                  busy
+                      ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          color: AppColors.bgDark,
+                        ),
+                      )
+                      : Text(
+                        'Restore hearts',
                         style: GoogleFonts.manrope(
                           fontWeight: FontWeight.w800,
                           fontSize: 16,
@@ -1256,6 +1346,8 @@ class LessonScreenLayout extends StatelessWidget {
     this.answerBusy = false,
     this.recovery,
     this.notice,
+    this.onRestoreHearts,
+    this.continueLabel = 'Continue',
   });
 
   final double progress;
@@ -1281,9 +1373,16 @@ class LessonScreenLayout extends StatelessWidget {
   /// One-line catch-up under the chrome, such as a resumed lesson.
   final String? notice;
 
+  /// When set (and not graded), replaces the tool row with a restore dock.
+  final VoidCallback? onRestoreHearts;
+
+  /// Primary CTA on the graded answer dock.
+  final String continueLabel;
+
   @override
   Widget build(BuildContext context) {
     final graded = result != null && onContinue != null;
+    final outOfHearts = onRestoreHearts != null && !graded;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -1332,12 +1431,14 @@ class LessonScreenLayout extends StatelessWidget {
                   // Always wrap — swapping a bare [stage] for MediaQuery when
                   // Nice! shrinks the stage remounts stateful felts (peek
                   // face-up, blinds step, suit taps) and resets local state.
-                  return MediaQuery(
+                  final stageChild = MediaQuery(
                     data: mq.copyWith(
                       size: Size(mq.size.width, mediaHeight),
                     ),
                     child: stage,
                   );
+                  if (!outOfHearts) return stageChild;
+                  return AbsorbPointer(child: stageChild);
                 },
               ),
             ),
@@ -1352,6 +1453,12 @@ class LessonScreenLayout extends StatelessWidget {
             onContinue: onContinue!,
             busy: answerBusy,
             recovery: recovery,
+            continueLabel: continueLabel,
+          )
+        else if (outOfHearts)
+          LessonOutOfHeartsDock(
+            onRestoreHearts: onRestoreHearts!,
+            busy: answerBusy,
           )
         else
           LessonToolRow(

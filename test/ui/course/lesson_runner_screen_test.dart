@@ -4434,6 +4434,76 @@ void main() {
     expect(errored.livesMax, 5);
   });
 
+  testWidgets('zero hearts blocks the stage and shows restore dock', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    const home = CourseHomeSnapshot(
+      status: CourseHomeLoadStatus.ready,
+      nodes: [],
+      sections: [],
+      hearts: 0,
+      livesMax: 5,
+      gems: 0,
+    );
+    final zeroHearts = _ZeroHeartsCourseService(catalog);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => catalog),
+          courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: LessonRunnerScreen(
+            lessonId: kFirstCourseLessonId,
+            courseService: zeroHearts,
+            startRequestId: 'start_zero_hearts',
+          ),
+        ),
+      ),
+    );
+    await _pumpUntil(tester, find.textContaining('Tap your cards'));
+    // Auto-prompted refill sheet — dismiss so the in-lesson dock is visible.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Watch an ad'), findsOneWidget);
+    await tester.tapAt(const Offset(8, 8));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('Out of hearts'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('lesson-restore-hearts')),
+      findsOneWidget,
+    );
+    final layout = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(layout.livesRemaining, 0);
+    expect(layout.onRestoreHearts, isNotNull);
+
+    await tester.tap(
+      find.byKey(const ValueKey<String>('lesson-seat-hero')),
+      warnIfMissed: false,
+    );
+    await tester.pump();
+    await tester.pump();
+    expect(zeroHearts.submitCalls, 0);
+    expect(find.text('Nice!'), findsNothing);
+  });
+
   testWidgets('stale activity submit resyncs to server resume cursor', (
     tester,
   ) async {
@@ -5297,6 +5367,88 @@ class _FixedHomeHearts extends CourseHomeController {
 
   @override
   Future<CourseHomeSnapshot> build() async => snapshot;
+}
+
+/// Starts a first-run attempt already at zero hearts.
+class _ZeroHeartsCourseService extends CourseService {
+  _ZeroHeartsCourseService(this.catalog) : super();
+
+  final CourseCatalog catalog;
+  var submitCalls = 0;
+
+  List<CourseActivity> get activities =>
+      catalog.activitiesForLesson(kFirstCourseLessonId);
+
+  @override
+  Future<void> initializeProfile({
+    required String catalogVersion,
+    String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    int? streakGoalDays,
+    String? recommendedLessonId,
+  }) async {}
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+  }) async {
+    final first = activities.first;
+    return StartCourseLessonResult(
+      attempt: CourseAttemptSnapshot(
+        attemptId: 'attempt-zero',
+        lessonId: lessonId,
+        catalogVersion: catalogVersion,
+        status: 'remediation',
+        activityIndex: 0,
+        currentActivityId: first.id,
+        livesRemaining: 0,
+        livesMax: 5,
+        acceptedCount: 0,
+        scoredCount: 0,
+        stepCount: 0,
+      ),
+      resume: CourseResumePointer(
+        attemptId: 'attempt-zero',
+        lessonId: lessonId,
+        activityId: first.id,
+        activityIndex: 0,
+      ),
+      duplicate: false,
+    );
+  }
+
+  @override
+  Future<SubmitCourseStepResult> submitStep({
+    required String attemptId,
+    required String activityId,
+    required String idempotencyKey,
+    String? catalogVersion,
+    String? choiceId,
+    List<String>? orderedIds,
+    double? numericValue,
+  }) async {
+    submitCalls += 1;
+    throw const CourseServiceException(
+      'Out of hearts. Refill before continuing.',
+      code: 'failed-precondition',
+    );
+  }
+
+  @override
+  Future<CompleteCourseLessonResult> completeLesson({
+    required String attemptId,
+    required String idempotencyKey,
+    String? catalogVersion,
+  }) async {
+    throw const CourseServiceException(
+      'Complete remediation before finishing the lesson.',
+      code: 'failed-precondition',
+    );
+  }
 }
 
 Future<void> _pumpUntil(WidgetTester tester, Finder finder) async {
