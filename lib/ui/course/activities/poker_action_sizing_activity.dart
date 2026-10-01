@@ -197,6 +197,8 @@ class PokerActionSizingActivity extends StatelessWidget {
                         heroFaceUp: true,
                         villainArchetypes:
                             villainType == null ? null : [villainType],
+                        heroStackChips: spot.heroStackAmount?.toDouble(),
+                        villainStackChips: spot.villainStackChips,
                       )
                       : null;
               return Column(

@@ -57,6 +57,20 @@ class LessonActionSpot {
     return int.tryParse(match.group(1)!);
   }
 
+  /// Whether [stackLabel] names a shared remaining depth for every seat
+  /// (e.g. "Stacks left 55"), not a hero-only short stack ("Stack 12").
+  bool get appliesStackToVillains {
+    final raw = stackLabel;
+    if (raw == null || raw.isEmpty) return false;
+    return RegExp(r'\bstacks\b', caseSensitive: false).hasMatch(raw);
+  }
+
+  /// Villain seat chips when [appliesStackToVillains] is true.
+  double? get villainStackChips {
+    if (!appliesStackToVillains) return null;
+    return heroStackAmount?.toDouble();
+  }
+
   /// Copy with remapped hole / board codes.
   LessonActionSpot copyWithCodes({
     List<String>? heroCodes,

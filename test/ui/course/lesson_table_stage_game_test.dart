@@ -226,4 +226,25 @@ void main() {
       PlayerArchetype.nit,
     ]);
   });
+
+  test('heroStackChips overrides only the hero remaining stack', () {
+    final game = lessonTableStageGame(
+      villainCount: 1,
+      boardCodes: const ['Td', '8s', '2c'],
+      heroStackChips: 12,
+    );
+
+    expect(game.hero.stack, 12);
+    expect(game.players[1].stack, 200);
+  });
+
+  test('villainStackChips overrides every non-hero seat', () {
+    final game = lessonTableStageGame(
+      villainCount: 2,
+      heroStackChips: 55,
+      villainStackChips: 55,
+    );
+
+    expect(game.players.map((p) => p.stack), [55, 55, 55]);
+  });
 }

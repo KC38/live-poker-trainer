@@ -56,6 +56,12 @@ GameState lessonTableStageGame({
   double bigBlind = lessonBigBlind,
   List<PlayerArchetype>? villainArchetypes,
   bool postBigBlind = true,
+
+  /// Remaining chips for the hero seat. Null keeps the default band stack.
+  double? heroStackChips,
+
+  /// Remaining chips for every non-hero seat. Null keeps the default band stack.
+  double? villainStackChips,
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -80,7 +86,11 @@ GameState lessonTableStageGame({
   final players = <PlayerModel>[];
   for (final player in base.players) {
     if (player.isHero) {
-      players.add(player);
+      players.add(
+        heroStackChips == null
+            ? player
+            : player.copyWith(stack: heroStackChips),
+      );
       continue;
     }
     final holes = holesByVillain[villain];
@@ -96,6 +106,7 @@ GameState lessonTableStageGame({
             : [
                 for (final code in holes.take(2)) CardModel.fromCode(code),
               ],
+        stack: villainStackChips ?? player.stack,
       ),
     );
     villain += 1;
@@ -199,6 +210,8 @@ class LessonTableStage extends StatelessWidget {
     this.villainArchetypes,
     this.features,
     this.postBigBlind = true,
+    this.heroStackChips,
+    this.villainStackChips,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -304,6 +317,13 @@ class LessonTableStage extends StatelessWidget {
   /// quizzes). The BB seat index and SoftPulse target stay the same.
   final bool postBigBlind;
 
+  /// Remaining chips drawn on the hero seat. Null keeps the default band stack.
+  final double? heroStackChips;
+
+  /// Remaining chips drawn on each villain seat. Null keeps the default band
+  /// stack.
+  final double? villainStackChips;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -319,6 +339,8 @@ class LessonTableStage extends StatelessWidget {
     bigBlind: bigBlind,
     villainArchetypes: villainArchetypes,
     postBigBlind: postBigBlind,
+    heroStackChips: heroStackChips,
+    villainStackChips: villainStackChips,
   );
 
   @override

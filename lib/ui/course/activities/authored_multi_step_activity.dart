@@ -195,6 +195,8 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                           boardCodes: spot.boardCodes,
                           villainCount: 1,
                           heroFaceUp: true,
+                          heroStackChips: spot.heroStackAmount?.toDouble(),
+                          villainStackChips: spot.villainStackChips,
                         )
                         : LessonActionTable(
                           spot: spot,
