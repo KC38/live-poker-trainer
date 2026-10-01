@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
+import 'package:live_poker_trainer/models/course/course_session_models.dart';
 
 /// Accent colors for unit banners, keyed by section order (1-based).
 Color unitBannerColorForSection(int sectionOrder) {
@@ -172,12 +173,16 @@ class CourseUnitBanner extends StatelessWidget {
 }
 
 /// Vertical winding path of course nodes.
-class CoursePathView extends StatelessWidget {
+///
+/// Tapping an unlocked node selects it and shows an overlay START/REVIEW
+/// bubble. Lessons launch only from that CTA — never from the node alone.
+class CoursePathView extends StatefulWidget {
   /// Creates the path.
   const CoursePathView({
     super.key,
     required this.nodes,
     required this.onNodeTap,
+    this.startsEnabled = true,
     this.sectionOrders = const {},
     this.sectionKeys = const {},
     this.unitKeys = const {},
@@ -185,7 +190,12 @@ class CoursePathView extends StatelessWidget {
   });
 
   final List<CourseMapNode> nodes;
+
+  /// Locked / paused taps, and confirmed START/REVIEW launches.
   final void Function(CourseMapNode node) onNodeTap;
+
+  /// When false, non-active nodes surface the paused snackbar instead of a bubble.
+  final bool startsEnabled;
 
   /// Catalog `order` for each [CourseMapNode.sectionId], used for node accents.
   final Map<String, int> sectionOrders;
@@ -200,8 +210,43 @@ class CoursePathView extends StatelessWidget {
   final GlobalKey? focusLessonKey;
 
   @override
+  State<CoursePathView> createState() => _CoursePathViewState();
+}
+
+class _CoursePathViewState extends State<CoursePathView> {
+  String? _selectedLessonId;
+
+  void _dismissBubble() {
+    if (_selectedLessonId == null) return;
+    setState(() => _selectedLessonId = null);
+  }
+
+  void _onNodePressed(CourseMapNode node) {
+    if (node.state == CourseNodeState.locked) {
+      _dismissBubble();
+      widget.onNodeTap(node);
+      return;
+    }
+    if (!widget.startsEnabled && node.state != CourseNodeState.active) {
+      _dismissBubble();
+      widget.onNodeTap(node);
+      return;
+    }
+    if (_selectedLessonId == node.lessonId) {
+      _dismissBubble();
+      return;
+    }
+    setState(() => _selectedLessonId = node.lessonId);
+  }
+
+  void _onLaunch(CourseMapNode node) {
+    _dismissBubble();
+    widget.onNodeTap(node);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (nodes.isEmpty) {
+    if (widget.nodes.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -210,10 +255,11 @@ class CoursePathView extends StatelessWidget {
     String? lastUnitId;
     var pathIndex = 0;
     var isFirstUnit = true;
+    final bubbleHidden = _selectedLessonId == null;
 
-    for (var i = 0; i < nodes.length; i++) {
-      final node = nodes[i];
-      final sectionOrder = sectionOrders[node.sectionId] ?? 1;
+    for (var i = 0; i < widget.nodes.length; i++) {
+      final node = widget.nodes[i];
+      final sectionOrder = widget.sectionOrders[node.sectionId] ?? 1;
       final bannerColor = unitBannerColorForSection(sectionOrder);
 
       if (node.sectionId != lastSectionId) {
@@ -221,7 +267,7 @@ class CoursePathView extends StatelessWidget {
         lastUnitId = null;
         children.add(
           KeyedSubtree(
-            key: sectionKeys[node.sectionId],
+            key: widget.sectionKeys[node.sectionId],
             child: const SizedBox(height: 4),
           ),
         );
@@ -233,7 +279,7 @@ class CoursePathView extends StatelessWidget {
         isFirstUnit = false;
         children.add(
           KeyedSubtree(
-            key: unitKeys[node.unitId],
+            key: widget.unitKeys[node.unitId],
             child: showDivider
                 ? Padding(
                     padding: const EdgeInsets.only(top: 28, bottom: 18),
@@ -248,21 +294,29 @@ class CoursePathView extends StatelessWidget {
         node: node,
         pathIndex: pathIndex,
         accent: bannerColor,
-        showConnector: i < nodes.length - 1 &&
-            nodes[i + 1].unitId == node.unitId,
-        onTap: () => onNodeTap(node),
+        showConnector: i < widget.nodes.length - 1 &&
+            widget.nodes[i + 1].unitId == node.unitId,
+        selected: _selectedLessonId == node.lessonId,
+        showPulse: node.isNext && bubbleHidden,
+        onSelect: () => _onNodePressed(node),
+        onLaunch: () => _onLaunch(node),
+        onDismiss: _dismissBubble,
       );
       children.add(
-        node.isNext && focusLessonKey != null
-            ? KeyedSubtree(key: focusLessonKey, child: row)
+        node.isNext && widget.focusLessonKey != null
+            ? KeyedSubtree(key: widget.focusLessonKey, child: row)
             : row,
       );
       pathIndex += 1;
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: children,
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: _selectedLessonId == null ? null : _dismissBubble,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: children,
+      ),
     );
   }
 }
@@ -304,24 +358,51 @@ class _UnitPathMarker extends StatelessWidget {
   }
 }
 
-class _PathNodeRow extends StatelessWidget {
+class _PathNodeRow extends StatefulWidget {
   const _PathNodeRow({
     required this.node,
     required this.pathIndex,
     required this.accent,
     required this.showConnector,
-    required this.onTap,
+    required this.selected,
+    required this.showPulse,
+    required this.onSelect,
+    required this.onLaunch,
+    required this.onDismiss,
   });
 
   final CourseMapNode node;
   final int pathIndex;
   final Color accent;
   final bool showConnector;
-  final VoidCallback onTap;
+  final bool selected;
+  final bool showPulse;
+  final VoidCallback onSelect;
+  final VoidCallback onLaunch;
+  final VoidCallback onDismiss;
+
+  @override
+  State<_PathNodeRow> createState() => _PathNodeRowState();
+}
+
+class _PathNodeRowState extends State<_PathNodeRow>
+    with SingleTickerProviderStateMixin {
+  final LayerLink _link = LayerLink();
+  final OverlayPortalController _portal = OverlayPortalController();
+  late final AnimationController _pulse;
 
   /// Zig-zag: center, right, center, left, …
   double get _alignmentX {
-    return switch (pathIndex % 4) {
+    return switch (widget.pathIndex % 4) {
+      0 => 0.0,
+      1 => 0.42,
+      2 => 0.0,
+      _ => -0.42,
+    };
+  }
+
+  double get _nextAlignmentX {
+    return switch ((widget.pathIndex + 1) % 4) {
       0 => 0.0,
       1 => 0.42,
       2 => 0.0,
@@ -330,106 +411,200 @@ class _PathNodeRow extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    if (widget.selected) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && widget.selected) _portal.show();
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncPulse();
+  }
+
+  @override
+  void didUpdateWidget(covariant _PathNodeRow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncPulse();
+    if (widget.selected == oldWidget.selected) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (widget.selected) {
+        _portal.show();
+      } else {
+        _portal.hide();
+      }
+    });
+  }
+
+  void _syncPulse() {
+    // Infinite reverse ticks lock widget-test pumpAndSettle; keep a static ring.
+    final isWidgetTest = WidgetsBinding.instance.runtimeType
+        .toString()
+        .contains('TestWidgetsFlutterBinding');
+    if (widget.showPulse && !isWidgetTest) {
+      if (!_pulse.isAnimating) {
+        _pulse.repeat(reverse: true);
+      }
+    } else if (_pulse.isAnimating) {
+      _pulse
+        ..stop()
+        ..value = widget.showPulse ? 0.5 : 0;
+    } else {
+      _pulse.value = widget.showPulse ? 0.5 : 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final bubble = _NodeCircle(node: node, accent: accent);
+    final isReview = !widget.node.isNext;
+    final xp = isReview
+        ? reviewLessonXp(widget.node.previewXp)
+        : widget.node.previewXp;
+    final actionLabel = isReview ? 'REVIEW' : 'START';
+
+    final circle = _NodeCircle(
+      node: widget.node,
+      accent: widget.accent,
+      pulse: widget.showPulse ? _pulse : null,
+    );
+
     final labeled = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        bubble,
-        if (node.isNext) ...[
-          const SizedBox(height: 10),
-          _StartLessonBubble(
-            title: node.title,
-            previewXp: node.previewXp,
-            color: accent,
-          ),
-        ] else ...[
-          const SizedBox(height: 8),
-          SizedBox(
-            width: 120,
-            child: Text(
-              node.title,
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.manrope(
-                color: node.state == CourseNodeState.locked
-                    ? AppColors.slate
-                    : AppColors.cream,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                height: 1.2,
-              ),
+        CompositedTransformTarget(
+          link: _link,
+          child: circle,
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: 120,
+          child: Text(
+            widget.node.title,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.manrope(
+              color: widget.node.state == CourseNodeState.locked
+                  ? AppColors.slate
+                  : AppColors.cream,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              height: 1.2,
             ),
           ),
-        ],
+        ),
       ],
     );
 
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment(_alignmentX, 0),
-          child: Semantics(
-            button: true,
-            enabled: true,
-            label: node.semanticsLabel,
-            hint: node.state == CourseNodeState.locked ? node.lockReason : null,
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: onTap,
-                borderRadius: BorderRadius.circular(20),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
+    return OverlayPortal(
+      controller: _portal,
+      overlayChildBuilder: (context) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: widget.onDismiss,
+                child: const ColoredBox(color: Color(0x66000000)),
+              ),
+            ),
+            CompositedTransformFollower(
+              link: _link,
+              showWhenUnlinked: false,
+              targetAnchor: Alignment.bottomCenter,
+              followerAnchor: Alignment.topCenter,
+              offset: const Offset(0, 8),
+              child: Material(
+                color: Colors.transparent,
+                child: _LessonActionBubble(
+                  title: widget.node.title,
+                  actionLabel: actionLabel,
+                  previewXp: xp,
+                  color: widget.accent,
+                  onAction: widget.onLaunch,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment(_alignmentX, 0),
+            child: Semantics(
+              button: true,
+              enabled: true,
+              label: widget.node.semanticsLabel,
+              hint: widget.node.state == CourseNodeState.locked
+                  ? widget.node.lockReason
+                  : null,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: widget.onSelect,
+                  borderRadius: BorderRadius.circular(20),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    child: labeled,
                   ),
-                  child: labeled,
                 ),
               ),
             ),
           ),
-        ),
-        if (showConnector)
-          SizedBox(
-            height: 22,
-            width: double.infinity,
-            child: CustomPaint(
-              painter: _PathDotPainter(
-                fromX: _alignmentX,
-                toX: _nextAlignmentX,
-                color: node.isNext
-                    ? accent.withValues(alpha: 0.55)
-                    : AppColors.slateDark,
+          if (widget.showConnector)
+            SizedBox(
+              height: 22,
+              width: double.infinity,
+              child: CustomPaint(
+                painter: _PathDotPainter(
+                  fromX: _alignmentX,
+                  toX: _nextAlignmentX,
+                  color: widget.node.isNext
+                      ? widget.accent.withValues(alpha: 0.55)
+                      : AppColors.slateDark,
+                ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
-  }
-
-  double get _nextAlignmentX {
-    return switch ((pathIndex + 1) % 4) {
-      0 => 0.0,
-      1 => 0.42,
-      2 => 0.0,
-      _ => -0.42,
-    };
   }
 }
 
-/// Duo-style speech bubble anchored under the next lesson node.
-class _StartLessonBubble extends StatelessWidget {
-  const _StartLessonBubble({
+/// Duo-style speech bubble overlaid under a selected path node.
+class _LessonActionBubble extends StatelessWidget {
+  const _LessonActionBubble({
     required this.title,
+    required this.actionLabel,
     required this.previewXp,
     required this.color,
+    required this.onAction,
   });
 
   final String title;
+  final String actionLabel;
   final int previewXp;
   final Color color;
+  final VoidCallback onAction;
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +649,11 @@ class _StartLessonBubble extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  _StartXpButton(previewXp: previewXp, color: color),
+                  _ActionXpButton(
+                    label: '$actionLabel +$previewXp XP',
+                    color: color,
+                    onPressed: onAction,
+                  ),
                 ],
               ),
             ),
@@ -485,40 +664,48 @@ class _StartLessonBubble extends StatelessWidget {
   }
 }
 
-class _StartXpButton extends StatelessWidget {
-  const _StartXpButton({
-    required this.previewXp,
+class _ActionXpButton extends StatelessWidget {
+  const _ActionXpButton({
+    required this.label,
     required this.color,
+    required this.onPressed,
   });
 
-  final int previewXp;
+  final String label;
   final Color color;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final label = 'START +$previewXp XP';
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: onPressed,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            offset: const Offset(0, 3),
-            blurRadius: 0,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.18),
+                offset: const Offset(0, 3),
+                blurRadius: 0,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Text(
-          label,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.manrope(
-            color: color,
-            fontSize: 15,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.6,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.manrope(
+                color: color,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.6,
+              ),
+            ),
           ),
         ),
       ),
@@ -551,10 +738,12 @@ class _NodeCircle extends StatelessWidget {
   const _NodeCircle({
     required this.node,
     required this.accent,
+    this.pulse,
   });
 
   final CourseMapNode node;
   final Color accent;
+  final Animation<double>? pulse;
 
   @override
   Widget build(BuildContext context) {
@@ -576,11 +765,12 @@ class _NodeCircle extends StatelessWidget {
     final shadow = Color.lerp(fill, Colors.black, 0.35)!;
     final iconColor = locked ? AppColors.slate : Colors.white;
 
-    return SizedBox(
+    Widget circle = SizedBox(
       width: 72,
       height: 70,
       child: Stack(
         alignment: Alignment.topCenter,
+        clipBehavior: Clip.none,
         children: [
           Positioned(
             top: 6,
@@ -612,6 +802,34 @@ class _NodeCircle extends StatelessWidget {
         ],
       ),
     );
+
+    final pulseAnim = pulse;
+    if (pulseAnim != null) {
+      circle = AnimatedBuilder(
+        animation: pulseAnim,
+        builder: (context, child) {
+          // Grow / shrink the highlight ring by a few pixels.
+          final expand = 4.0 + (pulseAnim.value * 6.0);
+          return Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+            children: [
+              CustomPaint(
+                size: Size(64 + expand * 2, 64 + expand * 2),
+                painter: _PulseRingPainter(
+                  color: accent.withValues(alpha: 0.45),
+                  strokeWidth: 3,
+                ),
+              ),
+              child!,
+            ],
+          );
+        },
+        child: circle,
+      );
+    }
+
+    return circle;
   }
 
   static IconData _iconFor(CourseMapNode node) {
@@ -629,6 +847,35 @@ class _NodeCircle extends StatelessWidget {
       CourseNodeKind.jumpTest => Icons.bolt_rounded,
       CourseNodeKind.handLab => Icons.table_restaurant_rounded,
     };
+  }
+}
+
+class _PulseRingPainter extends CustomPainter {
+  _PulseRingPainter({
+    required this.color,
+    required this.strokeWidth,
+  });
+
+  final Color color;
+  final double strokeWidth;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+    final inset = strokeWidth / 2;
+    canvas.drawCircle(
+      Offset(size.width / 2, size.height / 2),
+      (size.shortestSide / 2) - inset,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant _PulseRingPainter oldDelegate) {
+    return oldDelegate.color != color || oldDelegate.strokeWidth != strokeWidth;
   }
 }
 

@@ -140,7 +140,7 @@ class _FixedHome extends CourseHomeController {
   Future<CourseHomeSnapshot> build() async => snapshot;
 }
 
-void _expectHomeThemeMetrics(WidgetTester tester) {
+Future<void> _expectHomeThemeMetrics(WidgetTester tester) async {
   // Streak 2, gems 0, hearts 3 — Duo strip uses JetBrains Mono for counts.
   for (final value in ['2', '0', '3']) {
     expect(
@@ -150,19 +150,13 @@ void _expectHomeThemeMetrics(WidgetTester tester) {
   }
   expect(find.byType(RexCoachCard), findsNothing);
   expect(find.byType(RexMascot), findsNothing);
+  // Bubble is hidden until the next node is tapped.
+  expect(find.text('START +25 XP'), findsNothing);
+  await tester.tap(find.text('Lesson A'));
+  await tester.pumpAndSettle();
   expect(find.text('START +25 XP'), findsOneWidget);
-  final marked = find.ancestor(
-    of: find.text('START +25 XP'),
-    matching: find.byType(Column),
-  ).first;
-  expect(
-    find.descendant(of: marked, matching: find.text('Lesson A')),
-    findsOneWidget,
-  );
-  expect(
-    find.descendant(of: marked, matching: find.text('Lesson B')),
-    findsNothing,
-  );
+  expect(find.text('Lesson A'), findsWidgets);
+  expect(find.text('Lesson B'), findsOneWidget);
 }
 
 void main() {
@@ -180,7 +174,7 @@ void main() {
     expect(find.byType(RexMascot), findsNothing);
     expect(find.byType(CoursePathView), findsOneWidget);
     expect(find.text('Lesson A'), findsOneWidget);
-    expect(find.text('START +25 XP'), findsOneWidget);
+    expect(find.text('START +25 XP'), findsNothing);
     expect(find.textContaining('SECTION'), findsWidgets);
     expect(find.text('SECTION 1, UNIT 1'), findsOneWidget);
     expect(
@@ -188,7 +182,7 @@ void main() {
       findsNothing,
     );
     expect(analytics.events, contains('home_course_view:ready'));
-    _expectHomeThemeMetrics(tester);
+    await _expectHomeThemeMetrics(tester);
   });
 
   testWidgets('anonymous Home omits guest progress banner', (tester) async {
@@ -226,7 +220,71 @@ void main() {
       snapshot: _readySnapshot(),
       analytics: _RecordingAnalytics(),
     );
-    _expectHomeThemeMetrics(tester);
+    await _expectHomeThemeMetrics(tester);
+  });
+
+  testWidgets('next node tap shows START bubble without launching', (
+    tester,
+  ) async {
+    final analytics = _RecordingAnalytics();
+    await _pumpHome(tester, snapshot: _readySnapshot(), analytics: analytics);
+
+    expect(find.text('START +25 XP'), findsNothing);
+    await tester.tap(find.text('Lesson A'));
+    await tester.pumpAndSettle();
+    expect(find.text('START +25 XP'), findsOneWidget);
+    expect(analytics.events, isNot(contains('home_node_open:lesson-a')));
+  });
+
+  testWidgets('completed node shows REVIEW bubble at 25 percent XP', (
+    tester,
+  ) async {
+    final analytics = _RecordingAnalytics();
+    await _pumpHome(
+      tester,
+      snapshot: const CourseHomeSnapshot(
+        status: CourseHomeLoadStatus.ready,
+        sections: [],
+        streak: 2,
+        gems: 0,
+        hearts: 3,
+        nextLessonId: 'lesson-b',
+        nodes: [
+          CourseMapNode(
+            lessonId: 'lesson-a',
+            title: 'Lesson A',
+            summary: 'First',
+            kind: CourseNodeKind.lesson,
+            state: CourseNodeState.completed,
+            sectionId: 'sec-1',
+            sectionTitle: 'Section One',
+            unitId: 'unit-1',
+            unitTitle: 'Unit One',
+            isNext: false,
+            previewXp: 40,
+          ),
+          CourseMapNode(
+            lessonId: 'lesson-b',
+            title: 'Lesson B',
+            summary: 'Second',
+            kind: CourseNodeKind.lesson,
+            state: CourseNodeState.available,
+            sectionId: 'sec-1',
+            sectionTitle: 'Section One',
+            unitId: 'unit-1',
+            unitTitle: 'Unit One',
+            isNext: true,
+            previewXp: 40,
+          ),
+        ],
+      ),
+      analytics: analytics,
+    );
+
+    await tester.tap(find.text('Lesson A'));
+    await tester.pumpAndSettle();
+    expect(find.text('REVIEW +10 XP'), findsOneWidget);
+    expect(find.textContaining('START'), findsNothing);
   });
 
   testWidgets('locked node tap explains prerequisite and logs', (tester) async {
@@ -320,6 +378,9 @@ void main() {
       const Offset(0, -120),
     );
     expect(find.text('Lesson A'), findsOneWidget);
+    expect(find.text('START +25 XP'), findsNothing);
+    await tester.tap(find.text('Lesson A'));
+    await tester.pumpAndSettle();
     expect(find.text('START +25 XP'), findsOneWidget);
   });
 
@@ -377,9 +438,12 @@ void main() {
     );
 
     expect(find.text('Resume'), findsNothing);
-    expect(find.text('START +25 XP'), findsOneWidget);
+    expect(find.text('START +25 XP'), findsNothing);
     expect(find.byType(RexMascot), findsNothing);
     expect(find.text('Lesson A'), findsOneWidget);
+    await tester.tap(find.text('Lesson A'));
+    await tester.pumpAndSettle();
+    expect(find.text('START +25 XP'), findsOneWidget);
   });
 
   testWidgets('Home re-focus scrolls the next lesson back into view', (
@@ -437,7 +501,15 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Lesson 11').hitTestable(), findsOneWidget);
-    expect(find.text('START +25 XP').hitTestable(), findsOneWidget);
+    expect(find.text('START +25 XP'), findsNothing);
+    await tester.tap(find.text('Lesson 11'));
+    await tester.pumpAndSettle();
+    expect(find.text('START +25 XP'), findsOneWidget);
+
+    // Dismiss via the dimmed overlay barrier.
+    await tester.tapAt(const Offset(8, 8));
+    await tester.pumpAndSettle();
+    expect(find.text('START +25 XP'), findsNothing);
 
     await tester.dragUntilVisible(
       find.text('Lesson 0'),
@@ -450,7 +522,10 @@ void main() {
     focusRequests.value++;
     await tester.pumpAndSettle();
     expect(find.text('Lesson 11').hitTestable(), findsOneWidget);
-    expect(find.text('START +25 XP').hitTestable(), findsOneWidget);
+    expect(find.text('START +25 XP'), findsNothing);
+    await tester.tap(find.text('Lesson 11'));
+    await tester.pumpAndSettle();
+    expect(find.text('START +25 XP'), findsOneWidget);
   });
 
   testWidgets('unit banner opens organized section picker', (tester) async {

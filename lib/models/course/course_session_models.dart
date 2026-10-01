@@ -305,6 +305,12 @@ int previewLessonXp(int activityCount) {
   return steps * kXpPerAcceptedStep + kXpLessonComplete;
 }
 
+/// XP shown on the Home path REVIEW CTA (25% of a perfect-run preview).
+int reviewLessonXp(int previewXp) {
+  if (previewXp <= 0) return 0;
+  return (previewXp * 0.25).round();
+}
+
 /// XP to show for a finished lesson.
 ///
 /// [completionBonus] is the completion grant in
