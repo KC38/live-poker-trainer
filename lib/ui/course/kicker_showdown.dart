@@ -133,6 +133,7 @@ SubmitCourseStepResult rewriteKickerShowdownResult({
       betterChoiceId: null,
       reversalRead: result.reversalRead,
       masteryWeight: result.masteryWeight,
+      livesNextRefillAtMs: result.livesNextRefillAtMs,
     );
   }
   return SubmitCourseStepResult(
@@ -150,6 +151,7 @@ SubmitCourseStepResult rewriteKickerShowdownResult({
     betterChoiceId: correctId,
     reversalRead: result.reversalRead,
     masteryWeight: result.masteryWeight,
+    livesNextRefillAtMs: result.livesNextRefillAtMs,
   );
 }
 

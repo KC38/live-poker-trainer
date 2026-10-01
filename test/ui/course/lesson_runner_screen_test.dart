@@ -680,7 +680,8 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.textContaining('Button marks the dealer').evaluate().isEmpty;
+      i < 40 &&
+          find.textContaining('Button marks the dealer').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -694,7 +695,10 @@ void main() {
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Redo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('lesson-table-stage')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('lesson-table-stage')),
+      findsOneWidget,
+    );
     expect(find.text('D'), findsOneWidget);
     expect(find.text('SB'), findsOneWidget);
     expect(find.text('BB'), findsOneWidget);
@@ -763,7 +767,8 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.textContaining('Tap each card that plays').evaluate().isEmpty;
+      i < 40 &&
+          find.textContaining('Tap each card that plays').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -1067,7 +1072,10 @@ void main() {
     expect(find.textContaining('Tap the button'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('lesson-table-stage')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('lesson-table-stage')),
+      findsOneWidget,
+    );
     expect(find.text('EP'), findsWidgets);
     expect(find.text('BTN'), findsWidgets);
     expect(find.text('D'), findsOneWidget);
@@ -1108,7 +1116,10 @@ void main() {
     expect(find.textContaining('Tap EP'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('lesson-table-stage')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('lesson-table-stage')),
+      findsOneWidget,
+    );
     expect(find.text('EP'), findsWidgets);
     expect(find.text('HJ'), findsWidgets);
     expect(find.text('BTN'), findsWidgets);
@@ -1390,7 +1401,10 @@ void main() {
     for (
       var i = 0;
       i < 40 &&
-          find.textContaining('Seat right before the button').evaluate().isEmpty;
+          find
+              .textContaining('Seat right before the button')
+              .evaluate()
+              .isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -1772,7 +1786,8 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.textContaining('What do you track first').evaluate().isEmpty;
+      i < 40 &&
+          find.textContaining('What do you track first').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -1955,10 +1970,7 @@ void main() {
     expect(find.textContaining('Tap Value'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(
-      find.byKey(const ValueKey('sizing-language-table')),
-      findsOneWidget,
-    );
+    expect(find.byKey(const ValueKey('sizing-language-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('VALUE'), findsOneWidget);
     expect(find.text('PRESSURE'), findsOneWidget);
@@ -2050,89 +2062,94 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('meet calling station uses the lesson frame and the station tiles', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+  testWidgets(
+    'meet calling station uses the lesson frame and the station tiles',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-04-06-02-meet-calling-station',
-          courseService: _PrerequisiteLockedCourseService(catalog)
-            ..previousComplete = true,
-          startRequestId: 'start_meet_calling_station_frame',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-04-06-02-meet-calling-station',
+            courseService: _PrerequisiteLockedCourseService(catalog)
+              ..previousComplete = true,
+            startRequestId: 'start_meet_calling_station_frame',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.textContaining('Tap Station').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('Tap Station').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    expect(find.byType(AppBar), findsNothing);
-    expect(find.text('Meet the Calling Station'), findsNothing);
-    expect(find.byTooltip('Close'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap Station'), findsOneWidget);
-    expect(find.byTooltip('Undo'), findsOneWidget);
-    expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('calling-station-table')), findsOneWidget);
-    expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.text('STATION'), findsOneWidget);
-    expect(find.text('HIGH'), findsOneWidget);
-    expect(find.text('LOW'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Meet the Calling Station'), findsNothing);
+      expect(find.byTooltip('Close'), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+      expect(find.textContaining('Tap Station'), findsOneWidget);
+      expect(find.byTooltip('Undo'), findsOneWidget);
+      expect(find.byTooltip('Hint'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('calling-station-table')),
+        findsOneWidget,
+      );
+      expect(find.byType(FeltTableView), findsOneWidget);
+      expect(find.text('STATION'), findsOneWidget);
+      expect(find.text('HIGH'), findsOneWidget);
+      expect(find.text('LOW'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets(
     'adjust versus calling station uses the lesson frame and the exploit tiles',
     (tester) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-04-06-03-adjust-calling-station',
-          courseService: _PrerequisiteLockedCourseService(catalog)
-            ..previousComplete = true,
-          startRequestId: 'start_adjust_station_frame',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-04-06-03-adjust-calling-station',
+            courseService: _PrerequisiteLockedCourseService(catalog)
+              ..previousComplete = true,
+            startRequestId: 'start_adjust_station_frame',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.textContaining('Tap Value').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('Tap Value').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    expect(find.byType(AppBar), findsNothing);
-    expect(find.text('Adjust versus Calling Station'), findsNothing);
-    expect(find.byTooltip('Close'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap Value'), findsOneWidget);
-    expect(find.byTooltip('Undo'), findsOneWidget);
-    expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('vs-station-table')), findsOneWidget);
-    expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.text('VALUE'), findsOneWidget);
-    expect(find.text('BLUFFS'), findsOneWidget);
-    expect(find.text('CITE'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Adjust versus Calling Station'), findsNothing);
+      expect(find.byTooltip('Close'), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+      expect(find.textContaining('Tap Value'), findsOneWidget);
+      expect(find.byTooltip('Undo'), findsOneWidget);
+      expect(find.byTooltip('Hint'), findsOneWidget);
+      expect(find.byKey(const ValueKey('vs-station-table')), findsOneWidget);
+      expect(find.byType(FeltTableView), findsOneWidget);
+      expect(find.text('VALUE'), findsOneWidget);
+      expect(find.text('BLUFFS'), findsOneWidget);
+      expect(find.text('CITE'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('narrow players uses the lesson frame and the tight-seat tiles', (
     tester,
@@ -2218,47 +2235,48 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('adjust versus nit uses the lesson frame and the nit exploit tiles', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+  testWidgets(
+    'adjust versus nit uses the lesson frame and the nit exploit tiles',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-04-07-03-adjust-nit',
-          courseService: _PrerequisiteLockedCourseService(catalog)
-            ..previousComplete = true,
-          startRequestId: 'start_adjust_nit_frame',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-04-07-03-adjust-nit',
+            courseService: _PrerequisiteLockedCourseService(catalog)
+              ..previousComplete = true,
+            startRequestId: 'start_adjust_nit_frame',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.textContaining('Tap Steal').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('Tap Steal').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    expect(find.byType(AppBar), findsNothing);
-    expect(find.text('Adjust versus Nit'), findsNothing);
-    expect(find.byTooltip('Close'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap Steal'), findsOneWidget);
-    expect(find.byTooltip('Undo'), findsOneWidget);
-    expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('vs-nits-table')), findsOneWidget);
-    expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.text('STEAL'), findsOneWidget);
-    expect(find.text('CREDIT'), findsOneWidget);
-    expect(find.text('EXPLODE'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Adjust versus Nit'), findsNothing);
+      expect(find.byTooltip('Close'), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+      expect(find.textContaining('Tap Steal'), findsOneWidget);
+      expect(find.byTooltip('Undo'), findsOneWidget);
+      expect(find.byTooltip('Hint'), findsOneWidget);
+      expect(find.byKey(const ValueKey('vs-nits-table')), findsOneWidget);
+      expect(find.byType(FeltTableView), findsOneWidget);
+      expect(find.text('STEAL'), findsOneWidget);
+      expect(find.text('CREDIT'), findsOneWidget);
+      expect(find.text('EXPLODE'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('wild aggressors uses the lesson frame and the entry tiles', (
     tester,
@@ -2344,173 +2362,180 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('adjust versus maniac uses the lesson frame and the exploit tiles', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+  testWidgets(
+    'adjust versus maniac uses the lesson frame and the exploit tiles',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-04-08-03-adjust-maniac',
-          courseService: _PrerequisiteLockedCourseService(catalog)
-            ..previousComplete = true,
-          startRequestId: 'start_adjust_maniac_frame',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-04-08-03-adjust-maniac',
+            courseService: _PrerequisiteLockedCourseService(catalog)
+              ..previousComplete = true,
+            startRequestId: 'start_adjust_maniac_frame',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.textContaining('Tap Wider').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('Tap Wider').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    expect(find.byType(AppBar), findsNothing);
-    expect(find.text('Adjust versus Maniac'), findsNothing);
-    expect(find.byTooltip('Close'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap Wider'), findsOneWidget);
-    expect(find.byTooltip('Undo'), findsOneWidget);
-    expect(find.byKey(const ValueKey('vs-maniacs-table')), findsOneWidget);
-    expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.text('WIDER'), findsOneWidget);
-    expect(find.text('HANG'), findsOneWidget);
-    expect(find.text('EGO'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Adjust versus Maniac'), findsNothing);
+      expect(find.byTooltip('Close'), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+      expect(find.textContaining('Tap Wider'), findsOneWidget);
+      expect(find.byTooltip('Undo'), findsOneWidget);
+      expect(find.byKey(const ValueKey('vs-maniacs-table')), findsOneWidget);
+      expect(find.byType(FeltTableView), findsOneWidget);
+      expect(find.byTooltip('Hint'), findsOneWidget);
+      expect(find.text('WIDER'), findsOneWidget);
+      expect(find.text('HANG'), findsOneWidget);
+      expect(find.text('EGO'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
-  testWidgets('confidence and samples uses the lesson frame and the certainty tiles', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+  testWidgets(
+    'confidence and samples uses the lesson frame and the certainty tiles',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-04-09-01-type-identification',
-          courseService: _PrerequisiteLockedCourseService(catalog)
-            ..previousComplete = true,
-          startRequestId: 'start_confidence_samples_frame',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-04-09-01-type-identification',
+            courseService: _PrerequisiteLockedCourseService(catalog)
+              ..previousComplete = true,
+            startRequestId: 'start_confidence_samples_frame',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.textContaining('Tap Observe').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('Tap Observe').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    expect(find.byType(AppBar), findsNothing);
-    expect(find.text('Confidence and samples'), findsNothing);
-    expect(find.byTooltip('Close'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap Observe'), findsOneWidget);
-    expect(find.byTooltip('Undo'), findsOneWidget);
-    expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(
-      find.byKey(const ValueKey('observation-certainty-table')),
-      findsOneWidget,
-    );
-    expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.text('OBSERVE'), findsOneWidget);
-    expect(find.text('SAMPLES'), findsOneWidget);
-    expect(find.text('SHOWDOWNS'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Confidence and samples'), findsNothing);
+      expect(find.byTooltip('Close'), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+      expect(find.textContaining('Tap Observe'), findsOneWidget);
+      expect(find.byTooltip('Undo'), findsOneWidget);
+      expect(find.byTooltip('Hint'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('observation-certainty-table')),
+        findsOneWidget,
+      );
+      expect(find.byType(FeltTableView), findsOneWidget);
+      expect(find.text('OBSERVE'), findsOneWidget);
+      expect(find.text('SAMPLES'), findsOneWidget);
+      expect(find.text('SHOWDOWNS'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
-  testWidgets('same hand different types uses the lesson frame and the evidence tiles', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+  testWidgets(
+    'same hand different types uses the lesson frame and the evidence tiles',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-04-10-01-exploit-checkpoints',
-          courseService: _PrerequisiteLockedCourseService(catalog)
-            ..previousComplete = true,
-          startRequestId: 'start_same_hand_types_frame',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-04-10-01-exploit-checkpoints',
+            courseService: _PrerequisiteLockedCourseService(catalog)
+              ..previousComplete = true,
+            startRequestId: 'start_same_hand_types_frame',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.textContaining('Tap Cards').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('Tap Cards').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    expect(find.byType(AppBar), findsNothing);
-    expect(find.text('Same hand, different types'), findsNothing);
-    expect(find.byTooltip('Close'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap Cards'), findsOneWidget);
-    expect(find.byTooltip('Undo'), findsOneWidget);
-    expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('exploit-evidence-table')), findsOneWidget);
-    expect(find.byType(FeltTableView), findsOneWidget);
-    expect(find.text('CARDS'), findsOneWidget);
-    expect(find.text('SEATS'), findsOneWidget);
-    expect(find.text('EVIDENCE'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Same hand, different types'), findsNothing);
+      expect(find.byTooltip('Close'), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+      expect(find.textContaining('Tap Cards'), findsOneWidget);
+      expect(find.byTooltip('Undo'), findsOneWidget);
+      expect(find.byTooltip('Hint'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('exploit-evidence-table')),
+        findsOneWidget,
+      );
+      expect(find.byType(FeltTableView), findsOneWidget);
+      expect(find.text('CARDS'), findsOneWidget);
+      expect(find.text('SEATS'), findsOneWidget);
+      expect(find.text('EVIDENCE'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
-  testWidgets('section 4 jump check uses the lesson frame and the range tiles', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+  testWidgets(
+    'section 4 jump check uses the lesson frame and the range tiles',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-04-10-02-section-four-jump-test',
-          courseService: _PrerequisiteLockedCourseService(catalog)
-            ..previousComplete = true,
-          startRequestId: 'start_section_four_jump_frame',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-04-10-02-section-four-jump-test',
+            courseService: _PrerequisiteLockedCourseService(catalog)
+              ..previousComplete = true,
+            startRequestId: 'start_section_four_jump_frame',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.textContaining('best described as').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.textContaining('best described as').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    expect(find.byType(AppBar), findsNothing);
-    expect(find.text('Section 4 jump check'), findsNothing);
-    expect(find.byTooltip('Close'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('best described as'), findsOneWidget);
-    expect(find.byTooltip('Undo'), findsOneWidget);
-    expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.text('Narrower'), findsOneWidget);
-    expect(find.text('Any two'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Section 4 jump check'), findsNothing);
+      expect(find.byTooltip('Close'), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+      expect(find.textContaining('best described as'), findsOneWidget);
+      expect(find.byTooltip('Undo'), findsOneWidget);
+      expect(find.byTooltip('Hint'), findsOneWidget);
+      expect(find.text('Narrower'), findsOneWidget);
+      expect(find.text('Any two'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('multiway ranges uses the lesson frame and the nut tiles', (
     tester,
@@ -2891,44 +2916,48 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('section 5 checkpoint uses the lesson frame and the priority tiles', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.reset);
+  testWidgets(
+    'section 5 checkpoint uses the lesson frame and the priority tiles',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(
-      _app(
-        LessonRunnerScreen(
-          lessonId: 'lesson-05-09-02-section-five-checkpoint',
-          courseService: _PrerequisiteLockedCourseService(catalog)
-            ..previousComplete = true,
-          startRequestId: 'start_section_five_checkpoint_frame',
+      await tester.pumpWidget(
+        _app(
+          LessonRunnerScreen(
+            lessonId: 'lesson-05-09-02-section-five-checkpoint',
+            courseService: _PrerequisiteLockedCourseService(catalog)
+              ..previousComplete = true,
+            startRequestId: 'start_section_five_checkpoint_frame',
+          ),
+          catalog: catalog,
         ),
-        catalog: catalog,
-      ),
-    );
-    await tester.pump();
-    for (
-      var i = 0;
-      i < 40 && find.text('Nut potential').evaluate().isEmpty;
-      i++
-    ) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 && find.text('Nut potential').evaluate().isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
 
-    expect(find.byType(AppBar), findsNothing);
-    expect(find.text('Section 5 checkpoint'), findsNothing);
-    expect(find.byTooltip('Close'), findsOneWidget);
-    expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Four-way pot priority'), findsAtLeastNWidgets(1));
-    expect(find.byTooltip('Undo'), findsOneWidget);
-    expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.text('Nut potential'), findsAtLeastNWidgets(1));
-    expect(find.text('Bluff more'), findsAtLeastNWidgets(1));
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.byType(AppBar), findsNothing);
+      expect(find.text('Section 5 checkpoint'), findsNothing);
+      expect(find.byTooltip('Close'), findsOneWidget);
+      expect(find.byIcon(Icons.favorite), findsNWidgets(3));
+      expect(
+        find.textContaining('Four-way pot priority'),
+        findsAtLeastNWidgets(1),
+      );
+      expect(find.byTooltip('Undo'), findsOneWidget);
+      expect(find.byTooltip('Hint'), findsOneWidget);
+      expect(find.text('Nut potential'), findsAtLeastNWidgets(1));
+      expect(find.text('Bluff more'), findsAtLeastNWidgets(1));
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('range advantage uses the lesson frame and the advantage tiles', (
     tester,
@@ -3132,7 +3161,10 @@ void main() {
     expect(find.textContaining('Tap Overbet'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('overbet-geometry-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('overbet-geometry-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('OVERBET'), findsOneWidget);
     expect(find.text('POLAR'), findsOneWidget);
@@ -3294,16 +3326,16 @@ void main() {
     }
 
     expect(find.byType(AppBar), findsNothing);
-    expect(
-      find.text('Navigate 3-bet and 4-bet pots by depth'),
-      findsNothing,
-    );
+    expect(find.text('Navigate 3-bet and 4-bet pots by depth'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
     expect(find.textContaining('Tap 3-Bet'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('threebet-fourbet-spr-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('threebet-fourbet-spr-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('3BET'), findsOneWidget);
     expect(find.text('4BET'), findsOneWidget);
@@ -3348,7 +3380,10 @@ void main() {
     expect(find.textContaining('Tap Hard'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('hard-fold-cooler-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('hard-fold-cooler-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('HARD'), findsOneWidget);
     expect(find.text('COOLER'), findsOneWidget);
@@ -3390,7 +3425,10 @@ void main() {
     expect(find.textContaining('Tap Tight'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('selective-aggression-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('selective-aggression-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('TIGHT'), findsOneWidget);
     expect(find.text('BARREL'), findsOneWidget);
@@ -3719,7 +3757,10 @@ void main() {
     expect(find.textContaining('Tap Reason'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('preflop-flop-plan-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('preflop-flop-plan-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('REASON'), findsOneWidget);
     expect(find.text('CONFIRM'), findsOneWidget);
@@ -3803,7 +3844,10 @@ void main() {
     expect(find.textContaining('Tap Value'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('river-composition-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('river-composition-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('VALUE'), findsOneWidget);
     expect(find.text('BLUFF'), findsOneWidget);
@@ -3929,7 +3973,10 @@ void main() {
     expect(find.textContaining('Tap Short'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('stack-depth-plans-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('stack-depth-plans-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('SHORT'), findsOneWidget);
     expect(find.text('DEEP'), findsOneWidget);
@@ -3971,7 +4018,10 @@ void main() {
     expect(find.textContaining('Tap Cards'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('same-cards-types-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('same-cards-types-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CARDS'), findsOneWidget);
     expect(find.text('MODELS'), findsOneWidget);
@@ -4007,10 +4057,7 @@ void main() {
     }
 
     expect(find.byType(AppBar), findsNothing);
-    expect(
-      find.text('Integrate type, board, line, and sizing'),
-      findsNothing,
-    );
+    expect(find.text('Integrate type, board, line, and sizing'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
     expect(find.textContaining('Tap Type'), findsOneWidget);
@@ -4059,7 +4106,10 @@ void main() {
     expect(find.textContaining('Tap Leak'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('leak-review-book-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('leak-review-book-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('LEAK'), findsOneWidget);
     expect(find.text('BOOK'), findsOneWidget);
@@ -4185,7 +4235,10 @@ void main() {
     expect(find.textContaining('Tap Nuts'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('capstone-multiway-deep-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('capstone-multiway-deep-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('NUTS'), findsOneWidget);
     expect(find.text('DEEP'), findsOneWidget);
@@ -4311,7 +4364,10 @@ void main() {
     expect(find.textContaining('Tap Checklist'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
-    expect(find.byKey(const ValueKey('live-warmup-prep-table')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('live-warmup-prep-table')),
+      findsOneWidget,
+    );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CHECKLIST'), findsOneWidget);
     expect(find.text('DEFAULTS'), findsOneWidget);
@@ -4502,6 +4558,67 @@ void main() {
     await tester.pump();
     expect(zeroHearts.submitCalls, 0);
     expect(find.text('Nice!'), findsNothing);
+  });
+
+  testWidgets('a due passive heart lifts the in-lesson gate', (tester) async {
+    tester.view.physicalSize = const Size(390, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final home = CourseHomeSnapshot(
+      status: CourseHomeLoadStatus.ready,
+      nodes: const [],
+      sections: const [],
+      hearts: 0,
+      livesMax: 5,
+      gems: 0,
+      livesNextRefillAtMs: DateTime.now().millisecondsSinceEpoch - 1000,
+    );
+    final hearts = _PassiveHeartRestoresCourseService(catalog);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => catalog),
+          courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: LessonRunnerScreen(
+            lessonId: kFirstCourseLessonId,
+            courseService: hearts,
+            startRequestId: 'start_passive_heart',
+          ),
+        ),
+      ),
+    );
+    await _pumpUntil(tester, find.textContaining('Tap your cards'));
+    await tester.pump();
+    await tester.pump();
+
+    if (find.text('Watch an ad').evaluate().isNotEmpty) {
+      await tester.tapAt(const Offset(8, 8));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+    }
+
+    final layout = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(hearts.starts, greaterThanOrEqualTo(2));
+    expect(layout.livesRemaining, 1);
+    expect(layout.onRestoreHearts, isNull);
+    expect(
+      find.byKey(const ValueKey<String>('lesson-restore-hearts')),
+      findsNothing,
+    );
   });
 
   testWidgets('stale activity submit resyncs to server resume cursor', (
@@ -5367,6 +5484,48 @@ class _FixedHomeHearts extends CourseHomeController {
 
   @override
   Future<CourseHomeSnapshot> build() async => snapshot;
+}
+
+/// Zero-heart start, then a passive refill on the next resume.
+class _PassiveHeartRestoresCourseService extends _ZeroHeartsCourseService {
+  _PassiveHeartRestoresCourseService(super.catalog);
+
+  var starts = 0;
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+  }) async {
+    starts += 1;
+    final started = await super.startLesson(
+      lessonId: lessonId,
+      catalogVersion: catalogVersion,
+      startRequestId: startRequestId,
+      timezone: timezone,
+    );
+    if (starts < 2) return started;
+    final attempt = started.attempt;
+    return StartCourseLessonResult(
+      attempt: CourseAttemptSnapshot(
+        attemptId: attempt.attemptId,
+        lessonId: attempt.lessonId,
+        catalogVersion: attempt.catalogVersion,
+        status: 'in_progress',
+        activityIndex: attempt.activityIndex,
+        currentActivityId: attempt.currentActivityId,
+        livesRemaining: 1,
+        livesMax: attempt.livesMax,
+        acceptedCount: attempt.acceptedCount,
+        scoredCount: attempt.scoredCount,
+        stepCount: attempt.stepCount,
+      ),
+      resume: started.resume,
+      duplicate: true,
+    );
+  }
 }
 
 /// Starts a first-run attempt already at zero hearts.

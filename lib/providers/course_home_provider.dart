@@ -16,8 +16,8 @@ import 'package:live_poker_trainer/services/firestore/course_service.dart';
 /// Loads and derives the Home course map for the signed-in user.
 final courseHomeProvider =
     AsyncNotifierProvider<CourseHomeController, CourseHomeSnapshot>(
-  CourseHomeController.new,
-);
+      CourseHomeController.new,
+    );
 
 /// Fetches server course state and builds a [CourseHomeSnapshot].
 class CourseHomeController extends AsyncNotifier<CourseHomeSnapshot> {
@@ -53,8 +53,8 @@ class CourseHomeController extends AsyncNotifier<CourseHomeSnapshot> {
       );
       return snapshotFromCourseState(catalog: catalog, raw: raw);
     } on CourseServiceException catch (error) {
-      final offline = error.code == 'unavailable' ||
-          error.code == 'deadline-exceeded';
+      final offline =
+          error.code == 'unavailable' || error.code == 'deadline-exceeded';
       return buildCourseHomeSnapshot(
         catalog: catalog,
         flags: CourseFlags.disabled(catalogVersion: catalog.catalogVersion),
@@ -95,6 +95,29 @@ class CourseHomeController extends AsyncNotifier<CourseHomeSnapshot> {
       livesNextRefillAtMs: result.livesNextRefillAtMs,
       nextAdClaimAtMs: result.nextAdClaimAtMs,
       adClaimsRemainingToday: result.adClaimsRemainingToday,
+    );
+    state = AsyncData(next);
+    _schedulePassiveRefill(next);
+  }
+
+  /// Records the heart wallet from a graded step without reloading the path.
+  void applyStepHeartWallet({
+    required int livesRemaining,
+    required int livesMax,
+    int? livesNextRefillAtMs,
+  }) {
+    final current = state.valueOrNull;
+    if (current == null || current.status != CourseHomeLoadStatus.ready) {
+      return;
+    }
+    final ceiling = livesMax > 0 ? livesMax : current.livesMax;
+    final next = current.withHeartState(
+      hearts: livesRemaining.clamp(0, ceiling).toInt(),
+      livesMax: ceiling,
+      gems: current.gems,
+      livesNextRefillAtMs: livesNextRefillAtMs,
+      nextAdClaimAtMs: current.nextAdClaimAtMs,
+      adClaimsRemainingToday: current.adClaimsRemainingToday,
     );
     state = AsyncData(next);
     _schedulePassiveRefill(next);
@@ -161,9 +184,7 @@ CourseHomeSnapshot snapshotFromCourseState({
   CourseProfileView? profile;
   final profileRaw = raw['profile'];
   if (profileRaw is Map) {
-    profile = CourseProfileView.fromJson(
-      Map<String, dynamic>.from(profileRaw),
-    );
+    profile = CourseProfileView.fromJson(Map<String, dynamic>.from(profileRaw));
   }
 
   CourseAttemptSnapshot? openAttempt;

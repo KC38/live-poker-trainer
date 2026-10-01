@@ -5,6 +5,7 @@
 import {describe, expect, it} from "vitest";
 import {HttpsError} from "firebase-functions/v2/https";
 import type {Firestore} from "firebase-admin/firestore";
+import {HEART_REFILL_INTERVAL_MS} from "./course_hearts";
 import {
   activityIdsInOrder,
   courseBank,
@@ -30,6 +31,7 @@ import {
   omitUndefined,
   reviewLessonXp,
   shouldAdvanceActivityAfterSubmit,
+  resolveSubmitHeartState,
   shouldBlockSubmitForHearts,
   XP_LESSON_COMPLETE,
   XP_PER_ACCEPTED_STEP,
@@ -714,6 +716,82 @@ describe("shouldBlockSubmitForHearts", () => {
         isPracticeOrReplay: true,
       }),
     ).toBe(false);
+  });
+});
+
+describe("resolveSubmitHeartState", () => {
+  const nowMs = 1_000_000;
+
+  it("grades from a passive heart that accrued on the profile", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "remediation",
+      attemptLivesRemaining: 0,
+      attemptLivesMax: 5,
+      profileExists: true,
+      profileData: {
+        livesRemaining: 0,
+        livesMax: 5,
+        livesNextRefillAtMs: nowMs,
+      },
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.blocked).toBe(false);
+    expect(resolved.livesRemaining).toBe(1);
+    expect(resolved.status).toBe("in_progress");
+    expect(resolved.livesNextRefillAtMs).toBe(nowMs + HEART_REFILL_INTERVAL_MS);
+  });
+
+  it("keeps a first-run lesson blocked when the wallet is still empty", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "remediation",
+      attemptLivesRemaining: 0,
+      attemptLivesMax: 5,
+      profileExists: true,
+      profileData: {
+        livesRemaining: 0,
+        livesMax: 5,
+        livesNextRefillAtMs: nowMs + HEART_REFILL_INTERVAL_MS,
+      },
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.blocked).toBe(true);
+    expect(resolved.livesRemaining).toBe(0);
+    expect(resolved.status).toBe("remediation");
+  });
+
+  it("does not drop a heart the profile already accrued above the attempt", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "in_progress",
+      attemptLivesRemaining: 3,
+      attemptLivesMax: 5,
+      profileExists: true,
+      profileData: {
+        livesRemaining: 3,
+        livesMax: 5,
+        livesNextRefillAtMs: nowMs,
+      },
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.livesRemaining).toBe(4);
+    expect(resolved.blocked).toBe(false);
+  });
+
+  it("keeps the attempt count when the profile has no heart wallet", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "in_progress",
+      attemptLivesRemaining: 0,
+      attemptLivesMax: 5,
+      profileExists: true,
+      profileData: {gems: 10},
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.blocked).toBe(true);
+    expect(resolved.livesRemaining).toBe(0);
+    expect(resolved.livesNextRefillAtMs).toBeNull();
   });
 });
 
