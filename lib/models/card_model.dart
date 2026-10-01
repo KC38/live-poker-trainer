@@ -1,4 +1,4 @@
-/// Playing card model with 4-color deck support.
+/// Playing card model with standard 2-color suit ink.
 library;
 
 import 'package:flutter/material.dart';

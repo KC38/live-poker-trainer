@@ -127,10 +127,138 @@ void main() {
     );
     final controller = LessonActivityController(activity: activity);
     expect(controller.hintRequests, 0);
+    expect(controller.hintUsed, isFalse);
     controller.revealHint();
+    expect(controller.hintUsed, isTrue);
     controller.revealHint();
     expect(controller.hintRequests, 2);
     expect(controller.draft.hasAnswer, isFalse);
+    controller.dispose();
+  });
+
+  test('hint stays used for the node after reveal', () {
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Look at your seat'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.revealHint();
+    expect(controller.hintUsed, isTrue);
+    controller.toggleHint();
+    expect(controller.hintVisible, isFalse);
+    expect(controller.hintUsed, isTrue);
+    controller.dispose();
+  });
+
+  test('binding a new activity clears hint used', () {
+    final first = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Look at your seat'),
+      ],
+    );
+    final second = CourseActivity(
+      id: 'b',
+      order: 2,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'b',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h2', kind: 'hint', text: 'Check position'),
+      ],
+    );
+    final controller = LessonActivityController(activity: first);
+    controller.revealHint();
+    expect(controller.hintUsed, isTrue);
+    controller.bindActivity(second);
+    expect(controller.hintUsed, isFalse);
+    expect(controller.hintVisible, isFalse);
+    controller.dispose();
+  });
+
+  test('next hand street re-enables Hint on the same activity', () {
+    final activity = CourseActivity(
+      id: 'multi',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 60,
+      accessibilityText: 'Play two streets',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Size small'),
+      ],
+      handSteps: const [
+        CourseHandStep(
+          id: 'pre',
+          street: 'preflop',
+          prompt: 'Open',
+          choices: [
+            CourseChoice(id: 'open', label: 'Open'),
+            CourseChoice(id: 'fold', label: 'Fold'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'flop',
+          street: 'flop',
+          prompt: 'C-bet',
+          choices: [
+            CourseChoice(id: 'bet', label: 'Bet'),
+            CourseChoice(id: 'check', label: 'Check'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    expect(controller.currentNodeKey, 'multi#0');
+    controller.revealHint();
+    expect(controller.hintUsed, isTrue);
+    controller.advanceToNextHandStep();
+    expect(controller.currentNodeKey, 'multi#1');
+    expect(controller.hintUsed, isFalse);
+    expect(controller.hintVisible, isFalse);
+    controller.revealHint();
+    expect(controller.hintUsed, isTrue);
+    controller.dispose();
+  });
+
+  test('revealing a hint enables tap cues on unguided steps', () {
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Tap the board'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    expect(controller.showTargetCue, isFalse);
+    controller.revealHint();
+    expect(controller.hintVisible, isTrue);
+    expect(controller.showTargetCue, isTrue);
+    controller.toggleHint();
+    expect(controller.hintVisible, isFalse);
+    expect(controller.showTargetCue, isFalse);
     controller.dispose();
   });
 

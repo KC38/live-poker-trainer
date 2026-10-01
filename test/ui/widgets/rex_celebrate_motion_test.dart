@@ -51,4 +51,19 @@ void main() {
     });
     expect(turns.length, 2);
   });
+
+  testWidgets('upper-body crop clips legs and shortens the slot', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Center(
+          child: RexMascot(size: 80, crop: RexMascotCrop.upperBody),
+        ),
+      ),
+    );
+    await tester.pump();
+    final size = tester.getSize(find.byType(RexMascot));
+    expect(size.width, 80);
+    expect(size.height, closeTo(RexMascot.heightFor(80, RexMascotCrop.upperBody), 0.5));
+    expect(size.height, lessThan(RexMascot.heightFor(80)));
+  });
 }

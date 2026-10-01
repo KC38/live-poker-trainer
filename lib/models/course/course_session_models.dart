@@ -76,7 +76,7 @@ class CourseAttemptSnapshot {
       activityIndex: (json['activityIndex'] as num?)?.toInt() ?? 0,
       currentActivityId: json['currentActivityId'] as String? ?? '',
       livesRemaining: (json['livesRemaining'] as num?)?.toInt() ?? 0,
-      livesMax: (json['livesMax'] as num?)?.toInt() ?? 3,
+      livesMax: (json['livesMax'] as num?)?.toInt() ?? 5,
       acceptedCount: (json['acceptedCount'] as num?)?.toInt() ?? 0,
       scoredCount: (json['scoredCount'] as num?)?.toInt() ?? 0,
       stepCount: (json['stepCount'] as num?)?.toInt() ?? 0,
@@ -184,6 +184,10 @@ class CompleteCourseLessonResult {
     this.resume,
     this.gemsAwarded = 0,
     this.gems = 0,
+    this.heartsRestored = 0,
+    this.livesRemaining,
+    this.livesMax,
+    this.livesNextRefillAtMs,
   });
 
   final String attemptId;
@@ -208,6 +212,14 @@ class CompleteCourseLessonResult {
   /// Wallet balance after this completion.
   final int gems;
 
+  /// Hearts restored by completing a practice/replay lesson.
+  final int heartsRestored;
+
+  /// Profile hearts after completion when the server returned them.
+  final int? livesRemaining;
+  final int? livesMax;
+  final int? livesNextRefillAtMs;
+
   factory CompleteCourseLessonResult.fromJson(Map<String, dynamic> json) {
     final resumeRaw = json['resume'];
     return CompleteCourseLessonResult(
@@ -225,6 +237,55 @@ class CompleteCourseLessonResult {
           : null,
       gemsAwarded: (json['gemsAwarded'] as num?)?.toInt() ?? 0,
       gems: (json['gems'] as num?)?.toInt() ?? 0,
+      heartsRestored: (json['heartsRestored'] as num?)?.toInt() ?? 0,
+      livesRemaining: (json['livesRemaining'] as num?)?.toInt(),
+      livesMax: (json['livesMax'] as num?)?.toInt(),
+      livesNextRefillAtMs: (json['livesNextRefillAtMs'] as num?)?.toInt(),
+    );
+  }
+}
+
+/// Heart refill callable result.
+class RefillCourseHeartsResult {
+  /// Creates a refill result.
+  const RefillCourseHeartsResult({
+    required this.method,
+    required this.livesRemaining,
+    required this.livesMax,
+    required this.heartsRestored,
+    required this.gems,
+    required this.gemsSpent,
+    required this.duplicate,
+    this.livesNextRefillAtMs,
+    this.nextAdClaimAtMs,
+    this.adClaimsRemainingToday = 0,
+  });
+
+  final String method;
+  final int livesRemaining;
+  final int livesMax;
+  final int heartsRestored;
+  final int gems;
+  final int gemsSpent;
+  final bool duplicate;
+  final int? livesNextRefillAtMs;
+  final int? nextAdClaimAtMs;
+  final int adClaimsRemainingToday;
+
+  /// Parses refillCourseHearts JSON.
+  factory RefillCourseHeartsResult.fromJson(Map<String, dynamic> json) {
+    return RefillCourseHeartsResult(
+      method: json['method']?.toString() ?? '',
+      livesRemaining: (json['livesRemaining'] as num?)?.toInt() ?? 0,
+      livesMax: (json['livesMax'] as num?)?.toInt() ?? 5,
+      heartsRestored: (json['heartsRestored'] as num?)?.toInt() ?? 0,
+      gems: (json['gems'] as num?)?.toInt() ?? 0,
+      gemsSpent: (json['gemsSpent'] as num?)?.toInt() ?? 0,
+      duplicate: json['duplicate'] as bool? ?? false,
+      livesNextRefillAtMs: (json['livesNextRefillAtMs'] as num?)?.toInt(),
+      nextAdClaimAtMs: (json['nextAdClaimAtMs'] as num?)?.toInt(),
+      adClaimsRemainingToday:
+          (json['adClaimsRemainingToday'] as num?)?.toInt() ?? 0,
     );
   }
 }

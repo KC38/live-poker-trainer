@@ -9,10 +9,11 @@ import 'package:live_poker_trainer/models/card_model.dart';
 /// Height of a table card for each unit of width.
 const double tableCardAspect = 1.4;
 
-/// Face-up card with a large corner index, readable at arm's length.
+/// Face-up card with a corner rank and a large centered suit.
 ///
-/// Rank and suit sit in the top 60% so a seat box may tuck the bottom of a
-/// hole card behind it without hiding what the card is.
+/// Rank stays in the top-left; a single suit glyph fills the face below
+/// the rank (no second overlapping suit). Hole cards sit fully above their
+/// seat box — neither covers the other.
 class TableCard extends StatelessWidget {
   /// Creates a card face [width] wide.
   const TableCard({
@@ -44,6 +45,7 @@ class TableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = card.displayColor;
     final radius = width * 0.12;
+    final height = width * tableCardAspect;
     final borderColor = selected
         ? AppColors.gold
         : highlighted
@@ -54,6 +56,8 @@ class TableCard extends StatelessWidget {
         : highlighted
         ? 2.0
         : 0.6;
+    // Leave clear air under the corner rank so the suit never overlaps it.
+    final suitTop = width * 0.48;
     return Semantics(
       label: card.display,
       selected: selected,
@@ -61,7 +65,7 @@ class TableCard extends StatelessWidget {
         opacity: dimmed && !selected ? 0.38 : 1,
         child: Container(
           width: width,
-          height: width * tableCardAspect,
+          height: height,
           decoration: BoxDecoration(
             color: AppColors.cream,
             borderRadius: BorderRadius.circular(radius),
@@ -91,29 +95,33 @@ class TableCard extends StatelessWidget {
                 Positioned(
                   left: width * 0.1,
                   top: width * 0.06,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        card.rankLabel,
-                        maxLines: 1,
-                        style: GoogleFonts.manrope(
-                          fontSize: width * 0.5,
-                          height: 1,
-                          fontWeight: FontWeight.w800,
-                          color: color,
-                        ),
+                  child: Text(
+                    card.rankLabel,
+                    maxLines: 1,
+                    style: GoogleFonts.manrope(
+                      fontSize: width * 0.46,
+                      height: 1,
+                      fontWeight: FontWeight.w800,
+                      color: color,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  top: suitTop,
+                  bottom: width * 0.06,
+                  child: Center(
+                    child: Text(
+                      card.suitSymbol,
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: width * 0.62,
+                        height: 1,
+                        color: color,
                       ),
-                      Text(
-                        card.suitSymbol,
-                        maxLines: 1,
-                        style: TextStyle(
-                          fontSize: width * 0.36,
-                          height: 1,
-                          color: color,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 if (orderBadge != null)

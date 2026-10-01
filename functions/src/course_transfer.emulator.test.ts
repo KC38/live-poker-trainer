@@ -206,7 +206,7 @@ describe("anonymous progress transfer", () => {
       activityIndex: 2,
       currentActivityId: "act-01-01-02-guided-suits",
       livesRemaining: 2,
-      livesMax: 3,
+      livesMax: 5,
       catalogVersion: "2.0.0",
     });
 

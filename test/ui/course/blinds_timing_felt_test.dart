@@ -1,4 +1,4 @@
-/// Locks the Button and blinds phase columns so cards stay inside the felt.
+/// Locks blinds-timing option rows so flop / showdown visuals stay on the felt.
 library;
 
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('flop cards and showdown backs stack inside the phase columns', (
+  testWidgets('flop cards and showdown backs sit in horizontal option rows', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(402, 874);
@@ -64,14 +64,26 @@ void main() {
     expect(find.text('Showdown'), findsOneWidget);
     expect(find.text('When do those forced bets go in?'), findsOneWidget);
 
-    _expectStackedInside(
+    final before = tester.getCenter(find.text('Before deal'));
+    final after = tester.getCenter(find.text('After flop'));
+    final showdown = tester.getCenter(find.text('Showdown'));
+    // Horizontal options stack top → bottom (timeline order).
+    expect(before.dy, lessThan(after.dy));
+    expect(after.dy, lessThan(showdown.dy));
+
+    final felt = tester.getRect(
+      find.byKey(const ValueKey('blinds-timing-felt')),
+    );
+    _expectSideBySideInsideFelt(
       tester,
-      columnOf: find.text('After flop'),
+      felt: felt,
+      nearLabel: find.text('After flop'),
       items: find.byType(MiniCard),
     );
-    _expectStackedInside(
+    _expectSideBySideInsideFelt(
       tester,
-      columnOf: find.text('Showdown'),
+      felt: felt,
+      nearLabel: find.text('Showdown'),
       items: find.byType(CardBack),
     );
   });
@@ -91,27 +103,32 @@ Widget _wrap(Widget child) {
   );
 }
 
-void _expectStackedInside(
+void _expectSideBySideInsideFelt(
   WidgetTester tester, {
-  required Finder columnOf,
+  required Rect felt,
+  required Finder nearLabel,
   required Finder items,
 }) {
-  final column = find
-      .ancestor(of: columnOf, matching: find.byType(Expanded))
-      .first;
-  final bounds = tester.getRect(column);
+  final labelCenter = tester.getCenter(nearLabel);
   final count = tester.widgetList(items).length;
-  final rects = [for (var i = 0; i < count; i++) tester.getRect(items.at(i))];
+  final rects = <Rect>[];
+  for (var i = 0; i < count; i++) {
+    final rect = tester.getRect(items.at(i));
+    // Keep visuals that share the option row's vertical band with the label.
+    if ((rect.center.dy - labelCenter.dy).abs() < 48) {
+      rects.add(rect);
+    }
+  }
   expect(rects.length, greaterThan(1));
   for (final rect in rects) {
-    expect(rect.left, greaterThanOrEqualTo(bounds.left - 0.5));
-    expect(rect.right, lessThanOrEqualTo(bounds.right + 0.5));
-    expect(rect.top, greaterThanOrEqualTo(bounds.top - 0.5));
-    expect(rect.bottom, lessThanOrEqualTo(bounds.bottom + 0.5));
+    expect(rect.left, greaterThanOrEqualTo(felt.left - 0.5));
+    expect(rect.right, lessThanOrEqualTo(felt.right + 0.5));
+    expect(rect.top, greaterThanOrEqualTo(felt.top - 0.5));
+    expect(rect.bottom, lessThanOrEqualTo(felt.bottom + 0.5));
   }
-  final sorted = [...rects]..sort((a, b) => a.top.compareTo(b.top));
+  final sorted = [...rects]..sort((a, b) => a.left.compareTo(b.left));
   for (var i = 1; i < sorted.length; i++) {
-    expect(sorted[i].top, greaterThan(sorted[i - 1].bottom - 0.5));
-    expect((sorted[i].left - sorted.first.left).abs(), lessThan(1));
+    expect(sorted[i].left, greaterThan(sorted[i - 1].right - 0.5));
+    expect((sorted[i].top - sorted.first.top).abs(), lessThan(2));
   }
 }

@@ -308,18 +308,17 @@ String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
   }
   if (activity.id == 'act-01-02-01-explain-ladder') {
     return 'Pair beats high card. Flush beats straight. '
-        'Tap each made hand from high card up to flush.';
+        'Tap seats from weakest hand to strongest.';
   }
   if (activity.id == 'act-01-02-01-checkpoint-winner') {
-    return 'Showdown. Tap your cards if the flush wins, their cards if '
-        'the straight wins, or the board to chop.';
+    return 'Showdown. Tap seats from strongest hand to weakest.';
   }
   if (activity.id == 'act-01-02-02-explain-five') {
     return 'Only five cards count. Tap each card that plays.';
   }
   if (activity.id == 'act-01-02-02-scaffolded-kicker') {
     return 'Same pair of kings. Tap your cards if the queen kicker wins, '
-        'their cards if the jack wins, or the board to chop.';
+        'their cards if the jack wins, or Chop if they tie.';
   }
   if (activity.id == 'act-01-02-02-unguided-board') {
     return 'The board is broadway. Tap the board if both play it, your '
@@ -651,12 +650,59 @@ String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
   return resolved.coach;
 }
 
+/// Whether this step intentionally leaves Hint disabled.
+bool lessonFrameHintsDisabled(CourseActivity activity) {
+  if (activity.stage == ActivityStage.jumpTest) return true;
+  final blob =
+      '${activity.id} ${activity.accessibilityText} ${activity.prompt ?? ''}'
+          .toLowerCase();
+  if (blob.contains('no hints')) return true;
+  // Capstone hands / explains that coach copy marks as no-hint.
+  const noHintIds = <String>{
+    'act-07-10-01-explain',
+    'act-07-10-02-explain',
+    'act-07-10-03-explain',
+    'act-07-10-04-explain',
+    'act-07-10-05-explain',
+    'act-07-10-01-hand',
+    'act-07-10-02-hand',
+    'act-07-10-03-hand',
+    'act-07-10-04-hand',
+    'act-07-10-05-hand',
+  };
+  return noHintIds.contains(activity.id);
+}
+
 /// Hint copy when the catalog step has no hint media.
+///
+/// Most interactive steps only author hints on a few guided beats. For the
+/// rest, reuse [CourseActivity.accessibilityText] as a short nudge — it is
+/// usually clearer than the spoken prompt and also unlocks quiet-stage cues
+/// when Hint is revealed.
 String? lessonFrameHintFallback(CourseActivity activity) {
+  if (lessonFrameHintsDisabled(activity)) return null;
+
   if (activity.id == 'act-01-01-01-explain-hole-cards') {
     return 'Your two cards are at your seat, along the bottom of the table.';
   }
-  return null;
+
+  // Explain steps already speak the teach line in the bubble.
+  if (activity.stage == ActivityStage.explain) return null;
+
+  final accessibility = activity.accessibilityText.trim();
+  if (accessibility.isEmpty) return null;
+
+  final prompt = activity.prompt?.trim() ?? '';
+  if (prompt.isNotEmpty &&
+      accessibility.toLowerCase() == prompt.toLowerCase()) {
+    // Still enable Hint on quieter stages so tap cues can unlock.
+    if (activity.stage == ActivityStage.unguided ||
+        activity.stage == ActivityStage.checkpoint) {
+      return accessibility;
+    }
+    return null;
+  }
+  return accessibility;
 }
 
 /// Coach-band mood for the current lesson beat.
@@ -692,7 +738,7 @@ class LessonCoachBand extends StatelessWidget {
     required this.expression,
   });
 
-  /// Width of Rex in the coach band. Height follows the full-body drawing.
+  /// Width of Rex in the coach band. Height is the upper-body crop.
   static const double mascotSize = 78;
 
   /// Bubble copy. Empty hides the words and keeps the mascot box.
@@ -708,7 +754,11 @@ class LessonCoachBand extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          RexMascot(size: mascotSize, mood: expression.rexMood),
+          RexMascot(
+            size: mascotSize,
+            mood: expression.rexMood,
+            crop: RexMascotCrop.upperBody,
+          ),
           const SizedBox(width: 2),
           Expanded(child: _SpeechBubble(text: speech)),
         ],
@@ -856,7 +906,7 @@ class LessonChromeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hearts = livesMax <= 0 ? 3 : livesMax;
+    final hearts = livesMax <= 0 ? 5 : livesMax;
     return SizedBox(
       height: 36,
       child: Padding(
@@ -1209,16 +1259,13 @@ class LessonScreenLayout extends StatelessWidget {
                 screenHeight: mq.size.height,
                 stageMaxHeight: constraints.maxHeight,
               );
-              final stageChild =
-                  mediaHeight == mq.size.height
-                      ? stage
-                      : MediaQuery(
-                        data: mq.copyWith(
-                          size: Size(mq.size.width, mediaHeight),
-                        ),
-                        child: stage,
-                      );
-              return stageChild;
+              // Always wrap — swapping a bare [stage] for MediaQuery when
+              // Nice! shrinks the stage remounts stateful felts (peek face-up,
+              // blinds step, suit taps) and resets their local state.
+              return MediaQuery(
+                data: mq.copyWith(size: Size(mq.size.width, mediaHeight)),
+                child: stage,
+              );
             },
           ),
         ),

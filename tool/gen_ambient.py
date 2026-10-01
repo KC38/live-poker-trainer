@@ -5,7 +5,7 @@ Prefer ``tool/gen_audio_ai.py`` (ElevenLabs multi-take) when an API key
 is available; this script remains the deterministic offline fallback.
 
 Soft drones and quiet room tone — calm felt atmosphere for the Home screen,
-not table SFX. Writes a WAV then (when ffmpeg is available) a compact MP3.
+not table SFX. Writes a gapless WAV (MP3 encoder delay causes loop pauses).
 
 Usage::
 
@@ -122,15 +122,12 @@ def encode_mp3(wav_path: pathlib.Path, mp3_name: str) -> pathlib.Path | None:
 
 
 def main() -> None:
-    """Writes lounge ambient WAV and compact MP3 when possible."""
+    """Writes a gapless lounge ambient WAV for ``SoundService``."""
     samples = build_lounge_ambient()
     wav_path = write_wav("lounge_ambient.wav", samples)
-    mp3_path = encode_mp3(wav_path, "lounge_ambient.mp3")
-    if mp3_path is not None:
-        wav_path.unlink(missing_ok=True)
-        print(f"Wrote {mp3_path} ({mp3_path.stat().st_size} bytes)")
-    else:
-        print(f"Wrote {wav_path} ({wav_path.stat().st_size} bytes; install ffmpeg for MP3)")
+    # Drop any legacy MP3 so the player cannot pick a gappy loop by mistake.
+    (OUT_DIR / "lounge_ambient.mp3").unlink(missing_ok=True)
+    print(f"Wrote {wav_path} ({wav_path.stat().st_size} bytes)")
 
 
 if __name__ == "__main__":

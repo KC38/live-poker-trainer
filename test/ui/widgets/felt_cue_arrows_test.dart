@@ -127,10 +127,91 @@ void main() {
     expect(find.byIcon(Icons.arrow_downward_rounded), findsOneWidget);
   });
 
+  testWidgets('board cue SoftPulses every dealt community card', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final game = _peekGame().copyWith(
+      community: [
+        CardModel.fromCode('Qs'),
+        CardModel.fromCode('Jh'),
+        CardModel.fromCode('2c'),
+      ],
+      street: Street.flop,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: game,
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              highlightBoard: true,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    // One arrow + CuePulse per dealt flop card — not a lone arrow over slots.
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(3));
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(3));
+    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNWidgets(3));
+  });
+
   testWidgets('no cue arrows when highlights are off', (tester) async {
     await _pumpFelt(tester, highlightHero: false, highlightBoard: false);
 
     expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
+  });
+
+  testWidgets('highlightHeroIndexes puts one arrow on that hole card', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: _peekGame(),
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              heroCardsFaceUp: true,
+              highlightHeroIndexes: const {0},
+              onHeroCardTap: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsNothing);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsOneWidget);
+
+    final arrow = tester.getCenter(
+      find.byKey(const ValueKey<String>('hero-cue-arrow-0')),
+    );
+    final leftCard = tester.getCenter(
+      find.byKey(const ValueKey<String>('lesson-hero-card-0')),
+    );
+    final rightCard = tester.getCenter(
+      find.byKey(const ValueKey<String>('lesson-hero-card-1')),
+    );
+    expect(arrow.dx, closeTo(leftCard.dx, 1));
+    expect((arrow.dx - rightCard.dx).abs(), greaterThan(20));
   });
 }

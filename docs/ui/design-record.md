@@ -105,9 +105,9 @@ The table is built for a phone held upright:
   so the felt spends its area on the board. Side seats sit above or below
   the board row, not beside it.
 - **Seat box.** One box per seat: a generic player icon, the name, and the
-  stack in large JetBrains Mono. Face-down cards tuck behind the top of the
-  box. The icon ring is colored by player type when player types are on,
-  and a type tag sits on the box's top edge.
+  stack in large JetBrains Mono. Hole cards sit fully above the box with a
+  small gap — neither covers the other. The icon ring is colored by player
+  type when player types are on, and a type tag sits on the box face.
 - **Around a seat.** Dealer, SB, and BB pucks sit beside the box, facing the
   felt. A street bet sits on the line from the seat toward the pot, clear of
   every seat. The action badge hangs from the bottom of the box.
@@ -425,6 +425,8 @@ Hole-card choice bands (`_HoleCardBands` in `select_identify_activity.dart`) fil
 
 Densified teach felts that ask for ~58% of screen height (`kTeachFeltHeightFactor` in `teach_felt_height.dart`) clamp to the stage when Nice! / Continue shrinks it. `LessonScreenLayout` rewrites MediaQuery height for every stage child, and `_feltShell` clamps again so blinds timing and other table scenes never bottom-overflow.
 
+Playing cards use one face everywhere: `TableCard` (corner rank, one centered suit). `MiniCard` and `CardBack` are size presets over `TableCard` / `TableCardBack` for densified lesson trays — they must not invent a second face.
+
 A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
 
 ### Shipped
@@ -445,12 +447,12 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 | Slot | Current | Reuse |
 | --- | --- | --- |
 | Logo | `assets/brand/logo_mark.svg` — gold mark, transparent background, via `BrandLogo` | Welcome, Auth screen, and Live Training hub. Rasterized to launcher / notification icons via `tools/brand/render_logo_assets.mjs` |
-| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Welcome, Meet Rex, `RexCoachLine`, `RexCoachCard`, and the lesson coach band |
+| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Welcome, Meet Rex, `RexCoachLine`, `RexCoachCard`; lesson coach band uses the same slot with `RexMascotCrop.upperBody` |
 | Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet`, the lesson coach band on accept, and the lesson-result ceremony |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
 | Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
 | Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` (regenerate with `tool/gen_audio_ai.py`) | Table actions call these. Do not add a second chip sound |
-| Background music | `assets/sounds/lounge_ambient.mp3` via `SoundService.startHomeBgm` (regenerate with `tool/gen_audio_ai.py`) | Home. Pause when leaving Home. Settings toggle is `musicEnabled` |
+| Background music | `assets/sounds/lounge_ambient.wav` via `SoundService.startHomeBgm` from app launch (incl. onboarding; regenerate with `tool/gen_audio_ai.py`). SoLoud loops it in the mixer; `integration_test/bgm_loop_test.dart` checks the restart is sample-continuous | Pauses in background and in Live Training. Settings toggle is `musicEnabled` |
 
 The mascot slot is the full-body coach with a mood. Meet Rex and the Rex line on Your start show that drawing. Text-only `RexCoachLine` is not the slot.
 
@@ -512,8 +514,10 @@ One row, height 36.
 ### 2. Coach band
 
 The mascot and one speech bubble share a row directly under the chrome.
-The mascot is `RexMascot` at width 78 (height follows the full-body
-drawing), the same coach as Meet Rex and the lesson-result ceremony.
+The mascot is `RexMascot` at width 78 with `RexMascotCrop.upperBody`
+(head through torso; legs clipped), the same coach as Meet Rex and the
+lesson-result ceremony. Full-body stays for Meet Rex, Home, and the
+lesson-result ceremony.
 The bubble is a rounded rectangle with a tail aimed at the
 coach's mouth. A plain rectangle is not the bubble. The bubble's top
 and that tail stay in the same place on every step. More text grows
@@ -606,10 +610,8 @@ frame and the full table: one community card per suit, board ranks for
 order, and face-up seats for suited / pair. Button and blinds uses the
 same frame; its stage is the full table, with the dealer button, small
 blind, and big blind on the seats. Hand ranks uses the same frame and the
-full table: the explain ladder cycles made hands on the felt, order steps
-show a made hand on the table with category answers under the felt, the
-spot sits face up on the table, and the showdown taps You / Them on that
-table. Best five
+full table: every step is a multiway showdown with face-up seats, and the
+learner taps seats from weakest to strongest or strongest to weakest. Best five
 and kickers uses the same frame and the full table: explain taps the
 five cards that play on hero holes and the board, guided and checkpoint
 build the best five by tapping those seven cards, and a kicker battle

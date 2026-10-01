@@ -16,9 +16,10 @@ void main() {
         reason: 'Missing SFX asset ${kind.fileName} in gen_audio_ai.py',
       );
     }
-    expect(script, contains('out_name="lounge_ambient.mp3"'));
+    expect(script, contains('out_name="lounge_ambient.wav"'));
     expect(script, contains('ELEVENLABS_API_KEY'));
     expect(script, contains('tool/.env.local'));
+    expect(script, contains('make_seamless_loop_wav'));
   });
 
   test('bundled sound assets exist for SoundService', () {
@@ -27,8 +28,9 @@ void main() {
       expect(path.existsSync(), isTrue, reason: path.path);
       expect(path.lengthSync(), greaterThan(1000));
     }
-    final ambient = File('assets/sounds/lounge_ambient.mp3');
+    final ambient = File('assets/sounds/lounge_ambient.wav');
     expect(ambient.existsSync(), isTrue);
     expect(ambient.lengthSync(), greaterThan(1000));
+    expect(File('assets/sounds/lounge_ambient.mp3').existsSync(), isFalse);
   });
 }

@@ -28,6 +28,12 @@ void main() {
     expect(
       text,
       contains(
+        'Playing cards use one face everywhere: `TableCard` (corner rank, one centered suit). `MiniCard` and `CardBack` are size presets over `TableCard` / `TableCardBack` for densified lesson trays — they must not invent a second face.',
+      ),
+    );
+    expect(
+      text,
+      contains(
         'A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column.',
       ),
     );
@@ -45,7 +51,7 @@ void main() {
         'The Live Training hub shows `assets/brand/logo_mark.svg` above the lock or the table entry.',
       ),
     );
-    expect(text, contains('lounge_ambient.mp3'));
+    expect(text, contains('lounge_ambient.wav'));
     expect(text, contains('## Lesson screen layout'));
     expect(text, contains('## Gamified learning'));
     expect(

@@ -27,7 +27,7 @@ class PokerActionSizingActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spot = resolveLessonActionSpot(activity);
+    final spot = dealtLessonActionSpot(activity, generation: controller.bindGeneration);
     final tableMode = isLessonActionTableActivity(activity) && spot != null;
     final villainType = lessonNamedVillainType([
       spot?.villainLine,
@@ -74,7 +74,10 @@ class PokerActionSizingActivity extends StatelessWidget {
             );
 
         if (tableMode) {
-          final pulseTarget = _guidedPulseTargetId(activity);
+          final pulseTarget = _hintPulseTargetId(
+            activity,
+            hintVisible: controller.hintVisible,
+          );
           final pulseChoiceId =
               showGuidance && !locked && selected == null
                   ? pulseTarget
@@ -297,13 +300,23 @@ class PokerActionSizingActivity extends StatelessWidget {
 }
 
 /// Soft-pulse dock target for guided / scaffolded teach spots (ignores lock).
-String? _guidedPulseTargetId(CourseActivity activity) {
-  if (activity.stage != ActivityStage.guided &&
-      activity.stage != ActivityStage.scaffolded &&
-      activity.stage != ActivityStage.checkpoint &&
-      activity.stage != ActivityStage.jumpTest) {
-    return null;
+///
+/// When [hintVisible] is true, quieter stages also resolve a target: prefer the
+/// authored map, otherwise pulse the first choice (nearly always recommended).
+String? _hintPulseTargetId(
+  CourseActivity activity, {
+  required bool hintVisible,
+}) {
+  final mapped = _guidedPulseTargetId(activity);
+  if (mapped != null) return mapped;
+  if (hintVisible && activity.choices.isNotEmpty) {
+    return activity.choices.first.id;
   }
+  return null;
+}
+
+/// Authored SoftPulse dock target by activity id (any stage).
+String? _guidedPulseTargetId(CourseActivity activity) {
   return switch (activity.id) {
     'act-01-03-01-guided-fold' => 'fold-72',
     'act-01-03-01-scaffolded-check' => 'check-free',

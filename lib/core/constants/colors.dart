@@ -3,7 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 
-/// Brand and UI colors (emerald felt, gold accents, navy charcoal, 4-color deck).
+/// Brand and UI colors (emerald felt, gold accents, navy charcoal, 2-color deck).
 class AppColors {
   AppColors._();
 
@@ -32,11 +32,11 @@ class AppColors {
   static const Color success = Color(0xFF2DB87A);
   static const Color warning = Color(0xFFE5A84B);
 
-  // 4-color deck
+  // Standard 2-color deck: black (clubs/spades), red (hearts/diamonds)
   static const Color spades = Color(0xFF0F172A);
   static const Color hearts = Color(0xFFDC2626);
-  static const Color diamonds = Color(0xFF2563EB);
-  static const Color clubs = Color(0xFF16A34A);
+  static const Color diamonds = Color(0xFFDC2626);
+  static const Color clubs = Color(0xFF0F172A);
 
   // Archetypes — restrained, readable on dark
   static const Color maniac = Color(0xFFE07A3A);

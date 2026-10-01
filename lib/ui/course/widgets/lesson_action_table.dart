@@ -1,11 +1,14 @@
 /// Mini-table + action-dock visuals for Fold/Check/Call and Bet/Raise/All-in.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -53,6 +56,49 @@ class LessonActionSpot {
     if (match == null) return null;
     return int.tryParse(match.group(1)!);
   }
+
+  /// Copy with remapped hole / board codes.
+  LessonActionSpot copyWithCodes({
+    List<String>? heroCodes,
+    List<String>? boardCodes,
+  }) {
+    return LessonActionSpot(
+      heroCodes: heroCodes ?? this.heroCodes,
+      boardCodes: boardCodes ?? this.boardCodes,
+      potLabel: potLabel,
+      villainLine: villainLine,
+      streetLabel: streetLabel,
+      stackLabel: stackLabel,
+      facingBet: facingBet,
+      identifyUnavailable: identifyUnavailable,
+      openPot: openPot,
+      feltStatusLine: feltStatusLine,
+    );
+  }
+}
+
+/// Authored spot with suits permuted for this attempt (stable within [generation]).
+LessonActionSpot? dealtLessonActionSpot(
+  CourseActivity activity, {
+  int generation = 0,
+  Random? random,
+}) {
+  final spot = resolveLessonActionSpot(activity);
+  if (spot == null) return null;
+  if (!lessonSuitRemapEnabled) return spot;
+  final rng = resolveLessonDealRandom(
+    activityId: activity.id,
+    generation: generation,
+    random: random,
+  );
+  final remapped = permuteCardSuitGroups(
+    [spot.heroCodes, spot.boardCodes],
+    rng,
+  );
+  return spot.copyWithCodes(
+    heroCodes: remapped[0],
+    boardCodes: remapped[1],
+  );
 }
 
 /// Resolves a teaching spot for Section 1 action lessons.
@@ -1151,6 +1197,34 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
       );
   }
   return null;
+}
+
+/// Toy-hand step with suits permuted for this attempt.
+LessonActionSpot? dealtToyHandStepSpot({
+  required String activityId,
+  required String stepId,
+  int generation = 0,
+  Random? random,
+}) {
+  final spot = resolveToyHandStepSpot(
+    activityId: activityId,
+    stepId: stepId,
+  );
+  if (spot == null) return null;
+  if (!lessonSuitRemapEnabled) return spot;
+  final rng = resolveLessonDealRandom(
+    activityId: '$activityId/$stepId',
+    generation: generation,
+    random: random,
+  );
+  final remapped = permuteCardSuitGroups(
+    [spot.heroCodes, spot.boardCodes],
+    rng,
+  );
+  return spot.copyWithCodes(
+    heroCodes: remapped[0],
+    boardCodes: remapped[1],
+  );
 }
 
 /// Mini-table spot for one authored multi-step hand decision.

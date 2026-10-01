@@ -147,6 +147,22 @@ class CourseService {
     });
   }
 
+  /// Refills hearts via gems, ad claim, or practice claim.
+  Future<RefillCourseHeartsResult> refillHearts({
+    required String method,
+    required String idempotencyKey,
+    String? catalogVersion,
+  }) async {
+    _requireAuth();
+    final data = await _callWithRetry('refillCourseHearts', <String, dynamic>{
+      'clientVersion': clientVersion,
+      'method': method,
+      'idempotencyKey': idempotencyKey,
+      if (catalogVersion != null) 'catalogVersion': catalogVersion,
+    });
+    return RefillCourseHeartsResult.fromJson(data);
+  }
+
   /// Issues a short-lived anonymous progress transfer receipt.
   Future<Map<String, dynamic>> issueAnonymousProgressTransfer({
     String? catalogVersion,

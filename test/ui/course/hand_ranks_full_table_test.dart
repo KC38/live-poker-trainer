@@ -1,4 +1,4 @@
-/// Hand ranks teaches on the full poker table, not ladder tiles.
+/// Hand ranks teaches multiway showdown seat order on the full poker table.
 library;
 
 import 'package:flutter/material.dart';
@@ -32,8 +32,24 @@ Widget _frame(Widget child) {
   );
 }
 
+Future<void> _tapShowdownInCorrectOrder(WidgetTester tester) async {
+  final table = tester.widget<LessonShowdownOrderTable>(
+    find.byType(LessonShowdownOrderTable),
+  );
+  for (final id in table.spot.correctOrder) {
+    final seat = table.spot.seatIds.indexOf(id);
+    final key = seat == 0
+        ? const ValueKey<String>('lesson-seat-hero')
+        : ValueKey<String>('lesson-seat-$seat');
+    await tester.tap(find.byKey(key));
+    await tester.pump();
+  }
+}
+
 void main() {
-  testWidgets('explain ladder taps made hands on the full table', (tester) async {
+  testWidgets('explain showdown taps seats weak to strong on the full table', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -69,20 +85,16 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byType(LessonHandLadderExplainTable), findsOneWidget);
+    expect(find.byType(LessonShowdownOrderExplainTable), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.byType(HandRankLadderDemo), findsNothing);
+    expect(find.byType(LessonHandLadderExplainTable), findsNothing);
 
-    for (var i = 0; i < HandRankLadderDemo.rungs.length; i++) {
-      await tester.tap(find.byKey(const ValueKey('lesson-board')));
-      await tester.pump();
-    }
+    await _tapShowdownInCorrectOrder(tester);
     expect(ack, 1);
   });
 
-  testWidgets('guided ladder orders under the felt on the full table', (
-    tester,
-  ) async {
+  testWidgets('guided showdown orders seats on the full table', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
@@ -93,13 +105,13 @@ void main() {
       stage: ActivityStage.guided,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 50,
-      accessibilityText: 'Tap high card, then pair, then flush.',
+      accessibilityText: 'Showdown — tap You, Sam, then Jo.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap weakest to strongest.',
       sequenceItems: const [
-        CourseChoice(id: 'hr-high', label: 'High card'),
-        CourseChoice(id: 'hr-pair', label: 'One pair'),
-        CourseChoice(id: 'hr-flush', label: 'Flush'),
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
     final controller = LessonActivityController(activity: activity);
@@ -117,17 +129,12 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.byType(LessonMadeHandTable), findsOneWidget);
+    expect(find.byType(LessonShowdownOrderTable), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.byKey(const ValueKey('hand-order-felt')), findsNothing);
 
-    await tester.tap(find.text('High card'));
-    await tester.pump();
-    await tester.tap(find.text('One pair'));
-    await tester.pump();
-    await tester.tap(find.text('Flush'));
-    await tester.pump();
-    expect(controller.draft.orderedIds, ['hr-high', 'hr-pair', 'hr-flush']);
+    await _tapShowdownInCorrectOrder(tester);
+    expect(controller.draft.orderedIds, ['you', 'sam', 'jo']);
     expect(autoSubmits, 1);
   });
 }

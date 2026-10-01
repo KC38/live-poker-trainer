@@ -1,6 +1,8 @@
 /// Suits and ranks teaches on the full poker table, not suit/rank tiles.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -9,6 +11,7 @@ import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.
 import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
@@ -299,6 +302,10 @@ void main() {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
+    addTearDown(() => debugLessonCardDealRandom = null);
+
+    // Seed keeps Sam (seat 1) as the suited answer so the tap target is known.
+    debugLessonCardDealRandom = Random(3);
 
     final activity = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
@@ -315,6 +322,10 @@ void main() {
         CourseChoice(id: 'pair-77', label: '7c 7d'),
       ],
     );
+    final expected = dealHoleHandSeatPlan(
+      activity,
+      random: Random(3),
+    )!;
     final controller = LessonActivityController(activity: activity);
     addTearDown(controller.dispose);
     var autoSubmits = 0;
@@ -333,7 +344,8 @@ void main() {
     expect(find.byType(LessonHoleHandTable), findsOneWidget);
     expect(find.byKey(const ValueKey('hole-card-bands')), findsNothing);
 
-    await tester.tap(find.text('You'));
+    const seatNames = ['You', 'Sam', 'Jo'];
+    await tester.tap(find.text(seatNames[expected.correctSeatIndex]));
     await tester.pump();
     expect(controller.draft.choiceId, 'suited-ah-kh');
     expect(autoSubmits, 1);

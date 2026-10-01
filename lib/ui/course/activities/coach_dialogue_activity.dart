@@ -115,6 +115,22 @@ class CoachDialogueActivity extends StatelessWidget {
           );
         }
         if (framed && visual.kind == CoachDialogueVisualKind.handLadder) {
+          if (handRanksShowdownSpot('act-01-02-01-explain-ladder') != null) {
+            return LessonShowdownOrderExplainTable(
+              key: ValueKey<String>(
+                'act-01-02-01-explain-ladder-${controller.bindGeneration}',
+              ),
+              activityId: 'act-01-02-01-explain-ladder',
+              enabled: !locked,
+              showGuidance: showGuidance,
+              onComplete: locked ? null : onFeltAcknowledge,
+              onMiss: () {
+                LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                  'Tap seats from weakest hand to strongest.',
+                );
+              },
+            );
+          }
           return LessonHandLadderExplainTable(
             enabled: !locked,
             showGuidance: showGuidance,
@@ -1504,7 +1520,7 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.positionLabels =>
       'Tap the button (BTN) — the latest seat.',
     CoachDialogueVisualKind.handLadder =>
-      'Tap each made hand from high card up to flush.',
+      'Tap seats from weakest hand to strongest.',
     CoachDialogueVisualKind.bestFive =>
       'Tap each playing card — only five of seven play.',
     CoachDialogueVisualKind.passiveActions => 'Tap Fold, Check, and Call.',
@@ -2823,7 +2839,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('your two') ||
       blob.contains('yours alone') ||
       blob.contains('nobody else sees')) {
-    final scene = resolveLessonTableScene(activity);
+    final scene = dealtLessonTableScene(activity, generation: 0);
     final codes =
         scene != null && scene.heroCodes.length >= 2
             ? scene.heroCodes.take(2).toList(growable: false)

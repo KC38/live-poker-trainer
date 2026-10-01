@@ -24,10 +24,13 @@ Usage::
 from __future__ import annotations
 
 import argparse
+import array
 import json
+import math
 import os
 import pathlib
 import shutil
+import struct
 import subprocess
 import tempfile
 import urllib.error
@@ -156,7 +159,7 @@ ASSETS: tuple[AssetSpec, ...] = (
     ),
     AssetSpec(
         name="lounge_ambient",
-        out_name="lounge_ambient.mp3",
+        out_name="lounge_ambient.wav",
         kind="ambient",
         text=AMBIENT_VARIANTS[0][1],
         duration_seconds=14.0,
@@ -299,53 +302,83 @@ def decode_mono_wav(src: pathlib.Path, dest: pathlib.Path, sample_rate: int = 44
     )
 
 
-def crossfade_loop_wav(src: pathlib.Path, dest: pathlib.Path, xfade_sec: float = 2.0) -> None:
-    """Crossfades the end of ``src`` into its start for cleaner looping."""
-    with wave.open(str(src), "rb") as handle:
-        n_channels = handle.getnchannels()
-        sampwidth = handle.getsampwidth()
+def _read_mono_pcm16(path: pathlib.Path) -> tuple[array.array, int]:
+    """Reads a mono 16-bit WAV into a sample array and sample rate."""
+    with wave.open(str(path), "rb") as handle:
+        if handle.getnchannels() != 1 or handle.getsampwidth() != 2:
+            raise RuntimeError(
+                f"expected mono 16-bit wav, got {handle.getnchannels()}ch "
+                f"{handle.getsampwidth()}B"
+            )
         rate = handle.getframerate()
-        frames = handle.readframes(handle.getnframes())
-    if n_channels != 1 or sampwidth != 2:
-        raise RuntimeError(f"expected mono 16-bit wav, got {n_channels}ch {sampwidth}B")
+        samples = array.array("h")
+        samples.frombytes(handle.readframes(handle.getnframes()))
+    return samples, rate
 
-    import array
-    import struct
 
-    samples = array.array("h")
-    samples.frombytes(frames)
-    xfade = min(len(samples) // 4, int(xfade_sec * rate))
-    if xfade < 8:
-        dest.write_bytes(src.read_bytes())
-        return
-    out = samples[:]
-    for i in range(xfade):
-        alpha = i / xfade
-        end_i = len(samples) - xfade + i
-        blended = int(out[end_i] * (1.0 - alpha) + samples[i] * alpha)
-        out[end_i] = max(-32767, min(32767, blended))
-    with wave.open(str(dest), "wb") as handle:
+def _write_mono_pcm16(path: pathlib.Path, samples: array.array, rate: int) -> None:
+    """Writes a mono 16-bit WAV."""
+    with wave.open(str(path), "wb") as handle:
         handle.setnchannels(1)
         handle.setsampwidth(2)
         handle.setframerate(rate)
-        handle.writeframes(struct.pack(f"<{len(out)}h", *out))
+        handle.writeframes(struct.pack(f"<{len(samples)}h", *samples))
 
 
-def polish_ambient_mp3(src: pathlib.Path, dest: pathlib.Path, target_lufs: float) -> None:
-    """Softens harsh highs, crossfades the loop point, and loudness-normalizes."""
+def make_seamless_loop_wav(
+    src: pathlib.Path,
+    dest: pathlib.Path,
+    xfade_sec: float = 3.0,
+) -> None:
+    """Builds a true seamless loop via overlap-add crossfade.
+
+    Crossfades the clipped-off tail onto the start, then drops that tail so
+    ``out[-1]`` and ``out[0]`` were adjacent samples in the source. Equal-power
+    fades avoid a dip at the join. WAV (not MP3) preserves gapless playback.
+    """
+    samples, rate = _read_mono_pcm16(src)
+    xfade = min(len(samples) // 3, max(8, int(xfade_sec * rate)))
+    if len(samples) <= xfade * 2:
+        dest.write_bytes(src.read_bytes())
+        return
+
+    out_len = len(samples) - xfade
+    out = array.array("h", samples[:out_len])
+    for i in range(xfade):
+        t = i / xfade
+        # Equal-power: start fades in, discarded tail fades out.
+        fade_in = math.sin(t * math.pi * 0.5)
+        fade_out = math.cos(t * math.pi * 0.5)
+        mixed = int(samples[i] * fade_in + samples[out_len + i] * fade_out)
+        out[i] = max(-32767, min(32767, mixed))
+
+    _write_mono_pcm16(dest, out, rate)
+    # Loop join should match original adjacency (samples[out_len-1] → samples[out_len]).
+    join_delta = abs(out[-1] - out[0])
+    src_delta = abs(samples[out_len - 1] - samples[out_len])
+    print(
+        f"  seamless loop: {len(out)/rate:.2f}s, xfade={xfade/rate:.2f}s, "
+        f"join_delta={join_delta} (src_adj={src_delta})"
+    )
+
+
+def polish_ambient_wav(src: pathlib.Path, dest: pathlib.Path, target_lufs: float) -> None:
+    """EQ/loudnorm first, then seamless-loop last, writing gapless WAV."""
     dest.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = pathlib.Path(tmp)
         raw = tmp_path / "raw.wav"
+        shaped_ext = tmp_path / "shaped_ext.wav"
+        shaped = tmp_path / "shaped.wav"
         looped = tmp_path / "looped.wav"
-        decode_mono_wav(src, raw)
-        crossfade_loop_wav(raw, looped, xfade_sec=2.0)
+        decode_mono_wav(src, raw, sample_rate=44100)
+        # Shape before looping so loudnorm cannot reopen a seam afterward.
         run_ffmpeg(
             [
                 "ffmpeg",
                 "-y",
                 "-i",
-                str(looped),
+                str(raw),
                 "-af",
                 (
                     "highpass=f=45,lowpass=f=6500,"
@@ -353,12 +386,32 @@ def polish_ambient_mp3(src: pathlib.Path, dest: pathlib.Path, target_lufs: float
                     f"loudnorm=I={target_lufs}:TP=-2.0:LRA=8"
                 ),
                 "-c:a",
-                "libmp3lame",
-                "-qscale:a",
-                "4",
-                str(dest),
+                "pcm_s16le",
+                str(shaped_ext),
             ]
         )
+        # loudnorm often writes WAVE_FORMAT_EXTENSIBLE; re-wrap as classic PCM.
+        run_ffmpeg(
+            [
+                "ffmpeg",
+                "-y",
+                "-i",
+                str(shaped_ext),
+                "-ac",
+                "1",
+                "-ar",
+                "44100",
+                "-c:a",
+                "pcm_s16le",
+                "-map_metadata",
+                "-1",
+                str(shaped),
+            ]
+        )
+        # Loop last and write it untouched: any resample after this point
+        # filters the two ends independently and reopens the seam.
+        make_seamless_loop_wav(shaped, looped, xfade_sec=3.0)
+        shutil.copyfile(looped, dest)
 
 
 def mix_wavs(paths: list[pathlib.Path], dest: pathlib.Path, gains_db: list[float]) -> None:
@@ -541,7 +594,7 @@ def write_winner(spec: AssetSpec, src: pathlib.Path) -> pathlib.Path:
     if spec.kind == "sfx":
         convert_to_wav(src, dest, spec.target_lufs)
     else:
-        polish_ambient_mp3(src, dest, spec.target_lufs)
+        polish_ambient_wav(src, dest, spec.target_lufs)
     print(f"wrote {dest.relative_to(REPO)} ({dest.stat().st_size} bytes)")
     return dest
 

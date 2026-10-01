@@ -1,4 +1,4 @@
-/// Seat on the felt: hole cards over one box with the icon, name, and stack.
+/// Seat on the felt: hole cards above one box with the icon, name, and stack.
 library;
 
 import 'dart:async';
@@ -51,7 +51,8 @@ class SeatMetrics {
           (hero ? (compact ? 52.0 : 58.0) : (compact ? 26.0 : 30.0)) *
           (hero && review ? _reviewGrowth : 1) *
           scale,
-      cardTuck: hero ? 0.24 : 0.3,
+      // No tuck — hole cards and the name box must not cover each other.
+      cardTuck: 0,
       cardGap: (hero ? 4.0 : 2.0) * scale,
       scale: scale,
     );
@@ -60,13 +61,16 @@ class SeatMetrics {
   /// Hero card growth while a finished hand is reviewed.
   static const double _reviewGrowth = 1.12;
 
+  /// Clear air between the hole-card bottoms and the seat-box top.
+  static const double cardBoxGap = 2;
+
   /// The seat box.
   final Size pod;
 
   /// Face-up hole card width.
   final double cardWidth;
 
-  /// Share of a hole card's height hidden behind the top of the box.
+  /// Share of a hole card's height that may sit over the box (always zero).
   final double cardTuck;
 
   /// Gap between the two hole cards.
@@ -81,11 +85,11 @@ class SeatMetrics {
   /// Face-up hole card height.
   double get cardHeight => cardWidth * tableCardAspect;
 
-  /// Pixels of a face-up card tucked behind the box.
+  /// Pixels of a face-up card that may sit over the box (always zero).
   double get tuck => cardHeight * cardTuck;
 
-  /// Card height visible above the box.
-  double get cardsAbove => cardHeight - tuck;
+  /// Vertical space reserved above the box for hole cards (+ gap).
+  double get cardsAbove => cardHeight - tuck + cardBoxGap * scale;
 
   /// Width of a face-up pair.
   double get cardsWidth => cardWidth * 2 + cardGap;
@@ -103,7 +107,7 @@ class SeatMetrics {
   );
 }
 
-/// One seat: hole cards tucked behind a box with the icon, name, and stack.
+/// One seat: hole cards fully above a box with the icon, name, and stack.
 ///
 /// Pucks, bets, and action badges are placed by the felt around [SeatMetrics.podIn].
 class PlayerSeatWidget extends StatelessWidget {
@@ -202,22 +206,22 @@ class PlayerSeatWidget extends StatelessWidget {
           children: [
             if (cards != null)
               Positioned(
+                key: ValueKey<String>('seat-cards-layer-${player.id}'),
                 left: 0,
                 right: 0,
-                bottom: pod.height - m.tuck,
-                child: Align(
-                  alignment:
-                      _typed
-                          ? const Alignment(0.35, 1)
-                          : Alignment.bottomCenter,
-                  child: cards,
-                ),
+                bottom: pod.height + SeatMetrics.cardBoxGap * scale - m.tuck,
+                child: Align(alignment: Alignment.bottomCenter, child: cards),
               ),
-            Positioned.fromRect(rect: pod, child: _box(m)),
+            Positioned.fromRect(
+              key: ValueKey<String>('seat-box-layer-${player.id}'),
+              rect: pod,
+              child: _box(m),
+            ),
             if (_typed)
               Positioned(
+                // Keep the type tag on the box face so it never covers cards.
                 left: pod.left + 4 * scale,
-                top: pod.top - 7 * scale,
+                top: pod.top + 2 * scale,
                 child: _TypeTag(archetype: player.archetype, scale: scale),
               ),
           ],
@@ -444,7 +448,7 @@ class _TypeTag extends StatelessWidget {
 }
 
 /// Dealer, small-blind, or big-blind puck beside a seat box.
-class SeatPuck extends StatelessWidget {
+class SeatPuck extends StatefulWidget {
   /// Creates a puck reading [label] (`D`, `SB`, or `BB`).
   const SeatPuck({super.key, required this.label, this.scale = 1});
 
@@ -455,36 +459,58 @@ class SeatPuck extends StatelessWidget {
   static const double diameter = 18;
 
   @override
+  State<SeatPuck> createState() => _SeatPuckState();
+}
+
+class _SeatPuckState extends State<SeatPuck> {
+  double _pop = 0.7;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) setState(() => _pop = 1);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final label = widget.label;
+    final scale = widget.scale;
     final color = switch (label) {
       'D' => AppColors.cream,
       'SB' => AppColors.goldMuted,
       _ => AppColors.goldBright,
     };
-    final d = diameter * scale;
-    return Container(
-      key: ValueKey<String>('puck-$label'),
-      width: d,
-      height: d,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.bgDark.withValues(alpha: 0.5)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
-            blurRadius: 3,
-            offset: const Offset(0, 1),
+    final d = SeatPuck.diameter * scale;
+    return AnimatedScale(
+      scale: _pop,
+      duration: const Duration(milliseconds: 220),
+      curve: Curves.easeOutBack,
+      child: Container(
+        key: ValueKey<String>('puck-$label'),
+        width: d,
+        height: d,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.bgDark.withValues(alpha: 0.5)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.4),
+              blurRadius: 3,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.jetBrainsMono(
+            fontSize: (label.length > 1 ? 7.5 : 9.5) * scale,
+            fontWeight: FontWeight.w800,
+            color: AppColors.bgDark,
           ),
-        ],
-      ),
-      child: Text(
-        label,
-        style: GoogleFonts.jetBrainsMono(
-          fontSize: (label.length > 1 ? 7.5 : 9.5) * scale,
-          fontWeight: FontWeight.w800,
-          color: AppColors.bgDark,
         ),
       ),
     );
@@ -492,7 +518,7 @@ class SeatPuck extends StatelessWidget {
 }
 
 /// Committed chips for the current street.
-class StreetBetPill extends StatelessWidget {
+class StreetBetPill extends StatefulWidget {
   /// Creates a street-commitment chip pill.
   const StreetBetPill({super.key, required this.label, this.compact = false});
 
@@ -522,39 +548,74 @@ class StreetBetPill extends StatelessWidget {
   final bool compact;
 
   @override
+  State<StreetBetPill> createState() => _StreetBetPillState();
+}
+
+class _StreetBetPillState extends State<StreetBetPill> {
+  double _pop = 0.55;
+  double _opacity = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _pop = 1;
+          _opacity = 1;
+        });
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: compact ? 5 : 7, vertical: 2),
-        decoration: BoxDecoration(
-          color: AppColors.bgDark.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: AppColors.gold.withValues(alpha: 0.85),
-            width: 1,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.danger,
-                border: Border.all(color: AppColors.cream, width: 1.2),
+    final compact = widget.compact;
+    return AnimatedOpacity(
+      opacity: _opacity,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeOut,
+      child: AnimatedScale(
+        scale: _pop,
+        duration: const Duration(milliseconds: 280),
+        curve: Curves.easeOutBack,
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: compact ? 5 : 7,
+              vertical: 2,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.bgDark.withValues(alpha: 0.9),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: AppColors.gold.withValues(alpha: 0.85),
+                width: 1,
               ),
             ),
-            const SizedBox(width: 4),
-            Text(
-              label,
-              maxLines: 1,
-              softWrap: false,
-              style: textStyle(compact: compact),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.danger,
+                    border: Border.all(color: AppColors.cream, width: 1.2),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  widget.label,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: StreetBetPill.textStyle(compact: compact),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -610,6 +671,9 @@ class _SeatWaitTimerState extends State<_SeatWaitTimer> {
 }
 
 /// Card back used by lesson widgets that draw [MiniCard] rows.
+///
+/// Matches [TableCardBack] so face-down cards share one design with the
+/// live table.
 class CardBack extends StatelessWidget {
   /// Creates a card back.
   const CardBack({super.key, this.size = MiniCardSize.tiny});
@@ -619,19 +683,6 @@ class CardBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dims = size.dimensions;
-    return Container(
-      width: dims.width,
-      height: dims.height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF7C1D2B), Color(0xFF4A0F1B)],
-        ),
-        border: Border.all(color: AppColors.cream.withValues(alpha: 0.5)),
-      ),
-    );
+    return TableCardBack(width: size.dimensions.width);
   }
 }

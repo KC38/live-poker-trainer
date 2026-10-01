@@ -113,7 +113,7 @@ LessonHandExample? resolveHandExample({
     case 'chop-kicker':
       return const LessonHandExample(
         id: 'chop-kicker',
-        title: 'Chop the pot',
+        title: 'Chop',
         codes: [],
       );
     case 'chop-broadway':
@@ -734,8 +734,8 @@ LessonHandExample? resolveHandExample({
 
 /// Whether this activity should render sequence items as hand examples.
 bool isHandExampleSequenceActivity(CourseActivity activity) {
-  if (activity.id.startsWith('act-01-02-01-') ||
-      activity.id == 'act-01-06-02-jump-ranks') {
+  if (isShowdownOrderSequenceActivity(activity.id)) return false;
+  if (activity.id == 'act-01-06-02-jump-ranks') {
     return true;
   }
   if (activity.sequenceItems.isEmpty) return false;
@@ -778,34 +778,57 @@ class HandExampleTile extends StatelessWidget {
         // Skip bad demo codes.
       }
     }
+    // Text-only expandable tiles (e.g. Chop) must read as dock buttons —
+    // felt fill + left label looks like a strip, not a tap target.
+    final dockButton =
+        expand && cards.isEmpty && badge == null && onPressed != null;
     final border =
         selected
             ? AppColors.gold
+            : dockButton
+            ? AppColors.slate
             : AppColors.slateDark.withValues(alpha: 0.85);
+    final fill =
+        selected
+            ? AppColors.gold.withValues(alpha: 0.18)
+            : dockButton
+            ? AppColors.bgElevated
+            : AppColors.feltLight.withValues(alpha: 0.92);
     final child = AnimatedContainer(
       duration: const Duration(milliseconds: 160),
       width: expand ? double.infinity : null,
+      constraints:
+          dockButton ? const BoxConstraints(minHeight: 48) : null,
       padding: EdgeInsets.fromLTRB(
         compact ? 8 : 10,
+        dockButton ? 14 : (compact ? 8 : 10),
         compact ? 8 : 10,
-        compact ? 8 : 10,
-        compact ? 8 : 10,
+        dockButton ? 14 : (compact ? 8 : 10),
       ),
+      alignment: dockButton ? Alignment.center : null,
       decoration: BoxDecoration(
-        color:
-            selected
-                ? AppColors.gold.withValues(alpha: 0.18)
-                : AppColors.feltLight.withValues(alpha: 0.92),
+        color: fill,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: border, width: selected ? 2.2 : 1.2),
+        border: Border.all(
+          color: border,
+          width: selected ? 2.2 : (dockButton ? 1.4 : 1.2),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment:
-            expand ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+            dockButton
+                ? CrossAxisAlignment.center
+                : expand
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
         children: [
           Row(
             mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
+            mainAxisAlignment:
+                dockButton
+                    ? MainAxisAlignment.center
+                    : MainAxisAlignment.start,
             children: [
               if (badge != null) ...[
                 Text(
@@ -818,14 +841,15 @@ class HandExampleTile extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
               ],
-          Text(
-            example.title,
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontSize: compact ? 12 : 13,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
+              Text(
+                example.title,
+                textAlign: dockButton ? TextAlign.center : TextAlign.start,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: dockButton ? 15 : (compact ? 12 : 13),
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
             ],
           ),
           if (cards.isNotEmpty) ...[

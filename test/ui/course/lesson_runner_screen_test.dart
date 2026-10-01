@@ -12,12 +12,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_catalog_provider.dart';
+import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
@@ -49,6 +51,7 @@ class _ScriptedCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -720,7 +723,7 @@ void main() {
     for (
       var i = 0;
       i < 40 &&
-          find.textContaining('made hand from high card').evaluate().isEmpty;
+          find.textContaining('Tap seats from weakest').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -730,7 +733,7 @@ void main() {
     expect(find.text('Hand ranks'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('made hand from high card'), findsOneWidget);
+    expect(find.textContaining('Tap seats from weakest'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
     expect(find.byKey(const ValueKey('lesson-table-stage')), findsOneWidget);
@@ -4378,6 +4381,59 @@ void main() {
     expect(find.textContaining('taking too long'), findsOneWidget);
   });
 
+  testWidgets('bootstrap chrome keeps Home hearts instead of flashing full', (
+    tester,
+  ) async {
+    const home = CourseHomeSnapshot(
+      status: CourseHomeLoadStatus.ready,
+      nodes: [],
+      sections: [],
+      hearts: 4,
+      livesMax: 5,
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => catalog),
+          courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: LessonRunnerScreen(
+            lessonId: kFirstCourseLessonId,
+            courseService: _HungStartCourseService(catalog),
+            startRequestId: 'start_hearts_boot',
+            bootstrapTimeout: const Duration(milliseconds: 80),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    final loading = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(loading.livesRemaining, 4);
+    expect(loading.livesMax, 5);
+    expect(find.byIcon(Icons.favorite), findsNWidgets(5));
+
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump();
+    final errored = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(errored.livesRemaining, 4);
+    expect(errored.livesMax, 5);
+  });
+
   testWidgets('stale activity submit resyncs to server resume cursor', (
     tester,
   ) async {
@@ -4952,6 +5008,7 @@ class _SameStepStaleCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5021,6 +5078,7 @@ class _StaleThenResumeCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5117,6 +5175,7 @@ class _PermissionDeniedStartCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5148,6 +5207,7 @@ class _PermissionDeniedOnceCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5182,6 +5242,7 @@ class _PrerequisiteLockedCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5214,6 +5275,7 @@ class _HungStartCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
@@ -5226,6 +5288,15 @@ class _HungStartCourseService extends CourseService {
   }) {
     return Completer<StartCourseLessonResult>().future;
   }
+}
+
+class _FixedHomeHearts extends CourseHomeController {
+  _FixedHomeHearts(this.snapshot);
+
+  final CourseHomeSnapshot snapshot;
+
+  @override
+  Future<CourseHomeSnapshot> build() async => snapshot;
 }
 
 Future<void> _pumpUntil(WidgetTester tester, Finder finder) async {
@@ -5301,6 +5372,7 @@ class _TinyLessonService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {}
 
