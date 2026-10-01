@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 /// Demo cards + short caption for a hand-category teaching token.
 class LessonHandExample {
@@ -972,7 +973,7 @@ class _HandRankLadderDemoState extends State<HandRankLadderDemo> {
         (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
 
     Widget rungAt(int i) {
-      return _SoftPulseTarget(
+      return GlowHighlight(
         active:
             widget.interactive &&
             widget.enabled &&
@@ -1183,7 +1184,7 @@ class _LessonHandFamiliesExplainTableState
           alignment: WrapAlignment.center,
           children: [
             for (final family in HandFamiliesDemo.families)
-              _SoftPulseTarget(
+              GlowHighlight(
                 active:
                     teaching &&
                     widget.showGuidance &&
@@ -1331,7 +1332,7 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
         (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
 
     Widget familyAt(int i) {
-      return _SoftPulseTarget(
+      return GlowHighlight(
         active:
             widget.interactive &&
             widget.enabled &&
@@ -1454,76 +1455,6 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
-  }
-}
-
-/// Soft gold pulse around the next family tile.
-class _SoftPulseTarget extends StatefulWidget {
-  const _SoftPulseTarget({required this.active, required this.child});
-
-  final bool active;
-  final Widget child;
-
-  @override
-  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
-}
-
-class _SoftPulseTargetState extends State<_SoftPulseTarget>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    if (widget.active) {
-      _pulse.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.active && !_pulse.isAnimating) {
-      _pulse.repeat(reverse: true);
-    } else if (!widget.active && _pulse.isAnimating) {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.active) return widget.child;
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final glow = 0.4 + (_pulse.value * 0.55);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.65),
-                blurRadius: 12 + (10 * _pulse.value),
-                spreadRadius: 1 + (2 * _pulse.value),
-              ),
-            ],
-          ),
-          child: child,
-        );
-      },
-      child: widget.child,
-    );
   }
 }
 
