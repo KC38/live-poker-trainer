@@ -253,12 +253,13 @@ void main() {
       stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.orderSequence,
       estimatedSeconds: 50,
-      accessibilityText: 'Put UTG, HJ, and BTN in preflop action order.',
+      accessibilityText: 'Put UTG, HJ, CO, and BTN in preflop action order.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap seats in the order they act preflop after blinds.',
       sequenceItems: const [
         CourseChoice(id: 'seat-utg', label: 'UTG'),
         CourseChoice(id: 'seat-hj', label: 'HJ'),
+        CourseChoice(id: 'seat-co', label: 'CO'),
         CourseChoice(id: 'seat-btn', label: 'BTN'),
       ],
     );
@@ -288,12 +289,15 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('HJ'));
     await tester.pump();
+    await tester.tap(find.text('CO'));
+    await tester.pump();
     await tester.tap(find.text('BTN'));
     await tester.pump();
 
     expect(controller.draft.orderedIds, [
       'seat-utg',
       'seat-hj',
+      'seat-co',
       'seat-btn',
     ]);
     expect(autoSubmits, 1);

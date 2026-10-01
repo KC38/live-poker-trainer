@@ -153,6 +153,7 @@ void main() {
     ]);
     expect(lessonActionOrderSeatIndex('UTG'), 0);
     expect(lessonActionOrderSeatIndex('ep'), 0);
+    expect(lessonActionOrderSeatIndex('CO'), 2);
     expect(lessonActionOrderSeatIndex('BTN'), 3);
     expect(lessonActionOrderSeatIndex('SB'), 4);
     expect(lessonActionOrderSeatIndex('unknown'), isNull);

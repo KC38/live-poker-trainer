@@ -344,7 +344,7 @@ String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
     return 'Later seats see more. Tap the button.';
   }
   if (activity.id == 'act-02-01-02-explain-order') {
-    return 'Preflop starts left of the big blind. Tap EP, then HJ, then BTN.';
+    return 'Preflop starts left of the big blind. Tap UTG, then HJ, CO, then BTN.';
   }
   if (activity.id == 'act-02-02-01-explain-families') {
     return 'Pairs, broadways, suited aces, connectors. Tap each family.';

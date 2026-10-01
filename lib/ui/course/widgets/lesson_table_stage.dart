@@ -674,7 +674,7 @@ class _LessonBlindsClockwiseTableState
   }
 }
 
-/// Preflop order: UTG, then HJ, then the button. A wrong seat is a miss.
+/// Preflop order: UTG, HJ, CO, then the button. A wrong seat is a miss.
 class LessonPreflopOrderTable extends StatefulWidget {
   /// Creates the order stage.
   const LessonPreflopOrderTable({
@@ -684,7 +684,7 @@ class LessonPreflopOrderTable extends StatefulWidget {
     this.enabled = true,
   });
 
-  /// The learner tapped UTG, HJ, and the button in that order.
+  /// The learner tapped UTG, HJ, CO, and the button in that order.
   final VoidCallback? onComplete;
 
   /// A seat other than the next required one was tapped.
@@ -699,7 +699,12 @@ class LessonPreflopOrderTable extends StatefulWidget {
 }
 
 class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
-  static const _order = <int>[0, 1, lessonBlindsButtonIndex];
+  static const _order = <int>[
+    0,
+    1,
+    lessonBlindsRightOfButtonIndex,
+    lessonBlindsButtonIndex,
+  ];
 
   int _step = 0;
 
