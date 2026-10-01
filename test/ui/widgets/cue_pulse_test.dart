@@ -47,6 +47,43 @@ void main() {
     expect(ring.height, closeTo(60 + pad.vertical, 0.5));
   });
 
+  testWidgets('reserved SoftPulse keeps the same face size when SoftPulse toggles', (
+    tester,
+  ) async {
+    Future<Size> pumpActive(bool active) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 120,
+                height: 80,
+                child: GlowHighlight(
+                  active: active,
+                  animated: false,
+                  child: const ColoredBox(
+                    key: ValueKey<String>('pulse-child'),
+                    color: Color(0xFF112233),
+                    child: SizedBox.expand(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      return tester.getSize(find.byKey(const ValueKey<String>('pulse-child')));
+    }
+
+    final off = await pumpActive(false);
+    final on = await pumpActive(true);
+    expect(on, off);
+    // Face is inset by outset on each side inside the fixed outer box.
+    expect(off.width, closeTo(120 - 2 * GlowHighlight.softBleed - 2 * GlowHighlight.outset, 0.5));
+    expect(off.height, closeTo(80 - 2 * GlowHighlight.softBleed - 2 * GlowHighlight.outset, 0.5));
+  });
+
   testWidgets('felt SoftPulse paints the ring outside the child box', (
     tester,
   ) async {
@@ -81,12 +118,13 @@ void main() {
     expect(ring.bottom, closeTo(child.bottom + pad.bottom, 0.5));
   });
 
-  testWidgets('inactive GlowHighlight draws the child only', (tester) async {
+  testWidgets('inactive felt SoftPulse draws the child only', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
           body: GlowHighlight(
             active: false,
+            reserveLayout: false,
             child: SizedBox(
               key: ValueKey<String>('pulse-child'),
               width: 40,
