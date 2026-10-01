@@ -223,6 +223,7 @@ class CommunityCardsView extends StatelessWidget {
         ],
         GlowHighlight(
           active: highlightBoardGroup,
+          reserveLayout: false,
           borderRadius: 10 * scale,
           padding: EdgeInsets.all(4 * scale),
           child: SizedBox(
@@ -376,6 +377,7 @@ class _BoardCardTarget extends StatelessWidget {
     final cardFace = GlowHighlight(
       active: highlight || selected,
       animated: highlight && !selected,
+      reserveLayout: false,
       borderRadius: width * 0.12,
       child: _RevealedCard(
         card: card,

@@ -260,6 +260,7 @@ class PlayerSeatWidget extends StatelessWidget {
     return GlowHighlight(
       active: highlighted || selected,
       animated: highlighted && !selected,
+      reserveLayout: false,
       borderRadius: m.cardWidth * 0.12,
       child: TableCard(
         card: player.holeCards[i],

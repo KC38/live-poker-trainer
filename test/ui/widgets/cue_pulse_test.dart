@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 void main() {
-  testWidgets('active GlowHighlight expands the gold ring by outset on every side', (
+  testWidgets('reserved SoftPulse ring keeps outset around the child', (
     tester,
   ) async {
     const pad = EdgeInsets.all(GlowHighlight.outset);
@@ -36,14 +36,49 @@ void main() {
     );
 
     expect(GlowHighlight.outset, 6);
+    expect(GlowHighlight.softBleed, 8);
     expect(GlowHighlight.gutter, GlowHighlight.outset * 2);
     expect(ring.top, closeTo(child.top - pad.top, 0.5));
     expect(ring.left, closeTo(child.left - pad.left, 0.5));
     expect(ring.right, closeTo(child.right + pad.right, 0.5));
     expect(ring.bottom, closeTo(child.bottom + pad.bottom, 0.5));
-    expect(pad.top, pad.left);
-    expect(pad.top, pad.right);
-    expect(pad.top, pad.bottom);
+    // softBleed is reserved outside the ring so neighbors stay clear.
+    expect(ring.width, closeTo(80 + pad.horizontal, 0.5));
+    expect(ring.height, closeTo(60 + pad.vertical, 0.5));
+  });
+
+  testWidgets('felt SoftPulse paints the ring outside the child box', (
+    tester,
+  ) async {
+    const pad = EdgeInsets.all(GlowHighlight.outset);
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: GlowHighlight(
+              reserveLayout: false,
+              child: SizedBox(
+                key: ValueKey<String>('pulse-child'),
+                width: 80,
+                height: 60,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final child = tester.getRect(
+      find.byKey(const ValueKey<String>('pulse-child')),
+    );
+    final ring = tester.getRect(
+      find.byKey(const ValueKey<String>('glow-highlight-ring')),
+    );
+    expect(ring.top, closeTo(child.top - pad.top, 0.5));
+    expect(ring.left, closeTo(child.left - pad.left, 0.5));
+    expect(ring.right, closeTo(child.right + pad.right, 0.5));
+    expect(ring.bottom, closeTo(child.bottom + pad.bottom, 0.5));
   });
 
   testWidgets('inactive GlowHighlight draws the child only', (tester) async {
