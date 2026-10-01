@@ -29,6 +29,26 @@ bool isLessonBlindsFrameActivity(String activityId) {
       activityId == 'act-01-01-03-checkpoint-layout';
 }
 
+/// Felt seat SoftPulse should mark for [highlight], if any.
+///
+/// Shared by blinds / position frame steps so answer cues always go through
+/// [LessonTableStage.cueSeatIndex] (CuePulse + CueArrows) — never the action
+/// glow from [LessonTableStage.activeSeatIndex].
+int? lessonSeatIndexForHighlight(LessonTableHighlight highlight) {
+  return switch (highlight) {
+    LessonTableHighlight.button => lessonBlindsButtonIndex,
+    LessonTableHighlight.smallBlind => lessonBlindsSmallBlindIndex,
+    LessonTableHighlight.bigBlind => lessonBlindsBigBlindIndex,
+    LessonTableHighlight.cutoff => 2,
+    LessonTableHighlight.hijack => 1,
+    LessonTableHighlight.earlyPosition => 0,
+    LessonTableHighlight.none ||
+    LessonTableHighlight.hero ||
+    LessonTableHighlight.board =>
+      null,
+  };
+}
+
 /// Felt tap for a Button and blinds step, in the grader's region or seat.
 LessonTableTapTarget? lessonBlindsFrameTarget(String activityId, int seatIndex) {
   switch (activityId) {
@@ -1457,18 +1477,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                             'act-01-01-03-scaffolded-blinds' ||
                         widget.controller.draft.choiceId == 'bb-two' ||
                         (widget.controller.lastResult?.accepted ?? false),
-                    activeSeatIndex: switch (scene.highlight) {
-                      LessonTableHighlight.button => lessonBlindsButtonIndex,
-                      LessonTableHighlight.smallBlind =>
-                        lessonBlindsSmallBlindIndex,
-                      LessonTableHighlight.bigBlind =>
-                        lessonBlindsBigBlindIndex,
-                      _ => null,
-                    },
+                    // SoftPulse (CuePulse + arrows) only — never gold-tip via
+                    // activeSeatIndex before Hint on quieter stages.
                     cueSeatIndex:
-                        _cuesAnswerSeat(locked) &&
-                                scene.highlight == LessonTableHighlight.button
-                            ? lessonBlindsButtonIndex
+                        _cuesAnswerSeat(locked)
+                            ? lessonSeatIndexForHighlight(scene.highlight)
                             : null,
                     enabled: !locked,
                     onSeatIndexTap:
@@ -1585,26 +1598,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                           sbIndex: lessonBlindsSmallBlindIndex,
                           bbIndex: lessonBlindsBigBlindIndex,
                           positionLabels: true,
-                          activeSeatIndex:
-                              widget.activity.id == 'act-02-07-02-jump-pos'
-                                  ? null
-                                  : switch (scene.highlight) {
-                            LessonTableHighlight.button =>
-                              lessonBlindsButtonIndex,
-                            LessonTableHighlight.smallBlind =>
-                              lessonBlindsSmallBlindIndex,
-                            LessonTableHighlight.bigBlind =>
-                              lessonBlindsBigBlindIndex,
-                            LessonTableHighlight.cutoff => 2,
-                            LessonTableHighlight.hijack => 1,
-                            LessonTableHighlight.earlyPosition => 0,
-                            _ => null,
-                          },
+                          // SoftPulse only — activeSeatIndex would spoil the
+                          // answer seat before Hint on scaffolded / quieter.
                           cueSeatIndex:
-                              _cuesAnswerSeat(locked) &&
-                                      scene.highlight ==
-                                          LessonTableHighlight.button
-                                  ? lessonBlindsButtonIndex
+                              _cuesAnswerSeat(locked)
+                                  ? lessonSeatIndexForHighlight(scene.highlight)
                                   : null,
                           enabled: !locked,
                           onSeatIndexTap:

@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
+import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 CourseCatalog _catalog() {
@@ -318,6 +319,101 @@ void main() {
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(3));
     expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNWidgets(3));
     expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsNothing);
+    controller.dispose();
+  });
+
+  testWidgets('scaffolded blinds SoftPulse only after hint', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-03-scaffolded-blinds',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the seat that posts the big blind.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'h',
+          kind: 'hint',
+          text:
+              'Blinds sit left of the button — the bigger forced bet posts two.',
+        ),
+      ],
+      prompt: 'Blinds are 1/2. Tap who posts the big blind.',
+      choices: const [
+        CourseChoice(id: 'bb-two', label: 'The seat two left of the button'),
+        CourseChoice(id: 'sb-one', label: 'The seat immediately left'),
+        CourseChoice(id: 'btn-posts', label: 'The button posts both'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(390, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: TableFeaturesScope(
+            features: TableFeatures.forLessonId(
+              'lesson-01-01-03-blinds-and-button',
+            ),
+            child: LessonFrameScope(
+              onLocalMiss: (_) {},
+              child: AnimatedBuilder(
+                animation: controller,
+                builder: (context, _) {
+                  return SizedBox(
+                    height: 560,
+                    child: SelectIdentifyActivity(
+                      activity: activity,
+                      controller: controller,
+                      showGuidance: controller.showTargetCue,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final bbSeat = find.byKey(
+      ValueKey<String>('lesson-seat-$lessonBlindsBigBlindIndex'),
+    );
+    expect(bbSeat, findsOneWidget);
+    // No SoftPulse / action-glow spoiler before Hint.
+    expect(
+      find.byKey(ValueKey<String>('seat-cue-$lessonBlindsBigBlindIndex')),
+      findsNothing,
+    );
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNothing);
+    expect(
+      tester
+          .widget<PlayerSeatWidget>(
+            find.descendant(
+              of: bbSeat,
+              matching: find.byType(PlayerSeatWidget),
+            ),
+          )
+          .isActive,
+      isFalse,
+    );
+
+    controller.revealHint();
+    await tester.pump();
+
+    // Same SoftPulse as hole / board cues: CuePulse ring + CueArrows.
+    expect(
+      find.byKey(ValueKey<String>('seat-cue-$lessonBlindsBigBlindIndex')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsOneWidget);
+    expect(tester.takeException(), isNull);
     controller.dispose();
   });
 
