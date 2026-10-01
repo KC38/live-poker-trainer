@@ -66,11 +66,10 @@ void main() {
 
   test('guided SoftPulse leaves Hint disabled — cues are already on', () {
     final guided = _hintActivity(
-      id: 'act-01-02-01-guided-ladder',
+      id: 'act-01-01-01-guided-find-holes',
       stage: ActivityStage.guided,
-      accessibilityText:
-          'Showdown — tap You (high card), Sam (pair), then Jo (flush).',
-      prompt: 'Tap weakest to strongest.',
+      accessibilityText: 'Tap your hole cards on the table.',
+      prompt: 'Tap the cards that belong to you.',
     );
     expect(lessonFrameHintShownByDefault(guided), isTrue);
     expect(lessonFrameHintsDisabled(guided), isTrue);
@@ -84,6 +83,22 @@ void main() {
     );
     expect(lessonFrameHintShownByDefault(scaffolded), isFalse);
     expect(lessonFrameHintsDisabled(scaffolded), isFalse);
+  });
+
+  test('same-concept guided keeps Hint so SoftPulse can unlock', () {
+    final guided = _hintActivity(
+      id: 'act-01-01-02-guided-suits',
+      stage: ActivityStage.guided,
+      accessibilityText: 'Tap hearts, diamonds, clubs, and spades on the board.',
+      prompt: 'Tap one community card of each suit.',
+    );
+    expect(lessonFrameSoftPulseQuietByDefault(guided), isTrue);
+    expect(lessonFrameHintShownByDefault(guided), isFalse);
+    expect(lessonFrameHintsDisabled(guided), isFalse);
+    expect(
+      lessonFrameHintFallback(guided),
+      'Tap hearts, diamonds, clubs, and spades on the board.',
+    );
   });
 
   test('hint fallback stays off for explain, jump tests, and no-hint caps', () {

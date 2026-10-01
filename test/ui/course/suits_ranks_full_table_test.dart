@@ -16,6 +16,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart'
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -147,6 +148,59 @@ void main() {
     expect(controller.draft.choiceId, 'suits-full');
     expect(autoSubmits, 1);
   });
+
+  testWidgets(
+    'guided suits keeps SoftPulse off until Hint (same concept as explain)',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final activity = CourseActivity(
+        id: 'act-01-01-02-guided-suits',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText:
+            'Tap hearts, diamonds, clubs, and spades on the board.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap one community card of each suit.',
+        choices: const [
+          CourseChoice(
+            id: 'suits-full',
+            label: 'Hearts, diamonds, clubs, spades',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+      expect(controller.showTargetCue, isFalse);
+
+      await tester.pumpWidget(
+        _frame(
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, _) {
+              return SelectIdentifyActivity(
+                activity: activity,
+                controller: controller,
+                showGuidance: controller.showTargetCue,
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(LessonSuitBoardTable), findsOneWidget);
+      expect(find.byType(CueArrows), findsNothing);
+
+      controller.revealHint();
+      await tester.pump();
+      expect(controller.showTargetCue, isTrue);
+      expect(find.byType(CueArrows), findsWidgets);
+    },
+  );
 
   testWidgets('guided suits star distractor is a miss', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
