@@ -78,6 +78,20 @@ void main() {
     );
   });
 
+  test('board-plays showdown names the three tap targets without broadway jargon', () {
+    final activity = _catalog().sections
+        .expand((s) => s.units)
+        .expand((u) => u.lessons)
+        .expand((l) => l.activities)
+        .firstWhere((a) => a.id == 'act-01-02-02-unguided-board');
+    expect(
+      lessonFrameSpeech(activity),
+      'Both checked down. Tap the board if both play it, your cards '
+      'if a higher hole card wins, or their cards if the button wins '
+      'automatically.',
+    );
+  });
+
   test('scene-only copy gains the step instruction', () {
     const dock = 'Tap your action below the table.';
     expect(
