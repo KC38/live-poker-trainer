@@ -101,13 +101,13 @@ LessonHandExample? resolveHandExample({
     case 'you-kicker':
       return const LessonHandExample(
         id: 'you-kicker',
-        title: 'You — kings, Q kicker',
+        title: 'You — better kicker',
         codes: ['Kh', 'Kd', 'Ah', 'Qd', '7c'],
       );
     case 'they-kicker':
       return const LessonHandExample(
         id: 'they-kicker',
-        title: 'They — kings, J kicker',
+        title: 'They — better kicker',
         codes: ['Kh', 'Kd', 'As', 'Jd', '7c'],
       );
     case 'chop-kicker':

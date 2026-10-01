@@ -23165,7 +23165,7 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap who wins.',
       choices: const [
-        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'you-kicker', label: 'You win — better kicker'),
         CourseChoice(id: 'they-kicker', label: 'They win'),
         CourseChoice(id: 'chop-kicker', label: 'Chop'),
       ],
@@ -23265,7 +23265,7 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap who wins.',
       choices: const [
-        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'you-kicker', label: 'You win — better kicker'),
         CourseChoice(id: 'they-kicker', label: 'They win'),
         CourseChoice(id: 'chop-kicker', label: 'Chop'),
       ],
@@ -23317,7 +23317,7 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap who wins.',
       choices: const [
-        CourseChoice(id: 'you-kicker', label: 'You win — queen kicker'),
+        CourseChoice(id: 'you-kicker', label: 'You win — better kicker'),
         CourseChoice(id: 'they-kicker', label: 'They win'),
         CourseChoice(id: 'chop-kicker', label: 'Chop'),
       ],

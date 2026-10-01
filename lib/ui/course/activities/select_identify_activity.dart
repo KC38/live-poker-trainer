@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
+import 'package:live_poker_trainer/ui/course/kicker_showdown.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -492,17 +493,27 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       );
     }
     if (mapped == null) return;
+    final scene = dealtLessonTableScene(
+      widget.activity,
+      generation: widget.controller.bindGeneration,
+    );
+    final bankChoiceId =
+        remapKickerShowdownChoiceId(
+          activityId: widget.activity.id,
+          semanticChoiceId: mapped,
+          heroCodes: scene?.heroCodes,
+          boardCodes: scene?.boardCodes,
+          villainCodes: scene?.villainCodes,
+        ) ??
+        mapped;
     setState(() {
       _selectedRegion = target.region;
       _selectedSeatIndex = target.seatIndex;
     });
     widget.controller.selectChoice(
-      mapped,
+      bankChoiceId,
       autoSubmit: true,
-      seatLabel: seatLabelForTableTap(
-        dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration),
-        target,
-      ),
+      seatLabel: seatLabelForTableTap(scene, target),
     );
   }
 
@@ -1399,10 +1410,21 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                           selected: selected == 'chop-kicker',
                           enabled: !locked,
                           expand: true,
-                          onPressed: () => widget.controller.selectChoice(
-                            'chop-kicker',
-                            autoSubmit: true,
-                          ),
+                          onPressed: () {
+                            final bankChoiceId =
+                                remapKickerShowdownChoiceId(
+                                  activityId: widget.activity.id,
+                                  semanticChoiceId: 'chop-kicker',
+                                  heroCodes: scene.heroCodes,
+                                  boardCodes: scene.boardCodes,
+                                  villainCodes: scene.villainCodes,
+                                ) ??
+                                'chop-kicker';
+                            widget.controller.selectChoice(
+                              bankChoiceId,
+                              autoSubmit: true,
+                            );
+                          },
                         ),
                       ],
                     ],
@@ -1735,10 +1757,21 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                   onPressed:
                       locked
                           ? null
-                          : () => widget.controller.selectChoice(
-                            'chop-kicker',
-                            autoSubmit: true,
-                          ),
+                          : () {
+                            final bankChoiceId =
+                                remapKickerShowdownChoiceId(
+                                  activityId: widget.activity.id,
+                                  semanticChoiceId: 'chop-kicker',
+                                  heroCodes: scene.heroCodes,
+                                  boardCodes: scene.boardCodes,
+                                  villainCodes: scene.villainCodes,
+                                ) ??
+                                'chop-kicker';
+                            widget.controller.selectChoice(
+                              bankChoiceId,
+                              autoSubmit: true,
+                            );
+                          },
                 ),
               ],
             ],
@@ -2310,9 +2343,18 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
       choices: widget.activity.choices,
     );
     if (mapped == null) return;
+    final bankChoiceId =
+        remapKickerShowdownChoiceId(
+          activityId: widget.activity.id,
+          semanticChoiceId: mapped,
+          heroCodes: scene?.heroCodes,
+          boardCodes: scene?.boardCodes,
+          villainCodes: scene?.villainCodes,
+        ) ??
+        mapped;
     setState(() => _selectedRegion = region);
     widget.controller.selectChoice(
-      mapped,
+      bankChoiceId,
       autoSubmit: true,
       seatLabel: scene == null ? null : seatLabelForTableTap(scene, target),
     );
@@ -2400,9 +2442,18 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                             choices: widget.activity.choices,
                           );
                           if (mapped == null) return;
+                          final bankChoiceId =
+                              remapKickerShowdownChoiceId(
+                                activityId: widget.activity.id,
+                                semanticChoiceId: mapped,
+                                heroCodes: scene.heroCodes,
+                                boardCodes: scene.boardCodes,
+                                villainCodes: scene.villainCodes,
+                              ) ??
+                              mapped;
                           setState(() => _selectedRegion = target.region);
                           widget.controller.selectChoice(
-                            mapped,
+                            bankChoiceId,
                             autoSubmit: true,
                             seatLabel: seatLabelForTableTap(scene, target),
                           );
@@ -2451,10 +2502,21 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                         onPressed:
                             locked
                                 ? null
-                                : () => widget.controller.selectChoice(
-                                  choice.id,
-                                  autoSubmit: true,
-                                ),
+                                : () {
+                                  final bankChoiceId =
+                                      remapKickerShowdownChoiceId(
+                                        activityId: widget.activity.id,
+                                        semanticChoiceId: choice.id,
+                                        heroCodes: scene?.heroCodes,
+                                        boardCodes: scene?.boardCodes,
+                                        villainCodes: scene?.villainCodes,
+                                      ) ??
+                                      choice.id;
+                                  widget.controller.selectChoice(
+                                    bankChoiceId,
+                                    autoSubmit: true,
+                                  );
+                                },
                       );
                     },
                   ),

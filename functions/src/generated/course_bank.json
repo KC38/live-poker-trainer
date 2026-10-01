@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "270ff25f28d0bbe208845a2300fc88ae1f836f46733949a619d21c4b25dc3a40",
+  "contentChecksum": "d9f818e52d5956b4dbb73322f0b7085c62cbdc01fb6085f2137c4d2089e9c334",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1119,7 +1119,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the winner of the king-pair kicker battle.",
+                  "accessibilityText": "Tap who wins when kickers break a tied pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1146,7 +1146,7 @@
                       "accessibilityText": "They win — their kicker",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Queen beats jack as kicker.",
+                        "feedback": "Higher kicker takes it — look again.",
                         "betterChoiceId": "you-kicker"
                       }
                     },
@@ -22000,7 +22000,7 @@
         },
         "they-kicker": {
           "grade": "clear_mistake",
-          "feedback": "Queen beats jack as kicker.",
+          "feedback": "Higher kicker takes it — look again.",
           "betterChoiceId": "you-kicker"
         },
         "chop-kicker": {
