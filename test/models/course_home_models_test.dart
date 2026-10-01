@@ -150,9 +150,12 @@ void main() {
     expect(snap.nextLessonId, 'lesson-a');
     expect(snap.nodes[0].state, CourseNodeState.available);
     expect(snap.nodes[0].isNext, isTrue);
+    expect(snap.nodes[0].previewXp, previewLessonXp(1));
+    expect(snap.nodes[0].previewXp, 35);
     expect(snap.nodes[1].state, CourseNodeState.locked);
     expect(snap.nodes[1].lockReason, contains('Lesson A'));
     expect(snap.nodes[1].kind, CourseNodeKind.jumpTest);
+    expect(snap.nodes[1].previewXp, 35);
     expect(snap.nodes[2].kind, CourseNodeKind.handLab);
   });
 
