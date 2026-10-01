@@ -677,11 +677,38 @@ bool lessonFrameHintsDisabled(CourseActivity activity) {
   return noHintIds.contains(activity.id);
 }
 
+/// Guided steps that replay an interactive explain SoftPulse task.
+///
+/// The first node already taught the same tap concept with SoftPulse on.
+/// SoftPulse stays off here until the learner asks for Hint.
+const Set<String> lessonFrameSameConceptQuietIds = {
+  // Suits explain: tap one board card per suit → guided repeats with a ★ decoy.
+  'act-01-01-02-guided-suits',
+  // Button explain: tap button → SB → BB → guided asks for the button again.
+  'act-01-01-03-guided-button',
+  // Hand-ranks explain: weakest → strongest seats → guided repeats the order.
+  'act-01-02-01-guided-ladder',
+  // Best-five explain: tap cards that play → guided builds the five again.
+  'act-01-02-02-guided-seven',
+  // Streets explain: tap each street → guided orders the same four streets.
+  'act-01-04-01-guided-streets',
+};
+
+/// Whether SoftPulse / tap cues stay off until Hint on this step.
+///
+/// True when [activity] is a same-concept practice after an interactive
+/// explain (see [lessonFrameSameConceptQuietIds]).
+bool lessonFrameSoftPulseQuietByDefault(CourseActivity activity) {
+  return lessonFrameSameConceptQuietIds.contains(activity.id);
+}
+
 /// Whether SoftPulse / answer cues are already visible without Hint.
 ///
 /// Guided (new-concept) steps SoftPulse the answer by default, so Hint would
-/// be a no-op. Quieter stages keep Hint so learners can unlock those cues.
+/// be a no-op. Same-concept guided replays stay SoftPulse-quiet, so Hint
+/// remains available to unlock cues. Quieter stages keep Hint too.
 bool lessonFrameHintShownByDefault(CourseActivity activity) {
+  if (lessonFrameSoftPulseQuietByDefault(activity)) return false;
   return activity.stage == ActivityStage.guided;
 }
 

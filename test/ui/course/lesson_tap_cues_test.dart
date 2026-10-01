@@ -502,4 +502,75 @@ void main() {
     expect(tester.takeException(), isNull);
     controller.dispose();
   });
+
+  test('same-concept guided nodes stay SoftPulse-quiet until Hint', () {
+    expect(lessonFrameSameConceptQuietIds, isNotEmpty);
+    for (final id in lessonFrameSameConceptQuietIds) {
+      final activity = _catalog().sections
+          .expand((s) => s.units)
+          .expand((u) => u.lessons)
+          .expand((l) => l.activities)
+          .firstWhere((a) => a.id == id);
+      expect(activity.stage, ActivityStage.guided, reason: id);
+      final controller = LessonActivityController(activity: activity);
+      expect(
+        controller.showTargetCue,
+        isFalse,
+        reason: '$id should not SoftPulse by default',
+      );
+      controller.revealHint();
+      expect(
+        controller.showTargetCue,
+        isTrue,
+        reason: '$id SoftPulse unlocks on Hint',
+      );
+      controller.dispose();
+    }
+  });
+
+  test(
+    'same-concept quiet ids follow an interactive explain in the same lesson',
+    () {
+      final catalogIds = <String>{};
+      for (final section in _catalog().sections) {
+        for (final unit in section.units) {
+          for (final lesson in unit.lessons) {
+            final acts = [...lesson.activities]
+              ..sort((a, b) => a.order.compareTo(b.order));
+            for (final activity in acts) {
+              catalogIds.add(activity.id);
+              if (!lessonFrameSameConceptQuietIds.contains(activity.id)) {
+                continue;
+              }
+              CourseActivity? explain;
+              for (final prior in acts) {
+                if (prior.stage == ActivityStage.explain &&
+                    prior.order < activity.order) {
+                  explain = prior;
+                  break;
+                }
+              }
+              expect(
+                explain,
+                isNotNull,
+                reason: '${activity.id} needs a prior explain in ${lesson.id}',
+              );
+              final explainObjectives = explain!.objectives.toSet();
+              expect(
+                activity.objectives.any(explainObjectives.contains),
+                isTrue,
+                reason:
+                    '${activity.id} should share an objective with '
+                    '${explain.id}',
+              );
+            }
+          }
+        }
+      }
+      expect(
+        lessonFrameSameConceptQuietIds.difference(catalogIds),
+        isEmpty,
+      );
+    },
+  );
 }

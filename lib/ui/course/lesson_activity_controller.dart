@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 
 /// Draft answer the learner is composing.
 class ActivityDraft {
@@ -91,13 +92,17 @@ class LessonActivityController extends ChangeNotifier {
 
   /// Whether SoftPulse / tap cues should remain visible.
   ///
-  /// Teaching stages keep their authored cues. Revealing a hint unlocks the
+  /// Teaching stages keep their authored cues. Same-concept guided replays
+  /// after an interactive explain stay quiet until Hint (see
+  /// [lessonFrameSoftPulseQuietByDefault]). Revealing a hint unlocks the
   /// same highlights on quieter stages (unguided / checkpoint / jump-test).
-  bool get showTargetCue =>
-      _hintVisible ||
-      activity.stage == ActivityStage.explain ||
-      activity.stage == ActivityStage.guided ||
-      activity.stage == ActivityStage.scaffolded;
+  bool get showTargetCue {
+    if (_hintVisible) return true;
+    if (lessonFrameSoftPulseQuietByDefault(activity)) return false;
+    return activity.stage == ActivityStage.explain ||
+        activity.stage == ActivityStage.guided ||
+        activity.stage == ActivityStage.scaffolded;
+  }
 
   void bindActivity(CourseActivity next) {
     // Always reset local draft/feedback — including rebinding the same
