@@ -20,6 +20,17 @@ const _complete = CompleteCourseLessonResult(
   duplicate: false,
 );
 
+const _imperfect = CompleteCourseLessonResult(
+  attemptId: 'a2',
+  lessonId: 'lesson-01-03-02-bet-raise-allin',
+  xpAwarded: 25,
+  mastery: 0.8,
+  streak: 1,
+  acceptedAccuracy: 0.8,
+  liveTrainingGranted: false,
+  duplicate: false,
+);
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -197,5 +208,34 @@ void main() {
     final shape =
         style!.shape!.resolve(const <WidgetState>{})! as RoundedRectangleBorder;
     expect(shape.borderRadius, BorderRadius.circular(14));
+  });
+
+  testWidgets('lesson result shows imperfect accuracy from the server', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(402, 874);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const LessonResultScreen(
+            lessonTitle: 'Bet, raise, all-in',
+            result: _imperfect,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1000));
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('GREAT'), findsOneWidget);
+    expect(find.text('80%'), findsOneWidget);
+    expect(find.text('100%'), findsNothing);
+    expect(find.text('AMAZING'), findsNothing);
   });
 }

@@ -168,6 +168,13 @@ export interface CourseAttempt {
   startRequestId: string;
   acceptedCount: number;
   scoredCount: number;
+  /**
+   * Accepted answers among [scoredCount] only. Excludes explain / auto-pass
+   * steps so lesson accuracy is acceptedScored / scoredCount.
+   *
+   * Undefined on attempts written before this field existed.
+   */
+  acceptedScoredCount?: number;
   masteryPoints: number;
   masteryWeight: number;
   jumpTestPassed: boolean;
@@ -262,6 +269,54 @@ export function disabledCourseFlags(
     catalogVersion,
     minimumClientVersion,
   };
+}
+
+/**
+ * Accepted accuracy for a lesson attempt: accepted scored answers / scored
+ * answers. Explain auto-passes are excluded via [acceptedScoredCount].
+ *
+ * When [acceptedScoredCount] was never persisted (legacy attempts), subtract
+ * explain activities from [acceptedCount].
+ */
+export function lessonAttemptAcceptedAccuracy(
+  attempt: Pick<
+    CourseAttempt,
+    "acceptedCount" | "scoredCount" | "acceptedScoredCount"
+  >,
+  lesson: CourseLesson,
+): number {
+  if (attempt.scoredCount <= 0) return 0;
+  const acceptedScored = attempt.acceptedScoredCount !== undefined ?
+    attempt.acceptedScoredCount :
+    Math.max(
+      0,
+      attempt.acceptedCount -
+        sortedActivities(lesson).filter((a) => a.stage === "explain").length,
+    );
+  return acceptedAccuracyRatio(acceptedScored, attempt.scoredCount);
+}
+
+/** Clamped accepted / scored ratio used for profile and lesson accuracy. */
+export function acceptedAccuracyRatio(
+  acceptedAnswers: number,
+  totalScoredAnswers: number,
+): number {
+  if (totalScoredAnswers <= 0) return 0;
+  return Math.min(1, acceptedAnswers / totalScoredAnswers);
+}
+
+/**
+ * Whether this submit counts toward scored accuracy (and mastery weight).
+ * Mid-street accepts on multi-step hands do not count until the activity
+ * advances; every rejection on a scored activity does.
+ */
+export function countsAsScoredAnswer(options: {
+  scored: boolean;
+  advanceActivity: boolean;
+  accepted: boolean;
+}): boolean {
+  return options.scored &&
+    (options.advanceActivity || !options.accepted);
 }
 
 /**
@@ -793,6 +848,7 @@ export async function startCourseLessonForUser(options: {
       startRequestId,
       acceptedCount: 0,
       scoredCount: 0,
+      acceptedScoredCount: 0,
       masteryPoints: 0,
       masteryWeight: 0,
       jumpTestPassed: false,
@@ -965,11 +1021,16 @@ export async function submitCourseStepForUser(options: {
     // One accept per activity so multi-step streets don't trip
     // isLessonAttemptReadyToComplete early via acceptedCount >= length.
     const acceptedCount = attempt.acceptedCount + (advanceActivity ? 1 : 0);
-    const scoredCount = attempt.scoredCount +
-      (scored && (advanceActivity || !outcome.accepted) ? 1 : 0);
+    const countsAsScored = countsAsScoredAnswer({
+      scored,
+      advanceActivity,
+      accepted: outcome.accepted,
+    });
+    const scoredCount = attempt.scoredCount + (countsAsScored ? 1 : 0);
+    const acceptedScoredCount = (attempt.acceptedScoredCount ?? 0) +
+      (countsAsScored && outcome.accepted ? 1 : 0);
     const masteryPoints = attempt.masteryPoints + outcome.masteryWeight;
-    const masteryWeight = attempt.masteryWeight +
-      (scored && (advanceActivity || !outcome.accepted) ? 1 : 0);
+    const masteryWeight = attempt.masteryWeight + (countsAsScored ? 1 : 0);
     const jumpTestPassed = attempt.jumpTestPassed ||
       (activity.stage === "jump_test" && advanceActivity);
 
@@ -1005,6 +1066,7 @@ export async function submitCourseStepForUser(options: {
       livesRemaining,
       acceptedCount,
       scoredCount,
+      acceptedScoredCount,
       masteryPoints,
       masteryWeight,
       jumpTestPassed,
@@ -1074,10 +1136,12 @@ export async function submitCourseStepForUser(options: {
       livesNextRefillAtMs,
       updatedAt: FieldValue.serverTimestamp(),
     };
-    if (scored) {
+    // Only scored answers affect accepted accuracy (docs/architecture.md).
+    // Explain auto-passes must not inflate the numerator past the denominator.
+    if (countsAsScored) {
       profileUpdate.totalScoredAnswers = FieldValue.increment(1);
     }
-    if (outcome.accepted) {
+    if (countsAsScored && outcome.accepted) {
       profileUpdate.acceptedAnswers = FieldValue.increment(1);
     }
     if (xpAwarded > 0) {
@@ -1099,12 +1163,11 @@ export async function submitCourseStepForUser(options: {
       );
     }
     const acceptedAnswers = Number(profileSnap.data()?.acceptedAnswers ?? 0) +
-      (outcome.accepted ? 1 : 0);
+      (countsAsScored && outcome.accepted ? 1 : 0);
     const totalScored = Number(profileSnap.data()?.totalScoredAnswers ?? 0) +
-      (scored ? 1 : 0);
-    profileUpdate.acceptedAccuracy = totalScored === 0 ?
-      0 :
-      acceptedAnswers / totalScored;
+      (countsAsScored ? 1 : 0);
+    profileUpdate.acceptedAccuracy =
+      acceptedAccuracyRatio(acceptedAnswers, totalScored);
     tx.set(profileRef, profileUpdate, {merge: true});
 
     // Course writes must never touch Live Training progress docs.
@@ -1183,6 +1246,7 @@ export async function completeCourseLessonForUser(options: {
     const attempt = attemptFromData(attemptSnap.data()!);
     if (attempt.status === "completed") {
       const profile = profileFromData(profileSnap.data() ?? {});
+      const locatedCompleted = findLesson(attempt.lessonId);
       return {
         attemptId,
         lessonId: attempt.lessonId,
@@ -1190,7 +1254,9 @@ export async function completeCourseLessonForUser(options: {
         lessonXpAwarded: lessonXpTotal(attempt.xpEarned),
         mastery: masteryRatio(attempt),
         streak: profile.currentStreak,
-        acceptedAccuracy: profile.acceptedAccuracy,
+        acceptedAccuracy: locatedCompleted ?
+          lessonAttemptAcceptedAccuracy(attempt, locatedCompleted.lesson) :
+          profile.acceptedAccuracy,
         liveTrainingGranted: entitlementSnap.exists === true &&
           entitlementSnap.data()?.unrestrictedAccess === true,
         duplicate: true,
@@ -1320,9 +1386,11 @@ export async function completeCourseLessonForUser(options: {
 
     const acceptedAnswers = Number(profileSnap.data()?.acceptedAnswers ?? 0);
     const totalScored = Number(profileSnap.data()?.totalScoredAnswers ?? 0);
-    const acceptedAccuracy = totalScored === 0 ?
-      0 :
-      acceptedAnswers / totalScored;
+    const profileAcceptedAccuracy =
+      acceptedAccuracyRatio(acceptedAnswers, totalScored);
+    // Celebration screen shows this lesson's accuracy, not lifetime profile.
+    const acceptedAccuracy =
+      lessonAttemptAcceptedAccuracy(attempt, located.lesson);
 
     const firstLessonCompletedAtMs =
       Number(profileSnap.data()?.firstLessonCompletedAtMs ?? 0) ||
@@ -1337,7 +1405,7 @@ export async function completeCourseLessonForUser(options: {
       masteryByLessonId,
       currentLessonId: null,
       resume: null,
-      acceptedAccuracy,
+      acceptedAccuracy: profileAcceptedAccuracy,
       ...heartFieldsToFirestore(heartState),
       ...(firstLessonCompletedAtMs ?
         {firstLessonCompletedAtMs} :
@@ -1828,9 +1896,7 @@ function profileFromData(data: DocumentData): CourseProfile {
     timezone: sanitizeTimezone(String(data.timezone ?? "UTC")),
     acceptedAnswers,
     totalScoredAnswers,
-    acceptedAccuracy: totalScoredAnswers === 0 ?
-      0 :
-      Number(data.acceptedAccuracy ?? acceptedAnswers / totalScoredAnswers),
+    acceptedAccuracy: acceptedAccuracyRatio(acceptedAnswers, totalScoredAnswers),
     masteryByLessonId: (data.masteryByLessonId as Record<string, number>) ?? {},
     completedLessonIds: Array.isArray(data.completedLessonIds) ?
       data.completedLessonIds.map(String) :
@@ -1876,6 +1942,10 @@ function attemptFromData(data: DocumentData): CourseAttempt {
     startRequestId: String(data.startRequestId ?? ""),
     acceptedCount: Number(data.acceptedCount ?? 0),
     scoredCount: Number(data.scoredCount ?? 0),
+    acceptedScoredCount: data.acceptedScoredCount === undefined ||
+      data.acceptedScoredCount === null ?
+      undefined :
+      Number(data.acceptedScoredCount),
     masteryPoints: Number(data.masteryPoints ?? 0),
     masteryWeight: Number(data.masteryWeight ?? 0),
     jumpTestPassed: data.jumpTestPassed === true,

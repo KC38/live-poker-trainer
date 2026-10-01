@@ -525,6 +525,7 @@ export async function completeCalibrationWarmUpForUser(options: {
       stepCount: activities.length,
       acceptedCount: activities.length,
       scoredCount: activities.length,
+      acceptedScoredCount: activities.length,
       masteryPoints: 1,
       masteryWeight: 1,
       status: "in_progress",
@@ -836,6 +837,8 @@ async function recordCourseLiveDecision(options: {
     tx.set(attemptRef, {
       acceptedCount: Number(attempt.acceptedCount ?? 0) + (accepted ? 1 : 0),
       scoredCount: Number(attempt.scoredCount ?? 0) + 1,
+      acceptedScoredCount:
+        Number(attempt.acceptedScoredCount ?? 0) + (accepted ? 1 : 0),
       stepCount: Number(attempt.stepCount ?? 0) + 1,
       masteryPoints: Number(attempt.masteryPoints ?? 0) + masteryPoints,
       masteryWeight: Number(attempt.masteryWeight ?? 0) + masteryWeight,

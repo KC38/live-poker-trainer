@@ -381,7 +381,7 @@
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Tap deuce, ten, and ace on the board in ascending order.",
+                  "accessibilityText": "Tap the three board ranks from lowest to highest.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -389,7 +389,7 @@
                   ],
                   "lifeLossEligible": false,
                   "objectives": [
-                    "Order ranks from deuce to ace"
+                    "Order ranks from lowest to highest"
                   ],
                   "prompt": "Tap these ranks from lowest to highest.",
                   "sequenceItems": [
@@ -414,11 +414,11 @@
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "Deuce lowest, then ten, ace highest."
+                      "feedback": "Lowest first, then the middle rank, highest last."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
-                      "feedback": "Start at 2, climb through face cards, ace on top."
+                      "feedback": "Start with the smallest rank and climb up."
                     }
                   }
                 },
@@ -442,8 +442,8 @@
                   "choices": [
                     {
                       "id": "suited-ah-kh",
-                      "label": "Ah Kh",
-                      "accessibilityText": "Ah Kh",
+                      "label": "Suited",
+                      "accessibilityText": "Suited",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Same suit — that is suited."
@@ -451,8 +451,8 @@
                     },
                     {
                       "id": "offsuit-ah-kd",
-                      "label": "Ac Kd",
-                      "accessibilityText": "Ac Kd",
+                      "label": "Offsuit",
+                      "accessibilityText": "Offsuit",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Different suits. That is offsuit.",
@@ -461,8 +461,8 @@
                     },
                     {
                       "id": "pair-77",
-                      "label": "7c 7d",
-                      "accessibilityText": "7c 7d",
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "That is a pair, not suited. Look for matching suits."
@@ -476,7 +476,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the seat with pocket nines.",
+                  "accessibilityText": "Tap the seat with a pocket pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -490,8 +490,8 @@
                   "choices": [
                     {
                       "id": "pocket-pair",
-                      "label": "9h 9d",
-                      "accessibilityText": "9h 9d",
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Matching ranks — that is a pocket pair."
@@ -499,8 +499,8 @@
                     },
                     {
                       "id": "suited-nine",
-                      "label": "Ah Kh",
-                      "accessibilityText": "Ah Kh",
+                      "label": "Suited",
+                      "accessibilityText": "Suited",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Suited, but not a pair. Matching ranks make a pair.",
@@ -509,8 +509,8 @@
                     },
                     {
                       "id": "two-high",
-                      "label": "Ac Kd",
-                      "accessibilityText": "Ac Kd",
+                      "label": "Offsuit",
+                      "accessibilityText": "Offsuit",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "High cards, not a pair. Matching ranks make a pair.",
@@ -1062,7 +1062,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the five cards for aces with king kicker.",
+                  "accessibilityText": "Tap the five cards for top pair with the best kicker.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1076,30 +1076,30 @@
                   "choices": [
                     {
                       "id": "best-pair-k",
-                      "label": "Pair of aces with king kicker",
-                      "accessibilityText": "Pair of aces with king kicker",
+                      "label": "Top pair with best kicker",
+                      "accessibilityText": "Top pair with best kicker",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Ah As plus Kd — ace pair, king kicker."
+                        "feedback": "Pair plus the strongest available kickers."
                       }
                     },
                     {
                       "id": "weak-kickers",
-                      "label": "Aces with nine — leave the king out",
-                      "accessibilityText": "Aces with nine — leave the king out",
+                      "label": "Pair with a weaker kicker",
+                      "accessibilityText": "Pair with a weaker kicker",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "The king is a stronger kicker than the nine.",
+                        "feedback": "Keep the stronger kicker in your five.",
                         "betterChoiceId": "best-pair-k"
                       }
                     },
                     {
                       "id": "ignore-ace",
-                      "label": "King-high only",
-                      "accessibilityText": "King-high only",
+                      "label": "High card only",
+                      "accessibilityText": "High card only",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "You paired the ace on the board.",
+                        "feedback": "You paired a board card — use the pair.",
                         "betterChoiceId": "best-pair-k"
                       }
                     }
@@ -1108,7 +1108,7 @@
                     {
                       "id": "act-01-02-02-guided-seven-hint",
                       "kind": "hint",
-                      "text": "You only need one ace from the board for top pair."
+                      "text": "Use your pair plus the strongest kickers."
                     }
                   ]
                 },
@@ -1216,7 +1216,7 @@
                   "stage": "checkpoint",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap three eights and two kings for eights full of kings.",
+                  "accessibilityText": "Tap three of a kind plus a pair for a full house.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1231,27 +1231,27 @@
                   "choices": [
                     {
                       "id": "fh-eights",
-                      "label": "Full house — eights full of kings",
-                      "accessibilityText": "Full house — eights full of kings",
+                      "label": "Full house — trips over the higher pair",
+                      "accessibilityText": "Full house — trips over the higher pair",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Three eights and two kings."
+                        "feedback": "Trips plus the stronger pair."
                       }
                     },
                     {
                       "id": "fh-deuces",
-                      "label": "Full house — eights full of deuces",
-                      "accessibilityText": "Full house — eights full of deuces",
+                      "label": "Full house — trips over the lower pair",
+                      "accessibilityText": "Full house — trips over the lower pair",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Kings outrank deuces — use the kings.",
+                        "feedback": "Use the higher pair under your trips.",
                         "betterChoiceId": "fh-eights"
                       }
                     },
                     {
                       "id": "two-pair-only",
-                      "label": "Two pair, eights and kings",
-                      "accessibilityText": "Two pair, eights and kings",
+                      "label": "Two pair only",
+                      "accessibilityText": "Two pair only",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "You have trips plus a pair — full house.",
@@ -3558,7 +3558,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Look at pocket eights on the felt — tap Pocket pair.",
+                  "accessibilityText": "Look at the pocket pair on the felt — tap Pocket pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3576,7 +3576,7 @@
                       "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Matching ranks — pocket eights."
+                        "feedback": "Matching ranks — pocket pair."
                       }
                     },
                     {
@@ -3614,7 +3614,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Look at ace-king on the felt — tap Broadway.",
+                  "accessibilityText": "Look at the broadway holes on the felt — tap Broadway.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -5234,7 +5234,7 @@
                   "objectives": [
                     "Confirm starting-hand family"
                   ],
-                  "prompt": "Ah 5h belongs to which family?",
+                  "prompt": "These holes belong to which family?",
                   "choices": [
                     {
                       "id": "j2-sa",
@@ -5973,7 +5973,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Three remaining aces are the clean outs.",
+                  "accessibilityText": "Tap the three clean outs on the felt.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -5983,24 +5983,24 @@
                   "objectives": [
                     "Count clean versus dirty outs"
                   ],
-                  "prompt": "Board Kc 8h 2d. You hold Ah Qh. Clean outs to the best hand?",
+                  "prompt": "Clean outs to the best hand?",
                   "choices": [
                     {
                       "id": "outs-3",
-                      "label": "About 3 — the aces",
-                      "accessibilityText": "About 3 — the aces",
+                      "label": "About 3 — clean overs",
+                      "accessibilityText": "About 3 — clean overs",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Aces are clean; queens are dirty versus a king."
+                        "feedback": "Overs that make the best hand are clean; underpair outs are dirty."
                       }
                     },
                     {
                       "id": "outs-6",
-                      "label": "6 — aces and queens",
-                      "accessibilityText": "6 — aces and queens",
+                      "label": "6 — clean and dirty",
+                      "accessibilityText": "6 — clean and dirty",
                       "grading": {
                         "grade": "questionable",
-                        "feedback": "Queens often leave you second-best."
+                        "feedback": "Some of those outs leave you second-best."
                       }
                     },
                     {
@@ -6009,7 +6009,7 @@
                       "accessibilityText": "0 — never improve",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "An ace pairs you ahead of one pair of kings often.",
+                        "feedback": "Clean overs improve you to the best hand often.",
                         "betterChoiceId": "outs-3"
                       }
                     }

@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 /// Felt context for a poker-action teaching spot.
 class LessonActionSpot {
@@ -1836,7 +1837,7 @@ class _LessonPassiveActionsExplainTableState
             for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
               if (i > 0) const SizedBox(width: 10),
               Expanded(
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -1926,7 +1927,7 @@ class _LessonAggressiveActionsExplainTableState
             for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
               if (i > 0) const SizedBox(width: 10),
               Expanded(
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -2026,7 +2027,7 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
         for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -2205,7 +2206,7 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
         for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -2375,7 +2376,7 @@ class _LessonOpenRangeExplainTableState
             for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
               if (i > 0) const SizedBox(width: 10),
               Expanded(
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -2472,7 +2473,7 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
         for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -2632,7 +2633,7 @@ class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
             for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
               if (i > 0) const SizedBox(width: 10),
               Expanded(
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -2734,7 +2735,7 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
         for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -2897,7 +2898,7 @@ class _LessonBbStackDepthExplainTableState
             for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
               if (i > 0) const SizedBox(width: 10),
               Expanded(
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -2995,7 +2996,7 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
         for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -3159,7 +3160,7 @@ class _LessonTableHabitsExplainTableState
             for (var i = 0; i < TableHabitsDemo.habits.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -3253,7 +3254,7 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
     Widget habitTile(int index) {
       final habit = TableHabitsDemo.habits[index];
       return Expanded(
-        child: _DemoSoftPulse(
+        child: GlowHighlight(
           active:
               widget.interactive &&
               widget.enabled &&
@@ -3434,7 +3435,7 @@ class _LessonFullRingExplainTableState
             for (var i = 0; i < FullRingDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -3531,7 +3532,7 @@ class _FullRingDemoState extends State<FullRingDemo> {
         for (var i = 0; i < FullRingDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -3703,7 +3704,7 @@ class _LessonTableReadExplainTableState
             for (var i = 0; i < TableReadDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -3798,7 +3799,7 @@ class _TableReadDemoState extends State<TableReadDemo> {
     Widget pointTile(int index) {
       final point = TableReadDemo.points[index];
       return Expanded(
-        child: _DemoSoftPulse(
+        child: GlowHighlight(
           active:
               widget.interactive &&
               widget.enabled &&
@@ -3985,7 +3986,7 @@ class _LessonFlopLabelExplainTableState
             for (var i = 0; i < FlopLabelDemo.labels.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -4079,7 +4080,7 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
     Widget labelTile(int index) {
       final item = FlopLabelDemo.labels[index];
       return Expanded(
-        child: _DemoSoftPulse(
+        child: GlowHighlight(
           active:
               widget.interactive &&
               widget.enabled &&
@@ -4267,7 +4268,7 @@ class _LessonOutsPriceExplainTableState
             for (var i = 0; i < OutsPriceDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -4363,7 +4364,7 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
         for (var i = 0; i < OutsPriceDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -4531,7 +4532,7 @@ class _LessonFlopLinesExplainTableState
             for (var i = 0; i < FlopLinesDemo.lines.length; i++)
               SizedBox(
                 width: 110,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -4628,7 +4629,7 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
     Widget lineTile(int index) {
       final line = FlopLinesDemo.lines[index];
       return Expanded(
-        child: _DemoSoftPulse(
+        child: GlowHighlight(
           active:
               widget.interactive &&
               widget.enabled &&
@@ -4815,7 +4816,7 @@ class _LessonTurnStoryExplainTableState
             for (var i = 0; i < TurnStoryDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -4910,7 +4911,7 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
     Widget pointTile(int index) {
       final point = TurnStoryDemo.points[index];
       return Expanded(
-        child: _DemoSoftPulse(
+        child: GlowHighlight(
           active:
               widget.interactive &&
               widget.enabled &&
@@ -5097,7 +5098,7 @@ class _LessonRiverBinaryExplainTableState
             for (var i = 0; i < RiverBinaryDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -5192,7 +5193,7 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
     Widget pointTile(int index) {
       final point = RiverBinaryDemo.points[index];
       return Expanded(
-        child: _DemoSoftPulse(
+        child: GlowHighlight(
           active:
               widget.interactive &&
               widget.enabled &&
@@ -5379,7 +5380,7 @@ class _LessonMultiwayPlanExplainTableState
             for (var i = 0; i < MultiwayPlanDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -5476,7 +5477,7 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
         for (var i = 0; i < MultiwayPlanDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -5645,7 +5646,7 @@ class _LessonCommonLeaksExplainTableState
             for (var i = 0; i < CommonLeaksDemo.leaks.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -5740,7 +5741,7 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
     Widget leakTile(int index) {
       final leak = CommonLeaksDemo.leaks[index];
       return Expanded(
-        child: _DemoSoftPulse(
+        child: GlowHighlight(
           active:
               widget.interactive &&
               widget.enabled &&
@@ -5927,7 +5928,7 @@ class _LessonRangeUpdateExplainTableState
             for (var i = 0; i < RangeUpdateDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -6024,7 +6025,7 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
         for (var i = 0; i < RangeUpdateDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -6191,7 +6192,7 @@ class _LessonThreeBetSqueezeExplainTableState
             for (var i = 0; i < ThreeBetSqueezeDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -6320,7 +6321,7 @@ class _LessonMultiStreetPlanExplainTableState
             for (var i = 0; i < MultiStreetPlanDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -6422,7 +6423,7 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
         for (var i = 0; i < ThreeBetSqueezeDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -6568,7 +6569,7 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
         for (var i = 0; i < MultiStreetPlanDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -6738,7 +6739,7 @@ class _LessonSizingLanguageExplainTableState
             for (var i = 0; i < SizingLanguageDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -6843,7 +6844,7 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
         for (var i = 0; i < SizingLanguageDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -7013,7 +7014,7 @@ class _LessonSprDepthExplainTableState
             for (var i = 0; i < SprDepthDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -7110,7 +7111,7 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
         for (var i = 0; i < SprDepthDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -7275,7 +7276,7 @@ class _LessonPlayerObserveExplainTableState
             for (var i = 0; i < PlayerObserveDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -7377,7 +7378,7 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
         for (var i = 0; i < PlayerObserveDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -7543,7 +7544,7 @@ class _LessonCallingStationExplainTableState
             for (var i = 0; i < CallingStationDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -7645,7 +7646,7 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
         for (var i = 0; i < CallingStationDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -7810,7 +7811,7 @@ class _LessonVsStationExplainTableState
             for (var i = 0; i < VsStationDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -7912,7 +7913,7 @@ class _VsStationDemoState extends State<VsStationDemo> {
         for (var i = 0; i < VsStationDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -8079,7 +8080,7 @@ class _LessonTightSeatsExplainTableState
             for (var i = 0; i < TightSeatsDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -8181,7 +8182,7 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
         for (var i = 0; i < TightSeatsDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -8345,7 +8346,7 @@ class _LessonNitModelExplainTableState
             for (var i = 0; i < NitModelDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -8451,7 +8452,7 @@ class _NitModelDemoState extends State<NitModelDemo> {
         for (var i = 0; i < NitModelDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -8615,7 +8616,7 @@ class _LessonVsNitsExplainTableState extends State<LessonVsNitsExplainTable> {
             for (var i = 0; i < VsNitsDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -8717,7 +8718,7 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
         for (var i = 0; i < VsNitsDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -8882,7 +8883,7 @@ class _LessonExtremeEntryExplainTableState
             for (var i = 0; i < ExtremeEntryDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -8984,7 +8985,7 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
         for (var i = 0; i < ExtremeEntryDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -9149,7 +9150,7 @@ class _LessonManiacModelExplainTableState
             for (var i = 0; i < ManiacModelDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -9251,7 +9252,7 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
         for (var i = 0; i < ManiacModelDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -9415,7 +9416,7 @@ class _LessonVsManiacsExplainTableState
             for (var i = 0; i < VsManiacsDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -9517,7 +9518,7 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
         for (var i = 0; i < VsManiacsDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -9682,7 +9683,7 @@ class _LessonVsTagsExplainTableState extends State<LessonVsTagsExplainTable> {
             for (var i = 0; i < VsTagsDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -9778,7 +9779,7 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
         for (var i = 0; i < VsTagsDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -9943,7 +9944,7 @@ class _LessonVsLagsExplainTableState extends State<LessonVsLagsExplainTable> {
             for (var i = 0; i < VsLagsDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -10039,7 +10040,7 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
         for (var i = 0; i < VsLagsDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -10204,7 +10205,7 @@ class _LessonObservationCertaintyExplainTableState
             for (var i = 0; i < ObservationCertaintyDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -10307,7 +10308,7 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
         for (var i = 0; i < ObservationCertaintyDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -10474,7 +10475,7 @@ class _LessonExploitEvidenceExplainTableState
             for (var i = 0; i < ExploitEvidenceDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -10580,7 +10581,7 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
         for (var i = 0; i < ExploitEvidenceDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -10744,7 +10745,7 @@ class _LessonMultiwayNutsExplainTableState
             for (var i = 0; i < MultiwayNutsDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -10850,7 +10851,7 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
         for (var i = 0; i < MultiwayNutsDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -11014,7 +11015,7 @@ class _LessonDeepStacksExplainTableState
             for (var i = 0; i < DeepStacksDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -11116,7 +11117,7 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
         for (var i = 0; i < DeepStacksDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -11280,7 +11281,7 @@ class _LessonImpliedOddsExplainTableState
             for (var i = 0; i < ImpliedOddsDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -11382,7 +11383,7 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
         for (var i = 0; i < ImpliedOddsDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -11547,7 +11548,7 @@ class _LessonThinValueExplainTableState
             for (var i = 0; i < ThinValueDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -11649,7 +11650,7 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
         for (var i = 0; i < ThinValueDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -11815,7 +11816,7 @@ class _LessonLineStoriesExplainTableState
             for (var i = 0; i < LineStoriesDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -11915,7 +11916,7 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
     Widget pointTile(int index) {
       final point = LineStoriesDemo.points[index];
       return Expanded(
-        child: _DemoSoftPulse(
+        child: GlowHighlight(
           active:
               widget.interactive &&
               widget.enabled &&
@@ -12098,7 +12099,7 @@ class _LessonRangeRewriteExplainTableState
             for (var i = 0; i < RangeRewriteDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -12200,7 +12201,7 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
         for (var i = 0; i < RangeRewriteDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -12364,7 +12365,7 @@ class _LessonTimingCluesExplainTableState
             for (var i = 0; i < TimingCluesDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -12466,7 +12467,7 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
         for (var i = 0; i < TimingCluesDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -12631,7 +12632,7 @@ class _LessonTablesChangeExplainTableState
             for (var i = 0; i < TablesChangeDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _DemoSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -12733,7 +12734,7 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
         for (var i = 0; i < TablesChangeDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _DemoSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -12838,81 +12839,6 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
-  }
-}
-
-class _DemoSoftPulse extends StatefulWidget {
-  const _DemoSoftPulse({required this.active, required this.child});
-
-  final bool active;
-  final Widget child;
-
-  @override
-  State<_DemoSoftPulse> createState() => _DemoSoftPulseState();
-}
-
-class _DemoSoftPulseState extends State<_DemoSoftPulse>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    if (widget.active) {
-      _pulse.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _DemoSoftPulse oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.active && !_pulse.isAnimating) {
-      _pulse.repeat(reverse: true);
-    } else if (!widget.active && _pulse.isAnimating) {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.active) return widget.child;
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        // Match streets/path SoftPulse intensity — weak glow washed out on
-        // danger-tinted EARLY tiles (open-fold SoftPulse looked "static").
-        final glow = 0.4 + (_pulse.value * 0.55);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.gold.withValues(alpha: 0.95),
-              width: 2.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.65),
-                blurRadius: 12 + (10 * _pulse.value),
-                spreadRadius: 1 + (2 * _pulse.value),
-              ),
-            ],
-          ),
-          child: child,
-        );
-      },
-      child: widget.child,
-    );
   }
 }
 
@@ -13039,12 +12965,24 @@ class LessonActionTable extends StatelessWidget {
     super.key,
     required this.spot,
     this.coachOwnsCue = false,
+    this.potLabelOverride,
+    this.facingBetAmount,
+    this.heroBetAmount,
   });
 
   final LessonActionSpot spot;
 
   /// SoftPulse + Rex own the next-action cue — suppress felt gold status.
   final bool coachOwnsCue;
+
+  /// Live pot label after Call / Bet / Raise (e.g. `Pot 15`).
+  final String? potLabelOverride;
+
+  /// Facing bet chips to show beside the pot when a bet is out.
+  final double? facingBetAmount;
+
+  /// Hero street bet chips after the learner puts money in.
+  final double? heroBetAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -13153,7 +13091,26 @@ class LessonActionTable extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                _PotChip(label: spot.potLabel),
+                _PotChip(label: potLabelOverride ?? spot.potLabel),
+                if (facingBetAmount != null && facingBetAmount! > 0)
+                  _PotChip(
+                    label: facingBetAmount == facingBetAmount!.roundToDouble()
+                        ? 'Bet ${facingBetAmount!.round()}'
+                        : 'Bet $facingBetAmount',
+                  ),
+                if (heroBetAmount != null && heroBetAmount! > 0)
+                  _PotChip(
+                    label: () {
+                      final n = heroBetAmount == heroBetAmount!.roundToDouble()
+                          ? '${heroBetAmount!.round()}'
+                          : '$heroBetAmount';
+                      // Open-pot hero bet uses the same "Bet" word as live.
+                      if (facingBetAmount == null || facingBetAmount! <= 0) {
+                        return 'Bet $n';
+                      }
+                      return 'You $n';
+                    }(),
+                  ),
                 if (spot.stackLabel != null) _PotChip(label: spot.stackLabel!),
               ],
             ),
@@ -13406,7 +13363,7 @@ class LessonActionDock extends StatelessWidget {
                         _callExceedsStack(choice, heroStackAmount) ||
                         (_isBet(choice) && facingBet) ||
                         (_isRaise(choice) && !facingBet && hasBetChoice));
-                return _DemoSoftPulse(
+                return GlowHighlight(
                   active:
                       enabled &&
                       pulseChoiceId != null &&

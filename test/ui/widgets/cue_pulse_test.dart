@@ -1,12 +1,12 @@
-/// CuePulse gold ring sits outside the child with even breathing room.
+/// CuePulse / GlowHighlight gold ring sits outside the child with even room.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 void main() {
-  testWidgets('active CuePulse expands the gold ring 4px on every side', (
+  testWidgets('active GlowHighlight expands the gold ring 4px on every side', (
     tester,
   ) async {
     const pad = EdgeInsets.all(4);
@@ -14,7 +14,7 @@ void main() {
       const MaterialApp(
         home: Scaffold(
           body: Center(
-            child: CuePulse(
+            child: GlowHighlight(
               padding: pad,
               child: SizedBox(
                 key: ValueKey<String>('pulse-child'),
@@ -28,12 +28,12 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
     final child = tester.getRect(
       find.byKey(const ValueKey<String>('pulse-child')),
     );
     final ring = tester.getRect(
-      find.byKey(const ValueKey<String>('cue-pulse-ring')),
+      find.byKey(const ValueKey<String>('glow-highlight-ring')),
     );
 
     expect(ring.top, closeTo(child.top - pad.top, 0.5));
@@ -45,11 +45,11 @@ void main() {
     expect(pad.top, pad.bottom);
   });
 
-  testWidgets('inactive CuePulse draws the child only', (tester) async {
+  testWidgets('inactive GlowHighlight draws the child only', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
-          body: CuePulse(
+          body: GlowHighlight(
             active: false,
             child: SizedBox(
               key: ValueKey<String>('pulse-child'),
@@ -62,7 +62,30 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
     expect(find.byKey(const ValueKey<String>('pulse-child')), findsOneWidget);
+  });
+
+  testWidgets('GlowHighlight wraps arbitrary children for reuse', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: GlowHighlight(
+            child: Row(
+              key: const ValueKey<String>('group-child'),
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                SizedBox(width: 20, height: 28),
+                SizedBox(width: 20, height: 28),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('group-child')), findsOneWidget);
   });
 }

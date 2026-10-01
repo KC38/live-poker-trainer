@@ -552,7 +552,7 @@ export function mergeCourseProfiles(
       totalScoredAnswers,
       acceptedAccuracy: totalScoredAnswers === 0 ?
         0 :
-        acceptedAnswers / totalScoredAnswers,
+        Math.min(1, acceptedAnswers / totalScoredAnswers),
       masteryByLessonId,
       completedLessonIds,
       currentLessonId:

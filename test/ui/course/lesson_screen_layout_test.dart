@@ -391,6 +391,50 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('tool row keeps clearance under the stage', (tester) async {
+    const size = Size(390, 844);
+    await tester.binding.setSurfaceSize(size);
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: LessonScreenLayout(
+            progress: 0.2,
+            livesRemaining: 3,
+            livesMax: 3,
+            onClose: _noop,
+            speech: 'Four streets: preflop, flop, turn, river.',
+            expression: LessonMascotExpression.thinking,
+            stage: const ColoredBox(
+              key: ValueKey<String>('lesson-stage-probe'),
+              color: Color(0xFF112233),
+              child: SizedBox.expand(),
+            ),
+            onUndo: _noop,
+            onRedo: _noop,
+            onHint: _noop,
+            canUndo: false,
+            canRedo: false,
+            canHint: true,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final toolRect = tester.getRect(find.byType(LessonToolRow));
+    final stageRect = tester.getRect(
+      find.byKey(const ValueKey<String>('lesson-stage-probe')),
+    );
+    expect(
+      toolRect.top - stageRect.bottom,
+      LessonAnswerDock.stageClearance,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('a miss shows the wrong face and the oops dock', (tester) async {
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));

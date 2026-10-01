@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 /// Meet the LAG explain: WIDE / PRESSURE / MODEL under the full poker table.
 class LessonLagModelExplainTable extends StatefulWidget {
@@ -61,7 +62,7 @@ class _LessonLagModelExplainTableState
             for (var i = 0; i < LagModelDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _LagSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -162,7 +163,7 @@ class _LagModelDemoState extends State<LagModelDemo> {
         for (var i = 0; i < LagModelDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _LagSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -357,75 +358,6 @@ class _LagModelTile extends StatelessWidget {
           child: child,
         ),
       ),
-    );
-  }
-}
-
-class _LagSoftPulse extends StatefulWidget {
-  const _LagSoftPulse({required this.active, required this.child});
-
-  final bool active;
-  final Widget child;
-
-  @override
-  State<_LagSoftPulse> createState() => _LagSoftPulseState();
-}
-
-class _LagSoftPulseState extends State<_LagSoftPulse>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    if (widget.active) {
-      _pulse.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _LagSoftPulse oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.active && !_pulse.isAnimating) {
-      _pulse.repeat(reverse: true);
-    } else if (!widget.active && _pulse.isAnimating) {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.active) return widget.child;
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final glow = 0.22 + (_pulse.value * 0.38);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow),
-                blurRadius: 10 + (_pulse.value * 8),
-                spreadRadius: 0.5 + (_pulse.value * 1.2),
-              ),
-            ],
-          ),
-          child: child,
-        );
-      },
-      child: widget.child,
     );
   }
 }

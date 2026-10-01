@@ -14,12 +14,15 @@ import {
   LIVE_UNLOCK_SECTION_ID,
 } from "./course_catalog";
 import {
+  acceptedAccuracyRatio,
   applyStudyDayStreak,
   assertCourseAvailable,
+  countsAsScoredAnswer,
   disabledCourseFlags,
   evaluateLifeAndAcceptance,
   gradeCourseResponse,
   isLessonAttemptReadyToComplete,
+  lessonAttemptAcceptedAccuracy,
   lessonXpTotal,
   localDateString,
   parseCourseFlags,
@@ -502,6 +505,73 @@ describe("placement and live unlock helpers", () => {
     const sec4Jump = findLesson("lesson-04-10-02-section-four-jump-test")!;
     expect(lessonRequiresPlacementFlag(sec4Jump.lesson)).toBe(true);
     expect(lessonGrantsLiveTrainingEntitlement(sec4Jump)).toBe(true);
+  });
+});
+
+describe("accepted accuracy", () => {
+  const lesson = findLesson("lesson-01-03-02-bet-raise-allin")!.lesson;
+
+  it("clamps accepted / scored and treats empty scored as zero", () => {
+    expect(acceptedAccuracyRatio(0, 0)).toBe(0);
+    expect(acceptedAccuracyRatio(3, 4)).toBe(0.75);
+    expect(acceptedAccuracyRatio(5, 4)).toBe(1);
+  });
+
+  it("counts rejections and advancing accepts, not explain or mid-street accepts", () => {
+    expect(countsAsScoredAnswer({
+      scored: false,
+      advanceActivity: true,
+      accepted: true,
+    })).toBe(false);
+    expect(countsAsScoredAnswer({
+      scored: true,
+      advanceActivity: false,
+      accepted: false,
+    })).toBe(true);
+    expect(countsAsScoredAnswer({
+      scored: true,
+      advanceActivity: false,
+      accepted: true,
+    })).toBe(false);
+    expect(countsAsScoredAnswer({
+      scored: true,
+      advanceActivity: true,
+      accepted: true,
+    })).toBe(true);
+  });
+
+  it("does not let one explain cancel one mistake on the result screen", () => {
+    // Bet, raise, all-in: 1 explain + 4 scored. One wrong then four accepts
+    // used to report 5/5 = 100% because explain inflated acceptedAnswers.
+    expect(lesson.activities.filter((a) => a.stage === "explain")).toHaveLength(
+      1,
+    );
+    expect(
+      lessonAttemptAcceptedAccuracy({
+        acceptedCount: 5,
+        scoredCount: 5,
+        acceptedScoredCount: 4,
+      }, lesson),
+    ).toBe(0.8);
+  });
+
+  it("derives legacy attempts by subtracting explain activities", () => {
+    expect(
+      lessonAttemptAcceptedAccuracy({
+        acceptedCount: 5,
+        scoredCount: 5,
+      }, lesson),
+    ).toBe(0.8);
+  });
+
+  it("reports perfect when every scored answer was accepted", () => {
+    expect(
+      lessonAttemptAcceptedAccuracy({
+        acceptedCount: 5,
+        scoredCount: 4,
+        acceptedScoredCount: 4,
+      }, lesson),
+    ).toBe(1);
   });
 });
 

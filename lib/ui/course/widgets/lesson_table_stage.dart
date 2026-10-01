@@ -56,6 +56,10 @@ GameState lessonTableStageGame({
   double bigBlind = lessonBigBlind,
   List<PlayerArchetype>? villainArchetypes,
   bool postBigBlind = true,
+  List<double>? streetBets,
+  double? potTotal,
+  String? heroActionLabel,
+  String? villainActionLabel,
 
   /// Remaining chips for the hero seat. Null keeps the default band stack.
   double? heroStackChips,
@@ -86,11 +90,7 @@ GameState lessonTableStageGame({
   final players = <PlayerModel>[];
   for (final player in base.players) {
     if (player.isHero) {
-      players.add(
-        heroStackChips == null
-            ? player
-            : player.copyWith(stack: heroStackChips),
-      );
+      players.add(player);
       continue;
     }
     final holes = holesByVillain[villain];
@@ -106,7 +106,6 @@ GameState lessonTableStageGame({
             : [
                 for (final code in holes.take(2)) CardModel.fromCode(code),
               ],
-        stack: villainStackChips ?? player.stack,
       ),
     );
     villain += 1;
@@ -118,9 +117,71 @@ GameState lessonTableStageGame({
             players[i].copyWith(name: positions[i % positions.length]),
         ]
       : players;
-  final named = base.copyWith(players: seated);
+  var named = base.copyWith(players: seated);
+  if (streetBets != null || potTotal != null) {
+    named = _applyLessonStageStreetMoney(
+      named,
+      streetBets: streetBets ?? const <double>[],
+      potTotal: potTotal,
+      heroActionLabel: heroActionLabel,
+      villainActionLabel: villainActionLabel,
+    );
+  }
+  if (heroStackChips != null || villainStackChips != null) {
+    named = named.copyWith(
+      players: [
+        for (final player in named.players)
+          player.isHero
+              ? (heroStackChips == null
+                  ? player
+                  : player.copyWith(stack: heroStackChips))
+              : (villainStackChips == null
+                  ? player
+                  : player.copyWith(stack: villainStackChips)),
+      ],
+    );
+  }
   if (dealerIndex == null) return named;
   return named.copyWith(activePlayerIndex: activeSeatIndex ?? -1);
+}
+
+/// Posts authored street bets and sets main pot from a display [potTotal].
+GameState _applyLessonStageStreetMoney(
+  GameState base, {
+  required List<double> streetBets,
+  double? potTotal,
+  String? heroActionLabel,
+  String? villainActionLabel,
+}) {
+  final n = base.players.length;
+  final bets = [
+    for (var i = 0; i < n; i++) i < streetBets.length ? streetBets[i] : 0.0,
+  ];
+  final streetSum = bets.fold<double>(0, (sum, b) => sum + b);
+  final total = potTotal ?? (base.mainPot + streetSum);
+  final mainPot = (total - streetSum).clamp(0, double.infinity).toDouble();
+  final highest = bets.fold<double>(0, (m, b) => b > m ? b : m);
+  final players = <PlayerModel>[
+    for (var i = 0; i < n; i++)
+      base.players[i].copyWith(
+        currentBet: bets[i],
+        stack: (base.players[i].stack + base.players[i].currentBet - bets[i])
+            .clamp(0, double.infinity)
+            .toDouble(),
+        lastActionLabel: i == 0
+            ? heroActionLabel
+            : (i == 1 ? villainActionLabel : null),
+        clearLastAction:
+            (i == 0 && heroActionLabel == null) ||
+            (i == 1 && villainActionLabel == null) ||
+            i > 1,
+      ),
+  ];
+  return base.copyWith(
+    players: players,
+    mainPot: mainPot,
+    highestBet: highest,
+  );
 }
 
 /// Player type a step names for its opponent, read from [texts] in order.
@@ -210,6 +271,10 @@ class LessonTableStage extends StatelessWidget {
     this.villainArchetypes,
     this.features,
     this.postBigBlind = true,
+    this.streetBets,
+    this.potTotal,
+    this.heroActionLabel,
+    this.villainActionLabel,
     this.heroStackChips,
     this.villainStackChips,
   });
@@ -317,6 +382,18 @@ class LessonTableStage extends StatelessWidget {
   /// quizzes). The BB seat index and SoftPulse target stay the same.
   final bool postBigBlind;
 
+  /// Per-seat street bets (hero at 0). Null keeps [lessonBandGame] defaults.
+  final List<double>? streetBets;
+
+  /// Display pot including [streetBets]. Null keeps the band default pot.
+  final double? potTotal;
+
+  /// Last-action badge on the hero after a Call / Bet / Raise.
+  final String? heroActionLabel;
+
+  /// Last-action badge on the first villain when a bet faces the hero.
+  final String? villainActionLabel;
+
   /// Remaining chips drawn on the hero seat. Null keeps the default band stack.
   final double? heroStackChips;
 
@@ -339,6 +416,10 @@ class LessonTableStage extends StatelessWidget {
     bigBlind: bigBlind,
     villainArchetypes: villainArchetypes,
     postBigBlind: postBigBlind,
+    streetBets: streetBets,
+    potTotal: potTotal,
+    heroActionLabel: heroActionLabel,
+    villainActionLabel: villainActionLabel,
     heroStackChips: heroStackChips,
     villainStackChips: villainStackChips,
   );
@@ -375,21 +456,20 @@ class LessonTableStage extends StatelessWidget {
             showHoleCardBacks: true,
             heroCardsFaceUp: heroFaceUp,
             faceUpPlayerIds: faceUp,
-            // Face-up holes still need CueArrows + CuePulse — the old
+            // Face-up holes SoftPulse via GlowHighlight — the old
             // `&& !heroFaceUp` gate hid every "tap your cards" cue in the
             // lesson frame (guided find-holes, etc.).
-            // Board region cues expand to every dealt card the same way —
-            // a lone centered arrow over five slots lands on the rightmost
-            // flop card and skips CuePulse.
+            // Board region cues wrap the whole board row; per-card board
+            // taps SoftPulse each dealt card individually.
             highlightHero: cue == LessonTableCue.hero,
             highlightBoard: cue == LessonTableCue.board &&
                 highlightBoardIndexes.isEmpty &&
-                boardCodes.isEmpty,
+                onBoardCardTap == null,
             selectedBoardIndexes: selectedBoardIndexes,
             highlightBoardIndexes:
                 highlightBoardIndexes.isNotEmpty
                     ? highlightBoardIndexes
-                    : (cue == LessonTableCue.board
+                    : (cue == LessonTableCue.board && onBoardCardTap != null
                         ? {for (var i = 0; i < boardCodes.length; i++) i}
                         : const <int>{}),
             dimmedBoardIndexes: dimmedBoardIndexes,
@@ -691,13 +771,26 @@ class LessonSuitBoardTable extends StatefulWidget {
 class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
   final Set<String> _selected = <String>{};
   late final List<String> _boardCodes;
+  late final List<String> _heroCodes;
   late final List<String?> _suitLetters;
 
   @override
   void initState() {
     super.initState();
+    final rng = resolveLessonDealRandom();
     _boardCodes = dealSuitLessonBoard(
       withStarDistractor: widget.withStarDistractor,
+      random: rng,
+    );
+    final used = <String>{
+      for (final code in _boardCodes)
+        if (!code.endsWith('*')) code,
+    };
+    _heroCodes = dealStartingHandFamily(
+      LessonStartingHandFamily
+          .values[rng.nextInt(LessonStartingHandFamily.values.length)],
+      rng,
+      used: used,
     );
     _suitLetters = widget.withStarDistractor
         ? const <String?>['h', 'd', null, 'c', 's']
@@ -757,7 +850,7 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
       }
     }
     return LessonTableStage(
-      heroCodes: const ['Ah', 'Kd'],
+      heroCodes: _heroCodes,
       boardCodes: _boardCodes,
       villainCount: 3,
       heroFaceUp: false,
@@ -832,6 +925,7 @@ class LessonRankOrderTable extends StatefulWidget {
     this.enabled = true,
     this.showGuidance = true,
     this.distractorCode,
+    this.generation = 0,
   });
 
   final String activityId;
@@ -848,24 +942,28 @@ class LessonRankOrderTable extends StatefulWidget {
   /// Optional fake-rank code inserted in the middle (e.g. `Hs`).
   final String? distractorCode;
 
+  /// Attempt generation salt for fresh ranks on retry.
+  final int generation;
+
   @override
   State<LessonRankOrderTable> createState() => _LessonRankOrderTableState();
 }
 
 class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
-  late final List<String> _board;
+  late final RankOrderDeal _deal;
 
   @override
   void initState() {
     super.initState();
-    _board = lessonRankOrderBoardCodes(
+    _deal = dealRankOrderSpot(
+      authoredItems: widget.sequenceItems,
       activityId: widget.activityId,
-      rankLabels: [
-        for (final item in widget.sequenceItems) item.label,
-      ],
+      generation: widget.generation,
       distractorCode: widget.distractorCode,
     );
   }
+
+  List<String> get _board => _deal.boardCodes;
 
   String? _idForBoardIndex(int index) {
     if (index < 0 || index >= _board.length) return null;
@@ -874,7 +972,7 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
       return null;
     }
     final rank = code[0];
-    for (final item in widget.sequenceItems) {
+    for (final item in _deal.sequenceItems) {
       if (item.label.toUpperCase() == rank) return item.id;
     }
     return null;
@@ -907,8 +1005,8 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
     int? nextIndex;
     if (widget.showGuidance &&
         widget.enabled &&
-        widget.orderedIds.length < widget.sequenceItems.length) {
-      final nextId = widget.sequenceItems[widget.orderedIds.length].id;
+        widget.orderedIds.length < _deal.sequenceItems.length) {
+      final nextId = _deal.sequenceItems[widget.orderedIds.length].id;
       for (var i = 0; i < _board.length; i++) {
         if (_idForBoardIndex(i) == nextId) {
           nextIndex = i;
@@ -917,7 +1015,7 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
       }
     }
     return LessonTableStage(
-      heroCodes: const ['Ah', 'Kd'],
+      heroCodes: _deal.heroCodes,
       boardCodes: _board,
       villainCount: 3,
       heroFaceUp: false,

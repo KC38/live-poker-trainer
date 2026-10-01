@@ -8,11 +8,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 final _rankOnly = RegExp(r'^[2-9TJQKA]$', caseSensitive: false);
 
@@ -217,6 +219,7 @@ class OrderSequenceActivity extends StatelessWidget {
               '${activity.id}-${controller.bindGeneration}',
             ),
             activityId: activity.id,
+            generation: controller.bindGeneration,
             sequenceItems: [
               for (final item in activity.sequenceItems)
                 (id: item.id, label: item.label),
@@ -229,7 +232,8 @@ class OrderSequenceActivity extends StatelessWidget {
             onMiss: useDistractor
                 ? () {
                     LessonFrameScope.maybeOf(context)?.onLocalMiss(
-                      'H is not a rank — tap 2, then T, then A.',
+                      'H is not a rank — tap the real ranks from lowest '
+                      'to highest.',
                     );
                   }
                 : null,
@@ -304,7 +308,7 @@ class OrderSequenceActivity extends StatelessWidget {
             }
             return null;
           }();
-          final previewCodes =
+          final templateCodes =
               previewItem == null
                   ? const ['Ah', 'Kd', '9c', '7s', '3h']
                   : (resolveHandExample(
@@ -312,6 +316,11 @@ class OrderSequenceActivity extends StatelessWidget {
                         label: previewItem.label,
                       )?.codes ??
                       const ['Ah', 'Kd', '9c', '7s', '3h']);
+          final previewCodes = dealtHandExampleCodes(
+            templateCodes,
+            activityId: '${activity.id}:${previewItem?.id ?? 'preview'}',
+            generation: controller.bindGeneration,
+          );
           return Column(
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}-hand-order',
@@ -333,7 +342,7 @@ class OrderSequenceActivity extends StatelessWidget {
                   alignment: WrapAlignment.center,
                   children: [
                     for (final item in remaining)
-                      _SoftPulseTarget(
+                      GlowHighlight(
                         active: showGuidance && !locked && item.id == nextId,
                         child: _UnderFeltHandChoice(
                           label: item.label,
@@ -508,7 +517,7 @@ class OrderSequenceActivity extends StatelessWidget {
                           children: [
                             for (var i = 0; i < remaining.length; i++) ...[
                               if (i > 0) SizedBox(height: densify ? 10 : 8),
-                              _SoftPulseTarget(
+                              GlowHighlight(
                                 active:
                                     showGuidance &&
                                     !locked &&
@@ -821,7 +830,7 @@ class OrderSequenceActivity extends StatelessWidget {
                           children: [
                             for (var i = 0; i < remaining.length; i++)
                               if (_rankMode)
-                                _SoftPulseTarget(
+                                GlowHighlight(
                                   active:
                                       showGuidance &&
                                       !locked &&
@@ -932,7 +941,7 @@ class _StreetTileGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget cell(CourseChoice item) {
-      return _SoftPulseTarget(
+      return GlowHighlight(
         active: nextId != null && item.id == nextId,
         child: StreetOrderTile(
           label: item.label,
@@ -997,7 +1006,7 @@ class _SeatTileGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget cell(CourseChoice item) {
-      return _SoftPulseTarget(
+      return GlowHighlight(
         active: nextId != null && item.id == nextId,
         child: SeatOrderTile(
           label: item.label,
@@ -1309,78 +1318,6 @@ class _GhostOrderSlotState extends State<_GhostOrderSlot>
           '${widget.role.isNotEmpty ? ', ${widget.role}' : ''}'
           '${widget.isNext ? ', next' : ', empty'}',
       child: body,
-    );
-  }
-}
-
-/// Soft gold pulse around the first palette tile on an empty board.
-class _SoftPulseTarget extends StatefulWidget {
-  const _SoftPulseTarget({required this.active, required this.child});
-
-  final bool active;
-  final Widget child;
-
-  @override
-  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
-}
-
-class _SoftPulseTargetState extends State<_SoftPulseTarget>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    if (widget.active) {
-      _pulse.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.active && !_pulse.isAnimating) {
-      _pulse.repeat(reverse: true);
-    } else if (!widget.active && _pulse.isAnimating) {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.active) {
-      return widget.child;
-    }
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final glow = 0.4 + (_pulse.value * 0.55);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.65),
-                blurRadius: 12 + (10 * _pulse.value),
-                spreadRadius: 1 + (2 * _pulse.value),
-              ),
-            ],
-          ),
-          child: child,
-        );
-      },
-      child: widget.child,
     );
   }
 }

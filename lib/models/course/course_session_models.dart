@@ -290,6 +290,21 @@ class RefillCourseHeartsResult {
   }
 }
 
+/// Matches `XP_PER_ACCEPTED_STEP` in `functions/src/course_session.ts`.
+const kXpPerAcceptedStep = 10;
+
+/// Matches `XP_LESSON_COMPLETE` in `functions/src/course_session.ts`.
+const kXpLessonComplete = 25;
+
+/// Perfect-run XP preview for a lesson with [activityCount] steps.
+///
+/// Mirrors server `lessonXpTotal(activityCount * XP_PER_ACCEPTED_STEP)`:
+/// every accepted step plus the one-time completion bonus.
+int previewLessonXp(int activityCount) {
+  final steps = activityCount > 0 ? activityCount : 0;
+  return steps * kXpPerAcceptedStep + kXpLessonComplete;
+}
+
 /// XP to show for a finished lesson.
 ///
 /// [completionBonus] is the completion grant in

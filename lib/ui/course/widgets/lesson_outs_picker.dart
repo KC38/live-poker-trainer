@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 /// Felt picker: tap the three remaining aces (clean outs) on the king-high flop.
 ///
@@ -202,7 +203,7 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
                   final isClean = _cleanOrder.contains(code);
                   final selected = _tappedClean.contains(code);
                   final isNext = guide && isClean && code == next;
-                  return _SoftPulseTarget(
+                  return GlowHighlight(
                     active: isNext,
                     child: SelectableBestFiveCard(
                       key: ValueKey<String>('outs-ace-$code'),
@@ -328,82 +329,6 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _SoftPulseTarget extends StatefulWidget {
-  const _SoftPulseTarget({required this.active, required this.child});
-
-  final bool active;
-  final Widget child;
-
-  @override
-  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
-}
-
-class _SoftPulseTargetState extends State<_SoftPulseTarget>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    if (widget.active) {
-      _pulse.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.active && !_pulse.isAnimating) {
-      _pulse.repeat(reverse: true);
-    } else if (!widget.active && _pulse.isAnimating) {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final t = widget.active ? _pulse.value : 0.0;
-        return Transform.scale(
-          scale: 1 + (0.035 * t),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              boxShadow:
-                  widget.active
-                      ? [
-                        BoxShadow(
-                          color: AppColors.gold.withValues(
-                            alpha: 0.18 + 0.22 * t,
-                          ),
-                          blurRadius: 10 + 8 * t,
-                          spreadRadius: 0.5 + t,
-                        ),
-                      ]
-                      : null,
-            ),
-            child: child,
-          ),
-        );
-      },
-      child: widget.child,
     );
   }
 }

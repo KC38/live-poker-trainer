@@ -7,7 +7,7 @@ import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
-import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -33,6 +33,7 @@ class CommunityCardsView extends StatelessWidget {
     this.onBoardCardTap,
     this.selectedBoardIndexes = const {},
     this.highlightBoardIndexes = const {},
+    this.highlightBoardGroup = false,
     this.dimmedBoardIndexes = const {},
     this.boardOrderBadges = const {},
   });
@@ -65,8 +66,11 @@ class CommunityCardsView extends StatelessWidget {
   /// Board indexes with a selected gold ring.
   final Set<int> selectedBoardIndexes;
 
-  /// Board indexes that bounce a cue arrow (teach-by-doing).
+  /// Board indexes SoftPulsed individually via [GlowHighlight].
   final Set<int> highlightBoardIndexes;
+
+  /// SoftPulse the whole board card row as one [GlowHighlight].
+  final bool highlightBoardGroup;
 
   /// Board indexes faded as leftovers.
   final Set<int> dimmedBoardIndexes;
@@ -217,46 +221,45 @@ class CommunityCardsView extends StatelessWidget {
           ),
           SizedBox(height: 4 * scale),
         ],
-        SizedBox(
-          key: const ValueKey<String>('felt-board-row'),
-          height: cardsHeight * scale +
-              (highlightBoardIndexes.isNotEmpty ? 30 * scale : 0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              for (var i = 0; i < 5; i++)
-                Padding(
-                  padding: EdgeInsets.only(left: i == 0 ? 0 : cardGap * scale),
-                  child:
-                      i < community.length
-                          ? _BoardCardTarget(
-                            key: ValueKey('board-card-$i-${community[i].code}'),
-                            index: i,
-                            card: community[i],
-                            width: w,
-                            scale: scale,
-                            reserveCue: highlightBoardIndexes.isNotEmpty,
-                            selected: selectedBoardIndexes.contains(i),
-                            highlight: highlightBoardIndexes.contains(i),
-                            dimmed: dimmedBoardIndexes.contains(i),
-                            orderBadge: boardOrderBadges[i],
-                            onTap: onBoardCardTap == null
-                                ? null
-                                : () => onBoardCardTap!(i),
-                          )
-                          : features.boardSlots
-                          ? Padding(
-                            padding: EdgeInsets.only(
-                              top: highlightBoardIndexes.isNotEmpty
-                                  ? 30 * scale
-                                  : 0,
-                            ),
-                            child: TableCardSlot(width: w),
-                          )
-                          : SizedBox(width: w),
-                ),
-            ],
+        GlowHighlight(
+          active: highlightBoardGroup,
+          borderRadius: 10 * scale,
+          padding: EdgeInsets.all(4 * scale),
+          child: SizedBox(
+            key: const ValueKey<String>('felt-board-row'),
+            height: cardsHeight * scale,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                for (var i = 0; i < 5; i++)
+                  Padding(
+                    padding: EdgeInsets.only(left: i == 0 ? 0 : cardGap * scale),
+                    child:
+                        i < community.length
+                            ? _BoardCardTarget(
+                              key: ValueKey(
+                                'board-card-$i-${community[i].code}',
+                              ),
+                              index: i,
+                              card: community[i],
+                              width: w,
+                              selected: selectedBoardIndexes.contains(i),
+                              highlight:
+                                  !highlightBoardGroup &&
+                                  highlightBoardIndexes.contains(i),
+                              dimmed: dimmedBoardIndexes.contains(i),
+                              orderBadge: boardOrderBadges[i],
+                              onTap: onBoardCardTap == null
+                                  ? null
+                                  : () => onBoardCardTap!(i),
+                            )
+                            : features.boardSlots
+                            ? TableCardSlot(width: w)
+                            : SizedBox(width: w),
+                  ),
+              ],
+            ),
           ),
         ),
         if (features.blinds) ...[
@@ -299,19 +302,14 @@ class _PinnedToLabelWidth extends StatelessWidget {
 /// A board card that fades and scales in when it is first dealt.
 class _RevealedCard extends StatefulWidget {
   const _RevealedCard({
-    super.key,
     required this.card,
     required this.width,
-    this.selected = false,
-    this.highlighted = false,
     this.dimmed = false,
     this.orderBadge,
   });
 
   final CardModel card;
   final double width;
-  final bool selected;
-  final bool highlighted;
   final bool dimmed;
   final int? orderBadge;
 
@@ -342,8 +340,6 @@ class _RevealedCardState extends State<_RevealedCard> {
         child: TableCard(
           card: widget.card,
           width: widget.width,
-          selected: widget.selected,
-          highlighted: widget.highlighted,
           dimmed: widget.dimmed,
           orderBadge: widget.orderBadge,
         ),
@@ -352,15 +348,13 @@ class _RevealedCardState extends State<_RevealedCard> {
   }
 }
 
-/// One tappable board card with an optional cue arrow above it.
+/// One tappable board card with an optional [GlowHighlight].
 class _BoardCardTarget extends StatelessWidget {
   const _BoardCardTarget({
     super.key,
     required this.index,
     required this.card,
     required this.width,
-    required this.scale,
-    required this.reserveCue,
     required this.selected,
     required this.highlight,
     required this.dimmed,
@@ -371,8 +365,6 @@ class _BoardCardTarget extends StatelessWidget {
   final int index;
   final CardModel card;
   final double width;
-  final double scale;
-  final bool reserveCue;
   final bool selected;
   final bool highlight;
   final bool dimmed;
@@ -381,35 +373,18 @@ class _BoardCardTarget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardFace = CuePulse(
-      active: highlight && !selected,
+    final cardFace = GlowHighlight(
+      active: highlight || selected,
+      animated: highlight && !selected,
       borderRadius: width * 0.12,
       child: _RevealedCard(
         card: card,
         width: width,
-        selected: selected,
-        highlighted: highlight,
         dimmed: dimmed,
         orderBadge: orderBadge,
       ),
     );
-    final column = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (reserveCue)
-          SizedBox(
-            height: 30 * scale,
-            child: highlight && !selected
-                ? Align(
-                  alignment: Alignment.topCenter,
-                  child: CueArrows(size: 20 * scale),
-                )
-                : null,
-          ),
-        cardFace,
-      ],
-    );
-    if (onTap == null) return column;
+    if (onTap == null) return cardFace;
     return Semantics(
       button: true,
       label: card.display,
@@ -418,7 +393,7 @@ class _BoardCardTarget extends StatelessWidget {
         key: ValueKey<String>('lesson-board-card-$index'),
         behavior: HitTestBehavior.opaque,
         onTap: onTap,
-        child: column,
+        child: cardFace,
       ),
     );
   }

@@ -57,6 +57,8 @@ CourseHomeSnapshot _readySnapshot({
     sections: sections,
     streak: 2,
     lifetimeXp: 40,
+    gems: 0,
+    hearts: 3,
     acceptedAccuracy: 0.75,
     nextLessonId: 'lesson-a',
     rexLine: 'Next lesson on the path. One short lesson, then move.',
@@ -72,6 +74,7 @@ CourseHomeSnapshot _readySnapshot({
         unitId: 'unit-1',
         unitTitle: 'Unit One',
         isNext: true,
+        previewXp: 25,
       ),
       CourseMapNode(
         lessonId: 'lesson-b',
@@ -147,13 +150,17 @@ void _expectHomeThemeMetrics(WidgetTester tester) {
   }
   expect(find.byType(RexCoachCard), findsNothing);
   expect(find.byType(RexMascot), findsOneWidget);
-  expect(find.text('START'), findsOneWidget);
+  expect(find.text('START +25 XP'), findsOneWidget);
   final marked = find.ancestor(
     of: find.byType(RexMascot),
     matching: find.byType(Column),
   ).first;
   expect(
-    find.descendant(of: marked, matching: find.text('START')),
+    find.descendant(of: marked, matching: find.text('START +25 XP')),
+    findsOneWidget,
+  );
+  expect(
+    find.descendant(of: marked, matching: find.text('Lesson A')),
     findsOneWidget,
   );
   expect(
@@ -177,7 +184,7 @@ void main() {
     expect(find.byType(RexMascot), findsOneWidget);
     expect(find.byType(CoursePathView), findsOneWidget);
     expect(find.text('Lesson A'), findsOneWidget);
-    expect(find.text('START'), findsOneWidget);
+    expect(find.text('START +25 XP'), findsOneWidget);
     expect(find.textContaining('SECTION'), findsWidgets);
     expect(find.text('SECTION 1, UNIT 1'), findsOneWidget);
     expect(
@@ -317,7 +324,7 @@ void main() {
       const Offset(0, -120),
     );
     expect(find.text('Lesson A'), findsOneWidget);
-    expect(find.text('START'), findsOneWidget);
+    expect(find.text('START +25 XP'), findsOneWidget);
   });
 
   testWidgets('every node exposes a semantic label', (tester) async {
@@ -374,7 +381,7 @@ void main() {
     );
 
     expect(find.text('Resume'), findsNothing);
-    expect(find.text('START'), findsOneWidget);
+    expect(find.text('START +25 XP'), findsOneWidget);
     expect(find.byType(RexMascot), findsOneWidget);
     expect(find.text('Lesson A'), findsOneWidget);
   });
@@ -434,7 +441,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Lesson 11').hitTestable(), findsOneWidget);
-    expect(find.text('START').hitTestable(), findsOneWidget);
+    expect(find.text('START +25 XP').hitTestable(), findsOneWidget);
 
     await tester.dragUntilVisible(
       find.text('Lesson 0'),
@@ -447,7 +454,7 @@ void main() {
     focusRequests.value++;
     await tester.pumpAndSettle();
     expect(find.text('Lesson 11').hitTestable(), findsOneWidget);
-    expect(find.text('START').hitTestable(), findsOneWidget);
+    expect(find.text('START +25 XP').hitTestable(), findsOneWidget);
   });
 
   testWidgets('unit banner opens organized section picker', (tester) async {

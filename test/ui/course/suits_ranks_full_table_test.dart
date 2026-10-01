@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
@@ -16,7 +17,6 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart'
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
-import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -193,12 +193,12 @@ void main() {
       );
       await tester.pump();
       expect(find.byType(LessonSuitBoardTable), findsOneWidget);
-      expect(find.byType(CueArrows), findsNothing);
+      expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
       controller.revealHint();
       await tester.pump();
       expect(controller.showTargetCue, isTrue);
-      expect(find.byType(CueArrows), findsWidgets);
+      expect(find.byKey(const ValueKey<String>('glow-highlight')), findsWidgets);
     },
   );
 
@@ -258,7 +258,7 @@ void main() {
       stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.orderSequence,
       estimatedSeconds: 50,
-      accessibilityText: 'Tap deuce, ten, and ace on the board.',
+      accessibilityText: 'Tap the three board ranks from lowest to highest.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap these ranks from lowest to highest.',
       sequenceItems: const [
@@ -286,15 +286,22 @@ void main() {
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('H'), findsOneWidget);
 
-    final board = lessonRankOrderBoardCodes(
+    final deal = dealRankOrderSpot(
+      authoredItems: const [
+        (id: 'rank-2', label: '2'),
+        (id: 'rank-T', label: 'T'),
+        (id: 'rank-A', label: 'A'),
+      ],
       activityId: activity.id,
-      rankLabels: const ['2', 'T', 'A'],
+      generation: controller.bindGeneration,
       distractorCode: lessonRankOrderDistractorCode,
     );
-    expect(board.length, 4);
-    expect(board.contains(lessonRankOrderDistractorCode), isTrue);
-    for (final rank in ['2', 'T', 'A']) {
-      final index = board.indexWhere((code) => code.startsWith(rank));
+    expect(deal.boardCodes.length, 4);
+    expect(deal.boardCodes.contains(lessonRankOrderDistractorCode), isTrue);
+    for (final item in deal.sequenceItems) {
+      final index = deal.boardCodes.indexWhere(
+        (code) => code.startsWith(item.label),
+      );
       await tester.tap(find.byKey(ValueKey('lesson-board-card-$index')));
       await tester.pump();
     }
@@ -313,7 +320,7 @@ void main() {
       stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.orderSequence,
       estimatedSeconds: 50,
-      accessibilityText: 'Tap deuce, ten, and ace on the board.',
+      accessibilityText: 'Tap the three board ranks from lowest to highest.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Tap these ranks from lowest to highest.',
       sequenceItems: const [
@@ -338,12 +345,19 @@ void main() {
     );
     await tester.pump();
 
-    final board = lessonRankOrderBoardCodes(
+    final deal = dealRankOrderSpot(
+      authoredItems: const [
+        (id: 'rank-2', label: '2'),
+        (id: 'rank-T', label: 'T'),
+        (id: 'rank-A', label: 'A'),
+      ],
       activityId: activity.id,
-      rankLabels: const ['2', 'T', 'A'],
+      generation: controller.bindGeneration,
       distractorCode: lessonRankOrderDistractorCode,
     );
-    final distractorIndex = board.indexOf(lessonRankOrderDistractorCode);
+    final distractorIndex = deal.boardCodes.indexOf(
+      lessonRankOrderDistractorCode,
+    );
     await tester.tap(
       find.byKey(ValueKey('lesson-board-card-$distractorIndex')),
     );
@@ -405,26 +419,38 @@ void main() {
     expect(autoSubmits, 1);
   });
 
-  test('rank board shuffle is stable and not authored ascending', () {
-    final board = lessonRankOrderBoardCodes(
-      activityId: 'act-01-01-02-scaffolded-ranks',
-      rankLabels: const ['2', 'T', 'A'],
-      distractorCode: lessonRankOrderDistractorCode,
-    );
-    expect(board.length, 4);
-    expect(board.contains(lessonRankOrderDistractorCode), isTrue);
-    final real = [
-      for (final code in board)
-        if (code != lessonRankOrderDistractorCode) code[0],
+  test('rank order deal varies ranks and stays id-stable', () {
+    const authored = [
+      (id: 'rank-2', label: '2'),
+      (id: 'rank-T', label: 'T'),
+      (id: 'rank-A', label: 'A'),
     ];
-    expect(real, isNot(['2', 'T', 'A']));
-    expect(
-      lessonRankOrderBoardCodes(
+    final labels = <String>{};
+    for (var gen = 0; gen < 12; gen++) {
+      final deal = dealRankOrderSpot(
+        authoredItems: authored,
         activityId: 'act-01-01-02-scaffolded-ranks',
-        rankLabels: const ['2', 'T', 'A'],
+        generation: gen,
         distractorCode: lessonRankOrderDistractorCode,
-      ),
-      board,
-    );
+        random: Random(gen + 7),
+      );
+      expect(deal.boardCodes.length, 4);
+      expect(deal.boardCodes.contains(lessonRankOrderDistractorCode), isTrue);
+      expect(
+        [for (final item in deal.sequenceItems) item.id],
+        ['rank-2', 'rank-T', 'rank-A'],
+      );
+      final ranks = [for (final item in deal.sequenceItems) item.label];
+      labels.add(ranks.join(','));
+      // Labels stay ascending by poker rank.
+      final values = [
+        for (final label in ranks)
+          PokerConstants.rankLabels.entries
+              .firstWhere((e) => e.value == label)
+              .key,
+      ];
+      expect(values, values.toList()..sort());
+    }
+    expect(labels.length, greaterThan(1));
   });
 }

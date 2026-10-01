@@ -1322,17 +1322,18 @@ class LessonScreenLayout extends StatelessWidget {
             ),
           ),
         ),
-        if (graded) ...[
-          // Free margin of scaffold bg so stage controls never sit on the
-          // banner; Expanded above shrinks so content scales upward.
-          const SizedBox(height: LessonAnswerDock.stageClearance),
+        // Free margin of scaffold bg so stage controls (and their glow
+        // highlights) never sit on the tool row or answer dock; Expanded
+        // above shrinks so content scales upward.
+        const SizedBox(height: LessonAnswerDock.stageClearance),
+        if (graded)
           LessonAnswerDock(
             result: result!,
             onContinue: onContinue!,
             busy: answerBusy,
             recovery: recovery,
-          ),
-        ] else
+          )
+        else
           LessonToolRow(
             onUndo: onUndo,
             onRedo: onRedo,

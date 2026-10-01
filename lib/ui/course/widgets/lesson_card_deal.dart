@@ -581,19 +581,34 @@ class HoleHandSeatDeal {
 class HoleHandSeatRole {
   /// Creates a role mapped to an authored choice id.
   const HoleHandSeatRole({
-    required this.kind,
+    required this.family,
     required this.choiceId,
     required this.correct,
   });
 
-  /// How to deal the two cards.
-  final LessonHoleKind kind;
+  /// Starting-hand family used when dealing the two cards.
+  final LessonStartingHandFamily family;
 
   /// Authored grading choice id (stable across card values).
   final String choiceId;
 
   /// Whether this role is the correct tap target.
   final bool correct;
+}
+
+/// Maps a coarse [LessonHoleKind] onto a starting-hand family.
+LessonStartingHandFamily startingHandFamilyForHoleKind(LessonHoleKind kind) {
+  return switch (kind) {
+    LessonHoleKind.pocketPair => LessonStartingHandFamily.mediumPair,
+    LessonHoleKind.suitedAce => LessonStartingHandFamily.suitedAce,
+    LessonHoleKind.broadway => LessonStartingHandFamily.offsuitBroadway,
+    LessonHoleKind.suitedConnector => LessonStartingHandFamily.suitedConnector,
+    LessonHoleKind.offsuitConnector =>
+      LessonStartingHandFamily.offsuitConnector,
+    LessonHoleKind.offsuitTrash => LessonStartingHandFamily.junkOffsuit,
+    LessonHoleKind.suitedNonPair => LessonStartingHandFamily.suitedNonPair,
+    LessonHoleKind.offsuitNonPair => LessonStartingHandFamily.offsuitNonPair,
+  };
 }
 
 /// Returns a randomized seat plan for suits/ranks hole-hand identify steps.
@@ -604,34 +619,34 @@ HoleHandSeatDeal? dealHoleHandSeatPlan(
   final roles = switch (activity.id) {
     'act-01-01-02-unguided-suited' => const [
       HoleHandSeatRole(
-        kind: LessonHoleKind.suitedNonPair,
+        family: LessonStartingHandFamily.suitedNonPair,
         choiceId: 'suited-ah-kh',
         correct: true,
       ),
       HoleHandSeatRole(
-        kind: LessonHoleKind.offsuitNonPair,
+        family: LessonStartingHandFamily.offsuitNonPair,
         choiceId: 'offsuit-ah-kd',
         correct: false,
       ),
       HoleHandSeatRole(
-        kind: LessonHoleKind.pocketPair,
+        family: LessonStartingHandFamily.mediumPair,
         choiceId: 'pair-77',
         correct: false,
       ),
     ],
     'act-01-01-02-checkpoint-pair' => const [
       HoleHandSeatRole(
-        kind: LessonHoleKind.pocketPair,
+        family: LessonStartingHandFamily.mediumPair,
         choiceId: 'pocket-pair',
         correct: true,
       ),
       HoleHandSeatRole(
-        kind: LessonHoleKind.suitedNonPair,
+        family: LessonStartingHandFamily.suitedNonPair,
         choiceId: 'suited-nine',
         correct: false,
       ),
       HoleHandSeatRole(
-        kind: LessonHoleKind.offsuitNonPair,
+        family: LessonStartingHandFamily.offsuitNonPair,
         choiceId: 'two-high',
         correct: false,
       ),
@@ -653,7 +668,7 @@ HoleHandSeatDeal dealHoleHandSeatRoles(
   final dealt = <({List<String> codes, String choiceId, bool correct})>[
     for (final role in roles)
       (
-        codes: dealHoleHand(role.kind, rng, used: used),
+        codes: dealStartingHandFamily(role.family, rng, used: used),
         choiceId: role.choiceId,
         correct: role.correct,
       ),
@@ -1228,12 +1243,126 @@ bool _namesMatch({
       name(jo) == expected[2];
 }
 
+/// Rank-order board deal: fresh ranks, stable authored item ids.
+@immutable
+class RankOrderDeal {
+  /// Creates a dealt rank-order layout.
+  const RankOrderDeal({
+    required this.boardCodes,
+    required this.sequenceItems,
+    required this.heroCodes,
+  });
+
+  /// Shuffled board codes (optional distractor included).
+  final List<String> boardCodes;
+
+  /// Authored ids with labels remapped to the dealt ranks (low → high).
+  final List<({String id, String label})> sequenceItems;
+
+  /// Face-down hero holes from a starting-hand family.
+  final List<String> heroCodes;
+}
+
+/// Samples distinct ranks for a rank-order step; item ids stay authored.
+///
+/// [authoredItems] must already be in correct low→high order. Labels become
+/// the dealt ranks; grading still uses the stable ids.
+RankOrderDeal dealRankOrderSpot({
+  required List<({String id, String label})> authoredItems,
+  required String activityId,
+  int generation = 0,
+  String? distractorCode,
+  Random? random,
+}) {
+  assert(authoredItems.length >= 2, 'rank-order needs at least two ranks');
+  final rng = resolveLessonDealRandom(
+    activityId: activityId,
+    generation: generation,
+    random: random,
+  );
+  final pool = List<int>.generate(13, (i) => i + 2)..shuffle(rng);
+  final ranks = pool.take(authoredItems.length).toList()..sort();
+  final items = <({String id, String label})>[
+    for (var i = 0; i < authoredItems.length; i++)
+      (
+        id: authoredItems[i].id,
+        label: PokerConstants.rankLabels[ranks[i]]!,
+      ),
+  ];
+  const suitCycle = ['h', 'd', 'c', 's'];
+  final board = <String>[
+    for (var i = 0; i < items.length; i++)
+      '${items[i].label}${suitCycle[i % suitCycle.length]}',
+  ];
+  for (var i = board.length - 1; i > 0; i--) {
+    final j = rng.nextInt(i + 1);
+    final tmp = board[i];
+    board[i] = board[j];
+    board[j] = tmp;
+  }
+  final authoredOrder = [
+    for (final item in items) item.label,
+  ];
+  final boardRanks = [
+    for (final code in board)
+      if (distractorCode == null || code != distractorCode) code[0],
+  ];
+  if (boardRanks.length > 1 && _sameStringList(boardRanks, authoredOrder)) {
+    final tmp = board[0];
+    board[0] = board[1];
+    board[1] = tmp;
+  }
+  if (distractorCode != null && distractorCode.isNotEmpty) {
+    board.insert(board.length ~/ 2, distractorCode);
+  }
+  final used = <String>{
+    for (final code in board)
+      if (distractorCode == null || code != distractorCode) code,
+  };
+  final family = LessonStartingHandFamily
+      .values[rng.nextInt(LessonStartingHandFamily.values.length)];
+  final hero = dealStartingHandFamily(family, rng, used: used);
+  return RankOrderDeal(
+    boardCodes: List<String>.unmodifiable(board),
+    sequenceItems: List<({String id, String label})>.unmodifiable(items),
+    heroCodes: hero,
+  );
+}
+
+bool _sameStringList(List<String> a, List<String> b) {
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
+/// Structure-preserving remap of a made-hand example tile.
+List<String> dealtHandExampleCodes(
+  List<String> template, {
+  required String activityId,
+  int generation = 0,
+  Random? random,
+}) {
+  if (template.isEmpty || !lessonSuitRemapEnabled) {
+    return List<String>.of(template);
+  }
+  final rng = resolveLessonDealRandom(
+    activityId: '$activityId#hand-example',
+    generation: generation,
+    random: random,
+  );
+  final remapped = structurePreservingLessonCardGroups([template], rng) ??
+      permuteCardSuitGroups([template], rng);
+  return List<String>.unmodifiable(remapped[0]);
+}
+
 /// Two tiny hole cards dealt once for a hand-family teaching tile.
 class DealtMiniPair extends StatefulWidget {
-  /// Creates a randomized mini pair for [kind].
+  /// Creates a randomized mini pair for [kind] via its starting-hand family.
   const DealtMiniPair({super.key, required this.kind});
 
-  /// Attribute to deal.
+  /// Attribute to deal (mapped onto [LessonStartingHandFamily]).
   final LessonHoleKind kind;
 
   @override
@@ -1246,8 +1375,8 @@ class _DealtMiniPairState extends State<DealtMiniPair> {
   @override
   void initState() {
     super.initState();
-    _codes = dealHoleHand(
-      widget.kind,
+    _codes = dealStartingHandFamily(
+      startingHandFamilyForHoleKind(widget.kind),
       debugLessonCardDealRandom ?? Random(),
     );
   }

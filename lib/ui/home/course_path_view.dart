@@ -109,55 +109,60 @@ class CourseUnitBanner extends StatelessWidget {
       button: onTap != null,
       label: '$eyebrow. $unitTitle',
       hint: onTap == null ? null : 'Open section list',
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: base,
-          borderRadius: radius,
-          boxShadow: [
-            BoxShadow(
-              color: lip,
-              offset: const Offset(0, 4),
-              blurRadius: 0,
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          borderRadius: radius,
-          child: InkWell(
-            onTap: onTap,
+      // Stretch to the parent width so AnimatedSwitcher cannot shrink-wrap
+      // and center a content-sized plate (Duo banners are near full-bleed).
+      child: SizedBox(
+        width: double.infinity,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: base,
             borderRadius: radius,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    eyebrow,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.manrope(
-                      // Duo tints the eyebrow with the banner; white@opacity
-                      // on a saturated fill reads the same way.
-                      color: Colors.white.withValues(alpha: 0.78),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.8,
+            boxShadow: [
+              BoxShadow(
+                color: lip,
+                offset: const Offset(0, 4),
+                blurRadius: 0,
+              ),
+            ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: radius,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: radius,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      eyebrow,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.manrope(
+                        // Duo tints the eyebrow with the banner; white@opacity
+                        // on a saturated fill reads the same way.
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.6,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    unitTitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.manrope(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      height: 1.15,
+                    const SizedBox(height: 2),
+                    Text(
+                      unitTitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.manrope(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        height: 1.2,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -331,10 +336,6 @@ class _PathNodeRow extends StatelessWidget {
     final labeled = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (node.isNext) ...[
-          _StartChip(color: accent),
-          const SizedBox(height: 6),
-        ],
         if (node.isNext)
           Padding(
             padding: const EdgeInsets.only(bottom: 4),
@@ -346,24 +347,33 @@ class _PathNodeRow extends StatelessWidget {
             ),
           ),
         bubble,
-        const SizedBox(height: 8),
-        SizedBox(
-          width: 120,
-          child: Text(
-            node.title,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.manrope(
-              color: node.state == CourseNodeState.locked
-                  ? AppColors.slate
-                  : AppColors.cream,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              height: 1.2,
+        if (node.isNext) ...[
+          const SizedBox(height: 10),
+          _StartLessonBubble(
+            title: node.title,
+            previewXp: node.previewXp,
+            color: accent,
+          ),
+        ] else ...[
+          const SizedBox(height: 8),
+          SizedBox(
+            width: 120,
+            child: Text(
+              node.title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.manrope(
+                color: node.state == CourseNodeState.locked
+                    ? AppColors.slate
+                    : AppColors.cream,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                height: 1.2,
+              ),
             ),
           ),
-        ),
+        ],
       ],
     );
 
@@ -420,37 +430,131 @@ class _PathNodeRow extends StatelessWidget {
   }
 }
 
-class _StartChip extends StatelessWidget {
-  const _StartChip({required this.color});
+/// Duo-style speech bubble anchored under the next lesson node.
+class _StartLessonBubble extends StatelessWidget {
+  const _StartLessonBubble({
+    required this.title,
+    required this.previewXp,
+    required this.color,
+  });
 
+  final String title;
+  final int previewXp;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+    final lip = Color.lerp(color, Colors.black, 0.22)!;
+    const radius = BorderRadius.all(Radius.circular(16));
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CustomPaint(
+          size: const Size(18, 10),
+          painter: _BubbleCaretPainter(color: color),
+        ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 196, maxWidth: 220),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: radius,
+              boxShadow: [
+                BoxShadow(
+                  color: lip,
+                  offset: const Offset(0, 4),
+                  blurRadius: 0,
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.manrope(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  _StartXpButton(previewXp: previewXp, color: color),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StartXpButton extends StatelessWidget {
+  const _StartXpButton({
+    required this.previewXp,
+    required this.color,
+  });
+
+  final int previewXp;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = 'START +$previewXp XP';
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.bgDark,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.55)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.35),
-            blurRadius: 8,
+            color: Colors.black.withValues(alpha: 0.18),
             offset: const Offset(0, 3),
+            blurRadius: 0,
           ),
         ],
       ),
-      child: Text(
-        'START',
-        style: GoogleFonts.manrope(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 1.1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.manrope(
+            color: color,
+            fontSize: 15,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.6,
+          ),
         ),
       ),
     );
+  }
+}
+
+class _BubbleCaretPainter extends CustomPainter {
+  _BubbleCaretPainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..moveTo(0, size.height)
+      ..lineTo(size.width / 2, 0)
+      ..lineTo(size.width, size.height)
+      ..close();
+    canvas.drawPath(path, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(covariant _BubbleCaretPainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }
 

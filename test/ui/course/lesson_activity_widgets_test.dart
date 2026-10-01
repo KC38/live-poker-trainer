@@ -1,6 +1,8 @@
 /// Widget coverage for lesson activity shells and grade feedback.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -2108,7 +2110,7 @@ void main() {
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText:
-          'Look at pocket eights on the felt — tap Pocket pair.',
+          'Look at the pocket pair on the felt — tap Pocket pair.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Name the family for your holes.',
       choices: const [
@@ -8846,13 +8848,13 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('rank order palette is shuffled, not authored ascending', (
+  testWidgets('rank order board deals fresh ranks, not authored 2-T-A', (
     tester,
   ) async {
     const items = [
-      CourseChoice(id: 'r2', label: '2'),
-      CourseChoice(id: 'rT', label: 'T'),
-      CourseChoice(id: 'rA', label: 'A'),
+      CourseChoice(id: 'rank-2', label: '2'),
+      CourseChoice(id: 'rank-T', label: 'T'),
+      CourseChoice(id: 'rank-A', label: 'A'),
     ];
     final activity = CourseActivity(
       id: 'act-01-01-02-scaffolded-ranks',
@@ -8865,63 +8867,60 @@ await tester.tap(find.text('NIT'));
       prompt: 'Order these ranks from lowest to highest.',
       sequenceItems: items,
     );
-    final expectedPalette =
-        shuffledSequencePalette(
-          activityId: activity.id,
-          items: items,
-        ).map((item) => item.label.toUpperCase()).toList(growable: false);
-    expect(expectedPalette, isNot(['2', 'T', 'A']));
+    final deal = dealRankOrderSpot(
+      authoredItems: [
+        for (final item in items) (id: item.id, label: item.label),
+      ],
+      activityId: activity.id,
+      distractorCode: lessonRankOrderDistractorCode,
+      random: Random(11),
+    );
+    expect(
+      [for (final item in deal.sequenceItems) item.label],
+      isNot(['2', 'T', 'A']),
+    );
+    expect(deal.boardCodes.contains(lessonRankOrderDistractorCode), isTrue);
 
     final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+    addTearDown(() => debugLessonCardDealRandom = null);
+    debugLessonCardDealRandom = Random(11);
+
     await tester.pumpWidget(
-      _wrap(
-        OrderSequenceActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
+      ProviderScope(
+        overrides: [
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: LessonFrameScope(
+              onLocalMiss: (_) {},
+              child: OrderSequenceActivity(
+                activity: activity,
+                controller: controller,
+                showGuidance: true,
+              ),
+            ),
+          ),
         ),
       ),
     );
+    await tester.pump();
+    expect(find.byType(LessonRankOrderTable), findsOneWidget);
+    expect(find.text('H'), findsOneWidget);
 
-    List<String> paletteByPosition() {
-      final entries = <({String label, Offset pos})>[];
-      for (final label in ['2', 'T', 'A']) {
-        entries.add((
-          label: label,
-          pos: tester.getTopLeft(find.text(label)),
-        ));
-      }
-      entries.sort((a, b) {
-        final dy = a.pos.dy.compareTo(b.pos.dy);
-        if (dy != 0) return dy;
-        return a.pos.dx.compareTo(b.pos.dx);
-      });
-      return entries.map((e) => e.label).toList(growable: false);
+    for (final item in deal.sequenceItems) {
+      final index = deal.boardCodes.indexWhere(
+        (code) => code.startsWith(item.label),
+      );
+      await tester.tap(find.byKey(ValueKey('lesson-board-card-$index')));
+      await tester.pump();
     }
-
-    final first = paletteByPosition();
-    expect(first, expectedPalette);
-    expect(first, isNot(['2', 'T', 'A']));
-
-    await tester.pumpWidget(
-      _wrap(
-        OrderSequenceActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
-        ),
-      ),
-    );
-    expect(paletteByPosition(), first);
-
-    await tester.tap(find.text('2'));
-    await tester.pump();
-    await tester.tap(find.text('T'));
-    await tester.pump();
-    await tester.tap(find.text('A'));
-    await tester.pump();
-    expect(controller.draft.orderedIds, ['r2', 'rT', 'rA']);
-    controller.dispose();
+    expect(controller.draft.orderedIds, ['rank-2', 'rank-T', 'rank-A']);
   });
 
   testWidgets('suit identify shows prompt once in Rex, not duplicated below', (
@@ -10237,7 +10236,7 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 35,
       accessibilityText: 'Jump test: suited ace family.',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Ah 5h belongs to which family?',
+      prompt: 'These holes belong to which family?',
       choices: const [
         CourseChoice(id: 'j2-sa', label: 'Suited ace'),
         CourseChoice(id: 'j2-pair', label: 'Pocket pair'),
@@ -10277,19 +10276,16 @@ await tester.tap(find.text('NIT'));
       find.text('Look at your holes — pick the family they belong to.'),
       findsOneWidget,
     );
-    expect(find.text('Ah 5h belongs to which family?'), findsNothing);
+    expect(find.text('These holes belong to which family?'), findsNothing);
     expect(find.text('Suited ace'), findsOneWidget);
     expect(find.text('Pocket pair'), findsOneWidget);
     expect(find.text('Offsuit trash'), findsOneWidget);
-    // Suited-ace tile uses an example (As9s), not hero Ah5h — no visual spoil.
+    // Family tiles deal inside the family — never spoil with hero Ah5h.
     expect(
       find.byWidgetPredicate(
-        (w) =>
-            w is MiniCard &&
-            w.card.code.toLowerCase() == 'as' &&
-            w.size == MiniCardSize.tiny,
+        (w) => w is MiniCard && w.size == MiniCardSize.tiny,
       ),
-      findsOneWidget,
+      findsWidgets,
     );
     expect(
       find.byWidgetPredicate(
@@ -11007,7 +11003,7 @@ await tester.tap(find.text('NIT'));
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Board Kc 8h 2d. You hold Ah Qh. Clean outs to the best hand?',
       choices: const [
-        CourseChoice(id: 'outs-3', label: 'About 3 — the aces'),
+        CourseChoice(id: 'outs-3', label: 'About 3 — clean overs'),
         CourseChoice(id: 'outs-6', label: '6 — aces and queens'),
         CourseChoice(id: 'outs-0', label: '0 — never improve'),
       ],
@@ -11064,7 +11060,7 @@ await tester.tap(find.text('NIT'));
       accessibilityText: 'Three remaining aces are the clean outs.',
       acceptedGrades: const [SoftGrade.recommended],
       choices: const [
-        CourseChoice(id: 'outs-3', label: 'About 3 — the aces'),
+        CourseChoice(id: 'outs-3', label: 'About 3 — clean overs'),
         CourseChoice(id: 'outs-6', label: '6 — aces and queens'),
         CourseChoice(id: 'outs-0', label: '0 — never improve'),
       ],
@@ -12122,8 +12118,8 @@ await tester.tap(find.text('NIT'));
     // Call 20 exceeds the 12-chip stack — live dock marks it off.
     expect(find.text('CALL (off)'), findsOneWidget);
     expect(find.text('CALL 20'), findsNothing);
-    // Default 100bb villain still shows; hero is the short stack.
-    expect(find.text('\$200'), findsOneWidget);
+    // Villain bet 20 comes out of the default 100bb stack ($200 → $180).
+    expect(find.text('\$180'), findsOneWidget);
     await tester.tap(find.text('ALL-IN 12'));
     await tester.pump();
     expect(allInController.draft.choiceId, 'shove-12');

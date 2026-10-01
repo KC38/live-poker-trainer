@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_money.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
@@ -135,6 +136,68 @@ class AuthoredMultiStepActivity extends StatelessWidget {
           // SoftPulse and/or Rex own the cue — hide a third gold felt tip
           // (including SoftPulse-quiet checkpoint/jump where SoftPulse is off).
           final coachOwnsCue = !locked;
+          CourseChoice? selectedChoice;
+          if (selected != null) {
+            for (final choice in step.choices) {
+              if (choice.id == selected) {
+                selectedChoice = choice;
+                break;
+              }
+            }
+          }
+          final feltMoney = resolveLessonActionFeltMoney(
+            spot: spot,
+            choices: step.choices,
+            selected: selectedChoice,
+            seatCount: 2,
+          );
+          final applyFeltMoney =
+              spot.facingBet ||
+              feltMoney.heroActionLabel != null ||
+              feltMoney.streetBets.any((b) => b > 0);
+          final useFullTable =
+              LessonFrameScope.maybeOf(context) != null &&
+              (activity.id.startsWith('act-01-06-01-') ||
+                  activity.id == 'act-01-06-02-jump-hand' ||
+                  activity.id == 'act-04-03-01-guided' ||
+                  activity.id == 'act-07-10-01-hand' ||
+                  activity.id == 'act-07-10-02-hand' ||
+                  activity.id == 'act-07-10-03-hand' ||
+                  activity.id == 'act-07-10-04-hand' ||
+                  activity.id == 'act-07-10-05-hand');
+          final table =
+              useFullTable
+                  ? LessonTableStage(
+                    heroCodes: spot.heroCodes,
+                    boardCodes: spot.boardCodes,
+                    villainCount: 1,
+                    heroFaceUp: true,
+                    streetBets: applyFeltMoney ? feltMoney.streetBets : null,
+                    potTotal: applyFeltMoney ? feltMoney.potTotal : null,
+                    heroActionLabel: feltMoney.heroActionLabel,
+                    villainActionLabel:
+                        applyFeltMoney ? feltMoney.villainActionLabel : null,
+                    heroStackChips: spot.heroStackAmount?.toDouble(),
+                    villainStackChips: spot.villainStackChips,
+                  )
+                  : LessonActionTable(
+                    spot: spot,
+                    coachOwnsCue: coachOwnsCue,
+                    potLabelOverride:
+                        applyFeltMoney
+                            ? lessonActionPotChipLabel(feltMoney)
+                            : null,
+                    facingBetAmount:
+                        applyFeltMoney &&
+                                spot.facingBet &&
+                                feltMoney.streetBets.length > 1
+                            ? feltMoney.streetBets[1]
+                            : null,
+                    heroBetAmount:
+                        applyFeltMoney && feltMoney.streetBets.isNotEmpty
+                            ? feltMoney.streetBets[0]
+                            : null,
+                  );
           return LayoutBuilder(
             builder: (context, constraints) {
               final fill =
@@ -156,52 +219,7 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  if (fill)
-                    Expanded(
-                      child:
-                          LessonFrameScope.maybeOf(context) != null &&
-                                  (activity.id.startsWith('act-01-06-01-') ||
-                                      activity.id ==
-                                          'act-01-06-02-jump-hand' ||
-                                      activity.id == 'act-04-03-01-guided' ||
-                                      activity.id == 'act-07-10-01-hand' ||
-                                      activity.id == 'act-07-10-02-hand' ||
-                                      activity.id == 'act-07-10-03-hand' ||
-                                      activity.id == 'act-07-10-04-hand' ||
-                                      activity.id == 'act-07-10-05-hand')
-                              ? LessonTableStage(
-                                heroCodes: spot.heroCodes,
-                                boardCodes: spot.boardCodes,
-                                villainCount: 1,
-                                heroFaceUp: true,
-                              )
-                              : LessonActionTable(
-                                spot: spot,
-                                coachOwnsCue: coachOwnsCue,
-                              ),
-                    )
-                  else
-                    LessonFrameScope.maybeOf(context) != null &&
-                            (activity.id.startsWith('act-01-06-01-') ||
-                                activity.id == 'act-01-06-02-jump-hand' ||
-                                activity.id == 'act-04-03-01-guided' ||
-                                activity.id == 'act-07-10-01-hand' ||
-                                activity.id == 'act-07-10-02-hand' ||
-                                activity.id == 'act-07-10-03-hand' ||
-                                activity.id == 'act-07-10-04-hand' ||
-                                activity.id == 'act-07-10-05-hand')
-                        ? LessonTableStage(
-                          heroCodes: spot.heroCodes,
-                          boardCodes: spot.boardCodes,
-                          villainCount: 1,
-                          heroFaceUp: true,
-                          heroStackChips: spot.heroStackAmount?.toDouble(),
-                          villainStackChips: spot.villainStackChips,
-                        )
-                        : LessonActionTable(
-                          spot: spot,
-                          coachOwnsCue: coachOwnsCue,
-                        ),
+                  if (fill) Expanded(child: table) else table,
                   const SizedBox(height: 14),
                   LessonActionDock(
                     choices: shuffledLessonChoices(
