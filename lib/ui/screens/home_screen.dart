@@ -575,11 +575,21 @@ class _HomeBodyState extends State<_HomeBody> {
         if (activeUnit != null)
           Padding(
             key: _bannerKey,
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+            // Match status-bar inset so the plate reads as Duo near-full-bleed.
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 220),
               switchInCurve: Curves.easeOut,
               switchOutCurve: Curves.easeIn,
+              layoutBuilder: (currentChild, previousChildren) {
+                return Stack(
+                  alignment: Alignment.topCenter,
+                  children: <Widget>[
+                    ...previousChildren,
+                    ?currentChild,
+                  ],
+                );
+              },
               child: CourseUnitBanner(
                 key: ValueKey<String>(activeUnit.unitId),
                 sectionOrder: activeUnit.sectionOrder,
