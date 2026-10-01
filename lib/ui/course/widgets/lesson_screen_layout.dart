@@ -321,8 +321,8 @@ String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
         'their cards if theirs wins, or Chop if you tie.';
   }
   if (activity.id == 'act-01-02-02-unguided-board') {
-    return 'Both checked down. Tap the board if both play it, your cards '
-        'if a higher hole card wins, or their cards if they win.';
+    return 'Both checked down. Tap the board if both play it, or a '
+        "player's cards if you think their holes win.";
   }
   if (activity.id == 'act-01-03-01-explain-passive') {
     return 'Three quiet buttons. Tap Fold, then Check, then Call.';
