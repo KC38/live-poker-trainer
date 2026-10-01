@@ -37,6 +37,7 @@ class CourseMapNode {
     required this.isNext,
     this.lockReason,
     this.mastery = 0,
+    this.previewXp = kXpLessonComplete,
   });
 
   final String lessonId;
@@ -51,6 +52,9 @@ class CourseMapNode {
   final bool isNext;
   final String? lockReason;
   final double mastery;
+
+  /// Perfect-run XP shown on the Duo-style START CTA (`START +N XP`).
+  final int previewXp;
 
   /// Accessibility label for icon-only nodes.
   String get semanticsLabel {
@@ -438,6 +442,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
             isNext: false,
             lockReason: lockReason,
             mastery: masteryScore,
+            previewXp: previewLessonXp(lesson.activities.length),
           ),
         );
       }
@@ -492,6 +497,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
         isNext: node.lessonId == nextId,
         lockReason: node.lockReason,
         mastery: node.mastery,
+        previewXp: node.previewXp,
       ),
   ];
 
