@@ -1477,6 +1477,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     dealerIndex: lessonBlindsButtonIndex,
                     sbIndex: lessonBlindsSmallBlindIndex,
                     bbIndex: lessonBlindsBigBlindIndex,
+                    // SoftPulse SB only after Hint — never before on checkpoint.
+                    cueSeatIndex:
+                        _cuesAnswerSeat(locked)
+                            ? lessonSeatIndexForHighlight(scene.highlight)
+                            : null,
                     enabled: !locked,
                     onSeatIndexTap:
                         locked

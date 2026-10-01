@@ -411,6 +411,151 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('postflop checkpoint SoftPulses SB only after hint', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-checkpoint-postflop',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Tap the seat left of the button — first to act postflop.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Postflop multiway. Tap who acts first.',
+      choices: const [
+        CourseChoice(id: 'sb-first', label: 'SB'),
+        CourseChoice(id: 'btn-first', label: 'BTN'),
+        CourseChoice(id: 'bb-first-always', label: 'BB'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(390, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: TableFeaturesScope(
+            features: TableFeatures.forLessonId(
+              'lesson-01-04-01-streets-and-order',
+            ),
+            child: LessonFrameScope(
+              onLocalMiss: (_) {},
+              child: AnimatedBuilder(
+                animation: controller,
+                builder: (context, _) {
+                  return SizedBox(
+                    height: 560,
+                    child: SelectIdentifyActivity(
+                      activity: activity,
+                      controller: controller,
+                      showGuidance: controller.showTargetCue,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(
+      find.byKey(ValueKey<String>('seat-cue-$lessonBlindsSmallBlindIndex')),
+      findsNothing,
+    );
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    controller.revealHint();
+    await tester.pump();
+
+    expect(
+      find.byKey(ValueKey<String>('seat-cue-$lessonBlindsSmallBlindIndex')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(
+      find.byKey(ValueKey<String>('seat-cue-$lessonBlindsButtonIndex')),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
+    controller.dispose();
+  });
+
+  testWidgets('street-end SoftPulses Bets matched only after hint', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-unguided-end',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Betting is live — pick when this street ends.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Flop betting is live. Tap when this street ends.',
+      choices: const [
+        CourseChoice(id: 'matched', label: 'Bets matched'),
+        CourseChoice(id: 'three-cards', label: 'Flop appears'),
+        CourseChoice(id: 'someone-folds', label: 'Someone folds'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(390, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: LessonFrameScope(
+            onLocalMiss: (_) {},
+            child: AnimatedBuilder(
+              animation: controller,
+              builder: (context, _) {
+                return SizedBox(
+                  height: 560,
+                  child: SelectIdentifyActivity(
+                    activity: activity,
+                    controller: controller,
+                    showGuidance: controller.showTargetCue,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey<String>('street-end-cue-streetActionMatched')),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('street-end-tile-streetActionMatched')),
+      findsOneWidget,
+    );
+
+    controller.revealHint();
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey<String>('street-end-cue-streetActionMatched')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey<String>('street-end-cue-streetFlopDealt')),
+      findsNothing,
+    );
+    expect(find.byKey(const ValueKey('street-end-felt')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    controller.dispose();
+  });
+
   testWidgets('scaffolded blinds posts BB chips only after a correct tap', (
     tester,
   ) async {
