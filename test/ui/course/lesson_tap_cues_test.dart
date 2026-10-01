@@ -259,6 +259,68 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('hint SoftPulses every flop card on unguided mix', (tester) async {
+    final activity = CourseActivity(
+      id: 'act-01-01-01-unguided-mix',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap the shared community cards on the flop.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'h',
+          kind: 'hint',
+          text: 'Community cards sit in the middle of the table.',
+        ),
+      ],
+      choices: const [
+        CourseChoice(id: 'choice-flop', label: 'Qs Jh 2c in the middle'),
+        CourseChoice(id: 'choice-hero-again', label: 'Your Ah Kd'),
+        CourseChoice(id: 'choice-muck', label: 'Folded cards in the muck'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(390, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: LessonFrameScope(
+            onLocalMiss: (_) {},
+            child: AnimatedBuilder(
+              animation: controller,
+              builder: (context, _) {
+                return SizedBox(
+                  height: 520,
+                  child: SelectIdentifyActivity(
+                    activity: activity,
+                    controller: controller,
+                    showGuidance: controller.showTargetCue,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
+
+    controller.revealHint();
+    await tester.pump();
+
+    // Match hole-card SoftPulse: CuePulse + arrow on each dealt board card.
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(3));
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(3));
+    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNWidgets(3));
+    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsNothing);
+    controller.dispose();
+  });
+
   testWidgets('scaffolded blinds posts BB chips only after a correct tap', (
     tester,
   ) async {

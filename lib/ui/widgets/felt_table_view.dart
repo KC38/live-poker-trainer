@@ -103,7 +103,11 @@ class FeltTableView extends StatelessWidget {
   /// Arrows on the hero seat, the lesson cue for "tap your cards".
   final bool highlightHero;
 
-  /// An arrow on the community cards.
+  /// SoftPulse the community cards (CuePulse + arrows), matching [highlightHero].
+  ///
+  /// When [highlightBoardIndexes] is empty and the board has dealt cards,
+  /// every community index is cued — a single arrow centered on five slots
+  /// lands on the rightmost flop card and skips the gold ring.
   final bool highlightBoard;
 
   /// Tap on a seat, including the hero. Lesson stages use this.
@@ -445,6 +449,18 @@ class FeltTableView extends StatelessWidget {
     }
 
     final board = layout.board;
+    // Region board cue → every dealt card (CuePulse + arrow), same as face-up
+    // hero holes. Empty board keeps a single centered CueArrows above slots.
+    final effectiveBoardHighlights =
+        highlightBoardIndexes.isNotEmpty
+            ? highlightBoardIndexes
+            : (highlightBoard
+                ? <int>{for (var i = 0; i < game.community.length; i++) i}
+                : const <int>{});
+    final boardRegionCue =
+        highlightBoard && effectiveBoardHighlights.isEmpty;
+    final boardCueBand =
+        boardRegionCue || effectiveBoardHighlights.isNotEmpty;
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -456,8 +472,7 @@ class FeltTableView extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: board.columnTop -
-              (highlightBoard || highlightBoardIndexes.isNotEmpty ? 30 : 0),
+          top: board.columnTop - (boardCueBand ? 30 : 0),
           child: Center(
             child: GestureDetector(
               key:
@@ -476,7 +491,7 @@ class FeltTableView extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (highlightBoard && highlightBoardIndexes.isEmpty)
+                    if (boardRegionCue)
                       const SizedBox(height: 30, child: CueArrows()),
                     TweenAnimationBuilder<double>(
                       tween: Tween<double>(end: board.scale),
@@ -498,7 +513,7 @@ class FeltTableView extends StatelessWidget {
                                 game.isHandOver ? game.resultMessage : null,
                             onBoardCardTap: onBoardCardTap,
                             selectedBoardIndexes: selectedBoardIndexes,
-                            highlightBoardIndexes: highlightBoardIndexes,
+                            highlightBoardIndexes: effectiveBoardHighlights,
                             dimmedBoardIndexes: dimmedBoardIndexes,
                             boardOrderBadges: boardOrderBadges,
                           ),

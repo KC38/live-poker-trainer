@@ -127,6 +127,43 @@ void main() {
     expect(find.byIcon(Icons.arrow_downward_rounded), findsOneWidget);
   });
 
+  testWidgets('board cue SoftPulses every dealt community card', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final game = _peekGame().copyWith(
+      community: [
+        CardModel.fromCode('Qs'),
+        CardModel.fromCode('Jh'),
+        CardModel.fromCode('2c'),
+      ],
+      street: Street.flop,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: game,
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              highlightBoard: true,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    // One arrow + CuePulse per dealt flop card — not a lone arrow over slots.
+    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(3));
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(3));
+    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNWidgets(3));
+  });
+
   testWidgets('no cue arrows when highlights are off', (tester) async {
     await _pumpFelt(tester, highlightHero: false, highlightBoard: false);
 
