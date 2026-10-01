@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
@@ -88,6 +89,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   String? _resumeNotice;
   Timer? _resumeNoticeTimer;
   late final String _startRequestId;
+
+  /// Guards against stacking multiple heart-refill sheets.
+  bool _heartRefillSheetOpen = false;
+
+  /// True while a mid-lesson heart refill callable is in flight.
+  bool _heartRefillBusy = false;
 
   CourseService get _service =>
       widget.courseService ?? ref.read(courseServiceProvider);
@@ -241,6 +248,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     if (started.attempt.isReadyToComplete(activities.length)) {
       await _completeLesson();
+      return;
+    }
+    if (_heartsGateActive) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_promptHeartRefill());
+      });
     }
   }
 
@@ -295,6 +308,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   bool get _canSubmit {
     final c = _activityController;
     if (c == null || c.submitting || c.lastResult != null) return false;
+    if (_heartsGateActive) return false;
     final activity = c.activity;
     if (activity.renderer == ActivityRenderer.coachDialogue ||
         activity.stage == ActivityStage.explain) {
@@ -311,12 +325,47 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     return c.draft.choiceId != null;
   }
 
+  /// Practice / replay may start at 0 hearts to earn one back.
+  bool get _isPracticeOrReplay {
+    final lesson = _lesson;
+    if (lesson != null) {
+      final id = lesson.id.toLowerCase();
+      final title = lesson.title.toLowerCase();
+      if (id.contains('-practice-') || title.contains('practice')) {
+        return true;
+      }
+    }
+    final home = ref.read(courseHomeProvider).asData?.value;
+    if (home == null) return false;
+    final lessonId = _lesson?.id ?? widget.lessonId;
+    for (final node in home.nodes) {
+      if (node.lessonId != lessonId) continue;
+      return node.state == CourseNodeState.completed ||
+          node.state == CourseNodeState.mastered ||
+          node.state == CourseNodeState.reviewDue;
+    }
+    return false;
+  }
+
+  /// First-run lessons pause at zero hearts until a refill restores lives.
+  bool get _heartsGateActive {
+    final attempt = _attempt;
+    if (attempt == null) return false;
+    if (attempt.livesRemaining > 0) return false;
+    if (_isPracticeOrReplay) return false;
+    return true;
+  }
+
   Future<void> _submit() async {
     final controller = _activityController;
     final attempt = _attempt;
     // Felt-tap explains hide the Check dock — never silent-no-op while the
     // catalog provider is mid-reload (same class of bug as #228 complete).
     if (controller == null || attempt == null) return;
+    if (_heartsGateActive) {
+      unawaited(_promptHeartRefill());
+      return;
+    }
     if (!_canSubmit) return;
 
     // Local cursor drifted from the attempt snapshot (e.g. after a partial
@@ -461,6 +510,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           );
         }
       }
+      if (result.remediationRequired || result.livesRemaining <= 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          unawaited(_promptHeartRefill());
+        });
+      }
     } catch (error) {
       controller.failSubmit();
       if (!mounted) return;
@@ -573,6 +627,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
 
     if (!result.accepted) {
+      if (_heartsGateActive) {
+        await _promptHeartRefill();
+        return;
+      }
       controller.clearFeedbackForRetry();
       setState(() {});
       return;
@@ -791,6 +849,118 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     Navigator.of(context).maybePop();
   }
 
+  /// Opens the refill sheet in place while the lesson stays mounted.
+  Future<void> _promptHeartRefill() async {
+    if (!mounted || _heartRefillSheetOpen || !_heartsGateActive) return;
+    _heartRefillSheetOpen = true;
+    try {
+      final home = ref.read(courseHomeProvider).asData?.value;
+      final attempt = _attempt;
+      final action = await showHeartRefillSheet(
+        context: context,
+        livesRemaining: attempt?.livesRemaining ?? home?.hearts ?? 0,
+        livesMax: attempt?.livesMax ?? home?.livesMax ?? 5,
+        gems: home?.gems ?? 0,
+        livesNextRefillAtMs: home?.livesNextRefillAtMs,
+        adClaimsRemainingToday: home?.adClaimsRemainingToday ?? 5,
+        nextAdClaimAtMs: home?.nextAdClaimAtMs,
+        busy: _heartRefillBusy,
+      );
+      if (!mounted || action == null) return;
+      await _applyHeartRefillAction(action, retryBootstrapOnSuccess: false);
+    } finally {
+      _heartRefillSheetOpen = false;
+    }
+  }
+
+  /// Applies gems / ad / practice from the refill sheet.
+  Future<void> _applyHeartRefillAction(
+    HeartRefillAction action, {
+    required bool retryBootstrapOnSuccess,
+  }) async {
+    switch (action) {
+      case HeartRefillAction.practice:
+        if (mounted) Navigator.of(context).maybePop();
+        return;
+      case HeartRefillAction.ad:
+        setState(() => _heartRefillBusy = true);
+        try {
+          final result = await watchAdAndClaimHeart(
+            context: context,
+            service: _service,
+          );
+          if (!mounted) return;
+          _onHeartRefillSucceeded(result, retryBootstrap: retryBootstrapOnSuccess);
+        } catch (error) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('$error')));
+        } finally {
+          if (mounted) setState(() => _heartRefillBusy = false);
+        }
+      case HeartRefillAction.gems:
+        setState(() => _heartRefillBusy = true);
+        try {
+          final result = await _service.refillHearts(
+            method: 'gems',
+            idempotencyKey: CourseService.newRequestKey('heart_gems'),
+          );
+          if (!mounted) return;
+          _onHeartRefillSucceeded(result, retryBootstrap: retryBootstrapOnSuccess);
+        } catch (error) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('$error')));
+        } finally {
+          if (mounted) setState(() => _heartRefillBusy = false);
+        }
+    }
+  }
+
+  void _onHeartRefillSucceeded(
+    RefillCourseHeartsResult result, {
+    required bool retryBootstrap,
+  }) {
+    final home = ref.read(courseHomeProvider.notifier);
+    home.applyHeartRefill(result);
+    unawaited(home.refresh());
+    final attempt = _attempt;
+    if (attempt != null && result.livesRemaining > 0) {
+      setState(() {
+        _attempt = CourseAttemptSnapshot(
+          attemptId: attempt.attemptId,
+          lessonId: attempt.lessonId,
+          catalogVersion: attempt.catalogVersion,
+          status: 'in_progress',
+          activityIndex: attempt.activityIndex,
+          currentActivityId: attempt.currentActivityId,
+          livesRemaining: result.livesRemaining,
+          livesMax: result.livesMax,
+          acceptedCount: attempt.acceptedCount,
+          scoredCount: attempt.scoredCount,
+          stepCount: attempt.stepCount,
+          jumpTestPassed: attempt.jumpTestPassed,
+        );
+      });
+      _activityController?.clearFeedbackForRetry();
+    }
+    if (retryBootstrap) {
+      _retryBootstrap();
+    }
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          result.heartsRestored > 0
+              ? 'Heart restored! ${result.livesRemaining}/${result.livesMax}'
+              : 'Hearts updated.',
+        ),
+      ),
+    );
+  }
+
   /// Hearts for the lesson chrome while bootstrapping or after an error.
   ///
   /// Prefer the open attempt, then Home profile — never invent a full bar of
@@ -855,13 +1025,16 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           notice: _resumeNotice,
           speech: _frameSpeech(controller),
           expression: expression,
-          canUndo: controller.canUndo,
-          canRedo: controller.canRedo,
-          canHint: _frameCanHint(activity) && !controller.hintUsed,
+          canUndo: !_heartsGateActive && controller.canUndo,
+          canRedo: !_heartsGateActive && controller.canRedo,
+          canHint:
+              !_heartsGateActive &&
+              _frameCanHint(activity) &&
+              !controller.hintUsed,
           onUndo: controller.undoDraft,
           onRedo: controller.redoDraft,
           onHint: () {
-            if (controller.hintUsed) return;
+            if (_heartsGateActive || controller.hintUsed) return;
             controller.revealHint();
             unawaited(
               ref
@@ -885,7 +1058,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                             : _heroRecoveryChoiceId(activity)),
                   ),
           onContinue: result == null ? null : _continueAfterFeedback,
-          answerBusy: _completing || _advancingActivity,
+          continueLabel:
+              result != null && !result.accepted && _heartsGateActive
+                  ? 'Restore hearts'
+                  : 'Continue',
+          onRestoreHearts:
+              _heartsGateActive && result == null ? _promptHeartRefill : null,
+          answerBusy: _completing || _advancingActivity || _heartRefillBusy,
           stage: LessonFrameScope(
             onLocalMiss: _reportLocalMiss,
             child: activityRegistry.build(
@@ -1045,38 +1224,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     nextAdClaimAtMs: home?.nextAdClaimAtMs,
                   );
                   if (!mounted || action == null) return;
-                  if (action == HeartRefillAction.gems) {
-                    try {
-                      await _service.refillHearts(
-                        method: 'gems',
-                        idempotencyKey:
-                            CourseService.newRequestKey('heart_gems'),
-                      );
-                      if (!mounted) return;
-                      _retryBootstrap();
-                    } catch (error) {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('$error')),
-                      );
-                    }
-                  } else if (action == HeartRefillAction.ad) {
-                    try {
-                      await watchAdAndClaimHeart(
-                        context: context,
-                        service: _service,
-                      );
-                      if (!mounted) return;
-                      _retryBootstrap();
-                    } catch (error) {
-                      if (!mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('$error')),
-                      );
-                    }
-                  } else if (action == HeartRefillAction.practice) {
-                    if (mounted) Navigator.of(context).maybePop();
-                  }
+                  await _applyHeartRefillAction(
+                    action,
+                    retryBootstrapOnSuccess: true,
+                  );
                 },
                 child: const Text('Restore hearts'),
               ),
@@ -1187,6 +1338,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         ),
                       ),
                     );
+                    final lockedPane =
+                        _heartsGateActive
+                            ? AbsorbPointer(child: activityPane)
+                            : activityPane;
                     final hintText =
                         activity.hintMedia.isNotEmpty
                             ? activity.hintMedia.first.text
@@ -1203,12 +1358,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     if (!fillFelt) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [activityPane, ...hintLine],
+                        children: [lockedPane, ...hintLine],
                       );
                     }
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [Expanded(child: activityPane), ...hintLine],
+                      children: [Expanded(child: lockedPane), ...hintLine],
                     );
                   },
                 );
@@ -1245,7 +1400,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                       showActions: false,
                       onContinue: _continueAfterFeedback,
                       onRetry:
-                          result.accepted
+                          result.accepted || _heartsGateActive
                               ? null
                               : () {
                                 controller.clearFeedbackForRetry();
@@ -1255,10 +1410,17 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     const SizedBox(height: 10),
                     _FeedbackFooter(
                       result: result,
-                      completing: _completing || _advancingActivity,
+                      completing:
+                          _completing ||
+                          _advancingActivity ||
+                          _heartRefillBusy,
+                      continueLabel:
+                          !result.accepted && _heartsGateActive
+                              ? 'Restore hearts'
+                              : 'Continue',
                       onContinue: _continueAfterFeedback,
                       onRetry:
-                          result.accepted
+                          result.accepted || _heartsGateActive
                               ? null
                               : () {
                                 controller.clearFeedbackForRetry();
@@ -1266,6 +1428,16 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                               },
                     ),
                   ],
+                );
+              }
+              if (_heartsGateActive) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: FilledButton(
+                    key: const ValueKey<String>('lesson-restore-hearts'),
+                    onPressed: _heartRefillBusy ? null : _promptHeartRefill,
+                    child: const Text('Restore hearts'),
+                  ),
                 );
               }
               // Prefer live controller activity so advance never uses a
@@ -1502,17 +1674,18 @@ class _FeedbackFooter extends StatelessWidget {
     required this.onContinue,
     required this.completing,
     this.onRetry,
+    this.continueLabel = 'Continue',
   });
 
   final SubmitCourseStepResult result;
   final VoidCallback onContinue;
   final VoidCallback? onRetry;
   final bool completing;
+  final String continueLabel;
 
   @override
   Widget build(BuildContext context) {
     final accepted = result.accepted;
-    const continueLabel = 'Continue';
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(

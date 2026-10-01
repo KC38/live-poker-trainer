@@ -984,6 +984,27 @@ export async function submitCourseStepForUser(options: {
     if (!located) {
       throw new HttpsError("failed-precondition", "Lesson missing from catalog.");
     }
+    // First-run lessons stop at 0 hearts until a refill restores the attempt.
+    // Practice / replay may start at 0 so learners can earn a heart back.
+    const priorCompletedForHearts = Array.isArray(
+      profileSnap.data()?.completedLessonIds,
+    ) ?
+      profileSnap.data()!.completedLessonIds as string[] :
+      [];
+    const isPracticeOrReplaySubmit =
+      priorCompletedForHearts.includes(attempt.lessonId) ||
+      isPracticeLesson(located.lesson);
+    if (
+      shouldBlockSubmitForHearts({
+        livesRemaining: attempt.livesRemaining,
+        isPracticeOrReplay: isPracticeOrReplaySubmit,
+      })
+    ) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Out of hearts. Refill before continuing.",
+      );
+    }
     if (isLessonAttemptReadyToComplete(attempt, located.lesson)) {
       throw new HttpsError(
         "failed-precondition",
@@ -2039,6 +2060,17 @@ function isPracticeLesson(lesson: CourseLesson): boolean {
   const id = lesson.id.toLowerCase();
   const title = lesson.title.toLowerCase();
   return id.includes("-practice-") || title.includes("practice");
+}
+
+/**
+ * First-run lessons pause at zero hearts until a refill; practice/replay may
+ * keep submitting so learners can earn a heart back.
+ */
+export function shouldBlockSubmitForHearts(options: {
+  livesRemaining: number;
+  isPracticeOrReplay: boolean;
+}): boolean {
+  return options.livesRemaining <= 0 && !options.isPracticeOrReplay;
 }
 
 function sanitizeEntitlement(data: DocumentData): Record<string, unknown> {

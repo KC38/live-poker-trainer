@@ -30,6 +30,7 @@ import {
   omitUndefined,
   reviewLessonXp,
   shouldAdvanceActivityAfterSubmit,
+  shouldBlockSubmitForHearts,
   XP_LESSON_COMPLETE,
   XP_PER_ACCEPTED_STEP,
   type CourseFlags,
@@ -657,6 +658,35 @@ describe("lesson completion cursor", () => {
         activityIndex: lesson.activities.length,
         acceptedCount: lesson.activities.length,
       }, lesson),
+    ).toBe(false);
+  });
+});
+
+describe("shouldBlockSubmitForHearts", () => {
+  it("blocks first-run lessons at zero hearts", () => {
+    expect(
+      shouldBlockSubmitForHearts({
+        livesRemaining: 0,
+        isPracticeOrReplay: false,
+      }),
+    ).toBe(true);
+  });
+
+  it("allows practice or replay at zero hearts", () => {
+    expect(
+      shouldBlockSubmitForHearts({
+        livesRemaining: 0,
+        isPracticeOrReplay: true,
+      }),
+    ).toBe(false);
+  });
+
+  it("allows submits while hearts remain", () => {
+    expect(
+      shouldBlockSubmitForHearts({
+        livesRemaining: 1,
+        isPracticeOrReplay: false,
+      }),
     ).toBe(false);
   });
 });
