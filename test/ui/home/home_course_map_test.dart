@@ -304,6 +304,55 @@ void main() {
     expect(find.textContaining('START'), findsNothing);
   });
 
+  testWidgets('mastered node REVIEW bubble also uses quarter XP', (
+    tester,
+  ) async {
+    await _pumpHome(
+      tester,
+      snapshot: const CourseHomeSnapshot(
+        status: CourseHomeLoadStatus.ready,
+        sections: [],
+        streak: 2,
+        gems: 0,
+        hearts: 3,
+        nextLessonId: 'lesson-b',
+        nodes: [
+          CourseMapNode(
+            lessonId: 'lesson-a',
+            title: 'Lesson A',
+            summary: 'First',
+            kind: CourseNodeKind.lesson,
+            state: CourseNodeState.mastered,
+            sectionId: 'sec-1',
+            sectionTitle: 'Section One',
+            unitId: 'unit-1',
+            unitTitle: 'Unit One',
+            isNext: false,
+            previewXp: 40,
+          ),
+          CourseMapNode(
+            lessonId: 'lesson-b',
+            title: 'Lesson B',
+            summary: 'Second',
+            kind: CourseNodeKind.lesson,
+            state: CourseNodeState.available,
+            sectionId: 'sec-1',
+            sectionTitle: 'Section One',
+            unitId: 'unit-1',
+            unitTitle: 'Unit One',
+            isNext: true,
+            previewXp: 40,
+          ),
+        ],
+      ),
+      analytics: _RecordingAnalytics(),
+    );
+
+    await tester.tap(find.text('Lesson A'));
+    await tester.pumpAndSettle();
+    expect(find.text('REVIEW +10 XP'), findsOneWidget);
+  });
+
   testWidgets('locked node tap explains prerequisite and logs', (tester) async {
     final analytics = _RecordingAnalytics();
     await _pumpHome(tester, snapshot: _readySnapshot(), analytics: analytics);

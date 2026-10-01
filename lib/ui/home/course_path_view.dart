@@ -471,7 +471,15 @@ class _PathNodeRowState extends State<_PathNodeRow>
 
   @override
   Widget build(BuildContext context) {
-    final isReview = !widget.node.isNext;
+    // Completed / review-due / mastered nodes are replays: preview 25% of a
+    // perfect first-run total (same scale the server applies to earned XP).
+    final isReview = switch (widget.node.state) {
+      CourseNodeState.completed ||
+      CourseNodeState.mastered ||
+      CourseNodeState.reviewDue =>
+        true,
+      _ => false,
+    };
     final xp = isReview
         ? reviewLessonXp(widget.node.previewXp)
         : widget.node.previewXp;

@@ -20,6 +20,18 @@ const _complete = CompleteCourseLessonResult(
   duplicate: false,
 );
 
+const _review = CompleteCourseLessonResult(
+  attemptId: 'a1-review',
+  lessonId: 'lesson-01-01-01-your-two-cards',
+  xpAwarded: 10,
+  lessonXpAwarded: 10,
+  mastery: 1,
+  streak: 2,
+  acceptedAccuracy: 1,
+  liveTrainingGranted: false,
+  duplicate: false,
+);
+
 const _imperfect = CompleteCourseLessonResult(
   attemptId: 'a2',
   lessonId: 'lesson-01-03-02-bet-raise-allin',
@@ -208,6 +220,33 @@ void main() {
     final shape =
         style!.shape!.resolve(const <WidgetState>{})! as RoundedRectangleBorder;
     expect(shape.borderRadius, BorderRadius.circular(14));
+  });
+
+  testWidgets('lesson result TOTAL XP shows review-scaled award', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(402, 874);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const LessonResultScreen(
+            lessonTitle: 'Suits and ranks',
+            result: _review,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1000));
+
+    expect(find.text('TOTAL XP'), findsOneWidget);
+    expect(find.text('10'), findsOneWidget);
+    expect(find.text('25'), findsNothing);
   });
 
   testWidgets('lesson result shows imperfect accuracy from the server', (

@@ -17,6 +17,7 @@ void main() {
     expect(reviewLessonXp(40), 10);
     expect(reviewLessonXp(25), 6);
     expect(reviewLessonXp(35), 9);
+    expect(reviewLessonXp(previewLessonXp(5)), 19);
   });
 
   test('displayedLessonXp prefers the larger local or server total', () {
@@ -40,5 +41,20 @@ void main() {
       ),
       65,
     );
+  });
+
+  test('displayedLessonXp shows review-scaled total when steps defer to complete', () {
+    const earnedFull = 40;
+    final reviewTotal = reviewLessonXp(earnedFull);
+    expect(
+      displayedLessonXp(
+        stepXpAwarded: 0,
+        completionBonus: reviewTotal,
+        lessonXpFromServer: reviewTotal,
+      ),
+      reviewTotal,
+    );
+    expect(reviewTotal, isNot(earnedFull));
+    expect(reviewTotal, lessThan(earnedFull));
   });
 }
