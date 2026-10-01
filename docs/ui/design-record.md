@@ -108,10 +108,11 @@ The table is built for a phone held upright:
   stack in large JetBrains Mono. Hole cards sit fully above the box with a
   small gap — neither covers the other. The icon ring is colored by player
   type when player types are on, and a type tag sits on the box face.
-- **Around a seat.** Dealer, SB, and BB pucks and the street bet park on a
-  fixed inward felt lane for that seat (`SeatFeltSpots`). Distances scale with
-  the seat so markers stay consistent for 2–9 players. The action badge hangs
-  from the bottom of the box.
+- **Around a seat.** Dealer, SB, and BB pucks, the street bet, and CHECK park
+  on a fixed potward felt lane for that seat (`SeatFeltSpots`) — the ray from
+  the seat toward the pot, starting just past the seat claim. Distances scale
+  with the seat so markers stay tight and consistent for 2–9 players. Other
+  action badges (FOLD, CALL, RAISE, …) hang from the bottom of the box.
 - **Center.** The pot pill (`FLOP · POT $10`) above the board, five large
   board cards, and `Blinds $1/$2 NLH` under them (`CommunityCardsView`). The
   board leaves clear side margins on the felt (`TableLayout.boardSideInset`)
