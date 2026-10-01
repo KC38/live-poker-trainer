@@ -290,11 +290,10 @@ export function evaluateLifeAndAcceptance(options: {
   lifeLossEligible: boolean;
 }): Pick<GradeOutcome, "accepted" | "lifeLost" | "masteryWeight"> {
   const accepted = ACCEPTED_GRADES.has(options.grade);
-  const lifeLost = options.grade === "clear_mistake" &&
+  // Any non-accepted grade costs a heart on life-eligible stages.
+  const lifeLost = !accepted &&
     options.lifeLossEligible &&
-    LIFE_ELIGIBLE_STAGES.has(options.stage) &&
-    options.stage !== "guided" &&
-    options.stage !== "scaffolded";
+    LIFE_ELIGIBLE_STAGES.has(options.stage);
   return {
     accepted,
     lifeLost,

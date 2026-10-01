@@ -133,7 +133,7 @@ class _LessonFeedbackSheetState extends State<LessonFeedbackSheet>
 
   @override
   Widget build(BuildContext context) {
-    // Reasonable/questionable must never look like a life-loss event.
+    // Life chrome follows the server flag (any non-accepted eligible grade).
     final showLifeLoss = widget.result.lifeLost;
     // Sticky footer owns CTAs — tighten bottom padding so sheet + dock hug.
     final bottomPad = widget.showActions ? 14.0 : 10.0;
