@@ -3535,12 +3535,12 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-01-04-01-checkpoint-postflop':
       return const LessonTableScene(
         layout: LessonTableLayout.blindsSeats,
-        // No seat pulse — checkpoint must not spoil who acts first.
-        // (Previously pulsed the button, which taught the wrong seat.)
-        highlight: LessonTableHighlight.none,
+        // SoftPulse stays off until Hint (checkpoint). Highlight names the
+        // answer seat so Hint can SoftPulse SB — not the button.
+        highlight: LessonTableHighlight.smallBlind,
         seatCount: 6,
         buttonSeat: 3,
-        // Rex already owns the cue — keep the felt quiet.
+        // Rex already owns the cue — keep the felt quiet until Hint.
         caption: null,
       );
     case 'act-01-05-01-guided-fold-win':
@@ -6637,28 +6637,39 @@ class LessonTableContext extends StatelessWidget {
 
   Widget _buildStreetEndPhases(BuildContext context) {
     // Tall-phone teach: fill navy void under the three end-of-street tiles.
-    // Unguided — densify only, no SoftPulse spoiler on the correct phase.
+    // Unguided SoftPulse stays off until Hint, then SoftPulses Bets matched.
     final densifyShell = true;
     final feltHeight = MediaQuery.sizeOf(context).height * 0.58;
+    final pulseMatched =
+        showSoftPulse && selectedRegion == null && _interactive;
 
     Widget phase({
       required LessonTableRegion region,
       required String title,
       required String detail,
       required Widget visual,
+      bool pulse = false,
     }) {
       final selected = selectedRegion == region;
-      return _horizontalOptionTile(
-        title: title,
-        detail: detail,
-        visual: visual,
-        selected: selected,
-        densify: densifyShell,
-        maxTitleLines: 2,
-        onTap:
-            _interactive
-                ? () => onRegionTap!(LessonTableTapTarget(region))
-                : null,
+      return KeyedSubtree(
+        key: ValueKey<String>(
+          pulse
+              ? 'street-end-cue-${region.name}'
+              : 'street-end-tile-${region.name}',
+        ),
+        child: _horizontalOptionTile(
+          title: title,
+          detail: detail,
+          visual: visual,
+          selected: selected,
+          densify: densifyShell,
+          highlighted: pulse && !selected,
+          maxTitleLines: 2,
+          onTap:
+              _interactive
+                  ? () => onRegionTap!(LessonTableTapTarget(region))
+                  : null,
+        ),
       );
     }
 
@@ -6677,6 +6688,7 @@ class LessonTableContext extends StatelessWidget {
             region: LessonTableRegion.streetActionMatched,
             title: 'Bets matched',
             detail: 'Action equal',
+            pulse: pulseMatched,
             visual: const _BlindChipStack(amount: 3, densify: true),
           ),
           phase(
@@ -6900,8 +6912,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive live habit — tap cover and wait, act early, or leave bare',
       semanticsStatic: 'Live habit outcomes',
       caption: scene.caption ?? 'Full ring · action still left',
-      // Checkpoint: densify only — no SoftPulse spoiler / Tap footer.
+      // SoftPulse off until Hint — then SoftPulse Cover + wait.
       cueLabel: '',
+      guideRegion: LessonTableRegion.habitCoverWait,
       phases: [
         (
           region: LessonTableRegion.habitCoverWait,
@@ -7169,9 +7182,10 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive:
           'Interactive acting order — tap wait, open early, or flash cards',
       semanticsStatic: 'Acting order wait outcomes',
-      // SoftPulse-quiet densify — Rex owns the cue; no gold tip on Wait.
+      // SoftPulse-quiet until Hint — then SoftPulse Wait.
       caption: scene.caption ?? 'Action on UTG · you are on the button',
       cueLabel: '',
+      guideRegion: LessonTableRegion.actingWaitTurn,
       phases: [
         (
           region: LessonTableRegion.actingWaitTurn,
@@ -7214,8 +7228,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive effective stack — tap the shorter stack',
       semanticsStatic: 'Effective stack outcomes',
       caption: scene.caption ?? 'You 120bb · Villain 55bb',
-      // Jump densify — no SoftPulse spoiler / Tap footer on the correct tile.
+      // SoftPulse-quiet until Hint — then SoftPulse 55bb.
       cueLabel: '',
+      guideRegion: LessonTableRegion.effectiveStackShort,
       phases: [
         (
           region: LessonTableRegion.effectiveStackShort,
@@ -7751,13 +7766,14 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildHandRankShowdownOutcomes() {
-
-    // Checkpoint: densify without SoftPulse spoiler on the correct seat.
+    // SoftPulse-quiet until Hint — then SoftPulse You.
     return _buildOutcomePhases(
       semanticsInteractive:
           'Interactive showdown — tap You, Them, or Chop',
       semanticsStatic: 'Hand ranks showdown outcomes',
       caption: scene.caption ?? 'Showdown · who wins?',
+      cueLabel: '',
+      guideRegion: LessonTableRegion.handRankYouWin,
       phases: [
         (
           region: LessonTableRegion.handRankYouWin,
@@ -8260,13 +8276,14 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildFlopClassUnguidedOutcomes() {
-    // No SoftPulse cue — unguided finds the air class without a guide tile.
+    // SoftPulse-quiet until Hint — then SoftPulse Air.
     return _buildOutcomePhases(
       semanticsInteractive:
           'Interactive flop class — tap Air, SDV, or Made',
       semanticsStatic: 'Flop class unguided outcomes',
       caption: scene.caption ?? 'Flop · multiway',
       cueLabel: '',
+      guideRegion: LessonTableRegion.flopClassAirMw,
       phases: [
         (
           region: LessonTableRegion.flopClassAirMw,
@@ -8303,13 +8320,14 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildFlopClassCheckpointOutcomes() {
-    // Checkpoint: no SoftPulse guide — find the open-ender yourself.
+    // SoftPulse-quiet until Hint — then SoftPulse Draw (open-ender).
     return _buildOutcomePhases(
       semanticsInteractive:
           'Interactive flop class — tap Draw, Made, or Air',
       semanticsStatic: 'Flop class checkpoint outcomes',
       caption: scene.caption ?? 'Flop · your holes',
       cueLabel: '',
+      guideRegion: LessonTableRegion.flopClassOesd,
       phases: [
         (
           region: LessonTableRegion.flopClassOesd,
