@@ -103,16 +103,24 @@ class _CueArrowsState extends State<CueArrows>
 /// [CueArrows].
 class CuePulse extends StatefulWidget {
   /// Wraps [child]. Inactive draws [child] untouched.
+  ///
+  /// [padding] expands the ring outward so content (e.g. hole cards) is not
+  /// flush against the gold border — especially the top edge.
   const CuePulse({
     super.key,
     required this.child,
     this.active = true,
     this.borderRadius = 8,
+    this.padding = const EdgeInsets.fromLTRB(4, 6, 4, 4),
   });
 
   final Widget child;
   final bool active;
   final double borderRadius;
+
+  /// Air between [child] and the gold ring. Drawn outside [child] so seats
+  /// keep their footprint under tight [Positioned] constraints.
+  final EdgeInsets padding;
 
   @override
   State<CuePulse> createState() => _CuePulseState();
@@ -155,36 +163,52 @@ class _CuePulseState extends State<CuePulse>
   @override
   Widget build(BuildContext context) {
     if (!widget.active) return widget.child;
-    final radius = BorderRadius.circular(widget.borderRadius);
+    final pad = widget.padding;
+    // Grow corner radius with the outward pad so the ring still tracks the
+    // child's rounded shape.
+    final radius = BorderRadius.only(
+      topLeft: Radius.circular(widget.borderRadius + pad.top),
+      topRight: Radius.circular(widget.borderRadius + pad.top),
+      bottomLeft: Radius.circular(widget.borderRadius + pad.bottom),
+      bottomRight: Radius.circular(widget.borderRadius + pad.bottom),
+    );
     return AnimatedBuilder(
       animation: _motion,
       builder: (context, child) {
         final t = _beat.value;
         return Transform.scale(
           scale: 1 + (0.05 * t),
-          child: DecoratedBox(
+          child: Stack(
             key: const ValueKey<String>('cue-pulse'),
-            decoration: BoxDecoration(
-              borderRadius: radius,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.goldBright.withValues(
-                    alpha: 0.35 + (0.45 * t),
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                left: -pad.left,
+                top: -pad.top,
+                right: -pad.right,
+                bottom: -pad.bottom,
+                child: DecoratedBox(
+                  key: const ValueKey<String>('cue-pulse-ring'),
+                  decoration: BoxDecoration(
+                    borderRadius: radius,
+                    border: Border.all(
+                      color: AppColors.goldBright,
+                      width: 2.4,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.goldBright.withValues(
+                          alpha: 0.35 + (0.45 * t),
+                        ),
+                        blurRadius: 10 + (10 * t),
+                        spreadRadius: 1 + (2.5 * t),
+                      ),
+                    ],
                   ),
-                  blurRadius: 10 + (10 * t),
-                  spreadRadius: 1 + (2.5 * t),
                 ),
-              ],
-            ),
-            position: DecorationPosition.background,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: radius,
-                border: Border.all(color: AppColors.goldBright, width: 2.4),
               ),
-              position: DecorationPosition.foreground,
-              child: child,
-            ),
+              child!,
+            ],
           ),
         );
       },
