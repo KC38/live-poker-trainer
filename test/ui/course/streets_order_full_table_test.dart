@@ -9,9 +9,12 @@ import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.
 import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 Widget _frame(Widget child) {
@@ -79,6 +82,102 @@ void main() {
       await tester.pump();
     }
     expect(ack, 1);
+  });
+
+  testWidgets('street chips keep air above the tool row while glowing', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          backgroundColor: const Color(0xFF0B1220),
+          body: LessonScreenLayout(
+            progress: 0.2,
+            livesRemaining: 4,
+            livesMax: 5,
+            onClose: () {},
+            speech: 'Four streets: preflop, flop, turn, river. Tap each street.',
+            expression: LessonMascotExpression.thinking,
+            stage: LessonStreetsExplainTable(
+              onAllStreetsTapped: () {},
+            ),
+            onUndo: () {},
+            onRedo: () {},
+            onHint: () {},
+            canUndo: false,
+            canRedo: false,
+            canHint: true,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(find.byType(GlowHighlight), findsWidgets);
+    final preflopRect = tester.getRect(find.text('PREFLOP'));
+    final undoRect = tester.getRect(find.byTooltip('Undo'));
+    // Chip label bottom → undo top must clear glow inset + stage clearance.
+    expect(
+      undoRect.top - preflopRect.bottom,
+      greaterThanOrEqualTo(
+        LessonAnswerDock.stageGlowInset + LessonAnswerDock.stageClearance,
+      ),
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('aggressive action tiles keep air above the tool row', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          backgroundColor: const Color(0xFF0B1220),
+          body: LessonScreenLayout(
+            progress: 0.3,
+            livesRemaining: 4,
+            livesMax: 5,
+            onClose: () {},
+            speech:
+                'Three chip-pushing buttons. Tap Bet, then Raise, then All-in.',
+            expression: LessonMascotExpression.thinking,
+            stage: LessonAggressiveActionsExplainTable(
+              onAllActionsTapped: () {},
+            ),
+            onUndo: () {},
+            onRedo: () {},
+            onHint: () {},
+            canUndo: false,
+            canRedo: false,
+            canHint: true,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+
+    expect(find.byType(GlowHighlight), findsWidgets);
+    final betRect = tester.getRect(find.text('BET'));
+    final undoRect = tester.getRect(find.byTooltip('Undo'));
+    expect(
+      undoRect.top - betRect.bottom,
+      greaterThanOrEqualTo(
+        LessonAnswerDock.stageGlowInset + LessonAnswerDock.stageClearance,
+      ),
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('guided street order uses the full table', (tester) async {

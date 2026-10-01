@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -386,7 +387,7 @@ void main() {
     );
     expect(
       dockRect.top - stageRect.bottom,
-      LessonAnswerDock.stageClearance,
+      LessonAnswerDock.stageGlowInset + LessonAnswerDock.stageClearance,
     );
     expect(tester.takeException(), isNull);
   });
@@ -430,7 +431,22 @@ void main() {
     );
     expect(
       toolRect.top - stageRect.bottom,
-      LessonAnswerDock.stageClearance,
+      LessonAnswerDock.stageGlowInset + LessonAnswerDock.stageClearance,
+    );
+    // Glow outset is part of the stage inset — never smaller than the ring.
+    expect(
+      LessonAnswerDock.stageGlowInset,
+      greaterThanOrEqualTo(GlowHighlight.outset),
+    );
+    // Tool controls sit under the row's top padding, not flush to the stage.
+    final undoRect = tester.getRect(find.byTooltip('Undo'));
+    expect(
+      undoRect.top - stageRect.bottom,
+      greaterThanOrEqualTo(
+        LessonAnswerDock.stageGlowInset +
+            LessonAnswerDock.stageClearance +
+            12,
+      ),
     );
     expect(tester.takeException(), isNull);
   });

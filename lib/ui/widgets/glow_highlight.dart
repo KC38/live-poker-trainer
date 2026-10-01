@@ -17,15 +17,20 @@ class GlowHighlight extends StatefulWidget {
   ///
   /// [padding] expands the ring outward so content is not flush against the
   /// border. Drawn outside [child] so seats keep their footprint under tight
-  /// [Positioned] constraints.
+  /// [Positioned] constraints. Neighbors (tool row, answer dock) must reserve
+  /// at least [outset] so the ring does not collide with them.
   const GlowHighlight({
     super.key,
     required this.child,
     this.active = true,
     this.animated = true,
     this.borderRadius = 8,
-    this.padding = const EdgeInsets.all(4),
+    this.padding = const EdgeInsets.all(outset),
   });
+
+  /// Outward paint past [child] on each side (ring pad). Layout that sits
+  /// beside a SoftPulse target must clear at least this much.
+  static const double outset = 6;
 
   /// Content to highlight — a card, a name tag, a row of cards, etc.
   final Widget child;
@@ -39,7 +44,7 @@ class GlowHighlight extends StatefulWidget {
   /// Corner radius of the gold ring before [padding] is applied.
   final double borderRadius;
 
-  /// Air between [child] and the gold ring.
+  /// Air between [child] and the gold ring. Defaults to [outset] on each side.
   final EdgeInsets padding;
 
   @override
