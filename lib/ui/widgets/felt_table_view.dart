@@ -12,7 +12,7 @@ import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
 import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
-import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -119,11 +119,10 @@ class FeltTableView extends StatelessWidget {
   /// Arrows on the hero seat, the lesson cue for "tap your cards".
   final bool highlightHero;
 
-  /// SoftPulse the community cards (CuePulse + arrows), matching [highlightHero].
+  /// SoftPulse the community cards as one group via [GlowHighlight].
   ///
-  /// When [highlightBoardIndexes] is empty and the board has dealt cards,
-  /// every community index is cued — a single arrow centered on five slots
-  /// lands on the rightmost flop card and skips the gold ring.
+  /// Prefer [highlightBoardIndexes] to cue individual dealt cards. When those
+  /// indexes are empty, [highlightBoard] wraps the whole board row in one glow.
   final bool highlightBoard;
 
   /// Tap on a seat, including the hero. Lesson stages use this.
@@ -164,8 +163,8 @@ class FeltTableView extends StatelessWidget {
   /// 1-based order badge drawn on a seat (showdown rank order).
   final Map<int, int> seatOrderBadges;
 
-  /// Seat index SoftPulsed with shared [CuePulse] + [CueArrows] (same as
-  /// hole / board card cues). Null leaves every seat unmarked.
+  /// Seat index SoftPulsed with shared [GlowHighlight] (same as hole / board
+  /// card cues). Null leaves every seat unmarked.
   final int? cueSeatIndex;
 
   /// Optional layers. Null reads [TableFeaturesScope].
@@ -251,10 +250,14 @@ class FeltTableView extends StatelessWidget {
                           ? 'Your hole cards, face up'
                           : 'Your hole cards')
                       : "${player.name}'s hole cards",
-              // SoftPulse seats the same way as cards: CuePulse ring here,
-              // CueArrows in the deco layer — never the action-turn gold tip.
-              child: CuePulse(
-                active: cueSeatIndex == slot.index,
+              // SoftPulse seats the same way as cards: GlowHighlight ring —
+              // never the action-turn gold tip.
+              child: GlowHighlight(
+                active:
+                    cueSeatIndex == slot.index ||
+                    (highlightHero &&
+                        player.isHero &&
+                        highlightHeroIndexes.isEmpty),
                 borderRadius: 12 * layout.seatScale,
                 child: PlayerSeatWidget(
                   player: player,
@@ -372,61 +375,17 @@ class FeltTableView extends StatelessWidget {
         );
       }
 
-      // Face-down "tap your cards" keeps a centered pair. Face-up taps put
-      // one arrow on each cued hole card — same as board-card cues.
-      if (highlightHero &&
-          player.isHero &&
-          highlightHeroIndexes.isEmpty) {
-        heroDecorations.add(
-          Positioned(
-            left: slot.footprint.left,
-            top: _clamp(slot.footprint.top - 30, 0, math.max(0.0, h - 28)),
-            width: slot.footprint.width,
-            child: const CueArrows(count: 2),
-          ),
-        );
-      } else if (player.isHero &&
-          faceUp &&
-          highlightHeroIndexes.isNotEmpty) {
-        final metrics = SeatMetrics.of(
-          hero: true,
-          compact: layout.compact,
-          scale: layout.seatScale,
-          review: review,
-        );
-        final cardsLeft =
-            slot.footprint.center.dx - metrics.cardsWidth / 2;
-        final arrowTop =
-            _clamp(slot.footprint.top - 30, 0, math.max(0.0, h - 28));
-        final indexes = highlightHeroIndexes.toList()..sort();
-        for (final i in indexes) {
-          if (i < 0 || i > 1 || selectedHeroIndexes.contains(i)) {
-            continue;
-          }
-          heroDecorations.add(
-            Positioned(
-              key: ValueKey<String>('hero-cue-arrow-$i'),
-              left: cardsLeft + i * (metrics.cardWidth + metrics.cardGap),
-              top: arrowTop,
-              width: metrics.cardWidth,
-              child: CueArrows(size: 20 * layout.seatScale),
-            ),
-          );
-        }
-      }
-
-      if (cueSeatIndex == slot.index && !player.isHero) {
-        final above = slot.footprint.top >= 30;
+      // Seat SoftPulse is the GlowHighlight on PlayerSeatWidget above —
+      // no arrows. Keep a finder key so seat-order lessons can assert the cue.
+      if (cueSeatIndex == slot.index) {
         decoLayer.add(
           Positioned(
             key: ValueKey<String>('seat-cue-${player.id}'),
             left: slot.footprint.left,
-            top:
-                above
-                    ? slot.footprint.top - 30
-                    : _clamp(slot.footprint.bottom + 2, 0, math.max(0.0, h - 28)),
-            width: slot.footprint.width,
-            child: CueArrows(pointUp: !above),
+            top: slot.footprint.top,
+            width: 0,
+            height: 0,
+            child: const SizedBox.shrink(),
           ),
         );
       }
@@ -474,18 +433,9 @@ class FeltTableView extends StatelessWidget {
     }
 
     final board = layout.board;
-    // Region board cue → every dealt card (CuePulse + arrow), same as face-up
-    // hero holes. Empty board keeps a single centered CueArrows above slots.
-    final effectiveBoardHighlights =
-        highlightBoardIndexes.isNotEmpty
-            ? highlightBoardIndexes
-            : (highlightBoard
-                ? <int>{for (var i = 0; i < game.community.length; i++) i}
-                : const <int>{});
-    final boardRegionCue =
-        highlightBoard && effectiveBoardHighlights.isEmpty;
-    final boardCueBand =
-        boardRegionCue || effectiveBoardHighlights.isNotEmpty;
+    // Region board cue → one GlowHighlight around the whole board row.
+    // Per-card cues use highlightBoardIndexes only (no auto-expand).
+    final boardGroupCue = highlightBoard && highlightBoardIndexes.isEmpty;
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -497,7 +447,7 @@ class FeltTableView extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: board.columnTop - (boardCueBand ? 30 : 0),
+          top: board.columnTop,
           child: Center(
             child: GestureDetector(
               key:
@@ -513,37 +463,31 @@ class FeltTableView extends StatelessWidget {
                 label: onBoardTap == null || onBoardCardTap != null
                     ? null
                     : 'Community cards',
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (boardRegionCue)
-                      const SizedBox(height: 30, child: CueArrows()),
-                    TweenAnimationBuilder<double>(
-                      tween: Tween<double>(end: board.scale),
-                      duration: const Duration(milliseconds: 280),
-                      curve: Curves.easeOutCubic,
-                      builder:
-                          (context, scale, _) => CommunityCardsView(
-                            community: game.community,
-                            pot: game.displayPot,
-                            street: game.street,
-                            bigBlind: game.bigBlind,
-                            smallBlind: game.smallBlind,
-                            chipDisplayMode: chipDisplayMode,
-                            scale: scale,
-                            awarding: awardingChips,
-                            isSplit: game.isSplitPot,
-                            features: f,
-                            resultMessage:
-                                game.isHandOver ? game.resultMessage : null,
-                            onBoardCardTap: onBoardCardTap,
-                            selectedBoardIndexes: selectedBoardIndexes,
-                            highlightBoardIndexes: effectiveBoardHighlights,
-                            dimmedBoardIndexes: dimmedBoardIndexes,
-                            boardOrderBadges: boardOrderBadges,
-                          ),
-                    ),
-                  ],
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween<double>(end: board.scale),
+                  duration: const Duration(milliseconds: 280),
+                  curve: Curves.easeOutCubic,
+                  builder:
+                      (context, scale, _) => CommunityCardsView(
+                        community: game.community,
+                        pot: game.displayPot,
+                        street: game.street,
+                        bigBlind: game.bigBlind,
+                        smallBlind: game.smallBlind,
+                        chipDisplayMode: chipDisplayMode,
+                        scale: scale,
+                        awarding: awardingChips,
+                        isSplit: game.isSplitPot,
+                        features: f,
+                        resultMessage:
+                            game.isHandOver ? game.resultMessage : null,
+                        onBoardCardTap: onBoardCardTap,
+                        selectedBoardIndexes: selectedBoardIndexes,
+                        highlightBoardIndexes: highlightBoardIndexes,
+                        highlightBoardGroup: boardGroupCue,
+                        dimmedBoardIndexes: dimmedBoardIndexes,
+                        boardOrderBadges: boardOrderBadges,
+                      ),
                 ),
               ),
             ),

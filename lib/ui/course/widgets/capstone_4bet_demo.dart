@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 /// Capstone: 4-bet pot explain: SPR / COMMIT / NO HERO under the full poker table.
 class LessonCapstone4betExplainTable extends StatefulWidget {
@@ -61,7 +62,7 @@ class _LessonCapstone4betExplainTableState
             for (var i = 0; i < Capstone4betDemo.points.length; i++)
               SizedBox(
                 width: 150,
-                child: _FourBetSoftPulse(
+                child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
@@ -162,7 +163,7 @@ class _Capstone4betDemoState extends State<Capstone4betDemo> {
         for (var i = 0; i < Capstone4betDemo.points.length; i++) ...[
           if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
           Expanded(
-            child: _FourBetSoftPulse(
+            child: GlowHighlight(
               active:
                   widget.interactive &&
                   widget.enabled &&
@@ -346,75 +347,6 @@ class _Capstone4betTile extends StatelessWidget {
           child: child,
         ),
       ),
-    );
-  }
-}
-
-class _FourBetSoftPulse extends StatefulWidget {
-  const _FourBetSoftPulse({required this.active, required this.child});
-
-  final bool active;
-  final Widget child;
-
-  @override
-  State<_FourBetSoftPulse> createState() => _FourBetSoftPulseState();
-}
-
-class _FourBetSoftPulseState extends State<_FourBetSoftPulse>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    if (widget.active) {
-      _pulse.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _FourBetSoftPulse oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.active && !_pulse.isAnimating) {
-      _pulse.repeat(reverse: true);
-    } else if (!widget.active && _pulse.isAnimating) {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.active) return widget.child;
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final glow = 0.22 + (_pulse.value * 0.38);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow),
-                blurRadius: 10 + (_pulse.value * 8),
-                spreadRadius: 0.5 + (_pulse.value * 1.2),
-              ),
-            ],
-          ),
-          child: child,
-        );
-      },
-      child: widget.child,
     );
   }
 }

@@ -17,7 +17,6 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart'
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
-import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -194,12 +193,12 @@ void main() {
       );
       await tester.pump();
       expect(find.byType(LessonSuitBoardTable), findsOneWidget);
-      expect(find.byType(CueArrows), findsNothing);
+      expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
       controller.revealHint();
       await tester.pump();
       expect(controller.showTargetCue, isTrue);
-      expect(find.byType(CueArrows), findsWidgets);
+      expect(find.byKey(const ValueKey<String>('glow-highlight')), findsWidgets);
     },
   );
 

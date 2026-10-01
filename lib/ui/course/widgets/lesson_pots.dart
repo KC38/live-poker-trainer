@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 /// Features for How pots are won explain on the full table.
 TableFeatures get lessonPotsWonTableFeatures => const TableFeatures(
@@ -112,7 +113,7 @@ class _LessonWinningPathsExplainTableState
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < LessonWinningPathsExplainTable.paths.length; i++)
-              _SoftPulseTarget(
+              GlowHighlight(
                 active: teaching && widget.showGuidance && next == i,
                 child: _UnderFeltPathChip(
                   label: LessonWinningPathsExplainTable.paths[i].$1,
@@ -259,7 +260,7 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
     ];
 
     Widget laneAt(int i) {
-      return _SoftPulseTarget(
+      return GlowHighlight(
         active:
             widget.interactive && widget.enabled && next == i,
         child: _PathLane(
@@ -382,78 +383,6 @@ class _WinningPathsDemoState extends State<WinningPathsDemo> {
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
-  }
-}
-
-/// Soft gold pulse around the next winning-path lane.
-class _SoftPulseTarget extends StatefulWidget {
-  const _SoftPulseTarget({required this.active, required this.child});
-
-  final bool active;
-  final Widget child;
-
-  @override
-  State<_SoftPulseTarget> createState() => _SoftPulseTargetState();
-}
-
-class _SoftPulseTargetState extends State<_SoftPulseTarget>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-    if (widget.active) {
-      _pulse.repeat(reverse: true);
-    }
-  }
-
-  @override
-  void didUpdateWidget(covariant _SoftPulseTarget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.active && !_pulse.isAnimating) {
-      _pulse.repeat(reverse: true);
-    } else if (!widget.active && _pulse.isAnimating) {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!widget.active) {
-      return widget.child;
-    }
-    return AnimatedBuilder(
-      animation: _pulse,
-      builder: (context, child) {
-        final glow = 0.4 + (_pulse.value * 0.55);
-        return DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.gold.withValues(alpha: glow * 0.65),
-                blurRadius: 12 + (10 * _pulse.value),
-                spreadRadius: 1 + (2 * _pulse.value),
-              ),
-            ],
-          ),
-          child: child,
-        );
-      },
-      child: widget.child,
-    );
   }
 }
 

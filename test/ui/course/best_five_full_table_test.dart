@@ -138,13 +138,11 @@ void main() {
     );
     await tester.pump();
 
-    // First playing card is Ah (hero index 0). Arrow sits on that card.
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsNothing);
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
+    // First playing card is Ah (hero index 0). GlowHighlight sits on that card.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
 
-    final arrow = tester.getCenter(
-      find.byKey(const ValueKey<String>('hero-cue-arrow-0')),
+    final glow = tester.getCenter(
+      find.byKey(const ValueKey<String>('glow-highlight')),
     );
     final ah = tester.getCenter(
       find.byKey(const ValueKey<String>('lesson-hero-card-0')),
@@ -152,19 +150,20 @@ void main() {
     final kd = tester.getCenter(
       find.byKey(const ValueKey<String>('lesson-hero-card-1')),
     );
-    expect(arrow.dx, closeTo(ah.dx, 1));
-    expect((arrow.dx - kd.dx).abs(), greaterThan(20));
+    expect(glow.dx, closeTo(ah.dx, 8));
+    expect((glow.dx - kd.dx).abs(), greaterThan(20));
 
     await tester.tap(find.byKey(const ValueKey<String>('lesson-hero-card-0')));
     await tester.pump();
 
-    // Next hero card is Kd — arrow moves to index 1.
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsNothing);
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsOneWidget);
-    final kdArrow = tester.getCenter(
-      find.byKey(const ValueKey<String>('hero-cue-arrow-1')),
-    );
-    expect(kdArrow.dx, closeTo(kd.dx, 1));
+    // Ah keeps a static selected ring; SoftPulse moves to Kd.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
+    final glowFinder = find.byKey(const ValueKey<String>('glow-highlight'));
+    final nearKd = List.generate(
+      2,
+      (i) => tester.getCenter(glowFinder.at(i)),
+    ).any((g) => (g.dx - kd.dx).abs() < 8);
+    expect(nearKd, isTrue);
   });
 
   testWidgets('guided picker selects five on the full table', (tester) async {

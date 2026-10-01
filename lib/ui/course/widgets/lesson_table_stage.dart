@@ -353,21 +353,20 @@ class LessonTableStage extends StatelessWidget {
             showHoleCardBacks: true,
             heroCardsFaceUp: heroFaceUp,
             faceUpPlayerIds: faceUp,
-            // Face-up holes still need CueArrows + CuePulse — the old
+            // Face-up holes SoftPulse via GlowHighlight — the old
             // `&& !heroFaceUp` gate hid every "tap your cards" cue in the
             // lesson frame (guided find-holes, etc.).
-            // Board region cues expand to every dealt card the same way —
-            // a lone centered arrow over five slots lands on the rightmost
-            // flop card and skips CuePulse.
+            // Board region cues wrap the whole board row; per-card board
+            // taps SoftPulse each dealt card individually.
             highlightHero: cue == LessonTableCue.hero,
             highlightBoard: cue == LessonTableCue.board &&
                 highlightBoardIndexes.isEmpty &&
-                boardCodes.isEmpty,
+                onBoardCardTap == null,
             selectedBoardIndexes: selectedBoardIndexes,
             highlightBoardIndexes:
                 highlightBoardIndexes.isNotEmpty
                     ? highlightBoardIndexes
-                    : (cue == LessonTableCue.board
+                    : (cue == LessonTableCue.board && onBoardCardTap != null
                         ? {for (var i = 0; i < boardCodes.length; i++) i}
                         : const <int>{}),
             dimmedBoardIndexes: dimmedBoardIndexes,

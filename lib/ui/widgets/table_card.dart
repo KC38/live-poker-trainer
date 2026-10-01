@@ -14,26 +14,25 @@ const double tableCardAspect = 1.4;
 /// Rank stays in the top-left; a single suit glyph fills the face below
 /// the rank (no second overlapping suit). Hole cards sit fully above their
 /// seat box — neither covers the other.
+///
+/// Selection and lesson cues are drawn by [GlowHighlight] around this
+/// widget — the card face itself stays a plain cream tile.
 class TableCard extends StatelessWidget {
   /// Creates a card face [width] wide.
   const TableCard({
     super.key,
     required this.card,
     required this.width,
-    this.selected = false,
-    this.highlighted = false,
     this.dimmed = false,
     this.orderBadge,
+    @Deprecated('Use GlowHighlight around the card instead')
+    this.selected = false,
+    @Deprecated('Use GlowHighlight around the card instead')
+    this.highlighted = false,
   });
 
   final CardModel card;
   final double width;
-
-  /// Gold ring when the learner has tapped this card.
-  final bool selected;
-
-  /// Soft gold cue for the next card to tap.
-  final bool highlighted;
 
   /// Fade leftover cards that do not play.
   final bool dimmed;
@@ -41,28 +40,25 @@ class TableCard extends StatelessWidget {
   /// Optional 1-based order badge drawn on a selected card.
   final int? orderBadge;
 
+  /// Ignored — kept so older call sites compile while they migrate.
+  @Deprecated('Use GlowHighlight around the card instead')
+  final bool selected;
+
+  /// Ignored — kept so older call sites compile while they migrate.
+  @Deprecated('Use GlowHighlight around the card instead')
+  final bool highlighted;
+
   @override
   Widget build(BuildContext context) {
     final color = card.displayColor;
     final radius = width * 0.12;
     final height = width * tableCardAspect;
-    final borderColor = selected
-        ? AppColors.gold
-        : highlighted
-        ? AppColors.gold.withValues(alpha: 0.75)
-        : AppColors.slateDark.withValues(alpha: 0.35);
-    final borderWidth = selected
-        ? 2.2
-        : highlighted
-        ? 2.0
-        : 0.6;
     // Leave clear air under the corner rank so the suit never overlaps it.
     final suitTop = width * 0.48;
     return Semantics(
       label: card.display,
-      selected: selected,
       child: Opacity(
-        opacity: dimmed && !selected ? 0.38 : 1,
+        opacity: dimmed ? 0.38 : 1,
         child: Container(
           width: width,
           height: height,
@@ -70,8 +66,8 @@ class TableCard extends StatelessWidget {
             color: AppColors.cream,
             borderRadius: BorderRadius.circular(radius),
             border: Border.all(
-              color: borderColor,
-              width: borderWidth,
+              color: AppColors.slateDark.withValues(alpha: 0.35),
+              width: 0.6,
             ),
             boxShadow: [
               BoxShadow(
@@ -79,14 +75,6 @@ class TableCard extends StatelessWidget {
                 blurRadius: 4,
                 offset: const Offset(0, 1.5),
               ),
-              if (selected || highlighted)
-                BoxShadow(
-                  color: AppColors.gold.withValues(
-                    alpha: selected ? 0.45 : 0.28,
-                  ),
-                  blurRadius: selected ? 10 : 8,
-                  spreadRadius: selected ? 1 : 0.5,
-                ),
             ],
           ),
           child: ExcludeSemantics(
