@@ -96,6 +96,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   /// True while a mid-lesson heart refill callable is in flight.
   bool _heartRefillBusy = false;
 
+  /// Fires when a passive heart should reach an open zero-heart lesson.
+  Timer? _heartResyncTimer;
+
+  /// True while a passive-heart startLesson resync is in flight.
+  bool _heartResyncInFlight = false;
+
   CourseService get _service =>
       widget.courseService ?? ref.read(courseServiceProvider);
 
@@ -109,6 +115,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   @override
   void dispose() {
+    _heartResyncTimer?.cancel();
     _resumeNoticeTimer?.cancel();
     _activityController?.removeListener(_onActivityChanged);
     _activityController?.dispose();
@@ -251,6 +258,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       return;
     }
     if (_heartsGateActive) {
+      _armPassiveHeartResync();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(_promptHeartRefill());
       });
@@ -280,9 +288,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     // toString is CourseServiceException($code): $message. The code must
     // stay in Technical details, not in the learner sentence.
-    final match = RegExp(
-      r'CourseServiceException(?:\([^)]*\))?:\s*(.+)',
-    ).firstMatch(raw);
+    final match = RegExp(r'CourseServiceException(?:\([^)]*\))?:\s*(.+)')
+        .firstMatch(raw);
     if (match != null) {
       return match.group(1)!.trim();
     }
@@ -356,6 +363,88 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     return true;
   }
 
+  /// Schedules one server resync for when the next passive heart is due.
+  ///
+  /// The attempt document does not accrue hearts on its own. [startLesson]
+  /// copies the profile wallet, including a heart that just came due, back
+  /// onto the open attempt so the in-place gate can lift.
+  void _armPassiveHeartResync({int? livesNextRefillAtMs}) {
+    _heartResyncTimer?.cancel();
+    _heartResyncTimer = null;
+    if (!_heartsGateActive) return;
+    var atMs = livesNextRefillAtMs;
+    if (atMs == null && ref.exists(courseHomeProvider)) {
+      atMs = ref.read(courseHomeProvider).asData?.value.livesNextRefillAtMs;
+    }
+    if (atMs == null) return;
+    final delayMs = atMs - DateTime.now().millisecondsSinceEpoch;
+    _heartResyncTimer = Timer(
+      Duration(milliseconds: delayMs <= 0 ? 0 : delayMs),
+      () {
+        unawaited(_resyncHeartsFromServer());
+      },
+    );
+  }
+
+  /// Pulls profile hearts onto the open attempt after a passive refill.
+  Future<void> _resyncHeartsFromServer() async {
+    if (!mounted || _heartResyncInFlight || !_heartsGateActive) return;
+    final lessonId = _lesson?.id ?? widget.lessonId;
+    final catalog = ref.read(courseCatalogProvider).asData?.value;
+    if (catalog == null) return;
+    _heartResyncInFlight = true;
+    try {
+      final started = await _service.startLesson(
+        lessonId: lessonId,
+        catalogVersion: catalog.catalogVersion,
+        startRequestId: CourseService.newRequestKey('heart_sync'),
+      );
+      if (!mounted) return;
+      final restored = started.attempt.livesRemaining;
+      if (restored <= 0) return;
+      final attempt = _attempt;
+      if (attempt == null) return;
+      setState(() {
+        _attempt = CourseAttemptSnapshot(
+          attemptId: attempt.attemptId,
+          lessonId: attempt.lessonId,
+          catalogVersion: attempt.catalogVersion,
+          status: attempt.status == 'remediation'
+              ? 'in_progress'
+              : attempt.status,
+          activityIndex: attempt.activityIndex,
+          currentActivityId: attempt.currentActivityId,
+          livesRemaining: restored,
+          livesMax: started.attempt.livesMax,
+          acceptedCount: attempt.acceptedCount,
+          scoredCount: attempt.scoredCount,
+          stepCount: attempt.stepCount,
+          jumpTestPassed: attempt.jumpTestPassed,
+        );
+      });
+      _heartResyncTimer?.cancel();
+      _heartResyncTimer = null;
+    } catch (_) {
+      // The gate stays up. The next refill action or a fresh open retries.
+    } finally {
+      _heartResyncInFlight = false;
+    }
+  }
+
+  /// Keeps a ready Home wallet aligned with the graded step.
+  void _syncReadyHomeHearts(SubmitCourseStepResult result) {
+    if (!ref.exists(courseHomeProvider)) return;
+    final home = ref.read(courseHomeProvider).asData?.value;
+    if (home == null || home.status != CourseHomeLoadStatus.ready) return;
+    ref
+        .read(courseHomeProvider.notifier)
+        .applyStepHeartWallet(
+          livesRemaining: result.livesRemaining,
+          livesMax: home.livesMax,
+          livesNextRefillAtMs: result.livesNextRefillAtMs,
+        );
+  }
+
   Future<void> _submit() async {
     final controller = _activityController;
     final attempt = _attempt;
@@ -410,10 +499,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         idempotencyKey: key,
         catalogVersion: catalog.catalogVersion,
         choiceId: controller.draft.choiceId,
-        orderedIds:
-            controller.draft.orderedIds.isEmpty
-                ? null
-                : controller.draft.orderedIds,
+        orderedIds: controller.draft.orderedIds.isEmpty
+            ? null
+            : controller.draft.orderedIds,
         numericValue: controller.draft.numericValue,
       );
       if (!mounted) return;
@@ -510,7 +598,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           );
         }
       }
+      if (result.livesRemaining > 0) {
+        _heartResyncTimer?.cancel();
+        _heartResyncTimer = null;
+      }
+      _syncReadyHomeHearts(result);
       if (result.remediationRequired || result.livesRemaining <= 0) {
+        _armPassiveHeartResync(livesNextRefillAtMs: result.livesNextRefillAtMs);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           unawaited(_promptHeartRefill());
         });
@@ -526,9 +620,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         );
         return;
       }
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('$error')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('$error')));
       setState(() {});
     }
   }
@@ -562,10 +655,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         startRequestId: CourseService.newRequestKey('resync'),
       );
       if (!mounted) return;
-      final activities =
-          _activities.isEmpty
-              ? catalog.activitiesForLesson(lessonId)
-              : _activities;
+      final activities = _activities.isEmpty
+          ? catalog.activitiesForLesson(lessonId)
+          : _activities;
       final current = activities.firstWhere(
         (a) => a.id == started.resume.activityId,
         orElse: () => activities.first,
@@ -584,9 +676,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       }
     } catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('$error')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('$error')));
       setState(() {});
     }
   }
@@ -775,20 +866,18 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       if (!mounted) return;
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
-          builder:
-              (_) => LessonResultScreen(
-                lessonTitle: _lesson?.title ?? 'Lesson',
-                result: shown,
-                standalone: !widget.embeddedInShell,
-              ),
+          builder: (_) => LessonResultScreen(
+            lessonTitle: _lesson?.title ?? 'Lesson',
+            result: shown,
+            standalone: !widget.embeddedInShell,
+          ),
         ),
       );
     } catch (error) {
       if (!mounted) return;
       setState(() => _completing = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('$error')));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('$error')));
     }
   }
 
@@ -823,14 +912,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   String _frameSpeech(LessonActivityController controller) {
     if (controller.hintVisible) {
-      final authored =
-          controller.activity.hintMedia.isNotEmpty
-              ? controller.activity.hintMedia.first.text
-              : null;
-      final hint =
-          (authored == null || authored.trim().isEmpty)
-              ? lessonFrameHintFallback(controller.activity)
-              : authored;
+      final authored = controller.activity.hintMedia.isNotEmpty
+          ? controller.activity.hintMedia.first.text
+          : null;
+      final hint = (authored == null || authored.trim().isEmpty)
+          ? lessonFrameHintFallback(controller.activity)
+          : authored;
       if (hint != null && hint.trim().isNotEmpty) return hint;
     }
     return lessonFrameSpeech(
@@ -880,9 +967,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   }) async {
     switch (action) {
       case HeartRefillAction.practice:
+        if (!_heartsGateActive) return;
         if (mounted) Navigator.of(context).maybePop();
         return;
       case HeartRefillAction.ad:
+        if (!_heartsGateActive) return;
         setState(() => _heartRefillBusy = true);
         try {
           final result = await watchAdAndClaimHeart(
@@ -890,16 +979,19 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             service: _service,
           );
           if (!mounted) return;
-          _onHeartRefillSucceeded(result, retryBootstrap: retryBootstrapOnSuccess);
+          _onHeartRefillSucceeded(
+            result,
+            retryBootstrap: retryBootstrapOnSuccess,
+          );
         } catch (error) {
           if (!mounted) return;
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('$error')));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('$error')));
         } finally {
           if (mounted) setState(() => _heartRefillBusy = false);
         }
       case HeartRefillAction.gems:
+        if (!_heartsGateActive) return;
         setState(() => _heartRefillBusy = true);
         try {
           final result = await _service.refillHearts(
@@ -907,12 +999,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             idempotencyKey: CourseService.newRequestKey('heart_gems'),
           );
           if (!mounted) return;
-          _onHeartRefillSucceeded(result, retryBootstrap: retryBootstrapOnSuccess);
+          _onHeartRefillSucceeded(
+            result,
+            retryBootstrap: retryBootstrapOnSuccess,
+          );
         } catch (error) {
           if (!mounted) return;
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('$error')));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('$error')));
         } finally {
           if (mounted) setState(() => _heartRefillBusy = false);
         }
@@ -923,6 +1017,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     RefillCourseHeartsResult result, {
     required bool retryBootstrap,
   }) {
+    _heartResyncTimer?.cancel();
+    _heartResyncTimer = null;
     final home = ref.read(courseHomeProvider.notifier);
     home.applyHeartRefill(result);
     unawaited(home.refresh());
@@ -996,12 +1092,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         canUndo: false,
         canRedo: false,
         canHint: false,
-        stage:
-            _error != null
-                ? _buildBody()
-                : const Center(
-                  child: CircularProgressIndicator(color: AppColors.gold),
-                ),
+        stage: _error != null
+            ? _buildBody()
+            : const Center(
+                child: CircularProgressIndicator(color: AppColors.gold),
+              ),
       );
     }
 
@@ -1047,23 +1142,22 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             );
           },
           result: result,
-          recovery:
-              result == null || result.accepted
-                  ? null
-                  : _labelForChoice(
-                    activity,
-                    result.betterChoiceId ??
-                        (result.accepted
-                            ? null
-                            : _heroRecoveryChoiceId(activity)),
-                  ),
+          recovery: result == null || result.accepted
+              ? null
+              : _labelForChoice(
+                  activity,
+                  result.betterChoiceId ??
+                      (result.accepted
+                          ? null
+                          : _heroRecoveryChoiceId(activity)),
+                ),
           onContinue: result == null ? null : _continueAfterFeedback,
-          continueLabel:
-              result != null && !result.accepted && _heartsGateActive
-                  ? 'Restore hearts'
-                  : 'Continue',
-          onRestoreHearts:
-              _heartsGateActive && result == null ? _promptHeartRefill : null,
+          continueLabel: result != null && !result.accepted && _heartsGateActive
+              ? 'Restore hearts'
+              : 'Continue',
+          onRestoreHearts: _heartsGateActive && result == null
+              ? _promptHeartRefill
+              : null,
           answerBusy: _completing || _advancingActivity || _heartRefillBusy,
           stage: LessonFrameScope(
             onLocalMiss: _reportLocalMiss,
@@ -1073,9 +1167,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               showGuidance: controller.showTargetCue,
               onFeltAcknowledge:
                   isTableRegionTapActivity(activity) &&
-                          activity.renderer == ActivityRenderer.coachDialogue
-                      ? _submit
-                      : null,
+                      activity.renderer == ActivityRenderer.coachDialogue
+                  ? _submit
+                  : null,
             ),
           ),
         );
@@ -1160,9 +1254,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         detail != _error) ...[
                       const SizedBox(height: 16),
                       Theme(
-                        data: Theme.of(
-                          context,
-                        ).copyWith(dividerColor: Colors.transparent),
+                        data: Theme.of(context)
+                            .copyWith(dividerColor: Colors.transparent),
                         child: ExpansionTile(
                           tilePadding: EdgeInsets.zero,
                           childrenPadding: const EdgeInsets.only(bottom: 8),
@@ -1197,12 +1290,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
-                      builder:
-                          (_) => LessonRunnerScreen(
-                            lessonId: previous.id,
-                            embeddedInShell: widget.embeddedInShell,
-                            courseService: widget.courseService,
-                          ),
+                      builder: (_) => LessonRunnerScreen(
+                        lessonId: previous.id,
+                        embeddedInShell: widget.embeddedInShell,
+                        courseService: widget.courseService,
+                      ),
                     ),
                   );
                 },
@@ -1235,13 +1327,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             ],
             _errorDetail?.toLowerCase().contains('failed-precondition') == true
                 ? OutlinedButton(
-                  onPressed: _retryBootstrap,
-                  child: const Text('Retry'),
-                )
+                    onPressed: _retryBootstrap,
+                    child: const Text('Retry'),
+                  )
                 : FilledButton(
-                  onPressed: _retryBootstrap,
-                  child: const Text('Retry'),
-                ),
+                    onPressed: _retryBootstrap,
+                    child: const Text('Retry'),
+                  ),
           ],
         ),
       );
@@ -1265,25 +1357,24 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             livesMax: attempt.livesMax,
             acceptedStreak: _acceptedStreak,
             hintEnabled: hasHint && !controller.hintUsed,
-            onHint:
-                !hasHint
-                    ? null
-                    : () {
-                      if (controller.hintUsed) return;
-                      controller.revealHint();
-                      setState(() {});
-                      final attempt = _attempt;
-                      if (attempt == null) return;
-                      unawaited(
-                        ref
-                            .read(analyticsServiceProvider)
-                            .logRemediation(
-                              lessonId: attempt.lessonId,
-                              activityId: controller.activity.id,
-                              kind: 'hint',
-                            ),
-                      );
-                    },
+            onHint: !hasHint
+                ? null
+                : () {
+                    if (controller.hintUsed) return;
+                    controller.revealHint();
+                    setState(() {});
+                    final attempt = _attempt;
+                    if (attempt == null) return;
+                    unawaited(
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logRemediation(
+                            lessonId: attempt.lessonId,
+                            activityId: controller.activity.id,
+                            kind: 'hint',
+                          ),
+                    );
+                  },
           ),
           if (_resumeNotice != null) ...[
             const SizedBox(height: 6),
@@ -1304,9 +1395,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                 final fillFelt = isLessonActionTableActivity(activity);
                 final feltAck =
                     isTableRegionTapActivity(activity) &&
-                            activity.renderer == ActivityRenderer.coachDialogue
-                        ? _submit
-                        : null;
+                        activity.renderer == ActivityRenderer.coachDialogue
+                    ? _submit
+                    : null;
                 final body = AnimatedBuilder(
                   animation: controller,
                   builder: (context, _) {
@@ -1314,19 +1405,18 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                       duration: const Duration(milliseconds: 220),
                       switchInCurve: Curves.easeOut,
                       switchOutCurve: Curves.easeIn,
-                      layoutBuilder:
-                          fillFelt
-                              ? (currentChild, previousChildren) {
-                                return Stack(
-                                  fit: StackFit.expand,
-                                  alignment: Alignment.topCenter,
-                                  children: <Widget>[
-                                    ...previousChildren,
-                                    if (currentChild != null) currentChild,
-                                  ],
-                                );
-                              }
-                              : AnimatedSwitcher.defaultLayoutBuilder,
+                      layoutBuilder: fillFelt
+                          ? (currentChild, previousChildren) {
+                              return Stack(
+                                fit: StackFit.expand,
+                                alignment: Alignment.topCenter,
+                                children: <Widget>[
+                                  ...previousChildren,
+                                  if (currentChild != null) currentChild,
+                                ],
+                              );
+                            }
+                          : AnimatedSwitcher.defaultLayoutBuilder,
                       child: KeyedSubtree(
                         key: ValueKey<String>(activity.id),
                         child: activityRegistry.build(
@@ -1338,23 +1428,21 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         ),
                       ),
                     );
-                    final lockedPane =
-                        _heartsGateActive
-                            ? AbsorbPointer(child: activityPane)
-                            : activityPane;
-                    final hintText =
-                        activity.hintMedia.isNotEmpty
-                            ? activity.hintMedia.first.text
-                            : lessonFrameHintFallback(activity);
+                    final lockedPane = _heartsGateActive
+                        ? AbsorbPointer(child: activityPane)
+                        : activityPane;
+                    final hintText = activity.hintMedia.isNotEmpty
+                        ? activity.hintMedia.first.text
+                        : lessonFrameHintFallback(activity);
                     final hintLine =
                         controller.hintVisible &&
-                                hintText != null &&
-                                hintText.trim().isNotEmpty
-                            ? <Widget>[
-                              const SizedBox(height: 10),
-                              RexCoachLine(text: hintText, label: 'Hint'),
-                            ]
-                            : const <Widget>[];
+                            hintText != null &&
+                            hintText.trim().isNotEmpty
+                        ? <Widget>[
+                            const SizedBox(height: 10),
+                            RexCoachLine(text: hintText, label: 'Hint'),
+                          ]
+                        : const <Widget>[];
                     if (!fillFelt) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1363,7 +1451,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     }
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [Expanded(child: lockedPane), ...hintLine],
+                      children: [
+                        Expanded(child: lockedPane),
+                        ...hintLine,
+                      ],
                     );
                   },
                 );
@@ -1386,8 +1477,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     const SizedBox(height: 10),
                     LessonFeedbackSheet(
                       result: result,
-                      seatLabel:
-                          result.accepted ? null : controller.tappedSeatLabel,
+                      seatLabel: result.accepted
+                          ? null
+                          : controller.tappedSeatLabel,
                       betterChoiceLabel: _labelForChoice(
                         activity,
                         result.betterChoiceId ??
@@ -1399,33 +1491,28 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                       // and CTAs hug — no empty Expanded gap.
                       showActions: false,
                       onContinue: _continueAfterFeedback,
-                      onRetry:
-                          result.accepted || _heartsGateActive
-                              ? null
-                              : () {
-                                controller.clearFeedbackForRetry();
-                                setState(() {});
-                              },
+                      onRetry: result.accepted || _heartsGateActive
+                          ? null
+                          : () {
+                              controller.clearFeedbackForRetry();
+                              setState(() {});
+                            },
                     ),
                     const SizedBox(height: 10),
                     _FeedbackFooter(
                       result: result,
                       completing:
-                          _completing ||
-                          _advancingActivity ||
-                          _heartRefillBusy,
-                      continueLabel:
-                          !result.accepted && _heartsGateActive
-                              ? 'Restore hearts'
-                              : 'Continue',
+                          _completing || _advancingActivity || _heartRefillBusy,
+                      continueLabel: !result.accepted && _heartsGateActive
+                          ? 'Restore hearts'
+                          : 'Continue',
                       onContinue: _continueAfterFeedback,
-                      onRetry:
-                          result.accepted || _heartsGateActive
-                              ? null
-                              : () {
-                                controller.clearFeedbackForRetry();
-                                setState(() {});
-                              },
+                      onRetry: result.accepted || _heartsGateActive
+                          ? null
+                          : () {
+                              controller.clearFeedbackForRetry();
+                              setState(() {});
+                            },
                     ),
                   ],
                 );
@@ -1479,13 +1566,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                 children: [
                   if (controller.draft.hasAnswer)
                     TextButton(
-                      onPressed:
-                          controller.submitting
-                              ? null
-                              : () {
-                                controller.undoDraft();
-                                setState(() {});
-                              },
+                      onPressed: controller.submitting
+                          ? null
+                          : () {
+                              controller.undoDraft();
+                              setState(() {});
+                            },
                       child: const Text('Undo'),
                     ),
                   const Spacer(),
@@ -1506,7 +1592,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         controller.submitting
                             ? 'Checking…'
                             : liveActivity.renderer ==
-                                ActivityRenderer.coachDialogue
+                                  ActivityRenderer.coachDialogue
                             ? 'Continue'
                             : isLessonActionTableActivity(liveActivity)
                             // Avoid colliding with dock CHECK / CHECK (off).
@@ -1736,24 +1822,23 @@ class _FeedbackFooter extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child:
-                        completing
-                            ? const SizedBox(
-                              width: 22,
-                              height: 22,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.4,
-                                color: AppColors.bgDark,
-                              ),
-                            )
-                            : Text(
-                              continueLabel,
-                              style: GoogleFonts.manrope(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 16,
-                                letterSpacing: 0.2,
-                              ),
+                    child: completing
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.4,
+                              color: AppColors.bgDark,
                             ),
+                          )
+                        : Text(
+                            continueLabel,
+                            style: GoogleFonts.manrope(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
                   ),
                 ),
               ),

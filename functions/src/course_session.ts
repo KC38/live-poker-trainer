@@ -227,6 +227,8 @@ export interface SubmitCourseStepResult {
   betterChoiceId?: string;
   reversalRead?: string;
   duplicate: boolean;
+  /** Epoch ms of the next passive heart, after this step's life change. */
+  livesNextRefillAtMs?: number | null;
 }
 
 export interface CompleteCourseLessonResult {
@@ -994,18 +996,28 @@ export async function submitCourseStepForUser(options: {
     const isPracticeOrReplaySubmit =
       priorCompletedForHearts.includes(attempt.lessonId) ||
       isPracticeLesson(located.lesson);
-    if (
-      shouldBlockSubmitForHearts({
-        livesRemaining: attempt.livesRemaining,
-        isPracticeOrReplay: isPracticeOrReplaySubmit,
-      })
-    ) {
+    // Profile is the heart wallet. Passive refill updates it while this
+    // attempt stays open; grading from the stale attempt deletes accrued
+    // hearts and keeps a zero-heart lesson blocked after one comes back.
+    const hearts = resolveSubmitHeartState({
+      attemptStatus: attempt.status,
+      attemptLivesRemaining: attempt.livesRemaining,
+      attemptLivesMax: attempt.livesMax,
+      profileData: profileSnap.data(),
+      profileExists: profileSnap.exists,
+      nowMs,
+      isPracticeOrReplay: isPracticeOrReplaySubmit,
+    });
+    if (hearts.blocked) {
       throw new HttpsError(
         "failed-precondition",
         "Out of hearts. Refill before continuing.",
       );
     }
-    if (isLessonAttemptReadyToComplete(attempt, located.lesson)) {
+    if (isLessonAttemptReadyToComplete(
+      {...attempt, status: hearts.status},
+      located.lesson,
+    )) {
       throw new HttpsError(
         "failed-precondition",
         "All activities are finished. Complete the lesson.",
@@ -1029,17 +1041,16 @@ export async function submitCourseStepForUser(options: {
       numericValue,
     });
 
-    let livesRemaining = attempt.livesRemaining;
+    let livesRemaining = hearts.livesRemaining;
+    const livesMax = hearts.livesMax;
     let lifeLost = false;
-    let livesNextRefillAtMs: number | null = heartStateFromData(
-      profileSnap.data(),
-    ).livesNextRefillAtMs;
+    let livesNextRefillAtMs = hearts.livesNextRefillAtMs;
     if (outcome.lifeLost && livesRemaining > 0) {
       livesRemaining -= 1;
       lifeLost = true;
       livesNextRefillAtMs = scheduleHeartRefillAfterLoss({
         livesRemaining,
-        livesMax: attempt.livesMax > 0 ? attempt.livesMax : DEFAULT_LESSON_LIVES,
+        livesMax,
         livesNextRefillAtMs,
         nowMs,
       });
@@ -1097,12 +1108,13 @@ export async function submitCourseStepForUser(options: {
 
     const nextStatus: CourseAttempt["status"] = remediationRequired ?
       "remediation" :
-      attempt.status === "remediation" && outcome.accepted ?
+      hearts.status === "remediation" && outcome.accepted ?
       "in_progress" :
-      attempt.status;
+      hearts.status;
 
     const nextAttempt: CourseAttempt = {
       ...attempt,
+      livesMax,
       activityIndex: nextIndex,
       currentActivityId: advance && currentIndex < activities.length - 1 ?
         nextActivityId :
@@ -1140,6 +1152,7 @@ export async function submitCourseStepForUser(options: {
       remediationRequired,
       resume,
       duplicate: false,
+      livesNextRefillAtMs,
     };
     if (outcome.betterChoiceId) {
       result.betterChoiceId = outcome.betterChoiceId;
@@ -1178,7 +1191,7 @@ export async function submitCourseStepForUser(options: {
       timezone,
       // Keep user hearts in sync when a life is spent (and backfill max).
       livesRemaining,
-      livesMax: attempt.livesMax > 0 ? attempt.livesMax : DEFAULT_LESSON_LIVES,
+      livesMax,
       livesNextRefillAtMs,
       updatedAt: FieldValue.serverTimestamp(),
     };
@@ -2071,6 +2084,77 @@ export function shouldBlockSubmitForHearts(options: {
   isPracticeOrReplay: boolean;
 }): boolean {
   return options.livesRemaining <= 0 && !options.isPracticeOrReplay;
+}
+
+/**
+ * Heart count a step submit must grade against.
+ *
+ * Passive refill writes the profile while an open attempt keeps the old
+ * count. Submits that trust the attempt then write that stale count back
+ * onto the profile, deleting the free heart, and a first-run lesson stuck
+ * at zero never sees the heart that would lift the gate.
+ *
+ * When the profile has a numeric wallet, accrue passive hearts first and
+ * grade from that. Otherwise keep the attempt count (no profile to clobber).
+ */
+export function resolveSubmitHeartState(options: {
+  attemptStatus: CourseAttempt["status"];
+  attemptLivesRemaining: number;
+  attemptLivesMax: number;
+  profileData: DocumentData | undefined;
+  profileExists: boolean;
+  nowMs: number;
+  isPracticeOrReplay: boolean;
+}): {
+  livesRemaining: number;
+  livesMax: number;
+  status: CourseAttempt["status"];
+  livesNextRefillAtMs: number | null;
+  blocked: boolean;
+} {
+  const wallet = options.profileExists &&
+    options.profileData != null &&
+    Object.prototype.hasOwnProperty.call(options.profileData, "livesRemaining") &&
+    Number.isFinite(Number(options.profileData.livesRemaining));
+  if (!wallet) {
+    const livesMax = options.attemptLivesMax > 0 ?
+      options.attemptLivesMax :
+      DEFAULT_LESSON_LIVES;
+    const raw = Number(options.attemptLivesRemaining);
+    const livesRemaining = Number.isFinite(raw) ?
+      Math.max(0, Math.min(livesMax, Math.floor(raw))) :
+      0;
+    return {
+      livesRemaining,
+      livesMax,
+      status: options.attemptStatus === "remediation" && livesRemaining > 0 ?
+        "in_progress" :
+        options.attemptStatus,
+      livesNextRefillAtMs: null,
+      blocked: shouldBlockSubmitForHearts({
+        livesRemaining,
+        isPracticeOrReplay: options.isPracticeOrReplay,
+      }),
+    };
+  }
+  const passive = applyPassiveHeartRefill(
+    heartStateFromData(options.profileData),
+    options.nowMs,
+  );
+  const status: CourseAttempt["status"] =
+    options.attemptStatus === "remediation" && passive.livesRemaining > 0 ?
+      "in_progress" :
+      options.attemptStatus;
+  return {
+    livesRemaining: passive.livesRemaining,
+    livesMax: passive.livesMax,
+    status,
+    livesNextRefillAtMs: passive.livesNextRefillAtMs,
+    blocked: shouldBlockSubmitForHearts({
+      livesRemaining: passive.livesRemaining,
+      isPracticeOrReplay: options.isPracticeOrReplay,
+    }),
+  };
 }
 
 function sanitizeEntitlement(data: DocumentData): Record<string, unknown> {

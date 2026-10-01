@@ -129,6 +129,7 @@ class SubmitCourseStepResult {
     this.betterChoiceId,
     this.reversalRead,
     this.masteryWeight = 0,
+    this.livesNextRefillAtMs,
   });
 
   final String attemptId;
@@ -145,6 +146,9 @@ class SubmitCourseStepResult {
   final String? betterChoiceId;
   final String? reversalRead;
   final double masteryWeight;
+
+  /// Epoch ms when the next passive heart arrives, after this step.
+  final int? livesNextRefillAtMs;
 
   factory SubmitCourseStepResult.fromJson(Map<String, dynamic> json) {
     return SubmitCourseStepResult(
@@ -164,6 +168,7 @@ class SubmitCourseStepResult {
       betterChoiceId: json['betterChoiceId'] as String?,
       reversalRead: json['reversalRead'] as String?,
       masteryWeight: (json['masteryWeight'] as num?)?.toDouble() ?? 0,
+      livesNextRefillAtMs: (json['livesNextRefillAtMs'] as num?)?.toInt(),
     );
   }
 }
