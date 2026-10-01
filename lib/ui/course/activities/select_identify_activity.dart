@@ -338,7 +338,7 @@ class SelectIdentifyActivity extends StatelessWidget {
       SelectIdentifyPresentation.bestFiveCardTap =>
         'Tap the five cards that play in your best hand.',
       SelectIdentifyPresentation.outsCleanAcesTap =>
-        'King-high board — count only outs that make the best hand.',
+        'Count only the outs that make the best hand.',
       SelectIdentifyPresentation.text =>
         hasScene
             ? 'Look at the table, then pick the answer that matches.'
@@ -586,7 +586,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Flush vs straight on the river — stronger category takes it.',
       // SoftPulse owns your holes — don’t gold-tip the kicker winner.
       'act-01-02-02-scaffolded-kicker' =>
-        'Same pair of kings — tap your cards, their cards, or Chop.',
+        'Same pair on the board — tap your cards, their cards, or Chop.',
       // Jump densify — SoftPulse off; pick without gold-tipping 55bb.
       'act-02-07-02-jump-stack' =>
         'You 120bb · villain 55bb — pick the effective stack.',
@@ -633,7 +633,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Eight or queen completes — your hand needs the right runout.',
       // SoftPulse owns remaining aces — don’t gold-tip the cards.
       'act-03-03-01-guided' =>
-        'King-high board — count only outs that make the best hand.',
+        'Count only the outs that make the best hand.',
       // SoftPulse owns Call 10 — don’t gold-tip the tile.
       'act-03-03-01-scaffolded' =>
         'Pot 20, bet 10 — the call equals the bet in front of you.',
@@ -1810,7 +1810,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-03-02-01-checkpoint' =>
       'Eight or queen completes — your hand needs the right runout.',
     'act-03-03-01-guided' =>
-      'King-high board — count only outs that make the best hand.',
+      'Count only the outs that make the best hand.',
     'act-03-03-01-unguided' =>
       'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
     'act-03-03-01-checkpoint' =>
@@ -2260,7 +2260,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
   String get _coachFallback {
     if (widget.activity.id == 'act-01-02-02-scaffolded-kicker') {
       // SoftPulse owns your holes — don’t gold-tip the kicker winner.
-      return 'Same pair of kings — tap your cards, their cards, or Chop.';
+      return 'Same pair on the board — tap your cards, their cards, or Chop.';
     }
     if (widget.activity.id == 'act-01-02-02-unguided-board') {
       // SoftPulse owns the board — don’t gold-tip Chop.
@@ -2510,7 +2510,10 @@ class _BestFiveCardTapActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final spot = resolveBestFiveSpot(activity);
+    final spot = dealtBestFiveSpot(
+      activity,
+      generation: controller.bindGeneration,
+    );
     if (spot == null) {
       return Text(
         'Missing best-five spot for ${activity.id}',
@@ -2567,7 +2570,7 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
   final bool showGuidance;
 
   static const _coach =
-      'King-high board — count only outs that make the best hand.';
+      'Count only the outs that make the best hand.';
 
   @override
   Widget build(BuildContext context) {

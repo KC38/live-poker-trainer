@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/engine/fast_evaluator.dart';
 import 'package:live_poker_trainer/engine/hand_class.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 
 bool _isSuited(List<String> codes) {
@@ -33,6 +34,7 @@ void main() {
   tearDown(() {
     debugLessonCardDealRandom = null;
     debugFreezeLessonSuitRemap = false;
+    lessonDealAttemptSalt = '';
   });
 
   test('dealHoleHand preserves attributes across kinds', () {
@@ -408,5 +410,87 @@ void main() {
       );
     }
     expect(orders.length, greaterThan(1));
+  });
+
+  test('coordinated remap keeps relative kickers across hero and villain', () {
+    const hero = ['Ah', 'Qd'];
+    const board = ['Kh', 'Kd', '7c', '3s', '2d'];
+    const villain = ['As', 'Jd'];
+    for (var seed = 0; seed < 20; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [hero, board, villain],
+        Random(seed),
+        coordinated: true,
+      );
+      final h = [
+        CardModel.fromCode(groups[0][0]),
+        CardModel.fromCode(groups[0][1]),
+      ]..sort((a, b) => b.rank.compareTo(a.rank));
+      final v = [
+        CardModel.fromCode(groups[2][0]),
+        CardModel.fromCode(groups[2][1]),
+      ]..sort((a, b) => b.rank.compareTo(a.rank));
+      final bCards = [
+        for (final c in groups[1]) CardModel.fromCode(c),
+      ];
+      // Board still pairs (two equal top ranks from authored KK).
+      final boardRanks = bCards.map((c) => c.rank).toList()..sort();
+      expect(boardRanks[3], boardRanks[4]); // two highest equal (pair)
+      // Hero's second card still outranks villain's second (Q > J).
+      expect(h[1].rank, greaterThan(v[1].rank));
+      // Shared top hole rank (ace) stays tied.
+      expect(h[0].rank, v[0].rank);
+    }
+  });
+
+  test('attempt salt changes the deal for the same activity generation', () {
+    lessonDealAttemptSalt = 'attempt-a';
+    final a = isomorphicLessonCardGroups(
+      [
+        ['7h', '2d'],
+        <String>[],
+      ],
+      resolveLessonDealRandom(activityId: 'act-fold', generation: 1),
+    );
+    lessonDealAttemptSalt = 'attempt-b';
+    final b = isomorphicLessonCardGroups(
+      [
+        ['7h', '2d'],
+        <String>[],
+      ],
+      resolveLessonDealRandom(activityId: 'act-fold', generation: 1),
+    );
+    expect(a[0].join(' '), isNot(b[0].join(' ')));
+  });
+
+  test('dealtBestFiveSpot remaps choice sets with the holes', () {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-guided-seven',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [
+        CourseChoice(id: 'best-pair-k', label: 'Best'),
+        CourseChoice(id: 'weak-kickers', label: 'Weak'),
+        CourseChoice(id: 'ignore-ace', label: 'Ignore'),
+      ],
+    );
+    final spot = dealtBestFiveSpot(activity, random: Random(9))!;
+    final all = spot.allCodes.toSet();
+    for (final set in spot.choiceSets.values) {
+      expect(set.toSet().difference(all), isEmpty);
+      expect(set.toSet().length, 5);
+    }
+    expect(
+      mapBestFiveSelectionToChoiceId(
+        selected: spot.choiceSets['best-pair-k']!.toSet(),
+        spot: spot,
+        choices: activity.choices,
+      ),
+      'best-pair-k',
+    );
   });
 }

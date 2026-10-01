@@ -599,9 +599,9 @@ export function buildSectionOne() {
                 a11y: "Tap the winner of the king-pair kicker battle.",
                 objectives: ["Use kickers when categories tie"],
                 choices: [
-                  choice("you-kicker", "You win — queen kicker", "recommended",
+                  choice("you-kicker", "You win — better kicker", "recommended",
                     "Same pair; higher kicker wins."),
-                  choice("they-kicker", "They win — jack is live", "clear_mistake",
+                  choice("they-kicker", "They win — their kicker", "clear_mistake",
                     "Queen beats jack as kicker.", {betterChoiceId: "you-kicker"}),
                   choice("chop-kicker", "Chop — same pair always ties", "clear_mistake",
                     "Kickers decide when pairs match.", {betterChoiceId: "you-kicker"}),

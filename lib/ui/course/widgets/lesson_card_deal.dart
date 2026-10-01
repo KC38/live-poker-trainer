@@ -28,23 +28,42 @@ bool debugFreezeLessonSuitRemap = false;
 /// Whether production remappers should permute suits.
 bool get lessonSuitRemapEnabled => !debugFreezeLessonSuitRemap;
 
+/// Attempt-scoped salt so replaying a lesson deals new faces.
+///
+/// Set from the course attempt id when a lesson starts; clear on dispose.
+String lessonDealAttemptSalt = '';
+
 /// RNG for a lesson attempt: explicit, test hook, or stable activity seed.
 Random resolveLessonDealRandom({
   String? activityId,
   int generation = 0,
   Random? random,
+  String? salt,
 }) {
   if (random != null) return random;
   final hooked = debugLessonCardDealRandom;
   if (hooked != null) return hooked;
-  if (activityId != null) return Random(lessonDealSeed(activityId, generation));
+  if (activityId != null) {
+    return Random(
+      lessonDealSeed(
+        activityId,
+        generation,
+        salt ?? lessonDealAttemptSalt,
+      ),
+    );
+  }
   return Random();
 }
 
-/// FNV-1a seed from an activity id (and optional generation) for stable deals.
-int lessonDealSeed(String activityId, [int generation = 0]) {
+/// FNV-1a seed from an activity id, generation, and optional attempt salt.
+int lessonDealSeed(
+  String activityId, [
+  int generation = 0,
+  String salt = '',
+]) {
   var hash = 0x811c9dc5;
-  final key = '$activityId#$generation';
+  final key =
+      salt.isEmpty ? '$activityId#$generation' : '$activityId#$generation#$salt';
   for (final unit in key.codeUnits) {
     hash ^= unit;
     hash = (hash * 0x01000193) & 0xffffffff;
@@ -245,10 +264,15 @@ List<String> dealStartingHandFamily(
 /// [HandClassifier] matches the authored class (capped retries → suit-only).
 ///
 /// When [suitOnly] is true (multi-step / toy runouts), only suits change.
+///
+/// When any non-hero group holds cards (villain holes, best-five choice sets,
+/// outs tiles), uses a structure-preserving rank shift + suit perm so kickers
+/// and relative strength stay coherent with coach copy.
 List<List<String>> isomorphicLessonCardGroups(
   List<List<String>> groups,
   Random rng, {
   bool suitOnly = false,
+  bool coordinated = false,
 }) {
   if (groups.isEmpty) return const [];
   if (!lessonSuitRemapEnabled) {
@@ -261,9 +285,16 @@ List<List<String>> isomorphicLessonCardGroups(
   final hero = groups[0];
   final board = groups.length > 1 ? groups[1] : const <String>[];
   final rest = groups.length > 2 ? groups.sublist(2) : const <List<String>>[];
+  final hasSideCards = rest.any((g) => g.isNotEmpty);
 
   if (hero.length < 2) {
     return permuteCardSuitGroups(groups, rng);
+  }
+
+  // Multi-hand / choice-set spots: keep relative ranks (Q kicker > J kicker).
+  if (coordinated || hasSideCards) {
+    return structurePreservingLessonCardGroups(groups, rng) ??
+        permuteCardSuitGroups(groups, rng);
   }
 
   if (board.length < 3) {
@@ -275,6 +306,77 @@ List<List<String>> isomorphicLessonCardGroups(
     rest: rest,
     rng: rng,
   );
+}
+
+/// Order-preserving remap: shift every rank by one offset and permute suits.
+///
+/// Returns null when the rank span cannot shift into 2–A without collision.
+List<List<String>>? structurePreservingLessonCardGroups(
+  List<List<String>> groups,
+  Random rng,
+) {
+  final all = [for (final g in groups) for (final c in g) c];
+  if (all.isEmpty) {
+    return [for (final g in groups) List<String>.of(g)];
+  }
+  final ranks = <int>{
+    for (final code in all) CardModel.fromCode(code).rank,
+  }.toList()
+    ..sort();
+  final minR = ranks.first;
+  final maxR = ranks.last;
+  final span = maxR - minR;
+  if (span > 12) return null;
+  final maxStart = 14 - span;
+  final newStart = rng.nextInt(maxStart - 1) + 2;
+  final delta = newStart - minR;
+  final rankMap = {for (final r in ranks) r: r + delta};
+  if (rankMap.values.any((r) => r < 2 || r > 14)) return null;
+
+  final suitMap = _freshSuitMap(rng);
+  List<String> mapCodes(List<String> codes) => [
+        for (final code in codes)
+          _code(
+            rankMap[CardModel.fromCode(code).rank]!,
+            suitMap[CardModel.fromCode(code).suit.code]!,
+          ),
+      ];
+
+  final mapped = [for (final g in groups) mapCodes(g)];
+  if (!_groupsHaveUniqueCards(mapped)) return null;
+  return [
+    for (final g in mapped) List<String>.unmodifiable(g),
+  ];
+}
+
+/// Applies the same structure-preserving maps used for [template] groups onto
+/// extra code lists (choice sets, playing sets, outs tiles).
+List<String> structurePreserveCodesLike({
+  required List<String> codes,
+  required List<List<String>> templateGroups,
+  required List<List<String>> mappedGroups,
+}) {
+  if (codes.isEmpty) return const [];
+  final rankMap = <int, int>{};
+  final suitMap = <String, String>{};
+  for (var gi = 0; gi < templateGroups.length; gi++) {
+    final before = templateGroups[gi];
+    final after = mappedGroups[gi];
+    for (var i = 0; i < before.length && i < after.length; i++) {
+      final b = CardModel.fromCode(before[i]);
+      final a = CardModel.fromCode(after[i]);
+      rankMap[b.rank] = a.rank;
+      suitMap[b.suit.code] = a.suit.code;
+    }
+  }
+  return [
+    for (final code in codes)
+      _code(
+        rankMap[CardModel.fromCode(code).rank] ?? CardModel.fromCode(code).rank,
+        suitMap[CardModel.fromCode(code).suit.code] ??
+            CardModel.fromCode(code).suit.code,
+      ),
+  ];
 }
 
 List<List<String>> _isomorphicPreflopGroups(

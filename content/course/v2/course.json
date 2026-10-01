@@ -1132,8 +1132,8 @@
                   "choices": [
                     {
                       "id": "you-kicker",
-                      "label": "You win — queen kicker",
-                      "accessibilityText": "You win — queen kicker",
+                      "label": "You win — better kicker",
+                      "accessibilityText": "You win — better kicker",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Same pair; higher kicker wins."
@@ -1141,8 +1141,8 @@
                     },
                     {
                       "id": "they-kicker",
-                      "label": "They win — jack is live",
-                      "accessibilityText": "They win — jack is live",
+                      "label": "They win — their kicker",
+                      "accessibilityText": "They win — their kicker",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Queen beats jack as kicker.",

@@ -53,6 +53,7 @@ import 'package:live_poker_trainer/ui/course/widgets/live_warmup_prep_demo.dart'
 import 'package:live_poker_trainer/ui/course/widgets/lag_model_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/wide_pressure_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
@@ -11029,7 +11030,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('King-high board — count only outs that make the best hand.'),
+      find.text('Count only the outs that make the best hand.'),
       findsOneWidget,
     );
     expect(
@@ -23089,6 +23090,11 @@ await tester.tap(find.text('NIT'));
   testWidgets('best five card picker selects aces with king kicker', (
     tester,
   ) async {
+    debugFreezeLessonSuitRemap = true;
+    addTearDown(() {
+      debugFreezeLessonSuitRemap = false;
+      lessonDealAttemptSalt = '';
+    });
     final activity = CourseActivity(
       id: 'act-01-02-02-guided-seven',
       order: 2,
@@ -23218,11 +23224,11 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Same pair of kings — tap your cards, their cards, or Chop.'),
+      find.text('Same pair on the board — tap your cards, their cards, or Chop.'),
       findsOneWidget,
     );
     expect(
-      find.text('Same pair of kings — the higher kicker breaks the tie.'),
+      find.text('Same pair on the board — the higher kicker breaks the tie.'),
       findsNothing,
     );
     expect(find.text('Tap who wins.'), findsNothing);

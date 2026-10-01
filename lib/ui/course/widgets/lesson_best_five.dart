@@ -1,12 +1,15 @@
 /// Best-five / kicker teaching visuals and tap-five-of-seven mapping.
 library;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -44,6 +47,20 @@ class BestFiveSpot {
   final String hint;
 
   List<String> get allCodes => [...heroCodes, ...boardCodes];
+
+  /// Copy with remapped codes and choice sets.
+  BestFiveSpot copyWithCodes({
+    List<String>? heroCodes,
+    List<String>? boardCodes,
+    Map<String, List<String>>? choiceSets,
+  }) {
+    return BestFiveSpot(
+      heroCodes: heroCodes ?? this.heroCodes,
+      boardCodes: boardCodes ?? this.boardCodes,
+      choiceSets: choiceSets ?? this.choiceSets,
+      hint: hint,
+    );
+  }
 }
 
 /// Resolves a best-five tap spot for known activities.
@@ -73,6 +90,41 @@ BestFiveSpot? resolveBestFiveSpot(CourseActivity activity) {
       );
   }
   return null;
+}
+
+/// Authored best-five spot with structure-preserving isomorphic cards.
+BestFiveSpot? dealtBestFiveSpot(
+  CourseActivity activity, {
+  int generation = 0,
+  Random? random,
+}) {
+  final spot = resolveBestFiveSpot(activity);
+  if (spot == null) return null;
+  if (!lessonSuitRemapEnabled) return spot;
+  final rng = resolveLessonDealRandom(
+    activityId: activity.id,
+    generation: generation,
+    random: random,
+  );
+  final template = [spot.heroCodes, spot.boardCodes];
+  final remapped = isomorphicLessonCardGroups(
+    template,
+    rng,
+    coordinated: true,
+  );
+  final choiceSets = <String, List<String>>{
+    for (final entry in spot.choiceSets.entries)
+      entry.key: structurePreserveCodesLike(
+        codes: entry.value,
+        templateGroups: template,
+        mappedGroups: remapped,
+      ),
+  };
+  return spot.copyWithCodes(
+    heroCodes: remapped[0],
+    boardCodes: remapped[1],
+    choiceSets: choiceSets,
+  );
 }
 
 /// Maps a five-card selection onto an authored choice id.
@@ -108,6 +160,70 @@ bool bestFiveSelectionIsReady({
       null;
 }
 
+/// Dealt layout for the explain / demo best-five seven-card teach.
+@immutable
+class BestFiveExplainDeal {
+  /// Creates a dealt explain layout.
+  const BestFiveExplainDeal({
+    required this.hero,
+    required this.board,
+    required this.playing,
+    required this.playOrder,
+  });
+
+  final List<String> hero;
+  final List<String> board;
+  final Set<String> playing;
+  final List<String> playOrder;
+}
+
+/// Structure-preserving deal of the Ah/Kd + As72 9h 3s best-five teach.
+BestFiveExplainDeal dealBestFiveExplainLayout({
+  String activityId = 'act-01-02-02-explain-five',
+  int generation = 0,
+  Random? random,
+}) {
+  const templateHero = ['Ah', 'Kd'];
+  const templateBoard = ['As', '7c', '2d', '9h', '3s'];
+  const templatePlaying = ['Ah', 'As', 'Kd', '9h', '7c'];
+  const templatePlayOrder = ['Ah', 'Kd', 'As', '7c', '9h'];
+  if (!lessonSuitRemapEnabled) {
+    return const BestFiveExplainDeal(
+      hero: templateHero,
+      board: templateBoard,
+      playing: {...templatePlaying},
+      playOrder: templatePlayOrder,
+    );
+  }
+  final rng = resolveLessonDealRandom(
+    activityId: activityId,
+    generation: generation,
+    random: random,
+  );
+  final template = [templateHero, templateBoard];
+  final remapped = isomorphicLessonCardGroups(
+    template,
+    rng,
+    coordinated: true,
+  );
+  final playing = structurePreserveCodesLike(
+    codes: templatePlaying,
+    templateGroups: template,
+    mappedGroups: remapped,
+  );
+  final playOrder = structurePreserveCodesLike(
+    codes: templatePlayOrder,
+    templateGroups: template,
+    mappedGroups: remapped,
+  );
+  return BestFiveExplainDeal(
+    hero: remapped[0],
+    board: remapped[1],
+    playing: playing.toSet(),
+    playOrder: playOrder,
+  );
+}
+
 /// Full table: tap each playing card on hero holes + board.
 class LessonBestFiveExplainTable extends StatefulWidget {
   /// Creates the explain stage.
@@ -116,6 +232,7 @@ class LessonBestFiveExplainTable extends StatefulWidget {
     required this.onAllPlayingTapped,
     this.enabled = true,
     this.showGuidance = true,
+    this.generation = 0,
   });
 
   /// Every playing card has been tapped.
@@ -123,6 +240,7 @@ class LessonBestFiveExplainTable extends StatefulWidget {
 
   final bool enabled;
   final bool showGuidance;
+  final int generation;
 
   @override
   State<LessonBestFiveExplainTable> createState() =>
@@ -132,12 +250,16 @@ class LessonBestFiveExplainTable extends StatefulWidget {
 class _LessonBestFiveExplainTableState
     extends State<LessonBestFiveExplainTable> {
   final Set<String> _tapped = <String>{};
+  late final BestFiveExplainDeal _deal;
 
-  /// Visual left→right among the five that play (hero row, then board).
-  static const _playOrder = ['Ah', 'Kd', 'As', '7c', '9h'];
+  @override
+  void initState() {
+    super.initState();
+    _deal = dealBestFiveExplainLayout(generation: widget.generation);
+  }
 
   String? get _nextCode {
-    for (final code in _playOrder) {
+    for (final code in _deal.playOrder) {
       if (!_tapped.contains(code)) return code;
     }
     return null;
@@ -145,58 +267,58 @@ class _LessonBestFiveExplainTableState
 
   void _tapCode(String code) {
     if (!widget.enabled || widget.onAllPlayingTapped == null) return;
-    if (!BestFiveDemo.playing.contains(code)) return;
+    if (!_deal.playing.contains(code)) return;
     if (_tapped.contains(code)) return;
     setState(() => _tapped.add(code));
-    if (_tapped.containsAll(BestFiveDemo.playing)) {
+    if (_tapped.containsAll(_deal.playing)) {
       widget.onAllPlayingTapped!();
     }
   }
 
   void _tapHero(int index) {
-    if (index < 0 || index >= BestFiveDemo.hero.length) return;
-    _tapCode(BestFiveDemo.hero[index]);
+    if (index < 0 || index >= _deal.hero.length) return;
+    _tapCode(_deal.hero[index]);
   }
 
   void _tapBoard(int index) {
-    if (index < 0 || index >= BestFiveDemo.board.length) return;
-    _tapCode(BestFiveDemo.board[index]);
+    if (index < 0 || index >= _deal.board.length) return;
+    _tapCode(_deal.board[index]);
   }
 
   @override
   Widget build(BuildContext context) {
     final next = _nextCode;
     final selectedHero = <int>{
-      for (var i = 0; i < BestFiveDemo.hero.length; i++)
-        if (_tapped.contains(BestFiveDemo.hero[i])) i,
+      for (var i = 0; i < _deal.hero.length; i++)
+        if (_tapped.contains(_deal.hero[i])) i,
     };
     final selectedBoard = <int>{
-      for (var i = 0; i < BestFiveDemo.board.length; i++)
-        if (_tapped.contains(BestFiveDemo.board[i])) i,
+      for (var i = 0; i < _deal.board.length; i++)
+        if (_tapped.contains(_deal.board[i])) i,
     };
     final dimmedHero = <int>{
-      for (var i = 0; i < BestFiveDemo.hero.length; i++)
-        if (!BestFiveDemo.playing.contains(BestFiveDemo.hero[i])) i,
+      for (var i = 0; i < _deal.hero.length; i++)
+        if (!_deal.playing.contains(_deal.hero[i])) i,
     };
     final dimmedBoard = <int>{
-      for (var i = 0; i < BestFiveDemo.board.length; i++)
-        if (!BestFiveDemo.playing.contains(BestFiveDemo.board[i])) i,
+      for (var i = 0; i < _deal.board.length; i++)
+        if (!_deal.playing.contains(_deal.board[i])) i,
     };
     final highlightHero = <int>{};
     final highlightBoard = <int>{};
     if (widget.showGuidance && widget.enabled && next != null) {
-      final heroIdx = BestFiveDemo.hero.indexOf(next);
+      final heroIdx = _deal.hero.indexOf(next);
       if (heroIdx >= 0) {
         highlightHero.add(heroIdx);
       } else {
-        final boardIdx = BestFiveDemo.board.indexOf(next);
+        final boardIdx = _deal.board.indexOf(next);
         if (boardIdx >= 0) highlightBoard.add(boardIdx);
       }
     }
     return LessonTableStage(
       key: const ValueKey<String>('best-five-table'),
-      heroCodes: BestFiveDemo.hero,
-      boardCodes: BestFiveDemo.board,
+      heroCodes: _deal.hero,
+      boardCodes: _deal.board,
       villainCount: 2,
       heroFaceUp: true,
       enabled: widget.enabled && widget.onAllPlayingTapped != null,
@@ -419,6 +541,7 @@ class BestFiveDemo extends StatefulWidget {
     this.enabled = false,
     this.onAllPlayingTapped,
     this.height,
+    this.generation = 0,
   });
 
   /// When true, the five playing cards are teach-by-doing tap targets.
@@ -435,6 +558,10 @@ class BestFiveDemo extends StatefulWidget {
   /// Null keeps the standalone teach shell at 58% of the screen.
   final double? height;
 
+  /// Deal generation (attempt salt is applied via [lessonDealAttemptSalt]).
+  final int generation;
+
+  /// Authored template (tests / callers that need the unmapped layout).
   static const hero = ['Ah', 'Kd'];
   static const board = ['As', '7c', '2d', '9h', '3s'];
   static const playing = {'Ah', 'As', 'Kd', '9h', '7c'};
@@ -445,12 +572,16 @@ class BestFiveDemo extends StatefulWidget {
 
 class _BestFiveDemoState extends State<BestFiveDemo> {
   final Set<String> _tapped = <String>{};
+  late final BestFiveExplainDeal _deal;
 
-  /// Visual left→right among the five that play (hero row, then board).
-  static const _playOrder = ['Ah', 'Kd', 'As', '7c', '9h'];
+  @override
+  void initState() {
+    super.initState();
+    _deal = dealBestFiveExplainLayout(generation: widget.generation);
+  }
 
   String? get _nextCode {
-    for (final code in _playOrder) {
+    for (final code in _deal.playOrder) {
       if (!_tapped.contains(code)) return code;
     }
     return null;
@@ -458,9 +589,9 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
 
   void _onCardTap(String code) {
     if (!widget.enabled || widget.onAllPlayingTapped == null) return;
-    if (!BestFiveDemo.playing.contains(code)) return;
+    if (!_deal.playing.contains(code)) return;
     setState(() => _tapped.add(code));
-    if (_tapped.containsAll(BestFiveDemo.playing)) {
+    if (_tapped.containsAll(_deal.playing)) {
       widget.onAllPlayingTapped!();
     }
   }
@@ -506,7 +637,7 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
           SizedBox(height: expandTeach ? 12 : 6),
           _DemoRow(
             codes: codes,
-            playing: BestFiveDemo.playing,
+            playing: _deal.playing,
             tapped: _tapped,
             nextCode: next,
             interactive: widget.interactive,
@@ -550,13 +681,13 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
           const SizedBox(height: 12),
           labeledRow(
             label: 'You',
-            codes: BestFiveDemo.hero,
+            codes: _deal.hero,
             cardScale: 1.0,
           ),
           const SizedBox(height: 12),
           labeledRow(
             label: 'Board',
-            codes: BestFiveDemo.board,
+            codes: _deal.board,
             cardScale: 1.0,
           ),
           const SizedBox(height: 12),
@@ -571,13 +702,13 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
                 children: [
                   labeledRow(
                     label: 'You',
-                    codes: BestFiveDemo.hero,
+                    codes: _deal.hero,
                     cardScale: heroScale,
                   ),
                   const SizedBox(height: 14),
                   labeledRow(
                     label: 'Board',
-                    codes: BestFiveDemo.board,
+                    codes: _deal.board,
                     cardScale: boardScale,
                   ),
                 ],
