@@ -1,4 +1,4 @@
-/// CuePulse gold ring sits outside the child with top breathing room.
+/// CuePulse gold ring sits outside the child with even breathing room.
 library;
 
 import 'package:flutter/material.dart';
@@ -6,10 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 
 void main() {
-  testWidgets('active CuePulse expands the gold ring above the child', (
+  testWidgets('active CuePulse expands the gold ring 4px on every side', (
     tester,
   ) async {
-    const pad = EdgeInsets.fromLTRB(4, 6, 4, 4);
+    const pad = EdgeInsets.all(4);
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -40,8 +40,9 @@ void main() {
     expect(ring.left, closeTo(child.left - pad.left, 0.5));
     expect(ring.right, closeTo(child.right + pad.right, 0.5));
     expect(ring.bottom, closeTo(child.bottom + pad.bottom, 0.5));
-    // Extra top air so hole cards are not flush with the gold line.
-    expect(pad.top, greaterThan(pad.left));
+    expect(pad.top, pad.left);
+    expect(pad.top, pad.right);
+    expect(pad.top, pad.bottom);
   });
 
   testWidgets('inactive CuePulse draws the child only', (tester) async {

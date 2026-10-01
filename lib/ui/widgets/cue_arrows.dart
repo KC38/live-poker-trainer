@@ -105,13 +105,13 @@ class CuePulse extends StatefulWidget {
   /// Wraps [child]. Inactive draws [child] untouched.
   ///
   /// [padding] expands the ring outward so content (e.g. hole cards) is not
-  /// flush against the gold border — especially the top edge.
+  /// flush against the gold border.
   const CuePulse({
     super.key,
     required this.child,
     this.active = true,
     this.borderRadius = 8,
-    this.padding = const EdgeInsets.fromLTRB(4, 6, 4, 4),
+    this.padding = const EdgeInsets.all(4),
   });
 
   final Widget child;
