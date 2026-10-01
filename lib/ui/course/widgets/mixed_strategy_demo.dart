@@ -55,8 +55,8 @@ class _LessonMixedStrategyExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < MixedStrategyDemo.points.length; i++)
@@ -161,7 +161,7 @@ class _MixedStrategyDemoState extends State<MixedStrategyDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < MixedStrategyDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:

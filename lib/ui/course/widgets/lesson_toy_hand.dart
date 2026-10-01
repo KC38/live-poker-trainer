@@ -93,8 +93,8 @@ class _LessonToyHandExplainTableState extends State<LessonToyHandExplainTable> {
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < LessonToyHandExplainTable.steps.length; i++)
@@ -483,7 +483,7 @@ class _RunLane extends StatelessWidget {
                   ],
                 ),
           ),
-          SizedBox(width: densify ? 12 : 8),
+          SizedBox(width: GlowHighlight.gutter),
           densify ? Transform.scale(scale: 1.35, child: visual) : visual,
         ],
       ),

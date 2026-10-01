@@ -1312,12 +1312,15 @@ class LessonScreenLayout extends StatelessWidget {
           // densified shell (blinds timing, SoftPulse demos, suit pickers)
           // still fits without a bottom overflow. ClipRect keeps any stray
           // paint from the stage from covering the answer dock below.
-          // Bottom inset reserves layout for GlowHighlight overflow so every
-          // under-felt SoftPulse (streets, aggressives, demos) clears tools.
+          // Bottom and side insets reserve layout for GlowHighlight overflow
+          // so under-felt SoftPulse tiles clear tools and neighboring chips.
           child: ClipRect(
             child: Padding(
-              padding: const EdgeInsets.only(
-                bottom: LessonAnswerDock.stageGlowInset,
+              padding: const EdgeInsets.fromLTRB(
+                GlowHighlight.outset,
+                0,
+                GlowHighlight.outset,
+                LessonAnswerDock.stageGlowInset,
               ),
               child: LayoutBuilder(
                 builder: (context, constraints) {

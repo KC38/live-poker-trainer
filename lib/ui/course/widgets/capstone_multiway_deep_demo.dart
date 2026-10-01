@@ -55,8 +55,8 @@ class _LessonCapstoneMultiwayDeepExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < CapstoneMultiwayDeepDemo.points.length; i++)
@@ -162,7 +162,7 @@ class _CapstoneMultiwayDeepDemoState extends State<CapstoneMultiwayDeepDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < CapstoneMultiwayDeepDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:

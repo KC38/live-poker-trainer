@@ -55,8 +55,8 @@ class _LessonTypeBoardLineExplainTableState
         ),
         const SizedBox(height: 10),
         Wrap(
-          spacing: 8,
-          runSpacing: 8,
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
             for (var i = 0; i < TypeBoardLineDemo.points.length; i++)
@@ -162,7 +162,7 @@ class _TypeBoardLineDemoState extends State<TypeBoardLineDemo> {
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
       children: [
         for (var i = 0; i < TypeBoardLineDemo.points.length; i++) ...[
-          if (i > 0) SizedBox(width: expandTeach ? 12 : 8),
+          if (i > 0) SizedBox(width: GlowHighlight.gutter),
           Expanded(
             child: GlowHighlight(
               active:
