@@ -45,6 +45,39 @@ class CourseSectionProgress {
   int get percent => (fraction * 100).round();
 }
 
+/// Section id whose lessons should appear on the Home path.
+///
+/// Prefers an explicit [focusedSectionId] (from JUMP HERE) when that section
+/// still has nodes; otherwise the section containing the next lesson, then
+/// the first node on the map.
+String? resolveHomePathSectionId(
+  CourseHomeSnapshot snapshot, {
+  String? focusedSectionId,
+}) {
+  if (focusedSectionId != null) {
+    final stillPresent = snapshot.nodes.any(
+      (node) => node.sectionId == focusedSectionId,
+    );
+    if (stillPresent) return focusedSectionId;
+  }
+  final nextSectionId = snapshot.nextNode?.sectionId;
+  if (nextSectionId != null) return nextSectionId;
+  if (snapshot.nodes.isEmpty) return null;
+  return snapshot.nodes.first.sectionId;
+}
+
+/// Nodes for a single section on the Home path (empty when [sectionId] is null).
+List<CourseMapNode> homePathNodesForSection(
+  List<CourseMapNode> nodes,
+  String? sectionId,
+) {
+  if (sectionId == null) return const [];
+  return [
+    for (final node in nodes)
+      if (node.sectionId == sectionId) node,
+  ];
+}
+
 /// Builds [CourseSectionProgress] rows from a Home snapshot.
 List<CourseSectionProgress> buildSectionProgress(
   CourseHomeSnapshot snapshot,
