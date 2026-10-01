@@ -54,6 +54,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   bool _autoFocusQueued = false;
   int _lastFocusRequest = 0;
 
+  /// Section shown on the path after JUMP HERE; null follows next lesson.
+  String? _focusedSectionId;
+
+  /// Last [CourseHomeSnapshot.nextNode] section — used to auto-advance.
+  String? _lastNextSectionId;
+
   @override
   void initState() {
     super.initState();
@@ -86,16 +92,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void _scheduleAutoFocus(CourseHomeSnapshot snapshot) {
     if (snapshot.status != CourseHomeLoadStatus.ready) return;
-    final id = snapshot.nextLessonId;
-    if (id == null || id == _autoFocusedLessonId || _autoFocusQueued) return;
+    final pathSectionId = resolveHomePathSectionId(
+      snapshot,
+      focusedSectionId: _focusedSectionId,
+    );
+    final next = snapshot.nextNode;
+    // Only auto-scroll when the next lesson is on the visible section.
+    if (next == null || next.sectionId != pathSectionId) return;
+    final id = next.lessonId;
+    if (id == _autoFocusedLessonId || _autoFocusQueued) return;
     _autoFocusQueued = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _autoFocusQueued = false;
       if (!mounted) return;
-      final focusId =
-          ref.read(courseHomeProvider).asData?.value.nextLessonId;
-      if (focusId == null || focusId == _autoFocusedLessonId) return;
-      _autoFocusedLessonId = focusId;
+      final snap = ref.read(courseHomeProvider).asData?.value;
+      if (snap == null) return;
+      final focusNext = snap.nextNode;
+      final focusSection = resolveHomePathSectionId(
+        snap,
+        focusedSectionId: _focusedSectionId,
+      );
+      if (focusNext == null ||
+          focusNext.sectionId != focusSection ||
+          focusNext.lessonId == _autoFocusedLessonId) {
+        return;
+      }
+      _autoFocusedLessonId = focusNext.lessonId;
       unawaited(_scrollFocusLessonIntoView());
     });
   }
@@ -139,6 +161,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ref.read(analyticsServiceProvider).logHomeCourseView(status: status),
         );
       }
+      final nextSectionId = snap.nextNode?.sectionId;
+      final advanced =
+          _lastNextSectionId != null &&
+          nextSectionId != null &&
+          nextSectionId != _lastNextSectionId;
+      if (advanced) {
+        setState(() {
+          _focusedSectionId = nextSectionId;
+          _lastNextSectionId = nextSectionId;
+          _autoFocusedLessonId = null;
+        });
+      } else {
+        _lastNextSectionId = nextSectionId ?? _lastNextSectionId;
+      }
       _scheduleAutoFocus(snap);
     });
 
@@ -170,9 +206,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       () => ref.read(courseHomeProvider.notifier).refresh(),
                 ),
             data: (snapshot) {
+              _lastNextSectionId ??= snapshot.nextNode?.sectionId;
               _scheduleAutoFocus(snapshot);
+              final pathSectionId = resolveHomePathSectionId(
+                snapshot,
+                focusedSectionId: _focusedSectionId,
+              );
+              final pathNodes = homePathNodesForSection(
+                snapshot.nodes,
+                pathSectionId,
+              );
               return _HomeBody(
                 snapshot: snapshot,
+                pathNodes: pathNodes,
                 focusLessonKey: _focusLessonKey,
                 onRetry:
                     () => ref.read(courseHomeProvider.notifier).refresh(),
@@ -193,15 +239,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       snapshot: snapshot,
     );
     if (!mounted || sectionId == null) return;
-    final key = _HomeBody.sectionKeyFor(sectionId);
-    final target = key.currentContext;
-    if (target == null) return;
-    await Scrollable.ensureVisible(
-      target,
-      duration: const Duration(milliseconds: 420),
-      curve: Curves.easeOutCubic,
-      alignment: 0.08,
-    );
+    setState(() {
+      _focusedSectionId = sectionId;
+      _autoFocusedLessonId = null;
+    });
   }
 
   Future<void> _onHeartsTap(CourseHomeSnapshot snapshot) async {
@@ -432,6 +473,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 class _HomeBody extends StatefulWidget {
   const _HomeBody({
     required this.snapshot,
+    required this.pathNodes,
     required this.onRetry,
     required this.onNodeTap,
     required this.onOpenSections,
@@ -440,6 +482,9 @@ class _HomeBody extends StatefulWidget {
   });
 
   final CourseHomeSnapshot snapshot;
+
+  /// Lessons for the single section currently shown on the path.
+  final List<CourseMapNode> pathNodes;
   final VoidCallback onRetry;
   final void Function(CourseMapNode node) onNodeTap;
   final VoidCallback onOpenSections;
@@ -492,7 +537,7 @@ class _HomeBodyState extends State<_HomeBody> {
   @override
   void didUpdateWidget(covariant _HomeBody oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!identical(oldWidget.snapshot.nodes, snapshot.nodes) ||
+    if (!identical(oldWidget.pathNodes, widget.pathNodes) ||
         !identical(oldWidget.snapshot.sections, snapshot.sections)) {
       _reconcileUnits();
     }
@@ -503,7 +548,7 @@ class _HomeBodyState extends State<_HomeBody> {
       for (final section in snapshot.sections) section.id: section.order,
     };
     final units = coursePathUnits(
-      nodes: snapshot.nodes,
+      nodes: widget.pathNodes,
       sectionOrders: sectionOrders,
     );
     final signature = units.map((u) => u.unitId).join('|');
@@ -513,7 +558,7 @@ class _HomeBodyState extends State<_HomeBody> {
     }
     _unitsSignature = signature;
     _units = units;
-    _activeUnitIndex = _initialUnitIndex(units, snapshot.nodes);
+    _activeUnitIndex = _initialUnitIndex(units, widget.pathNodes);
   }
 
   void _onScroll() {
@@ -610,7 +655,7 @@ class _HomeBodyState extends State<_HomeBody> {
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     if (snapshot.rexLine != null &&
-                        !snapshot.nodes.any((node) => node.isNext)) ...[
+                        !widget.pathNodes.any((node) => node.isNext)) ...[
                       const SizedBox(height: 2),
                       RexCoachCard(
                         line: snapshot.rexLine!,
@@ -634,7 +679,7 @@ class _HomeBodyState extends State<_HomeBody> {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 280),
                 sliver: SliverToBoxAdapter(
                   child: CoursePathView(
-                    nodes: snapshot.nodes,
+                    nodes: widget.pathNodes,
                     onNodeTap: widget.onNodeTap,
                     sectionOrders: sectionOrders,
                     sectionKeys: sectionKeys,
