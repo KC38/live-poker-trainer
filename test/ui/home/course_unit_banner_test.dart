@@ -6,9 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 
 void main() {
-  testWidgets('unit banner is fully rounded without chevron or notch', (
+  testWidgets('unit banner is extruded, fully rounded, without chevron or notch', (
     tester,
   ) async {
+    const face = Color(0xFF1CB0A0);
+    final lip = Color.lerp(face, Colors.black, 0.22)!;
+
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -16,7 +19,7 @@ void main() {
             sectionOrder: 1,
             unitOrder: 2,
             unitTitle: 'What beats what',
-            color: const Color(0xFF1CB0A0),
+            color: face,
             onTap: () {},
           ),
         ),
@@ -27,8 +30,24 @@ void main() {
     expect(find.text('What beats what'), findsOneWidget);
     expect(find.byIcon(Icons.keyboard_arrow_down_rounded), findsNothing);
 
-    final ink = tester.widget<Ink>(find.byType(Ink));
-    final decoration = ink.decoration! as BoxDecoration;
-    expect(decoration.borderRadius, BorderRadius.circular(16));
+    final plate = tester.widget<DecoratedBox>(
+      find.descendant(
+        of: find.byType(CourseUnitBanner),
+        matching: find.byType(DecoratedBox),
+      ),
+    );
+    final plateDecoration = plate.decoration as BoxDecoration;
+    expect(plateDecoration.color, lip);
+    expect(plateDecoration.borderRadius, BorderRadius.circular(16));
+
+    final faceMaterial = tester.widget<Material>(
+      find.descendant(
+        of: find.byType(CourseUnitBanner),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Material && widget.color == face,
+        ),
+      ),
+    );
+    expect(faceMaterial.borderRadius, BorderRadius.circular(16));
   });
 }
