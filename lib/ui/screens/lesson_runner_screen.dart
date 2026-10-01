@@ -757,6 +757,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   }
 
   bool _frameCanHint(CourseActivity activity) {
+    if (lessonFrameHintsDisabled(activity)) return false;
     if (activity.hintMedia.isNotEmpty) return true;
     return lessonFrameHintFallback(activity) != null;
   }
