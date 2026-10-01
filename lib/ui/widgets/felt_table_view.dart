@@ -16,6 +16,20 @@ import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
+/// Diameter of the 1-based showdown order badge under a seat.
+const double kSeatOrderBadgeSize = 22;
+
+/// How far under-seat chrome starts above [SeatSlot.pod] bottom.
+const double kSeatBadgeOverlapPod = 7;
+
+/// Clearance below the pod so order / winner / action chrome stays in-bounds.
+///
+/// Order badges are [kSeatOrderBadgeSize] tall and start
+/// [kSeatBadgeOverlapPod] above the pod bottom, so they need
+/// `size - overlap` below the pod, plus a couple px of felt margin.
+const double kSeatBadgeBelowPod =
+    kSeatOrderBadgeSize - kSeatBadgeOverlapPod + 2;
+
 /// Mobile-first poker table used by Live Training and every lesson.
 ///
 /// The hero sits at the bottom center with the largest hole cards. The
@@ -296,7 +310,11 @@ class FeltTableView extends StatelessWidget {
         );
       }
 
-      final badgeTop = _clamp(slot.pod.bottom - 7, 0, math.max(0.0, h - 16));
+      final badgeTop = _clamp(
+        slot.pod.bottom - kSeatBadgeOverlapPod,
+        0,
+        math.max(0.0, h - kSeatOrderBadgeSize),
+      );
       if (f.actions && player.lastActionLabel != null && !game.isHandOver) {
         decoLayer.add(
           Positioned(
@@ -886,7 +904,7 @@ class TableLayout {
           stats: features.stats,
           scale: seatScale,
         );
-        final badgeH = 9 * seatScale;
+        final badgeH = math.max(kSeatBadgeBelowPod, 9 * seatScale);
         final band = h - 2 * margin - badgeH;
         final need = trial.footprint.height * 3 + 4;
         if (need <= band || seatScale <= 0.62) break;
@@ -905,7 +923,9 @@ class TableLayout {
       review: review,
       scale: seatScale,
     );
-    final badge = 9 * seatScale;
+    // Must clear [_SeatOrderBadge] (and winner/action pills), not only the
+    // old ~9px action-pill band — otherwise Nice! covers the hero "2".
+    final badge = math.max(kSeatBadgeBelowPod, 9 * seatScale);
     final cx = w / 2;
 
     final topY = villainM.cardsAbove + villainM.pod.height / 2 + margin;
@@ -1538,8 +1558,8 @@ class _SeatOrderBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 22,
-        height: 22,
+        width: kSeatOrderBadgeSize,
+        height: kSeatOrderBadgeSize,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: AppColors.gold,

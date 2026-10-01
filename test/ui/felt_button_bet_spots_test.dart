@@ -224,5 +224,24 @@ void main() {
         lessThan(dealer.pod.width * 0.35),
       );
     });
+
+    test('hero pod leaves room for the showdown order badge', () {
+      // Short stage heights (Nice! dock) used to reserve only ~9px under the
+      // hero while the gold order badge is 22px — Nice! covered the "2".
+      for (final size in const [
+        Size(390, 320),
+        Size(390, 420),
+        Size(390, 560),
+      ]) {
+        final game = _ring(seats: 3, dealerIndex: 1);
+        final layout = _layout(game, size: size);
+        final hero = layout.seats.firstWhere((s) => s.index == 0);
+        expect(
+          hero.pod.bottom + kSeatBadgeBelowPod,
+          lessThanOrEqualTo(size.height),
+          reason: 'felt ${size.height}: order badge must fit under hero',
+        );
+      }
+    });
   });
 }

@@ -11,8 +11,10 @@ import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 CourseActivity _hintActivity({
   required String id,
@@ -540,6 +542,70 @@ void main() {
     // Answer dock shrinks the stage and used to remount the peek table,
     // flipping the hero holes face-down again. They must stay revealed.
     expect(aceOfHearts, findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('hero order badge stays fully above the answer dock', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: SafeArea(
+            bottom: false,
+            child: LessonScreenLayout(
+              progress: 0.55,
+              livesRemaining: 5,
+              livesMax: 5,
+              onClose: _noop,
+              speech: 'Tap who wins, then next, then last.',
+              expression: LessonMascotExpression.happy,
+              stage: LessonTableStage(
+                heroCodes: const ['As', 'Kh'],
+                boardCodes: const ['Th', '7h', 'Jh', '5s', '4c'],
+                villainHoleCodes: const [
+                  ['Qc', 'Jd'],
+                  ['9c', '9d'],
+                ],
+                villainCount: 2,
+                heroFaceUp: true,
+                features: TableFeatures.full.copyWith(
+                  playerTypes: false,
+                  stats: false,
+                ),
+                seatOrderBadges: const {0: 2, 1: 3, 2: 1},
+              ),
+              onUndo: _noop,
+              onRedo: _noop,
+              onHint: _noop,
+              canUndo: false,
+              canRedo: false,
+              canHint: false,
+              onContinue: _noop,
+              result: _result(
+                accepted: true,
+                feedback: 'High card, then pair, then flush.',
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final badge = tester.getRect(
+      find.byKey(const ValueKey<String>('seat-order-0-2')),
+    );
+    final dock = tester.getRect(find.byType(LessonAnswerDock));
+    expect(badge.height, kSeatOrderBadgeSize);
+    expect(
+      badge.bottom,
+      lessThanOrEqualTo(dock.top),
+      reason: 'Nice! must not cover the hero order badge',
+    );
     expect(tester.takeException(), isNull);
   });
 
