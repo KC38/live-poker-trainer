@@ -13,7 +13,6 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
-import 'package:live_poker_trainer/ui/widgets/cue_arrows.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -29,18 +28,6 @@ Future<void> _pump(WidgetTester tester, Widget child) async {
     MaterialApp(theme: buildPokerTheme(), home: Scaffold(body: child)),
   );
   await tester.pump();
-}
-
-double _arrowDy(WidgetTester tester) {
-  final transform = tester.widget<Transform>(
-    find
-        .ancestor(
-          of: find.byKey(const ValueKey<String>('felt-cue-arrows')),
-          matching: find.byType(Transform),
-        )
-        .first,
-  );
-  return transform.transform.storage[13];
 }
 
 void main() {
@@ -116,19 +103,20 @@ void main() {
     expect(withLessonTapInstruction('Four suits.', ''), 'Four suits.');
   });
 
-  testWidgets('next suit card bounces an arrow and pulses', (tester) async {
+  testWidgets('next suit card SoftPulses with GlowHighlight, no arrows', (tester) async {
     await _pump(tester, LessonSuitBoardTable(onAllSuitsSelected: () {}));
 
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsOneWidget);
-    final start = _arrowDy(tester);
-    await tester.pump(const Duration(milliseconds: 450));
-    expect(_arrowDy(tester), isNot(closeTo(start, 0.5)));
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
 
     await tester.tap(find.byKey(const ValueKey<String>('lesson-board-card-0')));
     await tester.pump();
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsOneWidget);
+    // Selected card keeps a static ring; SoftPulse moves to the next suit.
+    expect(
+      find.byKey(const ValueKey<String>('glow-highlight')),
+      findsAtLeastNWidgets(1),
+    );
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -156,11 +144,11 @@ void main() {
       find.byKey(ValueKey<String>('lesson-seat-$lessonBlindsBigBlindIndex')),
     );
     await tester.pump();
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('framed find-holes shows CueArrows on face-up hero holes', (
+  testWidgets('framed find-holes shows GlowHighlight on face-up hero holes', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -203,16 +191,13 @@ void main() {
       find.byKey(const ValueKey<String>('lesson-table-stage')),
       findsOneWidget,
     );
-    // One arrow above each face-up hole card (not a centered pair).
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(2));
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(2));
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsWidgets);
+    // One GlowHighlight on each face-up hole card (not a centered pair).
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
     controller.dispose();
   });
 
-  testWidgets('hint restores CueArrows on quieter hole-card frame steps', (
+  testWidgets('hint restores GlowHighlight on quieter hole-card frame steps', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -262,14 +247,13 @@ void main() {
       ),
     );
     await tester.pump();
-    // Scaffolded scene clears highlight — no arrows until Hint.
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
+    // Scaffolded scene clears highlight — no SoftPulse until Hint.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
     controller.revealHint();
     await tester.pump();
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(2));
-    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(2));
-    expect(find.byType(CuePulse), findsWidgets);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
     controller.dispose();
   });
 
@@ -322,16 +306,14 @@ void main() {
       ),
     );
     await tester.pump();
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
     controller.revealHint();
     await tester.pump();
 
-    // Match hole-card SoftPulse: CuePulse + arrow on each dealt board card.
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(3));
-    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(3));
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNWidgets(3));
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsNothing);
+    // Region board SoftPulse: one GlowHighlight around the whole board row.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
     controller.dispose();
   });
 
@@ -401,8 +383,8 @@ void main() {
       find.byKey(ValueKey<String>('seat-cue-$lessonBlindsBigBlindIndex')),
       findsNothing,
     );
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
     expect(
       tester
           .widget<PlayerSeatWidget>(
@@ -418,14 +400,13 @@ void main() {
     controller.revealHint();
     await tester.pump();
 
-    // Same SoftPulse as hole / board cues: CuePulse ring + CueArrows.
+    // Same SoftPulse as hole / board cues: GlowHighlight ring, no arrows.
     expect(
       find.byKey(ValueKey<String>('seat-cue-$lessonBlindsBigBlindIndex')),
       findsOneWidget,
     );
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_downward_rounded), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
     expect(tester.takeException(), isNull);
     controller.dispose();
   });

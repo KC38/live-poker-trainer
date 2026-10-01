@@ -1,4 +1,4 @@
-/// Hero/board cue arrows bounce and glow so the tap target is obvious.
+/// Felt SoftPulse uses shared [GlowHighlight] — no cue arrows.
 library;
 
 import 'package:flutter/material.dart';
@@ -87,47 +87,27 @@ Future<void> _pumpFelt(
   await tester.pump();
 }
 
-Offset _arrowTranslate(WidgetTester tester) {
-  final transform = tester.widget<Transform>(
-    find
-        .ancestor(
-          of: find.byKey(const ValueKey<String>('felt-cue-arrows')),
-          matching: find.byType(Transform),
-        )
-        .first,
-  );
-  return Offset(transform.transform.storage[12], transform.transform.storage[13]);
-}
-
 void main() {
-  testWidgets('hero cue shows two gold bouncing arrows', (tester) async {
+  testWidgets('hero cue SoftPulses the seat with GlowHighlight, no arrows', (
+    tester,
+  ) async {
     await _pumpFelt(tester, highlightHero: true, highlightBoard: false);
 
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(2));
-
-    final icons = tester.widgetList<Icon>(
-      find.byIcon(Icons.arrow_downward_rounded),
-    );
-    for (final icon in icons) {
-      expect(icon.color, AppColors.goldBright);
-      expect(icon.size, 22);
-    }
-
-    final start = _arrowTranslate(tester);
-    await tester.pump(const Duration(milliseconds: 450));
-    final mid = _arrowTranslate(tester);
-    expect(mid.dy, isNot(closeTo(start.dy, 0.5)));
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
+    expect(find.byIcon(Icons.arrow_upward_rounded), findsNothing);
   });
 
-  testWidgets('board cue shows one arrow above community cards', (tester) async {
+  testWidgets('board group cue SoftPulses the whole board row', (tester) async {
     await _pumpFelt(tester, highlightHero: false, highlightBoard: true);
 
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_downward_rounded), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
   });
 
-  testWidgets('board cue SoftPulses every dealt community card', (tester) async {
+  testWidgets('board group cue SoftPulses dealt community as one ring', (
+    tester,
+  ) async {
     await tester.binding.setSurfaceSize(const Size(390, 560));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     final game = _peekGame().copyWith(
@@ -158,20 +138,56 @@ void main() {
     );
     await tester.pump();
 
-    // One arrow + CuePulse per dealt flop card — not a lone arrow over slots.
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNWidgets(3));
-    expect(find.byIcon(Icons.arrow_downward_rounded), findsNWidgets(3));
-    expect(find.byKey(const ValueKey<String>('cue-pulse')), findsNWidgets(3));
-  });
-
-  testWidgets('no cue arrows when highlights are off', (tester) async {
-    await _pumpFelt(tester, highlightHero: false, highlightBoard: false);
-
-    expect(find.byKey(const ValueKey<String>('felt-cue-arrows')), findsNothing);
+    // Group SoftPulse — one GlowHighlight around the board row, no arrows.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
   });
 
-  testWidgets('highlightHeroIndexes puts one arrow on that hole card', (
+  testWidgets('per-card board SoftPulse uses one GlowHighlight each', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final game = _peekGame().copyWith(
+      community: [
+        CardModel.fromCode('Qs'),
+        CardModel.fromCode('Jh'),
+        CardModel.fromCode('2c'),
+      ],
+      street: Street.flop,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: game,
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              highlightBoardIndexes: const {0, 1, 2},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(3));
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
+  });
+
+  testWidgets('no SoftPulse when highlights are off', (tester) async {
+    await _pumpFelt(tester, highlightHero: false, highlightBoard: false);
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
+  });
+
+  testWidgets('highlightHeroIndexes SoftPulses that hole card only', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(390, 560));
@@ -198,12 +214,11 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-0')), findsOneWidget);
-    expect(find.byKey(const ValueKey<String>('hero-cue-arrow-1')), findsNothing);
-    expect(find.byIcon(Icons.arrow_downward_rounded), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
 
-    final arrow = tester.getCenter(
-      find.byKey(const ValueKey<String>('hero-cue-arrow-0')),
+    final glow = tester.getCenter(
+      find.byKey(const ValueKey<String>('glow-highlight')),
     );
     final leftCard = tester.getCenter(
       find.byKey(const ValueKey<String>('lesson-hero-card-0')),
@@ -211,7 +226,7 @@ void main() {
     final rightCard = tester.getCenter(
       find.byKey(const ValueKey<String>('lesson-hero-card-1')),
     );
-    expect(arrow.dx, closeTo(leftCard.dx, 1));
-    expect((arrow.dx - rightCard.dx).abs(), greaterThan(20));
+    expect(glow.dx, closeTo(leftCard.dx, 8));
+    expect((glow.dx - rightCard.dx).abs(), greaterThan(20));
   });
 }
