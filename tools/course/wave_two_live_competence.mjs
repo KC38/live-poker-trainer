@@ -193,16 +193,16 @@ export function buildSectionThree() {
                 {objectives: ["Count clean versus dirty outs"]}),
               selectAct({
                 id: "act-03-03-01-guided", order: 2, stage: "guided",
-                prompt: "Board Kc 8h 2d. You hold Ah Qh. Clean outs to the best hand?",
-                a11y: "Three remaining aces are the clean outs.",
+                prompt: "Clean outs to the best hand?",
+                a11y: "Tap the three clean outs on the felt.",
                 objectives: ["Count clean versus dirty outs"],
                 choices: [
-                  choice("outs-3", "About 3 — the aces", "recommended",
-                    "Aces are clean; queens are dirty versus a king."),
-                  choice("outs-6", "6 — aces and queens", "questionable",
-                    "Queens often leave you second-best."),
+                  choice("outs-3", "About 3 — clean overs", "recommended",
+                    "Overs that make the best hand are clean; underpair outs are dirty."),
+                  choice("outs-6", "6 — clean and dirty", "questionable",
+                    "Some of those outs leave you second-best."),
                   choice("outs-0", "0 — never improve", "clear_mistake",
-                    "An ace pairs you ahead of one pair of kings often.", {betterChoiceId: "outs-3"})
+                    "Clean overs improve you to the best hand often.", {betterChoiceId: "outs-3"})
                 ],
               }),
               selectAct({
