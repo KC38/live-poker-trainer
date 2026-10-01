@@ -1302,22 +1302,25 @@ class LessonScreenLayout extends StatelessWidget {
           // Teach felts request ~58% of screen height. When the answer dock
           // shrinks the stage below that, rewrite MediaQuery height so every
           // densified shell (blinds timing, SoftPulse demos, suit pickers)
-          // still fits without a bottom overflow.
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final mq = MediaQuery.of(context);
-              final mediaHeight = teachStageMediaHeight(
-                screenHeight: mq.size.height,
-                stageMaxHeight: constraints.maxHeight,
-              );
-              // Always wrap — swapping a bare [stage] for MediaQuery when
-              // Nice! shrinks the stage remounts stateful felts (peek face-up,
-              // blinds step, suit taps) and resets their local state.
-              return MediaQuery(
-                data: mq.copyWith(size: Size(mq.size.width, mediaHeight)),
-                child: stage,
-              );
-            },
+          // still fits without a bottom overflow. ClipRect keeps any stray
+          // paint from the stage from covering the answer dock below.
+          child: ClipRect(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final mq = MediaQuery.of(context);
+                final mediaHeight = teachStageMediaHeight(
+                  screenHeight: mq.size.height,
+                  stageMaxHeight: constraints.maxHeight,
+                );
+                // Always wrap — swapping a bare [stage] for MediaQuery when
+                // Nice! shrinks the stage remounts stateful felts (peek face-up,
+                // blinds step, suit taps) and resets their local state.
+                return MediaQuery(
+                  data: mq.copyWith(size: Size(mq.size.width, mediaHeight)),
+                  child: stage,
+                );
+              },
+            ),
           ),
         ),
         if (graded) ...[
