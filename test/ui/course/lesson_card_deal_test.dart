@@ -439,6 +439,80 @@ void main() {
     expect(a[0].join(' '), isNot(b[0].join(' ')));
   });
 
+  test('dealRankOrderSpot remaps ranks and keeps authored ids', () {
+    const authored = [
+      (id: 'rank-2', label: '2'),
+      (id: 'rank-T', label: 'T'),
+      (id: 'rank-A', label: 'A'),
+    ];
+    final a = dealRankOrderSpot(
+      authoredItems: authored,
+      activityId: 'act-ranks',
+      generation: 0,
+      distractorCode: 'Hs',
+      random: Random(4),
+    );
+    final b = dealRankOrderSpot(
+      authoredItems: authored,
+      activityId: 'act-ranks',
+      generation: 0,
+      distractorCode: 'Hs',
+      random: Random(21),
+    );
+    expect([for (final item in a.sequenceItems) item.id], [
+      'rank-2',
+      'rank-T',
+      'rank-A',
+    ]);
+    expect(a.boardCodes.contains('Hs'), isTrue);
+    expect(a.heroCodes.length, 2);
+    expect(
+      [for (final item in a.sequenceItems) item.label].join(','),
+      isNot([for (final item in b.sequenceItems) item.label].join(',')),
+    );
+    expect(
+      startingHandFamilyFromCodes(a.heroCodes),
+      isNotNull,
+    );
+  });
+
+  test('hole-hand seat roles deal inside starting-hand families', () {
+    final deal = dealHoleHandSeatPlan(
+      const CourseActivity(
+        id: 'act-01-01-02-unguided-suited',
+        order: 1,
+        stage: ActivityStage.unguided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'suited',
+        acceptedGrades: [SoftGrade.recommended],
+        choices: [
+          CourseChoice(id: 'suited-ah-kh', label: 'Suited'),
+          CourseChoice(id: 'offsuit-ah-kd', label: 'Offsuit'),
+          CourseChoice(id: 'pair-77', label: 'Pocket pair'),
+        ],
+      ),
+      random: Random(5),
+    )!;
+    final seats = [deal.heroCodes, ...deal.villainHoleCodes];
+    final byChoice = {
+      for (var i = 0; i < deal.choiceIdsBySeat.length; i++)
+        deal.choiceIdsBySeat[i]: seats[i],
+    };
+    expect(
+      startingHandFamilyFromCodes(byChoice['suited-ah-kh']!),
+      LessonStartingHandFamily.suitedNonPair,
+    );
+    expect(
+      startingHandFamilyFromCodes(byChoice['offsuit-ah-kd']!),
+      LessonStartingHandFamily.offsuitNonPair,
+    );
+    expect(
+      startingHandFamilyFromCodes(byChoice['pair-77']!),
+      LessonStartingHandFamily.mediumPair,
+    );
+  });
+
   test('dealtBestFiveSpot remaps choice sets with the holes', () {
     final activity = CourseActivity(
       id: 'act-01-02-02-guided-seven',

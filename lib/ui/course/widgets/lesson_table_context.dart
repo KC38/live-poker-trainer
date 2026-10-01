@@ -7518,14 +7518,14 @@ class LessonTableContext extends StatelessWidget {
       phases: [
         (
           region: LessonTableRegion.outsCleanAces,
-          title: 'Remaining aces',
-          detail: 'Clean outs',
+          title: 'Clean overs',
+          detail: 'Best-hand outs',
           visual: miniRow(const ['As', 'Ad', 'Ac']),
         ),
         (
           region: LessonTableRegion.outsDirtyAcesQueens,
-          title: 'Aces + queens',
-          detail: 'Dirty mix',
+          title: 'Clean + dirty',
+          detail: 'Mixed outs',
           visual: miniRow(const ['As', 'Ad', 'Qs', 'Qd']),
         ),
         (

@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
@@ -217,6 +218,7 @@ class OrderSequenceActivity extends StatelessWidget {
               '${activity.id}-${controller.bindGeneration}',
             ),
             activityId: activity.id,
+            generation: controller.bindGeneration,
             sequenceItems: [
               for (final item in activity.sequenceItems)
                 (id: item.id, label: item.label),
@@ -229,7 +231,8 @@ class OrderSequenceActivity extends StatelessWidget {
             onMiss: useDistractor
                 ? () {
                     LessonFrameScope.maybeOf(context)?.onLocalMiss(
-                      'H is not a rank — tap 2, then T, then A.',
+                      'H is not a rank — tap the real ranks from lowest '
+                      'to highest.',
                     );
                   }
                 : null,
@@ -304,7 +307,7 @@ class OrderSequenceActivity extends StatelessWidget {
             }
             return null;
           }();
-          final previewCodes =
+          final templateCodes =
               previewItem == null
                   ? const ['Ah', 'Kd', '9c', '7s', '3h']
                   : (resolveHandExample(
@@ -312,6 +315,11 @@ class OrderSequenceActivity extends StatelessWidget {
                         label: previewItem.label,
                       )?.codes ??
                       const ['Ah', 'Kd', '9c', '7s', '3h']);
+          final previewCodes = dealtHandExampleCodes(
+            templateCodes,
+            activityId: '${activity.id}:${previewItem?.id ?? 'preview'}',
+            generation: controller.bindGeneration,
+          );
           return Column(
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}-hand-order',

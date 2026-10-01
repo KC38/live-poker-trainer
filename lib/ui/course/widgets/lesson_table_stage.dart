@@ -669,13 +669,26 @@ class LessonSuitBoardTable extends StatefulWidget {
 class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
   final Set<String> _selected = <String>{};
   late final List<String> _boardCodes;
+  late final List<String> _heroCodes;
   late final List<String?> _suitLetters;
 
   @override
   void initState() {
     super.initState();
+    final rng = resolveLessonDealRandom();
     _boardCodes = dealSuitLessonBoard(
       withStarDistractor: widget.withStarDistractor,
+      random: rng,
+    );
+    final used = <String>{
+      for (final code in _boardCodes)
+        if (!code.endsWith('*')) code,
+    };
+    _heroCodes = dealStartingHandFamily(
+      LessonStartingHandFamily
+          .values[rng.nextInt(LessonStartingHandFamily.values.length)],
+      rng,
+      used: used,
     );
     _suitLetters = widget.withStarDistractor
         ? const <String?>['h', 'd', null, 'c', 's']
@@ -735,7 +748,7 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
       }
     }
     return LessonTableStage(
-      heroCodes: const ['Ah', 'Kd'],
+      heroCodes: _heroCodes,
       boardCodes: _boardCodes,
       villainCount: 3,
       heroFaceUp: false,
@@ -810,6 +823,7 @@ class LessonRankOrderTable extends StatefulWidget {
     this.enabled = true,
     this.showGuidance = true,
     this.distractorCode,
+    this.generation = 0,
   });
 
   final String activityId;
@@ -826,24 +840,28 @@ class LessonRankOrderTable extends StatefulWidget {
   /// Optional fake-rank code inserted in the middle (e.g. `Hs`).
   final String? distractorCode;
 
+  /// Attempt generation salt for fresh ranks on retry.
+  final int generation;
+
   @override
   State<LessonRankOrderTable> createState() => _LessonRankOrderTableState();
 }
 
 class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
-  late final List<String> _board;
+  late final RankOrderDeal _deal;
 
   @override
   void initState() {
     super.initState();
-    _board = lessonRankOrderBoardCodes(
+    _deal = dealRankOrderSpot(
+      authoredItems: widget.sequenceItems,
       activityId: widget.activityId,
-      rankLabels: [
-        for (final item in widget.sequenceItems) item.label,
-      ],
+      generation: widget.generation,
       distractorCode: widget.distractorCode,
     );
   }
+
+  List<String> get _board => _deal.boardCodes;
 
   String? _idForBoardIndex(int index) {
     if (index < 0 || index >= _board.length) return null;
@@ -852,7 +870,7 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
       return null;
     }
     final rank = code[0];
-    for (final item in widget.sequenceItems) {
+    for (final item in _deal.sequenceItems) {
       if (item.label.toUpperCase() == rank) return item.id;
     }
     return null;
@@ -885,8 +903,8 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
     int? nextIndex;
     if (widget.showGuidance &&
         widget.enabled &&
-        widget.orderedIds.length < widget.sequenceItems.length) {
-      final nextId = widget.sequenceItems[widget.orderedIds.length].id;
+        widget.orderedIds.length < _deal.sequenceItems.length) {
+      final nextId = _deal.sequenceItems[widget.orderedIds.length].id;
       for (var i = 0; i < _board.length; i++) {
         if (_idForBoardIndex(i) == nextId) {
           nextIndex = i;
@@ -895,7 +913,7 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
       }
     }
     return LessonTableStage(
-      heroCodes: const ['Ah', 'Kd'],
+      heroCodes: _deal.heroCodes,
       boardCodes: _board,
       villainCount: 3,
       heroFaceUp: false,
