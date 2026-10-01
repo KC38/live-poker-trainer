@@ -1,4 +1,4 @@
-/// CourseStatusBar shows centered streak, gems, and hearts only.
+/// CourseStatusBar shows streak, gems, and hearts spaced across the row.
 library;
 
 import 'package:flutter/material.dart';
@@ -60,7 +60,7 @@ void main() {
     expect(find.text('$kHomeDefaultHearts'), findsOneWidget);
   });
 
-  testWidgets('stats are centered as an evenly spaced group', (tester) async {
+  testWidgets('stats span the full width evenly', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: buildPokerTheme(),
@@ -73,6 +73,7 @@ void main() {
       ),
     );
 
+    final bar = tester.getRect(find.byType(CourseStatusBar));
     final streak = tester.getCenter(
       find.byIcon(Icons.local_fire_department_rounded),
     );
@@ -84,14 +85,16 @@ void main() {
 
     final gapStreakGems = gems.dx - streak.dx;
     final gapGemsHearts = hearts.dx - gems.dx;
-    expect((gapStreakGems - gapGemsHearts).abs(), lessThan(12));
+    expect((gapStreakGems - gapGemsHearts).abs(), lessThan(20));
 
-    // Content spans left icon through right-hand value; midpoint near bar center.
-    final bar = tester.getRect(find.byType(CourseStatusBar));
+    // Left and right stats sit near the bar edges (not clustered center).
     final leftBound =
         tester.getTopLeft(find.byIcon(Icons.local_fire_department_rounded)).dx;
     final rightBound = tester.getTopRight(find.text('3')).dx;
-    final contentMid = (leftBound + rightBound) / 2;
-    expect((contentMid - bar.center.dx).abs(), lessThan(8));
+    expect(leftBound - bar.left, lessThan(16));
+    expect(bar.right - rightBound, lessThan(16));
+
+    // Middle gem roughly at bar center.
+    expect((gems.dx - bar.center.dx).abs(), lessThan(24));
   });
 }

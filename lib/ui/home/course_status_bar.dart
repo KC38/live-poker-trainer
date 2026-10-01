@@ -1,4 +1,4 @@
-/// Home status bar: streak, gems, hearts — centered Duolingo-style strip.
+/// Home status bar: streak, gems, hearts — full-width Duolingo-style strip.
 library;
 
 import 'package:flutter/material.dart';
@@ -10,8 +10,8 @@ const int kHomeDefaultHearts = 5;
 
 /// Compact course stats strip for Home.
 ///
-/// Layout: streak, gems, and hearts centered as a group with matching
-/// accent colors. Section picker stays on the unit banner.
+/// Layout: streak, gems, and hearts spaced evenly across the full row with
+/// matching accent colors. Section picker stays on the unit banner.
 class CourseStatusBar extends StatelessWidget {
   /// Creates the status bar.
   const CourseStatusBar({
@@ -41,9 +41,6 @@ class CourseStatusBar extends StatelessWidget {
 
   static const Color _gemColor = Color(0xFF5EC8FF);
 
-  /// Gap between the three centered stats.
-  static const double _statGap = 36;
-
   @override
   Widget build(BuildContext context) {
     return Semantics(
@@ -51,7 +48,7 @@ class CourseStatusBar extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _StatIcon(
               icon: Icons.local_fire_department_rounded,
@@ -60,7 +57,6 @@ class CourseStatusBar extends StatelessWidget {
               value: '$streak',
               valueColor: AppColors.warning,
             ),
-            const SizedBox(width: _statGap),
             _StatIcon(
               icon: Icons.diamond_rounded,
               iconColor: _gemColor,
@@ -68,7 +64,6 @@ class CourseStatusBar extends StatelessWidget {
               value: '$gems',
               valueColor: _gemColor,
             ),
-            const SizedBox(width: _statGap),
             _StatIcon(
               icon: Icons.favorite_rounded,
               iconColor: AppColors.hearts,
