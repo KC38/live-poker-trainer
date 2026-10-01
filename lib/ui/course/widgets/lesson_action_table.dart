@@ -1832,34 +1832,40 @@ class _LessonPassiveActionsExplainTableState
           ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
-              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
-              Expanded(
-                child: GlowHighlight(
-                  active:
-                      teaching &&
-                      widget.showGuidance &&
-                      !_tapped.contains(PassiveActionsDemo.actions[i].$1) &&
-                      PassiveActionsDemo.actions
-                          .take(i)
-                          .every((a) => _tapped.contains(a.$1)),
-                  child: _DemoActionCard(
-                    label: PassiveActionsDemo.actions[i].$1,
-                    caption: PassiveActionsDemo.actions[i].$2,
-                    color: PassiveActionsDemo.actions[i].$3,
-                    densify: false,
-                    selected: _tapped.contains(PassiveActionsDemo.actions[i].$1),
-                    enabled: teaching,
-                    onPressed: teaching
-                        ? () => _onTap(PassiveActionsDemo.actions[i].$1)
-                        : null,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
+                if (i > 0) const SizedBox(width: GlowHighlight.gutter),
+                Expanded(
+                  child: GlowHighlight(
+                    active:
+                        teaching &&
+                        widget.showGuidance &&
+                        !_tapped.contains(PassiveActionsDemo.actions[i].$1) &&
+                        PassiveActionsDemo.actions
+                            .take(i)
+                            .every((a) => _tapped.contains(a.$1)),
+                    child: _DemoActionCard(
+                      label: PassiveActionsDemo.actions[i].$1,
+                      caption: PassiveActionsDemo.actions[i].$2,
+                      color: PassiveActionsDemo.actions[i].$3,
+                      densify: false,
+                      expand: true,
+                      selected: _tapped.contains(
+                        PassiveActionsDemo.actions[i].$1,
+                      ),
+                      enabled: teaching,
+                      onPressed: teaching
+                          ? () => _onTap(PassiveActionsDemo.actions[i].$1)
+                          : null,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ],
     );
@@ -1922,35 +1928,42 @@ class _LessonAggressiveActionsExplainTableState
           ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
-              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
-              Expanded(
-                child: GlowHighlight(
-                  active:
-                      teaching &&
-                      widget.showGuidance &&
-                      !_tapped.contains(AggressiveActionsDemo.actions[i].$1) &&
-                      AggressiveActionsDemo.actions
-                          .take(i)
-                          .every((a) => _tapped.contains(a.$1)),
-                  child: _DemoActionCard(
-                    label: AggressiveActionsDemo.actions[i].$1,
-                    caption: AggressiveActionsDemo.actions[i].$2,
-                    color: AggressiveActionsDemo.actions[i].$3,
-                    densify: false,
-                    selected:
-                        _tapped.contains(AggressiveActionsDemo.actions[i].$1),
-                    enabled: teaching,
-                    onPressed: teaching
-                        ? () => _onTap(AggressiveActionsDemo.actions[i].$1)
-                        : null,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
+                if (i > 0) const SizedBox(width: GlowHighlight.gutter),
+                Expanded(
+                  child: GlowHighlight(
+                    active:
+                        teaching &&
+                        widget.showGuidance &&
+                        !_tapped.contains(
+                          AggressiveActionsDemo.actions[i].$1,
+                        ) &&
+                        AggressiveActionsDemo.actions
+                            .take(i)
+                            .every((a) => _tapped.contains(a.$1)),
+                    child: _DemoActionCard(
+                      label: AggressiveActionsDemo.actions[i].$1,
+                      caption: AggressiveActionsDemo.actions[i].$2,
+                      color: AggressiveActionsDemo.actions[i].$3,
+                      densify: false,
+                      expand: true,
+                      selected: _tapped.contains(
+                        AggressiveActionsDemo.actions[i].$1,
+                      ),
+                      enabled: teaching,
+                      onPressed: teaching
+                          ? () => _onTap(AggressiveActionsDemo.actions[i].$1)
+                          : null,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ],
     );
@@ -2371,35 +2384,41 @@ class _LessonOpenRangeExplainTableState
           ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
-              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
-              Expanded(
-                child: GlowHighlight(
-                  active:
-                      teaching &&
-                      widget.showGuidance &&
-                      !_tapped.contains(OpenRangeDemo.points[i].label) &&
-                      OpenRangeDemo.points
-                          .take(i)
-                          .every((p) => _tapped.contains(p.label)),
-                  child: _DemoActionCard(
-                    label: OpenRangeDemo.points[i].label,
-                    caption: OpenRangeDemo.points[i].caption,
-                    color: OpenRangeDemo.points[i].color,
-                    densify: false,
-                    selected: _tapped.contains(OpenRangeDemo.points[i].label),
-                    enabled: teaching,
-                    onPressed:
-                        teaching
-                            ? () => _onTap(OpenRangeDemo.points[i].label)
-                            : null,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: GlowHighlight.gutter),
+                Expanded(
+                  child: GlowHighlight(
+                    active:
+                        teaching &&
+                        widget.showGuidance &&
+                        !_tapped.contains(OpenRangeDemo.points[i].label) &&
+                        OpenRangeDemo.points
+                            .take(i)
+                            .every((p) => _tapped.contains(p.label)),
+                    child: _DemoActionCard(
+                      label: OpenRangeDemo.points[i].label,
+                      caption: OpenRangeDemo.points[i].caption,
+                      color: OpenRangeDemo.points[i].color,
+                      densify: false,
+                      expand: true,
+                      selected: _tapped.contains(
+                        OpenRangeDemo.points[i].label,
+                      ),
+                      enabled: teaching,
+                      onPressed:
+                          teaching
+                              ? () => _onTap(OpenRangeDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ],
     );
@@ -2628,41 +2647,45 @@ class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
           ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
-              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
-              Expanded(
-                child: GlowHighlight(
-                  active:
-                      teaching &&
-                      widget.showGuidance &&
-                      !_tapped.contains(
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
+                if (i > 0) const SizedBox(width: GlowHighlight.gutter),
+                Expanded(
+                  child: GlowHighlight(
+                    active:
+                        teaching &&
+                        widget.showGuidance &&
+                        !_tapped.contains(
+                          VsOpenResponseDemo.responses[i].label,
+                        ) &&
+                        VsOpenResponseDemo.responses
+                            .take(i)
+                            .every((r) => _tapped.contains(r.label)),
+                    child: _DemoActionCard(
+                      label: VsOpenResponseDemo.responses[i].label,
+                      caption: VsOpenResponseDemo.responses[i].caption,
+                      color: VsOpenResponseDemo.responses[i].color,
+                      densify: false,
+                      expand: true,
+                      selected: _tapped.contains(
                         VsOpenResponseDemo.responses[i].label,
-                      ) &&
-                      VsOpenResponseDemo.responses
-                          .take(i)
-                          .every((r) => _tapped.contains(r.label)),
-                  child: _DemoActionCard(
-                    label: VsOpenResponseDemo.responses[i].label,
-                    caption: VsOpenResponseDemo.responses[i].caption,
-                    color: VsOpenResponseDemo.responses[i].color,
-                    densify: false,
-                    selected: _tapped.contains(
-                      VsOpenResponseDemo.responses[i].label,
+                      ),
+                      enabled: teaching,
+                      onPressed:
+                          teaching
+                              ? () => _onTap(
+                                VsOpenResponseDemo.responses[i].label,
+                              )
+                              : null,
                     ),
-                    enabled: teaching,
-                    onPressed:
-                        teaching
-                            ? () => _onTap(
-                              VsOpenResponseDemo.responses[i].label,
-                            )
-                            : null,
                   ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ],
     );
@@ -2893,36 +2916,41 @@ class _LessonBbStackDepthExplainTableState
           ),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
-              if (i > 0) const SizedBox(width: GlowHighlight.gutter),
-              Expanded(
-                child: GlowHighlight(
-                  active:
-                      teaching &&
-                      widget.showGuidance &&
-                      !_tapped.contains(BbStackDepthDemo.points[i].label) &&
-                      BbStackDepthDemo.points
-                          .take(i)
-                          .every((p) => _tapped.contains(p.label)),
-                  child: _DemoActionCard(
-                    label: BbStackDepthDemo.points[i].label,
-                    caption: BbStackDepthDemo.points[i].caption,
-                    color: BbStackDepthDemo.points[i].color,
-                    densify: false,
-                    selected:
-                        _tapped.contains(BbStackDepthDemo.points[i].label),
-                    enabled: teaching,
-                    onPressed:
-                        teaching
-                            ? () => _onTap(BbStackDepthDemo.points[i].label)
-                            : null,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
+                if (i > 0) const SizedBox(width: GlowHighlight.gutter),
+                Expanded(
+                  child: GlowHighlight(
+                    active:
+                        teaching &&
+                        widget.showGuidance &&
+                        !_tapped.contains(BbStackDepthDemo.points[i].label) &&
+                        BbStackDepthDemo.points
+                            .take(i)
+                            .every((p) => _tapped.contains(p.label)),
+                    child: _DemoActionCard(
+                      label: BbStackDepthDemo.points[i].label,
+                      caption: BbStackDepthDemo.points[i].caption,
+                      color: BbStackDepthDemo.points[i].color,
+                      densify: false,
+                      expand: true,
+                      selected: _tapped.contains(
+                        BbStackDepthDemo.points[i].label,
+                      ),
+                      enabled: teaching,
+                      onPressed:
+                          teaching
+                              ? () => _onTap(BbStackDepthDemo.points[i].label)
+                              : null,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ],
     );
@@ -12848,6 +12876,7 @@ class _DemoActionCard extends StatelessWidget {
     required this.caption,
     required this.color,
     this.densify = false,
+    this.expand = false,
     this.selected = false,
     this.enabled = false,
     this.onPressed,
@@ -12857,6 +12886,9 @@ class _DemoActionCard extends StatelessWidget {
   final String caption;
   final Color color;
   final bool densify;
+
+  /// Fill a stretched SoftPulse row so every sibling matches the tallest.
+  final bool expand;
   final bool selected;
   final bool enabled;
   final VoidCallback? onPressed;
@@ -12866,12 +12898,13 @@ class _DemoActionCard extends StatelessWidget {
     final borderColor = selected
         ? AppColors.gold
         : color.withValues(alpha: 0.9);
+    final fill = densify || expand;
     final card = AnimatedContainer(
       duration: const Duration(milliseconds: 140),
-      width: densify ? double.infinity : null,
+      width: fill ? double.infinity : null,
       padding: EdgeInsets.symmetric(
         vertical: densify ? 24 : 12,
-        horizontal: densify ? 10 : 6,
+        horizontal: densify ? 10 : 8,
       ),
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -12900,6 +12933,8 @@ class _DemoActionCard extends StatelessWidget {
                   Text(
                     caption,
                     textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.manrope(
                       // SoftPulse densify tints are light — slate on cream/gold
                       // reads as muddy grey; cream keeps captions legible.
@@ -12927,6 +12962,8 @@ class _DemoActionCard extends StatelessWidget {
                 Text(
                   caption,
                   textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.manrope(
                     color: AppColors.slate,
                     fontSize: 11,
@@ -12936,7 +12973,7 @@ class _DemoActionCard extends StatelessWidget {
               ],
             ),
     );
-    final child = densify ? SizedBox.expand(child: card) : card;
+    final child = fill ? SizedBox.expand(child: card) : card;
     if (onPressed == null) return child;
     return Semantics(
       button: true,
