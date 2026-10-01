@@ -38,9 +38,42 @@ const int lessonBlindsRightOfButtonIndex = 2;
 /// Otherwise the small blind and big blind sit one and two seats clockwise
 /// from the button, unless [sbIndex] or [bbIndex] is set, and no seat glows
 /// unless [activeSeatIndex] is set. [positionLabels] renames the ring EP, HJ,
-/// CO, BTN, SB, BB. The table plays [smallBlind]/[bigBlind] with 100 big blind
-/// stacks. [villainArchetypes] gives the opponents, in seat order, real player
-/// types. [postBigBlind] false leaves the BB unposted until a quiz reveals it.
+/// CO, BTN, SB, BB. [seatNames] overrides those labels when set (action-order
+/// steps use UTG in place of EP). The table plays [smallBlind]/[bigBlind] with
+/// 100 big blind stacks. [villainArchetypes] gives the opponents, in seat
+/// order, real player types. [postBigBlind] false leaves the BB unposted until
+/// a quiz reveals it.
+/// Six-max seat names for action-order taps (UTG, not EP).
+const List<String> lessonActionOrderSeatNames = [
+  'UTG',
+  'HJ',
+  'CO',
+  'BTN',
+  'SB',
+  'BB',
+];
+
+/// Felt index for a position label on the six-max action-order ring.
+int? lessonActionOrderSeatIndex(String label) {
+  switch (label.trim().toUpperCase()) {
+    case 'UTG':
+    case 'EP':
+      return 0;
+    case 'HJ':
+      return 1;
+    case 'CO':
+      return 2;
+    case 'BTN':
+      return 3;
+    case 'SB':
+      return 4;
+    case 'BB':
+      return 5;
+    default:
+      return null;
+  }
+}
+
 GameState lessonTableStageGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
@@ -52,6 +85,7 @@ GameState lessonTableStageGame({
   int? bbIndex,
   int? activeSeatIndex,
   bool positionLabels = false,
+  List<String>? seatNames,
   double smallBlind = lessonSmallBlind,
   double bigBlind = lessonBigBlind,
   List<PlayerArchetype>? villainArchetypes,
@@ -111,12 +145,13 @@ GameState lessonTableStageGame({
     villain += 1;
   }
   const positions = ['EP', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
-  final seated = positionLabels
-      ? [
+  final labels = seatNames ?? (positionLabels ? positions : null);
+  final seated = labels == null
+      ? players
+      : [
           for (var i = 0; i < players.length; i++)
-            players[i].copyWith(name: positions[i % positions.length]),
-        ]
-      : players;
+            players[i].copyWith(name: labels[i % labels.length]),
+        ];
   var named = base.copyWith(players: seated);
   if (streetBets != null || potTotal != null) {
     named = _applyLessonStageStreetMoney(
@@ -266,6 +301,7 @@ class LessonTableStage extends StatelessWidget {
     this.dimmedHeroIndexes = const {},
     this.seatOrderBadges = const {},
     this.positionLabels = false,
+    this.seatNames,
     this.smallBlind = lessonSmallBlind,
     this.bigBlind = lessonBigBlind,
     this.villainArchetypes,
@@ -363,6 +399,11 @@ class LessonTableStage extends StatelessWidget {
   /// Rename the six-max ring EP, HJ, CO, BTN, SB, BB.
   final bool positionLabels;
 
+  /// Override seat display names when set (e.g. UTG instead of EP).
+  ///
+  /// Implies labeled seats even when [positionLabels] is false.
+  final List<String>? seatNames;
+
   /// Stakes this step plays. `Blinds $1/$2 NLH` unless the step teaches
   /// another level.
   final double smallBlind;
@@ -412,6 +453,7 @@ class LessonTableStage extends StatelessWidget {
     bbIndex: bbIndex,
     activeSeatIndex: activeSeatIndex,
     positionLabels: positionLabels,
+    seatNames: seatNames,
     smallBlind: smallBlind,
     bigBlind: bigBlind,
     villainArchetypes: villainArchetypes,
@@ -632,7 +674,7 @@ class _LessonBlindsClockwiseTableState
   }
 }
 
-/// Preflop order: EP, then HJ, then the button. A wrong seat is a miss.
+/// Preflop order: UTG, then HJ, then the button. A wrong seat is a miss.
 class LessonPreflopOrderTable extends StatefulWidget {
   /// Creates the order stage.
   const LessonPreflopOrderTable({
@@ -642,7 +684,7 @@ class LessonPreflopOrderTable extends StatefulWidget {
     this.enabled = true,
   });
 
-  /// The learner tapped EP, HJ, and the button in that order.
+  /// The learner tapped UTG, HJ, and the button in that order.
   final VoidCallback? onComplete;
 
   /// A seat other than the next required one was tapped.
@@ -680,9 +722,81 @@ class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
       dealerIndex: lessonBlindsButtonIndex,
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
-      positionLabels: true,
+      seatNames: lessonActionOrderSeatNames,
       cueSeatIndex: teaching ? _order[_step] : null,
       enabled: teaching,
+      onSeatIndexTap: _tap,
+    );
+  }
+}
+
+/// Full table: tap seats in authored action order (preflop or postflop).
+class LessonSeatOrderSequenceTable extends StatelessWidget {
+  /// Creates the seat-order stage.
+  const LessonSeatOrderSequenceTable({
+    super.key,
+    required this.sequenceItems,
+    required this.orderedIds,
+    required this.onPick,
+    this.boardCodes = const [],
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final List<({String id, String label})> sequenceItems;
+  final List<String> orderedIds;
+  final ValueChanged<String> onPick;
+  final List<String> boardCodes;
+  final bool enabled;
+  final bool showGuidance;
+
+  int? _seatIndexForId(String id) {
+    for (final item in sequenceItems) {
+      if (item.id != id) continue;
+      return lessonActionOrderSeatIndex(item.label);
+    }
+    return null;
+  }
+
+  String? _idForSeatIndex(int index) {
+    for (final item in sequenceItems) {
+      if (lessonActionOrderSeatIndex(item.label) == index) return item.id;
+    }
+    return null;
+  }
+
+  void _tap(int seatIndex) {
+    if (!enabled) return;
+    final id = _idForSeatIndex(seatIndex);
+    if (id == null || orderedIds.contains(id)) return;
+    onPick(id);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final badges = <int, int>{};
+    for (var order = 0; order < orderedIds.length; order++) {
+      final seat = _seatIndexForId(orderedIds[order]);
+      if (seat != null) badges[seat] = order + 1;
+    }
+    int? nextSeat;
+    if (showGuidance &&
+        enabled &&
+        orderedIds.length < sequenceItems.length) {
+      nextSeat = _seatIndexForId(sequenceItems[orderedIds.length].id);
+    }
+    return LessonTableStage(
+      key: const ValueKey<String>('seat-order-table'),
+      heroCodes: const ['Ah', 'Kd'],
+      boardCodes: boardCodes,
+      villainCount: lessonBlindsVillainCount,
+      dealerIndex: lessonBlindsButtonIndex,
+      sbIndex: lessonBlindsSmallBlindIndex,
+      bbIndex: lessonBlindsBigBlindIndex,
+      seatNames: lessonActionOrderSeatNames,
+      seatOrderBadges: badges,
+      cueSeatIndex: nextSeat,
+      enabled: enabled,
       onSeatIndexTap: _tap,
     );
   }

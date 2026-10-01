@@ -219,7 +219,7 @@ that table with the dock under it.
 
 Streets and action order uses the full poker table for every step: explain
 and street order advance the board with street labels under the felt, and
-postflop order taps seats on that table.
+seat order taps seats on that table.
 
 How pots are won uses the full poker table for every step: explain taps
 Fold win, Showdown, and Side pot under the felt, and each decision spot

@@ -189,7 +189,7 @@ class CoachDialogueActivity extends StatelessWidget {
             onComplete: locked ? null : onFeltAcknowledge,
             onMiss: () {
               LessonFrameScope.maybeOf(context)?.onLocalMiss(
-                'Preflop order — tap EP, then HJ, then the button.',
+                'Preflop order — tap UTG, then HJ, then the button.',
               );
             },
           );

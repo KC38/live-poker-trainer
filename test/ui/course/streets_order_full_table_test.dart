@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
@@ -229,6 +230,65 @@ void main() {
       'st-flop',
       'st-turn',
       'st-river',
+    ]);
+    expect(autoSubmits, 1);
+  });
+
+  testWidgets('scaffolded seat order taps seats on the full table', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-04-01-scaffolded-order',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 50,
+      accessibilityText: 'Put UTG, HJ, and BTN in preflop action order.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap seats in the order they act preflop after blinds.',
+      sequenceItems: const [
+        CourseChoice(id: 'seat-utg', label: 'UTG'),
+        CourseChoice(id: 'seat-hj', label: 'HJ'),
+        CourseChoice(id: 'seat-btn', label: 'BTN'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+    var autoSubmits = 0;
+    controller.onAutoSubmit = () => autoSubmits += 1;
+
+    await tester.pumpWidget(
+      _frame(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byType(LessonSeatOrderSequenceTable), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byKey(const ValueKey('seat-order-felt')), findsNothing);
+    expect(find.text('Your seat order'), findsNothing);
+    expect(find.text('Build order here'), findsNothing);
+
+    await tester.tap(find.text('UTG'));
+    await tester.pump();
+    await tester.tap(find.text('HJ'));
+    await tester.pump();
+    await tester.tap(find.text('BTN'));
+    await tester.pump();
+
+    expect(controller.draft.orderedIds, [
+      'seat-utg',
+      'seat-hj',
+      'seat-btn',
     ]);
     expect(autoSubmits, 1);
   });
