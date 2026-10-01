@@ -101,6 +101,7 @@ class CourseUnitBanner extends StatelessWidget {
     final base = color;
     final shadow = Color.lerp(base, Colors.black, 0.28)!;
     final eyebrow = 'SECTION $sectionOrder, UNIT $unitOrder';
+    const radius = BorderRadius.all(Radius.circular(16));
 
     return Semantics(
       button: onTap != null,
@@ -108,105 +109,56 @@ class CourseUnitBanner extends StatelessWidget {
       hint: onTap == null ? null : 'Open section list',
       child: Material(
         color: Colors.transparent,
+        shape: const RoundedRectangleBorder(borderRadius: radius),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Ink(
-                decoration: BoxDecoration(
-                  color: base,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: shadow,
-                      offset: const Offset(0, 4),
+          borderRadius: radius,
+          child: Ink(
+            decoration: BoxDecoration(
+              color: base,
+              borderRadius: radius,
+              boxShadow: [
+                BoxShadow(
+                  color: shadow,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    eyebrow,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.manrope(
+                      color: Colors.white.withValues(alpha: 0.92),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
                     ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(18, 14, 14, 16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              eyebrow,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.manrope(
-                                color: Colors.white.withValues(alpha: 0.92),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: 0.6,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              unitTitle,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.manrope(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                height: 1.15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (onTap != null)
-                        Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          color: Colors.white.withValues(alpha: 0.9),
-                          size: 28,
-                        ),
-                    ],
                   ),
-                ),
-              ),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: -7,
-                child: Center(
-                  child: CustomPaint(
-                    size: const Size(18, 8),
-                    painter: _BannerNotchPainter(color: base),
+                  const SizedBox(height: 4),
+                  Text(
+                    unitTitle,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.manrope(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      height: 1.15,
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
-  }
-}
-
-/// Downward tab under the sticky unit banner (Duolingo path cue).
-class _BannerNotchPainter extends CustomPainter {
-  const _BannerNotchPainter({required this.color});
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(size.width / 2, size.height)
-      ..lineTo(size.width, 0)
-      ..close();
-    canvas.drawPath(path, Paint()..color = color);
-  }
-
-  @override
-  bool shouldRepaint(covariant _BannerNotchPainter oldDelegate) {
-    return oldDelegate.color != color;
   }
 }
 

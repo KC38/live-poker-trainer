@@ -575,7 +575,7 @@ class _HomeBodyState extends State<_HomeBody> {
         if (activeUnit != null)
           Padding(
             key: _bannerKey,
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 220),
               switchInCurve: Curves.easeOut,
