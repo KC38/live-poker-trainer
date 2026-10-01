@@ -149,16 +149,12 @@ void _expectHomeThemeMetrics(WidgetTester tester) {
     );
   }
   expect(find.byType(RexCoachCard), findsNothing);
-  expect(find.byType(RexMascot), findsOneWidget);
+  expect(find.byType(RexMascot), findsNothing);
   expect(find.text('START +25 XP'), findsOneWidget);
   final marked = find.ancestor(
-    of: find.byType(RexMascot),
+    of: find.text('START +25 XP'),
     matching: find.byType(Column),
   ).first;
-  expect(
-    find.descendant(of: marked, matching: find.text('START +25 XP')),
-    findsOneWidget,
-  );
   expect(
     find.descendant(of: marked, matching: find.text('Lesson A')),
     findsOneWidget,
@@ -172,7 +168,7 @@ void _expectHomeThemeMetrics(WidgetTester tester) {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('ready Home shows status, Rex, path, and logs view', (
+  testWidgets('ready Home shows status, path, and logs view', (
     tester,
   ) async {
     final analytics = _RecordingAnalytics();
@@ -181,7 +177,7 @@ void main() {
     expect(find.byType(CourseStatusBar), findsOneWidget);
     expect(find.text('2'), findsOneWidget);
     expect(find.byType(RexCoachCard), findsNothing);
-    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.byType(RexMascot), findsNothing);
     expect(find.byType(CoursePathView), findsOneWidget);
     expect(find.text('Lesson A'), findsOneWidget);
     expect(find.text('START +25 XP'), findsOneWidget);
@@ -224,7 +220,7 @@ void main() {
     expect(find.byType(CoursePathView), findsOneWidget);
   });
 
-  testWidgets('Rex stands on the only marked next node', (tester) async {
+  testWidgets('start bubble marks only the next node', (tester) async {
     await _pumpHome(
       tester,
       snapshot: _readySnapshot(),
@@ -382,7 +378,7 @@ void main() {
 
     expect(find.text('Resume'), findsNothing);
     expect(find.text('START +25 XP'), findsOneWidget);
-    expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.byType(RexMascot), findsNothing);
     expect(find.text('Lesson A'), findsOneWidget);
   });
 

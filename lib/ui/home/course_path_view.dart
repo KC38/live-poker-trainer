@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
-import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Accent colors for unit banners, keyed by section order (1-based).
 Color unitBannerColorForSection(int sectionOrder) {
@@ -336,16 +335,6 @@ class _PathNodeRow extends StatelessWidget {
     final labeled = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (node.isNext)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: RexMascot(
-              size: 52,
-              mood: node.state == CourseNodeState.active
-                  ? RexMood.celebrate
-                  : RexMood.calm,
-            ),
-          ),
         bubble,
         if (node.isNext) ...[
           const SizedBox(height: 10),
@@ -455,7 +444,7 @@ class _StartLessonBubble extends StatelessWidget {
           painter: _BubbleCaretPainter(color: color),
         ),
         ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: 196, maxWidth: 220),
+          constraints: const BoxConstraints(minWidth: 248, maxWidth: 280),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: color,
