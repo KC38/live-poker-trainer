@@ -263,6 +263,10 @@ class OrderSequenceActivity extends StatelessWidget {
           );
         }
         if (framed && isStreetSequenceActivity(activity)) {
+          final palette = shuffledSequencePalette(
+            activityId: activity.id,
+            items: activity.sequenceItems,
+          );
           return LessonStreetsOrderTable(
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}',
@@ -270,6 +274,9 @@ class OrderSequenceActivity extends StatelessWidget {
             sequenceItems: [
               for (final item in activity.sequenceItems)
                 (id: item.id, label: item.label),
+            ],
+            paletteItems: [
+              for (final item in palette) (id: item.id, label: item.label),
             ],
             orderedIds: ordered,
             enabled: !locked,
