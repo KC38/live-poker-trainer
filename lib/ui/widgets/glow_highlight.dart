@@ -8,14 +8,17 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 ///
 /// This is the single highlight style used across the app — seats, hole
 /// cards, board cards (individually or as a group), and demo tiles. Pass
-/// the widgets to emphasize as [child]; inactive draws [child] untouched.
+/// the widgets to emphasize as [child]; inactive draws [child] untouched
+/// when [reserveLayout] is false.
 ///
 /// There are no arrows. Optional breathing animation matches the felt cue
 /// pulse; set [animated] false for a static selected ring.
 ///
 /// By default the ring's [outset] is reserved in layout so SoftPulse tiles
 /// (Bet/Raise/All-in, streets, demos) do not paint over neighbors or the
-/// tool row. Felt seats and cards pass [reserveLayout] false so their
+/// tool row. That reserved box is present whether SoftPulse is on or off,
+/// so the button face does not resize when hint / guidance toggles the
+/// ring. Felt seats and cards pass [reserveLayout] false so their
 /// footprint stays tight under [Positioned] constraints.
 class GlowHighlight extends StatefulWidget {
   /// Wraps [child] in the shared gold highlight.
@@ -32,8 +35,8 @@ class GlowHighlight extends StatefulWidget {
   /// Outward paint past [child] on each side (ring pad).
   static const double outset = 6;
 
-  /// Extra layout air past the ring for soft-shadow / breath scale so
-  /// neighboring SoftPulse tiles stay clear of the glow.
+  /// Extra layout air past the ring for soft-shadow so neighboring SoftPulse
+  /// tiles stay clear of the glow.
   static const double softBleed = 8;
 
   /// Minimum clear space between neighboring SoftPulse targets after each
@@ -43,10 +46,11 @@ class GlowHighlight extends StatefulWidget {
   /// Content to highlight — a card, a name tag, a row of cards, etc.
   final Widget child;
 
-  /// When false, draws [child] only.
+  /// When false, hides the ring. With [reserveLayout], the layout pad stays.
   final bool active;
 
-  /// When true and [active], the ring breathes. When false, a static ring.
+  /// When true and [active], the ring's glow breathes. When false, a static
+  /// ring. SoftPulse tiles do not scale — only the glow opacity pulses.
   final bool animated;
 
   /// Corner radius of the gold ring before [padding] is applied.
@@ -56,8 +60,9 @@ class GlowHighlight extends StatefulWidget {
   final EdgeInsets padding;
 
   /// When true (default), pad the layout so the ring sits inside this
-  /// widget's box. When false, paint the ring outside [child] (felt seats /
-  /// cards under tight [Positioned] slots).
+  /// widget's box — always, even when inactive, so SoftPulse does not
+  /// resize the face. When false, paint the ring outside [child] (felt
+  /// seats / cards under tight [Positioned] slots).
   final bool reserveLayout;
 
   @override
@@ -126,7 +131,6 @@ class _GlowHighlightState extends State<GlowHighlight>
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.active) return widget.child;
     final pad = widget.padding;
     // Grow corner radius with the outward pad so the ring still tracks the
     // child's rounded shape.
@@ -138,24 +142,25 @@ class _GlowHighlightState extends State<GlowHighlight>
     );
 
     if (widget.reserveLayout) {
-      // SoftPulse tiles: ring + softBleed live inside layout so siblings and
-      // the tool row see real gaps, not paint overflowing a tight box.
+      // SoftPulse tiles: always keep outset + softBleed in layout so the
+      // face size is stable when SoftPulse turns on (hint / guidance).
+      // Breath is glow opacity only — no Transform.scale.
       return AnimatedBuilder(
         animation: _motion,
         builder: (context, child) {
           final t = widget.animated ? _beat.value : 0.55;
           return Padding(
             padding: const EdgeInsets.all(GlowHighlight.softBleed),
-            child: Transform.scale(
-              scale: widget.animated ? 1 + (0.05 * t) : 1,
-              child: DecoratedBox(
-                key: const ValueKey<String>('glow-highlight-ring'),
-                decoration: _ringDecoration(t, radius),
-                child: Padding(
-                  key: const ValueKey<String>('glow-highlight'),
-                  padding: pad,
-                  child: child,
-                ),
+            child: DecoratedBox(
+              key: const ValueKey<String>('glow-highlight-ring'),
+              decoration:
+                  widget.active
+                      ? _ringDecoration(t, radius)
+                      : const BoxDecoration(),
+              child: Padding(
+                key: const ValueKey<String>('glow-highlight'),
+                padding: pad,
+                child: child,
               ),
             ),
           );
@@ -163,6 +168,8 @@ class _GlowHighlightState extends State<GlowHighlight>
         child: widget.child,
       );
     }
+
+    if (!widget.active) return widget.child;
 
     // Felt seats / cards: keep the child's footprint; ring paints outside.
     return AnimatedBuilder(
