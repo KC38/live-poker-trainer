@@ -1127,12 +1127,12 @@ class LessonAnswerDock extends StatelessWidget {
   ///
   /// Separate from [stageGlowInset]; together they keep SoftPulse targets
   /// clear of undo / redo / hint and the Nice! dock.
-  static const double stageClearance = 14;
+  static const double stageClearance = 16;
 
-  /// Empty air inside the stage [ClipRect] for [GlowHighlight.outset] plus a
-  /// little soft-shadow bleed so under-felt rings are not truncated flush
-  /// against [stageClearance].
-  static const double stageGlowInset = GlowHighlight.outset + 8;
+  /// Empty air inside the stage [ClipRect] for SoftPulse soft-bleed so rings
+  /// are not truncated flush against [stageClearance].
+  /// Keep in sync with [GlowHighlight.softBleed].
+  static const double stageGlowInset = 8;
 
   final SubmitCourseStepResult result;
   final VoidCallback onContinue;

@@ -173,16 +173,20 @@ void main() {
     final betRect = tester.getRect(find.text('BET'));
     final raiseRect = tester.getRect(find.text('RAISE'));
     final undoRect = tester.getRect(find.byTooltip('Undo'));
-    expect(
-      undoRect.top - betRect.bottom,
-      greaterThanOrEqualTo(
-        LessonAnswerDock.stageGlowInset + LessonAnswerDock.stageClearance,
-      ),
-    );
-    // SoftPulse sibling gap clears both rings' outset.
+    // SoftPulse sibling gap clears reserved rings (outset + softBleed each).
     expect(
       raiseRect.left - betRect.right,
       greaterThanOrEqualTo(GlowHighlight.gutter),
+    );
+    // Each SoftPulse reserves outset+softBleed under the face.
+    expect(
+      undoRect.top - betRect.bottom,
+      greaterThanOrEqualTo(
+        GlowHighlight.outset +
+            GlowHighlight.softBleed +
+            LessonAnswerDock.stageGlowInset +
+            LessonAnswerDock.stageClearance,
+      ),
     );
     expect(tester.takeException(), isNull);
   });

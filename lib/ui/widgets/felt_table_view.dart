@@ -258,6 +258,7 @@ class FeltTableView extends StatelessWidget {
                     (highlightHero &&
                         player.isHero &&
                         highlightHeroIndexes.isEmpty),
+                reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,
                 child: PlayerSeatWidget(
                   player: player,
