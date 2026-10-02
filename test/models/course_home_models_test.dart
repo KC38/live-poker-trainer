@@ -191,7 +191,42 @@ void main() {
     expect(snap.nodes[1].state, CourseNodeState.active);
     expect(snap.nodes[1].isNext, isTrue);
     expect(snap.nodes[0].state, CourseNodeState.mastered);
+    expect(snap.nodes[0].hasCompleted, isTrue);
+    expect(snap.nodes[1].hasCompleted, isFalse);
     expect(snap.resume?.attemptId, 'att-1');
+  });
+
+  test('open attempt on an earned lesson stays active but hasCompleted', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 40,
+        gems: 0,
+        currentStreak: 3,
+        acceptedAccuracy: 0.9,
+        completedLessonIds: ['lesson-a', 'lesson-b'],
+        masteryByLessonId: {'lesson-a': 0.9, 'lesson-b': 0.6},
+        catalogVersion: '2.0.0',
+      ),
+      openAttempt: const CourseAttemptSnapshot(
+        attemptId: 'att-replay',
+        lessonId: 'lesson-b',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 0,
+        currentActivityId: 'act-b1',
+        livesRemaining: 3,
+        livesMax: 3,
+        acceptedCount: 0,
+        scoredCount: 0,
+        stepCount: 0,
+      ),
+    );
+    expect(snap.nodes[1].state, CourseNodeState.active);
+    expect(snap.nodes[1].hasCompleted, isTrue);
+    expect(snap.nodes[0].hasCompleted, isTrue);
   });
 
   test('review-due nodes are preferred next after active clears', () {

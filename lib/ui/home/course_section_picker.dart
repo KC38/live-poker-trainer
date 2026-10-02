@@ -30,6 +30,11 @@ bool countsTowardSectionProgress(CourseNodeState state) {
       state == CourseNodeState.reviewDue;
 }
 
+/// Finished for section progress: profile completion or a finished path state.
+bool nodeCountsTowardSectionProgress(CourseMapNode node) {
+  return node.hasCompleted || countsTowardSectionProgress(node.state);
+}
+
 /// Progress for one section derived from path nodes.
 class CourseSectionProgress {
   /// Creates section progress.
@@ -94,7 +99,7 @@ List<CourseSectionProgress> buildSectionProgress(
 ) {
   final finishedIds = <String>{};
   for (final node in snapshot.nodes) {
-    if (countsTowardSectionProgress(node.state)) {
+    if (nodeCountsTowardSectionProgress(node)) {
       finishedIds.add(node.lessonId);
     }
   }

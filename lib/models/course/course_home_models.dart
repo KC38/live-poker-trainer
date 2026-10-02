@@ -38,6 +38,7 @@ class CourseMapNode {
     this.lockReason,
     this.mastery = 0,
     this.previewXp = kXpLessonComplete,
+    this.hasCompleted = false,
   });
 
   final String lessonId;
@@ -55,6 +56,12 @@ class CourseMapNode {
 
   /// Perfect-run XP shown on the Duo-style START CTA (`START +N XP`).
   final int previewXp;
+
+  /// True when the lesson id is in the profile's completed set.
+  ///
+  /// Distinct from [state]: an open attempt keeps `active` even after the
+  /// lesson was already earned, and section progress must still count it.
+  final bool hasCompleted;
 
   /// Accessibility label for icon-only nodes.
   String get semanticsLabel {
@@ -443,6 +450,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
             lockReason: lockReason,
             mastery: masteryScore,
             previewXp: previewLessonXp(lesson.activities.length),
+            hasCompleted: isComplete,
           ),
         );
       }
@@ -498,6 +506,7 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
         lockReason: node.lockReason,
         mastery: node.mastery,
         previewXp: node.previewXp,
+        hasCompleted: node.hasCompleted,
       ),
   ];
 

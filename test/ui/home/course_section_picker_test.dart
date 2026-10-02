@@ -55,6 +55,7 @@ CourseMapNode _node({
   required String sectionId,
   required CourseNodeState state,
   bool isNext = false,
+  bool? hasCompleted,
 }) {
   return CourseMapNode(
     lessonId: lessonId,
@@ -68,6 +69,10 @@ CourseMapNode _node({
     unitTitle: 'Unit 1',
     isNext: isNext,
     previewXp: 25,
+    hasCompleted: hasCompleted ??
+        (state == CourseNodeState.completed ||
+            state == CourseNodeState.mastered ||
+            state == CourseNodeState.reviewDue),
   );
 }
 
@@ -169,6 +174,46 @@ void main() {
       expect(row.percent, 33);
       expect(row.isComplete, isFalse);
       expect(row.isCurrent, isTrue);
+    });
+
+    test('counts active nodes that already earned completion', () {
+      final snapshot = CourseHomeSnapshot(
+        status: CourseHomeLoadStatus.ready,
+        sections: [section1, section2],
+        nodes: [
+          _node(
+            lessonId: 'lesson-1',
+            sectionId: 'sec-1',
+            state: CourseNodeState.completed,
+          ),
+          _node(
+            lessonId: 'lesson-2',
+            sectionId: 'sec-1',
+            state: CourseNodeState.completed,
+          ),
+          _node(
+            lessonId: 'lesson-3',
+            sectionId: 'sec-1',
+            state: CourseNodeState.active,
+            isNext: true,
+            hasCompleted: true,
+          ),
+          _node(
+            lessonId: 'lesson-4',
+            sectionId: 'sec-2',
+            state: CourseNodeState.available,
+          ),
+        ],
+        nextLessonId: 'lesson-3',
+        rexLine: 'Resume.',
+      );
+
+      final rows = buildSectionProgress(snapshot);
+      expect(rows[0].completed, 3);
+      expect(rows[0].total, 3);
+      expect(rows[0].percent, 100);
+      expect(rows[0].isComplete, isTrue);
+      expect(rows[1].isUnlocked, isTrue);
     });
   });
 
