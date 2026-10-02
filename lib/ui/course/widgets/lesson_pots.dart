@@ -27,6 +27,21 @@ TableFeatures get lessonPotsWonTableFeatures => const TableFeatures(
   boardSlots: false,
 );
 
+/// Open-pot math: show bets and seats, hide the pot total.
+TableFeatures get lessonOpenPotMathTableFeatures => const TableFeatures(
+  stacks: false,
+  pot: false,
+  street: false,
+  blinds: true,
+  positions: true,
+  bets: true,
+  actions: false,
+  opponentCards: true,
+  playerTypes: false,
+  stats: false,
+  boardSlots: false,
+);
+
 /// Full table: tap Fold win / Showdown / Side pot under the felt.
 class LessonWinningPathsExplainTable extends StatefulWidget {
   /// Creates the explain stage.

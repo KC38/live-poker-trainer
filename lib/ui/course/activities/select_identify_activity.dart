@@ -17,6 +17,8 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart'
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_outs_picker.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_pots.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
@@ -626,7 +628,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'River is called — best five decide the pot.',
       // Unguided densify — SoftPulse stays quiet.
       'act-01-05-01-unguided-pot' =>
-        'Blinds plus the open — pick the chip total.',
+        dealLessonOpenPot(
+          activityId: widget.activity.id,
+          generation: widget.controller.bindGeneration,
+        ).coachLine,
       // Checkpoint densify — don’t gold-tip Side pot.
       'act-01-05-01-checkpoint-side' =>
         'You are short all-in while others keep betting.',
@@ -1633,6 +1638,66 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                             ),
                       ),
                     ],
+                  ),
+                )
+              else if (LessonFrameScope.maybeOf(context) != null &&
+                  widget.activity.id == kOpenPotActivityId)
+                Expanded(
+                  child: Builder(
+                    builder: (context) {
+                      final deal = dealLessonOpenPot(
+                        activityId: widget.activity.id,
+                        generation: widget.controller.bindGeneration,
+                      );
+                      final labeled = deal.labeledChoices(
+                        widget.activity.choices,
+                      );
+                      final displayChoices = shuffledLessonChoices(
+                        labeled,
+                        activityId: widget.activity.id,
+                        generation: widget.controller.bindGeneration,
+                      );
+                      final streetBets = deal.streetBetsForSixMax(
+                        buttonIndex: lessonBlindsButtonIndex,
+                        smallBlindIndex: lessonBlindsSmallBlindIndex,
+                        bigBlindIndex: lessonBlindsBigBlindIndex,
+                      );
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            child: LessonTableStage(
+                              key: ValueKey<String>(
+                                'open-pot-${deal.openTo}-'
+                                '${widget.controller.bindGeneration}',
+                              ),
+                              heroCodes: const [],
+                              heroFaceUp: false,
+                              villainCount: lessonBlindsVillainCount,
+                              dealerIndex: lessonBlindsButtonIndex,
+                              sbIndex: lessonBlindsSmallBlindIndex,
+                              bbIndex: lessonBlindsBigBlindIndex,
+                              positionLabels: true,
+                              seatNames: lessonActionOrderSeatNames,
+                              streetBets: streetBets,
+                              potTotal: deal.correctPot.toDouble(),
+                              features: lessonOpenPotMathTableFeatures,
+                              enabled: !locked,
+                            ),
+                          ),
+                          _LessonChoiceStack(
+                            choices: displayChoices,
+                            selectedId: selected,
+                            locked: locked,
+                            onSelect:
+                                (id) => widget.controller.selectChoice(
+                                  id,
+                                  autoSubmit: true,
+                                ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 )
               else if (LessonFrameScope.maybeOf(context) != null &&

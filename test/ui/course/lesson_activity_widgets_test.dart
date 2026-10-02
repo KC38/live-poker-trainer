@@ -58,6 +58,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_hand_examples.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_pots.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
@@ -7976,12 +7977,12 @@ await tester.tap(find.text('NIT'));
         activityId: 'act-01-05-01-unguided-pot',
         region: LessonTableRegion.potChipsNine,
         choices: const [
-          CourseChoice(id: 'pot-9', label: '9 chips'),
-          CourseChoice(id: 'pot-7', label: '7 chips'),
-          CourseChoice(id: 'pot-12', label: '12 chips'),
+          CourseChoice(id: 'pot-correct', label: 'Correct pot'),
+          CourseChoice(id: 'pot-miss-blind', label: 'Miss a blind'),
+          CourseChoice(id: 'pot-too-big', label: 'Too big'),
         ],
       ),
-      'pot-9',
+      'pot-correct',
     );
     expect(
       resolveLessonTableScene(
@@ -7994,9 +7995,9 @@ await tester.tap(find.text('NIT'));
           accessibilityText: 'pot size',
           acceptedGrades: const [SoftGrade.recommended],
           choices: const [
-            CourseChoice(id: 'pot-9', label: '9 chips'),
-            CourseChoice(id: 'pot-7', label: '7 chips'),
-            CourseChoice(id: 'pot-12', label: '12 chips'),
+            CourseChoice(id: 'pot-correct', label: 'Correct pot'),
+            CourseChoice(id: 'pot-miss-blind', label: 'Miss a blind'),
+            CourseChoice(id: 'pot-too-big', label: 'Too big'),
           ],
         ),
       )?.layout,
@@ -8013,7 +8014,7 @@ await tester.tap(find.text('NIT'));
           accessibilityText: 'pot size',
           acceptedGrades: const [SoftGrade.recommended],
           choices: const [
-            CourseChoice(id: 'pot-9', label: '9 chips'),
+            CourseChoice(id: 'pot-correct', label: 'Correct pot'),
           ],
         ),
       )?.villainSeatCount,
@@ -9976,6 +9977,7 @@ await tester.tap(find.text('NIT'));
   testWidgets('how pots unguided pot densifies without decoy Them', (
     tester,
   ) async {
+    final deal = dealLessonOpenPot(activityId: kOpenPotActivityId, generation: 0);
     final activity = CourseActivity(
       id: 'act-01-05-01-unguided-pot',
       order: 4,
@@ -9984,11 +9986,11 @@ await tester.tap(find.text('NIT'));
       estimatedSeconds: 40,
       accessibilityText: 'pot size',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Blinds 1/2. BTN opens to 6. Tap the pot before blinds act.',
+      prompt: 'Blinds 1/2. BTN opens. Tap the pot before blinds act.',
       choices: const [
-        CourseChoice(id: 'pot-9', label: '9 chips'),
-        CourseChoice(id: 'pot-7', label: '7 chips'),
-        CourseChoice(id: 'pot-12', label: '12 chips'),
+        CourseChoice(id: 'pot-correct', label: 'Correct pot'),
+        CourseChoice(id: 'pot-miss-blind', label: 'Miss a blind'),
+        CourseChoice(id: 'pot-too-big', label: 'Too big'),
       ],
     );
     final controller = LessonActivityController(activity: activity);
@@ -10001,17 +10003,10 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(
-      find.text('Blinds plus the open — pick the chip total.'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Blinds plus the open — tap the chip total.'),
-      findsNothing,
-    );
+    expect(find.text(deal.coachLine), findsOneWidget);
     // No decoy face-down villain — chip tiles own the felt.
     expect(find.text('Them'), findsNothing);
-    expect(find.text('9 chips'), findsWidgets);
+    expect(find.text('${deal.correctPot} chips'), findsWidgets);
     expect(find.text('Tap your answer on the felt.'), findsNothing);
     final teachHeight = tester
         .getSize(find.byKey(const ValueKey('outcome-phases-felt')))
@@ -10025,9 +10020,80 @@ await tester.tap(find.text('NIT'));
         epsilon: 1,
       ),
     );
-    await tester.tap(find.text('9 chips').first);
+    await tester.tap(find.text('${deal.correctPot} chips').first);
     await tester.pump();
-    expect(controller.draft.choiceId, 'pot-9');
+    expect(controller.draft.choiceId, 'pot-correct');
+    controller.dispose();
+  });
+
+  testWidgets('framed open-pot quiz uses live table with pot hidden', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final deal = dealLessonOpenPot(activityId: kOpenPotActivityId, generation: 0);
+    final activity = CourseActivity(
+      id: 'act-01-05-01-unguided-pot',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'pot size',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Blinds 1/2. BTN opens. Tap the pot before blinds act.',
+      choices: const [
+        CourseChoice(id: 'pot-correct', label: 'Correct pot'),
+        CourseChoice(id: 'pot-miss-blind', label: 'Miss a blind'),
+        CourseChoice(id: 'pot-too-big', label: 'Too big'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId(
+                'lesson-01-05-01-winning-pots',
+              ),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: SelectIdentifyActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: true,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byType(LessonTableStage), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byType(LessonChoiceButton), findsNWidgets(3));
+    // Frame owns Rex; stage speech comes from lessonFrameSpeech.
+    expect(
+      lessonFrameSpeech(activity, bindGeneration: 0),
+      contains('BTN opens to ${deal.openTo}'),
+    );
+    expect(find.textContaining('POT'), findsNothing);
+    await tester.tap(
+      find.widgetWithText(LessonChoiceButton, '${deal.correctPot} chips'),
+    );
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pot-correct');
     controller.dispose();
   });
 
