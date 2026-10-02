@@ -97,7 +97,7 @@ describe("course catalog bank", () => {
       expect(raw.includes(token)).toBe(false);
     }
     // Public metadata required by the contract.
-    expect(raw.includes('"lifeLossEligible"')).toBe(true);
+    expect(raw.includes('"lifeLossEligible"')).toBe(false);
     expect(raw.includes('"acceptedGrades"')).toBe(true);
   });
 

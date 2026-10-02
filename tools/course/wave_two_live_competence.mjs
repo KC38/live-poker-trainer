@@ -81,7 +81,7 @@ export function buildSectionThree() {
                 id: "act-03-01-01-unguided", order: 4, stage: "unguided",
                 prompt: "You say \"raise\" then try to take it back to a call. Result?",
                 a11y: "Verbal raise binds at a live table.",
-                objectives: ["Honor verbal declarations at a live table"], lifeLoss: true,
+                objectives: ["Honor verbal declarations at a live table"],
                 choices: [
                   choice("bound", "The raise stands — verbal is binding", "recommended",
                     "Live rooms treat clear verbal action as final."),
@@ -95,7 +95,7 @@ export function buildSectionThree() {
                 id: "act-03-01-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Hero 140bb, villain 55bb, pot 18. What matters most next?",
                 a11y: "Effective stack is the shorter committed stack.",
-                objectives: ["Honor verbal declarations at a live table"], lifeLoss: true,
+                objectives: ["Honor verbal declarations at a live table"],
                 choices: [
                   choice("eff-55", "Effective 55bb and the 18 pot", "recommended",
                     "Shorter stack caps the matchup; pot frames price."),
@@ -152,7 +152,7 @@ export function buildSectionThree() {
                 id: "act-03-02-01-unguided", order: 4, stage: "unguided",
                 prompt: "Board Qc 7d 2s. You hold 5h 4h multiway. Class?",
                 a11y: "No pair and almost no draw — air.",
-                objectives: ["Recognize air that needs equity or fold equity"], lifeLoss: true,
+                objectives: ["Recognize air that needs equity or fold equity"],
                 choices: [
                   choice("air", "Air — little equity, no pair", "recommended",
                     "Gutshot-ish trash multiway is give-up territory."),
@@ -166,7 +166,7 @@ export function buildSectionThree() {
                 id: "act-03-02-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Board Ts 9s 4d. You hold Js 8d. Best label?",
                 a11y: "Open-ender with a spade is a draw class.",
-                objectives: ["Recognize air that needs equity or fold equity"], lifeLoss: true,
+                objectives: ["Recognize air that needs equity or fold equity"],
                 choices: [
                   choice("oesd", "Draw — open-ended straight draw", "recommended",
                     "Eight or queen completes; treat it as a draw."),
@@ -225,7 +225,6 @@ export function buildSectionThree() {
                 prompt: "Pot 20, bet 10 (call 10 into 30). You have ~8 clean outs on the turn. Call?",
                 a11y: "Nine-outish equity is close; with implied odds deep, call is fine.",
                 objectives: ["Compare pot odds to draw equity"],
-                lifeLoss: true,
                 choices: [
                   choice("call-draw", "Call — price is acceptable with outs", "recommended",
                     "Getting 3:1 with real outs is a continue, especially deep."),
@@ -240,7 +239,6 @@ export function buildSectionThree() {
                 prompt: "200bb deep. Nut flush draw, pot-sized bet from a sticky caller. Edge?",
                 a11y: "Deep stacks add implied odds versus sticky players.",
                 objectives: ["Use implied-odds intuition deep-stacked"],
-                lifeLoss: true,
                 choices: [
                   choice("implied-yes", "Implied odds improve — they pay when you hit", "recommended",
                     "Deep stacks plus a caller who sticks around pay off the nuts."),
@@ -297,7 +295,7 @@ export function buildSectionThree() {
                 id: "act-03-04-01-unguided", order: 4, stage: "unguided",
                 prompt: "Multiway pot. Villain bets half pot. You flopped a set. Action?",
                 a11y: "Raise a set for value multiway.",
-                objectives: ["Check back, call, fold, or raise with a plan"], lifeLoss: true,
+                objectives: ["Check back, call, fold, or raise with a plan"],
                 choices: [
                   choice("raise-set", "Raise", "recommended",
                     "Build the pot with a monster while multiway.", {action: "RAISE", amountBb: 12}),
@@ -311,7 +309,7 @@ export function buildSectionThree() {
                 id: "act-03-04-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Three players. Flop bets and a raise ahead. You have bottom pair. Action?",
                 a11y: "Fold weak one-pair multiway to heat.",
-                objectives: ["Check back, call, fold, or raise with a plan"], lifeLoss: true,
+                objectives: ["Check back, call, fold, or raise with a plan"],
                 choices: [
                   choice("fold-bp", "Fold", "recommended",
                     "Bottom pair dies to multiway aggression.", {action: "FOLD"}),
@@ -368,7 +366,7 @@ export function buildSectionThree() {
                 id: "act-03-05-01-unguided", order: 4, stage: "unguided",
                 prompt: "You checked back flop with a flush draw. Turn completes your flush. Checked to you. Action?",
                 a11y: "Delayed value bet when the draw comes in.",
-                objectives: ["Use delayed aggression when checked to"], lifeLoss: true,
+                objectives: ["Use delayed aggression when checked to"],
                 choices: [
                   choice("delay-bet", "Bet for value now", "recommended",
                     "Delayed aggression gets paid when you improve.", {action: "BET", amountBb: 7}),
@@ -382,7 +380,7 @@ export function buildSectionThree() {
                 id: "act-03-05-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "You bluffed flop on Kc 8d 3s. Turn Qh completes front-door draws. Plan?",
                 a11y: "Scare cards often end unsupported barrels.",
-                objectives: ["Use delayed aggression when checked to"], lifeLoss: true,
+                objectives: ["Use delayed aggression when checked to"],
                 choices: [
                   choice("give-up", "Often give up — changing card hurts air", "recommended",
                     "Unsupported second barrels die on draw-completing turns."),
@@ -439,7 +437,7 @@ export function buildSectionThree() {
                 id: "act-03-06-01-unguided", order: 4, stage: "unguided",
                 prompt: "You have top pair weak kicker. Villain jams river after a quiet line. Action?",
                 a11y: "Often fold weak top pair to a huge river jam.",
-                objectives: ["Bluff-catch or fold with clarity"], lifeLoss: true,
+                objectives: ["Bluff-catch or fold with clarity"],
                 choices: [
                   choice("fold-weak", "Fold", "recommended",
                     "Weak kickers lose to value-heavy jams.", {action: "FOLD"}),
@@ -453,7 +451,7 @@ export function buildSectionThree() {
                 id: "act-03-06-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Which river job matches medium-strength one pair versus a big bet?",
                 a11y: "Medium one pair is often a bluff-catch decision.",
-                objectives: ["Bluff-catch or fold with clarity"], lifeLoss: true,
+                objectives: ["Bluff-catch or fold with clarity"],
                 choices: [
                   choice("role-catch", "Bluff-catch or fold — not thin value", "recommended",
                     "Versus a big bet you decide if they bluff enough."),
@@ -510,7 +508,7 @@ export function buildSectionThree() {
                 id: "act-03-07-01-unguided", order: 4, stage: "unguided",
                 prompt: "Multiway. Choose the better speculative hand deep.",
                 a11y: "Suited connectors with nut potential beat dominated offsuit trash.",
-                objectives: ["Prefer nut potential and position"], lifeLoss: true,
+                objectives: ["Prefer nut potential and position"],
                 choices: [
                   choice("sc", "Suited connector in position", "recommended",
                     "Nut flushes/straights cash multiway."),
@@ -524,7 +522,7 @@ export function buildSectionThree() {
                 id: "act-03-07-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "One seat has entered eight of the last ten pots with calls. Observation?",
                 a11y: "Tag high participation without naming an archetype yet.",
-                objectives: ["Prefer nut potential and position"], lifeLoss: true,
+                objectives: ["Prefer nut potential and position"],
                 choices: [
                   choice("obs-many", "They play many hands — note it", "recommended",
                     "Record participation. Labels come later."),
@@ -581,7 +579,7 @@ export function buildSectionThree() {
                 id: "act-03-08-01-unguided", order: 4, stage: "unguided",
                 prompt: "Four players. You have no pair, no draw. Someone bets. Action?",
                 a11y: "Fold air multiway; do not float or bluff the crowd.",
-                objectives: ["Avoid passive calling and crowd bluffs"], lifeLoss: true,
+                objectives: ["Avoid passive calling and crowd bluffs"],
                 choices: [
                   choice("fold-air", "Fold", "recommended",
                     "No equity, no bluff target.", {action: "FOLD"}),
@@ -595,7 +593,7 @@ export function buildSectionThree() {
                 id: "act-03-08-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Seat A raises often; Seat B almost never enters. Best notes?",
                 a11y: "Track raise-versus-call and participation without labels.",
-                objectives: ["Avoid passive calling and crowd bluffs"], lifeLoss: true,
+                objectives: ["Avoid passive calling and crowd bluffs"],
                 choices: [
                   choice("notes", "A raises a lot; B plays few hands", "recommended",
                     "Behavior notes only — no fixed labels yet."),
@@ -619,7 +617,6 @@ export function buildSectionThree() {
                 prompt: "Pot 16, shorter stack 40bb. What do you track first?",
                 a11y: "Jump: pot and effective stack.",
                 objectives: ["Confirm table reading"],
-                lifeLoss: true,
                 choices: [
                   choice("j3-track", "Pot and effective 40bb", "recommended",
                     "Price and commitment frame the hand."),
@@ -634,7 +631,6 @@ export function buildSectionThree() {
                 prompt: "Board Qd 9d 3c. You hold Jd Td. Class?",
                 a11y: "Jump: combo draw.",
                 objectives: ["Confirm flop classes and price"],
-                lifeLoss: true,
                 choices: [
                   choice("j3-draw", "Draw — straight and flush potential", "recommended",
                     "Open-ender plus flush draw."),
@@ -649,7 +645,6 @@ export function buildSectionThree() {
                 prompt: "Four-way. You have air on a wet flop. Action?",
                 a11y: "Jump: fold air multiway.",
                 objectives: ["Confirm street plans and multiway discipline"],
-                lifeLoss: true,
                 choices: [
                   choice("j3-fold", "Fold", "recommended",
                     "Do not bluff crowds.", {action: "FOLD"}),
@@ -662,7 +657,6 @@ export function buildSectionThree() {
                 prompt: "Brick river. You have top two. Villain checks. Action?",
                 a11y: "Jump: value bet two pair.",
                 objectives: ["Confirm street plans and multiway discipline"],
-                lifeLoss: true,
                 choices: [
                   choice("j3-val", "Bet value", "recommended",
                     "Two pair value bets.", {action: "BET", amountBb: 10}),
@@ -677,7 +671,6 @@ export function buildSectionThree() {
                 prompt: "Gutshot, pot 10, face a 20 bet. Fix the leak?",
                 a11y: "Jump: fold bad price.",
                 objectives: ["Confirm flop classes and price"],
-                lifeLoss: true,
                 choices: [
                   choice("j3-foldprice", "Fold — price is wrong", "recommended",
                     "Stop chasing bad prices."),
@@ -772,7 +765,7 @@ export function buildSectionFour() {
                 id: "act-04-01-01-unguided", order: 4, stage: "unguided",
                 prompt: "Villain bets twice. You decide they have exactly AK. Problem?",
                 a11y: "Over-precision is a leak.",
-                objectives: ["Avoid assigning one exact hand too early"], lifeLoss: true,
+                objectives: ["Avoid assigning one exact hand too early"],
                 choices: [
                   choice("too-exact", "Too exact — keep a weighted range", "recommended",
                     "AK is one node in a range, not the whole story."),
@@ -786,7 +779,7 @@ export function buildSectionFour() {
                 id: "act-04-01-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Same board. Same hero hand. Different villain lines. Result?",
                 a11y: "Recommendations change only when the read/range changes.",
-                objectives: ["Avoid assigning one exact hand too early"], lifeLoss: true,
+                objectives: ["Avoid assigning one exact hand too early"],
                 choices: [
                   choice("read-drives", "Advice may change when the range changes", "recommended",
                     "Exploits follow evidence, not vibes."),
@@ -843,7 +836,7 @@ export function buildSectionFour() {
                 id: "act-04-02-01-unguided", order: 4, stage: "unguided",
                 prompt: "UTG opens, two callers. You have AKo in the big blind. Action?",
                 a11y: "Squeeze with strong hands multiway.",
-                objectives: ["Recognize squeeze spots multiway"], lifeLoss: true,
+                objectives: ["Recognize squeeze spots multiway"],
                 choices: [
                   choice("squeeze", "Squeeze to ~20", "recommended",
                     "Punish the multiway flat with a strong hand.",
@@ -859,7 +852,7 @@ export function buildSectionFour() {
                 id: "act-04-02-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Live open is 6. Choose a value 3-bet size with a premium pair.",
                 a11y: "Soft-grade nearby live 3-bet sizes.",
-                objectives: ["Recognize squeeze spots multiway"], lifeLoss: true,
+                objectives: ["Recognize squeeze spots multiway"],
                 choices: [
                   choice("size-18", "3-bet to 18", "recommended",
                     "About 3x is a clean live value size.", {action: "RAISE", amountBb: 9}),
@@ -936,7 +929,6 @@ export function buildSectionFour() {
                 prompt: "Medium strength, deep stacks, multiway. Prefer?",
                 a11y: "Keep medium hands in smaller pots.",
                 objectives: ["Keep pot size matched to hand strength"],
-                lifeLoss: true,
                 choices: [
                   choice("small-pot", "Keep pot small", "recommended",
                     "Medium hands hate gigantic multiway pots.", {action: "CHECK"}),
@@ -950,7 +942,6 @@ export function buildSectionFour() {
                 prompt: "Good multi-street plans do what?",
                 a11y: "Plans state flop intent and turn/river branches.",
                 objectives: ["Build a multi-street plan"],
-                lifeLoss: true,
                 choices: [
                   choice("branches", "Brick → barrel · flush → abort", "recommended",
                     "If X card, continue; if Y card, shut down."),
@@ -1009,7 +1000,7 @@ export function buildSectionFour() {
                 id: "act-04-04-01-unguided", order: 4, stage: "unguided",
                 prompt: "Two value sizes both get worse hands to call. Grading idea?",
                 a11y: "Nearby sizes earn soft grades.",
-                objectives: ["Avoid tiny or nonsensical sizes"], lifeLoss: true,
+                objectives: ["Avoid tiny or nonsensical sizes"],
                 choices: [
                   choice("soft", "Nearby sizes both soft-grade", "recommended",
                     "Live sizing has a band, not one chip exactness."),
@@ -1023,7 +1014,7 @@ export function buildSectionFour() {
                 id: "act-04-04-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Pot 30. You want value with a strong hand. Worst size?",
                 a11y: "One-chip value bets are clear mistakes.",
-                objectives: ["Avoid tiny or nonsensical sizes"], lifeLoss: true,
+                objectives: ["Avoid tiny or nonsensical sizes"],
                 choices: [
                   choice("bad-1", "Bet 1", "recommended",
                     "Tiny bets do not look like value.", {action: "BET", amountBb: 0.5}),
@@ -1082,7 +1073,6 @@ export function buildSectionFour() {
                 prompt: "SPR 20, multiway, second pair. Prefer?",
                 a11y: "High SPR medium hands keep pots smaller.",
                 objectives: ["Keep flexibility at high SPR"],
-                lifeLoss: true,
                 choices: [
                   choice("flexible", "Keep pot small", "recommended",
                     "Deep SPR punishes medium-strength stacks-in.", {action: "CHECK"}),
@@ -1095,7 +1085,6 @@ export function buildSectionFour() {
                 prompt: "About to put stacks in. First?",
                 a11y: "Check SPR before committing the rest.",
                 objectives: ["Estimate stack-to-pot ratio"],
-                lifeLoss: true,
                 choices: [
                   choice("before", "Weigh SPR first", "recommended",
                     "Commitment is an SPR decision."),
@@ -1151,7 +1140,7 @@ export function buildSectionFour() {
                 id: "act-04-06-01-unguided", order: 4, stage: "unguided",
                 prompt: "One dramatic call. How confident is a type label?",
                 a11y: "One hand is low confidence.",
-                objectives: ["Separate observation from certainty"], lifeLoss: true,
+                objectives: ["Separate observation from certainty"],
                 choices: [
                   choice("low-conf", "Low confidence — need samples", "recommended",
                     "One hand is a note, not a verdict."),
@@ -1163,7 +1152,7 @@ export function buildSectionFour() {
                 id: "act-04-06-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Best pre-label note bundle?",
                 a11y: "High participation plus low folding.",
-                objectives: ["Separate observation from certainty"], lifeLoss: true,
+                objectives: ["Separate observation from certainty"],
                 choices: [
                   choice("bundle", "Many hands · rarely folds", "recommended",
                     "That is the evidence bundle."),
@@ -1215,7 +1204,6 @@ export function buildSectionFour() {
                 prompt: "Seat limps often, calls raises, almost never folds turns. Label?",
                 a11y: "Calling Station.",
                 objectives: ["Identify from evidence"],
-                lifeLoss: true,
                 playerTypeRefs: ["calling_station"],
                 choices: [
                   choice("station2", "Calling Station", "recommended",
@@ -1229,7 +1217,6 @@ export function buildSectionFour() {
                 prompt: "After 2 hands, confidence in Calling Station should be?",
                 a11y: "Low sample confidence.",
                 objectives: ["Identify from evidence"],
-                lifeLoss: true,
                 choices: [
                   choice("low", "Low — keep collecting samples", "recommended",
                     "Display sample limits; do not overfit."),
@@ -1281,7 +1268,6 @@ export function buildSectionFour() {
                 prompt: "Same second pair. Unknown opponent with no sample. Action?",
                 a11y: "Baseline is more cautious without the station read.",
                 objectives: ["Cite the sticky-call tendency"],
-                lifeLoss: true,
                 choices: [
                   choice("baseline-check", "Keep it cautious", "recommended",
                     "Without sticky evidence, do not auto-thin-value.", {action: "CHECK", reversalRead: "With sticky-call samples, thin value becomes recommended."}),
@@ -1294,7 +1280,6 @@ export function buildSectionFour() {
                 prompt: "Why bluff less versus a Calling Station?",
                 a11y: "Because they fold too little.",
                 objectives: ["Cite the sticky-call tendency"],
-                lifeLoss: true,
                 playerTypeRefs: ["calling_station"],
                 choices: [
                   choice("cite-fold", "They fold too rarely", "recommended",
@@ -1346,7 +1331,7 @@ export function buildSectionFour() {
                 id: "act-04-07-01-unguided", order: 4, stage: "unguided",
                 prompt: "They folded two hands. Label them already?",
                 a11y: "Not enough samples.",
-                objectives: ["Wait for samples before labeling"], lifeLoss: true,
+                objectives: ["Wait for samples before labeling"],
                 choices: [
                   choice("wait", "No — sample too small", "recommended",
                     "Confidence scales with samples."),
@@ -1358,7 +1343,7 @@ export function buildSectionFour() {
                 id: "act-04-07-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Evidence bundle for this seat?",
                 a11y: "Narrow entry and strong aggression.",
-                objectives: ["Wait for samples before labeling"], lifeLoss: true,
+                objectives: ["Wait for samples before labeling"],
                 choices: [
                   choice("bundle-nit", "Few hands; heavy action when involved", "recommended",
                     "That is the pre-label note."),
@@ -1398,7 +1383,6 @@ export function buildSectionFour() {
                 prompt: "Seat folds forever, then check-raises a triple barrel. Label?",
                 a11y: "Nit.",
                 objectives: ["Identify from evidence"],
-                lifeLoss: true,
                 playerTypeRefs: ["nit"],
                 choices: [
                   choice("nit2", "Nit", "recommended",
@@ -1412,7 +1396,6 @@ export function buildSectionFour() {
                 prompt: "Nit is best treated as?",
                 a11y: "Working model.",
                 objectives: ["Introduce Nit"],
-                lifeLoss: true,
                 choices: [
                   choice("model-n", "A working model with sample limits", "recommended",
                     "Update with new evidence."),
@@ -1462,7 +1445,6 @@ export function buildSectionFour() {
                 prompt: "Same K9o steal. Unknown BB. Action?",
                 a11y: "Without nit evidence, K9o steal is thinner.",
                 objectives: ["Cite narrow-entry tendency"],
-                lifeLoss: true,
                 choices: [
                   choice("tighter", "Tighter baseline", "recommended",
                     "Steal width cites their overfolding.", {action: "FOLD", reversalRead: "With nit evidence, K9o becomes a steal."}),
@@ -1475,7 +1457,6 @@ export function buildSectionFour() {
                 prompt: "Why respect a Nit check-raise?",
                 a11y: "Because their aggression is value-heavy.",
                 objectives: ["Cite narrow-entry tendency"],
-                lifeLoss: true,
                 playerTypeRefs: ["nit"],
                 choices: [
                   choice("cite-strong", "Range is strong when they raise", "recommended",
@@ -1527,7 +1508,7 @@ export function buildSectionFour() {
                 id: "act-04-08-01-unguided", order: 4, stage: "unguided",
                 prompt: "Best note style versus wild aggression?",
                 a11y: "Frequencies, not ego.",
-                objectives: ["Avoid ego battles in notes"], lifeLoss: true,
+                objectives: ["Avoid ego battles in notes"],
                 choices: [
                   choice("calm", "Frequencies and shows — no ego story", "recommended",
                     "You will exploit later; do not tilt notes."),
@@ -1539,7 +1520,7 @@ export function buildSectionFour() {
                 id: "act-04-08-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Evidence bundle?",
                 a11y: "Extreme entry and aggression.",
-                objectives: ["Avoid ego battles in notes"], lifeLoss: true,
+                objectives: ["Avoid ego battles in notes"],
                 choices: [
                   choice("bundle-m", "Enters constantly; barrels without mercy", "recommended",
                     "Pre-label evidence."),
@@ -1579,7 +1560,6 @@ export function buildSectionFour() {
                 prompt: "Seat 3-bets light and never gives up rivers. Label?",
                 a11y: "Maniac.",
                 objectives: ["Identify from evidence"],
-                lifeLoss: true,
                 playerTypeRefs: ["maniac"],
                 choices: [
                   choice("maniac2", "Maniac", "recommended",
@@ -1593,7 +1573,6 @@ export function buildSectionFour() {
                 prompt: "Which types are legal to mix now?",
                 a11y: "Station, Nit, and Maniac — already introduced.",
                 objectives: ["Introduce Maniac"],
-                lifeLoss: true,
                 playerTypeRefs: ["calling_station", "nit", "maniac"],
                 choices: [
                   choice("three", "Calling Station, Nit, and Maniac", "recommended",
@@ -1646,7 +1625,6 @@ export function buildSectionFour() {
                 prompt: "Same river bet, unknown opponent. Top pair weak kicker?",
                 a11y: "Without maniac evidence, more folds.",
                 objectives: ["Cite extreme aggression tendency"],
-                lifeLoss: true,
                 choices: [
                   choice("baseline-fold", "More often fold", "recommended",
                     "Wide catching cites their over-aggression.", {action: "FOLD", reversalRead: "With maniac samples, calling becomes recommended."}),
@@ -1659,7 +1637,6 @@ export function buildSectionFour() {
                 prompt: "Why call wider versus a Maniac?",
                 a11y: "Because they bet too many hands.",
                 objectives: ["Cite extreme aggression tendency"],
-                lifeLoss: true,
                 playerTypeRefs: ["maniac"],
                 choices: [
                   choice("cite-wide", "Their betting range is too wide", "recommended",
@@ -1713,7 +1690,7 @@ export function buildSectionFour() {
                 id: "act-04-09-01-unguided", order: 4, stage: "unguided",
                 prompt: "Former 'station' starts folding three streets. Next step?",
                 a11y: "Retire or update the label.",
-                objectives: ["Retire labels when evidence flips"], lifeLoss: true,
+                objectives: ["Retire labels when evidence flips"],
                 playerTypeRefs: ["calling_station"],
                 choices: [
                   choice("update", "Update/retire the Calling Station model", "recommended",
@@ -1726,7 +1703,7 @@ export function buildSectionFour() {
                 id: "act-04-09-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Course should show what beside a type label?",
                 a11y: "Sample/confidence limits.",
-                objectives: ["Retire labels when evidence flips"], lifeLoss: true,
+                objectives: ["Retire labels when evidence flips"],
                 choices: [
                   choice("limits", "Sample and confidence limits", "recommended",
                     "No type from one dramatic hand."),
@@ -1781,7 +1758,6 @@ export function buildSectionFour() {
                 prompt: "Same second pair. Maniac barrels river. Action?",
                 a11y: "Call wider versus maniac.",
                 objectives: ["Change lines by type with justification"],
-                lifeLoss: true,
                 playerTypeRefs: ["maniac"],
                 choices: [
                   choice("m-call", "Call", "recommended",
@@ -1797,7 +1773,6 @@ export function buildSectionFour() {
                 prompt: "Full ring. Type × position × stack decide the line.",
                 a11y: "Button vs nit BB steal; deep stack.",
                 objectives: ["Combine type × position × stack × board"],
-                lifeLoss: true,
                 playerTypeRefs: ["nit"],
                 choices: [
                   choice("lab-steal", "Open to 6", "recommended",
@@ -1854,7 +1829,6 @@ export function buildSectionFour() {
                 prompt: "UTG open is best described as?",
                 a11y: "Jump: stronger narrower range.",
                 objectives: ["Confirm ranges and 3-bet basics"],
-                lifeLoss: true,
                 choices: [
                   choice("j4-range", "Stronger, narrower range", "recommended",
                     "Position tightens opens."),
@@ -1867,7 +1841,6 @@ export function buildSectionFour() {
                 prompt: "CO opens 6. You have a premium pair on BTN. Action?",
                 a11y: "Jump: value 3-bet.",
                 objectives: ["Confirm ranges and 3-bet basics"],
-                lifeLoss: true,
                 choices: [
                   choice("j4-3bet", "3-bet to 18", "recommended",
                     "Value.", {action: "RAISE", amountBb: 9}),
@@ -1882,7 +1855,6 @@ export function buildSectionFour() {
                 prompt: "Stack 60bb, pot 15bb. SPR?",
                 a11y: "Jump: SPR 4.",
                 objectives: ["Confirm sizing and SPR"],
-                lifeLoss: true,
                 choices: [
                   choice("spr-4", "4", "recommended",
                     "60/15 = 4."),
@@ -1897,7 +1869,6 @@ export function buildSectionFour() {
                 prompt: "Value bet into pot 20 with top pair. Best sizes?",
                 a11y: "Jump: soft-grade value sizes.",
                 objectives: ["Confirm sizing and SPR"],
-                lifeLoss: true,
                 choices: [
                   choice("j4-10", "Bet 10", "recommended",
                     "Half pot.", {action: "BET", amountBb: 5}),
@@ -1912,7 +1883,6 @@ export function buildSectionFour() {
                 prompt: "Sticky caller three streets. Label + exploit direction?",
                 a11y: "Jump: Calling Station — value more, bluff less.",
                 objectives: ["Confirm Calling Station, Nit, and Maniac adjustments"],
-                lifeLoss: true,
                 playerTypeRefs: ["calling_station"],
                 choices: [
                   choice("j4-cs", "Calling Station — thicker value, fewer bluffs", "recommended",
@@ -1926,7 +1896,6 @@ export function buildSectionFour() {
                 prompt: "Tiny range, huge check-raise. Label + line?",
                 a11y: "Jump: Nit — respect heat.",
                 objectives: ["Confirm Calling Station, Nit, and Maniac adjustments"],
-                lifeLoss: true,
                 playerTypeRefs: ["nit"],
                 choices: [
                   choice("j4-nit", "Nit — respect the raise; steal more elsewhere", "recommended",
@@ -1940,7 +1909,6 @@ export function buildSectionFour() {
                 prompt: "Seat barrels forever. You have top pair. Label + line?",
                 a11y: "Jump: Maniac — call wider.",
                 objectives: ["Confirm Calling Station, Nit, and Maniac adjustments"],
-                lifeLoss: true,
                 playerTypeRefs: ["maniac"],
                 choices: [
                   choice("j4-man", "Maniac — widen bluff-catch; avoid ego raises", "recommended",

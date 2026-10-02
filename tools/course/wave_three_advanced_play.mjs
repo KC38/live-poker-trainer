@@ -86,7 +86,6 @@ export function buildSectionFive() {
                 prompt: "Three callers. You flop top set on a wet board. Action?",
                 a11y: "Bet for value; protect and build.",
                 objectives: ["Value thicker when capped opponents call"],
-                lifeLoss: true,
                 playerTypeRefs: ["calling_station"],
                 choices: [
                   choice("bet-set", "Bet solid value", "recommended",
@@ -101,7 +100,7 @@ export function buildSectionFive() {
                 id: "act-05-01-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Multiway construction priority?",
                 a11y: "Nut potential and domination avoidance.",
-                objectives: ["Prefer nut potential multiway"], lifeLoss: true,
+                objectives: ["Prefer nut potential multiway"],
                 choices: [
                   choice("nuts", "Nut potential and clean equity", "recommended",
                     "Avoid second-best traps."),
@@ -156,7 +155,7 @@ export function buildSectionFive() {
                 id: "act-05-02-01-unguided", order: 4, stage: "unguided",
                 prompt: "SPR ~12 on the flop. Your first job?",
                 a11y: "Plan turn and river before stacking.",
-                objectives: ["Plan future streets when SPR is high"], lifeLoss: true,
+                objectives: ["Plan future streets when SPR is high"],
                 choices: [
                   choice("plan", "Map turn/river plans before committing", "recommended",
                     "High SPR is a multi-street problem."),
@@ -168,7 +167,7 @@ export function buildSectionFive() {
                 id: "act-05-02-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "150–300bb cash play rewards?",
                 a11y: "Position, implied odds, disciplined folds.",
-                objectives: ["Plan future streets when SPR is high"], lifeLoss: true,
+                objectives: ["Plan future streets when SPR is high"],
                 choices: [
                   choice("pos", "Position, implied odds, and disciplined folds", "recommended",
                     "Depth amplifies skill edges."),
@@ -225,7 +224,7 @@ export function buildSectionFive() {
                 id: "act-05-03-01-unguided", order: 4, stage: "unguided",
                 prompt: "Four-way. 7h6h on Kh 9h 2c facing a bet. Action?",
                 a11y: "Non-nut flush draw — fold the domination leak.",
-                objectives: ["Skip dominated draws multiway"], lifeLoss: true,
+                objectives: ["Skip dominated draws multiway"],
                 choices: [
                   choice("nonut", "Fold", "recommended",
                     "Dominated flush draws leak multiway.", {action: "FOLD"}),
@@ -237,7 +236,7 @@ export function buildSectionFive() {
                 id: "act-05-03-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Implied odds rise most when?",
                 a11y: "Depth plus paying tendencies.",
-                objectives: ["Estimate implied odds from depth and tendencies"], lifeLoss: true,
+                objectives: ["Estimate implied odds from depth and tendencies"],
                 choices: [
                   choice("depth-pay", "Deep stacks and opponents who pay", "recommended",
                     "Both matter."),
@@ -296,7 +295,6 @@ export function buildSectionFive() {
                 prompt: "Same second pair river. Nit checked to you. Action?",
                 a11y: "Check back — thin value dies.",
                 objectives: ["Skip thin value versus overfolders"],
-                lifeLoss: true,
                 playerTypeRefs: ["nit"],
                 choices: [
                   choice("check-nit", "Check back", "recommended",
@@ -311,7 +309,7 @@ export function buildSectionFive() {
                 id: "act-05-04-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Same hand, different types — what must change?",
                 a11y: "The recommendation only when the read justifies it.",
-                objectives: ["Choose thin value versus sticky callers"], lifeLoss: true,
+                objectives: ["Choose thin value versus sticky callers"],
                 choices: [
                   choice("read", "The line — only when the authored read justifies it", "recommended",
                     "Baseline first; exploit second."),
@@ -365,7 +363,7 @@ export function buildSectionFive() {
                 id: "act-05-05-01-unguided", order: 4, stage: "unguided",
                 prompt: "BB donks large on A-high dry flop into PFR. Meaning?",
                 a11y: "Often polarized — ace or air.",
-                objectives: ["Treat donks as polarized information"], lifeLoss: true,
+                objectives: ["Treat donks as polarized information"],
                 choices: [
                   choice("polar", "Often polarized — strong or bluff", "recommended",
                     "Live donks skew polar on dry ace boards."),
@@ -377,7 +375,7 @@ export function buildSectionFive() {
                 id: "act-05-05-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Delayed c-bet is best when?",
                 a11y: "Flop check then turn barrel after they show weakness.",
-                objectives: ["Use probes and delayed c-bets with a plan"], lifeLoss: true,
+                objectives: ["Use probes and delayed c-bets with a plan"],
                 choices: [
                   choice("delay", "After flop check takes away their range strength", "recommended",
                     "Turn barrels punish capped continues."),
@@ -428,7 +426,7 @@ export function buildSectionFive() {
                 id: "act-05-06-01-unguided", order: 4, stage: "unguided",
                 prompt: "Best line-reading habit?",
                 a11y: "Street-by-street updates.",
-                objectives: ["Update ranges after each street"], lifeLoss: true,
+                objectives: ["Update ranges after each street"],
                 choices: [
                   choice("update", "Rebuild after every action", "recommended",
                     "Stories go stale fast."),
@@ -440,7 +438,7 @@ export function buildSectionFive() {
                 id: "act-05-06-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Check-raise flop, bet turn, shove river usually means?",
                 a11y: "Strong uncapped pressure — respect without a read.",
-                objectives: ["Notice capped versus uncapped lines"], lifeLoss: true,
+                objectives: ["Notice capped versus uncapped lines"],
                 choices: [
                   choice("uncap", "Uncapped — respect unless type says otherwise", "recommended",
                     "Baseline respect; exploit only with evidence."),
@@ -493,7 +491,7 @@ export function buildSectionFive() {
                 id: "act-05-07-01-unguided", order: 4, stage: "unguided",
                 prompt: "Coach says \"look left means bluff.\" Response?",
                 a11y: "Reject magic tells.",
-                objectives: ["Reject magic-tell claims"], lifeLoss: true,
+                objectives: ["Reject magic-tell claims"],
                 choices: [
                   choice("reject", "Reject magic tells", "recommended",
                     "Stay with frequencies and lines."),
@@ -505,7 +503,7 @@ export function buildSectionFive() {
                 id: "act-05-07-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Best use of live timing?",
                 a11y: "Tiny confidence update alongside stronger evidence.",
-                objectives: ["Treat timing as soft evidence only"], lifeLoss: true,
+                objectives: ["Treat timing as soft evidence only"],
                 choices: [
                   choice("tiny", "Tiny update beside stronger reads", "recommended",
                     "Hierarchy of evidence."),
@@ -556,7 +554,7 @@ export function buildSectionFive() {
                 id: "act-05-08-01-unguided", order: 4, stage: "unguided",
                 prompt: "You are steaming after a cooler. Best action?",
                 a11y: "Reset or step away — bankroll guardrail.",
-                objectives: ["Avoid chasing emotional pots"], lifeLoss: true,
+                objectives: ["Avoid chasing emotional pots"],
                 choices: [
                   choice("reset", "Fold", "recommended",
                     "Session discipline beats revenge poker.", {action: "FOLD"}),
@@ -568,7 +566,7 @@ export function buildSectionFive() {
                 id: "act-05-08-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Dynamic reads should be?",
                 a11y: "Temporary working models with samples.",
-                objectives: ["Recognize gear changes mid-session"], lifeLoss: true,
+                objectives: ["Recognize gear changes mid-session"],
                 choices: [
                   choice("temp", "Fresh samples", "recommended",
                     "Update as the table shifts."),
@@ -619,7 +617,7 @@ export function buildSectionFive() {
                 id: "act-05-09-01-unguided", order: 4, stage: "unguided",
                 prompt: "Tired, winning small, table getting wild. Best?",
                 a11y: "Cash out while ahead of fatigue.",
-                objectives: ["End sessions before leaks spiral"], lifeLoss: true,
+                objectives: ["End sessions before leaks spiral"],
                 choices: [
                   choice("cash", "Cash out", "recommended",
                     "Protect the win."),
@@ -631,7 +629,7 @@ export function buildSectionFive() {
                 id: "act-05-09-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Session discipline is part of?",
                 a11y: "Winning strategy — not soft extra credit.",
-                objectives: ["End sessions before leaks spiral"], lifeLoss: true,
+                objectives: ["End sessions before leaks spiral"],
                 choices: [
                   choice("edge", "Your edge", "recommended",
                     "Bankroll and fatigue matter."),
@@ -653,7 +651,7 @@ export function buildSectionFive() {
                 id: "act-05-09-02-cp-multi", order: 1, stage: "checkpoint",
                 prompt: "Four-way pot priority?",
                 a11y: "Nut potential.",
-                objectives: ["Confirm multiway and deep-stack priorities"], lifeLoss: true,
+                objectives: ["Confirm multiway and deep-stack priorities"],
                 choices: [
                   choice("nut", "Nut potential", "recommended",
                     "Crowds punish air."),
@@ -666,7 +664,6 @@ export function buildSectionFive() {
                 prompt: "River second pair vs Calling Station. Action?",
                 a11y: "Thin value.",
                 objectives: ["Confirm thin value versus types"],
-                lifeLoss: true,
                 playerTypeRefs: ["calling_station"],
                 choices: [
                   choice("bet", "Bet thin value", "recommended",
@@ -680,7 +677,6 @@ export function buildSectionFive() {
                 prompt: "Maniac river barrel. Second pair. Action?",
                 a11y: "Call.",
                 objectives: ["Confirm thin value versus types"],
-                lifeLoss: true,
                 playerTypeRefs: ["maniac"],
                 choices: [
                   choice("call", "Call", "recommended",
@@ -693,7 +689,7 @@ export function buildSectionFive() {
                 id: "act-05-09-02-cp-tell", order: 4, stage: "checkpoint",
                 prompt: "Instant shove proves?",
                 a11y: "Nothing absolute.",
-                objectives: ["Confirm soft evidence and discipline"], lifeLoss: true,
+                objectives: ["Confirm soft evidence and discipline"],
                 choices: [
                   choice("soft", "Soft evidence", "recommended",
                     "No magic tells."),
@@ -705,7 +701,7 @@ export function buildSectionFive() {
                 id: "act-05-09-02-cp-stop", order: 5, stage: "checkpoint",
                 prompt: "Hit stop-loss. Do?",
                 a11y: "Stop.",
-                objectives: ["Confirm soft evidence and discipline"], lifeLoss: true,
+                objectives: ["Confirm soft evidence and discipline"],
                 choices: [
                   choice("stop", "Honor stop", "recommended",
                     "Guardrails."),
@@ -792,7 +788,7 @@ export function buildSectionSix() {
                 id: "act-06-01-01-unguided", order: 4, stage: "unguided",
                 prompt: "You are PFR on K72r. Action with range+nut lean?",
                 a11y: "C-bet with advantage.",
-                objectives: ["Choose pressure when you own both"], lifeLoss: true,
+                objectives: ["Choose pressure when you own both"],
                 choices: [
                   choice("cbet", "C-bet 6", "recommended",
                     "Advantage boards support betting.", {action: "BET", amountBb: 6}),
@@ -806,7 +802,7 @@ export function buildSectionSix() {
                 id: "act-06-01-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Advantage is a reason to?",
                 a11y: "Apply pressure selectively.",
-                objectives: ["Choose pressure when you own both"], lifeLoss: true,
+                objectives: ["Choose pressure when you own both"],
                 choices: [
                   choice("press", "Apply pressure", "recommended",
                     "Not random aggression."),
@@ -857,7 +853,7 @@ export function buildSectionSix() {
                 id: "act-06-02-01-unguided", order: 4, stage: "unguided",
                 prompt: "Semi-bluff check-raise with nut draw IP-denied. Purpose?",
                 a11y: "Realize equity via fold equity + outs.",
-                objectives: ["Use aggression to realize when appropriate"], lifeLoss: true,
+                objectives: ["Use aggression to realize when appropriate"],
                 choices: [
                   choice("realize", "Fold equity", "recommended",
                     "Aggression can realize equity."),
@@ -869,7 +865,7 @@ export function buildSectionSix() {
                 id: "act-06-02-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Equity realization rises with?",
                 a11y: "Position and initiative.",
-                objectives: ["Prefer IP for marginal equity"], lifeLoss: true,
+                objectives: ["Prefer IP for marginal equity"],
                 choices: [
                   choice("pos", "Position + initiative", "recommended",
                     "Core levers."),
@@ -922,7 +918,7 @@ export function buildSectionSix() {
                 id: "act-06-03-01-unguided", order: 4, stage: "unguided",
                 prompt: "Check-raise flop, bet turn, bomb river. Treat as?",
                 a11y: "Uncapped — respect.",
-                objectives: ["Respect uncapped aggression"], lifeLoss: true,
+                objectives: ["Respect uncapped aggression"],
                 choices: [
                   choice("uncap", "Uncapped", "recommended",
                     "Baseline respect."),
@@ -934,7 +930,7 @@ export function buildSectionSix() {
                 id: "act-06-03-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Caps are for?",
                 a11y: "Attacking.",
-                objectives: ["Attack caps with thin value and bluffs"], lifeLoss: true,
+                objectives: ["Attack caps with thin value and bluffs"],
                 choices: [
                   choice("attack", "Attack caps", "recommended",
                     "That is the exploit."),
@@ -988,7 +984,7 @@ export function buildSectionSix() {
                 id: "act-06-04-01-unguided", order: 4, stage: "unguided",
                 prompt: "Mismatch to avoid?",
                 a11y: "Tiny bets as pure polar bluffs without a story.",
-                objectives: ["Avoid mismatched shapes"], lifeLoss: true,
+                objectives: ["Avoid mismatched shapes"],
                 choices: [
                   choice("mismatch", "Tiny bluffs", "recommended",
                     "Shape must match goal."),
@@ -1000,7 +996,7 @@ export function buildSectionSix() {
                 id: "act-06-04-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Merged betting aims to?",
                 a11y: "Get called by worse / fold out some better sometimes.",
-                objectives: ["Use merged sizes for thin value"], lifeLoss: true,
+                objectives: ["Use merged sizes for thin value"],
                 choices: [
                   choice("thin", "Thin value", "recommended",
                     "Classic thin value."),
@@ -1056,7 +1052,7 @@ export function buildSectionSix() {
                 id: "act-06-05-01-unguided", order: 4, stage: "unguided",
                 prompt: "Random 3x pot bet with medium strength?",
                 a11y: "Avoid.",
-                objectives: ["Avoid random huge bets"], lifeLoss: true,
+                objectives: ["Avoid random huge bets"],
                 choices: [
                   choice("avoid", "Avoid", "recommended",
                     "No random bombs."),
@@ -1068,7 +1064,7 @@ export function buildSectionSix() {
                 id: "act-06-05-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Geometric sizing primarily helps?",
                 a11y: "Multi-street stack pressure.",
-                objectives: ["Plan geometric street sizes"], lifeLoss: true,
+                objectives: ["Plan geometric street sizes"],
                 choices: [
                   choice("multi", "Multi-street plan", "recommended",
                     "Link streets."),
@@ -1121,7 +1117,7 @@ export function buildSectionSix() {
                 id: "act-06-06-01-unguided", order: 4, stage: "unguided",
                 prompt: "Blockers replace?",
                 a11y: "Nothing — they tweak choices.",
-                objectives: ["Avoid fabricated EV claims"], lifeLoss: true,
+                objectives: ["Avoid fabricated EV claims"],
                 choices: [
                   choice("tweak", "Tweak evidence", "recommended",
                     "Not a magic wand."),
@@ -1133,7 +1129,7 @@ export function buildSectionSix() {
                 id: "act-06-06-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Course stance on solver EV quotes?",
                 a11y: "No fabricated EV.",
-                objectives: ["Avoid fabricated EV claims"], lifeLoss: true,
+                objectives: ["Avoid fabricated EV claims"],
                 choices: [
                   choice("no", "No fake EV", "recommended",
                     "Qualitative and decision-linked only."),
@@ -1185,7 +1181,7 @@ export function buildSectionSix() {
                 id: "act-06-07-01-unguided", order: 4, stage: "unguided",
                 prompt: "MDF numbers in this course?",
                 a11y: "Intuition only — no fake precision.",
-                objectives: ["Ignore fake MDF percentages"], lifeLoss: true,
+                objectives: ["Ignore fake MDF percentages"],
                 choices: [
                   choice("int", "Intuition", "recommended",
                     "Decision-linked."),
@@ -1197,7 +1193,7 @@ export function buildSectionSix() {
                 id: "act-06-07-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Minimum defense goal?",
                 a11y: "Punish over-bluffing with sensible continues.",
-                objectives: ["Continue with stronger catchers"], lifeLoss: true,
+                objectives: ["Continue with stronger catchers"],
                 choices: [
                   choice("punish", "Punish over-bluffs", "recommended",
                     "That's the idea."),
@@ -1251,7 +1247,7 @@ export function buildSectionSix() {
                 id: "act-06-08-01-unguided", order: 4, stage: "unguided",
                 prompt: "Randomness for its own sake?",
                 a11y: "No.",
-                objectives: ["Avoid pure randomness"], lifeLoss: true,
+                objectives: ["Avoid pure randomness"],
                 choices: [
                   choice("no", "Need a reason", "recommended",
                     "Frequency ≠ chaos."),
@@ -1263,7 +1259,7 @@ export function buildSectionSix() {
                 id: "act-06-08-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Best mix description?",
                 a11y: "Frequency with purpose.",
-                objectives: ["Avoid pure randomness"], lifeLoss: true,
+                objectives: ["Avoid pure randomness"],
                 choices: [
                   choice("freq", "Purpose freq", "recommended",
                     "Course standard."),
@@ -1314,7 +1310,7 @@ export function buildSectionSix() {
                 id: "act-06-09-01-unguided", order: 4, stage: "unguided",
                 prompt: "Light 4-bet bluff with no blockers for ego?",
                 a11y: "Avoid.",
-                objectives: ["Avoid ego 4-bets"], lifeLoss: true,
+                objectives: ["Avoid ego 4-bets"],
                 choices: [
                   choice("avoid", "Avoid ego", "recommended",
                     "Need blockers and folds."),
@@ -1326,7 +1322,7 @@ export function buildSectionSix() {
                 id: "act-06-09-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Depth change in 3-bet pots mainly changes?",
                 a11y: "SPR and commitment thresholds.",
-                objectives: ["Plan 3-bet pots by SPR"], lifeLoss: true,
+                objectives: ["Plan 3-bet pots by SPR"],
                 choices: [
                   choice("spr", "SPR / commit", "recommended",
                     "Core."),
@@ -1379,7 +1375,7 @@ export function buildSectionSix() {
                 id: "act-06-10-01-unguided", order: 4, stage: "unguided",
                 prompt: "Calling because you are \"due\"?",
                 a11y: "Mistake.",
-                objectives: ["Avoid ego call-downs"], lifeLoss: true,
+                objectives: ["Avoid ego call-downs"],
                 choices: [
                   choice("ego", "Ego call", "recommended",
                     "Due is not a reason."),
@@ -1391,7 +1387,7 @@ export function buildSectionSix() {
                 id: "act-06-10-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Review question after a big loss?",
                 a11y: "Cooler or mistake?",
-                objectives: ["Separate coolers from mistakes"], lifeLoss: true,
+                objectives: ["Separate coolers from mistakes"],
                 choices: [
                   choice("ask", "Cooler / mistake?", "recommended",
                     "Honest review."),
@@ -1445,7 +1441,7 @@ export function buildSectionSix() {
                 id: "act-06-11-01-unguided", order: 4, stage: "unguided",
                 prompt: "Two hands of tightness. Confidence?",
                 a11y: "Low.",
-                objectives: ["Delay the label until samples exist"], lifeLoss: true,
+                objectives: ["Delay the label until samples exist"],
                 choices: [
                   choice("low", "Keep sampling", "recommended",
                     "Working notes first."),
@@ -1457,7 +1453,7 @@ export function buildSectionSix() {
                 id: "act-06-11-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Best pre-label note bundle?",
                 a11y: "Tight in, aggressive with discipline.",
-                objectives: ["Delay the label until samples exist"], lifeLoss: true,
+                objectives: ["Delay the label until samples exist"],
                 choices: [
                   choice("bundle", "Tight · plan · give", "recommended",
                     "That's the bundle."),
@@ -1509,7 +1505,6 @@ export function buildSectionSix() {
                 prompt: "Seat opens tight, folds to 3-bets, c-bets selectively. Label?",
                 a11y: "TAG.",
                 objectives: ["Identify TAG from evidence"],
-                lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 choices: [
                   choice("tag2", "TAG", "recommended",
@@ -1522,7 +1517,7 @@ export function buildSectionSix() {
                 id: "act-06-11-02-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "TAG is?",
                 a11y: "Working model.",
-                objectives: ["Introduce TAG"], lifeLoss: true,
+                objectives: ["Introduce TAG"],
                 choices: [
                   choice("model", "Working model", "recommended",
                     "Update with evidence."),
@@ -1574,7 +1569,6 @@ export function buildSectionSix() {
                 prompt: "River thin value vs TAG who rarely calls light. Action?",
                 a11y: "Check more.",
                 objectives: ["Value thin only when they call"],
-                lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 choices: [
                   choice("check", "Check back", "recommended",
@@ -1587,7 +1581,7 @@ export function buildSectionSix() {
                 id: "act-06-11-03-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Versus TAG, cite which tendency?",
                 a11y: "Selective aggression / tighter call-downs.",
-                objectives: ["Respect TAG aggression"], lifeLoss: true,
+                objectives: ["Respect TAG aggression"],
                 playerTypeRefs: ["tag"],
                 choices: [
                   choice("cite", "Selective + disciplined", "recommended",
@@ -1641,7 +1635,7 @@ export function buildSectionSix() {
                 id: "act-06-12-01-unguided", order: 4, stage: "unguided",
                 prompt: "Label after one wide open?",
                 a11y: "No.",
-                objectives: ["Note sustained pressure"], lifeLoss: true,
+                objectives: ["Note sustained pressure"],
                 choices: [
                   choice("wait", "Keep sampling", "recommended",
                     "One hand is a note."),
@@ -1653,7 +1647,7 @@ export function buildSectionSix() {
                 id: "act-06-12-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Best pre-label note bundle?",
                 a11y: "Wide + pressure + some discipline.",
-                objectives: ["Separate planned pressure from maniac samples"], lifeLoss: true,
+                objectives: ["Separate planned pressure from maniac samples"],
                 choices: [
                   choice("bundle", "Wide · barrels · folds", "recommended",
                     "Bundle ready."),
@@ -1705,7 +1699,6 @@ export function buildSectionSix() {
                 prompt: "Wide opens, 3-bets light, keeps barreling. Label?",
                 a11y: "LAG.",
                 objectives: ["Identify LAG from evidence"],
-                lifeLoss: true,
                 playerTypeRefs: ["lag"],
                 choices: [
                   choice("lag2", "LAG", "recommended",
@@ -1718,7 +1711,7 @@ export function buildSectionSix() {
                 id: "act-06-12-02-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Show beside LAG label?",
                 a11y: "Sample/confidence limits.",
-                objectives: ["Introduce LAG"], lifeLoss: true,
+                objectives: ["Introduce LAG"],
                 choices: [
                   choice("limits", "Sample limits", "recommended",
                     "Always."),
@@ -1771,7 +1764,7 @@ export function buildSectionSix() {
                 id: "act-06-12-03-unguided", order: 4, stage: "unguided",
                 prompt: "Inventing triple-barrel bluffs into a LAG?",
                 a11y: "Usually bad.",
-                objectives: ["Avoid fancy bluffs into pressure"], lifeLoss: true,
+                objectives: ["Avoid fancy bluffs into pressure"],
                 playerTypeRefs: ["lag"],
                 choices: [
                   choice("avoid", "Usually avoid", "recommended",
@@ -1784,7 +1777,7 @@ export function buildSectionSix() {
                 id: "act-06-12-03-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "LAG exploit cites?",
                 a11y: "Wide entry and sustained pressure.",
-                objectives: ["Widen bluff-catches versus LAG"], lifeLoss: true,
+                objectives: ["Widen bluff-catches versus LAG"],
                 playerTypeRefs: ["lag"],
                 choices: [
                   choice("cite", "Wide + pressure", "recommended",
@@ -1840,7 +1833,6 @@ export function buildSectionSix() {
                 prompt: "Same hand. LAG barrels. Action?",
                 a11y: "Call.",
                 objectives: ["Adjust across all five types"],
-                lifeLoss: true,
                 playerTypeRefs: ["lag"],
                 choices: [
                   choice("lag", "Call", "recommended",
@@ -1854,7 +1846,6 @@ export function buildSectionSix() {
                 prompt: "Selective entry + disciplined barrels. Label + line vs their raise?",
                 a11y: "TAG — respect.",
                 objectives: ["Cite the tendency that changes the line"],
-                lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 choices: [
                   choice("tag", "TAG — respect the raise", "recommended",
@@ -1877,7 +1868,7 @@ export function buildSectionSix() {
                 id: "act-06-13-02-cp-adv", order: 1, stage: "checkpoint",
                 prompt: "PFR on dry A-high often has?",
                 a11y: "Range advantage.",
-                objectives: ["Confirm advantage and caps"], lifeLoss: true,
+                objectives: ["Confirm advantage and caps"],
                 choices: [
                   choice("ra", "Range advantage", "recommended",
                     "Yes."),
@@ -1889,7 +1880,7 @@ export function buildSectionSix() {
                 id: "act-06-13-02-cp-cap", order: 2, stage: "checkpoint",
                 prompt: "Check-back turn often makes river range?",
                 a11y: "Capped.",
-                objectives: ["Confirm advantage and caps"], lifeLoss: true,
+                objectives: ["Confirm advantage and caps"],
                 choices: [
                   choice("cap", "More capped", "recommended",
                     "Yes."),
@@ -1901,7 +1892,7 @@ export function buildSectionSix() {
                 id: "act-06-13-02-cp-polar", order: 3, stage: "checkpoint",
                 prompt: "River overbet shape?",
                 a11y: "Polar.",
-                objectives: ["Confirm polar/merged and blockers"], lifeLoss: true,
+                objectives: ["Confirm polar/merged and blockers"],
                 choices: [
                   choice("polar", "Polarized", "recommended",
                     "Yes."),
@@ -1914,7 +1905,6 @@ export function buildSectionSix() {
                 prompt: "Tight entry, planned barrels. Label?",
                 a11y: "TAG.",
                 objectives: ["Confirm TAG and LAG"],
-                lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 choices: [
                   choice("tag", "TAG", "recommended",
@@ -1928,7 +1918,6 @@ export function buildSectionSix() {
                 prompt: "Wide entry, sustained pressure, some folds. Label?",
                 a11y: "LAG.",
                 objectives: ["Confirm TAG and LAG"],
-                lifeLoss: true,
                 playerTypeRefs: ["lag"],
                 choices: [
                   choice("lag", "LAG", "recommended",
@@ -2014,7 +2003,7 @@ export function buildSectionSeven() {
                 id: "act-07-01-01-unguided", order: 4, stage: "unguided",
                 prompt: "Best habit?",
                 a11y: "Write the thesis before flop.",
-                objectives: ["State a preflop thesis"], lifeLoss: true,
+                objectives: ["State a preflop thesis"],
                 choices: [
                   choice("thesis", "Name the preflop reason before acting flop", "recommended",
                     "Integration."),
@@ -2026,7 +2015,7 @@ export function buildSectionSeven() {
                 id: "act-07-01-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Dead plan response?",
                 a11y: "Abandon quickly.",
-                objectives: ["Abandon dead plans quickly"], lifeLoss: true,
+                objectives: ["Abandon dead plans quickly"],
                 choices: [
                   choice("abandon", "Abandon quickly", "recommended",
                     "Sunk cost dies."),
@@ -2077,7 +2066,7 @@ export function buildSectionSeven() {
                 id: "act-07-02-01-unguided", order: 4, stage: "unguided",
                 prompt: "Bet flop with no turn idea?",
                 a11y: "Avoid.",
-                objectives: ["Bet flop only with a turn map"], lifeLoss: true,
+                objectives: ["Bet flop only with a turn map"],
                 choices: [
                   choice("avoid", "Avoid — map first", "recommended",
                     "Integration standard."),
@@ -2089,7 +2078,7 @@ export function buildSectionSeven() {
                 id: "act-07-02-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Turn map is?",
                 a11y: "Continue vs kill list.",
-                objectives: ["Bet flop only with a turn map"], lifeLoss: true,
+                objectives: ["Bet flop only with a turn map"],
                 choices: [
                   choice("list", "A continue/kill list made on the flop", "recommended",
                     "Yes."),
@@ -2141,7 +2130,7 @@ export function buildSectionSeven() {
                 id: "act-07-03-01-unguided", order: 4, stage: "unguided",
                 prompt: "No value, no blockers, no fold equity. River?",
                 a11y: "Check.",
-                objectives: ["Check trash without a story"], lifeLoss: true,
+                objectives: ["Check trash without a story"],
                 choices: [
                   choice("check", "Check", "recommended",
                     "No story."),
@@ -2153,7 +2142,7 @@ export function buildSectionSeven() {
                 id: "act-07-03-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "River composition rule?",
                 a11y: "Value needs calls; bluffs need folds.",
-                objectives: ["Choose river value candidates"], lifeLoss: true,
+                objectives: ["Choose river value candidates"],
                 choices: [
                   choice("rule", "Value needs calls; bluffs need folds", "recommended",
                     "Core."),
@@ -2204,7 +2193,7 @@ export function buildSectionSeven() {
                 id: "act-07-04-01-unguided", order: 4, stage: "unguided",
                 prompt: "4-bet pot 100bb. Mindset?",
                 a11y: "High commitment — tighter.",
-                objectives: ["Plan 3-bet/4-bet pots"], lifeLoss: true,
+                objectives: ["Plan 3-bet/4-bet pots"],
                 choices: [
                   choice("commit", "Higher commitment — fewer spewy bluffs", "recommended",
                     "SPR is short."),
@@ -2216,7 +2205,7 @@ export function buildSectionSeven() {
                 id: "act-07-04-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Pot type changes?",
                 a11y: "Ranges and SPR.",
-                objectives: ["Plan 3-bet/4-bet pots"], lifeLoss: true,
+                objectives: ["Plan 3-bet/4-bet pots"],
                 choices: [
                   choice("both", "Ranges and SPR", "recommended",
                     "Yes."),
@@ -2268,7 +2257,7 @@ export function buildSectionSeven() {
                 id: "act-07-05-01-unguided", order: 4, stage: "unguided",
                 prompt: "Multiway top set. Line lean?",
                 a11y: "Thicker value / protection.",
-                objectives: ["Value thicker multiway"], lifeLoss: true,
+                objectives: ["Value thicker multiway"],
                 choices: [
                   choice("thick", "Thicker value and protection", "recommended",
                     "Yes."),
@@ -2280,7 +2269,7 @@ export function buildSectionSeven() {
                 id: "act-07-05-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Player count is?",
                 a11y: "A first-class input.",
-                objectives: ["Bluff less multiway"], lifeLoss: true,
+                objectives: ["Bluff less multiway"],
                 choices: [
                   choice("input", "A first-class planning input", "recommended",
                     "Yes."),
@@ -2331,7 +2320,7 @@ export function buildSectionSeven() {
                 id: "act-07-06-01-unguided", order: 4, stage: "unguided",
                 prompt: "Hero 200bb, villain 40bb. Effective?",
                 a11y: "40bb.",
-                objectives: ["Recalculate effective stacks each hand"], lifeLoss: true,
+                objectives: ["Recalculate effective stacks each hand"],
                 choices: [
                   choice("40", "40bb", "recommended",
                     "Shorter stack caps."),
@@ -2343,7 +2332,7 @@ export function buildSectionSeven() {
                 id: "act-07-06-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Stack depth is?",
                 a11y: "Plan input every hand.",
-                objectives: ["Recalculate effective stacks each hand"], lifeLoss: true,
+                objectives: ["Recalculate effective stacks each hand"],
                 choices: [
                   choice("every", "Recalculated every hand", "recommended",
                     "Yes."),
@@ -2398,7 +2387,6 @@ export function buildSectionSeven() {
                 prompt: "Same top pair. LAG barrels turn. Action?",
                 a11y: "Call.",
                 objectives: ["Practice all five types"],
-                lifeLoss: true,
                 playerTypeRefs: ["lag"],
                 choices: [
                   choice("call", "Call", "recommended",
@@ -2411,7 +2399,7 @@ export function buildSectionSeven() {
                 id: "act-07-07-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "No type evidence yet. Default?",
                 a11y: "Baseline strategy.",
-                objectives: ["Keep identical lines when evidence is absent"], lifeLoss: true,
+                objectives: ["Keep identical lines when evidence is absent"],
                 choices: [
                   choice("base", "Baseline strategy", "recommended",
                     "Exploit needs evidence."),
@@ -2466,7 +2454,6 @@ export function buildSectionSeven() {
                 prompt: "TAG pots river after strong line. Second pair. Action?",
                 a11y: "Fold.",
                 objectives: ["Produce one coherent action"],
-                lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 choices: [
                   choice("fold", "Fold", "recommended",
@@ -2479,7 +2466,7 @@ export function buildSectionSeven() {
                 id: "act-07-08-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Integrated decision uses?",
                 a11y: "All four inputs.",
-                objectives: ["Produce one coherent action"], lifeLoss: true,
+                objectives: ["Produce one coherent action"],
                 choices: [
                   choice("four", "Type, board, line, and sizing together", "recommended",
                     "Yes."),
@@ -2530,7 +2517,7 @@ export function buildSectionSeven() {
                 id: "act-07-09-01-unguided", order: 4, stage: "unguided",
                 prompt: "When to review the book?",
                 a11y: "After sessions / on a schedule.",
-                objectives: ["Schedule review habits"], lifeLoss: true,
+                objectives: ["Schedule review habits"],
                 choices: [
                   choice("sched", "After sessions on a schedule", "recommended",
                     "Habit."),
@@ -2542,7 +2529,7 @@ export function buildSectionSeven() {
                 id: "act-07-09-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Default book purpose?",
                 a11y: "Baseline before exploits.",
-                objectives: ["Write default lines for common spots"], lifeLoss: true,
+                objectives: ["Write default lines for common spots"],
                 choices: [
                   choice("base", "Baseline before exploits", "recommended",
                     "Yes."),
@@ -2569,7 +2556,6 @@ export function buildSectionSeven() {
                 id: "act-07-10-01-hand", order: 2, stage: "unguided",
                 a11y: "BTN open, BB call. Play three streets.",
                 objectives: ["Execute a full SRP plan", "Update streets without hints", "Finish river coherently"],
-                lifeLoss: true,
                 steps: [
                   {
                     id: "step-flop", street: "flop",
@@ -2630,7 +2616,6 @@ export function buildSectionSeven() {
                 id: "act-07-10-02-hand", order: 2, stage: "unguided",
                 a11y: "You 3-bet TAG open with AQ; 120bb deep.",
                 objectives: ["Plan a 3-bet pot by SPR", "Continue or kill on turn", "Close river without ego"],
-                lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 steps: [
                   {
@@ -2686,7 +2671,6 @@ export function buildSectionSeven() {
                 id: "act-07-10-03-hand", order: 2, stage: "unguided",
                 a11y: "Four-way, 200bb, you hold AhQh.",
                 objectives: ["Prefer nut potential multiway", "Use deep implied odds correctly", "Avoid bluffing crowds"],
-                lifeLoss: true,
                 steps: [
                   {
                     id: "step-mw-flop", street: "flop",
@@ -2743,7 +2727,6 @@ export function buildSectionSeven() {
                 id: "act-07-10-04-hand", order: 2, stage: "unguided",
                 a11y: "Four-way limp, 150bb, you hold AhKh on BTN.",
                 objectives: ["Prefer nut potential limped multiway", "Avoid light multiway bluffs", "Use depth for draws carefully"],
-                lifeLoss: true,
                 steps: [
                   {
                     id: "step-limp-flop", street: "flop",
@@ -2800,7 +2783,6 @@ export function buildSectionSeven() {
                 id: "act-07-10-05-hand", order: 2, stage: "unguided",
                 a11y: "100bb 4-bet pot; you hold a premium pair after 4-betting.",
                 objectives: ["Respect short SPR commitment", "Avoid ego bluffs in 4-bet pots", "Close river without hero calls"],
-                lifeLoss: true,
                 steps: [
                   {
                     id: "step-4b-flop", street: "flop",
@@ -2884,7 +2866,7 @@ export function buildSectionSeven() {
                 id: "act-07-11-01-unguided", order: 4, stage: "unguided",
                 prompt: "Scope reminder?",
                 a11y: "Live cash NLH only.",
-                objectives: ["Stay inside live cash NLH scope"], lifeLoss: true,
+                objectives: ["Stay inside live cash NLH scope"],
                 choices: [
                   choice("scope", "Live cash NLH only", "recommended",
                     "Course invariant."),
@@ -2896,7 +2878,7 @@ export function buildSectionSeven() {
                 id: "act-07-11-01-checkpoint", order: 5, stage: "checkpoint",
                 prompt: "Warm-up goal?",
                 a11y: "Load the plan, then execute one hand.",
-                objectives: ["Carry defaults into Live"], lifeLoss: true,
+                objectives: ["Carry defaults into Live"],
                 choices: [
                   choice("one", "Load checklist and execute one coached hand", "recommended",
                     "Ready for Plan 10 bridge."),
@@ -2922,7 +2904,6 @@ export function buildSectionSeven() {
                 prompt: "Sticky calls three streets. Label + exploit?",
                 a11y: "Calling Station — value more.",
                 objectives: ["Identify all five types from behavior"],
-                lifeLoss: true,
                 playerTypeRefs: ["calling_station"],
                 choices: [
                   choice("cs", "Calling Station — thicker value, fewer bluffs", "recommended",
@@ -2936,7 +2917,6 @@ export function buildSectionSeven() {
                 prompt: "Tiny range, huge check-raise. Label + line?",
                 a11y: "Nit — respect.",
                 objectives: ["Identify all five types from behavior"],
-                lifeLoss: true,
                 playerTypeRefs: ["nit"],
                 choices: [
                   choice("nit", "Nit — respect heat; steal elsewhere", "recommended",
@@ -2950,7 +2930,6 @@ export function buildSectionSeven() {
                 prompt: "Endless barrels, never folds. Label + line?",
                 a11y: "Maniac — call wider.",
                 objectives: ["Select adjustments with citations"],
-                lifeLoss: true,
                 playerTypeRefs: ["maniac"],
                 choices: [
                   choice("man", "Maniac — widen catches; avoid ego raises", "recommended",
@@ -2964,7 +2943,6 @@ export function buildSectionSeven() {
                 prompt: "Selective entry, disciplined barrels. Label + vs raise?",
                 a11y: "TAG — respect.",
                 objectives: ["Select adjustments with citations"],
-                lifeLoss: true,
                 playerTypeRefs: ["tag"],
                 choices: [
                   choice("tag", "TAG — respect raises; steal less than vs nits", "recommended",
@@ -2978,7 +2956,6 @@ export function buildSectionSeven() {
                 prompt: "Wide entry, sustained pressure, some folds. Label + line?",
                 a11y: "LAG — trap/call wider.",
                 objectives: ["Select adjustments with citations"],
-                lifeLoss: true,
                 playerTypeRefs: ["lag"],
                 choices: [
                   choice("lag", "LAG — trap more; call wider; fancy less", "recommended",
@@ -2991,7 +2968,7 @@ export function buildSectionSeven() {
                 id: "act-07-12-01-uncertain", order: 6, stage: "checkpoint",
                 prompt: "Three mixed samples only. Confidence?",
                 a11y: "Low — keep baseline heavier.",
-                objectives: ["Retire labels when evidence flips"], lifeLoss: true,
+                objectives: ["Retire labels when evidence flips"],
                 choices: [
                   choice("low", "Low — lean baseline until samples grow", "recommended",
                     "Uncertainty is honest."),
@@ -3003,7 +2980,7 @@ export function buildSectionSeven() {
                 id: "act-07-12-01-retire", order: 7, stage: "checkpoint",
                 prompt: "Old Calling Station now folds rivers and 3-bets light. Do?",
                 a11y: "Retire/update the label.",
-                objectives: ["Retire labels when evidence flips"], lifeLoss: true,
+                objectives: ["Retire labels when evidence flips"],
                 playerTypeRefs: ["calling_station"],
                 choices: [
                   choice("retire", "Retire or update the model", "recommended",

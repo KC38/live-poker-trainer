@@ -395,17 +395,10 @@ export function validateAndGenerate(course) {
               }
             }
           }
-          if (typeof act.lifeLossEligible !== "boolean") {
-            errors.push(`${actPath}: lifeLossEligible must be boolean`);
-          }
-          if (
-            (act.stage === "guided" || act.stage === "scaffolded") &&
-            act.lifeLossEligible === true
-          ) {
-            // life loss only allowed via clear_mistake on non-guided stages;
-            // guided/scaffolded may never be life-loss eligible.
+          if (Object.prototype.hasOwnProperty.call(act, "lifeLossEligible")) {
             errors.push(
-              `${actPath}: life loss is not allowed on guided/scaffolded activities`,
+              `${actPath}: lifeLossEligible was removed; hearts are lost on ` +
+                "all non-guided mistakes",
             );
           }
 
@@ -416,7 +409,6 @@ export function validateAndGenerate(course) {
             stage: act.stage,
             renderer: act.renderer,
             acceptedGrades: act.acceptedGrades,
-            lifeLossEligible: act.lifeLossEligible,
           };
           if (Array.isArray(act.choices)) {
             privatePayload.choiceGrading = Object.fromEntries(
@@ -425,22 +417,6 @@ export function validateAndGenerate(course) {
                 return [c.id, c.grading];
               }),
             );
-            for (const choice of act.choices) {
-              const c = /** @type {Record<string, unknown>} */ (choice);
-              const grading = /** @type {Record<string, unknown>|undefined} */ (
-                c.grading
-              );
-              if (
-                grading &&
-                grading.grade === "clear_mistake" &&
-                (act.stage === "guided" || act.stage === "scaffolded") &&
-                act.lifeLossEligible === true
-              ) {
-                errors.push(
-                  `${actPath}: clear_mistake life loss forbidden on ${act.stage}`,
-                );
-              }
-            }
           }
           if (act.correctSequence !== undefined) {
             privatePayload.correctSequence = act.correctSequence;
