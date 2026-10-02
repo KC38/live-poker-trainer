@@ -474,6 +474,19 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       (widget.activity.stage == ActivityStage.guided ||
           widget.controller.hintVisible);
 
+  /// SoftPulse target for framed choice docks (Take pot, Showdown, …).
+  ///
+  /// Catalog authors keep the recommended answer first. SoftPulse stays off
+  /// until Hint on quieter stages — same gate as [_cuesAnswerSeat].
+  String? _framedDockPulseChoiceId({
+    required bool locked,
+    required String? selected,
+  }) {
+    if (!_cuesAnswerSeat(locked) || selected != null) return null;
+    if (widget.activity.choices.isEmpty) return null;
+    return widget.activity.choices.first.id;
+  }
+
   void _onController() {
     var clearSelection = false;
     if (widget.controller.draft.choiceId == null &&
@@ -1608,6 +1621,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         choices: widget.activity.choices,
                         selectedId: selected,
                         locked: locked,
+                        pulseChoiceId: _framedDockPulseChoiceId(
+                          locked: locked,
+                          selected: selected,
+                        ),
                         onSelect:
                             (id) => widget.controller.selectChoice(
                               id,
@@ -1659,6 +1676,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         choices: widget.activity.choices,
                         selectedId: selected,
                         locked: locked,
+                        pulseChoiceId: _framedDockPulseChoiceId(
+                          locked: locked,
+                          selected: selected,
+                        ),
                         onSelect:
                             (id) => widget.controller.selectChoice(
                               id,
@@ -3127,6 +3148,7 @@ class _LessonChoiceStack extends StatelessWidget {
     required this.locked,
     required this.onSelect,
     this.includeChoiceId,
+    this.pulseChoiceId,
   });
 
   final List<CourseChoice> choices;
@@ -3136,6 +3158,9 @@ class _LessonChoiceStack extends StatelessWidget {
 
   /// When set, only this choice id is shown (e.g. dock-only `same-always`).
   final String? includeChoiceId;
+
+  /// SoftPulse this choice id (guided, or after Hint on quieter stages).
+  final String? pulseChoiceId;
 
   @override
   Widget build(BuildContext context) {
@@ -3151,12 +3176,21 @@ class _LessonChoiceStack extends StatelessWidget {
         for (final choice in visible)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: LessonChoiceButton(
-              label: choice.label,
-              accessibilityText: choice.accessibilityText,
-              selected: selectedId == choice.id,
-              enabled: !locked,
-              onPressed: locked ? null : () => onSelect(choice.id),
+            child: GlowHighlight(
+              active:
+                  pulseChoiceId != null &&
+                  choice.id == pulseChoiceId &&
+                  selectedId == null &&
+                  !locked,
+              borderRadius: 12,
+              child: LessonChoiceButton(
+                label: choice.label,
+                accessibilityText: choice.accessibilityText,
+                selected: selectedId == choice.id,
+                highlighted: false,
+                enabled: !locked,
+                onPressed: locked ? null : () => onSelect(choice.id),
+              ),
             ),
           ),
       ],
