@@ -196,7 +196,7 @@ void main() {
     expect(snap.resume?.attemptId, 'att-1');
   });
 
-  test('open attempt on an earned lesson stays active but hasCompleted', () {
+  test('open attempt on an earned lesson does not move the progress pointer', () {
     final snap = buildCourseHomeSnapshot(
       catalog: catalog,
       flags: _enabledFlags(),
@@ -224,9 +224,48 @@ void main() {
         stepCount: 0,
       ),
     );
-    expect(snap.nodes[1].state, CourseNodeState.active);
+    // Reviewing lesson-b must not steal isNext from the frontier (lesson-c).
+    expect(snap.nodes[1].state, CourseNodeState.completed);
     expect(snap.nodes[1].hasCompleted, isTrue);
+    expect(snap.nodes[1].isNext, isFalse);
     expect(snap.nodes[0].hasCompleted, isTrue);
+    expect(snap.nextLessonId, 'lesson-c');
+    expect(snap.nodes[2].isNext, isTrue);
+    expect(snap.resume, isNull);
+  });
+
+  test('review of an early lesson keeps next on the furthest available', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 40,
+        gems: 0,
+        currentStreak: 3,
+        acceptedAccuracy: 0.9,
+        completedLessonIds: ['lesson-a', 'lesson-b'],
+        masteryByLessonId: {'lesson-a': 0.9, 'lesson-b': 0.9},
+        catalogVersion: '2.0.0',
+      ),
+      openAttempt: const CourseAttemptSnapshot(
+        attemptId: 'att-review-early',
+        lessonId: 'lesson-a',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 0,
+        currentActivityId: 'act-a1',
+        livesRemaining: 3,
+        livesMax: 3,
+        acceptedCount: 0,
+        scoredCount: 0,
+        stepCount: 0,
+      ),
+    );
+    expect(snap.nextLessonId, 'lesson-c');
+    expect(snap.nodes[0].state, CourseNodeState.mastered);
+    expect(snap.nodes[0].isNext, isFalse);
+    expect(snap.resume, isNull);
   });
 
   test('review-due nodes are preferred next after active clears', () {
