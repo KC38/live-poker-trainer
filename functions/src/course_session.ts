@@ -169,6 +169,11 @@ export interface CourseAttempt {
   livesRemaining: number;
   livesMax: number;
   startRequestId: string;
+  /**
+   * True when this attempt was opened from the heart-refill Practice action.
+   * Completing it restores +1 heart; voluntary map reviews leave this unset.
+   */
+  restoreHeartOnComplete?: boolean;
   acceptedCount: number;
   scoredCount: number;
   /**
@@ -683,6 +688,7 @@ export async function startCourseLessonForUser(options: {
   const catalogVersion = optionalString(input.catalogVersion) ??
     courseBank.catalogVersion;
   const timezone = sanitizeTimezone(optionalString(input.timezone) ?? "UTC");
+  const restoreHeartOnComplete = input.restoreHeartOnComplete === true;
   const located = findLesson(lessonId);
   if (!located) {
     throw new HttpsError("not-found", "Unknown lessonId.");
@@ -854,6 +860,7 @@ export async function startCourseLessonForUser(options: {
       livesRemaining: passive.livesRemaining,
       livesMax: passive.livesMax,
       startRequestId,
+      ...(restoreHeartOnComplete ? {restoreHeartOnComplete: true} : {}),
       acceptedCount: 0,
       scoredCount: 0,
       acceptedScoredCount: 0,
@@ -1347,8 +1354,6 @@ export async function completeCourseLessonForUser(options: {
       profileSnap.data()!.completedLessonIds as string[] :
       [];
     const isReview = priorCompleted.includes(attempt.lessonId);
-    const isPracticeOrReplay =
-      isReview || isPracticeLesson(located.lesson);
 
     const mastery = masteryRatio(attempt);
     const fullLessonXp = lessonXpTotal(attempt.xpEarned);
@@ -1377,7 +1382,7 @@ export async function completeCourseLessonForUser(options: {
     const practiceGrant = practiceHeartGrantFromCompletion({
       state: {...passiveHearts, gems: gemsBalance},
       nowMs,
-      isPracticeOrReplay,
+      restoreHeartOnComplete: attempt.restoreHeartOnComplete === true,
     });
     const heartState = practiceGrant ?? passiveHearts;
 
@@ -2020,6 +2025,9 @@ function attemptFromData(data: DocumentData): CourseAttempt {
     livesRemaining: Number(data.livesRemaining ?? DEFAULT_LESSON_LIVES),
     livesMax: Number(data.livesMax ?? DEFAULT_LESSON_LIVES),
     startRequestId: String(data.startRequestId ?? ""),
+    restoreHeartOnComplete: data.restoreHeartOnComplete === true ?
+      true :
+      undefined,
     acceptedCount: Number(data.acceptedCount ?? 0),
     scoredCount: Number(data.scoredCount ?? 0),
     acceptedScoredCount: data.acceptedScoredCount === undefined ||
@@ -2080,7 +2088,7 @@ function masteryRatio(attempt: CourseAttempt): number {
   return attempt.masteryPoints / attempt.masteryWeight;
 }
 
-/** Practice nodes (title/id) restore a heart on completion like Duo practice. */
+/** Practice nodes (title/id) may play at zero hearts like a Duo practice. */
 function isPracticeLesson(lesson: CourseLesson): boolean {
   const id = lesson.id.toLowerCase();
   const title = lesson.title.toLowerCase();

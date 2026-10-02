@@ -60,11 +60,15 @@ class CourseService {
   }
 
   /// Starts or resumes a lesson attempt.
+  ///
+  /// Pass [restoreHeartOnComplete] only from the heart-refill Practice action
+  /// so completing that run restores +1 heart. Voluntary map reviews omit it.
   Future<StartCourseLessonResult> startLesson({
     required String lessonId,
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     _requireAuth();
     final data = await _callWithRetry('startCourseLesson', <String, dynamic>{
@@ -73,6 +77,7 @@ class CourseService {
       'catalogVersion': catalogVersion,
       'startRequestId': startRequestId,
       'timezone': timezone,
+      if (restoreHeartOnComplete) 'restoreHeartOnComplete': true,
     });
     return StartCourseLessonResult.fromJson(data);
   }

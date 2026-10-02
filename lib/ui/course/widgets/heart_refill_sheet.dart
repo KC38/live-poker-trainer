@@ -25,7 +25,7 @@ String? heartRefillSuccessSnackBarMessage(RefillCourseHeartsResult result) {
 
 /// Result of a refill action chosen in the sheet.
 enum HeartRefillAction {
-  /// Start a practice/replay lesson for +1 heart on completion.
+  /// Start a heart-refill Practice run (+1 heart on completion only).
   practice,
 
   /// Claim +1 after a rewarded ad.
@@ -193,7 +193,7 @@ class _HeartRefillSheetState extends State<HeartRefillSheet> {
             _RefillOption(
               icon: Icons.fitness_center_rounded,
               title: 'Practice',
-              subtitle: 'Earn +1 heart by reviewing a lesson',
+              subtitle: 'Earn +1 heart when you finish Practice',
               enabled: !_full && !widget.busy,
               onTap: () => Navigator.of(context).pop(HeartRefillAction.practice),
             ),

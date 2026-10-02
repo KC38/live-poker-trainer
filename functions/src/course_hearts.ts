@@ -439,15 +439,18 @@ export async function refillCourseHeartsForUser(options: {
 }
 
 /**
- * Awards +1 heart when a learner completes a practice/replay lesson.
+ * Awards +1 heart when a learner finishes a heart-refill Practice run.
+ *
+ * Voluntary map reviews do not grant hearts — only attempts started from the
+ * refill sheet's Practice action (restoreHeartOnComplete on the attempt).
  * Idempotent via the completion receipt path (caller gates once per attempt).
  */
 export function practiceHeartGrantFromCompletion(options: {
   state: HeartState;
   nowMs: number;
-  isPracticeOrReplay: boolean;
+  restoreHeartOnComplete: boolean;
 }): PassiveHeartRefillResult | null {
-  if (!options.isPracticeOrReplay) return null;
+  if (!options.restoreHeartOnComplete) return null;
   if (options.state.livesRemaining >= options.state.livesMax) return null;
   return grantHearts({state: options.state, amount: 1, nowMs: options.nowMs});
 }

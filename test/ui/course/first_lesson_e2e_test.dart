@@ -37,6 +37,7 @@ class _ScriptedCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     log.add('start');
     attempt = CourseAttemptSnapshot(
