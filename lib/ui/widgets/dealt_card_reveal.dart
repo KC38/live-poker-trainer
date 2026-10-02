@@ -1,9 +1,12 @@
 /// Fade/scale-in for a card that just landed on the felt, with deal SFX.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 
 /// Plays the deal SFX once when this card first appears, then eases it in.
 class DealtCardReveal extends StatefulWidget {
@@ -12,6 +15,8 @@ class DealtCardReveal extends StatefulWidget {
     super.key,
     required this.child,
     this.playSound = true,
+    this.delay = Duration.zero,
+    this.placeholder,
   });
 
   /// The card face or back.
@@ -20,6 +25,12 @@ class DealtCardReveal extends StatefulWidget {
   /// False for a showdown flip that is not a new deal.
   final bool playSound;
 
+  /// Wait this long before revealing [child] (sequential dealer pacing).
+  final Duration delay;
+
+  /// Shown until [delay] elapses.
+  final Widget? placeholder;
+
   @override
   State<DealtCardReveal> createState() => _DealtCardRevealState();
 }
@@ -27,15 +38,32 @@ class DealtCardReveal extends StatefulWidget {
 class _DealtCardRevealState extends State<DealtCardReveal> {
   double _progress = 0;
   var _soundPlayed = false;
+  late bool _visible;
+  Timer? _delayTimer;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      _playDealOnce();
-      setState(() => _progress = 1);
+    final delay = CardDealPace.instant ? Duration.zero : widget.delay;
+    _visible = delay <= Duration.zero;
+    if (_visible) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        setState(() => _progress = 1);
+        _playDealOnce();
+      });
+    } else {
+      _delayTimer = Timer(delay, _reveal);
+    }
+  }
+
+  void _reveal() {
+    if (!mounted || _visible) return;
+    setState(() {
+      _visible = true;
+      _progress = 1;
     });
+    _playDealOnce();
   }
 
   void _playDealOnce() {
@@ -52,7 +80,16 @@ class _DealtCardRevealState extends State<DealtCardReveal> {
   }
 
   @override
+  void dispose() {
+    _delayTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (!_visible) {
+      return widget.placeholder ?? const SizedBox.shrink();
+    }
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 220),
       opacity: _progress,

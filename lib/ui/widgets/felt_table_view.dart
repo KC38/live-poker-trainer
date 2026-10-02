@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
@@ -202,6 +203,8 @@ class FeltTableView extends StatelessWidget {
     final decorations = <Widget>[];
     final heroDecorations = <Widget>[];
 
+    final seatCount = game.players.length;
+    final dealerIndex = game.dealerIndex;
     for (final slot in layout.seats) {
       final player = game.players[slot.index];
       final isWinner = game.isHandOver && winners.contains(player.id);
@@ -218,6 +221,15 @@ class FeltTableView extends StatelessWidget {
           (player.isHero
               ? showHoleCardBacks
               : (showHoleCardBacks || f.opponentCards) && !player.folded);
+      final holeDealDelays = [
+        for (var card = 0; card < 2; card++)
+          CardDealPace.holeDelay(
+            seatIndex: slot.index,
+            cardIndex: card,
+            seatCount: seatCount,
+            dealerIndex: dealerIndex,
+          ),
+      ];
 
       final heroCardTaps =
           player.isHero && onHeroCardTap != null && faceUp;
@@ -275,6 +287,7 @@ class FeltTableView extends StatelessWidget {
                   showCards: showdown,
                   revealHoleCards: faceUp,
                   showHoleBacks: backs,
+                  holeDealDelays: holeDealDelays,
                   onHeroCardTap: heroCardTaps ? onHeroCardTap : null,
                   selectedHeroIndexes:
                       player.isHero ? selectedHeroIndexes : const {},
