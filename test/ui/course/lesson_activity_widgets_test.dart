@@ -10089,6 +10089,9 @@ await tester.tap(find.text('NIT'));
       contains('BTN opens to ${deal.openTo}'),
     );
     expect(find.textContaining('POT'), findsNothing);
+    // BTN open only after UTG / HJ / CO fold.
+    expect(find.text('FOLD'), findsNWidgets(3));
+    expect(find.text('RAISE'), findsOneWidget);
     await tester.tap(
       find.widgetWithText(LessonChoiceButton, '${deal.correctPot} chips'),
     );

@@ -27,7 +27,7 @@ TableFeatures get lessonPotsWonTableFeatures => const TableFeatures(
   boardSlots: false,
 );
 
-/// Open-pot math: show bets and seats, hide the pot total.
+/// Open-pot math: show bets and folds, hide the pot total.
 TableFeatures get lessonOpenPotMathTableFeatures => const TableFeatures(
   stacks: false,
   pot: false,
@@ -35,7 +35,7 @@ TableFeatures get lessonOpenPotMathTableFeatures => const TableFeatures(
   blinds: true,
   positions: true,
   bets: true,
-  actions: false,
+  actions: true,
   opponentCards: true,
   playerTypes: false,
   stats: false,

@@ -1662,6 +1662,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         smallBlindIndex: lessonBlindsSmallBlindIndex,
                         bigBlindIndex: lessonBlindsBigBlindIndex,
                       );
+                      // BTN open implies UTG / HJ / CO already folded.
+                      const earlyFolds = <int>[0, 1, 2];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -1677,10 +1679,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                               dealerIndex: lessonBlindsButtonIndex,
                               sbIndex: lessonBlindsSmallBlindIndex,
                               bbIndex: lessonBlindsBigBlindIndex,
+                              // Blinds still to act — SB is next.
+                              activeSeatIndex: lessonBlindsSmallBlindIndex,
                               positionLabels: true,
                               seatNames: lessonActionOrderSeatNames,
                               streetBets: streetBets,
                               potTotal: deal.correctPot.toDouble(),
+                              foldedSeatIndexes: earlyFolds,
+                              seatActionLabels: const {
+                                lessonBlindsButtonIndex: 'RAISE',
+                              },
                               features: lessonOpenPotMathTableFeatures,
                               enabled: !locked,
                             ),
