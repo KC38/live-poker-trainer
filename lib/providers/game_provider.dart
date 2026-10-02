@@ -238,7 +238,6 @@ class GameController extends StateNotifier<TableSession> {
                   );
       if (_disposed || token != _replayToken) return;
       _handCount++;
-      await sound.deal();
       if (_disposed || token != _replayToken) return;
       final course =
           result.courseContext != null
@@ -643,7 +642,6 @@ class GameController extends StateNotifier<TableSession> {
           waitingForHero: false,
         );
         state = state.copyWith(game: game, collectingChips: false);
-        await sound.deal();
         await Future<void>.delayed(ReplayPace.dealStreet);
       }
       game = applyLiveReplayEvent(game, event);
@@ -686,7 +684,6 @@ class GameController extends StateNotifier<TableSession> {
         waitingForHero: false,
       );
       state = state.copyWith(game: game, collectingChips: false);
-      await sound.deal();
       await Future<void>.delayed(ReplayPace.dealStreet);
       if (_disposed || token != _replayToken) return;
     }

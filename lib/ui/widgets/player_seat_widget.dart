@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/ui/widgets/dealt_card_reveal.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
@@ -262,10 +263,13 @@ class PlayerSeatWidget extends StatelessWidget {
       animated: highlighted && !selected,
       reserveLayout: false,
       borderRadius: m.cardWidth * 0.12,
-      child: TableCard(
-        card: player.holeCards[i],
-        width: m.cardWidth,
-        dimmed: dimmedHeroIndexes.contains(i),
+      child: DealtCardReveal(
+        playSound: !showCards,
+        child: TableCard(
+          card: player.holeCards[i],
+          width: m.cardWidth,
+          dimmed: dimmedHeroIndexes.contains(i),
+        ),
       ),
     );
   }
@@ -276,9 +280,9 @@ class PlayerSeatWidget extends StatelessWidget {
       key: ValueKey<String>('seat-backs-${player.id}'),
       mainAxisSize: MainAxisSize.min,
       children: [
-        TableCardBack(width: width),
+        DealtCardReveal(child: TableCardBack(width: width)),
         SizedBox(width: m.cardGap),
-        TableCardBack(width: width),
+        DealtCardReveal(child: TableCardBack(width: width)),
       ],
     );
   }

@@ -249,6 +249,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     );
     _bindActivityController(LessonActivityController(activity: current));
     _setDealSalt(started.attempt.attemptId);
+    unawaited(ref.read(soundServiceProvider).unlock());
     if (!mounted) return;
     setState(() {
       _lesson = lesson;

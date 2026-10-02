@@ -79,4 +79,15 @@ void main() {
     expect(sound.bgmHandle, isNull);
     await sound.dispose();
   });
+
+  test('dealStaggered records one deal per card with a short stagger', () async {
+    final sound = SoundService.silent();
+    await sound.unlock();
+    sound.dealStaggered();
+    sound.dealStaggered();
+    sound.dealStaggered();
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    expect(sound.played, [SfxKind.deal, SfxKind.deal, SfxKind.deal]);
+    await sound.dispose();
+  });
 }

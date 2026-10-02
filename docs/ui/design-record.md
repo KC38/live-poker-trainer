@@ -455,7 +455,7 @@ introduced. Reuse the path already listed. Add a row when a new file ships.
 | Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet`, the lesson coach band on accept, and the lesson-result ceremony |
 | Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
 | Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
-| Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` (regenerate with `tool/gen_audio_ai.py`) | Table actions call these. Do not add a second chip sound |
+| Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` (regenerate with `tool/gen_audio_ai.py`) | `DealtCardReveal` plays `deal` once per felt card (games and lessons). Other table actions call chip/knock/fold/win. Do not add a second chip sound |
 | Background music | `assets/sounds/lounge_ambient.wav` via `SoundService.startHomeBgm` from app launch (incl. onboarding; regenerate with `tool/gen_audio_ai.py`). SoLoud loops it in the mixer; `integration_test/bgm_loop_test.dart` checks the restart is sample-continuous | Pauses in background and in Live Training. Settings toggle is `musicEnabled` |
 
 The mascot slot is the full-body coach with a mood. Meet Rex and the Rex line on Your start show that drawing. Text-only `RexCoachLine` is not the slot.

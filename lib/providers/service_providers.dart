@@ -1,6 +1,7 @@
 /// Shared server repositories and audio.
 library;
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/services/firestore/live_hand_service.dart';
@@ -23,7 +24,16 @@ final liveHandServiceProvider = Provider<LiveHandService>(
 );
 
 final soundServiceProvider = Provider<SoundService>((ref) {
-  final service = SoundService();
+  final service = _createSoundService();
   ref.onDispose(service.dispose);
   return service;
 });
+
+/// Widget tests use the silent service so felt deal SFX never open SoLoud.
+SoundService _createSoundService() {
+  final binding = WidgetsBinding.instance.runtimeType.toString();
+  if (binding.contains('TestWidgetsFlutterBinding')) {
+    return SoundService.silent();
+  }
+  return SoundService();
+}
