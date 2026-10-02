@@ -56,6 +56,22 @@ void main() {
     }
   });
 
+  test('preflop seat-order lessons include CO between HJ and BTN', () {
+    final scaffolded = catalog.activityById('act-01-04-01-scaffolded-order');
+    expect(scaffolded, isNotNull);
+    expect(
+      scaffolded!.sequenceItems.map((item) => item.id).toList(),
+      ['seat-utg', 'seat-hj', 'seat-co', 'seat-btn'],
+    );
+
+    final jump = catalog.activityById('act-01-06-02-jump-order');
+    expect(jump, isNotNull);
+    expect(
+      jump!.sequenceItems.map((item) => item.id).toList(),
+      ['j-utg', 'j-hj', 'j-co', 'j-btn'],
+    );
+  });
+
   test('player types are introduced before later refs', () {
     final introduced = <CoursePlayerTypeId>{};
     for (final section in catalog.sections) {

@@ -4,7 +4,9 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
@@ -20,6 +22,9 @@ import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 Widget _frame(Widget child) {
   return ProviderScope(
+    overrides: [
+      soundServiceProvider.overrideWithValue(SoundService.silent()),
+    ],
     child: MaterialApp(
       theme: buildPokerTheme().copyWith(
         splashFactory: NoSplash.splashFactory,
@@ -35,6 +40,11 @@ Widget _frame(Widget child) {
       ),
     ),
   );
+}
+
+/// Clears staggered deal-SFX timers so the binding does not fail tearDown.
+Future<void> _settleDealSfx(WidgetTester tester) async {
+  await tester.pump(const Duration(seconds: 2));
 }
 
 void main() {
@@ -83,6 +93,7 @@ void main() {
       await tester.pump();
     }
     expect(ack, 1);
+    await _settleDealSfx(tester);
   });
 
   testWidgets('street chips keep air above the tool row while glowing', (
@@ -280,6 +291,7 @@ void main() {
       'st-river',
     ]);
     expect(autoSubmits, 1);
+    await _settleDealSfx(tester);
   });
 
   test('shuffledSequencePalette never leaves streets in authored order', () {
@@ -363,6 +375,17 @@ void main() {
     await tester.pump();
     await tester.tap(find.text('HJ'));
     await tester.pump();
+
+    // Guide must cue CO next — never skip to BTN.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    final glow = tester.getCenter(
+      find.byKey(const ValueKey<String>('glow-highlight')),
+    );
+    final co = tester.getCenter(find.text('CO'));
+    final btn = tester.getCenter(find.text('BTN'));
+    expect((glow - co).distance, lessThan(48));
+    expect((glow - btn).distance, greaterThan(48));
+
     await tester.tap(find.text('CO'));
     await tester.pump();
     await tester.tap(find.text('BTN'));
@@ -375,5 +398,6 @@ void main() {
       'seat-btn',
     ]);
     expect(autoSubmits, 1);
+    await _settleDealSfx(tester);
   });
 }

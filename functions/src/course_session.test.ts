@@ -289,17 +289,17 @@ describe("soft grading and life loss", () => {
     });
   });
 
-  it("accepts UTG HJ BTN and rejects a scrambled seat order", () => {
+  it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",
     )!;
     expect(gradeCourseResponse({
       activity: scaffolded,
-      orderedIds: ["seat-utg", "seat-hj", "seat-btn"],
+      orderedIds: ["seat-utg", "seat-hj", "seat-co", "seat-btn"],
     })).toMatchObject({accepted: true, lifeLost: false});
     expect(gradeCourseResponse({
       activity: scaffolded,
-      orderedIds: ["seat-btn", "seat-utg", "seat-hj"],
+      orderedIds: ["seat-utg", "seat-hj", "seat-btn"],
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,

@@ -1868,7 +1868,7 @@
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Put UTG, HJ, and BTN in preflop action order.",
+                  "accessibilityText": "Put UTG, HJ, CO, and BTN in preflop action order.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1888,6 +1888,10 @@
                       "label": "HJ"
                     },
                     {
+                      "id": "seat-co",
+                      "label": "CO"
+                    },
+                    {
                       "id": "seat-btn",
                       "label": "BTN"
                     }
@@ -1895,16 +1899,17 @@
                   "correctSequence": [
                     "seat-utg",
                     "seat-hj",
+                    "seat-co",
                     "seat-btn"
                   ],
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "UTG acts first. Button acts last preflop."
+                      "feedback": "UTG → HJ → CO → BTN. Button acts last preflop."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
-                      "feedback": "Start under the gun, then move toward the button."
+                      "feedback": "Start under the gun, then HJ, CO, and the button."
                     }
                   }
                 },
@@ -2801,6 +2806,10 @@
                       "label": "HJ"
                     },
                     {
+                      "id": "j-co",
+                      "label": "CO"
+                    },
+                    {
                       "id": "j-btn",
                       "label": "BTN"
                     }
@@ -2808,16 +2817,17 @@
                   "correctSequence": [
                     "j-utg",
                     "j-hj",
+                    "j-co",
                     "j-btn"
                   ],
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "Left of big blind first; button last."
+                      "feedback": "UTG → HJ → CO → BTN. Left of big blind first; button last."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
-                      "feedback": "UTG, then toward the button."
+                      "feedback": "UTG, then HJ, CO, and the button."
                     }
                   }
                 },
