@@ -9946,6 +9946,10 @@ await tester.tap(find.text('NIT'));
       await tester.tap(takePot);
       await tester.pump();
       expect(controller.draft.choiceId, 'no-show');
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(find.textContaining('TAKES'), findsOneWidget);
+      expect(find.text('WINS'), findsOneWidget);
+      expect(find.byKey(const ValueKey('award-0-0')), findsOneWidget);
       controller.dispose();
     },
   );

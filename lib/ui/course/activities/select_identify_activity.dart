@@ -1670,6 +1670,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                   : scene.villainSeatCount,
                           heroFaceUp: true,
                           enabled: !locked,
+                          winnerIds: lessonPotAwardWinnerIds(
+                            activityId: widget.activity.id,
+                            selectedId: selected,
+                          ),
                         ),
                       ),
                       _LessonChoiceStack(
