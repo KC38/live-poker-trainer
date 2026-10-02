@@ -1,4 +1,4 @@
-/// Home path shows one section; JUMP HERE switches; finish auto-advances.
+/// Home path shows one section; tapping another switches; finish auto-advances.
 library;
 
 import 'package:flutter/material.dart';
@@ -174,7 +174,7 @@ void main() {
     expect(find.textContaining('SECTION 1'), findsOneWidget);
   });
 
-  testWidgets('JUMP HERE switches the path to that section', (tester) async {
+  testWidgets('tapping an unlocked section switches the path', (tester) async {
     await _pumpMutableHome(
       tester,
       snapshot: _twoSectionSnapshot(nextLessonId: 'lesson-a'),
@@ -183,9 +183,10 @@ void main() {
     await tester.tap(find.textContaining('SECTION 1'));
     await tester.pumpAndSettle();
     expect(find.text('Sections'), findsOneWidget);
-    expect(find.text('JUMP HERE'), findsOneWidget);
+    expect(find.text('JUMP HERE'), findsNothing);
+    expect(find.text('Section 2'), findsOneWidget);
 
-    await tester.tap(find.text('JUMP HERE'));
+    await tester.tap(find.text('Section 2'));
     await tester.pumpAndSettle();
 
     expect(find.text('Sections'), findsNothing);
