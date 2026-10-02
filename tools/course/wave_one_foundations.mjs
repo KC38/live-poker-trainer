@@ -14,7 +14,6 @@ export function dialogue(id, order, text, extra = {}) {
     estimatedSeconds: 30,
     accessibilityText: text,
     acceptedGrades: ["recommended"],
-    lifeLossEligible: false,
     coachMedia: [{id: `${id}-media`, kind: "dialogue", text}],
     ...extra,
   };
@@ -38,15 +37,13 @@ export function choice(id, label, grade, feedback, extra = {}) {
 }
 
 export function selectAct({
-  id, order, stage, prompt, a11y, objectives, choices,
-  lifeLoss = false, hint, playerTypeRefs = [],
+  id, order, stage, prompt, a11y, objectives, choices, hint, playerTypeRefs = [],
 }) {
   const act = {
     id, order, stage, renderer: "select_identify",
     estimatedSeconds: stage === "checkpoint" ? 45 : 40,
     accessibilityText: a11y,
     acceptedGrades: ACC,
-    lifeLossEligible: lifeLoss,
     objectives,
     prompt,
     choices,
@@ -60,14 +57,13 @@ export function selectAct({
 
 export function sequenceAct({
   id, order, stage, prompt, a11y, objectives, items, correct,
-  okFeedback, missFeedback, lifeLoss = false, renderer = "order_sequence",
+  okFeedback, missFeedback, renderer = "order_sequence",
 }) {
   return {
     id, order, stage, renderer,
     estimatedSeconds: 50,
     accessibilityText: a11y,
     acceptedGrades: ACC,
-    lifeLossEligible: lifeLoss,
     objectives,
     prompt,
     sequenceItems: items,
@@ -81,14 +77,13 @@ export function sequenceAct({
 
 export function numericAct({
   id, order, stage, question, a11y, objectives,
-  unit, min, max, okFeedback, missFeedback, lifeLoss = false,
+  unit, min, max, okFeedback, missFeedback,
 }) {
   return {
     id, order, stage, renderer: "numeric_pot_price",
     estimatedSeconds: 40,
     accessibilityText: a11y,
     acceptedGrades: ACC,
-    lifeLossEligible: lifeLoss,
     objectives,
     numericPrompt: {
       question,
@@ -102,15 +97,13 @@ export function numericAct({
 }
 
 export function actionAct({
-  id, order, stage, prompt, a11y, objectives, choices,
-  lifeLoss = false, hint, playerTypeRefs = [],
+  id, order, stage, prompt, a11y, objectives, choices, hint, playerTypeRefs = [],
 }) {
   const act = {
     id, order, stage, renderer: "poker_action_sizing",
     estimatedSeconds: 55,
     accessibilityText: a11y,
     acceptedGrades: ACC,
-    lifeLossEligible: lifeLoss,
     objectives,
     prompt,
     choices,
@@ -123,7 +116,7 @@ export function actionAct({
 }
 
 export function multiStepAct({
-  id, order, stage, a11y, objectives, steps, lifeLoss = false,
+  id, order, stage, a11y, objectives, steps,
   playerTypeRefs = [],
 }) {
   const act = {
@@ -131,7 +124,6 @@ export function multiStepAct({
     estimatedSeconds: 70,
     accessibilityText: a11y,
     acceptedGrades: ACC,
-    lifeLossEligible: lifeLoss,
     objectives,
     handSteps: steps,
   };
@@ -140,7 +132,7 @@ export function multiStepAct({
 }
 
 export function handLabAct({
-  id, order, stage, prompt, a11y, objectives, choices, lab, lifeLoss = true,
+  id, order, stage, prompt, a11y, objectives, choices, lab,
   playerTypeRefs = [],
 }) {
   const act = {
@@ -148,7 +140,6 @@ export function handLabAct({
     estimatedSeconds: 90,
     accessibilityText: a11y,
     acceptedGrades: ACC,
-    lifeLossEligible: lifeLoss,
     objectives,
     prompt,
     choices,
@@ -181,15 +172,13 @@ export function unit(id, order, title, summary, lessons) {
 
 /** Player-read classify activity (Plan 08+). */
 export function classifyAct({
-  id, order, stage, prompt, a11y, objectives, choices,
-  lifeLoss = false, playerTypeRefs = [], hint,
+  id, order, stage, prompt, a11y, objectives, choices, playerTypeRefs = [], hint,
 }) {
   const act = {
     id, order, stage, renderer: "player_read_classify",
     estimatedSeconds: 45,
     accessibilityText: a11y,
     acceptedGrades: ACC,
-    lifeLossEligible: lifeLoss,
     objectives,
     prompt,
     choices,
@@ -276,7 +265,6 @@ export function buildSectionOne() {
                 prompt: "Tap the community cards.",
                 a11y: "Tap the shared community cards on the flop.",
                 objectives: ["Distinguish hole cards from community cards"],
-                lifeLoss: true,
                 choices: [
                   choice("choice-flop", "Qs Jh 2c in the middle", "recommended",
                     "Those are shared. Everyone uses them."),
@@ -296,7 +284,6 @@ export function buildSectionOne() {
                   "Identify your two hole cards",
                   "Distinguish hole cards from community cards",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("choice-checkpoint-holes", "The two cards at your seat", "recommended",
                     "Still just your two. Board and other seats stay separate."),
@@ -360,7 +347,6 @@ export function buildSectionOne() {
                 prompt: "Tap the suited hole cards.",
                 a11y: "Tap the seat whose hole cards share a suit.",
                 objectives: ["Spot pairs and suited cards"],
-                lifeLoss: true,
                 choices: [
                   choice("suited-ah-kh", "Suited", "recommended",
                     "Same suit — that is suited."),
@@ -375,7 +361,6 @@ export function buildSectionOne() {
                 prompt: "Tap the pocket pair.",
                 a11y: "Tap the seat with a pocket pair.",
                 objectives: ["Spot pairs and suited cards"],
-                lifeLoss: true,
                 choices: [
                   choice("pocket-pair", "Pocket pair", "recommended",
                     "Matching ranks — that is a pocket pair."),
@@ -448,7 +433,6 @@ export function buildSectionOne() {
                 prompt: "Tap when the blinds go in.",
                 a11y: "Tap the hand phase when blinds are posted.",
                 objectives: ["Know blinds post before cards are dealt"],
-                lifeLoss: true,
                 choices: [
                   choice("before-deal", "Before any hole cards are dealt", "recommended",
                     "Blinds first, then cards."),
@@ -468,7 +452,6 @@ export function buildSectionOne() {
                   "Locate the dealer button",
                   "Identify the small and big blinds",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("sb-seat0", "Seat 0 (first left of button)", "recommended",
                     "Clockwise: button, then small blind, then big blind."),
@@ -535,7 +518,6 @@ export function buildSectionOne() {
                 prompt: "Tap highest to lowest.",
                 a11y: "Showdown — tap You (full house), Sam (trips), then Jo (two pair).",
                 objectives: ["Compare two finished hands"],
-                lifeLoss: true,
                 items: [
                   {id: "you", label: "You"},
                   {id: "sam", label: "Sam"},
@@ -551,7 +533,6 @@ export function buildSectionOne() {
                 prompt: "Tap highest to lowest.",
                 a11y: "Showdown — tap You (flush), Sam (straight), then Jo (high card).",
                 objectives: ["Compare two finished hands", "Order common hand ranks"],
-                lifeLoss: true,
                 items: [
                   {id: "you", label: "You"},
                   {id: "sam", label: "Sam"},
@@ -612,7 +593,6 @@ export function buildSectionOne() {
                 prompt: "Both checked down — tap who takes the pot.",
                 a11y: "Tap chop when the board plays for everyone.",
                 objectives: ["Spot board-tied pots"],
-                lifeLoss: true,
                 choices: [
                   choice("chop-broadway", "Chop — both play the board", "recommended",
                     "Neither hole card beats this straight flush board."),
@@ -632,7 +612,6 @@ export function buildSectionOne() {
                   "Build the best five-card hand from seven",
                   "Use kickers when categories tie",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("fh-eights", "Full house — trips over the higher pair", "recommended",
                     "Trips plus the stronger pair."),
@@ -699,7 +678,6 @@ export function buildSectionOne() {
                 prompt: "A bet is out — pick how you continue.",
                 a11y: "Tap Call to match a half-pot bet.",
                 objectives: ["Call to match the current bet"],
-                lifeLoss: true,
                 choices: [
                   choice("call-5", "Call 5", "recommended",
                     "Calling matches the 5.", {action: "CALL"}),
@@ -719,7 +697,6 @@ export function buildSectionOne() {
                   "Check when no bet faces you",
                   "Call to match the current bet",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("check-illegal", "Check", "recommended",
                     "You must fold, call, or raise — check is off.",
@@ -787,7 +764,6 @@ export function buildSectionOne() {
                 prompt: "Stack 12. Villain bets 20. Tap what you can put in.",
                 a11y: "Tap All-in 12 — capped by your remaining stack.",
                 objectives: ["Treat all-in as a sized bet or raise"],
-                lifeLoss: true,
                 choices: [
                   choice("shove-12", "All-in 12", "recommended",
                     "You can only put in what you have.", {action: "ALL_IN"}),
@@ -807,7 +783,6 @@ export function buildSectionOne() {
                   "Bet when the pot is unchecked",
                   "Raise to increase a facing bet",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("named-bet", "Bet 4", "recommended",
                     "First chips into an unchecked pot are a bet.",
@@ -873,7 +848,6 @@ export function buildSectionOne() {
                 prompt: "Flop betting is live. Tap when this street ends.",
                 a11y: "Tap bets matched — a street ends when action is complete.",
                 objectives: ["Know a street ends when bets are matched"],
-                lifeLoss: true,
                 choices: [
                   choice("matched", "Bets matched",
                     "recommended", "Equalized action closes the street."),
@@ -893,7 +867,6 @@ export function buildSectionOne() {
                   "Know preflop order starts left of the big blind",
                   "Name preflop, flop, turn, and river",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("sb-first", "SB", "recommended",
                     "Postflop starts left of the button — usually the small blind if live."),
@@ -959,7 +932,6 @@ export function buildSectionOne() {
                 prompt: "Blinds 1/2. BTN opens. Tap the pot before blinds act.",
                 a11y: "Tap the pot total — blinds plus the open. Open size varies each attempt.",
                 objectives: ["Sense main pot versus side pot without deep math"],
-                lifeLoss: true,
                 choices: [
                   choice("pot-correct", "Correct pot", "recommended",
                     "Add both blinds and the open."),
@@ -976,7 +948,6 @@ export function buildSectionOne() {
                 prompt: "You are all-in for less; two big stacks keep betting. Tap what is true.",
                 a11y: "Tap side pot — unmatched chips form a side pot you cannot win.",
                 objectives: ["Sense main pot versus side pot without deep math"],
-                lifeLoss: true,
                 choices: [
                   choice("side-exists", "Side pot",
                     "recommended",
@@ -1013,7 +984,6 @@ export function buildSectionOne() {
                 id: "act-01-06-01-guided-steps", order: 2, stage: "guided",
                 a11y: "Button with a suited ace — open to 6, then take the pot when blinds fold.",
                 objectives: ["Choose legal actions on more than one street"],
-                lifeLoss: false,
                 steps: [
                   {
                     id: "step-01-06-pre",
@@ -1052,7 +1022,6 @@ export function buildSectionOne() {
                 id: "act-01-06-01-scaffolded-multi", order: 3, stage: "scaffolded",
                 a11y: "BB calls your open — confirm the flop, then bet top pair.",
                 objectives: ["Choose legal actions on more than one street"],
-                lifeLoss: false,
                 steps: [
                   {
                     id: "step-01-06-bb-defend",
@@ -1089,7 +1058,6 @@ export function buildSectionOne() {
                 prompt: "BTN opens to 6. You hold a weak ace offsuit in the big blind.",
                 a11y: "Big blind vs button open — call, fold, or jam.",
                 objectives: ["Finish without freezing on basic decisions"],
-                lifeLoss: true,
                 choices: [
                   choice("fold-bb", "Fold", "reasonable",
                     "Folding a weak ace offsuit is fine; defending is optional this deep.",
@@ -1143,7 +1111,6 @@ export function buildSectionOne() {
                   "Follow a hand from blinds to a terminal state",
                   "Finish without freezing on basic decisions",
                 ],
-                lifeLoss: true,
                 steps: [
                   {
                     id: "step-01-06-cp-open",
@@ -1194,7 +1161,6 @@ export function buildSectionOne() {
                 prompt: "Pick strongest hand first, then weaker.",
                 a11y: "Jump test: pick strongest hand first, then weaker.",
                 objectives: ["Confirm hand ranking"],
-                lifeLoss: true,
                 items: [
                   {id: "j-flush", label: "Flush"},
                   {id: "j-straight", label: "Straight"},
@@ -1209,7 +1175,6 @@ export function buildSectionOne() {
                 prompt: "Pick seats in the order they act.",
                 a11y: "Jump test: pick seats in the order they act.",
                 objectives: ["Confirm acting order"],
-                lifeLoss: true,
                 items: [
                   {id: "j-utg", label: "UTG"},
                   {id: "j-hj", label: "HJ"},
@@ -1224,7 +1189,6 @@ export function buildSectionOne() {
                 prompt: "A bet faces you. Pick the action you cannot take.",
                 a11y: "Jump test: check is illegal facing a bet.",
                 objectives: ["Confirm legal action"],
-                lifeLoss: true,
                 choices: [
                   choice("j-check", "Check", "recommended",
                     "Check is off when a bet faces you.",
@@ -1239,7 +1203,6 @@ export function buildSectionOne() {
                 id: "act-01-06-02-jump-hand", order: 4, stage: "jump_test",
                 a11y: "Jump test: complete a tiny button steal hand.",
                 objectives: ["Confirm a complete toy hand"],
-                lifeLoss: true,
                 steps: [
                   {
                     id: "j-hand-open",
@@ -1348,7 +1311,6 @@ export function buildSectionTwo() {
                 prompt: "Tap the seat right before the button.",
                 a11y: "Tap the cutoff seat on the six-max table.",
                 objectives: ["Label EP, HJ, CO, and BTN"],
-                lifeLoss: true,
                 choices: [
                   choice("label-co", "Cutoff (CO)", "recommended",
                     "Cutoff sits right before the button."),
@@ -1364,7 +1326,6 @@ export function buildSectionTwo() {
                 prompt: "Same hand — tap where it is stronger to play.",
                 a11y: "Tap the button rather than early position.",
                 objectives: ["Prefer later seats when choosing hands"],
-                lifeLoss: true,
                 choices: [
                   choice("prefer-btn", "On the button", "recommended",
                     "More information, last action."),
@@ -1422,7 +1383,6 @@ export function buildSectionTwo() {
                 prompt: "Action is on UTG. You are on the button. What do you do?",
                 a11y: "Wait for earlier seats before acting.",
                 objectives: ["Wait for your turn before acting"],
-                lifeLoss: true,
                 choices: [
                   choice("wait", "Wait — do not act yet", "recommended",
                     "Acting out of turn creates messes."),
@@ -1440,7 +1400,6 @@ export function buildSectionTwo() {
                   "Order postflop action from the button",
                   "Wait for your turn before acting",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("last-btn", "BTN", "recommended",
                     "Button closes postflop action."),
@@ -1509,7 +1468,6 @@ export function buildSectionTwo() {
                 prompt: "Name the family for your holes.",
                 a11y: "Look at seven-six suited on the felt — tap Suited connector.",
                 objectives: ["Recognize suited connectors versus offsuit trash"],
-                lifeLoss: true,
                 choices: [
                   choice("hf-sc", "Suited connector", "recommended",
                     "Connected and suited."),
@@ -1525,7 +1483,6 @@ export function buildSectionTwo() {
                 prompt: "Name the family for your holes.",
                 a11y: "Look at seven-two offsuit on the felt — tap Offsuit trash.",
                 objectives: ["Recognize suited connectors versus offsuit trash"],
-                lifeLoss: true,
                 choices: [
                   choice("hf-trash", "Offsuit trash", "recommended",
                     "Worst starting shape — fold early."),
@@ -1592,7 +1549,6 @@ export function buildSectionTwo() {
                 prompt: "Folds to you on the button with K9s. Action?",
                 a11y: "Open king-nine suited on the button.",
                 objectives: ["Widen opens on the button"],
-                lifeLoss: true,
                 choices: [
                   choice("open-k9s", "Open to 6", "recommended",
                     "Button can open this suited king.", {action: "RAISE", amountBb: 3}),
@@ -1611,7 +1567,6 @@ export function buildSectionTwo() {
                   "Open strong hands for a live size",
                   "Widen opens on the button",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("open-ato", "Open to 6", "recommended",
                     "Solid HJ open.", {action: "RAISE", amountBb: 3}),
@@ -1677,7 +1632,6 @@ export function buildSectionTwo() {
                 prompt: "BTN opens to 6. You have a premium pair in the small blind. Action?",
                 a11y: "Value three-bet kings.",
                 objectives: ["Value 3-bet strong hands"],
-                lifeLoss: true,
                 choices: [
                   choice("3bet-kk", "3-bet to 18", "recommended",
                     "Kings want a bigger pot.", {action: "RAISE", amountBb: 9}),
@@ -1696,7 +1650,6 @@ export function buildSectionTwo() {
                   "Call with playable hands in position",
                   "Value 3-bet strong hands",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("3bet-aqs", "3-bet to 18", "recommended",
                     "Strong suited broadway — value 3-bet.",
@@ -1761,7 +1714,6 @@ export function buildSectionTwo() {
                 prompt: "Which depth plays closest to a short-stack shove game?",
                 a11y: "Identify 50bb as shallower than 100 or 200.",
                 objectives: ["Sense 50bb vs 100bb vs 200bb depth"],
-                lifeLoss: true,
                 choices: [
                   choice("depth-50", "50bb", "recommended",
                     "Shallower — stack-off pressure shows up sooner."),
@@ -1780,7 +1732,6 @@ export function buildSectionTwo() {
                   "Convert chips to big blinds",
                   "Sense 50bb vs 100bb vs 200bb depth",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("bb-200", "200bb", "recommended",
                     "1000 / 5 = 200 big blinds — deep."),
@@ -1844,7 +1795,6 @@ export function buildSectionTwo() {
                 prompt: "Your cards sit near the muck. Best habit?",
                 a11y: "Protect hole cards with a chip or hand.",
                 objectives: ["Protect cards and avoid acting out of turn"],
-                lifeLoss: true,
                 choices: [
                   choice("chip-on-cards", "Keep a chip or hand on your cards", "recommended",
                     "Protected cards do not get scooped."),
@@ -1862,7 +1812,6 @@ export function buildSectionTwo() {
                   "Protect cards and avoid acting out of turn",
                   "Follow the action before deciding",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("oot-bad", "You acted out of turn", "recommended",
                     "Wait. Out-of-turn action can be binding or pulled back."),
@@ -1932,7 +1881,6 @@ export function buildSectionTwo() {
                   "Respond to a raise with a planned action",
                   "Keep live habits while deciding",
                 ],
-                lifeLoss: true,
                 choices: [
                   choice("lab-fold", "Fold", "clear_mistake",
                     "Offsuit broadway on the button calls or 3-bets; folding is too tight.",
@@ -1982,7 +1930,6 @@ export function buildSectionTwo() {
                 prompt: "Full ring. Action two seats left. Your cards are uncovered. Fix?",
                 a11y: "Protect cards and wait for action on a full ring.",
                 objectives: ["Keep live habits while deciding"],
-                lifeLoss: true,
                 choices: [
                   choice("cover-wait", "Cover your cards and wait your turn", "recommended",
                     "Habits first, then the decision."),
@@ -2013,7 +1960,6 @@ export function buildSectionTwo() {
                 prompt: "Seat right before the button?",
                 a11y: "Jump test: cutoff label.",
                 objectives: ["Confirm position labels"],
-                lifeLoss: true,
                 choices: [
                   choice("j2-co", "Cutoff", "recommended", "CO sits before the button."),
                   choice("j2-hj", "Hijack", "clear_mistake",
@@ -2027,7 +1973,6 @@ export function buildSectionTwo() {
                 prompt: "These holes belong to which family?",
                 a11y: "Jump test: suited ace family.",
                 objectives: ["Confirm starting-hand family"],
-                lifeLoss: true,
                 choices: [
                   choice("j2-sa", "Suited ace", "recommended", "Ace with a suited kicker."),
                   choice("j2-pair", "Pocket pair", "clear_mistake",
@@ -2041,7 +1986,6 @@ export function buildSectionTwo() {
                 prompt: "UTG with trash offsuit. Action?",
                 a11y: "Jump test: fold trash early.",
                 objectives: ["Confirm open or fold"],
-                lifeLoss: true,
                 choices: [
                   choice("j2-fold", "Fold", "recommended",
                     "Easy fold.", {action: "FOLD"}),
@@ -2054,7 +1998,6 @@ export function buildSectionTwo() {
                 prompt: "Open to 6. You have AA in the big blind. Action?",
                 a11y: "Jump test: value 3-bet aces.",
                 objectives: ["Confirm facing a raise"],
-                lifeLoss: true,
                 choices: [
                   choice("j2-3bet", "3-bet to 18", "recommended",
                     "Aces raise for value.", {action: "RAISE", amountBb: 9}),
@@ -2069,7 +2012,6 @@ export function buildSectionTwo() {
                 prompt: "You 120bb, villain 55bb. Effective stack?",
                 a11y: "Jump test: effective stack is 55bb.",
                 objectives: ["Confirm effective stack"],
-                lifeLoss: true,
                 choices: [
                   choice("j2-55", "55bb", "recommended", "Shorter stack rules."),
                   choice("j2-120", "120bb", "clear_mistake",

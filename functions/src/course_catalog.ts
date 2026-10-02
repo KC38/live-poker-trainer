@@ -71,7 +71,6 @@ export interface CourseActivity {
   estimatedSeconds: number;
   accessibilityText: string;
   acceptedGrades: readonly SoftGrade[];
-  lifeLossEligible: boolean;
   objectives?: readonly string[];
   playerTypeRefs?: readonly CoursePlayerTypeId[];
   prompt?: string;

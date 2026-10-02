@@ -265,7 +265,6 @@ class CourseActivity {
     required this.estimatedSeconds,
     required this.accessibilityText,
     required this.acceptedGrades,
-    this.lifeLossEligible = false,
     this.objectives = const <String>[],
     this.playerTypeRefs = const <CoursePlayerTypeId>[],
     this.coachMedia = const <CoachMediaRef>[],
@@ -298,9 +297,6 @@ class CourseActivity {
 
   /// Accepted soft grades.
   final List<SoftGrade> acceptedGrades;
-
-  /// Server-only life policy; absent in client assets.
-  final bool lifeLossEligible;
 
   /// Objective strings.
   final List<String> objectives;
@@ -420,7 +416,6 @@ class CourseActivity {
       estimatedSeconds: json['estimatedSeconds'] as int,
       accessibilityText: json['accessibilityText'] as String,
       acceptedGrades: grades,
-      lifeLossEligible: json['lifeLossEligible'] as bool? ?? false,
       objectives: _stringList(json['objectives']),
       playerTypeRefs: playerTypes,
       coachMedia: List.unmodifiable(media),

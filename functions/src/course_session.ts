@@ -95,12 +95,6 @@ const MASTERY_WEIGHT: Record<SoftGrade, number> = {
   clear_mistake: 0,
 };
 
-const LIFE_ELIGIBLE_STAGES: ReadonlySet<ActivityStage> = new Set([
-  "unguided",
-  "checkpoint",
-  "jump_test",
-]);
-
 /** Server-controlled course feature flags at appConfig/courseFlags. */
 export interface CourseFlags {
   courseEnabled: boolean;
@@ -360,13 +354,10 @@ export function isLessonAttemptReadyToComplete(
 export function evaluateLifeAndAcceptance(options: {
   grade: SoftGrade;
   stage: ActivityStage;
-  lifeLossEligible: boolean;
 }): Pick<GradeOutcome, "accepted" | "lifeLost" | "masteryWeight"> {
   const accepted = ACCEPTED_GRADES.has(options.grade);
-  // Any non-accepted grade costs a heart on life-eligible stages.
-  const lifeLost = !accepted &&
-    options.lifeLossEligible &&
-    LIFE_ELIGIBLE_STAGES.has(options.stage);
+  // Guided practice never costs a heart; every other miss does.
+  const lifeLost = !accepted && options.stage !== "guided";
   return {
     accepted,
     lifeLost,
@@ -395,7 +386,6 @@ export function gradeCourseResponse(options: {
       ...evaluateLifeAndAcceptance({
         grade: "recommended",
         stage: options.activity.stage,
-        lifeLossEligible: options.activity.lifeLossEligible,
       }),
     };
   }
@@ -1740,7 +1730,6 @@ function outcomeFromGrading(
     ...evaluateLifeAndAcceptance({
       grade: grading.grade,
       stage: activity.stage,
-      lifeLossEligible: activity.lifeLossEligible,
     }),
   };
 }

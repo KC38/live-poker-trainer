@@ -107,57 +107,50 @@ describe("soft grading and life loss", () => {
   const streets = findLesson("lesson-01-04-01-streets-and-order")!.lesson;
   const pots = findLesson("lesson-01-05-01-winning-pots")!.lesson;
 
-  it("loses a life on any non-accepted grade when stage is eligible", () => {
+  it("loses a life on any non-accepted grade except guided", () => {
     expect(
       evaluateLifeAndAcceptance({
         grade: "questionable",
         stage: "unguided",
-        lifeLossEligible: true,
       }),
     ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
         stage: "checkpoint",
-        lifeLossEligible: true,
       }).lifeLost,
     ).toBe(true);
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
         stage: "guided",
-        lifeLossEligible: false,
       }).lifeLost,
     ).toBe(false);
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
         stage: "scaffolded",
-        lifeLossEligible: false,
       }).lifeLost,
-    ).toBe(false);
+    ).toBe(true);
     expect(
       evaluateLifeAndAcceptance({
         grade: "questionable",
-        stage: "unguided",
-        lifeLossEligible: false,
+        stage: "explain",
       }).lifeLost,
-    ).toBe(false);
+    ).toBe(true);
   });
 
-  it("loses a life on jump_test mistakes when eligible", () => {
+  it("loses a life on jump_test mistakes", () => {
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
         stage: "jump_test",
-        lifeLossEligible: true,
       }),
     ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
     expect(
       evaluateLifeAndAcceptance({
         grade: "questionable",
         stage: "jump_test",
-        lifeLossEligible: true,
       }),
     ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
   });
@@ -167,14 +160,12 @@ describe("soft grading and life loss", () => {
       evaluateLifeAndAcceptance({
         grade: "strong",
         stage: "unguided",
-        lifeLossEligible: true,
       }),
     ).toMatchObject({accepted: true, lifeLost: false, masteryWeight: 0.85});
     expect(
       evaluateLifeAndAcceptance({
         grade: "reasonable",
         stage: "checkpoint",
-        lifeLossEligible: true,
       }),
     ).toMatchObject({accepted: true, lifeLost: false, masteryWeight: 0.7});
   });
@@ -203,7 +194,7 @@ describe("soft grading and life loss", () => {
     })).toMatchObject({
       grade: "questionable",
       accepted: false,
-      lifeLost: false,
+      lifeLost: true,
     });
 
     const checkpoint = openFold.activities.find(
@@ -258,7 +249,7 @@ describe("soft grading and life loss", () => {
       orderedIds: ["seat-btn", "seat-utg", "seat-hj"],
     })).toMatchObject({
       grade: "clear_mistake",
-      lifeLost: false,
+      lifeLost: true,
     });
 
     const unguided = pots.activities.find(
@@ -266,11 +257,11 @@ describe("soft grading and life loss", () => {
     )!;
     expect(gradeCourseResponse({
       activity: unguided,
-      choiceId: "pot-9",
+      choiceId: "pot-correct",
     })).toMatchObject({grade: "recommended", accepted: true, lifeLost: false});
     expect(gradeCourseResponse({
       activity: unguided,
-      choiceId: "pot-7",
+      choiceId: "pot-miss-blind",
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,
@@ -278,12 +269,12 @@ describe("soft grading and life loss", () => {
     });
     expect(gradeCourseResponse({
       activity: unguided,
-      choiceId: "pot-12",
+      choiceId: "pot-too-big",
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,
       lifeLost: true,
-      betterChoiceId: "pot-9",
+      betterChoiceId: "pot-correct",
     });
   });
 
@@ -298,21 +289,21 @@ describe("soft grading and life loss", () => {
     });
   });
 
-  it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
+  it("accepts UTG HJ BTN and rejects a scrambled seat order", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",
     )!;
     expect(gradeCourseResponse({
       activity: scaffolded,
-      orderedIds: ["seat-utg", "seat-hj", "seat-co", "seat-btn"],
+      orderedIds: ["seat-utg", "seat-hj", "seat-btn"],
     })).toMatchObject({accepted: true, lifeLost: false});
     expect(gradeCourseResponse({
       activity: scaffolded,
-      orderedIds: ["seat-utg", "seat-hj", "seat-btn"],
+      orderedIds: ["seat-btn", "seat-utg", "seat-hj"],
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,
-      lifeLost: false,
+      lifeLost: true,
     });
   });
 

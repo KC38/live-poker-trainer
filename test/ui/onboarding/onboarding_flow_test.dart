@@ -100,7 +100,6 @@ void main() {
                       'estimatedSeconds': 30,
                       'accessibilityText': 'Hi',
                       'acceptedGrades': ['recommended'],
-                      'lifeLossEligible': false,
                     },
                   ],
                 },

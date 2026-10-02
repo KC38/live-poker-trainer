@@ -78,7 +78,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-01-01-explain-hole-cards-media",
@@ -102,7 +101,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify your two hole cards"
                   ],
@@ -158,7 +156,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Recognize that other seats hide their hole cards"
                   ],
@@ -207,7 +204,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Distinguish hole cards from community cards"
                   ],
@@ -256,7 +252,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify your two hole cards",
                     "Distinguish hole cards from community cards"
@@ -327,7 +322,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-01-02-explain-suits-media",
@@ -351,7 +345,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Name the four suits"
                   ],
@@ -387,7 +380,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Order ranks from lowest to highest"
                   ],
@@ -434,7 +426,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Spot pairs and suited cards"
                   ],
@@ -482,7 +473,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Spot pairs and suited cards"
                   ],
@@ -552,7 +542,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-01-03-explain-button-media",
@@ -577,7 +566,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Locate the dealer button"
                   ],
@@ -633,7 +621,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify the small and big blinds"
                   ],
@@ -682,7 +669,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Know blinds post before cards are dealt"
                   ],
@@ -731,7 +717,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Locate the dealer button",
                     "Identify the small and big blinds"
@@ -810,7 +795,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-02-01-explain-ladder-media",
@@ -834,7 +818,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Order common hand ranks"
                   ],
@@ -881,7 +864,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Recognize pairs, straights, and flushes"
                   ],
@@ -928,7 +910,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Compare two finished hands"
                   ],
@@ -975,7 +956,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Compare two finished hands",
                     "Order common hand ranks"
@@ -1044,7 +1024,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-02-02-explain-five-media",
@@ -1068,7 +1047,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Build the best five-card hand from seven"
                   ],
@@ -1124,7 +1102,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Use kickers when categories tie"
                   ],
@@ -1173,7 +1150,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Spot board-tied pots"
                   ],
@@ -1222,7 +1198,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Build the best five-card hand from seven",
                     "Use kickers when categories tie"
@@ -1301,7 +1276,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-03-01-explain-passive-media",
@@ -1325,7 +1299,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Fold to give up the hand"
                   ],
@@ -1385,7 +1358,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Check when no bet faces you"
                   ],
@@ -1437,7 +1409,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Call to match the current bet"
                   ],
@@ -1488,7 +1459,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Check when no bet faces you",
                     "Call to match the current bet"
@@ -1562,7 +1532,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-03-02-explain-aggro-media",
@@ -1586,7 +1555,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Bet when the pot is unchecked"
                   ],
@@ -1646,7 +1614,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Raise to increase a facing bet"
                   ],
@@ -1699,7 +1666,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Treat all-in as a sized bet or raise"
                   ],
@@ -1751,7 +1717,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Bet when the pot is unchecked",
                     "Raise to increase a facing bet"
@@ -1835,7 +1800,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-04-01-explain-streets-media",
@@ -1859,7 +1823,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Name preflop, flop, turn, and river"
                   ],
@@ -1911,7 +1874,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Know preflop order starts left of the big blind"
                   ],
@@ -1958,7 +1920,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Know a street ends when bets are matched"
                   ],
@@ -2007,7 +1968,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Know preflop order starts left of the big blind",
                     "Name preflop, flop, turn, and river"
@@ -2086,7 +2046,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-05-01-explain-win-media",
@@ -2110,7 +2069,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Win the pot when everyone else folds"
                   ],
@@ -2166,7 +2124,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Win at showdown with the best five"
                   ],
@@ -2215,7 +2172,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Sense main pot versus side pot without deep math"
                   ],
@@ -2264,7 +2220,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Sense main pot versus side pot without deep math"
                   ],
@@ -2342,7 +2297,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-01-06-01-explain-run-media",
@@ -2366,7 +2320,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Choose legal actions on more than one street"
                   ],
@@ -2461,7 +2414,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Choose legal actions on more than one street"
                   ],
@@ -2547,7 +2499,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Finish without freezing on basic decisions"
                   ],
@@ -2680,7 +2631,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Follow a hand from blinds to a terminal state",
                     "Finish without freezing on basic decisions"
@@ -2791,7 +2741,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm hand ranking"
                   ],
@@ -2838,7 +2787,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm acting order"
                   ],
@@ -2885,7 +2833,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm legal action"
                   ],
@@ -2937,7 +2884,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm a complete toy hand"
                   ],
@@ -3051,7 +2997,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-02-01-01-explain-pos-media",
@@ -3075,7 +3020,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Label EP, HJ, CO, and BTN"
                   ],
@@ -3131,7 +3075,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Label SB and BB"
                   ],
@@ -3180,7 +3123,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Label EP, HJ, CO, and BTN"
                   ],
@@ -3229,7 +3171,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Prefer later seats when choosing hands"
                   ],
@@ -3299,7 +3240,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-02-01-02-explain-order-media",
@@ -3323,7 +3263,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Order preflop action after the blinds"
                   ],
@@ -3370,7 +3309,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Order postflop action from the button"
                   ],
@@ -3412,7 +3350,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Wait for your turn before acting"
                   ],
@@ -3461,7 +3398,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Order postflop action from the button",
                     "Wait for your turn before acting"
@@ -3540,7 +3476,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-02-02-01-explain-families-media",
@@ -3564,7 +3499,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Recognize pocket pairs"
                   ],
@@ -3620,7 +3554,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Recognize broadways and suited aces"
                   ],
@@ -3669,7 +3602,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recognize suited connectors versus offsuit trash"
                   ],
@@ -3717,7 +3649,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recognize suited connectors versus offsuit trash"
                   ],
@@ -3795,7 +3726,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-02-03-01-explain-open-media",
@@ -3819,7 +3749,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Fold trash from early position"
                   ],
@@ -3878,7 +3807,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Open strong hands for a live size"
                   ],
@@ -3930,7 +3858,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Widen opens on the button"
                   ],
@@ -3982,7 +3909,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Open strong hands for a live size",
                     "Widen opens on the button"
@@ -4064,7 +3990,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-02-04-01-explain-vs-media",
@@ -4088,7 +4013,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Fold weak hands to an open"
                   ],
@@ -4148,7 +4072,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Call with playable hands in position"
                   ],
@@ -4199,7 +4122,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Value 3-bet strong hands"
                   ],
@@ -4251,7 +4173,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Call with playable hands in position",
                     "Value 3-bet strong hands"
@@ -4333,7 +4254,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-02-05-01-explain-bb-media",
@@ -4357,7 +4277,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Convert chips to big blinds"
                   ],
@@ -4406,7 +4325,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Use the shorter stack as effective"
                   ],
@@ -4455,7 +4373,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Sense 50bb vs 100bb vs 200bb depth"
                   ],
@@ -4503,7 +4420,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Convert chips to big blinds",
                     "Sense 50bb vs 100bb vs 200bb depth"
@@ -4582,7 +4498,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-02-06-01-explain-habits-media",
@@ -4606,7 +4521,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Follow the action before deciding"
                   ],
@@ -4661,7 +4575,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Verbalize actions clearly"
                   ],
@@ -4709,7 +4622,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Protect cards and avoid acting out of turn"
                   ],
@@ -4758,7 +4670,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Protect cards and avoid acting out of turn",
                     "Follow the action before deciding"
@@ -4837,7 +4748,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-02-07-01-explain-full-media",
@@ -4861,7 +4771,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Make a baseline open on a full ring"
                   ],
@@ -4920,7 +4829,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Respond to a raise with a planned action"
                   ],
@@ -4971,7 +4879,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Respond to a raise with a planned action",
                     "Keep live habits while deciding"
@@ -5107,7 +5014,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Keep live habits while deciding"
                   ],
@@ -5181,7 +5087,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm position labels"
                   ],
@@ -5230,7 +5135,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm starting-hand family"
                   ],
@@ -5279,7 +5183,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm open or fold"
                   ],
@@ -5321,7 +5224,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm facing a raise"
                   ],
@@ -5373,7 +5275,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm effective stack"
                   ],
@@ -5460,7 +5361,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-03-01-01-explain-media",
@@ -5484,7 +5384,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Track pot size and stack depths"
                   ],
@@ -5533,7 +5432,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Locate the button and action seat"
                   ],
@@ -5582,7 +5480,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Honor verbal declarations at a live table"
                   ],
@@ -5630,7 +5527,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Honor verbal declarations at a live table"
                   ],
@@ -5708,7 +5604,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-03-02-01-explain-media",
@@ -5732,7 +5627,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify made hands on the flop"
                   ],
@@ -5781,7 +5675,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Separate draws from showdown value"
                   ],
@@ -5829,7 +5722,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recognize air that needs equity or fold equity"
                   ],
@@ -5878,7 +5770,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recognize air that needs equity or fold equity"
                   ],
@@ -5955,7 +5846,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-03-03-01-explain-media",
@@ -5979,7 +5869,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Count clean versus dirty outs"
                   ],
@@ -6027,7 +5916,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Compare pot odds to draw equity"
                   ],
@@ -6076,7 +5964,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Compare pot odds to draw equity"
                   ],
@@ -6124,7 +6011,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Use implied-odds intuition deep-stacked"
                   ],
@@ -6202,7 +6088,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-03-04-01-explain-media",
@@ -6226,7 +6111,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Value bet strong made hands"
                   ],
@@ -6278,7 +6162,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "C-bet selectively as the preflop aggressor"
                   ],
@@ -6330,7 +6213,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Check back, call, fold, or raise with a plan"
                   ],
@@ -6382,7 +6264,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Check back, call, fold, or raise with a plan"
                   ],
@@ -6464,7 +6345,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-03-05-01-explain-media",
@@ -6488,7 +6368,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Recognize brick versus changing turns"
                   ],
@@ -6536,7 +6415,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Fire a second barrel with a plan"
                   ],
@@ -6588,7 +6466,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Use delayed aggression when checked to"
                   ],
@@ -6640,7 +6517,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Use delayed aggression when checked to"
                   ],
@@ -6718,7 +6594,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-03-06-01-explain-media",
@@ -6742,7 +6617,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Value bet hands that beat calling ranges"
                   ],
@@ -6794,7 +6668,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Bluff only with a credible story"
                   ],
@@ -6847,7 +6720,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Bluff-catch or fold with clarity"
                   ],
@@ -6899,7 +6771,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Bluff-catch or fold with clarity"
                   ],
@@ -6977,7 +6848,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-03-07-01-explain-media",
@@ -7001,7 +6871,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Demand stronger made hands multiway"
                   ],
@@ -7053,7 +6922,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Bluff less with players left to act"
                   ],
@@ -7107,7 +6975,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Prefer nut potential and position"
                   ],
@@ -7156,7 +7023,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Prefer nut potential and position"
                   ],
@@ -7234,7 +7100,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-03-08-01-explain-media",
@@ -7258,7 +7123,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Stop overplaying weak top pair"
                   ],
@@ -7309,7 +7173,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Fold draws at bad prices"
                   ],
@@ -7361,7 +7224,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid passive calling and crowd bluffs"
                   ],
@@ -7414,7 +7276,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid passive calling and crowd bluffs"
                   ],
@@ -7486,7 +7347,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm table reading"
                   ],
@@ -7535,7 +7395,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm flop classes and price"
                   ],
@@ -7583,7 +7442,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm street plans and multiway discipline"
                   ],
@@ -7625,7 +7483,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm street plans and multiway discipline"
                   ],
@@ -7677,7 +7534,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm flop classes and price"
                   ],
@@ -7754,7 +7610,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-01-01-explain-media",
@@ -7778,7 +7633,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Describe a seat as a range"
                   ],
@@ -7827,7 +7681,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Widen or narrow ranges with action"
                   ],
@@ -7876,7 +7729,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid assigning one exact hand too early"
                   ],
@@ -7925,7 +7777,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid assigning one exact hand too early"
                   ],
@@ -8003,7 +7854,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-02-01-explain-media",
@@ -8027,7 +7877,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Value 3-bet strong hands"
                   ],
@@ -8079,7 +7928,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Fold or continue correctly versus 3-bets"
                   ],
@@ -8132,7 +7980,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recognize squeeze spots multiway"
                   ],
@@ -8185,7 +8032,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recognize squeeze spots multiway"
                   ],
@@ -8279,7 +8125,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-03-01-explain-media",
@@ -8303,7 +8148,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Build a multi-street plan"
                   ],
@@ -8380,7 +8224,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Abort plans when the board changes"
                   ],
@@ -8434,7 +8277,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Keep pot size matched to hand strength"
                   ],
@@ -8475,7 +8317,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Build a multi-street plan"
                   ],
@@ -8552,7 +8393,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-04-01-explain-media",
@@ -8576,7 +8416,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Match size to value versus polar pressure"
                   ],
@@ -8641,7 +8480,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Accept nearby reasonable live sizes"
                   ],
@@ -8694,7 +8532,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid tiny or nonsensical sizes"
                   ],
@@ -8743,7 +8580,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid tiny or nonsensical sizes"
                   ],
@@ -8827,7 +8663,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-05-01-explain-media",
@@ -8851,7 +8686,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Estimate stack-to-pot ratio"
                   ],
@@ -8900,7 +8734,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Commit correctly at low SPR"
                   ],
@@ -8942,7 +8775,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Keep flexibility at high SPR"
                   ],
@@ -8983,7 +8815,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Estimate stack-to-pot ratio"
                   ],
@@ -9062,7 +8893,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-06-01-explain-media",
@@ -9086,7 +8916,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Tag high participation"
                   ],
@@ -9135,7 +8964,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Tag low folding to bets"
                   ],
@@ -9174,7 +9002,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Separate observation from certainty"
                   ],
@@ -9213,7 +9040,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Separate observation from certainty"
                   ],
@@ -9276,7 +9102,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-06-02-explain-media",
@@ -9303,7 +9128,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify from evidence"
                   ],
@@ -9347,7 +9171,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Introduce Calling Station"
                   ],
@@ -9386,7 +9209,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify from evidence"
                   ],
@@ -9430,7 +9252,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify from evidence"
                   ],
@@ -9492,7 +9313,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-06-03-explain-media",
@@ -9519,7 +9339,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Value wider versus Calling Station"
                   ],
@@ -9574,7 +9393,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Bluff less without equity"
                   ],
@@ -9618,7 +9436,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Cite the sticky-call tendency"
                   ],
@@ -9660,7 +9477,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Cite the sticky-call tendency"
                   ],
@@ -9732,7 +9548,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-07-01-explain-media",
@@ -9756,7 +9571,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Tag narrow entry"
                   ],
@@ -9795,7 +9609,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Tag strong aggression when they play"
                   ],
@@ -9834,7 +9647,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Wait for samples before labeling"
                   ],
@@ -9873,7 +9685,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Wait for samples before labeling"
                   ],
@@ -9936,7 +9747,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-07-02-explain-media",
@@ -9963,7 +9773,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify from evidence"
                   ],
@@ -10007,7 +9816,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify from evidence"
                   ],
@@ -10050,7 +9858,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Introduce Nit"
                   ],
@@ -10112,7 +9919,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-07-03-explain-media",
@@ -10139,7 +9945,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Steal more versus Nits"
                   ],
@@ -10181,7 +9986,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Respect their heavy action"
                   ],
@@ -10223,7 +10027,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Cite narrow-entry tendency"
                   ],
@@ -10265,7 +10068,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Cite narrow-entry tendency"
                   ],
@@ -10337,7 +10139,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-08-01-explain-media",
@@ -10361,7 +10162,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Tag extreme entry"
                   ],
@@ -10400,7 +10200,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Tag constant aggression"
                   ],
@@ -10439,7 +10238,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid ego battles in notes"
                   ],
@@ -10478,7 +10276,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid ego battles in notes"
                   ],
@@ -10541,7 +10338,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-08-02-explain-media",
@@ -10568,7 +10364,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify from evidence"
                   ],
@@ -10611,7 +10406,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify from evidence"
                   ],
@@ -10654,7 +10448,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Introduce Maniac"
                   ],
@@ -10721,7 +10514,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-08-03-explain-media",
@@ -10748,7 +10540,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Widen value and bluff-catch ranges"
                   ],
@@ -10802,7 +10593,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Widen value and bluff-catch ranges"
                   ],
@@ -10844,7 +10634,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Cite extreme aggression tendency"
                   ],
@@ -10885,7 +10674,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Cite extreme aggression tendency"
                   ],
@@ -10961,7 +10749,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-09-01-explain-media",
@@ -10985,7 +10772,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Separate observation from certainty"
                   ],
@@ -11024,7 +10810,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Raise confidence only with samples"
                   ],
@@ -11066,7 +10851,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Retire labels when evidence flips"
                   ],
@@ -11109,7 +10893,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Retire labels when evidence flips"
                   ],
@@ -11181,7 +10964,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-04-10-01-explain-media",
@@ -11205,7 +10987,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Change lines by type with justification"
                   ],
@@ -11252,7 +11033,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Change lines by type with justification"
                   ],
@@ -11297,7 +11077,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Change lines by type with justification"
                   ],
@@ -11353,7 +11132,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Combine type × position × stack × board"
                   ],
@@ -11519,7 +11297,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm ranges and 3-bet basics"
                   ],
@@ -11558,7 +11335,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm ranges and 3-bet basics"
                   ],
@@ -11611,7 +11387,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm sizing and SPR"
                   ],
@@ -11660,7 +11435,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm sizing and SPR"
                   ],
@@ -11714,7 +11488,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm Calling Station, Nit, and Maniac adjustments"
                   ],
@@ -11757,7 +11530,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm Calling Station, Nit, and Maniac adjustments"
                   ],
@@ -11800,7 +11572,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm Calling Station, Nit, and Maniac adjustments"
                   ],
@@ -11883,7 +11654,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-01-01-explain-media",
@@ -11907,7 +11677,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Prefer nut potential multiway"
                   ],
@@ -11955,7 +11724,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Tighten speculative hands multiway"
                   ],
@@ -12006,7 +11774,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Value thicker when capped opponents call"
                   ],
@@ -12062,7 +11829,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Prefer nut potential multiway"
                   ],
@@ -12130,7 +11896,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-02-01-explain-media",
@@ -12154,7 +11919,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Use depth for speculative implied odds"
                   ],
@@ -12203,7 +11967,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Avoid stacking off light deep"
                   ],
@@ -12255,7 +12018,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Plan future streets when SPR is high"
                   ],
@@ -12294,7 +12056,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Plan future streets when SPR is high"
                   ],
@@ -12365,7 +12126,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-03-01-explain-media",
@@ -12389,7 +12149,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Estimate implied odds from depth and tendencies"
                   ],
@@ -12434,7 +12193,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Spot reverse implied odds traps"
                   ],
@@ -12478,7 +12236,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Skip dominated draws multiway"
                   ],
@@ -12519,7 +12276,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Estimate implied odds from depth and tendencies"
                   ],
@@ -12591,7 +12347,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-04-01-explain-media",
@@ -12615,7 +12370,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Choose thin value versus sticky callers"
                   ],
@@ -12672,7 +12426,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Widen bluff-catches versus over-aggression"
                   ],
@@ -12728,7 +12481,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Skip thin value versus overfolders"
                   ],
@@ -12785,7 +12537,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Choose thin value versus sticky callers"
                   ],
@@ -12853,7 +12604,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-05-01-explain-media",
@@ -12877,7 +12627,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Interpret check-raises by strength and type"
                   ],
@@ -12920,7 +12669,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Use probes and delayed c-bets with a plan"
                   ],
@@ -12973,7 +12721,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Treat donks as polarized information"
                   ],
@@ -13012,7 +12759,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Use probes and delayed c-bets with a plan"
                   ],
@@ -13080,7 +12826,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-06-01-explain-media",
@@ -13104,7 +12849,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Notice capped versus uncapped lines"
                   ],
@@ -13143,7 +12887,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Abandon stale flop stories"
                   ],
@@ -13184,7 +12927,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Update ranges after each street"
                   ],
@@ -13223,7 +12965,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Notice capped versus uncapped lines"
                   ],
@@ -13291,7 +13032,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-07-01-explain-media",
@@ -13315,7 +13055,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Treat timing as soft evidence only"
                   ],
@@ -13364,7 +13103,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Read sizing as range language"
                   ],
@@ -13403,7 +13141,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Reject magic-tell claims"
                   ],
@@ -13442,7 +13179,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Treat timing as soft evidence only"
                   ],
@@ -13510,7 +13246,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-08-01-explain-media",
@@ -13534,7 +13269,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify tilted or stuck opponents"
                   ],
@@ -13573,7 +13307,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Recognize gear changes mid-session"
                   ],
@@ -13612,7 +13345,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid chasing emotional pots"
                   ],
@@ -13653,7 +13385,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recognize gear changes mid-session"
                   ],
@@ -13721,7 +13452,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-05-09-01-explain-media",
@@ -13745,7 +13475,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Set session stop-losses"
                   ],
@@ -13784,7 +13513,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Respect bankroll for stakes"
                   ],
@@ -13823,7 +13551,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "End sessions before leaks spiral"
                   ],
@@ -13861,7 +13588,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "End sessions before leaks spiral"
                   ],
@@ -13927,7 +13653,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm multiway and deep-stack priorities"
                   ],
@@ -13966,7 +13691,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm thin value versus types"
                   ],
@@ -14013,7 +13737,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm thin value versus types"
                   ],
@@ -14057,7 +13780,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm soft evidence and discipline"
                   ],
@@ -14096,7 +13818,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm soft evidence and discipline"
                   ],
@@ -14173,7 +13894,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-01-01-explain-media",
@@ -14197,7 +13917,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify range advantage"
                   ],
@@ -14236,7 +13955,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify nut advantage"
                   ],
@@ -14275,7 +13993,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Choose pressure when you own both"
                   ],
@@ -14328,7 +14045,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Choose pressure when you own both"
                   ],
@@ -14396,7 +14112,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-02-01-explain-media",
@@ -14420,7 +14135,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Prefer IP for marginal equity"
                   ],
@@ -14459,7 +14173,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Discount OOP equity"
                   ],
@@ -14498,7 +14211,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Use aggression to realize when appropriate"
                   ],
@@ -14537,7 +14249,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Prefer IP for marginal equity"
                   ],
@@ -14605,7 +14316,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-03-01-explain-media",
@@ -14629,7 +14339,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Spot capped ranges from passive lines"
                   ],
@@ -14668,7 +14377,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Attack caps with thin value and bluffs"
                   ],
@@ -14720,7 +14428,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Respect uncapped aggression"
                   ],
@@ -14759,7 +14466,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Attack caps with thin value and bluffs"
                   ],
@@ -14827,7 +14533,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-04-01-explain-media",
@@ -14851,7 +14556,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Recognize polarized sizing"
                   ],
@@ -14890,7 +14594,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Use merged sizes for thin value"
                   ],
@@ -14945,7 +14648,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid mismatched shapes"
                   ],
@@ -14984,7 +14686,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Use merged sizes for thin value"
                   ],
@@ -15052,7 +14753,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-05-01-explain-media",
@@ -15076,7 +14776,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Select overbets for polar spots"
                   ],
@@ -15115,7 +14814,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Plan geometric street sizes"
                   ],
@@ -15168,7 +14866,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid random huge bets"
                   ],
@@ -15207,7 +14904,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Plan geometric street sizes"
                   ],
@@ -15275,7 +14971,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-06-01-explain-media",
@@ -15299,7 +14994,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Choose bluffs that block call-downs"
                   ],
@@ -15347,7 +15041,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Prefer call-downs that unblock bluffs"
                   ],
@@ -15386,7 +15079,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid fabricated EV claims"
                   ],
@@ -15425,7 +15117,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid fabricated EV claims"
                   ],
@@ -15493,7 +15184,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-07-01-explain-media",
@@ -15517,7 +15207,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Continue with stronger catchers"
                   ],
@@ -15556,7 +15245,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Fold dominated trash"
                   ],
@@ -15597,7 +15285,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Ignore fake MDF percentages"
                   ],
@@ -15636,7 +15323,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Continue with stronger catchers"
                   ],
@@ -15706,7 +15392,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-08-01-explain-media",
@@ -15730,7 +15415,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Mix strong hands sometimes"
                   ],
@@ -15771,7 +15455,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Let types reduce mixing needs"
                   ],
@@ -15814,7 +15497,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid pure randomness"
                   ],
@@ -15853,7 +15535,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid pure randomness"
                   ],
@@ -15921,7 +15602,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-09-01-explain-media",
@@ -15945,7 +15625,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Tighten 4-bet pots appropriately"
                   ],
@@ -15984,7 +15663,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Plan 3-bet pots by SPR"
                   ],
@@ -16027,7 +15705,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid ego 4-bets"
                   ],
@@ -16066,7 +15743,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Plan 3-bet pots by SPR"
                   ],
@@ -16134,7 +15810,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-10-01-explain-media",
@@ -16158,7 +15833,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Fold dominated one-pair in heat"
                   ],
@@ -16210,7 +15884,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Separate coolers from mistakes"
                   ],
@@ -16249,7 +15922,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid ego call-downs"
                   ],
@@ -16288,7 +15960,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Separate coolers from mistakes"
                   ],
@@ -16356,7 +16027,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-11-01-explain-media",
@@ -16380,7 +16050,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Note selective entry"
                   ],
@@ -16429,7 +16098,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Note disciplined aggression"
                   ],
@@ -16468,7 +16136,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Delay the label until samples exist"
                   ],
@@ -16507,7 +16174,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Delay the label until samples exist"
                   ],
@@ -16570,7 +16236,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-11-02-explain-media",
@@ -16597,7 +16262,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify TAG from evidence"
                   ],
@@ -16640,7 +16304,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Introduce TAG"
                   ],
@@ -16679,7 +16342,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify TAG from evidence"
                   ],
@@ -16722,7 +16384,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Introduce TAG"
                   ],
@@ -16784,7 +16445,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-11-03-explain-media",
@@ -16811,7 +16471,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Avoid bluffing TAG check-raises light"
                   ],
@@ -16857,7 +16516,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Respect TAG aggression"
                   ],
@@ -16903,7 +16561,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Value thin only when they call"
                   ],
@@ -16948,7 +16605,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Respect TAG aggression"
                   ],
@@ -17019,7 +16675,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-12-01-explain-media",
@@ -17043,7 +16698,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Note wide entry"
                   ],
@@ -17092,7 +16746,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Separate planned pressure from maniac samples"
                   ],
@@ -17131,7 +16784,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Note sustained pressure"
                   ],
@@ -17170,7 +16822,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Separate planned pressure from maniac samples"
                   ],
@@ -17233,7 +16884,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-12-02-explain-media",
@@ -17260,7 +16910,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Identify LAG from evidence"
                   ],
@@ -17303,7 +16952,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Introduce LAG"
                   ],
@@ -17342,7 +16990,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify LAG from evidence"
                   ],
@@ -17385,7 +17032,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Introduce LAG"
                   ],
@@ -17447,7 +17093,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-12-03-explain-media",
@@ -17474,7 +17119,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Widen bluff-catches versus LAG"
                   ],
@@ -17530,7 +17174,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Trap strong hands more"
                   ],
@@ -17575,7 +17218,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Avoid fancy bluffs into pressure"
                   ],
@@ -17617,7 +17259,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Widen bluff-catches versus LAG"
                   ],
@@ -17694,7 +17335,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-06-13-01-explain-media",
@@ -17718,7 +17358,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Adjust across all five types"
                   ],
@@ -17765,7 +17404,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Adjust across all five types"
                   ],
@@ -17810,7 +17448,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Adjust across all five types"
                   ],
@@ -17854,7 +17491,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Cite the tendency that changes the line"
                   ],
@@ -17923,7 +17559,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm advantage and caps"
                   ],
@@ -17962,7 +17597,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm advantage and caps"
                   ],
@@ -18001,7 +17635,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm polar/merged and blockers"
                   ],
@@ -18040,7 +17673,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm TAG and LAG"
                   ],
@@ -18083,7 +17715,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Confirm TAG and LAG"
                   ],
@@ -18164,7 +17795,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-01-01-explain-media",
@@ -18188,7 +17818,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Update on flop texture"
                   ],
@@ -18227,7 +17856,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Update on flop texture"
                   ],
@@ -18266,7 +17894,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "State a preflop thesis"
                   ],
@@ -18305,7 +17932,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Abandon dead plans quickly"
                   ],
@@ -18373,7 +17999,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-02-01-explain-media",
@@ -18397,7 +18022,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "List turn continue cards"
                   ],
@@ -18435,7 +18059,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "List give-up cards"
                   ],
@@ -18474,7 +18097,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Bet flop only with a turn map"
                   ],
@@ -18513,7 +18135,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Bet flop only with a turn map"
                   ],
@@ -18581,7 +18202,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-03-01-explain-media",
@@ -18605,7 +18225,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Choose river value candidates"
                   ],
@@ -18648,7 +18267,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Choose bluff candidates with blockers"
                   ],
@@ -18687,7 +18305,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Check trash without a story"
                   ],
@@ -18726,7 +18343,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Choose river value candidates"
                   ],
@@ -18794,7 +18410,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-04-01-explain-media",
@@ -18818,7 +18433,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Plan limped pots"
                   ],
@@ -18857,7 +18471,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Plan single-raised pots"
                   ],
@@ -18896,7 +18509,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Plan 3-bet/4-bet pots"
                   ],
@@ -18935,7 +18547,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Plan 3-bet/4-bet pots"
                   ],
@@ -19003,7 +18614,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-05-01-explain-media",
@@ -19027,7 +18637,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Bluff less multiway"
                   ],
@@ -19066,7 +18675,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Widen selected HU bluffs"
                   ],
@@ -19108,7 +18716,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Value thicker multiway"
                   ],
@@ -19146,7 +18753,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Bluff less multiway"
                   ],
@@ -19214,7 +18820,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-06-01-explain-media",
@@ -19238,7 +18843,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Commit earlier short"
                   ],
@@ -19277,7 +18881,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Use implied odds deep"
                   ],
@@ -19316,7 +18919,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recalculate effective stacks each hand"
                   ],
@@ -19355,7 +18957,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Recalculate effective stacks each hand"
                   ],
@@ -19429,7 +19030,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-07-01-explain-media",
@@ -19453,7 +19053,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Practice all five types"
                   ],
@@ -19497,7 +19096,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Practice all five types"
                   ],
@@ -19543,7 +19141,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Practice all five types"
                   ],
@@ -19587,7 +19184,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Keep identical lines when evidence is absent"
                   ],
@@ -19659,7 +19255,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-08-01-explain-media",
@@ -19683,7 +19278,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Combine type with board texture"
                   ],
@@ -19727,7 +19321,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Combine line history with sizing"
                   ],
@@ -19773,7 +19366,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Produce one coherent action"
                   ],
@@ -19818,7 +19410,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Produce one coherent action"
                   ],
@@ -19886,7 +19477,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-09-01-explain-media",
@@ -19910,7 +19500,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Name personal leaks"
                   ],
@@ -19949,7 +19538,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Write default lines for common spots"
                   ],
@@ -19988,7 +19576,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Schedule review habits"
                   ],
@@ -20027,7 +19614,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Write default lines for common spots"
                   ],
@@ -20095,7 +19681,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-10-01-explain-media",
@@ -20119,7 +19704,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Execute a full SRP plan",
                     "Update streets without hints",
@@ -20286,7 +19870,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-10-02-explain-media",
@@ -20313,7 +19896,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Plan a 3-bet pot by SPR",
                     "Continue or kill on turn",
@@ -20457,7 +20039,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-10-03-explain-media",
@@ -20481,7 +20062,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Prefer nut potential multiway",
                     "Use deep implied odds correctly",
@@ -20622,7 +20202,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-10-04-explain-media",
@@ -20646,7 +20225,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Prefer nut potential limped multiway",
                     "Avoid light multiway bluffs",
@@ -20799,7 +20377,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-10-05-explain-media",
@@ -20823,7 +20400,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Respect short SPR commitment",
                     "Avoid ego bluffs in 4-bet pots",
@@ -20984,7 +20560,6 @@
                   "acceptedGrades": [
                     "recommended"
                   ],
-                  "lifeLossEligible": false,
                   "coachMedia": [
                     {
                       "id": "act-07-11-01-explain-media",
@@ -21008,7 +20583,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "List warm-up checklist items"
                   ],
@@ -21047,7 +20621,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": false,
                   "objectives": [
                     "Carry defaults into Live"
                   ],
@@ -21086,7 +20659,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Stay inside live cash NLH scope"
                   ],
@@ -21125,7 +20697,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Carry defaults into Live"
                   ],
@@ -21201,7 +20772,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify all five types from behavior"
                   ],
@@ -21244,7 +20814,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Identify all five types from behavior"
                   ],
@@ -21287,7 +20856,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Select adjustments with citations"
                   ],
@@ -21330,7 +20898,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Select adjustments with citations"
                   ],
@@ -21373,7 +20940,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Select adjustments with citations"
                   ],
@@ -21416,7 +20982,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Retire labels when evidence flips"
                   ],
@@ -21455,7 +21020,6 @@
                     "strong",
                     "reasonable"
                   ],
-                  "lifeLossEligible": true,
                   "objectives": [
                     "Retire labels when evidence flips"
                   ],

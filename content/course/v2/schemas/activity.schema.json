@@ -4,7 +4,7 @@
   "title": "Course activity",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "order", "stage", "renderer", "estimatedSeconds", "accessibilityText", "acceptedGrades", "lifeLossEligible"],
+  "required": ["id", "order", "stage", "renderer", "estimatedSeconds", "accessibilityText", "acceptedGrades"],
   "properties": {
     "id": { "$ref": "common.schema.json#/definitions/idString" },
     "order": { "$ref": "common.schema.json#/definitions/positiveInt" },
@@ -13,7 +13,6 @@
     "estimatedSeconds": { "$ref": "common.schema.json#/definitions/positiveInt" },
     "accessibilityText": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
     "acceptedGrades": { "$ref": "common.schema.json#/definitions/acceptedGrades" },
-    "lifeLossEligible": { "type": "boolean" },
     "objectives": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/nonEmptyString" }, "uniqueItems": true },
     "playerTypeRefs": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/playerTypeId" }, "uniqueItems": true },
     "coachMedia": { "type": "array", "items": { "$ref": "coach_media.schema.json" } },

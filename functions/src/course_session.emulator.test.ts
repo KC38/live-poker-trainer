@@ -158,7 +158,7 @@ describe("course session integration", () => {
     expect(questionable.lifeLost).toBe(false);
     expect(questionable.livesRemaining).toBe(5);
 
-    // Accept guided, then questionable scaffolded (still no life loss).
+    // Accept guided, then questionable scaffolded (costs a heart).
     await submitCourseStepForUser({
       uid: "life-user",
       raw: {
@@ -182,7 +182,8 @@ describe("course session integration", () => {
       db,
     });
     expect(scaffoldedQuestionable.grade).toBe("questionable");
-    expect(scaffoldedQuestionable.lifeLost).toBe(false);
+    expect(scaffoldedQuestionable.lifeLost).toBe(true);
+    expect(scaffoldedQuestionable.livesRemaining).toBe(4);
     await submitCourseStepForUser({
       uid: "life-user",
       raw: {
@@ -207,10 +208,10 @@ describe("course session integration", () => {
     });
     expect(clearMistake.grade).toBe("clear_mistake");
     expect(clearMistake.lifeLost).toBe(true);
-    expect(clearMistake.livesRemaining).toBe(4);
+    expect(clearMistake.livesRemaining).toBe(3);
 
     const profileAfterLoss = await db.doc("users/life-user/course/main").get();
-    expect(profileAfterLoss.data()?.livesRemaining).toBe(4);
+    expect(profileAfterLoss.data()?.livesRemaining).toBe(3);
   });
 
   test("new lesson starts carry profile hearts (not a fresh set)", async () => {
