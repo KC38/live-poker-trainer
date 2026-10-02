@@ -564,9 +564,8 @@ String? _selectNextLessonId({
       nodes.any((n) => n.lessonId == activeLessonId)) {
     return activeLessonId;
   }
-  for (final node in nodes) {
-    if (node.state == CourseNodeState.reviewDue) return node.lessonId;
-  }
+  // Review-due nodes stay tappable on the map but must not steal the Home
+  // pulse / section focus from the course frontier (next unfinished lesson).
   if (recommendedLessonId != null) {
     for (final node in nodes) {
       if (node.lessonId == recommendedLessonId &&

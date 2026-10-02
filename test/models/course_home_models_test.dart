@@ -268,7 +268,7 @@ void main() {
     expect(snap.resume, isNull);
   });
 
-  test('review-due nodes are preferred next after active clears', () {
+  test('review-due does not steal next from the course frontier', () {
     final snap = buildCourseHomeSnapshot(
       catalog: catalog,
       flags: _enabledFlags(),
@@ -285,7 +285,35 @@ void main() {
       reviewLessonIds: const ['lesson-a'],
     );
     expect(snap.nodes[0].state, CourseNodeState.reviewDue);
-    expect(snap.nextLessonId, 'lesson-a');
+    // Spaced review stays openable, but pulse stays on lesson-c.
+    expect(snap.nextLessonId, 'lesson-c');
+    expect(snap.nodes[2].isNext, isTrue);
+    expect(snap.nodes[0].isNext, isFalse);
+  });
+
+  test('review-due alone does not become next when the path is finished', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 60,
+        gems: 0,
+        currentStreak: 3,
+        acceptedAccuracy: 0.9,
+        completedLessonIds: ['lesson-a', 'lesson-b', 'lesson-c'],
+        masteryByLessonId: {
+          'lesson-a': 0.9,
+          'lesson-b': 0.9,
+          'lesson-c': 0.9,
+        },
+        catalogVersion: '2.0.0',
+      ),
+      reviewLessonIds: const ['lesson-a'],
+    );
+    expect(snap.nodes[0].state, CourseNodeState.reviewDue);
+    expect(snap.nextLessonId, isNull);
+    expect(snap.nodes.every((n) => !n.isNext), isTrue);
   });
 
   test('dangling profile.resume without openAttempt is not shown', () {
