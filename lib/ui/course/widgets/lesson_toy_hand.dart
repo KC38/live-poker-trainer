@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 
 /// Features for toy-hand explain on the full table.
 TableFeatures get lessonToyHandTableFeatures => const TableFeatures(
@@ -51,7 +52,15 @@ class _LessonToyHandExplainTableState extends State<LessonToyHandExplainTable> {
 
   void _onTap(String title) {
     if (!widget.enabled || widget.onAllStepsTapped == null) return;
+    final bool wasNext = !_tapped.contains(title);
     setState(() => _tapped.add(title));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: LessonToyHandExplainTable.steps.length - _tapped.length,
+    );
     if (_tapped.length >= LessonToyHandExplainTable.steps.length) {
       widget.onAllStepsTapped!();
     }
@@ -68,6 +77,10 @@ class _LessonToyHandExplainTableState extends State<LessonToyHandExplainTable> {
   Widget build(BuildContext context) {
     final teaching = widget.enabled && widget.onAllStepsTapped != null;
     final next = _nextIndex;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     final stepIndex = next ?? LessonToyHandExplainTable.steps.length - 1;
     final board = switch (stepIndex) {
       0 => const <String>[],
@@ -200,7 +213,15 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
 
   void _onTap(String title) {
     if (!widget.enabled || widget.onAllStepsTapped == null) return;
+    final bool wasNext = !_tapped.contains(title);
     setState(() => _tapped.add(title));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: _titles.length - _tapped.length,
+    );
     if (_tapped.length >= _titles.length) {
       widget.onAllStepsTapped!();
     }
@@ -216,6 +237,10 @@ class _ToyHandRunDemoState extends State<ToyHandRunDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextIndex;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last step while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;

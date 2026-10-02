@@ -13,6 +13,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 
 /// Felt context for a poker-action teaching spot.
 class LessonActionSpot {
@@ -1807,7 +1808,15 @@ class _LessonPassiveActionsExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllActionsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: PassiveActionsDemo.actions.length - _tapped.length,
+    );
     if (_tapped.length >= PassiveActionsDemo.actions.length) {
       widget.onAllActionsTapped!();
     }
@@ -1903,7 +1912,15 @@ class _LessonAggressiveActionsExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllActionsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: AggressiveActionsDemo.actions.length - _tapped.length,
+    );
     if (_tapped.length >= AggressiveActionsDemo.actions.length) {
       widget.onAllActionsTapped!();
     }
@@ -2005,7 +2022,15 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllActionsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: PassiveActionsDemo.actions.length - _tapped.length,
+    );
     if (_tapped.length >= PassiveActionsDemo.actions.length) {
       widget.onAllActionsTapped!();
     }
@@ -2033,6 +2058,10 @@ class _PassiveActionsDemoState extends State<PassiveActionsDemo> {
         break;
       }
     }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     final tiles = Row(
       crossAxisAlignment:
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
@@ -2184,7 +2213,15 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllActionsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: AggressiveActionsDemo.actions.length - _tapped.length,
+    );
     if (_tapped.length >= AggressiveActionsDemo.actions.length) {
       widget.onAllActionsTapped!();
     }
@@ -2212,6 +2249,10 @@ class _AggressiveActionsDemoState extends State<AggressiveActionsDemo> {
         break;
       }
     }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     final tiles = Row(
       crossAxisAlignment:
           expandTeach ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
@@ -2354,7 +2395,15 @@ class _LessonOpenRangeExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: OpenRangeDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= OpenRangeDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -2461,7 +2510,15 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: OpenRangeDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= OpenRangeDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -2477,6 +2534,10 @@ class _OpenRangeDemoState extends State<OpenRangeDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -2623,7 +2684,15 @@ class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllResponsesTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsOpenResponseDemo.responses.length - _tapped.length,
+    );
     if (_tapped.length >= VsOpenResponseDemo.responses.length) {
       widget.onAllResponsesTapped!();
     }
@@ -2727,7 +2796,15 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllResponsesTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsOpenResponseDemo.responses.length - _tapped.length,
+    );
     if (_tapped.length >= VsOpenResponseDemo.responses.length) {
       widget.onAllResponsesTapped!();
     }
@@ -2743,6 +2820,10 @@ class _VsOpenResponseDemoState extends State<VsOpenResponseDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextResponse;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -2892,7 +2973,15 @@ class _LessonBbStackDepthExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: BbStackDepthDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= BbStackDepthDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -2993,7 +3082,15 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: BbStackDepthDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= BbStackDepthDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -3009,6 +3106,10 @@ class _BbStackDepthDemoState extends State<BbStackDepthDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -3156,7 +3257,15 @@ class _LessonTableHabitsExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllHabitsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TableHabitsDemo.habits.length - _tapped.length,
+    );
     if (_tapped.length >= TableHabitsDemo.habits.length) {
       widget.onAllHabitsTapped!();
     }
@@ -3254,7 +3363,15 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllHabitsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TableHabitsDemo.habits.length - _tapped.length,
+    );
     if (_tapped.length >= TableHabitsDemo.habits.length) {
       widget.onAllHabitsTapped!();
     }
@@ -3270,6 +3387,10 @@ class _TableHabitsDemoState extends State<TableHabitsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextHabit;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -3431,7 +3552,15 @@ class _LessonFullRingExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: FullRingDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= FullRingDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -3529,7 +3658,15 @@ class _FullRingDemoState extends State<FullRingDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: FullRingDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= FullRingDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -3545,6 +3682,10 @@ class _FullRingDemoState extends State<FullRingDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -3691,7 +3832,15 @@ class _LessonTableReadExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TableReadDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TableReadDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -3799,7 +3948,15 @@ class _TableReadDemoState extends State<TableReadDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TableReadDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TableReadDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -3815,6 +3972,10 @@ class _TableReadDemoState extends State<TableReadDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -3980,7 +4141,15 @@ class _LessonFlopLabelExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllLabelsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: FlopLabelDemo.labels.length - _tapped.length,
+    );
     if (_tapped.length >= FlopLabelDemo.labels.length) {
       widget.onAllLabelsTapped!();
     }
@@ -4080,7 +4249,15 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllLabelsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: FlopLabelDemo.labels.length - _tapped.length,
+    );
     if (_tapped.length >= FlopLabelDemo.labels.length) {
       widget.onAllLabelsTapped!();
     }
@@ -4096,6 +4273,10 @@ class _FlopLabelDemoState extends State<FlopLabelDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextLabel;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -4261,7 +4442,15 @@ class _LessonOutsPriceExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: OutsPriceDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= OutsPriceDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -4361,7 +4550,15 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: OutsPriceDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= OutsPriceDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -4377,6 +4574,10 @@ class _OutsPriceDemoState extends State<OutsPriceDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -4526,7 +4727,15 @@ class _LessonFlopLinesExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllLinesTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: FlopLinesDemo.lines.length - _tapped.length,
+    );
     if (_tapped.length >= FlopLinesDemo.lines.length) {
       widget.onAllLinesTapped!();
     }
@@ -4629,7 +4838,15 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllLinesTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: FlopLinesDemo.lines.length - _tapped.length,
+    );
     if (_tapped.length >= FlopLinesDemo.lines.length) {
       widget.onAllLinesTapped!();
     }
@@ -4645,6 +4862,10 @@ class _FlopLinesDemoState extends State<FlopLinesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextLine;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -4810,7 +5031,15 @@ class _LessonTurnStoryExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TurnStoryDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TurnStoryDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -4911,7 +5140,15 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TurnStoryDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TurnStoryDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -4927,6 +5164,10 @@ class _TurnStoryDemoState extends State<TurnStoryDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -5092,7 +5333,15 @@ class _LessonRiverBinaryExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: RiverBinaryDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= RiverBinaryDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -5193,7 +5442,15 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: RiverBinaryDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= RiverBinaryDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -5209,6 +5466,10 @@ class _RiverBinaryDemoState extends State<RiverBinaryDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -5374,7 +5635,15 @@ class _LessonMultiwayPlanExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: MultiwayPlanDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= MultiwayPlanDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -5474,7 +5743,15 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: MultiwayPlanDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= MultiwayPlanDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -5490,6 +5767,10 @@ class _MultiwayPlanDemoState extends State<MultiwayPlanDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -5640,7 +5921,15 @@ class _LessonCommonLeaksExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllLeaksTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: CommonLeaksDemo.leaks.length - _tapped.length,
+    );
     if (_tapped.length >= CommonLeaksDemo.leaks.length) {
       widget.onAllLeaksTapped!();
     }
@@ -5741,7 +6030,15 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllLeaksTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: CommonLeaksDemo.leaks.length - _tapped.length,
+    );
     if (_tapped.length >= CommonLeaksDemo.leaks.length) {
       widget.onAllLeaksTapped!();
     }
@@ -5757,6 +6054,10 @@ class _CommonLeaksDemoState extends State<CommonLeaksDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextLeak;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -5922,7 +6223,15 @@ class _LessonRangeUpdateExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: RangeUpdateDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= RangeUpdateDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -6022,7 +6331,15 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: RangeUpdateDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= RangeUpdateDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -6038,6 +6355,10 @@ class _RangeUpdateDemoState extends State<RangeUpdateDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -6188,7 +6509,15 @@ class _LessonThreeBetSqueezeExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ThreeBetSqueezeDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ThreeBetSqueezeDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -6315,7 +6644,15 @@ class _LessonMultiStreetPlanExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: MultiStreetPlanDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= MultiStreetPlanDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -6420,7 +6757,15 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ThreeBetSqueezeDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ThreeBetSqueezeDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -6436,6 +6781,10 @@ class _ThreeBetSqueezeDemoState extends State<ThreeBetSqueezeDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -6566,7 +6915,15 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: MultiStreetPlanDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= MultiStreetPlanDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -6582,6 +6939,10 @@ class _MultiStreetPlanDemoState extends State<MultiStreetPlanDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -6732,7 +7093,15 @@ class _LessonSizingLanguageExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: SizingLanguageDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= SizingLanguageDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -6841,7 +7210,15 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: SizingLanguageDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= SizingLanguageDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -6857,6 +7234,10 @@ class _SizingLanguageDemoState extends State<SizingLanguageDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -7006,7 +7387,15 @@ class _LessonSprDepthExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: SprDepthDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= SprDepthDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -7108,7 +7497,15 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: SprDepthDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= SprDepthDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -7124,6 +7521,10 @@ class _SprDepthDemoState extends State<SprDepthDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -7272,7 +7673,15 @@ class _LessonPlayerObserveExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: PlayerObserveDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= PlayerObserveDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -7375,7 +7784,15 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: PlayerObserveDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= PlayerObserveDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -7391,6 +7808,10 @@ class _PlayerObserveDemoState extends State<PlayerObserveDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -7540,7 +7961,15 @@ class _LessonCallingStationExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: CallingStationDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= CallingStationDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -7643,7 +8072,15 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: CallingStationDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= CallingStationDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -7659,6 +8096,10 @@ class _CallingStationDemoState extends State<CallingStationDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -7807,7 +8248,15 @@ class _LessonVsStationExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsStationDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsStationDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -7910,7 +8359,15 @@ class _VsStationDemoState extends State<VsStationDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsStationDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsStationDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -7926,6 +8383,10 @@ class _VsStationDemoState extends State<VsStationDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -8076,7 +8537,15 @@ class _LessonTightSeatsExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TightSeatsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TightSeatsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -8179,7 +8648,15 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TightSeatsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TightSeatsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -8195,6 +8672,10 @@ class _TightSeatsDemoState extends State<TightSeatsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -8342,7 +8823,15 @@ class _LessonNitModelExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: NitModelDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= NitModelDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -8449,7 +8938,15 @@ class _NitModelDemoState extends State<NitModelDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: NitModelDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= NitModelDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -8465,6 +8962,10 @@ class _NitModelDemoState extends State<NitModelDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -8612,7 +9113,15 @@ class _LessonVsNitsExplainTableState extends State<LessonVsNitsExplainTable> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsNitsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsNitsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -8715,7 +9224,15 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsNitsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsNitsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -8731,6 +9248,10 @@ class _VsNitsDemoState extends State<VsNitsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -8879,7 +9400,15 @@ class _LessonExtremeEntryExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ExtremeEntryDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ExtremeEntryDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -8982,7 +9511,15 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ExtremeEntryDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ExtremeEntryDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -8998,6 +9535,10 @@ class _ExtremeEntryDemoState extends State<ExtremeEntryDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -9146,7 +9687,15 @@ class _LessonManiacModelExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ManiacModelDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ManiacModelDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -9249,7 +9798,15 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ManiacModelDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ManiacModelDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -9265,6 +9822,10 @@ class _ManiacModelDemoState extends State<ManiacModelDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -9412,7 +9973,15 @@ class _LessonVsManiacsExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsManiacsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsManiacsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -9515,7 +10084,15 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsManiacsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsManiacsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -9531,6 +10108,10 @@ class _VsManiacsDemoState extends State<VsManiacsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -9679,7 +10260,15 @@ class _LessonVsTagsExplainTableState extends State<LessonVsTagsExplainTable> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsTagsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsTagsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -9776,7 +10365,15 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsTagsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsTagsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -9792,6 +10389,10 @@ class _VsTagsDemoState extends State<VsTagsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -9940,7 +10541,15 @@ class _LessonVsLagsExplainTableState extends State<LessonVsLagsExplainTable> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsLagsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsLagsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -10037,7 +10646,15 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: VsLagsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= VsLagsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -10053,6 +10670,10 @@ class _VsLagsDemoState extends State<VsLagsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -10201,7 +10822,15 @@ class _LessonObservationCertaintyExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ObservationCertaintyDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ObservationCertaintyDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -10305,7 +10934,15 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ObservationCertaintyDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ObservationCertaintyDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -10321,6 +10958,10 @@ class _ObservationCertaintyDemoState extends State<ObservationCertaintyDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -10471,7 +11112,15 @@ class _LessonExploitEvidenceExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ExploitEvidenceDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ExploitEvidenceDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -10578,7 +11227,15 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ExploitEvidenceDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ExploitEvidenceDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -10594,6 +11251,10 @@ class _ExploitEvidenceDemoState extends State<ExploitEvidenceDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -10741,7 +11402,15 @@ class _LessonMultiwayNutsExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: MultiwayNutsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= MultiwayNutsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -10848,7 +11517,15 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: MultiwayNutsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= MultiwayNutsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -10864,6 +11541,10 @@ class _MultiwayNutsDemoState extends State<MultiwayNutsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -11011,7 +11692,15 @@ class _LessonDeepStacksExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: DeepStacksDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= DeepStacksDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -11114,7 +11803,15 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: DeepStacksDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= DeepStacksDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -11130,6 +11827,10 @@ class _DeepStacksDemoState extends State<DeepStacksDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -11277,7 +11978,15 @@ class _LessonImpliedOddsExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ImpliedOddsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ImpliedOddsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -11380,7 +12089,15 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ImpliedOddsDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ImpliedOddsDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -11396,6 +12113,10 @@ class _ImpliedOddsDemoState extends State<ImpliedOddsDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -11544,7 +12265,15 @@ class _LessonThinValueExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ThinValueDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ThinValueDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -11647,7 +12376,15 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: ThinValueDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= ThinValueDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -11663,6 +12400,10 @@ class _ThinValueDemoState extends State<ThinValueDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -11812,7 +12553,15 @@ class _LessonLineStoriesExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: LineStoriesDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= LineStoriesDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -11916,7 +12665,15 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: LineStoriesDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= LineStoriesDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -11932,6 +12689,10 @@ class _LineStoriesDemoState extends State<LineStoriesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -12095,7 +12856,15 @@ class _LessonRangeRewriteExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: RangeRewriteDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= RangeRewriteDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -12198,7 +12967,15 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: RangeRewriteDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= RangeRewriteDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -12214,6 +12991,10 @@ class _RangeRewriteDemoState extends State<RangeRewriteDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -12361,7 +13142,15 @@ class _LessonTimingCluesExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TimingCluesDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TimingCluesDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -12464,7 +13253,15 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TimingCluesDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TimingCluesDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -12480,6 +13277,10 @@ class _TimingCluesDemoState extends State<TimingCluesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -12628,7 +13429,15 @@ class _LessonTablesChangeExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TablesChangeDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TablesChangeDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -12731,7 +13540,15 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: TablesChangeDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= TablesChangeDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -12747,6 +13564,10 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;

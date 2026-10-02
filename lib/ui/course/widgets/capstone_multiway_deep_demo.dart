@@ -4,6 +4,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 
 /// Capstone: multiway deep explain: NUTS / DEEP / NO-BLUFF under the full poker table.
 class LessonCapstoneMultiwayDeepExplainTable extends StatefulWidget {
@@ -30,7 +31,15 @@ class _LessonCapstoneMultiwayDeepExplainTableState
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: CapstoneMultiwayDeepDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= CapstoneMultiwayDeepDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -133,7 +142,15 @@ class _CapstoneMultiwayDeepDemoState extends State<CapstoneMultiwayDeepDemo> {
 
   void _onTap(String label) {
     if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
     setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: CapstoneMultiwayDeepDemo.points.length - _tapped.length,
+    );
     if (_tapped.length >= CapstoneMultiwayDeepDemo.points.length) {
       widget.onAllPointsTapped!();
     }
@@ -149,6 +166,10 @@ class _CapstoneMultiwayDeepDemoState extends State<CapstoneMultiwayDeepDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextPoint;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last tap while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;

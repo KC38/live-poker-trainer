@@ -29,6 +29,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_choice_visuals.dart'
 import 'package:live_poker_trainer/ui/course/widgets/lesson_feedback_sheet.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_progress_header.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
@@ -1114,11 +1115,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           canHint:
               !_heartsGateActive &&
               _frameCanHint(activity) &&
-              !controller.hintUsed,
+              controller.canRequestHint,
           onUndo: controller.undoDraft,
           onRedo: controller.redoDraft,
           onHint: () {
-            if (_heartsGateActive || controller.hintUsed) return;
+            if (_heartsGateActive || !controller.canRequestHint) return;
             controller.revealHint();
             unawaited(
               ref
@@ -1148,15 +1149,19 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           answerBusy: _completing || _advancingActivity || _heartRefillBusy,
           stage: LessonFrameScope(
             onLocalMiss: _reportLocalMiss,
-            child: activityRegistry.build(
-              activity: activity,
-              controller: controller,
-              showGuidance: controller.showTargetCue,
-              onFeltAcknowledge:
-                  isTableRegionTapActivity(activity) &&
-                      activity.renderer == ActivityRenderer.coachDialogue
-                  ? _submit
-                  : null,
+            activityController: controller,
+            child: LessonSoftPulseScope(
+              allowed: controller.showTargetCue,
+              child: activityRegistry.build(
+                activity: activity,
+                controller: controller,
+                showGuidance: controller.showTargetCue,
+                onFeltAcknowledge:
+                    isTableRegionTapActivity(activity) &&
+                        activity.renderer == ActivityRenderer.coachDialogue
+                    ? _submit
+                    : null,
+              ),
             ),
           ),
         );
@@ -1343,11 +1348,11 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             livesRemaining: attempt.livesRemaining,
             livesMax: attempt.livesMax,
             acceptedStreak: _acceptedStreak,
-            hintEnabled: hasHint && !controller.hintUsed,
+            hintEnabled: hasHint && controller.canRequestHint,
             onHint: !hasHint
                 ? null
                 : () {
-                    if (controller.hintUsed) return;
+                    if (!controller.canRequestHint) return;
                     controller.revealHint();
                     setState(() {});
                     final attempt = _attempt;

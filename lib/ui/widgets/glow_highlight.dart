@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 
 /// Gold border + outer glow wrapped around any [child].
 ///
@@ -21,6 +22,10 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 /// ring. SoftPulse cues one target at a time, so [gutter] clears a single
 /// [outset], not two. Felt seats and cards pass [reserveLayout] false so
 /// their footprint stays tight under [Positioned] constraints.
+///
+/// Inside [LessonSoftPulseScope], SoftPulse also respects the current Hint
+/// wave so multi-press teach steps only glow for the first press (or after
+/// Hint re-opens SoftPulse).
 class GlowHighlight extends StatefulWidget {
   /// Wraps [child] in the shared gold highlight.
   const GlowHighlight({
@@ -142,6 +147,11 @@ class _GlowHighlightState extends State<GlowHighlight>
       bottomRight: Radius.circular(widget.borderRadius + pad.bottom),
     );
 
+    // Multi-press SoftPulse: demos may mark the next tile active, but the
+    // frame SoftPulse scope decides whether this Hint wave still glows.
+    final bool active =
+        widget.active && LessonSoftPulseScope.isAllowed(context);
+
     if (widget.reserveLayout) {
       // SoftPulse tiles: reserve only [outset] so faces stay large. Soft
       // shadow may soft-bleed into [gutter] / stage inset; SoftPulse cues
@@ -153,9 +163,7 @@ class _GlowHighlightState extends State<GlowHighlight>
           return DecoratedBox(
             key: const ValueKey<String>('glow-highlight-ring'),
             decoration:
-                widget.active
-                    ? _ringDecoration(t, radius)
-                    : const BoxDecoration(),
+                active ? _ringDecoration(t, radius) : const BoxDecoration(),
             child: Padding(
               key: const ValueKey<String>('glow-highlight'),
               padding: pad,
@@ -167,7 +175,7 @@ class _GlowHighlightState extends State<GlowHighlight>
       );
     }
 
-    if (!widget.active) return widget.child;
+    if (!active) return widget.child;
 
     // Felt seats / cards: keep the child's footprint; ring paints outside.
     return AnimatedBuilder(

@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -1006,9 +1007,20 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
       widget.onMiss?.call();
       return;
     }
+    final bool wasNext = !_selected.contains(suit) && widget.showGuidance;
     setState(() {
       if (!_selected.add(suit)) _selected.remove(suit);
     });
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    final remaining = const {'h', 'd', 'c', 's'}
+        .where((s) => !_selected.contains(s))
+        .length;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: remaining,
+    );
     if (_selected.length >= 4 &&
         _selected.containsAll(const {'h', 'd', 'c', 's'})) {
       widget.onAllSuitsSelected!();
@@ -1031,6 +1043,10 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
         }
       }
     }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: nextIndex == null ? 0 : 1,
+    );
     return LessonTableStage(
       heroCodes: _heroCodes,
       boardCodes: _boardCodes,

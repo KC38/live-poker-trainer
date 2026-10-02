@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
@@ -1145,7 +1146,16 @@ class _LessonHandFamiliesExplainTableState
 
   void _onTap(LessonHandExample family) {
     if (!widget.enabled || widget.onAllFamiliesTapped == null) return;
+    final bool wasNext = !_tapped.contains(family.id);
     setState(() => _tapped.add(family.id));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount:
+          HandFamiliesDemo.families.length - _tapped.length,
+    );
     if (_tapped.length >= HandFamiliesDemo.families.length) {
       widget.onAllFamiliesTapped!();
     }
@@ -1162,6 +1172,10 @@ class _LessonHandFamiliesExplainTableState
   Widget build(BuildContext context) {
     final teaching = widget.enabled && widget.onAllFamiliesTapped != null;
     final next = _nextFamily;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     final preview = next ?? HandFamiliesDemo.families.last;
     return Column(
       key: const ValueKey<String>('hand-families-table'),
@@ -1308,7 +1322,16 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
 
   void _onTap(LessonHandExample family) {
     if (!widget.enabled || widget.onAllFamiliesTapped == null) return;
+    final bool wasNext = !_tapped.contains(family.id);
     setState(() => _tapped.add(family.id));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount:
+          HandFamiliesDemo.families.length - _tapped.length,
+    );
     if (_tapped.length >= HandFamiliesDemo.families.length) {
       widget.onAllFamiliesTapped!();
     }
@@ -1324,6 +1347,10 @@ class _HandFamiliesDemoState extends State<HandFamiliesDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextFamily;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last family while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
