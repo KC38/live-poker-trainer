@@ -23,6 +23,13 @@ String experienceBandLabel(String band) {
   };
 }
 
+/// Whether a path node counts as finished for section completion %.
+bool countsTowardSectionProgress(CourseNodeState state) {
+  return state == CourseNodeState.completed ||
+      state == CourseNodeState.mastered ||
+      state == CourseNodeState.reviewDue;
+}
+
 /// Progress for one section derived from path nodes.
 class CourseSectionProgress {
   /// Creates section progress.
@@ -43,6 +50,9 @@ class CourseSectionProgress {
   double get fraction => total == 0 ? 0 : (completed / total).clamp(0, 1);
 
   int get percent => (fraction * 100).round();
+
+  /// Every published lesson in the section is finished (incl. review-due).
+  bool get isComplete => total > 0 && completed >= total;
 }
 
 /// Section id whose lessons should appear on the Home path.
@@ -82,11 +92,10 @@ List<CourseMapNode> homePathNodesForSection(
 List<CourseSectionProgress> buildSectionProgress(
   CourseHomeSnapshot snapshot,
 ) {
-  final completedIds = <String>{};
+  final finishedIds = <String>{};
   for (final node in snapshot.nodes) {
-    if (node.state == CourseNodeState.completed ||
-        node.state == CourseNodeState.mastered) {
-      completedIds.add(node.lessonId);
+    if (countsTowardSectionProgress(node.state)) {
+      finishedIds.add(node.lessonId);
     }
   }
   final currentSectionId = snapshot.nextNode?.sectionId;
@@ -98,7 +107,7 @@ List<CourseSectionProgress> buildSectionProgress(
     for (final unit in section.units) {
       for (final lesson in unit.lessons) {
         total += 1;
-        if (completedIds.contains(lesson.id)) done += 1;
+        if (finishedIds.contains(lesson.id)) done += 1;
       }
     }
     for (final node in snapshot.nodes) {
@@ -248,113 +257,214 @@ class _SectionCard extends StatelessWidget {
               color: AppColors.bgElevated,
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                color: row.isCurrent
+                color: row.isCurrent && !row.isComplete
                     ? accent.withValues(alpha: 0.7)
                     : AppColors.slateDark,
-                width: row.isCurrent ? 1.5 : 0.8,
+                width: row.isCurrent && !row.isComplete ? 1.5 : 0.8,
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: _SpeechBubble(text: section.summary),
-                      ),
-                      const SizedBox(width: 8),
-                      RexMascot(
-                        size: 64,
-                        mood: row.isCurrent ? RexMood.celebrate : RexMood.calm,
-                      ),
-                    ],
+            child: row.isComplete
+                ? _CompletedSectionBody(
+                    sectionOrder: section.order,
+                    accent: accent,
+                  )
+                : _ActiveSectionBody(
+                    row: row,
+                    accent: accent,
+                    unlocked: unlocked,
+                    onJump: onJump,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Section ${section.order}',
-                              style: GoogleFonts.manrope(
-                                color: AppColors.cream,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            experienceBandLabel(section.experienceBand),
-                            style: GoogleFonts.manrope(
-                              color: accent,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.4,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        section.title,
-                        style: GoogleFonts.manrope(
-                          color: AppColors.slate,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      if (row.isCurrent) ...[
-                        _ProgressTrack(
-                          percent: row.percent,
-                          accent: accent,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'CURRENT SECTION',
-                          style: GoogleFonts.manrope(
-                            color: accent,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.6,
-                          ),
-                        ),
-                      ] else
-                        TextButton(
-                          onPressed: unlocked ? onJump : null,
-                          style: TextButton.styleFrom(
-                            foregroundColor: unlocked
-                                ? accent
-                                : AppColors.slate,
-                            padding: EdgeInsets.zero,
-                            minimumSize: Size.zero,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                          child: Text(
-                            unlocked ? 'JUMP HERE' : 'LOCKED',
-                            style: GoogleFonts.manrope(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.6,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ),
     );
+  }
+}
+
+/// Finished section: title + full bar only (Duolingo-style).
+class _CompletedSectionBody extends StatelessWidget {
+  const _CompletedSectionBody({
+    required this.sectionOrder,
+    required this.accent,
+  });
+
+  final int sectionOrder;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(17),
+      child: CustomPaint(
+        painter: _DiagonalStripePainter(
+          color: AppColors.slateDark.withValues(alpha: 0.55),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Section $sectionOrder',
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _ProgressTrack(
+                percent: 100,
+                accent: accent,
+                showTrophyLit: true,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActiveSectionBody extends StatelessWidget {
+  const _ActiveSectionBody({
+    required this.row,
+    required this.accent,
+    required this.unlocked,
+    required this.onJump,
+  });
+
+  final CourseSectionProgress row;
+  final Color accent;
+  final bool unlocked;
+  final VoidCallback onJump;
+
+  @override
+  Widget build(BuildContext context) {
+    final section = row.section;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _SpeechBubble(text: section.summary),
+              ),
+              const SizedBox(width: 8),
+              RexMascot(
+                size: 64,
+                mood: row.isCurrent ? RexMood.celebrate : RexMood.calm,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Section ${section.order}',
+                      style: GoogleFonts.manrope(
+                        color: AppColors.cream,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    experienceBandLabel(section.experienceBand),
+                    style: GoogleFonts.manrope(
+                      color: accent,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                section.title,
+                style: GoogleFonts.manrope(
+                  color: AppColors.slate,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (row.isCurrent) ...[
+                _ProgressTrack(
+                  percent: row.percent,
+                  accent: accent,
+                  showTrophyLit: row.percent >= 100,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'CURRENT SECTION',
+                  style: GoogleFonts.manrope(
+                    color: accent,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+              ] else
+                TextButton(
+                  onPressed: unlocked ? onJump : null,
+                  style: TextButton.styleFrom(
+                    foregroundColor: unlocked ? accent : AppColors.slate,
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    unlocked ? 'JUMP HERE' : 'LOCKED',
+                    style: GoogleFonts.manrope(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DiagonalStripePainter extends CustomPainter {
+  const _DiagonalStripePainter({required this.color});
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 10
+      ..style = PaintingStyle.stroke;
+    const gap = 22.0;
+    for (var x = -size.height; x < size.width + size.height; x += gap) {
+      canvas.drawLine(
+        Offset(x, size.height),
+        Offset(x + size.height, 0),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DiagonalStripePainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }
 
@@ -386,13 +496,22 @@ class _SpeechBubble extends StatelessWidget {
 }
 
 class _ProgressTrack extends StatelessWidget {
-  const _ProgressTrack({required this.percent, required this.accent});
+  const _ProgressTrack({
+    required this.percent,
+    required this.accent,
+    this.showTrophyLit = false,
+  });
 
   final int percent;
   final Color accent;
+  final bool showTrophyLit;
 
   @override
   Widget build(BuildContext context) {
+    final fill = (percent / 100).clamp(0.0, 1.0);
+    final trophyColor = showTrophyLit || fill >= 1
+        ? accent
+        : AppColors.slate;
     return Row(
       children: [
         Expanded(
@@ -401,22 +520,13 @@ class _ProgressTrack extends StatelessWidget {
             child: SizedBox(
               height: 22,
               child: Stack(
-                alignment: Alignment.center,
                 children: [
                   Container(color: AppColors.slateDark),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: FractionallySizedBox(
-                      widthFactor: (percent / 100).clamp(0.0, 1.0),
+                      widthFactor: fill,
                       child: Container(color: accent),
-                    ),
-                  ),
-                  Text(
-                    '$percent%',
-                    style: GoogleFonts.manrope(
-                      color: AppColors.cream,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ],
@@ -425,7 +535,7 @@ class _ProgressTrack extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 10),
-        Icon(Icons.emoji_events_rounded, color: accent, size: 22),
+        Icon(Icons.emoji_events_rounded, color: trophyColor, size: 22),
       ],
     );
   }
