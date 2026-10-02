@@ -2912,11 +2912,24 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
 
   void _toggle(LessonSuitToken token) {
     if (widget.locked) return;
+    final bool wasNext = _nextHintSuit() == token;
     setState(() {
       if (!_selected.add(token)) {
         _selected.remove(token);
       }
     });
+    if (wasNext && widget.controller.showTargetCue) {
+      widget.controller.consumeSequentialSoftPulse();
+    }
+    final remaining = const [
+      LessonSuitToken.hearts,
+      LessonSuitToken.diamonds,
+      LessonSuitToken.clubs,
+      LessonSuitToken.spades,
+    ].where((t) => !_selected.contains(t)).length;
+    widget.controller.notifySequentialPressProgress(
+      remainingPressCount: remaining,
+    );
     final mapped = mapSuitTapSelectionToChoiceId(
       selected: _selected,
       choices: widget.activity.choices,
@@ -2977,6 +2990,9 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
         final wantedHeight =
             MediaQuery.sizeOf(context).height * kTeachFeltHeightFactor;
         final hint = _nextHintSuit();
+        widget.controller.notifySequentialPressProgress(
+          remainingPressCount: hint == null ? 0 : 1,
+        );
         final realSuits = const [
           LessonSuitToken.hearts,
           LessonSuitToken.diamonds,
@@ -3017,6 +3033,7 @@ class _SuitTapPickerState extends State<SuitTapPicker> {
                           Expanded(
                             child: GlowHighlight(
                               active:
+                                  widget.controller.showTargetCue &&
                                   hint != null &&
                                   realSuits[i] == hint &&
                                   !widget.locked,

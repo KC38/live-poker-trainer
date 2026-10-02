@@ -262,6 +262,74 @@ void main() {
     controller.dispose();
   });
 
+  test('multi-press SoftPulse only the first wave; Hint stays until done', () {
+    final activity = CourseActivity(
+      id: 'multi-press',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap Fold, Check, and Call.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Start with Fold'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isTrue);
+
+    controller.notifySequentialPressProgress(remainingPressCount: 3);
+    expect(controller.sequentialPressesRemaining, isTrue);
+
+    controller.consumeSequentialSoftPulse();
+    expect(controller.showTargetCue, isFalse);
+    expect(controller.canRequestHint, isTrue);
+
+    controller.revealHint();
+    expect(controller.hintUsed, isTrue);
+    expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isTrue);
+
+    controller.consumeSequentialSoftPulse();
+    expect(controller.showTargetCue, isFalse);
+    expect(controller.canRequestHint, isTrue);
+
+    controller.notifySequentialPressProgress(remainingPressCount: 0);
+    expect(controller.sequentialPressesRemaining, isFalse);
+    expect(controller.canRequestHint, isFalse);
+    expect(controller.hintVisible, isFalse);
+    controller.dispose();
+  });
+
+  test('Hint re-opens SoftPulse for the current next press only', () {
+    final activity = CourseActivity(
+      id: 'scaffolded-multi',
+      order: 2,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap each suit.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Hearts next'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    expect(controller.showTargetCue, isTrue);
+
+    controller.notifySequentialPressProgress(remainingPressCount: 4);
+    controller.consumeSequentialSoftPulse();
+    expect(controller.showTargetCue, isFalse);
+
+    controller.revealHint();
+    expect(controller.showTargetCue, isTrue);
+    controller.consumeSequentialSoftPulse();
+    expect(controller.showTargetCue, isFalse);
+    expect(controller.canRequestHint, isTrue);
+    controller.dispose();
+  });
+
   test('duplicate submit result must not animate a fresh life loss', () {
     final result = SubmitCourseStepResult(
       attemptId: 'att',

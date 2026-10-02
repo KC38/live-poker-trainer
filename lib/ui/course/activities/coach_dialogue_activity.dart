@@ -48,6 +48,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
@@ -3724,7 +3725,15 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
 
   void _onSuitTap(LessonSuitToken token) {
     if (!widget.enabled || widget.onAllSuitsTapped == null) return;
+    final bool wasNext = !_tapped.contains(token);
     setState(() => _tapped.add(token));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: _suits.length - _tapped.length,
+    );
     if (_tapped.length >= _suits.length) {
       _pulse.stop();
       widget.onAllSuitsTapped!();
@@ -3742,6 +3751,10 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
         break;
       }
     }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: remaining,
+    );
     // Keep densify after the last suit while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -3761,7 +3774,10 @@ class _SuitsRanksDemoState extends State<_SuitsRanksDemo>
               // Pulse only the next untapped suit — teach-by-doing
               // order, not a bulk glow on every remaining tile.
               final needsPulse =
-                  widget.enabled && nextSuit == token && remaining > 0;
+                  widget.enabled &&
+                  LessonSoftPulseScope.isAllowed(context) &&
+                  nextSuit == token &&
+                  remaining > 0;
               final glow = needsPulse ? 0.45 + (_pulse.value * 0.55) : 0.0;
               return DecoratedBox(
                 decoration: BoxDecoration(

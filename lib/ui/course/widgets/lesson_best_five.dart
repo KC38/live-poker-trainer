@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -270,7 +271,15 @@ class _LessonBestFiveExplainTableState
     if (!widget.enabled || widget.onAllPlayingTapped == null) return;
     if (!_deal.playing.contains(code)) return;
     if (_tapped.contains(code)) return;
+    final bool wasNext = _nextCode == code;
     setState(() => _tapped.add(code));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: _deal.playing.length - _tapped.length,
+    );
     if (_tapped.containsAll(_deal.playing)) {
       widget.onAllPlayingTapped!();
     }
@@ -289,6 +298,10 @@ class _LessonBestFiveExplainTableState
   @override
   Widget build(BuildContext context) {
     final next = _nextCode;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     final selectedHero = <int>{
       for (var i = 0; i < _deal.hero.length; i++)
         if (_tapped.contains(_deal.hero[i])) i,
@@ -591,7 +604,15 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
   void _onCardTap(String code) {
     if (!widget.enabled || widget.onAllPlayingTapped == null) return;
     if (!_deal.playing.contains(code)) return;
+    final bool wasNext = _nextCode == code;
     setState(() => _tapped.add(code));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: _deal.playing.length - _tapped.length,
+    );
     if (_tapped.containsAll(_deal.playing)) {
       widget.onAllPlayingTapped!();
     }
@@ -606,6 +627,10 @@ class _BestFiveDemoState extends State<BestFiveDemo> {
         widget.height ??
         (expandTeach ? MediaQuery.sizeOf(context).height * 0.58 : null);
     final next = _nextCode;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Width-capped FittedBox.contain left tiny cards in green void — scale
     // hero/board rows and spaceEvenly so the densified felt fills vertically.
     // Board stays ≤~1.2 so five hero cards fit one row on Pro width.

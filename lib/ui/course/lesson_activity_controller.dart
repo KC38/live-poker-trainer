@@ -1,6 +1,8 @@
 /// Local interaction state for one activity before/during server submit.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
@@ -56,6 +58,12 @@ class LessonActivityController extends ChangeNotifier {
   bool _hintVisible = false;
   /// Node key (`activityId#handStepIndex`) for which Hint was already used.
   String? _hintUsedNodeKey;
+  /// Node key for the active multi-press SoftPulse sequence, if any.
+  String? _sequentialCueNodeKey;
+  /// True while [currentNodeKey] still has multi-press taps left.
+  bool _sequentialPressesRemaining = false;
+  /// SoftPulse wave is open: first press (or Hint re-grant) may glow.
+  bool _sequentialSoftPulseWaveOpen = true;
   int _hintRequests = 0;
   String? _pendingIdempotencyKey;
   int _bindGeneration = 0;
@@ -81,6 +89,17 @@ class LessonActivityController extends ChangeNotifier {
   /// Scoped per screen (activity + hand step), not for the whole lesson —
   /// advancing to the next activity or street re-enables Hint.
   bool get hintUsed => _hintUsedNodeKey == currentNodeKey;
+
+  /// True while a multi-press node still has taps left.
+  ///
+  /// Keeps Hint enabled after [hintUsed] until the sequence is complete, so
+  /// the bubble / SoftPulse for the *current* next press can be restored.
+  bool get sequentialPressesRemaining =>
+      _sequentialPressesRemaining && _sequentialCueNodeKey == currentNodeKey;
+
+  /// Hint stays tappable while this node still has SoftPulse presses left.
+  bool get canRequestHint => !hintUsed || sequentialPressesRemaining;
+
   int get hintRequests => _hintRequests;
   String? get pendingIdempotencyKey => _pendingIdempotencyKey;
 
@@ -96,12 +115,60 @@ class LessonActivityController extends ChangeNotifier {
   /// after an interactive explain stay quiet until Hint (see
   /// [lessonFrameSoftPulseQuietByDefault]). Revealing a hint unlocks the
   /// same highlights on quieter stages (unguided / checkpoint / jump-test).
+  ///
+  /// Multi-press sequences SoftPulse only the current wave: the first press
+  /// (or a Hint re-open). After that press is tapped, SoftPulse stays off
+  /// until Hint opens the next one-press wave.
   bool get showTargetCue {
-    if (_hintVisible) return true;
-    if (lessonFrameSoftPulseQuietByDefault(activity)) return false;
-    return activity.stage == ActivityStage.explain ||
-        activity.stage == ActivityStage.guided ||
-        activity.stage == ActivityStage.scaffolded;
+    final unlocked = _hintVisible ||
+        (!lessonFrameSoftPulseQuietByDefault(activity) &&
+            (activity.stage == ActivityStage.explain ||
+                activity.stage == ActivityStage.guided ||
+                activity.stage == ActivityStage.scaffolded));
+    if (!unlocked) return false;
+    if (_sequentialCueNodeKey == currentNodeKey &&
+        !_sequentialSoftPulseWaveOpen) {
+      return false;
+    }
+    return true;
+  }
+
+  /// Reports how many presses remain in a multi-press SoftPulse sequence.
+  ///
+  /// Call from multi-press demos on build / after taps so Hint stays enabled
+  /// until [remainingPressCount] reaches zero. Does not consume SoftPulse.
+  void notifySequentialPressProgress({required int remainingPressCount}) {
+    final remaining = remainingPressCount > 0;
+    var changed = false;
+    if (remaining && _sequentialCueNodeKey != currentNodeKey) {
+      _sequentialCueNodeKey = currentNodeKey;
+      changed = true;
+    }
+    if (_sequentialPressesRemaining != remaining) {
+      _sequentialPressesRemaining = remaining;
+      changed = true;
+    }
+    if (!remaining && _hintVisible) {
+      _hintVisible = false;
+      changed = true;
+    }
+    if (!changed) return;
+    // Defer so callers can finish the current build / setState.
+    scheduleMicrotask(() {
+      if (hasListeners) notifyListeners();
+    });
+  }
+
+  /// Ends the current SoftPulse wave after the learner taps the cued target.
+  ///
+  /// Later presses stay quiet until [revealHint] / [toggleHint] re-opens the
+  /// wave for one more press.
+  void consumeSequentialSoftPulse() {
+    if (!_sequentialSoftPulseWaveOpen) return;
+    _sequentialSoftPulseWaveOpen = false;
+    // Multi-press nodes must be marked before SoftPulse can stay off.
+    _sequentialCueNodeKey ??= currentNodeKey;
+    notifyListeners();
   }
 
   void bindActivity(CourseActivity next) {
@@ -113,6 +180,9 @@ class LessonActivityController extends ChangeNotifier {
     _submitting = false;
     _hintVisible = false;
     _hintUsedNodeKey = null;
+    _sequentialCueNodeKey = null;
+    _sequentialPressesRemaining = false;
+    _sequentialSoftPulseWaveOpen = true;
     _pendingIdempotencyKey = null;
     _tappedSeatLabel = null;
     _bindGeneration += 1;
@@ -239,15 +309,21 @@ class LessonActivityController extends ChangeNotifier {
     _hintVisible = !_hintVisible;
     if (_hintVisible) {
       _hintUsedNodeKey = currentNodeKey;
+      // Re-open SoftPulse for the current next press only.
+      _sequentialSoftPulseWaveOpen = true;
       _hintRequests += 1;
     }
     notifyListeners();
   }
 
-  /// Reveals the hint once for the current lesson screen.
+  /// Reveals the hint for the current lesson screen.
+  ///
+  /// On multi-press nodes Hint may be tapped again while presses remain;
+  /// each reveal re-opens SoftPulse for the current next press only.
   void revealHint() {
     _hintVisible = true;
     _hintUsedNodeKey = currentNodeKey;
+    _sequentialSoftPulseWaveOpen = true;
     _hintRequests += 1;
     notifyListeners();
   }
@@ -258,6 +334,9 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     _pendingIdempotencyKey = null;
     _hintVisible = false;
+    _sequentialCueNodeKey = null;
+    _sequentialPressesRemaining = false;
+    _sequentialSoftPulseWaveOpen = true;
     // New hand street = new screen; Hint becomes available again because
     // [hintUsed] compares against [currentNodeKey].
     _draft = ActivityDraft(handStepIndex: _draft.handStepIndex + 1);

@@ -13,6 +13,7 @@ import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 
 /// Features for Streets explain / order on the full table.
 TableFeatures get lessonStreetsTableFeatures => const TableFeatures(
@@ -64,7 +65,15 @@ class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
 
   void _onTap(String title) {
     if (!widget.enabled || widget.onAllStreetsTapped == null) return;
+    final bool wasNext = !_tapped.contains(title);
     setState(() => _tapped.add(title));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: StreetsTimelineDemo.streets.length - _tapped.length,
+    );
     if (_tapped.length >= StreetsTimelineDemo.streets.length) {
       widget.onAllStreetsTapped!();
     }
@@ -80,6 +89,10 @@ class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
   List<String> get _board {
     // Show the furthest street reached (or the next one while teaching).
     final next = _nextStreet;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     if (next != null) {
       for (final street in StreetsTimelineDemo.streets) {
         if (street.title == next) return street.board;
@@ -92,6 +105,10 @@ class _LessonStreetsExplainTableState extends State<LessonStreetsExplainTable> {
   Widget build(BuildContext context) {
     final teaching = widget.enabled && widget.onAllStreetsTapped != null;
     final next = _nextStreet;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     return Column(
       key: const ValueKey<String>('streets-table'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -312,7 +329,15 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
 
   void _onTap(String title) {
     if (!widget.enabled || widget.onAllStreetsTapped == null) return;
+    final bool wasNext = !_tapped.contains(title);
     setState(() => _tapped.add(title));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: StreetsTimelineDemo.streets.length - _tapped.length,
+    );
     if (_tapped.length >= StreetsTimelineDemo.streets.length) {
       widget.onAllStreetsTapped!();
     }
@@ -328,6 +353,10 @@ class _StreetsTimelineDemoState extends State<StreetsTimelineDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextStreet;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last street while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;
@@ -908,6 +937,10 @@ class _ActionOrderDemoState extends State<ActionOrderDemo> {
   @override
   Widget build(BuildContext context) {
     final next = _nextCorrect;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: next == null ? 0 : 1,
+    );
     // Keep densify after the last seat while Continue shows — locking
     // `enabled` false must not collapse the teach shell into navy void.
     final expandTeach = widget.interactive;

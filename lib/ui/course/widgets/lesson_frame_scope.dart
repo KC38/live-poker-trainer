@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 
 /// Activity bodies hide their own coach line so the bubble is the only copy.
 class LessonFrameScope extends InheritedWidget {
@@ -9,11 +10,15 @@ class LessonFrameScope extends InheritedWidget {
   const LessonFrameScope({
     super.key,
     required this.onLocalMiss,
+    this.activityController,
     required super.child,
   });
 
   /// Shows the wrong dock for [feedback].
   final void Function(String feedback) onLocalMiss;
+
+  /// Shared activity controller for SoftPulse / Hint coordination.
+  final LessonActivityController? activityController;
 
   /// The surrounding frame, if this step is inside one.
   static LessonFrameScope? maybeOf(BuildContext context) {
@@ -21,5 +26,32 @@ class LessonFrameScope extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(LessonFrameScope oldWidget) => false;
+  bool updateShouldNotify(LessonFrameScope oldWidget) =>
+      activityController != oldWidget.activityController;
+}
+
+/// Tells the frame how many multi-press taps remain (keeps Hint enabled).
+///
+/// Pass a positive count while SoftPulse targets remain; pass `0` when the
+/// sequence is finished. SoftPulse itself is gated by
+/// [LessonActivityController.showTargetCue] after
+/// [consumeLessonSequentialSoftPulse].
+void reportLessonSequentialPressProgress(
+  BuildContext context, {
+  required int remainingPressCount,
+}) {
+  LessonFrameScope.maybeOf(context)
+      ?.activityController
+      ?.notifySequentialPressProgress(
+        remainingPressCount: remainingPressCount,
+      );
+}
+
+/// Ends the SoftPulse wave after the learner taps the cued target.
+///
+/// Later presses stay quiet until Hint re-opens a one-press SoftPulse wave.
+void consumeLessonSequentialSoftPulse(BuildContext context) {
+  LessonFrameScope.maybeOf(context)
+      ?.activityController
+      ?.consumeSequentialSoftPulse();
 }
