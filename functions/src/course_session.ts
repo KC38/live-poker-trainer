@@ -889,14 +889,21 @@ export async function startCourseLessonForUser(options: {
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
     });
-    tx.set(profileRef, {
-      currentLessonId: lessonId,
-      resume: resumeFromAttempt(attempt),
+    // Practice / review of an already-completed lesson must not move the
+    // course progress pointer (currentLessonId / resume). Otherwise going
+    // back to review an earlier node regresses Home focus and can wipe an
+    // in-progress first-run further along the path.
+    const profileUpdate: DocumentData = {
       catalogVersion,
       timezone,
       ...heartFieldsToFirestore(passive),
       updatedAt: FieldValue.serverTimestamp(),
-    }, {merge: true});
+    };
+    if (!isPracticeReplay) {
+      profileUpdate.currentLessonId = lessonId;
+      profileUpdate.resume = resumeFromAttempt(attempt);
+    }
+    tx.set(profileRef, profileUpdate, {merge: true});
     return {
       attempt,
       resume: resumeFromAttempt(attempt),
@@ -1183,8 +1190,6 @@ export async function submitCourseStepForUser(options: {
     });
 
     const profileUpdate: DocumentData = {
-      currentLessonId: attempt.lessonId,
-      resume,
       currentStreak: streak.currentStreak,
       longestStreak: streak.longestStreak,
       lastStudyLocalDate: streak.lastStudyLocalDate,
@@ -1195,6 +1200,11 @@ export async function submitCourseStepForUser(options: {
       livesNextRefillAtMs,
       updatedAt: FieldValue.serverTimestamp(),
     };
+    // Reviews keep the furthest-progress pointer intact.
+    if (!isReview) {
+      profileUpdate.currentLessonId = attempt.lessonId;
+      profileUpdate.resume = resume;
+    }
     // Only scored answers affect accepted accuracy (docs/architecture.md).
     // Explain auto-passes must not inflate the numerator past the denominator.
     if (countsAsScored) {
@@ -1462,6 +1472,14 @@ export async function completeCourseLessonForUser(options: {
     const firstLessonCompletedAtMs =
       Number(profileSnap.data()?.firstLessonCompletedAtMs ?? 0) ||
       (completedLessonIds.length === 1 ? nowMs : null);
+    const existingResume = profileSnap.data()?.resume as
+      | DocumentData
+      | undefined;
+    const resumePointsHere =
+      optionalString(existingResume?.attemptId) === attemptId;
+    // Completing a review must not clear an unrelated first-run resume
+    // further along the path. Only clear when this attempt owns the pointer.
+    const clearProgressPointer = !isReview || resumePointsHere;
     tx.set(profileRef, {
       lifetimeXp: FieldValue.increment(xpAwarded),
       ...(gemsAwarded > 0 ? {gems: FieldValue.increment(gemsAwarded)} : {}),
@@ -1470,8 +1488,9 @@ export async function completeCourseLessonForUser(options: {
       lastStudyLocalDate: streak.lastStudyLocalDate,
       completedLessonIds,
       masteryByLessonId,
-      currentLessonId: null,
-      resume: null,
+      ...(clearProgressPointer ?
+        {currentLessonId: null, resume: null} :
+        {}),
       acceptedAccuracy: profileAcceptedAccuracy,
       ...heartFieldsToFirestore(heartState),
       ...(firstLessonCompletedAtMs ?
@@ -1578,14 +1597,18 @@ export async function getCourseStateForUser(options: {
       .get();
     if (snap.exists) {
       const attempt = attemptFromData(snap.data()!);
-      if (attempt.status === "in_progress" || attempt.status === "remediation") {
-        openAttempt = profile ?
-          {
-            ...attempt,
-            livesRemaining: profile.livesRemaining,
-            livesMax: profile.livesMax,
-          } :
-          attempt;
+      const completedIds = profile.completedLessonIds;
+      const isPracticeReplay = completedIds.includes(attempt.lessonId);
+      // Do not surface review/practice attempts as the Home resume pointer.
+      if (
+        !isPracticeReplay &&
+        (attempt.status === "in_progress" || attempt.status === "remediation")
+      ) {
+        openAttempt = {
+          ...attempt,
+          livesRemaining: profile.livesRemaining,
+          livesMax: profile.livesMax,
+        };
       }
     }
   }

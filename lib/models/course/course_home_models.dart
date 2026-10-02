@@ -383,9 +383,15 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
   final completed = profile?.completedLessonIds.toSet() ?? <String>{};
   final mastery = profile?.masteryByLessonId ?? const <String, double>{};
   final reviews = reviewLessonIds.toSet();
-  // Only a live open attempt is resumable. Dangling profile.resume after
-  // complete would restart the finished lesson at activity 0.
-  final activeLessonId = openAttempt?.lessonId;
+  // Only a live first-run open attempt owns the Home progress pointer.
+  // Replays of already-completed lessons must not move isNext / focus /
+  // resume — otherwise reviewing an earlier node regresses the path.
+  // Dangling profile.resume after complete is also ignored (no openAttempt).
+  final progressAttempt =
+      openAttempt != null && !completed.contains(openAttempt.lessonId)
+          ? openAttempt
+          : null;
+  final activeLessonId = progressAttempt?.lessonId;
   final startsOpen = flags.courseStartsEnabled;
   final lessonTitles = <String, String>{};
   for (final section in catalog.sections) {
@@ -511,12 +517,12 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
   ];
 
   final resume =
-      openAttempt != null
+      progressAttempt != null
           ? CourseResumePointer(
-            attemptId: openAttempt.attemptId,
-            lessonId: openAttempt.lessonId,
-            activityId: openAttempt.currentActivityId,
-            activityIndex: openAttempt.activityIndex,
+            attemptId: progressAttempt.attemptId,
+            lessonId: progressAttempt.lessonId,
+            activityId: progressAttempt.currentActivityId,
+            activityIndex: progressAttempt.activityIndex,
           )
           : null;
 

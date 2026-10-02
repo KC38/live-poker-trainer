@@ -519,4 +519,93 @@ describe("course session integration", () => {
     expect(entitlement.data()?.grantedByLessonId).toBe(lessonId);
   });
 
+  test("reviewing an earlier lesson does not move the progress pointer", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "review-pointer-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    const frontierLessonId = "lesson-02-01-01-position-labels";
+    const reviewLessonId = "lesson-01-01-01-your-two-cards";
+    await db.doc("users/review-pointer-user/course/main").set({
+      completedLessonIds: [
+        "lesson-01-01-01-your-two-cards",
+        "lesson-01-06-02-section-one-jump",
+      ],
+      currentLessonId: frontierLessonId,
+      resume: {
+        attemptId: "frontier-att",
+        lessonId: frontierLessonId,
+        activityId: "act-02-01-01-explain-pos",
+        activityIndex: 0,
+      },
+    }, {merge: true});
+    await db.doc("users/review-pointer-user/courseAttempts/frontier-att").set({
+      attemptId: "frontier-att",
+      uid: "review-pointer-user",
+      lessonId: frontierLessonId,
+      catalogVersion: "2.0.0",
+      status: "in_progress",
+      activityIndex: 0,
+      currentActivityId: "act-02-01-01-explain-pos",
+      livesRemaining: 5,
+      livesMax: 5,
+      startRequestId: "start_frontier_seed",
+      acceptedCount: 0,
+      scoredCount: 0,
+      acceptedScoredCount: 0,
+      masteryPoints: 0,
+      masteryWeight: 0,
+      jumpTestPassed: false,
+      stepCount: 0,
+      xpEarned: 0,
+      createdAtMs: Date.now(),
+      updatedAtMs: Date.now(),
+      completedAtMs: null,
+    });
+
+    const reviewed = await startCourseLessonForUser({
+      uid: "review-pointer-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: reviewLessonId,
+        startRequestId: "start_review_pointer_01",
+      },
+      db,
+    });
+    expect(reviewed.attempt.lessonId).toBe(reviewLessonId);
+
+    const profileAfterStart = (
+      await db.doc("users/review-pointer-user/course/main").get()
+    ).data();
+    expect(profileAfterStart?.currentLessonId).toBe(frontierLessonId);
+    expect(profileAfterStart?.resume?.attemptId).toBe("frontier-att");
+    expect(profileAfterStart?.resume?.lessonId).toBe(frontierLessonId);
+
+    await submitCourseStepForUser({
+      uid: "review-pointer-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: reviewed.attempt.attemptId,
+        activityId: "act-01-01-01-explain-hole-cards",
+        idempotencyKey: "review_pointer_step_01",
+      },
+      db,
+    });
+    const profileAfterSubmit = (
+      await db.doc("users/review-pointer-user/course/main").get()
+    ).data();
+    expect(profileAfterSubmit?.currentLessonId).toBe(frontierLessonId);
+    expect(profileAfterSubmit?.resume?.attemptId).toBe("frontier-att");
+
+    const state = await getCourseStateForUser({
+      uid: "review-pointer-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    expect(state.openAttempt?.lessonId).toBe(frontierLessonId);
+    expect(state.openAttempt?.attemptId).toBe("frontier-att");
+  });
+
 });
