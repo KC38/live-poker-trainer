@@ -1,6 +1,8 @@
 /// Select / identify activity (positions, cards, classifications).
 library;
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
@@ -427,6 +429,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   LessonTableRegion? _selectedRegion;
   int? _selectedSeatIndex;
 
+  /// Checkpoint layout: SB puck/chips after a hit, then BB after a short beat.
+  bool _checkpointSbPosted = false;
+  bool _checkpointBbPosted = false;
+  Timer? _checkpointBbTimer;
+
+  /// Gap between SB and BB pop-ins — matches the StreetBetPill settle feel.
+  static const Duration _checkpointBlindStagger = Duration(milliseconds: 380);
+
   @override
   void initState() {
     super.initState();
@@ -436,16 +446,21 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   @override
   void didUpdateWidget(covariant _TableRegionTapActivity oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.controller != widget.controller) {
+    if (oldWidget.controller != widget.controller ||
+        oldWidget.activity.id != widget.activity.id) {
       oldWidget.controller.removeListener(_onController);
       widget.controller.addListener(_onController);
+      _checkpointBbTimer?.cancel();
       _selectedRegion = null;
       _selectedSeatIndex = null;
+      _checkpointSbPosted = false;
+      _checkpointBbPosted = false;
     }
   }
 
   @override
   void dispose() {
+    _checkpointBbTimer?.cancel();
     widget.controller.removeListener(_onController);
     super.dispose();
   }
@@ -460,13 +475,47 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
           widget.controller.hintVisible);
 
   void _onController() {
+    var clearSelection = false;
     if (widget.controller.draft.choiceId == null &&
         (_selectedRegion != null || _selectedSeatIndex != null)) {
+      clearSelection = true;
+    }
+    final revealChanged = _syncCheckpointBlindReveal();
+    if (clearSelection || revealChanged) {
       setState(() {
-        _selectedRegion = null;
-        _selectedSeatIndex = null;
+        if (clearSelection) {
+          _selectedRegion = null;
+          _selectedSeatIndex = null;
+        }
       });
     }
+  }
+
+  /// Returns true when SB/BB posted flags changed (caller should setState).
+  bool _syncCheckpointBlindReveal() {
+    if (widget.activity.id != 'act-01-01-03-checkpoint-layout') {
+      return false;
+    }
+    final hit = widget.controller.draft.choiceId == 'sb-seat0' ||
+        (widget.controller.lastResult?.accepted ?? false);
+    if (!hit) {
+      if (widget.controller.draft.choiceId == null &&
+          (_checkpointSbPosted || _checkpointBbPosted)) {
+        _checkpointBbTimer?.cancel();
+        _checkpointSbPosted = false;
+        _checkpointBbPosted = false;
+        return true;
+      }
+      return false;
+    }
+    if (_checkpointSbPosted) return false;
+    _checkpointSbPosted = true;
+    _checkpointBbTimer?.cancel();
+    _checkpointBbTimer = Timer(_checkpointBlindStagger, () {
+      if (!mounted) return;
+      setState(() => _checkpointBbPosted = true);
+    });
+    return true;
   }
 
   /// Region the written instruction names, so tapping that sentence
@@ -1508,13 +1557,20 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     dealerIndex: lessonBlindsButtonIndex,
                     sbIndex: lessonBlindsSmallBlindIndex,
                     bbIndex: lessonBlindsBigBlindIndex,
-                    // Ask who posts BB without showing $2 already out —
-                    // post + animate as soon as the learner taps the BB seat.
-                    postBigBlind:
+                    // Scaffolded: SB already out; BB posts on a correct tap.
+                    // Checkpoint: both hidden until SB is tapped, then SB and
+                    // BB pop in one after the other (same SeatPuck / bet pop).
+                    postSmallBlind:
                         widget.activity.id !=
-                            'act-01-01-03-scaffolded-blinds' ||
+                            'act-01-01-03-checkpoint-layout' ||
+                        _checkpointSbPosted,
+                    postBigBlind: switch (widget.activity.id) {
+                      'act-01-01-03-scaffolded-blinds' =>
                         widget.controller.draft.choiceId == 'bb-two' ||
-                        (widget.controller.lastResult?.accepted ?? false),
+                            (widget.controller.lastResult?.accepted ?? false),
+                      'act-01-01-03-checkpoint-layout' => _checkpointBbPosted,
+                      _ => true,
+                    },
                     // SoftPulse (CuePulse + arrows) only — never gold-tip via
                     // activeSeatIndex before Hint on quieter stages.
                     cueSeatIndex:

@@ -628,6 +628,89 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets(
+    'checkpoint layout reveals SB then BB after a correct small-blind tap',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-01-01-03-checkpoint-layout',
+        order: 5,
+        stage: ActivityStage.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 45,
+        accessibilityText: 'On a six-handed table, tap the small blind seat.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Button is seat 5. Tap the small blind.',
+        choices: const [
+          CourseChoice(id: 'sb-seat0', label: 'Seat 0 (first left of button)'),
+          CourseChoice(id: 'sb-seat4', label: 'Seat 4 (right of button)'),
+          CourseChoice(id: 'sb-seat1', label: 'Seat 1 (big blind seat)'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.binding.setSurfaceSize(const Size(390, 720));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme(),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId(
+                'lesson-01-01-03-blinds-and-button',
+              ),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: SizedBox(
+                  height: 560,
+                  child: SelectIdentifyActivity(
+                    activity: activity,
+                    controller: controller,
+                    showGuidance: true,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(
+        find.byKey(const ValueKey<String>('lesson-table-stage')),
+        findsOneWidget,
+      );
+      // Only the D chip — SB/BB wait for the correct seat tap.
+      expect(find.byKey(const ValueKey<String>('puck-D')), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('puck-SB')), findsNothing);
+      expect(find.byKey(const ValueKey<String>('puck-BB')), findsNothing);
+      expect(find.text(r'$1'), findsNothing);
+      expect(find.text(r'$2'), findsNothing);
+
+      await tester.tap(
+        find.byKey(
+          ValueKey<String>('lesson-seat-$lessonBlindsSmallBlindIndex'),
+        ),
+      );
+      await tester.pump();
+
+      expect(controller.draft.choiceId, 'sb-seat0');
+      // SB pops first; BB still hidden for the stagger beat.
+      expect(find.byKey(const ValueKey<String>('puck-SB')), findsOneWidget);
+      expect(find.text(r'$1'), findsOneWidget);
+      expect(find.byKey(const ValueKey<String>('puck-BB')), findsNothing);
+      expect(find.text(r'$2'), findsNothing);
+      expect(find.textContaining(r'POT $1'), findsOneWidget);
+
+      await tester.pump(const Duration(milliseconds: 380));
+
+      expect(find.byKey(const ValueKey<String>('puck-BB')), findsOneWidget);
+      expect(find.text(r'$2'), findsOneWidget);
+      expect(find.textContaining(r'POT $3'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
   test('same-concept guided nodes stay SoftPulse-quiet until Hint', () {
     expect(lessonFrameSameConceptQuietIds, isNotEmpty);
     for (final id in lessonFrameSameConceptQuietIds) {
