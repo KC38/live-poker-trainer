@@ -5,28 +5,22 @@ library;
 /// `LIVE_WARMUP_UNLOCK_LESSON_ID` in Cloud Functions.
 const kLiveWarmUpUnlockLessonId = 'lesson-02-07-02-section-two-jump';
 
-/// Home title for [kLiveWarmUpUnlockLessonId] when the catalog is not loaded.
+/// Catalog path-node title for [kLiveWarmUpUnlockLessonId].
 ///
-/// This is the path-node title. It does not say Section 2.
+/// Locked-tab copy uses learner-facing "Section 2 checkpoint" wording instead
+/// of this node title.
 const kLiveWarmUpUnlockLessonTitle = 'Baseline jump check';
 
-/// Locked-tab sentence. [lessonTitle] is the Home lesson the learner must finish.
-String liveTrainingLockedMessage({String? lessonTitle}) {
-  final title = _unlockTitle(lessonTitle);
-  return 'Live Training is advanced. Finish $title on Home '
+/// Locked-tab sentence. Points at the Section 2 Home checkpoint.
+String liveTrainingLockedMessage() {
+  return 'Live Training is advanced. Finish the Section 2 checkpoint on Home '
       'to unlock a coached warm-up.';
 }
 
 /// Snackbar when a locked learner tries to start a table.
-String liveTrainingLockedSnack({String? lessonTitle}) {
-  final title = _unlockTitle(lessonTitle);
-  return 'Live Training unlocks after $title. Continue on Home.';
-}
-
-String _unlockTitle(String? lessonTitle) {
-  final trimmed = lessonTitle?.trim() ?? '';
-  if (trimmed.isEmpty) return kLiveWarmUpUnlockLessonTitle;
-  return trimmed;
+String liveTrainingLockedSnack() {
+  return 'Live Training unlocks after the Section 2 checkpoint. '
+      'Continue on Home.';
 }
 
 /// Access level for the Live Training tab and start callables.
