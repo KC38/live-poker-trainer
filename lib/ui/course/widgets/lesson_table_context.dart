@@ -3535,6 +3535,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-01-04-01-checkpoint-postflop':
       return const LessonTableScene(
         layout: LessonTableLayout.blindsSeats,
+        // Three flop cards so the live table is FLOP, not PREFLOP.
+        boardCodes: ['Qs', '7c', '2d'],
         // SoftPulse stays off until Hint (checkpoint). Highlight names the
         // answer seat so Hint can SoftPulse SB — not the button.
         highlight: LessonTableHighlight.smallBlind,

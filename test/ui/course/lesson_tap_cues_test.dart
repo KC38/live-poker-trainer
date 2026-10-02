@@ -463,6 +463,9 @@ void main() {
     );
     await tester.pump();
 
+    expect(find.textContaining('FLOP'), findsOneWidget);
+    expect(find.textContaining('PREFLOP'), findsNothing);
+
     expect(
       find.byKey(ValueKey<String>('seat-cue-$lessonBlindsSmallBlindIndex')),
       findsNothing,
