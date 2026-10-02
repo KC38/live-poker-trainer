@@ -1031,15 +1031,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       _retryBootstrap();
     }
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          result.heartsRestored > 0
-              ? 'Heart restored! ${result.livesRemaining}/${result.livesMax}'
-              : 'Hearts updated.',
-        ),
-      ),
-    );
+    final message = heartRefillSuccessSnackBarMessage(result);
+    if (message != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    }
   }
 
   /// Hearts for the lesson chrome while bootstrapping or after an error.

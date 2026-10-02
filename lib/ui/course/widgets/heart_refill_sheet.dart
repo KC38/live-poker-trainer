@@ -12,6 +12,17 @@ import 'package:live_poker_trainer/services/firestore/course_service.dart';
 /// Cost of a full gem refill (matches server [GEMS_FULL_HEART_REFILL]).
 const int kGemsFullHeartRefill = 650;
 
+/// Success snackbar copy after a heart refill, or `null` to show nothing.
+///
+/// The heart chrome already shows remaining/max, so confirmation toasts are
+/// suppressed for every refill method (ad, gems, practice grant).
+String? heartRefillSuccessSnackBarMessage(RefillCourseHeartsResult result) {
+  // Keep the result parameter so call sites stay typed if copy returns later.
+  return switch (result.method) {
+    'ad' || 'gems' || 'practice' || _ => null,
+  };
+}
+
 /// Result of a refill action chosen in the sheet.
 enum HeartRefillAction {
   /// Start a practice/replay lesson for +1 heart on completion.

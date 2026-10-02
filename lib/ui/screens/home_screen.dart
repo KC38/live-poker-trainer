@@ -279,15 +279,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           final home = ref.read(courseHomeProvider.notifier);
           home.applyHeartRefill(result);
           unawaited(home.refresh());
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                result.heartsRestored > 0
-                    ? 'Heart restored! ${result.livesRemaining}/${result.livesMax}'
-                    : 'Hearts updated.',
-              ),
-            ),
-          );
+          final message = heartRefillSuccessSnackBarMessage(result);
+          if (message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message)),
+            );
+          }
         } catch (error) {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
@@ -305,13 +302,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           final home = ref.read(courseHomeProvider.notifier);
           home.applyHeartRefill(result);
           unawaited(home.refresh());
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Hearts refilled! ${result.livesRemaining}/${result.livesMax}',
-              ),
-            ),
-          );
+          final message = heartRefillSuccessSnackBarMessage(result);
+          if (message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(message)),
+            );
+          }
         } catch (error) {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
