@@ -4497,9 +4497,23 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
+    // Completed map node: replaying from Home must still gate at zero hearts.
     const home = CourseHomeSnapshot(
       status: CourseHomeLoadStatus.ready,
-      nodes: [],
+      nodes: [
+        CourseMapNode(
+          lessonId: kFirstCourseLessonId,
+          title: 'Your two cards',
+          summary: 'Done',
+          kind: CourseNodeKind.lesson,
+          state: CourseNodeState.completed,
+          sectionId: 'sec',
+          sectionTitle: 'Sec',
+          unitId: 'unit',
+          unitTitle: 'Unit',
+          isNext: false,
+        ),
+      ],
       sections: [],
       hearts: 0,
       livesMax: 5,
@@ -4558,6 +4572,59 @@ void main() {
     await tester.pump();
     expect(zeroHearts.submitCalls, 0);
     expect(find.text('Nice!'), findsNothing);
+  });
+
+  testWidgets('Practice refill path can play at zero hearts', (tester) async {
+    tester.view.physicalSize = const Size(390, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    const home = CourseHomeSnapshot(
+      status: CourseHomeLoadStatus.ready,
+      nodes: [],
+      sections: [],
+      hearts: 0,
+      livesMax: 5,
+      gems: 0,
+    );
+    final zeroHearts = _ZeroHeartsCourseService(catalog);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => catalog),
+          courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: LessonRunnerScreen(
+            lessonId: kFirstCourseLessonId,
+            courseService: zeroHearts,
+            startRequestId: 'start_practice_zero',
+            allowZeroHeartsPractice: true,
+          ),
+        ),
+      ),
+    );
+    await _pumpUntil(tester, find.textContaining('Tap your cards'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text('Out of hearts'), findsNothing);
+    expect(find.text('Watch an ad'), findsNothing);
+    expect(find.byTooltip('Hint'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
+    await tester.pump();
+    await tester.pump();
+    expect(zeroHearts.submitCalls, 1);
   });
 
   testWidgets('a due passive heart lifts the in-lesson gate', (tester) async {

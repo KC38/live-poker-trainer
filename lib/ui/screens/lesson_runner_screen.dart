@@ -42,6 +42,7 @@ class LessonRunnerScreen extends ConsumerStatefulWidget {
     super.key,
     required this.lessonId,
     this.embeddedInShell = false,
+    this.allowZeroHeartsPractice = false,
     this.courseService,
     this.startRequestId,
     this.bootstrapTimeout = const Duration(seconds: 45),
@@ -52,6 +53,12 @@ class LessonRunnerScreen extends ConsumerStatefulWidget {
 
   /// When true, keeps shell chrome; when false this is a standalone route.
   final bool embeddedInShell;
+
+  /// When true, play is allowed at zero hearts so Practice can earn one back.
+  ///
+  /// Only set this from the heart-refill "Practice" action. Map opens and
+  /// mid-lesson continue always gate at zero hearts.
+  final bool allowZeroHeartsPractice;
 
   /// Optional injectable service (tests).
   final CourseService? courseService;
@@ -332,34 +339,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     return c.draft.choiceId != null;
   }
 
-  /// Practice / replay may start at 0 hearts to earn one back.
-  bool get _isPracticeOrReplay {
-    final lesson = _lesson;
-    if (lesson != null) {
-      final id = lesson.id.toLowerCase();
-      final title = lesson.title.toLowerCase();
-      if (id.contains('-practice-') || title.contains('practice')) {
-        return true;
-      }
-    }
-    final home = ref.read(courseHomeProvider).asData?.value;
-    if (home == null) return false;
-    final lessonId = _lesson?.id ?? widget.lessonId;
-    for (final node in home.nodes) {
-      if (node.lessonId != lessonId) continue;
-      return node.state == CourseNodeState.completed ||
-          node.state == CourseNodeState.mastered ||
-          node.state == CourseNodeState.reviewDue;
-    }
-    return false;
-  }
-
-  /// First-run lessons pause at zero hearts until a refill restores lives.
+  /// Zero-heart lessons pause until a refill, unless opened as Practice.
   bool get _heartsGateActive {
     final attempt = _attempt;
     if (attempt == null) return false;
     if (attempt.livesRemaining > 0) return false;
-    if (_isPracticeOrReplay) return false;
+    if (widget.allowZeroHeartsPractice) return false;
     return true;
   }
 
