@@ -55,4 +55,33 @@ void main() {
     expect(bets[lessonBlindsBigBlindIndex], 2);
     expect(bets[0], 0);
   });
+
+  test('open pot table folds early seats before the button opens', () {
+    final deal = const LessonOpenPotDeal(openTo: 8, smallBlind: 1, bigBlind: 2);
+    final game = lessonTableStageGame(
+      heroCodes: const [],
+      villainCount: lessonBlindsVillainCount,
+      dealerIndex: lessonBlindsButtonIndex,
+      sbIndex: lessonBlindsSmallBlindIndex,
+      bbIndex: lessonBlindsBigBlindIndex,
+      activeSeatIndex: lessonBlindsSmallBlindIndex,
+      positionLabels: true,
+      seatNames: lessonActionOrderSeatNames,
+      streetBets: deal.streetBetsForSixMax(
+        buttonIndex: lessonBlindsButtonIndex,
+        smallBlindIndex: lessonBlindsSmallBlindIndex,
+        bigBlindIndex: lessonBlindsBigBlindIndex,
+      ),
+      potTotal: deal.correctPot.toDouble(),
+      foldedSeatIndexes: const [0, 1, 2],
+      seatActionLabels: const {lessonBlindsButtonIndex: 'RAISE'},
+    );
+    expect(game.players[0].folded, isTrue);
+    expect(game.players[1].folded, isTrue);
+    expect(game.players[2].folded, isTrue);
+    expect(game.players[lessonBlindsButtonIndex].folded, isFalse);
+    expect(game.players[lessonBlindsButtonIndex].lastActionLabel, 'RAISE');
+    expect(game.players[0].lastActionLabel, 'FOLD');
+    expect(game.activePlayerIndex, lessonBlindsSmallBlindIndex);
+  });
 }

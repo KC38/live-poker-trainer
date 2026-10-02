@@ -103,6 +103,12 @@ GameState lessonTableStageGame({
   /// Remaining chips for every non-hero seat. Null keeps the default band stack.
   double? villainStackChips,
 
+  /// Seat indexes that have folded (dimmed, no hole cards).
+  List<int> foldedSeatIndexes = const [],
+
+  /// Optional last-action badge per seat index (e.g. RAISE on the button).
+  Map<int, String> seatActionLabels = const {},
+
   /// Seat ids that take [displayPot]. Empty leaves the pot in the middle.
   List<int> winnerIds = const [],
 }) {
@@ -179,6 +185,22 @@ GameState lessonTableStageGame({
               : (villainStackChips == null
                   ? player
                   : player.copyWith(stack: villainStackChips)),
+      ],
+    );
+  }
+  if (foldedSeatIndexes.isNotEmpty || seatActionLabels.isNotEmpty) {
+    final folded = foldedSeatIndexes.toSet();
+    named = named.copyWith(
+      players: [
+        for (var i = 0; i < named.players.length; i++)
+          named.players[i].copyWith(
+            folded: folded.contains(i) ? true : null,
+            lastActionLabel:
+                seatActionLabels[i] ??
+                (folded.contains(i) ? 'FOLD' : null),
+            clearLastAction:
+                !seatActionLabels.containsKey(i) && !folded.contains(i),
+          ),
       ],
     );
   }
@@ -360,6 +382,8 @@ class LessonTableStage extends StatelessWidget {
     this.villainActionLabel,
     this.heroStackChips,
     this.villainStackChips,
+    this.foldedSeatIndexes = const [],
+    this.seatActionLabels = const {},
     this.winnerIds = const [],
     this.awardingChips,
   });
@@ -495,6 +519,12 @@ class LessonTableStage extends StatelessWidget {
   /// stack.
   final double? villainStackChips;
 
+  /// Seat indexes that have folded (dimmed, no hole cards).
+  final List<int> foldedSeatIndexes;
+
+  /// Optional last-action badge per seat index.
+  final Map<int, String> seatActionLabels;
+
   /// Seat ids that win the pot. Non-empty credits stacks and shows WINS.
   final List<int> winnerIds;
 
@@ -525,6 +555,8 @@ class LessonTableStage extends StatelessWidget {
     villainActionLabel: villainActionLabel,
     heroStackChips: heroStackChips,
     villainStackChips: villainStackChips,
+    foldedSeatIndexes: foldedSeatIndexes,
+    seatActionLabels: seatActionLabels,
     winnerIds: winnerIds,
   );
 
