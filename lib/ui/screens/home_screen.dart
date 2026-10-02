@@ -654,33 +654,12 @@ class _HomeBodyState extends State<_HomeBody> {
             key: const PageStorageKey<String>('home_course_scroll'),
             physics: const BouncingScrollPhysics(),
             slivers: [
+              // Path CTA is the Duo-style start bubble on the next node.
+              // Do not surface a Rex+Start card here — after JUMP HERE the
+              // visible section may omit isNext, and Start would open the
+              // global next lesson in another section.
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate([
-                    if (snapshot.rexLine != null &&
-                        !widget.pathNodes.any((node) => node.isNext)) ...[
-                      const SizedBox(height: 2),
-                      RexCoachCard(
-                        line: snapshot.rexLine!,
-                        onContinue:
-                            snapshot.nextLessonId == null ||
-                                    !snapshot.startsEnabled
-                                ? null
-                                : () {
-                                  final next = snapshot.nextNode;
-                                  if (next == null) return;
-                                  widget.onNodeTap(next);
-                                },
-                        continueLabel: 'Start',
-                      ),
-                    ],
-                    const SizedBox(height: 4),
-                  ]),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 280),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 280),
                 sliver: SliverToBoxAdapter(
                   child: CoursePathView(
                     nodes: widget.pathNodes,

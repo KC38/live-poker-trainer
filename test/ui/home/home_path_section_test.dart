@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/course_home_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/ui/home/course_section_picker.dart';
+import 'package:live_poker_trainer/ui/home/rex_coach_card.dart';
 import 'package:live_poker_trainer/ui/screens/home_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
@@ -191,6 +192,10 @@ void main() {
     expect(find.text('Lesson B'), findsOneWidget);
     expect(find.text('Lesson A'), findsNothing);
     expect(find.textContaining('SECTION 2'), findsOneWidget);
+    // Browsing another section must not revive the Rex+Start card that
+    // would open the global next lesson (still in section 1).
+    expect(find.byType(RexCoachCard), findsNothing);
+    expect(find.text('Start'), findsNothing);
   });
 
   testWidgets('finishing a section auto-advances the path', (tester) async {
