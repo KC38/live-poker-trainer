@@ -267,7 +267,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           );
           return;
         }
-        _openLesson(practiceId);
+        _openLesson(practiceId, allowZeroHeartsPractice: true);
       case HeartRefillAction.ad:
         try {
           final service = ref.read(courseServiceProvider);
@@ -359,7 +359,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     _openLesson(node.lessonId);
   }
 
-  void _openLesson(String lessonId) {
+  void _openLesson(
+    String lessonId, {
+    bool allowZeroHeartsPractice = false,
+  }) {
     if (lessonId == HomeScreen.calibrationLessonId) {
       unawaited(_openCalibrationWarmUp(lessonId));
       return;
@@ -374,6 +377,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 (_) => LessonRunnerScreen(
                   lessonId: lessonId,
                   embeddedInShell: true,
+                  allowZeroHeartsPractice: allowZeroHeartsPractice,
                 ),
           ),
         )
