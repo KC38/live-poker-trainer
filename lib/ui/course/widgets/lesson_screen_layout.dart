@@ -921,7 +921,7 @@ class _SpeechBubblePainter extends CustomPainter {
 }
 
 /// Close, lesson progress, and one heart per life.
-class LessonChromeBar extends StatelessWidget {
+class LessonChromeBar extends StatefulWidget {
   /// Creates the chrome row.
   const LessonChromeBar({
     super.key,
@@ -929,7 +929,17 @@ class LessonChromeBar extends StatelessWidget {
     required this.livesRemaining,
     required this.livesMax,
     required this.onClose,
+    this.onHeartsTap,
+    this.emptyHeartsNudgeTick = 0,
   });
+
+  /// Idle empty-heart breathe — slow enough to stay in peripheral vision.
+  static const Duration emptyHeartsBreatheDuration = Duration(
+    milliseconds: 2200,
+  );
+
+  /// One-shot swell when the learner tries to play at zero hearts.
+  static const Duration emptyHeartsNudgeDuration = Duration(milliseconds: 360);
 
   /// 0 to 1 across the lesson.
   final double progress;
@@ -943,9 +953,65 @@ class LessonChromeBar extends StatelessWidget {
   /// Leaves the lesson.
   final VoidCallback onClose;
 
+  /// Opens refill when the empty hearts are tapped.
+  final VoidCallback? onHeartsTap;
+
+  /// Increment to fire a slightly stronger empty-heart pulse.
+  final int emptyHeartsNudgeTick;
+
+  @override
+  State<LessonChromeBar> createState() => _LessonChromeBarState();
+}
+
+class _LessonChromeBarState extends State<LessonChromeBar>
+    with TickerProviderStateMixin {
+  late final AnimationController _breathe;
+  late final AnimationController _nudge;
+
+  bool get _empty => widget.livesRemaining <= 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _breathe = AnimationController(
+      vsync: this,
+      duration: LessonChromeBar.emptyHeartsBreatheDuration,
+    );
+    _nudge = AnimationController(
+      vsync: this,
+      duration: LessonChromeBar.emptyHeartsNudgeDuration,
+    );
+    if (_empty) {
+      _breathe.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant LessonChromeBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_empty && !_breathe.isAnimating) {
+      _breathe.repeat(reverse: true);
+    } else if (!_empty && _breathe.isAnimating) {
+      _breathe
+        ..stop()
+        ..value = 0;
+      _nudge.value = 0;
+    }
+    if (_empty && widget.emptyHeartsNudgeTick != oldWidget.emptyHeartsNudgeTick) {
+      _nudge.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _breathe.dispose();
+    _nudge.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final hearts = livesMax <= 0 ? 5 : livesMax;
+    final hearts = widget.livesMax <= 0 ? 5 : widget.livesMax;
     return SizedBox(
       height: 36,
       child: Padding(
@@ -954,14 +1020,14 @@ class LessonChromeBar extends StatelessWidget {
           children: [
             IconButton(
               tooltip: 'Close',
-              onPressed: onClose,
+              onPressed: widget.onClose,
               icon: const Icon(Icons.close, color: AppColors.slate),
             ),
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(999),
                 child: LinearProgressIndicator(
-                  value: progress.clamp(0.0, 1.0),
+                  value: widget.progress.clamp(0.0, 1.0),
                   minHeight: 12,
                   backgroundColor: AppColors.slateDark,
                   color: AppColors.success,
@@ -970,21 +1036,46 @@ class LessonChromeBar extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             Semantics(
-              label: '$livesRemaining of $hearts lives',
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  for (var i = 0; i < hearts; i++)
-                    Icon(
-                      Icons.favorite,
-                      key: ValueKey<String>('lesson-heart-$i'),
-                      size: 22,
-                      color:
-                          i < livesRemaining
+              button: widget.onHeartsTap != null,
+              label:
+                  '${widget.livesRemaining} of $hearts lives'
+                  '${_empty ? '. Restore hearts' : ''}',
+              child: GestureDetector(
+                key: const ValueKey<String>('lesson-hearts'),
+                onTap: widget.onHeartsTap,
+                behavior: HitTestBehavior.opaque,
+                child: AnimatedBuilder(
+                  animation: Listenable.merge(<Listenable>[_breathe, _nudge]),
+                  builder: (context, child) {
+                    if (!_empty) return child!;
+                    final breathe = _breathe.value;
+                    final nudge = _nudge.value;
+                    final nudgeLift = nudge < 0.5
+                        ? nudge / 0.5
+                        : 1 - (nudge - 0.5) / 0.5;
+                    final opacity = (0.42 + 0.38 * breathe + 0.12 * nudgeLift)
+                        .clamp(0.36, 1.0);
+                    final scale = 1 + 0.04 * breathe + 0.07 * nudgeLift;
+                    return Opacity(
+                      opacity: opacity,
+                      child: Transform.scale(scale: scale, child: child),
+                    );
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (var i = 0; i < hearts; i++)
+                        Icon(
+                          Icons.favorite,
+                          key: ValueKey<String>('lesson-heart-$i'),
+                          size: 22,
+                          color: i < widget.livesRemaining
                               ? AppColors.danger
                               : AppColors.slateDark,
-                    ),
-                ],
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ],
@@ -1233,92 +1324,6 @@ class LessonAnswerDock extends StatelessWidget {
   }
 }
 
-/// Full-bleed dock when the lesson is paused at zero hearts.
-class LessonOutOfHeartsDock extends StatelessWidget {
-  /// Creates the out-of-hearts restore dock.
-  const LessonOutOfHeartsDock({
-    super.key,
-    required this.onRestoreHearts,
-    this.busy = false,
-  });
-
-  final VoidCallback onRestoreHearts;
-  final bool busy;
-
-  @override
-  Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.paddingOf(context).bottom;
-    return Material(
-      color: AppColors.bgElevated,
-      elevation: 0,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(20, 18, 20, 16 + bottomInset),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Out of hearts',
-              style: GoogleFonts.manrope(
-                color: AppColors.danger,
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Restore hearts to keep going in this lesson.',
-              style: GoogleFonts.manrope(
-                color: AppColors.cream,
-                fontSize: 15,
-                height: 1.3,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 14),
-            FilledButton(
-              key: const ValueKey<String>('lesson-restore-hearts'),
-              onPressed: busy ? null : onRestoreHearts,
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.gold,
-                foregroundColor: AppColors.bgDark,
-                disabledBackgroundColor: AppColors.gold.withValues(alpha: 0.72),
-                minimumSize: const Size.fromHeight(54),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                textStyle: GoogleFonts.manrope(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 16,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              child:
-                  busy
-                      ? const SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.4,
-                          color: AppColors.bgDark,
-                        ),
-                      )
-                      : Text(
-                        'Restore hearts',
-                        style: GoogleFonts.manrope(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
-                          letterSpacing: 0.4,
-                        ),
-                      ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 /// The lesson frame. [stage] is the only region that changes per step.
 ///
 /// Every lesson uses this widget. A hand step passes `LessonTableStage`.
@@ -1347,6 +1352,8 @@ class LessonScreenLayout extends StatelessWidget {
     this.recovery,
     this.notice,
     this.onRestoreHearts,
+    this.onBlockedPlay,
+    this.emptyHeartsNudgeTick = 0,
     this.continueLabel = 'Continue',
   });
 
@@ -1373,8 +1380,14 @@ class LessonScreenLayout extends StatelessWidget {
   /// One-line catch-up under the chrome, such as a resumed lesson.
   final String? notice;
 
-  /// When set (and not graded), replaces the tool row with a restore dock.
+  /// Tapping the empty hearts opens refill. Stage stays locked at zero.
   final VoidCallback? onRestoreHearts;
+
+  /// Felt tap while gated — nudges the empty-heart chrome instead of a dock.
+  final VoidCallback? onBlockedPlay;
+
+  /// Bumps the empty-heart chrome pulse when the learner tries to play.
+  final int emptyHeartsNudgeTick;
 
   /// Primary CTA on the graded answer dock.
   final String continueLabel;
@@ -1382,7 +1395,7 @@ class LessonScreenLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final graded = result != null && onContinue != null;
-    final outOfHearts = onRestoreHearts != null && !graded;
+    final outOfHearts = onRestoreHearts != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -1391,6 +1404,8 @@ class LessonScreenLayout extends StatelessWidget {
           livesRemaining: livesRemaining,
           livesMax: livesMax,
           onClose: onClose,
+          onHeartsTap: onRestoreHearts,
+          emptyHeartsNudgeTick: emptyHeartsNudgeTick,
         ),
         if (notice != null && notice!.trim().isNotEmpty)
           Padding(
@@ -1438,7 +1453,17 @@ class LessonScreenLayout extends StatelessWidget {
                     child: stage,
                   );
                   if (!outOfHearts) return stageChild;
-                  return AbsorbPointer(child: stageChild);
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      AbsorbPointer(child: stageChild),
+                      GestureDetector(
+                        key: const ValueKey<String>('lesson-empty-hearts-block'),
+                        behavior: HitTestBehavior.opaque,
+                        onTap: onBlockedPlay,
+                      ),
+                    ],
+                  );
                 },
               ),
             ),
@@ -1454,11 +1479,6 @@ class LessonScreenLayout extends StatelessWidget {
             busy: answerBusy,
             recovery: recovery,
             continueLabel: continueLabel,
-          )
-        else if (outOfHearts)
-          LessonOutOfHeartsDock(
-            onRestoreHearts: onRestoreHearts!,
-            busy: answerBusy,
           )
         else
           LessonToolRow(

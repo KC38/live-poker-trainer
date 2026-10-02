@@ -238,10 +238,11 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('out of hearts replaces tools with restore dock and blocks stage', (
+  testWidgets('out of hearts keeps tools and pulses chrome hearts', (
     tester,
   ) async {
     var restoreTaps = 0;
+    var blockedTaps = 0;
     await tester.binding.setSurfaceSize(const Size(390, 844));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
@@ -253,7 +254,7 @@ void main() {
             livesRemaining: 0,
             livesMax: 5,
             onClose: _noop,
-            speech: 'Out of hearts — restore to keep going.',
+            speech: 'The button has the D chip.',
             expression: LessonMascotExpression.thinking,
             stage: ElevatedButton(
               key: const ValueKey<String>('blocked-stage-tap'),
@@ -267,22 +268,24 @@ void main() {
             canRedo: false,
             canHint: false,
             onRestoreHearts: () => restoreTaps += 1,
+            onBlockedPlay: () => blockedTaps += 1,
           ),
         ),
       ),
     );
     await tester.pump();
 
-    expect(find.text('Out of hearts'), findsOneWidget);
-    expect(find.text('Restore hearts'), findsOneWidget);
-    expect(find.byTooltip('Undo'), findsNothing);
+    expect(find.text('Out of hearts'), findsNothing);
+    expect(find.text('Restore hearts'), findsNothing);
+    expect(find.byTooltip('Undo'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('lesson-hearts')), findsOneWidget);
     await tester.tap(
-      find.byKey(const ValueKey<String>('blocked-stage-tap')),
-      warnIfMissed: false,
+      find.byKey(const ValueKey<String>('lesson-empty-hearts-block')),
     );
     await tester.pump();
     expect(restoreTaps, 0);
-    await tester.tap(find.byKey(const ValueKey<String>('lesson-restore-hearts')));
+    expect(blockedTaps, 1);
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-hearts')));
     await tester.pump();
     expect(restoreTaps, 1);
   });

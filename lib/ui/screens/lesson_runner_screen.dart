@@ -103,6 +103,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   /// True while a mid-lesson heart refill callable is in flight.
   bool _heartRefillBusy = false;
 
+  /// Bumps the empty-heart chrome pulse when play is blocked.
+  int _heartsNudgeTick = 0;
+
   /// Fires when a passive heart should reach an open zero-heart lesson.
   Timer? _heartResyncTimer;
 
@@ -266,9 +269,6 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     if (_heartsGateActive) {
       _armPassiveHeartResync();
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        unawaited(_promptHeartRefill());
-      });
     }
   }
 
@@ -437,7 +437,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     // catalog provider is mid-reload (same class of bug as #228 complete).
     if (controller == null || attempt == null) return;
     if (_heartsGateActive) {
-      unawaited(_promptHeartRefill());
+      _nudgeEmptyHearts();
       return;
     }
     if (!_canSubmit) return;
@@ -591,7 +591,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       if (result.remediationRequired || result.livesRemaining <= 0) {
         _armPassiveHeartResync(livesNextRefillAtMs: result.livesNextRefillAtMs);
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          unawaited(_promptHeartRefill());
+          if (mounted) _nudgeEmptyHearts();
         });
       }
     } catch (error) {
@@ -704,7 +704,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
     if (!result.accepted) {
       if (_heartsGateActive) {
-        await _promptHeartRefill();
+        _nudgeEmptyHearts();
         return;
       }
       controller.clearFeedbackForRetry();
@@ -921,6 +921,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     Navigator.of(context).maybePop();
   }
 
+  /// Subtle chrome pulse — no refill sheet unless the learner taps hearts.
+  void _nudgeEmptyHearts() {
+    if (!mounted || !_heartsGateActive) return;
+    setState(() => _heartsNudgeTick += 1);
+  }
+
   /// Opens the refill sheet in place while the lesson stays mounted.
   Future<void> _promptHeartRefill() async {
     if (!mounted || _heartRefillSheetOpen || !_heartsGateActive) return;
@@ -1134,12 +1140,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                           : _heroRecoveryChoiceId(activity)),
                 ),
           onContinue: result == null ? null : _continueAfterFeedback,
-          continueLabel: result != null && !result.accepted && _heartsGateActive
-              ? 'Restore hearts'
-              : 'Continue',
-          onRestoreHearts: _heartsGateActive && result == null
-              ? _promptHeartRefill
-              : null,
+          continueLabel: 'Continue',
+          onRestoreHearts: _heartsGateActive ? _promptHeartRefill : null,
+          onBlockedPlay: _heartsGateActive ? _nudgeEmptyHearts : null,
+          emptyHeartsNudgeTick: _heartsNudgeTick,
           answerBusy: _completing || _advancingActivity || _heartRefillBusy,
           stage: LessonFrameScope(
             onLocalMiss: _reportLocalMiss,
@@ -1485,9 +1489,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                       result: result,
                       completing:
                           _completing || _advancingActivity || _heartRefillBusy,
-                      continueLabel: !result.accepted && _heartsGateActive
-                          ? 'Restore hearts'
-                          : 'Continue',
+                      continueLabel: 'Continue',
                       onContinue: _continueAfterFeedback,
                       onRetry: result.accepted || _heartsGateActive
                           ? null
@@ -1497,16 +1499,6 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                             },
                     ),
                   ],
-                );
-              }
-              if (_heartsGateActive) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: FilledButton(
-                    key: const ValueKey<String>('lesson-restore-hearts'),
-                    onPressed: _heartRefillBusy ? null : _promptHeartRefill,
-                    child: const Text('Restore hearts'),
-                  ),
                 );
               }
               // Prefer live controller activity so advance never uses a

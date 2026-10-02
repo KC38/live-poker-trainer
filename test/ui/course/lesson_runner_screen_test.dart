@@ -4545,31 +4545,28 @@ void main() {
       ),
     );
     await _pumpUntil(tester, find.textContaining('Tap your cards'));
-    // Auto-prompted refill sheet — dismiss so the in-lesson dock is visible.
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 300));
-    expect(find.text('Watch an ad'), findsOneWidget);
-    await tester.tapAt(const Offset(8, 8));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(find.text('Out of hearts'), findsOneWidget);
-    expect(
-      find.byKey(const ValueKey<String>('lesson-restore-hearts')),
-      findsOneWidget,
-    );
+    expect(find.text('Out of hearts'), findsNothing);
+    expect(find.text('Watch an ad'), findsNothing);
+    expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('lesson-hearts')), findsOneWidget);
     final layout = tester.widget<LessonScreenLayout>(
       find.byType(LessonScreenLayout),
     );
     expect(layout.livesRemaining, 0);
     expect(layout.onRestoreHearts, isNotNull);
+    expect(layout.emptyHeartsNudgeTick, 0);
 
     await tester.tap(
-      find.byKey(const ValueKey<String>('lesson-seat-hero')),
-      warnIfMissed: false,
+      find.byKey(const ValueKey<String>('lesson-empty-hearts-block')),
     );
     await tester.pump();
-    await tester.pump();
+    final nudged = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(nudged.emptyHeartsNudgeTick, 1);
     expect(zeroHearts.submitCalls, 0);
     expect(find.text('Nice!'), findsNothing);
   });
@@ -4668,13 +4665,9 @@ void main() {
     );
     await _pumpUntil(tester, find.textContaining('Tap your cards'));
     await tester.pump();
+    // Zero-delay Timer for a due passive heart needs a clock tick.
+    await tester.pump(const Duration(milliseconds: 1));
     await tester.pump();
-
-    if (find.text('Watch an ad').evaluate().isNotEmpty) {
-      await tester.tapAt(const Offset(8, 8));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-    }
 
     final layout = tester.widget<LessonScreenLayout>(
       find.byType(LessonScreenLayout),
