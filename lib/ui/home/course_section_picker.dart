@@ -9,20 +9,6 @@ import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/ui/home/course_path_view.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
-/// Friendly label for a catalog experience band.
-String experienceBandLabel(String band) {
-  return switch (band) {
-    'never_played' => 'NEVER PLAYED',
-    'rules_known' => 'RULES KNOWN',
-    'first_casino' => 'FIRST CASINO',
-    'regular_live' => 'REGULAR LIVE',
-    'winning_12' => 'WINNING 1/2',
-    'advanced_live' => 'ADVANCED LIVE',
-    'full_hand_integration' => 'FULL-HAND INTEGRATION',
-    _ => band.replaceAll('_', ' ').toUpperCase(),
-  };
-}
-
 /// Whether a path node counts as finished for section completion %.
 bool countsTowardSectionProgress(CourseNodeState state) {
   return state == CourseNodeState.completed ||
@@ -62,9 +48,9 @@ class CourseSectionProgress {
 
 /// Section id whose lessons should appear on the Home path.
 ///
-/// Prefers an explicit [focusedSectionId] (from JUMP HERE) when that section
-/// still has nodes; otherwise the section containing the next lesson, then
-/// the first node on the map.
+/// Prefers an explicit [focusedSectionId] (from a section-card jump) when that
+/// section still has nodes; otherwise the section containing the next lesson,
+/// then the first node on the map.
 String? resolveHomePathSectionId(
   CourseHomeSnapshot snapshot, {
   String? focusedSectionId,
@@ -276,8 +262,6 @@ class _SectionCard extends StatelessWidget {
                 : _ActiveSectionBody(
                     row: row,
                     accent: accent,
-                    unlocked: unlocked,
-                    onJump: onJump,
                   ),
           ),
         ),
@@ -331,117 +315,55 @@ class _CompletedSectionBody extends StatelessWidget {
   }
 }
 
+/// Incomplete section: title, progress, summary bubble + upper-half Rex.
 class _ActiveSectionBody extends StatelessWidget {
   const _ActiveSectionBody({
     required this.row,
     required this.accent,
-    required this.unlocked,
-    required this.onJump,
   });
 
   final CourseSectionProgress row;
   final Color accent;
-  final bool unlocked;
-  final VoidCallback onJump;
 
   @override
   Widget build(BuildContext context) {
     final section = row.section;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Section ${section.order}',
+            style: GoogleFonts.manrope(
+              color: AppColors.cream,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _ProgressTrack(
+            percent: row.percent,
+            accent: accent,
+            showTrophyLit: row.percent >= 100,
+          ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
                 child: _SpeechBubble(text: section.summary),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 4),
               RexMascot(
-                size: 64,
+                size: 72,
                 mood: row.isCurrent ? RexMood.celebrate : RexMood.calm,
+                crop: RexMascotCrop.upperBody,
               ),
             ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Section ${section.order}',
-                      style: GoogleFonts.manrope(
-                        color: AppColors.cream,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    experienceBandLabel(section.experienceBand),
-                    style: GoogleFonts.manrope(
-                      color: accent,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.4,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                section.title,
-                style: GoogleFonts.manrope(
-                  color: AppColors.slate,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 12),
-              if (row.isCurrent) ...[
-                _ProgressTrack(
-                  percent: row.percent,
-                  accent: accent,
-                  showTrophyLit: row.percent >= 100,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'CURRENT SECTION',
-                  style: GoogleFonts.manrope(
-                    color: accent,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.6,
-                  ),
-                ),
-              ] else
-                TextButton(
-                  onPressed: unlocked ? onJump : null,
-                  style: TextButton.styleFrom(
-                    foregroundColor: unlocked ? accent : AppColors.slate,
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: Text(
-                    unlocked ? 'JUMP HERE' : 'LOCKED',
-                    style: GoogleFonts.manrope(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.6,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/ui/home/course_section_picker.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 CourseLesson _lesson(String id, {List<String> prerequisites = const []}) {
   return CourseLesson(
@@ -217,7 +218,8 @@ void main() {
     });
   });
 
-  testWidgets('completed section shows only title and full bar', (tester) async {
+  testWidgets('incomplete section shows title, progress, and summary only',
+      (tester) async {
     final section1 = _section(
       id: 'sec-1',
       order: 1,
@@ -273,13 +275,27 @@ void main() {
     expect(find.text('Section 1'), findsOneWidget);
     expect(find.text('Section summary for Never Played'), findsNothing);
     expect(find.textContaining('NEVER PLAYED'), findsNothing);
+    expect(find.text('Never Played'), findsNothing);
     expect(find.text('9%'), findsNothing);
     expect(find.text('100%'), findsNothing);
     expect(find.text('33%'), findsNothing);
 
     expect(find.text('Section 2'), findsOneWidget);
-    expect(find.text('Section summary for Rules Known / Home Games'), findsOneWidget);
-    expect(find.text('CURRENT SECTION'), findsOneWidget);
-    expect(find.textContaining('RULES KNOWN'), findsOneWidget);
+    expect(
+      find.text('Section summary for Rules Known / Home Games'),
+      findsOneWidget,
+    );
+    expect(find.text('Rules Known / Home Games'), findsNothing);
+    expect(find.textContaining('RULES KNOWN'), findsNothing);
+    expect(find.text('JUMP HERE'), findsNothing);
+    expect(find.text('LOCKED'), findsNothing);
+    expect(find.text('CURRENT SECTION'), findsNothing);
+
+    final mascots = tester.widgetList<RexMascot>(find.byType(RexMascot));
+    expect(mascots, isNotEmpty);
+    expect(
+      mascots.every((mascot) => mascot.crop == RexMascotCrop.upperBody),
+      isTrue,
+    );
   });
 }

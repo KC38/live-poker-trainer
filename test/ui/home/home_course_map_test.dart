@@ -635,10 +635,17 @@ void main() {
     await tester.tap(find.textContaining('SECTION 1'));
     await tester.pumpAndSettle();
     expect(find.text('Sections'), findsOneWidget);
-    expect(find.text('CURRENT SECTION'), findsOneWidget);
-    expect(find.text('LOCKED'), findsOneWidget);
-    expect(find.textContaining('NEVER PLAYED'), findsOneWidget);
-    expect(find.textContaining('RULES KNOWN'), findsOneWidget);
+    expect(find.text('Section 1'), findsOneWidget);
+    expect(find.text('Section 2'), findsOneWidget);
+    expect(find.text('Learn the basics of the live cash table.'), findsOneWidget);
+    expect(find.text('Build a disciplined baseline.'), findsOneWidget);
+    expect(find.text('CURRENT SECTION'), findsNothing);
+    expect(find.text('JUMP HERE'), findsNothing);
+    expect(find.text('LOCKED'), findsNothing);
+    expect(find.textContaining('NEVER PLAYED'), findsNothing);
+    expect(find.textContaining('RULES KNOWN'), findsNothing);
+    expect(find.text('Section One'), findsNothing);
+    expect(find.text('Section Two'), findsNothing);
   });
 
   testWidgets('sticky unit banner replaces instead of stacking', (tester) async {
