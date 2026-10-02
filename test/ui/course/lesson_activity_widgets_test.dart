@@ -68,6 +68,7 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/action_dock_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/coach_shelf_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
@@ -9880,7 +9881,7 @@ await tester.tap(find.text('NIT'));
   });
 
   testWidgets(
-    'framed fold-win dock uses LessonChoiceButton, not TextButton',
+    'framed fold-win SoftPulses Take pot via GlowHighlight',
     (tester) async {
       final activity = CourseActivity(
         id: 'act-01-05-01-guided-fold-win',
@@ -9925,7 +9926,24 @@ await tester.tap(find.text('NIT'));
       expect(find.byType(LessonTableStage), findsOneWidget);
       expect(find.byType(LessonChoiceButton), findsNWidgets(3));
       expect(find.byType(TextButton), findsNothing);
-      await tester.tap(find.widgetWithText(LessonChoiceButton, 'Take pot'));
+      // SoftPulse Take pot — Hint stays disabled because the cue is already on.
+      final glows = tester
+          .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+          .toList(growable: false);
+      expect(glows.where((g) => g.active), hasLength(1));
+      final takePot = find.widgetWithText(LessonChoiceButton, 'Take pot');
+      expect(
+        find.descendant(
+          of: find.ancestor(of: takePot, matching: find.byType(GlowHighlight)),
+          matching: find.byType(LessonChoiceButton),
+        ),
+        findsOneWidget,
+      );
+      final takeGlow = tester.widget<GlowHighlight>(
+        find.ancestor(of: takePot, matching: find.byType(GlowHighlight)).first,
+      );
+      expect(takeGlow.active, isTrue);
+      await tester.tap(takePot);
       await tester.pump();
       expect(controller.draft.choiceId, 'no-show');
       controller.dispose();
