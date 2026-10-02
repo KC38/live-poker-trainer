@@ -32,7 +32,7 @@ void main() {
     );
   });
 
-  testWidgets('a locked guest sees the Home lesson title and no table', (
+  testWidgets('a locked guest sees the Section 2 checkpoint copy and no table', (
     tester,
   ) async {
     var openedHome = false;
@@ -66,13 +66,12 @@ void main() {
     expect(find.byType(BrandLogo), findsOneWidget);
     expect(
       find.text(
-        'Live Training is advanced. Finish Baseline jump check on Home '
+        'Live Training is advanced. Finish the Section 2 checkpoint on Home '
         'to unlock a coached warm-up.',
       ),
       findsOneWidget,
     );
-    expect(find.textContaining('Section 2'), findsNothing);
-    expect(find.textContaining('Section 2 checkpoint'), findsNothing);
+    expect(find.textContaining('Baseline jump check'), findsNothing);
 
     await tester.tap(find.text('Continue on Home'));
     await tester.pump();

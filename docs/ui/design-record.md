@@ -843,6 +843,6 @@ A miss shows that coach thinking beside the short line. `LessonFeedbackSheet` us
 
 The lesson coach band uses the same `RexMascot` slot. `LessonCoachBand` (`lib/ui/course/widgets/lesson_screen_layout.dart`) maps `LessonMascotExpression` to calm, celebrate, or think. It does not draw a placeholder face.
 
-The locked Live Training hub names Baseline jump check in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That title is the Home node for `lesson-02-07-02-section-two-jump`.
+The locked Live Training hub says to finish the Section 2 checkpoint on Home in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That gate is the Home node `lesson-02-07-02-section-two-jump` (catalog title Baseline jump check).
 
 The lesson result shows this lesson’s XP and the daily goal before Home. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) lists XP earned and a Daily goal row of the onboarding minutes.
