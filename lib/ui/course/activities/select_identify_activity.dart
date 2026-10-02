@@ -1535,6 +1535,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                   widget.activity.id == 'act-01-04-01-checkpoint-postflop')
                 Expanded(
                   child: LessonTableStage(
+                    boardCodes: scene.boardCodes,
                     villainCount: lessonBlindsVillainCount,
                     dealerIndex: lessonBlindsButtonIndex,
                     sbIndex: lessonBlindsSmallBlindIndex,

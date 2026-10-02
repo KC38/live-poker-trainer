@@ -7911,8 +7911,27 @@ await tester.tap(find.text('NIT'));
             CourseChoice(id: 'bb-first-always', label: 'BB'),
           ],
         ),
+      )?.boardCodes,
+      ['Qs', '7c', '2d'],
+    );
+    expect(
+      resolveLessonTableScene(
+        CourseActivity(
+          id: 'act-01-04-01-checkpoint-postflop',
+          order: 5,
+          stage: ActivityStage.checkpoint,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'postflop',
+          acceptedGrades: const [SoftGrade.recommended],
+          choices: const [
+            CourseChoice(id: 'sb-first', label: 'SB'),
+            CourseChoice(id: 'btn-first', label: 'BTN'),
+            CourseChoice(id: 'bb-first-always', label: 'BB'),
+          ],
+        ),
       )?.highlight,
-      LessonTableHighlight.none,
+      LessonTableHighlight.smallBlind,
     );
 
     const foldWinChoices = [
