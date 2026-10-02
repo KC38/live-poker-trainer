@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "7ae5185918ed1bdd6c4060bc145d320553ec70db48f457559dfed74c26c86646",
+  "contentChecksum": "c1d0e8e8d34e7316b2f900f238668037dbd57e9d54c6358e89aa500245a8a0ab",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1906,7 +1906,7 @@
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Put UTG, HJ, CO, and BTN in preflop action order.",
+                  "accessibilityText": "Put UTG, HJ, and BTN in preflop action order.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1927,10 +1927,6 @@
                       "label": "HJ"
                     },
                     {
-                      "id": "seat-co",
-                      "label": "CO"
-                    },
-                    {
                       "id": "seat-btn",
                       "label": "BTN"
                     }
@@ -1938,17 +1934,16 @@
                   "correctSequence": [
                     "seat-utg",
                     "seat-hj",
-                    "seat-co",
                     "seat-btn"
                   ],
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "UTG → HJ → CO → BTN. Button acts last preflop."
+                      "feedback": "UTG acts first. Button acts last preflop."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
-                      "feedback": "Start under the gun, then HJ, CO, and the button."
+                      "feedback": "Start under the gun, then move toward the button."
                     }
                   }
                 },
@@ -2215,7 +2210,7 @@
                   "stage": "unguided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap 9 chips — blinds plus the open: 1 + 2 + 6.",
+                  "accessibilityText": "Tap the pot total — blinds plus the open. Open size varies each attempt.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2225,35 +2220,35 @@
                   "objectives": [
                     "Sense main pot versus side pot without deep math"
                   ],
-                  "prompt": "Blinds 1/2. BTN opens to 6. Tap the pot before blinds act.",
+                  "prompt": "Blinds 1/2. BTN opens. Tap the pot before blinds act.",
                   "choices": [
                     {
-                      "id": "pot-9",
-                      "label": "9 chips",
-                      "accessibilityText": "9 chips",
+                      "id": "pot-correct",
+                      "label": "Correct pot",
+                      "accessibilityText": "Correct pot",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "1 + 2 + 6 = 9 chips in the middle."
+                        "feedback": "Add both blinds and the open."
                       }
                     },
                     {
-                      "id": "pot-7",
-                      "label": "7 chips",
-                      "accessibilityText": "7 chips",
+                      "id": "pot-miss-blind",
+                      "label": "Miss a blind",
+                      "accessibilityText": "Miss a blind",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Add both blinds and the open: 1 + 2 + 6.",
-                        "betterChoiceId": "pot-9"
+                        "feedback": "Add both blinds and the open.",
+                        "betterChoiceId": "pot-correct"
                       }
                     },
                     {
-                      "id": "pot-12",
-                      "label": "12 chips",
-                      "accessibilityText": "12 chips",
+                      "id": "pot-too-big",
+                      "label": "Too big",
+                      "accessibilityText": "Too big",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "That would be a bigger open. Here it is 1 + 2 + 6.",
-                        "betterChoiceId": "pot-9"
+                        "feedback": "Add both blinds and the open — do not double the raise.",
+                        "betterChoiceId": "pot-correct"
                       }
                     }
                   ]
@@ -2859,10 +2854,6 @@
                       "label": "HJ"
                     },
                     {
-                      "id": "j-co",
-                      "label": "CO"
-                    },
-                    {
                       "id": "j-btn",
                       "label": "BTN"
                     }
@@ -2870,17 +2861,16 @@
                   "correctSequence": [
                     "j-utg",
                     "j-hj",
-                    "j-co",
                     "j-btn"
                   ],
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "UTG → HJ → CO → BTN. Left of big blind first; button last."
+                      "feedback": "Left of big blind first; button last."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
-                      "feedback": "UTG, then HJ, CO, and the button."
+                      "feedback": "UTG, then toward the button."
                     }
                   }
                 },
@@ -22354,17 +22344,16 @@
       "correctSequence": [
         "seat-utg",
         "seat-hj",
-        "seat-co",
         "seat-btn"
       ],
       "sequenceGrading": {
         "correct": {
           "grade": "recommended",
-          "feedback": "UTG → HJ → CO → BTN. Button acts last preflop."
+          "feedback": "UTG acts first. Button acts last preflop."
         },
         "incorrect": {
           "grade": "clear_mistake",
-          "feedback": "Start under the gun, then HJ, CO, and the button."
+          "feedback": "Start under the gun, then move toward the button."
         }
       }
     },
@@ -22496,19 +22485,19 @@
       ],
       "lifeLossEligible": true,
       "choiceGrading": {
-        "pot-9": {
+        "pot-correct": {
           "grade": "recommended",
-          "feedback": "1 + 2 + 6 = 9 chips in the middle."
+          "feedback": "Add both blinds and the open."
         },
-        "pot-7": {
+        "pot-miss-blind": {
           "grade": "clear_mistake",
-          "feedback": "Add both blinds and the open: 1 + 2 + 6.",
-          "betterChoiceId": "pot-9"
+          "feedback": "Add both blinds and the open.",
+          "betterChoiceId": "pot-correct"
         },
-        "pot-12": {
+        "pot-too-big": {
           "grade": "clear_mistake",
-          "feedback": "That would be a bigger open. Here it is 1 + 2 + 6.",
-          "betterChoiceId": "pot-9"
+          "feedback": "Add both blinds and the open — do not double the raise.",
+          "betterChoiceId": "pot-correct"
         }
       }
     },
@@ -22753,17 +22742,16 @@
       "correctSequence": [
         "j-utg",
         "j-hj",
-        "j-co",
         "j-btn"
       ],
       "sequenceGrading": {
         "correct": {
           "grade": "recommended",
-          "feedback": "UTG → HJ → CO → BTN. Left of big blind first; button last."
+          "feedback": "Left of big blind first; button last."
         },
         "incorrect": {
           "grade": "clear_mistake",
-          "feedback": "UTG, then HJ, CO, and the button."
+          "feedback": "UTG, then toward the button."
         }
       }
     },

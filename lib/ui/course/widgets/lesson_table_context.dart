@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 
@@ -3571,7 +3572,7 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.potOpenSizeOutcomes,
         // Chip-total tiles teach pot math — no decoy face-down "Them".
         villainSeatCount: 0,
-        caption: '1/2 · BTN opens 6 · blinds still to act',
+        caption: '1/2 · BTN opens · blinds still to act',
       );
     case 'act-01-02-01-scaffolded-spot':
       return const LessonTableScene(
@@ -3884,9 +3885,9 @@ String? mapTableRegionToChoiceId({
       };
     case 'act-01-05-01-unguided-pot':
       return switch (region) {
-        LessonTableRegion.potChipsNine => pick('pot-9'),
-        LessonTableRegion.potChipsSeven => pick('pot-7'),
-        LessonTableRegion.potChipsTwelve => pick('pot-12'),
+        LessonTableRegion.potChipsNine => pick(kOpenPotCorrectChoiceId),
+        LessonTableRegion.potChipsSeven => pick(kOpenPotMissBlindChoiceId),
+        LessonTableRegion.potChipsTwelve => pick(kOpenPotTooBigChoiceId),
         _ => null,
       };
     case 'act-02-01-01-guided-btn':
@@ -6872,32 +6873,33 @@ class LessonTableContext extends StatelessWidget {
   }
 
   Widget _buildPotOpenSizeOutcomes() {
+    final deal = dealLessonOpenPot();
     return _buildOutcomePhases(
       semanticsInteractive: 'Interactive pot size — tap the chip total',
       semanticsStatic: 'Open pot size outcomes',
-      caption: scene.caption ?? '1/2 · BTN opens 6',
+      caption: scene.caption ?? deal.caption,
       // No spot cards — keep teach densify; Rex owns the cue.
       cueLabel: '',
       minHeightFactor: 0.58,
       phases: [
         (
           region: LessonTableRegion.potChipsSeven,
-          title: '7 chips',
+          title: '${deal.missBlindPot} chips',
           detail: 'Miss a blind',
-          visual: const _PotChipDot(label: '7', gold: false),
+          visual: _PotChipDot(label: '${deal.missBlindPot}', gold: false),
         ),
         (
           region: LessonTableRegion.potChipsNine,
-          title: '9 chips',
-          detail: '1+2+6',
+          title: '${deal.correctPot} chips',
+          detail: '${deal.smallBlind}+${deal.bigBlind}+${deal.openTo}',
           // Keep all chips neutral until the learner taps — gold would spoil.
-          visual: const _PotChipDot(label: '9', gold: false),
+          visual: _PotChipDot(label: '${deal.correctPot}', gold: false),
         ),
         (
           region: LessonTableRegion.potChipsTwelve,
-          title: '12 chips',
+          title: '${deal.tooBigPot} chips',
           detail: 'Too big',
-          visual: const _PotChipDot(label: '12', gold: false),
+          visual: _PotChipDot(label: '${deal.tooBigPot}', gold: false),
         ),
       ],
     );

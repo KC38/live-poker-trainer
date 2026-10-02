@@ -224,7 +224,9 @@ seat order taps seats on that table.
 
 How pots are won uses the full poker table for every step: explain taps
 Fold win, Showdown, and Side pot under the felt, and each decision spot
-uses that table.
+uses that table. The open-pot size quiz shows the live open with bets
+visible and the pot total hidden; chip-total choices and the BTN open
+amount randomize each attempt.
 
 Play a full toy hand uses the full poker table for every step: explain
 taps Blinds, You act, and Ending under the felt, and each street uses

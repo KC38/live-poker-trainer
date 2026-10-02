@@ -1,0 +1,58 @@
+/// Unit coverage for randomized open-pot math deals.
+library;
+
+import 'dart:math';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+
+void main() {
+  test('open pot deal adds blinds to the open', () {
+    final deal = dealLessonOpenPot(random: Random(0));
+    expect(kLessonOpenToAmounts, contains(deal.openTo));
+    expect(deal.correctPot, deal.smallBlind + deal.bigBlind + deal.openTo);
+    expect(deal.missBlindPot, deal.correctPot - deal.smallBlind);
+    expect(deal.tooBigPot, deal.openTo * 2);
+    expect(deal.missBlindPot, isNot(deal.correctPot));
+    expect(deal.tooBigPot, isNot(deal.correctPot));
+  });
+
+  test('open pot deal is stable across repeated calls', () {
+    final a = dealLessonOpenPot(activityId: kOpenPotActivityId, generation: 3);
+    final b = dealLessonOpenPot(activityId: kOpenPotActivityId, generation: 3);
+    expect(a.openTo, b.openTo);
+    final c = dealLessonOpenPot(activityId: kOpenPotActivityId, generation: 4);
+    // Different generation may or may not change; just ensure API is callable.
+    expect(kLessonOpenToAmounts, contains(c.openTo));
+  });
+
+  test('labeled choices rewrite chip totals', () {
+    final deal = const LessonOpenPotDeal(openTo: 6, smallBlind: 1, bigBlind: 2);
+    final labeled = deal.labeledChoices(const [
+      CourseChoice(id: kOpenPotCorrectChoiceId, label: 'Correct pot'),
+      CourseChoice(id: kOpenPotMissBlindChoiceId, label: 'Miss a blind'),
+      CourseChoice(id: kOpenPotTooBigChoiceId, label: 'Too big'),
+    ]);
+    expect(labeled.map((c) => c.label), [
+      '9 chips',
+      '8 chips',
+      '12 chips',
+    ]);
+  });
+
+  test('six-max street bets post blinds and the button open', () {
+    final deal = const LessonOpenPotDeal(openTo: 7, smallBlind: 1, bigBlind: 2);
+    final bets = deal.streetBetsForSixMax(
+      buttonIndex: lessonBlindsButtonIndex,
+      smallBlindIndex: lessonBlindsSmallBlindIndex,
+      bigBlindIndex: lessonBlindsBigBlindIndex,
+    );
+    expect(bets.length, 6);
+    expect(bets[lessonBlindsButtonIndex], 7);
+    expect(bets[lessonBlindsSmallBlindIndex], 1);
+    expect(bets[lessonBlindsBigBlindIndex], 2);
+    expect(bets[0], 0);
+  });
+}

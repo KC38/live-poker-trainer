@@ -908,6 +908,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     return lessonFrameSpeech(
       controller.activity,
       handStepIndex: controller.draft.handStepIndex,
+      bindGeneration: controller.bindGeneration,
     );
   }
 

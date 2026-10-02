@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
@@ -199,9 +200,17 @@ bool isLessonScreenFrameLesson(String lessonId) {
 ///
 /// Every line ends by saying what to tap. Authored copy that only sets the
 /// scene ("Button with A9s. Folds to you.") gets the step's tap instruction.
-String lessonFrameSpeech(CourseActivity activity, {int handStepIndex = 0}) {
+String lessonFrameSpeech(
+  CourseActivity activity, {
+  int handStepIndex = 0,
+  int bindGeneration = 0,
+}) {
   return withLessonTapInstruction(
-    _lessonFrameLine(activity, handStepIndex: handStepIndex),
+    _lessonFrameLine(
+      activity,
+      handStepIndex: handStepIndex,
+      bindGeneration: bindGeneration,
+    ),
     lessonTapInstruction(activity, handStepIndex: handStepIndex),
   );
 }
@@ -275,7 +284,17 @@ String withLessonTapInstruction(String line, String instruction) {
   return text.isEmpty ? instruction : '$text $instruction';
 }
 
-String _lessonFrameLine(CourseActivity activity, {int handStepIndex = 0}) {
+String _lessonFrameLine(
+  CourseActivity activity, {
+  int handStepIndex = 0,
+  int bindGeneration = 0,
+}) {
+  if (activity.id == kOpenPotActivityId) {
+    return dealLessonOpenPot(
+      activityId: activity.id,
+      generation: bindGeneration,
+    ).coachLine;
+  }
   if (activity.id == 'act-01-01-01-explain-hole-cards') {
     return 'These two are your cards alone. Nobody else sees them. '
         'Tap your cards to peek.';
