@@ -35,11 +35,7 @@ void main() {
       CourseChoice(id: kOpenPotMissBlindChoiceId, label: 'Miss a blind'),
       CourseChoice(id: kOpenPotTooBigChoiceId, label: 'Too big'),
     ]);
-    expect(labeled.map((c) => c.label), [
-      '9 chips',
-      '8 chips',
-      '12 chips',
-    ]);
+    expect(labeled.map((c) => c.label), ['9 chips', '8 chips', '12 chips']);
   });
 
   test('six-max street bets post blinds and the button open', () {
@@ -54,6 +50,41 @@ void main() {
     expect(bets[lessonBlindsSmallBlindIndex], 1);
     expect(bets[lessonBlindsBigBlindIndex], 2);
     expect(bets[0], 0);
+  });
+
+  test('every live open size has three different chip totals', () {
+    for (final openTo in kLessonOpenToAmounts) {
+      final deal = LessonOpenPotDeal(
+        openTo: openTo,
+        smallBlind: 1,
+        bigBlind: 2,
+      );
+      expect(
+        {deal.correctPot, deal.missBlindPot, deal.tooBigPot},
+        hasLength(3),
+        reason: 'open-to $openTo',
+      );
+      expect(deal.correctPot, 1 + 2 + openTo);
+    }
+  });
+
+  test('street bets ignore seats outside the ring', () {
+    const deal = LessonOpenPotDeal(openTo: 5, smallBlind: 1, bigBlind: 2);
+    final bets = deal.streetBetsForSixMax(
+      buttonIndex: -1,
+      smallBlindIndex: 6,
+      bigBlindIndex: 2,
+    );
+    expect(bets, [0, 0, 2, 0, 0, 0]);
+    expect(
+      deal.streetBetsForSixMax(
+        buttonIndex: 0,
+        smallBlindIndex: 0,
+        bigBlindIndex: 0,
+        seatCount: 0,
+      ),
+      isEmpty,
+    );
   });
 
   test('open pot table folds early seats before the button opens', () {
