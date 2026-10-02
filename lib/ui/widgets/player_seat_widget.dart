@@ -132,6 +132,7 @@ class PlayerSeatWidget extends StatelessWidget {
     this.selectedHeroIndexes = const {},
     this.highlightHeroIndexes = const {},
     this.dimmedHeroIndexes = const {},
+    this.holeDealDelays = const [Duration.zero, Duration.zero],
   });
 
   final PlayerModel player;
@@ -173,6 +174,9 @@ class PlayerSeatWidget extends StatelessWidget {
 
   /// Hero hole indexes faded as leftovers.
   final Set<int> dimmedHeroIndexes;
+
+  /// Per-hole-card delay before the card appears (dealer pacing).
+  final List<Duration> holeDealDelays;
 
   /// Geometry this seat draws with.
   SeatMetrics get metrics => SeatMetrics.of(
@@ -255,9 +259,19 @@ class PlayerSeatWidget extends StatelessWidget {
     ],
   );
 
+  Duration _delayFor(int i) {
+    if (showCards) return Duration.zero;
+    if (i < 0 || i >= holeDealDelays.length) return Duration.zero;
+    return holeDealDelays[i];
+  }
+
   Widget _cuedCard(SeatMetrics m, int i) {
     final selected = selectedHeroIndexes.contains(i);
     final highlighted = highlightHeroIndexes.contains(i);
+    final placeholder = SizedBox(
+      width: m.cardWidth,
+      height: m.cardHeight,
+    );
     return GlowHighlight(
       active: highlighted || selected,
       animated: highlighted && !selected,
@@ -265,6 +279,8 @@ class PlayerSeatWidget extends StatelessWidget {
       borderRadius: m.cardWidth * 0.12,
       child: DealtCardReveal(
         playSound: !showCards,
+        delay: _delayFor(i),
+        placeholder: placeholder,
         child: TableCard(
           card: player.holeCards[i],
           width: m.cardWidth,
@@ -276,13 +292,19 @@ class PlayerSeatWidget extends StatelessWidget {
 
   Widget _backCards(SeatMetrics m) {
     final width = m.backWidth(hero: player.isHero);
+    final height = width * tableCardAspect;
+    Widget back(int i) => DealtCardReveal(
+          delay: _delayFor(i),
+          placeholder: SizedBox(width: width, height: height),
+          child: TableCardBack(width: width),
+        );
     return Row(
       key: ValueKey<String>('seat-backs-${player.id}'),
       mainAxisSize: MainAxisSize.min,
       children: [
-        DealtCardReveal(child: TableCardBack(width: width)),
+        back(0),
         SizedBox(width: m.cardGap),
-        DealtCardReveal(child: TableCardBack(width: width)),
+        back(1),
       ],
     );
   }

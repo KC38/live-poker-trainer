@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/engine/poker_engine.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
@@ -35,6 +36,9 @@ class ReplayPace {
   static Duration get collectPot => _scaled(360);
   static Duration get dealStreet => _scaled(560);
   static Duration get handOver => _scaled(700);
+
+  /// Gap between individual board cards when a street is dealt.
+  static Duration get dealCard => _scaled(CardDealPace.dealCardMs);
 }
 
 /// UI-facing online table snapshot.
@@ -634,15 +638,12 @@ class GameController extends StateNotifier<TableSession> {
           ],
           mainPot: game.mainPot + collected,
           street: eventStreet,
-          community: boardCodes
-              .take(boardCount)
-              .map(CardModel.fromCode)
-              .toList(growable: false),
           highestBet: 0,
           waitingForHero: false,
         );
         state = state.copyWith(game: game, collectingChips: false);
-        await Future<void>.delayed(ReplayPace.dealStreet);
+        await _dealBoardCards(boardCodes, boardCount, token);
+        if (_disposed || token != _replayToken) return;
       }
       game = applyLiveReplayEvent(game, event);
       state = state.copyWith(game: game);
@@ -676,16 +677,38 @@ class GameController extends StateNotifier<TableSession> {
         ],
         mainPot: game.mainPot + collected,
         street: nextStreet,
-        community: boardCodes
-            .take(boardCount)
-            .map(CardModel.fromCode)
-            .toList(growable: false),
         highestBet: 0,
         waitingForHero: false,
       );
       state = state.copyWith(game: game, collectingChips: false);
-      await Future<void>.delayed(ReplayPace.dealStreet);
+      await _dealBoardCards(boardCodes, boardCount, token);
       if (_disposed || token != _replayToken) return;
+    }
+  }
+
+  /// Reveals board cards one at a time up to [boardCount].
+  Future<void> _dealBoardCards(
+    List<String> boardCodes,
+    int boardCount,
+    int token,
+  ) async {
+    var game = state.game;
+    if (game == null) return;
+    final start = game.community.length;
+    final target = boardCount.clamp(0, boardCodes.length);
+    if (target <= start) return;
+    for (var i = start + 1; i <= target; i++) {
+      if (_disposed || token != _replayToken) return;
+      game = state.game;
+      if (game == null) return;
+      game = game.copyWith(
+        community: boardCodes
+            .take(i)
+            .map(CardModel.fromCode)
+            .toList(growable: false),
+      );
+      state = state.copyWith(game: game, collectingChips: false);
+      await Future<void>.delayed(ReplayPace.dealCard);
     }
   }
 
