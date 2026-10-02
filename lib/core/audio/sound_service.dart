@@ -39,6 +39,19 @@ class SoundService with WidgetsBindingObserver {
   SoundHandle? _bgmHandle;
   final Map<SfxKind, AudioSource> _sfxSources = {};
 
+  DateTime? _dealBurstAt;
+  Duration _dealBurstCursor = Duration.zero;
+
+  /// Spacing between overlapping hole/board deal voices in one burst.
+  static const Duration dealStagger = Duration(milliseconds: 70);
+
+  /// New cards after this gap start a fresh deal burst.
+  static const Duration dealBurstWindow = Duration(milliseconds: 350);
+
+  /// SFX requested through [playSfx], including the silent test service.
+  @visibleForTesting
+  final List<SfxKind> played = [];
+
   /// Serializes BGM transitions so fades and pauses cannot interleave.
   Future<void> _bgmOps = Future<void>.value();
 
@@ -233,7 +246,8 @@ class SoundService with WidgetsBindingObserver {
 
   /// Plays a short table SFX if enabled.
   Future<void> playSfx(SfxKind kind) async {
-    if (!sfxEnabled || !_unlocked) return;
+    played.add(kind);
+    if (!_bindPlatform || !sfxEnabled || !_unlocked) return;
     if (!await ensureEngine()) return;
     final source = _sfxSources[kind];
     if (source == null) return;
@@ -242,6 +256,38 @@ class SoundService with WidgetsBindingObserver {
     } catch (error) {
       debugPrint('SoundService.playSfx(${kind.name}) failed: $error');
     }
+  }
+
+  Duration _nextDealDelay() {
+    final now = DateTime.now();
+    final burstAt = _dealBurstAt;
+    if (burstAt == null || now.difference(burstAt) > dealBurstWindow) {
+      _dealBurstAt = now;
+      _dealBurstCursor = Duration.zero;
+    }
+    final delay = _dealBurstCursor;
+    _dealBurstCursor += dealStagger;
+    return delay;
+  }
+
+  /// Clears the in-flight deal stagger (tests).
+  @visibleForTesting
+  void resetDealBurst() {
+    _dealBurstAt = null;
+    _dealBurstCursor = Duration.zero;
+  }
+
+  /// Plays the deal SFX after a short offset so a multi-card burst does not
+  /// pile up as one click.
+  void dealStaggered() {
+    final delay = _nextDealDelay();
+    if (delay <= Duration.zero) {
+      unawaited(deal());
+      return;
+    }
+    Future<void>.delayed(delay, () {
+      unawaited(deal());
+    });
   }
 
   Future<void> deal() => playSfx(SfxKind.deal);

@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
+import 'package:live_poker_trainer/ui/widgets/dealt_card_reveal.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -300,55 +301,6 @@ class _PinnedToLabelWidth extends StatelessWidget {
   }
 }
 
-/// A board card that fades and scales in when it is first dealt.
-class _RevealedCard extends StatefulWidget {
-  const _RevealedCard({
-    required this.card,
-    required this.width,
-    this.dimmed = false,
-    this.orderBadge,
-  });
-
-  final CardModel card;
-  final double width;
-  final bool dimmed;
-  final int? orderBadge;
-
-  @override
-  State<_RevealedCard> createState() => _RevealedCardState();
-}
-
-class _RevealedCardState extends State<_RevealedCard> {
-  double _progress = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) setState(() => _progress = 1);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 220),
-      opacity: _progress,
-      child: AnimatedScale(
-        scale: 0.82 + 0.18 * _progress,
-        duration: const Duration(milliseconds: 260),
-        curve: Curves.easeOutBack,
-        child: TableCard(
-          card: widget.card,
-          width: widget.width,
-          dimmed: widget.dimmed,
-          orderBadge: widget.orderBadge,
-        ),
-      ),
-    );
-  }
-}
-
 /// One tappable board card with an optional [GlowHighlight].
 class _BoardCardTarget extends StatelessWidget {
   const _BoardCardTarget({
@@ -379,11 +331,13 @@ class _BoardCardTarget extends StatelessWidget {
       animated: highlight && !selected,
       reserveLayout: false,
       borderRadius: width * 0.12,
-      child: _RevealedCard(
-        card: card,
-        width: width,
-        dimmed: dimmed,
-        orderBadge: orderBadge,
+      child: DealtCardReveal(
+        child: TableCard(
+          card: card,
+          width: width,
+          dimmed: dimmed,
+          orderBadge: orderBadge,
+        ),
       ),
     );
     if (onTap == null) return cardFace;

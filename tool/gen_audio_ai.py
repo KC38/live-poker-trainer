@@ -100,13 +100,13 @@ ASSETS: tuple[AssetSpec, ...] = (
         out_name="deal.wav",
         kind="sfx",
         text=(
-            "Two playing cards dealt face-down onto a felt poker table in quick "
-            "succession, soft paper flick and brief slide, close-mic Foley, dry, "
-            "no music, no voices"
+            "One playing card dealt face-down onto a felt poker table, a single "
+            "short paper flick and brief slide, close-mic Foley, dry, no second "
+            "card, no music, no voices"
         ),
-        duration_seconds=0.55,
+        duration_seconds=0.5,
         target_lufs=-14.0,
-        prompt_influence=0.55,
+        prompt_influence=0.6,
     ),
     AssetSpec(
         name="chip",
