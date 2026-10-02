@@ -4490,7 +4490,7 @@ void main() {
     expect(errored.livesMax, 5);
   });
 
-  testWidgets('zero hearts blocks the stage and shows restore dock', (
+  testWidgets('zero hearts blocks the stage and pulses chrome hearts', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 1600);
