@@ -7,30 +7,70 @@ import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  tearDown(() => CardDealPace.testScale = 1);
+  tearDown(() {
+    CardDealPace.testScale = 1;
+    CardDealPace.debugInstant = null;
+  });
 
-  test('hole order is clockwise from left of the button', () {
+  test('holeDelay deals clockwise from the left of the button', () {
+    CardDealPace.debugInstant = false;
     const seats = 6;
-    const dealer = 3; // button
-    // Left of button is seat 4, then 5, 0, 1, 2, 3.
-    final order = [
-      for (var seat = 0; seat < seats; seat++)
-        (seat - dealer - 1 + seats) % seats,
-    ];
-    expect(order, [2, 3, 4, 5, 0, 1]);
-    expect(order[4], 0); // SB first
-    expect(order[3], 5); // BTN last in the round
+    const dealer = 3;
+
+    Duration delay(int seat, int card) => CardDealPace.holeDelay(
+      seatIndex: seat,
+      cardIndex: card,
+      seatCount: seats,
+      dealerIndex: dealer,
+    );
+
+    // Left of the button (seat 4) is first; the button is last in the round.
+    expect(delay(4, 0), Duration.zero);
+    expect(delay(5, 0), CardDealPace.dealCard);
+    expect(delay(0, 0), CardDealPace.dealCard * 2);
+    expect(delay(1, 0), CardDealPace.dealCard * 3);
+    expect(delay(2, 0), CardDealPace.dealCard * 4);
+    expect(delay(3, 0), CardDealPace.dealCard * 5);
+    // Second hole card starts after a full clockwise round.
+    expect(delay(4, 1), CardDealPace.dealCard * seats);
+    expect(delay(3, 1), CardDealPace.dealCard * (seats + 5));
+  });
+
+  test('holeDelay clamps the dealer and ignores an empty ring', () {
+    CardDealPace.debugInstant = false;
+    expect(
+      CardDealPace.holeDelay(
+        seatIndex: 0,
+        cardIndex: 0,
+        seatCount: 0,
+        dealerIndex: 0,
+      ),
+      Duration.zero,
+    );
+    // Dealer past the last seat clamps to seat 5, so seat 0 is first.
+    expect(
+      CardDealPace.holeDelay(
+        seatIndex: 0,
+        cardIndex: 0,
+        seatCount: 6,
+        dealerIndex: 99,
+      ),
+      Duration.zero,
+    );
+    expect(
+      CardDealPace.holeDelay(
+        seatIndex: 5,
+        cardIndex: 0,
+        seatCount: 6,
+        dealerIndex: 99,
+      ),
+      CardDealPace.dealCard * 5,
+    );
   });
 
   test('boardDelay is zero under the test binding', () {
-    expect(
-      CardDealPace.boardDelay(index: 2, alreadyVisible: 0),
-      Duration.zero,
-    );
-    expect(
-      CardDealPace.boardDelay(index: 3, alreadyVisible: 3),
-      Duration.zero,
-    );
+    expect(CardDealPace.boardDelay(index: 2, alreadyVisible: 0), Duration.zero);
+    expect(CardDealPace.boardDelay(index: 3, alreadyVisible: 3), Duration.zero);
   });
 
   test('dealCard respects testScale when not under widget tests', () {
@@ -38,5 +78,20 @@ void main() {
     expect(CardDealPace.instant, isTrue);
     CardDealPace.testScale = 0;
     expect(CardDealPace.dealCard, Duration.zero);
+  });
+
+  test('boardDelay skips cards already up and scales the rest', () {
+    CardDealPace.debugInstant = false;
+    CardDealPace.testScale = 2;
+    expect(CardDealPace.boardDelay(index: 1, alreadyVisible: 3), Duration.zero);
+    expect(CardDealPace.boardDelay(index: 3, alreadyVisible: 3), Duration.zero);
+    expect(
+      CardDealPace.boardDelay(index: 4, alreadyVisible: 3),
+      const Duration(milliseconds: 300),
+    );
+    expect(
+      CardDealPace.boardDelay(index: 5, alreadyVisible: 3),
+      const Duration(milliseconds: 600),
+    );
   });
 }

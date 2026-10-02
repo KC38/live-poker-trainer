@@ -5,7 +5,10 @@
 import {describe, expect, it} from "vitest";
 import {HttpsError} from "firebase-functions/v2/https";
 import type {Firestore} from "firebase-admin/firestore";
-import {HEART_REFILL_INTERVAL_MS} from "./course_hearts";
+import {
+  DEFAULT_LESSON_LIVES,
+  HEART_REFILL_INTERVAL_MS,
+} from "./course_hearts";
 import {
   activityIdsInOrder,
   courseBank,
@@ -782,6 +785,128 @@ describe("resolveSubmitHeartState", () => {
     });
     expect(resolved.blocked).toBe(true);
     expect(resolved.livesRemaining).toBe(0);
+    expect(resolved.livesNextRefillAtMs).toBeNull();
+  });
+
+  it("does not restore hearts from a stale higher attempt count", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "in_progress",
+      attemptLivesRemaining: 4,
+      attemptLivesMax: 5,
+      profileExists: true,
+      profileData: {
+        livesRemaining: 1,
+        livesMax: 5,
+        livesNextRefillAtMs: nowMs + HEART_REFILL_INTERVAL_MS,
+      },
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.livesRemaining).toBe(1);
+    expect(resolved.livesMax).toBe(DEFAULT_LESSON_LIVES);
+    expect(resolved.blocked).toBe(false);
+    expect(resolved.status).toBe("in_progress");
+  });
+
+  it("lets practice continue on an empty wallet without leaving remediation", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "remediation",
+      attemptLivesRemaining: 4,
+      attemptLivesMax: 5,
+      profileExists: true,
+      profileData: {
+        livesRemaining: 0,
+        livesMax: 5,
+        livesNextRefillAtMs: nowMs + HEART_REFILL_INTERVAL_MS,
+      },
+      nowMs,
+      isPracticeOrReplay: true,
+    });
+    expect(resolved.livesRemaining).toBe(0);
+    expect(resolved.blocked).toBe(false);
+    expect(resolved.status).toBe("remediation");
+  });
+
+  it("grades a numeric-string wallet and lifts remediation", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "remediation",
+      attemptLivesRemaining: 0,
+      attemptLivesMax: 5,
+      profileExists: true,
+      profileData: {
+        livesRemaining: "2",
+        livesMax: 5,
+        livesNextRefillAtMs: nowMs + HEART_REFILL_INTERVAL_MS,
+      },
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.livesRemaining).toBe(2);
+    expect(resolved.blocked).toBe(false);
+    expect(resolved.status).toBe("in_progress");
+  });
+
+  it("ignores a non-numeric wallet and clamps the attempt", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "in_progress",
+      attemptLivesRemaining: 9,
+      attemptLivesMax: 5,
+      profileExists: true,
+      profileData: {livesRemaining: "none", livesMax: 5},
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.livesRemaining).toBe(5);
+    expect(resolved.livesMax).toBe(5);
+    expect(resolved.blocked).toBe(false);
+    expect(resolved.livesNextRefillAtMs).toBeNull();
+  });
+
+  it("blocks a missing profile when the attempt count is not finite", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "in_progress",
+      attemptLivesRemaining: Number.NaN,
+      attemptLivesMax: 0,
+      profileExists: false,
+      profileData: {livesRemaining: 5, livesMax: 5},
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.livesRemaining).toBe(0);
+    expect(resolved.livesMax).toBe(DEFAULT_LESSON_LIVES);
+    expect(resolved.livesNextRefillAtMs).toBeNull();
+    expect(resolved.blocked).toBe(true);
+    expect(resolved.status).toBe("in_progress");
+  });
+
+  it("does not block practice when the attempt count is not finite", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "in_progress",
+      attemptLivesRemaining: Number.NaN,
+      attemptLivesMax: 0,
+      profileExists: false,
+      profileData: undefined,
+      nowMs,
+      isPracticeOrReplay: true,
+    });
+    expect(resolved.blocked).toBe(false);
+    expect(resolved.livesRemaining).toBe(0);
+    expect(resolved.livesMax).toBe(DEFAULT_LESSON_LIVES);
+  });
+
+  it("floors a fractional attempt and clears remediation without a wallet", () => {
+    const resolved = resolveSubmitHeartState({
+      attemptStatus: "remediation",
+      attemptLivesRemaining: 2.9,
+      attemptLivesMax: 5,
+      profileExists: false,
+      profileData: {livesRemaining: 0},
+      nowMs,
+      isPracticeOrReplay: false,
+    });
+    expect(resolved.livesRemaining).toBe(2);
+    expect(resolved.status).toBe("in_progress");
+    expect(resolved.blocked).toBe(false);
     expect(resolved.livesNextRefillAtMs).toBeNull();
   });
 });

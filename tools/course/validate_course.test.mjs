@@ -247,6 +247,29 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   );
 });
 
+test("lifeLossEligible is rejected and omitted from generated banks", () => {
+  const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  const activity = course.sections[0].units[0].lessons[0].activities[0];
+  assert.equal(
+    Object.prototype.hasOwnProperty.call(activity, "lifeLossEligible"),
+    false,
+  );
+  activity.lifeLossEligible = false;
+  const rejected = validateAndGenerate(course);
+  const match = rejected.errors.find((error) =>
+    error.includes("activities[0]") &&
+    error.includes("lifeLossEligible was removed"),
+  );
+  assert.ok(match, rejected.errors.join("\n"));
+  assert.match(match, /hearts are lost on all non-guided mistakes/);
+
+  const clean = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  const {errors, clientCatalog, serverBank} = validateAndGenerate(clean);
+  assert.equal(errors.length, 0, errors.join("\n"));
+  assert.equal(JSON.stringify(clientCatalog).includes("lifeLossEligible"), false);
+  assert.equal(JSON.stringify(serverBank).includes("lifeLossEligible"), false);
+});
+
 test("invalid fixtures each fail validation", () => {
   const failures = runInvalidFixtureSuite();
   assert.deepEqual(failures, []);

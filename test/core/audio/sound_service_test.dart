@@ -11,37 +11,43 @@ import 'package:live_poker_trainer/core/audio/sound_service.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('background pause keeps BGM wanted and resume clears the flag', () async {
-    final sound = SoundService.silent();
-    await sound.startHomeBgm();
-    expect(sound.bgmWanted, isTrue);
-    expect(sound.pausedForBackground, isFalse);
+  test(
+    'background pause keeps BGM wanted and resume clears the flag',
+    () async {
+      final sound = SoundService.silent();
+      await sound.startHomeBgm();
+      expect(sound.bgmWanted, isTrue);
+      expect(sound.pausedForBackground, isFalse);
 
-    await sound.pauseForBackground();
-    expect(sound.bgmWanted, isTrue);
-    expect(sound.pausedForBackground, isTrue);
+      await sound.pauseForBackground();
+      expect(sound.bgmWanted, isTrue);
+      expect(sound.pausedForBackground, isTrue);
 
-    await sound.resumeFromBackground();
-    expect(sound.bgmWanted, isTrue);
-    expect(sound.pausedForBackground, isFalse);
+      await sound.resumeFromBackground();
+      expect(sound.bgmWanted, isTrue);
+      expect(sound.pausedForBackground, isFalse);
 
-    await sound.dispose();
-  });
+      await sound.dispose();
+    },
+  );
 
-  test('pauseHomeBgm clears wanted so background resume will not restart', () async {
-    final sound = SoundService.silent();
-    await sound.startHomeBgm();
-    await sound.pauseHomeBgm();
-    expect(sound.bgmWanted, isFalse);
+  test(
+    'pauseHomeBgm clears wanted so background resume will not restart',
+    () async {
+      final sound = SoundService.silent();
+      await sound.startHomeBgm();
+      await sound.pauseHomeBgm();
+      expect(sound.bgmWanted, isFalse);
 
-    await sound.pauseForBackground();
-    expect(sound.pausedForBackground, isFalse);
+      await sound.pauseForBackground();
+      expect(sound.pausedForBackground, isFalse);
 
-    await sound.resumeFromBackground();
-    expect(sound.bgmWanted, isFalse);
+      await sound.resumeFromBackground();
+      expect(sound.bgmWanted, isFalse);
 
-    await sound.dispose();
-  });
+      await sound.dispose();
+    },
+  );
 
   test('lifecycle observer pauses on hidden and resumes on resumed', () async {
     final sound = SoundService.silent();
@@ -80,14 +86,28 @@ void main() {
     await sound.dispose();
   });
 
-  test('dealStaggered records one deal per card with a short stagger', () async {
-    final sound = SoundService.silent();
-    await sound.unlock();
-    sound.dealStaggered();
-    sound.dealStaggered();
-    sound.dealStaggered();
-    await Future<void>.delayed(const Duration(milliseconds: 250));
-    expect(sound.played, [SfxKind.deal, SfxKind.deal, SfxKind.deal]);
-    await sound.dispose();
-  });
+  test(
+    'dealStaggered plays the first card now and staggers the rest',
+    () async {
+      final sound = SoundService.silent();
+      await sound.unlock();
+      sound.dealStaggered();
+      sound.dealStaggered();
+      sound.dealStaggered();
+      expect(sound.played, [SfxKind.deal]);
+
+      sound.resetDealBurst();
+      sound.dealStaggered();
+      expect(sound.played, [SfxKind.deal, SfxKind.deal]);
+
+      await Future<void>.delayed(const Duration(milliseconds: 250));
+      expect(sound.played, [
+        SfxKind.deal,
+        SfxKind.deal,
+        SfxKind.deal,
+        SfxKind.deal,
+      ]);
+      await sound.dispose();
+    },
+  );
 }
