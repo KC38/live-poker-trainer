@@ -215,6 +215,26 @@ void main() {
     expect(game.highestBet, 1);
   });
 
+  test('postSmallBlind false leaves both blinds unposted', () {
+    final game = lessonTableStageGame(
+      villainCount: lessonBlindsVillainCount,
+      dealerIndex: lessonBlindsButtonIndex,
+      sbIndex: lessonBlindsSmallBlindIndex,
+      bbIndex: lessonBlindsBigBlindIndex,
+      postSmallBlind: false,
+      postBigBlind: false,
+    );
+
+    final sb = game.players[lessonBlindsSmallBlindIndex];
+    final bb = game.players[lessonBlindsBigBlindIndex];
+    expect(sb.currentBet, 0);
+    expect(bb.currentBet, 0);
+    expect(sb.stack, 200);
+    expect(bb.stack, 200);
+    expect(game.displayPot, 0);
+    expect(game.highestBet, 0);
+  });
+
   test('a step can teach other stakes; stacks stay 100 big blinds', () {
     final game = lessonTableStageGame(smallBlind: 0.5, bigBlind: 1);
 

@@ -943,9 +943,13 @@ class TableLayout {
       final puckD = SeatPuck.diameter * seatScale;
       final labels = [
         if (features.positions && game.dealerIndex == i) 'D',
-        if (features.positions && game.sbIndex == i) 'SB',
-        // Hide the BB puck while that seat has not posted yet (preflop quiz
-        // that reveals the big blind after a correct tap).
+        // Hide SB/BB pucks while that seat has not posted yet (preflop quizzes
+        // that reveal blinds after a correct tap — SB then BB when staggered).
+        if (features.positions &&
+            game.sbIndex == i &&
+            (game.street != Street.preflop ||
+                game.players[i].currentBet > Money.epsilon))
+          'SB',
         if (features.positions &&
             game.bbIndex == i &&
             (game.street != Street.preflop ||

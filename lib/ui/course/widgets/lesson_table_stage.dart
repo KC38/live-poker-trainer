@@ -41,8 +41,8 @@ const int lessonBlindsRightOfButtonIndex = 2;
 /// CO, BTN, SB, BB. [seatNames] overrides those labels when set (action-order
 /// steps use UTG in place of EP). The table plays [smallBlind]/[bigBlind] with
 /// 100 big blind stacks. [villainArchetypes] gives the opponents, in seat
-/// order, real player types. [postBigBlind] false leaves the BB unposted until
-/// a quiz reveals it.
+/// order, real player types. [postSmallBlind] / [postBigBlind] false leave
+/// that blind unposted until a quiz reveals it.
 /// Six-max seat names for action-order taps (UTG, not EP).
 const List<String> lessonActionOrderSeatNames = [
   'UTG',
@@ -89,6 +89,7 @@ GameState lessonTableStageGame({
   double smallBlind = lessonSmallBlind,
   double bigBlind = lessonBigBlind,
   List<PlayerArchetype>? villainArchetypes,
+  bool postSmallBlind = true,
   bool postBigBlind = true,
   List<double>? streetBets,
   double? potTotal,
@@ -110,6 +111,7 @@ GameState lessonTableStageGame({
     dealerIndex: dealerIndex ?? 0,
     sbIndex: sbIndex,
     bbIndex: bbIndex,
+    postSmallBlind: postSmallBlind,
     postBigBlind: postBigBlind,
   );
   const names = ['Sam', 'Jo', 'Rio', 'Max', 'Kai'];
@@ -306,6 +308,7 @@ class LessonTableStage extends StatelessWidget {
     this.bigBlind = lessonBigBlind,
     this.villainArchetypes,
     this.features,
+    this.postSmallBlind = true,
     this.postBigBlind = true,
     this.streetBets,
     this.potTotal,
@@ -419,6 +422,10 @@ class LessonTableStage extends StatelessWidget {
   /// [TableFeaturesScope].
   final TableFeatures? features;
 
+  /// When false, the small blind seat has no chips out yet (reveal-on-tap
+  /// quizzes). The SB seat index and SoftPulse target stay the same.
+  final bool postSmallBlind;
+
   /// When false, the big blind seat has no chips out yet (reveal-on-tap
   /// quizzes). The BB seat index and SoftPulse target stay the same.
   final bool postBigBlind;
@@ -457,6 +464,7 @@ class LessonTableStage extends StatelessWidget {
     smallBlind: smallBlind,
     bigBlind: bigBlind,
     villainArchetypes: villainArchetypes,
+    postSmallBlind: postSmallBlind,
     postBigBlind: postBigBlind,
     streetBets: streetBets,
     potTotal: potTotal,
