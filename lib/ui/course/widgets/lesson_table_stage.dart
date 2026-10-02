@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
+import 'package:live_poker_trainer/core/constants/money.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
@@ -101,6 +102,9 @@ GameState lessonTableStageGame({
 
   /// Remaining chips for every non-hero seat. Null keeps the default band stack.
   double? villainStackChips,
+
+  /// Seat ids that take [displayPot]. Empty leaves the pot in the middle.
+  List<int> winnerIds = const [],
 }) {
   final base = lessonBandGame(
     heroCodes: heroCodes,
@@ -178,8 +182,48 @@ GameState lessonTableStageGame({
       ],
     );
   }
-  if (dealerIndex == null) return named;
-  return named.copyWith(activePlayerIndex: activeSeatIndex ?? -1);
+  if (dealerIndex != null) {
+    named = named.copyWith(activePlayerIndex: activeSeatIndex ?? -1);
+  }
+  if (winnerIds.isEmpty) return named;
+  return awardLessonStagePot(named, winnerIds);
+}
+
+/// Credits [winnerIds] with the center pot and marks the hand over.
+///
+/// Stacks rise immediately; [GameState.awardedPot] keeps the pot label on
+/// the felt while [FeltTableView.awardingChips] flies each share to a seat.
+GameState awardLessonStagePot(GameState base, List<int> winnerIds) {
+  final pot = base.displayPot;
+  final payouts = Money.splitPot(pot, winnerIds);
+  return base.copyWith(
+    players: [
+      for (var i = 0; i < base.players.length; i++)
+        base.players[i].copyWith(
+          stack: Money.round(
+            base.players[i].stack + (payouts[base.players[i].id] ?? 0),
+          ),
+          currentBet: 0,
+        ),
+    ],
+    mainPot: 0,
+    awardedPot: pot,
+    isHandOver: true,
+    winnerIds: List<int>.from(winnerIds),
+    waitingForHero: false,
+    activePlayerIndex: -1,
+  );
+}
+
+/// Hero seat after a correct fold-win "Take pot" tap.
+List<int> lessonPotAwardWinnerIds({
+  required String activityId,
+  required String? selectedId,
+}) {
+  if (selectedId == 'no-show' && activityId == 'act-01-05-01-guided-fold-win') {
+    return const [0];
+  }
+  return const [];
 }
 
 /// Posts authored street bets and sets main pot from a display [potTotal].
@@ -316,6 +360,8 @@ class LessonTableStage extends StatelessWidget {
     this.villainActionLabel,
     this.heroStackChips,
     this.villainStackChips,
+    this.winnerIds = const [],
+    this.awardingChips,
   });
 
   /// Hero hole cards. Hidden until [heroFaceUp] is true.
@@ -449,6 +495,13 @@ class LessonTableStage extends StatelessWidget {
   /// stack.
   final double? villainStackChips;
 
+  /// Seat ids that win the pot. Non-empty credits stacks and shows WINS.
+  final List<int> winnerIds;
+
+  /// When set, overrides flying the pot to [winnerIds]. Null flies whenever
+  /// [winnerIds] is not empty.
+  final bool? awardingChips;
+
   GameState get _game => lessonTableStageGame(
     heroCodes: heroCodes,
     boardCodes: boardCodes,
@@ -472,6 +525,7 @@ class LessonTableStage extends StatelessWidget {
     villainActionLabel: villainActionLabel,
     heroStackChips: heroStackChips,
     villainStackChips: villainStackChips,
+    winnerIds: winnerIds,
   );
 
   @override
@@ -502,6 +556,7 @@ class LessonTableStage extends StatelessWidget {
           child: FeltTableView(
             game: game,
             chipDisplayMode: ChipDisplayMode.dollars,
+            awardingChips: awardingChips ?? winnerIds.isNotEmpty,
             features: table,
             showHoleCardBacks: true,
             heroCardsFaceUp: heroFaceUp,

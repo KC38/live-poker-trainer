@@ -208,6 +208,28 @@ void main() {
       expect(find.byKey(const ValueKey('felt-board-row')), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
+
+    testWidgets('awarding flies the pot share to the winner seat', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _frame(
+          const LessonTableStage(
+            villainCount: 0,
+            heroFaceUp: true,
+            winnerIds: [0],
+          ),
+          scope: TableFeatures.full,
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.textContaining('TAKES'), findsOneWidget);
+      expect(find.text('WINS'), findsOneWidget);
+      expect(find.textContaining(r'$3'), findsWidgets);
+      expect(find.byKey(const ValueKey('award-0-0')), findsOneWidget);
+    });
   });
 
   testWidgets('the felt reads the nearest scope when no features are passed', (

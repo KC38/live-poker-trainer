@@ -289,4 +289,47 @@ void main() {
 
     expect(game.players.map((p) => p.stack), [55, 55, 55]);
   });
+
+  test('winnerIds credits the pot to those seats and ends the hand', () {
+    final open = lessonTableStageGame(villainCount: 0);
+    final awarded = lessonTableStageGame(
+      villainCount: 0,
+      winnerIds: const [0],
+    );
+
+    expect(open.isHandOver, isFalse);
+    expect(open.displayPot, 3);
+    expect(open.hero.stack, 200);
+    expect(awarded.isHandOver, isTrue);
+    expect(awarded.winnerIds, [0]);
+    expect(awarded.awardedPot, 3);
+    expect(awarded.displayPot, 3);
+    expect(awarded.hero.stack, 203);
+    expect(awarded.awardShareFor(0), 3);
+    expect(awarded.mainPot, 0);
+  });
+
+  test('lessonPotAwardWinnerIds is the hero after Take pot', () {
+    expect(
+      lessonPotAwardWinnerIds(
+        activityId: 'act-01-05-01-guided-fold-win',
+        selectedId: 'no-show',
+      ),
+      [0],
+    );
+    expect(
+      lessonPotAwardWinnerIds(
+        activityId: 'act-01-05-01-guided-fold-win',
+        selectedId: 'must-show',
+      ),
+      isEmpty,
+    );
+    expect(
+      lessonPotAwardWinnerIds(
+        activityId: 'act-01-05-01-scaffolded-showdown',
+        selectedId: 'no-show',
+      ),
+      isEmpty,
+    );
+  });
 }
