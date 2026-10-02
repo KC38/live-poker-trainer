@@ -248,7 +248,7 @@ describe("grantHearts and practice", () => {
     const grant = practiceHeartGrantFromCompletion({
       state,
       nowMs: 1,
-      isPracticeOrReplay: true,
+      restoreHeartOnComplete: true,
     });
     expect(grant?.heartsRestored).toBe(1);
     expect(grant?.livesRemaining).toBe(3);
@@ -262,7 +262,7 @@ describe("grantHearts and practice", () => {
     expect(practiceHeartGrantFromCompletion({
       state,
       nowMs: 1,
-      isPracticeOrReplay: true,
+      restoreHeartOnComplete: true,
     })).toBeNull();
   });
 
@@ -270,12 +270,12 @@ describe("grantHearts and practice", () => {
     expect(AD_HEART_DAILY_MAX).toBe(5);
   });
 
-  it("does not grant a heart for a first-run completion", () => {
+  it("does not grant a heart for a voluntary review or first-run", () => {
     const state = heartStateFromData({livesRemaining: 0, livesMax: 5});
     expect(practiceHeartGrantFromCompletion({
       state,
       nowMs: 1,
-      isPracticeOrReplay: false,
+      restoreHeartOnComplete: false,
     })).toBeNull();
   });
 

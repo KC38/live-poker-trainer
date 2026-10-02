@@ -520,6 +520,95 @@ describe("course session integration", () => {
     expect(entitlement.data()?.grantedByLessonId).toBe(lessonId);
   });
 
+  test("voluntary review does not restore a heart; Practice flag does", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "heart-practice-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    const lessonId = "lesson-02-01-01-position-labels";
+    await db.doc("users/heart-practice-user/course/main").set({
+      completedLessonIds: [
+        "lesson-01-06-02-section-one-jump",
+        lessonId,
+      ],
+      livesRemaining: 2,
+      livesMax: 5,
+      livesNextRefillAtMs: Date.now() + 6 * 60 * 60 * 1000,
+    }, {merge: true});
+
+    const review = await startCourseLessonForUser({
+      uid: "heart-practice-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId,
+        startRequestId: "start_vol_review_01",
+      },
+      db,
+    });
+    expect(review.attempt.restoreHeartOnComplete).toBeUndefined();
+    await submitCourseStepForUser({
+      uid: "heart-practice-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: review.attempt.attemptId,
+        activityId: "act-02-01-01-explain-pos",
+        idempotencyKey: "vol_review_step_01",
+      },
+      db,
+    });
+    const voluntaryComplete = await completeCourseLessonForUser({
+      uid: "heart-practice-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: review.attempt.attemptId,
+        idempotencyKey: "vol_review_complete_01",
+      },
+      db,
+    });
+    expect(voluntaryComplete.heartsRestored).toBe(0);
+    expect(voluntaryComplete.livesRemaining).toBe(2);
+
+    const practice = await startCourseLessonForUser({
+      uid: "heart-practice-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId,
+        startRequestId: "start_practice_heart_01",
+        restoreHeartOnComplete: true,
+      },
+      db,
+    });
+    expect(practice.attempt.restoreHeartOnComplete).toBe(true);
+    await submitCourseStepForUser({
+      uid: "heart-practice-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: practice.attempt.attemptId,
+        activityId: "act-02-01-01-explain-pos",
+        idempotencyKey: "practice_heart_step_01",
+      },
+      db,
+    });
+    const practiceComplete = await completeCourseLessonForUser({
+      uid: "heart-practice-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: practice.attempt.attemptId,
+        idempotencyKey: "practice_heart_complete_01",
+      },
+      db,
+    });
+    expect(practiceComplete.heartsRestored).toBe(1);
+    expect(practiceComplete.livesRemaining).toBe(3);
+
+    const profile = (
+      await db.doc("users/heart-practice-user/course/main").get()
+    ).data();
+    expect(profile?.livesRemaining).toBe(3);
+  });
+
   test("reviewing an earlier lesson does not move the progress pointer", async () => {
     await seedFlags();
     await initializeCourseProfileForUser({

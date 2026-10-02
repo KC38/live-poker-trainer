@@ -58,7 +58,8 @@ class LessonRunnerScreen extends ConsumerStatefulWidget {
   /// When true, play is allowed at zero hearts so Practice can earn one back.
   ///
   /// Only set this from the heart-refill "Practice" action. Map opens and
-  /// mid-lesson continue always gate at zero hearts.
+  /// mid-lesson continue always gate at zero hearts. Also marks the attempt
+  /// so completing it restores +1 heart (voluntary reviews do not).
   final bool allowZeroHeartsPractice;
 
   /// Optional injectable service (tests).
@@ -242,6 +243,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       lessonId: lessonId,
       catalogVersion: catalog.catalogVersion,
       startRequestId: _startRequestId,
+      restoreHeartOnComplete: widget.allowZeroHeartsPractice,
     );
     final activities = catalog.activitiesForLesson(lessonId);
     final current = activities.firstWhere(

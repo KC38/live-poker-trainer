@@ -42,6 +42,9 @@ class _ScriptedCourseService extends CourseService {
   /// Last lessonId passed to [startLesson] (for prefix-resolve assertions).
   String? lastStartedLessonId;
 
+  /// Last [restoreHeartOnComplete] passed to [startLesson].
+  bool? lastRestoreHeartOnComplete;
+
   List<CourseActivity> get activities =>
       catalog.activitiesForLesson(kFirstCourseLessonId);
 
@@ -61,8 +64,10 @@ class _ScriptedCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     lastStartedLessonId = lessonId;
+    lastRestoreHeartOnComplete = restoreHeartOnComplete;
     if (lessonId != kFirstCourseLessonId) {
       throw const CourseServiceException('Unknown lesson', code: 'not-found');
     }
@@ -4617,11 +4622,14 @@ void main() {
     expect(find.text('Out of hearts'), findsNothing);
     expect(find.text('Watch an ad'), findsNothing);
     expect(find.byTooltip('Hint'), findsOneWidget);
+    expect(zeroHearts.lastRestoreHeartOnComplete, isTrue);
 
     await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
     await tester.pump();
     await tester.pump();
     expect(zeroHearts.submitCalls, 1);
+    // Clear deal-stagger timers from the feedback deal before dispose.
+    await tester.pump(const Duration(seconds: 2));
   });
 
   testWidgets('a due passive heart lifts the in-lesson gate', (tester) async {
@@ -5265,6 +5273,7 @@ class _SameStepStaleCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     startCount += 1;
     final activity = activities.first;
@@ -5335,6 +5344,7 @@ class _StaleThenResumeCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     _startCount += 1;
     final activity = _startCount == 1 ? activities.first : activities[1];
@@ -5432,6 +5442,7 @@ class _PermissionDeniedStartCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     startCount += 1;
     throw const CourseServiceException(
@@ -5464,6 +5475,7 @@ class _PermissionDeniedOnceCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     startCount += 1;
     if (startCount == 1) {
@@ -5499,6 +5511,7 @@ class _PrerequisiteLockedCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     if (lessonId == 'lesson-01-01-02-suits-and-ranks' && !previousComplete) {
       throw const CourseServiceException(
@@ -5532,6 +5545,7 @@ class _HungStartCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) {
     return Completer<StartCourseLessonResult>().future;
   }
@@ -5558,6 +5572,7 @@ class _PassiveHeartRestoresCourseService extends _ZeroHeartsCourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     starts += 1;
     final started = await super.startLesson(
@@ -5565,6 +5580,7 @@ class _PassiveHeartRestoresCourseService extends _ZeroHeartsCourseService {
       catalogVersion: catalogVersion,
       startRequestId: startRequestId,
       timezone: timezone,
+      restoreHeartOnComplete: restoreHeartOnComplete,
     );
     if (starts < 2) return started;
     final attempt = started.attempt;
@@ -5594,6 +5610,7 @@ class _ZeroHeartsCourseService extends CourseService {
 
   final CourseCatalog catalog;
   var submitCalls = 0;
+  bool? lastRestoreHeartOnComplete;
 
   List<CourseActivity> get activities =>
       catalog.activitiesForLesson(kFirstCourseLessonId);
@@ -5614,7 +5631,9 @@ class _ZeroHeartsCourseService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
+    lastRestoreHeartOnComplete = restoreHeartOnComplete;
     final first = activities.first;
     return StartCourseLessonResult(
       attempt: CourseAttemptSnapshot(
@@ -5753,6 +5772,7 @@ class _TinyLessonService extends CourseService {
     required String catalogVersion,
     required String startRequestId,
     String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
   }) async {
     final first = activities.first;
     return StartCourseLessonResult(

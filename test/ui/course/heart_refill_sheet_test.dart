@@ -29,6 +29,10 @@ void main() {
     expect(find.text('Restore hearts'), findsOneWidget);
     expect(find.textContaining('Next heart in'), findsOneWidget);
     expect(find.text('Practice'), findsOneWidget);
+    expect(
+      find.text('Earn +1 heart when you finish Practice'),
+      findsOneWidget,
+    );
     expect(find.text('Watch an ad'), findsOneWidget);
     expect(find.text('Refill with gems'), findsOneWidget);
     expect(find.textContaining('650 gems'), findsOneWidget);
