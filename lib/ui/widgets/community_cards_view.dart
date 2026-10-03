@@ -7,7 +7,6 @@ import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
-import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/ui/widgets/dealt_card_reveal.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
@@ -16,8 +15,9 @@ import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 /// Pot pill, five board slots, and `Blinds $1/$2 NLH`, top to bottom.
 ///
 /// Sizes are fixed at [scale] 1 so the felt can size the board against the
-/// seats without measuring text. New board cards appear one at a time.
-class CommunityCardsView extends StatefulWidget {
+/// seats without measuring text. Visibility is gated by [visibleCount] so the
+/// felt deal controller can land each board card once, in order.
+class CommunityCardsView extends StatelessWidget {
   /// Creates the felt center.
   const CommunityCardsView({
     super.key,
@@ -32,6 +32,7 @@ class CommunityCardsView extends StatefulWidget {
     this.isSplit = false,
     this.resultMessage,
     this.features = TableFeatures.full,
+    this.visibleCount,
     this.onBoardCardTap,
     this.selectedBoardIndexes = const {},
     this.highlightBoardIndexes = const {},
@@ -61,6 +62,9 @@ class CommunityCardsView extends StatefulWidget {
 
   /// Which of the pot, street, blinds, and empty slots to draw.
   final TableFeatures features;
+
+  /// How many community cards to show. Null shows the full [community] list.
+  final int? visibleCount;
 
   /// Tap on one dealt board card by index. Null leaves cards inert.
   final ValueChanged<int>? onBoardCardTap;
@@ -145,47 +149,7 @@ class CommunityCardsView extends StatefulWidget {
       '${ChipFormat.dollars(bigBlind)} NLH';
 
   @override
-  State<CommunityCardsView> createState() => _CommunityCardsViewState();
-}
-
-class _CommunityCardsViewState extends State<CommunityCardsView> {
-  /// Cards already on the board before the latest growth; new indexes deal after.
-  int _alreadyVisible = 0;
-
-  @override
-  void didUpdateWidget(covariant CommunityCardsView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final next = widget.community;
-    final prev = oldWidget.community;
-    if (next.length < prev.length) {
-      _alreadyVisible = next.length;
-      return;
-    }
-    if (next.length > prev.length) {
-      _alreadyVisible = prev.length;
-      return;
-    }
-    for (var i = 0; i < next.length; i++) {
-      if (next[i].code != prev[i].code) {
-        _alreadyVisible = 0;
-        return;
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final pot = widget.pot;
-    final bigBlind = widget.bigBlind;
-    final smallBlind = widget.smallBlind;
-    final chipDisplayMode = widget.chipDisplayMode;
-    final awarding = widget.awarding;
-    final isSplit = widget.isSplit;
-    final features = widget.features;
-    final street = widget.street;
-    final scale = widget.scale;
-    final community = widget.community;
-    final resultMessage = widget.resultMessage;
     final potLabel = ChipFormat.chips(pot, bigBlind, chipDisplayMode);
     final headline =
         awarding
@@ -198,6 +162,7 @@ class _CommunityCardsViewState extends State<CommunityCardsView> {
     final slot = features.boardSlots
         ? TableCardSlot(width: w)
         : SizedBox(width: w);
+    final shown = (visibleCount ?? community.length).clamp(0, community.length);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -246,13 +211,13 @@ class _CommunityCardsViewState extends State<CommunityCardsView> {
           ),
           SizedBox(height: 8 * scale),
         ],
-        if (resultMessage != null && awarding) ...[
+        if (resultMessage case final message? when awarding) ...[
           SizedBox(
             height: 14 * scale,
             child: _PinnedToLabelWidth(
               scale: scale,
               child: Text(
-                resultMessage,
+                message,
                 maxLines: 1,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis,
@@ -267,7 +232,7 @@ class _CommunityCardsViewState extends State<CommunityCardsView> {
           SizedBox(height: 4 * scale),
         ],
         GlowHighlight(
-          active: widget.highlightBoardGroup,
+          active: highlightBoardGroup,
           reserveLayout: false,
           borderRadius: 10 * scale,
           padding: EdgeInsets.all(4 * scale),
@@ -284,7 +249,7 @@ class _CommunityCardsViewState extends State<CommunityCardsView> {
                       left: i == 0 ? 0 : CommunityCardsView.cardGap * scale,
                     ),
                     child:
-                        i < community.length
+                        i < shown
                             ? _BoardCardTarget(
                               key: ValueKey(
                                 'board-card-$i-${community[i].code}',
@@ -292,20 +257,15 @@ class _CommunityCardsViewState extends State<CommunityCardsView> {
                               index: i,
                               card: community[i],
                               width: w,
-                              delay: CardDealPace.boardDelay(
-                                index: i,
-                                alreadyVisible: _alreadyVisible,
-                              ),
-                              placeholder: slot,
-                              selected: widget.selectedBoardIndexes.contains(i),
+                              selected: selectedBoardIndexes.contains(i),
                               highlight:
-                                  !widget.highlightBoardGroup &&
-                                  widget.highlightBoardIndexes.contains(i),
-                              dimmed: widget.dimmedBoardIndexes.contains(i),
-                              orderBadge: widget.boardOrderBadges[i],
-                              onTap: widget.onBoardCardTap == null
+                                  !highlightBoardGroup &&
+                                  highlightBoardIndexes.contains(i),
+                              dimmed: dimmedBoardIndexes.contains(i),
+                              orderBadge: boardOrderBadges[i],
+                              onTap: onBoardCardTap == null
                                   ? null
-                                  : () => widget.onBoardCardTap!(i),
+                                  : () => onBoardCardTap!(i),
                             )
                             : slot,
                   ),
@@ -357,8 +317,6 @@ class _BoardCardTarget extends StatelessWidget {
     required this.index,
     required this.card,
     required this.width,
-    required this.delay,
-    required this.placeholder,
     required this.selected,
     required this.highlight,
     required this.dimmed,
@@ -369,8 +327,6 @@ class _BoardCardTarget extends StatelessWidget {
   final int index;
   final CardModel card;
   final double width;
-  final Duration delay;
-  final Widget placeholder;
   final bool selected;
   final bool highlight;
   final bool dimmed;
@@ -385,8 +341,8 @@ class _BoardCardTarget extends StatelessWidget {
       reserveLayout: false,
       borderRadius: width * 0.12,
       child: DealtCardReveal(
-        delay: delay,
-        placeholder: placeholder,
+        // FeltDealController owns deal SFX + order.
+        playSound: false,
         child: TableCard(
           card: card,
           width: width,
