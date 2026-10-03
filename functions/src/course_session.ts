@@ -1528,6 +1528,12 @@ export async function getCourseStateForUser(options: {
   raw: unknown;
   isAnonymous?: boolean;
   db?: Firestore;
+  /**
+   * Test seam. Runs after the initial heart read and before the
+   * transactional persist, so a concurrent wallet write can land between
+   * them. Production callers leave this unset.
+   */
+  beforePassiveHeartPersist?: () => Promise<void>;
 }): Promise<{
   available: boolean;
   flags: CourseFlags;
@@ -1561,12 +1567,20 @@ export async function getCourseStateForUser(options: {
   const nowMs = Date.now();
   if (profile && profileSnap.exists) {
     const heartState = heartStateFromData(profileSnap.data());
-    const passive = applyPassiveHeartRefill(heartState, nowMs);
-    if (passive.changed) {
-      await courseProfileRef(db, options.uid).set({
-        ...heartFieldsToFirestore(passive),
-        updatedAt: FieldValue.serverTimestamp(),
-      }, {merge: true});
+    const preview = applyPassiveHeartRefill(heartState, nowMs);
+    // Re-read inside a transaction. A blind set of the first snapshot
+    // overwrites a heart spent, a gem refill, or an ad claim that committed
+    // after this read (Home refresh while a lesson is in progress).
+    let passive = preview;
+    if (preview.changed) {
+      if (options.beforePassiveHeartPersist) {
+        await options.beforePassiveHeartPersist();
+      }
+      passive = await persistPassiveHeartRefillTx({
+        db,
+        uid: options.uid,
+        nowMs,
+      });
     }
     const localDate = localDateString(nowMs, profile.timezone);
     const availability = adHeartAvailability({
@@ -2072,6 +2086,41 @@ function ensureProfileTx(
 
 function courseProfileRef(db: Firestore, uid: string) {
   return db.collection("users").doc(uid).collection("course").doc("main");
+}
+
+/**
+ * Persists passive heart accrual without clobbering a newer wallet.
+ *
+ * The transaction re-reads the profile, so a submit or refill that landed
+ * after the caller's first snapshot is included before any write.
+ */
+async function persistPassiveHeartRefillTx(options: {
+  db: Firestore;
+  uid: string;
+  nowMs: number;
+}): Promise<ReturnType<typeof applyPassiveHeartRefill>> {
+  const profileRef = courseProfileRef(options.db, options.uid);
+  return options.db.runTransaction(async (tx) => {
+    const freshSnap = await tx.get(profileRef);
+    if (!freshSnap.exists) {
+      const missing = applyPassiveHeartRefill(
+        heartStateFromData(undefined),
+        options.nowMs,
+      );
+      return {...missing, changed: false, heartsRestored: 0};
+    }
+    const accrued = applyPassiveHeartRefill(
+      heartStateFromData(freshSnap.data()),
+      options.nowMs,
+    );
+    if (accrued.changed) {
+      tx.set(profileRef, {
+        ...heartFieldsToFirestore(accrued),
+        updatedAt: FieldValue.serverTimestamp(),
+      }, {merge: true});
+    }
+    return accrued;
+  });
 }
 
 function attemptRef(db: Firestore, uid: string, attemptId: string) {

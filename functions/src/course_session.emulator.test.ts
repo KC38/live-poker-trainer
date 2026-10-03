@@ -9,6 +9,7 @@ import {afterAll, afterEach, beforeAll, describe, expect, test} from "vitest";
 import {
   completeCourseLessonForUser,
   getCourseStateForUser,
+  HEART_REFILL_INTERVAL_MS,
   initializeCourseProfileForUser,
   startCourseLessonForUser,
   submitCourseStepForUser,
@@ -696,6 +697,79 @@ describe("course session integration", () => {
     });
     expect(state.openAttempt?.lessonId).toBe(frontierLessonId);
     expect(state.openAttempt?.attemptId).toBe("frontier-att");
+  });
+
+  test("getCourseState persists one due passive heart", async () => {
+    await seedFlags();
+    const now = Date.now();
+    await db.doc("users/heart-accrual-user/course/main").set({
+      livesRemaining: 2,
+      livesMax: 5,
+      livesNextRefillAtMs: now - 1000,
+      gems: 10,
+      timezone: "UTC",
+      completedLessonIds: [],
+    });
+
+    const state = await getCourseStateForUser({
+      uid: "heart-accrual-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+
+    const saved = (
+      await db.doc("users/heart-accrual-user/course/main").get()
+    ).data();
+    expect(saved?.livesRemaining).toBe(3);
+    expect(saved?.gems).toBe(10);
+    expect(saved?.livesNextRefillAtMs).toBeGreaterThan(now);
+    expect(state.profile?.livesRemaining).toBe(3);
+  });
+
+  test("getCourseState does not clobber a heart spent during accrual", async () => {
+    await seedFlags();
+    const now = Date.now();
+    const pushedTimer = now + HEART_REFILL_INTERVAL_MS;
+    await db.doc("users/heart-race-user/course/main").set({
+      livesRemaining: 3,
+      livesMax: 5,
+      livesNextRefillAtMs: now - 1000,
+      gems: 650,
+      timezone: "UTC",
+      completedLessonIds: [],
+      heartsAdClaimsToday: 0,
+    });
+
+    const state = await getCourseStateForUser({
+      uid: "heart-race-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+      beforePassiveHeartPersist: async () => {
+        // A lesson miss (or gem/ad refill) commits after the stale read
+        // and before the persist. Net hearts stay 3; the ad counter advances.
+        await db.doc("users/heart-race-user/course/main").set({
+          livesRemaining: 3,
+          livesMax: 5,
+          livesNextRefillAtMs: pushedTimer,
+          gems: 0,
+          heartsAdClaimsToday: 1,
+          heartsAdClaimsLocalDate: "2026-10-03",
+          lastHeartAdClaimAtMs: now,
+        }, {merge: true});
+      },
+    });
+
+    const saved = (
+      await db.doc("users/heart-race-user/course/main").get()
+    ).data();
+    expect(saved?.livesRemaining).toBe(3);
+    expect(saved?.gems).toBe(0);
+    expect(saved?.heartsAdClaimsToday).toBe(1);
+    expect(saved?.heartsAdClaimsLocalDate).toBe("2026-10-03");
+    expect(saved?.lastHeartAdClaimAtMs).toBe(now);
+    expect(saved?.livesNextRefillAtMs).toBe(pushedTimer);
+    expect(state.profile?.livesRemaining).toBe(3);
+    expect(state.profile?.heartsAdClaimsToday).toBe(1);
   });
 
 });
