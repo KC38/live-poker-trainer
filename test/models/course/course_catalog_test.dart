@@ -59,17 +59,21 @@ void main() {
   test('preflop seat-order lessons include CO between HJ and BTN', () {
     final scaffolded = catalog.activityById('act-01-04-01-scaffolded-order');
     expect(scaffolded, isNotNull);
-    expect(
-      scaffolded!.sequenceItems.map((item) => item.id).toList(),
-      ['seat-utg', 'seat-hj', 'seat-co', 'seat-btn'],
-    );
+    expect(scaffolded!.sequenceItems.map((item) => item.id).toList(), [
+      'seat-utg',
+      'seat-hj',
+      'seat-co',
+      'seat-btn',
+    ]);
 
     final jump = catalog.activityById('act-01-06-02-jump-order');
     expect(jump, isNotNull);
-    expect(
-      jump!.sequenceItems.map((item) => item.id).toList(),
-      ['j-utg', 'j-hj', 'j-co', 'j-btn'],
-    );
+    expect(jump!.sequenceItems.map((item) => item.id).toList(), [
+      'j-utg',
+      'j-hj',
+      'j-co',
+      'j-btn',
+    ]);
   });
 
   test('player types are introduced before later refs', () {
@@ -116,6 +120,54 @@ void main() {
     test('empty and unknown ids return null', () {
       expect(catalog.lessonById(''), isNull);
       expect(catalog.lessonById('lesson-99-99-99'), isNull);
+    });
+  });
+
+  group('wire parsers fail closed', () {
+    test('known stage, renderer, and player type ids map', () {
+      expect(activityStageFromWire('jump_test'), ActivityStage.jumpTest);
+      expect(
+        activityRendererFromWire('full_table_hand_lab'),
+        ActivityRenderer.fullTableHandLab,
+      );
+      expect(
+        coursePlayerTypeIdFromWire('calling_station'),
+        CoursePlayerTypeId.callingStation,
+      );
+    });
+
+    test('unknown wire ids throw instead of guessing a lesson type', () {
+      expect(() => activityStageFromWire('jump-test'), throwsFormatException);
+      expect(
+        () => activityRendererFromWire('mini_felt'),
+        throwsFormatException,
+      );
+      expect(() => coursePlayerTypeIdFromWire('fish'), throwsFormatException);
+    });
+
+    test('choice amountBb keeps decimals and stays null when omitted', () {
+      final sized = CourseChoice.fromJson(<String, dynamic>{
+        'id': 'raise',
+        'label': '3-bet to 18',
+        'action': 'RAISE',
+        'amountBb': 9,
+      });
+      expect(sized.amountBb, 9);
+      expect(sized.action, 'RAISE');
+
+      final fractional = CourseChoice.fromJson(<String, dynamic>{
+        'id': 'open',
+        'label': 'Open',
+        'amountBb': 2.5,
+      });
+      expect(fractional.amountBb, 2.5);
+
+      final bare = CourseChoice.fromJson(<String, dynamic>{
+        'id': 'fold',
+        'label': 'Fold',
+      });
+      expect(bare.amountBb, isNull);
+      expect(bare.action, isNull);
     });
   });
 }
