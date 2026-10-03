@@ -686,7 +686,7 @@ class GameController extends StateNotifier<TableSession> {
     }
   }
 
-  /// Reveals board cards one at a time up to [boardCount].
+  /// Snaps board cards up to [boardCount]; the felt UI deals them in order.
   Future<void> _dealBoardCards(
     List<String> boardCodes,
     int boardCount,
@@ -697,18 +697,17 @@ class GameController extends StateNotifier<TableSession> {
     final start = game.community.length;
     final target = boardCount.clamp(0, boardCodes.length);
     if (target <= start) return;
-    for (var i = start + 1; i <= target; i++) {
-      if (_disposed || token != _replayToken) return;
-      game = state.game;
-      if (game == null) return;
-      game = game.copyWith(
-        community: boardCodes
-            .take(i)
-            .map(CardModel.fromCode)
-            .toList(growable: false),
-      );
-      state = state.copyWith(game: game, collectingChips: false);
-      await Future<void>.delayed(ReplayPace.dealCard);
+    game = game.copyWith(
+      community: boardCodes
+          .take(target)
+          .map(CardModel.fromCode)
+          .toList(growable: false),
+    );
+    state = state.copyWith(game: game, collectingChips: false);
+    final newCards = target - start;
+    if (newCards > 0 && !CardDealPace.instant) {
+      // Hold replay while FeltDealController lands each new card once.
+      await Future<void>.delayed(ReplayPace.dealCard * newCards);
     }
   }
 

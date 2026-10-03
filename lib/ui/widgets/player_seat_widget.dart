@@ -132,7 +132,7 @@ class PlayerSeatWidget extends StatelessWidget {
     this.selectedHeroIndexes = const {},
     this.highlightHeroIndexes = const {},
     this.dimmedHeroIndexes = const {},
-    this.holeDealDelays = const [Duration.zero, Duration.zero],
+    this.visibleHoleCount = 2,
   });
 
   final PlayerModel player;
@@ -175,8 +175,9 @@ class PlayerSeatWidget extends StatelessWidget {
   /// Hero hole indexes faded as leftovers.
   final Set<int> dimmedHeroIndexes;
 
-  /// Per-hole-card delay before the card appears (dealer pacing).
-  final List<Duration> holeDealDelays;
+  /// How many hole cards this seat currently shows (0–2). Owned by the felt
+  /// deal controller so each card lands once, in order.
+  final int visibleHoleCount;
 
   /// Geometry this seat draws with.
   SeatMetrics get metrics => SeatMetrics.of(
@@ -188,6 +189,14 @@ class PlayerSeatWidget extends StatelessWidget {
   );
 
   bool get _typed => features.playerTypes && !player.isHero;
+
+  /// Cards drawn for this seat; showdown ignores the deal gate.
+  int get _shownCount {
+    if (showCards) {
+      return player.holeCards.length.clamp(0, 2);
+    }
+    return visibleHoleCount.clamp(0, 2);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,52 +244,44 @@ class PlayerSeatWidget extends StatelessWidget {
     );
   }
 
-  Widget _faceCards(SeatMetrics m) => Row(
-    key: ValueKey<String>('seat-faces-${player.id}'),
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      for (var i = 0; i < player.holeCards.length && i < 2; i++) ...[
-        if (i > 0) SizedBox(width: m.cardGap),
-        if (player.isHero && onHeroCardTap != null)
-          GestureDetector(
-            key: ValueKey<String>('lesson-hero-card-$i'),
-            behavior: HitTestBehavior.opaque,
-            onTap: () => onHeroCardTap!(i),
-            child: Semantics(
-              button: true,
-              selected: selectedHeroIndexes.contains(i),
-              label: player.holeCards[i].display,
-              child: _cuedCard(m, i),
-            ),
-          )
-        else
-          _cuedCard(m, i),
+  Widget _faceCards(SeatMetrics m) {
+    final count = _shownCount.clamp(0, player.holeCards.length);
+    return Row(
+      key: ValueKey<String>('seat-faces-${player.id}'),
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (var i = 0; i < count; i++) ...[
+          if (i > 0) SizedBox(width: m.cardGap),
+          if (player.isHero && onHeroCardTap != null)
+            GestureDetector(
+              key: ValueKey<String>('lesson-hero-card-$i'),
+              behavior: HitTestBehavior.opaque,
+              onTap: () => onHeroCardTap!(i),
+              child: Semantics(
+                button: true,
+                selected: selectedHeroIndexes.contains(i),
+                label: player.holeCards[i].display,
+                child: _cuedCard(m, i),
+              ),
+            )
+          else
+            _cuedCard(m, i),
+        ],
       ],
-    ],
-  );
-
-  Duration _delayFor(int i) {
-    if (showCards) return Duration.zero;
-    if (i < 0 || i >= holeDealDelays.length) return Duration.zero;
-    return holeDealDelays[i];
+    );
   }
 
   Widget _cuedCard(SeatMetrics m, int i) {
     final selected = selectedHeroIndexes.contains(i);
     final highlighted = highlightHeroIndexes.contains(i);
-    final placeholder = SizedBox(
-      width: m.cardWidth,
-      height: m.cardHeight,
-    );
     return GlowHighlight(
       active: highlighted || selected,
       animated: highlighted && !selected,
       reserveLayout: false,
       borderRadius: m.cardWidth * 0.12,
       child: DealtCardReveal(
-        playSound: !showCards,
-        delay: _delayFor(i),
-        placeholder: placeholder,
+        // FeltDealController owns deal SFX + order.
+        playSound: false,
         child: TableCard(
           card: player.holeCards[i],
           width: m.cardWidth,
@@ -292,19 +293,19 @@ class PlayerSeatWidget extends StatelessWidget {
 
   Widget _backCards(SeatMetrics m) {
     final width = m.backWidth(hero: player.isHero);
-    final height = width * tableCardAspect;
+    final count = _shownCount;
     Widget back(int i) => DealtCardReveal(
-          delay: _delayFor(i),
-          placeholder: SizedBox(width: width, height: height),
+          playSound: false,
           child: TableCardBack(width: width),
         );
     return Row(
       key: ValueKey<String>('seat-backs-${player.id}'),
       mainAxisSize: MainAxisSize.min,
       children: [
-        back(0),
-        SizedBox(width: m.cardGap),
-        back(1),
+        for (var i = 0; i < count; i++) ...[
+          if (i > 0) SizedBox(width: m.cardGap),
+          back(i),
+        ],
       ],
     );
   }

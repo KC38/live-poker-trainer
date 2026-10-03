@@ -4,14 +4,16 @@ library;
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
+import 'package:live_poker_trainer/core/deal/felt_deal_controller.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
+import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/ui/widgets/action_badge.dart';
-import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/ui/widgets/community_cards_view.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
@@ -48,7 +50,7 @@ const double kSeatBadgeBelowPod =
 ///
 /// [features] (or the nearest [TableFeaturesScope]) turns optional layers
 /// off for lessons that have not taught them yet.
-class FeltTableView extends StatelessWidget {
+class FeltTableView extends StatefulWidget {
   /// Creates the table.
   const FeltTableView({
     super.key,
@@ -80,9 +82,13 @@ class FeltTableView extends StatelessWidget {
     this.cueSeatIndex,
     this.features,
     this.heroStatus,
+    this.dealKey,
   });
 
   final GameState game;
+
+  /// Optional stable id for the deal pass (lessons). When null, uses handCount.
+  final String? dealKey;
 
   /// Table amounts are currency-only; see [ChipDisplayMode.tableMode].
   final ChipDisplayMode chipDisplayMode;
@@ -176,26 +182,87 @@ class FeltTableView extends StatelessWidget {
   final String? heroStatus;
 
   @override
+  State<FeltTableView> createState() => _FeltTableViewState();
+}
+
+class _FeltTableViewState extends State<FeltTableView> {
+  late final FeltDealController _deal;
+
+  @override
+  void initState() {
+    super.initState();
+    _deal = FeltDealController(onDealt: _playDealSound);
+    _syncDeal();
+  }
+
+  @override
+  void didUpdateWidget(covariant FeltTableView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncDeal();
+  }
+
+  @override
+  void dispose() {
+    _deal.dispose();
+    super.dispose();
+  }
+
+  void _playDealSound() {
+    if (!mounted) return;
+    try {
+      ProviderScope.containerOf(
+        context,
+        listen: false,
+      ).read(soundServiceProvider).deal();
+    } on Object {
+      // Layout tests may pump without a [ProviderScope].
+    }
+  }
+
+  void _syncDeal() {
+    final game = widget.game;
+    final epoch =
+        widget.dealKey ??
+        'hand-${game.handCount}-d${game.dealerIndex}-n${game.players.length}';
+    final dealHoles =
+        widget.showHoleCardBacks ||
+        game.players.any((player) => player.holeCards.isNotEmpty);
+    _deal.bind(
+      epoch: epoch,
+      seatCount: game.players.length,
+      dealerIndex: game.dealerIndex,
+      boardTarget: game.community.length,
+      dealHoles: dealHoles,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final features = this.features ?? TableFeaturesScope.of(context);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final layout = TableLayout.resolve(
-          size: Size(constraints.maxWidth, constraints.maxHeight),
-          game: game,
-          features: features,
-          includeHero: includeHero,
-          review: review,
-          awarding: awardingChips,
-          chipDisplayMode: chipDisplayMode,
-          collecting: collectingChips,
+    final features = widget.features ?? TableFeaturesScope.of(context);
+    return AnimatedBuilder(
+      animation: _deal,
+      builder: (context, _) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final layout = TableLayout.resolve(
+              size: Size(constraints.maxWidth, constraints.maxHeight),
+              game: widget.game,
+              features: features,
+              includeHero: widget.includeHero,
+              review: widget.review,
+              awarding: widget.awardingChips,
+              chipDisplayMode: widget.chipDisplayMode,
+              collecting: widget.collectingChips,
+            );
+            return _build(context, layout, features);
+          },
         );
-        return _build(context, layout, features);
       },
     );
   }
 
   Widget _build(BuildContext context, TableLayout layout, TableFeatures f) {
+    final game = widget.game;
     final h = layout.size.height;
     final winners = game.winnerIds.toSet();
     final villains = <Widget>[];
@@ -203,8 +270,6 @@ class FeltTableView extends StatelessWidget {
     final decorations = <Widget>[];
     final heroDecorations = <Widget>[];
 
-    final seatCount = game.players.length;
-    final dealerIndex = game.dealerIndex;
     for (final slot in layout.seats) {
       final player = game.players[slot.index];
       final isWinner = game.isHandOver && winners.contains(player.id);
@@ -212,27 +277,19 @@ class FeltTableView extends StatelessWidget {
       final decoLayer = player.isHero ? heroDecorations : decorations;
       final faceUp =
           player.isHero
-              ? (!showHoleCardBacks || heroCardsFaceUp)
-              : faceUpPlayerIds.contains(player.id);
+              ? (!widget.showHoleCardBacks || widget.heroCardsFaceUp)
+              : widget.faceUpPlayerIds.contains(player.id);
       final showdown = game.isHandOver && !player.folded;
       final backs =
           !faceUp &&
           !(showdown && player.holeCards.isNotEmpty) &&
           (player.isHero
-              ? showHoleCardBacks
-              : (showHoleCardBacks || f.opponentCards) && !player.folded);
-      final holeDealDelays = [
-        for (var card = 0; card < 2; card++)
-          CardDealPace.holeDelay(
-            seatIndex: slot.index,
-            cardIndex: card,
-            seatCount: seatCount,
-            dealerIndex: dealerIndex,
-          ),
-      ];
+              ? widget.showHoleCardBacks
+              : (widget.showHoleCardBacks || f.opponentCards) &&
+                  !player.folded);
 
       final heroCardTaps =
-          player.isHero && onHeroCardTap != null && faceUp;
+          player.isHero && widget.onHeroCardTap != null && faceUp;
       final seatTap =
           heroCardTaps ? null : _seatTap(player);
       seatLayer.add(
@@ -266,35 +323,35 @@ class FeltTableView extends StatelessWidget {
               // never the action-turn gold tip.
               child: GlowHighlight(
                 active:
-                    cueSeatIndex == slot.index ||
-                    (highlightHero &&
+                    widget.cueSeatIndex == slot.index ||
+                    (widget.highlightHero &&
                         player.isHero &&
-                        highlightHeroIndexes.isEmpty),
+                        widget.highlightHeroIndexes.isEmpty),
                 reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,
                 child: PlayerSeatWidget(
                   player: player,
                   bigBlind: game.bigBlind,
-                  chipDisplayMode: chipDisplayMode,
+                  chipDisplayMode: widget.chipDisplayMode,
                   isActive:
                       game.activePlayerIndex == slot.index && !game.isHandOver,
                   isWinner: isWinner,
-                  isWaitingOnLlm: waitingOnSeat == player.id,
+                  isWaitingOnLlm: widget.waitingOnSeat == player.id,
                   compact: layout.compact,
                   scale: layout.seatScale,
-                  review: review,
+                  review: widget.review,
                   features: f,
                   showCards: showdown,
                   revealHoleCards: faceUp,
                   showHoleBacks: backs,
-                  holeDealDelays: holeDealDelays,
-                  onHeroCardTap: heroCardTaps ? onHeroCardTap : null,
+                  visibleHoleCount: _deal.holeVisibleAt(slot.index),
+                  onHeroCardTap: heroCardTaps ? widget.onHeroCardTap : null,
                   selectedHeroIndexes:
-                      player.isHero ? selectedHeroIndexes : const {},
+                      player.isHero ? widget.selectedHeroIndexes : const {},
                   highlightHeroIndexes:
-                      player.isHero ? highlightHeroIndexes : const {},
+                      player.isHero ? widget.highlightHeroIndexes : const {},
                   dimmedHeroIndexes:
-                      player.isHero ? dimmedHeroIndexes : const {},
+                      player.isHero ? widget.dimmedHeroIndexes : const {},
                 ),
               ),
             ),
@@ -363,7 +420,7 @@ class FeltTableView extends StatelessWidget {
         );
       }
 
-      final status = heroStatus;
+      final status = widget.heroStatus;
       final hasBadge = underPodAction || feltAction != null;
       if (player.isHero && status != null && !hasBadge && !isWinner) {
         decoLayer.add(
@@ -390,7 +447,7 @@ class FeltTableView extends StatelessWidget {
         );
       }
 
-      final seatOrder = seatOrderBadges[slot.index];
+      final seatOrder = widget.seatOrderBadges[slot.index];
       if (seatOrder != null && !isWinner) {
         decoLayer.add(
           Positioned(
@@ -407,7 +464,7 @@ class FeltTableView extends StatelessWidget {
 
       // Seat SoftPulse is the GlowHighlight on PlayerSeatWidget above —
       // no arrows. Keep a finder key so seat-order lessons can assert the cue.
-      if (cueSeatIndex == slot.index) {
+      if (widget.cueSeatIndex == slot.index) {
         decoLayer.add(
           Positioned(
             key: ValueKey<String>('seat-cue-${player.id}'),
@@ -422,7 +479,7 @@ class FeltTableView extends StatelessWidget {
     }
 
     final collects = <Widget>[];
-    if (collectingChips) {
+    if (widget.collectingChips) {
       for (final slot in layout.seats) {
         final player = game.players[slot.index];
         if (player.currentBet <= Money.epsilon) continue;
@@ -436,7 +493,7 @@ class FeltTableView extends StatelessWidget {
             label: ChipFormat.chips(
               player.currentBet,
               game.bigBlind,
-              chipDisplayMode,
+              widget.chipDisplayMode,
             ),
             faded: true,
           ),
@@ -445,7 +502,7 @@ class FeltTableView extends StatelessWidget {
     }
 
     final awards = <Widget>[];
-    if (awardingChips) {
+    if (widget.awardingChips) {
       for (final slot in layout.seats) {
         final player = game.players[slot.index];
         if (!winners.contains(player.id)) continue;
@@ -456,7 +513,11 @@ class FeltTableView extends StatelessWidget {
             key: ValueKey('award-${player.id}-${game.handCount}'),
             from: layout.potTarget,
             to: slot.pod.center,
-            label: ChipFormat.chips(share, game.bigBlind, chipDisplayMode),
+            label: ChipFormat.chips(
+              share,
+              game.bigBlind,
+              widget.chipDisplayMode,
+            ),
           ),
         );
       }
@@ -465,7 +526,8 @@ class FeltTableView extends StatelessWidget {
     final board = layout.board;
     // Region board cue → one GlowHighlight around the whole board row.
     // Per-card cues use highlightBoardIndexes only (no auto-expand).
-    final boardGroupCue = highlightBoard && highlightBoardIndexes.isEmpty;
+    final boardGroupCue =
+        widget.highlightBoard && widget.highlightBoardIndexes.isEmpty;
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -481,16 +543,18 @@ class FeltTableView extends StatelessWidget {
           child: Center(
             child: GestureDetector(
               key:
-                  onBoardTap == null
+                  widget.onBoardTap == null
                       ? null
                       : const ValueKey<String>('lesson-board'),
               behavior: HitTestBehavior.translucent,
               // Per-card taps own the hit target; whole-board tap stays for
               // steps that treat the board as one answer.
-              onTap: onBoardCardTap == null ? onBoardTap : null,
+              onTap: widget.onBoardCardTap == null ? widget.onBoardTap : null,
               child: Semantics(
-                button: onBoardTap != null && onBoardCardTap == null,
-                label: onBoardTap == null || onBoardCardTap != null
+                button:
+                    widget.onBoardTap != null && widget.onBoardCardTap == null,
+                label: widget.onBoardTap == null ||
+                        widget.onBoardCardTap != null
                     ? null
                     : 'Community cards',
                 child: TweenAnimationBuilder<double>(
@@ -504,19 +568,20 @@ class FeltTableView extends StatelessWidget {
                         street: game.street,
                         bigBlind: game.bigBlind,
                         smallBlind: game.smallBlind,
-                        chipDisplayMode: chipDisplayMode,
+                        chipDisplayMode: widget.chipDisplayMode,
                         scale: scale,
-                        awarding: awardingChips,
+                        awarding: widget.awardingChips,
                         isSplit: game.isSplitPot,
                         features: f,
                         resultMessage:
                             game.isHandOver ? game.resultMessage : null,
-                        onBoardCardTap: onBoardCardTap,
-                        selectedBoardIndexes: selectedBoardIndexes,
-                        highlightBoardIndexes: highlightBoardIndexes,
+                        visibleCount: _deal.boardVisible,
+                        onBoardCardTap: widget.onBoardCardTap,
+                        selectedBoardIndexes: widget.selectedBoardIndexes,
+                        highlightBoardIndexes: widget.highlightBoardIndexes,
                         highlightBoardGroup: boardGroupCue,
-                        dimmedBoardIndexes: dimmedBoardIndexes,
-                        boardOrderBadges: boardOrderBadges,
+                        dimmedBoardIndexes: widget.dimmedBoardIndexes,
+                        boardOrderBadges: widget.boardOrderBadges,
                       ),
                 ),
               ),
@@ -532,12 +597,13 @@ class FeltTableView extends StatelessWidget {
   }
 
   VoidCallback? _seatTap(PlayerModel player) {
-    if (onSeatTap == null && (player.tendency == null || onPlayerTap == null)) {
+    if (widget.onSeatTap == null &&
+        (player.tendency == null || widget.onPlayerTap == null)) {
       return null;
     }
     return () {
-      onSeatTap?.call(player);
-      if (player.tendency != null) onPlayerTap?.call(player);
+      widget.onSeatTap?.call(player);
+      if (player.tendency != null) widget.onPlayerTap?.call(player);
     };
   }
 

@@ -588,6 +588,9 @@ class LessonTableStage extends StatelessWidget {
           height: height,
           child: FeltTableView(
             game: game,
+            dealKey:
+                'lesson-${heroCodes.join()}-${boardCodes.join()}'
+                '-v$villainCount-d${dealerIndex ?? 0}',
             chipDisplayMode: ChipDisplayMode.dollars,
             awardingChips: awardingChips ?? winnerIds.isNotEmpty,
             features: table,
