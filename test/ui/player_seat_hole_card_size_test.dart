@@ -15,7 +15,10 @@ Widget _seat(
   PlayerModel player, {
   bool reveal = false,
   bool backs = false,
+  bool showCards = false,
+  int visibleHoleCount = 2,
   TableFeatures features = TableFeatures.full,
+  ValueChanged<int>? onHeroCardTap,
 }) {
   return MaterialApp(
     home: Scaffold(
@@ -25,8 +28,11 @@ Widget _seat(
           bigBlind: 2,
           chipDisplayMode: ChipDisplayMode.dollars,
           isActive: false,
+          showCards: showCards,
           revealHoleCards: reveal,
           showHoleBacks: backs,
+          visibleHoleCount: visibleHoleCount,
+          onHeroCardTap: onHeroCardTap,
           features: features,
         ),
       ),
@@ -220,5 +226,42 @@ void main() {
       _seat(_villain, features: const TableFeatures(stacks: false)),
     );
     expect(find.text(r'$200'), findsNothing);
+  });
+
+  testWidgets('the deal gate reveals hole cards one at a time', (tester) async {
+    final hero = _hero.copyWith(
+      holeCards: [CardModel.fromCode('Ah'), CardModel.fromCode('Kd')],
+    );
+
+    await tester.pumpWidget(_seat(hero, reveal: true, visibleHoleCount: 0));
+    expect(find.byType(TableCard), findsNothing);
+
+    await tester.pumpWidget(
+      _seat(hero, reveal: true, visibleHoleCount: 1, onHeroCardTap: (_) {}),
+    );
+    expect(find.byType(TableCard), findsOneWidget);
+    expect(find.byKey(const ValueKey('lesson-hero-card-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey('lesson-hero-card-1')), findsNothing);
+
+    await tester.pumpWidget(_seat(hero, reveal: true, visibleHoleCount: 4));
+    expect(find.byType(TableCard), findsNWidgets(2));
+
+    await tester.pumpWidget(_seat(_villain, backs: true, visibleHoleCount: 1));
+    expect(find.byType(TableCardBack), findsOneWidget);
+  });
+
+  testWidgets('showdown draws both hole cards before the deal catches up', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _seat(
+        _hero.copyWith(
+          holeCards: [CardModel.fromCode('Ah'), CardModel.fromCode('Kd')],
+        ),
+        showCards: true,
+        visibleHoleCount: 0,
+      ),
+    );
+    expect(find.byType(TableCard), findsNWidgets(2));
   });
 }

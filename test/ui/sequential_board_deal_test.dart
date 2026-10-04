@@ -67,4 +67,42 @@ void main() {
 
     deal.dispose();
   });
+
+  testWidgets(
+    'visibleCount null shows the board and out-of-range counts clamp',
+    (tester) async {
+      final community = [
+        CardModel.fromCode('Ah'),
+        CardModel.fromCode('Kd'),
+        CardModel.fromCode('Qc'),
+      ];
+
+      Future<void> pump(int? visibleCount) {
+        return tester.pumpWidget(
+          MaterialApp(
+            home: CommunityCardsView(
+              community: community,
+              pot: 6,
+              street: Street.flop,
+              bigBlind: 2,
+              chipDisplayMode: ChipDisplayMode.dollars,
+              visibleCount: visibleCount,
+            ),
+          ),
+        );
+      }
+
+      await pump(null);
+      expect(find.byType(TableCard), findsNWidgets(3));
+
+      await pump(0);
+      expect(find.byType(TableCard), findsNothing);
+
+      await pump(-1);
+      expect(find.byType(TableCard), findsNothing);
+
+      await pump(9);
+      expect(find.byType(TableCard), findsNWidgets(3));
+    },
+  );
 }
