@@ -767,6 +767,11 @@ export async function startCourseLessonForUser(options: {
           ),
           nowMs,
         );
+        // Practice from the refill sheet reuses this open attempt. Stamp the
+        // grant here — a resume that ignores the flag finishes with no heart,
+        // and a first lesson at zero hearts stays unsubmittable.
+        const grantHeartOnComplete =
+          restoreHeartOnComplete && attempt.restoreHeartOnComplete !== true;
         const synced: CourseAttempt = {
           ...attempt,
           livesRemaining: passive.livesRemaining,
@@ -775,9 +780,10 @@ export async function startCourseLessonForUser(options: {
               passive.livesRemaining > 0 ?
             "in_progress" :
             attempt.status,
+          ...(restoreHeartOnComplete ? {restoreHeartOnComplete: true} : {}),
         };
         if (passive.changed || synced.livesRemaining !== attempt.livesRemaining ||
-          synced.status !== attempt.status) {
+          synced.status !== attempt.status || grantHeartOnComplete) {
           tx.set(profileRef, {
             ...heartFieldsToFirestore(passive),
             updatedAt: FieldValue.serverTimestamp(),
@@ -786,6 +792,7 @@ export async function startCourseLessonForUser(options: {
             livesRemaining: synced.livesRemaining,
             livesMax: synced.livesMax,
             status: synced.status,
+            ...(grantHeartOnComplete ? {restoreHeartOnComplete: true} : {}),
             updatedAt: FieldValue.serverTimestamp(),
           }, {merge: true});
         }
@@ -841,7 +848,11 @@ export async function startCourseLessonForUser(options: {
       nowMs,
     );
     const isPracticeReplay = completedForPrereqs.includes(lessonId);
-    if (passive.livesRemaining <= 0 && !isPracticeReplay) {
+    if (passive.livesRemaining <= 0 && !allowsZeroHeartPlay({
+      lessonCompleted: isPracticeReplay,
+      practiceLesson: isPracticeLesson(located.lesson),
+      restoreHeartOnComplete,
+    })) {
       throw new HttpsError(
         "failed-precondition",
         "Out of hearts. Refill before starting a lesson.",
@@ -997,9 +1008,11 @@ export async function submitCourseStepForUser(options: {
     ) ?
       profileSnap.data()!.completedLessonIds as string[] :
       [];
-    const isPracticeOrReplaySubmit =
-      priorCompletedForHearts.includes(attempt.lessonId) ||
-      isPracticeLesson(located.lesson);
+    const isPracticeOrReplaySubmit = allowsZeroHeartPlay({
+      lessonCompleted: priorCompletedForHearts.includes(attempt.lessonId),
+      practiceLesson: isPracticeLesson(located.lesson),
+      restoreHeartOnComplete: attempt.restoreHeartOnComplete === true,
+    });
     // Profile is the heart wallet. Passive refill updates it while this
     // attempt stays open; grading from the stale attempt deletes accrued
     // hearts and keeps a zero-heart lesson blocked after one comes back.
@@ -2142,6 +2155,23 @@ function isPracticeLesson(lesson: CourseLesson): boolean {
   const id = lesson.id.toLowerCase();
   const title = lesson.title.toLowerCase();
   return id.includes("-practice-") || title.includes("practice");
+}
+
+/**
+ * True when a learner may start or submit at zero hearts.
+ *
+ * Already-completed lessons and practice nodes may continue. A heart-refill
+ * Practice run may too, once restoreHeartOnComplete is set — including when
+ * that start resumes a first lesson that has not been completed yet.
+ */
+export function allowsZeroHeartPlay(options: {
+  lessonCompleted: boolean;
+  practiceLesson: boolean;
+  restoreHeartOnComplete: boolean;
+}): boolean {
+  return options.lessonCompleted ||
+    options.practiceLesson ||
+    options.restoreHeartOnComplete;
 }
 
 /**

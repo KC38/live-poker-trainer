@@ -33,6 +33,7 @@ import {
   profileLivesFromData,
   omitUndefined,
   reviewLessonXp,
+  allowsZeroHeartPlay,
   shouldAdvanceActivityAfterSubmit,
   resolveSubmitHeartState,
   shouldBlockSubmitForHearts,
@@ -663,6 +664,37 @@ describe("lesson completion cursor", () => {
         acceptedCount: lesson.activities.length,
       }, lesson),
     ).toBe(false);
+  });
+});
+
+describe("allowsZeroHeartPlay", () => {
+  it("blocks a first-run lesson that is not a heart-refill Practice", () => {
+    expect(allowsZeroHeartPlay({
+      lessonCompleted: false,
+      practiceLesson: false,
+      restoreHeartOnComplete: false,
+    })).toBe(false);
+  });
+
+  it("allows a heart-refill Practice attempt before the lesson is completed", () => {
+    expect(allowsZeroHeartPlay({
+      lessonCompleted: false,
+      practiceLesson: false,
+      restoreHeartOnComplete: true,
+    })).toBe(true);
+  });
+
+  it("allows a completed lesson and a practice node", () => {
+    expect(allowsZeroHeartPlay({
+      lessonCompleted: true,
+      practiceLesson: false,
+      restoreHeartOnComplete: false,
+    })).toBe(true);
+    expect(allowsZeroHeartPlay({
+      lessonCompleted: false,
+      practiceLesson: true,
+      restoreHeartOnComplete: false,
+    })).toBe(true);
   });
 });
 

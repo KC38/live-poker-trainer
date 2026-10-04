@@ -610,6 +610,135 @@ describe("course session integration", () => {
     expect(profile?.livesRemaining).toBe(3);
   });
 
+  test("Practice on an open zero-heart lesson stamps the grant and can submit", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "heart-resume-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    const lessonId = "lesson-01-01-01-your-two-cards";
+    const started = await startCourseLessonForUser({
+      uid: "heart-resume-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId,
+        startRequestId: "start_first_run_01",
+      },
+      db,
+    });
+    expect(started.attempt.restoreHeartOnComplete).toBeUndefined();
+    const nextHeartAt = Date.now() + 6 * 60 * 60 * 1000;
+    await db.doc("users/heart-resume-user/course/main").set({
+      livesRemaining: 0,
+      livesMax: 5,
+      livesNextRefillAtMs: nextHeartAt,
+    }, {merge: true});
+
+    const resumed = await startCourseLessonForUser({
+      uid: "heart-resume-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId,
+        startRequestId: "start_blocked_retry_01",
+      },
+      db,
+    });
+    expect(resumed.duplicate).toBe(true);
+    expect(resumed.attempt.attemptId).toBe(started.attempt.attemptId);
+    expect(resumed.attempt.restoreHeartOnComplete).toBeUndefined();
+    await expect(submitCourseStepForUser({
+      uid: "heart-resume-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: resumed.attempt.attemptId,
+        activityId: "act-01-01-01-explain-hole-cards",
+        idempotencyKey: "blocked_resume_step_01",
+      },
+      db,
+    })).rejects.toMatchObject({
+      code: "failed-precondition",
+      message: expect.stringContaining("Out of hearts"),
+    });
+
+    const practice = await startCourseLessonForUser({
+      uid: "heart-resume-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId,
+        startRequestId: "start_practice_resume_01",
+        restoreHeartOnComplete: true,
+      },
+      db,
+    });
+    expect(practice.duplicate).toBe(true);
+    expect(practice.attempt.attemptId).toBe(started.attempt.attemptId);
+    expect(practice.attempt.restoreHeartOnComplete).toBe(true);
+    expect(practice.attempt.livesRemaining).toBe(0);
+
+    const submitted = await submitCourseStepForUser({
+      uid: "heart-resume-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: practice.attempt.attemptId,
+        activityId: "act-01-01-01-explain-hole-cards",
+        idempotencyKey: "practice_resume_step_01",
+      },
+      db,
+    });
+    expect(submitted.accepted).toBe(true);
+    expect(submitted.livesRemaining).toBe(0);
+
+    const stored = (
+      await db.doc(
+        `users/heart-resume-user/courseAttempts/${practice.attempt.attemptId}`,
+      ).get()
+    ).data();
+    expect(stored?.restoreHeartOnComplete).toBe(true);
+  });
+
+  test("a fresh Practice start is allowed at zero hearts", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "heart-fresh-practice-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    await db.doc("users/heart-fresh-practice-user/course/main").set({
+      livesRemaining: 0,
+      livesMax: 5,
+      livesNextRefillAtMs: Date.now() + 6 * 60 * 60 * 1000,
+      resume: null,
+    }, {merge: true});
+
+    await expect(startCourseLessonForUser({
+      uid: "heart-fresh-practice-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: "lesson-01-01-01-your-two-cards",
+        startRequestId: "start_zero_blocked_01",
+      },
+      db,
+    })).rejects.toMatchObject({
+      code: "failed-precondition",
+      message: expect.stringContaining("Out of hearts"),
+    });
+
+    const practice = await startCourseLessonForUser({
+      uid: "heart-fresh-practice-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: "lesson-01-01-01-your-two-cards",
+        startRequestId: "start_zero_practice_01",
+        restoreHeartOnComplete: true,
+      },
+      db,
+    });
+    expect(practice.duplicate).toBe(false);
+    expect(practice.attempt.restoreHeartOnComplete).toBe(true);
+    expect(practice.attempt.livesRemaining).toBe(0);
+  });
+
   test("reviewing an earlier lesson does not move the progress pointer", async () => {
     await seedFlags();
     await initializeCourseProfileForUser({
