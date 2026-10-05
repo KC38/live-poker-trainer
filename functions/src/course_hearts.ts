@@ -1,6 +1,6 @@
 /**
  * Duolingo-style course hearts: five-heart ceiling, passive time refill,
- * gem full refill, practice +1, and rewarded-ad +1.
+ * gem full refill, rewarded-ad +1, and a Practice-lesson completion grant.
  */
 
 import {
@@ -29,7 +29,12 @@ export const AD_HEART_COOLDOWN_MS = 15 * 1000;
 /** Cap rewarded-ad heart claims per local calendar day. */
 export const AD_HEART_DAILY_MAX = 5;
 
-/** Heart replenishment methods exposed by refillCourseHearts. */
+/**
+ * Heart replenishment methods accepted by the refill callable parser.
+ *
+ * `"practice"` is parsed so a direct callable claim can be rejected. Hearts
+ * for Practice are granted only when that lesson completes.
+ */
 export type HeartRefillMethod = "gems" | "ad" | "practice";
 
 /** Snapshot of heart fields used by passive accrual and refill callables. */
@@ -269,7 +274,25 @@ export interface RefillCourseHeartsResult {
 }
 
 /**
- * Applies gems / ad / practice heart refill with idempotent receipts.
+ * Refuses a client-claimed Practice heart.
+ *
+ * Completing a lesson started from the refill sheet grants the heart. This
+ * callable used to mint one with no lesson, so any signed-in caller could
+ * refill up to the ceiling by rotating idempotency keys.
+ */
+export function assertClientHeartRefillMethod(method: HeartRefillMethod): void {
+  if (method !== "practice") return;
+  throw new HttpsError(
+    "failed-precondition",
+    "Finish a Practice lesson to earn a heart.",
+  );
+}
+
+/**
+ * Applies a gem or rewarded-ad heart refill with idempotent receipts.
+ *
+ * Practice is not a refill method. {@link assertClientHeartRefillMethod}
+ * rejects it before any wallet write.
  */
 export async function refillCourseHeartsForUser(options: {
   uid: string;
@@ -282,6 +305,7 @@ export async function refillCourseHeartsForUser(options: {
   const nowMs = options.nowMs ?? Date.now();
   const input = asRecord(options.raw, "request");
   const method = parseMethod(input.method);
+  assertClientHeartRefillMethod(method);
   const idempotencyKey = nonEmpty(input.idempotencyKey, "idempotencyKey");
   nonEmpty(input.clientVersion, "clientVersion");
 
@@ -383,17 +407,7 @@ export async function refillCourseHeartsForUser(options: {
         lastHeartAdClaimAtMs: nowMs,
       };
     } else {
-      // practice — client calls after finishing a practice/replay session.
-      if (next.livesRemaining >= next.livesMax) {
-        throw new HttpsError(
-          "failed-precondition",
-          "Hearts are already full.",
-        );
-      }
-      next = {
-        ...grantHearts({state: next, amount: 1, nowMs}),
-        gems: next.gems,
-      };
+      assertClientHeartRefillMethod(method);
     }
 
     const availability = adHeartAvailability({
@@ -500,7 +514,7 @@ function parseMethod(raw: unknown): HeartRefillMethod {
   }
   throw new HttpsError(
     "invalid-argument",
-    "method must be gems, ad, or practice.",
+    "method must be gems or ad.",
   );
 }
 
