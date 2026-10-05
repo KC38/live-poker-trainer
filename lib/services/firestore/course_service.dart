@@ -152,7 +152,9 @@ class CourseService {
     });
   }
 
-  /// Refills hearts via gems, ad claim, or practice claim.
+  /// Refills hearts via gems or a rewarded-ad claim.
+  ///
+  /// Practice hearts are granted by completing the lesson, not this callable.
   Future<RefillCourseHeartsResult> refillHearts({
     required String method,
     required String idempotencyKey,

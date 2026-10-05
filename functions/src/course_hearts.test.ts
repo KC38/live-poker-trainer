@@ -8,6 +8,7 @@ import {
   AD_HEART_DAILY_MAX,
   adHeartAvailability,
   applyPassiveHeartRefill,
+  assertClientHeartRefillMethod,
   DEFAULT_LESSON_LIVES,
   GEMS_FULL_HEART_REFILL,
   grantHearts,
@@ -268,6 +269,17 @@ describe("grantHearts and practice", () => {
 
   it("exposes ad daily cap constant", () => {
     expect(AD_HEART_DAILY_MAX).toBe(5);
+  });
+
+  it("refuses a client practice refill that never finished a lesson", () => {
+    expect(() => assertClientHeartRefillMethod("practice")).toThrow(
+      expect.objectContaining({
+        code: "failed-precondition",
+        message: expect.stringContaining("Practice lesson"),
+      }),
+    );
+    expect(() => assertClientHeartRefillMethod("gems")).not.toThrow();
+    expect(() => assertClientHeartRefillMethod("ad")).not.toThrow();
   });
 
   it("does not grant a heart for a voluntary review or first-run", () => {

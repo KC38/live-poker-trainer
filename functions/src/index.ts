@@ -296,7 +296,7 @@ export const getCourseState = onCall(
   },
 );
 
-/** Refills hearts via gems, rewarded ad claim, or practice claim. */
+/** Refills hearts via gems or a rewarded ad claim. */
 export const refillCourseHearts = onCall(
   {
     region: "us-central1",
