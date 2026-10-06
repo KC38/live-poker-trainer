@@ -310,6 +310,7 @@ class _FeltTableViewState extends State<FeltTableView> {
           heroCardTaps ? null : _seatTap(player);
       seatLayer.add(
         Positioned.fromRect(
+          key: ValueKey<String>('felt-seat-${player.id}'),
           rect: slot.footprint,
           child: GestureDetector(
             behavior:
@@ -553,6 +554,7 @@ class _FeltTableViewState extends State<FeltTableView> {
         ...collects,
         ...villains,
         Positioned(
+          key: const ValueKey<String>('felt-board'),
           left: 0,
           right: 0,
           top: board.columnTop,
