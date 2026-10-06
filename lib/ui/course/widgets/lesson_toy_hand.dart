@@ -146,7 +146,7 @@ class _UnderFeltBeatChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final border =
-        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+        selected ? AppColors.selectionGlow : AppColors.feltBorder.withValues(alpha: 0.7);
     final child = Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
@@ -405,7 +405,7 @@ class _RunLane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final border =
-        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+        selected ? AppColors.selectionGlow : AppColors.feltBorder.withValues(alpha: 0.7);
     final pad = densify ? 16.0 : 10.0;
     final titleSize = densify ? 16.0 : 13.0;
     final detailSize = densify ? 13.0 : 11.0;

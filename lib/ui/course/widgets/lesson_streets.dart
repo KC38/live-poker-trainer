@@ -243,7 +243,7 @@ class _UnderFeltStreetChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final border =
-        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+        selected ? AppColors.selectionGlow : AppColors.feltBorder.withValues(alpha: 0.7);
     final child = Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
@@ -510,7 +510,7 @@ class _StreetLane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final border =
-        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+        selected ? AppColors.selectionGlow : AppColors.feltBorder.withValues(alpha: 0.7);
     final cardSize = densify ? MiniCardSize.small : MiniCardSize.tiny;
     final badge = densify ? 28.0 : 22.0;
     final titleW = densify ? 88.0 : 72.0;
@@ -664,7 +664,7 @@ class StreetOrderTile extends StatelessWidget {
       label: label,
       child: Material(
         color: selected
-            ? AppColors.gold.withValues(alpha: 0.22)
+            ? AppColors.selectionGlow.withValues(alpha: 0.22)
             : AppColors.feltDark.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(14),
         child: InkWell(
@@ -676,7 +676,7 @@ class StreetOrderTile extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: selected ? AppColors.gold : AppColors.feltBorder,
+                color: selected ? AppColors.selectionGlow : AppColors.feltBorder,
                 width: selected ? 2 : 1.2,
               ),
             ),
@@ -798,7 +798,7 @@ class SeatOrderTile extends StatelessWidget {
       label: label,
       child: Material(
         color: selected
-            ? AppColors.gold.withValues(alpha: 0.22)
+            ? AppColors.selectionGlow.withValues(alpha: 0.22)
             : AppColors.feltDark.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(radius),
         child: InkWell(
@@ -815,7 +815,7 @@ class SeatOrderTile extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(radius),
               border: Border.all(
-                color: selected ? AppColors.gold : AppColors.feltBorder,
+                color: selected ? AppColors.selectionGlow : AppColors.feltBorder,
                 width: selected ? 2 : 1.2,
               ),
             ),

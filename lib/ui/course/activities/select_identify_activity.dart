@@ -1550,6 +1550,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         _cuesAnswerSeat(locked)
                             ? lessonSeatIndexForHighlight(scene.highlight)
                             : null,
+                    selectedSeatIndexes: {
+                      ?_selectedSeatIndex,
+                    },
                     enabled: !locked,
                     onSeatIndexTap:
                         locked
@@ -1564,7 +1567,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                   LessonTableRegion.bigBlind,
                                 _ => LessonTableRegion.emptySeat,
                               };
-                              _submitRegion(LessonTableTapTarget(region));
+                              _submitRegion(
+                                LessonTableTapTarget(region, seatIndex: index),
+                              );
                             },
                   ),
                 )
@@ -1596,6 +1601,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         _cuesAnswerSeat(locked)
                             ? lessonSeatIndexForHighlight(scene.highlight)
                             : null,
+                    selectedSeatIndexes: {
+                      ?_selectedSeatIndex,
+                    },
                     enabled: !locked,
                     onSeatIndexTap:
                         locked
@@ -1605,7 +1613,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                 widget.activity.id,
                                 index,
                               );
-                              if (target != null) _submitRegion(target);
+                              if (target != null) {
+                                _submitRegion(target);
+                                setState(() => _selectedSeatIndex = index);
+                              }
                             },
                   ),
                 )
@@ -1831,6 +1842,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                               _cuesAnswerSeat(locked)
                                   ? lessonSeatIndexForHighlight(scene.highlight)
                                   : null,
+                          selectedSeatIndexes: {
+                            ?_selectedSeatIndex,
+                          },
                           enabled: !locked,
                           onSeatIndexTap:
                               locked
@@ -1848,7 +1862,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                         LessonTableRegion.bigBlind,
                                       _ => LessonTableRegion.emptySeat,
                                     };
-                                    _submitRegion(LessonTableTapTarget(region));
+                                    _submitRegion(
+                                      LessonTableTapTarget(
+                                        region,
+                                        seatIndex: index,
+                                      ),
+                                    );
                                   },
                         ),
                       ),
@@ -3263,7 +3282,7 @@ class _HoleCardBands extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: selected ? AppColors.gold : Colors.transparent,
+                color: selected ? AppColors.selectionGlow : Colors.transparent,
                 width: 2,
               ),
             ),

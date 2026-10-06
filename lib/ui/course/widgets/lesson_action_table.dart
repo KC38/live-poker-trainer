@@ -13719,7 +13719,7 @@ class _DemoActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderColor = selected
-        ? AppColors.gold
+        ? AppColors.selectionGlow
         : color.withValues(alpha: 0.9);
     final fill = densify || expand;
     final card = AnimatedContainer(
@@ -13732,7 +13732,7 @@ class _DemoActionCard extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: selected
-            ? AppColors.gold.withValues(alpha: 0.28)
+            ? AppColors.selectionGlow.withValues(alpha: 0.28)
             : color.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(densify ? 16 : 12),
         border: Border.all(color: borderColor, width: selected ? 2.5 : 1),
@@ -14278,7 +14278,7 @@ class _DockButton extends StatelessWidget {
   }
 
   Color get _border {
-    if (selected) return AppColors.gold;
+    if (selected) return AppColors.selectionGlow;
     if (unavailableLook) return AppColors.slate;
     final action = (choice.action ?? choice.label).toUpperCase();
     if (action.startsWith('FOLD') || action.startsWith('ALL')) {

@@ -798,7 +798,7 @@ class _ActionPill extends StatelessWidget {
         child: Material(
           color:
               selected
-                  ? AppColors.gold.withValues(alpha: 0.22)
+                  ? AppColors.selectionGlow.withValues(alpha: 0.22)
                   : AppColors.feltDark.withValues(alpha: 0.85),
           borderRadius: BorderRadius.circular(12),
           child: InkWell(
@@ -809,7 +809,7 @@ class _ActionPill extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: selected ? AppColors.gold : AppColors.feltBorder,
+                  color: selected ? AppColors.selectionGlow : AppColors.feltBorder,
                 ),
               ),
               child: Text(

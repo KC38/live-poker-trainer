@@ -11676,7 +11676,7 @@ class LessonTableContext extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               gold
-                  ? AppColors.gold.withValues(alpha: 0.22)
+                  ? AppColors.selectionGlow.withValues(alpha: 0.22)
                   : AppColors.feltDark.withValues(alpha: 0.55),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
@@ -15148,14 +15148,14 @@ class _TappableRegionState extends State<_TappableRegion>
     // Densified tiles need a visible fill + forced expand — transparent
     // InkWell/Material shrink leaves sparse green under SPR / outcome rows.
     final staticBorder = widget.selected
-        ? AppColors.gold
+        ? AppColors.selectionGlow
         : widget.highlighted
         ? AppColors.gold.withValues(alpha: 0.55)
         : widget.expand
         ? AppColors.cream.withValues(alpha: 0.32)
         : Colors.transparent;
     final staticFill = widget.selected
-        ? AppColors.gold.withValues(alpha: 0.22)
+        ? AppColors.selectionGlow.withValues(alpha: 0.22)
         : widget.highlighted
         ? AppColors.gold.withValues(alpha: 0.14)
         : widget.expand

@@ -78,6 +78,7 @@ class FeltTableView extends StatefulWidget {
     this.dimmedBoardIndexes = const {},
     this.boardOrderBadges = const {},
     this.selectedHeroIndexes = const {},
+    this.selectedSeatIndexes = const {},
     this.highlightHeroIndexes = const {},
     this.dimmedHeroIndexes = const {},
     this.seatOrderBadges = const {},
@@ -155,7 +156,7 @@ class FeltTableView extends StatefulWidget {
   /// when the lesson needs a single hero card.
   final ValueChanged<int>? onHeroCardTap;
 
-  /// Board indexes with a selected gold ring.
+  /// Board indexes with a cyan learner-selection ring.
   final Set<int> selectedBoardIndexes;
 
   /// Board indexes that bounce a cue arrow.
@@ -167,8 +168,11 @@ class FeltTableView extends StatefulWidget {
   /// 1-based order badge drawn on a selected board card.
   final Map<int, int> boardOrderBadges;
 
-  /// Hero hole indexes with a selected gold ring.
+  /// Hero hole indexes with a cyan learner-selection ring.
   final Set<int> selectedHeroIndexes;
+
+  /// Seat indexes with a cyan learner-selection ring (tapped seats).
+  final Set<int> selectedSeatIndexes;
 
   /// Hero hole indexes that cue the next tap.
   final Set<int> highlightHeroIndexes;
@@ -424,11 +428,13 @@ class _FeltTableViewState extends State<FeltTableView> {
                       : "${player.name}'s hole cards",
               // Seat SoftPulse (showdown order, blinds) wraps the pod.
               // Hole-card Hint rings each card via highlightHeroIndexes —
-              // never the You name box.
-              child: GlowHighlight(
-                active: _cuesReady && widget.cueSeatIndex == slot.index,
+              // never the You name box. Cyan selection stays on tapped seats.
+              child: LessonTargetGlow(
+                selected: widget.selectedSeatIndexes.contains(slot.index),
+                highlighted: _cuesReady && widget.cueSeatIndex == slot.index,
                 reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,
+                scale: layout.seatScale,
                 child: PlayerSeatWidget(
                   player: player,
                   bigBlind: game.bigBlind,

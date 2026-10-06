@@ -141,7 +141,7 @@ class LessonChoiceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final border =
         selected
-            ? AppColors.gold
+            ? AppColors.selectionGlow
             : highlighted
             ? AppColors.goldMuted
             : AppColors.slateDark;
@@ -156,7 +156,7 @@ class LessonChoiceButton extends StatelessWidget {
         child: Material(
           color:
               selected
-                  ? AppColors.gold.withValues(alpha: 0.22)
+                  ? AppColors.selectionGlow.withValues(alpha: 0.22)
                   : highlighted
                   ? AppColors.gold.withValues(alpha: 0.08)
                   : AppColors.surfaceMuted.withValues(alpha: 0.65),

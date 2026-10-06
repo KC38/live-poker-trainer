@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
@@ -161,14 +162,20 @@ void main() {
     await tester.tap(find.byKey(const ValueKey<String>('lesson-hero-card-0')));
     await tester.pump();
 
-    // Ah keeps a static selected ring; Kd stays the remaining hole cue.
-    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
-    final afterAh = find.byKey(const ValueKey<String>('glow-highlight'));
-    final nearKd = List.generate(
-      2,
-      (i) => tester.getCenter(afterAh.at(i)),
-    ).any((g) => (g.dx - kd.dx).abs() < 8);
-    expect(nearKd, isTrue);
+    // Ah keeps a cyan selected ring; gold SoftPulse stays on Kd.
+    expect(
+      find.byKey(const ValueKey<String>('selection-highlight')),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(
+      tester.getCenter(find.byKey(const ValueKey<String>('selection-highlight'))).dx,
+      closeTo(ah.dx, 8),
+    );
+    expect(
+      tester.getCenter(find.byKey(const ValueKey<String>('glow-highlight'))).dx,
+      closeTo(kd.dx, 8),
+    );
   });
 
   testWidgets('guided picker selects five on the full table', (tester) async {
@@ -227,5 +234,88 @@ void main() {
     }
     expect(controller.draft.choiceId, 'best-pair-k');
     expect(autoSubmits, 1);
+  });
+
+  testWidgets('missed picker keeps cyan picks and golds the coach five', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-02-02-guided-seven',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your best five.',
+      choices: const [
+        CourseChoice(id: 'best-pair-k', label: 'Aces with king'),
+        CourseChoice(id: 'weak-kickers', label: 'Aces with nine'),
+        CourseChoice(id: 'ignore-ace', label: 'King high'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      _frame(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final spot = resolveBestFiveSpot(activity)!;
+    for (final code in ['Ah', 'As', '9h', '7c', '3s']) {
+      final heroIdx = spot.heroCodes.indexOf(code);
+      if (heroIdx >= 0) {
+        await tester.tap(find.byKey(ValueKey<String>('lesson-hero-card-$heroIdx')));
+      } else {
+        final boardIdx = spot.boardCodes.indexOf(code);
+        await tester.tap(
+          find.byKey(ValueKey<String>('lesson-board-card-$boardIdx')),
+        );
+      }
+      await tester.pump();
+    }
+
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'a1',
+        activityId: activity.id,
+        grade: SoftGrade.clearMistake,
+        feedback: 'King plays over the leftover three.',
+        accepted: false,
+        lifeLost: true,
+        livesRemaining: 2,
+        xpAwarded: 0,
+        remediationRequired: false,
+        resume: CourseResumePointer(
+          attemptId: 'a1',
+          lessonId: 'lesson-01-02-02-best-five-kickers',
+          activityId: activity.id,
+          activityIndex: 0,
+        ),
+        duplicate: false,
+        betterChoiceId: 'best-pair-k',
+      ),
+    );
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey<String>('selection-highlight')),
+      findsNWidgets(5),
+    );
+    expect(
+      find.byKey(const ValueKey<String>('glow-highlight')),
+      findsNWidgets(5),
+    );
   });
 }

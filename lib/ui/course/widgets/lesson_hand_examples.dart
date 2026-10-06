@@ -786,7 +786,7 @@ class HandExampleTile extends StatelessWidget {
         expand && cards.isEmpty && badge == null && onPressed != null;
     final border =
         selected
-            ? AppColors.gold
+            ? AppColors.selectionGlow
             : dockButton
             ? AppColors.slate
             : AppColors.slateDark.withValues(alpha: 0.85);
@@ -1233,7 +1233,7 @@ class _UnderFeltFamilyChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final border =
-        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+        selected ? AppColors.selectionGlow : AppColors.feltBorder.withValues(alpha: 0.7);
     final child = Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(

@@ -779,7 +779,7 @@ class SuitTapTile extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(radius),
               border: Border.all(
-                color: selected ? AppColors.gold : AppColors.slateDark,
+                color: selected ? AppColors.selectionGlow : AppColors.slateDark,
                 width: selected ? 2.5 : 1,
               ),
             ),
@@ -829,7 +829,7 @@ class HoleCardChoiceButton extends StatelessWidget {
     }
     final border =
         selected
-            ? AppColors.gold
+            ? AppColors.selectionGlow
             : highlighted
             ? AppColors.goldMuted
             : AppColors.slateDark;
@@ -845,7 +845,7 @@ class HoleCardChoiceButton extends StatelessWidget {
         child: Material(
           color:
               selected
-                  ? AppColors.gold.withValues(alpha: 0.22)
+                  ? AppColors.selectionGlow.withValues(alpha: 0.22)
                   : highlighted
                   ? AppColors.gold.withValues(alpha: 0.08)
                   : AppColors.surfaceMuted.withValues(alpha: 0.65),
@@ -917,7 +917,7 @@ class SuitSetChoiceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final border =
         selected
-            ? AppColors.gold
+            ? AppColors.selectionGlow
             : highlighted
             ? AppColors.goldMuted
             : AppColors.slateDark;
@@ -932,7 +932,7 @@ class SuitSetChoiceButton extends StatelessWidget {
         child: Material(
           color:
               selected
-                  ? AppColors.gold.withValues(alpha: 0.22)
+                  ? AppColors.selectionGlow.withValues(alpha: 0.22)
                   : highlighted
                   ? AppColors.gold.withValues(alpha: 0.08)
                   : AppColors.surfaceMuted.withValues(alpha: 0.65),

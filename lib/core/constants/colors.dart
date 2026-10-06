@@ -28,6 +28,8 @@ class AppColors {
   static const Color cream = Color(0xFFF4F1EA);
   /// Active bottom-nav ring (Duolingo-style cyan on dark navy).
   static const Color navRing = Color(0xFF49C0F8);
+  /// Learner tap selection on felt cards (distinct from gold coach cues).
+  static const Color selectionGlow = Color(0xFF5EC8F8);
   static const Color danger = Color(0xFFE05252);
   static const Color success = Color(0xFF2DB87A);
   static const Color warning = Color(0xFFE5A84B);

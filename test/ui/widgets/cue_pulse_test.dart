@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
@@ -203,6 +204,42 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('group-child')), findsOneWidget);
+  });
+
+  testWidgets('selection ring stays on when SoftPulse is closed', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: LessonSoftPulseScope(
+            allowed: false,
+            child: LessonTargetGlow(
+              selected: true,
+              highlighted: true,
+              reserveLayout: false,
+              child: SizedBox(
+                key: ValueKey<String>('pulse-child'),
+                width: 40,
+                height: 40,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('selection-highlight')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    final ring = tester.widget<DecoratedBox>(
+      find.byKey(const ValueKey<String>('selection-highlight-ring')),
+    );
+    final decoration = ring.decoration as BoxDecoration;
+    expect(decoration.border, isNotNull);
+    expect(
+      (decoration.border as Border).top.color,
+      AppColors.selectionGlow,
+    );
   });
 }
 

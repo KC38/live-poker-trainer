@@ -397,6 +397,7 @@ class LessonTableStage extends StatelessWidget {
     this.dimmedBoardIndexes = const {},
     this.boardOrderBadges = const {},
     this.selectedHeroIndexes = const {},
+    this.selectedSeatIndexes = const {},
     this.highlightHeroIndexes = const {},
     this.dimmedHeroIndexes = const {},
     this.seatOrderBadges = const {},
@@ -477,7 +478,7 @@ class LessonTableStage extends StatelessWidget {
   /// Learner tapped a seat. The value is that seat's index in the hand.
   final ValueChanged<int>? onSeatIndexTap;
 
-  /// Board indexes with a selected gold ring.
+  /// Board indexes with a cyan learner-selection ring.
   final Set<int> selectedBoardIndexes;
 
   /// Board indexes that bounce a cue arrow.
@@ -489,8 +490,11 @@ class LessonTableStage extends StatelessWidget {
   /// 1-based order badge drawn on a selected board card.
   final Map<int, int> boardOrderBadges;
 
-  /// Hero hole indexes with a selected gold ring.
+  /// Hero hole indexes with a cyan learner-selection ring.
   final Set<int> selectedHeroIndexes;
+
+  /// Seat indexes with a cyan learner-selection ring.
+  final Set<int> selectedSeatIndexes;
 
   /// Hero hole indexes that cue the next tap.
   final Set<int> highlightHeroIndexes;
@@ -651,6 +655,7 @@ class LessonTableStage extends StatelessWidget {
             dimmedBoardIndexes: dimmedBoardIndexes,
             boardOrderBadges: boardOrderBadges,
             selectedHeroIndexes: selectedHeroIndexes,
+            selectedSeatIndexes: selectedSeatIndexes,
             highlightHeroIndexes:
                 highlightHeroIndexes.isNotEmpty
                     ? highlightHeroIndexes
@@ -811,6 +816,7 @@ class _LessonBlindsClockwiseTableState
       dealerIndex: lessonBlindsButtonIndex,
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
+      selectedSeatIndexes: {for (var i = 0; i < _step; i++) _order[i]},
       cueSeatIndex: showCue ? _order[_step] : null,
       enabled: teaching,
       onSeatIndexTap: _tap,
@@ -882,6 +888,7 @@ class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
       seatNames: lessonActionOrderSeatNames,
+      selectedSeatIndexes: {for (var i = 0; i < _step; i++) _order[i]},
       cueSeatIndex: showCue ? _order[_step] : null,
       enabled: teaching,
       onSeatIndexTap: _tap,
@@ -970,6 +977,10 @@ class LessonSeatOrderSequenceTable extends StatelessWidget {
       seatNames: lessonActionOrderSeatNames,
       foldedSeatIndexes: lessonSeatOrderFoldedIndexes(activityId),
       seatOrderBadges: badges,
+      selectedSeatIndexes: {
+        for (final id in orderedIds)
+          if (_seatIndexForId(id) != null) _seatIndexForId(id)!,
+      },
       cueSeatIndex: nextSeat,
       enabled: enabled,
       onSeatIndexTap: (index) => _tap(context, index),
@@ -1648,6 +1659,10 @@ class LessonShowdownOrderTable extends StatelessWidget {
       enabled: enabled,
       features: lessonHandRanksTableFeatures,
       seatOrderBadges: badges,
+      selectedSeatIndexes: {
+        for (final id in orderedIds)
+          if (_seatIndexForId(id) != null) _seatIndexForId(id)!,
+      },
       cue: nextSeat == 0 ? LessonTableCue.hero : LessonTableCue.none,
       cueSeatIndex: nextSeat != null && nextSeat > 0 ? nextSeat : null,
       onSeatIndexTap: (index) => _tap(context, index),
