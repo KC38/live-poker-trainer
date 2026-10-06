@@ -571,4 +571,115 @@ void main() {
     expect(snap.nextLessonId, 'lesson-a');
     expect(heartRestorePracticeLessonId(snap), isNull);
   });
+
+  test('heart restore treats mastery at the threshold as strong', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: CourseProfileView(
+        lifetimeXp: 20,
+        gems: 0,
+        currentStreak: 2,
+        acceptedAccuracy: 0.9,
+        completedLessonIds: const ['lesson-a'],
+        masteryByLessonId: {'lesson-a': kCourseMasteryThreshold},
+        catalogVersion: '2.0.0',
+      ),
+      openAttempt: const CourseAttemptSnapshot(
+        attemptId: 'att-bleed',
+        lessonId: 'lesson-b',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 1,
+        currentActivityId: 'act-b1',
+        livesRemaining: 0,
+        livesMax: 5,
+        acceptedCount: 0,
+        scoredCount: 2,
+        stepCount: 2,
+      ),
+    );
+    expect(heartRestorePracticeLessonId(snap), 'lesson-b');
+  });
+
+  test('heart restore breaks equal mastery toward the later lesson', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 40,
+        gems: 0,
+        currentStreak: 3,
+        acceptedAccuracy: 0.4,
+        completedLessonIds: ['lesson-a', 'lesson-b'],
+        masteryByLessonId: {'lesson-a': 0.4, 'lesson-b': 0.4},
+        catalogVersion: '2.0.0',
+      ),
+    );
+    expect(heartRestorePracticeLessonId(snap), 'lesson-b');
+  });
+
+  test('heart restore ignores a resume that is not on the map', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 20,
+        gems: 0,
+        currentStreak: 2,
+        acceptedAccuracy: 0.9,
+        completedLessonIds: ['lesson-a'],
+        masteryByLessonId: {'lesson-a': 0.9},
+        catalogVersion: '2.0.0',
+      ),
+      openAttempt: const CourseAttemptSnapshot(
+        attemptId: 'att-missing',
+        lessonId: 'lesson-missing',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 0,
+        currentActivityId: 'act-x',
+        livesRemaining: 0,
+        livesMax: 5,
+        acceptedCount: 0,
+        scoredCount: 1,
+        stepCount: 1,
+      ),
+    );
+    expect(heartRestorePracticeLessonId(snap), 'lesson-a');
+  });
+
+  test('heart restore ignores a resume of an already completed lesson', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 40,
+        gems: 0,
+        currentStreak: 3,
+        acceptedAccuracy: 0.95,
+        completedLessonIds: ['lesson-a', 'lesson-b'],
+        masteryByLessonId: {'lesson-a': 0.95, 'lesson-b': 0.9},
+        catalogVersion: '2.0.0',
+      ),
+      openAttempt: const CourseAttemptSnapshot(
+        attemptId: 'att-done',
+        lessonId: 'lesson-a',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 2,
+        currentActivityId: 'act-a1',
+        livesRemaining: 0,
+        livesMax: 5,
+        acceptedCount: 1,
+        scoredCount: 2,
+        stepCount: 2,
+      ),
+    );
+    expect(heartRestorePracticeLessonId(snap), 'lesson-b');
+  });
 }
