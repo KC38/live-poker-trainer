@@ -272,6 +272,7 @@ class LessonTargetGlow extends StatelessWidget {
     this.highlighted = false,
     this.borderRadius = 8,
     this.scale = 1,
+    this.padding,
     this.reserveLayout = false,
     this.cueIgnoresSoftPulse = false,
   });
@@ -291,6 +292,9 @@ class LessonTargetGlow extends StatelessWidget {
   /// Scales ring padding with the felt.
   final double scale;
 
+  /// Override ring padding (hole cards use a tight 3px pad).
+  final EdgeInsets? padding;
+
   /// When true, gold cue reserves layout (demo trays). Felt uses false.
   final bool reserveLayout;
 
@@ -299,9 +303,17 @@ class LessonTargetGlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectionPad = GlowHighlight.selectionOutset * scale;
-    final cuePad = GlowHighlight.outset * scale +
-        (selected && highlighted ? 3.0 * scale : 0);
+    final selectionPad = padding ??
+        EdgeInsets.all(GlowHighlight.selectionOutset * scale);
+    final extra = selected && highlighted ? 3.0 * scale : 0.0;
+    final cuePad = padding != null
+        ? EdgeInsets.fromLTRB(
+            padding!.left + extra,
+            padding!.top + extra,
+            padding!.right + extra,
+            padding!.bottom + extra,
+          )
+        : EdgeInsets.all(GlowHighlight.outset * scale + extra);
     return GlowHighlight(
       kind: GlowKind.selection,
       active: selected,
@@ -309,14 +321,14 @@ class LessonTargetGlow extends StatelessWidget {
       ignoreSoftPulse: true,
       reserveLayout: reserveLayout,
       borderRadius: borderRadius,
-      padding: EdgeInsets.all(selectionPad),
+      padding: selectionPad,
       child: GlowHighlight(
         active: highlighted,
         animated: highlighted && !selected,
         ignoreSoftPulse: cueIgnoresSoftPulse,
         reserveLayout: false,
         borderRadius: borderRadius,
-        padding: EdgeInsets.all(cuePad),
+        padding: cuePad,
         child: child,
       ),
     );
