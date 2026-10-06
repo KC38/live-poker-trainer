@@ -125,9 +125,9 @@ class LessonActivityController extends ChangeNotifier {
   /// the same highlights on quieter stages (unguided / checkpoint /
   /// jump-test).
   ///
-  /// Multi-press sequences SoftPulse only the current wave: the first press
-  /// (or a Hint re-open). After that press is tapped, SoftPulse stays off
-  /// until Hint opens the next one-press wave.
+  /// Multi-press sequences SoftPulse only the current wave when Hint can
+  /// re-open the next press. Teaching steps that already SoftPulse with
+  /// Hint disabled keep the next-target cue on.
   bool get showTargetCue {
     final unlocked = _hintVisible ||
         (!lessonFrameSoftPulseQuietByDefault(activity, isReview: isReview) &&
@@ -135,7 +135,11 @@ class LessonActivityController extends ChangeNotifier {
                 activity.stage == ActivityStage.guided ||
                 activity.stage == ActivityStage.scaffolded));
     if (!unlocked) return false;
-    if (_sequentialCueNodeKey == currentNodeKey &&
+    // When cues are already on and Hint is disabled, keep SoftPulse on the
+    // next press. Sequential wave-close is only for stages that can re-open
+    // via Hint.
+    if (!lessonFrameHintShownByDefault(activity, isReview: isReview) &&
+        _sequentialCueNodeKey == currentNodeKey &&
         !_sequentialSoftPulseWaveOpen) {
       return false;
     }

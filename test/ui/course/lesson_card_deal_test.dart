@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/engine/fast_evaluator.dart';
 import 'package:live_poker_trainer/engine/hand_class.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 
@@ -542,5 +543,28 @@ void main() {
       ),
       'best-pair-k',
     );
+  });
+
+  test('toy-hand streets keep the same hole suits as the board grows', () {
+    const activityId = 'act-07-10-01-hand';
+    final flop = dealtToyHandStepSpot(
+      activityId: activityId,
+      stepId: 'step-flop',
+      generation: 4,
+    )!;
+    final turn = dealtToyHandStepSpot(
+      activityId: activityId,
+      stepId: 'step-turn',
+      generation: 4,
+    )!;
+    final river = dealtToyHandStepSpot(
+      activityId: activityId,
+      stepId: 'step-river',
+      generation: 4,
+    )!;
+    expect(flop.heroCodes, turn.heroCodes);
+    expect(turn.heroCodes, river.heroCodes);
+    expect(turn.boardCodes.take(3), flop.boardCodes);
+    expect(river.boardCodes.take(4), turn.boardCodes);
   });
 }

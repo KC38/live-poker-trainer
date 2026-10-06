@@ -38,6 +38,9 @@ class FeltDealController extends ChangeNotifier {
   /// How many hole cards are shown at [seatIndex] (0–2).
   int holeVisibleAt(int seatIndex) => _holeVisible[seatIndex] ?? 0;
 
+  /// True when every requested hole and board card has landed.
+  bool get isComplete => _isComplete;
+
   /// Syncs targets for [epoch]. New epochs deal the arriving street only;
   /// same epochs only deal newly required board cards.
   void bind({

@@ -1229,7 +1229,9 @@ LessonActionSpot? dealtToyHandStepSpot({
   if (spot == null) return null;
   if (!lessonSuitRemapEnabled) return spot;
   final rng = resolveLessonDealRandom(
-    activityId: '$activityId/$stepId',
+    // Seed by activity, not step — the same suit map must hold from
+    // preflop through river so later streets do not redeal the holes.
+    activityId: activityId,
     generation: generation,
     random: random,
   );

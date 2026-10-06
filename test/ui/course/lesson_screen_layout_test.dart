@@ -22,12 +22,13 @@ CourseActivity _hintActivity({
   required ActivityStage stage,
   required String accessibilityText,
   String? prompt,
+  ActivityRenderer renderer = ActivityRenderer.selectIdentify,
 }) {
   return CourseActivity(
     id: id,
     order: 1,
     stage: stage,
-    renderer: ActivityRenderer.selectIdentify,
+    renderer: renderer,
     estimatedSeconds: 30,
     accessibilityText: accessibilityText,
     acceptedGrades: const [SoftGrade.recommended],
@@ -86,6 +87,39 @@ void main() {
     );
     expect(lessonFrameHintShownByDefault(scaffolded), isFalse);
     expect(lessonFrameHintsDisabled(scaffolded), isFalse);
+  });
+
+  test('scaffolded SoftPulse leaves Hint disabled when cues are already on', () {
+    final seatOrder = _hintActivity(
+      id: 'act-01-04-01-scaffolded-order',
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.orderSequence,
+      accessibilityText: 'Put UTG, HJ, CO, and BTN in preflop action order.',
+      prompt: 'Tap seats in the order they act preflop after blinds.',
+    );
+    expect(lessonFrameHintShownByDefault(seatOrder), isTrue);
+    expect(lessonFrameHintsDisabled(seatOrder), isTrue);
+    expect(lessonFrameHintFallback(seatOrder), isNull);
+
+    final sizing = _hintActivity(
+      id: 'act-01-03-01-scaffolded-check',
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      accessibilityText: 'Check when the pot is free.',
+      prompt: 'Nobody has bet. Pick the cheap action.',
+    );
+    expect(lessonFrameHintShownByDefault(sizing), isTrue);
+    expect(lessonFrameHintsDisabled(sizing), isTrue);
+
+    expect(
+      lessonFrameHintShownByDefault(seatOrder, isReview: true),
+      isFalse,
+    );
+    expect(lessonFrameHintsDisabled(seatOrder, isReview: true), isFalse);
+    expect(
+      lessonFrameHintFallback(seatOrder, isReview: true),
+      'Put UTG, HJ, CO, and BTN in preflop action order.',
+    );
   });
 
   test('same-concept guided keeps Hint so SoftPulse can unlock', () {
