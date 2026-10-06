@@ -123,7 +123,10 @@ class FeltTableView extends StatefulWidget {
   /// Extra seats whose hole cards are face up, by player id.
   final Set<int> faceUpPlayerIds;
 
-  /// Arrows on the hero seat, the lesson cue for "tap your cards".
+  /// SoftPulse the hero's hole cards (each card, never the You name box).
+  ///
+  /// Empty [highlightHeroIndexes] still rings both landed holes. Seat-level
+  /// GlowHighlight is only [cueSeatIndex].
   final bool highlightHero;
 
   /// SoftPulse the community cards as one group via [GlowHighlight].
@@ -252,6 +255,17 @@ class _FeltTableViewState extends State<FeltTableView> {
     );
   }
 
+  /// Hole indexes to SoftPulse. Wait until both cards have landed so the
+  /// ring is not an empty box. [highlightHero] with no indexes means both.
+  Set<int> _heroHoleCueIndexes({required bool landed}) {
+    if (!landed) return const {};
+    if (widget.highlightHeroIndexes.isNotEmpty) {
+      return widget.highlightHeroIndexes;
+    }
+    if (widget.highlightHero) return const {0, 1};
+    return const {};
+  }
+
   @override
   Widget build(BuildContext context) {
     final features = widget.features ?? TableFeaturesScope.of(context);
@@ -336,17 +350,11 @@ class _FeltTableViewState extends State<FeltTableView> {
                           ? 'Your hole cards, face up'
                           : 'Your hole cards')
                       : "${player.name}'s hole cards",
-              // SoftPulse seats the same way as cards: GlowHighlight ring —
-              // never the action-turn gold tip. Hole cues wait until both
-              // cards have landed so the ring is not an empty box.
+              // Seat SoftPulse (showdown order, blinds) wraps the pod.
+              // Hole-card Hint rings each card via highlightHeroIndexes —
+              // never the You name box.
               child: GlowHighlight(
-                active:
-                    widget.cueSeatIndex == slot.index ||
-                    (widget.highlightHero &&
-                        player.isHero &&
-                        widget.highlightHeroIndexes.isEmpty &&
-                        (showdown ||
-                            _deal.holeVisibleAt(slot.index) >= 2)),
+                active: widget.cueSeatIndex == slot.index,
                 reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,
                 child: PlayerSeatWidget(
@@ -369,7 +377,12 @@ class _FeltTableViewState extends State<FeltTableView> {
                   selectedHeroIndexes:
                       player.isHero ? widget.selectedHeroIndexes : const {},
                   highlightHeroIndexes:
-                      player.isHero ? widget.highlightHeroIndexes : const {},
+                      player.isHero
+                          ? _heroHoleCueIndexes(
+                              landed: showdown ||
+                                  _deal.holeVisibleAt(slot.index) >= 2,
+                            )
+                          : const {},
                   dimmedHeroIndexes:
                       player.isHero ? widget.dimmedHeroIndexes : const {},
                 ),

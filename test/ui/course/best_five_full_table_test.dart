@@ -101,7 +101,7 @@ void main() {
     expect(ack, 1);
   });
 
-  testWidgets('explain cues the next hero card, not the hole-card center', (
+  testWidgets('explain cues both playing hole cards, not the You seat', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -138,30 +138,35 @@ void main() {
     );
     await tester.pump();
 
-    // First playing card is Ah (hero index 0). GlowHighlight sits on that card.
-    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    // Both playing hole cards SoftPulse individually — not the You name box.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
 
-    final glow = tester.getCenter(
-      find.byKey(const ValueKey<String>('glow-highlight')),
-    );
+    final glowFinder = find.byKey(const ValueKey<String>('glow-highlight'));
     final ah = tester.getCenter(
       find.byKey(const ValueKey<String>('lesson-hero-card-0')),
     );
     final kd = tester.getCenter(
       find.byKey(const ValueKey<String>('lesson-hero-card-1')),
     );
-    expect(glow.dx, closeTo(ah.dx, 8));
-    expect((glow.dx - kd.dx).abs(), greaterThan(20));
+    final you = tester.getCenter(
+      find.byKey(const ValueKey<String>('seat-box-0')),
+    );
+    final glows = List.generate(2, (i) => tester.getCenter(glowFinder.at(i)));
+    expect(glows.any((g) => (g.dx - ah.dx).abs() < 8), isTrue);
+    expect(glows.any((g) => (g.dx - kd.dx).abs() < 8), isTrue);
+    for (final g in glows) {
+      expect(g.dy, lessThan(you.dy - 8));
+    }
 
     await tester.tap(find.byKey(const ValueKey<String>('lesson-hero-card-0')));
     await tester.pump();
 
-    // Ah keeps a static selected ring; SoftPulse moves to Kd.
+    // Ah keeps a static selected ring; Kd stays the remaining hole cue.
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
-    final glowFinder = find.byKey(const ValueKey<String>('glow-highlight'));
+    final afterAh = find.byKey(const ValueKey<String>('glow-highlight'));
     final nearKd = List.generate(
       2,
-      (i) => tester.getCenter(glowFinder.at(i)),
+      (i) => tester.getCenter(afterAh.at(i)),
     ).any((g) => (g.dx - kd.dx).abs() < 8);
     expect(nearKd, isTrue);
   });

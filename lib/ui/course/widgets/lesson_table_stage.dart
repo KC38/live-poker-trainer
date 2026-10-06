@@ -235,9 +235,10 @@ GameState lessonTableStageGame({
       ],
     );
   }
-  if (dealerIndex != null) {
-    named = named.copyWith(activePlayerIndex: activeSeatIndex ?? -1);
-  }
+  // Default GameState treats seat 0 as to-act, which gold-rings the You
+  // name box. SoftPulse / Hint must not inherit that action-turn glow —
+  // only [activeSeatIndex] lights a seat.
+  named = named.copyWith(activePlayerIndex: activeSeatIndex ?? -1);
   if (winnerIds.isEmpty) return named;
   return awardLessonStagePot(named, winnerIds);
 }
@@ -633,11 +634,9 @@ class LessonTableStage extends StatelessWidget {
             showHoleCardBacks: true,
             heroCardsFaceUp: heroFaceUp,
             faceUpPlayerIds: faceUp,
-            // Face-up holes SoftPulse via GlowHighlight — the old
-            // `&& !heroFaceUp` gate hid every "tap your cards" cue in the
-            // lesson frame (guided find-holes, etc.).
-            // Board region cues wrap the whole board row; per-card board
-            // taps SoftPulse each dealt card individually.
+            // Hole-card Hint / SoftPulse rings each hole card, never the
+            // You name box. Board region cues still wrap the whole row;
+            // per-card board taps SoftPulse each dealt card.
             highlightHero: cue == LessonTableCue.hero,
             highlightBoard: cue == LessonTableCue.board &&
                 highlightBoardIndexes.isEmpty &&
@@ -655,9 +654,7 @@ class LessonTableStage extends StatelessWidget {
             highlightHeroIndexes:
                 highlightHeroIndexes.isNotEmpty
                     ? highlightHeroIndexes
-                    : (cue == LessonTableCue.hero && heroFaceUp
-                        ? const {0, 1}
-                        : const <int>{}),
+                    : (cue == LessonTableCue.hero ? const {0, 1} : const <int>{}),
             dimmedHeroIndexes: dimmedHeroIndexes,
             seatOrderBadges: seatOrderBadges,
             cueSeatIndex: cueSeatIndex,
