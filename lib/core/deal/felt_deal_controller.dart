@@ -8,9 +8,10 @@ import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 
 /// Coordinates hole + board reveals so each card lands once, in order.
 ///
-/// Hole cards deal clockwise from the left of the button (two rounds), then
-/// board cards fill left-to-right up to [boardTarget]. Rebuilds with the same
-/// [epoch] only extend the board; they never replay holes or already-up cards.
+/// A new [epoch] deals only the street that is arriving: preflop deals holes,
+/// flop deals three board cards (holes already out), turn deals the fourth
+/// card, river deals the fifth. Rebuilds with the same [epoch] only extend
+/// the board; they never replay holes or already-up cards.
 class FeltDealController extends ChangeNotifier {
   /// Creates a deal controller. [onDealt] fires once per newly landed card.
   FeltDealController({this.onDealt});
@@ -37,8 +38,8 @@ class FeltDealController extends ChangeNotifier {
   /// How many hole cards are shown at [seatIndex] (0–2).
   int holeVisibleAt(int seatIndex) => _holeVisible[seatIndex] ?? 0;
 
-  /// Syncs targets for [epoch]. New epochs start a fresh deal; same epochs only
-  /// deal newly required board cards.
+  /// Syncs targets for [epoch]. New epochs deal the arriving street only;
+  /// same epochs only deal newly required board cards.
   void bind({
     required String epoch,
     required int seatCount,
@@ -54,8 +55,8 @@ class FeltDealController extends ChangeNotifier {
       _dealerIndex = dealerIndex;
       _holesWanted = dealHoles;
       _boardTarget = target;
-      _boardVisible = 0;
       _holeVisible.clear();
+      _seedAlreadyDealt(target);
       if (CardDealPace.instant) {
         _snapComplete();
       } else {
@@ -86,6 +87,23 @@ class FeltDealController extends ChangeNotifier {
         _snapComplete();
       } else {
         _kick();
+      }
+    }
+  }
+
+  /// Leaves earlier streets in place when a deal begins mid-hand.
+  ///
+  /// Flop (3): holes are already dealt. Turn (4): holes and flop. River (5):
+  /// holes, flop, and turn. Preflop (0) and partial boards deal from empty.
+  void _seedAlreadyDealt(int target) {
+    _boardVisible = switch (target) {
+      >= 5 => 4,
+      >= 4 => 3,
+      _ => 0,
+    };
+    if (_holesWanted && target >= 3) {
+      for (var seat = 0; seat < _seatCount; seat++) {
+        _holeVisible[seat] = 2;
       }
     }
   }

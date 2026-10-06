@@ -68,6 +68,52 @@ void main() {
     deal.dispose();
   });
 
+  testWidgets('turn start shows the flop already out, then the turn', (
+    tester,
+  ) async {
+    CardDealPace.debugInstant = false;
+    CardDealPace.testScale = 1;
+    final deal = FeltDealController();
+    final community = [
+      CardModel.fromCode('Ah'),
+      CardModel.fromCode('Kd'),
+      CardModel.fromCode('Qc'),
+      CardModel.fromCode('2s'),
+    ];
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: AnimatedBuilder(
+          animation: deal,
+          builder: (context, _) {
+            return CommunityCardsView(
+              community: community,
+              pot: 6,
+              street: Street.turn,
+              bigBlind: 2,
+              chipDisplayMode: ChipDisplayMode.dollars,
+              visibleCount: deal.boardVisible,
+            );
+          },
+        ),
+      ),
+    );
+
+    deal.bind(
+      epoch: 'turn-1',
+      seatCount: 2,
+      dealerIndex: 0,
+      boardTarget: 4,
+      dealHoles: true,
+    );
+    expect(deal.boardVisible, 3);
+
+    await tester.pump();
+    expect(find.byType(TableCard), findsNWidgets(4));
+
+    deal.dispose();
+  });
+
   testWidgets(
     'visibleCount null shows the board and out-of-range counts clamp',
     (tester) async {
