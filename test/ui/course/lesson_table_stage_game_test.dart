@@ -159,6 +159,31 @@ void main() {
     expect(lessonActionOrderSeatIndex('unknown'), isNull);
   });
 
+  test('late-seat order tables fold UTG and HJ before CO acts', () {
+    expect(lessonSeatOrderFoldedIndexes('act-02-01-02-guided-pre'), [0, 1]);
+    expect(
+      lessonSeatOrderFoldedIndexes('act-02-01-02-scaffolded-post'),
+      [0, 1, 2, 5],
+    );
+    expect(lessonSeatOrderFoldedIndexes('act-01-04-01-scaffolded-order'), isEmpty);
+
+    final pre = lessonTableStageGame(
+      villainCount: lessonBlindsVillainCount,
+      dealerIndex: lessonBlindsButtonIndex,
+      sbIndex: lessonBlindsSmallBlindIndex,
+      bbIndex: lessonBlindsBigBlindIndex,
+      seatNames: lessonActionOrderSeatNames,
+      foldedSeatIndexes: lessonSeatOrderFoldedIndexes('act-02-01-02-guided-pre'),
+    );
+    expect(pre.players[0].name, 'UTG');
+    expect(pre.players[0].folded, isTrue);
+    expect(pre.players[1].folded, isTrue);
+    expect(pre.players[0].lastActionLabel, 'FOLD');
+    expect(pre.players[1].lastActionLabel, 'FOLD');
+    expect(pre.players[2].folded, isFalse);
+    expect(pre.players[5].folded, isFalse);
+  });
+
   test('explicit blinds replace the clockwise default', () {
     final game = lessonTableStageGame(
       villainCount: lessonBlindsVillainCount,

@@ -76,6 +76,22 @@ int? lessonActionOrderSeatIndex(String label) {
   }
 }
 
+/// Seats that already folded on an action-order table, so remaining actors
+/// are obvious.
+///
+/// Guided preflop: an open folded through UTG and HJ, then CO / BTN / SB act
+/// (BB still to act). Scaffolded postflop: heads-up SB versus BTN.
+List<int> lessonSeatOrderFoldedIndexes(String activityId) {
+  switch (activityId) {
+    case 'act-02-01-02-guided-pre':
+      return const [0, 1];
+    case 'act-02-01-02-scaffolded-post':
+      return const [0, 1, 2, 5];
+    default:
+      return const [];
+  }
+}
+
 GameState lessonTableStageGame({
   List<String> heroCodes = const ['Ah', 'Kd'],
   List<String> boardCodes = const [],
@@ -842,6 +858,7 @@ class LessonSeatOrderSequenceTable extends StatelessWidget {
     required this.sequenceItems,
     required this.orderedIds,
     required this.onPick,
+    this.activityId = '',
     this.boardCodes = const [],
     this.enabled = true,
     this.showGuidance = true,
@@ -850,6 +867,9 @@ class LessonSeatOrderSequenceTable extends StatelessWidget {
   final List<({String id, String label})> sequenceItems;
   final List<String> orderedIds;
   final ValueChanged<String> onPick;
+
+  /// Course activity id; used to mark early folds on late-seat quizzes.
+  final String activityId;
   final List<String> boardCodes;
   final bool enabled;
   final bool showGuidance;
@@ -898,6 +918,7 @@ class LessonSeatOrderSequenceTable extends StatelessWidget {
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
       seatNames: lessonActionOrderSeatNames,
+      foldedSeatIndexes: lessonSeatOrderFoldedIndexes(activityId),
       seatOrderBadges: badges,
       cueSeatIndex: nextSeat,
       enabled: enabled,

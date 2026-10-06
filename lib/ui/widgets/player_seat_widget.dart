@@ -204,7 +204,9 @@ class PlayerSeatWidget extends StatelessWidget {
     final size = m.footprint;
     final faces = (showCards || revealHoleCards) && player.holeCards.isNotEmpty;
     final cards =
-        faces
+        player.folded
+            ? null
+            : faces
             ? _faceCards(m)
             : showHoleBacks
             ? _backCards(m)

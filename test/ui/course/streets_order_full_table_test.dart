@@ -400,4 +400,50 @@ void main() {
     expect(autoSubmits, 1);
     await _settleDealSfx(tester);
   });
+
+  testWidgets('guided late-seat order shows UTG and HJ folded', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-02-01-02-guided-pre',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 50,
+      accessibilityText: 'Order cutoff, button, then small blind preflop.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Order CO, BTN, SB to act preflop after an open folds to them.',
+      sequenceItems: const [
+        CourseChoice(id: 'ord-co', label: 'CO'),
+        CourseChoice(id: 'ord-btn', label: 'BTN'),
+        CourseChoice(id: 'ord-sb', label: 'SB'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      _frame(
+        OrderSequenceActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 2));
+
+    expect(find.byType(LessonSeatOrderSequenceTable), findsOneWidget);
+    expect(find.byKey(const ValueKey('act-0-FOLD')), findsOneWidget);
+    expect(find.byKey(const ValueKey('act-1-FOLD')), findsOneWidget);
+    expect(find.text('FOLD'), findsNWidgets(2));
+    expect(find.byKey(const ValueKey('seat-backs-0')), findsNothing);
+    expect(find.byKey(const ValueKey('seat-backs-1')), findsNothing);
+    expect(find.byKey(const ValueKey('seat-backs-2')), findsOneWidget);
+    expect(find.byKey(const ValueKey('act-2-FOLD')), findsNothing);
+    expect(find.byKey(const ValueKey('act-5-FOLD')), findsNothing);
+  });
 }

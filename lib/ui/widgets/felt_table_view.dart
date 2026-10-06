@@ -297,12 +297,12 @@ class _FeltTableViewState extends State<FeltTableView> {
               : widget.faceUpPlayerIds.contains(player.id);
       final showdown = game.isHandOver && !player.folded;
       final backs =
+          !player.folded &&
           !faceUp &&
           !(showdown && player.holeCards.isNotEmpty) &&
           (player.isHero
               ? widget.showHoleCardBacks
-              : (widget.showHoleCardBacks || f.opponentCards) &&
-                  !player.folded);
+              : (widget.showHoleCardBacks || f.opponentCards));
 
       final heroCardTaps =
           player.isHero && widget.onHeroCardTap != null && faceUp;
