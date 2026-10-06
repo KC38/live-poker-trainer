@@ -361,8 +361,8 @@ export function evaluateLifeAndAcceptance(options: {
   stage: ActivityStage;
 }): Pick<GradeOutcome, "accepted" | "lifeLost" | "masteryWeight"> {
   const accepted = ACCEPTED_GRADES.has(options.grade);
-  // Guided practice never costs a heart; every other miss does.
-  const lifeLost = !accepted && options.stage !== "guided";
+  // Any non-accepted grade costs a heart, including guided practice.
+  const lifeLost = !accepted;
   return {
     accepted,
     lifeLost,
