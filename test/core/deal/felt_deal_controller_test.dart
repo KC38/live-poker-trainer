@@ -43,12 +43,22 @@ void main() {
         epoch: 'hand-1',
         seatCount: 3,
         dealerIndex: 0,
+        boardTarget: 0,
+        dealHoles: true,
+      );
+      async.flushMicrotasks();
+      for (var i = 0; i < 5; i++) {
+        async.elapse(CardDealPace.dealCard);
+      }
+      deal.bind(
+        epoch: 'hand-1',
+        seatCount: 3,
+        dealerIndex: 0,
         boardTarget: 3,
         dealHoles: true,
       );
       async.flushMicrotasks();
-
-      for (var i = 0; i < 8; i++) {
+      for (var i = 0; i < 3; i++) {
         async.elapse(CardDealPace.dealCard);
       }
 
@@ -193,7 +203,7 @@ void main() {
         epoch: 'hand-a',
         seatCount: 2,
         dealerIndex: 0,
-        boardTarget: 3,
+        boardTarget: 0,
         dealHoles: true,
       );
       async.flushMicrotasks();
@@ -204,7 +214,7 @@ void main() {
         epoch: 'hand-b',
         seatCount: 2,
         dealerIndex: 0,
-        boardTarget: 1,
+        boardTarget: 0,
         dealHoles: true,
       );
       expect(deal.epoch, 'hand-b');
@@ -227,10 +237,10 @@ void main() {
       }
       expect(deal.holeVisibleAt(0), 2);
       expect(deal.holeVisibleAt(1), 2);
-      expect(deal.boardVisible, 1);
-      // One card from hand-a, then five from hand-b. The abandoned
-      // timer must not keep dealing hand-a's flop.
-      expect(sounds, 6);
+      expect(deal.boardVisible, 0);
+      // One card from hand-a, then four hole cards from hand-b. The
+      // abandoned timer must not keep dealing hand-a's remaining holes.
+      expect(sounds, 5);
       deal.dispose();
     });
   });
@@ -275,7 +285,7 @@ void main() {
         epoch: 'hand-dispose',
         seatCount: 2,
         dealerIndex: 0,
-        boardTarget: 5,
+        boardTarget: 0,
         dealHoles: true,
       );
       async.flushMicrotasks();
@@ -304,11 +314,12 @@ void main() {
         dealHoles: true,
       );
       async.flushMicrotasks();
-      expect(deal.boardVisible, 1);
+      // River start: flop and turn are already out; only the fifth card deals.
+      expect(deal.boardVisible, 5);
       expect(deal.holeVisibleAt(0), 0);
       async.elapse(CardDealPace.dealCard * 6);
       expect(deal.boardVisible, 5);
-      expect(sounds, 5);
+      expect(sounds, 1);
 
       deal.bind(
         epoch: 'hand-none',
@@ -320,7 +331,7 @@ void main() {
       async.flushMicrotasks();
       async.elapse(CardDealPace.dealCard * 2);
       expect(deal.boardVisible, 0);
-      expect(sounds, 5);
+      expect(sounds, 1);
       deal.dispose();
     });
   });
@@ -435,5 +446,108 @@ void main() {
     expect(deal.holeVisibleAt(0), 2);
     expect(deal.boardVisible, 4);
     deal.dispose();
+  });
+
+  test('a flop start deals the board only; holes are already out', () {
+    CardDealPace.debugInstant = false;
+    fakeAsync((async) {
+      var sounds = 0;
+      final deal = FeltDealController(onDealt: () => sounds++);
+      deal.bind(
+        epoch: 'lesson-flop',
+        seatCount: 2,
+        dealerIndex: 0,
+        boardTarget: 3,
+        dealHoles: true,
+      );
+      expect(deal.holeVisibleAt(0), 2);
+      expect(deal.holeVisibleAt(1), 2);
+      expect(deal.boardVisible, 0);
+
+      async.flushMicrotasks();
+      expect(deal.boardVisible, 1);
+      expect(sounds, 1);
+      async.elapse(CardDealPace.dealCard);
+      expect(deal.boardVisible, 2);
+      async.elapse(CardDealPace.dealCard);
+      expect(deal.boardVisible, 3);
+      expect(deal.holeVisibleAt(0), 2);
+      expect(sounds, 3);
+      deal.dispose();
+    });
+  });
+
+  test('a turn start deals only the turn card', () {
+    CardDealPace.debugInstant = false;
+    fakeAsync((async) {
+      var sounds = 0;
+      final deal = FeltDealController(onDealt: () => sounds++);
+      deal.bind(
+        epoch: 'lesson-turn',
+        seatCount: 2,
+        dealerIndex: 0,
+        boardTarget: 4,
+        dealHoles: true,
+      );
+      expect(deal.holeVisibleAt(0), 2);
+      expect(deal.boardVisible, 3);
+
+      async.flushMicrotasks();
+      expect(deal.boardVisible, 4);
+      expect(sounds, 1);
+      async.elapse(CardDealPace.dealCard);
+      expect(deal.boardVisible, 4);
+      expect(sounds, 1);
+      deal.dispose();
+    });
+  });
+
+  test('a river start deals only the river card', () {
+    CardDealPace.debugInstant = false;
+    fakeAsync((async) {
+      var sounds = 0;
+      final deal = FeltDealController(onDealt: () => sounds++);
+      deal.bind(
+        epoch: 'lesson-river',
+        seatCount: 2,
+        dealerIndex: 0,
+        boardTarget: 5,
+        dealHoles: true,
+      );
+      expect(deal.holeVisibleAt(1), 2);
+      expect(deal.boardVisible, 4);
+
+      async.flushMicrotasks();
+      expect(deal.boardVisible, 5);
+      expect(sounds, 1);
+      deal.dispose();
+    });
+  });
+
+  test('a preflop start deals holes and no board', () {
+    CardDealPace.debugInstant = false;
+    fakeAsync((async) {
+      var sounds = 0;
+      final deal = FeltDealController(onDealt: () => sounds++);
+      deal.bind(
+        epoch: 'lesson-preflop',
+        seatCount: 2,
+        dealerIndex: 0,
+        boardTarget: 0,
+        dealHoles: true,
+      );
+      expect(deal.holeVisibleAt(0), 0);
+      expect(deal.boardVisible, 0);
+
+      async.flushMicrotasks();
+      for (var i = 0; i < 4; i++) {
+        async.elapse(CardDealPace.dealCard);
+      }
+      expect(deal.holeVisibleAt(0), 2);
+      expect(deal.holeVisibleAt(1), 2);
+      expect(deal.boardVisible, 0);
+      expect(sounds, 4);
+      deal.dispose();
+    });
   });
 }
