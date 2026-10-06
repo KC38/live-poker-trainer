@@ -234,9 +234,13 @@ String lessonTapInstruction(CourseActivity activity, {int handStepIndex = 0}) {
     case ActivityRenderer.compareRank:
       return 'Tap them in order.';
     default:
-      return _seatAnswerActivityIds.contains(activity.id)
-          ? 'Tap that seat on the table.'
-          : 'Tap the best answer.';
+      if (_seatAnswerActivityIds.contains(activity.id)) {
+        return 'Tap that seat on the table.';
+      }
+      if (_dockAnswerActivityIds.contains(activity.id)) {
+        return _dockInstruction(activity.choices);
+      }
+      return 'Tap the best answer.';
   }
 }
 
@@ -245,6 +249,11 @@ const Set<String> _seatAnswerActivityIds = {
   'act-02-01-02-checkpoint-full',
   'act-02-07-02-jump-pos',
   'act-03-01-01-scaffolded',
+};
+
+/// Questions answered on the choice dock under the full table.
+const Set<String> _dockAnswerActivityIds = {
+  'act-02-01-02-unguided-wait',
 };
 
 String _dockInstruction(List<CourseChoice> choices) {

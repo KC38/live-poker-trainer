@@ -1768,6 +1768,48 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                   ),
                 )
               else if (LessonFrameScope.maybeOf(context) != null &&
+                  widget.activity.id == 'act-02-01-02-unguided-wait')
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: LessonTableStage(
+                          heroCodes:
+                              scene.heroCodes.isEmpty
+                                  ? const ['Ah', 'Kd']
+                                  : scene.heroCodes,
+                          villainCount: lessonBlindsVillainCount,
+                          dealerIndex: 0,
+                          heroFaceUp: true,
+                          seatNames: lessonHeroOnButtonSeatNames,
+                          // Scene: action is on UTG. Not an answer cue.
+                          activeSeatIndex: lessonHeroOnButtonUtgIndex,
+                          enabled: !locked,
+                        ),
+                      ),
+                      _LessonChoiceStack(
+                        choices: shuffledLessonChoices(
+                          widget.activity.choices,
+                          activityId: widget.activity.id,
+                          generation: widget.controller.bindGeneration,
+                        ),
+                        selectedId: selected,
+                        locked: locked,
+                        pulseChoiceId: _framedDockPulseChoiceId(
+                          locked: locked,
+                          selected: selected,
+                        ),
+                        onSelect:
+                            (id) => widget.controller.selectChoice(
+                              id,
+                              autoSubmit: true,
+                            ),
+                      ),
+                    ],
+                  ),
+                )
+              else if (LessonFrameScope.maybeOf(context) != null &&
                   (widget.activity.id.startsWith('act-02-01-01-') ||
                       widget.activity.id == 'act-02-01-02-checkpoint-full' ||
                       widget.activity.id == 'act-02-07-02-jump-pos' ||
