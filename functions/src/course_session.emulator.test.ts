@@ -118,7 +118,7 @@ describe("course session integration", () => {
     expect(ledger.size).toBe(1);
   });
 
-  test("questionable answers never lose lives; clear_mistake does when eligible", async () => {
+  test("non-accepted grades lose a heart on guided, scaffolded, and unguided", async () => {
     await seedFlags();
     await initializeCourseProfileForUser({
       uid: "life-user",
@@ -145,7 +145,7 @@ describe("course session integration", () => {
       },
       db,
     });
-    const questionable = await submitCourseStepForUser({
+    const guidedMiss = await submitCourseStepForUser({
       uid: "life-user",
       raw: {
         clientVersion: "2.0.0",
@@ -156,10 +156,11 @@ describe("course session integration", () => {
       },
       db,
     });
-    expect(questionable.lifeLost).toBe(false);
-    expect(questionable.livesRemaining).toBe(5);
+    expect(guidedMiss.grade).toBe("clear_mistake");
+    expect(guidedMiss.lifeLost).toBe(true);
+    expect(guidedMiss.livesRemaining).toBe(4);
 
-    // Accept guided, then questionable scaffolded (costs a heart).
+    // Accept guided, then questionable scaffolded (costs another heart).
     await submitCourseStepForUser({
       uid: "life-user",
       raw: {
@@ -184,7 +185,7 @@ describe("course session integration", () => {
     });
     expect(scaffoldedQuestionable.grade).toBe("questionable");
     expect(scaffoldedQuestionable.lifeLost).toBe(true);
-    expect(scaffoldedQuestionable.livesRemaining).toBe(4);
+    expect(scaffoldedQuestionable.livesRemaining).toBe(3);
     await submitCourseStepForUser({
       uid: "life-user",
       raw: {
@@ -209,10 +210,10 @@ describe("course session integration", () => {
     });
     expect(clearMistake.grade).toBe("clear_mistake");
     expect(clearMistake.lifeLost).toBe(true);
-    expect(clearMistake.livesRemaining).toBe(3);
+    expect(clearMistake.livesRemaining).toBe(2);
 
     const profileAfterLoss = await db.doc("users/life-user/course/main").get();
-    expect(profileAfterLoss.data()?.livesRemaining).toBe(3);
+    expect(profileAfterLoss.data()?.livesRemaining).toBe(2);
   });
 
   test("new lesson starts carry profile hearts (not a fresh set)", async () => {
