@@ -46,9 +46,13 @@ class PokerActionSizingActivity extends StatelessWidget {
       builder: (context, _) {
         final selected = controller.draft.choiceId;
         final locked = controller.submitting || controller.lastResult != null;
-        final feltFirstCoach = _feltFirstCoach(activity, spot);
+        final feltFirstCoach = alignLessonActionCopy(
+          activity,
+          _feltFirstCoach(activity, spot) ?? '',
+          generation: controller.bindGeneration,
+        );
         final fallback =
-            feltFirstCoach ??
+            (feltFirstCoach.isNotEmpty ? feltFirstCoach : null) ??
             (activity.id == 'act-01-06-01-unguided-lab'
                 ? 'Big blind vs a button open — pick Fold, Call, or Jam.'
                 : spot?.identifyUnavailable == true
@@ -70,7 +74,11 @@ class PokerActionSizingActivity extends StatelessWidget {
                   activity: activity,
                   fallback: fallback,
                 );
-        final coach = resolved.coach;
+        final coach = alignLessonActionCopy(
+          activity,
+          resolved.coach,
+          generation: controller.bindGeneration,
+        );
         final showPrompt = resolved.showPrompt;
         final showCoach =
             !locked &&
