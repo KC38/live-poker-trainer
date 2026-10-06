@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -770,19 +771,29 @@ class _LessonBlindsClockwiseTableState
       widget.onMiss?.call();
       return;
     }
+    consumeLessonSequentialSoftPulse(context);
     setState(() => _step += 1);
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: _order.length - _step,
+    );
     if (_step >= _order.length) widget.onComplete!.call();
   }
 
   @override
   Widget build(BuildContext context) {
     final teaching = widget.enabled && _step < _order.length;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: teaching ? _order.length - _step : 0,
+    );
+    final showCue = teaching && LessonSoftPulseScope.isAllowed(context);
     return LessonTableStage(
       villainCount: lessonBlindsVillainCount,
       dealerIndex: lessonBlindsButtonIndex,
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
-      cueSeatIndex: teaching ? _order[_step] : null,
+      cueSeatIndex: showCue ? _order[_step] : null,
       enabled: teaching,
       onSeatIndexTap: _tap,
     );
@@ -830,20 +841,30 @@ class _LessonPreflopOrderTableState extends State<LessonPreflopOrderTable> {
       widget.onMiss?.call();
       return;
     }
+    consumeLessonSequentialSoftPulse(context);
     setState(() => _step += 1);
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: _order.length - _step,
+    );
     if (_step >= _order.length) widget.onComplete!.call();
   }
 
   @override
   Widget build(BuildContext context) {
     final teaching = widget.enabled && _step < _order.length;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: teaching ? _order.length - _step : 0,
+    );
+    final showCue = teaching && LessonSoftPulseScope.isAllowed(context);
     return LessonTableStage(
       villainCount: lessonBlindsVillainCount,
       dealerIndex: lessonBlindsButtonIndex,
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
       seatNames: lessonActionOrderSeatNames,
-      cueSeatIndex: teaching ? _order[_step] : null,
+      cueSeatIndex: showCue ? _order[_step] : null,
       enabled: teaching,
       onSeatIndexTap: _tap,
     );
@@ -889,10 +910,15 @@ class LessonSeatOrderSequenceTable extends StatelessWidget {
     return null;
   }
 
-  void _tap(int seatIndex) {
+  void _tap(BuildContext context, int seatIndex) {
     if (!enabled) return;
     final id = _idForSeatIndex(seatIndex);
     if (id == null || orderedIds.contains(id)) return;
+    consumeLessonSequentialSoftPulse(context);
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: sequenceItems.length - orderedIds.length - 1,
+    );
     onPick(id);
   }
 
@@ -903,10 +929,16 @@ class LessonSeatOrderSequenceTable extends StatelessWidget {
       final seat = _seatIndexForId(orderedIds[order]);
       if (seat != null) badges[seat] = order + 1;
     }
+    final remaining = sequenceItems.length - orderedIds.length;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: remaining,
+    );
     int? nextSeat;
     if (showGuidance &&
+        LessonSoftPulseScope.isAllowed(context) &&
         enabled &&
-        orderedIds.length < sequenceItems.length) {
+        remaining > 0) {
       nextSeat = _seatIndexForId(sequenceItems[orderedIds.length].id);
     }
     return LessonTableStage(
@@ -922,7 +954,7 @@ class LessonSeatOrderSequenceTable extends StatelessWidget {
       seatOrderBadges: badges,
       cueSeatIndex: nextSeat,
       enabled: enabled,
-      onSeatIndexTap: _tap,
+      onSeatIndexTap: (index) => _tap(context, index),
     );
   }
 }
@@ -1549,7 +1581,7 @@ class LessonShowdownOrderTable extends StatelessWidget {
     return spot.seatIds[index];
   }
 
-  void _tap(int seatIndex) {
+  void _tap(BuildContext context, int seatIndex) {
     if (!enabled) return;
     final id = _idForSeatIndex(seatIndex);
     if (id == null || orderedIds.contains(id)) return;
@@ -1561,6 +1593,11 @@ class LessonShowdownOrderTable extends StatelessWidget {
         return;
       }
     }
+    consumeLessonSequentialSoftPulse(context);
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: spot.correctOrder.length - orderedIds.length - 1,
+    );
     onPick(id);
   }
 
@@ -1571,10 +1608,16 @@ class LessonShowdownOrderTable extends StatelessWidget {
       final seat = _seatIndexForId(orderedIds[order]);
       if (seat != null) badges[seat] = order + 1;
     }
+    final remaining = spot.correctOrder.length - orderedIds.length;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: remaining,
+    );
     int? nextSeat;
     if (showGuidance &&
+        LessonSoftPulseScope.isAllowed(context) &&
         enabled &&
-        orderedIds.length < spot.correctOrder.length) {
+        remaining > 0) {
       nextSeat = _seatIndexForId(spot.correctOrder[orderedIds.length]);
     }
     return LessonTableStage(
@@ -1589,7 +1632,7 @@ class LessonShowdownOrderTable extends StatelessWidget {
       seatOrderBadges: badges,
       cue: nextSeat == 0 ? LessonTableCue.hero : LessonTableCue.none,
       cueSeatIndex: nextSeat != null && nextSeat > 0 ? nextSeat : null,
-      onSeatIndexTap: _tap,
+      onSeatIndexTap: (index) => _tap(context, index),
     );
   }
 }

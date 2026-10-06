@@ -2,13 +2,16 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 void main() {
   testWidgets(
@@ -108,6 +111,105 @@ void main() {
       expect(controller.canRequestHint, isFalse);
 
       controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'showdown SoftPulse only You, then stays quiet until Hint',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final activity = CourseActivity(
+        id: 'act-01-02-01-explain-ladder',
+        order: 1,
+        stage: ActivityStage.explain,
+        renderer: ActivityRenderer.coachDialogue,
+        estimatedSeconds: 40,
+        accessibilityText:
+            'Showdown — tap You (high card), Sam (pair), then Jo (flush).',
+        acceptedGrades: const [SoftGrade.recommended],
+      );
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: Scaffold(
+              body: TableFeaturesScope(
+                features: TableFeatures.forLessonId(
+                  'lesson-01-02-01-hand-ranks',
+                ),
+                child: LessonFrameScope(
+                  onLocalMiss: (_) {},
+                  activityController: controller,
+                  child: AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, _) {
+                      return LessonSoftPulseScope(
+                        allowed: controller.showTargetCue,
+                        child: LessonShowdownOrderExplainTable(
+                          activityId: activity.id,
+                          showGuidance: controller.showTargetCue,
+                          onComplete: () {},
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(controller.showTargetCue, isTrue);
+      expect(controller.canRequestHint, isTrue);
+      LessonTableStage stage() => tester.widget<LessonTableStage>(
+        find.byType(LessonTableStage),
+      );
+      final table = tester.widget<LessonShowdownOrderTable>(
+        find.byType(LessonShowdownOrderTable),
+      );
+      final firstId = table.spot.correctOrder.first;
+      final firstSeat = table.spot.seatIds.indexOf(firstId);
+      expect(firstSeat, greaterThanOrEqualTo(0));
+      if (firstSeat == 0) {
+        expect(stage().cue, LessonTableCue.hero);
+        expect(stage().cueSeatIndex, isNull);
+      } else {
+        expect(stage().cue, LessonTableCue.none);
+        expect(stage().cueSeatIndex, firstSeat);
+      }
+
+      final firstKey = firstSeat == 0
+          ? const ValueKey<String>('lesson-seat-hero')
+          : ValueKey<String>('lesson-seat-$firstSeat');
+      await tester.tap(find.byKey(firstKey));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 20));
+
+      expect(controller.showTargetCue, isFalse);
+      expect(controller.canRequestHint, isTrue);
+      expect(stage().cue, LessonTableCue.none);
+      expect(stage().cueSeatIndex, isNull);
+
+      controller.revealHint();
+      await tester.pump();
+      expect(controller.showTargetCue, isTrue);
+      final nextId = table.spot.correctOrder[1];
+      final nextSeat = table.spot.seatIds.indexOf(nextId);
+      if (nextSeat == 0) {
+        expect(stage().cue, LessonTableCue.hero);
+        expect(stage().cueSeatIndex, isNull);
+      } else {
+        expect(stage().cue, LessonTableCue.none);
+        expect(stage().cueSeatIndex, nextSeat);
+      }
     },
   );
 }
