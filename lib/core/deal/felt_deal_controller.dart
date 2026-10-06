@@ -41,6 +41,15 @@ class FeltDealController extends ChangeNotifier {
   /// True when every requested hole and board card has landed.
   bool get isComplete => _isComplete;
 
+  /// True when every requested hole card has landed (board may still be out).
+  bool get holesComplete {
+    if (!_holesWanted) return true;
+    for (var seat = 0; seat < _seatCount; seat++) {
+      if (holeVisibleAt(seat) < 2) return false;
+    }
+    return true;
+  }
+
   /// Syncs targets for [epoch]. New epochs deal the arriving street only;
   /// same epochs only deal newly required board cards.
   void bind({
@@ -131,14 +140,7 @@ class FeltDealController extends ChangeNotifier {
     scheduleMicrotask(_advance);
   }
 
-  bool get _isComplete {
-    if (_holesWanted) {
-      for (var seat = 0; seat < _seatCount; seat++) {
-        if (holeVisibleAt(seat) < 2) return false;
-      }
-    }
-    return _boardVisible >= _boardTarget;
-  }
+  bool get _isComplete => holesComplete && _boardVisible >= _boardTarget;
 
   /// Next hole seat to receive a card, or null when holes are done.
   ({int seat, int cardIndex})? _nextHole() {
