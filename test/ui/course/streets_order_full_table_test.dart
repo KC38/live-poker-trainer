@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/audio/sound_service.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
@@ -18,6 +19,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
+import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 Widget _frame(Widget child) {
@@ -445,5 +447,68 @@ void main() {
     expect(find.byKey(const ValueKey('seat-backs-2')), findsOneWidget);
     expect(find.byKey(const ValueKey('act-2-FOLD')), findsNothing);
     expect(find.byKey(const ValueKey('act-5-FOLD')), findsNothing);
+  });
+
+  testWidgets('street chips extend the board without redealing holes', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    CardDealPace.debugInstant = false;
+    CardDealPace.testScale = 1;
+    addTearDown(() {
+      CardDealPace.debugInstant = null;
+      CardDealPace.testScale = 1;
+    });
+
+    await tester.pumpWidget(
+      _frame(
+        LessonScreenLayout(
+          progress: 0.2,
+          livesRemaining: 4,
+          livesMax: 5,
+          onClose: () {},
+          speech: 'Four streets: preflop, flop, turn, river. Tap each street.',
+          expression: LessonMascotExpression.thinking,
+          stage: LessonStreetsExplainTable(
+            onAllStreetsTapped: () {},
+          ),
+          onUndo: () {},
+          onRedo: () {},
+          onHint: () {},
+          canUndo: false,
+          canRedo: false,
+          canHint: true,
+        ),
+      ),
+    );
+    await tester.pump();
+    // Hole cards land first (two seats × two cards).
+    await tester.pump(CardDealPace.dealCard * 8);
+
+    expect(find.byKey(const ValueKey<String>('dealt-hole-0-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('dealt-hole-0-1')), findsOneWidget);
+    expect(find.byType(TableCard), findsNWidgets(2));
+
+    for (final title in const ['PREFLOP', 'FLOP', 'TURN', 'RIVER']) {
+      await tester.tap(find.text(title));
+      await tester.pump();
+      // Holes must still be up — a new deal epoch would hide them first.
+      expect(
+        find.byKey(const ValueKey<String>('dealt-hole-0-0')),
+        findsOneWidget,
+        reason: 'holes vanished after $title',
+      );
+      expect(
+        find.byKey(const ValueKey<String>('dealt-hole-0-1')),
+        findsOneWidget,
+        reason: 'holes vanished after $title',
+      );
+      await tester.pump(CardDealPace.dealCard * 5);
+    }
+
+    expect(find.byType(TableCard), findsNWidgets(7));
+    await _settleDealSfx(tester);
   });
 }

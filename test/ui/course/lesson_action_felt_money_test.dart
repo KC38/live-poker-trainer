@@ -479,6 +479,8 @@ void main() {
 
     expect(find.text('POT \$15'), findsOneWidget);
     expect(find.byType(StreetBetPill), findsNWidgets(2));
+    expect(find.byKey(const ValueKey<String>('dealt-hole-0-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('dealt-hole-0-1')), findsOneWidget);
     controller.dispose();
   });
 
@@ -504,6 +506,8 @@ void main() {
 
     expect(find.text('POT \$10'), findsOneWidget);
     expect(find.byType(StreetBetPill), findsNothing);
+    expect(find.byKey(const ValueKey<String>('dealt-hole-0-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('dealt-hole-0-1')), findsOneWidget);
 
     await tester.tap(find.text('BET 5'));
     await tester.pumpAndSettle();
@@ -511,6 +515,8 @@ void main() {
     expect(find.text('POT \$15'), findsOneWidget);
     expect(find.byType(StreetBetPill), findsOneWidget);
     expect(find.text('\$5'), findsWidgets);
+    expect(find.byKey(const ValueKey<String>('dealt-hole-0-0')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('dealt-hole-0-1')), findsOneWidget);
     controller.dispose();
   });
 }

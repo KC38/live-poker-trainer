@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 void main() {
@@ -118,7 +119,7 @@ void main() {
     expect(ring.bottom, closeTo(child.bottom + pad.bottom, 0.5));
   });
 
-  testWidgets('inactive felt SoftPulse draws the child only', (tester) async {
+  testWidgets('inactive felt SoftPulse keeps the child mounted', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(
@@ -138,6 +139,47 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
     expect(find.byKey(const ValueKey<String>('pulse-child')), findsOneWidget);
+    final ring = tester.widget<DecoratedBox>(
+      find.byKey(const ValueKey<String>('glow-highlight-ring')),
+    );
+    expect(ring.decoration, const BoxDecoration());
+  });
+
+  testWidgets('toggling felt SoftPulse does not remount the child', (
+    tester,
+  ) async {
+    var mounts = 0;
+
+    Widget host(bool active, {bool allowed = true}) {
+      return MaterialApp(
+        home: Scaffold(
+          body: LessonSoftPulseScope(
+            allowed: allowed,
+            child: GlowHighlight(
+              active: active,
+              reserveLayout: false,
+              child: _MountProbe(onMount: () => mounts += 1),
+            ),
+          ),
+        ),
+      );
+    }
+
+    await tester.pumpWidget(host(true));
+    await tester.pump();
+    expect(mounts, 1);
+
+    await tester.pumpWidget(host(false));
+    await tester.pump();
+    expect(mounts, 1);
+
+    await tester.pumpWidget(host(true, allowed: false));
+    await tester.pump();
+    expect(mounts, 1);
+
+    await tester.pumpWidget(host(true));
+    await tester.pump();
+    expect(mounts, 1);
   });
 
   testWidgets('GlowHighlight wraps arbitrary children for reuse', (tester) async {
@@ -162,4 +204,26 @@ void main() {
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
     expect(find.byKey(const ValueKey<String>('group-child')), findsOneWidget);
   });
+}
+
+class _MountProbe extends StatefulWidget {
+  const _MountProbe({required this.onMount});
+
+  final VoidCallback onMount;
+
+  @override
+  State<_MountProbe> createState() => _MountProbeState();
+}
+
+class _MountProbeState extends State<_MountProbe> {
+  @override
+  void initState() {
+    super.initState();
+    widget.onMount();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(width: 12, height: 12);
+  }
 }
