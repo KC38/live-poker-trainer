@@ -341,6 +341,7 @@ class _BoardCardTarget extends StatelessWidget {
       reserveLayout: false,
       borderRadius: width * 0.12,
       child: DealtCardReveal(
+        key: ValueKey<String>('dealt-board-$index'),
         // FeltDealController owns deal SFX + order.
         playSound: false,
         child: TableCard(

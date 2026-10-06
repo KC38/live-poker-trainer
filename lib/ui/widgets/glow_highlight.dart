@@ -9,8 +9,9 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dar
 ///
 /// This is the single highlight style used across the app — seats, hole
 /// cards, board cards (individually or as a group), and demo tiles. Pass
-/// the widgets to emphasize as [child]; inactive draws [child] untouched
-/// when [reserveLayout] is false.
+/// the widgets to emphasize as [child]; inactive hides the ring. Felt
+/// seats and cards keep a stable wrapper so toggling SoftPulse does not
+/// remount dealt cards.
 ///
 /// There are no arrows. Optional breathing animation matches the felt cue
 /// pulse; set [animated] false for a static selected ring.
@@ -175,17 +176,16 @@ class _GlowHighlightState extends State<GlowHighlight>
       );
     }
 
-    if (!active) return widget.child;
-
     // Felt seats / cards: keep the child's footprint; ring paints outside.
+    // Always use this tree — swapping to a bare [child] when inactive
+    // remounted [DealtCardReveal] and replayed the deal on every tap.
     return AnimatedBuilder(
       animation: _motion,
       builder: (context, child) {
         final t = widget.animated ? _beat.value : 0.55;
         return Transform.scale(
-          scale: widget.animated ? 1 + (0.05 * t) : 1,
+          scale: widget.animated && active ? 1 + (0.05 * t) : 1,
           child: Stack(
-            key: const ValueKey<String>('glow-highlight'),
             clipBehavior: Clip.none,
             children: [
               Positioned(
@@ -193,9 +193,16 @@ class _GlowHighlightState extends State<GlowHighlight>
                 top: -pad.top,
                 right: -pad.right,
                 bottom: -pad.bottom,
-                child: DecoratedBox(
-                  key: const ValueKey<String>('glow-highlight-ring'),
-                  decoration: _ringDecoration(t, radius),
+                child: KeyedSubtree(
+                  key: active
+                      ? const ValueKey<String>('glow-highlight')
+                      : const ValueKey<String>('glow-highlight-off'),
+                  child: DecoratedBox(
+                    key: const ValueKey<String>('glow-highlight-ring'),
+                    decoration: active
+                        ? _ringDecoration(t, radius)
+                        : const BoxDecoration(),
+                  ),
                 ),
               ),
               child!,
