@@ -38,9 +38,11 @@ class SoundService with WidgetsBindingObserver {
   AudioSource? _bgmSource;
   SoundHandle? _bgmHandle;
   final Map<SfxKind, AudioSource> _sfxSources = {};
+  final List<AudioSource> _dealSources = [];
 
   DateTime? _dealBurstAt;
   Duration _dealBurstCursor = Duration.zero;
+  var _dealCursor = 0;
 
   /// Spacing between overlapping hole/board deal voices in one burst.
   static const Duration dealStagger = Duration(milliseconds: 70);
@@ -48,9 +50,23 @@ class SoundService with WidgetsBindingObserver {
   /// New cards after this gap start a fresh deal burst.
   static const Duration dealBurstWindow = Duration(milliseconds: 350);
 
+  /// Ordered Freesound deal hits (`deal_01.wav` … `deal_08.wav`).
+  static const int dealVariationCount = 8;
+
   /// SFX requested through [playSfx], including the silent test service.
   @visibleForTesting
   final List<SfxKind> played = [];
+
+  /// 0-based deal clip indexes played by [deal], including the silent service.
+  @visibleForTesting
+  final List<int> dealVariationIndexes = [];
+
+  /// Asset path for deal variation [index] (`0` → `deal_01.wav`).
+  @visibleForTesting
+  static String dealAssetFor(int index) {
+    final n = (index + 1).toString().padLeft(2, '0');
+    return 'assets/sounds/deal_$n.wav';
+  }
 
   /// Serializes BGM transitions so fades and pauses cannot interleave.
   Future<void> _bgmOps = Future<void>.value();
@@ -111,15 +127,23 @@ class SoundService with WidgetsBindingObserver {
       await _soloud.init(bufferSize: 1024);
       _bgmSource = await _soloud.loadAsset(bgmAsset);
       for (final kind in SfxKind.values) {
+        if (kind == SfxKind.deal) continue;
         _sfxSources[kind] = await _soloud.loadAsset(
           'assets/sounds/${kind.fileName}',
         );
       }
+      _dealSources
+        ..clear()
+        ..addAll([
+          for (var i = 0; i < dealVariationCount; i++)
+            await _soloud.loadAsset(dealAssetFor(i)),
+        ]);
       return true;
     } catch (error) {
       debugPrint('SoundService engine start failed: $error');
       _bgmSource = null;
       _sfxSources.clear();
+      _dealSources.clear();
       return false;
     }
   }
@@ -277,6 +301,18 @@ class SoundService with WidgetsBindingObserver {
     _dealBurstCursor = Duration.zero;
   }
 
+  /// Starts a new deal pass at `deal_01`. Later cards loop `deal_02`–`deal_08`.
+  void resetDealSequence() {
+    _dealCursor = 0;
+  }
+
+  int _takeDealVariationIndex() {
+    final i = _dealCursor;
+    _dealCursor++;
+    if (i == 0) return 0;
+    return 1 + (i - 1) % (dealVariationCount - 1);
+  }
+
   /// Plays the deal SFX after a short offset so a multi-card burst does not
   /// pile up as one click.
   void dealStaggered() {
@@ -290,7 +326,20 @@ class SoundService with WidgetsBindingObserver {
     });
   }
 
-  Future<void> deal() => playSfx(SfxKind.deal);
+  Future<void> deal() async {
+    final index = _takeDealVariationIndex();
+    dealVariationIndexes.add(index);
+    played.add(SfxKind.deal);
+    if (!_bindPlatform || !sfxEnabled || !_unlocked) return;
+    if (!await ensureEngine()) return;
+    if (index < 0 || index >= _dealSources.length) return;
+    try {
+      _soloud.play(_dealSources[index], volume: _sfxVolume);
+    } catch (error) {
+      debugPrint('SoundService.deal(variation=$index) failed: $error');
+    }
+  }
+
   Future<void> chip() => playSfx(SfxKind.chip);
   Future<void> knock() => playSfx(SfxKind.knock);
   Future<void> fold() => playSfx(SfxKind.fold);
@@ -312,7 +361,7 @@ class SoundService with WidgetsBindingObserver {
 
 /// Bundled SFX asset kinds.
 enum SfxKind {
-  deal('deal.wav'),
+  deal('deal_01.wav'),
   chip('chip.wav'),
   knock('knock.wav'),
   fold('fold.wav'),

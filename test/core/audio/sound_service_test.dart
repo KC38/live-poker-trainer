@@ -110,4 +110,17 @@ void main() {
       await sound.dispose();
     },
   );
+
+  test('deal plays first clip once then loops variations 2-8', () async {
+    final sound = SoundService.silent();
+    await sound.unlock();
+    for (var i = 0; i < 10; i++) {
+      await sound.deal();
+    }
+    expect(sound.dealVariationIndexes, [0, 1, 2, 3, 4, 5, 6, 7, 1, 2]);
+    sound.resetDealSequence();
+    await sound.deal();
+    expect(sound.dealVariationIndexes.last, 0);
+    await sound.dispose();
+  });
 }

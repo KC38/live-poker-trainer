@@ -11,7 +11,10 @@ class CardDealPace {
   static double testScale = 1;
 
   /// Gap between one card and the next in a deal sequence.
-  static const int dealCardMs = 150;
+  ///
+  /// Long enough that each deal clip finishes with a beat of silence, like a
+  /// live dealer placing cards one at a time.
+  static const int dealCardMs = 420;
 
   /// When set, overrides [instant] (widget tests that assert real pacing).
   @visibleForTesting
@@ -31,9 +34,7 @@ class CardDealPace {
 
   static Duration _scaled(int milliseconds) {
     if (instant) return Duration.zero;
-    return Duration(
-      microseconds: (milliseconds * 1000 * testScale).round(),
-    );
+    return Duration(microseconds: (milliseconds * 1000 * testScale).round());
   }
 
   /// Delay before the next card in a sequential deal.

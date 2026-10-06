@@ -187,6 +187,7 @@ class FeltTableView extends StatefulWidget {
 
 class _FeltTableViewState extends State<FeltTableView> {
   late final FeltDealController _deal;
+  String? _soundEpoch;
 
   @override
   void initState() {
@@ -219,11 +220,26 @@ class _FeltTableViewState extends State<FeltTableView> {
     }
   }
 
+  void _resetDealSound() {
+    try {
+      ProviderScope.containerOf(
+        context,
+        listen: false,
+      ).read(soundServiceProvider).resetDealSequence();
+    } on Object {
+      // Layout tests may pump without a [ProviderScope].
+    }
+  }
+
   void _syncDeal() {
     final game = widget.game;
     final epoch =
         widget.dealKey ??
         'hand-${game.handCount}-d${game.dealerIndex}-n${game.players.length}';
+    if (epoch != _soundEpoch) {
+      _soundEpoch = epoch;
+      _resetDealSound();
+    }
     final dealHoles =
         widget.showHoleCardBacks ||
         game.players.any((player) => player.holeCards.isNotEmpty);

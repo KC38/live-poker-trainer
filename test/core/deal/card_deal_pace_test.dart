@@ -73,6 +73,12 @@ void main() {
     expect(CardDealPace.boardDelay(index: 3, alreadyVisible: 3), Duration.zero);
   });
 
+  test('dealCard leaves a beat between cards', () {
+    CardDealPace.debugInstant = false;
+    expect(CardDealPace.dealCardMs, greaterThanOrEqualTo(400));
+    expect(CardDealPace.dealCard, const Duration(milliseconds: 420));
+  });
+
   test('dealCard respects testScale when not under widget tests', () {
     // Instant is forced by TestWidgetsFlutterBinding; scale alone stays zero.
     expect(CardDealPace.instant, isTrue);
@@ -87,11 +93,11 @@ void main() {
     expect(CardDealPace.boardDelay(index: 3, alreadyVisible: 3), Duration.zero);
     expect(
       CardDealPace.boardDelay(index: 4, alreadyVisible: 3),
-      const Duration(milliseconds: 300),
+      CardDealPace.dealCard,
     );
     expect(
       CardDealPace.boardDelay(index: 5, alreadyVisible: 3),
-      const Duration(milliseconds: 600),
+      CardDealPace.dealCard * 2,
     );
   });
 }
