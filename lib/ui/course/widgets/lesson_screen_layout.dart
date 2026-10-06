@@ -680,8 +680,8 @@ bool lessonFrameHintsDisabled(
   bool isReview = false,
 }) {
   if (activity.stage == ActivityStage.jumpTest) return true;
-  // Guided SoftPulse / tap cues are already on for new concepts — tapping
-  // Hint would only re-show what the learner already sees.
+  // Teaching SoftPulse / tap cues are already on — tapping Hint would only
+  // re-show what the learner already sees.
   if (lessonFrameHintShownByDefault(activity, isReview: isReview)) {
     return true;
   }
@@ -737,8 +737,11 @@ bool lessonFrameSoftPulseQuietByDefault(
 /// Whether SoftPulse / answer cues are already visible without Hint.
 ///
 /// Guided (new-concept) steps SoftPulse the answer by default, so Hint would
-/// be a no-op. Same-concept guided replays and full-lesson reviews stay
-/// SoftPulse-quiet, so Hint remains available to unlock cues. Quieter
+/// be a no-op. Scaffolded teaching renderers do the same via
+/// [LessonActivityController.showTargetCue] (next-item / dock SoftPulse)
+/// except select-identify, which keeps SoftPulse off until Hint on
+/// non-guided stages. Same-concept guided replays and full-lesson reviews
+/// stay SoftPulse-quiet, so Hint remains available to unlock cues. Quieter
 /// stages keep Hint too.
 bool lessonFrameHintShownByDefault(
   CourseActivity activity, {
@@ -747,7 +750,11 @@ bool lessonFrameHintShownByDefault(
   if (lessonFrameSoftPulseQuietByDefault(activity, isReview: isReview)) {
     return false;
   }
-  return activity.stage == ActivityStage.guided;
+  if (activity.stage == ActivityStage.guided) return true;
+  if (activity.stage != ActivityStage.scaffolded) return false;
+  // Select-identify still waits for Hint (answer vs scene-context
+  // highlights). Other scaffolded teaching steps already SoftPulse.
+  return activity.renderer != ActivityRenderer.selectIdentify;
 }
 
 /// Hint copy when the catalog step has no hint media.
