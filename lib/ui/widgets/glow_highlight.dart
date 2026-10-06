@@ -1,17 +1,27 @@
-/// Reusable gold glow highlight for lesson cues and selected targets.
+/// Reusable glow highlight for lesson cues and selected targets.
 library;
 
 import 'package:flutter/material.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 
-/// Gold border + outer glow wrapped around any [child].
+/// Gold coach/SoftPulse cue versus cyan learner selection.
+enum GlowKind {
+  /// Gold ring for SoftPulse, hints, and coach “these count” cards.
+  cue,
+
+  /// Cyan ring for cards the learner tapped. Stays on after SoftPulse ends
+  /// so coach feedback can still show what they picked.
+  selection,
+}
+
+/// Gold (or cyan) border + outer glow wrapped around any [child].
 ///
-/// This is the single highlight style used across the app — seats, hole
-/// cards, board cards (individually or as a group), and demo tiles. Pass
-/// the widgets to emphasize as [child]; inactive hides the ring. Felt
-/// seats and cards keep a stable wrapper so toggling SoftPulse does not
-/// remount dealt cards.
+/// Coach/SoftPulse cues use [GlowKind.cue]. Learner taps use
+/// [GlowKind.selection] so both rings can sit on the same card. Pass the
+/// widgets to emphasize as [child]; inactive hides the ring. Felt seats and
+/// cards keep a stable wrapper so toggling SoftPulse does not remount dealt
+/// cards.
 ///
 /// There are no arrows. Optional breathing animation matches the felt cue
 /// pulse; set [animated] false for a static selected ring.
@@ -24,16 +34,18 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dar
 /// [outset], not two. Felt seats and cards pass [reserveLayout] false so
 /// their footprint stays tight under [Positioned] constraints.
 ///
-/// Inside [LessonSoftPulseScope], SoftPulse also respects the current Hint
+/// Inside [LessonSoftPulseScope], cue rings also respect the current Hint
 /// wave so multi-press teach steps only glow for the first press (or after
-/// Hint re-opens SoftPulse).
+/// Hint re-opens SoftPulse). Selection rings ignore that gate.
 class GlowHighlight extends StatefulWidget {
-  /// Wraps [child] in the shared gold highlight.
+  /// Wraps [child] in a gold or cyan highlight.
   const GlowHighlight({
     super.key,
     required this.child,
     this.active = true,
     this.animated = true,
+    this.kind = GlowKind.cue,
+    this.ignoreSoftPulse = false,
     this.borderRadius = 8,
     this.padding = const EdgeInsets.all(outset),
     this.reserveLayout = true,
@@ -50,6 +62,9 @@ class GlowHighlight extends StatefulWidget {
   /// at a time, so this clears a single [outset], not two.
   static const double gutter = outset;
 
+  /// Tighter ring so a cyan selection can sit inside a gold coach cue.
+  static const double selectionOutset = 4;
+
   /// Content to highlight — a card, a name tag, a row of cards, etc.
   final Widget child;
 
@@ -60,10 +75,19 @@ class GlowHighlight extends StatefulWidget {
   /// ring. SoftPulse tiles do not scale — only the glow opacity pulses.
   final bool animated;
 
-  /// Corner radius of the gold ring before [padding] is applied.
+  /// Gold coach cue versus cyan learner selection.
+  final GlowKind kind;
+
+  /// When true, paint even if [LessonSoftPulseScope] closed the Hint wave.
+  ///
+  /// Learner selection always sets this so taps remain visible under coach
+  /// feedback. Cue rings keep the default (false).
+  final bool ignoreSoftPulse;
+
+  /// Corner radius of the ring before [padding] is applied.
   final double borderRadius;
 
-  /// Air between [child] and the gold ring. Defaults to [outset] on each side.
+  /// Air between [child] and the ring. Defaults to [outset] on each side.
   final EdgeInsets padding;
 
   /// When true (default), pad the layout so the ring sits inside this
@@ -80,6 +104,22 @@ class _GlowHighlightState extends State<GlowHighlight>
     with SingleTickerProviderStateMixin {
   late final AnimationController _motion;
   late final Animation<double> _beat;
+
+  String get _onKey => widget.kind == GlowKind.selection
+      ? 'selection-highlight'
+      : 'glow-highlight';
+
+  String get _offKey => widget.kind == GlowKind.selection
+      ? 'selection-highlight-off'
+      : 'glow-highlight-off';
+
+  String get _ringKey => widget.kind == GlowKind.selection
+      ? 'selection-highlight-ring'
+      : 'glow-highlight-ring';
+
+  Color get _color => widget.kind == GlowKind.selection
+      ? AppColors.selectionGlow
+      : AppColors.goldBright;
 
   @override
   void initState() {
@@ -118,15 +158,16 @@ class _GlowHighlightState extends State<GlowHighlight>
   }
 
   BoxDecoration _ringDecoration(double t, BorderRadius radius) {
+    final color = _color;
     return BoxDecoration(
       borderRadius: radius,
       border: Border.all(
-        color: AppColors.goldBright,
+        color: color,
         width: 2.4,
       ),
       boxShadow: [
         BoxShadow(
-          color: AppColors.goldBright.withValues(
+          color: color.withValues(
             alpha: 0.35 + (0.45 * t),
           ),
           blurRadius: 10 + (10 * t),
@@ -150,8 +191,9 @@ class _GlowHighlightState extends State<GlowHighlight>
 
     // Multi-press SoftPulse: demos may mark the next tile active, but the
     // frame SoftPulse scope decides whether this Hint wave still glows.
-    final bool active =
-        widget.active && LessonSoftPulseScope.isAllowed(context);
+    // Learner selection stays on so coach feedback can show their picks.
+    final bool active = widget.active &&
+        (widget.ignoreSoftPulse || LessonSoftPulseScope.isAllowed(context));
 
     if (widget.reserveLayout) {
       // SoftPulse tiles: reserve only [outset] so faces stay large. Soft
@@ -162,11 +204,11 @@ class _GlowHighlightState extends State<GlowHighlight>
         builder: (context, child) {
           final t = widget.animated ? _beat.value : 0.55;
           return DecoratedBox(
-            key: const ValueKey<String>('glow-highlight-ring'),
+            key: ValueKey<String>(_ringKey),
             decoration:
                 active ? _ringDecoration(t, radius) : const BoxDecoration(),
             child: Padding(
-              key: const ValueKey<String>('glow-highlight'),
+              key: ValueKey<String>(_onKey),
               padding: pad,
               child: child,
             ),
@@ -195,10 +237,10 @@ class _GlowHighlightState extends State<GlowHighlight>
                 bottom: -pad.bottom,
                 child: KeyedSubtree(
                   key: active
-                      ? const ValueKey<String>('glow-highlight')
-                      : const ValueKey<String>('glow-highlight-off'),
+                      ? ValueKey<String>(_onKey)
+                      : ValueKey<String>(_offKey),
                   child: DecoratedBox(
-                    key: const ValueKey<String>('glow-highlight-ring'),
+                    key: ValueKey<String>(_ringKey),
                     decoration: active
                         ? _ringDecoration(t, radius)
                         : const BoxDecoration(),
@@ -211,6 +253,72 @@ class _GlowHighlightState extends State<GlowHighlight>
         );
       },
       child: widget.child,
+    );
+  }
+}
+
+/// Cyan learner selection inside a gold coach/SoftPulse cue.
+///
+/// Used on felt cards, seats, and any other tap target. Wrappers stay
+/// mounted whether either ring is on so dealt cards do not replay.
+/// Selection ignores SoftPulse so picks remain visible under coach
+/// feedback; the gold cue still respects the Hint wave.
+class LessonTargetGlow extends StatelessWidget {
+  /// Wraps [child] with optional selection and cue rings.
+  const LessonTargetGlow({
+    super.key,
+    required this.child,
+    this.selected = false,
+    this.highlighted = false,
+    this.borderRadius = 8,
+    this.scale = 1,
+    this.reserveLayout = false,
+    this.cueIgnoresSoftPulse = false,
+  });
+
+  /// Card face (or [DealtCardReveal] wrapping it).
+  final Widget child;
+
+  /// Cyan ring: the learner tapped this card.
+  final bool selected;
+
+  /// Gold ring: SoftPulse next target or coach feedback.
+  final bool highlighted;
+
+  /// Card corner radius before ring padding.
+  final double borderRadius;
+
+  /// Scales ring padding with the felt.
+  final double scale;
+
+  /// When true, gold cue reserves layout (demo trays). Felt uses false.
+  final bool reserveLayout;
+
+  /// When true, gold cue paints even if SoftPulse is closed (coach review).
+  final bool cueIgnoresSoftPulse;
+
+  @override
+  Widget build(BuildContext context) {
+    final selectionPad = GlowHighlight.selectionOutset * scale;
+    final cuePad = GlowHighlight.outset * scale +
+        (selected && highlighted ? 3.0 * scale : 0);
+    return GlowHighlight(
+      kind: GlowKind.selection,
+      active: selected,
+      animated: false,
+      ignoreSoftPulse: true,
+      reserveLayout: reserveLayout,
+      borderRadius: borderRadius,
+      padding: EdgeInsets.all(selectionPad),
+      child: GlowHighlight(
+        active: highlighted,
+        animated: highlighted && !selected,
+        ignoreSoftPulse: cueIgnoresSoftPulse,
+        reserveLayout: false,
+        borderRadius: borderRadius,
+        padding: EdgeInsets.all(cuePad),
+        child: child,
+      ),
     );
   }
 }

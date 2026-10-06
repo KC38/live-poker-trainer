@@ -166,7 +166,7 @@ class PlayerSeatWidget extends StatelessWidget {
   /// Tap one hero hole card by index (0 or 1).
   final ValueChanged<int>? onHeroCardTap;
 
-  /// Hero hole indexes with a selected gold ring.
+  /// Hero hole indexes with a cyan learner-selection ring.
   final Set<int> selectedHeroIndexes;
 
   /// Hero hole indexes that cue the next tap.
@@ -276,13 +276,14 @@ class PlayerSeatWidget extends StatelessWidget {
   Widget _cuedCard(SeatMetrics m, int i) {
     final selected = selectedHeroIndexes.contains(i);
     final highlighted = highlightHeroIndexes.contains(i);
-    return GlowHighlight(
-      active: highlighted || selected,
-      animated: highlighted && !selected,
+    return LessonTargetGlow(
+      selected: selected,
+      highlighted: highlighted,
       reserveLayout: false,
       // Tight pad so two hole rings stay separate and do not cover You.
       padding: const EdgeInsets.all(3),
       borderRadius: m.cardWidth * 0.12,
+      scale: scale,
       child: DealtCardReveal(
         key: ValueKey<String>('dealt-hole-${player.id}-$i'),
         // FeltDealController owns deal SFX + order.

@@ -1376,7 +1376,7 @@ class _RankTile extends StatelessWidget {
         color: AppColors.cream,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: selected ? AppColors.gold : AppColors.slateDark,
+          color: selected ? AppColors.selectionGlow : AppColors.slateDark,
           width: selected ? 2 : 1,
         ),
         boxShadow: [

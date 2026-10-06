@@ -180,7 +180,7 @@ class _UnderFeltPathChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final border =
-        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+        selected ? AppColors.selectionGlow : AppColors.feltBorder.withValues(alpha: 0.7);
     final child = Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
@@ -452,7 +452,7 @@ class _PathLane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final border =
-        selected ? AppColors.gold : AppColors.feltBorder.withValues(alpha: 0.7);
+        selected ? AppColors.selectionGlow : AppColors.feltBorder.withValues(alpha: 0.7);
     final badge = densify ? 28.0 : 22.0;
     final radius = densify ? 14.0 : 12.0;
     final lane = Container(

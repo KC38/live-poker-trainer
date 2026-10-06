@@ -69,7 +69,7 @@ class CommunityCardsView extends StatelessWidget {
   /// Tap on one dealt board card by index. Null leaves cards inert.
   final ValueChanged<int>? onBoardCardTap;
 
-  /// Board indexes with a selected gold ring.
+  /// Board indexes with a cyan learner-selection ring.
   final Set<int> selectedBoardIndexes;
 
   /// Board indexes SoftPulsed individually via [GlowHighlight].
@@ -335,9 +335,9 @@ class _BoardCardTarget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardFace = GlowHighlight(
-      active: highlight || selected,
-      animated: highlight && !selected,
+    final cardFace = LessonTargetGlow(
+      selected: selected,
+      highlighted: highlight,
       reserveLayout: false,
       borderRadius: width * 0.12,
       child: DealtCardReveal(

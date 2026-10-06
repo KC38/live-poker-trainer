@@ -316,7 +316,7 @@ class _CapstoneMwDeepTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderColor =
-        selected ? AppColors.gold : color.withValues(alpha: 0.9);
+        selected ? AppColors.selectionGlow : color.withValues(alpha: 0.9);
     final card = AnimatedContainer(
       duration: const Duration(milliseconds: 140),
       width: densify ? double.infinity : null,
@@ -327,7 +327,7 @@ class _CapstoneMwDeepTile extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: selected
-            ? AppColors.gold.withValues(alpha: 0.28)
+            ? AppColors.selectionGlow.withValues(alpha: 0.28)
             : color.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(densify ? 16 : 12),
         border: Border.all(color: borderColor, width: selected ? 2.5 : 1),

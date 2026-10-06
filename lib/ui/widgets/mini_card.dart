@@ -54,7 +54,7 @@ class MiniCard extends StatelessWidget {
   /// Multiplier on [size], used to enlarge cards while reviewing a hand.
   final double scale;
 
-  /// Gold ring when the learner has tapped this card.
+  /// Cyan ring when the learner has tapped this card.
   final bool selected;
 
   /// Soft gold cue for the next card to tap.

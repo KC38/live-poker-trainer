@@ -692,6 +692,7 @@ class CoachDialogueActivity extends StatelessWidget {
             sbIndex: lessonBlindsSmallBlindIndex,
             bbIndex: lessonBlindsBigBlindIndex,
             cueSeatIndex: locked ? null : lessonBlindsButtonIndex,
+            selectedSeatIndexes: locked ? {lessonBlindsButtonIndex} : const {},
             positionLabels: true,
             enabled: !locked,
             onSeatIndexTap:

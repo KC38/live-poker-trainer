@@ -10,7 +10,6 @@ import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
-import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 /// Felt picker: tap the three remaining aces (clean outs) on the king-high flop.
 ///
@@ -203,9 +202,7 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
                   final isClean = _cleanOrder.contains(code);
                   final selected = _tappedClean.contains(code);
                   final isNext = guide && isClean && code == next;
-                  return GlowHighlight(
-                    active: isNext,
-                    child: SelectableBestFiveCard(
+                  return SelectableBestFiveCard(
                       key: ValueKey<String>('outs-ace-$code'),
                       code: code,
                       selected: selected,
@@ -223,8 +220,7 @@ class _OutsCleanAcesPickerState extends State<OutsCleanAcesPicker> {
                                   _onDirtyTap();
                                 }
                               },
-                    ),
-                  );
+                    );
                 },
               ),
             ],

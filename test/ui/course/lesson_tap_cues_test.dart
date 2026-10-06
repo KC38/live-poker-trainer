@@ -111,7 +111,11 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey<String>('lesson-board-card-0')));
     await tester.pump();
-    // Selected card keeps a static ring; SoftPulse moves to the next suit.
+    // Selected card keeps a cyan ring; SoftPulse moves to the next suit.
+    expect(
+      find.byKey(const ValueKey<String>('selection-highlight')),
+      findsOneWidget,
+    );
     expect(
       find.byKey(const ValueKey<String>('glow-highlight')),
       findsAtLeastNWidgets(1),
@@ -145,6 +149,10 @@ void main() {
     );
     await tester.pump();
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+    expect(
+      find.byKey(const ValueKey<String>('selection-highlight')),
+      findsNWidgets(3),
+    );
     expect(tester.takeException(), isNull);
   });
 

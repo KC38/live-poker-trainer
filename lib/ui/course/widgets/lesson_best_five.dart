@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -503,6 +504,23 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
     return '${_selected.length}/5 selected';
   }
 
+  Set<String> _coachCodes() {
+    final result = widget.controller.lastResult;
+    if (result == null) return {};
+    final id = result.accepted
+        ? (result.betterChoiceId ?? widget.controller.draft.choiceId)
+        : result.betterChoiceId;
+    if (id == null) return {};
+    return widget.spot.choiceSets[id]?.toSet() ?? {};
+  }
+
+  Set<int> _indexesIn(List<String> source, Set<String> codes) {
+    return {
+      for (var i = 0; i < source.length; i++)
+        if (codes.contains(source[i])) i,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final spot = widget.spot;
@@ -514,25 +532,32 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
       for (var i = 0; i < spot.boardCodes.length; i++)
         if (_selected.contains(spot.boardCodes[i])) i,
     };
+    final coach = _coachCodes();
+    final highlightHero = _indexesIn(spot.heroCodes, coach);
+    final highlightBoard = _indexesIn(spot.boardCodes, coach);
     final status = _statusLine();
+    Widget table = LessonTableStage(
+      key: const ValueKey<String>('best-five-picker-table'),
+      heroCodes: spot.heroCodes,
+      boardCodes: spot.boardCodes,
+      villainCount: 2,
+      heroFaceUp: true,
+      enabled: !widget.locked,
+      features: lessonBestFiveTableFeatures,
+      selectedHeroIndexes: selectedHero,
+      selectedBoardIndexes: selectedBoard,
+      highlightHeroIndexes: highlightHero,
+      highlightBoardIndexes: highlightBoard,
+      onHeroCardTap: widget.locked ? null : _tapHero,
+      onBoardCardTap: widget.locked ? null : _tapBoard,
+    );
+    if (widget.controller.lastResult != null) {
+      table = LessonSoftPulseScope(allowed: true, child: table);
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Expanded(
-          child: LessonTableStage(
-            key: const ValueKey<String>('best-five-picker-table'),
-            heroCodes: spot.heroCodes,
-            boardCodes: spot.boardCodes,
-            villainCount: 2,
-            heroFaceUp: true,
-            enabled: !widget.locked,
-            features: lessonBestFiveTableFeatures,
-            selectedHeroIndexes: selectedHero,
-            selectedBoardIndexes: selectedBoard,
-            onHeroCardTap: widget.locked ? null : _tapHero,
-            onBoardCardTap: widget.locked ? null : _tapBoard,
-          ),
-        ),
+        Expanded(child: table),
         if (status.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -814,13 +839,7 @@ class _DemoRow extends StatelessWidget {
         children: [
           for (var i = 0; i < codes.length; i++) ...[
             if (i > 0) SizedBox(width: gap),
-            GlowHighlight(
-              active:
-                  interactive &&
-                  enabled &&
-                  playing.contains(codes[i]) &&
-                  codes[i] == nextCode,
-              child: SelectableBestFiveCard(
+            SelectableBestFiveCard(
                 key: ValueKey<String>('best-five-${codes[i]}'),
                 code: codes[i],
                 selected:
@@ -841,7 +860,6 @@ class _DemoRow extends StatelessWidget {
                         ? () => onCardTap(codes[i])
                         : null,
               ),
-            ),
           ],
         ],
       ),
@@ -882,7 +900,7 @@ class SelectableBestFiveCard extends StatelessWidget {
       card = null;
     }
     final radius = size.dimensions.width * scale * 0.12;
-    final child =
+    final face =
         card == null
             ? SizedBox(
               width: size.dimensions.width * scale,
@@ -892,11 +910,17 @@ class SelectableBestFiveCard extends StatelessWidget {
               card: card,
               size: size,
               scale: scale,
-              selected: selected,
-              highlighted: highlighted,
               dimmed: dimmed,
             );
-    if (onPressed == null) return child;
+    final glowed = LessonTargetGlow(
+      selected: selected,
+      highlighted: highlighted,
+      reserveLayout: false,
+      borderRadius: radius,
+      scale: scale,
+      child: face,
+    );
+    if (onPressed == null) return glowed;
     return Semantics(
       button: true,
       selected: selected,
@@ -906,7 +930,7 @@ class SelectableBestFiveCard extends StatelessWidget {
         child: InkWell(
           onTap: enabled ? onPressed : null,
           borderRadius: BorderRadius.circular(radius),
-          child: child,
+          child: glowed,
         ),
       ),
     );
