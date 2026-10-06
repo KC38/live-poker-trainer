@@ -85,12 +85,16 @@ class FeltTableView extends StatefulWidget {
     this.features,
     this.heroStatus,
     this.dealKey,
+    this.onDealReady,
   });
 
   final GameState game;
 
   /// Optional stable id for the deal pass (lessons). When null, uses handCount.
   final String? dealKey;
+
+  /// Fires whenever hole/board deal completeness changes (lessons).
+  final ValueChanged<bool>? onDealReady;
 
   /// Table amounts are currency-only; see [ChipDisplayMode.tableMode].
   final ChipDisplayMode chipDisplayMode;
@@ -201,6 +205,8 @@ class _FeltTableViewState extends State<FeltTableView> {
     _deal = FeltDealController(onDealt: _playDealSound);
     _actions = FeltActionRevealController(onRevealed: _playActionSound);
     _deal.addListener(_syncActions);
+    _deal.addListener(_reportDealReady);
+    _actions.addListener(_reportDealReady);
     _syncDeal();
   }
 
@@ -213,6 +219,8 @@ class _FeltTableViewState extends State<FeltTableView> {
   @override
   void dispose() {
     _deal.removeListener(_syncActions);
+    _deal.removeListener(_reportDealReady);
+    _actions.removeListener(_reportDealReady);
     _deal.dispose();
     _actions.dispose();
     super.dispose();
@@ -261,6 +269,7 @@ class _FeltTableViewState extends State<FeltTableView> {
       dealHoles: dealHoles,
     );
     _syncActions();
+    _reportDealReady();
   }
 
   void _syncActions() {
@@ -304,10 +313,19 @@ class _FeltTableViewState extends State<FeltTableView> {
     );
   }
 
-  /// Hole indexes to SoftPulse. Wait until both cards have landed so the
+  void _reportDealReady() {
+    widget.onDealReady?.call(_cuesReady);
+  }
+
+  /// True when this epoch's holes, board, and opening folds have landed.
+  bool get _cuesReady =>
+      widget.game.isHandOver ||
+      (_deal.isComplete && _actions.openingBatchComplete);
+
+  /// Hole indexes to SoftPulse. Wait until the deal has finished so the
   /// ring is not an empty box. [highlightHero] with no indexes means both.
-  Set<int> _heroHoleCueIndexes({required bool landed}) {
-    if (!landed) return const {};
+  Set<int> _heroHoleCueIndexes() {
+    if (!_cuesReady) return const {};
     if (widget.highlightHeroIndexes.isNotEmpty) {
       return widget.highlightHeroIndexes;
     }
@@ -408,9 +426,7 @@ class _FeltTableViewState extends State<FeltTableView> {
               // Hole-card Hint rings each card via highlightHeroIndexes —
               // never the You name box.
               child: GlowHighlight(
-                active:
-                    widget.cueSeatIndex == slot.index &&
-                    _actions.openingBatchComplete,
+                active: _cuesReady && widget.cueSeatIndex == slot.index,
                 reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,
                 child: PlayerSeatWidget(
@@ -433,12 +449,7 @@ class _FeltTableViewState extends State<FeltTableView> {
                   selectedHeroIndexes:
                       player.isHero ? widget.selectedHeroIndexes : const {},
                   highlightHeroIndexes:
-                      player.isHero
-                          ? _heroHoleCueIndexes(
-                              landed: showdown ||
-                                  _deal.holeVisibleAt(slot.index) >= 2,
-                            )
-                          : const {},
+                      player.isHero ? _heroHoleCueIndexes() : const {},
                   dimmedHeroIndexes:
                       player.isHero ? widget.dimmedHeroIndexes : const {},
                 ),
@@ -616,12 +627,19 @@ class _FeltTableViewState extends State<FeltTableView> {
     // Region board cue → one GlowHighlight around the whole board row.
     // Per-card cues use highlightBoardIndexes only (no auto-expand).
     // Wait until this street's cards have landed — an empty or partial
-    // board should not show the hint ring.
-    final boardGroupCue =
-        widget.highlightBoard &&
-        widget.highlightBoardIndexes.isEmpty &&
+    // board should not show the hint / guided ring.
+    final boardLanded =
         game.community.isNotEmpty &&
         _deal.boardVisible >= game.community.length;
+    final boardGroupCue =
+        _cuesReady &&
+        widget.highlightBoard &&
+        widget.highlightBoardIndexes.isEmpty &&
+        boardLanded;
+    final boardCardCues =
+        _cuesReady && boardLanded
+            ? widget.highlightBoardIndexes
+            : const <int>{};
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -673,7 +691,7 @@ class _FeltTableViewState extends State<FeltTableView> {
                         visibleCount: _deal.boardVisible,
                         onBoardCardTap: widget.onBoardCardTap,
                         selectedBoardIndexes: widget.selectedBoardIndexes,
-                        highlightBoardIndexes: widget.highlightBoardIndexes,
+                        highlightBoardIndexes: boardCardCues,
                         highlightBoardGroup: boardGroupCue,
                         dimmedBoardIndexes: widget.dimmedBoardIndexes,
                         boardOrderBadges: widget.boardOrderBadges,

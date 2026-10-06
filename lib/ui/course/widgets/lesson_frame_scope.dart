@@ -55,3 +55,10 @@ void consumeLessonSequentialSoftPulse(BuildContext context) {
       ?.activityController
       ?.consumeSequentialSoftPulse();
 }
+
+/// Felt deal completeness — SoftPulse stays off until [ready].
+void reportLessonFeltDealReady(BuildContext context, {required bool ready}) {
+  LessonFrameScope.maybeOf(context)
+      ?.activityController
+      ?.notifyFeltDealReady(ready);
+}
