@@ -10289,7 +10289,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('SoftPulse-quiet acting wait keeps Wait slate without SoftPulse', (
+  testWidgets('acting wait uses the full table and dock, not Them/You tiles', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -10303,34 +10303,68 @@ await tester.tap(find.text('NIT'));
       prompt: 'Action is on UTG. You are on the button. What do you do?',
       choices: const [
         CourseChoice(id: 'wait', label: 'Wait'),
-        CourseChoice(id: 'open-now', label: 'Open now'),
-        CourseChoice(id: 'flash', label: 'Flash cards'),
+        CourseChoice(id: 'open-early', label: 'Open now'),
+        CourseChoice(id: 'flash-cards', label: 'Flash cards'),
       ],
     );
     final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
-      _wrap(
-        SelectIdentifyActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: false,
+      ProviderScope(
+        overrides: [
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId(
+                'lesson-02-01-02-acting-order',
+              ),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: SelectIdentifyActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: false,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
-    expect(
-      find.text(
-        'Action is on UTG — you are on the button. Stay quiet until it reaches you.',
-      ),
-      findsOneWidget,
-    );
+    await tester.pump();
+
+    expect(find.byType(LessonTableStage), findsOneWidget);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.byType(LessonTableContext), findsNothing);
+    expect(find.byType(TableCard), findsWidgets);
+    expect(find.byType(LessonChoiceButton), findsNWidgets(3));
     expect(find.text('Wait'), findsOneWidget);
     expect(find.text('Open now'), findsOneWidget);
-    final table = tester.widget<LessonTableContext>(
-      find.byType(LessonTableContext),
+    expect(find.text('Flash cards'), findsOneWidget);
+    expect(find.byIcon(Icons.hourglass_empty), findsNothing);
+    expect(find.text('Them'), findsNothing);
+    expect(
+      lessonFrameSpeech(activity),
+      'Action is on UTG. You are on the button. '
+      'Tap your answer below the table.',
     );
-    expect(table.showSoftPulse, isFalse);
-    final waitIcon = tester.widget<Icon>(find.byIcon(Icons.hourglass_empty));
-    expect(waitIcon.color, AppColors.slate);
+    final table = tester.widget<LessonTableStage>(
+      find.byType(LessonTableStage),
+    );
+    expect(table.seatNames, lessonHeroOnButtonSeatNames);
+    expect(table.activeSeatIndex, lessonHeroOnButtonUtgIndex);
+    expect(table.dealerIndex, 0);
+    expect(table.heroFaceUp, isTrue);
+    await tester.tap(find.widgetWithText(LessonChoiceButton, 'Wait'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'wait');
     controller.dispose();
   });
 

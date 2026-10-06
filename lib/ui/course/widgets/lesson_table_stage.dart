@@ -56,6 +56,19 @@ const List<String> lessonActionOrderSeatNames = [
   'BB',
 ];
 
+/// Six-max names when the hero (index 0, bottom seat) is on the button.
+const List<String> lessonHeroOnButtonSeatNames = [
+  'BTN',
+  'SB',
+  'BB',
+  'UTG',
+  'HJ',
+  'CO',
+];
+
+/// UTG, clockwise from a hero-on-the-button six-max ring.
+const int lessonHeroOnButtonUtgIndex = 3;
+
 /// Felt index for a position label on the six-max action-order ring.
 int? lessonActionOrderSeatIndex(String label) {
   switch (label.trim().toUpperCase()) {
