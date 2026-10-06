@@ -280,6 +280,8 @@ class PlayerSeatWidget extends StatelessWidget {
       active: highlighted || selected,
       animated: highlighted && !selected,
       reserveLayout: false,
+      // Tight pad so two hole rings stay separate and do not cover You.
+      padding: const EdgeInsets.all(3),
       borderRadius: m.cardWidth * 0.12,
       child: DealtCardReveal(
         key: ValueKey<String>('dealt-hole-${player.id}-$i'),
@@ -297,11 +299,21 @@ class PlayerSeatWidget extends StatelessWidget {
   Widget _backCards(SeatMetrics m) {
     final width = m.backWidth(hero: player.isHero);
     final count = _shownCount;
-    Widget back(int i) => DealtCardReveal(
+    Widget back(int i) {
+      final highlighted = highlightHeroIndexes.contains(i);
+      return GlowHighlight(
+        active: highlighted,
+        animated: highlighted,
+        reserveLayout: false,
+        padding: const EdgeInsets.all(3),
+        borderRadius: width * 0.12,
+        child: DealtCardReveal(
           key: ValueKey<String>('dealt-back-${player.id}-$i'),
           playSound: false,
           child: TableCardBack(width: width),
-        );
+        ),
+      );
+    }
     return Row(
       key: ValueKey<String>('seat-backs-${player.id}'),
       mainAxisSize: MainAxisSize.min,

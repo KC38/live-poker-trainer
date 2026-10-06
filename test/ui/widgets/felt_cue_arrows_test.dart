@@ -94,12 +94,12 @@ void main() {
     CardDealPace.testScale = 1;
   });
 
-  testWidgets('hero cue SoftPulses the seat with GlowHighlight, no arrows', (
+  testWidgets('hero cue SoftPulses each hole card, not the You seat', (
     tester,
   ) async {
     await _pumpFelt(tester, highlightHero: true, highlightBoard: false);
 
-    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
     expect(find.byIcon(Icons.arrow_upward_rounded), findsNothing);
   });
@@ -132,7 +132,7 @@ void main() {
 
     await tester.pump(CardDealPace.dealCard * 8);
 
-    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
   });
 
   testWidgets('board group cue stays off until community cards land', (

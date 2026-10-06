@@ -321,10 +321,15 @@ class _LessonBestFiveExplainTableState
     final highlightHero = <int>{};
     final highlightBoard = <int>{};
     if (widget.showGuidance && widget.enabled && next != null) {
-      final heroIdx = _deal.hero.indexOf(next);
-      if (heroIdx >= 0) {
-        highlightHero.add(heroIdx);
-      } else {
+      // Ring every remaining hole that plays — individually — so Hint
+      // never wraps the You name box as one player-area cue.
+      for (var i = 0; i < _deal.hero.length; i++) {
+        if (_deal.playing.contains(_deal.hero[i]) &&
+            !_tapped.contains(_deal.hero[i])) {
+          highlightHero.add(i);
+        }
+      }
+      if (highlightHero.isEmpty) {
         final boardIdx = _deal.board.indexOf(next);
         if (boardIdx >= 0) highlightBoard.add(boardIdx);
       }

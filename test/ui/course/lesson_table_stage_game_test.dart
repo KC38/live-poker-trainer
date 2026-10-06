@@ -81,7 +81,7 @@ void main() {
     ]);
     expect(hidden.players[1].holeCards, isEmpty);
     expect(hidden.dealerIndex, 0);
-    expect(hidden.activePlayerIndex, 0);
+    expect(hidden.activePlayerIndex, -1);
 
     expect(shown.players.map((player) => player.name), [
       'You',
