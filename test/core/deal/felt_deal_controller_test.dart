@@ -538,6 +538,7 @@ void main() {
       );
       expect(deal.holeVisibleAt(0), 0);
       expect(deal.boardVisible, 0);
+      expect(deal.holesComplete, isFalse);
 
       async.flushMicrotasks();
       for (var i = 0; i < 4; i++) {
@@ -546,6 +547,7 @@ void main() {
       expect(deal.holeVisibleAt(0), 2);
       expect(deal.holeVisibleAt(1), 2);
       expect(deal.boardVisible, 0);
+      expect(deal.holesComplete, isTrue);
       expect(sounds, 4);
       deal.dispose();
     });

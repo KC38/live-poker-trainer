@@ -1,6 +1,7 @@
 /// The poker table: felt, seats, board, pot, and blinds.
 library;
 
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
+import 'package:live_poker_trainer/core/deal/felt_action_reveal_controller.dart';
 import 'package:live_poker_trainer/core/deal/felt_deal_controller.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
@@ -190,12 +192,15 @@ class FeltTableView extends StatefulWidget {
 
 class _FeltTableViewState extends State<FeltTableView> {
   late final FeltDealController _deal;
+  late final FeltActionRevealController _actions;
   String? _soundEpoch;
 
   @override
   void initState() {
     super.initState();
     _deal = FeltDealController(onDealt: _playDealSound);
+    _actions = FeltActionRevealController(onRevealed: _playActionSound);
+    _deal.addListener(_syncActions);
     _syncDeal();
   }
 
@@ -207,7 +212,9 @@ class _FeltTableViewState extends State<FeltTableView> {
 
   @override
   void dispose() {
+    _deal.removeListener(_syncActions);
     _deal.dispose();
+    _actions.dispose();
     super.dispose();
   }
 
@@ -253,6 +260,48 @@ class _FeltTableViewState extends State<FeltTableView> {
       boardTarget: game.community.length,
       dealHoles: dealHoles,
     );
+    _syncActions();
+  }
+
+  void _syncActions() {
+    _actions.bind(
+      epoch: _deal.epoch,
+      holesComplete: _deal.holesComplete,
+      actions: postDealActionsInOrder(widget.game),
+    );
+  }
+
+  void _playActionSound(int _, String label) {
+    if (!mounted) return;
+    try {
+      final sound = ProviderScope.containerOf(
+        context,
+        listen: false,
+      ).read(soundServiceProvider);
+      final kind = ActionBadge.displayLabel(label);
+      if (kind == 'FOLD') {
+        unawaited(sound.fold());
+      } else if (kind != 'CHECK') {
+        unawaited(sound.chip());
+      }
+    } on Object {
+      // Layout tests may pump without a [ProviderScope].
+    }
+  }
+
+  /// Snapshot with folds / raises held back until that seat's action lands.
+  GameState _displayGame(GameState game) {
+    if (!_actions.isSequencing || _actions.openingBatchComplete) {
+      return game;
+    }
+    return game.copyWith(
+      players: [
+        for (var i = 0; i < game.players.length; i++)
+          _actions.isRevealed(i)
+              ? game.players[i]
+              : game.players[i].copyWith(folded: false, clearLastAction: true),
+      ],
+    );
   }
 
   /// Hole indexes to SoftPulse. Wait until both cards have landed so the
@@ -270,13 +319,14 @@ class _FeltTableViewState extends State<FeltTableView> {
   Widget build(BuildContext context) {
     final features = widget.features ?? TableFeaturesScope.of(context);
     return AnimatedBuilder(
-      animation: _deal,
+      animation: Listenable.merge([_deal, _actions]),
       builder: (context, _) {
+        final game = _displayGame(widget.game);
         return LayoutBuilder(
           builder: (context, constraints) {
             final layout = TableLayout.resolve(
               size: Size(constraints.maxWidth, constraints.maxHeight),
-              game: widget.game,
+              game: game,
               features: features,
               includeHero: widget.includeHero,
               review: widget.review,
@@ -284,15 +334,19 @@ class _FeltTableViewState extends State<FeltTableView> {
               chipDisplayMode: widget.chipDisplayMode,
               collecting: widget.collectingChips,
             );
-            return _build(context, layout, features);
+            return _build(context, layout, features, game);
           },
         );
       },
     );
   }
 
-  Widget _build(BuildContext context, TableLayout layout, TableFeatures f) {
-    final game = widget.game;
+  Widget _build(
+    BuildContext context,
+    TableLayout layout,
+    TableFeatures f,
+    GameState game,
+  ) {
     final h = layout.size.height;
     final winners = game.winnerIds.toSet();
     final villains = <Widget>[];
@@ -354,7 +408,9 @@ class _FeltTableViewState extends State<FeltTableView> {
               // Hole-card Hint rings each card via highlightHeroIndexes —
               // never the You name box.
               child: GlowHighlight(
-                active: widget.cueSeatIndex == slot.index,
+                active:
+                    widget.cueSeatIndex == slot.index &&
+                    _actions.openingBatchComplete,
                 reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,
                 child: PlayerSeatWidget(
