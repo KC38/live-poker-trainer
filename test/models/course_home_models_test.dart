@@ -451,4 +451,124 @@ void main() {
     expect(resumed.nodes[2].state, CourseNodeState.locked);
     expect(resumed.nodes[2].lockReason, contains('paused'));
   });
+
+  test('heart restore practice never opens an unplayed next lesson', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 40,
+        gems: 0,
+        currentStreak: 3,
+        acceptedAccuracy: 0.95,
+        completedLessonIds: ['lesson-a', 'lesson-b'],
+        masteryByLessonId: {'lesson-a': 0.95, 'lesson-b': 0.9},
+        catalogVersion: '2.0.0',
+      ),
+    );
+    expect(snap.nextLessonId, 'lesson-c');
+    expect(heartRestorePracticeLessonId(snap), 'lesson-b');
+  });
+
+  test('heart restore practice picks the lowest-mastery completed lesson', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 40,
+        gems: 0,
+        currentStreak: 3,
+        acceptedAccuracy: 0.6,
+        completedLessonIds: ['lesson-a', 'lesson-b'],
+        masteryByLessonId: {'lesson-a': 0.4, 'lesson-b': 0.7},
+        catalogVersion: '2.0.0',
+      ),
+    );
+    expect(snap.nextLessonId, 'lesson-c');
+    expect(heartRestorePracticeLessonId(snap), 'lesson-a');
+  });
+
+  test('heart restore practice uses first-run resume when nothing is weak', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 20,
+        gems: 0,
+        currentStreak: 2,
+        acceptedAccuracy: 0.9,
+        completedLessonIds: ['lesson-a'],
+        masteryByLessonId: {'lesson-a': 0.9},
+        catalogVersion: '2.0.0',
+      ),
+      openAttempt: const CourseAttemptSnapshot(
+        attemptId: 'att-bleed',
+        lessonId: 'lesson-b',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 1,
+        currentActivityId: 'act-b1',
+        livesRemaining: 0,
+        livesMax: 5,
+        acceptedCount: 0,
+        scoredCount: 2,
+        stepCount: 2,
+      ),
+    );
+    expect(snap.nextLessonId, 'lesson-b');
+    expect(heartRestorePracticeLessonId(snap), 'lesson-b');
+  });
+
+  test('heart restore practice prefers a weak lesson over a first-run resume', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 20,
+        gems: 0,
+        currentStreak: 2,
+        acceptedAccuracy: 0.5,
+        completedLessonIds: ['lesson-a'],
+        masteryByLessonId: {'lesson-a': 0.5},
+        catalogVersion: '2.0.0',
+      ),
+      openAttempt: const CourseAttemptSnapshot(
+        attemptId: 'att-new',
+        lessonId: 'lesson-b',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: 0,
+        currentActivityId: 'act-b1',
+        livesRemaining: 0,
+        livesMax: 5,
+        acceptedCount: 0,
+        scoredCount: 1,
+        stepCount: 1,
+      ),
+    );
+    expect(heartRestorePracticeLessonId(snap), 'lesson-a');
+  });
+
+  test('heart restore practice is null when accuracy is none', () {
+    final snap = buildCourseHomeSnapshot(
+      catalog: catalog,
+      flags: _enabledFlags(),
+      available: true,
+      profile: const CourseProfileView(
+        lifetimeXp: 0,
+        gems: 0,
+        currentStreak: 0,
+        acceptedAccuracy: 0,
+        completedLessonIds: [],
+        masteryByLessonId: {},
+        catalogVersion: '2.0.0',
+      ),
+    );
+    expect(snap.nextLessonId, 'lesson-a');
+    expect(heartRestorePracticeLessonId(snap), isNull);
+  });
 }

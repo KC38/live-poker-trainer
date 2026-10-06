@@ -614,3 +614,45 @@ String _rexLineFor({
       'Next lesson on the path. One short lesson, then move.',
   };
 }
+
+/// Lesson to replay when Practice restores a heart.
+///
+/// Heart loss only happens on scored misses, so this never opens an unplayed
+/// next lesson (accuracy is none there). Prefers the lowest-mastery completed
+/// lesson below [kCourseMasteryThreshold], then a first-run resume (the
+/// attempt they just bled hearts on), then any completed lesson.
+String? heartRestorePracticeLessonId(CourseHomeSnapshot snapshot) {
+  final completed = [
+    for (final node in snapshot.nodes)
+      if (node.hasCompleted) node,
+  ];
+  final weak = [
+    for (final node in completed)
+      if (node.mastery < kCourseMasteryThreshold) node,
+  ];
+  final fromWeak = _lowestMasteryLessonId(weak);
+  if (fromWeak != null) return fromWeak;
+
+  final resumeId = snapshot.resume?.lessonId;
+  if (resumeId != null) {
+    for (final node in snapshot.nodes) {
+      if (node.lessonId == resumeId && !node.hasCompleted) {
+        return resumeId;
+      }
+    }
+  }
+
+  return _lowestMasteryLessonId(completed);
+}
+
+String? _lowestMasteryLessonId(List<CourseMapNode> nodes) {
+  if (nodes.isEmpty) return null;
+  var best = nodes.first;
+  for (var i = 1; i < nodes.length; i++) {
+    final node = nodes[i];
+    if (node.mastery <= best.mastery) {
+      best = node;
+    }
+  }
+  return best.lessonId;
+}

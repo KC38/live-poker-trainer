@@ -988,6 +988,47 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
   }
 
+  /// Replaces this run with a low-accuracy lesson so Practice never opens
+  /// an unplayed next node.
+  Future<void> _openHeartRestorePractice() async {
+    if (!_heartsGateActive && !widget.allowZeroHeartsPractice) return;
+    final home =
+        ref.exists(courseHomeProvider)
+            ? ref.read(courseHomeProvider).asData?.value
+            : null;
+    final practiceId =
+        home == null ? null : heartRestorePracticeLessonId(home);
+    if (practiceId == null) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Complete a lesson first, then practice to earn a heart.',
+          ),
+        ),
+      );
+      return;
+    }
+    if (practiceId == widget.lessonId && widget.allowZeroHeartsPractice) {
+      return;
+    }
+    if (!mounted || home == null) return;
+    final isReview = home.nodes.any(
+      (node) => node.lessonId == practiceId && node.hasCompleted,
+    );
+    await Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(
+        builder:
+            (_) => LessonRunnerScreen(
+              lessonId: practiceId,
+              embeddedInShell: widget.embeddedInShell,
+              allowZeroHeartsPractice: true,
+              isReview: isReview,
+            ),
+      ),
+    );
+  }
+
   /// Applies gems / ad / practice from the refill sheet.
   Future<void> _applyHeartRefillAction(
     HeartRefillAction action, {
@@ -995,8 +1036,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   }) async {
     switch (action) {
       case HeartRefillAction.practice:
-        if (!_heartsGateActive) return;
-        if (mounted) Navigator.of(context).maybePop();
+        await _openHeartRestorePractice();
         return;
       case HeartRefillAction.ad:
         if (!_heartsGateActive) return;
