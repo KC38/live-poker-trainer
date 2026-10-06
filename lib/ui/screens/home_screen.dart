@@ -258,7 +258,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (!mounted || action == null) return;
     switch (action) {
       case HeartRefillAction.practice:
-        final practiceId = _practiceLessonId(snapshot);
+        final practiceId = heartRestorePracticeLessonId(snapshot);
         if (practiceId == null) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -321,15 +321,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           );
         }
     }
-  }
-
-  String? _practiceLessonId(CourseHomeSnapshot snapshot) {
-    for (final node in snapshot.nodes.reversed) {
-      if (node.state == CourseNodeState.completed) {
-        return node.lessonId;
-      }
-    }
-    return snapshot.resume?.lessonId ?? snapshot.nextLessonId;
   }
 
   void _onNodeTap(CourseHomeSnapshot snapshot, CourseMapNode node) {
