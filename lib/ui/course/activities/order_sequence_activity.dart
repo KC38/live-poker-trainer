@@ -294,6 +294,7 @@ class OrderSequenceActivity extends StatelessWidget {
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}-seat-order',
             ),
+            activityId: activity.id,
             sequenceItems: [
               for (final item in activity.sequenceItems)
                 (id: item.id, label: item.label),
