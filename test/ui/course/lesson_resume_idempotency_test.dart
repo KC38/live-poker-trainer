@@ -262,6 +262,34 @@ void main() {
     controller.dispose();
   });
 
+  test('review run hides teaching cues until Hint', () {
+    final activity = CourseActivity(
+      id: 'act-01-01-01-guided-find-holes',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'Tap your hole cards on the table.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Your cards sit at the bottom.'),
+      ],
+    );
+    final firstRun = LessonActivityController(activity: activity);
+    expect(firstRun.showTargetCue, isTrue);
+    firstRun.dispose();
+
+    final review = LessonActivityController(
+      activity: activity,
+      isReview: true,
+    );
+    expect(review.showTargetCue, isFalse);
+    expect(review.canRequestHint, isTrue);
+    review.revealHint();
+    expect(review.showTargetCue, isTrue);
+    review.dispose();
+  });
+
   test('multi-press SoftPulse only the first wave; Hint stays until done', () {
     final activity = CourseActivity(
       id: 'multi-press',
