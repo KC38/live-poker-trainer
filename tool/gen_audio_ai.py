@@ -3,7 +3,8 @@
 
 Creates several takes per asset, scores them with ffmpeg loudness/silence
 heuristics, and writes the winners into ``assets/sounds`` under the filenames
-``SoundService`` already loads.
+``SoundService`` already loads. Deal hits are split from a Freesound clip by
+``tool/split_deal_variations.py`` and are not generated here.
 
 Lounge ambient is built from multiple Sound Effects pad prompts (and optional
 layered mixes). The Music API requires a paid ElevenLabs plan, so free-tier
@@ -95,19 +96,6 @@ ROOM_TONE_PROMPT = (
 
 
 ASSETS: tuple[AssetSpec, ...] = (
-    AssetSpec(
-        name="deal",
-        out_name="deal.wav",
-        kind="sfx",
-        text=(
-            "Realistic casino Foley: one playing card dealt onto a felt poker "
-            "table, crisp single-card snap and short paper flick, close mic, "
-            "dry, natural, no second card, no chip sounds, no music, no voices"
-        ),
-        duration_seconds=0.5,
-        target_lufs=-12.0,
-        prompt_influence=0.7,
-    ),
     AssetSpec(
         name="chip",
         out_name="chip.wav",
