@@ -64,6 +64,8 @@ class LessonActivityController extends ChangeNotifier {
   ActivityDraft? _redoDraft;
   bool _submitting = false;
   bool _hintVisible = false;
+  /// False while the felt is still dealing this activity's cards.
+  bool _feltDealReady = true;
   /// Node key (`activityId#handStepIndex`) for which Hint was already used.
   String? _hintUsedNodeKey;
   /// Node key for the active multi-press SoftPulse sequence, if any.
@@ -88,6 +90,9 @@ class LessonActivityController extends ChangeNotifier {
   SubmitCourseStepResult? get lastResult => _lastResult;
   bool get submitting => _submitting;
   bool get hintVisible => _hintVisible;
+
+  /// True when the felt has no in-flight deal (or this step has no felt).
+  bool get feltDealReady => _feltDealReady;
 
   /// One lesson screen: activity id plus the active hand-street index.
   String get currentNodeKey => '${_activity.id}#${_draft.handStepIndex}';
@@ -123,7 +128,7 @@ class LessonActivityController extends ChangeNotifier {
   /// lesson reviews and same-concept guided replays stay quiet until Hint
   /// (see [lessonFrameSoftPulseQuietByDefault]). Revealing a hint unlocks
   /// the same highlights on quieter stages (unguided / checkpoint /
-  /// jump-test).
+  /// jump-test). Cues stay off while the felt is still dealing cards.
   ///
   /// Multi-press sequences SoftPulse only the current wave when Hint can
   /// re-open the next press. Teaching steps that already SoftPulse with
@@ -135,6 +140,7 @@ class LessonActivityController extends ChangeNotifier {
                 activity.stage == ActivityStage.guided ||
                 activity.stage == ActivityStage.scaffolded));
     if (!unlocked) return false;
+    if (!_feltDealReady) return false;
     // When cues are already on and Hint is disabled, keep SoftPulse on the
     // next press. Sequential wave-close is only for stages that can re-open
     // via Hint.
@@ -184,6 +190,15 @@ class LessonActivityController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Felt deal progress — SoftPulse stays off until [ready] is true.
+  void notifyFeltDealReady(bool ready) {
+    if (_feltDealReady == ready) return;
+    _feltDealReady = ready;
+    scheduleMicrotask(() {
+      if (hasListeners) notifyListeners();
+    });
+  }
+
   void bindActivity(CourseActivity next) {
     // Always reset local draft/feedback — including rebinding the same
     // activity id after a stale-activity resync or cold resume.
@@ -192,6 +207,7 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     _submitting = false;
     _hintVisible = false;
+    _feltDealReady = true;
     _hintUsedNodeKey = null;
     _sequentialCueNodeKey = null;
     _sequentialPressesRemaining = false;
@@ -347,6 +363,7 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     _pendingIdempotencyKey = null;
     _hintVisible = false;
+    _feltDealReady = true;
     _sequentialCueNodeKey = null;
     _sequentialPressesRemaining = false;
     _sequentialSoftPulseWaveOpen = true;

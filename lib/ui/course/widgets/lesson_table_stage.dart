@@ -658,6 +658,8 @@ class LessonTableStage extends StatelessWidget {
             dimmedHeroIndexes: dimmedHeroIndexes,
             seatOrderBadges: seatOrderBadges,
             cueSeatIndex: cueSeatIndex,
+            onDealReady: (ready) =>
+                reportLessonFeltDealReady(context, ready: ready),
             onBoardTap: !enabled || onBoardTap == null || onBoardCardTap != null
                 ? null
                 : () {

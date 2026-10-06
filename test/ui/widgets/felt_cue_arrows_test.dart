@@ -260,6 +260,80 @@ void main() {
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
   });
 
+  testWidgets('per-card board SoftPulse waits until the flop has landed', (
+    tester,
+  ) async {
+    CardDealPace.debugInstant = false;
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final game = _peekGame().copyWith(
+      community: [
+        CardModel.fromCode('Qs'),
+        CardModel.fromCode('Jh'),
+        CardModel.fromCode('2c'),
+      ],
+      street: Street.flop,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: game,
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              highlightBoardIndexes: const {0, 1, 2},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    await tester.pump(CardDealPace.dealCard * 10);
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(3));
+  });
+
+  testWidgets('seat SoftPulse waits until hole cards have landed', (
+    tester,
+  ) async {
+    CardDealPace.debugInstant = false;
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: _peekGame(),
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              cueSeatIndex: 0,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    await tester.pump(CardDealPace.dealCard * 8);
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+  });
+
   testWidgets('no SoftPulse when highlights are off', (tester) async {
     await _pumpFelt(tester, highlightHero: false, highlightBoard: false);
 
