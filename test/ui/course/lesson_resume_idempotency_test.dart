@@ -358,6 +358,29 @@ void main() {
     controller.dispose();
   });
 
+  test('scaffolded sequence SoftPulse stays on because Hint is disabled', () {
+    final activity = CourseActivity(
+      id: 'act-01-04-01-scaffolded-order',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.orderSequence,
+      estimatedSeconds: 50,
+      accessibilityText: 'Put UTG, HJ, CO, and BTN in preflop action order.',
+      acceptedGrades: const [SoftGrade.recommended],
+    );
+    final controller = LessonActivityController(activity: activity);
+    expect(controller.showTargetCue, isTrue);
+
+    controller.notifySequentialPressProgress(remainingPressCount: 4);
+    controller.consumeSequentialSoftPulse();
+    expect(controller.showTargetCue, isTrue);
+
+    controller.notifySequentialPressProgress(remainingPressCount: 3);
+    controller.consumeSequentialSoftPulse();
+    expect(controller.showTargetCue, isTrue);
+    controller.dispose();
+  });
+
   test('duplicate submit result must not animate a fresh life loss', () {
     final result = SubmitCourseStepResult(
       attemptId: 'att',
