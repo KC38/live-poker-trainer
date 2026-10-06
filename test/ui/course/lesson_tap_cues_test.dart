@@ -9,6 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/activities/select_identify_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_starting_hand_copy.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
@@ -101,6 +104,31 @@ void main() {
       'Tap the pocket pair.',
     );
     expect(withLessonTapInstruction('Four suits.', ''), 'Four suits.');
+  });
+
+  test('open-fold unguided names the dealt holes, not catalog K9s', () {
+    final activity = _catalog().sections
+        .expand((s) => s.units)
+        .expand((u) => u.lessons)
+        .expand((l) => l.activities)
+        .firstWhere((a) => a.id == 'act-02-03-01-unguided-btn');
+    String? speech;
+    String? dealtLabel;
+    for (var generation = 0; generation < 48; generation++) {
+      final dealt = dealtLessonActionSpot(
+        activity,
+        generation: generation,
+      );
+      final label = startingHandLabelFromCodes(dealt!.heroCodes);
+      if (label == 'K9s') continue;
+      speech = lessonFrameSpeech(activity, bindGeneration: generation);
+      dealtLabel = label;
+      break;
+    }
+    expect(dealtLabel, isNotNull);
+    expect(speech, isNot(contains('K9s')));
+    expect(speech, contains(dealtLabel));
+    expect(speech, contains('Tap your action below the table.'));
   });
 
   testWidgets('next suit card SoftPulses with GlowHighlight, no arrows', (tester) async {

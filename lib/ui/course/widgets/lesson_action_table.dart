@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_starting_hand_copy.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -77,20 +78,44 @@ class LessonActionSpot {
   LessonActionSpot copyWithCodes({
     List<String>? heroCodes,
     List<String>? boardCodes,
+    String? streetLabel,
+    String? feltStatusLine,
   }) {
     return LessonActionSpot(
       heroCodes: heroCodes ?? this.heroCodes,
       boardCodes: boardCodes ?? this.boardCodes,
       potLabel: potLabel,
       villainLine: villainLine,
-      streetLabel: streetLabel,
+      streetLabel: streetLabel ?? this.streetLabel,
       stackLabel: stackLabel,
       facingBet: facingBet,
       identifyUnavailable: identifyUnavailable,
       openPot: openPot,
-      feltStatusLine: feltStatusLine,
+      feltStatusLine: feltStatusLine ?? this.feltStatusLine,
     );
   }
+}
+
+/// Rewrites combo names in [text] to the isomorphic deal for [activity].
+String alignLessonActionCopy(
+  CourseActivity activity,
+  String text, {
+  int generation = 0,
+  Random? random,
+}) {
+  final template = resolveLessonActionSpot(activity);
+  if (template == null || text.isEmpty) return text;
+  final dealt = dealtLessonActionSpot(
+    activity,
+    generation: generation,
+    random: random,
+  );
+  if (dealt == null) return text;
+  return alignStartingHandCopy(
+    text: text,
+    templateHero: template.heroCodes,
+    dealtHero: dealt.heroCodes,
+  );
 }
 
 /// Authored spot with hand-class isomorphic cards for this attempt.
@@ -111,9 +136,24 @@ LessonActionSpot? dealtLessonActionSpot(
     [spot.heroCodes, spot.boardCodes],
     rng,
   );
+  final hero = remapped[0];
   return spot.copyWithCodes(
-    heroCodes: remapped[0],
+    heroCodes: hero,
     boardCodes: remapped[1],
+    streetLabel: spot.streetLabel == null
+        ? null
+        : alignStartingHandCopy(
+            text: spot.streetLabel!,
+            templateHero: spot.heroCodes,
+            dealtHero: hero,
+          ),
+    feltStatusLine: spot.feltStatusLine == null
+        ? null
+        : alignStartingHandCopy(
+            text: spot.feltStatusLine!,
+            templateHero: spot.heroCodes,
+            dealtHero: hero,
+          ),
   );
 }
 

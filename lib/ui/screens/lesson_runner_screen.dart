@@ -936,9 +936,16 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           ? lessonFrameHintFallback(
               controller.activity,
               isReview: controller.isReview,
+              bindGeneration: controller.bindGeneration,
             )
           : authored;
-      if (hint != null && hint.trim().isNotEmpty) return hint;
+      if (hint != null && hint.trim().isNotEmpty) {
+        return alignLessonActionCopy(
+          controller.activity,
+          hint,
+          generation: controller.bindGeneration,
+        );
+      }
     }
     return lessonFrameSpeech(
       controller.activity,

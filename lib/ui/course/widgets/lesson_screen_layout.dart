@@ -7,6 +7,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
@@ -670,13 +671,21 @@ String _lessonFrameLine(
     final index = handStepIndex < 0
         ? 0
         : (handStepIndex > last ? last : handStepIndex);
-    return activity.handSteps[index].prompt;
+    return alignLessonActionCopy(
+      activity,
+      activity.handSteps[index].prompt,
+      generation: bindGeneration,
+    );
   }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,
     fallback: activity.accessibilityText,
   );
-  return resolved.coach;
+  return alignLessonActionCopy(
+    activity,
+    resolved.coach,
+    generation: bindGeneration,
+  );
 }
 
 /// Whether this step intentionally leaves Hint disabled.
@@ -775,6 +784,7 @@ bool lessonFrameHintShownByDefault(
 String? lessonFrameHintFallback(
   CourseActivity activity, {
   bool isReview = false,
+  int bindGeneration = 0,
 }) {
   if (lessonFrameHintsDisabled(activity, isReview: isReview)) return null;
 
@@ -796,11 +806,19 @@ String? lessonFrameHintFallback(
     if (isReview ||
         activity.stage == ActivityStage.unguided ||
         activity.stage == ActivityStage.checkpoint) {
-      return accessibility;
+      return alignLessonActionCopy(
+        activity,
+        accessibility,
+        generation: bindGeneration,
+      );
     }
     return null;
   }
-  return accessibility;
+  return alignLessonActionCopy(
+    activity,
+    accessibility,
+    generation: bindGeneration,
+  );
 }
 
 /// Coach-band mood for the current lesson beat.

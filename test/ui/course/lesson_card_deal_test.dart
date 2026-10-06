@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_starting_hand_copy.dart';
 
 bool _isSuited(List<String> codes) {
   final a = CardModel.fromCode(codes[0]);
@@ -230,6 +231,56 @@ void main() {
     expect(
       startingHandFamilyFromCodes(['Ah', '9h']),
       LessonStartingHandFamily.suitedAce,
+    );
+  });
+
+  test('startingHandLabelFromCodes uses chart notation', () {
+    expect(startingHandLabelFromCodes(['Kh', '9h']), 'K9s');
+    expect(startingHandLabelFromCodes(['Th', '8h']), 'T8s');
+    expect(startingHandLabelFromCodes(['Ah', 'Td']), 'ATo');
+    expect(startingHandLabelFromCodes(['Qh', 'Qd']), 'QQ');
+  });
+
+  test('alignStartingHandCopy rewrites catalog combos to the dealt hand', () {
+    expect(
+      alignStartingHandCopy(
+        text: 'Folds to you on the button with K9s. Action?',
+        templateHero: const ['Kh', '9h'],
+        dealtHero: const ['Th', '8h'],
+      ),
+      'Folds to you on the button with T8s. Action?',
+    );
+    expect(
+      alignStartingHandCopy(
+        text: 'Open king-nine suited on the button.',
+        templateHero: const ['Kh', '9h'],
+        dealtHero: const ['Th', '8h'],
+      ),
+      'Open ten-eight suited on the button.',
+    );
+    expect(
+      alignStartingHandCopy(
+        text: 'Queens on the button vs a CO open — reopen for value.',
+        templateHero: const ['Qh', 'Qd'],
+        dealtHero: const ['Kh', 'Kd'],
+      ),
+      'Kings on the button vs a CO open — reopen for value.',
+    );
+    expect(
+      alignStartingHandCopy(
+        text: '72o faces a BB 3-bet — leave without defending trash.',
+        templateHero: const ['7h', '2d'],
+        dealtHero: const ['9c', '3h'],
+      ),
+      '93o faces a BB 3-bet — leave without defending trash.',
+    );
+    expect(
+      alignStartingHandCopy(
+        text: 'A bet faces you with AA.',
+        templateHero: const ['Ah', 'Ad'],
+        dealtHero: const ['Kh', 'Kd'],
+      ),
+      'A bet faces you with KK.',
     );
   });
 
