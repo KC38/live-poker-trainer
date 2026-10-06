@@ -47,8 +47,16 @@ class ActivityDraft {
 /// Controller shared by activity widgets and the lesson runner.
 class LessonActivityController extends ChangeNotifier {
   /// Creates a controller for [activity].
-  LessonActivityController({required CourseActivity activity})
-    : _activity = activity;
+  ///
+  /// [isReview] is true when this lesson was already completed. SoftPulse
+  /// stays off until Hint, matching first-time teaching vs a replay.
+  LessonActivityController({
+    required CourseActivity activity,
+    this.isReview = false,
+  }) : _activity = activity;
+
+  /// True when replaying a lesson the learner already finished.
+  final bool isReview;
 
   CourseActivity _activity;
   ActivityDraft _draft = const ActivityDraft();
@@ -111,17 +119,18 @@ class LessonActivityController extends ChangeNotifier {
 
   /// Whether SoftPulse / tap cues should remain visible.
   ///
-  /// Teaching stages keep their authored cues. Same-concept guided replays
-  /// after an interactive explain stay quiet until Hint (see
-  /// [lessonFrameSoftPulseQuietByDefault]). Revealing a hint unlocks the
-  /// same highlights on quieter stages (unguided / checkpoint / jump-test).
+  /// Teaching stages keep their authored cues on a first run. Completed-
+  /// lesson reviews and same-concept guided replays stay quiet until Hint
+  /// (see [lessonFrameSoftPulseQuietByDefault]). Revealing a hint unlocks
+  /// the same highlights on quieter stages (unguided / checkpoint /
+  /// jump-test).
   ///
   /// Multi-press sequences SoftPulse only the current wave: the first press
   /// (or a Hint re-open). After that press is tapped, SoftPulse stays off
   /// until Hint opens the next one-press wave.
   bool get showTargetCue {
     final unlocked = _hintVisible ||
-        (!lessonFrameSoftPulseQuietByDefault(activity) &&
+        (!lessonFrameSoftPulseQuietByDefault(activity, isReview: isReview) &&
             (activity.stage == ActivityStage.explain ||
                 activity.stage == ActivityStage.guided ||
                 activity.stage == ActivityStage.scaffolded));

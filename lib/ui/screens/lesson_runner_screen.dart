@@ -44,6 +44,7 @@ class LessonRunnerScreen extends ConsumerStatefulWidget {
     required this.lessonId,
     this.embeddedInShell = false,
     this.allowZeroHeartsPractice = false,
+    this.isReview = false,
     this.courseService,
     this.startRequestId,
     this.bootstrapTimeout = const Duration(seconds: 45),
@@ -61,6 +62,12 @@ class LessonRunnerScreen extends ConsumerStatefulWidget {
   /// mid-lesson continue always gate at zero hearts. Also marks the attempt
   /// so completing it restores +1 heart (voluntary reviews do not).
   final bool allowZeroHeartsPractice;
+
+  /// True when replaying a lesson the learner already completed.
+  ///
+  /// SoftPulse / tap cues stay off until Hint. First-time runs still show
+  /// authored teaching cues.
+  final bool isReview;
 
   /// Optional injectable service (tests).
   final CourseService? courseService;
@@ -116,6 +123,22 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   CourseService get _service =>
       widget.courseService ?? ref.read(courseServiceProvider);
+
+  /// Review of a lesson already in the completed set.
+  ///
+  /// [LessonRunnerScreen.isReview] is set from Home REVIEW. Also consult
+  /// the Home snapshot so other entry points (practice, resume of a
+  /// completed node) stay cue-quiet without Hint.
+  bool _isReviewRun(String lessonId) {
+    if (widget.isReview) return true;
+    if (!ref.exists(courseHomeProvider)) return false;
+    final home = ref.read(courseHomeProvider).asData?.value;
+    if (home == null) return false;
+    for (final node in home.nodes) {
+      if (node.lessonId == lessonId && node.hasCompleted) return true;
+    }
+    return false;
+  }
 
   @override
   void initState() {
@@ -250,7 +273,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       (a) => a.id == started.resume.activityId,
       orElse: () => activities.first,
     );
-    _bindActivityController(LessonActivityController(activity: current));
+    _bindActivityController(
+      LessonActivityController(
+        activity: current,
+        isReview: _isReviewRun(lessonId),
+      ),
+    );
     _setDealSalt(started.attempt.attemptId);
     unawaited(ref.read(soundServiceProvider).unlock());
     if (!mounted) return;
@@ -905,7 +933,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           ? controller.activity.hintMedia.first.text
           : null;
       final hint = (authored == null || authored.trim().isEmpty)
-          ? lessonFrameHintFallback(controller.activity)
+          ? lessonFrameHintFallback(
+              controller.activity,
+              isReview: controller.isReview,
+            )
           : authored;
       if (hint != null && hint.trim().isNotEmpty) return hint;
     }
@@ -917,9 +948,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   }
 
   bool _frameCanHint(CourseActivity activity) {
-    if (lessonFrameHintsDisabled(activity)) return false;
+    final isReview = _activityController?.isReview ?? widget.isReview;
+    if (lessonFrameHintsDisabled(activity, isReview: isReview)) return false;
     if (activity.hintMedia.isNotEmpty) return true;
-    return lessonFrameHintFallback(activity) != null;
+    return lessonFrameHintFallback(activity, isReview: isReview) != null;
   }
 
   void _closeLesson() {
@@ -1289,6 +1321,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         lessonId: previous.id,
                         embeddedInShell: widget.embeddedInShell,
                         courseService: widget.courseService,
+                        isReview: true,
                       ),
                     ),
                   );
@@ -1428,7 +1461,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         : activityPane;
                     final hintText = activity.hintMedia.isNotEmpty
                         ? activity.hintMedia.first.text
-                        : lessonFrameHintFallback(activity);
+                        : lessonFrameHintFallback(
+                            activity,
+                            isReview: controller.isReview,
+                          );
                     final hintLine =
                         controller.hintVisible &&
                             hintText != null &&

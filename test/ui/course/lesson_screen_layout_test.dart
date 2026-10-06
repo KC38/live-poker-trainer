@@ -104,6 +104,39 @@ void main() {
     );
   });
 
+  test('lesson review keeps SoftPulse off until Hint', () {
+    final guided = _hintActivity(
+      id: 'act-01-01-01-guided-find-holes',
+      stage: ActivityStage.guided,
+      accessibilityText: 'Tap your hole cards on the table.',
+      prompt: 'Tap the cards that belong to you.',
+    );
+    expect(
+      lessonFrameSoftPulseQuietByDefault(guided, isReview: true),
+      isTrue,
+    );
+    expect(lessonFrameHintShownByDefault(guided, isReview: true), isFalse);
+    expect(lessonFrameHintsDisabled(guided, isReview: true), isFalse);
+    expect(
+      lessonFrameHintFallback(guided, isReview: true),
+      'Tap your hole cards on the table.',
+    );
+
+    final explain = _hintActivity(
+      id: 'act-01-01-02-explain-suits',
+      stage: ActivityStage.explain,
+      accessibilityText: 'You found all four suits. Ace is still the high card.',
+    );
+    expect(
+      lessonFrameSoftPulseQuietByDefault(explain, isReview: true),
+      isTrue,
+    );
+    expect(
+      lessonFrameHintFallback(explain, isReview: true),
+      'You found all four suits. Ace is still the high card.',
+    );
+  });
+
   test('hint fallback stays off for explain, jump tests, and no-hint caps', () {
     final explain = _hintActivity(
       id: 'act-01-01-02-explain-suits',

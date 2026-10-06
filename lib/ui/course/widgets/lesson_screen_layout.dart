@@ -671,11 +671,20 @@ String _lessonFrameLine(
 }
 
 /// Whether this step intentionally leaves Hint disabled.
-bool lessonFrameHintsDisabled(CourseActivity activity) {
+///
+/// [isReview] is true when the learner already completed this lesson. Review
+/// runs keep SoftPulse off until Hint, so Hint stays available except on
+/// jump tests and explicit no-hint steps.
+bool lessonFrameHintsDisabled(
+  CourseActivity activity, {
+  bool isReview = false,
+}) {
   if (activity.stage == ActivityStage.jumpTest) return true;
   // Guided SoftPulse / tap cues are already on for new concepts — tapping
   // Hint would only re-show what the learner already sees.
-  if (lessonFrameHintShownByDefault(activity)) return true;
+  if (lessonFrameHintShownByDefault(activity, isReview: isReview)) {
+    return true;
+  }
   final blob =
       '${activity.id} ${activity.accessibilityText} ${activity.prompt ?? ''}'
           .toLowerCase();
@@ -715,19 +724,29 @@ const Set<String> lessonFrameSameConceptQuietIds = {
 
 /// Whether SoftPulse / tap cues stay off until Hint on this step.
 ///
-/// True when [activity] is a same-concept practice after an interactive
-/// explain (see [lessonFrameSameConceptQuietIds]).
-bool lessonFrameSoftPulseQuietByDefault(CourseActivity activity) {
+/// True on a completed-lesson review, or when [activity] is a same-concept
+/// practice after an interactive explain (see [lessonFrameSameConceptQuietIds]).
+bool lessonFrameSoftPulseQuietByDefault(
+  CourseActivity activity, {
+  bool isReview = false,
+}) {
+  if (isReview) return true;
   return lessonFrameSameConceptQuietIds.contains(activity.id);
 }
 
 /// Whether SoftPulse / answer cues are already visible without Hint.
 ///
 /// Guided (new-concept) steps SoftPulse the answer by default, so Hint would
-/// be a no-op. Same-concept guided replays stay SoftPulse-quiet, so Hint
-/// remains available to unlock cues. Quieter stages keep Hint too.
-bool lessonFrameHintShownByDefault(CourseActivity activity) {
-  if (lessonFrameSoftPulseQuietByDefault(activity)) return false;
+/// be a no-op. Same-concept guided replays and full-lesson reviews stay
+/// SoftPulse-quiet, so Hint remains available to unlock cues. Quieter
+/// stages keep Hint too.
+bool lessonFrameHintShownByDefault(
+  CourseActivity activity, {
+  bool isReview = false,
+}) {
+  if (lessonFrameSoftPulseQuietByDefault(activity, isReview: isReview)) {
+    return false;
+  }
   return activity.stage == ActivityStage.guided;
 }
 
@@ -737,15 +756,19 @@ bool lessonFrameHintShownByDefault(CourseActivity activity) {
 /// rest, reuse [CourseActivity.accessibilityText] as a short nudge — it is
 /// usually clearer than the spoken prompt and also unlocks quiet-stage cues
 /// when Hint is revealed.
-String? lessonFrameHintFallback(CourseActivity activity) {
-  if (lessonFrameHintsDisabled(activity)) return null;
+String? lessonFrameHintFallback(
+  CourseActivity activity, {
+  bool isReview = false,
+}) {
+  if (lessonFrameHintsDisabled(activity, isReview: isReview)) return null;
 
   if (activity.id == 'act-01-01-01-explain-hole-cards') {
     return 'Your two cards are at your seat, along the bottom of the table.';
   }
 
-  // Explain steps already speak the teach line in the bubble.
-  if (activity.stage == ActivityStage.explain) return null;
+  // Explain steps already speak the teach line in the bubble. Reviews still
+  // need a fallback so Hint can unlock the cues that stay off by default.
+  if (activity.stage == ActivityStage.explain && !isReview) return null;
 
   final accessibility = activity.accessibilityText.trim();
   if (accessibility.isEmpty) return null;
@@ -754,7 +777,8 @@ String? lessonFrameHintFallback(CourseActivity activity) {
   if (prompt.isNotEmpty &&
       accessibility.toLowerCase() == prompt.toLowerCase()) {
     // Still enable Hint on quieter stages so tap cues can unlock.
-    if (activity.stage == ActivityStage.unguided ||
+    if (isReview ||
+        activity.stage == ActivityStage.unguided ||
         activity.stage == ActivityStage.checkpoint) {
       return accessibility;
     }
