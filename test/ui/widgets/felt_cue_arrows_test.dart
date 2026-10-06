@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
@@ -88,6 +89,11 @@ Future<void> _pumpFelt(
 }
 
 void main() {
+  tearDown(() {
+    CardDealPace.debugInstant = null;
+    CardDealPace.testScale = 1;
+  });
+
   testWidgets('hero cue SoftPulses the seat with GlowHighlight, no arrows', (
     tester,
   ) async {
@@ -98,10 +104,44 @@ void main() {
     expect(find.byIcon(Icons.arrow_upward_rounded), findsNothing);
   });
 
-  testWidgets('board group cue SoftPulses the whole board row', (tester) async {
-    await _pumpFelt(tester, highlightHero: false, highlightBoard: true);
+  testWidgets('hero cue waits until hole cards have landed', (tester) async {
+    CardDealPace.debugInstant = false;
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: _peekGame(),
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              highlightHero: true,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    await tester.pump(CardDealPace.dealCard * 8);
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+  });
+
+  testWidgets('board group cue stays off until community cards land', (
+    tester,
+  ) async {
+    await _pumpFelt(tester, highlightHero: false, highlightBoard: true);
+
+    // Preflop — no board yet, so no empty hint ring.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
   });
 
@@ -141,6 +181,46 @@ void main() {
     // Group SoftPulse — one GlowHighlight around the board row, no arrows.
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
+  });
+
+  testWidgets('board group cue waits until the flop has landed', (tester) async {
+    CardDealPace.debugInstant = false;
+    await tester.binding.setSurfaceSize(const Size(390, 560));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final game = _peekGame().copyWith(
+      community: [
+        CardModel.fromCode('Qs'),
+        CardModel.fromCode('Jh'),
+        CardModel.fromCode('2c'),
+      ],
+      street: Street.flop,
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: SizedBox(
+            width: 390,
+            height: 560,
+            child: FeltTableView(
+              game: game,
+              chipDisplayMode: ChipDisplayMode.dollars,
+              includeHero: true,
+              showHoleCardBacks: true,
+              highlightBoard: true,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    // 4 seats × 2 holes + 3 flop; first card lands on the opening pump.
+    await tester.pump(CardDealPace.dealCard * 10);
+
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
   });
 
   testWidgets('per-card board SoftPulse uses one GlowHighlight each', (

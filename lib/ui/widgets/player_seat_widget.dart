@@ -282,6 +282,7 @@ class PlayerSeatWidget extends StatelessWidget {
       reserveLayout: false,
       borderRadius: m.cardWidth * 0.12,
       child: DealtCardReveal(
+        key: ValueKey<String>('dealt-hole-${player.id}-$i'),
         // FeltDealController owns deal SFX + order.
         playSound: false,
         child: TableCard(
@@ -297,6 +298,7 @@ class PlayerSeatWidget extends StatelessWidget {
     final width = m.backWidth(hero: player.isHero);
     final count = _shownCount;
     Widget back(int i) => DealtCardReveal(
+          key: ValueKey<String>('dealt-back-${player.id}-$i'),
           playSound: false,
           child: TableCardBack(width: width),
         );

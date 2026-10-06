@@ -135,6 +135,7 @@ void main() {
     expect(deal.holeVisibleAt(0), 2);
     expect(deal.holeVisibleAt(1), 2);
     expect(deal.boardVisible, 5);
+    expect(deal.isComplete, isTrue);
     deal.dispose();
   });
 

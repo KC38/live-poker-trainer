@@ -605,8 +605,14 @@ class LessonTableStage extends StatelessWidget {
           height: height,
           child: FeltTableView(
             game: game,
+            // Hand identity only. Board length is the deal *target* — putting
+            // community codes here restarted holes and every street whenever
+            // a lesson button grew the board (PREFLOP → FLOP → TURN → RIVER).
             dealKey:
-                'lesson-${heroCodes.join()}-${boardCodes.join()}'
+                'lesson-${heroCodes.join()}-${villainCodes.join()}'
+                '-${[
+                  for (final holes in villainHoleCodes) holes.join(),
+                ].join('|')}'
                 '-v$villainCount-d${dealerIndex ?? 0}',
             chipDisplayMode: ChipDisplayMode.dollars,
             awardingChips: awardingChips ?? winnerIds.isNotEmpty,

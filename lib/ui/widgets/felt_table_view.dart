@@ -310,6 +310,7 @@ class _FeltTableViewState extends State<FeltTableView> {
           heroCardTaps ? null : _seatTap(player);
       seatLayer.add(
         Positioned.fromRect(
+          key: ValueKey<String>('felt-seat-${player.id}'),
           rect: slot.footprint,
           child: GestureDetector(
             behavior:
@@ -336,13 +337,16 @@ class _FeltTableViewState extends State<FeltTableView> {
                           : 'Your hole cards')
                       : "${player.name}'s hole cards",
               // SoftPulse seats the same way as cards: GlowHighlight ring —
-              // never the action-turn gold tip.
+              // never the action-turn gold tip. Hole cues wait until both
+              // cards have landed so the ring is not an empty box.
               child: GlowHighlight(
                 active:
                     widget.cueSeatIndex == slot.index ||
                     (widget.highlightHero &&
                         player.isHero &&
-                        widget.highlightHeroIndexes.isEmpty),
+                        widget.highlightHeroIndexes.isEmpty &&
+                        (showdown ||
+                            _deal.holeVisibleAt(slot.index) >= 2)),
                 reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,
                 child: PlayerSeatWidget(
@@ -542,8 +546,13 @@ class _FeltTableViewState extends State<FeltTableView> {
     final board = layout.board;
     // Region board cue → one GlowHighlight around the whole board row.
     // Per-card cues use highlightBoardIndexes only (no auto-expand).
+    // Wait until this street's cards have landed — an empty or partial
+    // board should not show the hint ring.
     final boardGroupCue =
-        widget.highlightBoard && widget.highlightBoardIndexes.isEmpty;
+        widget.highlightBoard &&
+        widget.highlightBoardIndexes.isEmpty &&
+        game.community.isNotEmpty &&
+        _deal.boardVisible >= game.community.length;
     return Stack(
       clipBehavior: Clip.hardEdge,
       children: [
@@ -553,6 +562,7 @@ class _FeltTableViewState extends State<FeltTableView> {
         ...collects,
         ...villains,
         Positioned(
+          key: const ValueKey<String>('felt-board'),
           left: 0,
           right: 0,
           top: board.columnTop,
