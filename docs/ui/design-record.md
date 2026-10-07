@@ -1,14 +1,82 @@
 # UI design record
 
-Visual contract for Live Poker Trainer. A screen matches this file, or a
-ticket names the section the change will update. Later work copies the
-section. It does not invent a second button, type ramp, or table.
+The visual and interaction contract for Live Poker Trainer. A screen either
+matches this file, or a ticket names the section the change will update.
+Later work copies a section. It does not invent a second button, type ramp,
+table, sound, or mascot.
 
-Tickets name the design-record section they will change.
-`/implement-open-jira` updates this file in the same change as the widgets.
-Read [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) and the
-[Duolingo Chess patterns](references/duolingo-chess/PATTERNS.md) before
+`/ui-design-agent` ([command](../../.cursor/commands/ui-design-agent.md))
+walks the app against this file, files the gap in Jira, ships it, and lands
+the section update in the same change. Any other UI change follows the same
+rules. Read [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) and
+the [Duolingo Chess patterns](references/duolingo-chess/PATTERNS.md) before
 editing.
+
+Reference device: **iPhone 13 mini** (375 × 812 pt). Small phones are where
+this app breaks first. A layout that only works on a large phone is not done.
+
+## What the stakeholders are asking for
+
+Distilled from the commit history, PR test plans, LPT tickets, and the
+owner's own instructions to agents. When a screen is ambiguous, these win.
+
+1. **Duolingo Chess, for poker.** The course is a game, not a textbook.
+   The reference is the 130-frame walkthrough in
+   `references/duolingo-chess/frames/`. Copy the loop, not the palette, the
+   owl, or the words.
+2. **Teach by doing.** Every step is answered in the world: tap your cards,
+   a board card, a seat, a chip, an action. A text Q&A list is the last
+   resort, used only when the answer really is a label. The owner's words:
+   "No boring text Q&A quizzes — Duolingo wasn't like that; teach by doing."
+3. **One phone-first poker table everywhere.** Live Training, Your start,
+   and every lesson step that shows a hand draw the same `FeltTableView`.
+   No mini felts, suit tiles, rank slots, or second table widget.
+4. **It feels like a real live table.** The dealer deals one card at a time,
+   clockwise from the button, then the board one card at a time, with a
+   deal sound per card. Blinds are posted in front of their seats. Early
+   folds are shown. Bets and CHECK sit on the felt lane in front of a seat.
+   The pot flies to the winner and stacks update.
+5. **Rex is the coach, with a face and a mood.** One mascot, the same
+   drawing everywhere, calm / celebrating / thinking. Never a letter R,
+   never a text-only coach on a right or wrong beat.
+6. **Gentle, honest guidance.** Gold glow (SoftPulse) marks the target only
+   after the cards have landed, and only for the first press. Hint is off
+   while cues are already on. The learner's own picks stay visible in cyan
+   under the coach feedback. Review lessons hide cues. Coach copy names
+   the cards actually dealt, not a template combo.
+7. **The game economy is visible and fair.** Five hearts. A non-guided
+   mistake costs a heart. At zero hearts the lesson is blocked in place and
+   the empty hearts breathe; tapping them opens the refill sheet. Practice
+   on a weak finished lesson earns a heart back. Streak, gems, XP, and the
+   daily goal are celebrated, not reported.
+8. **Home is a path.** One section at a time, a sticky unit banner, circular
+   nodes on a zig-zag, a pulse on the next lesson, and a Duolingo-style
+   START / REVIEW bubble when a node is tapped.
+9. **Polish without a second visual language.** Dark navy and emerald felt,
+   gold primary, cream text, Cinzel / Manrope / JetBrains Mono. Theme
+   metrics, not hand-tuned radii. Nothing clips or overflows on the mini.
+10. **Depth before breadth.** Finish one screen or one lesson properly
+    before moving on. A real teach-by-doing or behavior gap beats another
+    round of spacing chrome.
+
+### Rejected on purpose
+
+Do not bring these back. Each was removed after the owner asked for it.
+
+| Removed | Replaced by |
+| --- | --- |
+| Text-only explain steps with a lone Continue | Teach-by-doing taps under the felt |
+| Mini felts, suit tiles, rank slots, `_HoleCardFeltTray` | The full poker table |
+| Bouncing cue arrows (`CueArrows`, `CuePulse`) | `GlowHighlight` SoftPulse ring |
+| Rex card and Rex + Start box on the Home path | START / REVIEW bubble on the tapped node |
+| START chip on the path node | The same bubble |
+| Home Resume card and guest-progress banner | The path scrolls to the next lesson |
+| Home course mark above the status strip | A centered streak / gems / hearts strip |
+| "Step x of 4" and title rows on onboarding | A progress bar and Rex's bubble |
+| Lesson-title row under the lesson progress bar | Nothing. The bubble is the instruction |
+| Out of hearts / Restore hearts dock | Breathing empty hearts in the chrome |
+| Heart-restored confirmation toast | The heart count changes in place |
+| Duo sky blue, Nunito, slab buttons | Theme gold and the Theme button metrics |
 
 ## How a change is recorded
 
@@ -21,6 +89,36 @@ editing.
    what the next screen must copy. Git history is the date. Do not put a
    calendar date in this file.
 5. A layout change that can overflow at phone width names the Lesson tables sentence it will write, and the same change includes a widget test that fails on overflow.
+6. A stakeholder ask that is not shipped yet goes under Known gaps, not in
+   a contract section. Remove it from Known gaps when it ships.
+
+## Surfaces
+
+Every screen the app has, and where to reach it on the mini. Walk paths and
+preconditions are in [agent-paths.md](../agent-paths.md).
+
+| Surface | Code | Reach it |
+| --- | --- | --- |
+| Welcome | `WelcomeScreen` in `lib/ui/screens/onboarding_screens.dart` | Fresh install |
+| Onboarding questions (experience, daily goal) | `onboarding_screens.dart` | Welcome → Get started |
+| Rex intro and motivation | `onboarding_screens.dart` | After the questions |
+| Recommended start / Your start | `lib/ui/screens/first_lesson_launch_screen.dart` | After Rex intro |
+| Auth | `lib/ui/screens/auth_screen.dart` | Welcome → I already have an account |
+| Lesson runner | `lib/ui/screens/lesson_runner_screen.dart`, `LessonScreenLayout` | Any lesson; `agent_tap.py openlesson --text <lesson id>` |
+| Answer dock | `LessonAnswerDock` in `lesson_screen_layout.dart` | Answer any step |
+| Hint | `lesson_runner_screen.dart` | Tools row → Hint |
+| Heart refill sheet | `lib/ui/course/widgets/heart_refill_sheet.dart` | Tap the hearts in lesson chrome or on Home |
+| Lesson result | `lib/ui/screens/lesson_result_screen.dart` | Finish a lesson |
+| First-lesson celebration chain | `DayStreakScreen` → `StreakGoalScreen` → `DailyQuestsCompleteScreen` → `GemsRewardScreen` | After the first guest lesson |
+| Save progress | `SaveProgressScreen` in `onboarding_screens.dart` | After the celebration chain |
+| Home path | `lib/ui/screens/home_screen.dart`, `lib/ui/home/course_path_view.dart` | Home tab |
+| Status strip | `lib/ui/home/course_status_bar.dart` | Top of Home |
+| Section picker | `lib/ui/home/course_section_picker.dart` | Tap the unit banner |
+| Bottom navigation | `ShellBottomNav` in `lib/ui/widgets/shell_bottom_nav.dart` | Every tab |
+| Live Training hub and lock | `lib/ui/screens/live_training_screen.dart` | Live Training tab |
+| Live table | `lib/ui/screens/poker_table_screen.dart` | Unlocked hub → start |
+| Profile | `lib/ui/screens/profile_screen.dart` | Profile tab |
+| Settings | `lib/ui/screens/settings_screen.dart` | Profile → Settings |
 
 ## Theme
 
@@ -29,7 +127,7 @@ Source: `lib/ui/theme/app_theme.dart` (`buildPokerTheme`) and
 
 Dark Material 3. Navy charcoal scaffold (`bgDark`), emerald felt, gold
 primary, cream text. Display type is Cinzel. UI type is Manrope. Data
-(chips, labels) is JetBrains Mono.
+(chips, labels, counts) is JetBrains Mono.
 
 | Control | Look |
 | --- | --- |
@@ -43,52 +141,40 @@ primary, cream text. Display type is Cinzel. UI type is Manrope. Data
 New controls use `Theme.of(context).colorScheme` and these metrics. Do not
 hard-code a second gold or a second radius for the same role.
 
-Onboarding primary actions use the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800). On Welcome, “I already have an account” uses the outlined button (gold-bright label, gold-muted border, height 50, radius 14).
+| Accent | Use |
+| --- | --- |
+| Gold | Primary actions, coach cues (SoftPulse) |
+| Cyan (`#5EC8FF`) | Gems, and the learner's own selection ring |
+| `warning` / gold | Streak |
+| `AppColors.hearts` | Hearts |
+| `AppColors.success` / `AppColors.danger` | The answer dock only |
 
-Save progress (`SaveProgressScreen`) uses the same radial felt gradient as other onboarding scaffolds. CREATE A PROFILE uses the elevated button. LATER uses the outlined button. “I already have an account” is a gold-bright Manrope text link. Nice work and XP/streak chips use `AppColors` gold/warning on `bgElevated` with JetBrains Mono values — no Duolingo sky blue, Nunito, or slab buttons.
+Onboarding primary actions use the elevated button. On Welcome, “I already
+have an account” uses the outlined button.
 
-After the first guest lesson and before Save progress, the celebration chain is Day streak → Streak goal → Daily quests → Gems reward (`DayStreakScreen`, `StreakGoalScreen`, `DailyQuestsCompleteScreen`, `GemsRewardScreen` in `lib/ui/screens/onboarding_screens.dart`). CONTINUE / I CAN DO IT use the elevated button. Streak accents use `warning` / gold; gems use diamond cyan (`#5EC8FF`). No Duo sky-blue CTAs.
+Save progress uses the same radial felt gradient as other onboarding
+scaffolds. CREATE A PROFILE uses the elevated button. LATER uses the
+outlined button. “I already have an account” is a gold-bright Manrope text
+link. Nice work and XP / streak chips use `AppColors` gold / warning on
+`bgElevated` with JetBrains Mono values.
 
-Home status values (streak, gems, hearts) use JetBrains Mono in a compact
-Duolingo-style strip (`CourseStatusBar`): streak / gems / hearts spaced
-across the full row with matching accent colors. The unit banner opens the
-section picker. The Rex
-card uses the card (`bgElevated`, radius 16, hairline `slateDark`, no
-elevation). Start uses the elevated button (gold on bgDark, height 54,
-radius 14, Manrope 16 w800).
+After the first guest lesson and before Save progress, the celebration chain
+is Day streak → Streak goal → Daily quests → Gems reward. CONTINUE and
+I CAN DO IT use the elevated button.
 
-Lesson feedback Continue uses the elevated button (gold on bgDark, height 54, radius 14, Manrope 16 w800).
-
-Lesson result CONTINUE uses the elevated button (radius 14).
-
-The Settings Chip display segments ($, BB, Both) use JetBrains Mono.
+Lesson feedback Continue and lesson result CONTINUE use the elevated button
+(radius 14). The Settings Chip display segments ($, BB, Both) use JetBrains
+Mono.
 
 ### Shipped
-
-Home status is an icon strip in `CourseStatusBar`
-(`lib/ui/home/course_status_bar.dart`): flame + streak, diamond + gems,
-heart + hearts, spaced across the full row. JetBrains Mono for the numbers;
-each count uses its accent color. A sticky unit banner under the strip
-reads `SECTION N, UNIT M` with the unit title underneath, swaps as the path
-scrolls, and opens `CourseSectionPickerSheet` on tap.
-
-Chip display segments on `SettingsScreen`
-(`lib/ui/screens/settings_screen.dart`) use JetBrains Mono. The next screen
-that labels a chip amount copies that data type.
-
-Lesson feedback Continue is `_FeedbackFooter` in
-`lib/ui/screens/lesson_runner_screen.dart`.
-
-Lesson result CONTINUE uses the elevated button (radius 14). `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) uses `ElevatedButton`, so the Theme elevated button supplies radius 14.
 
 Save progress CTAs and celebration chips are `SaveProgressScreen` in
 `lib/ui/screens/onboarding_screens.dart`. The next guest conversion screen
 copies those elevated / outlined / gold-bright link roles.
 
-Post-first-lesson streak / quest / gem beats are the same file
-(`DayStreakScreen`, `StreakGoalScreen`, `DailyQuestsCompleteScreen`,
-`GemsRewardScreen`). Home gems are `CourseStatusBar` in
-`lib/ui/home/course_status_bar.dart`.
+Chip display segments are on `SettingsScreen`
+(`lib/ui/screens/settings_screen.dart`). The next screen that labels a chip
+amount copies that data type.
 
 ## Poker table
 
@@ -117,6 +203,22 @@ The table is built for a phone held upright:
   board cards, and `Blinds $1/$2 NLH` under them (`CommunityCardsView`). The
   board leaves clear side margins on the felt (`TableLayout.boardSideInset`)
   and takes the largest scale that no seat, puck, or bet reaches.
+- **Cards.** Playing cards use one face everywhere (see Lesson tables).
+  Suits are traditional red and black.
+
+### The deal
+
+`DealtCardReveal` with `CardDealPace` (`lib/core/deal/card_deal_pace.dart`)
+deals like a live dealer: hole cards clockwise from the button in two
+rounds, then the board one card at a time. Each card lands once, in order,
+with one of the eight `deal_0N.wav` hits. A later-street start deals only
+the arriving street. A tap on a lesson button never redeals the hand. Folds
+before the hero's decision are shown after the deal, not before it.
+
+When a lesson hand is won, the pot flies to the winner seat and the stacks
+update (`lessonTableStageGame`).
+
+### Live Training bands
 
 The Live Training screen is a column of non-overlapping bands:
 
@@ -130,10 +232,11 @@ width 900 the coach moves to a side column. Band resize uses a short size
 animation (about 280ms). The coach and the dock never cover your cards.
 Once a hand is over your cards grow a little.
 
-On Your start, Start lesson is below the coach shelf. The shelf shows the flop sentence for the preview hand.
+On Your start, Start lesson is below the coach shelf. The shelf shows the
+flop sentence for the preview hand.
 
 A lesson step uses the lesson screen layout instead of the coach shelf: the
-speech bubble is the instruction. Do not add a third table widget.
+speech bubble is the instruction.
 
 `HeroRailWidget` no longer draws the hero on any table. It only draws the
 hand choices on the hole-card picker.
@@ -147,8 +250,7 @@ VPIP/PFR, and empty board slots. Seats, the board, and your cards always draw.
 
 The lesson runner puts each lesson under `TableFeaturesScope` with
 `TableFeatures.forLessonId`. Each layer switches on at the lesson that
-teaches it and stays on for the rest of the course. Cards, seats, opponents'
-face-down cards, and the board slots are on from the first lesson.
+teaches it and stays on for the rest of the course.
 
 | Layer | On from | Constant |
 | --- | --- | --- |
@@ -162,13 +264,9 @@ Your two cards and Suits and ranks show only seats, cards, and the board.
 Live Training and an id that is not `lesson-SS-UU-LL` get
 `TableFeatures.full`. Your start uses the preset of the lesson it recommends.
 
-A step can pass its own `features` to `LessonTableStage` to hide more. A
-lesson seat shows a player type only when the step names it
-(`villainArchetypes`); a seat never shows a made-up type. An action spot
-reads the type from its table label, then its prompt
-(`lessonNamedVillainType`): Calling Station, station, or sticky caller is
-the Calling Station; Nit, Maniac, TAG, and LAG are themselves. A spot that
-says "unknown" stays a plain seat, because having no read is its point.
+A lesson seat shows a player type only when the step names it
+(`villainArchetypes`); a seat never shows a made-up type. A spot that says
+"unknown" stays a plain seat, because having no read is its point.
 
 ### Stakes
 
@@ -180,316 +278,27 @@ teaches another level passes `smallBlind` and `bigBlind` to
 
 ### Shipped
 
-`PokerTableScreen` is the Live Training table and the calibration warm-up
-(`HomeScreen._openCalibrationWarmUp` pushes it with `softFadeRoute`).
+`PokerTableScreen` is the Live Training table and the calibration warm-up.
 `LessonTableStage` draws the same `FeltTableView` for lessons, and
 `PokerTableBands` draws it for Your start.
 
-## Lesson tables
-
-Two older layouts still draw hands inside the lesson runner:
-
-| Layout | File | What it is |
-| --- | --- | --- |
-| `LessonActionSpot` | `lib/ui/course/widgets/lesson_action_table.dart` | Mini felt plus an action dock. `isLessonActionTableActivity` turns it on per activity id. |
-| `LessonTableScene` | `lib/ui/course/widgets/lesson_table_context.dart` | Authored teaching felt (hole cards, seats, button, captions). |
-
-`FullTableHandLabActivity` still builds `PokerActionSizingActivity` and
-`LessonActionSpot`. The name is not the full table above.
-
-Contract: every lesson step uses the Poker table (`FeltTableView`, with
-`CoachShelfWidget` and `ActionDockWidget` where the step has them). Retire
-mini felts, suit tiles, and rank slots. When no table object fits the
-answer, put choices in the action space under the felt.
-
-Suits and ranks uses the full poker table for every step: suit taps hit
-community cards (one of each suit), rank order taps board ranks low to high,
-and suited / pair picks tap the seat whose holes match.
-
-Best five and kickers uses the full poker table for every step: explain
-and build-five taps hit hero holes and board cards; kicker and board-plays
-steps tap You / Them / Board on that table.
-
-Fold, check, call uses the full poker table for every step: explain taps
-Fold, Check, and Call under a flop on the felt, and each action spot uses
-that table with the dock under it.
-
-Bet, raise, all-in uses the full poker table for every step: explain taps
-Bet, Raise, and All-in under a flop on the felt, and each action spot uses
-that table with the dock under it.
-
-Streets and action order uses the full poker table for every step: explain
-and street order advance the board with street labels under the felt, and
-seat order taps seats on that table.
-
-How pots are won uses the full poker table for every step: explain taps
-Fold win, Showdown, and Side pot under the felt, and each decision spot
-uses that table. The open-pot size quiz shows the live open with bets
-visible and the pot total hidden; chip-total choices and the BTN open
-amount randomize each attempt.
-
-Play a full toy hand uses the full poker table for every step: explain
-taps Blinds, You act, and Ending under the felt, and each street uses
-that table.
-
-Hand families uses the full poker table for every step: explain taps
-Pairs, Broadways, Suited aces, and Connectors under the felt while
-holes update, and each classify spot uses that table.
-
-Open or fold uses the full poker table for every step: explain taps
-Early, Button, and Live 3x under the felt, and each open spot uses that
-table.
-
-Versus an open uses the full poker table for every step: explain taps
-Fold, Call, and 3-bet under the felt, and each response spot uses that
-table.
-
-Effective stacks uses the full poker table for every step: explain taps
-Chips→BB, Shorter, and Depth under the felt, and each spot uses that
-table.
-
-Live table habits uses the full poker table for every step: explain taps
-Watch, Say, Cover, and Wait under the felt.
-
-Full-ring baseline uses the full poker table for every step: explain taps
-Nine, Same, and Position under the felt on a nine-max ring.
-
-Read the table first uses the full poker table for every step: explain taps
-Pot, Stacks, Button, and Who Acts under the felt.
-
-Name your flop class uses the full poker table for every step: explain taps
-Made, Draw, SDV, and Air under the felt.
-
-Count outs, pay the right price uses the full poker table for every step:
-explain taps Clean, Dirty, and Price under the felt.
-
-Choose a flop line uses the full poker table for every step: explain taps
-Value, C-bet, Check, Call, Fold, and Raise under the felt.
-
-Plan the turn card uses the full poker table for every step: explain taps
-Brick, Change, Barrel, and Delay under the felt.
-
-Close the river correctly uses the full poker table for every step: explain
-taps Value, Bluff, Catch, and Fold under the felt.
-
-Play tighter multiway uses the full poker table for every step: explain taps
-Stronger, Fewer, and Nuts under the felt.
-
-Patch the common leaks uses the full poker table for every step: explain taps
-Top pair, Prices, Passive, and Crowds under the felt.
-
-Think in ranges uses the full poker table for every step: explain taps
-One hand, Range, and Update under the felt.
-
-Navigate 3-bet pots uses the full poker table for every step: explain taps
-3-bet, Ranges, and Squeeze under the felt.
-
-Plan beyond the flop uses the full poker table for every step: explain taps
-Flop, Turn, and River under the felt.
-
-Size with a message uses the full poker table for every step: explain taps
-Value, Pressure, and Size under the felt.
-
-SPR decides commitment uses the full poker table for every step: explain taps
-SPR, Low, and High under the felt.
-
-Observe sticky callers uses the full poker table for every step: explain taps
-Enters, Calls, and Folds under the felt.
-
-Meet the Calling Station uses the full poker table for every step: explain taps
-Station, High, and Low under the felt.
-
-Adjust versus Calling Station uses the full poker table for every step: explain
-taps Value, Bluffs, and Cite under the felt.
-
-Observe narrow players uses the full poker table for every step: explain taps
-Rare, Enter, and Mean It under the felt.
-
-Meet the Nit uses the full poker table for every step: explain taps Nit,
-Narrow, and Respect under the felt.
-
-Adjust versus Nit uses the full poker table for every step: explain taps Steal,
-Credit, and Explode under the felt.
-
-Observe wild aggressors uses the full poker table for every step: explain taps
-Raise, Barrel, and Count under the felt.
-
-Meet the Maniac uses the full poker table for every step: explain taps Maniac,
-Entry, and Aggro under the felt.
-
-Adjust versus Maniac uses the full poker table for every step: explain taps
-Wider, Hang, and Ego under the felt.
-
-Confidence and samples uses the full poker table for every step: explain taps
-Observe, Samples, and Showdowns under the felt.
-
-Same hand, different types uses the full poker table for every step: explain
-taps Cards, Seats, and Evidence under the felt.
-
-Build multiway ranges with nut potential uses the full poker table for every
-step: explain taps Nutted, Air, and Domination under the felt.
-
-Play 150–300bb stacks with a plan uses the full poker table for every step:
-explain taps Deep, Realize, and Stack under the felt.
-
-Implied and reverse odds uses the full poker table for every step: explain
-taps Implied, Reverse, and Second under the felt.
-
-Thin value and bluff-catches uses the full poker table for every step: explain
-taps Thin, Catch, and Barrels under the felt.
-
-Advanced flop lines uses the full poker table for every step: explain taps
-X/R, Probe, Delay, and Donk under the felt.
-
-Street-by-street updates uses the full poker table for every step: explain
-taps Action, Rewrite, and Update under the felt.
-
-Soft timing evidence uses the full poker table for every step: explain taps
-Timing, Sizing, and Clues under the felt.
-
-Live table dynamics uses the full poker table for every step: explain taps
-Stuck, Tilted, and Gears under the felt.
-
-Keep cash session guardrails uses the full poker table for every step: explain
-taps Quit, Guard, and First under the felt.
-
-Spot range advantage and nut advantage uses the full poker table for every
-step: explain taps Range, Nut, and Advantage under the felt.
-
-Realize equity in and out of position uses the full poker table for every
-step: explain taps Equity, Cash, and Pos under the felt.
-
-Recognize capped versus uncapped ranges uses the full poker table for every
-step: explain taps Capped, Uncapped, and Nuts under the felt.
-
-Choose polarized or merged betting uses the full poker table for every step:
-explain taps Polar, Merged, and Size under the felt.
-
-Use overbets and geometric pressure uses the full poker table for every step: explain taps Overbet, Polar, and Geo under the felt.
-
-Use blockers without solver theater uses the full poker table for every step: explain taps Block, Use, and No EV under the felt.
-
-Defend enough without frequency theater uses the full poker table for every step: explain taps Defend, Bluff, and Enough under the felt.
-
-Mix with a reason uses the full poker table for every step: explain taps Mix, Purpose, and Strong under the felt.
-
-Navigate 3-bet and 4-bet pots by depth uses the full poker table for every step: explain taps 3-Bet, 4-Bet, and Depth under the felt.
-
-Make difficult folds; review coolers fairly uses the full poker table for every step: explain taps Hard, Cooler, and Ego under the felt.
-
-Observe selective aggression uses the full poker table for every step: explain taps Tight, Barrel, and Sample under the felt.
-
-Meet the TAG uses the full poker table for every step: explain taps Tight, Aggro, and Model under the felt.
-
-Observe wide sustained pressure uses the full poker table for every step: explain taps Wide, Pressure, and Sample under the felt.
-
-Meet the LAG uses the full poker table for every step: explain taps Wide, Pressure, and Model under the felt.
-
-Carry a preflop plan onto the flop uses the full poker table for every step: explain taps Reason, Confirm, and Cancel under the felt.
-
-Map turn barrels before you bet flop uses the full poker table for every step: explain taps Barrel, Give-up, and Map under the felt.
-
-Compose river value and bluffs uses the full poker table for every step: explain taps Value, Bluff, and Hold under the felt.
-
-Change plans by pot type uses the full poker table for every step: explain taps Limped, SRP, and 3-4bet under the felt.
-
-Switch gears between HU and multiway uses the full poker table for every step: explain taps Fewer, Thicker, and Widen under the felt.
-
-Rewrite plans when stacks change uses the full poker table for every step: explain taps Short, Deep, and Effective under the felt.
-
-Replay the same hand versus each type uses the full poker table for every step: explain taps Cards, Models, and Cite under the felt.
-
-Integrate type, board, line, and sizing uses the full poker table for every step: explain taps Type, Board, Line, and Size under the felt.
-
-Write your default strategy book uses the full poker table for every step: explain taps Leak, Book, and Review under the felt.
-
-Capstone: single-raised pot uses the full poker table for every step: explain taps Plan, Update, and Finish under the felt.
-
-Capstone: 3-bet pot uses the full poker table for every step: explain taps SPR, Turn, and Close under the felt.
-
-Capstone: limped pot uses the full poker table for every step: explain taps Nuts, Value, and Thin under the felt.
-
-Capstone: 4-bet pot uses the full poker table for every step: explain taps SPR, Commit, and No Hero under the felt.
-
-Prep a coached Live warm-up hand uses the full poker table for every step: explain taps Checklist, Defaults, and One hand under the felt.
-
-Capstone: multiway deep uses the full poker table for every step: explain taps Nuts, Deep, and No-bluff under the felt.
-
-Adjust versus TAG uses the full poker table for every step: explain taps Credit, Tighter, and No light under the felt.
-
-Adjust versus LAG uses the full poker table for every step: explain taps Call, Trap, and Fancy less under the felt.
-
-Your start’s hand preview uses the Poker table bands (`FeltTableView`, `CoachShelfWidget`), with your cards on the felt. It does not use `LessonTableScene`.
-
-The first lesson’s hole-card explain uses that same column. Other teaching felts stay on `LessonTableScene` until their own ticket.
-
-A lesson step that shows hole cards, including Suits and ranks “Tap the suited hole cards,” places those cards on the hero seat of the Poker table. Retire `_HoleCardFeltTray` for that step.
-
-Hole-card choice bands (`_HoleCardBands` in `select_identify_activity.dart`) fill the lesson stage height and scale the felt and choice rails together so a short phone never overflows. On the lesson frame the coach shelf and street heading stay off — the speech bubble owns the instruction.
-
-Densified teach felts that ask for ~58% of screen height (`kTeachFeltHeightFactor` in `teach_felt_height.dart`) clamp to the stage when Nice! / Continue shrinks it. `LessonScreenLayout` rewrites MediaQuery height for every stage child, and `_feltShell` clamps again so blinds timing and other table scenes never bottom-overflow.
-
-Playing cards use one face everywhere: `TableCard` (corner rank, one centered suit). `MiniCard` and `CardBack` are size presets over `TableCard` / `TableCardBack` for densified lesson trays — they must not invent a second face.
-
-A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
-
-### Shipped
-
-Button and blinds (LPT-36) stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`). The next phase column copies that vertical stack.
-
-Teach felts clamp to the lesson stage when the answer dock is showing (`teach_felt_height.dart`, `LessonScreenLayout`, `_feltShell`). The next densified shell copies that clamp.
-
-`_HoleCardBands` (`lib/ui/course/activities/select_identify_activity.dart`) fills the stage and scales felt plus rails with available height. The next hole-card picker step copies that proportional column.
-
-File one ticket per layout you still see, not one ticket per activity id.
-
-## Asset inventory
-
-Slots are the only place a new animation, icon, sound, logo, or mascot is
-introduced. Reuse the path already listed. Add a row when a new file ships.
-
-| Slot | Current | Reuse |
-| --- | --- | --- |
-| Logo | `assets/brand/logo_mark.svg` — gold mark, transparent background, via `BrandLogo` | Welcome, Auth screen, and Live Training hub. Rasterized to launcher / notification icons via `tools/brand/render_logo_assets.mjs` |
-| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Welcome, Meet Rex, `RexCoachLine`, `RexCoachCard`; lesson coach band uses the same slot with `RexMascotCrop.upperBody` |
-| Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat in `LessonFeedbackSheet`, the lesson coach band on accept, and the lesson-result ceremony |
-| Icons | Material / Cupertino. No branded icon set | Theme icon color (`slate` in the app bar) |
-| Motion | Implicit widget motion only (band resize, `AnimatedSwitcher` 220ms in the runner). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
-| Sound effects | `SoundService`: `deal.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` (regenerate with `tool/gen_audio_ai.py`) | `DealtCardReveal` + `CardDealPace` deal one card at a time (holes clockwise from the button, then board), with `deal` SFX per card. Other table actions call chip/knock/fold/win. Do not add a second chip sound |
-| Background music | `assets/sounds/lounge_ambient.wav` via `SoundService.startHomeBgm` from app launch (incl. onboarding; regenerate with `tool/gen_audio_ai.py`). SoLoud loops it in the mixer; `integration_test/bgm_loop_test.dart` checks the restart is sample-continuous | Pauses in background and in Live Training. Settings toggle is `musicEnabled` |
-
-The mascot slot is the full-body coach with a mood. Meet Rex and the Rex line on Your start show that drawing. Text-only `RexCoachLine` is not the slot.
-
-The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R.
-
-A missing slot (Rex still text-only, a deal with no motion, a table action
-with no `SoundService` call) is a ticket that names the slot. The walk does
-not generate the file. The implementer adds it and fills the row.
-
-The Live Training hub shows `assets/brand/logo_mark.svg` above the lock or the table entry.
-
-### Shipped
-
-The Live Training hub shows `assets/brand/logo_mark.svg` in `_LiveAccessGate` and the open table entry of `LiveTrainingScreen` (`lib/ui/screens/live_training_screen.dart`). Auth uses the same file in `lib/ui/screens/auth_screen.dart`. Welcome uses the same logo mark above `RexMascot` on `WelcomeScreen` (`lib/ui/screens/onboarding_screens.dart`).
-
-The lesson result uses `RexMascot` for the ceremony. It does not draw a letter R. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with `RexMood.celebrate` (`assets/brand/mascot_celebrate.png`).
-
 ## Lesson screen layout
 
-Every lesson step uses the same six regions, in this order, on a phone.
-The regions do not move, swap, or collapse between steps. A step may
-leave a region quiet (fewer seats, no arrows, hint disabled). It does
-not invent a second header, a second prompt, or a second table.
+Every lesson step uses the same five regions, in this order, on a phone.
+The regions do not move, swap, or collapse between steps. A step may leave
+a region quiet (fewer seats, hint disabled). It does not invent a second
+header, a second prompt, or a second table.
 
 Your two cards (`lesson-01-01-01-your-two-cards`) is the first lesson on
-this frame. Later lessons copy `LessonScreenLayout` in
-`lib/ui/course/widgets/lesson_screen_layout.dart`. They do not build
-their own chrome.
+this frame. Every lesson uses `LessonScreenLayout` in
+`lib/ui/course/widgets/lesson_screen_layout.dart`. None builds its own
+chrome. The procedure is the
+[lesson-screen-layout](../../.cursor/rules/lesson-screen-layout.mdc) rule.
 
 ```
 ┌──────────────────────────────────────┐
-│ 1  X     progress bar          ♥ ♥ ♥ │
-│ 2  [mascot]   speech bubble          │
+│ 1  X     progress bar    ♥ ♥ ♥ ♥ ♥   │
+│ 2  [Rex]   speech bubble             │
 │ 3                                    │
 │    stage (table, or the step itself) │
 │                                      │
@@ -502,8 +311,7 @@ their own chrome.
 └──────────────────────────────────────┘
 ```
 
-There is no lesson-title row. Duolingo's "Solve the puzzle" line is not
-copied, and the lesson title does not sit under the progress bar.
+There is no lesson-title row.
 
 ### 1. Chrome
 
@@ -511,34 +319,26 @@ One row, height 36.
 
 | Slot | What it is |
 | --- | --- |
-| Close | `X` on the left. Leaves the lesson. It is not a back chevron and it is not beside a title. |
-| Progress | The lesson bar fills the space between close and the hearts. It advances by activity, not by a second bar. |
-| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. Do not replace the row with a single heart and a number. |
+| Close | `X` on the left. Leaves the lesson. It is not a back chevron. |
+| Progress | The lesson bar fills the space between close and the hearts. It advances by activity. |
+| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. At zero, the empty hearts breathe slowly, a blocked stage tap nudges, and a tap on the hearts opens the refill sheet. |
 
 ### 2. Coach band
 
 The mascot and one speech bubble share a row directly under the chrome.
-The mascot is `RexMascot` at width 78 with `RexMascotCrop.upperBody`
-(head through torso; legs clipped), the same coach as Meet Rex and the
-lesson-result ceremony. Full-body stays for Meet Rex, Home, and the
-lesson-result ceremony.
-The bubble is a rounded rectangle with a tail aimed at the
-coach's mouth. A plain rectangle is not the bubble. The bubble's top
-and that tail stay in the same place on every step. More text grows
-the bubble downward. Less text does not move the tail or the first line.
+The mascot is `RexMascot` at width 78 with `RexMascotCrop.upperBody`, the
+same coach as Meet Rex and the lesson-result ceremony. The bubble is a
+rounded rectangle with a tail aimed at the coach's mouth. The bubble's top
+and that tail stay in the same place on every step. More text grows the
+bubble downward.
 
-The bubble holds the only instruction for the step. The same sentence
-is not repeated on the table, under the table, or in a second coach
-line. Your two cards' first step says: "These two are your cards alone.
-Nobody else sees them. Tap your cards to peek."
+The bubble holds the only instruction for the step. Your two cards' first
+step says: "These two are your cards alone. Nobody else sees them. Tap your
+cards to peek."
 
-Every bubble ends by saying what to tap. `lessonFrameSpeech` folds the
-step's tap instruction into copy that only sets the scene: action and
-hand streets get "Tap your action below the table.", questions get "Tap
-the best answer.", and seat questions get "Tap that seat on the table."
-A test walks the whole catalog and fails on a bubble with no tap line.
-
-`LessonMascotExpression` picks the Rex mood:
+Every bubble ends by saying what to tap (`lessonFrameSpeech`). A test walks
+the whole catalog and fails on a bubble with no tap line. Copy that names
+hole cards names the cards actually dealt.
 
 | Moment | Expression | Rex mood |
 | --- | --- | --- |
@@ -546,260 +346,153 @@ A test walks the whole catalog and fails on a bubble with no tap line.
 | Accepted answer | Happy | Celebrate |
 | Miss | Wrong | Think |
 
-The answer dock does not draw a second face.
-
 ### 3. Stage
 
-The stage is the large middle slot. It is the only region that changes
-from step to step. Chrome, the coach band, the tools, and the answer
-dock stay put whether or not this step draws a table.
+The stage is the large middle slot and the only region that changes from
+step to step. When the step shows hole cards, a board, a pot, seats, or an
+action, the stage is the full poker table: `LessonTableStage` on
+`FeltTableView`. Fewer players, a shorter board, or no action dock is how a
+step focuses. Tap table objects when the answer is on the felt. When no
+table object fits, answers sit in the action space under the felt as
+`LessonChoiceButton`s.
 
-When the step shows hole cards, a board, a pot, seats, or an action,
-the stage is the full poker table: `LessonTableStage` on
-`FeltTableView`. It draws the oval and every seat this step includes.
-Fewer players, a shorter board, or no action dock is how a step focuses.
-A mini felt, a loose row of cards, or a second table widget is not the
-stage.
+Your two cards' first step shows four seats, no board, your two cards face
+down. Tapping your cards turns them face up. Tapping another seat's cards
+is a miss.
 
-On that table the hero sits on the felt with the other seats, exactly
-as on the Live Training table. A lesson table does not add a street
-heading or a coach shelf. The pot pill names the street. The bubble says
-the instruction.
+### Cues
 
-Your two cards' first step shows four seats (you and three other
-players), no board, your two cards face down, and arrows on your cards.
-Tapping your cards turns them face up. Tapping another seat's cards is
-a miss: a buzz, the wrong face, and the answer dock. Those cards stay
-face down.
+`GlowHighlight` (`lib/ui/widgets/glow_highlight.dart`) is the one cue. There
+are no arrows.
 
-Those arrows are the one tap cue (`CueArrows` in
-`lib/ui/widgets/cue_arrows.dart`): bouncing, glowing gold arrows. A single
-board card or hero card also gets `CuePulse`, a breathing gold ring. A
-seat the step asks for (`cueSeatIndex`) gets the gold ring and an arrow.
-Guided steps only, since a later step's highlight can be a reference seat.
+| Ring | Meaning |
+| --- | --- |
+| Gold (`GlowKind.cue`) | SoftPulse: the coach's target. Breathes |
+| Cyan (`GlowKind.selection`) | What the learner tapped. Stays on under Nice! and the miss dock |
 
-Every step uses this frame and the full poker table in the stage. Tap
-table objects when the answer is on the felt. When no table object fits,
-answers sit in the action space under the felt. Do not replace the frame
-with the old app-bar runner, a mini felt, suit tiles, or rank slots.
+SoftPulse rules:
+
+- It appears only after the dealt cards have landed.
+- It marks the first press of a multi-press step, then stays off unless Hint
+  reopens it.
+- Hint is disabled while cues are already on.
+- Review lessons hide cues by default.
+- The ring's outset is reserved in layout, so toggling it never moves or
+  resizes a tile.
 
 ### 4. Tools
 
-Undo, redo, and hint sit in one fixed row under the stage while the
-step is unanswered. They are not in the chrome. Undo reverts the local
-answer. Redo restores the answer undo just cleared. Hint shows that
-step's hint in the speech bubble until it is tapped again. A step with
-no hint leaves the button visible and disabled.
+Undo, redo, and hint sit in one fixed row under the stage while the step is
+unanswered. Undo reverts the local answer. Redo restores what undo cleared.
+Hint shows that step's hint in the speech bubble until it is tapped again.
+A step with no hint leaves the button visible and disabled.
 
 ### 5. Answer dock
 
-A graded answer replaces the tool row. It does not push a new route.
-The dock is a Duolingo-style full-bleed bar: opaque elevated color from
-left edge to right edge, extending under the home indicator, with a
-clear dark gap (`LessonAnswerDock.stageClearance`) above so stage
-controls never sit on or under the banner. The stage `Expanded` shrinks
-when the dock appears so content moves up with the layout.
+A graded answer replaces the tool row. It does not push a new route. The
+dock is a Duolingo-style full-bleed bar: opaque elevated color from edge to
+edge, extending under the home indicator, with a clear gap
+(`LessonAnswerDock.stageClearance`) above it. The stage shrinks when the
+dock appears.
 
 | Answer | Title | Button |
 | --- | --- | --- |
 | Accepted | Nice! | Continue, `AppColors.success` |
 | Miss | Oops, that's not correct | Continue, `AppColors.danger` |
 
-One short line under the title says why. Continue is the only button.
-On a miss, Continue clears the dock and stays on the same step. On an
-accepted answer, Continue advances. The gold elevated button stays the
-primary button everywhere except this dock.
+One short line under the title says why. Continue is the only button. On a
+miss, Continue clears the dock and stays on the same step. On an accepted
+answer, Continue advances.
 
 ### Shipped
 
 `LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
-is the stage. Your two cards uses both. Suits and ranks uses the same
-frame and the full table: one community card per suit, board ranks for
-order, and face-up seats for suited / pair. Button and blinds uses the
-same frame; its stage is the full table, with the dealer button, small
-blind, and big blind on the seats. Hand ranks uses the same frame and the
-full table: every step is a multiway showdown with face-up seats, and the
-learner taps seats from weakest to strongest or strongest to weakest. Best five
-and kickers uses the same frame and the full table: explain taps the
-five cards that play on hero holes and the board, guided and checkpoint
-build the best five by tapping those seven cards, and a kicker battle
-or a board-plays pot uses that table.
-Fold, check, call uses the same frame and the full table: explain
-shows a flop on the felt with Fold, Check, and Call under it, and
-each action spot uses that table. Bet, raise,
-all-in uses the same frame and the full table: explain shows a flop on
-the felt with Bet, Raise, and All-in under it, and each action spot
-uses that table. Streets and action
-order uses the same frame and the full table: explain and street order
-advance the board under Preflop / Flop / Turn / River labels, and
-postflop seat order uses that table. How pots are won uses the same
-frame and the full table: explain taps Fold win, Showdown, and Side pot
-under the felt while the board updates, and a fold-win or a called
-river uses that table. Play a full toy hand uses the same frame and the full table:
-explain taps Blinds, You act, and Ending under the felt, and each
-street of the hand uses that table. Section 1 jump check uses the same frame: rank and
-seat order stay lists, and the action spot and the toy hand use the
-full table. Position labels uses the same frame: the six-max seats
-are labeled on the full table. Acting order uses the same frame:
-preflop order is UTG, then HJ, CO, then BTN on that table. Hand families
-uses the same frame and the full table: explain taps Pairs, Broadways,
-Suited aces, and Connectors under the felt while holes update, and a
-starting hand sits face up on that table. Open or fold baseline
-uses the same frame and the full table: explain taps Early, Button, and
-Live 3x under the felt, and each open sits face up on that table. Versus an open uses
-the same frame and the full table: explain taps Fold, Call, and 3-bet
-under the felt, and each response sits face up on that table. Effective stacks uses the
-same frame and the full table: explain taps Chips→BB, Shorter, and Depth
-under the felt. Live table habits uses the same frame and the full
-table: explain taps Watch, Say, Cover, and Wait under the felt.
-Full-ring baseline hand uses the same frame and the full table:
-explain taps Nine, Same, and Position under the felt on a nine-max
-ring, and each decision sits face up on that table. Baseline
-jump check uses the same frame: the seat map and the starting hand
-sit on the full table, the open and the 3-bet use that table, and
-the stack check stays a list. Read the table first uses the same
-frame and the full table: explain taps Pot, Stacks, Button, and Who
-Acts under the felt, and the first-to-act seat is tapped on that
-table. Name your flop class uses the same frame and the full table:
-explain taps Made, Draw, SDV, and Air under the felt, and each flop
-sits face up on that table. Count outs, pay the right price uses the
-same frame and the full table: explain taps Clean, Dirty, and Price
-under the felt, the clean aces stay a card picker, and a priced draw
-sits face up on that table. Choose a flop line uses the same frame
-and the full table: explain taps Value, C-bet, Check, Call, Fold, and
-Raise under the felt, and each flop decision sits face up on that
-table. Plan the turn card uses the same frame and the full table:
-explain taps Brick, Change, Barrel, and Delay under the felt, and
-each turn sits face up on that table. Close the river correctly uses
-the same frame and the full table: explain taps Value, Bluff, Catch,
-and Fold under the felt, and each river sits face up on that table.
-Play tighter multiway uses the same frame and the full table: explain
-taps Stronger, Fewer, and Nuts under the felt, and each multiway spot
-sits face up on that table. Patch the common leaks uses the same frame
-and the full table: explain taps Top pair, Prices, Passive, and Crowds
-under the felt, and each leak spot sits face up on that table. Section 3 jump check uses the
-same frame: the table-read stays a list, the flop class and the
-bad-price draw sit face up on the full table, and the multiway fold
-and the value bet use that table. Think in ranges uses the same
-frame and the full table: explain taps One hand, Range, and Update
-under the felt, and the bet-twice and same-board spots sit face up
-on that table. Navigate 3-bet pots uses the same frame and the full
-table: explain taps 3-bet, Ranges, and Squeeze under the felt, and
-each 3-bet spot sits face up on that table. Plan beyond the flop uses
-the same frame and the full table: explain taps Flop, Turn, and River
-under the felt, and each street of the plan sits face up on that
-table. Size with a message uses the same frame and the full table:
-explain taps Value, Pressure, and Size under the felt, and each
-sizing spot sits face up on that table. SPR decides commitment uses
-the same frame and the full table: explain taps SPR, Low, and High
-under the felt, and each commitment spot sits face up on that table.
-Observe sticky callers uses the same frame and the full table: explain
-taps Enters, Calls, and Folds under the felt, the participation note
-and the observation bundle stay lists, and the sticky-call and
-low-confidence spots sit face up on that table. Meet the Calling
-Station uses the same frame and the full table: explain taps Station,
-High, and Low under the felt, and the label quizzes stay lists. Adjust
-versus Calling Station uses the same frame and the full table: explain
-taps Value, Bluffs, and Cite under the felt, each adjustment spot sits
-face up on that table, and the bluff-less reason stays a list. Observe
-narrow players uses the same frame and the full table: explain taps
-Rare, Enter, and Mean It under the felt, and the entry quizzes stay
-lists. Meet the Nit uses the same frame and the full table: explain taps
-Nit, Narrow, and Respect under the felt, and the label quizzes stay lists.
-Adjust versus Nit uses the same frame and the full table: explain taps
-Steal, Credit, and Explode under the felt, each nit spot sits face up on
-that table, and the respect reason stays a list. Observe wild aggressors
-uses the same frame and the full table: explain taps Raise, Barrel, and
-Count under the felt, and the entry quizzes stay lists. Meet the Maniac
-uses the same frame and the full table: explain taps Maniac, Entry, and
-Aggro under the felt, and the label quizzes stay lists. Adjust versus
-Maniac uses the same frame and the full table: explain taps Wider, Hang,
-and Ego under the felt, each maniac spot sits face up on that table, and
-the call-wider reason stays a list. Confidence and samples uses the same
-frame and the full table: explain taps Observe, Samples, and Showdowns
-under the felt, and the confidence quizzes stay lists. Same hand,
-different types uses the same frame and the full table: explain taps
-Cards, Seats, and Evidence under the felt, and each type spot sits face
-up on that table. Section 4 jump check uses the same frame: the
-range, SPR, and player-type checks stay lists, and the 3-bet and the
-sizing spot sit face up on the full table. Build multiway ranges
-with nut potential uses the same frame and the full table: explain taps
-Nutted, Air, and Domination under the felt, the continue and priority
-checks stay lists, and the connector and the set spots sit face up on
-that table. Play
-150–300bb stacks with a plan uses the same frame and the full table:
-explain taps Deep, Realize, and Stack under the felt, the implied, plan,
-and reward checks stay lists, and the wet-flop fold sits face up on that
-table. Implied
-and reverse odds uses the same frame and the full table: explain taps
-Implied, Reverse, and Second under the felt, each price spot sits face
-up on that table, and the rise check stays a list. Thin value and bluff-catches uses the same frame and the full table:
-explain taps Thin, Catch, and Barrels under the felt, each thin-value
-spot sits face up on that table, and the read check stays a list.
-Advanced flop lines uses the same frame and the full table: explain taps
-X/R, Probe, Delay, and Donk under the felt, the nit, donk, and delay
-checks stay lists, and the probe spot sits face up on that table. Street-by-street
-updates uses the same frame and the full table: explain taps Action,
-Rewrite, and Update under the felt, the capped, habit, and shove checks
-stay lists, and the turn bomb sits face up on that table. Soft timing evidence uses the same frame and the full table: explain taps
-Timing, Sizing, and Clues under the felt, and the timing quizzes stay
-lists. Live table dynamics uses the same frame and the full table: explain taps
-Stuck, Tilted, and Gears under the felt, the stuck, gear, and freshness
-checks stay lists, and the steaming spot sits face up on that table. Keep
-cash session guardrails uses the same frame and the full table: explain
-taps Quit, Guard, and First under the felt, and the discipline quizzes
-stay lists.
-Section 5 checkpoint uses the same frame: the multiway, tell, and stop
-checks stay lists, and the thin-value and bluff-catch spots sit face
-up on the full table. Spot range advantage and nut advantage uses the same frame and the full
-table: explain taps Range, Nut, and Advantage under the felt, the
-dry-board, paired-board, and press checks stay lists, and the c-bet
-spot sits face up on that table. Realize equity in and out of
-position uses the same frame and the full table: explain taps Equity,
-Cash, and Pos under the felt, and the realization quizzes stay lists.
-Recognize capped versus uncapped ranges uses the same frame and the full
-table: explain taps Capped, Uncapped, and Nuts under the felt, the
-check-turn, bomb, and attack checks stay lists, and the thin-value spot
-sits face up on the full table. Choose polarized or merged betting uses
-the same frame and the full table: explain taps Polar, Merged, and Size
-under the felt, the overbet, mismatch, and aim checks stay lists, and the
-merged-size spot sits face up on the full table. Use overbets and geometric pressure uses the same frame and the full
-table: explain taps Overbet, Polar, and Geo under the felt, the
-candidate, avoid, and plan checks stay lists, and the geometric turn
-sits face up on the full table. Use blockers without solver theater uses the same frame and the full
-table: explain taps Block, Use, and No EV under the felt, the unblock,
-tweak, and EV checks stay lists, and the flush board sits face up on
-the full table. Defend enough without frequency theater uses the same frame and the full
-table: explain taps Defend, Bluff, and Enough under the felt, the continue, intuition, and punish checks stay lists,
-and the third-pair fold sits face up on the full table. Mix with a reason uses the same frame and the full table: explain taps
-Mix, Purpose, and Strong under the felt, the station, reason, and purpose checks stay lists, and the
-set check sits face up on the full table. Navigate 3-bet and 4-bet pots by depth uses the same frame and the full
-table: explain taps 3-Bet, 4-Bet, and Depth under the felt, the commit, ego, and SPR checks stay lists, and the missed
-AQo flop sits face up on the full table. Make difficult folds; review coolers fairly uses the same frame and the full table: explain taps Hard, Cooler, and Ego under the felt, the cooler, ego, and review checks stay lists, and the
-weak-kicker fold sits face up on the full table. Observe selective aggression uses the same frame and the full table: explain taps Tight, Barrel, and Sample under the felt, and the entry quizzes stay lists. Meet the TAG uses the same frame and the full table: explain taps
-Tight, Aggro, and Model under the felt, and the label quizzes stay
-lists. Adjust versus TAG uses the same frame and the full table: explain taps Credit, Tighter, and No light under the felt, the respect check stays a list, and the heat, steal, and thin-value spots sit face up on the full table. Observe wide sustained pressure uses the same frame and the full table: explain taps Wide, Pressure, and Sample under the felt, and the entry quizzes stay
-lists. Meet the LAG uses the same frame and the full table: explain taps Wide, Pressure, and Model under the felt, and the label quizzes stay lists. Adjust versus LAG uses the same frame and the full table: explain taps Call, Trap, and Fancy less under the felt, the
-avoid and cite checks stay lists, and the call-wider and trap spots
-sit face up on the full table. Same cards, five type models uses the
-same frame: cards, seats, and evidence stay in the stage, the label
-check stays a list, and the station, nit, and LAG spots sit face up on
-the full table. Section 6 checkpoint uses the same frame: the
-advantage, cap, polar, TAG, and LAG checks stay lists. Carry a preflop plan onto the flop uses the same frame and the full table: explain taps Reason, Confirm, and Cancel under the felt, and the plan quizzes stay lists. Map turn barrels before you bet flop uses the same frame and the full table: explain taps Barrel, Give-up, and Map under the felt, the no-plan and definition checks stay lists, and the
-continue and brick spots sit face up on the full table. Compose river value and bluffs uses the same frame and the full table: explain taps Value, Bluff, and Hold under the felt, the blocker, empty, and rule checks stay lists, and the
-top-set value spot sits face up on the full table. Change plans by pot type uses the same frame and the full table: explain taps Limped, SRP, and 3-4bet under the felt, and the pot-type quizzes stay lists. Switch gears between HU and multiway uses the same frame and the full table: explain taps Fewer, Thicker, and Widen under the felt, and the player-count quizzes stay lists. Rewrite plans when stacks change uses the same frame and the full table: explain taps Short, Deep, and Effective under the felt, and the depth quizzes stay lists. Replay the same hand versus each type uses the same frame and the full table: explain taps Cards, Models, and Cite under the felt, the no-evidence check stays a list, and the
-station, TAG, and LAG spots sit face up on the full table. Integrate type, board, line, and sizing uses the same frame and the full table: explain taps Type, Board, Line, and Size under the felt, the integration check stays a list, and
-the maniac, nit, and TAG spots sit face up on the full table. Write your default strategy book uses the same frame and the full table: explain taps Leak, Book, and Review under the felt, and the book quizzes stay lists. Capstone: single-raised pot uses the same frame and the full table: explain taps Plan, Update, and Finish under the felt, and the three streets sit face up on the full table.
-Capstone: 3-bet pot uses the same frame and the full table: explain taps SPR, Turn, and Close under the felt, and the three streets sit face up on the full table.
-Capstone: multiway deep uses the same frame and the full table: explain taps Nuts, Deep, and No-bluff under the felt, and the three streets sit face up on the full table.
-Capstone: limped pot uses the same frame and the full table: explain taps Nuts, Value, and Thin under the felt, and the three streets sit face up on the full table.
-Capstone: 4-bet pot uses the same frame and the full table: explain taps SPR, Commit, and No Hero under the felt, and the three streets sit face up on the full table.
-Prep a coached Live warm-up hand uses the same frame and the full table: explain taps Checklist, Defaults, and One hand under the felt, and the warm-up quizzes stay
-lists. Final: all five player types uses the same frame: the station,
-nit, maniac, TAG, LAG, certainty, and retire checks stay lists. The procedure for the
-next lesson is
-[lesson-screen-layout](../../.cursor/rules/lesson-screen-layout.mdc).
+is the stage. `LessonCoachBand` maps `LessonMascotExpression` to calm,
+celebrate, or think. `LessonChoiceButton`
+(`lib/ui/course/widgets/rex_coach_line.dart`) is the one framed option
+button.
+
+## Lesson tables
+
+Contract: every lesson step uses the Poker table (`FeltTableView`, with
+`CoachShelfWidget` and `ActionDockWidget` where the step has them). Retire
+mini felts, suit tiles, and rank slots.
+
+Two older layouts still exist inside the lesson runner. New work does not
+copy them:
+
+| Layout | File | What it is |
+| --- | --- | --- |
+| `LessonActionSpot` | `lib/ui/course/widgets/lesson_action_table.dart` | Mini felt plus an action dock. `isLessonActionTableActivity` turns it on per activity id. |
+| `LessonTableScene` | `lib/ui/course/widgets/lesson_table_context.dart` | Authored teaching felt (hole cards, seats, button, captions). |
+
+`FullTableHandLabActivity` still builds `PokerActionSizingActivity` and
+`LessonActionSpot`. The name is not the full table above.
+
+Your start’s hand preview uses the Poker table bands (`FeltTableView`,
+`CoachShelfWidget`), with your cards on the felt.
+
+Lesson cards are randomized within the hand class each attempt; the coach
+copy follows the dealt cards.
+
+Playing cards use one face everywhere: `TableCard` (corner rank, one centered suit). `MiniCard` and `CardBack` are size presets over `TableCard` / `TableCardBack` for densified lesson trays — they must not invent a second face.
+
+A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
+
+Hole-card choice bands (`_HoleCardBands` in `select_identify_activity.dart`)
+fill the lesson stage height and scale the felt and choice rails together so
+a short phone never overflows.
+
+Densified teach felts that ask for ~58% of screen height
+(`kTeachFeltHeightFactor` in `teach_felt_height.dart`) clamp to the stage
+when Nice! / Continue shrinks it. `LessonScreenLayout` rewrites MediaQuery
+height for every stage child, and `_feltShell` clamps again.
+
+### Shipped
+
+Button and blinds (LPT-36) stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`). The next phase column copies that vertical stack.
+
+The per-lesson state is the Lesson ledger at the end of this file.
+
+File one ticket per layout you still see, not one ticket per activity id.
+
+## Home
+
+The Home tab is a Duolingo path.
+
+- **Status strip.** `CourseStatusBar` (`lib/ui/home/course_status_bar.dart`):
+  flame + streak, diamond + gems, heart + hearts, centered and spaced across
+  the full row. JetBrains Mono numbers in each accent color. Tapping the
+  hearts opens the refill sheet.
+- **Unit banner.** One full-width, rounded, sticky banner reads
+  `SECTION N, UNIT M` with the unit title, swaps as the path scrolls, and
+  opens the section picker on tap. Color comes from
+  `unitBannerColorForSection`.
+- **Path.** One section at a time. Circular nodes on a zig-zag
+  (`CoursePathView`). The next lesson pulses; the pulse ring starts at the
+  node edge and expands evenly without shifting the layout. The pulse stays
+  on the course frontier while reviews are due.
+- **Start.** Tapping an unlocked node shows a speech bubble under it with
+  START (or REVIEW) and the XP preview. Lessons launch only from that
+  bubble. A locked node explains what to finish first.
+- **Section picker.** `CourseSectionPickerSheet`
+  (`lib/ui/home/course_section_picker.dart`): one card per section with a
+  summary, a progress bar or JUMP HERE. Jump scrolls the path to that
+  section.
+- **Bottom navigation.** `ShellBottomNav`, illustrated icons
+  `assets/brand/nav_home.svg`, `nav_live.svg`, `nav_profile.svg`.
+
+Rex appears on Home only in non-ready message states (loading, error,
+empty). He does not stand on the path.
+
+### Hearts
+
+Five hearts per user, shared across lessons (`kHomeDefaultHearts`). Guided
+steps are free; any other miss costs one. Out of hearts blocks the lesson in
+place. The refill sheet (`heart_refill_sheet.dart`) offers Practice (+1
+heart on finishing a weak, already-played lesson) and a full refill for
+gems. Hearts update in place on Home without blanking it.
 
 ## Gamified learning
 
@@ -809,42 +502,186 @@ board as the hero, a mascot beat when the answer lands, then a payoff.
 Frames are in `docs/ui/references/duolingo-chess/frames/`. Use the pattern.
 Do not copy their palette, owl, or words.
 
-| Beat | What the screen does |
-| --- | --- |
-| Step | The lesson screen layout: close, progress, hearts, one speech bubble, the stage, then undo / redo / hint. No title row. The stage is the full table only when the step is a hand. |
-| Right | The coach face turns happy. The dock says Nice! and one Continue. |
-| Wrong | The coach brings both arms in. The dock says Think again or Not quite. Continue stays on the step. |
-| Hint | Hint replaces the speech bubble until it is tapped again. |
-| Payoff | Lesson XP and the daily goal before Home. |
-| Home | Status strip: full-width streak, gems, hearts. One sticky unit banner (`SECTION N, UNIT M` + title) swaps on scroll. A winding path of circular nodes follows; the next lesson is the marked node with a START chip and Rex on it. |
-| Section list | Tapping the unit banner opens section cards: summary bubble, experience band, progress or JUMP HERE. Jump scrolls the path to that section. |
-
-On Home, Rex stands on the marked next-lesson node. A Rex card above the path is not that beat.
-| Section end | One ceremony: character, title, one button. |
-
-The lesson result shows this lesson’s XP and the daily goal before Home.
+| Beat | What the screen does | Frame |
+| --- | --- | --- |
+| Step | The lesson screen layout | `001.png` |
+| Right | Rex celebrates, the dock says Nice! and one Continue | `002.png` |
+| Wrong | Rex thinks, the dock says Oops, a heart empties, Continue stays on the step | `090.png` |
+| Hint | Hint replaces the speech bubble until it is tapped again | `020.png` |
+| Payoff | The lesson result: Rex celebrating, this lesson's XP, the daily goal, one CONTINUE | `117.png` |
+| Home | The path, the next node marked, the start bubble | `125.png` |
+| Section end | One ceremony: character, title, one button | `128.png` |
 
 A right answer shows the same coach in a celebrating mood beside the short line. The calm drawing and the celebrating drawing are the same coach. The Asset inventory celebrate row uses that same coach.
 
+A miss shows that coach thinking beside the short line. It does not
+celebrate.
+
+The lesson result uses `RexMascot` for the ceremony. It does not draw a
+letter R. It shows this lesson’s XP and the daily goal before Home. Review
+lessons award 25% of the XP earned.
+
 The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2.
 
-Rex on a teaching step has a face and a mood. A text-only coach line on a
-right or wrong answer is a gap in the mascot slot and in this section.
-File one ticket per missing beat.
+A learning screen that is a form, a wall of text, or a silent pop back to
+Home misses this loop. File one ticket per missing beat.
 
 ### Shipped
 
-Home path nodes are circles on a zig-zag in `CoursePathView`
-(`lib/ui/home/course_path_view.dart`). Unit banners use
-`unitBannerColorForSection`. Section cards live in
-`CourseSectionPickerSheet` (`lib/ui/home/course_section_picker.dart`).
+`LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`)
+uses `RexMascot` with `RexMood.celebrate` on a right answer and
+`RexMood.think` on a miss. `LessonResultScreen`
+(`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with
+`RexMood.celebrate` and a TOTAL XP and daily goal row.
 
-A right answer shows the same coach in a celebrating mood beside the short line. `LessonFeedbackSheet` (`lib/ui/course/widgets/lesson_feedback_sheet.dart`) uses `RexMascot` with `RexMood.celebrate` (`assets/brand/mascot_celebrate.png`). That drawing is the same coach as `assets/brand/mascot_idle.png`.
+The locked Live Training hub copy is `liveTrainingLockedMessage`
+(`lib/models/live_access.dart`). The gate is the Home node
+`lesson-02-07-02-section-two-jump` (Baseline jump check).
 
-A miss shows that coach thinking beside the short line. `LessonFeedbackSheet` uses `RexMascot` with `RexMood.think`. It does not celebrate.
+## Asset inventory
 
-The lesson coach band uses the same `RexMascot` slot. `LessonCoachBand` (`lib/ui/course/widgets/lesson_screen_layout.dart`) maps `LessonMascotExpression` to calm, celebrate, or think. It does not draw a placeholder face.
+Slots are the only place a new animation, icon, sound, logo, or mascot is
+introduced. Reuse the path already listed. Add a row when a new file ships.
 
-The locked Live Training hub says to finish the Section 2 checkpoint on Home in `liveTrainingLockedMessage` (`lib/models/live_access.dart`). That gate is the Home node `lesson-02-07-02-section-two-jump` (catalog title Baseline jump check).
+| Slot | Current | Reuse |
+| --- | --- | --- |
+| Logo | `assets/brand/logo_mark.svg` — gold mark, transparent background, via `BrandLogo` | Welcome, Auth, Live Training hub. Rasterized to launcher / notification icons via `tools/brand/render_logo_assets.mjs` |
+| Mascot | `assets/brand/mascot_idle.png` — full body, calm mood, via `RexMascot` | Welcome, Meet Rex, `RexCoachLine`, `RexCoachCard`; lesson coach band uses the same slot with `RexMascotCrop.upperBody` |
+| Mascot celebrate | `assets/brand/mascot_celebrate.png` — the same coach, celebrating mood, the same coach as the calm drawing, via `RexMascot` | Right-answer beat, the coach band on accept, the lesson-result ceremony |
+| Mascot rig | `mascot_body`, `mascot_arm_left`, `mascot_arm_right`, `mascot_mouth_happy` (`.svg` + `.png`), posed by `RexMascot` (`lib/ui/widgets/rex_mascot.dart`): calm blinks, celebrate raises an arm and opens the mouth, think folds both arms in front of the chest. `mascot_think`, `mascot_side`, `mascot_back` are drawn but not wired | Any new Rex motion or expression extends this rig. It does not add a second drawing of Rex |
+| Navigation icons | `assets/brand/nav_home.svg`, `nav_live.svg`, `nav_profile.svg` | `ShellBottomNav` |
+| Icons | Material / Cupertino otherwise. No other branded set | Theme icon color |
+| Motion | Implicit widget motion (band resize, `AnimatedSwitcher` in the runner, pulses, shake, pot flight). No Rive or Lottie | [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) durations |
+| Sound effects | `SoundService`: `deal_01.wav`–`deal_08.wav`, `chip.wav`, `knock.wav`, `fold.wav`, `win.wav` under `assets/sounds/` | One deal hit per dealt card. Other table actions call chip / knock / fold / win. Do not add a second chip sound |
+| Background music | `assets/sounds/lounge_ambient.wav` via `SoundService.startHomeBgm` from app launch. SoLoud loops it gaplessly; `integration_test/bgm_loop_test.dart` checks the restart | Pauses in background and in Live Training. Settings toggle is `musicEnabled` |
 
-The lesson result shows this lesson’s XP and the daily goal before Home. `LessonResultScreen` (`lib/ui/screens/lesson_result_screen.dart`) lists XP earned and a Daily goal row of the onboarding minutes.
+The mascot slot is the full-body coach with a mood. Text-only
+`RexCoachLine` is not the slot.
+
+The Live Training hub shows `assets/brand/logo_mark.svg` above the lock or the table entry.
+
+A missing slot (Rex text-only, a deal with no motion, a table action with no
+`SoundService` call) is a ticket that names the slot. The implementer adds
+the file and fills the row.
+
+## Known gaps
+
+Stakeholder asks that are not shipped yet. These are the first places to
+look for work. Verify on the mini before filing: the code may have moved
+past this list.
+
+- **Text quizzes inside lessons.** The Lesson ledger's "Still a list"
+  column is every step that is still a text Q&A list. Each one is a
+  teach-by-doing gap when the answer can live on the felt.
+- **Older lesson layouts.** Steps still on `LessonActionSpot` or
+  `LessonTableScene` instead of `LessonTableStage`.
+- **Section end ceremony.** Finishing a section has no character, title,
+  one-button ceremony (frame `128.png`).
+- **Gems do nothing on tap.** The status strip shows the balance, but there
+  is no shop or explanation. The plan is the gem economy rollout (wallet,
+  more ways to earn, a Gem Shop, Streak Freeze).
+- **Rex motion.** The rig has three poses. The ask is a scalable mascot
+  with more expressions and short, smooth full-body movements on each beat
+  (the side, back, and think drawings are not wired yet).
+- **Live Training and Profile** have had far less polish than lessons and
+  Home. Walk them against Theme and Poker table.
+
+## Lesson ledger
+
+One row per lesson. "Explain taps" are the teach-by-doing targets under the
+felt on the explain step. "Still a list" is what the record says remains a
+text list. Update the row in the same change that moves a step onto the
+felt.
+
+| Lesson | Explain taps | Still a list |
+| --- | --- | --- |
+| Your two cards | Your hole cards on the felt | — |
+| Suits and ranks | Suit taps on board cards, board ranks low to high, suited / pair seats | — |
+| Button and blinds | Dealer button, SB, BB on the seats | — |
+| Hand ranks | Showdown seats weakest to strongest | — |
+| Best five and kickers | The five cards that play; You / Them / Board | — |
+| Fold, check, call | Fold, Check, Call under a flop | — |
+| Bet, raise, all-in | Bet, Raise, All-in under a flop | — |
+| Streets and action order | Board advances by street; seat order on the table | — |
+| How pots are won | Fold win, Showdown, Side pot | — |
+| Play a full toy hand | Blinds, You act, Ending | — |
+| Section 1 jump check | — | rank and seat order |
+| Position labels | Six-max seats labeled on the table | — |
+| Acting order | UTG, HJ, CO, BTN on the table | — |
+| Hand families | Pairs, Broadways, Suited aces, Connectors | — |
+| Open or fold baseline | Early, Button, Live 3x | — |
+| Versus an open | Fold, Call, 3-bet | — |
+| Effective stacks | Chips→BB, Shorter, Depth | — |
+| Live table habits | Watch, Say, Cover, Wait | — |
+| Full-ring baseline hand | Nine, Same, Position | — |
+| Baseline jump check | — | stack check |
+| Read the table first | Pot, Stacks, Button, Who Acts | — |
+| Name your flop class | Made, Draw, SDV, Air | — |
+| Count outs, pay the right price | Clean, Dirty, Price | clean aces (card picker) |
+| Choose a flop line | Value, C-bet, Check, Call, Fold, Raise | — |
+| Plan the turn card | Brick, Change, Barrel, Delay | — |
+| Close the river correctly | Value, Bluff, Catch, Fold | — |
+| Play tighter multiway | Stronger, Fewer, Nuts | — |
+| Patch the common leaks | Top pair, Prices, Passive, Crowds | — |
+| Section 3 jump check | — | table-read |
+| Think in ranges | One hand, Range, Update | — |
+| Navigate 3-bet pots | 3-bet, Ranges, Squeeze | — |
+| Plan beyond the flop | Flop, Turn, River | — |
+| Size with a message | Value, Pressure, Size | — |
+| SPR decides commitment | SPR, Low, High | — |
+| Observe sticky callers | Enters, Calls, Folds | participation note, observation bundle |
+| Meet the Calling Station | Station, High, Low | label quizzes |
+| Adjust versus Calling Station | Value, Bluffs, Cite | bluff-less reason |
+| Observe narrow players | Rare, Enter, Mean It | entry quizzes |
+| Meet the Nit | Nit, Narrow, Respect | label quizzes |
+| Adjust versus Nit | Steal, Credit, Explode | respect reason |
+| Observe wild aggressors | Raise, Barrel, Count | entry quizzes |
+| Meet the Maniac | Maniac, Entry, Aggro | label quizzes |
+| Adjust versus Maniac | Wider, Hang, Ego | call-wider reason |
+| Confidence and samples | Observe, Samples, Showdowns | confidence quizzes |
+| Same hand, different types | Cards, Seats, Evidence | — |
+| Section 4 jump check | — | range, SPR, and player-type checks |
+| Build multiway ranges with nut potential | Nutted, Air, Domination | continue and priority checks |
+| Play 150–300bb stacks with a plan | Deep, Realize, Stack | implied, plan, and reward checks |
+| Implied and reverse odds | Implied, Reverse, Second | rise check |
+| Thin value and bluff-catches | Thin, Catch, Barrels | read check |
+| Advanced flop lines | X/R, Probe, Delay, Donk | nit, donk, and delay checks |
+| Street-by-street updates | Action, Rewrite, Update | capped, habit, and shove checks |
+| Soft timing evidence | Timing, Sizing, Clues | timing quizzes |
+| Live table dynamics | Stuck, Tilted, Gears | stuck, gear, and freshness checks |
+| Keep cash session guardrails | Quit, Guard, First | discipline quizzes |
+| Section 5 checkpoint | — | multiway, tell, and stop checks |
+| Spot range advantage and nut advantage | Range, Nut, Advantage | dry-board, paired-board, and press checks |
+| Realize equity in and out of position | Equity, Cash, Pos | realization quizzes |
+| Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts | check-turn, bomb, and attack checks |
+| Choose polarized or merged betting | Polar, Merged, Size | overbet, mismatch, and aim checks |
+| Use overbets and geometric pressure | Overbet, Polar, Geo | candidate, avoid, and plan checks |
+| Use blockers without solver theater | Block, Use, No EV | unblock, tweak, and EV checks |
+| Defend enough without frequency theater | Defend, Bluff, Enough | continue, intuition, and punish checks |
+| Mix with a reason | Mix, Purpose, Strong | station, reason, and purpose checks |
+| Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth | commit, ego, and SPR checks |
+| Make difficult folds; review coolers fairly | Hard, Cooler, Ego | cooler, ego, and review checks |
+| Observe selective aggression | Tight, Barrel, Sample | entry quizzes |
+| Meet the TAG | Tight, Aggro, Model | label quizzes |
+| Adjust versus TAG | Credit, Tighter, No light | respect check |
+| Observe wide sustained pressure | Wide, Pressure, Sample | entry quizzes |
+| Meet the LAG | Wide, Pressure, Model | label quizzes |
+| Adjust versus LAG | Call, Trap, Fancy less | avoid and cite checks |
+| Same cards, five type models | Cards, seats, and evidence in the stage | label check |
+| Section 6 checkpoint | — | advantage, cap, polar, TAG, and LAG checks |
+| Carry a preflop plan onto the flop | Reason, Confirm, Cancel | plan quizzes |
+| Map turn barrels before you bet flop | Barrel, Give-up, Map | no-plan and definition checks |
+| Compose river value and bluffs | Value, Bluff, Hold | blocker, empty, and rule checks |
+| Change plans by pot type | Limped, SRP, 3-4bet | pot-type quizzes |
+| Switch gears between HU and multiway | Fewer, Thicker, Widen | player-count quizzes |
+| Rewrite plans when stacks change | Short, Deep, Effective | depth quizzes |
+| Replay the same hand versus each type | Cards, Models, Cite | no-evidence check |
+| Integrate type, board, line, and sizing | Type, Board, Line, Size | integration check |
+| Write your default strategy book | Leak, Book, Review | book quizzes |
+| Capstone: single-raised pot | Plan, Update, Finish | — |
+| Capstone: 3-bet pot | SPR, Turn, Close | — |
+| Capstone: multiway deep | Nuts, Deep, No-bluff | — |
+| Capstone: limped pot | Nuts, Value, Thin | — |
+| Capstone: 4-bet pot | SPR, Commit, No Hero | — |
+| Prep a coached Live warm-up hand | Checklist, Defaults, One hand | warm-up quizzes |
+| Final: all five player types | — | station, nit, maniac, TAG, LAG, certainty, and retire checks |

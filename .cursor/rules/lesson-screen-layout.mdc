@@ -54,3 +54,4 @@ that teaches another level passes `smallBlind` and `bigBlind`.
 3. Pick the stage from the table above.
 4. Keep the bubble top, the tail, and the tool row where Your two cards has them.
 5. Cover the frame in a widget test: the regions are present, and a short line and a long line keep the same bubble top and first-line inset.
+6. Update that lesson's row in the design record's Lesson ledger when a step moves onto the felt.
