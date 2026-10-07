@@ -20,6 +20,21 @@ Do not hardcode a UDID. Do not target any other simulator.
 If the mini is already booted, or a `flutter run` is already up on it, follow
 [simulator-refresh](../simulator-refresh/SKILL.md).
 
+## 0. Hold the lock
+
+Claim the mini before booting it
+([simulator-lock](../../rules/simulator-lock.mdc)). If another agent holds
+it, stop and report the holder. Do not wait.
+
+```bash
+SIM_LOCK_RUN_ID="$(python3 tools/sim_lock.py claim --owner <agent> --purpose "launch origin/main")" \
+  || { python3 tools/sim_lock.py status; exit 0; }
+export SIM_LOCK_RUN_ID
+```
+
+Release it (`python3 tools/sim_lock.py release`) after the report below,
+unless the task that launched the mini still needs it.
+
 ## 1. Check
 
 ```bash

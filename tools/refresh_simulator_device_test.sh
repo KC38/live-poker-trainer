@@ -27,7 +27,7 @@ esac
 if grep -E 'F1AE4938|20ACECD5|7CB7DDCF' "$REFRESH" "$UDID_SCRIPT" \
   "$ROOT/.cursor/skills/launch-simulator/SKILL.md" \
   "$ROOT/.cursor/skills/simulator-refresh/SKILL.md" \
-  "$ROOT/.cursor/commands/implement-open-jira.md" \
+  "$ROOT/.cursor/commands/ui-design-agent.md" \
   "$ROOT/docs/agent-ios-simulator.md" >/dev/null
 then
   fail "hard-coded legacy simulator UDIDs still present"
@@ -37,7 +37,7 @@ if grep -E 'iPhone 17|Pro Max|iphone17-main|flutter-pro-lessons|flutter-ui-pro-m
   "$REFRESH" \
   "$ROOT/.cursor/skills/launch-simulator/SKILL.md" \
   "$ROOT/.cursor/skills/simulator-refresh/SKILL.md" \
-  "$ROOT/.cursor/commands/implement-open-jira.md" \
+  "$ROOT/.cursor/commands/ui-design-agent.md" \
   "$ROOT/docs/agent-ios-simulator.md" >/dev/null
 then
   fail "legacy multi-simulator wording still present"

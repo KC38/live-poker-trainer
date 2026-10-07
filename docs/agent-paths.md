@@ -1,6 +1,6 @@
 # Agent validation paths
 
-Journeys that tickets and `/implement-open-jira` may name. Add a path here
+Journeys that tickets and `/ui-design-agent` may name. Add a path here
 when the product grows a journey. Do not invent a path during a session.
 
 `requires` is the simulator precondition. `watch` prefixes mark when

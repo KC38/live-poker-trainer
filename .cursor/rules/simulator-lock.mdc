@@ -1,0 +1,53 @@
+---
+description: Hold the shared iPhone 13 mini lock before touching the simulator; if another agent holds it, stop instead of waiting
+alwaysApply: true
+---
+
+# One simulator, one holder
+
+The iPhone 13 mini is the only agent simulator, and only one agent uses it
+at a time. The current holder is in `~/.live-poker-trainer/simulator-lock.json`.
+Read it with:
+
+```bash
+python3 tools/sim_lock.py status   # exit 0 free, 3 in use
+```
+
+## Before touching the mini
+
+Holding the lock is required to boot it, `flutter run` on it, hot-restart it,
+install, uninstall, or terminate the app, tap or type with `agent_tap.py`,
+or take a screenshot (`xcrun simctl io …`).
+
+```bash
+SIM_LOCK_RUN_ID="$(python3 tools/sim_lock.py claim --owner <agent-name> --purpose "<what for>")" \
+  || { echo "iPhone 13 mini busy"; exit 0; }
+export SIM_LOCK_RUN_ID
+```
+
+- **Busy means stop.** If the claim exits 3, do not wait, poll, retry, or use
+  another simulator. Tell the user who holds it (the claim prints that), skip
+  the simulator part of the task, and finish the rest. `/ui-design-agent`
+  ends its run.
+- Keep `SIM_LOCK_RUN_ID` exported for every later shell call. If the shell
+  lost it, re-export the id you were given. Never read another run's id out
+  of the lock file.
+- Before each direct `xcrun simctl` call, run `python3 tools/sim_lock.py guard`.
+  `agent_tap.py` and `refresh-simulator.sh` check the lock themselves.
+- During long work that does not touch the mini (implement, tests, merge),
+  run `python3 tools/sim_lock.py heartbeat --purpose "<step>"` at least
+  every 30 minutes. A lock with no heartbeat for two hours, or whose
+  `--pid` exited, is stale and the next agent may claim it.
+
+## When done
+
+```bash
+python3 tools/sim_lock.py release   # uses $SIM_LOCK_RUN_ID
+```
+
+Release on every exit path, including failures. Do not release another
+holder's lock. `release --force` is for the user only, when they ask.
+
+`make-change` step 9 needs no claim of its own: `refresh-simulator.sh`
+uses your lock when you hold it, holds it briefly when it is free, and
+skips the refresh when someone else holds it.

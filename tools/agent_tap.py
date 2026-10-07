@@ -4,17 +4,36 @@
 The default log is the iPhone 13 mini session
 (`/tmp/flutter-live-poker-trainer.run.log`). Ticket worktree sessions pass
 `--log /tmp/flutter-$SLUG.log`.
+
+Only the holder of the simulator lock (`tools/sim_lock.py`) may drive the
+mini. Pass the run id with `--run-id` or `$SIM_LOCK_RUN_ID`.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import re
 import sys
+import types
 import urllib.parse
 import urllib.request
 from pathlib import Path
+
+
+def _load_sim_lock() -> types.ModuleType:
+    """Load the sibling sim_lock.py whether or not tools/ is a package."""
+    path = Path(__file__).with_name("sim_lock.py")
+    spec = importlib.util.spec_from_file_location("sim_lock", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+sim_lock = _load_sim_lock()
 
 DEFAULT_LOG = Path("/tmp/flutter-live-poker-trainer.run.log")
 # Back-compat alias for older callers/tests.
@@ -69,12 +88,20 @@ def build_parser() -> argparse.ArgumentParser:
             "Ticket worktrees pass /tmp/flutter-$SLUG.log."
         ),
     )
+    parser.add_argument(
+        "--run-id",
+        default=None,
+        help="Simulator lock run id. Default $SIM_LOCK_RUN_ID.",
+    )
     return parser
 
 
 def main(argv: list[str] | None = None) -> None:
-    """CLI entrypoint."""
+    """CLI entrypoint. Refuses unless this run holds the simulator lock."""
     args = build_parser().parse_args(argv)
+    lock_args = ["guard"] + (["--run-id", args.run_id] if args.run_id else [])
+    if sim_lock.main(lock_args) != sim_lock.EXIT_OK:
+        raise SystemExit("agent_tap: the iPhone 13 mini lock is not yours (tools/sim_lock.py status)")
     extra = {"text": args.text} if args.text else {}
     agent(args.cmd, log=args.log, **extra)
 

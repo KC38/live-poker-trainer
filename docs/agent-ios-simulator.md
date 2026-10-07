@@ -16,6 +16,26 @@ DEVICE="$(tools/iphone_13_mini_udid.sh)"
 Do not boot, uninstall, terminate, kill, hot-restart, screenshot, or tap any
 other simulator for agent work.
 
+## One holder at a time
+
+Only one agent uses the mini at a time. Claim it before touching it, and
+stop (do not wait) when someone else holds it. The rule is
+[simulator-lock](../.cursor/rules/simulator-lock.mdc).
+
+```bash
+python3 tools/sim_lock.py status          # who holds it; exit 3 when in use
+SIM_LOCK_RUN_ID="$(python3 tools/sim_lock.py claim --owner <agent> --purpose "<why>")" || exit 0
+export SIM_LOCK_RUN_ID
+python3 tools/sim_lock.py heartbeat --purpose "<step>"   # during long work
+python3 tools/sim_lock.py release
+```
+
+The holder lives in `~/.live-poker-trainer/simulator-lock.json`, with history
+in `simulator-lock.log` next to it. `agent_tap.py` and `refresh-simulator.sh`
+check the lock themselves. A person who wants the mini claims it the same
+way (`--owner kc`). `release --force` clears a holder only when the user
+asks.
+
 ## Xcode 27+: Device Hub (not Simulator.app)
 
 Xcode 27 **removed** `Simulator.app`. The GUI is **Device Hub**:
@@ -91,7 +111,7 @@ SESSION=flutter-iphone-13-mini
 PID_FILE=/tmp/flutter-live-poker-trainer.pid
 LOG_FILE=/tmp/flutter-live-poker-trainer.run.log
 
-# /implement-open-jira ticket worktree before merge may use:
+# /ui-design-agent ticket worktree before merge may use:
 # CHECKOUT="$PRIMARY/.worktrees/$SLUG"
 # SESSION=flutter-iphone-13-mini-$SLUG
 # PID_FILE=/tmp/flutter-$SLUG.pid
@@ -171,7 +191,8 @@ xcrun simctl io "$DEVICE" screenshot /tmp/mini.png
 
 - Boot when none is running: [`.cursor/skills/launch-simulator/SKILL.md`](../.cursor/skills/launch-simulator/SKILL.md)
 - Post-merge refresh: [`.cursor/skills/simulator-refresh/SKILL.md`](../.cursor/skills/simulator-refresh/SKILL.md)
-- Ship open tickets: [`.cursor/commands/implement-open-jira.md`](../.cursor/commands/implement-open-jira.md)
+- UI design agent (find, ship, and close UI tickets): [`.cursor/commands/ui-design-agent.md`](../.cursor/commands/ui-design-agent.md), looped by `tools/ui_design_agent_loop.sh`
+- Simulator lock: [`.cursor/rules/simulator-lock.mdc`](../.cursor/rules/simulator-lock.mdc), [`tools/sim_lock.py`](../tools/sim_lock.py)
 - Code changes: [`.cursor/skills/make-change/SKILL.md`](../.cursor/skills/make-change/SKILL.md)
 - Named journeys: [agent-paths.md](agent-paths.md)
 - UDID resolver: [`tools/iphone_13_mini_udid.sh`](../tools/iphone_13_mini_udid.sh)

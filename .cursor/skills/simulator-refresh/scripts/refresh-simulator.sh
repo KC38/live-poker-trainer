@@ -56,6 +56,20 @@ if [[ "${REFRESH_SIMULATOR_SOURCE_ONLY:-}" == "1" ]]; then
   return 0 2>/dev/null || exit 0
 fi
 
+# The mini is shared. Use the caller's lock when it holds one; otherwise hold
+# it just for this refresh. Someone else holding it means skip, not wait.
+SIM_LOCK="$REPO_ROOT/tools/sim_lock.py"
+if [[ -n "${SIM_LOCK_RUN_ID:-}" ]] && python3 "$SIM_LOCK" guard >/dev/null 2>&1; then
+  :
+elif SIM_LOCK_RUN_ID="$(python3 "$SIM_LOCK" claim --owner refresh-simulator --purpose "refresh to origin/main" 2>/dev/null)"; then
+  export SIM_LOCK_RUN_ID
+  trap 'python3 "$SIM_LOCK" release --run-id "$SIM_LOCK_RUN_ID" >/dev/null 2>&1 || true' EXIT
+else
+  echo "skip: the iPhone 13 mini is in use by another agent"
+  python3 "$SIM_LOCK" status || true
+  exit 0
+fi
+
 DEVICE_ID="$(resolve_iphone_13_mini_udid)"
 PID_FILE="/tmp/flutter-live-poker-trainer.pid"
 LOG_FILE="/tmp/flutter-live-poker-trainer.run.log"
