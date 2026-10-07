@@ -154,4 +154,130 @@ void main() {
     expect(reveal.isRevealed(1), isTrue);
     reveal.dispose();
   });
+
+  test('folded seats with a blank label still fold before later actions', () {
+    final actions = postDealActionsInOrder(
+      GameState(
+        players: [
+          _seat(id: 0, name: 'UTG', folded: true),
+          _seat(id: 1, name: 'HJ', folded: true, lastActionLabel: '  '),
+          _seat(id: 2, name: 'CO', lastActionLabel: 'raise_to'),
+          _seat(id: 3, name: 'BTN', lastActionLabel: ' '),
+          _seat(id: 4, name: 'SB', lastActionLabel: 'blind'),
+          _seat(id: 5, name: 'BB', lastActionLabel: 'BLIND'),
+        ],
+        mode: GameMode.training,
+        dealerIndex: 3,
+        sbIndex: 4,
+        bbIndex: 5,
+      ),
+    );
+    expect(actions, [
+      (seat: 0, label: 'FOLD'),
+      (seat: 1, label: 'FOLD'),
+      (seat: 2, label: 'RAISE-TO'),
+    ]);
+  });
+
+  test('an empty table has no post-deal actions', () {
+    expect(
+      postDealActionsInOrder(
+        const GameState(players: [], mode: GameMode.training),
+      ),
+      isEmpty,
+    );
+  });
+
+  test('seats that have not acted stay visible while opening folds wait', () {
+    CardDealPace.debugInstant = false;
+    final reveal = FeltActionRevealController();
+    reveal.bind(
+      epoch: 'pre-wait',
+      holesComplete: false,
+      actions: const [
+        (seat: 0, label: 'FOLD'),
+        (seat: 1, label: 'FOLD'),
+      ],
+    );
+    expect(reveal.isRevealed(0), isFalse);
+    expect(reveal.isRevealed(1), isFalse);
+    expect(reveal.isRevealed(3), isTrue);
+    reveal.dispose();
+  });
+
+  test('instant mode shows opening folds without reveal sfx', () {
+    CardDealPace.debugInstant = true;
+    final shown = <String>[];
+    final reveal = FeltActionRevealController(
+      onRevealed: (seat, label) => shown.add('$seat:$label'),
+    );
+    reveal.bind(
+      epoch: 'instant-1',
+      holesComplete: false,
+      actions: const [
+        (seat: 0, label: 'FOLD'),
+        (seat: 1, label: 'FOLD'),
+      ],
+    );
+    expect(reveal.isSequencing, isFalse);
+    expect(reveal.openingBatchComplete, isTrue);
+    expect(reveal.isRevealed(0), isTrue);
+    expect(reveal.isRevealed(1), isTrue);
+    expect(shown, isEmpty);
+    reveal.dispose();
+  });
+
+  test('a new epoch cancels a badge that has not landed', () {
+    CardDealPace.debugInstant = false;
+    fakeAsync((async) {
+      final shown = <String>[];
+      final reveal = FeltActionRevealController(
+        onRevealed: (seat, label) => shown.add('$seat:$label'),
+      );
+      reveal.bind(
+        epoch: 'hand-a',
+        holesComplete: false,
+        actions: const [(seat: 0, label: 'FOLD')],
+      );
+      reveal.bind(
+        epoch: 'hand-a',
+        holesComplete: true,
+        actions: const [(seat: 0, label: 'FOLD')],
+      );
+      reveal.bind(
+        epoch: 'hand-b',
+        holesComplete: false,
+        actions: const [(seat: 2, label: 'RAISE')],
+      );
+      async.elapse(CardDealPace.dealCard);
+      expect(shown, isEmpty);
+      expect(reveal.isSequencing, isTrue);
+      expect(reveal.isRevealed(2), isFalse);
+      expect(reveal.isRevealed(0), isTrue);
+      reveal.dispose();
+    });
+  });
+
+  test('dispose cancels a badge that has not landed', () {
+    CardDealPace.debugInstant = false;
+    fakeAsync((async) {
+      final shown = <String>[];
+      final reveal = FeltActionRevealController(
+        onRevealed: (seat, label) => shown.add('$seat:$label'),
+      );
+      reveal.bind(
+        epoch: 'hand-a',
+        holesComplete: false,
+        actions: const [(seat: 0, label: 'FOLD')],
+      );
+      reveal.bind(
+        epoch: 'hand-a',
+        holesComplete: true,
+        actions: const [(seat: 0, label: 'FOLD')],
+      );
+      reveal.dispose();
+      async.elapse(CardDealPace.dealCard);
+      expect(shown, isEmpty);
+    });
+  });
 }
