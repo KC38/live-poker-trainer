@@ -190,7 +190,12 @@ case "${1:-}" in
     [[ -f "$PID_FILE" ]] && echo "current run pid: $(cat "$PID_FILE")"
     sim_lock status || true
     latest="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
-    [[ -n "$latest" ]] && { echo "latest log: $latest"; tail -n 10 "$latest"; }
+    if [[ -n "$latest" ]]; then
+      echo "latest log: $latest"
+      tail -n 10 "$latest"
+    else
+      echo "latest log: none yet"
+    fi
     ;;
   attach)
     exec tmux attach -t "$SESSION"

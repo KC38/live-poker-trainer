@@ -62,4 +62,10 @@ python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 one_run >/dev/null 2>&1 || fail "free mini run failed"
 [[ -f "$tmp/agent-started" ]] || fail "agent should start when the mini is free"
 
+(unset UI_AGENT_LOOP_SOURCE_ONLY; bash "$LOOP" status >/dev/null) \
+  || fail "status should exit 0"
+rm -f "$LOG_DIR"/run-*.log
+(unset UI_AGENT_LOOP_SOURCE_ONLY; bash "$LOOP" status >/dev/null) \
+  || fail "status should exit 0 before the first run"
+
 echo "ui-design-agent loop ok"
