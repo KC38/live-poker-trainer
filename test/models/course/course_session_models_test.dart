@@ -253,4 +253,40 @@ void main() {
     expect(attempt.needsRemediation, isTrue);
     expect(attempt.isComplete, isFalse);
   });
+
+  test('a resumed attempt completes only after every activity is done', () {
+    CourseAttemptSnapshot attempt({
+      int activityIndex = 0,
+      int acceptedCount = 0,
+    }) {
+      return CourseAttemptSnapshot(
+        attemptId: 'att-1',
+        lessonId: 'lesson-1',
+        catalogVersion: '2.0.0',
+        status: 'in_progress',
+        activityIndex: activityIndex,
+        currentActivityId: 'act-1',
+        livesRemaining: 5,
+        livesMax: 5,
+        acceptedCount: acceptedCount,
+        scoredCount: acceptedCount,
+        stepCount: acceptedCount,
+      );
+    }
+
+    expect(attempt().isReadyToComplete(0), isFalse);
+    expect(attempt().isReadyToComplete(-1), isFalse);
+    expect(
+      attempt(activityIndex: 1, acceptedCount: 1).isReadyToComplete(4),
+      isFalse,
+    );
+    expect(
+      attempt(activityIndex: 4, acceptedCount: 3).isReadyToComplete(4),
+      isTrue,
+    );
+    expect(
+      attempt(activityIndex: 2, acceptedCount: 4).isReadyToComplete(4),
+      isTrue,
+    );
+  });
 }

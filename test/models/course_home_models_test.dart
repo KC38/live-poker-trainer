@@ -682,4 +682,109 @@ void main() {
     );
     expect(heartRestorePracticeLessonId(snap), 'lesson-b');
   });
+
+  test('course profile hearts clamp and a partial resume is dropped', () {
+    final empty = CourseProfileView.fromJson(<String, dynamic>{});
+    expect(empty.livesRemaining, 5);
+    expect(empty.livesMax, 5);
+    expect(empty.gems, 0);
+    expect(empty.lifetimeXp, 0);
+    expect(empty.currentStreak, 0);
+    expect(empty.acceptedAccuracy, 0);
+    expect(empty.completedLessonIds, isEmpty);
+    expect(empty.masteryByLessonId, isEmpty);
+    expect(empty.resume, isNull);
+    expect(empty.livesNextRefillAtMs, isNull);
+    expect(empty.nextAdClaimAtMs, isNull);
+    expect(empty.adClaimsRemainingToday, 5);
+    expect(empty.recommendedLessonId, isNull);
+    expect(empty.catalogVersion, '');
+
+    final clamped = CourseProfileView.fromJson(<String, dynamic>{
+      'livesMax': 5.8,
+      'livesRemaining': 9.2,
+      'gems': 12.9,
+      'lifetimeXp': 40.2,
+      'currentStreak': 3.4,
+      'acceptedAccuracy': 0.84,
+      'livesNextRefillAtMs': 1200.9,
+      'nextAdClaimAtMs': 400.4,
+      'adClaimsRemainingToday': 2.7,
+      'catalogVersion': '2.0.0',
+      'recommendedLessonId': 'lesson-c',
+      'completedLessonIds': ['lesson-a', 2],
+      'masteryByLessonId': <String, dynamic>{
+        'lesson-a': 0.4,
+        'lesson-b': null,
+      },
+      'resume': <String, dynamic>{
+        'attemptId': 'att-1',
+        'lessonId': '',
+        'activityId': 'act',
+        'activityIndex': 2,
+      },
+    });
+    expect(clamped.livesMax, 5);
+    expect(clamped.livesRemaining, 5);
+    expect(clamped.gems, 12);
+    expect(clamped.lifetimeXp, 40);
+    expect(clamped.currentStreak, 3);
+    expect(clamped.acceptedAccuracy, 0.84);
+    expect(clamped.livesNextRefillAtMs, 1200);
+    expect(clamped.nextAdClaimAtMs, 400);
+    expect(clamped.adClaimsRemainingToday, 2);
+    expect(clamped.recommendedLessonId, 'lesson-c');
+    expect(clamped.catalogVersion, '2.0.0');
+    expect(clamped.completedLessonIds, ['lesson-a', '2']);
+    expect(clamped.masteryByLessonId['lesson-a'], 0.4);
+    expect(clamped.masteryByLessonId['lesson-b'], 0);
+    expect(clamped.resume, isNull);
+
+    final negative = CourseProfileView.fromJson(<String, dynamic>{
+      'livesMax': 8,
+      'livesRemaining': -3,
+    });
+    expect(negative.livesMax, 8);
+    expect(negative.livesRemaining, 0);
+
+    final invalidCeiling = CourseProfileView.fromJson(<String, dynamic>{
+      'livesMax': 0,
+      'livesRemaining': 4,
+    });
+    expect(invalidCeiling.livesMax, 5);
+    expect(invalidCeiling.livesRemaining, 4);
+
+    final brokenCeiling = CourseProfileView.fromJson(<String, dynamic>{
+      'livesMax': -2,
+      'livesRemaining': 3.9,
+    });
+    expect(brokenCeiling.livesMax, 5);
+    expect(brokenCeiling.livesRemaining, 3);
+
+    final resume = CourseProfileView.fromJson(<String, dynamic>{
+      'resume': <String, dynamic>{
+        'attemptId': 'att-9',
+        'lessonId': 'lesson-b',
+        'activityIndex': 1.8,
+      },
+    });
+    expect(resume.resume?.attemptId, 'att-9');
+    expect(resume.resume?.lessonId, 'lesson-b');
+    expect(resume.resume?.activityId, '');
+    expect(resume.resume?.activityIndex, 1);
+
+    final missingAttempt = CourseProfileView.fromJson(<String, dynamic>{
+      'resume': <String, dynamic>{'lessonId': 'lesson-b'},
+    });
+    expect(missingAttempt.resume, isNull);
+
+    final notAMap = CourseProfileView.fromJson(<String, dynamic>{
+      'resume': 'att-1',
+      'completedLessonIds': 'lesson-a',
+      'masteryByLessonId': ['lesson-a'],
+    });
+    expect(notAMap.resume, isNull);
+    expect(notAMap.completedLessonIds, isEmpty);
+    expect(notAMap.masteryByLessonId, isEmpty);
+  });
 }
