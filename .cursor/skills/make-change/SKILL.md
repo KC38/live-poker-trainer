@@ -209,6 +209,9 @@ Only after step 7's `git pull --ff-only origin main` succeeded:
 
 That hot-restarts an existing primary `flutter run` on the iPhone 13 mini
 when one is attached, or starts one from the primary checkout when none is.
+It respects the [simulator lock](../../rules/simulator-lock.mdc): it uses
+your `$SIM_LOCK_RUN_ID` when you hold the lock, and reports `skip` when
+another agent holds it. A skip is not a ship failure.
 Skip this step when the primary pull failed (see above). If the mini cannot
 boot, skip and report — do not fail the ship.
 

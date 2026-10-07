@@ -3,8 +3,9 @@ name: simulator-refresh
 description: >-
   Hot-restart the iPhone 13 mini from origin/main in the primary clone.
   Resolve the UDID via tools/iphone_13_mini_udid.sh — never hardcode it.
-  Never a feature worktree. Use after /implement-open-jira merge, or when
-  the mini is already booted and should return to origin/main.
+  Never a feature worktree. Use after a make-change merge, or when the mini
+  is already booted and should return to origin/main. Skips when another
+  agent holds the simulator lock.
 ---
 
 # Simulator refresh
@@ -25,9 +26,15 @@ hardcode it.
 
 [make-change](../make-change/SKILL.md) calls this in step 9 after a
 successful primary `git pull --ff-only`. Skip when that pull failed.
-[/implement-open-jira](../../commands/implement-open-jira.md) and
+[/ui-design-agent](../../commands/ui-design-agent.md) and
 [launch-simulator](../launch-simulator/SKILL.md) also call this when the
 mini should show `origin/main`.
+
+The script respects the [simulator lock](../../rules/simulator-lock.mdc).
+When `$SIM_LOCK_RUN_ID` holds the lock, it runs under that lock. When the
+lock is free, it claims it for the refresh and releases it on exit. When
+another agent holds it, it prints `skip: the iPhone 13 mini is in use` and
+exits 0 without touching the device.
 
 Always refresh from `origin/main` in the primary clone (resolved via
 `tools/primary_checkout.sh` — `~/live-poker-trainer` or
