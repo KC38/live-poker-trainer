@@ -20,7 +20,9 @@ flutter run
 One agent uses the mini at a time: claim it with `tools/sim_lock.py` first
 (see `.cursor/rules/simulator-lock.mdc`). The UI design agent
 (`.cursor/commands/ui-design-agent.md`) runs back to back with
-`tools/ui_design_agent_loop.sh start`.
+`tools/ui_design_agent_loop.sh start`, after a one-time
+`tools/ui_design_agent_loop.sh setup` that saves a Cursor API key and an
+Atlassian API token (no keychain or browser login, so it works over SSH).
 
 The launch default is random six-max $1/$2 with a 200 BB maximum. Every hand
 gets a new ordered lineup of bounded player tendencies, visible by tapping a

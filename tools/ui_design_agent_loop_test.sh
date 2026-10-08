@@ -50,6 +50,26 @@ grep -q 'atlassian/old$' <<<"$override" || fail "UI_AGENT_PLUGIN_DIRS override i
 grep -q missing <<<"$override" && fail "missing plugin dir should be skipped"
 unset UI_AGENT_PLUGIN_DIRS
 
+# A saved Atlassian token builds a private CLI-only plugin that wins over the cache.
+ATLASSIAN_EMAIL="kc@example.com"
+ATLASSIAN_API_TOKEN="tok-123"
+token_args="$(plugin_args)"
+grep -q 'cli-plugins/atlassian-token$' <<<"$token_args" || fail "token plugin should be preferred"
+grep -q 'atlassian/new' <<<"$token_args" && fail "cached plugin should not load beside the token plugin"
+grep -q 'tok-123' <<<"$(agent_args)" && fail "the token must not appear on the command line"
+mcp="$HOME/.live-poker-trainer/cli-plugins/atlassian-token/.mcp.json"
+want_basic="$(printf '%s' 'kc@example.com:tok-123' | base64)"
+grep -q "\"Authorization\": \"Basic $want_basic\"" "$mcp" || fail "token plugin should send Basic auth"
+grep -q '"atlassian"' "$mcp" || fail "token plugin server must be named atlassian"
+[[ "$(stat -f '%Lp' "$mcp")" == 600 ]] || fail "token plugin file must be mode 600"
+unset ATLASSIAN_EMAIL ATLASSIAN_API_TOKEN
+
+# secrets.env is loaded into the environment.
+printf 'CURSOR_API_KEY=%q\n' 'key with space' >"$HOME/.live-poker-trainer/secrets.env"
+load_secrets
+[[ "${CURSOR_API_KEY:-}" == 'key with space' ]] || fail "secrets.env not loaded"
+unset CURSOR_API_KEY
+
 sync_primary() { :; }
 
 python3 "$ROOT/tools/sim_lock.py" claim --owner other-agent --purpose "holding" >/dev/null 2>&1
