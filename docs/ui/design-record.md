@@ -260,9 +260,11 @@ teaches it and stays on for the rest of the course.
 | Street name in the pot pill | 1.4.1 Streets and action order | `streetLesson` |
 | Player types, VPIP/PFR | 4.6.1 Observe sticky callers | `playerTypesLesson` |
 
-Your two cards and Suits and ranks show only seats, cards, and the board.
-Live Training and an id that is not `lesson-SS-UU-LL` get
-`TableFeatures.full`. Your start uses the preset of the lesson it recommends.
+Your two cards and Suits and ranks show only seats, cards, and the board
+when a step deals one. A hole-only step (Your two cards peek) turns
+`boardSlots` off so empty outlines do not draw. Live Training and an id
+that is not `lesson-SS-UU-LL` get `TableFeatures.full`. Your start uses
+the preset of the lesson it recommends.
 
 A lesson seat shows a player type only when the step names it
 (`villainArchetypes`); a seat never shows a made-up type. A spot that says
@@ -357,8 +359,9 @@ table object fits, answers sit in the action space under the felt as
 `LessonChoiceButton`s.
 
 Your two cards' first step shows four seats, no board, your two cards face
-down. Tapping your cards turns them face up. Tapping another seat's cards
-is a miss.
+down. Empty board slot outlines stay off (`boardSlots: false` on
+`LessonPeekTable`) until a step deals community cards. Tapping your cards
+turns them face up. Tapping another seat's cards is a miss.
 
 ### Cues
 
@@ -408,8 +411,9 @@ answer, Continue advances.
 
 `LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
-is the stage. `LessonCoachBand` maps `LessonMascotExpression` to calm,
-celebrate, or think. `LessonChoiceButton`
+is the stage. `LessonPeekTable` turns `boardSlots` off so the first Your
+two cards step has no empty board outlines. `LessonCoachBand` maps
+`LessonMascotExpression` to calm, celebrate, or think. `LessonChoiceButton`
 (`lib/ui/course/widgets/rex_coach_line.dart`) is the one framed option
 button.
 

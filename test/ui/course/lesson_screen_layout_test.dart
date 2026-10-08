@@ -724,6 +724,35 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('peek stage hides empty board slot outlines at mini size', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final early = TableFeatures.forLessonId(
+      'lesson-01-01-01-your-two-cards',
+    );
+    expect(early.boardSlots, isTrue);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          body: TableFeaturesScope(
+            features: early,
+            child: LessonPeekTable(onPeek: _noop, onMiss: _noop),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 900));
+
+    expect(find.byType(TableCardSlot), findsNothing);
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('hero order badge stays fully above the answer dock', (
     tester,
   ) async {
