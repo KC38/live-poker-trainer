@@ -96,9 +96,11 @@ for; your taste does not override them.
 
 ## 3. Choose the ticket
 
-Jira site `https://livepokertrainer.atlassian.net`, project **LPT**. Call
-`getAccessibleAtlassianResources` once and pass that `cloudId` on every
-call. Read each tool schema before calling it. `listJiraIssueTransitions`,
+Jira site `https://livepokertrainer.atlassian.net`, project **LPT**, cloudId
+`6c3dffc6-003e-49f8-a8fb-0acc800ca7e7`. Pass that `cloudId` on every call.
+Do not depend on `getAccessibleAtlassianResources`: the unattended loop
+authenticates with an API token, which is not bound to a site and cannot
+call it. Read each tool schema before calling it. `listJiraIssueTransitions`,
 `uploadAttachmentToJiraIssue`, and `createJiraIssueLink` run through
 `executeRead` / `executeWrite`. If Jira is unreachable, release the lock and
 end the run with `JIRA_UNAVAILABLE`.

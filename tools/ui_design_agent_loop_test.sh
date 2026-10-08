@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# The ui-design-agent loop builds the right CLI call and skips busy runs.
+# The ui-design-agent loop builds the right CLI call, keeps secrets off disk
+# outside secrets.env, and skips runs while the mini is busy.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -14,16 +15,30 @@ tmp="$(mktemp -d "${TMPDIR:-/tmp}/ui-agent-loop.XXXXXX")"
 trap 'rm -rf "$tmp"' EXIT
 
 export HOME="$tmp/home"
-export PRIMARY="$ROOT"
 export SIM_LOCK_DIR="$tmp/lock"
-mkdir -p "$HOME/.cursor/plugins/cache/cursor-public/atlassian/old" \
-  "$HOME/.cursor/plugins/cache/cursor-public/atlassian/new" "$tmp/bin"
-touch -t 202601010000 "$HOME/.cursor/plugins/cache/cursor-public/atlassian/old"
+mkdir -p "$HOME/.live-poker-trainer" "$tmp/bin"
 
-# A fake Cursor CLI: logged in, and records that it was started.
+# A throwaway primary checkout so the runner worktree is made from it.
+export PRIMARY="$tmp/primary"
+mkdir -p "$PRIMARY"
+git -C "$PRIMARY" init -q -b main
+git -C "$PRIMARY" config user.email test@example.com
+git -C "$PRIMARY" config user.name test
+touch "$PRIMARY/pubspec.yaml"
+git -C "$PRIMARY" add pubspec.yaml
+git -C "$PRIMARY" commit -qm seed
+PRIMARY="$(cd "$PRIMARY" && pwd -P)"
+
+# Secrets are loaded from secrets.env and turned into the Basic header value.
+printf 'CURSOR_API_KEY=%q\nATLASSIAN_EMAIL=%q\nATLASSIAN_API_TOKEN=%q\n' \
+  'key with space' 'kc@example.com' 'tok-123' >"$HOME/.live-poker-trainer/secrets.env"
+
+# A fake Cursor CLI that records each run's arguments and environment.
 cat >"$tmp/bin/agent" <<EOF
 #!/usr/bin/env bash
-if [[ "\${1:-}" == "status" ]]; then echo "Logged in as test"; exit 0; fi
+if [[ "\${1:-}" == "status" ]]; then echo "Not logged in"; exit 0; fi
+printf '%s\n' "\$@" >"$tmp/agent-args"
+echo "\$ATLASSIAN_BASIC" >"$tmp/agent-basic"
 echo started >>"$tmp/agent-started"
 EOF
 chmod +x "$tmp/bin/agent"
@@ -33,42 +48,39 @@ export UI_AGENT_LOOP_SOURCE_ONLY=1
 source "$LOOP"
 export PATH="$tmp/bin:$PATH"
 
+[[ "${CURSOR_API_KEY:-}" == 'key with space' ]] || fail "secrets.env not loaded"
+want_basic="$(printf '%s' 'kc@example.com:tok-123' | base64)"
+[[ "${ATLASSIAN_BASIC:-}" == "$want_basic" ]] || fail "ATLASSIAN_BASIC not derived from the token"
+logged_in || fail "a saved API key counts as logged in"
+
 args="$(agent_args)"
-for want in -p --force --trust --approve-mcps --sandbox disabled --workspace "$ROOT" --plugin-dir; do
+for want in -p --force --trust --approve-mcps --sandbox disabled --workspace "$RUNNER_DIR" --add-dir "$PRIMARY"; do
   grep -qxF -- "$want" <<<"$args" || fail "agent args missing $want"
 done
-grep -q 'atlassian/new$' <<<"$args" || fail "should load the newest Atlassian plugin"
-grep -q 'atlassian/old' <<<"$args" && fail "should not load the older Atlassian plugin"
+grep -q -- '--plugin-dir' <<<"$args" && fail "no plugin dirs by default"
+grep -q 'tok-123' <<<"$args" && fail "the token must not appear on the command line"
 
 UI_AGENT_MODEL=test-model
 grep -qxF -- test-model <<<"$(agent_args)" || fail "UI_AGENT_MODEL not passed"
 unset UI_AGENT_MODEL
-
-UI_AGENT_PLUGIN_DIRS="$tmp/missing:$HOME/.cursor/plugins/cache/cursor-public/atlassian/old"
-override="$(plugin_args)"
-grep -q 'atlassian/old$' <<<"$override" || fail "UI_AGENT_PLUGIN_DIRS override ignored"
-grep -q missing <<<"$override" && fail "missing plugin dir should be skipped"
+mkdir -p "$tmp/extra-plugin"
+UI_AGENT_PLUGIN_DIRS="$tmp/missing:$tmp/extra-plugin"
+grep -qxF -- "$tmp/extra-plugin" <<<"$(plugin_args)" || fail "UI_AGENT_PLUGIN_DIRS ignored"
+grep -q missing <<<"$(plugin_args)" && fail "missing plugin dir should be skipped"
 unset UI_AGENT_PLUGIN_DIRS
 
-# A saved Atlassian token builds a private CLI-only plugin that wins over the cache.
-ATLASSIAN_EMAIL="kc@example.com"
-ATLASSIAN_API_TOKEN="tok-123"
-token_args="$(plugin_args)"
-grep -q 'cli-plugins/atlassian-token$' <<<"$token_args" || fail "token plugin should be preferred"
-grep -q 'atlassian/new' <<<"$token_args" && fail "cached plugin should not load beside the token plugin"
-grep -q 'tok-123' <<<"$(agent_args)" && fail "the token must not appear on the command line"
-mcp="$HOME/.live-poker-trainer/cli-plugins/atlassian-token/.mcp.json"
-want_basic="$(printf '%s' 'kc@example.com:tok-123' | base64)"
-grep -q "\"Authorization\": \"Basic $want_basic\"" "$mcp" || fail "token plugin should send Basic auth"
-grep -q '"atlassian"' "$mcp" || fail "token plugin server must be named atlassian"
-[[ "$(stat -f '%Lp' "$mcp")" == 600 ]] || fail "token plugin file must be mode 600"
-unset ATLASSIAN_EMAIL ATLASSIAN_API_TOKEN
-
-# secrets.env is loaded into the environment.
-printf 'CURSOR_API_KEY=%q\n' 'key with space' >"$HOME/.live-poker-trainer/secrets.env"
-load_secrets
-[[ "${CURSOR_API_KEY:-}" == 'key with space' ]] || fail "secrets.env not loaded"
-unset CURSOR_API_KEY
+# The runner is a detached worktree of the primary with an mcp.json that reads the env.
+ensure_runner
+[[ "$(git -C "$RUNNER_DIR" rev-parse HEAD)" == "$(git -C "$PRIMARY" rev-parse HEAD)" ]] \
+  || fail "runner should sit at the primary's main"
+mcp="$RUNNER_DIR/.cursor/mcp.json"
+grep -qF '"Authorization": "Basic ${env:ATLASSIAN_BASIC}"' "$mcp" || fail "mcp.json should read the env header"
+grep -q 'tok-123\|'"$want_basic" "$mcp" && fail "mcp.json must not hold the token"
+echo change >"$PRIMARY/pubspec.yaml"
+git -C "$PRIMARY" commit -qam next
+ensure_runner
+[[ "$(git -C "$RUNNER_DIR" rev-parse HEAD)" == "$(git -C "$PRIMARY" rev-parse HEAD)" ]] \
+  || fail "runner should follow the primary's main"
 
 sync_primary() { :; }
 
@@ -81,6 +93,9 @@ one_run >/dev/null 2>&1 || code=$?
 python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 one_run >/dev/null 2>&1 || fail "free mini run failed"
 [[ -f "$tmp/agent-started" ]] || fail "agent should start when the mini is free"
+grep -qxF -- "$RUNNER_DIR" "$tmp/agent-args" || fail "run should use the runner workspace"
+grep -q "primary checkout is $PRIMARY" "$tmp/agent-args" || fail "prompt should name the primary"
+[[ "$(cat "$tmp/agent-basic")" == "$want_basic" ]] || fail "run should get ATLASSIAN_BASIC"
 
 (unset UI_AGENT_LOOP_SOURCE_ONLY; bash "$LOOP" status >/dev/null) \
   || fail "status should exit 0"
