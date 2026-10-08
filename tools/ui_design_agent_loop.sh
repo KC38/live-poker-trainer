@@ -47,6 +47,8 @@ GAP="${UI_AGENT_GAP:-60}"
 BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
 ATLASSIAN_MCP_URL="https://mcp.atlassian.com/v2/mcp"
+# Token form with the MCP server's agent-interface scopes pre-selected.
+ATLASSIAN_TOKEN_URL="https://id.atlassian.com/manage-profile/security/api-tokens?autofillToken&expiryDays=max&appId=mcp-v2&selectedScopes=all"
 JIRA_CLOUD_ID="6c3dffc6-003e-49f8-a8fb-0acc800ca7e7"
 
 mkdir -p "$LOG_DIR"
@@ -249,7 +251,7 @@ atlassian_check() {
   done
   if [[ -n "$missing" ]]; then
     echo "atlassian: connected, but missing Jira tools:$missing"
-    echo "  Recreate the token with scopes read:jira-work, write:jira-work, read:jira-user."
+    echo "  Recreate the token with the agent-interface scopes: $ATLASSIAN_TOKEN_URL"
     return 1
   fi
   local search
@@ -257,9 +259,11 @@ atlassian_check() {
     ${session[@]+"${session[@]}"} || true)"
   if ! grep -q 'LPT-[0-9]' <<<"$search"; then
     echo "atlassian: tools listed, but a Jira search failed:"
-    sed -n 's/^data: //p' <<<"$search" | grep -o '"message[^}]*' | head -1 | sed 's/^/    /'
-    echo "  A classic token cannot call Jira through the MCP server. Create one with"
-    echo "  'Create API token with scopes' → Jira → read:jira-work, write:jira-work, read:jira-user."
+    grep -oE '"text":"([^"\\]|\\.)*"' <<<"$search" | head -1 | sed 's/^/    /'
+    echo "  The MCP server needs a token with its agent-interface scopes (a classic token,"
+    echo "  or one with read:jira-work-style scopes, is refused). Create one here, keep every"
+    echo "  pre-selected scope, and run setup again:"
+    echo "  $ATLASSIAN_TOKEN_URL"
     return 1
   fi
   echo "atlassian: ok (Jira search works)"
@@ -319,8 +323,10 @@ setup() {
   local email=""
   read -r -p "   Email${ATLASSIAN_EMAIL:+ [$ATLASSIAN_EMAIL]}: " email
   [[ -n "$email" ]] && ATLASSIAN_EMAIL="$email"
-  echo "3. Atlassian API token: id.atlassian.com/manage-profile/security/api-tokens →"
-  echo "   Create API token with scopes → Jira → read:jira-work, write:jira-work, read:jira-user."
+  echo "3. Atlassian API token with the MCP server's agent-interface scopes. This link"
+  echo "   pre-selects them (keep them all, longest expiry):"
+  echo "   $ATLASSIAN_TOKEN_URL"
+  echo "   An org admin must also allow API-token auth for the Rovo MCP server (admin.atlassian.com)."
   prompt_secret ATLASSIAN_API_TOKEN "   Atlassian API token"
   (
     umask 077
