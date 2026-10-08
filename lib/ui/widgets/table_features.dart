@@ -84,7 +84,8 @@ class TableFeatures {
   ///
   /// Each layer switches on at the lesson that teaches it and stays on for
   /// the rest of the course. Cards, seats, opponents' face-down cards, and
-  /// the board slots are on from the first lesson.
+  /// board slots default on from the first lesson; a hole-only step may set
+  /// [boardSlots] false so empty outlines do not draw.
   static TableFeatures forLesson(LessonPosition at) {
     bool from(LessonPosition start) => compareLessons(at, start) >= 0;
     final blinds = from(blindsLesson);
