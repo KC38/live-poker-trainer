@@ -3,7 +3,9 @@
 #
 #   tools/ui_design_agent_loop.sh setup    one-time: save the Cursor API key and Atlassian token
 #   tools/ui_design_agent_loop.sh verify   check both work, including Jira from inside the CLI
-#   tools/ui_design_agent_loop.sh start    start the loop in tmux session ui-design-agent
+#   tools/ui_design_agent_loop.sh start    start the loop (its own tmux server, socket ui-agent)
+#   tools/ui_design_agent_loop.sh install  also start it at every login (LaunchAgent)
+#   tools/ui_design_agent_loop.sh uninstall  remove the login item
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
 #   tools/ui_design_agent_loop.sh stop     finish the current run, then stop
@@ -32,6 +34,9 @@ export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Develope
 SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 TOOLS="$(dirname "$SCRIPT")"
 SESSION="ui-design-agent"
+TMUX_SOCKET="ui-agent"
+LAUNCH_LABEL="com.livepokertrainer.ui-design-agent"
+PLIST="$HOME/Library/LaunchAgents/$LAUNCH_LABEL.plist"
 STATE_DIR="$HOME/.live-poker-trainer"
 LOG_DIR="$STATE_DIR/ui-agent-logs"
 STOP_FILE="$STATE_DIR/ui-agent.stop"
@@ -49,6 +54,10 @@ primary() {
 
 log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
+}
+
+lt() {
+  tmux -L "$TMUX_SOCKET" "$@"
 }
 
 prompt() {
@@ -241,12 +250,44 @@ fi
 
 case "${1:-}" in
   start)
-    if tmux has-session -t "=$SESSION" 2>/dev/null; then
-      echo "already running: tmux attach -t $SESSION"
+    if lt has-session -t "=$SESSION" 2>/dev/null; then
+      echo "already running: $SCRIPT attach"
       exit 0
     fi
-    tmux new-session -d -s "$SESSION" "bash '$SCRIPT' run-loop; echo 'loop exited'; exec bash"
-    echo "started tmux session $SESSION (attach: tmux attach -t $SESSION)"
+    # A server of our own, started from this login session with a clean
+    # environment: a tmux server begun from an SSH login cannot reach the
+    # keychain the CLI touches at startup, even with CURSOR_API_KEY set.
+    env -i HOME="$HOME" USER="$USER" LOGNAME="$USER" PATH="$PATH" \
+      LANG="${LANG:-en_US.UTF-8}" TERM="${TERM:-xterm-256color}" SHELL=/bin/zsh \
+      tmux -L "$TMUX_SOCKET" new-session -d -s "$SESSION" \
+      "bash '$SCRIPT' run-loop; echo 'loop exited'; exec bash"
+    echo "started the loop (watch: $SCRIPT attach)"
+    ;;
+  install)
+    mkdir -p "$(dirname "$PLIST")"
+    cat >"$PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>$LAUNCH_LABEL</string>
+  <key>ProgramArguments</key>
+  <array><string>/bin/bash</string><string>$(primary)/tools/ui_design_agent_loop.sh</string><string>start</string></array>
+  <key>RunAtLoad</key><true/>
+  <key>AbandonProcessGroup</key><true/>
+  <key>StandardOutPath</key><string>$LOG_DIR/launchd.log</string>
+  <key>StandardErrorPath</key><string>$LOG_DIR/launchd.log</string>
+</dict>
+</plist>
+EOF
+    launchctl bootout "gui/$(id -u)/$LAUNCH_LABEL" 2>/dev/null || true
+    launchctl bootstrap "gui/$(id -u)" "$PLIST"
+    echo "installed $PLIST: the loop starts now and at every login"
+    ;;
+  uninstall)
+    launchctl bootout "gui/$(id -u)/$LAUNCH_LABEL" 2>/dev/null || true
+    rm -f "$PLIST"
+    echo "removed $LAUNCH_LABEL (a running loop keeps going: $SCRIPT stop)"
     ;;
   run-loop)
     run_loop
@@ -265,12 +306,13 @@ case "${1:-}" in
       kill -TERM "$pid" 2>/dev/null || true
       sim_lock release --if-pid "$pid" >/dev/null 2>&1 || true
     fi
-    tmux kill-session -t "=$SESSION" 2>/dev/null || true
+    lt kill-session -t "=$SESSION" 2>/dev/null || true
     rm -f "$PID_FILE" "$STOP_FILE"
     echo "killed $SESSION"
     ;;
   status)
-    if tmux has-session -t "=$SESSION" 2>/dev/null; then echo "loop: running (tmux $SESSION)"; else echo "loop: not running"; fi
+    if lt has-session -t "=$SESSION" 2>/dev/null; then echo "loop: running (tmux -L $TMUX_SOCKET, session $SESSION)"; else echo "loop: not running"; fi
+    if [[ -f "$PLIST" ]]; then echo "login item: installed ($LAUNCH_LABEL)"; else echo "login item: not installed ($SCRIPT install)"; fi
     if [[ -f "$STOP_FILE" ]]; then echo "loop: stop requested"; fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
     sim_lock status || true
@@ -283,7 +325,7 @@ case "${1:-}" in
     fi
     ;;
   attach)
-    exec tmux attach -t "$SESSION"
+    exec tmux -L "$TMUX_SOCKET" attach -t "$SESSION"
     ;;
   setup)
     setup
@@ -292,7 +334,7 @@ case "${1:-}" in
     verify
     ;;
   *)
-    sed -n '2,26p' "$SCRIPT" | sed 's/^# \{0,1\}//'
+    sed -n '2,28p' "$SCRIPT" | sed 's/^# \{0,1\}//'
     exit 2
     ;;
 esac
