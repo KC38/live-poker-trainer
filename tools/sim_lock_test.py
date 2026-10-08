@@ -9,6 +9,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import types
 import unittest
@@ -143,9 +144,153 @@ class SimLockTest(unittest.TestCase):
             self._run("claim", "--owner", "loop")
         self.assertEqual(sim_lock.read_state()["pid"], os.getpid())
 
+    def test_non_numeric_pid_env_is_ignored(self) -> None:
+        with mock.patch.dict(os.environ, {"SIM_LOCK_PID": "nope"}):
+            code, _, err = self._run("claim", "--owner", "loop")
+        self.assertEqual(code, sim_lock.EXIT_OK)
+        self.assertIsNone(sim_lock.read_state()["pid"])
+        self.assertNotIn("Traceback", err)
+
+    def test_corrupt_or_unknown_lock_file_is_free_and_claimable(self) -> None:
+        path = Path(self._tmp.name, "simulator-lock.json")
+        for raw in ("{not json", "[]", '"in_use"', '{"state": "locked"}'):
+            path.write_text(raw, encoding="utf-8")
+            code, out, _ = self._run("status", "--json")
+            self.assertEqual(code, sim_lock.EXIT_OK, raw)
+            self.assertEqual(json.loads(out)["state"], "free")
+            code, _, _ = self._run("claim", "--owner", "recovery")
+            self.assertEqual(code, sim_lock.EXIT_OK, raw)
+            self._run("release", "--force")
+
+    def test_recent_claim_without_heartbeat_epoch_stays_busy(self) -> None:
+        self._run("claim", "--owner", "live", "--ttl", "60")
+        path = Path(self._tmp.name, "simulator-lock.json")
+        state = json.loads(path.read_text(encoding="utf-8"))
+        del state["heartbeat_epoch"]
+        path.write_text(json.dumps(state), encoding="utf-8")
+        self.assertEqual(self._run("status")[0], sim_lock.EXIT_BUSY)
+        self.assertEqual(self._run("claim", "--owner", "thief")[0], sim_lock.EXIT_BUSY)
+
+    def test_missing_timestamps_make_the_lock_claimable(self) -> None:
+        self._run("claim", "--owner", "ghost", "--ttl", "3600")
+        path = Path(self._tmp.name, "simulator-lock.json")
+        state = json.loads(path.read_text(encoding="utf-8"))
+        del state["heartbeat_epoch"]
+        del state["claimed_epoch"]
+        path.write_text(json.dumps(state), encoding="utf-8")
+        self.assertEqual(self._run("status")[0], sim_lock.EXIT_OK)
+        code, _, _ = self._run("claim", "--owner", "next")
+        self.assertEqual(code, sim_lock.EXIT_OK)
+        history = Path(self._tmp.name, "simulator-lock.log").read_text(encoding="utf-8")
+        self.assertIn("stale-cleared", history)
+
+    def test_permission_error_on_pid_does_not_steal_the_lock(self) -> None:
+        proc = subprocess.Popen([sys.executable, "-c", "pass"])
+        proc.wait()
+        self._run("claim", "--owner", "hidden", "--pid", str(proc.pid), "--ttl", "3600")
+        with mock.patch.object(sim_lock.os, "kill", side_effect=PermissionError):
+            code, _, err = self._run("claim", "--owner", "thief")
+        self.assertEqual(code, sim_lock.EXIT_BUSY)
+        self.assertIn("hidden", err)
+        self.assertEqual(sim_lock.read_state()["owner"], "hidden")
+
+    def test_stale_holder_cannot_refresh_and_can_still_release(self) -> None:
+        _, run_id, _ = self._run("claim", "--owner", "slow", "--ttl", "60", "--purpose", "old")
+        run_id = run_id.strip()
+        path = Path(self._tmp.name, "simulator-lock.json")
+        state = json.loads(path.read_text(encoding="utf-8"))
+        state["heartbeat_epoch"] = time.time() - 180
+        path.write_text(json.dumps(state), encoding="utf-8")
+
+        code, _, err = self._run(
+            "heartbeat", "--run-id", run_id, "--purpose", "still here"
+        )
+        self.assertEqual(code, sim_lock.EXIT_NOT_HOLDER)
+        self.assertIn("Claim it first", err)
+        fresh = sim_lock.read_state()
+        self.assertLess(fresh["heartbeat_epoch"], time.time() - 60)
+        self.assertEqual(fresh["purpose"], "old")
+        self.assertEqual(fresh["run_id"], run_id)
+
+        self.assertEqual(
+            self._run("guard", "--run-id", "intruder")[0], sim_lock.EXIT_NOT_HOLDER
+        )
+        self.assertEqual(
+            self._run("release", "--run-id", "intruder")[0], sim_lock.EXIT_NOT_HOLDER
+        )
+        self.assertEqual(sim_lock.read_state()["state"], "in_use")
+        self.assertEqual(self._run("release", "--run-id", run_id)[0], sim_lock.EXIT_OK)
+        self.assertEqual(sim_lock.read_state()["state"], "free")
+
+    def test_release_of_a_free_lock_is_ok(self) -> None:
+        self.assertEqual(self._run("release", "--force")[0], sim_lock.EXIT_OK)
+        self.assertEqual(self._run("release", "--if-pid", "1")[0], sim_lock.EXIT_OK)
+        self.assertEqual(sim_lock.read_state()["state"], "free")
+
+    def test_status_json_reports_a_live_holder(self) -> None:
+        self._run("claim", "--owner", "ui-design-agent", "--purpose", "walk Home")
+        code, out, _ = self._run("status", "--json")
+        self.assertEqual(code, sim_lock.EXIT_BUSY)
+        payload = json.loads(out)
+        self.assertEqual(payload["state"], "in_use")
+        self.assertEqual(payload["owner"], "ui-design-agent")
+        self.assertEqual(payload["purpose"], "walk Home")
+
+    def test_concurrent_claims_grant_exactly_one_holder(self) -> None:
+        barrier = threading.Barrier(8)
+        results: list[tuple[int, str]] = []
+        results_lock = threading.Lock()
+
+        def grab(index: int) -> None:
+            barrier.wait()
+            code, state = sim_lock.claim(f"agent-{index}", purpose="race")
+            with results_lock:
+                results.append((code, str(state.get("run_id"))))
+
+        threads = [threading.Thread(target=grab, args=(i,)) for i in range(8)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+
+        winners = [item for item in results if item[0] == sim_lock.EXIT_OK]
+        self.assertEqual(len(results), 8)
+        self.assertEqual(len(winners), 1)
+        self.assertEqual(
+            sum(1 for code, _ in results if code == sim_lock.EXIT_BUSY),
+            7,
+        )
+        self.assertEqual(sim_lock.read_state()["run_id"], winners[0][1])
+
 
 class AgentTapLockTest(unittest.TestCase):
     """agent_tap refuses to drive the mini without holding the lock."""
+
+    def test_agent_tap_refuses_without_a_run_id(self) -> None:
+        agent_tap = _load("agent_tap")
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(
+            os.environ, {"SIM_LOCK_DIR": tmp}
+        ):
+            os.environ.pop("SIM_LOCK_RUN_ID", None)
+            with mock.patch.object(agent_tap, "agent") as fake, redirect_stderr(
+                io.StringIO()
+            ):
+                with self.assertRaises(SystemExit):
+                    agent_tap.main(["tap", "--text", "Continue"])
+                fake.assert_not_called()
+
+    def test_agent_tap_accepts_an_explicit_run_id(self) -> None:
+        agent_tap = _load("agent_tap")
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(
+            os.environ, {"SIM_LOCK_DIR": tmp}
+        ):
+            os.environ.pop("SIM_LOCK_RUN_ID", None)
+            _, state = agent_tap.sim_lock.claim("me")
+            with mock.patch.object(agent_tap, "agent") as fake:
+                agent_tap.main(
+                    ["tap", "--text", "Continue", "--run-id", state["run_id"]]
+                )
+            fake.assert_called_once()
 
     def test_agent_tap_refuses_when_another_run_holds_the_mini(self) -> None:
         agent_tap = _load("agent_tap")
