@@ -140,6 +140,8 @@ void main() {
       'SIM_BUSY',
       'python3 tools/sim_lock.py release',
       'labels = ui-agent',
+      'python3 tools/jira.py check',
+      'JIRA_UNAVAILABLE',
       'needs-human',
       'Changes requested (attempt N)',
       'Stop after three failed attempts.',
