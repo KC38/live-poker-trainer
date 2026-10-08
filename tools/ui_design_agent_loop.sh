@@ -10,22 +10,26 @@
 #   tools/ui_design_agent_loop.sh kill     stop now and free a lock this loop holds
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
-# Each run is a fresh `agent -p` (Cursor CLI) on the primary checkout. The
-# loop skips a run without starting the agent while another agent holds the
-# iPhone 13 mini, and frees the lock if a run dies while holding it.
+# Each run is a fresh `agent -p` (Cursor CLI). The loop skips a run without
+# starting the agent while another agent holds the iPhone 13 mini, and frees
+# the lock if a run dies while holding it.
 #
 # Runs authenticate without the macOS keychain or a browser, so they keep
-# working over SSH and after a reboot: CURSOR_API_KEY for the CLI, and an
-# Atlassian API token sent as Basic auth by a CLI-only Atlassian plugin built
-# from ~/.live-poker-trainer/secrets.env (mode 600).
+# working over SSH and after a reboot. Keys live in
+# ~/.live-poker-trainer/secrets.env (mode 600): CURSOR_API_KEY for the CLI,
+# and an Atlassian email + API token sent as Basic auth to the Rovo MCP server.
+# The CLI only reads that server from its workspace's .cursor/mcp.json, so
+# each run's workspace is a detached worktree at ~/.live-poker-trainer/runner,
+# reset to origin/main, holding an mcp.json that reads the header from
+# $ATLASSIAN_BASIC. The IDE never opens it. The primary checkout is added
+# with --add-dir and stays where the agent makes changes.
 #
 # Environment:
 #   UI_AGENT_MODEL              model for `agent --model` (default: CLI default)
 #   UI_AGENT_GAP                seconds between runs (default 60)
 #   UI_AGENT_BUSY_SLEEP         seconds to sleep when the mini is busy (default 300)
 #   UI_AGENT_MAX_RUN_SECONDS    hard cap per run (default 14400)
-#   UI_AGENT_PLUGIN_DIRS        colon-separated plugin dirs (default: the token plugin,
-#                               else the newest cached Atlassian plugin)
+#   UI_AGENT_PLUGIN_DIRS        extra colon-separated --plugin-dir paths (default none)
 set -euo pipefail
 
 export PATH="$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/Applications/flutter/bin:${PATH:-}"
@@ -37,13 +41,13 @@ STATE_DIR="$HOME/.live-poker-trainer"
 LOG_DIR="$STATE_DIR/ui-agent-logs"
 STOP_FILE="$STATE_DIR/ui-agent.stop"
 PID_FILE="$STATE_DIR/ui-agent.pid"
+SECRETS_FILE="$STATE_DIR/secrets.env"
+RUNNER_DIR="$STATE_DIR/runner"
 GAP="${UI_AGENT_GAP:-60}"
 BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
-PROMPT='Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md in this workspace and follow it exactly, from step 0. This is an unattended run. Do not ask questions or wait for input.'
-SECRETS_FILE="$STATE_DIR/secrets.env"
-TOKEN_PLUGIN_DIR="$STATE_DIR/cli-plugins/atlassian-token"
 ATLASSIAN_MCP_URL="https://mcp.atlassian.com/v2/mcp"
+JIRA_CLOUD_ID="6c3dffc6-003e-49f8-a8fb-0acc800ca7e7"
 
 mkdir -p "$LOG_DIR"
 
@@ -55,6 +59,10 @@ log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
 }
 
+prompt() {
+  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md in this workspace and follow it exactly, from step 0. The primary checkout is $(primary); run every command from there as the command says. This is an unattended run. Do not ask questions or wait for input."
+}
+
 load_secrets() {
   if [[ -f "$SECRETS_FILE" ]]; then
     set -a
@@ -62,47 +70,55 @@ load_secrets() {
     . "$SECRETS_FILE"
     set +a
   fi
+  if [[ -n "${ATLASSIAN_EMAIL:-}" && -n "${ATLASSIAN_API_TOKEN:-}" ]]; then
+    ATLASSIAN_BASIC="$(printf '%s:%s' "$ATLASSIAN_EMAIL" "$ATLASSIAN_API_TOKEN" | base64 | tr -d '\n')"
+    export ATLASSIAN_BASIC
+  fi
 }
 
-atlassian_basic() {
-  printf '%s:%s' "$ATLASSIAN_EMAIL" "$ATLASSIAN_API_TOKEN" | base64 | tr -d '\n'
+main_ref() {
+  local dir="$1"
+  if git -C "$dir" rev-parse -q --verify origin/main >/dev/null; then
+    echo origin/main
+  else
+    echo HEAD
+  fi
 }
 
-# Write the CLI-only Atlassian plugin from the saved token; print its dir.
-token_plugin() {
-  [[ -n "${ATLASSIAN_EMAIL:-}" && -n "${ATLASSIAN_API_TOKEN:-}" ]] || return 1
-  local basic manifest
-  basic="$(atlassian_basic)"
-  manifest='{"name": "atlassian", "displayName": "Atlassian MCP (API token)", "version": "0.1.0", "mcpServers": "./.mcp.json"}'
-  (
-    umask 077
-    mkdir -p "$TOKEN_PLUGIN_DIR/.cursor-plugin"
-    printf '%s\n' "$manifest" >"$TOKEN_PLUGIN_DIR/.cursor-plugin/plugin.json"
-    printf '%s\n' "$manifest" >"$TOKEN_PLUGIN_DIR/plugin.json"
-    printf '{"mcpServers": {"atlassian": {"type": "streamable-http", "url": "%s", "headers": {"Authorization": "Basic %s"}}}}\n' \
-      "$ATLASSIAN_MCP_URL" "$basic" >"$TOKEN_PLUGIN_DIR/.mcp.json"
-  )
-  printf '%s\n' "$TOKEN_PLUGIN_DIR"
+# Detached worktree of the primary at origin/main, with the CLI's mcp.json.
+ensure_runner() {
+  local dir ref
+  dir="$(primary)"
+  ref="$(main_ref "$dir")"
+  if ! git -C "$RUNNER_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    rm -rf "$RUNNER_DIR"
+    git -C "$dir" worktree prune
+    git -C "$dir" worktree add -q --detach "$RUNNER_DIR" "$ref"
+  else
+    git -C "$RUNNER_DIR" checkout -q --detach --force "$(git -C "$dir" rev-parse "$ref")"
+  fi
+  mkdir -p "$RUNNER_DIR/.cursor"
+  # The header is read from $ATLASSIAN_BASIC at run time; no secret on disk here.
+  printf '{"mcpServers": {"atlassian": {"url": "%s", "headers": {"Authorization": "Basic ${env:ATLASSIAN_BASIC}"}}}}\n' \
+    "$ATLASSIAN_MCP_URL" >"$RUNNER_DIR/.cursor/mcp.json"
 }
 
 plugin_args() {
-  local dirs="${UI_AGENT_PLUGIN_DIRS:-}"
-  if [[ -z "$dirs" ]]; then
-    dirs="$(token_plugin || true)"
-  fi
-  if [[ -z "$dirs" ]]; then
-    dirs="$(ls -td "$HOME"/.cursor/plugins/cache/cursor-public/atlassian/*/ 2>/dev/null | head -1 || true)"
-  fi
   local IFS=:
   local dir
-  for dir in $dirs; do
-    [[ -n "$dir" && -d "$dir" ]] && printf -- '--plugin-dir\n%s\n' "${dir%/}"
+  for dir in ${UI_AGENT_PLUGIN_DIRS:-}; do
+    if [[ -n "$dir" && -d "$dir" ]]; then
+      printf -- '--plugin-dir\n%s\n' "${dir%/}"
+    fi
   done
 }
 
 agent_args() {
-  local args=(-p --force --trust --approve-mcps --sandbox disabled --output-format text --workspace "$(primary)")
-  [[ -n "${UI_AGENT_MODEL:-}" ]] && args+=(--model "$UI_AGENT_MODEL")
+  local args=(-p --force --trust --approve-mcps --sandbox disabled --output-format text
+    --workspace "$RUNNER_DIR" --add-dir "$(primary)")
+  if [[ -n "${UI_AGENT_MODEL:-}" ]]; then
+    args+=(--model "$UI_AGENT_MODEL")
+  fi
   printf '%s\n' "${args[@]}"
   plugin_args
 }
@@ -117,18 +133,19 @@ sync_primary() {
 }
 
 sim_lock() {
-  python3 "$(primary)/tools/sim_lock.py" "$@"
+  python3 "$(dirname "$SCRIPT")/sim_lock.py" "$@"
 }
 
 logged_in() {
-  ! agent status 2>&1 | grep -qi 'not logged in'
+  [[ -n "${CURSOR_API_KEY:-}" ]] && return 0
+  ! agent status 2>&1 | grep -qiE 'not logged in|keychain is locked|error'
 }
 
 # One run. Returns 0 after a run, 10 when the mini was busy, 11 when not logged in.
 one_run() {
   sync_primary
   if ! logged_in; then
-    log "Cursor CLI is not logged in. Run: $SCRIPT setup"
+    log "Cursor CLI has no API key and no login. Run: $SCRIPT setup"
     return 11
   fi
   if ! sim_lock status >/dev/null 2>&1; then
@@ -136,19 +153,21 @@ one_run() {
     sim_lock status 2>&1 | sed 's/^/    /' || true
     return 10
   fi
+  ensure_runner
 
-  local stamp run_log pid watchdog code start line
+  local stamp run_log pid watchdog code start line text
   local args=()
   stamp="$(date '+%Y%m%d-%H%M%S')"
   run_log="$LOG_DIR/run-$stamp.log"
   while IFS= read -r line; do args+=("$line"); done < <(agent_args)
+  text="$(prompt)"
 
   log "run $stamp starting (log $run_log)"
   start="$(date +%s)"
   (
     cd "$(primary)"
     # exec keeps this pid, so the lock's --pid is the agent itself.
-    exec bash -c 'export SIM_LOCK_PID=$$; exec agent "$@"' _ "${args[@]}" "$PROMPT"
+    exec bash -c 'export SIM_LOCK_PID=$$; exec agent "$@"' _ "${args[@]}" "$text"
   ) >"$run_log" 2>&1 &
   pid=$!
   echo "$pid" >"$PID_FILE"
@@ -197,7 +216,7 @@ mcp_post() {
   local body="$1"
   shift
   curl -s --max-time 30 -X POST "$ATLASSIAN_MCP_URL" \
-    -H "Authorization: Basic $(atlassian_basic)" \
+    -H "Authorization: Basic $ATLASSIAN_BASIC" \
     -H 'Content-Type: application/json' \
     -H 'Accept: application/json, text/event-stream' \
     "$@" -d "$body"
@@ -205,7 +224,7 @@ mcp_post() {
 
 # Call the Atlassian MCP with the saved token and confirm the Jira tools exist.
 atlassian_check() {
-  if [[ -z "${ATLASSIAN_EMAIL:-}" || -z "${ATLASSIAN_API_TOKEN:-}" ]]; then
+  if [[ -z "${ATLASSIAN_BASIC:-}" ]]; then
     echo "atlassian: no token saved (run: $SCRIPT setup)"
     return 1
   fi
@@ -233,18 +252,29 @@ atlassian_check() {
     echo "  Recreate the token with scopes read:jira-work, write:jira-work, read:jira-user."
     return 1
   fi
-  echo "atlassian: ok (Jira tools available)"
+  local search
+  search="$(mcp_post "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"searchJiraIssuesUsingJql\",\"arguments\":{\"cloudId\":\"$JIRA_CLOUD_ID\",\"jql\":\"project = LPT ORDER BY created DESC\",\"maxResults\":1,\"fields\":[\"summary\"]}}}" \
+    ${session[@]+"${session[@]}"} || true)"
+  if ! grep -q 'LPT-[0-9]' <<<"$search"; then
+    echo "atlassian: tools listed, but a Jira search failed:"
+    sed -n 's/^data: //p' <<<"$search" | grep -o '"message[^}]*' | head -1 | sed 's/^/    /'
+    echo "  A classic token cannot call Jira through the MCP server. Create one with"
+    echo "  'Create API token with scopes' → Jira → read:jira-work, write:jira-work, read:jira-user."
+    return 1
+  fi
+  echo "atlassian: ok (Jira search works)"
 }
 
-# Confirm the CLI itself loads the Jira tools through the token plugin.
+# A real CLI run in the runner workspace: proves the API key and the Jira tools.
 cli_jira_check() {
-  local out plugins=() line
-  while IFS= read -r line; do plugins+=("$line"); done < <(plugin_args)
+  local out key
+  ensure_runner
   out="$(cd "$(primary)" && agent -p --force --trust --approve-mcps --output-format text \
-    ${plugins[@]+"${plugins[@]}"} \
-    'Call the Atlassian getAccessibleAtlassianResources tool once. Reply with only the cloudId it returns, or NO_JIRA if you cannot call it.' 2>&1 | tail -n 5 || true)"
-  if grep -qE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' <<<"$out"; then
-    echo "cli jira: ok ($(grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' <<<"$out" | head -1))"
+    --workspace "$RUNNER_DIR" --add-dir "$(primary)" \
+    "Call the Atlassian searchJiraIssuesUsingJql tool once with cloudId $JIRA_CLOUD_ID, jql 'project = LPT ORDER BY created DESC', maxResults 1. Reply with only the issue key it returns, or NO_JIRA if the call fails." 2>&1 | tail -n 5 || true)"
+  key="$(grep -oE 'LPT-[0-9]+' <<<"$out" | head -1 || true)"
+  if [[ -n "$key" ]]; then
+    echo "cli jira: ok (latest issue $key)"
     return 0
   fi
   echo "cli jira: FAILED"
@@ -254,17 +284,21 @@ cli_jira_check() {
 
 verify() {
   local failed=0
-  if logged_in; then
-    echo "cursor: ok ($(agent status 2>&1 | grep -v '^$' | head -1))"
+  if [[ -n "${CURSOR_API_KEY:-}" ]]; then
+    echo "cursor: API key saved"
+  elif logged_in; then
+    echo "cursor: logged in"
   else
-    echo "cursor: not logged in (save a Cursor API key with: $SCRIPT setup)"
+    echo "cursor: no API key and no login (run: $SCRIPT setup)"
     failed=1
   fi
   atlassian_check || failed=1
   if [[ "$failed" == 0 ]]; then
     cli_jira_check || failed=1
   fi
-  [[ "$failed" == 0 ]] && echo "ready: $SCRIPT start"
+  if [[ "$failed" == 0 ]]; then
+    echo "ready: $SCRIPT start"
+  fi
   return "$failed"
 }
 
@@ -340,8 +374,8 @@ case "${1:-}" in
     ;;
   status)
     if tmux has-session -t "=$SESSION" 2>/dev/null; then echo "loop: running (tmux $SESSION)"; else echo "loop: not running"; fi
-    [[ -f "$STOP_FILE" ]] && echo "loop: stop requested"
-    [[ -f "$PID_FILE" ]] && echo "current run pid: $(cat "$PID_FILE")"
+    if [[ -f "$STOP_FILE" ]]; then echo "loop: stop requested"; fi
+    if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
     sim_lock status || true
     latest="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
     if [[ -n "$latest" ]]; then
@@ -361,7 +395,7 @@ case "${1:-}" in
     verify
     ;;
   *)
-    sed -n '2,28p' "$SCRIPT" | sed 's/^# \{0,1\}//'
+    sed -n '2,32p' "$SCRIPT" | sed 's/^# \{0,1\}//'
     exit 2
     ;;
 esac
