@@ -96,14 +96,23 @@ for; your taste does not override them.
 
 ## 3. Choose the ticket
 
-Jira site `https://livepokertrainer.atlassian.net`, project **LPT**, cloudId
-`6c3dffc6-003e-49f8-a8fb-0acc800ca7e7`. Pass that `cloudId` on every call.
-Do not depend on `getAccessibleAtlassianResources`: the unattended loop
-authenticates with an API token, which is not bound to a site and cannot
-call it. Read each tool schema before calling it. `listJiraIssueTransitions`,
-`uploadAttachmentToJiraIssue`, and `createJiraIssueLink` run through
-`executeRead` / `executeWrite`. If Jira is unreachable, release the lock and
-end the run with `JIRA_UNAVAILABLE`.
+Jira site `https://livepokertrainer.atlassian.net`, project **LPT**. Use
+`python3 tools/jira.py` for every Jira action (REST with the saved API
+token; run `python3 tools/jira.py --help` once). Do not use Atlassian MCP
+tools: the unattended loop has no MCP access. Bodies are Markdown files
+you write under `$PRIMARY/.cursor/tmp/ui-agent/`; `![what it shows](file.png)`
+renders an attached screenshot. Start with `python3 tools/jira.py check`.
+If it fails, release the lock and end the run with `JIRA_UNAVAILABLE`.
+
+| Action | Command |
+| --- | --- |
+| Search | `python3 tools/jira.py search '<JQL>'` |
+| Read an issue, comments, links | `python3 tools/jira.py get LPT-NN` |
+| Create | `python3 tools/jira.py create --type Story --summary "…" --priority Medium --labels ui,ui-agent,lesson --body-file body.md --attach shot1.png shot2.png` |
+| Edit fields or labels | `python3 tools/jira.py edit LPT-NN [--body-file body.md] [--add-label needs-human] [--remove-label …]` |
+| Comment with screenshots | `python3 tools/jira.py comment LPT-NN --body-file note.md --attach shot.png` |
+| Move | `python3 tools/jira.py transition LPT-NN --to "In Progress"` (statuses: To Do, In Progress, In Review, Done) |
+| Block | `python3 tools/jira.py link --type Blocks --inward LPT-A --outward LPT-B` (A blocks B) |
 
 **First, unfinished work.** Search:
 
@@ -112,7 +121,7 @@ project = LPT AND labels = ui-agent AND labels != needs-human AND statusCategory
 ```
 
 Skip any issue that an open issue **Blocks**. Take the first remaining one,
-read it with `getJiraIssue` (`view: full`, comments included), and walk its
+read it with `jira.py get` (description, comments, links), and walk its
 **Steps** on this build. If it no longer reproduces, comment that with a
 screenshot and the SHA, transition it to Done, and go back to this step for
 the next one. If it reproduces, go to step 6.
@@ -205,7 +214,7 @@ project = LPT AND text ~ "<distinctive phrase>" ORDER BY updated DESC
 - Same problem, Done, and it still reproduces: reopen it (transition to
   To Do), edit the description to the current repro, comment what changed,
   attach the new screenshots, and use that issue.
-- No match: `createJiraIssue` with `contentFormat: markdown`.
+- No match: `jira.py create` with the body below and the screenshots.
 
 Fields:
 
@@ -242,7 +251,8 @@ After this ships, that section should say: <the sentence that will land>.
 <the widget, layout, or motion approach>
 
 ## Screenshots
-Attached: <file names and what each shows>.
+![<what it shows>](<surface>-1.png)
+![<what it shows>](<surface>-2.png)
 
 ## Acceptance criteria
 1. <observable on the mini>
@@ -256,11 +266,10 @@ Attached: <file names and what each shows>.
 Device: iPhone 13 mini simulator, debug build of origin/main `<SHA>`.
 ```
 
-Attach each screenshot: `uploadAttachmentToJiraIssue` phase 1 with
-`filePath` returns an `uploadCommand`; run it; phase 2 with the `fileId`
-attaches it. When the finding depends on another open issue, link it with
-`createJiraIssueLink` (`linkType: "Blocks"`, inward blocks outward) and end
-the run: the blocker is the next run's work.
+Pass every screenshot to `--attach`; the images named in the body render
+in the ticket, and any others are shown at the end. When the finding
+depends on another open issue, link it (`jira.py link --type Blocks`, the
+blocker inward) and end the run: the blocker is the next run's work.
 
 If the right behavior is a product decision the record and the brief do
 not settle, write the options in the description, add `needs-human`,
@@ -277,8 +286,8 @@ BRANCH="fix/$SLUG"   # Bug → fix. Story or Task → feature.
 WT="$PRIMARY/.worktrees/$SLUG"
 ```
 
-- Transition the ticket to In Progress (`listJiraIssueTransitions`, then
-  `transitionJiraIssue`) and comment the branch name.
+- Move the ticket to In Progress (`jira.py transition --to "In Progress"`)
+  and comment the branch name.
 - The ticket is the spec. Ship the smallest change that makes every
   acceptance criterion true. Fix the cause. No bundled fixes.
 - Reuse the existing table, theme, `GlowHighlight`, `RexMascot`, and asset
@@ -336,16 +345,12 @@ A failure here is another attempt in the step 7 loop, on a new branch
 
 Close only when every criterion passed on origin/main:
 
-1. Upload each screenshot (`uploadAttachmentToJiraIssue` phase 1, run the
-   `uploadCommand`, keep `fileId` and collection; do not run phase 2).
-2. One comment with `addOrEditJiraIssueComment`, `contentFormat: html`,
-   with `inlineFileId` / `inlineFileCollection`. It stands alone: what
-   shipped, branch and PR URL, each acceptance criterion and how it was
-   checked on the mini after merge, the design-record section and the
-   sentence that landed, and that the images are from that live session.
-   Do not put the comment on `transitionJiraIssue`.
-3. `listJiraIssueTransitions`, then `transitionJiraIssue` to the Done
-   category. Confirm the status the tool returns.
+1. One comment, `jira.py comment LPT-NN --body-file close.md --attach
+   <KEY>-*.png`, that stands alone: what shipped, branch and PR URL, each
+   acceptance criterion and how it was checked on the mini after merge,
+   the design-record section and the sentence that landed, and that the
+   images are from that live session.
+2. `jira.py transition LPT-NN --to Done`. Confirm the status it prints.
 
 ## 10. Log, clean up, release, report
 

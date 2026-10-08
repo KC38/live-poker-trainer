@@ -2,7 +2,7 @@
 # Run /ui-design-agent back to back, unattended, inside tmux.
 #
 #   tools/ui_design_agent_loop.sh setup    one-time: save the Cursor API key and Atlassian token
-#   tools/ui_design_agent_loop.sh verify   check both work, including Jira tools inside the CLI
+#   tools/ui_design_agent_loop.sh verify   check both work, including Jira from inside the CLI
 #   tools/ui_design_agent_loop.sh start    start the loop in tmux session ui-design-agent
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
@@ -10,51 +10,41 @@
 #   tools/ui_design_agent_loop.sh kill     stop now and free a lock this loop holds
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
-# Each run is a fresh `agent -p` (Cursor CLI). The loop skips a run without
-# starting the agent while another agent holds the iPhone 13 mini, and frees
-# the lock if a run dies while holding it.
+# Each run is a fresh `agent -p` (Cursor CLI) on the primary checkout. The
+# loop skips a run without starting the agent while another agent holds the
+# iPhone 13 mini, and frees the lock if a run dies while holding it.
 #
 # Runs authenticate without the macOS keychain or a browser, so they keep
 # working over SSH and after a reboot. Keys live in
 # ~/.live-poker-trainer/secrets.env (mode 600): CURSOR_API_KEY for the CLI,
-# and an Atlassian email + API token sent as Basic auth to the Rovo MCP server.
-# The CLI only reads that server from its workspace's .cursor/mcp.json, so
-# each run's workspace is a detached worktree at ~/.live-poker-trainer/runner,
-# reset to origin/main, holding an mcp.json that reads the header from
-# $ATLASSIAN_BASIC. The IDE never opens it. The primary checkout is added
-# with --add-dir and stays where the agent makes changes.
+# and ATLASSIAN_EMAIL + ATLASSIAN_API_TOKEN for tools/jira.py (Jira REST).
 #
 # Environment:
 #   UI_AGENT_MODEL              model for `agent --model` (default: CLI default)
 #   UI_AGENT_GAP                seconds between runs (default 60)
 #   UI_AGENT_BUSY_SLEEP         seconds to sleep when the mini is busy (default 300)
 #   UI_AGENT_MAX_RUN_SECONDS    hard cap per run (default 14400)
-#   UI_AGENT_PLUGIN_DIRS        extra colon-separated --plugin-dir paths (default none)
 set -euo pipefail
 
 export PATH="$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/Applications/flutter/bin:${PATH:-}"
 export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}"
 
 SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
+TOOLS="$(dirname "$SCRIPT")"
 SESSION="ui-design-agent"
 STATE_DIR="$HOME/.live-poker-trainer"
 LOG_DIR="$STATE_DIR/ui-agent-logs"
 STOP_FILE="$STATE_DIR/ui-agent.stop"
 PID_FILE="$STATE_DIR/ui-agent.pid"
 SECRETS_FILE="$STATE_DIR/secrets.env"
-RUNNER_DIR="$STATE_DIR/runner"
 GAP="${UI_AGENT_GAP:-60}"
 BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
-ATLASSIAN_MCP_URL="https://mcp.atlassian.com/v2/mcp"
-# Token form with the MCP server's agent-interface scopes pre-selected.
-ATLASSIAN_TOKEN_URL="https://id.atlassian.com/manage-profile/security/api-tokens?autofillToken&expiryDays=max&appId=mcp-v2&selectedScopes=all"
-JIRA_CLOUD_ID="6c3dffc6-003e-49f8-a8fb-0acc800ca7e7"
 
 mkdir -p "$LOG_DIR"
 
 primary() {
-  bash "$(dirname "$SCRIPT")/primary_checkout.sh"
+  bash "$TOOLS/primary_checkout.sh"
 }
 
 log() {
@@ -62,7 +52,7 @@ log() {
 }
 
 prompt() {
-  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md in this workspace and follow it exactly, from step 0. The primary checkout is $(primary); run every command from there as the command says. This is an unattended run. Do not ask questions or wait for input."
+  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md in this workspace and follow it exactly, from step 0. This is an unattended run. Do not ask questions or wait for input."
 }
 
 load_secrets() {
@@ -72,57 +62,14 @@ load_secrets() {
     . "$SECRETS_FILE"
     set +a
   fi
-  if [[ -n "${ATLASSIAN_EMAIL:-}" && -n "${ATLASSIAN_API_TOKEN:-}" ]]; then
-    ATLASSIAN_BASIC="$(printf '%s:%s' "$ATLASSIAN_EMAIL" "$ATLASSIAN_API_TOKEN" | base64 | tr -d '\n')"
-    export ATLASSIAN_BASIC
-  fi
-}
-
-main_ref() {
-  local dir="$1"
-  if git -C "$dir" rev-parse -q --verify origin/main >/dev/null; then
-    echo origin/main
-  else
-    echo HEAD
-  fi
-}
-
-# Detached worktree of the primary at origin/main, with the CLI's mcp.json.
-ensure_runner() {
-  local dir ref
-  dir="$(primary)"
-  ref="$(main_ref "$dir")"
-  if ! git -C "$RUNNER_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    rm -rf "$RUNNER_DIR"
-    git -C "$dir" worktree prune
-    git -C "$dir" worktree add -q --detach "$RUNNER_DIR" "$ref"
-  else
-    git -C "$RUNNER_DIR" checkout -q --detach --force "$(git -C "$dir" rev-parse "$ref")"
-  fi
-  mkdir -p "$RUNNER_DIR/.cursor"
-  # The header is read from $ATLASSIAN_BASIC at run time; no secret on disk here.
-  printf '{"mcpServers": {"atlassian": {"url": "%s", "headers": {"Authorization": "Basic ${env:ATLASSIAN_BASIC}"}}}}\n' \
-    "$ATLASSIAN_MCP_URL" >"$RUNNER_DIR/.cursor/mcp.json"
-}
-
-plugin_args() {
-  local IFS=:
-  local dir
-  for dir in ${UI_AGENT_PLUGIN_DIRS:-}; do
-    if [[ -n "$dir" && -d "$dir" ]]; then
-      printf -- '--plugin-dir\n%s\n' "${dir%/}"
-    fi
-  done
 }
 
 agent_args() {
-  local args=(-p --force --trust --approve-mcps --sandbox disabled --output-format text
-    --workspace "$RUNNER_DIR" --add-dir "$(primary)")
+  local args=(-p --force --trust --sandbox disabled --output-format text --workspace "$(primary)")
   if [[ -n "${UI_AGENT_MODEL:-}" ]]; then
     args+=(--model "$UI_AGENT_MODEL")
   fi
   printf '%s\n' "${args[@]}"
-  plugin_args
 }
 
 sync_primary() {
@@ -135,7 +82,7 @@ sync_primary() {
 }
 
 sim_lock() {
-  python3 "$(dirname "$SCRIPT")/sim_lock.py" "$@"
+  python3 "$TOOLS/sim_lock.py" "$@"
 }
 
 logged_in() {
@@ -155,7 +102,6 @@ one_run() {
     sim_lock status 2>&1 | sed 's/^/    /' || true
     return 10
   fi
-  ensure_runner
 
   local stamp run_log pid watchdog code start line text
   local args=()
@@ -214,68 +160,11 @@ run_loop() {
   log "ui-design-agent loop stopped"
 }
 
-mcp_post() {
-  local body="$1"
-  shift
-  curl -s --max-time 30 -X POST "$ATLASSIAN_MCP_URL" \
-    -H "Authorization: Basic $ATLASSIAN_BASIC" \
-    -H 'Content-Type: application/json' \
-    -H 'Accept: application/json, text/event-stream' \
-    "$@" -d "$body"
-}
-
-# Call the Atlassian MCP with the saved token and confirm the Jira tools exist.
-atlassian_check() {
-  if [[ -z "${ATLASSIAN_BASIC:-}" ]]; then
-    echo "atlassian: no token saved (run: $SCRIPT setup)"
-    return 1
-  fi
-  local headers code sid tools missing="" name
-  headers="$(mktemp)"
-  mcp_post '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-03-26","capabilities":{},"clientInfo":{"name":"ui-design-agent-loop","version":"1"}}}' \
-    -D "$headers" -o /dev/null || true
-  code="$(awk 'NR==1 {print $2}' "$headers")"
-  sid="$(awk 'tolower($1) == "mcp-session-id:" {print $2}' "$headers" | tr -d '\r')"
-  rm -f "$headers"
-  if [[ "$code" != "200" ]]; then
-    echo "atlassian: token rejected (HTTP ${code:-none}). Check the email, the token's scopes,"
-    echo "  and that API-token auth for the Rovo MCP server is enabled in admin.atlassian.com."
-    return 1
-  fi
-  local session=()
-  [[ -n "$sid" ]] && session=(-H "Mcp-Session-Id: $sid")
-  mcp_post '{"jsonrpc":"2.0","method":"notifications/initialized"}' ${session[@]+"${session[@]}"} -o /dev/null || true
-  tools="$(mcp_post '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' ${session[@]+"${session[@]}"} || true)"
-  for name in searchJiraIssuesUsingJql getJiraIssue createJiraIssue addOrEditJiraIssueComment transitionJiraIssue; do
-    grep -q "\"$name\"" <<<"$tools" || missing="$missing $name"
-  done
-  if [[ -n "$missing" ]]; then
-    echo "atlassian: connected, but missing Jira tools:$missing"
-    echo "  Recreate the token with the agent-interface scopes: $ATLASSIAN_TOKEN_URL"
-    return 1
-  fi
-  local search
-  search="$(mcp_post "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"searchJiraIssuesUsingJql\",\"arguments\":{\"cloudId\":\"$JIRA_CLOUD_ID\",\"jql\":\"project = LPT ORDER BY created DESC\",\"maxResults\":1,\"fields\":[\"summary\"]}}}" \
-    ${session[@]+"${session[@]}"} || true)"
-  if ! grep -q 'LPT-[0-9]' <<<"$search"; then
-    echo "atlassian: tools listed, but a Jira search failed:"
-    grep -oE '"text":"([^"\\]|\\.)*"' <<<"$search" | head -1 | sed 's/^/    /'
-    echo "  The MCP server needs a token with its agent-interface scopes (a classic token,"
-    echo "  or one with read:jira-work-style scopes, is refused). Create one here, keep every"
-    echo "  pre-selected scope, and run setup again:"
-    echo "  $ATLASSIAN_TOKEN_URL"
-    return 1
-  fi
-  echo "atlassian: ok (Jira search works)"
-}
-
-# A real CLI run in the runner workspace: proves the API key and the Jira tools.
+# A real CLI run that calls tools/jira.py: proves the API key, shell access, and Jira.
 cli_jira_check() {
   local out key
-  ensure_runner
-  out="$(cd "$(primary)" && agent -p --force --trust --approve-mcps --output-format text \
-    --workspace "$RUNNER_DIR" --add-dir "$(primary)" \
-    "Call the Atlassian searchJiraIssuesUsingJql tool once with cloudId $JIRA_CLOUD_ID, jql 'project = LPT ORDER BY created DESC', maxResults 1. Reply with only the issue key it returns, or NO_JIRA if the call fails." 2>&1 | tail -n 5 || true)"
+  out="$(cd "$(primary)" && agent -p --force --trust --sandbox disabled --output-format text --workspace "$(primary)" \
+    "Run this shell command once: python3 tools/jira.py search 'project = LPT ORDER BY created DESC' --max 1. Reply with only the issue key it prints, or NO_JIRA if it fails." 2>&1 | tail -n 5 || true)"
   key="$(grep -oE 'LPT-[0-9]+' <<<"$out" | head -1 || true)"
   if [[ -n "$key" ]]; then
     echo "cli jira: ok (latest issue $key)"
@@ -296,7 +185,11 @@ verify() {
     echo "cursor: no API key and no login (run: $SCRIPT setup)"
     failed=1
   fi
-  atlassian_check || failed=1
+  if ! python3 "$TOOLS/jira.py" check; then
+    echo "  Use a token from id.atlassian.com/manage-profile/security/api-tokens →"
+    echo "  Create API token with scopes → Jira → read:jira-work, write:jira-work, read:jira-user."
+    failed=1
+  fi
   if [[ "$failed" == 0 ]]; then
     cli_jira_check || failed=1
   fi
@@ -323,10 +216,8 @@ setup() {
   local email=""
   read -r -p "   Email${ATLASSIAN_EMAIL:+ [$ATLASSIAN_EMAIL]}: " email
   [[ -n "$email" ]] && ATLASSIAN_EMAIL="$email"
-  echo "3. Atlassian API token with the MCP server's agent-interface scopes. This link"
-  echo "   pre-selects them (keep them all, longest expiry):"
-  echo "   $ATLASSIAN_TOKEN_URL"
-  echo "   An org admin must also allow API-token auth for the Rovo MCP server (admin.atlassian.com)."
+  echo "3. Atlassian API token: id.atlassian.com/manage-profile/security/api-tokens →"
+  echo "   Create API token with scopes → Jira → read:jira-work, write:jira-work, read:jira-user."
   prompt_secret ATLASSIAN_API_TOKEN "   Atlassian API token"
   (
     umask 077
@@ -401,7 +292,7 @@ case "${1:-}" in
     verify
     ;;
   *)
-    sed -n '2,32p' "$SCRIPT" | sed 's/^# \{0,1\}//'
+    sed -n '2,26p' "$SCRIPT" | sed 's/^# \{0,1\}//'
     exit 2
     ;;
 esac
