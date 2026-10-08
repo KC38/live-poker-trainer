@@ -202,6 +202,7 @@ final class AgentUiDriver {
           dig(child);
         });
       }
+      final route = ModalRoute.of(element);
       candidates.add(
         _TapCandidate(
           text: lower,
@@ -212,6 +213,7 @@ final class AgentUiDriver {
           length: lower.length,
           onPressed: onPressed,
           fromSemantics: fromSemantics,
+          onCurrentRoute: route?.isCurrent ?? true,
         ),
       );
     }
@@ -246,6 +248,10 @@ final class AgentUiDriver {
 
     candidates.sort((a, b) {
       if (a.exact != b.exact) return a.exact ? -1 : 1;
+      // Prefer the topmost route so buried CONTINUEs under a push do not win.
+      if (a.onCurrentRoute != b.onCurrentRoute) {
+        return a.onCurrentRoute ? -1 : 1;
+      }
       // Prefer a live onPressed target over a disabled FilledButton.
       final aLive = a.onPressed != null;
       final bLive = b.onPressed != null;
@@ -440,6 +446,7 @@ class _TapCandidate {
     required this.length,
     required this.onPressed,
     this.fromSemantics = false,
+    this.onCurrentRoute = true,
   });
 
   final String text;
@@ -450,4 +457,5 @@ class _TapCandidate {
   final int length;
   final VoidCallback? onPressed;
   final bool fromSemantics;
+  final bool onCurrentRoute;
 }

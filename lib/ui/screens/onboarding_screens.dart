@@ -246,11 +246,15 @@ class _DailyGoalScreenState extends ConsumerState<DailyGoalScreen> {
 }
 
 /// Duolingo-style Rex coach lines shown right after Get started.
-class CoachIntroScreen extends ConsumerWidget {
-  /// Creates one coach intro page. [pageIndex] is 0 or 1.
-  const CoachIntroScreen({super.key, required this.pageIndex});
+///
+/// One route advances both lines in place so only one CONTINUE is live.
+/// Stacking a second [CoachIntroScreen] left a buried CONTINUE that label
+/// taps (and the agent driver) could re-fire, never reaching Experience.
+class CoachIntroScreen extends ConsumerStatefulWidget {
+  /// Creates the coach intro. [pageIndex] is the starting line (0 or 1).
+  const CoachIntroScreen({super.key, this.pageIndex = 0});
 
-  /// Zero-based page in the two-screen coach sequence.
+  /// Zero-based starting line in the two-line coach sequence.
   final int pageIndex;
 
   static const _lines = <String>[
@@ -259,9 +263,22 @@ class CoachIntroScreen extends ConsumerWidget {
   ];
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final line = _lines[pageIndex.clamp(0, _lines.length - 1)];
-    final isLast = pageIndex >= _lines.length - 1;
+  ConsumerState<CoachIntroScreen> createState() => _CoachIntroScreenState();
+}
+
+class _CoachIntroScreenState extends ConsumerState<CoachIntroScreen> {
+  late int _pageIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageIndex = widget.pageIndex.clamp(0, CoachIntroScreen._lines.length - 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final line = CoachIntroScreen._lines[_pageIndex];
+    final isLast = _pageIndex >= CoachIntroScreen._lines.length - 1;
     return _RexMotivationScaffold(
       speech: line,
       onContinue: () async {
@@ -279,11 +296,7 @@ class CoachIntroScreen extends ConsumerWidget {
           );
           return;
         }
-        await Navigator.of(context).push(
-          MaterialPageRoute<void>(
-            builder: (_) => const CoachIntroScreen(pageIndex: 1),
-          ),
-        );
+        setState(() => _pageIndex += 1);
       },
     );
   }

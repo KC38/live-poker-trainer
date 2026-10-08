@@ -264,10 +264,10 @@ void main() {
     expect(find.widgetWithText(FilledButton, 'Continue'), findsOneWidget);
   });
 
-  testWidgets('get started shows two coach screens before experience', (
+  testWidgets('get started shows two coach lines then experience', (
     tester,
   ) async {
-    await tester.binding.setSurfaceSize(const Size(402, 874));
+    await tester.binding.setSurfaceSize(const Size(375, 812));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       ProviderScope(
@@ -290,20 +290,38 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text("Hi — I'm Rex, your coach."), findsOneWidget);
     expect(find.byType(RexMascot), findsOneWidget);
+    expect(find.byType(CoachIntroScreen), findsOneWidget);
     expect(find.byType(LinearProgressIndicator), findsNothing);
     expect(find.text('Where are you starting?'), findsNothing);
+    expect(tester.takeException(), isNull);
 
     await tapCoachContinue(tester);
     expect(find.text("Let's find where you should start."), findsOneWidget);
     expect(find.text("Hi — I'm Rex, your coach."), findsNothing);
+    // One route advances in place — no stacked duplicate CONTINUE.
+    expect(find.byType(CoachIntroScreen), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'CONTINUE'), findsOneWidget);
+    expect(tester.takeException(), isNull);
 
-    await tapCoachContinue(tester);
+    // Simulate an agent-style onPressed invoke (not a hit-test tap).
+    final continueButton = tester.widget<FilledButton>(
+      find.widgetWithText(FilledButton, 'CONTINUE'),
+    );
+    continueButton.onPressed!();
+    await tester.pumpAndSettle();
     expect(find.text('Where are you starting?'), findsOneWidget);
     expect(find.text("Let's find where you should start."), findsNothing);
+    // Prior coach route stays under Experience (offstage), still a single
+    // CoachIntroScreen — never a stacked pair of CONTINUEs.
+    expect(
+      find.byType(CoachIntroScreen, skipOffstage: false),
+      findsOneWidget,
+    );
     expect(
       tester.widget<LinearProgressIndicator>(find.byType(LinearProgressIndicator)).value,
       1 / kOnboardingProgressSteps,
     );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('daily goal continue skips Meet Rex', (tester) async {

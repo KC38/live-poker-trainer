@@ -100,8 +100,9 @@ preconditions are in [agent-paths.md](../agent-paths.md).
 | Surface | Code | Reach it |
 | --- | --- | --- |
 | Welcome | `WelcomeScreen` in `lib/ui/screens/onboarding_screens.dart` | Fresh install |
-| Onboarding questions (experience, daily goal) | `onboarding_screens.dart` | Welcome → Get started |
-| Rex intro and motivation | `onboarding_screens.dart` | After the questions |
+| Rex intro | `CoachIntroScreen` in `onboarding_screens.dart` | Welcome → Get started |
+| Onboarding questions (experience, daily goal) | `onboarding_screens.dart` | After Rex intro |
+| Rex motivation | `onboarding_screens.dart` | After the questions |
 | Recommended start / Your start | `lib/ui/screens/first_lesson_launch_screen.dart` | After Rex intro |
 | Auth | `lib/ui/screens/auth_screen.dart` | Welcome → I already have an account |
 | Lesson runner | `lib/ui/screens/lesson_runner_screen.dart`, `LessonScreenLayout` | Any lesson; `agent_tap.py openlesson --text <lesson id>` |
@@ -152,6 +153,10 @@ hard-code a second gold or a second radius for the same role.
 Onboarding primary actions use the elevated button. On Welcome, “I already
 have an account” uses the outlined button.
 
+Rex intro is a single `CoachIntroScreen` route that advances its two coach
+lines in place, then pushes Experience; it does not stack a second CONTINUE
+under the visible one.
+
 Save progress uses the same radial felt gradient as other onboarding
 scaffolds. CREATE A PROFILE uses the elevated button. LATER uses the
 outlined button. “I already have an account” is a gold-bright Manrope text
@@ -167,6 +172,10 @@ Lesson feedback Continue and lesson result CONTINUE use the elevated button
 Mono.
 
 ### Shipped
+
+Rex intro is `CoachIntroScreen` in `lib/ui/screens/onboarding_screens.dart`
+(two lines, one route, then Experience). The next multi-line coach beat
+advances in place the same way.
 
 Save progress CTAs and celebration chips are `SaveProgressScreen` in
 `lib/ui/screens/onboarding_screens.dart`. The next guest conversion screen
