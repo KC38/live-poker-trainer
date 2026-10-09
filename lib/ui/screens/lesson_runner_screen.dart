@@ -834,6 +834,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         liveTrainingGranted: complete.liveTrainingGranted,
         duplicate: complete.duplicate,
         resume: complete.resume,
+        gemsAwarded: complete.gemsAwarded,
+        gems: complete.gems,
       );
       unawaited(ref.read(soundServiceProvider).win());
       unawaited(

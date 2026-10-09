@@ -60,6 +60,16 @@ function optionalString(value: unknown): string | undefined {
   return typeof value === "string" && value.trim() ? value.trim() : undefined;
 }
 
+/** Later YYYY-MM-DD, so a merged profile cannot reclaim a quest already paid. */
+function laterLocalDate(
+  left: string | undefined,
+  right: string | undefined,
+): string | undefined {
+  if (!left) return right;
+  if (!right) return left;
+  return left >= right ? left : right;
+}
+
 function record(raw: unknown, label: string): Record<string, unknown> {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
     throw new HttpsError("invalid-argument", `${label} must be an object.`);
@@ -530,6 +540,11 @@ export function mergeCourseProfiles(
     livesMax;
   // Keep the fuller heart count so linking an account does not punish either.
   const livesRemaining = Math.min(livesMax, Math.max(destLives, sourceLives));
+  // Keep the later stamp so linking cannot claim today's quest again.
+  const lastDailyGemLocalDate = laterLocalDate(
+    optionalString(destination.lastDailyGemLocalDate),
+    optionalString(source.lastDailyGemLocalDate),
+  );
 
   return {
     profile: {
@@ -565,6 +580,7 @@ export function mergeCourseProfiles(
       recommendedLessonId,
       livesRemaining,
       livesMax,
+      ...(lastDailyGemLocalDate ? {lastDailyGemLocalDate} : {}),
       firstLessonCompletedAtMs:
         Number(destination.firstLessonCompletedAtMs ?? 0) ||
         Number(source.firstLessonCompletedAtMs ?? 0) ||

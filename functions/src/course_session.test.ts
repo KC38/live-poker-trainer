@@ -20,6 +20,7 @@ import {
 import {
   acceptedAccuracyRatio,
   applyStudyDayStreak,
+  dailyQuestGemsAwarded,
   assertCourseAvailable,
   countsAsScoredAnswer,
   disabledCourseFlags,
@@ -374,6 +375,21 @@ describe("streak calendar rules", () => {
     });
     expect(sameDay.credited).toBe(false);
     expect(sameDay.currentStreak).toBe(1);
+  });
+
+  it("still awards daily quest gems after streak credit was used", () => {
+    expect(dailyQuestGemsAwarded({
+      lastDailyGemLocalDate: null,
+      todayLocalDate: "2026-10-09",
+    })).toBe(5);
+    expect(dailyQuestGemsAwarded({
+      lastDailyGemLocalDate: "2026-10-08",
+      todayLocalDate: "2026-10-09",
+    })).toBe(5);
+    expect(dailyQuestGemsAwarded({
+      lastDailyGemLocalDate: "2026-10-09",
+      todayLocalDate: "2026-10-09",
+    })).toBe(0);
   });
 
   it("increments on the next local day and resets after a miss", () => {
