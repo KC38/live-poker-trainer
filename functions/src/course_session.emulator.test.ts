@@ -698,6 +698,91 @@ describe("course session integration", () => {
     expect(stored?.restoreHeartOnComplete).toBe(true);
   });
 
+  test("daily quest gems persist after the step submit credited the streak", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "gem-quest-user",
+      raw: {clientVersion: "2.0.0", timezone: "UTC"},
+      db,
+    });
+    const nowMs = Date.UTC(2026, 9, 9, 15, 0, 0);
+    const lessonId = "lesson-01-01-01-your-two-cards";
+    await db.doc("users/gem-quest-user/course/main").set({
+      lastStudyLocalDate: "2026-10-09",
+      currentStreak: 1,
+      longestStreak: 1,
+      gems: 0,
+      timezone: "UTC",
+    }, {merge: true});
+    const attempt = {
+      uid: "gem-quest-user",
+      lessonId,
+      catalogVersion: "2.0.0",
+      status: "in_progress",
+      activityIndex: 99,
+      currentActivityId: "act-01-01-01-explain-hole-cards",
+      livesRemaining: 5,
+      livesMax: 5,
+      acceptedCount: 99,
+      scoredCount: 1,
+      acceptedScoredCount: 1,
+      masteryPoints: 1,
+      masteryWeight: 1,
+      jumpTestPassed: false,
+      stepCount: 1,
+      xpEarned: 10,
+      createdAtMs: nowMs,
+      updatedAtMs: nowMs,
+    };
+    await db.doc("users/gem-quest-user/courseAttempts/gem-att-1").set({
+      ...attempt,
+      attemptId: "gem-att-1",
+      startRequestId: "start_gem_01",
+    });
+
+    const completed = await completeCourseLessonForUser({
+      uid: "gem-quest-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: "gem-att-1",
+        idempotencyKey: "gem_complete_01",
+      },
+      db,
+      nowMs,
+    });
+    expect(completed.gemsAwarded).toBe(5);
+    expect(completed.gems).toBe(5);
+    const profile = (
+      await db.doc("users/gem-quest-user/course/main").get()
+    ).data();
+    expect(profile?.gems).toBe(5);
+    expect(profile?.lastDailyGemLocalDate).toBe("2026-10-09");
+    expect(profile?.lastStudyLocalDate).toBe("2026-10-09");
+
+    await db.doc("users/gem-quest-user/courseAttempts/gem-att-2").set({
+      ...attempt,
+      attemptId: "gem-att-2",
+      startRequestId: "start_gem_02",
+    });
+    const second = await completeCourseLessonForUser({
+      uid: "gem-quest-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: "gem-att-2",
+        idempotencyKey: "gem_complete_02",
+      },
+      db,
+      nowMs,
+    });
+    expect(second.gemsAwarded).toBe(0);
+    expect(second.gems).toBe(5);
+    const after = (
+      await db.doc("users/gem-quest-user/course/main").get()
+    ).data();
+    expect(after?.gems).toBe(5);
+    expect(after?.lastDailyGemLocalDate).toBe("2026-10-09");
+  });
+
   test("a fresh Practice start is allowed at zero hearts", async () => {
     await seedFlags();
     await initializeCourseProfileForUser({

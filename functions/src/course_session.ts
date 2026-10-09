@@ -517,6 +517,22 @@ export function applyStudyDayStreak(options: {
   };
 }
 
+/**
+ * Gems for finishing a lesson on [todayLocalDate].
+ *
+ * The first step submit of the day already consumes study-streak credit and
+ * writes `lastStudyLocalDate`. Completion always follows that submit, so
+ * keying gems off streak credit never persists the daily quest reward.
+ * [lastDailyGemLocalDate] is the once-per-day stamp for the gem grant.
+ */
+export function dailyQuestGemsAwarded(options: {
+  lastDailyGemLocalDate: string | null;
+  todayLocalDate: string;
+}): number {
+  if (options.lastDailyGemLocalDate === options.todayLocalDate) return 0;
+  return GEMS_DAILY_QUEST;
+}
+
 export async function assertCourseAvailable(options: {
   db: Firestore;
   clientVersion: string;
@@ -1385,7 +1401,12 @@ export async function completeCourseLessonForUser(options: {
         null,
       todayLocalDate: today,
     });
-    const gemsAwarded = streak.credited ? GEMS_DAILY_QUEST : 0;
+    const lastDailyGemLocalDate =
+      optionalString(profileSnap.data()?.lastDailyGemLocalDate) ?? null;
+    const gemsAwarded = dailyQuestGemsAwarded({
+      lastDailyGemLocalDate,
+      todayLocalDate: today,
+    });
     const gemsBalance = Number(profileSnap.data()?.gems ?? 0) + gemsAwarded;
 
     const passiveHearts = applyPassiveHeartRefill(
@@ -1490,7 +1511,10 @@ export async function completeCourseLessonForUser(options: {
     const clearProgressPointer = !isReview || resumePointsHere;
     tx.set(profileRef, {
       lifetimeXp: FieldValue.increment(xpAwarded),
-      ...(gemsAwarded > 0 ? {gems: FieldValue.increment(gemsAwarded)} : {}),
+      ...(gemsAwarded > 0 ? {
+        gems: FieldValue.increment(gemsAwarded),
+        lastDailyGemLocalDate: today,
+      } : {}),
       currentStreak: streak.currentStreak,
       longestStreak: streak.longestStreak,
       lastStudyLocalDate: streak.lastStudyLocalDate,

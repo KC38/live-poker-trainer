@@ -85,6 +85,50 @@ describe("mergeCourseProfiles", () => {
     expect(merged.profile.livesRemaining).toBe(2);
     expect(merged.profile.livesMax).toBe(5);
   });
+
+  it("keeps a daily gem stamp so a link cannot claim twice", () => {
+    const merged = mergeCourseProfiles(
+      {
+        lifetimeXp: 10,
+        completedLessonIds: ["lesson-a"],
+        lastDailyGemLocalDate: "2026-10-09",
+      },
+      {
+        lifetimeXp: 20,
+        completedLessonIds: ["lesson-a"],
+      },
+      "2.0.0",
+    );
+    expect(merged.profile.lastDailyGemLocalDate).toBe("2026-10-09");
+    const destWins = mergeCourseProfiles(
+      {
+        lifetimeXp: 10,
+        completedLessonIds: ["lesson-a"],
+        lastDailyGemLocalDate: "2026-10-08",
+      },
+      {
+        lifetimeXp: 20,
+        completedLessonIds: ["lesson-a"],
+        lastDailyGemLocalDate: "2026-10-09",
+      },
+      "2.0.0",
+    );
+    expect(destWins.profile.lastDailyGemLocalDate).toBe("2026-10-09");
+    const sourceNewer = mergeCourseProfiles(
+      {
+        lifetimeXp: 10,
+        completedLessonIds: ["lesson-a"],
+        lastDailyGemLocalDate: "2026-10-09",
+      },
+      {
+        lifetimeXp: 20,
+        completedLessonIds: ["lesson-a"],
+        lastDailyGemLocalDate: "2026-10-08",
+      },
+      "2.0.0",
+    );
+    expect(sourceNewer.profile.lastDailyGemLocalDate).toBe("2026-10-09");
+  });
 });
 
 describe("inProgressAttemptForDestination", () => {
