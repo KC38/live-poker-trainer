@@ -1,7 +1,9 @@
-/// Exact-match rules for debug agent taps on lesson docks and felt captions.
+/// Exact-match rules and route choice for debug agent taps.
 library;
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/debug/agent_commands.dart';
 import 'package:live_poker_trainer/core/debug/agent_ui_driver.dart';
 
 void main() {
@@ -109,5 +111,58 @@ void main() {
     expect(agentTapLabelMatches('strong-narrow', 'Any two cards'), isFalse);
     expect(agentTapLabelMatches('  ', 'continue'), isFalse);
     expect(agentTapLabelMatches('continue', '   '), isFalse);
+  });
+
+  testWidgets('tap fires CONTINUE on the current route, not a buried one', (
+    tester,
+  ) async {
+    var buried = 0;
+    var current = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Align(
+            alignment: Alignment.bottomCenter,
+            child: FilledButton(
+              onPressed: () => buried++,
+              child: const Text('CONTINUE'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    tester
+        .state<NavigatorState>(find.byType(Navigator))
+        .push(
+          MaterialPageRoute<void>(
+            builder: (context) => Scaffold(
+              body: Align(
+                alignment: Alignment.topCenter,
+                child: FilledButton(
+                  onPressed: () => current++,
+                  child: const Text('CONTINUE'),
+                ),
+              ),
+            ),
+          ),
+        );
+    await tester.pumpAndSettle();
+
+    // Both buttons stay in the tree. The buried one sits lower, which is the
+    // tie-break that used to win before route order was checked.
+    expect(
+      find.widgetWithText(FilledButton, 'CONTINUE', skipOffstage: false),
+      findsNWidgets(2),
+    );
+
+    AgentUiDriver.install();
+    AgentCommands.debugEmit('tap:continue');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(current, 1);
+    expect(buried, 0);
   });
 }

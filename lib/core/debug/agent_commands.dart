@@ -28,6 +28,15 @@ final class AgentCommands {
   /// Live command stream (debug builds only; empty otherwise).
   static Stream<String> get stream => _controller.stream;
 
+  /// Pushes [cmd] onto the command bus.
+  ///
+  /// Production commands arrive through the VM service extension. Tests use
+  /// this so the UI driver can run without a VM service connection.
+  @visibleForTesting
+  static void debugEmit(String cmd) {
+    _controller.add(cmd);
+  }
+
   /// Registers `ext.poker.agent` with the VM service.
   static void install() {
     if (!kDebugMode) return;
@@ -41,12 +50,14 @@ final class AgentCommands {
       }
       final amountRaw = (params['amount'] ?? '').trim();
       if (amountRaw.isNotEmpty &&
-          (cmd == 'raise' || cmd == 'bet' || cmd == 'allin' || cmd == 'all_in')) {
+          (cmd == 'raise' ||
+              cmd == 'bet' ||
+              cmd == 'allin' ||
+              cmd == 'all_in')) {
         cmd = '$cmd:$amountRaw';
       }
       // Prefer explicit label params for UI taps (text= / label=).
-      final textRaw =
-          (params['text'] ?? params['label'] ?? '').trim();
+      final textRaw = (params['text'] ?? params['label'] ?? '').trim();
       if (textRaw.isNotEmpty &&
           (cmd == 'tap' ||
               cmd == 'taptext' ||

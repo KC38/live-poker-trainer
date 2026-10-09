@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import os
 import tempfile
 import types
 import unittest
+import urllib.error
+from email.message import Message
 from pathlib import Path
-from typing import Any, List
+from typing import Any, Dict, List
 from unittest import mock
 
 
@@ -168,6 +171,117 @@ class OperationsTest(unittest.TestCase):
         body = self.calls[0][2]
         self.assertEqual(body["inwardIssue"], {"key": "LPT-41"})
         self.assertEqual(body["outwardIssue"], {"key": "LPT-42"})
+
+
+class SearchTest(unittest.TestCase):
+    """Search pages with nextPageToken and stops instead of looping."""
+
+    def test_search_follows_the_next_page_until_last(self) -> None:
+        pages = [
+            {
+                "issues": [{"key": "LPT-1"}],
+                "isLast": False,
+                "nextPageToken": "page-2",
+            },
+            {"issues": [{"key": "LPT-2"}], "isLast": True},
+        ]
+        queries: List[Dict[str, Any]] = []
+        paths: List[str] = []
+
+        def fake_request(
+            method: str,
+            path: str,
+            body: Any = None,
+            query: Any = None,
+            **kwargs: Any,
+        ) -> Any:
+            self.assertEqual(method, "GET")
+            paths.append(path)
+            queries.append(dict(query or {}))
+            return pages[len(queries) - 1]
+
+        with mock.patch.object(jira, "request", fake_request):
+            found = jira.search("project = LPT ORDER BY key", limit=10)
+        self.assertEqual([item["key"] for item in found], ["LPT-1", "LPT-2"])
+        self.assertEqual(paths, ["/3/search/jql", "/3/search/jql"])
+        self.assertNotIn("nextPageToken", queries[0])
+        self.assertEqual(queries[1]["nextPageToken"], "page-2")
+        self.assertEqual(queries[0]["jql"], "project = LPT ORDER BY key")
+        self.assertEqual(queries[0]["maxResults"], 10)
+
+    def test_search_stops_once_the_page_fills_the_limit(self) -> None:
+        calls = 0
+
+        def fake_request(
+            method: str,
+            path: str,
+            body: Any = None,
+            query: Any = None,
+            **kwargs: Any,
+        ) -> Any:
+            nonlocal calls
+            calls += 1
+            self.assertEqual(query["maxResults"], 2)
+            return {
+                "issues": [{"key": "LPT-1"}, {"key": "LPT-2"}],
+                "isLast": False,
+                "nextPageToken": "more",
+            }
+
+        with mock.patch.object(jira, "request", fake_request):
+            found = jira.search("project = LPT", limit=2)
+        self.assertEqual(calls, 1)
+        self.assertEqual([item["key"] for item in found], ["LPT-1", "LPT-2"])
+
+    def test_search_does_not_follow_a_token_when_is_last_is_omitted(self) -> None:
+        calls = 0
+
+        def fake_request(
+            method: str,
+            path: str,
+            body: Any = None,
+            query: Any = None,
+            **kwargs: Any,
+        ) -> Any:
+            nonlocal calls
+            calls += 1
+            return {"issues": [{"key": "LPT-9"}], "nextPageToken": "again"}
+
+        with mock.patch.object(jira, "request", fake_request):
+            found = jira.search("project = LPT", limit=50)
+        self.assertEqual(calls, 1)
+        self.assertEqual(found[0]["key"], "LPT-9")
+
+
+class RequestFailureTest(unittest.TestCase):
+    """HTTP and network failures become JiraError text the agent can read."""
+
+    def test_http_401_keeps_the_status_and_body(self) -> None:
+        err = urllib.error.HTTPError(
+            "https://api.atlassian.com/ex/jira/x/rest/api/3/myself",
+            401,
+            "Unauthorized",
+            Message(),
+            io.BytesIO(b'{"message":"scope refused"}'),
+        )
+        with mock.patch.object(jira, "credentials", return_value=("a@b.c", "tok")), mock.patch.object(
+            jira.urllib.request, "urlopen", side_effect=err
+        ):
+            with self.assertRaises(jira.JiraError) as ctx:
+                jira.request("GET", "/3/myself")
+        message = str(ctx.exception)
+        self.assertIn("GET /3/myself", message)
+        self.assertIn("HTTP 401", message)
+        self.assertIn("scope refused", message)
+
+    def test_url_error_names_the_reason(self) -> None:
+        err = urllib.error.URLError("timed out")
+        with mock.patch.object(jira, "credentials", return_value=("a@b.c", "tok")), mock.patch.object(
+            jira.urllib.request, "urlopen", side_effect=err
+        ):
+            with self.assertRaises(jira.JiraError) as ctx:
+                jira.request("GET", "/3/myself")
+        self.assertIn("GET /3/myself failed: timed out", str(ctx.exception))
 
 
 if __name__ == "__main__":
