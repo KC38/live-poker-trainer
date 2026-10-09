@@ -71,4 +71,71 @@ rm -f "$LOG_DIR"/run-*.log
 (unset UI_AGENT_LOOP_SOURCE_ONLY; bash "$LOOP" status >/dev/null) \
   || fail "status should exit 0 before the first run"
 
+# The loop's own tmux server (socket ui-agent) and the login LaunchAgent.
+# $HOME/.local/bin is first on the script's PATH, so these fakes win.
+mkdir -p "$HOME/.local/bin"
+TMUX_LOG="$tmp/tmux.log"
+LAUNCH_LOG="$tmp/launchctl.log"
+SESSION_FLAG="$tmp/tmux-has-session"
+: >"$TMUX_LOG"
+: >"$LAUNCH_LOG"
+cat >"$HOME/.local/bin/tmux" <<EOF
+#!/usr/bin/env bash
+printf '%s\n' "\$*" >>"$TMUX_LOG"
+if [[ "\${1:-}" == "-L" && "\${3:-}" == "has-session" ]]; then
+  [[ -f "$SESSION_FLAG" ]]
+  exit \$?
+fi
+if [[ "\${1:-}" == "-L" && "\${3:-}" == "new-session" ]]; then
+  touch "$SESSION_FLAG"
+  exit 0
+fi
+exit 0
+EOF
+cat >"$HOME/.local/bin/launchctl" <<EOF
+#!/usr/bin/env bash
+printf '%s\n' "\$*" >>"$LAUNCH_LOG"
+exit 0
+EOF
+chmod +x "$HOME/.local/bin/tmux" "$HOME/.local/bin/launchctl"
+
+unset UI_AGENT_LOOP_SOURCE_ONLY
+start_out="$(bash "$LOOP" start)"
+grep -q 'started the loop' <<<"$start_out" || fail "start should report started: $start_out"
+grep -qx -- '-L ui-agent has-session -t =ui-design-agent' "$TMUX_LOG" \
+  || fail "start must probe socket ui-agent: $(cat "$TMUX_LOG")"
+grep -q -- '-L ui-agent new-session -d -s ui-design-agent ' "$TMUX_LOG" \
+  || fail "start must create the session on socket ui-agent: $(cat "$TMUX_LOG")"
+while IFS= read -r line; do
+  [[ "$line" == "-L ui-agent "* ]] || fail "tmux call left socket ui-agent: $line"
+done <"$TMUX_LOG"
+
+again="$(bash "$LOOP" start)"
+grep -q 'already running' <<<"$again" || fail "second start should see the session: $again"
+new_count="$(grep -c 'new-session' "$TMUX_LOG" || true)"
+[[ "$new_count" == 1 ]] || fail "a second start must not open another session (got $new_count)"
+
+status_out="$(bash "$LOOP" status)"
+grep -q 'loop: running (tmux -L ui-agent, session ui-design-agent)' <<<"$status_out" \
+  || fail "status should name the ui-agent socket: $status_out"
+grep -q 'login item: not installed' <<<"$status_out" \
+  || fail "login item should start uninstalled: $status_out"
+
+install_out="$(bash "$LOOP" install)"
+plist="$HOME/Library/LaunchAgents/com.livepokertrainer.ui-design-agent.plist"
+[[ -f "$plist" ]] || fail "install should write $plist ($install_out)"
+grep -q '<string>com.livepokertrainer.ui-design-agent</string>' "$plist" \
+  || fail "plist label missing"
+grep -q '<string>start</string>' "$plist" || fail "plist must launch the start command"
+grep -q 'ui_design_agent_loop.sh' "$plist" || fail "plist must name the loop script"
+grep -F -q "bootstrap gui/$(id -u) $plist" "$LAUNCH_LOG" \
+  || fail "install should bootstrap the agent: $(cat "$LAUNCH_LOG")"
+grep -q 'login item: installed (com.livepokertrainer.ui-design-agent)' \
+  <<<"$(bash "$LOOP" status)" || fail "status should see the login item"
+
+bash "$LOOP" uninstall >/dev/null
+[[ ! -f "$plist" ]] || fail "uninstall should remove the plist"
+grep -q 'login item: not installed' <<<"$(bash "$LOOP" status)" \
+  || fail "status should clear the login item"
+
 echo "ui-design-agent loop ok"
