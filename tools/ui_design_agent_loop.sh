@@ -344,7 +344,9 @@ DROP_LINE = re.compile(
     r"("
     r"\] logger |analytics\.track|structured-log\.|"
     r"startup\.|privacy\.|protoPrivacy|ripgrep\.|sandbox\.|"
-    r"serverConfig\.|Stack trace:|^\s*at "
+    r"serverConfig|statsig\.|atFileSuggestions\.|OpenTelemetry|"
+    r"cc-marketplace|logger\.default|debug-session-start|"
+    r"Stack trace:|^\s*at "
     r")",
     re.I,
 )
@@ -1127,14 +1129,12 @@ EOF
     sim_lock status || true
     latest="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
     if [[ -n "$latest" ]]; then
-      # Best-effort mid-run backfill so status is not stuck on an empty TTY log.
-      if [[ ! -s "$latest" ]] || ! grep -q 'backfilled from\|LPT-\|SIM_NOT_READY' "$latest" 2>/dev/null; then
-        stamp_guess="$(basename "$latest" .log)"
-        stamp_guess="${stamp_guess#run-}"
-        start_guess="$(date -j -f '%Y%m%d-%H%M%S' "$stamp_guess" '+%s' 2>/dev/null || echo 0)"
-        root_guess="$(cat "$PID_FILE" 2>/dev/null || true)"
-        backfill_run_log_from_session "$latest" "$start_guess" "$root_guess"
-      fi
+      # Always attempt backfill; helper no-ops when the session has not grown.
+      stamp_guess="$(basename "$latest" .log)"
+      stamp_guess="${stamp_guess#run-}"
+      start_guess="$(date -j -f '%Y%m%d-%H%M%S' "$stamp_guess" '+%s' 2>/dev/null || echo 0)"
+      root_guess="$(cat "$PID_FILE" 2>/dev/null || true)"
+      backfill_run_log_from_session "$latest" "$start_guess" "$root_guess"
       echo "latest log: $latest"
       if [[ -s "$latest" ]]; then
         tail -n 10 "$latest"
