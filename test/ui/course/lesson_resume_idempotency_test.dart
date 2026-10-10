@@ -203,6 +203,57 @@ void main() {
     controller.dispose();
   });
 
+  test('grading clears Hint so bubble is not stuck under Oops', () {
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(id: 'h', kind: 'hint', text: 'Use your pair'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
+    controller.revealHint();
+    expect(controller.hintVisible, isTrue);
+    expect(controller.showTargetCue, isTrue);
+    const miss = SubmitCourseStepResult(
+      attemptId: 'att',
+      activityId: 'a',
+      grade: SoftGrade.clearMistake,
+      feedback: 'try again',
+      accepted: false,
+      lifeLost: false,
+      livesRemaining: 3,
+      xpAwarded: 0,
+      remediationRequired: false,
+      resume: CourseResumePointer(
+        attemptId: 'att',
+        lessonId: 'l',
+        activityId: 'a',
+        activityIndex: 0,
+      ),
+      duplicate: false,
+    );
+    controller.finishSubmit(miss);
+    expect(controller.hintVisible, isFalse);
+    expect(controller.showTargetCue, isFalse);
+    expect(controller.lastResult?.accepted, isFalse);
+
+    controller.clearFeedbackForRetry();
+    controller.notifyFeltDealReady(true);
+    controller.revealHint();
+    expect(controller.hintVisible, isTrue);
+    controller.presentLocalMiss(miss);
+    expect(controller.hintVisible, isFalse);
+    expect(controller.showTargetCue, isFalse);
+    controller.dispose();
+  });
+
   test('binding a new activity clears hint used', () {
     final first = CourseActivity(
       id: 'a',
