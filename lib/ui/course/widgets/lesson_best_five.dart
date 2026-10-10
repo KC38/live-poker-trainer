@@ -6,6 +6,8 @@
 /// five are tapped so dimming cannot spoil the answer (LPT-56).
 /// Guided picker SoftPulse (`LessonBestFivePickerTable`) marks the next
 /// untapped card in the recommended `choiceSets` list the same way (LPT-57).
+/// After grade, the picker never SoftPulses the whole coach five — cyan
+/// keeps the learner's picks and leftovers dim (LPT-61).
 library;
 
 import 'dart:math';
@@ -19,11 +21,10 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
-import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
-import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
 /// Features for Best five table demos: seats, cards, board, no blinds.
 TableFeatures get lessonBestFiveTableFeatures => const TableFeatures(
@@ -564,7 +565,9 @@ class _LessonBestFiveExplainTableState
 ///
 /// SoftPulse (when [showGuidance]) is one gold target at a time on the next
 /// untapped card in the recommended [BestFiveSpot.choiceSets] list — never
-/// every remaining recommended card, never the You name box (LPT-57).
+/// every remaining recommended card, never the You name box (LPT-57). After
+/// grade, SoftPulse stays off; leftovers dim and cyan keeps the picks
+/// (LPT-61).
 class LessonBestFivePickerTable extends StatefulWidget {
   /// Creates the picker stage.
   const LessonBestFivePickerTable({
@@ -752,13 +755,6 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
     return widget.spot.choiceSets[id]?.toSet() ?? {};
   }
 
-  Set<int> _indexesIn(List<String> source, Set<String> codes) {
-    return {
-      for (var i = 0; i < source.length; i++)
-        if (codes.contains(source[i])) i,
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
     final spot = widget.spot;
@@ -771,13 +767,21 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
         if (_selected.contains(spot.boardCodes[i])) i,
     };
     final coach = _coachCodes();
-    // Post-grade coach five uses SoftPulse on every correct card. During the
-    // ask, SoftPulse is one gold target at a time on `_nextGuideCode` (LPT-57).
+    // Ask: one gold SoftPulse on `_nextGuideCode` (LPT-57). Post-grade: never
+    // SoftPulse the whole coach five — dim leftovers instead (LPT-61).
     final highlightHero = <int>{};
     final highlightBoard = <int>{};
+    final dimmedHero = <int>{};
+    final dimmedBoard = <int>{};
     if (widget.controller.lastResult != null) {
-      highlightHero.addAll(_indexesIn(spot.heroCodes, coach));
-      highlightBoard.addAll(_indexesIn(spot.boardCodes, coach));
+      dimmedHero.addAll({
+        for (var i = 0; i < spot.heroCodes.length; i++)
+          if (!coach.contains(spot.heroCodes[i])) i,
+      });
+      dimmedBoard.addAll({
+        for (var i = 0; i < spot.boardCodes.length; i++)
+          if (!coach.contains(spot.boardCodes[i])) i,
+      });
     } else if (widget.showGuidance && !widget.locked) {
       final next = _nextGuideCode;
       reportLessonSequentialPressProgress(
@@ -797,7 +801,7 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
       }
     }
     final status = _statusLine();
-    Widget table = LessonTableStage(
+    final table = LessonTableStage(
       key: const ValueKey<String>('best-five-picker-table'),
       heroCodes: spot.heroCodes,
       boardCodes: spot.boardCodes,
@@ -809,12 +813,11 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
       selectedBoardIndexes: selectedBoard,
       highlightHeroIndexes: highlightHero,
       highlightBoardIndexes: highlightBoard,
+      dimmedHeroIndexes: dimmedHero,
+      dimmedBoardIndexes: dimmedBoard,
       onHeroCardTap: widget.locked ? null : _tapHero,
       onBoardCardTap: widget.locked ? null : _tapBoard,
     );
-    if (widget.controller.lastResult != null) {
-      table = LessonSoftPulseScope(allowed: true, child: table);
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
