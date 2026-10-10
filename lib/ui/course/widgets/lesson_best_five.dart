@@ -4,6 +4,8 @@
 /// (`LessonBestFiveExplainTable`) — never every remaining playing hole
 /// together (LPT-55). Leftover hole/board cards stay undimmed until those
 /// five are tapped so dimming cannot spoil the answer (LPT-56).
+/// Guided picker SoftPulse (`LessonBestFivePickerTable`) marks the next
+/// untapped card in the recommended `choiceSets` list the same way (LPT-57).
 library;
 
 import 'dart:math';
@@ -559,6 +561,10 @@ class _LessonBestFiveExplainTableState
 }
 
 /// Full table: tap five of seven cards to assemble the best hand.
+///
+/// SoftPulse (when [showGuidance]) is one gold target at a time on the next
+/// untapped card in the recommended [BestFiveSpot.choiceSets] list — never
+/// every remaining recommended card, never the You name box (LPT-57).
 class LessonBestFivePickerTable extends StatefulWidget {
   /// Creates the picker stage.
   const LessonBestFivePickerTable({
@@ -567,12 +573,16 @@ class LessonBestFivePickerTable extends StatefulWidget {
     required this.controller,
     required this.spot,
     required this.locked,
+    this.showGuidance = true,
   });
 
   final CourseActivity activity;
   final LessonActivityController controller;
   final BestFiveSpot spot;
   final bool locked;
+
+  /// When true and SoftPulse is allowed, gold rings the next recommended card.
+  final bool showGuidance;
 
   @override
   State<LessonBestFivePickerTable> createState() =>
@@ -652,8 +662,25 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
     return codes.toSet();
   }
 
+  /// Recommended five in catalog order (authors keep the best choice first).
+  List<String> get _guideOrder {
+    final choices = widget.activity.choices;
+    if (choices.isEmpty) return const <String>[];
+    final codes = widget.spot.choiceSets[choices.first.id];
+    if (codes == null || codes.isEmpty) return const <String>[];
+    return List<String>.from(codes);
+  }
+
+  String? get _nextGuideCode {
+    for (final code in _guideOrder) {
+      if (!_selected.contains(code)) return code;
+    }
+    return null;
+  }
+
   void _toggle(String code) {
     if (widget.locked) return;
+    final bool wasNext = _nextGuideCode == code && !_selected.contains(code);
     setState(() {
       if (_selected.contains(code)) {
         _selected.remove(code);
@@ -661,6 +688,14 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
         _selected.add(code);
       }
     });
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount:
+          _guideOrder.where((c) => !_selected.contains(c)).length,
+    );
     final mapped = mapBestFiveSelectionToChoiceId(
       selected: _selected,
       spot: widget.spot,
@@ -736,8 +771,31 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
         if (_selected.contains(spot.boardCodes[i])) i,
     };
     final coach = _coachCodes();
-    final highlightHero = _indexesIn(spot.heroCodes, coach);
-    final highlightBoard = _indexesIn(spot.boardCodes, coach);
+    // Post-grade coach five uses SoftPulse on every correct card. During the
+    // ask, SoftPulse is one gold target at a time on `_nextGuideCode` (LPT-57).
+    final highlightHero = <int>{};
+    final highlightBoard = <int>{};
+    if (widget.controller.lastResult != null) {
+      highlightHero.addAll(_indexesIn(spot.heroCodes, coach));
+      highlightBoard.addAll(_indexesIn(spot.boardCodes, coach));
+    } else if (widget.showGuidance && !widget.locked) {
+      final next = _nextGuideCode;
+      reportLessonSequentialPressProgress(
+        context,
+        remainingPressCount: next == null
+            ? 0
+            : _guideOrder.where((c) => !_selected.contains(c)).length,
+      );
+      if (next != null) {
+        final heroIdx = spot.heroCodes.indexOf(next);
+        if (heroIdx >= 0) {
+          highlightHero.add(heroIdx);
+        } else {
+          final boardIdx = spot.boardCodes.indexOf(next);
+          if (boardIdx >= 0) highlightBoard.add(boardIdx);
+        }
+      }
+    }
     final status = _statusLine();
     Widget table = LessonTableStage(
       key: const ValueKey<String>('best-five-picker-table'),

@@ -2749,6 +2749,7 @@ class _BestFiveCardTapActivity extends StatelessWidget {
             controller: controller,
             spot: spot,
             locked: locked,
+            showGuidance: showGuidance,
           );
         }
         return Column(
