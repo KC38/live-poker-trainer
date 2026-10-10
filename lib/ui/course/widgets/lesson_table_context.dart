@@ -2186,9 +2186,12 @@ LessonTableScene? dealtLessonTableScene(
     generation: generation,
     random: random,
   );
+  // Full boards need structure-preserving rank remaps — postflop hero
+  // resampling alone leaves broadway / paired boards stuck on authored ranks.
   final remapped = isomorphicLessonCardGroups(
     [scene.heroCodes, scene.boardCodes, scene.villainCodes],
     rng,
+    coordinated: scene.boardCodes.length >= 3,
   );
   return scene.copyWithCodes(
     heroCodes: remapped[0],

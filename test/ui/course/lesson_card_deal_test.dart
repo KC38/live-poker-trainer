@@ -596,6 +596,78 @@ void main() {
     );
   });
 
+  test('best-five explain/guided templates vary ranks across seeds', () {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-guided-seven',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [
+        CourseChoice(id: 'best-pair-k', label: 'Best'),
+        CourseChoice(id: 'weak-kickers', label: 'Weak'),
+        CourseChoice(id: 'ignore-ace', label: 'Ignore'),
+      ],
+    );
+    final heroRankKeys = <String>{};
+    final boardRankKeys = <String>{};
+    for (var seed = 0; seed < 48; seed++) {
+      final spot = dealtBestFiveSpot(activity, random: Random(seed))!;
+      heroRankKeys.add(
+        ([for (final c in spot.heroCodes) CardModel.fromCode(c).rank]..sort())
+            .join(','),
+      );
+      boardRankKeys.add(
+        ([for (final c in spot.boardCodes) CardModel.fromCode(c).rank]..sort())
+            .join(','),
+      );
+      // Pair on board still pairs one hole (top pair teach).
+      final heroRanks = {
+        for (final c in spot.heroCodes) CardModel.fromCode(c).rank,
+      };
+      final boardRanks = {
+        for (final c in spot.boardCodes) CardModel.fromCode(c).rank,
+      };
+      expect(heroRanks.intersection(boardRanks), isNotEmpty);
+    }
+    expect(heroRankKeys.length, greaterThan(1));
+    expect(boardRankKeys.length, greaterThan(1));
+
+    final explainKeys = <String>{};
+    for (var seed = 0; seed < 48; seed++) {
+      final deal = dealBestFiveExplainLayout(random: Random(seed));
+      final heroRanks =
+          [for (final c in deal.hero) CardModel.fromCode(c).rank]..sort();
+      final boardRanks =
+          [for (final c in deal.board) CardModel.fromCode(c).rank]..sort();
+      explainKeys.add('${heroRanks.join(',')}|${boardRanks.join(',')}');
+    }
+    expect(explainKeys.length, greaterThan(1));
+  });
+
+  test('scaffolded kicker scene varies ranks across seeds', () {
+    const hero = ['Ah', 'Qd'];
+    const board = ['Kh', 'Kd', '7c', '3s', '2d'];
+    const villain = ['As', 'Jd'];
+    final keys = <String>{};
+    for (var seed = 0; seed < 48; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [hero, board, villain],
+        Random(seed),
+        coordinated: true,
+      );
+      keys.add(
+        [
+          for (final g in groups)
+            ([for (final c in g) CardModel.fromCode(c).rank]..sort()).join('-'),
+        ].join('|'),
+      );
+    }
+    expect(keys.length, greaterThan(1));
+  });
+
   test('toy-hand streets keep the same hole suits as the board grows', () {
     const activityId = 'act-07-10-01-hand';
     final flop = dealtToyHandStepSpot(

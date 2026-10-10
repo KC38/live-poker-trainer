@@ -122,6 +122,7 @@ class CoachDialogueActivity extends StatelessWidget {
                 'act-01-02-01-explain-ladder-${controller.bindGeneration}',
               ),
               activityId: 'act-01-02-01-explain-ladder',
+              generation: controller.bindGeneration,
               enabled: !locked,
               showGuidance: showGuidance,
               onComplete: locked ? null : onFeltAcknowledge,
@@ -144,8 +145,12 @@ class CoachDialogueActivity extends StatelessWidget {
         }
         if (framed && visual.kind == CoachDialogueVisualKind.bestFive) {
           return LessonBestFiveExplainTable(
+            key: ValueKey<String>(
+              'act-01-02-02-explain-five-${controller.bindGeneration}',
+            ),
             enabled: !locked,
             showGuidance: showGuidance,
+            generation: controller.bindGeneration,
             onAllPlayingTapped: locked ? null : onFeltAcknowledge,
           );
         }
@@ -714,6 +719,7 @@ class CoachDialogueActivity extends StatelessWidget {
               const SizedBox(height: 12),
               _CoachDialogueVisualPane(
                 visual: visual,
+                bindGeneration: controller.bindGeneration,
                 enabled: !locked && visual.requiresFeltTap,
                 showSoftPulse:
                     showGuidance && !locked && visual.requiresFeltTap,
@@ -2840,7 +2846,8 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       blob.contains('your two') ||
       blob.contains('yours alone') ||
       blob.contains('nobody else sees')) {
-    final scene = dealtLessonTableScene(activity, generation: 0);
+    // Attempt salt alone varies faces; generation stays 0 in this resolver.
+    final scene = dealtLessonTableScene(activity);
     final codes =
         scene != null && scene.heroCodes.length >= 2
             ? scene.heroCodes.take(2).toList(growable: false)
@@ -2857,6 +2864,7 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
 class _CoachDialogueVisualPane extends StatelessWidget {
   const _CoachDialogueVisualPane({
     required this.visual,
+    this.bindGeneration = 0,
     this.enabled = false,
     this.showSoftPulse = false,
     this.onRegionTap,
@@ -2943,6 +2951,7 @@ class _CoachDialogueVisualPane extends StatelessWidget {
   });
 
   final CoachDialogueVisual visual;
+  final int bindGeneration;
   final bool enabled;
   final bool showSoftPulse;
   final ValueChanged<LessonTableTapTarget>? onRegionTap;
@@ -3067,8 +3076,10 @@ class _CoachDialogueVisualPane extends StatelessWidget {
         CoachDialogueVisualKind.bestFive => BestFiveDemo(
           // Stay interactive (densified) through Continue — lock only clears
           // the ack callback / enabled, not the teach shell.
+          key: ValueKey<String>('best-five-demo-$bindGeneration'),
           interactive: true,
           enabled: enabled,
+          generation: bindGeneration,
           onAllPlayingTapped: onBestFiveAcknowledge,
         ),
         CoachDialogueVisualKind.passiveActions => PassiveActionsDemo(
