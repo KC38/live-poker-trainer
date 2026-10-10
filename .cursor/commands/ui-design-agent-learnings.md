@@ -57,7 +57,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   filing a near-duplicate.
 - Prefer one lesson-content bug (fixed cards, stacked/enabled-empty Hint,
   multi-target or inconsistent SoftPulse, bad coach copy, hearts that do
-  not spend or restore) or teach-by-doing gap over spacing chrome.
+  not spend or restore) or teach-by-doing gap over spacing chrome. When
+  fixing multi SoftPulse, update tests that assert `findsNWidgets(N>1)` on
+  `glow-highlight` for that surface — they may have locked the bug (LPT-55).
 - Prefer a second open of the same lesson when judging card randomization —
   screenshot hole/board cards on attempt A and attempt B before deciding
   the deal is fixed. Read ranks from the latest PNG before tapping a
@@ -156,3 +158,6 @@ trimming. Durable rules belong in the sections above, not only here.
   checkpoint sibling same path.
 - 2026-10-10: LPT-53 hide pending tool row; hand-ranks unlocked mid-run so
   closeout used best-five locked gate; `tester.state<Widget>` does not compile.
+- 2026-10-10: LPT-55 best-five explain SoftPulse lit every playing hole;
+  suite asserted `findsNWidgets(2)` on glow — rewrite that test when
+  collapsing to one gold target.
