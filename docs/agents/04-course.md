@@ -69,7 +69,8 @@ Default lesson stakes: `$1/$2` NLH unless the step overrides blinds.
 
 ## Hearts economy
 
-- Five hearts. Non-guided mistakes cost a heart.
+- Five hearts. Non-guided mistakes cost a heart. Guided-stage misses do not
+  (`evaluateLifeAndAcceptance` in `functions/src/course_session.ts`, LPT-59).
 - Zero hearts blocks the lesson in place; empty hearts breathe; tap → refill
   sheet.
 - Practice on a weak finished lesson can earn a heart back.

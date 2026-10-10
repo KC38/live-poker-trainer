@@ -364,8 +364,9 @@ export function evaluateLifeAndAcceptance(options: {
   stage: ActivityStage;
 }): Pick<GradeOutcome, "accepted" | "lifeLost" | "masteryWeight"> {
   const accepted = ACCEPTED_GRADES.has(options.grade);
-  // Any non-accepted grade costs a heart, including guided practice.
-  const lifeLost = !accepted;
+  // Guided practice is a free miss — SoftPulse / Hint teaching. Scaffolded,
+  // unguided, checkpoint, and jump_test still spend a heart (LPT-59).
+  const lifeLost = !accepted && options.stage !== "guided";
   return {
     accepted,
     lifeLost,
