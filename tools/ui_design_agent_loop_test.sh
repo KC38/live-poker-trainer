@@ -45,6 +45,8 @@ chmod +x "$tmp/bin/security"
 
 export UI_AGENT_LOOP_SOURCE_ONLY=1
 export UI_AGENT_SKIP_SIM_PREFLIGHT=1
+# one_run finalize must not poll 90s for coverage in unit tests.
+export UI_AGENT_COVERAGE_WAIT=0
 # shellcheck disable=SC1090
 source "$LOOP"
 export PATH="$tmp/bin:$PATH"
@@ -286,5 +288,28 @@ reconcile_health_from_coverage
 
 write_health_row "20261010-160000" "0" "12" "$empty_run" "$start_epoch"
 grep -q '"stamp": "20261010-160000"' "$HEALTH_FILE" || fail "write_health_row should append"
+
+# Stale run logs without .health get real stamp rows (not only reconciled).
+: >"$HEALTH_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-10T16:25:24+05:30","sha":"a","surface":"blinds","result":"closed","ticket":"LPT-52","leads":[],"learnings":"updated"}' \
+  '{"at":"2026-10-10T17:01:54+05:30","sha":"b","surface":"locked","result":"closed","ticket":"LPT-53","leads":[],"learnings":"updated"}' \
+  >"$COVERAGE_FILE"
+: >"$LOG_DIR/run-20261010-155514.log"
+: >"$LOG_DIR/run-20261010-163015.log"
+: >"$LOG_DIR/run-20261010-170515.log"
+# Active in-flight stamp must be skipped.
+heal_stale_run_health "20261010-170515"
+grep -q '"stamp": "20261010-155514".*"ticket": "LPT-52"\|"ticket": "LPT-52".*"stamp": "20261010-155514"' "$HEALTH_FILE" \
+  || grep -q '"stamp": "20261010-155514"' "$HEALTH_FILE" \
+  || fail "heal should write stamp for 155514: $(cat "$HEALTH_FILE")"
+grep -q '"stamp": "20261010-163015"' "$HEALTH_FILE" || fail "heal should write stamp for 163015: $(cat "$HEALTH_FILE")"
+grep -q '"stamp": "20261010-170515"' "$HEALTH_FILE" \
+  && fail "heal must skip active stamp: $(cat "$HEALTH_FILE")"
+[[ -f "$LOG_DIR/run-20261010-155514.health" ]] || fail "heal should mark 155514.health"
+# Idempotent.
+heal_stale_run_health "20261010-170515"
+[[ "$(grep -c '"stamp": "20261010-155514"' "$HEALTH_FILE")" == 1 ]] \
+  || fail "heal must not duplicate stamps"
 
 echo "ui-design-agent loop ok"

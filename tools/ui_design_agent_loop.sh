@@ -561,6 +561,179 @@ if appended:
 PY
 }
 
+# When the loop is killed before _one_run_finalize, run-*.health is missing
+# and tickets only show up as stamp=reconciled. Rebuild proper stamp rows
+# from run logs + coverage, and skip the in-flight run.
+# Args: [active_stamp]
+heal_stale_run_health() {
+  local active_stamp="${1:-}"
+  python3 - "$HEALTH_FILE" "$COVERAGE_FILE" "$LOG_DIR" "$active_stamp" <<'PY' || true
+import json, re, sys
+from datetime import datetime
+from pathlib import Path
+
+health_path, coverage_path, log_dir = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
+active = (sys.argv[4] or "").strip()
+stamp_re = re.compile(r"run-(\d{8}-\d{6})\.log$")
+
+def load_jsonl(path: Path) -> list[dict]:
+    rows = []
+    if not path.is_file():
+        return rows
+    try:
+        for ln in path.read_text(encoding="utf-8").splitlines():
+            if not ln.strip():
+                continue
+            try:
+                rows.append(json.loads(ln))
+            except json.JSONDecodeError:
+                pass
+    except OSError:
+        pass
+    return rows
+
+def stamp_epoch(stamp: str):
+    try:
+        return datetime.strptime(stamp, "%Y%m%d-%H%M%S").timestamp()
+    except ValueError:
+        return None
+
+health = load_jsonl(health_path)
+coverage = load_jsonl(coverage_path)
+seen_stamps = {h.get("stamp") for h in health if h.get("stamp") and h.get("stamp") != "reconciled"}
+seen_tickets = {
+    h.get("ticket") for h in health
+    if h.get("ticket") and not h.get("reconciled")
+    and h.get("result") not in (None, "stalled", "sim-not-ready")
+}
+
+runs: list[tuple[str, float, Path]] = []
+if log_dir.is_dir():
+    for path in sorted(log_dir.glob("run-*.log")):
+        m = stamp_re.search(path.name)
+        if not m:
+            continue
+        stamp = m.group(1)
+        if stamp == active:
+            continue
+        if (log_dir / f"run-{stamp}.health").is_file():
+            continue
+        if stamp in seen_stamps:
+            # Marker lost; still skip duplicate stamp rows.
+            (log_dir / f"run-{stamp}.health").touch()
+            continue
+        ep = stamp_epoch(stamp)
+        if ep is None:
+            continue
+        runs.append((stamp, ep, path))
+
+runs.sort(key=lambda t: t[1])
+healed = 0
+for i, (stamp, start_ep, _run_log) in enumerate(runs):
+    end_ep = runs[i + 1][1] if i + 1 < len(runs) else datetime.now().timestamp() + 1
+    chosen = None
+    for cov in reversed(coverage):
+        at = cov.get("at")
+        ticket = cov.get("ticket")
+        result = cov.get("result")
+        if not at or not ticket or result in (None, "sim-not-ready", "stalled"):
+            continue
+        if ticket in seen_tickets:
+            continue
+        try:
+            ts = datetime.fromisoformat(at).timestamp()
+        except ValueError:
+            continue
+        if start_ep - 5 <= ts < end_ep:
+            chosen = cov
+            break
+    marker = log_dir / f"run-{stamp}.health"
+    if chosen is None:
+        # Empty / no-ticket run — mark so we do not retry forever.
+        marker.touch()
+        continue
+    ticket = chosen.get("ticket")
+    result = chosen.get("result")
+    try:
+        seconds = max(0, int(datetime.fromisoformat(chosen["at"]).timestamp() - start_ep))
+    except (KeyError, ValueError, TypeError):
+        seconds = None
+    row = {
+        "at": chosen.get("at") or datetime.now().astimezone().isoformat(timespec="seconds"),
+        "stamp": stamp,
+        "exit": 0 if result == "closed" else -1,
+        "seconds": seconds,
+        "ticket": ticket,
+        "result": result,
+        "tail": f"healed from coverage surface={chosen.get('surface')}",
+        "healed": True,
+    }
+    health_path.parent.mkdir(parents=True, exist_ok=True)
+    with health_path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(row) + "\n")
+    marker.touch()
+    pids_path = log_dir / f"run-{stamp}.agent-pids"
+    if pids_path.is_file():
+        try:
+            pids_path.unlink()
+        except OSError:
+            pass
+    seen_tickets.add(ticket)
+    seen_stamps.add(stamp)
+    healed += 1
+if healed:
+    print(f"healed {healed} health row(s) from run logs", flush=True)
+PY
+}
+
+# Poll coverage for a row written at/after start_epoch (agent often lands
+# coverage moments after script(1) exits).
+# Args: start_epoch [timeout_seconds]
+wait_for_coverage_after() {
+  local start_epoch="$1" timeout="${2:-90}"
+  python3 - "$COVERAGE_FILE" "$start_epoch" "$timeout" <<'PY' || true
+import json, sys, time
+from datetime import datetime
+from pathlib import Path
+
+path, start_epoch, timeout = Path(sys.argv[1]), float(sys.argv[2]), int(sys.argv[3])
+deadline = time.time() + max(0, timeout)
+
+def found() -> bool:
+    if not path.is_file():
+        return False
+    try:
+        rows = []
+        for ln in path.read_text(encoding="utf-8").splitlines():
+            if not ln.strip():
+                continue
+            try:
+                rows.append(json.loads(ln))
+            except json.JSONDecodeError:
+                pass
+    except OSError:
+        return False
+    for cov in reversed(rows):
+        at = cov.get("at")
+        if not at or not cov.get("ticket"):
+            continue
+        if cov.get("result") in (None, "sim-not-ready", "stalled"):
+            continue
+        try:
+            ts = datetime.fromisoformat(at).timestamp()
+        except ValueError:
+            continue
+        if ts + 5 >= start_epoch:
+            return True
+    return False
+
+while time.time() < deadline:
+    if found():
+        raise SystemExit(0)
+    time.sleep(2)
+PY
+}
+
 # Write one health.jsonl row. Prefer coverage lines at/after start_epoch so a
 # prior closed ticket is not attributed to a failed/empty run.
 # Args: stamp code seconds run_log [start_epoch]
@@ -829,6 +1002,7 @@ one_run() {
 
   log "run $stamp starting agent (log $run_log; lock $run_id)"
   # Heal gaps from prior runs that died before write_health_row.
+  heal_stale_run_health "$stamp"
   reconcile_health_from_coverage
   # script(1) gives the CLI a terminal and flushes the log, so a run can be
   # tailed while it works and a crash still leaves output on disk.
@@ -899,9 +1073,12 @@ if cleaned != text:
 PY
     fi
     backfill_run_log_from_session "$run_log" "$start" "${pid:-}"
+    # Coverage is often flushed after script(1) returns; wait briefly.
+    wait_for_coverage_after "$start" "${UI_AGENT_COVERAGE_WAIT:-90}"
     write_health_row "$stamp" "${code:-1}" "$(( $(date +%s) - start ))" "$run_log" "$start"
     reconcile_health_from_coverage
     touch "$marker"
+    rm -f "$agent_pids_file"
   }
   # shellcheck disable=SC2064
   trap '_one_run_finalize; sim_lock release --run-id "'"$run_id"'" >/dev/null 2>&1 || true' EXIT
@@ -913,7 +1090,7 @@ PY
   wait_lingering_agent "$agent_pids_file" "$(( start + MAX_RUN ))"
   kill "$watchdog" 2>/dev/null || true
   wait "$watchdog" 2>/dev/null || true
-  rm -f "$PID_FILE" "$agent_pids_file"
+  rm -f "$PID_FILE"
   sim_lock release --run-id "$run_id" >/dev/null 2>&1 || true
   unset SIM_LOCK_RUN_ID SIM_LOCK_PID
 
@@ -1145,6 +1322,13 @@ EOF
     echo "killed $SESSION"
     ;;
   status)
+    active_stamp=""
+    latest_for_heal="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
+    if [[ -n "$latest_for_heal" && -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE" 2>/dev/null)" 2>/dev/null; then
+      active_stamp="$(basename "$latest_for_heal" .log)"
+      active_stamp="${active_stamp#run-}"
+    fi
+    heal_stale_run_health "$active_stamp"
     reconcile_health_from_coverage
     if loop_is_alive; then
       echo "loop: running (tmux -L $TMUX_SOCKET, session $SESSION, pid $(cat "$LOOP_PID_FILE"))"
