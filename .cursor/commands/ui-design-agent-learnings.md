@@ -50,14 +50,19 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Hearts / the refill sheet instead.
 - Prefer reopening a Done `ui-agent` ticket that still reproduces over
   filing a near-duplicate.
-- Prefer one lesson-content bug (fixed cards across attempts, broken Hint,
-  missing SoftPulse, empty or mismatched coach copy) or teach-by-doing gap
-  over spacing chrome when ranking findings.
+- Prefer one lesson-content bug (fixed cards, stacked/enabled-empty Hint,
+  multi-target or inconsistent SoftPulse, bad coach copy, hearts that do
+  not spend or restore) or teach-by-doing gap over spacing chrome.
 - Prefer a second open of the same lesson when judging card randomization —
   screenshot hole/board cards on attempt A and attempt B before deciding
   the deal is fixed.
+- Prefer screenshotting the heart count before and after a paid miss (and
+  after Practice/refill) before claiming hearts work.
 - Prefer reading PNGs you just captured before judging; do not close from
   memory of an earlier run's screenshot.
+- Prefer naming Jira shots `<surface>-issue.png` and
+  `<KEY>-validated.png`. Never file without an issue shot; never close
+  without a validated shot on origin/main.
 
 ## Ops (simulator, CLI, Jira)
 
@@ -94,9 +99,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   a place in the course.
 - "Your two cards" and similar peeks must not show empty board slots when
   no board is in play for that beat.
-- Lesson walks must exercise Hint, SoftPulse/cyan cues, coach mood/copy,
-  and a second attempt for card randomization — not only Continue through
-  the happy path.
+- Lesson walks must exercise Hint (one line, disabled when empty — including
+  multiturn), one gold SoftPulse at a time with the same cue UI for guide
+  and Hint, coach mood/copy, hearts lose/restore, and a second attempt for
+  card randomization — not only Continue through the happy path.
+- Every ticket needs a current-issue screenshot on file and a validated
+  origin/main screenshot on the Done comment. Text-only closeouts are not
+  enough.
 - When the design record and a shipped screen disagree, the record (plus
   stakeholder brief) wins; file or reopen the ticket rather than
   "accepting" the screen as intentional chrome.

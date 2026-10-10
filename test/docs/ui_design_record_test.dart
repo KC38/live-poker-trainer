@@ -160,9 +160,18 @@ void main() {
       'learnings: unchanged',
       'Lesson content',
       'Card randomization',
-      'Guide cues',
+      'Hints (one at a time)',
+      'Cues (one target, one system)',
       'Coach text and mood',
+      'Hearts (lose and restore)',
       'SoftPulse',
+      'exactly one',
+      'At most **one** gold SoftPulse',
+      'Screenshots — current issue',
+      '-issue.png',
+      '-validated.png',
+      'Required validated proof',
+      'Never transition to Done if the close comment lacks a validated',
     ]) {
       expect(command, contains(needle), reason: needle);
     }
@@ -178,11 +187,22 @@ void main() {
       'SIM_NOT_READY',
       'card randomization',
       'SoftPulse',
+      'heart count',
+      'multiturn',
+      '-validated.png',
+      'current-issue screenshot',
     ]) {
       expect(learnings, contains(needle), reason: needle);
     }
     expect(record, contains('### Lesson content'));
     expect(record, contains('Lesson content regressions'));
+    expect(record, contains('Hint (one at a time)'));
+    expect(record, contains('Cues (one system, one gold)'));
+    expect(record, contains('At most one gold SoftPulse target'));
+    expect(
+      record,
+      contains('including a multi-press / multi-turn step after the last'),
+    );
     expect(
       File('.cursor/skills/new-user-qa/SKILL.md').existsSync(),
       isFalse,
