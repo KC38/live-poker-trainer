@@ -463,6 +463,11 @@ Close only when every criterion passed on origin/main:
    - <criterion>: how checked on the mini
    ```
 
+   **PR URL:** paste the URL from `gh pr create` / `gh pr view <n> --json
+   url -q .url` only. Never invent
+   `https://github.com/<guessed-name>/live-poker-trainer/pull/N` — the
+   remotes/org owner is `KC38` (wrong owner links 404).
+
    Also state the design-record section and the sentence that landed, and
    that the images are from that live session (not the pre-fix issue
    shots).
