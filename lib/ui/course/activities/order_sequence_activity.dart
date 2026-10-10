@@ -251,6 +251,7 @@ class OrderSequenceActivity extends StatelessWidget {
               '${activity.id}-${controller.bindGeneration}-showdown-order',
             ),
             activityId: activity.id,
+            generation: controller.bindGeneration,
             orderedIds: ordered,
             enabled: !locked,
             showGuidance: showGuidance,

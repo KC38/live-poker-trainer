@@ -581,6 +581,11 @@ void main() {
   testWidgets('best-five explain taps each highlighted card instead of Continue', (
     tester,
   ) async {
+    debugFreezeLessonSuitRemap = true;
+    addTearDown(() {
+      debugFreezeLessonSuitRemap = false;
+      lessonDealAttemptSalt = '';
+    });
     final activity = CourseActivity(
       id: 'act-01-02-02-explain-five',
       order: 1,

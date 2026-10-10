@@ -308,9 +308,14 @@ List<List<String>> isomorphicLessonCardGroups(
   );
 }
 
-/// Order-preserving remap: shift every rank by one offset and permute suits.
+/// Order-preserving remap: re-place consecutive rank runs and permute suits.
 ///
-/// Returns null when the rank span cannot shift into 2–A without collision.
+/// Uniform whole-span shifts cannot vary templates that already use both a
+/// deuce and an ace (best-five / kicker teach spots). Instead, consecutive
+/// runs stay rigid (straights and pairs keep their shape) while gaps between
+/// runs may grow or shrink, then one shared suit permutation is applied.
+///
+/// Returns null when the ranks cannot fit into 2–A.
 List<List<String>>? structurePreservingLessonCardGroups(
   List<List<String>> groups,
   Random rng,
@@ -323,15 +328,8 @@ List<List<String>>? structurePreservingLessonCardGroups(
     for (final code in all) CardModel.fromCode(code).rank,
   }.toList()
     ..sort();
-  final minR = ranks.first;
-  final maxR = ranks.last;
-  final span = maxR - minR;
-  if (span > 12) return null;
-  final maxStart = 14 - span;
-  final newStart = rng.nextInt(maxStart - 1) + 2;
-  final delta = newStart - minR;
-  final rankMap = {for (final r in ranks) r: r + delta};
-  if (rankMap.values.any((r) => r < 2 || r > 14)) return null;
+  final rankMap = _sampleOrderPreservingRankMap(ranks, rng);
+  if (rankMap == null) return null;
 
   final suitMap = _freshSuitMap(rng);
   List<String> mapCodes(List<String> codes) => [
@@ -347,6 +345,89 @@ List<List<String>>? structurePreservingLessonCardGroups(
   return [
     for (final g in mapped) List<String>.unmodifiable(g),
   ];
+}
+
+/// Maps sorted unique ranks onto a fresh 2–A layout that keeps run shape.
+///
+/// Consecutive ranks stay consecutive (straight boards stay straights). Gaps
+/// between runs are redistributed so wide templates (2 through A) still deal
+/// new faces across attempts.
+Map<int, int>? _sampleOrderPreservingRankMap(
+  List<int> sortedUnique,
+  Random rng,
+) {
+  if (sortedUnique.isEmpty) return const {};
+  if (sortedUnique.length == 1) {
+    final only = sortedUnique.first;
+    final target = rng.nextInt(13) + 2;
+    return {only: target};
+  }
+
+  final runs = <List<int>>[];
+  var current = <int>[sortedUnique.first];
+  for (var i = 1; i < sortedUnique.length; i++) {
+    final rank = sortedUnique[i];
+    if (rank == current.last + 1) {
+      current.add(rank);
+    } else {
+      runs.add(current);
+      current = <int>[rank];
+    }
+  }
+  runs.add(current);
+
+  final sizes = [for (final run in runs) run.length];
+  final starts = _sampleBlockStarts(sizes, rng);
+  if (starts == null) return null;
+
+  final map = <int, int>{};
+  for (var bi = 0; bi < runs.length; bi++) {
+    final run = runs[bi];
+    final start = starts[bi];
+    for (var i = 0; i < run.length; i++) {
+      map[run[i]] = start + i;
+    }
+  }
+  return map;
+}
+
+/// Starts for each consecutive block inside ranks 2–A, or null if impossible.
+List<int>? _sampleBlockStarts(List<int> sizes, Random rng) {
+  const lo = 2;
+  const hi = 14;
+  final k = sizes.length;
+  if (k == 0) return const [];
+  final total = sizes.fold<int>(0, (sum, size) => sum + size);
+  final minGaps = k - 1;
+  final span = hi - lo + 1;
+  final free = span - total - minGaps;
+  if (free < 0) return null;
+
+  // Uniform stars-and-bars: distribute [free] extra gaps into (k + 1) bins.
+  final gaps = List<int>.filled(k + 1, 0);
+  if (free > 0) {
+    final cuts = <int>{};
+    while (cuts.length < k) {
+      cuts.add(rng.nextInt(free + k));
+    }
+    final ordered = cuts.toList()..sort();
+    gaps[0] = ordered.first;
+    for (var i = 1; i < k; i++) {
+      gaps[i] = ordered[i] - ordered[i - 1] - 1;
+    }
+    gaps[k] = free + k - ordered.last - 1;
+  }
+
+  final starts = <int>[];
+  var cursor = lo + gaps[0];
+  for (var i = 0; i < k; i++) {
+    starts.add(cursor);
+    cursor += sizes[i];
+    if (i < k - 1) {
+      cursor += 1 + gaps[i + 1]; // mandatory separator + extras
+    }
+  }
+  return starts;
 }
 
 /// Applies the same structure-preserving maps used for [template] groups onto
@@ -934,9 +1015,14 @@ class ShowdownOrderDeal {
 /// physical seat holds each role is shuffled.
 ShowdownOrderDeal? dealShowdownOrderCards(
   String activityId, {
+  int generation = 0,
   Random? random,
 }) {
-  final rng = random ?? debugLessonCardDealRandom ?? Random();
+  final rng = resolveLessonDealRandom(
+    activityId: activityId,
+    generation: generation,
+    random: random,
+  );
   final dealt = switch (activityId) {
     'act-01-02-01-explain-ladder' ||
     'act-01-02-01-guided-ladder' =>

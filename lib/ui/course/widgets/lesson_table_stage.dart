@@ -1508,9 +1508,14 @@ LessonShowdownOrderSpot? handRanksShowdownSpot(String activityId) {
 /// Fresh showdown layout for [activityId] (cards vary; seat order preserved).
 LessonShowdownOrderSpot? dealtHandRanksShowdownSpot(
   String activityId, {
+  int generation = 0,
   Random? random,
 }) {
-  final deal = dealShowdownOrderCards(activityId, random: random);
+  final deal = dealShowdownOrderCards(
+    activityId,
+    generation: generation,
+    random: random,
+  );
   if (deal == null) return handRanksShowdownSpot(activityId);
   return LessonShowdownOrderSpot(
     boardCodes: deal.boardCodes,
@@ -1539,9 +1544,11 @@ class RandomizedLessonShowdownOrderTable extends StatefulWidget {
     this.showGuidance = true,
     this.strictOrder = false,
     this.onMiss,
+    this.generation = 0,
   });
 
   final String activityId;
+  final int generation;
   final List<String> orderedIds;
   final ValueChanged<String> onPick;
   final bool enabled;
@@ -1561,7 +1568,10 @@ class _RandomizedLessonShowdownOrderTableState
   @override
   void initState() {
     super.initState();
-    _spot = dealtHandRanksShowdownSpot(widget.activityId) ??
+    _spot = dealtHandRanksShowdownSpot(
+          widget.activityId,
+          generation: widget.generation,
+        ) ??
         handRanksShowdownSpot(widget.activityId)!;
   }
 
@@ -1685,6 +1695,7 @@ class LessonShowdownOrderExplainTable extends StatefulWidget {
     this.onMiss,
     this.enabled = true,
     this.showGuidance = true,
+    this.generation = 0,
   });
 
   /// Activity whose showdown pattern should be dealt.
@@ -1693,6 +1704,7 @@ class LessonShowdownOrderExplainTable extends StatefulWidget {
   final VoidCallback? onMiss;
   final bool enabled;
   final bool showGuidance;
+  final int generation;
 
   @override
   State<LessonShowdownOrderExplainTable> createState() =>
@@ -1707,7 +1719,10 @@ class _LessonShowdownOrderExplainTableState
   @override
   void initState() {
     super.initState();
-    _spot = dealtHandRanksShowdownSpot(widget.activityId) ??
+    _spot = dealtHandRanksShowdownSpot(
+          widget.activityId,
+          generation: widget.generation,
+        ) ??
         handRanksShowdownSpot(widget.activityId)!;
   }
 
