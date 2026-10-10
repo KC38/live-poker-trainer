@@ -429,4 +429,49 @@ write_health_row "20261010-220000" "1" "90" "$usage_log" "$start_epoch"
 grep -q 'coverage:usage-limit' "$HEALTH_FILE" \
   || fail "health should classify usage-limit: $(cat "$HEALTH_FILE")"
 
+# Coverage timestamps with trailing Z must attribute on macOS Python 3.9.
+z_log="$LOG_DIR/run-z-coverage.log"
+printf '%s\n' 'LPT-79 closed on origin/main' >"$z_log"
+: >"$HEALTH_FILE"
+python3 - "$COVERAGE_FILE" <<'PY'
+import json, sys
+from pathlib import Path
+Path(sys.argv[1]).write_text(
+    json.dumps({
+        "at": "2026-10-10T16:37:37Z",
+        "sha": "z",
+        "surface": "lesson-runner:z",
+        "result": "closed",
+        "ticket": "LPT-79",
+        "leads": [],
+        "learnings": "unchanged",
+    }) + "\n",
+    encoding="utf-8",
+)
+PY
+# start_epoch well before the Z timestamp
+write_health_row "20261010-213534" "0" "2015" "$z_log" 1728572700
+grep -q 'coverage:closed ticket:LPT-79' "$HEALTH_FILE" \
+  || fail "health must accept coverage at=…Z: $(cat "$HEALTH_FILE")"
+
+# Empty stamp rows get filled from Z coverage by repair_health_tails.
+printf '%s\n' \
+  '{"at":"2026-10-10T22:09:09+05:30","stamp":"20261010-213534","exit":0,"seconds":2015,"ticket":null,"result":null,"tail":""}' \
+  >"$HEALTH_FILE"
+repair_health_tails
+grep -q '"ticket": "LPT-79"' "$HEALTH_FILE" \
+  || fail "repair should fill empty stamp from Z coverage: $(cat "$HEALTH_FILE")"
+
+python3 - "$ROOT/tools/ui_agent_iso.py" <<'PY' || fail "ui_agent_iso parse failed"
+import importlib.util, sys
+from pathlib import Path
+spec = importlib.util.spec_from_file_location("ui_agent_iso", sys.argv[1])
+mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mod)
+assert mod.parse_iso_epoch("2026-10-10T16:37:37Z") is not None
+assert mod.parse_iso_epoch("2026-10-10T22:09:09+05:30") is not None
+assert mod.parse_iso_epoch("not-a-date") is None
+print("ui_agent_iso ok")
+PY
+
 echo "ui-design-agent loop ok"
