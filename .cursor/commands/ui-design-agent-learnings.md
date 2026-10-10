@@ -83,9 +83,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   dead pid, starting `flutter run` yourself in tmux with
   `SIM_LOCK_RUN_ID=…` exported on that command line (same pattern as
   worktree validation) instead of re-debugging the refresh script.
-- Prefer waiting until the lesson felt is visible before capturing
-  `<KEY>-validated.png`. A bootstrap "Getting your next step ready…"
-  spinner is not closeout proof.
+- Prefer waiting until the target beat is settled before
+  `<KEY>-validated.png`: not the bootstrap spinner; for locked-start
+  chrome, the Open-previous / Retry gate (if that lesson unlocked during
+  worktree play, use a later still-locked id).
 - Prefer, when `openlesson` lands on a locked start, reading Rex's bubble
   against the gold Open-previous CTA — a Retry-only line with that button
   still up is a coach-copy bug (LPT-51), not a clean gate.
@@ -153,3 +154,5 @@ trimming. Durable rules belong in the sections above, not only here.
 - 2026-10-10: LPT-52 blinds frame still had empty board slots after LPT-50
   explain-only fix; openlesson resume skipped guided-button — validated on
   checkpoint sibling same path.
+- 2026-10-10: LPT-53 hide pending tool row; hand-ranks unlocked mid-run so
+  closeout used best-five locked gate; `tester.state<Widget>` does not compile.
