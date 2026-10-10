@@ -816,6 +816,10 @@ class _LessonBlindsClockwiseTableState
       remainingPressCount: teaching ? _order.length - _step : 0,
     );
     final showCue = teaching && LessonSoftPulseScope.isAllowed(context);
+    // No empty board slot outlines: this explain step has no community cards.
+    final features = TableFeaturesScope.of(
+      context,
+    ).copyWith(boardSlots: false);
     return LessonTableStage(
       villainCount: lessonBlindsVillainCount,
       dealerIndex: lessonBlindsButtonIndex,
@@ -824,6 +828,7 @@ class _LessonBlindsClockwiseTableState
       selectedSeatIndexes: {for (var i = 0; i < _step; i++) _order[i]},
       cueSeatIndex: showCue ? _order[_step] : null,
       enabled: teaching,
+      features: features,
       onSeatIndexTap: _tap,
     );
   }
