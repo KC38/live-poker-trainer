@@ -4533,6 +4533,65 @@ void main() {
     expect(errored.livesMax, 5);
   });
 
+  testWidgets(
+    'bootstrap coach bubble stays non-empty at mini size (LPT-48)',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      const home = CourseHomeSnapshot(
+        status: CourseHomeLoadStatus.ready,
+        nodes: [],
+        sections: [],
+        hearts: 5,
+        livesMax: 5,
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            soundServiceProvider.overrideWithValue(SoundService.silent()),
+            courseCatalogProvider.overrideWith((ref) async => catalog),
+            courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
+            onboardingControllerProvider.overrideWith(
+              (ref) => OnboardingController(null),
+            ),
+            heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: LessonRunnerScreen(
+              lessonId: kFirstCourseLessonId,
+              courseService: _HungStartCourseService(catalog),
+              startRequestId: 'start_empty_bubble_boot',
+              bootstrapTimeout: const Duration(milliseconds: 80),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      final loading = tester.widget<LessonScreenLayout>(
+        find.byType(LessonScreenLayout),
+      );
+      expect(loading.speech, kLessonBootstrapSpeech);
+      expect(find.text(kLessonBootstrapSpeech), findsOneWidget);
+      expect(tester.takeException(), isNull);
+
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
+      final errored = tester.widget<LessonScreenLayout>(
+        find.byType(LessonScreenLayout),
+      );
+      expect(errored.speech, kLessonStartErrorSpeech);
+      expect(find.text(kLessonStartErrorSpeech), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('zero hearts blocks the stage and pulses chrome hearts', (
     tester,
   ) async {

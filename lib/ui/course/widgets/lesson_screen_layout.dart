@@ -205,6 +205,15 @@ bool isLessonScreenFrameLesson(String lessonId) {
       lessonId == 'lesson-07-12-01';
 }
 
+/// Calm coach line while the lesson attempt is still starting (spinner stage).
+///
+/// Prefer: never mount [LessonCoachBand] with an empty bubble during bootstrap.
+const kLessonBootstrapSpeech = 'Getting your next step ready…';
+
+/// Calm coach line when start failed; Retry lives on the stage body.
+const kLessonStartErrorSpeech =
+    'Could not start this lesson. Tap Retry when you are ready.';
+
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
 ///
 /// Every line ends by saying what to tap. Authored copy that only sets the
