@@ -27,12 +27,16 @@ Hard rules:
   `needs-human` label, and end the run.
 - Code changes go through [make-change](../skills/make-change/SKILL.md) in
   this session. Never edit the primary checkout.
+- Keep getting better: read
+  [ui-design-agent-learnings.md](ui-design-agent-learnings.md) every run,
+  and update it in step 10 when this run hit a durable mistake so the next
+  run does not repeat it.
 
 ```
 Run progress:
 - [ ] 0. Lock claimed (or run ended: busy)
 - [ ] 1. Primary on origin/main, mini on that build, SHA recorded
-- [ ] 2. Contract read
+- [ ] 2. Contract and learnings read
 - [ ] 3. Ticket chosen: open ui-agent ticket, or a new finding
 - [ ] 4. Walked and captured (new finding only)
 - [ ] 5. Ticket filed or updated
@@ -40,7 +44,7 @@ Run progress:
 - [ ] 7. Validated on the worktree build (retry loop)
 - [ ] 8. Merged, deployed, mini refreshed to origin/main
 - [ ] 9. Validated on origin/main, ticket closed
-- [ ] 10. Coverage logged, scratch deleted, lock released, report
+- [ ] 10. Learnings updated if needed, coverage logged, lock released, report
 ```
 
 ## 0. Claim the mini
@@ -77,7 +81,7 @@ with `SIM_NOT_READY`. Do not uninstall the app, edit the refresh script, or
 debug the launcher: the next run retries. End the same way when the primary
 checkout is dirty or diverged.
 
-## 2. Read the contract
+## 2. Read the contract and learnings
 
 Read these before judging any screen. They are what the stakeholders asked
 for; your taste does not override them.
@@ -85,15 +89,18 @@ for; your taste does not override them.
 1. [docs/ui/design-record.md](../../docs/ui/design-record.md), all of it.
    Start with **What the stakeholders are asking for**, **Rejected on
    purpose**, and **Known gaps**.
-2. [PATTERNS.md](../../docs/ui/references/duolingo-chess/PATTERNS.md). Open
+2. [ui-design-agent-learnings.md](ui-design-agent-learnings.md), all of it.
+   These are mistakes and gotchas from earlier runs. Follow them. Do not
+   re-discover a rule that is already written there.
+3. [PATTERNS.md](../../docs/ui/references/duolingo-chess/PATTERNS.md). Open
    the frames in `docs/ui/references/duolingo-chess/frames/` for the beat
    you are judging (read the PNG). Translate the loop. Do not copy their
    green, owl, or words.
-3. [flutter-ui-ux](../skills/flutter-ui-ux/SKILL.md). It is how a screen is
+4. [flutter-ui-ux](../skills/flutter-ui-ux/SKILL.md). It is how a screen is
    built. When it disagrees with the design record, the record wins.
-4. [lesson-screen-layout](../rules/lesson-screen-layout.mdc) for any lesson
+5. [lesson-screen-layout](../rules/lesson-screen-layout.mdc) for any lesson
    step.
-5. [docs/agent-paths.md](../../docs/agent-paths.md) for journeys and their
+6. [docs/agent-paths.md](../../docs/agent-paths.md) for journeys and their
    preconditions, and [docs/agent-ios-simulator.md](../../docs/agent-ios-simulator.md)
    for driving the mini.
 
@@ -355,12 +362,29 @@ Close only when every criterion passed on origin/main:
    images are from that live session.
 2. `jira.py transition LPT-NN --to Done`. Confirm the status it prints.
 
-## 10. Log, clean up, release, report
+## 10. Learnings, log, clean up, release, report
+
+**Update learnings before you leave.** Open
+[ui-design-agent-learnings.md](ui-design-agent-learnings.md) and follow its
+**How to update** section. Triggers that usually need a new or tighter
+bullet: a validation retry, `SIM_NOT_READY`, `JIRA_UNAVAILABLE`, a wrong
+`agent_tap` needle, a reopen of a Done ticket, a deploy skip that confused
+closing, or any approach you had to undo. If nothing durable was learned,
+leave the file unchanged and say `learnings: unchanged` in the report.
+
+When the file did change:
+
+- If this run already has an open ticket worktree/PR, commit the learnings
+  edit there (same PR as the product fix is fine).
+- Otherwise open a tiny chore make-change PR that only updates the
+  learnings file (and the test lock if the test requires a new needle),
+  merge it, then continue cleanup. Do not hold the mini past that PR for
+  unrelated work.
 
 Append one line to `~/.live-poker-trainer/ui-agent-coverage.jsonl`:
 
 ```json
-{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked", "ticket": "LPT-NN", "leads": ["<other findings, one line each>"]}
+{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked|sim-not-ready", "ticket": "LPT-NN", "leads": ["<other findings, one line each>"], "learnings": "updated|unchanged"}
 ```
 
 Delete `$PRIMARY/.cursor/tmp/ui-agent/`. Make sure no worktree tmux session
@@ -372,4 +396,4 @@ python3 tools/sim_lock.py release
 
 Reply with one short block: SHA walked, surface, ticket key and result,
 branch and PR URL, attempts used, functions deploy result, leads logged,
-and the lock released.
+learnings updated or unchanged, and the lock released.

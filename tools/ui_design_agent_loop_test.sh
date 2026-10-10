@@ -63,6 +63,8 @@ python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 one_run >/dev/null 2>&1 || fail "free mini run failed"
 [[ -f "$tmp/agent-started" ]] || fail "agent should start when the mini is free"
 grep -q 'ui-design-agent.md' "$tmp/agent-args" || fail "prompt should name the command"
+grep -q 'ui-design-agent-learnings.md' "$tmp/agent-args" \
+  || fail "prompt should name the learnings file"
 [[ "$(cat "$tmp/agent-env")" == 'key with space|tok-123' ]] || fail "run should inherit the saved keys"
 
 (unset UI_AGENT_LOOP_SOURCE_ONLY; bash "$LOOP" status >/dev/null) \

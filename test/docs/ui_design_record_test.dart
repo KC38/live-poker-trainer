@@ -130,8 +130,11 @@ void main() {
     expect(File('.cursor/commands/implement-open-jira.md').existsSync(), isFalse);
     final command =
         File('.cursor/commands/ui-design-agent.md').readAsStringSync();
+    final learnings =
+        File('.cursor/commands/ui-design-agent-learnings.md').readAsStringSync();
     for (final needle in [
       'docs/ui/design-record.md',
+      'ui-design-agent-learnings.md',
       'PATTERNS.md',
       'flutter-ui-ux',
       'lesson-screen-layout.mdc',
@@ -150,8 +153,23 @@ void main() {
       'ui-agent-coverage.jsonl',
       'tools/iphone_13_mini_udid.sh',
       'Never launch a',
+      'Update learnings before you leave',
+      'learnings: unchanged',
     ]) {
       expect(command, contains(needle), reason: needle);
+    }
+    for (final needle in [
+      '## How to update (step 10)',
+      '## Never again',
+      '## Prefer',
+      '## Ops (simulator, CLI, Jira)',
+      '## Product judgment',
+      '## Recent run notes',
+      'at most **40** bullets',
+      'python3 tools/jira.py',
+      'SIM_NOT_READY',
+    ]) {
+      expect(learnings, contains(needle), reason: needle);
     }
     expect(
       File('.cursor/skills/new-user-qa/SKILL.md').existsSync(),

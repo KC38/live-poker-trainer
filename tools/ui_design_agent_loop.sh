@@ -62,7 +62,7 @@ lt() {
 }
 
 prompt() {
-  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md in this workspace and follow it exactly, from step 0. This is an unattended run. Do not ask questions or wait for input."
+  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md in this workspace and follow them exactly, from step 0. Update the learnings file in step 10 when this run hits a durable mistake. This is an unattended run. Do not ask questions or wait for input."
 }
 
 load_secrets() {
