@@ -248,6 +248,7 @@ empty_run="$LOG_DIR/run-backfill-test.log"
 sess_dir="/tmp/cursor-agent-logs-uiagenttest-$$"
 mkdir -p "$sess_dir"
 trap 'rm -rf "$tmp" "$sess_dir"' EXIT
+export UI_AGENT_SESSION_LOG_DIR="$sess_dir"
 sess="$sess_dir/session-2026-10-10T12-00-00-000Z-$$-1.log"
 printf '%s\n' '--- Cursor Agent Debug Session ---' 'User prompt' \
   'LPT-99 closed Lock released' >"$sess"
@@ -273,6 +274,7 @@ printf '%s\n' '--- Cursor Agent Debug Session ---' \
   '[x] logger {"message":"noise1"}' '[x] logger {"message":"noise2"}' >"$telem_sess"
 out="$(backfill_run_log_from_session "$telem_run" "$start_epoch" "" 1 2>&1 || true)"
 [[ -z "$out" ]] || fail "quiet size-bump must not print: $out"
+unset UI_AGENT_SESSION_LOG_DIR
 
 : >"$HEALTH_FILE"
 printf '%s\n' \
@@ -319,6 +321,37 @@ grep -q 'coverage:closed ticket:LPT-77' "$HEALTH_FILE" \
 grep -q 'User does not belong' "$HEALTH_FILE" \
   && fail "health tail must not keep CLI telemetry: $(cat "$HEALTH_FILE")"
 
+# Agent closeout prose also matches SIGNAL (LPT-NN / closed); still prefer coverage.
+prose_log="$LOG_DIR/run-prose-health.log"
+printf '%s\n' \
+  '**Functions deploy:** skipped (no local Firebase CI creds; client-only fix)' \
+  '**Leads:** LPT-44 gems; Live Training polish' \
+  '**Learnings:** updated' \
+  'LPT-78 closed on origin/main' >"$prose_log"
+python3 - "$COVERAGE_FILE" <<'PY'
+import json, sys
+from datetime import datetime
+from pathlib import Path
+path = Path(sys.argv[1])
+row = {
+    "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+    "sha": "p",
+    "surface": "lesson-runner:prose",
+    "result": "closed",
+    "ticket": "LPT-78",
+    "leads": [],
+    "learnings": "updated",
+}
+with path.open("a", encoding="utf-8") as handle:
+    handle.write(json.dumps(row) + "\n")
+PY
+: >"$HEALTH_FILE"
+write_health_row "20261010-181500" "0" "40" "$prose_log" "$start_epoch"
+grep -q 'coverage:closed ticket:LPT-78 surface:lesson-runner:prose' "$HEALTH_FILE" \
+  || fail "health tail should prefer coverage over agent prose: $(cat "$HEALTH_FILE")"
+grep -q 'Functions deploy' "$HEALTH_FILE" \
+  && fail "health tail must not keep agent report prose: $(cat "$HEALTH_FILE")"
+
 # Stale run logs without .health get real stamp rows (not only reconciled).
 : >"$HEALTH_FILE"
 printf '%s\n' \
@@ -358,5 +391,18 @@ grep -q 'User does not belong' "$HEALTH_FILE" \
 repair_health_tails
 [[ "$(grep -c tail_repaired "$HEALTH_FILE")" == 1 ]] \
   || fail "repair must not rewrite clean tails repeatedly"
+
+# Repair long agent-report prose tails (LPT-61 style).
+printf '%s\n' \
+  '{"at":"2026-10-10T20:42:43+05:30","stamp":"20261010-201017","exit":0,"seconds":1946,"ticket":"LPT-61","result":"closed","tail":"**Functions deploy:** skipped **Leads:** LPT-44 gems; Live Training polish **Learnings:** updated **Lock:** released"}' \
+  >"$HEALTH_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-10T20:42:30+05:30","sha":"y","surface":"lesson-runner:best-five-kickers","result":"closed","ticket":"LPT-61","leads":[],"learnings":"updated"}' \
+  >"$COVERAGE_FILE"
+repair_health_tails
+grep -q 'coverage:closed ticket:LPT-61 surface:lesson-runner:best-five-kickers' "$HEALTH_FILE" \
+  || fail "repair should rewrite agent prose tail: $(cat "$HEALTH_FILE")"
+grep -q 'Functions deploy' "$HEALTH_FILE" \
+  && fail "repaired health must drop agent prose: $(cat "$HEALTH_FILE")"
 
 echo "ui-design-agent loop ok"

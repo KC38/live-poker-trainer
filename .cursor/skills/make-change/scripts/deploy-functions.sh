@@ -20,6 +20,16 @@ if [[ -d "$NODE22_BIN" ]]; then
   export PATH="$NODE22_BIN:$PATH"
 fi
 
+# LaunchAgent / ui-agent runs often lack Firebase env; load the same secrets
+# file the loop uses (mode 600). Do not override vars already set in the shell.
+SECRETS_FILE="${UI_AGENT_SECRETS_FILE:-$HOME/.live-poker-trainer/secrets.env}"
+if [[ -f "$SECRETS_FILE" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  . "$SECRETS_FILE"
+  set +a
+fi
+
 if ! command -v node >/dev/null 2>&1 || ! node -v | grep -q '^v22\.'; then
   echo "Node 22 required for functions deploy (found $(command -v node >/dev/null 2>&1 && node -v || echo missing))." >&2
   exit 1
@@ -36,6 +46,7 @@ fi
 if [[ -z "${GOOGLE_APPLICATION_CREDENTIALS:-}" && -z "${FIREBASE_TOKEN:-}" ]]; then
   echo "Firebase deploy needs non-interactive credentials." >&2
   echo "Set FIREBASE_SERVICE_ACCOUNT (JSON), GOOGLE_APPLICATION_CREDENTIALS, or FIREBASE_TOKEN (firebase login:ci)." >&2
+  echo "Put FIREBASE_TOKEN in $SECRETS_FILE (mode 600) for LaunchAgent / ui-agent deploys." >&2
   echo "On GitHub, add the same value as a repository Actions secret; deploys also run from the deploy-functions job on main." >&2
   exit 1
 fi

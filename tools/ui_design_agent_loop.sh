@@ -21,7 +21,9 @@
 # Runs authenticate without the macOS keychain or a browser, so they keep
 # working over SSH and after a reboot. Keys live in
 # ~/.live-poker-trainer/secrets.env (mode 600): CURSOR_API_KEY for the CLI,
-# and ATLASSIAN_EMAIL + ATLASSIAN_API_TOKEN for tools/jira.py (Jira REST).
+# ATLASSIAN_EMAIL + ATLASSIAN_API_TOKEN for tools/jira.py (Jira REST), and
+# optionally FIREBASE_TOKEN (or GOOGLE_APPLICATION_CREDENTIALS path) so
+# make-change / deploy-functions.sh can deploy from LaunchAgent runs.
 #
 # Environment:
 #   UI_AGENT_MODEL              model for `agent --model` (default: CLI default)
@@ -418,10 +420,18 @@ if useful(cur) and not force_refresh:
 
 pids = descendant_pids(root_pid) if root_pid else set()
 candidates: list[tuple[float, int, Path]] = []
-for base in (Path("/tmp"), Path("/private/tmp")):
+# Tests set UI_AGENT_SESSION_LOG_DIR so a live /tmp agent session cannot steal.
+override = os.environ.get("UI_AGENT_SESSION_LOG_DIR", "").strip()
+session_globs: list[tuple[Path, str]] = []
+if override:
+    session_globs.append((Path(override), "session-*.log"))
+else:
+    for base in (Path("/tmp"), Path("/private/tmp")):
+        session_globs.append((base, "cursor-agent-logs-*/session-*.log"))
+for base, pattern in session_globs:
     if not base.is_dir():
         continue
-    for sess in base.glob("cursor-agent-logs-*/session-*.log"):
+    for sess in base.glob(pattern):
         try:
             st = sess.stat()
         except OSError:
@@ -580,10 +590,6 @@ TELEMETRY = re.compile(
     r")",
     re.I,
 )
-SIGNAL = re.compile(
-    r"\b(LPT-\d+|SIM_NOT_READY|closed|stalled|needs-human|coverage:)\b",
-    re.I,
-)
 
 def load_jsonl(path: Path) -> list[dict]:
     rows = []
@@ -615,24 +621,34 @@ for row in rows:
     tail = row.get("tail") or ""
     ticket = row.get("ticket")
     result = row.get("result")
-    # Only rewrite pure CLI telemetry; leave coverage:/healed/reconciled tails.
-    needs = (
+    # Rewrite CLI telemetry and long agent-report prose; leave structured tails.
+    structured = (
+        tail.startswith("coverage:")
+        or tail.startswith("healed from")
+        or tail.startswith("reconciled from")
+    )
+    prose_report = (
         bool(tail)
         and bool(ticket or result)
-        and TELEMETRY.search(tail) is not None
-        and SIGNAL.search(tail) is None
-        and not tail.startswith("coverage:")
-        and not tail.startswith("healed from")
-        and not tail.startswith("reconciled from")
+        and not structured
+        and (
+            TELEMETRY.search(tail) is not None
+            or "**" in tail
+            or len(tail) > 120
+            or "Functions deploy:" in tail
+            or "Leads:" in tail
+        )
     )
-    if needs:
+    if prose_report:
         cov = coverage_by_ticket.get(ticket or "") or {}
         surface = cov.get("surface")
+        use_result = result or cov.get("result")
+        use_ticket = ticket or cov.get("ticket")
         parts = []
-        if result:
-            parts.append(f"coverage:{result}")
-        if ticket:
-            parts.append(f"ticket:{ticket}")
+        if use_result:
+            parts.append(f"coverage:{use_result}")
+        if use_ticket:
+            parts.append(f"ticket:{use_ticket}")
         if surface:
             parts.append(f"surface:{surface}")
         if parts:
@@ -863,11 +879,6 @@ NOISE = re.compile(
     r")",
     re.I,
 )
-SIGNAL = re.compile(
-    r"\b(LPT-\d+|SIM_NOT_READY|closed|stalled|needs-human|Lock|step\s*\d+)\b",
-    re.I,
-)
-
 tail = ""
 try:
     lines = []
@@ -918,8 +929,15 @@ try:
 except (OSError, json.JSONDecodeError, TypeError, ValueError):
     pass
 
-# CLI session backfills are usually telemetry-only; prefer coverage summary.
-if result and (not tail or not SIGNAL.search(tail)):
+# Prefer a short coverage summary whenever coverage landed. Agent report
+# prose used to win because it also contained LPT-NN / closed, stuffing
+# markdown into health.jsonl (LPT-61).
+structured = (
+    tail.startswith("coverage:")
+    or tail.startswith("healed from")
+    or tail.startswith("reconciled from")
+)
+if result and not structured:
     parts = [f"coverage:{result}"]
     if ticket:
         parts.append(f"ticket:{ticket}")
