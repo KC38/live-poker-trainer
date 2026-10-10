@@ -217,16 +217,14 @@ def _ps() -> str:
 
 ps_out = _ps()
 
-# Flutter/dart still targeting the mini or a repo worktree (often under
-# a separate tmux session, not a child of agent -p).
+# Worktree flutter/dart only. The loop's own preflight run on primary
+# (flutter-live-poker-trainer / device UDID) must not mask a dead agent —
+# that left stall forever after LPT-48 while primary flutter stayed up.
 for line in ps_out.splitlines():
     low = line.lower()
-    if not any(tok in low for tok in ("flutter", "dartvm", "dart ", "xcodebuild")):
+    if ".worktrees/" not in low:
         continue
-    if any(
-        tok in low
-        for tok in (".worktrees/", "iphone 13 mini", "f82057df-579c-42ad-ba8f-312a2a8b9de1")
-    ):
+    if any(tok in low for tok in ("flutter", "dartvm", "dart ", "xcodebuild")):
         raise SystemExit(1)
 
 # tmux flutter-* sessions the ui-agent starts for worktree validates.
@@ -284,6 +282,17 @@ if agent_pid.isdigit():
 
 raise SystemExit(0)
 PY
+}
+
+# When CURSOR_API_KEY is set, the CLI still tries to write the login
+# keychain and can die on errSecDuplicateItem (stuck cursor-access-token).
+# Delete that item before each agent start; non-fatal if missing/locked.
+clear_stuck_cursor_keychain() {
+  [[ -n "${CURSOR_API_KEY:-}" ]] || return 0
+  if security delete-generic-password -s cursor-access-token -a cursor-user \
+      >/dev/null 2>&1; then
+    log "cleared stuck cursor-access-token keychain item (API key auth)"
+  fi
 }
 
 # Refresh (or hot-restart) origin/main and wait for a Dart VM. Caller must
@@ -392,6 +401,7 @@ one_run() {
   fi
 
   sim_lock heartbeat --purpose "agent starting" >/dev/null 2>&1 || true
+  clear_stuck_cursor_keychain
   while IFS= read -r line; do args+=("$line"); done < <(agent_args)
   text="$(prompt)"
 
@@ -450,6 +460,25 @@ one_run() {
     code=13
     rm -f "$LOG_DIR/run-$stamp.stalled"
     log "run $stamp marked stalled (exit 13)"
+    # Coverage so the ledger records stalls even when the agent died before
+    # step 10 (LPT-48 closed in Jira with no coverage line).
+    python3 - "$COVERAGE_FILE" "$sha" <<'PY' || true
+import json, sys
+from datetime import datetime
+from pathlib import Path
+path, sha = sys.argv[1], sys.argv[2]
+Path(path).parent.mkdir(parents=True, exist_ok=True)
+with Path(path).open("a", encoding="utf-8") as handle:
+    handle.write(json.dumps({
+        "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "sha": sha,
+        "surface": "none",
+        "result": "stalled",
+        "ticket": None,
+        "leads": ["loop stall watchdog: stale heartbeat and no worktree flutter/agent activity"],
+        "learnings": "unchanged",
+    }) + "\n")
+PY
   fi
 
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min"

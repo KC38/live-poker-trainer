@@ -77,46 +77,26 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 ## Ops (simulator, CLI, Jira)
 
 - Cursor CLI over SSH / LaunchAgent needs `CURSOR_API_KEY` in
-  `~/.live-poker-trainer/secrets.env`. A locked login keychain is not
-  fixable mid-run; do not call `agent login`.
-- Jira needs `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that same
-  secrets file. If `jira.py check` fails, release and end with
-  `JIRA_UNAVAILABLE`.
-- `jira.py create` prints `KEY<TAB>URL`. Capture the key with
-  `KEY=$(python3 tools/jira.py create … | awk '{print $1}')` — never pass
-  the whole line into `edit` / `get` / `comment`.
-- "Connection lost, reconnecting…" from the CLI is normal. Let it retry;
-  do not kill the run or the loop for a single reconnect.
-- `dart_vm_ready` must use a macOS-safe grep class (`[A-Za-z0-9_=-]`, '-' last).
-  A bad `\-=` range made every preflight report SIM_NOT_READY even when the
-  Dart VM URI was already in the Flutter log.
-- The unattended loop prepares the mini **programmatically** (claim →
-  refresh → wait for Dart VM) and only then starts `agent -p`. A
-  `SIM_NOT_READY` preflight never starts the agent. Do not re-claim the
-  lock when `SIM_LOCK_RUN_ID` already guards, and do not re-refresh when
-  the Flutter log already has a VM URI.
-- Flutter may stick at "Launching…" with no Dart VM line and no pid file.
-  After the mandated one retry, end `SIM_NOT_READY` — do not uninstall the
-  app or chase Device Hub UI. A common cause is `flutter pub get`
-  Terminated: 15 while another agent holds the Flutter cache lock;
-  `refresh-simulator.sh` retries pub get — do not rewrite it mid-run.
-- After consecutive `SIM_NOT_READY`, the loop backs off (~10 min) so other
-  flutter pub/test work can finish before the next claim.
-- `refresh-simulator` must claim with `--pid $$`. Pid-less locks go stale
-  after 10 minutes; never force-hold the mini without a pid.
-- `/tmp/flutter-live-poker-trainer.run.log` must be a normal file. If a
-  stale symlink or directory is there, the refresh script should recreate
-  it; do not hand-edit launcher scripts during a ticket run.
-- Worktree validation uses `--log /tmp/flutter-$SLUG.log` and its own
-  tmux session. Origin/main validation uses
-  `/tmp/flutter-live-poker-trainer.run.log`. Do not mix them.
-- When starting `refresh-simulator.sh` (or any sim tool) from tmux
-  `send-keys`, export `SIM_LOCK_RUN_ID=…` in that command line. A bare
-  tmux shell does not inherit the agent export, so refresh reports the
-  mini busy under your own run id.
-- Attach / the loop pane only prints run start and end. Live detail is in
-  `~/.live-poker-trainer/ui-agent-logs/run-*.log` and the run's agent
-  transcript. Do not stall waiting for the attach pane to stream tokens.
+  `~/.live-poker-trainer/secrets.env`. Do not call `agent login`. The loop
+  clears a stuck `cursor-access-token` keychain item before each start
+  when the API key is set (`errSecDuplicateItem` otherwise burns the run).
+- Heartbeat during long worktree `flutter run` / validates; the stall
+  watchdog kills a silent agent. Write coverage before long compiles when
+  the ticket is already Done in Jira.
+- Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
+  `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
+  `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.
+- "Connection lost, reconnecting…" is normal; let the CLI retry once.
+- Loop preflight is programmatic (claim → refresh → Dart VM) before
+  `agent -p`. `dart_vm_ready` needs macOS-safe `[A-Za-z0-9_=-]`. One
+  refresh + one retry then `SIM_NOT_READY` (often `pub get` Terminated: 15);
+  do not rewrite refresh mid-run. Consecutive misses back off ~10 min.
+- `refresh-simulator` must claim with `--pid $$`. Export `SIM_LOCK_RUN_ID`
+  inside tmux `send-keys`. Worktree validate uses
+  `/tmp/flutter-$SLUG.log`; origin/main uses
+  `/tmp/flutter-live-poker-trainer.run.log` (must be a normal file).
+- Attach pane only shows start/end; live detail is in
+  `~/.live-poker-trainer/ui-agent-logs/run-*.log` and the agent transcript.
 
 ## Product judgment
 
@@ -143,20 +123,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-10: Two back-to-back runs hit Flutter never reaching a Dart VM
-  service after refresh (`SIM_NOT_READY`). Next runs should keep the
-  one-retry rule and move on; do not burn the attempt budget debugging
-  launch.
-- 2026-10-10: LPT-16 regression returned ("Section 2" on the Live Training
-  lock). Reopen Done tickets that still reproduce; do not file a twin.
-- 2026-10-10: Local functions deploy skipped repeatedly (no Firebase CI
-  creds). Closing on mini proof is enough; Actions owns deploy.
-- 2026-10-10: LPT-44 filed `needs-human` for gems tap (shop vs
-  explanation vs defer). Parse `jira.py create` key before `edit`.
-- 2026-10-10: LPT-45 Settings then LPT-46 Profile twin (stadium
-  `FilledButton` → Theme elevated). Grep sibling guest Create an account
-  CTAs in the same walk; export `SIM_LOCK_RUN_ID` inside tmux
-  `send-keys` for post-merge refresh.
 - 2026-10-10: LPT-47 guided suits — `syncSelection` + empty draft wiped
-  cyan on SoftPulse rebuilds. Worktree `flutter run` needs copied
-  `firebase_options.dart`; `openlesson` needs lesson id not title.
+  cyan on SoftPulse rebuilds.
+- 2026-10-10: LPT-48 empty coach bubble during lesson bootstrap; stall
+  watchdog + keychain duplicate also bit the closing run — heartbeat and
+  write coverage before long worktree compiles.

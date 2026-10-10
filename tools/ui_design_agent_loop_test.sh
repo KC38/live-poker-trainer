@@ -117,6 +117,26 @@ lock_heartbeat_stalled || fail "heartbeat older than STALL_SECONDS should be sta
 unset UI_AGENT_STALL_HEARTBEAT_ONLY
 python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 
+# clear_stuck_cursor_keychain is a no-op without CURSOR_API_KEY; with a key
+# it must not fail the loop when security(1) denies/misses (fake security).
+SEC_LOG="$tmp/security.log"
+mkdir -p "$tmp/bin"
+cat >"$tmp/bin/security" <<EOF
+#!/usr/bin/env bash
+printf '%s\n' "\$*" >>"$SEC_LOG"
+exit 1
+EOF
+chmod +x "$tmp/bin/security"
+export PATH="$tmp/bin:$PATH"
+unset CURSOR_API_KEY
+clear_stuck_cursor_keychain || fail "clear_stuck_cursor_keychain should no-op without key"
+[[ ! -f "$SEC_LOG" ]] || fail "security must not run without CURSOR_API_KEY"
+CURSOR_API_KEY='test-key'
+clear_stuck_cursor_keychain || fail "clear_stuck_cursor_keychain must be non-fatal"
+grep -q 'delete-generic-password -s cursor-access-token -a cursor-user' "$SEC_LOG" \
+  || fail "should try to clear stuck cursor-access-token: $(cat "$SEC_LOG")"
+unset CURSOR_API_KEY
+
 # Backoff helper: latest coverage result drives SIM_NOT_READY sleep.
 mkdir -p "$(dirname "$COVERAGE_FILE")"
 printf '%s\n' '{"result":"closed"}' >"$COVERAGE_FILE"
