@@ -121,12 +121,17 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (and `/tmp/flutter_tools.*`) then retry once (LPT-61) — do not rewrite
   refresh or `needs-human` on the first disk-full build.
 - Prefer waiting until the target beat is settled before
-  `<KEY>-validated.png` (not bootstrap spinner). On locked-start, capture
-  the Open-previous / Retry gate and read Rex's bubble against the gold
-  Open-previous CTA — Retry-only copy with that button is a bug (LPT-51).
+  `<KEY>-validated.png` (not bootstrap spinner). On hole-card peeks, wait
+  until the hero cards are face-up (not empty outlines) before `tap You`.
+  On locked-start, capture the Open-previous / Retry gate and read Rex's
+  bubble against the gold Open-previous CTA — Retry-only copy with that
+  button is a bug (LPT-51).
 - Prefer clearing Hint / SoftPulse before staging an invalid Best five for
   Undo proof so the status hits "Five tapped — try a stronger five" and
   cyan matches the five taps.
+- Never run `sips -c` (or similar) in place on the only copy of an issue
+  or validated PNG — it can overwrite the file with a tiny crop. Copy
+  first, crop the copy.
 
 ## Ops (simulator, CLI, Jira)
 
@@ -183,4 +188,6 @@ trimming. Durable rules belong in the sections above, not only here.
   multi-glow; quiet ids until Hint; sibling picker after explain). LPT-59
   guided free miss; LPT-60 clear Hint on grade. LPT-62 draft-mirror Undo;
   closeout comment must succeed before Done. LPT-63 Hint off while
-  `showTargetCue` (incl. single-press scaffolded SoftPulse).
+  `showTargetCue` (incl. single-press scaffolded SoftPulse). LPT-64 graded
+  bubble uses `result.feedback` (not idle ask); post-merge refresh can leave
+  Launching+dead pid — start `flutter run` in tmux yourself.
