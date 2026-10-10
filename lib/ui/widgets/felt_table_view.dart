@@ -17,6 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/core/constants/money.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/core/deal/felt_action_reveal_controller.dart';
 import 'package:live_poker_trainer/core/deal/felt_deal_controller.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
@@ -209,6 +210,8 @@ class _FeltTableViewState extends State<FeltTableView> {
   late final FeltDealController _deal;
   late final FeltActionRevealController _actions;
   String? _soundEpoch;
+  Timer? _cueSettleTimer;
+  var _cuesSettled = false;
 
   @override
   void initState() {
@@ -216,8 +219,8 @@ class _FeltTableViewState extends State<FeltTableView> {
     _deal = FeltDealController(onDealt: _playDealSound);
     _actions = FeltActionRevealController(onRevealed: _playActionSound);
     _deal.addListener(_syncActions);
-    _deal.addListener(_reportDealReady);
-    _actions.addListener(_reportDealReady);
+    _deal.addListener(_onDealProgress);
+    _actions.addListener(_onDealProgress);
     _syncDeal();
   }
 
@@ -229,9 +232,10 @@ class _FeltTableViewState extends State<FeltTableView> {
 
   @override
   void dispose() {
+    _cueSettleTimer?.cancel();
     _deal.removeListener(_syncActions);
-    _deal.removeListener(_reportDealReady);
-    _actions.removeListener(_reportDealReady);
+    _deal.removeListener(_onDealProgress);
+    _actions.removeListener(_onDealProgress);
     _deal.dispose();
     _actions.dispose();
     super.dispose();
@@ -280,7 +284,7 @@ class _FeltTableViewState extends State<FeltTableView> {
       dealHoles: dealHoles,
     );
     _syncActions();
-    _reportDealReady();
+    _onDealProgress();
   }
 
   void _syncActions() {
@@ -324,14 +328,66 @@ class _FeltTableViewState extends State<FeltTableView> {
     );
   }
 
-  void _reportDealReady() {
-    widget.onDealReady?.call(_cuesReady);
-  }
-
-  /// True when this epoch's holes, board, and opening folds have landed.
-  bool get _cuesReady =>
+  /// Cards + opening folds are in the controller; reveal animation may still
+  /// be playing on the last card.
+  bool get _dealControllerReady =>
       widget.game.isHandOver ||
       (_deal.isComplete && _actions.openingBatchComplete);
+
+  /// SoftPulse / hint rings — only after the last card's reveal settles.
+  bool get _cuesReady => _cuesSettled;
+
+  void _onDealProgress() {
+    if (!_dealControllerReady) {
+      _cueSettleTimer?.cancel();
+      _cueSettleTimer = null;
+      if (_cuesSettled) {
+        _cuesSettled = false;
+        if (mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) setState(() {});
+          });
+        }
+      }
+      widget.onDealReady?.call(false);
+      return;
+    }
+    if (_cuesSettled) {
+      widget.onDealReady?.call(true);
+      return;
+    }
+    // Keep SoftPulse off while the last card finishes its fade/scale-in.
+    widget.onDealReady?.call(false);
+    if (CardDealPace.instant) {
+      _markCuesSettled();
+      return;
+    }
+    _cueSettleTimer?.cancel();
+    _cueSettleTimer = Timer(CardDealPace.revealSettle, () {
+      if (!mounted || !_dealControllerReady) return;
+      _markCuesSettled();
+    });
+  }
+
+  void _markCuesSettled() {
+    _cueSettleTimer?.cancel();
+    _cueSettleTimer = null;
+    if (!_cuesSettled) {
+      _cuesSettled = true;
+      // Timer callbacks are safe for setState; initState / bind sync
+      // reaches here only when CardDealPace.instant (tests).
+      if (mounted) {
+        if (CardDealPace.instant) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) setState(() {});
+          });
+        } else {
+          setState(() {});
+        }
+      }
+    }
+    widget.onDealReady?.call(true);
+  }
 
   /// Hole indexes to SoftPulse. Wait until the deal has finished so the
   /// ring is not an empty box. [highlightHero] with no indexes means both.

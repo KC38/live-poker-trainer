@@ -16,6 +16,10 @@ class CardDealPace {
   /// live dealer placing cards one at a time.
   static const int dealCardMs = 420;
 
+  /// After the last card is scheduled, wait for its fade/scale reveal to
+  /// finish before SoftPulse / hint rings appear.
+  static const int revealSettleMs = 280;
+
   /// When set, overrides [instant] (widget tests that assert real pacing).
   @visibleForTesting
   static bool? debugInstant;
@@ -39,6 +43,9 @@ class CardDealPace {
 
   /// Delay before the next card in a sequential deal.
   static Duration get dealCard => _scaled(dealCardMs);
+
+  /// Pause after the deal controller marks complete before SoftPulse.
+  static Duration get revealSettle => _scaled(revealSettleMs);
 
   /// Delay for board card [index] when [alreadyVisible] cards were already up.
   static Duration boardDelay({

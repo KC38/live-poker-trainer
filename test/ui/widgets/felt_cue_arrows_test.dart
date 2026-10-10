@@ -130,7 +130,12 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
-    await tester.pump(CardDealPace.dealCard * 8);
+    // First card on the opening pump; seven more finish the four-seat deal.
+    // Stop before revealSettle so SoftPulse stays off during the last fade-in.
+    await tester.pump(CardDealPace.dealCard * 7);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    await tester.pump(CardDealPace.revealSettle);
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
   });
@@ -217,8 +222,11 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
-    // 4 seats × 2 holes + 3 flop; first card lands on the opening pump.
-    await tester.pump(CardDealPace.dealCard * 10);
+    // Flop epoch seeds holes as already dealt — only three board cards animate.
+    await tester.pump(CardDealPace.dealCard * 2);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    await tester.pump(CardDealPace.revealSettle);
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
   });
@@ -296,7 +304,11 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
-    await tester.pump(CardDealPace.dealCard * 10);
+    // Flop epoch seeds holes as already dealt — only three board cards animate.
+    await tester.pump(CardDealPace.dealCard * 2);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    await tester.pump(CardDealPace.revealSettle);
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(3));
   });
@@ -329,7 +341,10 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
 
-    await tester.pump(CardDealPace.dealCard * 8);
+    await tester.pump(CardDealPace.dealCard * 7);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+
+    await tester.pump(CardDealPace.revealSettle);
 
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
   });

@@ -64,8 +64,12 @@ class LessonActivityController extends ChangeNotifier {
   ActivityDraft? _redoDraft;
   bool _submitting = false;
   bool _hintVisible = false;
-  /// False while the felt is still dealing this activity's cards.
-  bool _feltDealReady = true;
+  /// False until the felt reports the deal settled (or a no-felt step
+  /// releases the gate). Starts false so SoftPulse cannot flash before
+  /// the table mounts.
+  bool _feltDealReady = false;
+  /// True after [notifyFeltDealReady] ran for this activity bind.
+  bool _feltDealTracked = false;
   /// Node key (`activityId#handStepIndex`) for which Hint was already used.
   String? _hintUsedNodeKey;
   /// Node key for the active multi-press SoftPulse sequence, if any.
@@ -208,11 +212,18 @@ class LessonActivityController extends ChangeNotifier {
 
   /// Felt deal progress — SoftPulse stays off until [ready] is true.
   void notifyFeltDealReady(bool ready) {
+    _feltDealTracked = true;
     if (_feltDealReady == ready) return;
     _feltDealReady = ready;
     scheduleMicrotask(() {
       if (hasListeners) notifyListeners();
     });
+  }
+
+  /// Steps with no felt never call [notifyFeltDealReady]; unlock SoftPulse.
+  void releaseFeltDealIfUntracked() {
+    if (_feltDealTracked) return;
+    notifyFeltDealReady(true);
   }
 
   void bindActivity(CourseActivity next) {
@@ -223,7 +234,8 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     _submitting = false;
     _hintVisible = false;
-    _feltDealReady = true;
+    _feltDealReady = false;
+    _feltDealTracked = false;
     _hintUsedNodeKey = null;
     _sequentialCueNodeKey = null;
     _sequentialPressesRemaining = false;
@@ -380,7 +392,8 @@ class LessonActivityController extends ChangeNotifier {
     _lastResult = null;
     _pendingIdempotencyKey = null;
     _hintVisible = false;
-    _feltDealReady = true;
+    _feltDealReady = false;
+    _feltDealTracked = false;
     _sequentialCueNodeKey = null;
     _sequentialPressesRemaining = false;
     _sequentialSoftPulseWaveOpen = true;
