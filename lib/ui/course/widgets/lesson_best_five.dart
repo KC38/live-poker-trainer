@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/core/constants/poker_constants.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
@@ -95,7 +96,10 @@ BestFiveSpot? resolveBestFiveSpot(CourseActivity activity) {
   return null;
 }
 
-/// Authored best-five spot with structure-preserving isomorphic cards.
+/// Authored best-five spot re-dealt inside its teaching hand class.
+///
+/// Top-pair / full-house spots sample fresh ranks (not suit-only remaps) so a
+/// second open is not the same A-K layout with different suits.
 BestFiveSpot? dealtBestFiveSpot(
   CourseActivity activity, {
   int generation = 0,
@@ -109,6 +113,14 @@ BestFiveSpot? dealtBestFiveSpot(
     generation: generation,
     random: random,
   );
+  return switch (activity.id) {
+    'act-01-02-02-guided-seven' => _dealtTopPairKickerSpot(spot, rng),
+    'act-01-02-02-checkpoint-build' => _dealtFullHouseSpot(spot, rng),
+    _ => _dealtStructurePreservingSpot(spot, rng),
+  };
+}
+
+BestFiveSpot _dealtStructurePreservingSpot(BestFiveSpot spot, Random rng) {
   final template = [spot.heroCodes, spot.boardCodes];
   final remapped = isomorphicLessonCardGroups(
     template,
@@ -127,6 +139,34 @@ BestFiveSpot? dealtBestFiveSpot(
     heroCodes: remapped[0],
     boardCodes: remapped[1],
     choiceSets: choiceSets,
+  );
+}
+
+/// Top pair + best kicker: new pair/kicker ranks each deal.
+BestFiveSpot _dealtTopPairKickerSpot(BestFiveSpot spot, Random rng) {
+  final dealt = _dealTopPairBestKicker(rng);
+  return spot.copyWithCodes(
+    heroCodes: dealt.hero,
+    boardCodes: dealt.board,
+    choiceSets: {
+      'best-pair-k': dealt.bestFive,
+      'weak-kickers': dealt.weakKickers,
+      'ignore-ace': dealt.ignorePair,
+    },
+  );
+}
+
+/// Trips + two board pairs: fresh trip/pair ranks each deal.
+BestFiveSpot _dealtFullHouseSpot(BestFiveSpot spot, Random rng) {
+  final dealt = _dealTripsOverTwoPairs(rng);
+  return spot.copyWithCodes(
+    heroCodes: dealt.hero,
+    boardCodes: dealt.board,
+    choiceSets: {
+      'fh-eights': dealt.fullHouseHigh,
+      'fh-deuces': dealt.fullHouseLow,
+      'two-pair-only': dealt.twoPairOnly,
+    },
   );
 }
 
@@ -180,7 +220,7 @@ class BestFiveExplainDeal {
   final List<String> playOrder;
 }
 
-/// Structure-preserving deal of the Ah/Kd + As72 9h 3s best-five teach.
+/// Top-pair teach: fresh pair and kicker ranks (not suit-only remaps).
 BestFiveExplainDeal dealBestFiveExplainLayout({
   String activityId = 'act-01-02-02-explain-five',
   int generation = 0,
@@ -203,27 +243,181 @@ BestFiveExplainDeal dealBestFiveExplainLayout({
     generation: generation,
     random: random,
   );
-  final template = [templateHero, templateBoard];
-  final remapped = isomorphicLessonCardGroups(
-    template,
-    rng,
-    coordinated: true,
-  );
-  final playing = structurePreserveCodesLike(
-    codes: templatePlaying,
-    templateGroups: template,
-    mappedGroups: remapped,
-  );
-  final playOrder = structurePreserveCodesLike(
-    codes: templatePlayOrder,
-    templateGroups: template,
-    mappedGroups: remapped,
-  );
+  final dealt = _dealTopPairBestKicker(rng);
   return BestFiveExplainDeal(
-    hero: remapped[0],
-    board: remapped[1],
-    playing: playing.toSet(),
-    playOrder: playOrder,
+    hero: dealt.hero,
+    board: dealt.board,
+    playing: dealt.bestFive.toSet(),
+    playOrder: dealt.playOrder,
+  );
+}
+
+class _TopPairBestKickerDeal {
+  const _TopPairBestKickerDeal({
+    required this.hero,
+    required this.board,
+    required this.bestFive,
+    required this.weakKickers,
+    required this.ignorePair,
+    required this.playOrder,
+  });
+
+  final List<String> hero;
+  final List<String> board;
+  final List<String> bestFive;
+  final List<String> weakKickers;
+  final List<String> ignorePair;
+  final List<String> playOrder;
+}
+
+class _TripsOverTwoPairsDeal {
+  const _TripsOverTwoPairsDeal({
+    required this.hero,
+    required this.board,
+    required this.fullHouseHigh,
+    required this.fullHouseLow,
+    required this.twoPairOnly,
+  });
+
+  final List<String> hero;
+  final List<String> board;
+  final List<String> fullHouseHigh;
+  final List<String> fullHouseLow;
+  final List<String> twoPairOnly;
+}
+
+/// Sample top pair + best kicker with new ranks every call.
+_TopPairBestKickerDeal _dealTopPairBestKicker(Random rng) {
+  for (var attempt = 0; attempt < 64; attempt++) {
+    // Six distinct ranks → top is pair, next is hero kicker, rest are board.
+    final pool = List<int>.generate(13, (i) => i + 2)..shuffle(rng);
+    final picked = pool.take(6).toList()..sort((a, b) => b.compareTo(a));
+    final pairRank = picked[0];
+    final heroKicker = picked[1];
+    final boardKickers = picked.sublist(2); // already high→low
+
+    final suits = List<String>.of(const ['h', 'd', 'c', 's'])..shuffle(rng);
+    String code(int rank, String suit) =>
+        '${PokerConstants.rankLabels[rank]!}$suit';
+
+    final heroPair = code(pairRank, suits[0]);
+    final boardPair = code(pairRank, suits[1]);
+    final heroK = code(heroKicker, suits[2]);
+    final used = <String>{heroPair, heroK, boardPair};
+    final kickerCards = <String>[];
+    for (final rank in boardKickers) {
+      final options = [
+        for (final s in suits) code(rank, s),
+      ]..shuffle(rng);
+      String? pick;
+      for (final candidate in options) {
+        if (!used.contains(candidate)) {
+          pick = candidate;
+          break;
+        }
+      }
+      if (pick == null) {
+        kickerCards.clear();
+        break;
+      }
+      used.add(pick);
+      kickerCards.add(pick);
+    }
+    if (kickerCards.length != 4) continue;
+
+    final board = [boardPair, ...kickerCards];
+    return _TopPairBestKickerDeal(
+      hero: [heroPair, heroK],
+      board: board,
+      bestFive: [
+        heroPair,
+        boardPair,
+        heroK,
+        kickerCards[0],
+        kickerCards[1],
+      ],
+      weakKickers: [
+        heroPair,
+        boardPair,
+        kickerCards[0],
+        kickerCards[1],
+        kickerCards[2],
+      ],
+      ignorePair: [heroK, ...kickerCards],
+      playOrder: [
+        heroPair,
+        heroK,
+        boardPair,
+        kickerCards[1],
+        kickerCards[0],
+      ],
+    );
+  }
+  // Deterministic fallback matching the authored template shape.
+  return const _TopPairBestKickerDeal(
+    hero: ['Ah', 'Kd'],
+    board: ['As', '9h', '7c', '3s', '2d'],
+    bestFive: ['Ah', 'As', 'Kd', '9h', '7c'],
+    weakKickers: ['Ah', 'As', '9h', '7c', '3s'],
+    ignorePair: ['Kd', '9h', '7c', '3s', '2d'],
+    playOrder: ['Ah', 'Kd', 'As', '7c', '9h'],
+  );
+}
+
+/// Sample trips + higher/lower board pairs for the checkpoint build.
+_TripsOverTwoPairsDeal _dealTripsOverTwoPairs(Random rng) {
+  for (var attempt = 0; attempt < 48; attempt++) {
+    final ranks = List<int>.generate(13, (i) => i + 2)..shuffle(rng);
+    final trips = ranks[0];
+    final highPair = ranks[1] > ranks[2] ? ranks[1] : ranks[2];
+    final lowPair = ranks[1] > ranks[2] ? ranks[2] : ranks[1];
+    final suits = List<String>.of(const ['h', 'd', 'c', 's'])..shuffle(rng);
+    String code(int rank, String suit) =>
+        '${PokerConstants.rankLabels[rank]!}$suit';
+
+    final hero = [code(trips, suits[0]), code(trips, suits[1])];
+    final board = [
+      code(trips, suits[2]),
+      code(highPair, suits[0]),
+      code(highPair, suits[1]),
+      code(lowPair, suits[2]),
+      code(lowPair, suits[3]),
+    ];
+    final used = {...hero, ...board};
+    if (used.length != 7) continue;
+
+    return _TripsOverTwoPairsDeal(
+      hero: hero,
+      board: board,
+      fullHouseHigh: [
+        hero[0],
+        hero[1],
+        board[0],
+        board[1],
+        board[2],
+      ],
+      fullHouseLow: [
+        hero[0],
+        hero[1],
+        board[0],
+        board[3],
+        board[4],
+      ],
+      twoPairOnly: [
+        hero[0],
+        hero[1],
+        board[1],
+        board[2],
+        board[3],
+      ],
+    );
+  }
+  return const _TripsOverTwoPairsDeal(
+    hero: ['8h', '8d'],
+    board: ['8c', 'Kd', 'Ks', '2h', '2c'],
+    fullHouseHigh: ['8h', '8d', '8c', 'Kd', 'Ks'],
+    fullHouseLow: ['8h', '8d', '8c', '2h', '2c'],
+    twoPairOnly: ['8h', '8d', 'Kd', 'Ks', '2h'],
   );
 }
 

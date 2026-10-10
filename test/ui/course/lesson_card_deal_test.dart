@@ -641,40 +641,95 @@ void main() {
         CourseChoice(id: 'ignore-ace', label: 'Ignore'),
       ],
     );
+    final pairRanks = <int>{};
+    final kickerRanks = <int>{};
     final heroRankKeys = <String>{};
-    final boardRankKeys = <String>{};
     for (var seed = 0; seed < 48; seed++) {
       final spot = dealtBestFiveSpot(activity, random: Random(seed))!;
+      final hero = [
+        for (final c in spot.heroCodes) CardModel.fromCode(c),
+      ];
+      final board = [
+        for (final c in spot.boardCodes) CardModel.fromCode(c),
+      ];
+      final boardRankSet = {for (final c in board) c.rank};
+      final pairRank = hero.map((c) => c.rank).firstWhere(boardRankSet.contains);
+      final kickerRank = hero.map((c) => c.rank).firstWhere((r) => r != pairRank);
+      pairRanks.add(pairRank);
+      kickerRanks.add(kickerRank);
       heroRankKeys.add(
-        ([for (final c in spot.heroCodes) CardModel.fromCode(c).rank]..sort())
-            .join(','),
+        ([for (final c in hero) c.rank]..sort()).join(','),
       );
-      boardRankKeys.add(
-        ([for (final c in spot.boardCodes) CardModel.fromCode(c).rank]..sort())
-            .join(','),
+      // Top pair: pair outranks every non-pair board card.
+      for (final c in board.where((c) => c.rank != pairRank)) {
+        expect(pairRank, greaterThan(c.rank));
+      }
+      // Best kicker: hero kicker outranks every board kicker.
+      for (final c in board.where((c) => c.rank != pairRank)) {
+        expect(kickerRank, greaterThan(c.rank));
+      }
+      expect(
+        mapBestFiveSelectionToChoiceId(
+          selected: spot.choiceSets['best-pair-k']!.toSet(),
+          spot: spot,
+          choices: activity.choices,
+        ),
+        'best-pair-k',
       );
-      // Pair on board still pairs one hole (top pair teach).
-      final heroRanks = {
-        for (final c in spot.heroCodes) CardModel.fromCode(c).rank,
-      };
-      final boardRanks = {
-        for (final c in spot.boardCodes) CardModel.fromCode(c).rank,
-      };
-      expect(heroRanks.intersection(boardRanks), isNotEmpty);
     }
+    expect(pairRanks.length, greaterThan(1));
+    expect(kickerRanks.length, greaterThan(1));
     expect(heroRankKeys.length, greaterThan(1));
-    expect(boardRankKeys.length, greaterThan(1));
 
-    final explainKeys = <String>{};
+    final explainPairRanks = <int>{};
     for (var seed = 0; seed < 48; seed++) {
       final deal = dealBestFiveExplainLayout(random: Random(seed));
-      final heroRanks =
-          [for (final c in deal.hero) CardModel.fromCode(c).rank]..sort();
-      final boardRanks =
-          [for (final c in deal.board) CardModel.fromCode(c).rank]..sort();
-      explainKeys.add('${heroRanks.join(',')}|${boardRanks.join(',')}');
+      final hero = [for (final c in deal.hero) CardModel.fromCode(c)];
+      final board = [for (final c in deal.board) CardModel.fromCode(c)];
+      final boardRankSet = {for (final c in board) c.rank};
+      explainPairRanks.add(
+        hero.map((c) => c.rank).firstWhere(boardRankSet.contains),
+      );
+      expect(deal.playing.length, 5);
+      expect(deal.playOrder.toSet(), deal.playing);
+      expect({...deal.hero, ...deal.board}.length, 7);
     }
-    expect(explainKeys.length, greaterThan(1));
+    expect(explainPairRanks.length, greaterThan(1));
+  });
+
+  test('best-five checkpoint full house varies trip ranks across seeds', () {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-checkpoint-build',
+      order: 5,
+      stage: ActivityStage.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [
+        CourseChoice(id: 'fh-eights', label: 'High FH'),
+        CourseChoice(id: 'fh-deuces', label: 'Low FH'),
+        CourseChoice(id: 'two-pair-only', label: 'Two pair'),
+      ],
+    );
+    final tripRanks = <int>{};
+    for (var seed = 0; seed < 32; seed++) {
+      final spot = dealtBestFiveSpot(activity, random: Random(seed))!;
+      final heroRanks = [
+        for (final c in spot.heroCodes) CardModel.fromCode(c).rank,
+      ];
+      expect(heroRanks[0], heroRanks[1]);
+      tripRanks.add(heroRanks[0]);
+      expect(
+        mapBestFiveSelectionToChoiceId(
+          selected: spot.choiceSets['fh-eights']!.toSet(),
+          spot: spot,
+          choices: activity.choices,
+        ),
+        'fh-eights',
+      );
+    }
+    expect(tripRanks.length, greaterThan(1));
   });
 
   test('scaffolded kicker scene varies ranks across seeds', () {
