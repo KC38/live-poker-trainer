@@ -63,6 +63,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer naming Jira shots `<surface>-issue.png` and
   `<KEY>-validated.png`. Never file without an issue shot; never close
   without a validated shot on origin/main.
+- Prefer, when fixing a stadium `FilledButton` → Theme elevated CTA on one
+  surface (Settings, Profile, Save progress), grepping sibling guest
+  **Create an account** call sites in the same walk so the twin does not
+  wait another run (LPT-45 then LPT-46).
 
 ## Ops (simulator, CLI, Jira)
 
@@ -143,6 +147,7 @@ trimming. Durable rules belong in the sections above, not only here.
   creds). Closing on mini proof is enough; Actions owns deploy.
 - 2026-10-10: LPT-44 filed `needs-human` for gems tap (shop vs
   explanation vs defer). Parse `jira.py create` key before `edit`.
-- 2026-10-10: LPT-45 Settings Account stadium `FilledButton` → Theme
-  elevated. First post-merge refresh skipped until `SIM_LOCK_RUN_ID` was
-  exported inside the tmux `send-keys` line.
+- 2026-10-10: LPT-45 Settings then LPT-46 Profile twin (stadium
+  `FilledButton` → Theme elevated). Grep sibling guest Create an account
+  CTAs in the same walk; export `SIM_LOCK_RUN_ID` inside tmux
+  `send-keys` for post-merge refresh.
