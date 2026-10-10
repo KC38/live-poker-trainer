@@ -279,10 +279,10 @@ teaches it and stays on for the rest of the course.
 | Player types, VPIP/PFR | 4.6.1 Observe sticky callers | `playerTypesLesson` |
 
 Your two cards and Suits and ranks show only seats, cards, and the board
-when a step deals one. A hole-only step (Your two cards peek) turns
-`boardSlots` off so empty outlines do not draw. Live Training and an id
-that is not `lesson-SS-UU-LL` get `TableFeatures.full`. Your start uses
-the preset of the lesson it recommends.
+when a step deals one. A hole-only step (Your two cards peek, Button and
+blinds explain) turns `boardSlots` off so empty outlines do not draw. Live
+Training and an id that is not `lesson-SS-UU-LL` get `TableFeatures.full`.
+Your start uses the preset of the lesson it recommends.
 
 A lesson seat shows a player type only when the step names it
 (`villainArchetypes`); a seat never shows a made-up type. A spot that says
@@ -386,6 +386,10 @@ down. Empty board slot outlines stay off (`boardSlots: false` on
 `LessonPeekTable`) until a step deals community cards. Tapping your cards
 turns them face up. Tapping another seat's cards is a miss.
 
+Button and blinds' explain step (`LessonBlindsClockwiseTable`) draws seats,
+pot, pucks, posted blinds, and hole-card backs with empty board slot
+outlines off (`boardSlots: false`) until a later step deals community cards.
+
 ### Cues
 
 `GlowHighlight` (`lib/ui/widgets/glow_highlight.dart`) is the one cue. There
@@ -439,10 +443,11 @@ answer, Continue advances.
 `LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
 is the stage. `LessonPeekTable` turns `boardSlots` off so the first Your
-two cards step has no empty board outlines. `LessonCoachBand` maps
-`LessonMascotExpression` to calm, celebrate, or think. `LessonChoiceButton`
-(`lib/ui/course/widgets/rex_coach_line.dart`) is the one framed option
-button.
+two cards step has no empty board outlines. `LessonBlindsClockwiseTable`
+turns `boardSlots` off the same way for Button and blinds explain.
+`LessonCoachBand` maps `LessonMascotExpression` to calm, celebrate, or
+think. `LessonChoiceButton` (`lib/ui/course/widgets/rex_coach_line.dart`)
+is the one framed option button.
 
 ## Lesson tables
 
