@@ -60,8 +60,9 @@ Reference lesson: Your two cards. Copy it; do not invent a second frame.
 `TableFeatures.forLessonId` turns layers on when the course teaches them
 (blinds, button, pot, villains types, …). Hide more per step with `features`
 on the stage — do not fork a second table widget. Hole-only steps (Your two
-cards peek, Button and blinds explain) pass `boardSlots: false` so empty
-community slot outlines do not draw.
+cards peek, Button and blinds explain, and Button and blinds frame steps via
+`isLessonBlindsFrameActivity`) pass `boardSlots: false` so empty community
+slot outlines do not draw.
 
 Default lesson stakes: `$1/$2` NLH unless the step overrides blinds.
 
