@@ -66,7 +66,7 @@ Goal: an anonymous guest cannot start a Live Training hand.
 
 1. Open the **Live Training** tab.
 2. Read the hub copy. Tap the primary start control.
-3. An anonymous guest gets **Create an account before Live Training.** A signed-in player who is still locked gets the Section 2 or Section 4 snackbar from `live_training_screen.dart`. Record which text appeared.
+3. An anonymous guest gets **Create an account before Live Training.** A signed-in player who is still locked gets the Baseline jump check or Section 4 snackbar from `live_training_screen.dart`. Record which text appeared.
 4. The table must not deal. Do not create an account.
 
 ## live-training-one-hand

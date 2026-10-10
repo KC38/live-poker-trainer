@@ -83,18 +83,19 @@ void main() {
     });
   });
 
-  test('locked copy names the Section 2 checkpoint on Home', () {
+  test('locked copy names Baseline jump check on Home', () {
     expect(
       liveTrainingLockedMessage(),
-      'Live Training is advanced. Finish the Section 2 checkpoint on Home '
+      'Live Training is advanced. Finish Baseline jump check on Home '
       'to unlock a coached warm-up.',
     );
-    expect(liveTrainingLockedMessage(), contains('Section 2 checkpoint'));
-    expect(liveTrainingLockedMessage(), isNot(contains('Baseline jump check')));
+    expect(liveTrainingLockedMessage(), contains(kLiveWarmUpUnlockLessonTitle));
+    expect(liveTrainingLockedMessage(), isNot(contains('Section 2')));
     expect(
       liveTrainingLockedSnack(),
-      'Live Training unlocks after the Section 2 checkpoint. '
+      'Live Training unlocks after Baseline jump check. '
       'Continue on Home.',
     );
+    expect(liveTrainingLockedSnack(), isNot(contains('Section 2')));
   });
 }
