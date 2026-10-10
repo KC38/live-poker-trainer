@@ -148,8 +148,9 @@ class SettingsScreen extends ConsumerWidget {
               style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 8),
+            // Theme elevated / outlined (radius 14) — not M3 stadium FilledButton.
             if (anonymous) ...[
-              FilledButton(
+              ElevatedButton(
                 onPressed: () => pushSaveProgressAuth(context),
                 child: const Text('Create an account'),
               ),
