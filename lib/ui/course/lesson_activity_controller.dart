@@ -300,7 +300,9 @@ class LessonActivityController extends ChangeNotifier {
       );
       return true;
     }());
-    _draft = _draft.copyWith(choiceId: choiceId);
+    // Choice answers and ordered picks are alternate draft shapes — clear the
+    // other so Undo/Redo restore one coherent local answer (LPT-62).
+    _draft = _draft.copyWith(choiceId: choiceId, orderedIds: const <String>[]);
     _tappedSeatLabel = seatLabel;
     notifyListeners();
     if (autoSubmit) {
@@ -311,7 +313,10 @@ class LessonActivityController extends ChangeNotifier {
 
   void setOrderedIds(List<String> ids, {bool autoSubmit = false}) {
     if (_submitting || _lastResult != null) return;
-    _draft = _draft.copyWith(orderedIds: List.unmodifiable(ids));
+    _draft = _draft.copyWith(
+      orderedIds: List.unmodifiable(ids),
+      clearChoice: true,
+    );
     notifyListeners();
     if (autoSubmit) {
       _selectionHaptic();
