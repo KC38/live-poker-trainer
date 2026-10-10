@@ -407,14 +407,13 @@ class _FeltTableViewState extends State<FeltTableView> {
                 seatTap == null
                     ? HitTestBehavior.deferToChild
                     : HitTestBehavior.opaque,
-            key:
-                seatTap == null
-                    ? null
-                    : ValueKey<String>(
-                      player.isHero
-                          ? 'lesson-seat-hero'
-                          : 'lesson-seat-${player.id}',
-                    ),
+            // Keep the seat key even when taps lock (Nice! / Continue).
+            // Dropping the key remounts DealtCardReveal and replays the deal.
+            key: ValueKey<String>(
+              player.isHero
+                  ? 'lesson-seat-hero'
+                  : 'lesson-seat-${player.id}',
+            ),
             onTap: seatTap,
             child: Semantics(
               button: seatTap != null,
@@ -661,10 +660,8 @@ class _FeltTableViewState extends State<FeltTableView> {
           top: board.columnTop,
           child: Center(
             child: GestureDetector(
-              key:
-                  widget.onBoardTap == null
-                      ? null
-                      : const ValueKey<String>('lesson-board'),
+              // Stable even when board taps lock — same remount trap as seats.
+              key: const ValueKey<String>('lesson-board'),
               behavior: HitTestBehavior.translucent,
               // Per-card taps own the hit target; whole-board tap stays for
               // steps that treat the board as one answer.
