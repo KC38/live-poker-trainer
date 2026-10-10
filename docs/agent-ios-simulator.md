@@ -154,6 +154,7 @@ That fast-forwards the primary clone and hot-restarts (or starts) the mini.
 python3 tools/agent_tap.py openlesson --text lesson-01-01-01-your-two-cards
 python3 tools/agent_tap.py tap --text "Continue"
 python3 tools/agent_tap.py tap --text "Your hole cards"
+python3 tools/agent_tap.py back   # dismiss modal sheets / pop top route
 ```
 
 Ticket worktree before merge (pass that session's log):

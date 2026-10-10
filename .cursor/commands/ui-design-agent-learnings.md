@@ -45,6 +45,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 - Prefer exact `agent_tap` labels from the screen. Broad needles like
   `Continue` can hit Home chrome instead of the lesson control.
+- Prefer `python3 tools/agent_tap.py back` (no `--text`) to dismiss modal
+  bottom sheets (Hearts refill, legends). A `tap --text Back` needle is
+  not required and often missing on sheets.
 - Prefer `openlesson` with the catalog id from `course_catalog` / `rg`
   (`lesson-01-02-02-best-five-kickers`), not the Home title and not a
   guessed `01-01-0N` from ledger order — both yield "Unknown lesson".
