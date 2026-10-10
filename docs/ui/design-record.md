@@ -173,9 +173,9 @@ I CAN DO IT use the elevated button.
 
 Lesson feedback Continue and lesson result CONTINUE use the elevated button
 (radius 14). The Settings Chip display segments ($, BB, Both) use JetBrains
-Mono. Settings Account **Create an account** / **Sign out** use the Theme
-elevated and outlined button metrics (radius 14); they are not stadium
-`FilledButton`s.
+Mono. Settings Account **Create an account** / **Sign out** and Profile guest
+**Create an account** use the Theme elevated and outlined button metrics
+(radius 14); they are not stadium `FilledButton`s.
 
 ### Shipped
 
@@ -188,7 +188,9 @@ Save progress CTAs and celebration chips are `SaveProgressScreen` in
 copies those elevated / outlined / gold-bright link roles.
 
 Chip display segments and Account CTAs are on `SettingsScreen`
-(`lib/ui/screens/settings_screen.dart`). The next screen that labels a chip
+(`lib/ui/screens/settings_screen.dart`). Profile guest **Create an account**
+is the Theme elevated button on `ProfileScreen`
+(`lib/ui/screens/profile_screen.dart`). The next screen that labels a chip
 amount copies that data type. Account primary / secondary copy the elevated
 and outlined Theme metrics.
 
@@ -532,7 +534,8 @@ gems. Hearts update in place on Home without blanking it.
 ## Profile
 
 The Profile tab keeps Course and Live Training in separate blocks. Guest
-copy offers Create an account and never claims a signed-in account exists.
+copy offers **Create an account** as the Theme elevated button (radius 14)
+and never claims a signed-in account exists.
 
 The Course card shows lifetime XP, streak, accepted accuracy, mastery, and
 the learner’s place as `SECTION N, UNIT M` plus the current unit title from
