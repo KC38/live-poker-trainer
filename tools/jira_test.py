@@ -211,6 +211,77 @@ class OperationsTest(unittest.TestCase):
                     jira.attach("LPT-59", [str(path)])
             self.assertIn("did not return that file name", str(ctx.exception))
 
+    def test_wiki_embed_names_require_image_extension(self) -> None:
+        wiki = (
+            "!LPT-60-validated.png|thumbnail!\n"
+            "plain !emphasis! is not an image\n"
+            "!shot.JPG|thumbnail!"
+        )
+        self.assertEqual(
+            jira._wiki_embed_names(wiki),
+            ["LPT-60-validated.png", "shot.JPG"],
+        )
+
+    def test_verify_embeds_lists_orphans(self) -> None:
+        fake = self._fake({
+            ("GET", "/2/issue/LPT-60"): {
+                "fields": {
+                    "attachment": [{"filename": "LPT-60-hint.png"}],
+                    "description": "!lesson-issue.png|thumbnail!",
+                    "comment": {
+                        "comments": [
+                            {
+                                "id": "10167",
+                                "body": "!LPT-60-validated.png|thumbnail!\n!LPT-60-hint.png|thumbnail!",
+                            }
+                        ]
+                    },
+                }
+            }
+        })
+        with mock.patch.object(jira, "request", fake):
+            report = jira.verify_embeds(["LPT-60"])
+        self.assertEqual(
+            report,
+            [
+                "LPT-60\tdescription\tlesson-issue.png",
+                "LPT-60\tcomment:10167\tLPT-60-validated.png",
+            ],
+        )
+
+    def test_repair_embeds_strips_orphans(self) -> None:
+        issue = {
+            "fields": {
+                "attachment": [{"filename": "LPT-60-hint.png"}],
+                "description": "Before\n\n!missing.png|thumbnail!\n\nAfter",
+                "comment": {
+                    "comments": [
+                        {
+                            "id": "10167",
+                            "body": "ok\n!LPT-60-validated.png|thumbnail!\n!LPT-60-hint.png|thumbnail!",
+                        }
+                    ]
+                },
+            }
+        }
+        fake = self._fake({("GET", "/2/issue/LPT-60"): issue})
+        with mock.patch.object(jira, "request", fake):
+            changed = jira.repair_embeds(["LPT-60"])
+        self.assertEqual(
+            changed,
+            [
+                "LPT-60\tdescription\tstripped orphans",
+                "LPT-60\tcomment:10167\tstripped orphans",
+            ],
+        )
+        put_desc = [c for c in self.calls if c[0] == "PUT" and c[1] == "/2/issue/LPT-60"][0]
+        self.assertNotIn("missing.png", put_desc[2]["fields"]["description"])
+        put_comment = [
+            c for c in self.calls if c[0] == "PUT" and c[1].endswith("/comment/10167")
+        ][0]
+        self.assertNotIn("LPT-60-validated.png", put_comment[2]["body"])
+        self.assertIn("!LPT-60-hint.png|thumbnail!", put_comment[2]["body"])
+
     def test_edit_adds_and_removes_labels_without_replacing(self) -> None:
         fake = self._fake({})
         with mock.patch.object(jira, "request", fake):

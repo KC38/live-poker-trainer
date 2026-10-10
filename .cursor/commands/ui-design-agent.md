@@ -143,6 +143,7 @@ learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 | Create | `python3 tools/jira.py create --type Story --summary "…" --priority Medium --labels ui,ui-agent,lesson --body-file body.md --attach <surface>-issue.png` |
 | Edit fields or labels | `python3 tools/jira.py edit LPT-NN [--body-file body.md] [--add-label needs-human] [--remove-label …]` |
 | Comment with screenshots | `python3 tools/jira.py comment LPT-NN --body-file note.md --attach shot.png` |
+| Verify thumbs resolve | `python3 tools/jira.py verify-embeds LPT-NN` (must exit 0 before Done) |
 | Move | `python3 tools/jira.py transition LPT-NN --to "In Progress"` (statuses: To Do, In Progress, In Review, Done) |
 | Block | `python3 tools/jira.py link --type Blocks --inward LPT-A --outward LPT-B` (A blocks B) |
 
@@ -471,7 +472,10 @@ Close only when every criterion passed on origin/main:
    Also state the design-record section and the sentence that landed, and
    that the images are from that live session (not the pre-fix issue
    shots).
-2. `jira.py transition LPT-NN --to Done`. Confirm the status it prints.
+2. `python3 tools/jira.py verify-embeds LPT-NN` must exit 0. If it lists
+   orphan wiki thumbs (Preview unavailable in Jira), attach the missing
+   PNG and re-comment — do not transition yet.
+3. `jira.py transition LPT-NN --to Done`. Confirm the status it prints.
    Never transition to Done if the close comment lacks a validated
    screenshot attachment.
 
