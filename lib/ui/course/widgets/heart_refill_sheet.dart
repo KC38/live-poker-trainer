@@ -1,4 +1,4 @@
-/// Duolingo-style heart refill sheet: practice, ad, gems, and timer.
+/// Heart refill sheet: practice, ad, gems, and timer (Theme Manrope type).
 library;
 
 import 'dart:async';
@@ -67,7 +67,7 @@ Future<HeartRefillAction?> showHeartRefillSheet({
   );
 }
 
-/// Bottom sheet listing Duo-style ways to restore hearts.
+/// Bottom sheet listing ways to restore hearts.
 class HeartRefillSheet extends StatefulWidget {
   /// Creates the sheet.
   const HeartRefillSheet({
@@ -171,7 +171,7 @@ class _HeartRefillSheetState extends State<HeartRefillSheet> {
             Text(
               _full ? 'Hearts are full' : 'Restore hearts',
               textAlign: TextAlign.center,
-              style: GoogleFonts.nunito(
+              style: GoogleFonts.manrope(
                 color: Colors.white,
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
@@ -182,7 +182,7 @@ class _HeartRefillSheetState extends State<HeartRefillSheet> {
               Text(
                 'Next heart in $nextLabel',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.nunito(
+                style: GoogleFonts.jetBrainsMono(
                   color: Colors.white70,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -259,7 +259,7 @@ class _RefillOption extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.manrope(
                         color: enabled ? Colors.white : Colors.white54,
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -267,7 +267,7 @@ class _RefillOption extends StatelessWidget {
                     ),
                     Text(
                       subtitle,
-                      style: GoogleFonts.nunito(
+                      style: GoogleFonts.manrope(
                         color: enabled ? Colors.white70 : Colors.white38,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -337,11 +337,14 @@ Future<bool> _showPlaceholderAd(BuildContext context) async {
         backgroundColor: AppColors.feltDark,
         title: Text(
           'Sponsored break',
-          style: GoogleFonts.nunito(color: Colors.white, fontWeight: FontWeight.w800),
+          style: GoogleFonts.manrope(
+            color: Colors.white,
+            fontWeight: FontWeight.w800,
+          ),
         ),
         content: Text(
           'Thanks for watching. Your heart is on the way…',
-          style: GoogleFonts.nunito(color: Colors.white70),
+          style: GoogleFonts.manrope(color: Colors.white70),
         ),
       );
     },
