@@ -165,4 +165,39 @@ void main() {
     expect(current, 1);
     expect(buried, 0);
   });
+
+  testWidgets('back pops a modal bottom sheet', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            return Scaffold(
+              body: TextButton(
+                onPressed: () {
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder: (_) => const SizedBox(
+                      height: 120,
+                      child: Center(child: Text('Hearts sheet')),
+                    ),
+                  );
+                },
+                child: const Text('Open sheet'),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open sheet'));
+    await tester.pumpAndSettle();
+    expect(find.text('Hearts sheet'), findsOneWidget);
+
+    AgentUiDriver.install();
+    AgentCommands.debugEmit('back');
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Hearts sheet'), findsNothing);
+  });
 }

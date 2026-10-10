@@ -43,6 +43,14 @@ final class AgentUiDriver {
       await _signOut?.call();
       return;
     }
+    // Pop the top route (modal bottom sheets, dialogs, pushed screens).
+    // Poker-table also listens for `back`; handling it here covers Hearts
+    // refill and other sheets that never registered their own listener.
+    // Leave `dismiss` to GameProvider (mid-hand coach).
+    if (normalized == 'back') {
+      await _popTopRoute();
+      return;
+    }
     if (normalized.startsWith('openlesson:') ||
         normalized.startsWith('open_lesson:')) {
       final id = cmd.substring(cmd.indexOf(':') + 1).trim();
@@ -63,6 +71,26 @@ final class AgentUiDriver {
     }
     if (needle == null || needle.isEmpty) return;
     await _tapText(needle);
+  }
+
+  /// Pops the deepest navigator that can pop (sheet/dialog/route).
+  static Future<void> _popTopRoute() async {
+    final navigators = <NavigatorState>[];
+    void visit(Element element) {
+      if (element is StatefulElement && element.state is NavigatorState) {
+        navigators.add(element.state as NavigatorState);
+      }
+      element.visitChildren(visit);
+    }
+
+    WidgetsBinding.instance.rootElement?.visitChildren(visit);
+    for (final nav in navigators.reversed) {
+      if (!nav.mounted || !nav.canPop()) continue;
+      final didPop = await nav.maybePop();
+      debugPrint('AgentUiDriver: back -> popped=$didPop');
+      return;
+    }
+    debugPrint('AgentUiDriver: back -> nothing to pop');
   }
 
   static Future<void> _typeText(String value) async {

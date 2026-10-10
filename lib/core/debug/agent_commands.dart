@@ -8,7 +8,8 @@
 ///
 /// Commands: `start`, `fold`, `call`, `check`, `raise`, `raise:45`, `allin`,
 /// `next`/`dismiss` (dismisses mid-hand coach; otherwise next hand),
-/// `retry`/`resume`, `back`,
+/// `retry`/`resume`,
+/// `back` ([AgentUiDriver] pops the top route — modal sheets included),
 /// `tap` / `taptext` / `tap:<label>` (UI text tap; optional `text=` param),
 /// `type` / `enter` / `type:<value>` (fill focused/first EditableText),
 /// `signout`.
