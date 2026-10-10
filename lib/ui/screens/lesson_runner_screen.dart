@@ -1192,12 +1192,16 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final onClose = _closeLesson;
     if (_bootstrapping || _error != null) {
       final (livesRemaining, livesMax) = _frameLivesWhilePending();
+      // Never leave Rex beside an empty bubble (LPT-48). Spinner / Retry
+      // stay on the stage; the bubble names what is happening.
       return LessonScreenLayout(
         progress: 0,
         livesRemaining: livesRemaining,
         livesMax: livesMax,
         onClose: onClose,
-        speech: '',
+        speech: _error != null
+            ? kLessonStartErrorSpeech
+            : kLessonBootstrapSpeech,
         expression: LessonMascotExpression.thinking,
         onUndo: () {},
         onRedo: () {},
