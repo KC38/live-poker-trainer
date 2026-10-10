@@ -102,10 +102,10 @@ void main() {
     expect(ack, 1);
   });
 
-  testWidgets('explain cues both playing hole cards, not the You seat', (
+  testWidgets('explain SoftPulse is one next card, not both holes or You', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(390, 844);
+    tester.view.physicalSize = const Size(375, 812);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
@@ -139,10 +139,9 @@ void main() {
     );
     await tester.pump();
 
-    // Both playing hole cards SoftPulse individually — not the You name box.
-    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNWidgets(2));
+    // One gold SoftPulse on playOrder next (Ah) — never both holes or You.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
 
-    final glowFinder = find.byKey(const ValueKey<String>('glow-highlight'));
     final ah = tester.getCenter(
       find.byKey(const ValueKey<String>('lesson-hero-card-0')),
     );
@@ -152,17 +151,17 @@ void main() {
     final you = tester.getCenter(
       find.byKey(const ValueKey<String>('seat-box-0')),
     );
-    final glows = List.generate(2, (i) => tester.getCenter(glowFinder.at(i)));
-    expect(glows.any((g) => (g.dx - ah.dx).abs() < 8), isTrue);
-    expect(glows.any((g) => (g.dx - kd.dx).abs() < 8), isTrue);
-    for (final g in glows) {
-      expect(g.dy, lessThan(you.dy - 8));
-    }
+    final glow = tester.getCenter(
+      find.byKey(const ValueKey<String>('glow-highlight')),
+    );
+    expect(glow.dx, closeTo(ah.dx, 8));
+    expect(glow.dy, lessThan(you.dy - 8));
+    expect((glow.dx - kd.dx).abs(), greaterThan(8));
 
     await tester.tap(find.byKey(const ValueKey<String>('lesson-hero-card-0')));
     await tester.pump();
 
-    // Ah keeps a cyan selected ring; gold SoftPulse stays on Kd.
+    // Ah keeps a cyan selected ring; gold SoftPulse advances to Kd.
     expect(
       find.byKey(const ValueKey<String>('selection-highlight')),
       findsOneWidget,

@@ -1,4 +1,8 @@
 /// Best-five / kicker teaching visuals and tap-five-of-seven mapping.
+///
+/// Explain SoftPulse is one gold target at a time on `playOrder` next
+/// (`LessonBestFiveExplainTable`) — do not ring every remaining playing
+/// hole together (LPT-55).
 library;
 
 import 'dart:math';
@@ -513,18 +517,15 @@ class _LessonBestFiveExplainTableState
       for (var i = 0; i < _deal.board.length; i++)
         if (!_deal.playing.contains(_deal.board[i])) i,
     };
+    // One gold SoftPulse at a time on `_nextCode` (LPT-55). Ring the card,
+    // never the You name box — same sequential cue as button → SB → BB.
     final highlightHero = <int>{};
     final highlightBoard = <int>{};
     if (widget.showGuidance && widget.enabled && next != null) {
-      // Ring every remaining hole that plays — individually — so Hint
-      // never wraps the You name box as one player-area cue.
-      for (var i = 0; i < _deal.hero.length; i++) {
-        if (_deal.playing.contains(_deal.hero[i]) &&
-            !_tapped.contains(_deal.hero[i])) {
-          highlightHero.add(i);
-        }
-      }
-      if (highlightHero.isEmpty) {
+      final heroIdx = _deal.hero.indexOf(next);
+      if (heroIdx >= 0) {
+        highlightHero.add(heroIdx);
+      } else {
         final boardIdx = _deal.board.indexOf(next);
         if (boardIdx >= 0) highlightBoard.add(boardIdx);
       }
