@@ -138,22 +138,78 @@ class OperationsTest(unittest.TestCase):
 
     def test_create_attaches_and_shows_screenshots(self) -> None:
         fake = self._fake({("POST", "/2/issue"): {"key": "LPT-41"}})
-        with mock.patch.object(jira, "request", fake), mock.patch.object(
-            jira, "attach", return_value=["home-1.png", "home-2.png"]
-        ) as attach:
-            key = jira.create(
-                "Story", "Home clips", "## What happened\n![clip](home-1.png)",
-                priority="High", labels=["ui", "ui-agent"], files=["/tmp/home-1.png", "/tmp/home-2.png"],
-            )
+        with tempfile.TemporaryDirectory() as tmp:
+            home1 = Path(tmp) / "home-1.png"
+            home2 = Path(tmp) / "home-2.png"
+            home1.write_bytes(b"png1")
+            home2.write_bytes(b"png2")
+            with mock.patch.object(jira, "request", fake), mock.patch.object(
+                jira, "attach", return_value=["home-1.png", "home-2.png"]
+            ) as attach:
+                key = jira.create(
+                    "Story",
+                    "Home clips",
+                    f"## What happened\n![clip]({home1})",
+                    priority="High",
+                    labels=["ui", "ui-agent"],
+                    files=[str(home1), str(home2)],
+                )
         self.assertEqual(key, "LPT-41")
-        attach.assert_called_once_with("LPT-41", ["/tmp/home-1.png", "/tmp/home-2.png"])
+        attach.assert_called_once()
+        self.assertEqual(attach.call_args.args[0], "LPT-41")
+        self.assertEqual(
+            {Path(p).name for p in attach.call_args.args[1]},
+            {"home-1.png", "home-2.png"},
+        )
         created = self.calls[0][2]["fields"]
         self.assertEqual(created["project"], {"key": "LPT"})
         self.assertEqual(created["labels"], ["ui", "ui-agent"])
         self.assertEqual(created["priority"], {"name": "High"})
+        # Initial create must not embed thumbs before upload is confirmed.
+        self.assertNotIn("!home-1.png", created["description"])
         description = self.calls[1][2]["fields"]["description"]
         self.assertEqual(description.count("!home-1.png|thumbnail!"), 1)
         self.assertIn("!home-2.png|thumbnail!", description)
+
+    def test_comment_refuses_orphan_wiki_embeds(self) -> None:
+        fake = self._fake({
+            ("GET", "/2/issue/LPT-59"): {
+                "fields": {"attachment": [{"filename": "LPT-59-before.png"}]},
+            },
+        })
+        with mock.patch.object(jira, "request", fake), mock.patch.object(
+            jira, "attach", return_value=["LPT-59-before.png"]
+        ):
+            with self.assertRaises(jira.JiraError) as ctx:
+                jira.comment(
+                    "LPT-59",
+                    "![validated](LPT-59-validated.png)\n![before](LPT-59-before.png)",
+                    files=[],
+                )
+        self.assertIn("LPT-59-validated.png", str(ctx.exception))
+        self.assertFalse(any(c[0] == "POST" and c[1].endswith("/comment") for c in self.calls))
+
+    def test_attach_rejects_missing_and_empty_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            missing = Path(tmp) / "nope.png"
+            empty = Path(tmp) / "empty.png"
+            empty.write_bytes(b"")
+            with self.assertRaises(jira.JiraError) as missing_ctx:
+                jira.attach("LPT-59", [str(missing)])
+            self.assertIn("not a file", str(missing_ctx.exception))
+            with self.assertRaises(jira.JiraError) as empty_ctx:
+                jira.attach("LPT-59", [str(empty)])
+            self.assertIn("empty file", str(empty_ctx.exception))
+
+    def test_attach_requires_returned_filename(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "shot.png"
+            path.write_bytes(b"png")
+            fake = self._fake({("POST", "/3/issue/LPT-59/attachments"): []})
+            with mock.patch.object(jira, "request", fake):
+                with self.assertRaises(jira.JiraError) as ctx:
+                    jira.attach("LPT-59", [str(path)])
+            self.assertIn("did not return that file name", str(ctx.exception))
 
     def test_edit_adds_and_removes_labels_without_replacing(self) -> None:
         fake = self._fake({})

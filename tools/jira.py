@@ -140,6 +140,8 @@ _IMAGE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
 _LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
 _BOLD = re.compile(r"\*\*(.+?)\*\*")
 _TABLE_SEP = re.compile(r"^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$")
+# Jira wiki image: !file.png! or !file.png|thumbnail!
+_WIKI_EMBED = re.compile(r"!([^|!\n]+)(?:\|[^!\n]*)?!")
 
 
 def _inline(text: str) -> str:
@@ -272,11 +274,71 @@ def format_issue(issue: Json) -> str:
     return "\n".join(lines)
 
 
+def _wiki_embed_names(wiki: str) -> List[str]:
+    """Attachment file names referenced by wiki ``!file|thumbnail!`` embeds."""
+    return _WIKI_EMBED.findall(wiki)
+
+
+def _strip_wiki_embeds(wiki: str) -> str:
+    """Remove wiki image embeds (used before attachments are confirmed)."""
+    return _WIKI_EMBED.sub("", wiki)
+
+
+def _resolve_upload_paths(files: Optional[List[str]], markdown: str) -> List[str]:
+    """Paths to upload: ``--attach`` plus Markdown image targets that exist on disk."""
+    ordered: List[str] = []
+    seen: set[str] = set()
+    for raw in list(files or []) + _IMAGE.findall(markdown):
+        path = Path(raw).expanduser()
+        if not path.is_file():
+            continue
+        resolved = str(path.resolve())
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        ordered.append(resolved)
+    return ordered
+
+
+def _attachment_names(key: str) -> set[str]:
+    """File names currently attached to ``key``."""
+    issue = request(
+        "GET",
+        f"/2/issue/{key}",
+        query={"fields": "attachment"},
+    )
+    items = (issue or {}).get("fields", {}).get("attachment") or []
+    return {item["filename"] for item in items if item.get("filename")}
+
+
+def _assert_wiki_embeds_present(wiki: str, allowed: set[str], context: str) -> None:
+    """Refuse wiki that would show 'Preview unavailable' for missing attachments."""
+    missing = sorted({name for name in _wiki_embed_names(wiki) if name not in allowed})
+    if not missing:
+        return
+    raise JiraError(
+        f"{context} references attachments that are not on the issue: "
+        f"{', '.join(missing)}. Pass each file via --attach (or as an existing "
+        f"path in a Markdown image) so it uploads before the wiki thumbnail is "
+        f"posted."
+    )
+
+
 def attach(key: str, paths: List[str]) -> List[str]:
-    """Upload files to ``key``. Returns the stored file names."""
+    """Upload files to ``key``. Returns the stored file names.
+
+    Each path must exist, be a regular file, and be non-empty. The Jira response
+    must include the uploaded file name; otherwise this raises instead of
+    letting a later wiki ``!file|thumbnail!`` render as Preview unavailable.
+    """
     names: List[str] = []
     for raw_path in paths:
-        path = Path(raw_path)
+        path = Path(raw_path).expanduser()
+        if not path.is_file():
+            raise JiraError(f"attach {key}: not a file: {path}")
+        size = path.stat().st_size
+        if size <= 0:
+            raise JiraError(f"attach {key}: empty file: {path}")
         boundary = uuid.uuid4().hex
         mime = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
         body = (
@@ -292,7 +354,13 @@ def attach(key: str, paths: List[str]) -> List[str]:
                 "X-Atlassian-Token": "no-check",
             },
         )
-        names.extend(item["filename"] for item in result or [])
+        uploaded = [item.get("filename") for item in (result or []) if item.get("filename")]
+        if path.name not in uploaded:
+            raise JiraError(
+                f"attach {key}: upload of {path.name} ({size} bytes) did not "
+                f"return that file name (got {uploaded or '[]'})"
+            )
+        names.extend(uploaded)
     return names
 
 
@@ -313,23 +381,31 @@ def create(
     files: Optional[List[str]] = None,
 ) -> str:
     """Create an LPT issue from Markdown; attach files and show them. Returns the key."""
+    upload_paths = _resolve_upload_paths(files, body)
+    wiki = md_to_wiki(body)
+    _assert_wiki_embeds_present(
+        wiki, {Path(p).name for p in upload_paths}, "create"
+    )
+    # Post text first without embeds so a failed upload cannot leave orphan thumbs.
     fields: Json = {
         "project": {"key": PROJECT},
         "issuetype": {"name": issue_type},
         "summary": summary,
-        "description": md_to_wiki(body),
+        "description": _strip_wiki_embeds(wiki),
     }
     if priority:
         fields["priority"] = {"name": priority}
     if labels:
         fields["labels"] = labels
     key = request("POST", "/2/issue", body={"fields": fields})["key"]
-    if files:
-        names = attach(key, files)
+    names = attach(key, upload_paths) if upload_paths else []
+    final = _embed_missing(wiki, names)
+    _assert_wiki_embeds_present(final, set(names), f"create {key}")
+    if final != fields["description"]:
         request(
             "PUT",
             f"/2/issue/{key}",
-            body={"fields": {"description": _embed_missing(fields["description"], names)}},
+            body={"fields": {"description": final}},
         )
     return key
 
@@ -348,7 +424,9 @@ def edit(
     if summary:
         fields["summary"] = summary
     if body is not None:
-        fields["description"] = md_to_wiki(body)
+        wiki = md_to_wiki(body)
+        _assert_wiki_embeds_present(wiki, _attachment_names(key), f"edit {key}")
+        fields["description"] = wiki
     if priority:
         fields["priority"] = {"name": priority}
     label_ops = [{"add": label} for label in add_labels or []]
@@ -360,8 +438,15 @@ def edit(
 
 def comment(key: str, body: str, files: Optional[List[str]] = None) -> str:
     """Comment on ``key`` from Markdown, attaching and showing files. Returns the comment id."""
-    names = attach(key, files) if files else []
-    wiki = _embed_missing(md_to_wiki(body), names)
+    upload_paths = _resolve_upload_paths(files, body)
+    wiki = md_to_wiki(body)
+    existing = _attachment_names(key)
+    planned = {Path(p).name for p in upload_paths} | existing
+    _assert_wiki_embeds_present(wiki, planned, f"comment {key}")
+    names = attach(key, upload_paths) if upload_paths else []
+    allowed = set(names) | existing | _attachment_names(key)
+    wiki = _embed_missing(wiki, names)
+    _assert_wiki_embeds_present(wiki, allowed, f"comment {key}")
     return request("POST", f"/2/issue/{key}/comment", body={"body": wiki})["id"]
 
 
