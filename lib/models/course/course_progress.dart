@@ -16,7 +16,10 @@ class CourseProgress {
     required this.mastery,
     required this.reviewsDue,
     this.currentSectionId,
+    this.currentSectionOrder,
     this.currentSectionTitle,
+    this.currentUnitOrder,
+    this.currentUnitTitle,
     this.legacyLifetimeXp,
   });
 
@@ -31,7 +34,10 @@ class CourseProgress {
       mastery = 0,
       reviewsDue = 0,
       currentSectionId = null,
+      currentSectionOrder = null,
       currentSectionTitle = null,
+      currentUnitOrder = null,
+      currentUnitTitle = null,
       legacyLifetimeXp = null;
 
   /// Parsed from `getCourseState`. [catalog] resolves the current section.
@@ -61,6 +67,7 @@ class CourseProgress {
         _string(profile['recommendedLessonId']);
     final section =
         lessonId == null ? null : catalog.sectionForLesson(lessonId);
+    final unit = lessonId == null ? null : catalog.unitForLesson(lessonId);
     final reviewsRaw = state['reviewsDue'];
     final legacy = profile['legacyLifetimeXp'];
     final legacyLabel = profile['legacyXpLabel'];
@@ -74,7 +81,10 @@ class CourseProgress {
       mastery: mastery,
       reviewsDue: reviewsRaw is List ? reviewsRaw.length : 0,
       currentSectionId: section?.id,
+      currentSectionOrder: section?.order,
       currentSectionTitle: section?.title,
+      currentUnitOrder: unit?.order,
+      currentUnitTitle: unit?.title,
       legacyLifetimeXp:
           legacyLabel == 'legacy_academy' && legacy is num
               ? legacy.toInt()
@@ -91,10 +101,33 @@ class CourseProgress {
   final double mastery;
   final int reviewsDue;
   final String? currentSectionId;
+
+  /// Catalog section order (1-based), when a current lesson resolves.
+  final int? currentSectionOrder;
+
+  /// Experience-band section title from the catalog. Prefer [coursePlaceEyebrow]
+  /// and [coursePlaceTitle] for UI.
   final String? currentSectionTitle;
+
+  /// Catalog unit order within the section, when a current lesson resolves.
+  final int? currentUnitOrder;
+
+  /// Current unit title from the catalog (Home banner body).
+  final String? currentUnitTitle;
 
   /// Academy XP kept only as labeled metadata. Not added to [lifetimeXp].
   final int? legacyLifetimeXp;
+
+  /// Home-style place eyebrow: `SECTION N, UNIT M`.
+  String? get coursePlaceEyebrow {
+    final sectionOrder = currentSectionOrder;
+    final unitOrder = currentUnitOrder;
+    if (sectionOrder == null || unitOrder == null) return null;
+    return 'SECTION $sectionOrder, UNIT $unitOrder';
+  }
+
+  /// Unit title under [coursePlaceEyebrow], matching the Home unit banner.
+  String? get coursePlaceTitle => currentUnitTitle;
 
   static String? _string(Object? value) {
     if (value is! String || value.isEmpty) return null;

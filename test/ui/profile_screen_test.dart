@@ -165,7 +165,10 @@ void main() {
               acceptedAccuracy: 0.5,
               mastery: 0.4,
               reviewsDue: 1,
-              currentSectionTitle: 'Foundations',
+              currentSectionOrder: 1,
+              currentSectionTitle: 'Never Played',
+              currentUnitOrder: 1,
+              currentUnitTitle: 'Cards and the table',
             ),
           ),
         ],
@@ -211,7 +214,10 @@ void main() {
               acceptedAccuracy: 1,
               mastery: 0.4,
               reviewsDue: 0,
-              currentSectionTitle: 'Cards and the table',
+              currentSectionOrder: 1,
+              currentSectionTitle: 'Never Played',
+              currentUnitOrder: 1,
+              currentUnitTitle: 'Cards and the table',
             ),
           ),
         ],
@@ -272,6 +278,9 @@ void main() {
     }
     expect(find.text('Mastery'), findsOneWidget);
     expect(find.text('40%'), findsOneWidget);
+    expect(find.text('SECTION 1, UNIT 1'), findsOneWidget);
+    expect(find.text('Cards and the table'), findsOneWidget);
+    expect(find.text('Never Played'), findsNothing);
     // Live Training still explains that style comes from full-hand play.
     expect(
       find.text('Coaching record, results, and style from full-hand play.'),
@@ -432,4 +441,55 @@ void main() {
 
     expect(find.text('Kushal C'), findsOneWidget);
   });
+
+  testWidgets(
+    'Course place line matches Home SECTION/UNIT language at mini size',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            authUidProvider.overrideWithValue('test-user'),
+            userDocProvider.overrideWith((ref) async => users.document),
+            userRepositoryProvider.overrideWithValue(users),
+            progressRepositoryProvider.overrideWithValue(progress),
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
+            courseProgressProvider.overrideWith(
+              (ref) async => const CourseProgress(
+                loaded: true,
+                available: true,
+                lifetimeXp: 75,
+                gems: 5,
+                currentStreak: 1,
+                acceptedAccuracy: 1,
+                mastery: 1,
+                reviewsDue: 0,
+                currentSectionOrder: 1,
+                currentSectionTitle: 'Never Played',
+                currentUnitOrder: 1,
+                currentUnitTitle: 'Cards and the table',
+              ),
+            ),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: const ProfileScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SECTION 1, UNIT 1'), findsOneWidget);
+      expect(find.text('Cards and the table'), findsOneWidget);
+      expect(find.text('Never Played'), findsNothing);
+      expect(find.text('75'), findsOneWidget);
+      expect(find.text('No reviews due'), findsOneWidget);
+    },
+  );
 }
