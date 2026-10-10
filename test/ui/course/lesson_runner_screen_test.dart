@@ -250,6 +250,62 @@ void main() {
     expect(find.text("Oops, that's not correct"), findsNothing);
   });
 
+  testWidgets('graded coach bubble shows feedback, not the idle ask (LPT-64)', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: service,
+          startRequestId: 'start_grade_speech',
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    for (
+      var i = 0;
+      i < 40 && find.textContaining('Tap your cards').evaluate().isEmpty;
+      i++
+    ) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.textContaining('Tap your cards'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Nice!'), findsOneWidget);
+    final niceLayout = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(niceLayout.speech, 'Nice.');
+    expect(find.textContaining('Tap your cards'), findsNothing);
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.text('Continue'));
+    await tester.pump();
+    await tester.pump();
+    await tester.pump();
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-board')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.text("Oops, that's not correct"), findsOneWidget);
+    final oopsLayout = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(oopsLayout.speech, 'Look at your two cards.');
+    expect(find.textContaining('Tap your cards'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('feedback Continue uses the elevated button metrics', (
     tester,
   ) async {
