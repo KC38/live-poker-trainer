@@ -114,6 +114,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer, when `openlesson` lands on a locked start, reading Rex's bubble
   against the gold Open-previous CTA — a Retry-only line with that button
   still up is a coach-copy bug (LPT-51), not a clean gate.
+- Prefer, when worktree `flutter run` fails with Xcode "No space left on
+  device", clearing `~/Library/Developer/Xcode/DerivedData/Runner-*` (and
+  `/tmp/flutter_tools.*`) then retrying once — do not `needs-human` on the
+  first disk-full build (LPT-61).
 
 ## Ops (simulator, CLI, Jira)
 
@@ -193,3 +197,6 @@ trimming. Durable rules belong in the sections above, not only here.
   Deploy Cloud Functions before validated Oops shot.
 - 2026-10-10: LPT-60 Hint line stayed in coach bubble under Oops after
   Hint + wrong five; clear `_hintVisible` on grade.
+- 2026-10-10: LPT-61 picker post-grade SoftPulsed all five correct cards;
+  suite had locked `findsNWidgets(5)` on glow — dim leftovers + cyan only;
+  worktree build hit disk-full until DerivedData cleared.
