@@ -73,6 +73,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   surface (Settings, Profile, Save progress), grepping sibling guest
   **Create an account** call sites in the same walk so the twin does not
   wait another run (LPT-45 then LPT-46).
+- Prefer, when `refresh-simulator.sh` leaves only a `Launching…` line and a
+  dead pid, starting `flutter run` yourself in tmux with
+  `SIM_LOCK_RUN_ID=…` exported on that command line (same pattern as
+  worktree validation) instead of re-debugging the refresh script.
 
 ## Ops (simulator, CLI, Jira)
 
