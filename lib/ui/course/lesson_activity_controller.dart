@@ -105,13 +105,28 @@ class LessonActivityController extends ChangeNotifier {
 
   /// True while a multi-press node still has taps left.
   ///
-  /// Keeps Hint enabled after [hintUsed] until the sequence is complete, so
-  /// the bubble / SoftPulse for the *current* next press can be restored.
+  /// After [hintUsed], Hint re-enables only when the SoftPulse wave is closed
+  /// (learner tapped the cued target) so the next press can be hinted again.
   bool get sequentialPressesRemaining =>
       _sequentialPressesRemaining && _sequentialCueNodeKey == currentNodeKey;
 
-  /// Hint stays tappable while this node still has SoftPulse presses left.
-  bool get canRequestHint => !hintUsed || sequentialPressesRemaining;
+  /// Whether the Hint control should accept a tap right now.
+  ///
+  /// Multi-press SoftPulse: Hint is off while the current wave already shows
+  /// the next target (teaching SoftPulse or a just-revealed Hint). Tapping
+  /// that target closes the wave and re-enables Hint for the following press.
+  /// Single-press nodes: Hint stays available until used once on this screen.
+  bool get canRequestHint {
+    if (!hintUsed) {
+      if (sequentialPressesRemaining &&
+          _sequentialSoftPulseWaveOpen &&
+          showTargetCue) {
+        return false;
+      }
+      return true;
+    }
+    return sequentialPressesRemaining && !_sequentialSoftPulseWaveOpen;
+  }
 
   int get hintRequests => _hintRequests;
   String? get pendingIdempotencyKey => _pendingIdempotencyKey;
@@ -154,8 +169,9 @@ class LessonActivityController extends ChangeNotifier {
 
   /// Reports how many presses remain in a multi-press SoftPulse sequence.
   ///
-  /// Call from multi-press demos on build / after taps so Hint stays enabled
-  /// until [remainingPressCount] reaches zero. Does not consume SoftPulse.
+  /// Call from multi-press demos on build / after taps so Hint can re-open
+  /// SoftPulse until [remainingPressCount] reaches zero. Does not consume
+  /// SoftPulse.
   void notifySequentialPressProgress({required int remainingPressCount}) {
     final remaining = remainingPressCount > 0;
     var changed = false;
@@ -347,8 +363,9 @@ class LessonActivityController extends ChangeNotifier {
 
   /// Reveals the hint for the current lesson screen.
   ///
-  /// On multi-press nodes Hint may be tapped again while presses remain;
-  /// each reveal re-opens SoftPulse for the current next press only.
+  /// On multi-press nodes Hint may be tapped again after the learner taps
+  /// the cued target (wave closed) while presses remain; each reveal
+  /// re-opens SoftPulse for the current next press only.
   void revealHint() {
     _hintVisible = true;
     _hintUsedNodeKey = currentNodeKey;

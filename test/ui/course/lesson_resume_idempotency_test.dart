@@ -309,6 +309,8 @@ void main() {
 
     controller.notifySequentialPressProgress(remainingPressCount: 3);
     expect(controller.sequentialPressesRemaining, isTrue);
+    // SoftPulse already shows the current press — Hint waits for a tap.
+    expect(controller.canRequestHint, isFalse);
 
     controller.consumeSequentialSoftPulse();
     expect(controller.showTargetCue, isFalse);
@@ -317,7 +319,7 @@ void main() {
     controller.revealHint();
     expect(controller.hintUsed, isTrue);
     expect(controller.showTargetCue, isTrue);
-    expect(controller.canRequestHint, isTrue);
+    expect(controller.canRequestHint, isFalse);
 
     controller.consumeSequentialSoftPulse();
     expect(controller.showTargetCue, isFalse);
@@ -352,6 +354,7 @@ void main() {
 
     controller.revealHint();
     expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
     controller.consumeSequentialSoftPulse();
     expect(controller.showTargetCue, isFalse);
     expect(controller.canRequestHint, isTrue);

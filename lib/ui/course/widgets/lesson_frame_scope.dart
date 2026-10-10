@@ -30,12 +30,12 @@ class LessonFrameScope extends InheritedWidget {
       activityController != oldWidget.activityController;
 }
 
-/// Tells the frame how many multi-press taps remain (keeps Hint enabled).
+/// Tells the frame how many multi-press taps remain.
 ///
 /// Pass a positive count while SoftPulse targets remain; pass `0` when the
-/// sequence is finished. SoftPulse itself is gated by
-/// [LessonActivityController.showTargetCue] after
-/// [consumeLessonSequentialSoftPulse].
+/// sequence is finished. Hint re-enables only after
+/// [consumeLessonSequentialSoftPulse] closes the current wave. SoftPulse
+/// itself is gated by [LessonActivityController.showTargetCue].
 void reportLessonSequentialPressProgress(
   BuildContext context, {
   required int remainingPressCount,
