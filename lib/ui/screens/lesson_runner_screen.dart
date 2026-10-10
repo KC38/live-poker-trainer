@@ -90,6 +90,10 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   String? _error;
   String? _errorDetail;
   bool _bootstrapping = true;
+
+  /// Step [_bootstrapBody] is waiting on, named when the start times out.
+  _BootstrapStage _bootstrapStage = _BootstrapStage.signIn;
+  int _bootstrapGeneration = 0;
   bool _completing = false;
 
   /// True while Continue is swapping to the next activity — keeps feedback
@@ -187,16 +191,19 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     Object? failure;
     for (var attempt = 0; attempt < 2; attempt++) {
       try {
-        await _bootstrapBody().timeout(widget.bootstrapTimeout);
+        await _bootstrapBody(
+          ++_bootstrapGeneration,
+        ).timeout(widget.bootstrapTimeout);
         return;
       } on TimeoutException {
         if (!mounted) return;
+        final stage = _bootstrapStage;
         setState(() {
           _bootstrapping = false;
-          _error =
-              'Starting this lesson is taking too long. Check your connection '
-              'and retry.';
-          _errorDetail = 'TimeoutException after ${widget.bootstrapTimeout}';
+          _error = stage.timeoutMessage;
+          _errorDetail =
+              'TimeoutException after ${widget.bootstrapTimeout} '
+              'waiting on ${stage.label}';
         });
         return;
       } catch (error) {
@@ -239,10 +246,20 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     return catalog.lessonById(lesson.prerequisites.first);
   }
 
-  Future<void> _bootstrapBody() async {
+  /// Records [stage] unless a newer start has replaced [generation].
+  ///
+  /// A timed-out start keeps running, so it must not overwrite the stage of
+  /// the Retry that followed it.
+  void _enterStage(int generation, _BootstrapStage stage) {
+    if (generation == _bootstrapGeneration) _bootstrapStage = stage;
+  }
+
+  Future<void> _bootstrapBody(int generation) async {
+    _enterStage(generation, _BootstrapStage.signIn);
     if (widget.courseService == null) {
       await ref.read(authControllerProvider.notifier).ensureAnonymousSession();
     }
+    _enterStage(generation, _BootstrapStage.catalog);
     final catalog = await ref.read(courseCatalogProvider.future);
     final lesson = catalog.lessonById(widget.lessonId);
     if (lesson == null) {
@@ -255,6 +272,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     // the canonical full lesson id.
     final lessonId = lesson.id;
     final draft = ref.read(onboardingControllerProvider);
+    _enterStage(generation, _BootstrapStage.initializeProfile);
     await _service.initializeProfile(
       catalogVersion: catalog.catalogVersion,
       experienceBand: draft.experienceBand?.wireValue,
@@ -262,6 +280,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       streakGoalDays: draft.streakGoalDays,
       recommendedLessonId: draft.recommendedLessonId ?? lessonId,
     );
+    _enterStage(generation, _BootstrapStage.startLesson);
     final started = await _service.startLesson(
       lessonId: lessonId,
       catalogVersion: catalog.catalogVersion,
@@ -1916,4 +1935,27 @@ class _FeedbackFooter extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Ordered steps of a lesson start, named when the start times out.
+enum _BootstrapStage {
+  signIn('sign-in'),
+  catalog('course catalog'),
+  initializeProfile('initializeCourseProfile'),
+  startLesson('startCourseLesson');
+
+  const _BootstrapStage(this.label);
+
+  /// Name shown in Technical details.
+  final String label;
+
+  /// Learner-facing copy for a start that stalled at this step.
+  String get timeoutMessage => switch (this) {
+    signIn =>
+      'Signing in to start this lesson is taking too long. Check your '
+          'connection and retry.',
+    catalog || initializeProfile || startLesson =>
+      'Starting this lesson is taking too long. Check your connection '
+          'and retry.',
+  };
 }
