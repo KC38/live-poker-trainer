@@ -89,6 +89,14 @@ rm -f "$LOG_DIR"/run-*.log
 (unset UI_AGENT_LOOP_SOURCE_ONLY; bash "$LOOP" status >/dev/null) \
   || fail "status should exit 0 before the first run"
 
+# dart_vm_ready must match real Flutter VM URIs on macOS grep.
+vm_log="$tmp/vm.log"
+printf '%s\n' 'A Dart VM Service on iPhone 13 mini is available at: http://127.0.0.1:54552/IqQYiKnzOKQ=/' >"$vm_log"
+FLUTTER_RUN_LOG="$vm_log"
+dart_vm_ready || fail "dart_vm_ready should accept token ending in ="
+printf '%s\n' 'Launching lib/main.dart on iPhone 13 mini in debug mode...' >"$vm_log"
+dart_vm_ready && fail "dart_vm_ready should fail before the VM line"
+
 # Backoff helper: latest coverage result drives SIM_NOT_READY sleep.
 mkdir -p "$(dirname "$COVERAGE_FILE")"
 printf '%s\n' '{"result":"closed"}' >"$COVERAGE_FILE"

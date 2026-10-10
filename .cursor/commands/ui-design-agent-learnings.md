@@ -77,6 +77,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   the whole line into `edit` / `get` / `comment`.
 - "Connection lost, reconnecting…" from the CLI is normal. Let it retry;
   do not kill the run or the loop for a single reconnect.
+- `dart_vm_ready` must use a macOS-safe grep class (`[A-Za-z0-9_=-]`, '-' last).
+  A bad `\-=` range made every preflight report SIM_NOT_READY even when the
+  Dart VM URI was already in the Flutter log.
 - The unattended loop prepares the mini **programmatically** (claim →
   refresh → wait for Dart VM) and only then starts `agent -p`. A
   `SIM_NOT_READY` preflight never starts the agent. Do not re-claim the
