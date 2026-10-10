@@ -5,7 +5,7 @@
 #   tools/ui_design_agent_loop.sh verify   check both work, including Jira from inside the CLI
 #   tools/ui_design_agent_loop.sh start    start the loop (its own tmux server, socket ui-agent)
 #   tools/ui_design_agent_loop.sh install  start it at login, and again every 5 minutes if it died
-#   tools/ui_design_agent_loop.sh ensure   start the loop only when it is not already running
+#   tools/ui_design_agent_loop.sh ensure   start the loop only when run-loop is alive
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
 #   tools/ui_design_agent_loop.sh stop     finish the current run, then stop
@@ -50,6 +50,9 @@ LOG_DIR="$STATE_DIR/ui-agent-logs"
 HEALTH_FILE="$STATE_DIR/ui-agent-health.jsonl"
 STOP_FILE="$STATE_DIR/ui-agent.stop"
 PID_FILE="$STATE_DIR/ui-agent.pid"
+# Pid of the run-loop bash (not the agent). ensure/status use this so an
+# idle tmux shell left after stop is not mistaken for a live loop.
+LOOP_PID_FILE="$STATE_DIR/ui-agent-loop.pid"
 SECRETS_FILE="$STATE_DIR/secrets.env"
 GAP="${UI_AGENT_GAP:-60}"
 BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
@@ -75,6 +78,16 @@ log() {
 
 lt() {
   tmux -L "$TMUX_SOCKET" "$@"
+}
+
+# True only while run-loop is alive. A leftover tmux session after stop
+# (idle shell) must not count — LaunchAgent ensure used to no-op forever.
+loop_is_alive() {
+  local pid=""
+  [[ -f "$LOOP_PID_FILE" ]] || return 1
+  pid="$(cat "$LOOP_PID_FILE" 2>/dev/null || true)"
+  [[ -n "$pid" ]] || return 1
+  kill -0 "$pid" 2>/dev/null
 }
 
 prompt() {
@@ -372,6 +385,9 @@ PY
 }
 
 run_loop() {
+  echo $$ >"$LOOP_PID_FILE"
+  # shellcheck disable=SC2064
+  trap 'rm -f "$LOOP_PID_FILE"' EXIT
   rm -f "$STOP_FILE"
   log "ui-design-agent loop started (stop: $SCRIPT stop)"
   while [[ ! -f "$STOP_FILE" ]]; do
@@ -399,7 +415,8 @@ run_loop() {
         ;;
     esac
   done
-  rm -f "$STOP_FILE"
+  rm -f "$STOP_FILE" "$LOOP_PID_FILE"
+  trap - EXIT
   log "ui-design-agent loop stopped"
 }
 
@@ -484,17 +501,26 @@ fi
 
 case "${1:-}" in
   start)
-    if lt has-session -t "=$SESSION" 2>/dev/null; then
+    if loop_is_alive; then
       echo "already running: $SCRIPT attach"
       exit 0
     fi
+    # Idle leftover after stop: session exists but run-loop is gone. Kill it
+    # so LaunchAgent ensure can create a fresh run-loop session.
+    if lt has-session -t "=$SESSION" 2>/dev/null; then
+      echo "replacing idle tmux session (run-loop not alive)"
+      lt kill-session -t "=$SESSION" 2>/dev/null || true
+    fi
+    rm -f "$LOOP_PID_FILE"
     # A server of our own, started from this login session with a clean
     # environment: a tmux server begun from an SSH login cannot reach the
     # keychain the CLI touches at startup, even with CURSOR_API_KEY set.
+    # Exit (do not exec bash) after run-loop so the session dies and ensure
+    # can restart instead of attaching to an idle shell forever.
     env -i HOME="$HOME" USER="$USER" LOGNAME="$USER" PATH="$PATH" \
       LANG="${LANG:-en_US.UTF-8}" TERM="${TERM:-xterm-256color}" SHELL=/bin/zsh \
       tmux -L "$TMUX_SOCKET" new-session -d -s "$SESSION" \
-      "bash '$SCRIPT' run-loop; echo 'loop exited'; exec bash"
+      "bash '$SCRIPT' run-loop; echo 'loop exited'; exit"
     echo "started the loop (watch: $SCRIPT attach)"
     ;;
   install)
@@ -520,7 +546,7 @@ EOF
     echo "installed $PLIST: starts at login, and every 5 minutes when the loop is down"
     ;;
   ensure)
-    if lt has-session -t "=$SESSION" 2>/dev/null; then
+    if loop_is_alive; then
       exit 0
     fi
     bash "$SCRIPT" start
@@ -552,7 +578,13 @@ EOF
     echo "killed $SESSION"
     ;;
   status)
-    if lt has-session -t "=$SESSION" 2>/dev/null; then echo "loop: running (tmux -L $TMUX_SOCKET, session $SESSION)"; else echo "loop: not running"; fi
+    if loop_is_alive; then
+      echo "loop: running (tmux -L $TMUX_SOCKET, session $SESSION, pid $(cat "$LOOP_PID_FILE"))"
+    elif lt has-session -t "=$SESSION" 2>/dev/null; then
+      echo "loop: idle tmux session (run-loop dead; ensure will restart)"
+    else
+      echo "loop: not running"
+    fi
     if [[ -f "$PLIST" ]]; then echo "login item: installed ($LAUNCH_LABEL)"; else echo "login item: not installed ($SCRIPT install)"; fi
     if [[ -f "$STOP_FILE" ]]; then echo "loop: stop requested"; fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
