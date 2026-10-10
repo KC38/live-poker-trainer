@@ -56,8 +56,9 @@ void main() {
       );
       await tester.pump();
 
-      expect(controller.canRequestHint, isTrue);
       expect(controller.showTargetCue, isTrue);
+      // SoftPulse already cues Fold — Hint stays off until that press lands.
+      expect(controller.canRequestHint, isFalse);
       // SoftPulse paints a non-empty ring decoration while the wave is open.
       expect(
         find.byWidgetPredicate(
@@ -88,6 +89,7 @@ void main() {
       controller.revealHint();
       await tester.pump();
       expect(controller.showTargetCue, isTrue);
+      expect(controller.canRequestHint, isFalse);
       expect(
         find.byWidgetPredicate(
           (w) =>
@@ -168,7 +170,7 @@ void main() {
       await tester.pump();
 
       expect(controller.showTargetCue, isTrue);
-      expect(controller.canRequestHint, isTrue);
+      expect(controller.canRequestHint, isFalse);
       LessonTableStage stage() => tester.widget<LessonTableStage>(
         find.byType(LessonTableStage),
       );
@@ -201,6 +203,7 @@ void main() {
       controller.revealHint();
       await tester.pump();
       expect(controller.showTargetCue, isTrue);
+      expect(controller.canRequestHint, isFalse);
       final nextId = table.spot.correctOrder[1];
       final nextSeat = table.spot.seatIds.indexOf(nextId);
       if (nextSeat == 0) {
