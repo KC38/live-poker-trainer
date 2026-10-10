@@ -4614,6 +4614,81 @@ void main() {
     expect(find.text('Nice!'), findsNothing);
   });
 
+  testWidgets('last-heart miss opens restore sheet and blocks Continue', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    const home = CourseHomeSnapshot(
+      status: CourseHomeLoadStatus.ready,
+      nodes: [],
+      sections: [],
+      hearts: 1,
+      livesMax: 5,
+      gems: 0,
+    );
+    final lastHeart = _LastHeartCourseService(catalog);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => catalog),
+          courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: LessonRunnerScreen(
+            lessonId: kFirstCourseLessonId,
+            courseService: lastHeart,
+            startRequestId: 'start_last_heart',
+          ),
+        ),
+      ),
+    );
+    await _pumpUntil(tester, find.textContaining('Tap your cards'));
+    await tester.pump();
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-seat-hero')));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Nice!'), findsOneWidget);
+    await tester.tap(find.text('Continue'));
+    await tester.pump();
+    await tester.pump();
+    await tester.pump();
+
+    await tester.tap(find.byKey(const ValueKey<String>('lesson-board')));
+    await tester.pump();
+    await tester.pump();
+    // Post-frame callback opens the refill sheet.
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(find.text("Oops, that's not correct"), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'Continue'), findsNothing);
+    expect(find.widgetWithText(FilledButton, 'Restore hearts'), findsOneWidget);
+    expect(find.text('Watch an ad'), findsOneWidget);
+    final layout = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(layout.livesRemaining, 0);
+    expect(layout.onRestoreHearts, isNotNull);
+
+    // Dismiss the sheet and drain deal timers before dispose.
+    Navigator.of(tester.element(find.text('Watch an ad'))).pop();
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 3));
+  });
+
   testWidgets('Practice refill path can play at zero hearts', (tester) async {
     tester.view.physicalSize = const Size(390, 1600);
     tester.view.devicePixelRatio = 1;
@@ -5641,6 +5716,101 @@ class _PassiveHeartRestoresCourseService extends _ZeroHeartsCourseService {
       ),
       resume: started.resume,
       duplicate: true,
+    );
+  }
+}
+
+/// Starts with one heart; a miss spends it and requires remediation.
+class _LastHeartCourseService extends _ScriptedCourseService {
+  _LastHeartCourseService(super.catalog);
+
+  var _livesRemaining = 1;
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
+  }) async {
+    final started = await super.startLesson(
+      lessonId: lessonId,
+      catalogVersion: catalogVersion,
+      startRequestId: startRequestId,
+      timezone: timezone,
+      restoreHeartOnComplete: restoreHeartOnComplete,
+    );
+    final attempt = started.attempt;
+    _livesRemaining = 1;
+    return StartCourseLessonResult(
+      attempt: CourseAttemptSnapshot(
+        attemptId: attempt.attemptId,
+        lessonId: attempt.lessonId,
+        catalogVersion: attempt.catalogVersion,
+        status: attempt.status,
+        activityIndex: attempt.activityIndex,
+        currentActivityId: attempt.currentActivityId,
+        livesRemaining: 1,
+        livesMax: 5,
+        acceptedCount: attempt.acceptedCount,
+        scoredCount: attempt.scoredCount,
+        stepCount: attempt.stepCount,
+      ),
+      resume: started.resume,
+      duplicate: started.duplicate,
+    );
+  }
+
+  @override
+  Future<SubmitCourseStepResult> submitStep({
+    required String attemptId,
+    required String activityId,
+    required String idempotencyKey,
+    String? catalogVersion,
+    String? choiceId,
+    List<String>? orderedIds,
+    double? numericValue,
+  }) async {
+    final base = await super.submitStep(
+      attemptId: attemptId,
+      activityId: activityId,
+      idempotencyKey: idempotencyKey,
+      catalogVersion: catalogVersion,
+      choiceId: choiceId,
+      orderedIds: orderedIds,
+      numericValue: numericValue,
+    );
+    if (!base.accepted && _livesRemaining > 0) {
+      _livesRemaining = 0;
+      return SubmitCourseStepResult(
+        attemptId: base.attemptId,
+        activityId: base.activityId,
+        grade: base.grade,
+        feedback: base.feedback,
+        accepted: false,
+        lifeLost: true,
+        livesRemaining: 0,
+        xpAwarded: 0,
+        remediationRequired: true,
+        resume: base.resume,
+        duplicate: false,
+        betterChoiceId: base.betterChoiceId,
+      );
+    }
+    return SubmitCourseStepResult(
+      attemptId: base.attemptId,
+      activityId: base.activityId,
+      grade: base.grade,
+      feedback: base.feedback,
+      accepted: base.accepted,
+      lifeLost: false,
+      livesRemaining: _livesRemaining,
+      xpAwarded: base.xpAwarded,
+      remediationRequired: false,
+      resume: base.resume,
+      duplicate: base.duplicate,
+      betterChoiceId: base.betterChoiceId,
     );
   }
 }
