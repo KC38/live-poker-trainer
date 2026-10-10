@@ -33,8 +33,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   never appears. One refresh + one retry, then `SIM_NOT_READY`, release,
   end. The next run retries from a free mini.
 - Never treat a missing local Firebase CI login as a ticket failure.
-  Skip Cloud Functions deploy, note it in the report, and still close the
-  ticket when the mini criteria passed on origin/main.
+  Skip the local deploy script and note it. When the fix is in Cloud
+  Functions, wait for GitHub `Deploy Cloud Functions` on the merge SHA
+  before mini closeout — client chrome alone cannot prove a grade/hearts
+  rule until that job succeeds.
 - Never hardcode a simulator UDID. Always
   `DEVICE="$(tools/iphone_13_mini_udid.sh)"`.
 - Never launch a subagent or a second parallel `/ui-design-agent` run.
@@ -175,3 +177,6 @@ trimming. Durable rules belong in the sections above, not only here.
   again — manual tmux flutter run.
 - 2026-10-10: LPT-57 guided-seven SoftPulse quiet until Hint; picker never
   painted Hint-reopened gold — fix sibling after explain SoftPulse (LPT-55).
+- 2026-10-10: LPT-59 guided miss spent a heart (`#1554` had charged them);
+  design-record free-miss wins; local firebase creds missing — wait GH
+  Deploy Cloud Functions before validated Oops shot.
