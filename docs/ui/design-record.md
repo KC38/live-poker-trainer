@@ -7,9 +7,12 @@ table, sound, or mascot.
 
 `/ui-design-agent` ([command](../../.cursor/commands/ui-design-agent.md))
 walks the app against this file, files the gap in Jira, ships it, and lands
-the section update in the same change. Any other UI change follows the same
-rules. Read [flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) and
-the [Duolingo Chess patterns](references/duolingo-chess/PATTERNS.md) before
+the section update in the same change. It also keeps
+[ui-design-agent-learnings.md](../../.cursor/commands/ui-design-agent-learnings.md)
+updated so later runs do not repeat operational mistakes. Any other UI
+change follows the same rules. Read
+[flutter-ui-ux](../../.cursor/skills/flutter-ui-ux/SKILL.md) and the
+[Duolingo Chess patterns](references/duolingo-chess/PATTERNS.md) before
 editing.
 
 Reference device: **iPhone 13 mini** (375 × 812 pt). Small phones are where

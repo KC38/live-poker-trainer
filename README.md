@@ -23,6 +23,9 @@ One agent uses the mini at a time: claim it with `tools/sim_lock.py` first
 `tools/ui_design_agent_loop.sh start`, after a one-time
 `tools/ui_design_agent_loop.sh setup` that saves a Cursor API key and an
 Atlassian API token (no keychain or browser login, so it works over SSH).
+Each run reads and may update
+`.cursor/commands/ui-design-agent-learnings.md` so later runs avoid the
+same mistakes.
 
 The launch default is random six-max $1/$2 with a 200 BB maximum. Every hand
 gets a new ordered lineup of bounded player tendencies, visible by tapping a
