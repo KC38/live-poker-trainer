@@ -3,6 +3,7 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_starting_hand_copy.dart';
@@ -194,6 +195,50 @@ void main() {
     expect(startingHandLabelFromCodes(dealt!.heroCodes), 'QQ');
     expect(dealt.feltStatusLine, 'Queens — 3-bet value');
     expect(dealt.streetLabel, 'Preflop · Button · QQ');
+  });
+
+  test('graded feedback follows the dealt premium pair', () {
+    final activity = _activity('act-02-03-01-scaffolded-qq');
+    late int generation;
+    late LessonActionSpot dealt;
+    for (generation = 0; generation < 64; generation++) {
+      final next = dealtLessonActionSpot(activity, generation: generation);
+      expect(next, isNotNull);
+      if (startingHandLabelFromCodes(next!.heroCodes) != 'QQ') {
+        dealt = next;
+        break;
+      }
+    }
+    expect(generation, lessThan(64));
+    final expected = alignStartingHandCopy(
+      text: 'Never fold queens here.',
+      templateHero: const ['Qh', 'Qd'],
+      dealtHero: dealt.heroCodes,
+    );
+    final aligned = alignLessonActionSubmitResult(
+      activity: activity,
+      generation: generation,
+      result: SubmitCourseStepResult(
+        attemptId: 'attempt',
+        activityId: activity.id,
+        grade: SoftGrade.clearMistake,
+        feedback: 'Never fold queens here.',
+        accepted: false,
+        lifeLost: true,
+        livesRemaining: 0,
+        xpAwarded: 0,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'attempt',
+          lessonId: 'lesson-02-03-01-open-range',
+          activityId: 'act-02-03-01-scaffolded-qq',
+          activityIndex: 2,
+        ),
+        duplicate: false,
+      ),
+    );
+    expect(aligned.feedback, expected);
+    expect(aligned.feedback, isNot(contains('queens')));
   });
 }
 
