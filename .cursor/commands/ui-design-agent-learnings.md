@@ -62,13 +62,16 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer reopening a Done `ui-agent` ticket that still reproduces over
   filing a near-duplicate.
 - Prefer one lesson-content bug (fixed cards, stacked/enabled-empty Hint,
-  multi-target or inconsistent SoftPulse, bad coach copy, hearts that do
-  not spend or restore) or teach-by-doing gap over spacing chrome. When
-  fixing multi SoftPulse, update tests that assert `findsNWidgets(N>1)` on
+  Hint stuck under Oops/Nice! after a Hint press, multi-target or
+  inconsistent SoftPulse, bad coach copy, hearts that do not spend or
+  restore) or teach-by-doing gap over spacing chrome. When fixing multi
+  SoftPulse, update tests that assert `findsNWidgets(N>1)` on
   `glow-highlight` for that surface — they may have locked the bug (LPT-55).
   Ids in `lessonFrameSameConceptQuietIds` (e.g. guided-seven) stay SoftPulse
   off until Hint by design — judge Hint-reopened SoftPulse, not first-press
   gold (LPT-57). After SoftPulse lands on explain, grep the sibling picker.
+  After Hint then a grade, read the dock bubble — Hint copy under Oops is a
+  bug; clear `_hintVisible` on `finishSubmit` / `presentLocalMiss` (LPT-60).
 - Prefer card `agent_tap` needles as Semantics display (`A♣`), not ASCII
   codes like `Ac` — short codes can miss the card or open Hearts.
 - Prefer a second open of the same lesson when judging card randomization —
@@ -180,3 +183,5 @@ trimming. Durable rules belong in the sections above, not only here.
 - 2026-10-10: LPT-59 guided miss spent a heart (`#1554` had charged them);
   design-record free-miss wins; local firebase creds missing — wait GH
   Deploy Cloud Functions before validated Oops shot.
+- 2026-10-10: LPT-60 Hint line stayed in coach bubble under Oops after
+  Hint + wrong five; clear `_hintVisible` on grade.
