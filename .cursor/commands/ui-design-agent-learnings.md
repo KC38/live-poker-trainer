@@ -45,6 +45,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 - Prefer exact `agent_tap` labels from the screen. Broad needles like
   `Continue` can hit Home chrome instead of the lesson control.
+- Prefer not to treat `tap --text Gems` as proof the gem control works:
+  the strip Tooltip is "Gems" with no `onTap`, and the needle can land on
+  Hearts / the refill sheet instead.
 - Prefer reopening a Done `ui-agent` ticket that still reproduces over
   filing a near-duplicate.
 - Prefer one teach-by-doing or behavior gap over spacing chrome when
@@ -60,6 +63,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Jira needs `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that same
   secrets file. If `jira.py check` fails, release and end with
   `JIRA_UNAVAILABLE`.
+- `jira.py create` prints `KEY<TAB>URL`. Capture the key with
+  `KEY=$(python3 tools/jira.py create … | awk '{print $1}')` — never pass
+  the whole line into `edit` / `get` / `comment`.
 - "Connection lost, reconnecting…" from the CLI is normal. Let it retry;
   do not kill the run or the loop for a single reconnect.
 - Flutter may stick at "Launching…" with no Dart VM line and no pid file.
@@ -101,3 +107,5 @@ trimming. Durable rules belong in the sections above, not only here.
   lock). Reopen Done tickets that still reproduce; do not file a twin.
 - 2026-10-10: Local functions deploy skipped repeatedly (no Firebase CI
   creds). Closing on mini proof is enough; Actions owns deploy.
+- 2026-10-10: LPT-44 filed `needs-human` for gems tap (shop vs
+  explanation vs defer). Parse `jira.py create` key before `edit`.
