@@ -6,6 +6,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/services/firestore/course_service.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -348,6 +349,7 @@ void main() {
       ],
     );
     final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
     expect(controller.showTargetCue, isTrue);
     expect(controller.canRequestHint, isTrue);
 
@@ -390,6 +392,7 @@ void main() {
       ],
     );
     final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
     expect(controller.showTargetCue, isTrue);
 
     controller.notifySequentialPressProgress(remainingPressCount: 4);
@@ -416,6 +419,7 @@ void main() {
       acceptedGrades: const [SoftGrade.recommended],
     );
     final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
     expect(controller.showTargetCue, isTrue);
 
     controller.notifySequentialPressProgress(remainingPressCount: 4);
@@ -425,6 +429,39 @@ void main() {
     controller.notifySequentialPressProgress(remainingPressCount: 3);
     controller.consumeSequentialSoftPulse();
     expect(controller.showTargetCue, isTrue);
+    controller.dispose();
+  });
+
+  test('explain SoftPulse stays on when Hint cannot reopen (LPT-49)', () {
+    final activity = CourseActivity(
+      id: 'act-01-01-03-explain-button',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Clockwise from the button: small blind, then big blind.',
+      acceptedGrades: const [SoftGrade.recommended],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
+    expect(controller.showTargetCue, isTrue);
+    // Explain has no fallback hint — SoftPulse must keep teaching.
+    expect(lessonFrameHintFallback(activity), isNull);
+
+    controller.notifySequentialPressProgress(remainingPressCount: 3);
+    expect(controller.canRequestHint, isFalse);
+
+    controller.consumeSequentialSoftPulse();
+    expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
+
+    controller.notifySequentialPressProgress(remainingPressCount: 2);
+    controller.consumeSequentialSoftPulse();
+    expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
+
+    controller.notifySequentialPressProgress(remainingPressCount: 0);
+    expect(controller.sequentialPressesRemaining, isFalse);
     controller.dispose();
   });
 

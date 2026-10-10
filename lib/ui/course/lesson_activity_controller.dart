@@ -114,18 +114,33 @@ class LessonActivityController extends ChangeNotifier {
   bool get sequentialPressesRemaining =>
       _sequentialPressesRemaining && _sequentialCueNodeKey == currentNodeKey;
 
+  /// Whether Hint can re-open SoftPulse after a sequential wave closes.
+  ///
+  /// Explain steps often SoftPulse with no authored/fallback hint. Closing
+  /// the wave would leave the next press with neither gold SoftPulse nor
+  /// Hint — keep SoftPulse on instead (see [showTargetCue]).
+  bool get _canReopenSequentialCueViaHint {
+    if (lessonFrameHintsDisabled(activity, isReview: isReview)) {
+      return false;
+    }
+    if (activity.hintMedia.isNotEmpty) return true;
+    return lessonFrameHintFallback(activity, isReview: isReview) != null;
+  }
+
   /// Whether the Hint control should accept a tap right now.
   ///
   /// Multi-press SoftPulse: Hint is off while the current wave already shows
   /// the next target (teaching SoftPulse or a just-revealed Hint). Tapping
   /// that target closes the wave and re-enables Hint for the following press.
-  /// Single-press nodes: Hint stays available until used once on this screen.
+  /// When Hint cannot reopen (no hint text), SoftPulse stays on the next
+  /// press and Hint stays disabled. Single-press nodes: Hint stays available
+  /// until used once on this screen.
   bool get canRequestHint {
     if (!hintUsed) {
-      if (sequentialPressesRemaining &&
-          _sequentialSoftPulseWaveOpen &&
-          showTargetCue) {
-        return false;
+      if (sequentialPressesRemaining && showTargetCue) {
+        if (_sequentialSoftPulseWaveOpen || !_canReopenSequentialCueViaHint) {
+          return false;
+        }
       }
       return true;
     }
@@ -151,7 +166,8 @@ class LessonActivityController extends ChangeNotifier {
   ///
   /// Multi-press sequences SoftPulse only the current wave when Hint can
   /// re-open the next press. Teaching steps that already SoftPulse with
-  /// Hint disabled keep the next-target cue on.
+  /// Hint disabled (guided SoftPulse, or explain with no hint text) keep
+  /// the next-target cue on.
   bool get showTargetCue {
     final unlocked = _hintVisible ||
         (!lessonFrameSoftPulseQuietByDefault(activity, isReview: isReview) &&
@@ -160,12 +176,13 @@ class LessonActivityController extends ChangeNotifier {
                 activity.stage == ActivityStage.scaffolded));
     if (!unlocked) return false;
     if (!_feltDealReady) return false;
-    // When cues are already on and Hint is disabled, keep SoftPulse on the
-    // next press. Sequential wave-close is only for stages that can re-open
-    // via Hint.
+    // Sequential wave-close is only for stages that can re-open via Hint.
+    // Explain SoftPulse with no hint fallback must keep gold on the next
+    // seat (LPT-49 button → SB → BB).
     if (!lessonFrameHintShownByDefault(activity, isReview: isReview) &&
         _sequentialCueNodeKey == currentNodeKey &&
-        !_sequentialSoftPulseWaveOpen) {
+        !_sequentialSoftPulseWaveOpen &&
+        _canReopenSequentialCueViaHint) {
       return false;
     }
     return true;
