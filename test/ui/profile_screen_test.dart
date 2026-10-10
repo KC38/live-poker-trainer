@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/game_settings_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/hand_history_sample.dart';
@@ -250,6 +251,81 @@ void main() {
     expect(find.byType(AuthScreen), findsNothing);
     expect(find.text('Sign out'), findsOneWidget);
   });
+
+  testWidgets(
+    'guest Create an account uses Theme radius 14 at iPhone 13 mini size',
+    (tester) async {
+      final view = tester.view;
+      view.physicalSize = const Size(375, 812);
+      view.devicePixelRatio = 1;
+      addTearDown(view.resetPhysicalSize);
+      addTearDown(view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            authServiceProvider.overrideWithValue(_IdleAuthService()),
+            appAuthProvider.overrideWithValue(
+              const AsyncData(
+                AppAuthSnapshot(uid: 'guest', isAnonymous: true),
+              ),
+            ),
+            authUidProvider.overrideWithValue('guest'),
+            userDocProvider.overrideWith((ref) async => users.document),
+            userRepositoryProvider.overrideWithValue(users),
+            progressRepositoryProvider.overrideWithValue(progress),
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
+            courseProgressProvider.overrideWith(
+              (ref) async => const CourseProgress(
+                loaded: true,
+                available: false,
+                lifetimeXp: 25,
+                gems: 0,
+                currentStreak: 1,
+                acceptedAccuracy: 1,
+                mastery: 0.4,
+                reviewsDue: 0,
+                currentSectionOrder: 1,
+                currentSectionTitle: 'Never Played',
+                currentUnitOrder: 1,
+                currentUnitTitle: 'Cards and the table',
+              ),
+            ),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: const ProfileScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final createFinder = find.widgetWithText(
+        ElevatedButton,
+        'Create an account',
+      );
+      expect(createFinder, findsOneWidget);
+      expect(
+        find.widgetWithText(FilledButton, 'Create an account'),
+        findsNothing,
+      );
+
+      final create = tester.widget<ElevatedButton>(createFinder);
+      final createContext = tester.element(createFinder);
+      const states = <WidgetState>{};
+      expect(tester.getSize(createFinder).height, 54);
+      final createStyle =
+          create.style ?? Theme.of(createContext).elevatedButtonTheme.style;
+      final createShape =
+          createStyle!.shape!.resolve(states)! as RoundedRectangleBorder;
+      expect(createShape.borderRadius, BorderRadius.circular(14));
+      expect(createStyle.backgroundColor!.resolve(states), AppColors.gold);
+
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('with no hands the screen withholds every rate and the style', (
     tester,

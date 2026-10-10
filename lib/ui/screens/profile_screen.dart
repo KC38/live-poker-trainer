@@ -161,7 +161,8 @@ class _ProfileBody extends ConsumerWidget {
           _ProfileHeader(profile: profile),
           if (anonymous) ...[
             const SizedBox(height: 16),
-            FilledButton(
+            // Theme elevated (radius 14) — not M3 stadium FilledButton (LPT-46).
+            ElevatedButton(
               onPressed: () => pushSaveProgressAuth(context),
               child: const Text('Create an account'),
             ),
