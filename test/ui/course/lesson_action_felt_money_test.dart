@@ -4,7 +4,9 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
@@ -16,6 +18,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/dealt_card_reveal.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
@@ -519,12 +522,84 @@ void main() {
     expect(find.byKey(const ValueKey<String>('dealt-hole-0-1')), findsOneWidget);
     controller.dispose();
   });
+
+  testWidgets('wrong Fold keeps the same dealt hole states', (tester) async {
+    CardDealPace.debugInstant = true;
+    addTearDown(() {
+      CardDealPace.debugInstant = null;
+      CardDealPace.testScale = 1;
+    });
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final activity = CourseActivity(
+      id: 'act-02-03-01-unguided-btn',
+      order: 4,
+      stage: ActivityStage.unguided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Open king-nine suited on the button.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Folds to you on the button with K9s. Action?',
+      choices: const [
+        CourseChoice(
+          id: 'open-k9s',
+          label: 'Open to 6',
+          action: 'RAISE',
+          amountBb: 3,
+        ),
+        CourseChoice(id: 'fold-k9s', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'limp-k9s', label: 'Limp', action: 'CALL'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _framedAction(activity, controller, showGuidance: true),
+    );
+    await tester.pumpAndSettle();
+
+    final hole = find.byKey(const ValueKey<String>('dealt-hole-0-0'));
+    expect(hole, findsOneWidget);
+    final before = tester.state<DealtCardReveal>(hole);
+
+    controller.selectChoice('fold-k9s', autoSubmit: false);
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'attempt',
+        activityId: activity.id,
+        grade: SoftGrade.questionable,
+        feedback: 'Tight is okay, but button opens wider than EP.',
+        accepted: false,
+        lifeLost: true,
+        livesRemaining: 0,
+        xpAwarded: 0,
+        remediationRequired: false,
+        resume: CourseResumePointer(
+          attemptId: 'attempt',
+          lessonId: 'lesson-02-03-01-open-range',
+          activityId: activity.id,
+          activityIndex: 3,
+        ),
+        duplicate: false,
+      ),
+    );
+    await tester.pump();
+
+    expect(hole, findsOneWidget);
+    expect(
+      identical(before, tester.state<DealtCardReveal>(hole)),
+      isTrue,
+      reason: 'wrong Fold remounted DealtCardReveal (redeal)',
+    );
+    controller.dispose();
+  });
 }
 
 Widget _framedAction(
   CourseActivity activity,
-  LessonActivityController controller,
-) {
+  LessonActivityController controller, {
+  bool showGuidance = false,
+}) {
   final base = buildPokerTheme();
   return ProviderScope(
     overrides: [heroIdentityProvider.overrideWithValue(const HeroIdentity())],
@@ -543,7 +618,7 @@ Widget _framedAction(
               child: PokerActionSizingActivity(
                 activity: activity,
                 controller: controller,
-                showGuidance: false,
+                showGuidance: showGuidance,
               ),
             ),
           ),

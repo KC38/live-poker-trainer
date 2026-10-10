@@ -8,9 +8,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/ui/widgets/dealt_card_reveal.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
@@ -355,6 +357,80 @@ void main() {
     await tester.tap(find.byKey(const ValueKey<String>('lesson-hearts')));
     await tester.pump();
     expect(restoreTaps, 1);
+  });
+
+  testWidgets('spending the last heart does not remount dealt holes', (
+    tester,
+  ) async {
+    CardDealPace.debugInstant = true;
+    addTearDown(() {
+      CardDealPace.debugInstant = null;
+      CardDealPace.testScale = 1;
+    });
+    await tester.binding.setSurfaceSize(const Size(390, 844));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    Future<void> pumpFrame({required int lives}) {
+      final empty = lives == 0;
+      return tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme(),
+          home: Scaffold(
+            body: LessonScreenLayout(
+              progress: 0.4,
+              livesRemaining: lives,
+              livesMax: 5,
+              onClose: _noop,
+              speech: 'Folds to you on the button.',
+              expression: LessonMascotExpression.wrong,
+              stage: const LessonTableStage(
+                heroCodes: ['Kh', '9h'],
+                heroFaceUp: true,
+                villainCount: 1,
+              ),
+              onUndo: _noop,
+              onRedo: _noop,
+              onHint: _noop,
+              canUndo: false,
+              canRedo: false,
+              canHint: true,
+              // Runner only wires restore/block when hearts are empty.
+              onRestoreHearts: empty ? _noop : null,
+              onBlockedPlay: empty ? _noop : null,
+              result:
+                  empty
+                      ? _result(
+                        accepted: false,
+                        feedback:
+                            'Tight is okay, but button opens wider than EP.',
+                      )
+                      : null,
+              onContinue: empty ? _noop : null,
+            ),
+          ),
+        ),
+      );
+    }
+
+    await pumpFrame(lives: 1);
+    await tester.pumpAndSettle();
+    final hole = find.byKey(const ValueKey<String>('dealt-hole-0-0'));
+    expect(hole, findsOneWidget);
+    final before = tester.state<DealtCardReveal>(hole);
+
+    await pumpFrame(lives: 0);
+    await tester.pump();
+
+    expect(hole, findsOneWidget);
+    expect(
+      identical(before, tester.state<DealtCardReveal>(hole)),
+      isTrue,
+      reason: 'last-heart block remounted DealtCardReveal (redeal)',
+    );
+    expect(
+      find.byKey(const ValueKey<String>('lesson-empty-hearts-block')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('frame keeps close, hearts, one bubble, tools, and no title', (
