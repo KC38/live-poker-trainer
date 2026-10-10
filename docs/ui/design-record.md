@@ -473,6 +473,10 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Coach mood | Calm on the ask, celebrate on Nice!, think on Oops. Never an empty bubble after the deal, never a letter-R coach. |
 | Hearts | A non-guided miss empties one heart in place. Guided free misses do not. At zero, empty hearts breathe and the refill sheet opens from the hearts control. Practice / gem refill restores hearts in place (no toast, no rejected out-of-hearts dock). |
 
+Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
+rebuilds until all four real suits are in; `syncSelection` only mirrors a
+completed `suits-full` draft (LPT-47).
+
 Playing cards use one face everywhere: `TableCard` (corner rank, one centered suit). `MiniCard` and `CardBack` are size presets over `TableCard` / `TableCardBack` for densified lesson trays — they must not invent a second face.
 
 A phase column on a teaching felt stacks its playing cards vertically. A horizontal row of `MiniCard` or `CardBack` widgets is not used inside an `Expanded` phase column. Scaling the row down with `FittedBox` is not a substitute for that rule.
@@ -489,6 +493,12 @@ height for every stage child, and `_feltShell` clamps again.
 ### Shipped
 
 Button and blinds (LPT-36) stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`). The next phase column copies that vertical stack.
+
+Guided suits (`act-01-01-02-guided-suits` via `LessonSuitBoardTable` in
+`select_identify_activity.dart`) owns progressive suit picks locally and
+only syncs selection when the draft is already `suits-full`. The next
+multi-press board picker that rebuilds from `LessonActivityController`
+copies that gate so SoftPulse/Hint notifyListeners cannot clear cyan.
 
 The per-lesson state is the Lesson ledger at the end of this file.
 
