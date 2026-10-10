@@ -50,8 +50,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Hearts / the refill sheet instead.
 - Prefer reopening a Done `ui-agent` ticket that still reproduces over
   filing a near-duplicate.
-- Prefer one teach-by-doing or behavior gap over spacing chrome when
-  ranking findings.
+- Prefer one lesson-content bug (fixed cards across attempts, broken Hint,
+  missing SoftPulse, empty or mismatched coach copy) or teach-by-doing gap
+  over spacing chrome when ranking findings.
+- Prefer a second open of the same lesson when judging card randomization —
+  screenshot hole/board cards on attempt A and attempt B before deciding
+  the deal is fixed.
 - Prefer reading PNGs you just captured before judging; do not close from
   memory of an earlier run's screenshot.
 
@@ -90,6 +94,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   a place in the course.
 - "Your two cards" and similar peeks must not show empty board slots when
   no board is in play for that beat.
+- Lesson walks must exercise Hint, SoftPulse/cyan cues, coach mood/copy,
+  and a second attempt for card randomization — not only Continue through
+  the happy path.
 - When the design record and a shipped screen disagree, the record (plus
   stakeholder brief) wins; file or reopen the ticket rather than
   "accepting" the screen as intentional chrome.

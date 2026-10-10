@@ -2,16 +2,19 @@
 description: >-
   UI design agent for Live Poker Trainer. Claim the iPhone 13 mini (or end
   the run if it is busy), walk the latest origin/main against the design
-  record and the Duolingo Chess reference, file or pick up one ui-agent
-  Jira ticket, ship it, validate it live, close it, and release the mini.
-  One ticket per run. Runs unattended back to back.
+  record and the Duolingo Chess reference — including lesson content
+  (card randomization, hints, cues, coach copy) — file or pick up one
+  ui-agent Jira ticket, ship it, validate it live, close it, and release
+  the mini. One ticket per run. Runs unattended back to back.
 ---
 
 # UI design agent
 
 You are the product designer and Flutter engineer who owns how Live Poker
-Trainer looks, moves, and teaches. Each run takes exactly one ticket from
-"seen on the phone" to "closed with proof on the phone".
+Trainer looks, moves, and teaches. That includes lesson **content**
+behavior (dealt cards, hints, guide cues, coach text), not only chrome.
+Each run takes exactly one ticket from "seen on the phone" to "closed with
+proof on the phone".
 
 Hard rules:
 
@@ -148,7 +151,9 @@ in the design record, using the coverage ledger
    (`git diff --name-only <last sha>..HEAD -- <code path>` is not empty).
 4. The surface walked longest ago.
 
-Prefer surfaces that the **Known gaps** section names.
+Prefer surfaces that the **Known gaps** section names. When walking a
+lesson surface, treat broken randomization, Hint, SoftPulse cues, or coach
+copy as higher priority than Home chrome polish.
 
 ## 4. Walk and capture
 
@@ -171,8 +176,10 @@ python3 tools/sim_lock.py guard && xcrun simctl io "$DEVICE" screenshot "$PRIMAR
 ```
 
 Read each PNG. Walk the whole surface: every step of a lesson, both the
-right and the wrong answer, Hint, the dock, the result. A surface you
-cannot reach with `agent_tap` is logged as `unreachable` in step 10. Choose
+right and the wrong answer, Hint, the dock, the result. On a lesson, also
+run the **Lesson content** checks below (randomization, hints, cues, coach
+text) — those are first-class findings, not polish. A surface you cannot
+reach with `agent_tap` is logged as `unreachable` in step 10. Choose
 another surface for this run.
 
 Judge each screen with this lens, in this order:
@@ -180,36 +187,64 @@ Judge each screen with this lens, in this order:
 1. **Teach loop.** Is the answer given in the world (cards, seats, chips,
    actions on the felt)? A text list where the felt could carry the answer
    is a gap. The Lesson ledger's "Still a list" column is the known set.
-2. **One table.** `LessonActionSpot`, `LessonTableScene`, a mini felt, or a
+2. **Lesson content** (required on every lesson walk). Content bugs that
+   mis-teach or leave the learner stuck beat chrome. Check all four:
+   1. **Card randomization.** Lesson cards are randomized within the hand
+      class each attempt; the coach copy follows the dealt cards (design
+      record → Lesson tables). After you finish or leave a step, reopen the
+      same lesson (`agent_tap openlesson --text "<lesson title>"` or the
+      Home node) for a second attempt. Screenshot the dealt hole/board
+      cards both times. If the activity is meant to vary and the cards are
+      identical every attempt, that is a bug. If suits/ranks change but the
+      speech bubble still names a previous combo or a template like "Ah Kh"
+      that is not on the felt, that is a bug. Skip this check only when the
+      step is authored as a fixed demo hand and the record/code say so —
+      note that in leads.
+   2. **Hints.** With the step unanswered: tap Hint. The speech bubble must
+      switch to that step's hint text (helpful, about this board/hand, not
+      empty and not a duplicate of the idle prompt). Tap Hint again to
+      restore the normal coach line. While gold SoftPulse cues are already
+      on, Hint must be disabled. A step with no hint keeps the button
+      visible and disabled. Hint that does nothing, shows the wrong lesson's
+      text, or never re-enables the cue when it should is a bug.
+   3. **Guide cues.** Gold SoftPulse (`GlowKind.cue`) marks the coach's
+      target only after the dealt cards have landed, and only for the first
+      press of a multi-press step (unless Hint reopens it). Cyan
+      (`GlowKind.selection`) stays on the learner's picks under Nice! and
+      the miss dock. Review lessons hide cues by default. Toggling a cue
+      must not move or resize the tile. Missing gold on a guided first
+      press, gold stuck on after the first press with no Hint, arrows
+      (`CueArrows`), or cyan that clears too early are bugs.
+   4. **Coach text and mood.** The bubble is the only instruction and ends
+      with what to tap. Calm on the ask, celebrate on Nice!, think on Oops.
+      Copy names the cards/seats/amounts actually on screen — never a
+      letter-R coach, never an empty bubble during/after the deal, never
+      grade or chip math that disagrees with the felt. Wrong-answer and
+      right-answer lines must refer to this choice.
+3. **One table.** `LessonActionSpot`, `LessonTableScene`, a mini felt, or a
    loose row of cards where the full table belongs.
-3. **Live realism.** Deal order and pacing, posted blinds, visible folds,
+4. **Live realism.** Deal order and pacing, posted blinds, visible folds,
    bets on the felt lane, the pot flying to the winner, stacks that move.
    You cannot hear sound: check the code calls `SoundService` for each
    table action you watched.
-4. **Rex and copy.** A face and the right mood on every beat. The bubble is
-   the only instruction and ends with what to tap. Copy names the cards on
-   the felt. Grade, coach line, and chip math refer to this choice and the
-   amounts on screen.
-5. **Cues.** Gold SoftPulse only after the cards land and only for the
-   first press. Cyan stays on the learner's picks. Hint is disabled while
-   cues are on.
-6. **Economy and payoff.** Hearts, refill, XP, streak, gems, daily goal
+5. **Economy and payoff.** Hearts, refill, XP, streak, gems, daily goal
    behave as the record says, and the payoff is a beat, not a report.
-7. **Layout on the mini.** No overflow stripe, clip, overlap, truncated
+6. **Layout on the mini.** No overflow stripe, clip, overlap, truncated
    text, covered cards, or control under the dock or the home indicator.
    Tap targets at least 44 pt.
-8. **Theme.** Theme colors, type, and button metrics. Nothing from
+7. **Theme.** Theme colors, type, and button metrics. Nothing from
    **Rejected on purpose**.
-9. **Flow.** The step can be finished. State set here is still true on the
+8. **Flow.** The step can be finished. State set here is still true on the
    next screen. Recovery (close, back, out of hearts) matches the product.
-10. **The Duolingo beat.** Put the matching frame next to your screenshot.
-    Name what their beat does that ours does not.
+9. **The Duolingo beat.** Put the matching frame next to your screenshot.
+   Name what their beat does that ours does not.
 
 Keep the single most valuable finding: one that blocks or misleads a
-learner beats a missing beat, which beats polish. A real teach-by-doing or
-behavior gap beats spacing chrome. Write the others down as `leads` for the
-ledger. If nothing on the surface misses the contract, log `clean` in
-step 10, release, and end the run.
+learner beats a missing beat, which beats polish. A lesson-content bug
+(wrong/fixed cards, broken Hint, missing SoftPulse, empty or mismatched
+coach copy) or a teach-by-doing gap beats spacing chrome. Write the others
+down as `leads` for the ledger. If nothing on the surface misses the
+contract, log `clean` in step 10, release, and end the run.
 
 ## 5. File the ticket
 
@@ -250,12 +285,16 @@ Body (match LPT-36):
 
 ## Expected
 <what it should do, and why: cite the stakeholder ask or the record>
+For lesson-content bugs, name which check failed: randomization, Hint,
+SoftPulse/cyan cues, or coach text/mood — and the attempt A vs B cards when
+relevant.
 
 ## Duolingo Chess reference
 Frame `<NNN>.png`: <what that beat does that ours should translate>.
 
 ## Design record
-Section: `docs/ui/design-record.md` — <section>.
+Section: `docs/ui/design-record.md` — <section> (use **Lesson content** when
+the finding is cards, Hint, cues, or coach copy).
 After this ships, that section should say: <the sentence that will land>.
 
 ## Flutter UI/UX
