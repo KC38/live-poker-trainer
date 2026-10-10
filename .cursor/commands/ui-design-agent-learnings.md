@@ -91,7 +91,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   body must be a real on-disk path (or listed in `--attach`); `jira.py`
   refuses comments/creates that would post `!file|thumbnail!` for a file
   that did not upload — that is what shows as Preview unavailable in Jira
-  (LPT-59 closeout orphan `LPT-59-validated.png`).
+  (LPT-59 closeout orphan `LPT-59-validated.png`). After closeout,
+  `jira.py verify-embeds LPT-NN` must pass before Done.
 - Prefer, when fixing a stadium `FilledButton` → Theme elevated CTA on one
   surface (Settings, Profile, Save progress), grepping sibling guest
   **Create an account** call sites in the same walk so the twin does not

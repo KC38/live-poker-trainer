@@ -24,6 +24,8 @@ Commands:
              [--add-label L ...] [--remove-label L ...]
     comment KEY --body-file F [--attach FILE ...]
     attach KEY FILE ...
+    verify-embeds KEY [KEY ...]     exit 1 if wiki thumbs name missing files
+    repair-embeds KEY [KEY ...]     strip orphan wiki thumbs from description/comments
     transitions KEY                 id, name, and target status
     transition KEY --to STATUS      move by target status or transition name
     link --type Blocks --inward A --outward B   (A blocks B)
@@ -140,8 +142,11 @@ _IMAGE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
 _LINK = re.compile(r"\[([^\]]+)\]\(([^)\s]+)\)")
 _BOLD = re.compile(r"\*\*(.+?)\*\*")
 _TABLE_SEP = re.compile(r"^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$")
-# Jira wiki image: !file.png! or !file.png|thumbnail!
-_WIKI_EMBED = re.compile(r"!([^|!\n]+)(?:\|[^!\n]*)?!")
+# Jira wiki image: !file.png! or !file.png|thumbnail! (image extensions only)
+_WIKI_EMBED = re.compile(
+    r"!([^|!\n]+\.(?:png|jpe?g|gif|webp|bmp|svg))(?:\|[^!\n]*)?!",
+    re.IGNORECASE,
+)
 
 
 def _inline(text: str) -> str:
@@ -450,6 +455,79 @@ def comment(key: str, body: str, files: Optional[List[str]] = None) -> str:
     return request("POST", f"/2/issue/{key}/comment", body={"body": wiki})["id"]
 
 
+def _orphan_embed_report(key: str) -> List[str]:
+    """Human-readable lines for wiki thumbs on ``key`` that name missing attachments."""
+    issue = get(key)
+    fields = issue.get("fields") or {}
+    allowed = {
+        item["filename"]
+        for item in (fields.get("attachment") or [])
+        if item.get("filename")
+    }
+    lines: List[str] = []
+    for name in _wiki_embed_names(fields.get("description") or ""):
+        if name not in allowed:
+            lines.append(f"{key}\tdescription\t{name}")
+    for comment_row in (fields.get("comment") or {}).get("comments", []):
+        comment_id = comment_row.get("id", "?")
+        for name in _wiki_embed_names(comment_row.get("body") or ""):
+            if name not in allowed:
+                lines.append(f"{key}\tcomment:{comment_id}\t{name}")
+    return lines
+
+
+def verify_embeds(keys: List[str]) -> List[str]:
+    """Return orphan-embed report lines for each key (empty list means all OK)."""
+    report: List[str] = []
+    for key in keys:
+        report.extend(_orphan_embed_report(key))
+    return report
+
+
+def _strip_orphan_wiki_embeds(wiki: str, allowed: set[str]) -> str:
+    """Remove wiki image embeds whose file name is not in ``allowed``."""
+
+    def keep(match: re.Match[str]) -> str:
+        return match.group(0) if match.group(1) in allowed else ""
+
+    return _WIKI_EMBED.sub(keep, wiki)
+
+
+def repair_embeds(keys: List[str]) -> List[str]:
+    """Strip orphan wiki thumbs from description/comments. Returns change lines."""
+    changed: List[str] = []
+    for key in keys:
+        issue = get(key)
+        fields = issue.get("fields") or {}
+        allowed = {
+            item["filename"]
+            for item in (fields.get("attachment") or [])
+            if item.get("filename")
+        }
+        description = fields.get("description") or ""
+        fixed_description = _strip_orphan_wiki_embeds(description, allowed)
+        if fixed_description != description:
+            request(
+                "PUT",
+                f"/2/issue/{key}",
+                body={"fields": {"description": fixed_description}},
+            )
+            changed.append(f"{key}\tdescription\tstripped orphans")
+        for comment_row in (fields.get("comment") or {}).get("comments", []):
+            comment_id = str(comment_row.get("id", ""))
+            body = comment_row.get("body") or ""
+            fixed_body = _strip_orphan_wiki_embeds(body, allowed)
+            if fixed_body == body:
+                continue
+            request(
+                "PUT",
+                f"/2/issue/{key}/comment/{comment_id}",
+                body={"body": fixed_body},
+            )
+            changed.append(f"{key}\tcomment:{comment_id}\tstripped orphans")
+    return changed
+
+
 def transitions(key: str) -> List[Json]:
     """Available transitions for ``key``."""
     return (request("GET", f"/3/issue/{key}/transitions") or {}).get("transitions", [])
@@ -543,6 +621,18 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("key")
     p.add_argument("files", nargs="+")
 
+    p = sub.add_parser(
+        "verify-embeds",
+        help="exit 1 if any wiki thumbnail names a missing attachment",
+    )
+    p.add_argument("keys", nargs="+", help="issue keys, e.g. LPT-59")
+
+    p = sub.add_parser(
+        "repair-embeds",
+        help="strip orphan wiki thumbnails from description and comments",
+    )
+    p.add_argument("keys", nargs="+", help="issue keys, e.g. LPT-59")
+
     p = sub.add_parser("transitions", help="list transitions")
     p.add_argument("key")
 
@@ -582,6 +672,23 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(f"commented on {args.key} ({comment(args.key, _read_body(args.body_file) or '', args.attach)})")
         elif args.cmd == "attach":
             print("\n".join(attach(args.key, args.files)))
+        elif args.cmd == "verify-embeds":
+            report = verify_embeds(args.keys)
+            if report:
+                print("\n".join(report), file=sys.stderr)
+                print(
+                    f"jira: {len(report)} orphan wiki embed(s); "
+                    f"attach the file or run repair-embeds",
+                    file=sys.stderr,
+                )
+                return 1
+            print(f"jira: embeds ok ({', '.join(args.keys)})")
+        elif args.cmd == "repair-embeds":
+            changed = repair_embeds(args.keys)
+            if changed:
+                print("\n".join(changed))
+            else:
+                print(f"jira: nothing to repair ({', '.join(args.keys)})")
         elif args.cmd == "transitions":
             for item in transitions(args.key):
                 print(f"{item['id']}\t{item['name']}\t-> {item['to']['name']}")
