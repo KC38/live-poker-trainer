@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_starting_hand_copy.dart';
 
 bool _isSuited(List<String> codes) {
@@ -193,6 +194,53 @@ void main() {
         expect(name(codesForRole('jo')), entry.value[2], reason: entry.key);
       }
     }
+  });
+
+  test('showdown Hint names physical seats after role shuffle', () {
+    ShowdownOrderDeal? shuffled;
+    var shuffledSeed = -1;
+    for (var seed = 0; seed < 40; seed++) {
+      final deal = dealShowdownOrderCards(
+        'act-01-02-01-guided-ladder',
+        random: Random(seed),
+      )!;
+      if (deal.seatIds[0] != 'you') {
+        shuffled = deal;
+        shuffledSeed = seed;
+        break;
+      }
+    }
+    expect(shuffled, isNotNull, reason: 'expected a non-identity seat shuffle');
+    final deal = shuffled!;
+    final hint = showdownOrderHintSpeech(
+      'act-01-02-01-guided-ladder',
+      deal: deal,
+    )!;
+    final firstRole = deal.correctOrder.first;
+    final firstSeat = showdownOrderPhysicalSeatLabel(
+      deal.seatIds.indexOf(firstRole),
+    );
+    expect(hint, startsWith('Showdown — tap $firstSeat (high card)'));
+    expect(hint, isNot(startsWith('Showdown — tap You (high card)')));
+
+    // lessonFrameHintFallback must not keep the authored catalog seats when
+    // the deal RNG places the high-card role off You.
+    debugLessonCardDealRandom = Random(shuffledSeed);
+    addTearDown(() => debugLessonCardDealRandom = null);
+    final fallback = lessonFrameHintFallback(
+      CourseActivity(
+        id: 'act-01-02-01-guided-ladder',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.compareRank,
+        estimatedSeconds: 50,
+        accessibilityText:
+            'Showdown — tap You (high card), Sam (pair), then Jo (flush).',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap weakest to strongest.',
+      ),
+    );
+    expect(fallback, hint);
   });
 
   test('suit remap keeps relative suits across hole and board', () {
