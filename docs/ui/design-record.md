@@ -499,7 +499,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Hint (one at a time) | Hint swaps the speech bubble to **one** hint for the current press until tapped again. Never stack hint + idle prompt, or two hint bubbles. Disabled while SoftPulse is already on for this press. Visible but **disabled** when there is no hint — including a multi-press / multi-turn step after the last press that had a hint. |
 | Cues (one system, one gold) | `GlowHighlight` only: gold SoftPulse for the guide/Hint target, cyan for the learner's picks. Hint-reopened SoftPulse looks the same as the guide cue. At most one gold target at a time; after that press is taken, gold stays off until Hint reopens the next — except on multi-press explain SoftPulse sequences with no hint text (button → SB → BB, best-five `playOrder`), where gold SoftPulse advances to the next required card/seat and Hint stays disabled while that gold cue is on. Best five explain SoftPulse marks only the next card in `playOrder` — never every remaining playing hole at once (LPT-55). Best five guided/scaffolded picker SoftPulse (`LessonBestFivePickerTable`) marks only the next untapped card in the recommended `choiceSets` list — one gold ring at a time — matching explain `playOrder` SoftPulse; Hint reopens that same card cue (LPT-57). Best five explain does not dim leftover hole/board cards until the five that play are tapped; SoftPulse and cyan selection are the only pre-answer emphasis (LPT-56). Review lessons hide cues by default. No `CueArrows` / `CuePulse`. |
 | Coach mood | Calm on the ask, celebrate on Nice!, think on Oops. Never an empty bubble after the deal, never a letter-R coach. While the lesson is bootstrapping (or recovering from a load error), the coach bubble shows one calm line such as getting the next step ready — never an empty bubble beside Rex. On a locked start, the bubble names Open `<previous lesson>` when that CTA is shown; otherwise Retry (LPT-51). |
-| Hearts | A non-guided miss empties one heart in place. Guided free misses do not. At zero, empty hearts breathe and the refill sheet opens from the hearts control. Practice / gem refill restores hearts in place (no toast, no rejected out-of-hearts dock). |
+| Hearts | A non-guided miss empties one heart in place. Guided free misses do not — `evaluateLifeAndAcceptance` sets `lifeLost` only when the stage is not `guided` (scaffolded, unguided, checkpoint, jump_test still spend; LPT-59). At zero, empty hearts breathe and the refill sheet opens from the hearts control. Practice / gem refill restores hearts in place (no toast, no rejected out-of-hearts dock). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
 rebuilds until all four real suits are in; `syncSelection` only mirrors a
@@ -559,6 +559,12 @@ way — never every remaining recommended card, never the You name box.
 Hint reopens that card cue when the SoftPulse wave closes. The next
 multi-press felt explain or picker that cues cards copies that
 single-target advance and the no-early-dim rule.
+
+Guided free misses (LPT-59) are `evaluateLifeAndAcceptance` in
+`functions/src/course_session.ts`: `lifeLost` is false when `stage` is
+`guided`. Scaffolded, unguided, checkpoint, and jump_test still spend.
+Redeploy Cloud Functions after changing that helper. The next soft-grade
+life rule copies that stage gate instead of charging every rejection.
 
 The per-lesson state is the Lesson ledger at the end of this file.
 

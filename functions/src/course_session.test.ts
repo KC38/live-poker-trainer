@@ -112,7 +112,7 @@ describe("soft grading and life loss", () => {
   const streets = findLesson("lesson-01-04-01-streets-and-order")!.lesson;
   const pots = findLesson("lesson-01-05-01-winning-pots")!.lesson;
 
-  it("loses a life on any non-accepted grade, including guided", () => {
+  it("loses a life on non-guided non-accepted grades; guided is free", () => {
     expect(
       evaluateLifeAndAcceptance({
         grade: "questionable",
@@ -130,13 +130,13 @@ describe("soft grading and life loss", () => {
         grade: "clear_mistake",
         stage: "guided",
       }).lifeLost,
-    ).toBe(true);
+    ).toBe(false);
     expect(
       evaluateLifeAndAcceptance({
         grade: "questionable",
         stage: "guided",
       }).lifeLost,
-    ).toBe(true);
+    ).toBe(false);
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
@@ -195,7 +195,7 @@ describe("soft grading and life loss", () => {
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,
-      lifeLost: true,
+      lifeLost: false,
     });
     expect(gradeCourseResponse({
       activity: lesson.activities.find(
@@ -208,24 +208,24 @@ describe("soft grading and life loss", () => {
       lifeLost: true,
     });
 
-    const checkpoint = openFold.activities.find(
+    const guidedUtg = openFold.activities.find(
       (activity) => activity.id === "act-02-03-01-guided-utg",
     )!;
     expect(gradeCourseResponse({
-      activity: checkpoint,
+      activity: guidedUtg,
       choiceId: "open-six",
     })).toMatchObject({
       grade: "clear_mistake",
       accepted: false,
-      lifeLost: true,
+      lifeLost: false,
     });
     expect(gradeCourseResponse({
-      activity: checkpoint,
+      activity: guidedUtg,
       choiceId: "limp",
     })).toMatchObject({
       grade: "questionable",
       accepted: false,
-      lifeLost: true,
+      lifeLost: false,
     });
 
     const lifeLossCheckpoint = openFold.activities.find(
