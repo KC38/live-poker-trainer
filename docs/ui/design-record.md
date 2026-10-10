@@ -280,9 +280,11 @@ teaches it and stays on for the rest of the course.
 
 Your two cards and Suits and ranks show only seats, cards, and the board
 when a step deals one. A hole-only step (Your two cards peek, Button and
-blinds explain) turns `boardSlots` off so empty outlines do not draw. Live
-Training and an id that is not `lesson-SS-UU-LL` get `TableFeatures.full`.
-Your start uses the preset of the lesson it recommends.
+blinds explain, and Button and blinds frame steps that share
+`isLessonBlindsFrameActivity` without a dealt board) turns `boardSlots`
+off so empty outlines do not draw. Live Training and an id that is not
+`lesson-SS-UU-LL` get `TableFeatures.full`. Your start uses the preset of
+the lesson it recommends.
 
 A lesson seat shows a player type only when the step names it
 (`villainArchetypes`); a seat never shows a made-up type. A spot that says
@@ -391,6 +393,9 @@ turns them face up. Tapping another seat's cards is a miss.
 Button and blinds' explain step (`LessonBlindsClockwiseTable`) draws seats,
 pot, pucks, posted blinds, and hole-card backs with empty board slot
 outlines off (`boardSlots: false`) until a later step deals community cards.
+Button and blinds hole-only frame steps (`act-01-01-03-guided-button` and
+siblings that share `isLessonBlindsFrameActivity` without a dealt board)
+pass the same `boardSlots: false` gate on their `LessonTableStage` (LPT-52).
 
 ### Cues
 
@@ -446,7 +451,10 @@ answer, Continue advances.
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
 is the stage. `LessonPeekTable` turns `boardSlots` off so the first Your
 two cards step has no empty board outlines. `LessonBlindsClockwiseTable`
-turns `boardSlots` off the same way for Button and blinds explain.
+turns `boardSlots` off the same way for Button and blinds explain. Blinds
+frame steps in `select_identify_activity.dart`
+(`isLessonBlindsFrameActivity`) pass `boardSlots: false` on
+`LessonTableStage` the same way (LPT-52).
 `LessonCoachBand` maps `LessonMascotExpression` to calm, celebrate, or
 think. `LessonChoiceButton` (`lib/ui/course/widgets/rex_coach_line.dart`)
 is the one framed option button.

@@ -28,6 +28,7 @@ import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/hero_rail_widget.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 bool isLessonBlindsFrameActivity(String activityId) {
   return activityId == 'act-01-01-03-guided-button' ||
@@ -1584,6 +1585,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     dealerIndex: lessonBlindsButtonIndex,
                     sbIndex: lessonBlindsSmallBlindIndex,
                     bbIndex: lessonBlindsBigBlindIndex,
+                    // Hole-only blinds frame: no empty board slot outlines
+                    // (LPT-52; same gate as LessonBlindsClockwiseTable / LPT-50).
+                    features: TableFeaturesScope.of(
+                      context,
+                    ).copyWith(boardSlots: false),
                     // Scaffolded: SB already out; BB posts on a correct tap.
                     // Checkpoint: both hidden until SB is tapped, then SB and
                     // BB pop in one after the other (same SeatPuck / bet pop).
