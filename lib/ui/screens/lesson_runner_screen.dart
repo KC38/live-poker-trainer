@@ -969,7 +969,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   }
 
   String _frameSpeech(LessonActivityController controller) {
-    if (controller.hintVisible) {
+    // Graded dock owns the beat — never keep Hint copy in the bubble (LPT-60).
+    if (controller.hintVisible && controller.lastResult == null) {
       final authored = controller.activity.hintMedia.isNotEmpty
           ? controller.activity.hintMedia.first.text
           : null;

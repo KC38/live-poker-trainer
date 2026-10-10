@@ -169,6 +169,8 @@ class LessonActivityController extends ChangeNotifier {
   /// Hint disabled (guided SoftPulse, or explain with no hint text) keep
   /// the next-target cue on.
   bool get showTargetCue {
+    // Graded Nice! / Oops owns the beat — no Hint SoftPulse under the dock.
+    if (_lastResult != null) return false;
     final unlocked = _hintVisible ||
         (!lessonFrameSoftPulseQuietByDefault(activity, isReview: isReview) &&
             (activity.stage == ActivityStage.explain ||
@@ -373,6 +375,8 @@ class LessonActivityController extends ChangeNotifier {
   void presentLocalMiss(SubmitCourseStepResult result) {
     if (_submitting || _lastResult != null) return;
     _lastResult = result;
+    // Hint must not stay in the coach bubble under Oops (LPT-60).
+    _hintVisible = false;
     _redoDraft = null;
     HapticFeedback.heavyImpact();
     notifyListeners();
@@ -429,6 +433,8 @@ class LessonActivityController extends ChangeNotifier {
   void finishSubmit(SubmitCourseStepResult result) {
     _lastResult = result;
     _submitting = false;
+    // Hint must not stay in the coach bubble under Nice! / Oops (LPT-60).
+    _hintVisible = false;
     // Keep the same idempotency key so retries cannot double-submit.
     if (result.accepted) {
       _acceptedHaptic();
