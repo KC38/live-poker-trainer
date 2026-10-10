@@ -26,10 +26,13 @@
 # make-change / deploy-functions.sh can deploy from LaunchAgent runs.
 #
 # Environment:
-#   UI_AGENT_MODEL              model for `agent --model` (default: CLI default)
+#   UI_AGENT_MODEL              model for `agent --model` (default: CLI default /
+#                               Auto). Set this when Auto hits a usage limit.
 #   UI_AGENT_GAP                seconds between runs (default 60)
 #   UI_AGENT_BUSY_SLEEP         seconds to sleep when the mini is busy (default 300)
 #   UI_AGENT_SIM_NOT_READY_SLEEP  seconds after programmatic SIM_NOT_READY (default 600)
+#   UI_AGENT_USAGE_LIMIT_SLEEP  seconds after ActionRequiredError usage limit
+#                               (default: until stated reset day, else 3600)
 #   UI_AGENT_VM_WAIT_SECONDS    seconds to wait for a Dart VM per refresh (default 180)
 #   UI_AGENT_MAX_RUN_SECONDS    hard cap per run (default 14400)
 #   UI_AGENT_STALL_SECONDS      kill agent when lock heartbeat is older
@@ -61,6 +64,9 @@ BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
 # After back-to-back SIM_NOT_READY (usually Flutter cache lock / pub get
 # killed), back off so other agents can finish and the mini can boot.
 SIM_NOT_READY_SLEEP="${UI_AGENT_SIM_NOT_READY_SLEEP:-600}"
+# Override for Auto quota exhaustion; when unset, sleep_usage_limit_seconds
+# parses the reset date from the run log (else 3600s).
+USAGE_LIMIT_SLEEP="${UI_AGENT_USAGE_LIMIT_SLEEP:-}"
 VM_WAIT_SECONDS="${UI_AGENT_VM_WAIT_SECONDS:-180}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
 STALL_SECONDS="${UI_AGENT_STALL_SECONDS:-600}"
@@ -133,6 +139,55 @@ logged_in() {
 
 # True when the latest coverage line is sim-not-ready (or the health tail
 # says so when coverage is missing).
+# True when a run log shows Cursor Auto / headless usage-limit errors.
+run_log_has_usage_limit() {
+  local run_log="$1"
+  [[ -f "$run_log" ]] || return 1
+  grep -qiE \
+    'ActionRequiredError|usage limit|error_code=upgrade|resource_exhausted' \
+    "$run_log"
+}
+
+# Seconds to sleep after a usage-limit exit (override via UI_AGENT_USAGE_LIMIT_SLEEP).
+sleep_usage_limit_seconds() {
+  local run_log="${1:-}"
+  if [[ -n "$USAGE_LIMIT_SLEEP" ]]; then
+    echo "$USAGE_LIMIT_SLEEP"
+    return 0
+  fi
+  python3 - "$run_log" <<'PY' || echo 3600
+import re, sys
+from datetime import datetime, timedelta
+from pathlib import Path
+
+path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path()
+text = ""
+try:
+    text = path.read_text(encoding="utf-8", errors="replace") if path.is_file() else ""
+except OSError:
+    pass
+# "Your usage limits will reset when your monthly cycle ends on 10/11/2026."
+match = re.search(
+    r"ends on\s+(\d{1,2})/(\d{1,2})/(\d{4})",
+    text,
+    re.I,
+)
+now = datetime.now().astimezone()
+if match:
+    month, day, year = (int(match.group(1)), int(match.group(2)), int(match.group(3)))
+    try:
+        reset = datetime(year, month, day, 0, 5, tzinfo=now.tzinfo)
+        seconds = int((reset - now).total_seconds())
+        # Keep a floor so a mis-parsed "today" does not spin; cap at 24h so
+        # a wrong far-future date cannot freeze the loop for days.
+        print(max(1800, min(seconds, 86400)))
+        raise SystemExit(0)
+    except ValueError:
+        pass
+print(3600)
+PY
+}
+
 last_run_sim_not_ready() {
   if [[ -f "$COVERAGE_FILE" ]]; then
     python3 - "$COVERAGE_FILE" <<'PY'
@@ -929,6 +984,20 @@ try:
 except (OSError, json.JSONDecodeError, TypeError, ValueError):
     pass
 
+USAGE_LIMIT = re.compile(
+    r"ActionRequiredError|usage limit|error_code=upgrade|resource_exhausted",
+    re.I,
+)
+log_blob = ""
+try:
+    log_blob = Path(log).read_text(encoding="utf-8", errors="replace")
+except OSError:
+    pass
+if not result and USAGE_LIMIT.search(log_blob):
+    result = "usage-limit"
+    if not ticket:
+        ticket = None
+
 # Prefer a short coverage summary whenever coverage landed. Agent report
 # prose used to win because it also contained LPT-NN / closed, stuffing
 # markdown into health.jsonl (LPT-61).
@@ -1260,6 +1329,29 @@ with Path(path).open("a", encoding="utf-8") as handle:
         "learnings": "unchanged",
     }) + "\n")
 PY
+  elif run_log_has_usage_limit "$run_log"; then
+    code=14
+    log "run $stamp hit Cursor usage limit (exit 14); set UI_AGENT_MODEL to bypass Auto"
+    python3 - "$COVERAGE_FILE" "$sha" <<'PY' || true
+import json, sys
+from datetime import datetime
+from pathlib import Path
+path, sha = sys.argv[1], sys.argv[2]
+Path(path).parent.mkdir(parents=True, exist_ok=True)
+with Path(path).open("a", encoding="utf-8") as handle:
+    handle.write(json.dumps({
+        "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "sha": sha,
+        "surface": "none",
+        "result": "usage-limit",
+        "ticket": None,
+        "leads": [
+            "Cursor Auto usage limit (ActionRequiredError); set UI_AGENT_MODEL "
+            "or wait for the monthly reset before retrying"
+        ],
+        "learnings": "unchanged",
+    }) + "\n")
+PY
   fi
 
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min"
@@ -1291,6 +1383,11 @@ run_loop() {
       13)
         log "agent stalled; sleeping ${GAP}s then starting a fresh run"
         sleep "$GAP"
+        ;;
+      14)
+        _usage_sleep="$(sleep_usage_limit_seconds "$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1)")"
+        log "usage limit; sleeping ${_usage_sleep}s (set UI_AGENT_MODEL to use another model)"
+        sleep "$_usage_sleep"
         ;;
       *)
         if last_run_sim_not_ready; then
