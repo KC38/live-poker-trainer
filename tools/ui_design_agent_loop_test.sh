@@ -97,6 +97,21 @@ dart_vm_ready || fail "dart_vm_ready should accept token ending in ="
 printf '%s\n' 'Launching lib/main.dart on iPhone 13 mini in debug mode...' >"$vm_log"
 dart_vm_ready && fail "dart_vm_ready should fail before the VM line"
 
+# Stall helper: fresh heartbeat is fine; ancient heartbeat is stalled.
+python3 "$ROOT/tools/sim_lock.py" claim --owner stall-test --purpose "fresh" --pid $$ >/dev/null
+STALL_SECONDS=600
+lock_heartbeat_stalled && fail "fresh heartbeat must not look stalled"
+python3 - <<PY
+import json, time
+from pathlib import Path
+path = Path("$SIM_LOCK_DIR") / "simulator-lock.json"
+state = json.loads(path.read_text())
+state["heartbeat_epoch"] = time.time() - 601
+path.write_text(json.dumps(state))
+PY
+lock_heartbeat_stalled || fail "heartbeat older than STALL_SECONDS should be stalled"
+python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
+
 # Backoff helper: latest coverage result drives SIM_NOT_READY sleep.
 mkdir -p "$(dirname "$COVERAGE_FILE")"
 printf '%s\n' '{"result":"closed"}' >"$COVERAGE_FILE"

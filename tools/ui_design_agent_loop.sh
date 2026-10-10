@@ -30,6 +30,10 @@
 #   UI_AGENT_SIM_NOT_READY_SLEEP  seconds after programmatic SIM_NOT_READY (default 600)
 #   UI_AGENT_VM_WAIT_SECONDS    seconds to wait for a Dart VM per refresh (default 180)
 #   UI_AGENT_MAX_RUN_SECONDS    hard cap per run (default 14400)
+#   UI_AGENT_STALL_SECONDS      kill agent when lock heartbeat is older
+#                               than this while the process is still alive
+#                               (default 600). Covers Cursor reconnect hangs
+#                               that otherwise hold the mini until MAX_RUN.
 set -euo pipefail
 
 export PATH="$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/Applications/flutter/bin:${PATH:-}"
@@ -54,6 +58,7 @@ BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
 SIM_NOT_READY_SLEEP="${UI_AGENT_SIM_NOT_READY_SLEEP:-600}"
 VM_WAIT_SECONDS="${UI_AGENT_VM_WAIT_SECONDS:-180}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
+STALL_SECONDS="${UI_AGENT_STALL_SECONDS:-600}"
 COVERAGE_FILE="$STATE_DIR/ui-agent-coverage.jsonl"
 FLUTTER_RUN_LOG="/tmp/flutter-live-poker-trainer.run.log"
 REFRESH_SCRIPT="$(cd "$TOOLS/.." && pwd)/.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh"
@@ -157,6 +162,28 @@ wait_for_dart_vm() {
   return 1
 }
 
+# True when the holder’s heartbeat is older than STALL_SECONDS. A live
+# agent must heartbeat via sim_lock; Cursor reconnect hangs stop doing so
+# and used to burn the mini until MAX_RUN.
+lock_heartbeat_stalled() {
+  python3 - "$STALL_SECONDS" <<'PY'
+import json, os, sys, time
+from pathlib import Path
+
+stall = int(sys.argv[1])
+lock_dir = Path(os.environ.get("SIM_LOCK_DIR") or Path.home() / ".live-poker-trainer")
+path = lock_dir / "simulator-lock.json"
+try:
+    state = json.loads(path.read_text(encoding="utf-8"))
+except (OSError, json.JSONDecodeError):
+    raise SystemExit(1)
+if state.get("state") != "in_use":
+    raise SystemExit(1)
+beat = float(state.get("heartbeat_epoch") or state.get("claimed_epoch") or 0)
+raise SystemExit(0 if (time.time() - beat) > stall else 1)
+PY
+}
+
 # Refresh (or hot-restart) origin/main and wait for a Dart VM. Caller must
 # hold SIM_LOCK_RUN_ID. Returns 0 when ready.
 # Set UI_AGENT_SKIP_SIM_PREFLIGHT=1 in unit tests to skip the real device.
@@ -223,7 +250,8 @@ PY
 }
 
 # One run. Returns 0 after an agent run, 10 when the mini was busy, 11 when
-# not logged in, 12 when the Dart VM never came up (agent not started).
+# not logged in, 12 when the Dart VM never came up (agent not started),
+# 13 when the agent was killed for a stalled lock heartbeat.
 one_run() {
   sync_primary
   if ! logged_in; then
@@ -288,7 +316,19 @@ one_run() {
     deadline=$(( $(date +%s) + MAX_RUN ))
     while kill -0 "$pid" 2>/dev/null; do
       if (( $(date +%s) >= deadline )); then
+        log "MAX_RUN ${MAX_RUN}s exceeded; killing agent pid $pid"
         kill -TERM "$pid" 2>/dev/null || true
+        sleep 5
+        kill -KILL "$pid" 2>/dev/null || true
+        break
+      fi
+      if lock_heartbeat_stalled; then
+        # Marker before kill so wait-return cannot race past it.
+        echo 1 >"$LOG_DIR/run-$stamp.stalled"
+        log "agent stalled (lock heartbeat > ${STALL_SECONDS}s); killing pid $pid"
+        kill -TERM "$pid" 2>/dev/null || true
+        sleep 5
+        kill -KILL "$pid" 2>/dev/null || true
         break
       fi
       sleep 30
@@ -299,9 +339,16 @@ one_run() {
   code=0
   wait "$pid" || code=$?
   kill "$watchdog" 2>/dev/null || true
+  wait "$watchdog" 2>/dev/null || true
   rm -f "$PID_FILE"
   sim_lock release --run-id "$run_id" >/dev/null 2>&1 || true
   unset SIM_LOCK_RUN_ID SIM_LOCK_PID
+
+  if [[ -f "$LOG_DIR/run-$stamp.stalled" ]]; then
+    code=13
+    rm -f "$LOG_DIR/run-$stamp.stalled"
+    log "run $stamp marked stalled (exit 13)"
+  fi
 
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min"
   tail -n 15 "$run_log" | sed 's/^/    /'
@@ -321,7 +368,7 @@ with open(path, "a", encoding="utf-8") as handle:
     }) + "\n")
 PY
   find "$LOG_DIR" -name 'run-*.log' -mtime +14 -delete 2>/dev/null || true
-  return 0
+  return "$code"
 }
 
 run_loop() {
@@ -337,6 +384,10 @@ run_loop() {
       12)
         log "SIM_NOT_READY preflight; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
         sleep "$SIM_NOT_READY_SLEEP"
+        ;;
+      13)
+        log "agent stalled; sleeping ${GAP}s then starting a fresh run"
+        sleep "$GAP"
         ;;
       *)
         if last_run_sim_not_ready; then
@@ -509,7 +560,16 @@ EOF
     latest="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
     if [[ -n "$latest" ]]; then
       echo "latest log: $latest"
-      tail -n 10 "$latest"
+      if [[ -s "$latest" ]]; then
+        tail -n 10 "$latest"
+      else
+        echo "(run log empty — Cursor CLI often writes to /tmp/cursor-agent-logs-*/)"
+        sess="$(ls -t /tmp/cursor-agent-logs-*/session-*.log 2>/dev/null | head -1 || true)"
+        if [[ -n "$sess" ]]; then
+          echo "cursor session log: $sess"
+          tail -n 10 "$sess"
+        fi
+      fi
     else
       echo "latest log: none yet"
     fi
