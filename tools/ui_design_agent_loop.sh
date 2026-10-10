@@ -227,18 +227,33 @@ for line in ps_out.splitlines():
     if any(tok in low for tok in ("flutter", "dartvm", "dart ", "xcodebuild")):
         raise SystemExit(1)
 
-# tmux flutter-* sessions the ui-agent starts for worktree validates.
-try:
-    sessions = subprocess.check_output(
-        ["tmux", "list-sessions", "-F", "#{session_name}"],
-        text=True,
-        errors="replace",
-        stderr=subprocess.DEVNULL,
-    )
-except (OSError, subprocess.CalledProcessError):
-    sessions = ""
-for name in sessions.splitlines():
-    if name.startswith("flutter-iphone-13-mini"):
+# tmux sessions the ui-agent starts (default server and -L ui-agent).
+# Include deploy/refresh helpers — firebase deploy skips heartbeats and
+# used to look stalled while deploy-LPT-* was still running.
+session_names: list[str] = []
+for tmux_cmd in (
+    ["tmux", "list-sessions", "-F", "#{session_name}"],
+    ["tmux", "-L", "ui-agent", "list-sessions", "-F", "#{session_name}"],
+):
+    try:
+        session_names.extend(
+            subprocess.check_output(
+                tmux_cmd,
+                text=True,
+                errors="replace",
+                stderr=subprocess.DEVNULL,
+            ).splitlines()
+        )
+    except (OSError, subprocess.CalledProcessError):
+        pass
+alive_prefixes = (
+    "flutter-iphone-13-mini",
+    "deploy-LPT-",
+    "refresh-LPT-",
+    "ship-refresh",
+)
+for name in session_names:
+    if any(name.startswith(p) for p in alive_prefixes):
         raise SystemExit(1)
 
 # Busy descendants under the script/agent pid.
@@ -255,7 +270,7 @@ if agent_pid.isdigit():
     descendants: set[str] = set()
     busy_needles = (
         "flutter", "dart", "xcodebuild", "git ", "rsync", "pub get",
-        "agent_tap", "simctl",
+        "agent_tap", "simctl", "firebase", "npm ", "gh ", "deploy-functions",
     )
     while stack:
         cur = stack.pop()
