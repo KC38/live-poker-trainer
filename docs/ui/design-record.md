@@ -378,19 +378,21 @@ turns them face up. Tapping another seat's cards is a miss.
 ### Cues
 
 `GlowHighlight` (`lib/ui/widgets/glow_highlight.dart`) is the one cue. There
-are no arrows.
+are no arrows. Guide cues and Hint-reopened cues use the same gold SoftPulse
+ring — never a second cue language for hints.
 
 | Ring | Meaning |
 | --- | --- |
-| Gold (`GlowKind.cue`) | SoftPulse: the coach's target. Breathes |
+| Gold (`GlowKind.cue`) | SoftPulse: the coach's **one** current target. Breathes |
 | Cyan (`GlowKind.selection`) | What the learner tapped. Stays on under Nice! and the miss dock |
 
 SoftPulse rules:
 
 - It appears only after the dealt cards have landed.
-- It marks the first press of a multi-press step, then stays off unless Hint
-  reopens it.
-- Hint is disabled while cues are already on.
+- At most one gold SoftPulse target at a time. It marks the first press of
+  a multi-press step, then stays off unless Hint reopens SoftPulse for the
+  **next** press only.
+- Hint is disabled while gold SoftPulse is already on for this press.
 - Review lessons hide cues by default.
 - The ring's outset is reserved in layout, so toggling it never moves or
   resizes a tile.
@@ -399,8 +401,10 @@ SoftPulse rules:
 
 Undo, redo, and hint sit in one fixed row under the stage while the step is
 unanswered. Undo reverts the local answer. Redo restores what undo cleared.
-Hint shows that step's hint in the speech bubble until it is tapped again.
-A step with no hint leaves the button visible and disabled.
+Hint shows **one** hint for the current press in the speech bubble until it
+is tapped again — not stacked with the idle coach line. A step with no hint
+leaves the button visible and disabled, including mid multi-turn sequence
+when the current press has nothing left to hint.
 
 ### 5. Answer dock
 
@@ -458,9 +462,10 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | --- | --- |
 | Randomization | Cards are randomized within the hand class each attempt. A second open of the same lesson should not always deal the identical hole/board when the activity supports a class of hands. |
 | Coach follows the deal | Speech, grade lines, and chip math name the cards, seats, and amounts on the felt for this attempt — not a previous deal or a hard-coded template combo. |
-| Hint | Hint swaps the speech bubble to that step's hint until tapped again. Disabled while SoftPulse cues are already on. Visible but disabled when the step has no hint. |
-| Guide cues | Gold SoftPulse after cards land, first press only (Hint may reopen). Cyan keeps the learner's picks. Review lessons hide cues. No `CueArrows`. |
+| Hint (one at a time) | Hint swaps the speech bubble to **one** hint for the current press until tapped again. Never stack hint + idle prompt, or two hint bubbles. Disabled while SoftPulse is already on for this press. Visible but **disabled** when there is no hint — including a multi-press / multi-turn step after the last press that had a hint. |
+| Cues (one system, one gold) | `GlowHighlight` only: gold SoftPulse for the guide/Hint target, cyan for the learner's picks. Hint-reopened SoftPulse looks the same as the guide cue. At most one gold target at a time; after that press is taken, gold stays off until Hint reopens the next. Review lessons hide cues by default. No `CueArrows` / `CuePulse`. |
 | Coach mood | Calm on the ask, celebrate on Nice!, think on Oops. Never an empty bubble after the deal, never a letter-R coach. |
+| Hearts | A non-guided miss empties one heart in place. Guided free misses do not. At zero, empty hearts breathe and the refill sheet opens from the hearts control. Practice / gem refill restores hearts in place (no toast, no rejected out-of-hearts dock). |
 
 Playing cards use one face everywhere: `TableCard` (corner rank, one centered suit). `MiniCard` and `CardBack` are size presets over `TableCard` / `TableCardBack` for densified lesson trays — they must not invent a second face.
 
@@ -636,9 +641,12 @@ past this list.
 - **Live Training** has had far less polish than lessons and Home. Walk it
   against Theme and Poker table.
 - **Lesson content regressions.** Steps that always deal the same cards,
-  Hint that no-ops or shows the wrong text, missing SoftPulse on a guided
-  first press, or coach copy that does not name the dealt cards. Verify on
-  the mini (two attempts when checking randomization) before filing.
+  Hint that no-ops / stacks / stays enabled with nothing to show, multiple
+  gold SoftPulse targets or a second cue style for hints, missing SoftPulse
+  on a guided first press, coach copy that does not name the dealt cards,
+  or hearts that do not empty on a paid miss / restore on Practice or
+  refill. Verify on the mini (two attempts when checking randomization;
+  screenshot heart counts around a miss) before filing.
 
 ## Lesson ledger
 
