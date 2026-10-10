@@ -173,7 +173,9 @@ I CAN DO IT use the elevated button.
 
 Lesson feedback Continue and lesson result CONTINUE use the elevated button
 (radius 14). The Settings Chip display segments ($, BB, Both) use JetBrains
-Mono.
+Mono. Settings Account **Create an account** / **Sign out** use the Theme
+elevated and outlined button metrics (radius 14); they are not stadium
+`FilledButton`s.
 
 ### Shipped
 
@@ -185,9 +187,10 @@ Save progress CTAs and celebration chips are `SaveProgressScreen` in
 `lib/ui/screens/onboarding_screens.dart`. The next guest conversion screen
 copies those elevated / outlined / gold-bright link roles.
 
-Chip display segments are on `SettingsScreen`
+Chip display segments and Account CTAs are on `SettingsScreen`
 (`lib/ui/screens/settings_screen.dart`). The next screen that labels a chip
-amount copies that data type.
+amount copies that data type. Account primary / secondary copy the elevated
+and outlined Theme metrics.
 
 ## Poker table
 
