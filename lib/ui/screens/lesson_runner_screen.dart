@@ -1207,6 +1207,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       builder: (context, _) {
         final activity = controller.activity;
         final result = controller.lastResult;
+        final generation = controller.bindGeneration;
+        // No-felt steps never call onDealReady; unlock SoftPulse after mount.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          final live = _activityController;
+          if (live == null || live.bindGeneration != generation) return;
+          live.releaseFeltDealIfUntracked();
+        });
         final expression = switch (result?.accepted) {
           null => LessonMascotExpression.thinking,
           true => LessonMascotExpression.happy,
