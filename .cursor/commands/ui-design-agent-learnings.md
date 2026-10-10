@@ -80,6 +80,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer waiting until the lesson felt is visible before capturing
   `<KEY>-validated.png`. A bootstrap "Getting your next step ready…"
   spinner is not closeout proof.
+- Prefer, when `openlesson` lands on a locked start, reading Rex's bubble
+  against the gold Open-previous CTA — a Retry-only line with that button
+  still up is a coach-copy bug (LPT-51), not a clean gate.
 
 ## Ops (simulator, CLI, Jira)
 
@@ -139,3 +142,5 @@ trimming. Durable rules belong in the sections above, not only here.
   write coverage before long worktree compiles.
 - 2026-10-10: LPT-50 blinds empty boardSlots; refresh stuck at Launching
   again — manual tmux flutter run; do not close from bootstrap spinner shots.
+- 2026-10-10: LPT-51 locked-start coach said Tap Retry beside Open previous;
+  gate screens are coach-copy surfaces too.
