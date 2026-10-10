@@ -100,6 +100,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Worktree validation uses `--log /tmp/flutter-$SLUG.log` and its own
   tmux session. Origin/main validation uses
   `/tmp/flutter-live-poker-trainer.run.log`. Do not mix them.
+- When starting `refresh-simulator.sh` (or any sim tool) from tmux
+  `send-keys`, export `SIM_LOCK_RUN_ID=…` in that command line. A bare
+  tmux shell does not inherit the agent export, so refresh reports the
+  mini busy under your own run id.
 - Attach / the loop pane only prints run start and end. Live detail is in
   `~/.live-poker-trainer/ui-agent-logs/run-*.log` and the run's agent
   transcript. Do not stall waiting for the attach pane to stream tokens.
@@ -139,3 +143,6 @@ trimming. Durable rules belong in the sections above, not only here.
   creds). Closing on mini proof is enough; Actions owns deploy.
 - 2026-10-10: LPT-44 filed `needs-human` for gems tap (shop vs
   explanation vs defer). Parse `jira.py create` key before `edit`.
+- 2026-10-10: LPT-45 Settings Account stadium `FilledButton` → Theme
+  elevated. First post-merge refresh skipped until `SIM_LOCK_RUN_ID` was
+  exported inside the tmux `send-keys` line.
