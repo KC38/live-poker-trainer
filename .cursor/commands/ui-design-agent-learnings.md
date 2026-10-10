@@ -73,6 +73,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   surface (Settings, Profile, Save progress), grepping sibling guest
   **Create an account** call sites in the same walk so the twin does not
   wait another run (LPT-45 then LPT-46).
+- Prefer, after a hole-only `boardSlots: false` (or other per-step feature
+  gate) lands on one builder, grepping sibling stages on that lesson in the
+  same walk — explain vs `isLessonBlindsFrameActivity` (LPT-50 then LPT-52).
+- Prefer, when `openlesson` resumes mid-lesson past the beat under test,
+  finishing/restarting or validating a sibling activity on the **same**
+  code path for closeout proof instead of filing unreachable.
 - Prefer, when `refresh-simulator.sh` leaves only a `Launching…` line and a
   dead pid, starting `flutter run` yourself in tmux with
   `SIM_LOCK_RUN_ID=…` exported on that command line (same pattern as
@@ -144,3 +150,6 @@ trimming. Durable rules belong in the sections above, not only here.
   again — manual tmux flutter run; do not close from bootstrap spinner shots.
 - 2026-10-10: LPT-51 locked-start coach said Tap Retry beside Open previous;
   gate screens are coach-copy surfaces too.
+- 2026-10-10: LPT-52 blinds frame still had empty board slots after LPT-50
+  explain-only fix; openlesson resume skipped guided-button — validated on
+  checkpoint sibling same path.
