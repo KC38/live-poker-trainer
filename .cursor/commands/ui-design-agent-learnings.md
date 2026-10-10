@@ -77,6 +77,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   dead pid, starting `flutter run` yourself in tmux with
   `SIM_LOCK_RUN_ID=…` exported on that command line (same pattern as
   worktree validation) instead of re-debugging the refresh script.
+- Prefer waiting until the lesson felt is visible before capturing
+  `<KEY>-validated.png`. A bootstrap "Getting your next step ready…"
+  spinner is not closeout proof.
 
 ## Ops (simulator, CLI, Jira)
 
@@ -134,3 +137,5 @@ trimming. Durable rules belong in the sections above, not only here.
 - 2026-10-10: LPT-48 empty coach bubble during lesson bootstrap; stall
   watchdog + keychain duplicate also bit the closing run — heartbeat and
   write coverage before long worktree compiles.
+- 2026-10-10: LPT-50 blinds empty boardSlots; refresh stuck at Launching
+  again — manual tmux flutter run; do not close from bootstrap spinner shots.
