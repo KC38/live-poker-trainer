@@ -18,6 +18,7 @@ class CourseService {
     FirebaseAuth? auth,
     this.functionsRegion = 'us-central1',
     this.maximumWait = const Duration(minutes: 2),
+    this.callTimeout = const Duration(seconds: 25),
   }) : _functions = functions,
        _auth = auth;
 
@@ -25,6 +26,13 @@ class CourseService {
   final FirebaseAuth? _auth;
   final String functionsRegion;
   final Duration maximumWait;
+
+  /// Per-attempt callable timeout.
+  ///
+  /// The SDK default is 60s, longer than the lesson screen's start budget,
+  /// so a stalled connection would never get a fresh retry before the
+  /// screen gave up.
+  final Duration callTimeout;
 
   FirebaseFunctions get _fns =>
       _functions ?? FirebaseFunctions.instanceFor(region: functionsRegion);
@@ -207,7 +215,12 @@ class CourseService {
     var delay = const Duration(seconds: 1);
     for (;;) {
       try {
-        final response = await _fns.httpsCallable(callableName).call(payload);
+        final response = await _fns
+            .httpsCallable(
+              callableName,
+              options: HttpsCallableOptions(timeout: callTimeout),
+            )
+            .call(payload);
         return _map(response.data);
       } on FirebaseFunctionsException catch (error) {
         final retryable =

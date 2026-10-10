@@ -4440,6 +4440,44 @@ void main() {
     expect(find.text('Could not start the lesson'), findsOneWidget);
     expect(find.text('Retry'), findsOneWidget);
     expect(find.textContaining('taking too long'), findsOneWidget);
+
+    await tester.tap(find.text('Technical details'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(
+      find.textContaining('waiting on startCourseLesson'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('hung initializeProfile names that step in details', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        LessonRunnerScreen(
+          lessonId: kFirstCourseLessonId,
+          courseService: _HungStartCourseService(catalog)
+            ..hangInitialize = true,
+          startRequestId: 'start_hang_init',
+          bootstrapTimeout: const Duration(milliseconds: 80),
+        ),
+        catalog: catalog,
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump();
+    expect(find.text('Could not start the lesson'), findsOneWidget);
+
+    await tester.tap(find.text('Technical details'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(
+      find.textContaining('waiting on initializeCourseProfile'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('waiting on startCourseLesson'), findsNothing);
   });
 
   testWidgets('bootstrap chrome keeps Home hearts instead of flashing full', (
@@ -5528,6 +5566,7 @@ class _HungStartCourseService extends CourseService {
   _HungStartCourseService(this.catalog) : super();
 
   final CourseCatalog catalog;
+  bool hangInitialize = false;
 
   @override
   Future<void> initializeProfile({
@@ -5537,7 +5576,9 @@ class _HungStartCourseService extends CourseService {
     int? dailyGoalMinutes,
     int? streakGoalDays,
     String? recommendedLessonId,
-  }) async {}
+  }) async {
+    if (hangInitialize) await Completer<void>().future;
+  }
 
   @override
   Future<StartCourseLessonResult> startLesson({
