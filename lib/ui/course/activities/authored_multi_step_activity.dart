@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_money.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
@@ -145,16 +146,27 @@ class AuthoredMultiStepActivity extends StatelessWidget {
               }
             }
           }
+          final layout = resolveLessonActionFeltLayout(spot);
           final feltMoney = resolveLessonActionFeltMoney(
             spot: spot,
             choices: step.choices,
             selected: selectedChoice,
-            seatCount: 2,
+            seatCount: layout.seatCount,
+            villainSeatIndex: layout.villainSeatIndex,
           );
           final applyFeltMoney =
               spot.facingBet ||
               feltMoney.heroActionLabel != null ||
               feltMoney.streetBets.any((b) => b > 0);
+          final seatLabels = <int, String>{
+            ...layout.seatActionLabels,
+            if (feltMoney.heroActionLabel != null)
+              0: feltMoney.heroActionLabel!,
+            if (applyFeltMoney &&
+                feltMoney.villainActionLabel != null &&
+                !layout.seatActionLabels.containsKey(layout.villainSeatIndex))
+              layout.villainSeatIndex: feltMoney.villainActionLabel!,
+          };
           final useFullTable =
               LessonFrameScope.maybeOf(context) != null &&
               (activity.id.startsWith('act-01-06-01-') ||
@@ -170,13 +182,16 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                   ? LessonTableStage(
                     heroCodes: spot.heroCodes,
                     boardCodes: spot.boardCodes,
-                    villainCount: 1,
+                    villainCount: layout.villainCount,
+                    dealerIndex: layout.dealerIndex,
+                    sbIndex: layout.sbIndex,
+                    bbIndex: layout.bbIndex,
+                    activeSeatIndex: layout.activeSeatIndex,
                     heroFaceUp: true,
+                    foldedSeatIndexes: layout.foldedSeatIndexes,
+                    seatActionLabels: seatLabels,
                     streetBets: applyFeltMoney ? feltMoney.streetBets : null,
                     potTotal: applyFeltMoney ? feltMoney.potTotal : null,
-                    heroActionLabel: feltMoney.heroActionLabel,
-                    villainActionLabel:
-                        applyFeltMoney ? feltMoney.villainActionLabel : null,
                     heroStackChips: spot.heroStackAmount?.toDouble(),
                     villainStackChips: spot.villainStackChips,
                   )

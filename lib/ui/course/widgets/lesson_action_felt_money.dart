@@ -91,13 +91,21 @@ double? callAmountFromChoices(List<CourseChoice> choices) {
 
 /// Builds felt money for [spot], optionally applying the learner's [selected]
 /// Call / Bet / Raise / All-in so the pot and seat pills update live.
+///
+/// [villainSeatIndex] is the facing bettor / opener seat (default 1). On a
+/// six-max ring that is often not the seat immediately after the hero.
 LessonActionFeltMoney resolveLessonActionFeltMoney({
   required LessonActionSpot spot,
   required List<CourseChoice> choices,
   CourseChoice? selected,
   int seatCount = 2,
+  int villainSeatIndex = 1,
 }) {
   final seats = seatCount < 1 ? 1 : seatCount;
+  final villainSeat =
+      villainSeatIndex < 0
+          ? 0
+          : (villainSeatIndex >= seats ? (seats > 1 ? 1 : 0) : villainSeatIndex);
   final bets = List<double>.filled(seats, 0);
   final facing =
       spot.facingBet
@@ -114,8 +122,8 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
       heroBet = facing - callAmt;
     }
   }
-  if (seats > 1 && facing > 0) {
-    bets[1] = facing;
+  if (facing > 0 && villainSeat != 0) {
+    bets[villainSeat] = facing;
   }
   bets[0] = heroBet;
 
@@ -189,6 +197,13 @@ GameState applyLessonActionFeltMoney(
   final mainPot =
       (money.potTotal - streetSum).clamp(0, double.infinity).toDouble();
   final highest = bets.fold<double>(0, (m, b) => b > m ? b : m);
+  var labeledVillain = 1;
+  for (var i = 1; i < bets.length; i++) {
+    if (bets[i] > 0) {
+      labeledVillain = i;
+      break;
+    }
+  }
   final players = <PlayerModel>[
     for (var i = 0; i < n; i++)
       base.players[i].copyWith(
@@ -199,11 +214,11 @@ GameState applyLessonActionFeltMoney(
             .toDouble(),
         lastActionLabel: i == 0
             ? money.heroActionLabel
-            : (i == 1 ? money.villainActionLabel : null),
+            : (i == labeledVillain ? money.villainActionLabel : null),
         clearLastAction:
             (i == 0 && money.heroActionLabel == null) ||
-            (i == 1 && money.villainActionLabel == null) ||
-            i > 1,
+            (i == labeledVillain && money.villainActionLabel == null) ||
+            (i != 0 && i != labeledVillain),
       ),
   ];
   return base.copyWith(
