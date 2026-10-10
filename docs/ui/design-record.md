@@ -428,6 +428,8 @@ is tapped again — not stacked with the idle coach line. A step with no hint
 leaves the button visible and disabled, including mid multi-turn sequence
 when the current press has nothing left to hint.
 
+Bootstrap, locked-start, and start-error frames hide `LessonToolRow`; the tool row appears only after an activity is bound.
+
 ### 5. Answer dock
 
 A graded answer replaces the tool row. It does not push a new route. The
@@ -454,7 +456,9 @@ two cards step has no empty board outlines. `LessonBlindsClockwiseTable`
 turns `boardSlots` off the same way for Button and blinds explain. Blinds
 frame steps in `select_identify_activity.dart`
 (`isLessonBlindsFrameActivity`) pass `boardSlots: false` on
-`LessonTableStage` the same way (LPT-52).
+`LessonTableStage` the same way (LPT-52). Pending frames pass
+`showToolRow: false` so Undo / Redo / Hint stay off until an activity
+binds (LPT-53).
 `LessonCoachBand` maps `LessonMascotExpression` to calm, celebrate, or
 think. `LessonChoiceButton` (`lib/ui/course/widgets/rex_coach_line.dart`)
 is the one framed option button.
