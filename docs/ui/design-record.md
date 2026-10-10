@@ -449,8 +449,18 @@ copy them:
 Your start’s hand preview uses the Poker table bands (`FeltTableView`,
 `CoachShelfWidget`), with your cards on the felt.
 
-Lesson cards are randomized within the hand class each attempt; the coach
-copy follows the dealt cards.
+### Lesson content
+
+Lesson steps teach with the cards and coach on screen, not with static
+demo text. `/ui-design-agent` checks these on every lesson walk:
+
+| Check | Contract |
+| --- | --- |
+| Randomization | Cards are randomized within the hand class each attempt. A second open of the same lesson should not always deal the identical hole/board when the activity supports a class of hands. |
+| Coach follows the deal | Speech, grade lines, and chip math name the cards, seats, and amounts on the felt for this attempt — not a previous deal or a hard-coded template combo. |
+| Hint | Hint swaps the speech bubble to that step's hint until tapped again. Disabled while SoftPulse cues are already on. Visible but disabled when the step has no hint. |
+| Guide cues | Gold SoftPulse after cards land, first press only (Hint may reopen). Cyan keeps the learner's picks. Review lessons hide cues. No `CueArrows`. |
+| Coach mood | Calm on the ask, celebrate on Nice!, think on Oops. Never an empty bubble after the deal, never a letter-R coach. |
 
 Playing cards use one face everywhere: `TableCard` (corner rank, one centered suit). `MiniCard` and `CardBack` are size presets over `TableCard` / `TableCardBack` for densified lesson trays — they must not invent a second face.
 
@@ -625,6 +635,10 @@ past this list.
   (the side, back, and think drawings are not wired yet).
 - **Live Training** has had far less polish than lessons and Home. Walk it
   against Theme and Poker table.
+- **Lesson content regressions.** Steps that always deal the same cards,
+  Hint that no-ops or shows the wrong text, missing SoftPulse on a guided
+  first press, or coach copy that does not name the dealt cards. Verify on
+  the mini (two attempts when checking randomization) before filing.
 
 ## Lesson ledger
 

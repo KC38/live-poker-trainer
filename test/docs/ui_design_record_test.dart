@@ -20,6 +20,7 @@ void main() {
       '## Lesson screen layout',
       '### Cues',
       '## Lesson tables',
+      '### Lesson content',
       '## Home',
       '## Gamified learning',
       '## Asset inventory',
@@ -157,6 +158,11 @@ void main() {
       'go to step 10 with result',
       'sim-not-ready',
       'learnings: unchanged',
+      'Lesson content',
+      'Card randomization',
+      'Guide cues',
+      'Coach text and mood',
+      'SoftPulse',
     ]) {
       expect(command, contains(needle), reason: needle);
     }
@@ -170,9 +176,13 @@ void main() {
       'at most **40** bullets',
       'python3 tools/jira.py',
       'SIM_NOT_READY',
+      'card randomization',
+      'SoftPulse',
     ]) {
       expect(learnings, contains(needle), reason: needle);
     }
+    expect(record, contains('### Lesson content'));
+    expect(record, contains('Lesson content regressions'));
     expect(
       File('.cursor/skills/new-user-qa/SKILL.md').existsSync(),
       isFalse,
