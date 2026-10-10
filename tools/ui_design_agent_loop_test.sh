@@ -289,6 +289,36 @@ reconcile_health_from_coverage
 write_health_row "20261010-160000" "0" "12" "$empty_run" "$start_epoch"
 grep -q '"stamp": "20261010-160000"' "$HEALTH_FILE" || fail "write_health_row should append"
 
+# Telemetry-only run logs must not become the health tail when coverage exists.
+telem_health_log="$LOG_DIR/run-telem-health.log"
+printf '%s\n' '# backfilled from /tmp/x (1 bytes)' \
+  '--- Cursor Agent Debug Session ---' \
+  '[t] User does not belong to a team, skipping team commands' \
+  '[t] Loaded global commands: 6' >"$telem_health_log"
+python3 - "$COVERAGE_FILE" <<'PY'
+import json, sys
+from datetime import datetime
+from pathlib import Path
+path = Path(sys.argv[1])
+row = {
+    "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+    "sha": "z",
+    "surface": "lesson-runner:demo",
+    "result": "closed",
+    "ticket": "LPT-77",
+    "leads": [],
+    "learnings": "unchanged",
+}
+with path.open("a", encoding="utf-8") as handle:
+    handle.write(json.dumps(row) + "\n")
+PY
+: >"$HEALTH_FILE"
+write_health_row "20261010-180000" "0" "30" "$telem_health_log" "$start_epoch"
+grep -q 'coverage:closed ticket:LPT-77' "$HEALTH_FILE" \
+  || fail "health tail should prefer coverage over telemetry: $(cat "$HEALTH_FILE")"
+grep -q 'User does not belong' "$HEALTH_FILE" \
+  && fail "health tail must not keep CLI telemetry: $(cat "$HEALTH_FILE")"
+
 # Stale run logs without .health get real stamp rows (not only reconciled).
 : >"$HEALTH_FILE"
 printf '%s\n' \
