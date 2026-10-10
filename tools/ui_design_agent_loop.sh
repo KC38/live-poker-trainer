@@ -45,7 +45,11 @@ PID_FILE="$STATE_DIR/ui-agent.pid"
 SECRETS_FILE="$STATE_DIR/secrets.env"
 GAP="${UI_AGENT_GAP:-60}"
 BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
+# After back-to-back SIM_NOT_READY (usually Flutter cache lock / pub get
+# killed), back off so other agents can finish and the mini can boot.
+SIM_NOT_READY_SLEEP="${UI_AGENT_SIM_NOT_READY_SLEEP:-600}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
+COVERAGE_FILE="$STATE_DIR/ui-agent-coverage.jsonl"
 
 mkdir -p "$LOG_DIR"
 
@@ -98,6 +102,33 @@ sim_lock() {
 logged_in() {
   [[ -n "${CURSOR_API_KEY:-}" ]] && return 0
   ! agent status 2>&1 | grep -qiE 'not logged in|keychain is locked|error'
+}
+
+# True when the latest coverage line is sim-not-ready (or the health tail
+# says so when coverage is missing).
+last_run_sim_not_ready() {
+  if [[ -f "$COVERAGE_FILE" ]]; then
+    python3 - "$COVERAGE_FILE" <<'PY'
+import json, sys
+path = sys.argv[1]
+try:
+    lines = [ln for ln in open(path, encoding="utf-8") if ln.strip()]
+except OSError:
+    raise SystemExit(1)
+if not lines:
+    raise SystemExit(1)
+try:
+    obj = json.loads(lines[-1])
+except json.JSONDecodeError:
+    raise SystemExit(1)
+raise SystemExit(0 if obj.get("result") == "sim-not-ready" else 1)
+PY
+    return $?
+  fi
+  if [[ -f "$HEALTH_FILE" ]]; then
+    grep -q 'SIM_NOT_READY' <<<"$(tail -n 1 "$HEALTH_FILE")" && return 0
+  fi
+  return 1
 }
 
 # One run. Returns 0 after a run, 10 when the mini was busy, 11 when not logged in.
@@ -187,7 +218,14 @@ run_loop() {
     case "$code" in
       10) sleep "$BUSY_SLEEP" ;;
       11) sleep 600 ;;
-      *) sleep "$GAP" ;;
+      *)
+        if last_run_sim_not_ready; then
+          log "last run was SIM_NOT_READY; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
+          sleep "$SIM_NOT_READY_SLEEP"
+        else
+          sleep "$GAP"
+        fi
+        ;;
     esac
   done
   rm -f "$STOP_FILE"

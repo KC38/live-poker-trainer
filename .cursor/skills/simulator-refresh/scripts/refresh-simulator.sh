@@ -66,6 +66,45 @@ prepare_flutter_log() {
   touch "$log"
 }
 
+# Other agents often hold Flutter's global cache lock (pub get / test). A
+# SIGTERM mid-pub leaves the refresh with no app and the UI agent looping on
+# SIM_NOT_READY. Wait briefly for the lock, then retry pub get.
+flutter_pub_get_resilient() {
+  local attempts="${FLUTTER_PUB_GET_ATTEMPTS:-4}"
+  local wait_secs="${FLUTTER_PUB_GET_LOCK_WAIT:-45}"
+  local lock="${FLUTTER_ROOT:-}/bin/cache/lockfile"
+  if [[ -z "${FLUTTER_ROOT:-}" ]]; then
+    local flutter_bin
+    flutter_bin="$(command -v flutter || true)"
+    if [[ -n "$flutter_bin" ]]; then
+      lock="$(cd "$(dirname "$flutter_bin")/.." && pwd)/bin/cache/lockfile"
+    else
+      lock="/opt/homebrew/share/flutter/bin/cache/lockfile"
+    fi
+  fi
+  local i=1 code=0
+  while (( i <= attempts )); do
+    local waited=0
+    while (( waited < wait_secs )); do
+      if ! lsof "$lock" >/dev/null 2>&1; then
+        break
+      fi
+      echo "flutter cache lock busy; waiting (${waited}s/${wait_secs}s) before pub get"
+      sleep 3
+      waited=$((waited + 3))
+    done
+    code=0
+    flutter pub get || code=$?
+    if [[ "$code" -eq 0 ]]; then
+      return 0
+    fi
+    echo "flutter pub get failed (exit $code), attempt $i/$attempts"
+    sleep $((i * 5))
+    i=$((i + 1))
+  done
+  return "$code"
+}
+
 if [[ "${REFRESH_SIMULATOR_SOURCE_ONLY:-}" == "1" ]]; then
   return 0 2>/dev/null || exit 0
 fi
@@ -216,7 +255,7 @@ fi
 
 echo "starting flutter run on iPhone 13 mini ($DEVICE_ID) from $CHECKOUT (pid-file $PID_FILE)"
 prepare_flutter_log "$LOG_FILE" "$PID_FILE"
-flutter pub get
+flutter_pub_get_resilient
 if [[ "${SHIP_FLUTTER_FOREGROUND:-}" == "1" ]]; then
   exec flutter run -d "$DEVICE_ID" --pid-file "$PID_FILE"
 fi

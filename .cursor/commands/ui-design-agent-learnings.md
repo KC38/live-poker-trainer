@@ -79,7 +79,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   do not kill the run or the loop for a single reconnect.
 - Flutter may stick at "Launching…" with no Dart VM line and no pid file.
   After the mandated one retry, end `SIM_NOT_READY` — do not uninstall the
-  app or chase Device Hub UI.
+  app or chase Device Hub UI. A common cause is `flutter pub get`
+  Terminated: 15 while another agent holds the Flutter cache lock;
+  `refresh-simulator.sh` retries pub get — do not rewrite it mid-run.
+- After consecutive `SIM_NOT_READY`, the loop backs off (~10 min) so other
+  flutter pub/test work can finish before the next claim.
 - `/tmp/flutter-live-poker-trainer.run.log` must be a normal file. If a
   stale symlink or directory is there, the refresh script should recreate
   it; do not hand-edit launcher scripts during a ticket run.
