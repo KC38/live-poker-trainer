@@ -78,8 +78,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 - Cursor CLI over SSH / LaunchAgent needs `CURSOR_API_KEY` in
   `~/.live-poker-trainer/secrets.env`. Do not call `agent login`. The loop
-  clears a stuck `cursor-access-token` keychain item before each start
-  when the API key is set (`errSecDuplicateItem` otherwise burns the run).
+  sets `AGENT_CLI_CREDENTIAL_STORE=memory` and clears a stuck
+  `cursor-access-token` keychain item before each start so
+  `errSecDuplicateItem` / `auth.refresh.persistFailed` cannot burn the run.
 - Heartbeat during long worktree `flutter run` / validates; the stall
   watchdog kills a silent agent. Write coverage before long compiles when
   the ticket is already Done in Jira.

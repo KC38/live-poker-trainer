@@ -284,15 +284,25 @@ raise SystemExit(0)
 PY
 }
 
-# When CURSOR_API_KEY is set, the CLI still tries to write the login
-# keychain and can die on errSecDuplicateItem (stuck cursor-access-token).
-# Delete that item before each agent start; non-fatal if missing/locked.
-clear_stuck_cursor_keychain() {
+# Unattended runs authenticate with CURSOR_API_KEY. The CLI still defaults
+# to the macOS keychain and can burn on errSecDuplicateItem / persistFailed.
+# Prefer an in-memory credential store (file|memory|default); memory skips
+# keychain entirely. Also delete a stuck cursor-access-token item.
+configure_agent_credentials() {
   [[ -n "${CURSOR_API_KEY:-}" ]] || return 0
+  if [[ -z "${AGENT_CLI_CREDENTIAL_STORE:-}" ]]; then
+    export AGENT_CLI_CREDENTIAL_STORE=memory
+    log "AGENT_CLI_CREDENTIAL_STORE=memory (API key; skip macOS keychain)"
+  fi
   if security delete-generic-password -s cursor-access-token -a cursor-user \
       >/dev/null 2>&1; then
     log "cleared stuck cursor-access-token keychain item (API key auth)"
   fi
+}
+
+# Back-compat name used in older comments/tests.
+clear_stuck_cursor_keychain() {
+  configure_agent_credentials
 }
 
 # Refresh (or hot-restart) origin/main and wait for a Dart VM. Caller must
@@ -401,7 +411,7 @@ one_run() {
   fi
 
   sim_lock heartbeat --purpose "agent starting" >/dev/null 2>&1 || true
-  clear_stuck_cursor_keychain
+  configure_agent_credentials
   while IFS= read -r line; do args+=("$line"); done < <(agent_args)
   text="$(prompt)"
 

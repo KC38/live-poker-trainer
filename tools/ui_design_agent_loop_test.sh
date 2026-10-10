@@ -27,16 +27,28 @@ cat >"$tmp/bin/agent" <<EOF
 #!/usr/bin/env bash
 if [[ "\${1:-}" == "status" ]]; then echo "Not logged in"; exit 0; fi
 printf '%s\n' "\$@" >"$tmp/agent-args"
-echo "\$CURSOR_API_KEY|\$ATLASSIAN_API_TOKEN" >"$tmp/agent-env"
+echo "\$CURSOR_API_KEY|\$ATLASSIAN_API_TOKEN|\$AGENT_CLI_CREDENTIAL_STORE" >"$tmp/agent-env"
 echo started >>"$tmp/agent-started"
 EOF
 chmod +x "$tmp/bin/agent"
+
+# Fake security so configure_agent_credentials never touches the real keychain.
+SEC_LOG="$tmp/security.log"
+export SEC_LOG
+: >"$SEC_LOG"
+cat >"$tmp/bin/security" <<EOF
+#!/usr/bin/env bash
+printf '%s\n' "\$*" >>"$SEC_LOG"
+exit 1
+EOF
+chmod +x "$tmp/bin/security"
 
 export UI_AGENT_LOOP_SOURCE_ONLY=1
 export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 # shellcheck disable=SC1090
 source "$LOOP"
 export PATH="$tmp/bin:$PATH"
+unset AGENT_CLI_CREDENTIAL_STORE
 
 [[ "${CURSOR_API_KEY:-}" == 'key with space' ]] || fail "secrets.env not loaded"
 logged_in || fail "a saved API key counts as logged in"
@@ -68,7 +80,8 @@ grep -q 'ui-design-agent-learnings.md' "$tmp/agent-args" \
   || fail "prompt should name the learnings file"
 grep -q 'SIM_LOCK_RUN_ID is set' <<<"$(prompt)" \
   || fail "prompt should tell the agent the lock is preflight-claimed"
-[[ "$(cat "$tmp/agent-env")" == 'key with space|tok-123' ]] || fail "run should inherit the saved keys"
+[[ "$(cat "$tmp/agent-env")" == 'key with space|tok-123|memory' ]] \
+  || fail "run should inherit keys and set AGENT_CLI_CREDENTIAL_STORE=memory: $(cat "$tmp/agent-env")"
 
 # Programmatic SIM_NOT_READY must not start the agent.
 rm -f "$tmp/agent-started"
@@ -117,25 +130,19 @@ lock_heartbeat_stalled || fail "heartbeat older than STALL_SECONDS should be sta
 unset UI_AGENT_STALL_HEARTBEAT_ONLY
 python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 
-# clear_stuck_cursor_keychain is a no-op without CURSOR_API_KEY; with a key
-# it must not fail the loop when security(1) denies/misses (fake security).
-SEC_LOG="$tmp/security.log"
-mkdir -p "$tmp/bin"
-cat >"$tmp/bin/security" <<EOF
-#!/usr/bin/env bash
-printf '%s\n' "\$*" >>"$SEC_LOG"
-exit 1
-EOF
-chmod +x "$tmp/bin/security"
-export PATH="$tmp/bin:$PATH"
-unset CURSOR_API_KEY
-clear_stuck_cursor_keychain || fail "clear_stuck_cursor_keychain should no-op without key"
-[[ ! -f "$SEC_LOG" ]] || fail "security must not run without CURSOR_API_KEY"
+# configure_agent_credentials is a no-op without CURSOR_API_KEY; with a key
+# it sets memory store and clears stuck keychain (fake security above).
+: >"$SEC_LOG"
+unset CURSOR_API_KEY AGENT_CLI_CREDENTIAL_STORE
+configure_agent_credentials || fail "configure_agent_credentials should no-op without key"
+[[ -z "${AGENT_CLI_CREDENTIAL_STORE:-}" ]] || fail "must not set store without API key"
+[[ ! -s "$SEC_LOG" ]] || fail "security must not run without CURSOR_API_KEY"
 CURSOR_API_KEY='test-key'
-clear_stuck_cursor_keychain || fail "clear_stuck_cursor_keychain must be non-fatal"
+configure_agent_credentials || fail "configure_agent_credentials must be non-fatal"
+[[ "${AGENT_CLI_CREDENTIAL_STORE}" == "memory" ]] || fail "expected memory store"
 grep -q 'delete-generic-password -s cursor-access-token -a cursor-user' "$SEC_LOG" \
   || fail "should try to clear stuck cursor-access-token: $(cat "$SEC_LOG")"
-unset CURSOR_API_KEY
+unset CURSOR_API_KEY AGENT_CLI_CREDENTIAL_STORE
 
 # Backoff helper: latest coverage result drives SIM_NOT_READY sleep.
 mkdir -p "$(dirname "$COVERAGE_FILE")"
@@ -181,8 +188,10 @@ start_out="$(bash "$LOOP" start)"
 grep -q 'started the loop' <<<"$start_out" || fail "start should report started: $start_out"
 grep -q -- '-L ui-agent new-session -d -s ui-design-agent ' "$TMUX_LOG" \
   || fail "start must create the session on socket ui-agent: $(cat "$TMUX_LOG")"
-grep -q "run-loop; echo 'loop exited'; exit" <<<"$(grep new-session "$TMUX_LOG")" \
+grep -q 'loop exited' "$TMUX_LOG" \
   || fail "start must exit after run-loop (no idle exec bash): $(cat "$TMUX_LOG")"
+grep -q 'exec bash' "$TMUX_LOG" \
+  && fail "start must not leave idle exec bash: $(cat "$TMUX_LOG")"
 while IFS= read -r line; do
   [[ "$line" == "-L ui-agent "* ]] || fail "tmux call left socket ui-agent: $line"
 done <"$TMUX_LOG"
