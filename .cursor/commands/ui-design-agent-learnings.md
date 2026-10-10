@@ -45,8 +45,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 - Prefer exact `agent_tap` labels from the screen. Broad needles like
   `Continue` can hit Home chrome instead of the lesson control.
-- Prefer `openlesson` with the catalog id (`lesson-01-01-02-…`), not the
-  Home title — a title string yields "Unknown lesson".
+- Prefer `openlesson` with the catalog id from `course_catalog` / `rg`
+  (`lesson-01-02-02-best-five-kickers`), not the Home title and not a
+  guessed `01-01-0N` from ledger order — both yield "Unknown lesson".
 - Prefer copying gitignored `lib/firebase_options.dart` (and iOS/Android
   Google services files) into the ticket worktree before `flutter run`;
   without them the worktree build fails even when primary runs fine.
@@ -161,3 +162,6 @@ trimming. Durable rules belong in the sections above, not only here.
 - 2026-10-10: LPT-55 best-five explain SoftPulse lit every playing hole;
   suite asserted `findsNWidgets(2)` on glow — rewrite that test when
   collapsing to one gold target.
+- 2026-10-10: LPT-56 best-five explain dimmed leftovers before taps;
+  guessed `lesson-01-01-05-…` → Unknown lesson; refresh stuck at Launching
+  again — manual tmux flutter run.
