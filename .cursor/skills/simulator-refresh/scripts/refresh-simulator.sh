@@ -52,6 +52,20 @@ discard_ios_machine_dirt() {
   fi
 }
 
+# Flutter's redirect dies at once when the log or pid path is a symlink or a
+# directory (a stale link has shown up under /tmp). Leave a regular file.
+prepare_flutter_log() {
+  local log="$1" pidfile="$2"
+  if [[ -L "$log" || -d "$log" ]]; then
+    rm -rf "$log"
+  fi
+  if [[ -L "$pidfile" || -d "$pidfile" ]]; then
+    rm -rf "$pidfile"
+  fi
+  mkdir -p "$(dirname "$log")"
+  touch "$log"
+}
+
 if [[ "${REFRESH_SIMULATOR_SOURCE_ONLY:-}" == "1" ]]; then
   return 0 2>/dev/null || exit 0
 fi
@@ -201,6 +215,7 @@ if ! xcrun simctl bootstatus "$DEVICE_ID" -b >/dev/null 2>&1; then
 fi
 
 echo "starting flutter run on iPhone 13 mini ($DEVICE_ID) from $CHECKOUT (pid-file $PID_FILE)"
+prepare_flutter_log "$LOG_FILE" "$PID_FILE"
 flutter pub get
 if [[ "${SHIP_FLUTTER_FOREGROUND:-}" == "1" ]]; then
   exec flutter run -d "$DEVICE_ID" --pid-file "$PID_FILE"

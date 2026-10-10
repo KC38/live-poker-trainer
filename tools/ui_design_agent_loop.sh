@@ -4,8 +4,8 @@
 #   tools/ui_design_agent_loop.sh setup    one-time: save the Cursor API key and Atlassian token
 #   tools/ui_design_agent_loop.sh verify   check both work, including Jira from inside the CLI
 #   tools/ui_design_agent_loop.sh start    start the loop (its own tmux server, socket ui-agent)
-#   tools/ui_design_agent_loop.sh install  also start it at every login (LaunchAgent)
-#   tools/ui_design_agent_loop.sh uninstall  remove the login item
+#   tools/ui_design_agent_loop.sh install  start it at login, and again every 5 minutes if it died
+#   tools/ui_design_agent_loop.sh ensure   start the loop only when it is not already running
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
 #   tools/ui_design_agent_loop.sh stop     finish the current run, then stop
@@ -39,6 +39,7 @@ LAUNCH_LABEL="com.livepokertrainer.ui-design-agent"
 PLIST="$HOME/Library/LaunchAgents/$LAUNCH_LABEL.plist"
 STATE_DIR="$HOME/.live-poker-trainer"
 LOG_DIR="$STATE_DIR/ui-agent-logs"
+HEALTH_FILE="$STATE_DIR/ui-agent-health.jsonl"
 STOP_FILE="$STATE_DIR/ui-agent.stop"
 PID_FILE="$STATE_DIR/ui-agent.pid"
 SECRETS_FILE="$STATE_DIR/secrets.env"
@@ -121,11 +122,20 @@ one_run() {
 
   log "run $stamp starting (log $run_log)"
   start="$(date +%s)"
-  (
-    cd "$(primary)"
-    # exec keeps this pid, so the lock's --pid is the agent itself.
-    exec bash -c 'export SIM_LOCK_PID=$$; exec agent "$@"' _ "${args[@]}" "$text"
-  ) >"$run_log" 2>&1 &
+  # script(1) gives the CLI a terminal and flushes the log, so a run can be
+  # tailed while it works and a crash still leaves output on disk.
+  if command -v script >/dev/null 2>&1; then
+    (
+      cd "$(primary)"
+      exec bash -c 'export SIM_LOCK_PID=$$; exec script -q -F "$1" agent "${@:2}"' _ \
+        "$run_log" "${args[@]}" "$text"
+    ) &
+  else
+    (
+      cd "$(primary)"
+      exec bash -c 'export SIM_LOCK_PID=$$; exec agent "$@"' _ "${args[@]}" "$text"
+    ) >"$run_log" 2>&1 &
+  fi
   pid=$!
   echo "$pid" >"$PID_FILE"
   (
@@ -148,6 +158,21 @@ one_run() {
 
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min"
   tail -n 15 "$run_log" | sed 's/^/    /'
+  python3 - "$HEALTH_FILE" "$stamp" "$code" "$(( $(date +%s) - start ))" "$run_log" <<'PY'
+import json, sys
+path, stamp, code, seconds, log = sys.argv[1:]
+tail = ""
+try:
+    lines = open(log, encoding="utf-8", errors="replace").read().splitlines()
+    tail = " ".join(lines[-5:])[:400]
+except OSError:
+    pass
+with open(path, "a", encoding="utf-8") as handle:
+    handle.write(json.dumps({
+        "at": __import__("datetime").datetime.now().astimezone().isoformat(timespec="seconds"),
+        "stamp": stamp, "exit": int(code), "seconds": int(seconds), "tail": tail,
+    }) + "\n")
+PY
   find "$LOG_DIR" -name 'run-*.log' -mtime +14 -delete 2>/dev/null || true
   return 0
 }
@@ -271,9 +296,10 @@ case "${1:-}" in
 <plist version="1.0">
 <dict>
   <key>Label</key><string>$LAUNCH_LABEL</string>
-  <key>ProgramArguments</key>
-  <array><string>/bin/bash</string><string>$(primary)/tools/ui_design_agent_loop.sh</string><string>start</string></array>
+    <key>ProgramArguments</key>
+  <array><string>/bin/bash</string><string>$(primary)/tools/ui_design_agent_loop.sh</string><string>ensure</string></array>
   <key>RunAtLoad</key><true/>
+  <key>StartInterval</key><integer>300</integer>
   <key>AbandonProcessGroup</key><true/>
   <key>StandardOutPath</key><string>$LOG_DIR/launchd.log</string>
   <key>StandardErrorPath</key><string>$LOG_DIR/launchd.log</string>
@@ -282,7 +308,13 @@ case "${1:-}" in
 EOF
     launchctl bootout "gui/$(id -u)/$LAUNCH_LABEL" 2>/dev/null || true
     launchctl bootstrap "gui/$(id -u)" "$PLIST"
-    echo "installed $PLIST: the loop starts now and at every login"
+    echo "installed $PLIST: starts at login, and every 5 minutes when the loop is down"
+    ;;
+  ensure)
+    if lt has-session -t "=$SESSION" 2>/dev/null; then
+      exit 0
+    fi
+    bash "$SCRIPT" start
     ;;
   uninstall)
     launchctl bootout "gui/$(id -u)/$LAUNCH_LABEL" 2>/dev/null || true
@@ -322,6 +354,9 @@ EOF
       tail -n 10 "$latest"
     else
       echo "latest log: none yet"
+    fi
+    if [[ -f "$HEALTH_FILE" ]]; then
+      echo "last run: $(tail -n 1 "$HEALTH_FILE")"
     fi
     ;;
   attach)

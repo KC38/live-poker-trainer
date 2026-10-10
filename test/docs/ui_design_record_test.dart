@@ -138,6 +138,7 @@ void main() {
       'make-change',
       'tools/sim_lock.py claim --owner ui-design-agent',
       'SIM_BUSY',
+      'SIM_NOT_READY',
       'python3 tools/sim_lock.py release',
       'labels = ui-agent',
       'python3 tools/jira.py check',
