@@ -616,11 +616,24 @@ if log_dir.is_dir():
         stamp = m.group(1)
         if stamp == active:
             continue
-        if (log_dir / f"run-{stamp}.health").is_file():
+        health_marker = log_dir / f"run-{stamp}.health"
+        pids_leftover = log_dir / f"run-{stamp}.agent-pids"
+        if health_marker.is_file():
+            # Finalize sometimes left agent-pids behind after a kill/restart.
+            if pids_leftover.is_file():
+                try:
+                    pids_leftover.unlink()
+                except OSError:
+                    pass
             continue
         if stamp in seen_stamps:
             # Marker lost; still skip duplicate stamp rows.
-            (log_dir / f"run-{stamp}.health").touch()
+            health_marker.touch()
+            if pids_leftover.is_file():
+                try:
+                    pids_leftover.unlink()
+                except OSError:
+                    pass
             continue
         ep = stamp_epoch(stamp)
         if ep is None:
@@ -748,7 +761,15 @@ from pathlib import Path
 path, stamp, code, seconds, log, coverage, start_epoch = sys.argv[1:]
 start_epoch = int(float(start_epoch or "0"))
 NOISE = re.compile(
-    r"(Connection lost, reconnecting|Retry attempt |\^D|backfilled from)",
+    r"("
+    r"Connection lost, reconnecting|Retry attempt |\^D|backfilled from|"
+    r"Cursor Agent Debug Session|User does not belong to a team|"
+    r"Loaded global commands|telemetry-only|filtered out for missing"
+    r")",
+    re.I,
+)
+SIGNAL = re.compile(
+    r"\b(LPT-\d+|SIM_NOT_READY|closed|stalled|needs-human|Lock|step\s*\d+)\b",
     re.I,
 )
 
@@ -761,7 +782,7 @@ try:
             continue
         if s.startswith("# "):
             continue
-        if "] logger " in s:
+        if "] logger " in s or "analytics.track" in s or "structured-log" in s:
             continue
         lines.append(s)
     tail = " ".join(lines[-5:])[:400]
@@ -770,6 +791,7 @@ except OSError:
 
 ticket = None
 result = None
+surface = None
 try:
     cov_rows = []
     for ln in Path(coverage).read_text(encoding="utf-8").splitlines():
@@ -797,11 +819,18 @@ try:
     if chosen:
         ticket = chosen.get("ticket")
         result = chosen.get("result")
+        surface = chosen.get("surface")
 except (OSError, json.JSONDecodeError, TypeError, ValueError):
     pass
 
-if not tail and result:
-    tail = f"coverage:{result}" + (f" ticket:{ticket}" if ticket else "")
+# CLI session backfills are usually telemetry-only; prefer coverage summary.
+if result and (not tail or not SIGNAL.search(tail)):
+    parts = [f"coverage:{result}"]
+    if ticket:
+        parts.append(f"ticket:{ticket}")
+    if surface:
+        parts.append(f"surface:{surface}")
+    tail = " ".join(parts)
 
 with open(path, "a", encoding="utf-8") as handle:
     handle.write(json.dumps({
