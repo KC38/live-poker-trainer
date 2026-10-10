@@ -362,10 +362,10 @@ void main() {
     expect(autoSubmits, 1);
   });
 
-  testWidgets('missed picker keeps cyan picks and golds the coach five', (
+  testWidgets('missed picker keeps cyan picks without multi SoftPulse', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(390, 844);
+    tester.view.physicalSize = const Size(375, 812);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
@@ -439,9 +439,9 @@ void main() {
       find.byKey(const ValueKey<String>('selection-highlight')),
       findsNWidgets(5),
     );
-    expect(
-      find.byKey(const ValueKey<String>('glow-highlight')),
-      findsNWidgets(5),
-    );
+    // Post-grade answer reveal must not SoftPulse all five correct cards
+    // (LPT-61). Cyan selection is enough; leftovers dim on the table.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 }

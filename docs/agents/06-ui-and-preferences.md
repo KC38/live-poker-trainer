@@ -24,7 +24,7 @@ are not done. Claim the mini with `tools/sim_lock.py` before driving it.
 | One table | `FeltTableView` everywhere a hand is shown | Mini felts, suit tiles, rank slots |
 | Live deal feel | One card at a time, clockwise from button, deal SFX | Instant full board dumps |
 | Coach | Rex face + mood; bubble is the only instruction | Letter "R", duplicate title under progress |
-| Cues | Gold SoftPulse after cards land, first press; cyan for learner picks | Bouncing `CueArrows` |
+| Cues | Gold SoftPulse after cards land, first press; cyan for learner picks | Bouncing `CueArrows`; multi SoftPulse on the coach answer under Nice!/Oops |
 | Hint vs grade | Clear Hint (and Hint SoftPulse) when Nice! / Oops lands | Hint copy stuck under the answer dock |
 | Home | Path + START/REVIEW bubble | Resume card, Rex+Start box, START chip on node |
 | Economy | Hearts / streak / XP celebrated | Silent XP math with no UI beat |
