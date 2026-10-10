@@ -631,6 +631,7 @@ PY
 repair_health_tails() {
   python3 - "$HEALTH_FILE" "$COVERAGE_FILE" <<'PY' || true
 import json, re, sys
+from datetime import datetime
 from pathlib import Path
 
 health_path, coverage_path = Path(sys.argv[1]), Path(sys.argv[2])
@@ -645,6 +646,27 @@ TELEMETRY = re.compile(
     r")",
     re.I,
 )
+USAGE_LIMIT = re.compile(
+    r"ActionRequiredError|usage limit|error_code=upgrade|resource_exhausted",
+    re.I,
+)
+
+def _parse_iso_epoch(value):
+    if not value:
+        return None
+    text = str(value).strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        return datetime.fromisoformat(text).timestamp()
+    except ValueError:
+        return None
+
+def stamp_epoch(stamp: str):
+    try:
+        return datetime.strptime(stamp, "%Y%m%d-%H%M%S").timestamp()
+    except ValueError:
+        return None
 
 def load_jsonl(path: Path) -> list[dict]:
     rows = []
@@ -660,8 +682,9 @@ def load_jsonl(path: Path) -> list[dict]:
         return []
     return rows
 
+coverage_rows = load_jsonl(coverage_path)
 coverage_by_ticket: dict[str, dict] = {}
-for cov in load_jsonl(coverage_path):
+for cov in coverage_rows:
     ticket = cov.get("ticket")
     if ticket:
         coverage_by_ticket[ticket] = cov
@@ -673,9 +696,56 @@ if not rows:
 changed = 0
 out = []
 for row in rows:
+    row = dict(row)
     tail = row.get("tail") or ""
     ticket = row.get("ticket")
     result = row.get("result")
+    stamp = row.get("stamp") or ""
+
+    # Fill empty stamp rows from coverage in the run window (Z timestamps).
+    if (
+        stamp
+        and stamp != "reconciled"
+        and (not ticket or not result)
+        and result not in ("usage-limit", "stalled", "sim-not-ready")
+    ):
+        start_ep = stamp_epoch(stamp)
+        seconds = row.get("seconds")
+        end_ep = None
+        if start_ep is not None and isinstance(seconds, int):
+            end_ep = start_ep + max(seconds, 0) + 120
+        elif start_ep is not None:
+            end_ep = start_ep + 4 * 3600
+        if start_ep is not None and end_ep is not None:
+            for cov in reversed(coverage_rows):
+                cov_ts = _parse_iso_epoch(cov.get("at"))
+                if cov_ts is None or not cov.get("ticket"):
+                    continue
+                if cov.get("result") in (None, "sim-not-ready", "stalled"):
+                    continue
+                if start_ep - 5 <= cov_ts <= end_ep:
+                    ticket = cov.get("ticket")
+                    result = cov.get("result")
+                    row["ticket"] = ticket
+                    row["result"] = result
+                    surface = cov.get("surface")
+                    parts = [f"coverage:{result}", f"ticket:{ticket}"]
+                    if surface:
+                        parts.append(f"surface:{surface}")
+                    row["tail"] = " ".join(parts)
+                    row["tail_repaired"] = True
+                    changed += 1
+                    tail = row["tail"]
+                    break
+
+    if not result and USAGE_LIMIT.search(tail):
+        row["result"] = "usage-limit"
+        row["tail"] = "coverage:usage-limit"
+        row["tail_repaired"] = True
+        changed += 1
+        result = "usage-limit"
+        tail = row["tail"]
+
     # Rewrite CLI telemetry and long agent-report prose; leave structured tails.
     structured = (
         tail.startswith("coverage:")
@@ -709,7 +779,6 @@ for row in rows:
         if parts:
             new_tail = " ".join(parts)
             if new_tail != tail:
-                row = dict(row)
                 row["tail"] = new_tail
                 row["tail_repaired"] = True
                 changed += 1
@@ -741,6 +810,18 @@ from pathlib import Path
 health_path, coverage_path, log_dir = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
 active = (sys.argv[4] or "").strip()
 stamp_re = re.compile(r"run-(\d{8}-\d{6})\.log$")
+
+def _parse_iso_epoch(value):
+    """Epoch seconds; accept trailing Z (macOS Python 3.9)."""
+    if not value:
+        return None
+    text = str(value).strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        return datetime.fromisoformat(text).timestamp()
+    except ValueError:
+        return None
 
 def load_jsonl(path: Path) -> list[dict]:
     rows = []
@@ -819,9 +900,8 @@ for i, (stamp, start_ep, _run_log) in enumerate(runs):
             continue
         if ticket in seen_tickets:
             continue
-        try:
-            ts = datetime.fromisoformat(at).timestamp()
-        except ValueError:
+        ts = _parse_iso_epoch(at)
+        if ts is None:
             continue
         if start_ep - 5 <= ts < end_ep:
             chosen = cov
@@ -834,8 +914,9 @@ for i, (stamp, start_ep, _run_log) in enumerate(runs):
     ticket = chosen.get("ticket")
     result = chosen.get("result")
     try:
-        seconds = max(0, int(datetime.fromisoformat(chosen["at"]).timestamp() - start_ep))
-    except (KeyError, ValueError, TypeError):
+        cov_ts = _parse_iso_epoch(chosen.get("at"))
+        seconds = max(0, int(cov_ts - start_ep)) if cov_ts is not None else None
+    except (TypeError, ValueError):
         seconds = None
     row = {
         "at": chosen.get("at") or datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -878,6 +959,18 @@ from pathlib import Path
 path, start_epoch, timeout = Path(sys.argv[1]), float(sys.argv[2]), int(sys.argv[3])
 deadline = time.time() + max(0, timeout)
 
+def _parse_iso_epoch(value):
+    """Epoch seconds; accept trailing Z (macOS Python 3.9)."""
+    if not value:
+        return None
+    text = str(value).strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        return datetime.fromisoformat(text).timestamp()
+    except ValueError:
+        return None
+
 def found() -> bool:
     if not path.is_file():
         return False
@@ -898,9 +991,8 @@ def found() -> bool:
             continue
         if cov.get("result") in (None, "sim-not-ready", "stalled"):
             continue
-        try:
-            ts = datetime.fromisoformat(at).timestamp()
-        except ValueError:
+        ts = _parse_iso_epoch(at)
+        if ts is None:
             continue
         if ts + 5 >= start_epoch:
             return True
@@ -926,6 +1018,19 @@ from pathlib import Path
 
 path, stamp, code, seconds, log, coverage, start_epoch = sys.argv[1:]
 start_epoch = int(float(start_epoch or "0"))
+
+def _parse_iso_epoch(value):
+    """Epoch seconds; accept trailing Z (macOS Python 3.9)."""
+    if not value:
+        return None
+    text = str(value).strip()
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        return datetime.fromisoformat(text).timestamp()
+    except ValueError:
+        return None
+
 NOISE = re.compile(
     r"("
     r"Connection lost, reconnecting|Retry attempt |\^D|backfilled from|"
@@ -968,9 +1073,8 @@ try:
         at = cov.get("at")
         if not at:
             continue
-        try:
-            ts = dt.fromisoformat(at).timestamp()
-        except ValueError:
+        ts = _parse_iso_epoch(at)
+        if ts is None:
             continue
         # Never attribute a prior run's coverage to this stamp.
         if start_epoch > 0 and ts + 5 < start_epoch:
@@ -995,8 +1099,6 @@ except OSError:
     pass
 if not result and USAGE_LIMIT.search(log_blob):
     result = "usage-limit"
-    if not ticket:
-        ticket = None
 
 # Prefer a short coverage summary whenever coverage landed. Agent report
 # prose used to win because it also contained LPT-NN / closed, stuffing
