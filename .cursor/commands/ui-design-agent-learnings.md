@@ -37,6 +37,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Functions, wait for GitHub `Deploy Cloud Functions` on the merge SHA
   before mini closeout — client chrome alone cannot prove a grade/hearts
   rule until that job succeeds.
+- Never thrash the unattended loop on Cursor `ActionRequiredError` /
+  Auto usage limit. The loop backs off (exit 14); set `UI_AGENT_MODEL` in
+  the LaunchAgent/env to a non-Auto model, or wait for the monthly reset.
 - Never hardcode a simulator UDID. Always
   `DEVICE="$(tools/iphone_13_mini_udid.sh)"`.
 - Never launch a subagent or a second parallel `/ui-design-agent` run.

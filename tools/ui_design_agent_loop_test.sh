@@ -405,4 +405,28 @@ grep -q 'coverage:closed ticket:LPT-61 surface:lesson-runner:best-five-kickers' 
 grep -q 'Functions deploy' "$HEALTH_FILE" \
   && fail "repaired health must drop agent prose: $(cat "$HEALTH_FILE")"
 
+# Usage-limit detection + sleep length from reset date in the run log.
+usage_log="$LOG_DIR/run-usage-limit.log"
+printf '%s\n' \
+  'ActionRequiredError: You'"'"'ve hit your usage limit' \
+  'error_code=upgrade grpc_code=resource_exhausted' \
+  'Your usage limits will reset when your monthly cycle ends on 12/31/2099.' \
+  >"$usage_log"
+run_log_has_usage_limit "$usage_log" || fail "should detect usage limit text"
+secs="$(sleep_usage_limit_seconds "$usage_log")"
+[[ "$secs" =~ ^[0-9]+$ ]] || fail "sleep seconds must be numeric, got $secs"
+(( secs >= 1800 && secs <= 86400 )) || fail "sleep seconds out of range: $secs"
+UI_AGENT_USAGE_LIMIT_SLEEP=1234
+USAGE_LIMIT_SLEEP=1234
+[[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \
+  || fail "UI_AGENT_USAGE_LIMIT_SLEEP override ignored"
+unset UI_AGENT_USAGE_LIMIT_SLEEP
+USAGE_LIMIT_SLEEP=""
+
+: >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+write_health_row "20261010-220000" "1" "90" "$usage_log" "$start_epoch"
+grep -q 'coverage:usage-limit' "$HEALTH_FILE" \
+  || fail "health should classify usage-limit: $(cat "$HEALTH_FILE")"
+
 echo "ui-design-agent loop ok"
