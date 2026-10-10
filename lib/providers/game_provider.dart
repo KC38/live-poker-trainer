@@ -1,4 +1,11 @@
 /// Online server-authoritative live training session state.
+///
+/// Agent handbook: `docs/agents/05-live-training.md`.
+///
+/// Holds the projected [TableSession] (view, legal actions, coach, replay).
+/// The server owns deals, pots, and coaching; this notifier only applies
+/// projected updates and times felt replay. Do not compute hidden cards or
+/// invent action amounts client-side.
 library;
 
 import 'dart:async';

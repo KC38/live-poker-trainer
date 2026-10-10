@@ -1,7 +1,12 @@
 /// Progress ("You"): identity, style metrics, coaching record, charts.
 ///
-/// One Home destination for profile + coaching stats. Every rate carries the
-/// sample it came from. Style is withheld below [StyleThresholds.minHands].
+/// Agent handbook: `docs/agents/01-product-goal.md`
+/// (Two product surfaces).
+///
+/// One Profile tab for identity + **separate** Course and Live Training
+/// sections. Never merge accepted course accuracy with Live "strong
+/// decisions". Every rate carries the sample it came from. Style is
+/// withheld below [StyleThresholds.minHands].
 library;
 
 import 'dart:async';

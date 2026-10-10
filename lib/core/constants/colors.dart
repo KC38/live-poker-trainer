@@ -1,4 +1,10 @@
 /// Luxury dark-felt color palette for the Exploitative Poker Lab.
+///
+/// Agent handbook: `docs/agents/06-ui-and-preferences.md`.
+///
+/// Navy charcoal + emerald felt + gold + cream. [navRing] / [selectionGlow]
+/// are the Duolingo-style cyan accents — keep gold for coach cues and cyan
+/// for nav/selection so they stay distinct.
 library;
 
 import 'package:flutter/material.dart';

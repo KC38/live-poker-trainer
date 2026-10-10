@@ -1,4 +1,11 @@
 /// Interactive lesson runner with resume, soft-grade feedback, and registry.
+///
+/// Agent handbook: `docs/agents/04-course.md`.
+///
+/// Owns one lesson attempt: start/resume callables, activity registry, hearts
+/// gating, SoftPulse / hint policy, and navigation to results. Private
+/// grading keys stay on the server — the runner only shows projected feedback.
+/// Prefer [LessonScreenLayout] for framed lessons; do not rebuild chrome here.
 library;
 
 import 'dart:async';

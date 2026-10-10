@@ -2,7 +2,10 @@
  * Authoritative course attempts, soft grading, XP, streaks, lives, mastery,
  * reviews, resume, feature gates, and Section 4 Live entitlement writes.
  *
- * Course progress is isolated from Live Training documents.
+ * Agent handbook: docs/agents/04-course.md and docs/agents/08-backend.md.
+ *
+ * Course progress is isolated from Live Training documents — never write
+ * lesson completions into liveProgress / UserStatsModel.
  */
 
 import {randomUUID} from "node:crypto";

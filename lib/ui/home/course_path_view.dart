@@ -1,4 +1,10 @@
 /// Winding lesson path with Duolingo-style sticky unit banners and circular nodes.
+///
+/// Agent handbook: `docs/agents/04-course.md`
+/// (Home path) and design record Home section.
+///
+/// **Preference:** path + START/REVIEW bubble on tap. Do not bring back a
+/// Resume card, Rex+Start box on the path, or a START chip on the node.
 library;
 
 import 'package:flutter/material.dart';

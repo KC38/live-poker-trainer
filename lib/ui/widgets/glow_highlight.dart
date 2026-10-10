@@ -1,4 +1,10 @@
 /// Reusable glow highlight for lesson cues and selected targets.
+///
+/// Agent handbook: `docs/agents/06-ui-and-preferences.md`.
+///
+/// Gold SoftPulse = coach cues (after cards land, first press). Cyan =
+/// learner picks that stay visible under feedback. Prefer this over
+/// resurrecting bouncing [CueArrows].
 library;
 
 import 'package:flutter/material.dart';

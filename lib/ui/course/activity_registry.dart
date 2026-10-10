@@ -1,4 +1,12 @@
 /// Maps catalog renderers to activity widgets with explicit unsupported fallback.
+///
+/// Agent handbook: `docs/agents/04-course.md`
+/// (Activity renderers) and
+/// `docs/agents/07-reusable-components.md`.
+///
+/// Add a new renderer here **and** in the catalog wire map, server bank, and
+/// handbook table in the same change. Unknown renderers must degrade to
+/// [UnsupportedActivity], never throw out of the runner.
 library;
 
 import 'package:flutter/material.dart';

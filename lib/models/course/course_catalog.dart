@@ -1,8 +1,11 @@
 /// Public course catalog models for live cash NLH course v2.
 ///
+/// Agent handbook: `docs/agents/04-course.md`.
+///
 /// Mirrors `assets/course/v2/catalog.json` produced by
 /// `tools/course/validate_course.mjs`. Private grading lives only on the
-/// server bank and must never appear in this tree.
+/// server bank and must never appear in this tree — do not add answer keys,
+/// exact accepted choice ids for scoring, or coach-only secrets here.
 library;
 
 /// Stable production first-lesson id (Section 1 → Cards and the table).

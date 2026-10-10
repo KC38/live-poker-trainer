@@ -1,4 +1,10 @@
 /// Rex mascot slot: one full-body coach, posed from separate pieces.
+///
+/// Agent handbook: `docs/agents/06-ui-and-preferences.md`.
+///
+/// **Preference:** one drawing everywhere (calm / celebrate / think). Never
+/// substitute a letter "R", a second mascot, or text-only coach chrome on
+/// right/wrong beats — map expression through [RexMood] / lesson expression.
 library;
 
 import 'dart:math' as math;

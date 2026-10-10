@@ -1,5 +1,8 @@
 /// Debug-only agent command bus — drive the app via the Dart VM service.
 ///
+/// Agent handbook: `docs/agents/09-agent-workflow.md`
+/// and `docs/agent-ios-simulator.md`.
+///
 /// Register once at startup ([install]), then invoke from the host:
 /// `curl 'http://127.0.0.1:<port>/<token>/ext.poker.agent?isolateId=<id>&cmd=start'`
 ///
@@ -10,6 +13,9 @@
 /// `type` / `enter` / `type:<value>` (fill focused/first EditableText),
 /// `signout`.
 /// Optional `amount` query param becomes `raise:<amount>`.
+///
+/// Not for make-change ship verification — that skill only analyzes/tests,
+/// then simulator-refresh after primary pull.
 library;
 
 import 'dart:async';

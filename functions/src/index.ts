@@ -1,6 +1,12 @@
 /**
  * Cloud Functions for server-authoritative v3 live poker training.
  *
+ * Agent handbook: docs/agents/08-backend.md (and docs/architecture.md).
+ *
+ * This is the product brain: deals, legal actions, villains, coaching, course
+ * grading, hearts, and progress. The Flutter app is a renderer/input client.
+ * GEMINI_API_KEY stays in Functions/Secret Manager only.
+ *
  * The v2 fetch/progress/pool exports are intentionally removed so old clients
  * cannot recreate deleted graph situations after the mandatory upgrade reset.
  */

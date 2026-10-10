@@ -1,4 +1,10 @@
 /// Signed-in root: Home, Live Training, and Profile tabs.
+///
+/// Agent handbook: `docs/agents/03-client.md`.
+///
+/// Three-tab shell only. Poker table / lesson runner push above this
+/// navigator. Re-tapping Home must scroll to the next lesson — that is
+/// intentional path UX, not a no-op when already on the tab.
 library;
 
 import 'dart:async';

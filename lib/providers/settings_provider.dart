@@ -1,4 +1,11 @@
 /// Server-synced gameplay settings plus device-local audio preferences.
+///
+/// Agent handbook: `docs/agents/03-client.md`
+/// (Settings preferences).
+///
+/// Audio stays on-device. Chip display and other gameplay prefs sync when
+/// signed in. Obsolete client Gemini-key prefs are deleted on load — never
+/// restore a client-held model key.
 library;
 
 import 'dart:async';

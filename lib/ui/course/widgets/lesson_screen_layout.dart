@@ -1,4 +1,12 @@
 /// Shared lesson frame: chrome, coach band, stage, tools, answer dock.
+///
+/// Agent handbook: `docs/agents/04-course.md`.
+/// Cursor rule: `.cursor/rules/lesson-screen-layout.mdc`.
+///
+/// **Preference:** every new or edited lesson step uses this frame. The
+/// speech bubble is the only instruction — no title under the progress bar.
+/// Stage content is [LessonTableStage] / [FeltTableView], not a mini felt.
+/// Your two cards (`lesson-01-01-01-your-two-cards`) is the reference.
 library;
 
 import 'package:flutter/material.dart';
