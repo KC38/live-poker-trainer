@@ -323,17 +323,19 @@ clear_stuck_cursor_keychain() {
 # Cursor CLI often leaves the script(1) TTY log empty or full of ^D /
 # reconnect noise while the real session lives under
 # /tmp/cursor-agent-logs-*/session-*-<pid>-*.log. Copy a readable summary
-# (and enough session text for stall/status) into the run log when needed.
-# Args: run_log start_epoch [root_pid]
+# into the run log when needed.
+# Args: run_log start_epoch [root_pid] [quiet]
+# quiet=1 suppresses the "backfilled …" line (watchdog mid-run).
 backfill_run_log_from_session() {
-  local run_log="$1" start_epoch="$2" root_pid="${3:-}"
-  python3 - "$run_log" "$start_epoch" "$root_pid" <<'PY' || true
-import os, re, sys
+  local run_log="$1" start_epoch="$2" root_pid="${3:-}" quiet="${4:-}"
+  python3 - "$run_log" "$start_epoch" "$root_pid" "$quiet" <<'PY' || true
+import hashlib, os, re, sys
 from pathlib import Path
 
 run_log = Path(sys.argv[1])
 start_epoch = int(float(sys.argv[2]))
 root_pid = sys.argv[3].strip() if len(sys.argv) > 3 else ""
+quiet = (sys.argv[4].strip() if len(sys.argv) > 4 else "") in ("1", "true", "yes")
 
 NOISE = re.compile(
     r"(Connection lost, reconnecting|Retry attempt |\^D|\x04|\x08)",
@@ -444,7 +446,6 @@ if not candidates:
 
 candidates.sort(key=lambda t: (t[0], t[1]), reverse=True)
 best = candidates[0][2]
-# Skip rewrite when already backfilled from same path at same/larger size.
 prev_src = ""
 prev_size = -1
 m = re.match(r"# backfilled from (.+) \((\d+) bytes\)", cur.splitlines()[0] if cur else "")
@@ -458,24 +459,41 @@ if prev_src == str(best) and prev_size >= best_size:
     raise SystemExit(0)
 
 sess_text = cleaned_text(best)
-kept: list[str] = [
-    f"# backfilled from {best} ({best_size} bytes)",
-]
+body: list[str] = []
 for ln in sess_text.splitlines():
     if DROP_LINE.search(ln) or NOISE.search(ln):
         continue
-    kept.append(ln)
-if len(kept) < 3:
-    kept.append("(session log was telemetry-only; trailing lines:)")
-    kept.extend(sess_text.splitlines()[-15:])
+    body.append(ln)
+if len(body) < 2:
+    # Telemetry-only: stable marker (no trailing logger dump — that changed
+    # every few seconds and spammed the loop pane via rewrite+print).
+    body = ["(session log was telemetry-only)"]
 for ln in cur.splitlines():
+    if ln.startswith("# backfilled from") or ln.startswith("(session log was telemetry-only"):
+        continue
+    if ln.strip() and not NOISE.search(ln) and not DROP_LINE.search(ln) and ln not in body:
+        body.append(ln)
+
+def body_key(lines: list[str]) -> str:
+    return hashlib.sha1("\n".join(lines).encode("utf-8", errors="replace")).hexdigest()
+
+prev_body = []
+for ln in cur.splitlines()[1:]:
     if ln.startswith("# backfilled from"):
         continue
-    if ln.strip() and not NOISE.search(ln) and not DROP_LINE.search(ln) and ln not in kept:
-        kept.append(ln)
+    prev_body.append(ln)
+# Same filtered body and only session bytes grew → bump header silently.
+if prev_src == str(best) and body_key(prev_body) == body_key(body):
+    header = f"# backfilled from {best} ({best_size} bytes)"
+    run_log.parent.mkdir(parents=True, exist_ok=True)
+    run_log.write_text(header + "\n" + "\n".join(body).rstrip() + "\n", encoding="utf-8")
+    raise SystemExit(0)
+
+kept = [f"# backfilled from {best} ({best_size} bytes)", *body]
 run_log.parent.mkdir(parents=True, exist_ok=True)
 run_log.write_text("\n".join(kept).rstrip() + "\n", encoding="utf-8")
-print(f"backfilled {run_log} from {best}", flush=True)
+if not quiet:
+    print(f"backfilled {run_log} from {best}", flush=True)
 PY
 }
 
@@ -854,12 +872,39 @@ one_run() {
         break
       fi
       record_agent_pids "$pid" "$agent_pids_file"
-      # Mid-run: keep run log useful for status while CLI writes only to /tmp.
-      backfill_run_log_from_session "$run_log" "$start" "$pid"
+      # Mid-run: quiet refresh (no pane spam when session bytes grow).
+      backfill_run_log_from_session "$run_log" "$start" "$pid" 1
       sleep 30
     done
   ) &
   watchdog=$!
+
+  # If the loop is killed mid-run, still land health/coverage before exit.
+  # shellcheck disable=SC2329
+  _one_run_finalize() {
+    local marker="$LOG_DIR/run-$stamp.health"
+    [[ -f "$marker" ]] && return 0
+    if [[ -f "$run_log" ]]; then
+      python3 - "$run_log" <<'PY' || true
+import sys
+from pathlib import Path
+path = Path(sys.argv[1])
+try:
+    text = path.read_text(encoding="utf-8", errors="replace")
+except OSError:
+    raise SystemExit(0)
+cleaned = text.replace("\x04", "")
+if cleaned != text:
+    path.write_text(cleaned, encoding="utf-8")
+PY
+    fi
+    backfill_run_log_from_session "$run_log" "$start" "${pid:-}"
+    write_health_row "$stamp" "${code:-1}" "$(( $(date +%s) - start ))" "$run_log" "$start"
+    reconcile_health_from_coverage
+    touch "$marker"
+  }
+  # shellcheck disable=SC2064
+  trap '_one_run_finalize; sim_lock release --run-id "'"$run_id"'" >/dev/null 2>&1 || true' EXIT
 
   code=0
   wait "$pid" || code=$?
@@ -898,26 +943,11 @@ PY
   fi
 
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min"
-  # Strip script(1) EOF noise (^D) so status/health stay readable.
-  if [[ -f "$run_log" ]]; then
-    python3 - "$run_log" <<'PY' || true
-import sys
-from pathlib import Path
-path = Path(sys.argv[1])
-try:
-    text = path.read_text(encoding="utf-8", errors="replace")
-except OSError:
-    raise SystemExit(0)
-cleaned = text.replace("\x04", "")
-if cleaned != text:
-    path.write_text(cleaned, encoding="utf-8")
-PY
-  fi
-  backfill_run_log_from_session "$run_log" "$start" "$pid"
   tail -n 15 "$run_log" 2>/dev/null | sed 's/^/    /' || true
-  write_health_row "$stamp" "$code" "$(( $(date +%s) - start ))" "$run_log" "$start"
-  reconcile_health_from_coverage
+  _one_run_finalize
+  trap - EXIT
   find "$LOG_DIR" -name 'run-*.log' -mtime +14 -delete 2>/dev/null || true
+  find "$LOG_DIR" -name 'run-*.health' -mtime +14 -delete 2>/dev/null || true
   return "$code"
 }
 

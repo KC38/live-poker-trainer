@@ -254,6 +254,24 @@ backfill_run_log_from_session "$empty_run" "$start_epoch" ""
 grep -q 'backfilled from' "$empty_run" || fail "backfill should annotate source: $(cat "$empty_run")"
 grep -q 'LPT-99 closed' "$empty_run" || fail "backfill should copy session prose: $(cat "$empty_run")"
 
+# Quiet mid-run refresh must not print; telemetry-only must stay stable.
+# Isolate from the prose session above so largest-file ranking cannot steal.
+rm -f "$sess"
+telem_run="$LOG_DIR/run-telem-test.log"
+: >"$telem_run"
+telem_sess="$sess_dir/session-2026-10-10T12-01-00-000Z-99999-1.log"
+printf '%s\n' '--- Cursor Agent Debug Session ---' \
+  '[x] logger {"message":"noise1"}' >"$telem_sess"
+out="$(backfill_run_log_from_session "$telem_run" "$start_epoch" "" 1 2>&1 || true)"
+[[ -z "$out" ]] || fail "quiet backfill must not print: $out"
+grep -q 'telemetry-only' "$telem_run" || fail "telemetry-only marker missing: $(cat "$telem_run")"
+grep -q 'trailing lines' "$telem_run" && fail "must not dump trailing telemetry: $(cat "$telem_run")"
+# Growing telemetry alone must stay quiet (header size bump, no stdout).
+printf '%s\n' '--- Cursor Agent Debug Session ---' \
+  '[x] logger {"message":"noise1"}' '[x] logger {"message":"noise2"}' >"$telem_sess"
+out="$(backfill_run_log_from_session "$telem_run" "$start_epoch" "" 1 2>&1 || true)"
+[[ -z "$out" ]] || fail "quiet size-bump must not print: $out"
+
 : >"$HEALTH_FILE"
 printf '%s\n' \
   '{"at":"2026-10-10T15:29:26+05:30","sha":"x","surface":"s","result":"closed","ticket":"LPT-50","leads":[],"learnings":"updated"}' \
