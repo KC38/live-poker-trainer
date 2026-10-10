@@ -430,6 +430,9 @@ class LessonActivityController extends ChangeNotifier {
     // Drop the missed answer so SoftPulse / felt selection can restore to
     // the teach target (e.g. big blind after tapping the dealer).
     _draft = ActivityDraft(handStepIndex: _draft.handStepIndex);
+    // Remount felt deals so the retry shows a fresh isomorphic hand in the
+    // same starting-hand / hand-class family (not the missed layout).
+    _bindGeneration += 1;
     notifyListeners();
   }
 

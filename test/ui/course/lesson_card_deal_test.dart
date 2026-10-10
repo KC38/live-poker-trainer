@@ -491,6 +491,36 @@ void main() {
     expect(a[0].join(' '), isNot(b[0].join(' ')));
   });
 
+  test('retry generation stays in family but changes the preflop hand', () {
+    const template = [
+      ['7h', '2d'],
+      <String>[],
+    ];
+    const family = LessonStartingHandFamily.junkOffsuit;
+    final first = isomorphicLessonCardGroups(
+      template,
+      resolveLessonDealRandom(activityId: 'act-fold-retry', generation: 0),
+    );
+    expect(startingHandFamilyFromCodes(first[0]), family);
+
+    final labels = <String>{startingHandLabelFromCodes(first[0])};
+    for (var gen = 1; gen < 12; gen++) {
+      final next = isomorphicLessonCardGroups(
+        template,
+        resolveLessonDealRandom(activityId: 'act-fold-retry', generation: gen),
+      );
+      expect(
+        startingHandFamilyFromCodes(next[0]),
+        family,
+        reason: 'gen $gen ${next[0]}',
+      );
+      labels.add(startingHandLabelFromCodes(next[0]));
+    }
+    // Continue-after-miss bumps generation so the learner sees another
+    // combo from the same family, not the missed layout again.
+    expect(labels.length, greaterThan(1));
+  });
+
   test('dealRankOrderSpot remaps ranks and keeps authored ids', () {
     const authored = [
       (id: 'rank-2', label: '2'),
