@@ -111,9 +111,15 @@ final userDocProvider = FutureProvider<UserDocument?>((ref) async {
 /// Auth actions used by the login / register UI.
 class AuthController extends StateNotifier<AsyncValue<void>> {
   /// Creates the controller.
-  AuthController(this._ref) : super(const AsyncValue.data(null));
+  AuthController(
+    this._ref, {
+    this.guestUserDocTimeout = const Duration(seconds: 12),
+  }) : super(const AsyncValue.data(null));
 
   final Ref _ref;
+
+  /// Cap on the guest `users/{uid}` write during [ensureAnonymousSession].
+  final Duration guestUserDocTimeout;
 
   AuthService get _auth => _ref.read(authServiceProvider);
 
@@ -186,11 +192,18 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
       final user = await _auth.signInAnonymously();
       await _claimGuestInstall(user.uid);
       final repo = _ref.read(userRepositoryProvider);
-      await repo.ensureUserDoc(
-        uid: user.uid,
-        displayName: 'Guest',
-        preferences: const GameSettingsModel(),
-      );
+      try {
+        await repo
+            .ensureUserDoc(
+              uid: user.uid,
+              displayName: 'Guest',
+              preferences: const GameSettingsModel(),
+            )
+            .timeout(guestUserDocTimeout);
+      } on TimeoutException {
+        // Course callables never read users/{uid}, so a hung Firestore write
+        // must not hold the first lesson. userDocProvider recreates the doc.
+      }
       _ref.invalidate(userDocProvider);
       unawaited(_ref.read(analyticsServiceProvider).setUserId(user.uid));
       unawaited(
