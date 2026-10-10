@@ -1211,6 +1211,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         canUndo: false,
         canRedo: false,
         canHint: false,
+        // Pending frames are recovery, not a teach step — no dead tools.
+        showToolRow: false,
         stage: _error != null
             ? _buildBody()
             : const Center(

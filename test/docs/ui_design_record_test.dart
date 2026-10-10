@@ -100,6 +100,13 @@ void main() {
         'The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2.',
       ),
     );
+    expect(
+      record,
+      contains(
+        'Bootstrap, locked-start, and start-error frames hide `LessonToolRow`; the '
+        'tool row appears only after an activity is bound.',
+      ),
+    );
   });
 
   test('design record does not bring back what stakeholders removed', () {

@@ -50,7 +50,8 @@ Contract: `.cursor/rules/lesson-screen-layout.mdc` + design record
 - **Chrome:** close, progress, hearts — no lesson title row.
 - **Coach band:** Rex + one speech bubble (only instruction).
 - **Stage:** `LessonTableStage` / same `FeltTableView` as Live.
-- **Tools:** undo / redo / hint until graded.
+- **Tools:** undo / redo / hint until graded. Pending frames
+  (bootstrap / locked / start error) omit the row (`showToolRow: false`).
 - **Answer dock:** Nice! / Oops + Continue (full-bleed).
 
 Reference lesson: Your two cards. Copy it; do not invent a second frame.

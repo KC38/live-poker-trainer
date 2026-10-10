@@ -1450,6 +1450,7 @@ class LessonScreenLayout extends StatelessWidget {
     required this.canUndo,
     required this.canRedo,
     required this.canHint,
+    this.showToolRow = true,
     this.result,
     this.onContinue,
     this.answerBusy = false,
@@ -1474,6 +1475,10 @@ class LessonScreenLayout extends StatelessWidget {
   final bool canUndo;
   final bool canRedo;
   final bool canHint;
+
+  /// When false, omit Undo / Redo / Hint (bootstrap, locked start, start
+  /// error). Active steps keep the row even when every control is disabled.
+  final bool showToolRow;
   final SubmitCourseStepResult? result;
   final VoidCallback? onContinue;
   final bool answerBusy;
@@ -1583,7 +1588,8 @@ class LessonScreenLayout extends StatelessWidget {
         ),
         // Free margin of scaffold bg under the stage clip so controls never
         // sit on the tool row or answer dock; Expanded above shrinks upward.
-        const SizedBox(height: LessonAnswerDock.stageClearance),
+        if (graded || showToolRow)
+          const SizedBox(height: LessonAnswerDock.stageClearance),
         if (graded)
           LessonAnswerDock(
             result: result!,
@@ -1592,7 +1598,7 @@ class LessonScreenLayout extends StatelessWidget {
             recovery: recovery,
             continueLabel: continueLabel,
           )
-        else
+        else if (showToolRow)
           LessonToolRow(
             onUndo: onUndo,
             onRedo: onRedo,

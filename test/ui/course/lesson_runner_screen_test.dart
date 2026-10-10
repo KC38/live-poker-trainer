@@ -563,6 +563,10 @@ void main() {
         find.byType(LessonScreenLayout),
       );
       expect(layout.speech, expectedSpeech);
+      expect(layout.showToolRow, isFalse);
+      expect(find.byType(LessonToolRow), findsNothing);
+      expect(find.byTooltip('Hint'), findsNothing);
+      expect(find.byTooltip('Undo'), findsNothing);
       expect(tester.takeException(), isNull);
 
       await tester.tap(find.text('Technical details'));
@@ -4593,6 +4597,8 @@ void main() {
       );
       expect(loading.speech, kLessonBootstrapSpeech);
       expect(find.text(kLessonBootstrapSpeech), findsOneWidget);
+      expect(loading.showToolRow, isFalse);
+      expect(find.byType(LessonToolRow), findsNothing);
       expect(tester.takeException(), isNull);
 
       await tester.pump(const Duration(milliseconds: 100));
@@ -4602,6 +4608,8 @@ void main() {
       );
       expect(errored.speech, kLessonStartErrorSpeech);
       expect(find.text(kLessonStartErrorSpeech), findsOneWidget);
+      expect(errored.showToolRow, isFalse);
+      expect(find.byType(LessonToolRow), findsNothing);
       expect(tester.takeException(), isNull);
     },
   );

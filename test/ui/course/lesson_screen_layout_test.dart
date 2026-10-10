@@ -416,14 +416,15 @@ void main() {
     await tester.pumpAndSettle();
     final hole = find.byKey(const ValueKey<String>('dealt-hole-0-0'));
     expect(hole, findsOneWidget);
-    final before = tester.state<DealtCardReveal>(hole);
+    // State identity (not the widget type) — remount would redeal hole cards.
+    final before = tester.state(hole);
 
     await pumpFrame(lives: 0);
     await tester.pump();
 
     expect(hole, findsOneWidget);
     expect(
-      identical(before, tester.state<DealtCardReveal>(hole)),
+      identical(before, tester.state(hole)),
       isTrue,
       reason: 'last-heart block remounted DealtCardReveal (redeal)',
     );
@@ -584,6 +585,46 @@ void main() {
       dockRect.top - stageRect.bottom,
       LessonAnswerDock.stageGlowInset + LessonAnswerDock.stageClearance,
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('pending frame hides the tool row at mini size', (tester) async {
+    const size = Size(375, 812);
+    await tester.binding.setSurfaceSize(size);
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: buildPokerTheme(),
+        home: Scaffold(
+          backgroundColor: AppColors.bgDark,
+          body: LessonScreenLayout(
+            progress: 0,
+            livesRemaining: 3,
+            livesMax: 5,
+            onClose: _noop,
+            speech: kLessonBootstrapSpeech,
+            expression: LessonMascotExpression.thinking,
+            showToolRow: false,
+            stage: const Center(
+              child: Text('Could not start the lesson'),
+            ),
+            onUndo: _noop,
+            onRedo: _noop,
+            onHint: _noop,
+            canUndo: false,
+            canRedo: false,
+            canHint: false,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.byType(LessonToolRow), findsNothing);
+    expect(find.byTooltip('Hint'), findsNothing);
+    expect(find.byTooltip('Undo'), findsNothing);
+    expect(find.byTooltip('Redo'), findsNothing);
+    expect(find.text('Could not start the lesson'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
