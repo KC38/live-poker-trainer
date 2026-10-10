@@ -767,6 +767,18 @@ class CourseCatalog {
     return null;
   }
 
+  /// Unit that contains [lessonId], if the catalog publishes it.
+  CourseUnit? unitForLesson(String lessonId) {
+    for (final section in sections) {
+      for (final unit in section.units) {
+        for (final lesson in unit.lessons) {
+          if (lesson.id == lessonId) return unit;
+        }
+      }
+    }
+    return null;
+  }
+
   /// Finds a lesson by id.
   ///
   /// Exact id wins. If none match, a unique prefix of a lesson id also

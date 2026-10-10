@@ -507,6 +507,28 @@ place. The refill sheet (`heart_refill_sheet.dart`) offers Practice (+1
 heart on finishing a weak, already-played lesson) and a full refill for
 gems. Hearts update in place on Home without blanking it.
 
+## Profile
+
+The Profile tab keeps Course and Live Training in separate blocks. Guest
+copy offers Create an account and never claims a signed-in account exists.
+
+The Course card shows lifetime XP, streak, accepted accuracy, mastery, and
+the learner’s place as `SECTION N, UNIT M` plus the current unit title from
+the catalog — the same place language as the Home unit banner. It does not
+show an experience-band section title alone as the place line (for example
+bare `Never Played` next to earned XP).
+
+Live Training on the same screen stays about full-hand play: style, coaching
+record, and the empty state that asks for more hands. Lesson mastery never
+appears as live-hand style in the header.
+
+### Shipped
+
+`CourseProgress.coursePlaceEyebrow` / `coursePlaceTitle`
+(`lib/models/course/course_progress.dart`) feed `_CourseProgressCard` on
+`ProfileScreen`. The next surface that names the learner’s course place
+copies that SECTION / UNIT + unit title pair.
+
 ## Gamified learning
 
 Lessons teach like a game. The loop is
@@ -598,8 +620,8 @@ past this list.
 - **Rex motion.** The rig has three poses. The ask is a scalable mascot
   with more expressions and short, smooth full-body movements on each beat
   (the side, back, and think drawings are not wired yet).
-- **Live Training and Profile** have had far less polish than lessons and
-  Home. Walk them against Theme and Poker table.
+- **Live Training** has had far less polish than lessons and Home. Walk it
+  against Theme and Poker table.
 
 ## Lesson ledger
 

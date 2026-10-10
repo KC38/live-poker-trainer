@@ -1165,13 +1165,33 @@ class _CourseProgressCard extends StatelessWidget {
             rightLabel: 'Mastery',
           ),
           const SizedBox(height: 14),
-          Text(
-            progress.currentSectionTitle ?? 'Section not started',
-            style: GoogleFonts.manrope(
-              color: AppColors.cream,
-              fontWeight: FontWeight.w700,
+          if (progress.coursePlaceEyebrow != null) ...[
+            Text(
+              progress.coursePlaceEyebrow!,
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
+            if (progress.coursePlaceTitle != null) ...[
+              const SizedBox(height: 2),
+              Text(
+                progress.coursePlaceTitle!,
+                style: GoogleFonts.manrope(
+                  color: AppColors.cream,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13.5,
+                ),
+              ),
+            ],
+          ] else
+            Text(
+              'Section not started',
+              style: GoogleFonts.manrope(
+                color: AppColors.cream,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
           Text(
             progress.reviewsDue == 0
                 ? 'No reviews due'
