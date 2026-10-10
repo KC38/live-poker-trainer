@@ -348,10 +348,12 @@ void main() {
       ],
     );
     final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
     expect(controller.showTargetCue, isFalse);
     controller.revealHint();
     expect(controller.hintVisible, isTrue);
     expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
     controller.toggleHint();
     expect(controller.hintVisible, isFalse);
     expect(controller.showTargetCue, isFalse);
@@ -372,6 +374,7 @@ void main() {
       ],
     );
     final firstRun = LessonActivityController(activity: activity);
+    firstRun.notifyFeltDealReady(true);
     expect(firstRun.showTargetCue, isTrue);
     firstRun.dispose();
 
@@ -379,10 +382,12 @@ void main() {
       activity: activity,
       isReview: true,
     );
+    review.notifyFeltDealReady(true);
     expect(review.showTargetCue, isFalse);
     expect(review.canRequestHint, isTrue);
     review.revealHint();
     expect(review.showTargetCue, isTrue);
+    expect(review.canRequestHint, isFalse);
     review.dispose();
   });
 
@@ -402,7 +407,9 @@ void main() {
     final controller = LessonActivityController(activity: activity);
     controller.notifyFeltDealReady(true);
     expect(controller.showTargetCue, isTrue);
-    expect(controller.canRequestHint, isTrue);
+    // SoftPulse already teaching — Hint off even before sequential reports
+    // (LPT-63; same rule as single-press scaffolded SoftPulse).
+    expect(controller.canRequestHint, isFalse);
 
     controller.notifySequentialPressProgress(remainingPressCount: 3);
     expect(controller.sequentialPressesRemaining, isTrue);
@@ -429,6 +436,32 @@ void main() {
     controller.dispose();
   });
 
+  test('single-press SoftPulse keeps Hint disabled (LPT-63)', () {
+    final activity = CourseActivity(
+      id: 'act-01-02-02-scaffolded-kicker',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Tap who wins when kickers break a tied pair.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'h',
+          kind: 'hint',
+          text: 'Tap who wins when kickers break a tied pair.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
+    expect(controller.showTargetCue, isTrue);
+    expect(controller.sequentialPressesRemaining, isFalse);
+    expect(controller.canRequestHint, isFalse);
+    controller.dispose();
+  });
+
   test('Hint re-opens SoftPulse for the current next press only', () {
     final activity = CourseActivity(
       id: 'scaffolded-multi',
@@ -445,6 +478,7 @@ void main() {
     final controller = LessonActivityController(activity: activity);
     controller.notifyFeltDealReady(true);
     expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
 
     controller.notifySequentialPressProgress(remainingPressCount: 4);
     controller.consumeSequentialSoftPulse();
@@ -633,6 +667,7 @@ void main() {
       acceptedGrades: const [SoftGrade.recommended],
     );
     final controller = LessonActivityController(activity: first);
+    controller.notifyFeltDealReady(true);
     expect(controller.showTargetCue, isTrue);
     controller.selectChoice('c1');
     controller.ensureIdempotencyKey(() => 'fixed-key');

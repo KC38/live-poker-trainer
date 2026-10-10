@@ -129,21 +129,15 @@ class LessonActivityController extends ChangeNotifier {
 
   /// Whether the Hint control should accept a tap right now.
   ///
-  /// Multi-press SoftPulse: Hint is off while the current wave already shows
-  /// the next target (teaching SoftPulse or a just-revealed Hint). Tapping
-  /// that target closes the wave and re-enables Hint for the following press.
-  /// When Hint cannot reopen (no hint text), SoftPulse stays on the next
-  /// press and Hint stays disabled. Single-press nodes: Hint stays available
-  /// until used once on this screen.
+  /// Gold SoftPulse already teaching this press ([showTargetCue]) keeps Hint
+  /// off — single-press scaffolded SoftPulse included, not only multi-press
+  /// waves (LPT-63). After the learner takes that press (wave closes), Hint
+  /// can reopen SoftPulse for the next press when presses remain. When Hint
+  /// cannot reopen (no hint text), SoftPulse stays on and Hint stays off.
   bool get canRequestHint {
-    if (!hintUsed) {
-      if (sequentialPressesRemaining && showTargetCue) {
-        if (_sequentialSoftPulseWaveOpen || !_canReopenSequentialCueViaHint) {
-          return false;
-        }
-      }
-      return true;
-    }
+    // SoftPulse already on — do not let Hint stack a second help beat.
+    if (showTargetCue) return false;
+    if (!hintUsed) return true;
     return sequentialPressesRemaining && !_sequentialSoftPulseWaveOpen;
   }
 
