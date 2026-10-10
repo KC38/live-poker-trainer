@@ -1574,6 +1574,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                         : lessonFrameHintFallback(
                             activity,
                             isReview: controller.isReview,
+                            bindGeneration: controller.bindGeneration,
                           );
                     final hintLine =
                         controller.hintVisible &&

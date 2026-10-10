@@ -1008,11 +1008,73 @@ class ShowdownOrderDeal {
   final List<String> correctOrder;
 }
 
+/// Short hand-class labels for Hint, keyed by role id order you → sam → jo.
+///
+/// Matches catalog `accessibilityText` parentheticals. Roles keep these
+/// classes after [_shuffleShowdownSeatRoles]; only the physical seat moves.
+const Map<String, List<String>> _showdownOrderHintClassesByActivity = {
+  'act-01-02-01-explain-ladder': ['high card', 'pair', 'flush'],
+  'act-01-02-01-guided-ladder': ['high card', 'pair', 'flush'],
+  'act-01-02-01-scaffolded-spot': ['pair', 'straight', 'flush'],
+  'act-01-02-01-unguided-compare': ['full house', 'trips', 'two pair'],
+  'act-01-02-01-checkpoint-winner': ['flush', 'straight', 'high card'],
+};
+
+/// Physical seat label for a showdown-order hole index (hero, Sam, Jo).
+String showdownOrderPhysicalSeatLabel(int seatIndex) {
+  const names = ['You', 'Sam', 'Jo'];
+  if (seatIndex < 0 || seatIndex >= names.length) return 'seat';
+  return names[seatIndex];
+}
+
+/// Hint line for a Hand ranks showdown-order step after seat-role shuffle.
+///
+/// Catalog copy assumes You / Sam / Jo keep authored classes. After
+/// [_shuffleShowdownSeatRoles], SoftPulse follows role ids onto physical
+/// seats — Hint must name those same seats (LPT-54).
+String? showdownOrderHintSpeech(
+  String activityId, {
+  int generation = 0,
+  Random? random,
+  ShowdownOrderDeal? deal,
+}) {
+  final classes = _showdownOrderHintClassesByActivity[activityId];
+  if (classes == null || classes.length != 3) return null;
+  final resolved =
+      deal ??
+      dealShowdownOrderCards(
+        activityId,
+        generation: generation,
+        random: random,
+      );
+  if (resolved == null) return null;
+
+  String classForRole(String roleId) {
+    return switch (roleId) {
+      'you' => classes[0],
+      'sam' => classes[1],
+      'jo' => classes[2],
+      _ => roleId,
+    };
+  }
+
+  final parts = <String>[];
+  for (final roleId in resolved.correctOrder) {
+    final seatIndex = resolved.seatIds.indexOf(roleId);
+    if (seatIndex < 0) return null;
+    final seat = showdownOrderPhysicalSeatLabel(seatIndex);
+    parts.add('$seat (${classForRole(roleId)})');
+  }
+  if (parts.length != 3) return null;
+  return 'Showdown — tap ${parts[0]}, ${parts[1]}, then ${parts[2]}.';
+}
+
 /// Randomized Hand ranks showdown layout for [activityId], or null if unknown.
 ///
 /// Role ids stay authored (`you` / `sam` / `jo` = strength tiers) and
 /// [correctOrder] is unchanged for server grading. Card faces vary, and which
-/// physical seat holds each role is shuffled.
+/// physical seat holds each role is shuffled. Hint copy must use
+/// [showdownOrderHintSpeech] so seat names match the felt (LPT-54).
 ShowdownOrderDeal? dealShowdownOrderCards(
   String activityId, {
   int generation = 0,

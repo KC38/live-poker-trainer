@@ -16,6 +16,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
@@ -822,6 +823,20 @@ String? lessonFrameHintFallback(
   // Explain steps already speak the teach line in the bubble. Reviews still
   // need a fallback so Hint can unlock the cues that stay off by default.
   if (activity.stage == ActivityStage.explain && !isReview) return null;
+
+  // Hand ranks showdown-order: seat roles shuffle; catalog accessibility
+  // still names authored You/Sam/Jo classes. Build Hint from the deal.
+  final showdownHint = showdownOrderHintSpeech(
+    activity.id,
+    generation: bindGeneration,
+  );
+  if (showdownHint != null) {
+    return alignLessonActionCopy(
+      activity,
+      showdownHint,
+      generation: bindGeneration,
+    );
+  }
 
   final accessibility = activity.accessibilityText.trim();
   if (accessibility.isEmpty) return null;
