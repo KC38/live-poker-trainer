@@ -45,6 +45,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 - Prefer exact `agent_tap` labels from the screen. Broad needles like
   `Continue` can hit Home chrome instead of the lesson control.
+- Prefer `openlesson` with the catalog id (`lesson-01-01-02-…`), not the
+  Home title — a title string yields "Unknown lesson".
+- Prefer copying gitignored `lib/firebase_options.dart` (and iOS/Android
+  Google services files) into the ticket worktree before `flutter run`;
+  without them the worktree build fails even when primary runs fine.
 - Prefer not to treat `tap --text Gems` as proof the gem control works:
   the strip Tooltip is "Gems" with no `onTap`, and the needle can land on
   Hearts / the refill sheet instead.
@@ -55,7 +60,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   not spend or restore) or teach-by-doing gap over spacing chrome.
 - Prefer a second open of the same lesson when judging card randomization —
   screenshot hole/board cards on attempt A and attempt B before deciding
-  the deal is fixed.
+  the deal is fixed. Read ranks from the latest PNG before tapping a
+  SoftPulse target; a stale rank needle misses the gold card.
 - Prefer screenshotting the heart count before and after a paid miss (and
   after Practice/refill) before claiming hearts work.
 - Prefer reading PNGs you just captured before judging; do not close from
@@ -151,3 +157,6 @@ trimming. Durable rules belong in the sections above, not only here.
   `FilledButton` → Theme elevated). Grep sibling guest Create an account
   CTAs in the same walk; export `SIM_LOCK_RUN_ID` inside tmux
   `send-keys` for post-merge refresh.
+- 2026-10-10: LPT-47 guided suits — `syncSelection` + empty draft wiped
+  cyan on SoftPulse rebuilds. Worktree `flutter run` needs copied
+  `firebase_options.dart`; `openlesson` needs lesson id not title.
