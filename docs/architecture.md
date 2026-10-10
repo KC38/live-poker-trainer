@@ -1,5 +1,11 @@
 # Architecture
 
+Agent orientation for this file lives in
+[docs/agents/README.md](agents/README.md) (especially
+[05 — Live Training](agents/05-live-training.md) and
+[08 — Backend](agents/08-backend.md)). Keep both in sync when trust
+boundaries or pool/engine behavior change.
+
 ## Trust and information boundaries
 
 The Flutter app is an authenticated online renderer and input client. The

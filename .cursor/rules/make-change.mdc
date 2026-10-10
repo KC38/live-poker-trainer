@@ -10,6 +10,9 @@ Never edit, commit, or switch branches in the primary checkout
 
 For a new feature, bug fix, or any other requested code change, follow `.cursor/skills/make-change/SKILL.md` in this session.
 
+While shipping, keep `docs/agents/` and AI-oriented comments current
+(`.cursor/rules/agent-docs-maintenance.mdc`).
+
 Do not launch a background subagent. Do not implement the change in the primary checkout.
 
 Do not move the agent root into `.worktrees/<slug>`; stay on primary and use
