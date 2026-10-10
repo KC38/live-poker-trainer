@@ -103,12 +103,56 @@ void main() {
       ),
     );
     expect(controller.draft.choiceId, 'dealer');
+    final generation = controller.bindGeneration;
     controller.clearFeedbackForRetry();
     expect(controller.draft.choiceId, isNull);
     expect(controller.draft.handStepIndex, 2);
     expect(controller.lastResult, isNull);
     // SoftPulse gate: unlocked + no selection.
     expect(controller.submitting, isFalse);
+    // Retry remounts isomorphic deals (fresh hand in the same family).
+    expect(controller.bindGeneration, generation + 1);
+    controller.dispose();
+  });
+
+  test('clearFeedbackForRetry does not bump generation after an accept', () {
+    final activity = CourseActivity(
+      id: 'a',
+      order: 1,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 30,
+      accessibilityText: 'a',
+      acceptedGrades: const [SoftGrade.recommended],
+      choices: const [CourseChoice(id: 'bb', label: 'Big blind')],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.selectChoice('bb');
+    controller.beginSubmit('k');
+    controller.finishSubmit(
+      SubmitCourseStepResult(
+        attemptId: 'att',
+        activityId: 'a',
+        grade: SoftGrade.recommended,
+        feedback: 'nice',
+        accepted: true,
+        lifeLost: false,
+        livesRemaining: 3,
+        xpAwarded: 10,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'att',
+          lessonId: 'l',
+          activityId: 'a',
+          activityIndex: 0,
+        ),
+        duplicate: false,
+      ),
+    );
+    final generation = controller.bindGeneration;
+    controller.clearFeedbackForRetry();
+    expect(controller.bindGeneration, generation);
+    expect(controller.lastResult, isNotNull);
     controller.dispose();
   });
 
