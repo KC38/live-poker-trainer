@@ -243,6 +243,67 @@ void main() {
     );
   });
 
+  testWidgets('guided picker SoftPulse rings one recommended card', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-02-02-guided-seven',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your best five.',
+      choices: const [
+        CourseChoice(id: 'best-pair-k', label: 'Aces with king'),
+        CourseChoice(id: 'weak-kickers', label: 'Aces with nine'),
+        CourseChoice(id: 'ignore-ace', label: 'King high'),
+      ],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'h',
+          kind: 'hint',
+          text: 'Use your pair plus the strongest kickers.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+    controller.releaseFeltDealIfUntracked();
+
+    await tester.pumpWidget(
+      _frame(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    // Recommended set starts Ah (hero 0) — one gold SoftPulse, not You.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    final ah = tester.getCenter(
+      find.byKey(const ValueKey<String>('lesson-hero-card-0')),
+    );
+    final you = tester.getCenter(
+      find.byKey(const ValueKey<String>('seat-box-0')),
+    );
+    final glow = tester.getCenter(
+      find.byKey(const ValueKey<String>('glow-highlight')),
+    );
+    expect(glow.dx, closeTo(ah.dx, 8));
+    expect(glow.dy, lessThan(you.dy - 8));
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('guided picker selects five on the full table', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
