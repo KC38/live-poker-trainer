@@ -22,7 +22,11 @@ import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
-Widget _frame(Widget child, {void Function(String)? onMiss}) {
+Widget _frame(
+  Widget child, {
+  void Function(String)? onMiss,
+  LessonActivityController? activityController,
+}) {
   return ProviderScope(
     child: MaterialApp(
       theme: buildPokerTheme().copyWith(
@@ -36,6 +40,7 @@ Widget _frame(Widget child, {void Function(String)? onMiss}) {
           ),
           child: LessonFrameScope(
             onLocalMiss: onMiss ?? (_) {},
+            activityController: activityController,
             child: child,
           ),
         ),
@@ -191,8 +196,12 @@ void main() {
               );
             },
           ),
+          activityController: controller,
         ),
       );
+      await tester.pump();
+      // SoftPulse stays gated until the felt reports the deal settled.
+      controller.notifyFeltDealReady(true);
       await tester.pump();
       expect(find.byType(LessonSuitBoardTable), findsOneWidget);
       expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
@@ -201,6 +210,86 @@ void main() {
       await tester.pump();
       expect(controller.showTargetCue, isTrue);
       expect(find.byKey(const ValueKey<String>('glow-highlight')), findsWidgets);
+    },
+  );
+
+  testWidgets(
+    'guided suits keeps picks across SoftPulse controller rebuilds (LPT-47)',
+    (tester) async {
+      // Mini reference size — fail if the stage overflows while picking.
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final activity = CourseActivity(
+        id: 'act-01-01-02-guided-suits',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText:
+            'Tap hearts, diamonds, clubs, and spades on the board.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap one community card of each suit.',
+        choices: const [
+          CourseChoice(
+            id: 'suits-full',
+            label: 'Hearts, diamonds, clubs, spades',
+          ),
+        ],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'act-01-01-02-guided-suits-hint',
+            kind: 'hint',
+            text: 'Four suits — one card of each on the board.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+      var autoSubmits = 0;
+      controller.onAutoSubmit = () => autoSubmits += 1;
+
+      // Same rebuild path as LessonRunnerScreen (AnimatedBuilder on controller).
+      await tester.pumpWidget(
+        _frame(
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, _) {
+              return SelectIdentifyActivity(
+                activity: activity,
+                controller: controller,
+                showGuidance: controller.showTargetCue,
+              );
+            },
+          ),
+          activityController: controller,
+        ),
+      );
+      await tester.pump();
+      controller.notifyFeltDealReady(true);
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+
+      controller.revealHint();
+      await tester.pump();
+      expect(controller.showTargetCue, isTrue);
+
+      // SoftPulse on hearts (index 0); skip star at index 2.
+      await tester.tap(find.byKey(const ValueKey('lesson-board-card-0')));
+      await tester.pump();
+      expect(controller.showTargetCue, isFalse);
+      expect(autoSubmits, 0);
+      expect(controller.draft.choiceId, isNull);
+
+      // Mid-sequence rebuild must not wipe cyan / block the fourth tap.
+      for (final i in [1, 3, 4]) {
+        await tester.tap(find.byKey(ValueKey('lesson-board-card-$i')));
+        await tester.pump();
+      }
+      expect(controller.draft.choiceId, 'suits-full');
+      expect(autoSubmits, 1);
+      expect(tester.takeException(), isNull);
     },
   );
 

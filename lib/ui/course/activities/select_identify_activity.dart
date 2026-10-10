@@ -219,13 +219,16 @@ class SelectIdentifyActivity extends StatelessWidget {
         final framed = LessonFrameScope.maybeOf(context) != null;
         if (framed &&
             presentation == SelectIdentifyPresentation.suitTapPicker) {
+          // Own progressive picks locally. syncSelection + empty
+          // selectedSuitLetters would wipe _selected on every SoftPulse /
+          // Hint controller rebuild (LPT-47) and block Nice!.
           return LessonSuitBoardTable(
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}',
             ),
             enabled: !locked,
             showGuidance: showGuidance,
-            syncSelection: true,
+            syncSelection: selected == 'suits-full',
             withStarDistractor: true,
             selectedSuitLetters: selected == 'suits-full'
                 ? const {'h', 'd', 'c', 's'}
