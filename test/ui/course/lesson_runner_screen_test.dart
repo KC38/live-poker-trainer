@@ -519,6 +519,10 @@ void main() {
   testWidgets(
     'missing previous lesson offers that lesson, not the raw exception',
     (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
       final locked = _PrerequisiteLockedCourseService(catalog);
       await tester.pumpWidget(
         _app(
@@ -550,6 +554,16 @@ void main() {
       expect(find.textContaining('failed-precondition'), findsNothing);
       expect(find.text('Open Your two cards'), findsOneWidget);
       expect(find.text('Retry'), findsOneWidget);
+      final expectedSpeech = lessonStartErrorSpeech(
+        previousLessonTitle: 'Your two cards',
+      );
+      expect(find.text(expectedSpeech), findsOneWidget);
+      expect(find.text(kLessonStartErrorSpeech), findsNothing);
+      final layout = tester.widget<LessonScreenLayout>(
+        find.byType(LessonScreenLayout),
+      );
+      expect(layout.speech, expectedSpeech);
+      expect(tester.takeException(), isNull);
 
       await tester.tap(find.text('Technical details'));
       await tester.pumpAndSettle();

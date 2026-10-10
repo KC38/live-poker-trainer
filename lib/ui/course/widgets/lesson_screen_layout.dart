@@ -210,9 +210,19 @@ bool isLessonScreenFrameLesson(String lessonId) {
 /// Prefer: never mount [LessonCoachBand] with an empty bubble during bootstrap.
 const kLessonBootstrapSpeech = 'Getting your next step ready…';
 
-/// Calm coach line when start failed; Retry lives on the stage body.
+/// Calm coach line when start failed and only Retry is on the stage.
 const kLessonStartErrorSpeech =
     'Could not start this lesson. Tap Retry when you are ready.';
+
+/// Start-error speech that names the primary recovery control.
+///
+/// Prefer: when Open `<previous lesson>` is the gold CTA, the bubble must
+/// name that tap — never a Retry-only line beside it (LPT-51).
+String lessonStartErrorSpeech({String? previousLessonTitle}) {
+  final title = previousLessonTitle?.trim() ?? '';
+  if (title.isEmpty) return kLessonStartErrorSpeech;
+  return 'Could not start this lesson. Tap Open $title.';
+}
 
 /// The one sentence in the speech bubble. Nothing else on the step repeats it.
 ///

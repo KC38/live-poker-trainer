@@ -362,8 +362,10 @@ never an empty bubble beside Rex.
 
 Every bubble ends by saying what to tap (`lessonFrameSpeech`). A test walks
 the whole catalog and fails on a bubble with no tap line. Copy that names
-hole cards names the cards actually dealt. Loading and start-error lines
-are the exception: they name what is happening, not a tap target.
+hole cards names the cards actually dealt. Loading lines name what is
+happening. On a locked start, Rex's bubble names the primary recovery
+control (Open `<previous lesson>` when shown; otherwise Retry) — never a
+Retry-only line while Open previous is the gold CTA.
 
 | Moment | Expression | Rex mood |
 | --- | --- | --- |
@@ -480,7 +482,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Coach follows the deal | Speech, grade lines, and chip math name the cards, seats, and amounts on the felt for this attempt — not a previous deal or a hard-coded template combo. |
 | Hint (one at a time) | Hint swaps the speech bubble to **one** hint for the current press until tapped again. Never stack hint + idle prompt, or two hint bubbles. Disabled while SoftPulse is already on for this press. Visible but **disabled** when there is no hint — including a multi-press / multi-turn step after the last press that had a hint. |
 | Cues (one system, one gold) | `GlowHighlight` only: gold SoftPulse for the guide/Hint target, cyan for the learner's picks. Hint-reopened SoftPulse looks the same as the guide cue. At most one gold target at a time; after that press is taken, gold stays off until Hint reopens the next — except on multi-press explain SoftPulse sequences with no hint text (button → SB → BB), where gold SoftPulse advances to the next required seat and Hint stays disabled while that gold cue is on. Review lessons hide cues by default. No `CueArrows` / `CuePulse`. |
-| Coach mood | Calm on the ask, celebrate on Nice!, think on Oops. Never an empty bubble after the deal, never a letter-R coach. While the lesson is bootstrapping (or recovering from a load error), the coach bubble shows one calm line such as getting the next step ready — never an empty bubble beside Rex. |
+| Coach mood | Calm on the ask, celebrate on Nice!, think on Oops. Never an empty bubble after the deal, never a letter-R coach. While the lesson is bootstrapping (or recovering from a load error), the coach bubble shows one calm line such as getting the next step ready — never an empty bubble beside Rex. On a locked start, the bubble names Open `<previous lesson>` when that CTA is shown; otherwise Retry (LPT-51). |
 | Hearts | A non-guided miss empties one heart in place. Guided free misses do not. At zero, empty hearts breathe and the refill sheet opens from the hearts control. Practice / gem refill restores hearts in place (no toast, no rejected out-of-hearts dock). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -511,9 +513,11 @@ multi-press board picker that rebuilds from `LessonActivityController`
 copies that gate so SoftPulse/Hint notifyListeners cannot clear cyan.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
-`kLessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
-`LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48).
-The next pending lesson frame copies those constants instead of `speech: ''`.
+`lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
+`LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
+LPT-51). Locked starts pass the previous lesson title so the bubble names
+Open `<title>`; Retry-only errors keep `kLessonStartErrorSpeech`. The next
+pending lesson frame copies that helper instead of `speech: ''`.
 
 Multi-press explain SoftPulse with no hint text
 (`LessonActivityController.showTargetCue` / `_canReopenSequentialCueViaHint`,
