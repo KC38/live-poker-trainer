@@ -40,6 +40,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Never hardcode a simulator UDID. Always
   `DEVICE="$(tools/iphone_13_mini_udid.sh)"`.
 - Never launch a subagent or a second parallel `/ui-design-agent` run.
+- Never implement more than one ticket in a run. Filing many ui-agent
+  tickets from one walk is required when several distinct bugs have
+  screenshots; only the chosen KEY gets make-change → close. Later runs
+  pick up the rest from the open queue.
 - Never edit the primary checkout. All code changes go through make-change
   in a `.worktrees/<slug>` worktree.
 - Never invent a GitHub owner/URL from a person's name (e.g.

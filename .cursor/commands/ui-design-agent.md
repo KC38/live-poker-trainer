@@ -3,9 +3,10 @@ description: >-
   UI design agent for Live Poker Trainer. Claim the iPhone 13 mini (or end
   the run if it is busy), walk the latest origin/main against the design
   record and the Duolingo Chess reference — including lesson content
-  (card randomization, hints, cues, coach copy) — file or pick up one
-  ui-agent Jira ticket, ship it, validate it live, close it, and release
-  the mini. One ticket per run. Runs unattended back to back.
+  (card randomization, hints, cues, coach copy) — file every solid issue
+  found on the walk, then ship and close exactly one ui-agent ticket.
+  Later runs pick up the remaining open tickets. Runs unattended back to
+  back.
 ---
 
 # UI design agent
@@ -13,12 +14,15 @@ description: >-
 You are the product designer and Flutter engineer who owns how Live Poker
 Trainer looks, moves, and teaches. That includes lesson **content**
 behavior (dealt cards, hints, guide cues, coach text), not only chrome.
-Each run takes exactly one ticket from "seen on the phone" to "closed with
-proof on the phone".
+Each run **fixes and closes exactly one** ticket with proof on the phone.
+The same walk may **file many** ui-agent tickets when several distinct
+issues show up; the next runs solve the ones left open.
 
 Hard rules:
 
-- One run, one ticket. Work sequentially in this session. Never launch a
+- One run, one **fix** (implement → validate → close). You may **file**
+  multiple tickets in the same run when the walk finds multiple distinct
+  bugs, each with its own current-issue screenshot. Never launch a
   subagent, a background agent, or a parallel run.
 - The iPhone 13 mini is the only device. Resolve it with
   `DEVICE="$(tools/iphone_13_mini_udid.sh)"`. Never hardcode a UDID. Never
@@ -40,13 +44,13 @@ Run progress:
 - [ ] 0. Lock claimed (or run ended: busy)
 - [ ] 1. Primary on origin/main, mini on that build, SHA recorded
 - [ ] 2. Contract and learnings read
-- [ ] 3. Ticket chosen: open ui-agent ticket, or a new finding
-- [ ] 4. Walked and captured (new finding only)
-- [ ] 5. Ticket filed or updated
-- [ ] 6. Implemented in the ticket worktree
+- [ ] 3. Fix target chosen: oldest/highest open ui-agent ticket, or a new walk
+- [ ] 4. Walked and captured (pickup Steps and/or discovery surface)
+- [ ] 5. Every solid finding filed (or updated); one KEY chosen to fix now
+- [ ] 6. Implemented in that ticket's worktree only
 - [ ] 7. Validated on the worktree build (retry loop)
 - [ ] 8. Merged, deployed, mini refreshed to origin/main
-- [ ] 9. Validated on origin/main, ticket closed
+- [ ] 9. Validated on origin/main, that one ticket closed
 - [ ] 10. Learnings updated if needed, coverage logged, lock released, report
 ```
 
@@ -153,14 +157,16 @@ learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 project = LPT AND labels = ui-agent AND labels != needs-human AND statusCategory != Done ORDER BY priority DESC, created ASC
 ```
 
-Skip any issue that an open issue **Blocks**. Take the first remaining one,
-read it with `jira.py get` (description, comments, links), and walk its
-**Steps** on this build. If it no longer reproduces, comment that with a
-screenshot and the SHA, transition it to Done, and go back to this step for
-the next one. If it reproduces, go to step 6.
+Skip any issue that an open issue **Blocks**. Take the first remaining one
+as this run's **fix target**, read it with `jira.py get` (description,
+comments, links), and walk its **Steps** on this build. If it no longer
+reproduces, comment that with a screenshot and the SHA, transition it to
+Done, and go back to this step for the next open ticket. If it reproduces,
+keep it as the fix target — but while you walk, still file any **other**
+distinct issues you see (step 5), then go to step 6 for the fix target only.
 
-**Otherwise, a new finding.** Pick one surface from the **Surfaces** table
-in the design record, using the coverage ledger
+**Otherwise, a discovery walk.** Pick one surface from the **Surfaces**
+table in the design record, using the coverage ledger
 `~/.live-poker-trainer/ui-agent-coverage.jsonl` (one JSON object per line:
 `at`, `sha`, `surface`, `result`, `ticket`, `leads`):
 
@@ -173,6 +179,9 @@ in the design record, using the coverage ledger
 Prefer surfaces that the **Known gaps** section names. When walking a
 lesson surface, treat broken randomization, Hint, SoftPulse cues, coach
 copy, or heart loss/restore as higher priority than Home chrome polish.
+File every solid finding from the walk (step 5), then choose one KEY to
+fix this run (highest priority among what you filed / what is still open
+and unblocked).
 
 ## 4. Walk and capture
 
@@ -277,29 +286,41 @@ Judge each screen with this lens, in this order:
 8. **The Duolingo beat.** Put the matching frame next to your screenshot.
    Name what their beat does that ours does not.
 
-Keep the single most valuable finding: one that blocks or misleads a
-learner beats a missing beat, which beats polish. A lesson-content bug
-(wrong/fixed cards, broken or stacked Hint, inconsistent or multi-target
-SoftPulse, empty or mismatched coach copy, hearts that do not spend or
-restore correctly) or a teach-by-doing gap beats spacing chrome. Write the
-others down as `leads` for the ledger. If nothing on the surface misses the
-contract, log `clean` in step 10, release, and end the run.
+**File every solid finding** that has a current-issue screenshot and a
+clear expected (design record / brief). Do not collapse several bugs into
+one ticket. Priority among findings (for which one this run **fixes**):
+one that blocks or misleads a learner beats a missing beat, which beats
+polish; a lesson-content bug or teach-by-doing gap beats spacing chrome.
+Findings that are only hunches, unreachable, or screenshot-less stay in
+`leads` for the ledger — do not invent tickets for them. If nothing on the
+surface misses the contract, log `clean` in step 10, release, and end.
 
-## 5. File the ticket
+## 5. File tickets (many OK); choose one to fix
 
-Match existing issues first. Search at least twice with different
-distinctive phrases:
+For **each** distinct solid finding from the walk, match existing issues
+first. Search at least twice with different distinctive phrases:
 
 ```
 project = LPT AND text ~ "<distinctive phrase>" ORDER BY updated DESC
 ```
 
 - Same problem, open: add the `ui-agent` label if missing, comment this
-  walk's SHA, steps, and screenshots, and use that issue.
+  walk's SHA, steps, and screenshots. That issue is filed/updated; do not
+  duplicate it.
 - Same problem, Done, and it still reproduces: reopen it (transition to
   To Do), edit the description to the current repro, comment what changed,
-  attach the new screenshots, and use that issue.
-- No match: `jira.py create` with the body below and the screenshots.
+  attach the new screenshots.
+- No match: `jira.py create` with the body below and that finding's
+  screenshots.
+
+You may create or update **several** tickets in this step in one run.
+After filing, pick **exactly one** KEY to implement below:
+
+1. If step 3 already chose an open fix target that still reproduces, that
+   KEY wins (extra filings wait for later runs).
+2. Otherwise take the highest-priority newly filed / updated ticket from
+   this walk (same priority rules as the Fields list). Skip any still
+   blocked by an open **Blocks** link.
 
 Fields:
 
@@ -364,20 +385,27 @@ not leave this section empty or attach only unrelated chrome.
 Device: iPhone 13 mini simulator, debug build of origin/main `<SHA>`.
 ```
 
-Pass every screenshot to `--attach`; the images named in the body render
-in the ticket. Creating or updating a ticket **requires** at least one
+Pass every screenshot for that ticket to `--attach`; the images named in
+the body render. Creating or updating a ticket **requires** at least one
 **current-issue** screenshot in the description (or a comment on reopen).
-Do not file from memory or from a walk description alone. When the finding
-depends on another open issue, link it (`jira.py link --type Blocks`, the
-blocker inward) and end the run: the blocker is the next run's work.
+Do not file from memory or from a walk description alone. Use a distinct
+issue-shot filename per ticket (e.g. `<surface>-issue.png`,
+`<surface>-hint-issue.png`) so embeds do not collide across filings.
+
+When finding A depends on open finding B, link them (`jira.py link --type
+Blocks`, blocker inward). If the KEY you would fix this run is blocked,
+fix the blocker instead (or end with `blocked` only when you cannot make
+progress on any unblocked ticket). Extra filed tickets stay open for the
+next runs — do not implement more than one KEY here.
 
 If the right behavior is a product decision the record and the brief do
-not settle, write the options in the description, add `needs-human`,
-release, and end the run.
+not settle, write the options in that ticket's description, add
+`needs-human`, leave other filed tickets open, and either fix a different
+unblocked KEY this run or end the run if none remain.
 
 ## 6. Implement
 
-Run make-change steps 1–5 for this ticket only:
+Run make-change steps 1–5 for the **one** chosen KEY only:
 
 ```
 KEY=LPT-NN
@@ -498,10 +526,13 @@ When the file did change:
   merge it, then continue cleanup. Do not hold the mini past that PR for
   unrelated work.
 
-Append one line to `~/.live-poker-trainer/ui-agent-coverage.jsonl`:
+Append one line to `~/.live-poker-trainer/ui-agent-coverage.jsonl`.
+`ticket` is the KEY this run closed (or the primary outcome ticket). Put
+other **filed** keys and any unfiled hunches in `leads` (e.g.
+`"filed LPT-64 hint stack"`, `"filed LPT-65 heart chrome"`):
 
 ```json
-{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked|sim-not-ready|jira-unavailable", "ticket": "LPT-NN", "leads": ["<other findings, one line each>"], "learnings": "updated|unchanged"}
+{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked|sim-not-ready|jira-unavailable", "ticket": "LPT-NN", "leads": ["<filed LPT-MM … or other finding, one line each>"], "learnings": "updated|unchanged"}
 ```
 
 Delete `$PRIMARY/.cursor/tmp/ui-agent/`. Make sure no worktree tmux session
@@ -511,6 +542,7 @@ for this ticket is still running. Then:
 python3 tools/sim_lock.py release
 ```
 
-Reply with one short block: SHA walked, surface, ticket key and result,
-branch and PR URL, attempts used, functions deploy result, leads logged,
-learnings updated or unchanged, and the lock released.
+Reply with one short block: SHA walked, surface, ticket fixed and result,
+other tickets filed this run, branch and PR URL, attempts used, functions
+deploy result, leads logged, learnings updated or unchanged, and the lock
+released.
