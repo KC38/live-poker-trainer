@@ -65,7 +65,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   guessed `01-01-0N` from ledger order — both yield "Unknown lesson".
 - Prefer copying gitignored `lib/firebase_options.dart` (and iOS/Android
   Google services files) into the ticket worktree before `flutter run`;
-  without them the worktree build fails even when primary runs fine.
+  without them the worktree build fails even when primary runs fine. When a
+  prior-run worktree for the same KEY is behind `origin/main`,
+  `reset --hard origin/main` and re-apply the patch before tests (LPT-63).
 - Prefer not to treat `tap --text Gems` as proof the gem control works:
   the strip Tooltip is "Gems" with no `onTap`, and the needle can land on
   Hearts / the refill sheet instead.
@@ -82,6 +84,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   gold (LPT-57). After SoftPulse lands on explain, grep the sibling picker.
   After Hint then a grade, read the dock bubble — Hint copy under Oops is a
   bug; clear `_hintVisible` on `finishSubmit` / `presentLocalMiss` (LPT-60).
+  Hint must stay off whenever `showTargetCue` is true (LPT-63); judge that by
+  greyed chrome + unchanged bubble — `agent_tap tap Hint` still returns ok
+  on a disabled control. Call `notifyFeltDealReady(true)` before asserting
+  `showTargetCue` in controller unit tests.
 - Prefer card `agent_tap` needles as Semantics display (`A♣`), not ASCII
   codes like `Ac` — short codes can miss the card or open Hearts.
 - Prefer a second open of the same lesson when judging card randomization —
@@ -176,4 +182,5 @@ trimming. Durable rules belong in the sections above, not only here.
 - 2026-10-10: LPT-55–57 / LPT-61 best-five SoftPulse (one target; no post-grade
   multi-glow; quiet ids until Hint; sibling picker after explain). LPT-59
   guided free miss; LPT-60 clear Hint on grade. LPT-62 draft-mirror Undo;
-  closeout comment must succeed before Done.
+  closeout comment must succeed before Done. LPT-63 Hint off while
+  `showTargetCue` (incl. single-press scaffolded SoftPulse).
