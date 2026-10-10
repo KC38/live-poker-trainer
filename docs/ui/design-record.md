@@ -548,8 +548,10 @@ uses `RexMascot` with `RexMood.celebrate` on a right answer and
 `RexMood.celebrate` and a TOTAL XP and daily goal row.
 
 The locked Live Training hub copy is `liveTrainingLockedMessage`
-(`lib/models/live_access.dart`). The gate is the Home node
-`lesson-02-07-02-section-two-jump` (Baseline jump check).
+(`lib/models/live_access.dart`), which names Baseline jump check via
+`kLiveWarmUpUnlockLessonTitle`. The gate is the Home node
+`lesson-02-07-02-section-two-jump`. The snackbar
+`liveTrainingLockedSnack` uses the same title.
 
 ## Asset inventory
 

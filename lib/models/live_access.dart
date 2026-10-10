@@ -7,28 +7,27 @@ const kLiveWarmUpUnlockLessonId = 'lesson-02-07-02-section-two-jump';
 
 /// Catalog path-node title for [kLiveWarmUpUnlockLessonId].
 ///
-/// Locked-tab copy uses learner-facing "Section 2 checkpoint" wording instead
-/// of this node title.
+/// Locked-tab copy uses this Home path title so learners can match the node.
 const kLiveWarmUpUnlockLessonTitle = 'Baseline jump check';
 
-/// Locked-tab sentence. Points at the Section 2 Home checkpoint.
+/// Locked-tab sentence. Points at the Home lesson that unlocks warm-ups.
 String liveTrainingLockedMessage() {
-  return 'Live Training is advanced. Finish the Section 2 checkpoint on Home '
-      'to unlock a coached warm-up.';
+  return 'Live Training is advanced. Finish $kLiveWarmUpUnlockLessonTitle on '
+      'Home to unlock a coached warm-up.';
 }
 
 /// Snackbar when a locked learner tries to start a table.
 String liveTrainingLockedSnack() {
-  return 'Live Training unlocks after the Section 2 checkpoint. '
+  return 'Live Training unlocks after $kLiveWarmUpUnlockLessonTitle. '
       'Continue on Home.';
 }
 
 /// Access level for the Live Training tab and start callables.
 enum LiveAccessTier {
-  /// Before Section 2 checkpoint — tab explains and links Home.
+  /// Before [kLiveWarmUpUnlockLessonId] — tab explains and links Home.
   locked,
 
-  /// After Section 2 — Rex-guided warm-ups only.
+  /// After Baseline jump check — Rex-guided warm-ups only.
   warmUp,
 
   /// After Section 4 jump / grandfather / admin — unrestricted Live.
