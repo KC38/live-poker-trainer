@@ -76,10 +76,10 @@ SHA="$(git -C "$PRIMARY" rev-parse HEAD)"
 The script fast-forwards the primary clone and hot-restarts or starts the
 mini from it. Wait until `/tmp/flutter-live-poker-trainer.run.log` shows the
 Dart VM service, up to 3 minutes. If that line never arrives, run the
-refresh once more. If it is still down, release the lock and end the run
-with `SIM_NOT_READY`. Do not uninstall the app, edit the refresh script, or
-debug the launcher: the next run retries. End the same way when the primary
-checkout is dirty or diverged.
+refresh once more. If it is still down, go to step 10 with result
+`sim-not-ready` (update learnings if useful, then release). Do not uninstall
+the app, edit the refresh script, or debug the launcher: the next run
+retries. End the same way when the primary checkout is dirty or diverged.
 
 ## 2. Read the contract and learnings
 
@@ -112,7 +112,8 @@ token; run `python3 tools/jira.py --help` once). Do not use Atlassian MCP
 tools: the unattended loop has no MCP access. Bodies are Markdown files
 you write under `$PRIMARY/.cursor/tmp/ui-agent/`; `![what it shows](file.png)`
 renders an attached screenshot. Start with `python3 tools/jira.py check`.
-If it fails, release the lock and end the run with `JIRA_UNAVAILABLE`.
+If it fails, go to step 10 with result `jira-unavailable` (update
+learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 
 | Action | Command |
 | --- | --- |
@@ -384,7 +385,7 @@ When the file did change:
 Append one line to `~/.live-poker-trainer/ui-agent-coverage.jsonl`:
 
 ```json
-{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked|sim-not-ready", "ticket": "LPT-NN", "leads": ["<other findings, one line each>"], "learnings": "updated|unchanged"}
+{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked|sim-not-ready|jira-unavailable", "ticket": "LPT-NN", "leads": ["<other findings, one line each>"], "learnings": "updated|unchanged"}
 ```
 
 Delete `$PRIMARY/.cursor/tmp/ui-agent/`. Make sure no worktree tmux session

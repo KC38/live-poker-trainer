@@ -154,6 +154,8 @@ void main() {
       'tools/iphone_13_mini_udid.sh',
       'Never launch a',
       'Update learnings before you leave',
+      'go to step 10 with result',
+      'sim-not-ready',
       'learnings: unchanged',
     ]) {
       expect(command, contains(needle), reason: needle);
