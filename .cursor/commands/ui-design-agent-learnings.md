@@ -82,9 +82,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   the deal is fixed. Read ranks from the latest PNG before tapping a
   SoftPulse target; a stale rank needle misses the gold card.
 - Prefer screenshotting the heart count before and after a paid miss (and
-  after Practice/refill) before claiming hearts work.
-- Prefer reading PNGs you just captured before judging; do not close from
-  memory of an earlier run's screenshot.
+  after Practice/refill) before claiming hearts work. Read PNGs you just
+  captured; do not close from memory of an earlier run.
 - Prefer naming Jira shots `<surface>-issue.png` and
   `<KEY>-validated.png`. Never file without an issue shot; never close
   without a validated shot on origin/main. Every Markdown image in the
@@ -96,35 +95,25 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   re-comment first (LPT-62: first closeout failed, Done raced ahead). After
   a successful closeout comment, `jira.py verify-embeds LPT-NN` must pass
   before Done.
-- Prefer, when fixing a stadium `FilledButton` → Theme elevated CTA on one
-  surface (Settings, Profile, Save progress), grepping sibling guest
-  **Create an account** call sites in the same walk so the twin does not
-  wait another run (LPT-45 then LPT-46).
-- Prefer, after a hole-only `boardSlots: false` (or other per-step feature
-  gate) lands on one builder, grepping sibling stages on that lesson in the
-  same walk — explain vs `isLessonBlindsFrameActivity` (LPT-50 then LPT-52).
+- Prefer, after a one-surface fix (Theme CTA, `boardSlots: false`, SoftPulse
+  on explain), grepping sibling call sites / builders in the same walk so
+  twins do not wait another run (LPT-45/46, LPT-50/52, LPT-55→57).
 - Prefer, when `openlesson` resumes mid-lesson past the beat under test,
   finishing/restarting or validating a sibling activity on the **same**
   code path for closeout proof instead of filing unreachable.
 - Prefer, when `refresh-simulator.sh` leaves only a `Launching…` line and a
   dead pid, starting `flutter run` yourself in tmux with
-  `SIM_LOCK_RUN_ID=…` exported on that command line (same pattern as
-  worktree validation) instead of re-debugging the refresh script.
+  `SIM_LOCK_RUN_ID=…` exported on that command line. On Xcode "No space
+  left on device", clear `~/Library/Developer/Xcode/DerivedData/Runner-*`
+  (and `/tmp/flutter_tools.*`) then retry once (LPT-61) — do not rewrite
+  refresh or `needs-human` on the first disk-full build.
 - Prefer waiting until the target beat is settled before
-  `<KEY>-validated.png`: not the bootstrap spinner; for locked-start
-  chrome, the Open-previous / Retry gate (if that lesson unlocked during
-  worktree play, use a later still-locked id).
-- Prefer, when `openlesson` lands on a locked start, reading Rex's bubble
-  against the gold Open-previous CTA — a Retry-only line with that button
-  still up is a coach-copy bug (LPT-51), not a clean gate.
-- Prefer, when worktree `flutter run` fails with Xcode "No space left on
-  device", clearing `~/Library/Developer/Xcode/DerivedData/Runner-*` (and
-  `/tmp/flutter_tools.*`) then retrying once — do not `needs-human` on the
-  first disk-full build (LPT-61).
+  `<KEY>-validated.png` (not bootstrap spinner). On locked-start, capture
+  the Open-previous / Retry gate and read Rex's bubble against the gold
+  Open-previous CTA — Retry-only copy with that button is a bug (LPT-51).
 - Prefer clearing Hint / SoftPulse before staging an invalid Best five for
-  Undo proof so the status line hits "Five tapped — try a stronger five"
-  and cyan matches the five taps (gold SoftPulse on the board can confuse
-  the count).
+  Undo proof so the status hits "Five tapped — try a stronger five" and
+  cyan matches the five taps.
 
 ## Ops (simulator, CLI, Jira)
 
@@ -177,36 +166,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-10: LPT-47 guided suits — `syncSelection` + empty draft wiped
-  cyan on SoftPulse rebuilds.
-- 2026-10-10: LPT-48 empty coach bubble during lesson bootstrap; stall
-  watchdog + keychain duplicate also bit the closing run — heartbeat and
-  write coverage before long worktree compiles.
-- 2026-10-10: LPT-50 blinds empty boardSlots; refresh stuck at Launching
-  again — manual tmux flutter run; do not close from bootstrap spinner shots.
-- 2026-10-10: LPT-51 locked-start coach said Tap Retry beside Open previous;
-  gate screens are coach-copy surfaces too.
-- 2026-10-10: LPT-52 blinds frame still had empty board slots after LPT-50
-  explain-only fix; openlesson resume skipped guided-button — validated on
-  checkpoint sibling same path.
-- 2026-10-10: LPT-53 hide pending tool row; hand-ranks unlocked mid-run so
-  closeout used best-five locked gate; `tester.state<Widget>` does not compile.
-- 2026-10-10: LPT-55 best-five explain SoftPulse lit every playing hole;
-  suite asserted `findsNWidgets(2)` on glow — rewrite that test when
-  collapsing to one gold target.
-- 2026-10-10: LPT-56 best-five explain dimmed leftovers before taps;
-  guessed `lesson-01-01-05-…` → Unknown lesson; refresh stuck at Launching
-  again — manual tmux flutter run.
-- 2026-10-10: LPT-57 guided-seven SoftPulse quiet until Hint; picker never
-  painted Hint-reopened gold — fix sibling after explain SoftPulse (LPT-55).
-- 2026-10-10: LPT-59 guided miss spent a heart (`#1554` had charged them);
-  design-record free-miss wins; local firebase creds missing — wait GH
-  Deploy Cloud Functions before validated Oops shot.
-- 2026-10-10: LPT-60 Hint line stayed in coach bubble under Oops after
-  Hint + wrong five; clear `_hintVisible` on grade.
-- 2026-10-10: LPT-61 picker post-grade SoftPulsed all five correct cards;
-  suite had locked `findsNWidgets(5)` on glow — dim leftovers + cyan only;
-  worktree build hit disk-full until DerivedData cleared.
-- 2026-10-10: LPT-62 Best five invalid five left Undo disabled (picks only
-  in widget `_selected`); closeout comment failed once — do not Done until
-  comment+embeds succeed.
+- 2026-10-10: LPT-55–57 / LPT-61 best-five SoftPulse (one target; no post-grade
+  multi-glow; quiet ids until Hint; sibling picker after explain). LPT-59
+  guided free miss; LPT-60 clear Hint on grade. LPT-62 draft-mirror Undo;
+  closeout comment must succeed before Done.
