@@ -33,6 +33,7 @@ EOF
 chmod +x "$tmp/bin/agent"
 
 export UI_AGENT_LOOP_SOURCE_ONLY=1
+export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 # shellcheck disable=SC1090
 source "$LOOP"
 export PATH="$tmp/bin:$PATH"
@@ -65,7 +66,22 @@ one_run >/dev/null 2>&1 || fail "free mini run failed"
 grep -q 'ui-design-agent.md' "$tmp/agent-args" || fail "prompt should name the command"
 grep -q 'ui-design-agent-learnings.md' "$tmp/agent-args" \
   || fail "prompt should name the learnings file"
+grep -q 'SIM_LOCK_RUN_ID is set' <<<"$(prompt)" \
+  || fail "prompt should tell the agent the lock is preflight-claimed"
 [[ "$(cat "$tmp/agent-env")" == 'key with space|tok-123' ]] || fail "run should inherit the saved keys"
+
+# Programmatic SIM_NOT_READY must not start the agent.
+rm -f "$tmp/agent-started"
+ensure_sim_ready() { return 1; }
+code=0
+one_run >/dev/null 2>&1 || code=$?
+[[ "$code" == 12 ]] || fail "preflight failure should return 12, got $code"
+[[ ! -f "$tmp/agent-started" ]] || fail "agent must not start on SIM_NOT_READY preflight"
+grep -q '"result": "sim-not-ready"' "$COVERAGE_FILE" \
+  || fail "preflight should append sim-not-ready coverage"
+# Restore a passing preflight for the rest of the suite.
+ensure_sim_ready() { return 0; }
+python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 
 (unset UI_AGENT_LOOP_SOURCE_ONLY; bash "$LOOP" status >/dev/null) \
   || fail "status should exit 0"

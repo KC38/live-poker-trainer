@@ -54,17 +54,25 @@ Run progress:
 
 From the primary checkout (`PRIMARY="$(tools/primary_checkout.sh)"`):
 
+The unattended loop usually already claimed the mini and set
+`SIM_LOCK_RUN_ID`. Prefer that lock:
+
 ```bash
 cd "$PRIMARY"
-SIM_LOCK_RUN_ID="$(python3 tools/sim_lock.py claim --owner ui-design-agent --purpose "ui-design-agent: starting")"
+if [[ -n "${SIM_LOCK_RUN_ID:-}" ]] && python3 tools/sim_lock.py guard >/dev/null 2>&1; then
+  : # keep the preflight lock
+else
+  SIM_LOCK_RUN_ID="$(python3 tools/sim_lock.py claim --owner ui-design-agent --purpose "ui-design-agent: starting")"
+  export SIM_LOCK_RUN_ID
+fi
 ```
 
-- Exit 3 means another agent holds the mini. Print `SIM_BUSY` and the holder
-  the claim printed, and end the run now. Do not wait, retry, read Jira, or
-  do any other work.
-- Otherwise `export SIM_LOCK_RUN_ID` and keep it exported on every later
-  shell call. Every exit path from here, including errors, ends with step 10's
-  release.
+- Exit 3 from `claim` means another agent holds the mini. Print `SIM_BUSY`
+  and the holder the claim printed, and end the run now. Do not wait, retry,
+  read Jira, or do any other work.
+- Keep `SIM_LOCK_RUN_ID` exported on every later shell call. Every exit path
+  from here, including errors, ends with step 10's release (the loop may
+  also release after the agent exits — releasing twice is fine).
 - Run `python3 tools/sim_lock.py heartbeat --purpose "<KEY>: <step>"` at the
   start of every numbered step below, and at least every 30 minutes inside a
   long step.
@@ -72,17 +80,27 @@ SIM_LOCK_RUN_ID="$(python3 tools/sim_lock.py claim --owner ui-design-agent --pur
 ## 1. Latest origin/main on the mini
 
 ```bash
-.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
 SHA="$(git -C "$PRIMARY" rev-parse HEAD)"
 ```
 
-The script fast-forwards the primary clone and hot-restarts or starts the
-mini from it. Wait until `/tmp/flutter-live-poker-trainer.run.log` shows the
-Dart VM service, up to 3 minutes. If that line never arrives, run the
-refresh once more. If it is still down, go to step 10 with result
-`sim-not-ready` (update learnings if useful, then release). Do not uninstall
-the app, edit the refresh script, or debug the launcher: the next run
-retries. End the same way when the primary checkout is dirty or diverged.
+The unattended loop brings the mini up **programmatically** before starting
+this agent (refresh + wait for a Dart VM URI in
+`/tmp/flutter-live-poker-trainer.run.log`). When that log already shows
+`http://127.0.0.1:<port>/<token>/`, skip refresh and continue — do not burn
+time re-booting a ready simulator.
+
+If you are running outside the loop (or the VM is down), refresh yourself:
+
+```bash
+.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
+```
+
+Wait until the log shows the Dart VM service, up to 3 minutes. If that line
+never arrives, run the refresh once more. If it is still down, go to step 10
+with result `sim-not-ready` (update learnings if useful, then release). Do
+not uninstall the app, edit the refresh script, or debug the launcher: the
+next run retries. End the same way when the primary checkout is dirty or
+diverged.
 
 ## 2. Read the contract and learnings
 

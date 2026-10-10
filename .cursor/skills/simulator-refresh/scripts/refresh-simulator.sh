@@ -111,10 +111,17 @@ fi
 
 # The mini is shared. Use the caller's lock when it holds one; otherwise hold
 # it just for this refresh. Someone else holding it means skip, not wait.
+# Always record this shell's pid so a hung refresh cannot orphan the lock
+# for the full TTL (dead-pid / orphan-grace clears it).
 SIM_LOCK="$REPO_ROOT/tools/sim_lock.py"
 if [[ -n "${SIM_LOCK_RUN_ID:-}" ]] && python3 "$SIM_LOCK" guard >/dev/null 2>&1; then
   :
-elif SIM_LOCK_RUN_ID="$(python3 "$SIM_LOCK" claim --owner refresh-simulator --purpose "refresh to origin/main" 2>/dev/null)"; then
+elif SIM_LOCK_RUN_ID="$(
+  python3 "$SIM_LOCK" claim \
+    --owner refresh-simulator \
+    --purpose "refresh to origin/main" \
+    --pid $$ 2>/dev/null
+)"; then
   export SIM_LOCK_RUN_ID
   trap 'python3 "$SIM_LOCK" release --run-id "$SIM_LOCK_RUN_ID" >/dev/null 2>&1 || true' EXIT
 else

@@ -42,6 +42,10 @@ from typing import Any, Dict, Iterator, Optional
 
 DEVICE = "iPhone 13 mini"
 DEFAULT_TTL_SECONDS = 2 * 60 * 60
+# Holders that never recorded a pid (buggy claim) must not block the mini
+# for the full TTL. Ten minutes without a heartbeat is enough to call them
+# orphaned.
+NO_PID_STALE_SECONDS = 10 * 60
 EXIT_OK = 0
 EXIT_BUSY = 3
 EXIT_NOT_HOLDER = 4
@@ -150,8 +154,14 @@ def stale_reason(state: State, now: Optional[float] = None) -> Optional[str]:
         return f"owner pid {pid} exited"
     ttl = int(state.get("ttl_seconds") or DEFAULT_TTL_SECONDS)
     beat = float(state.get("heartbeat_epoch") or state.get("claimed_epoch") or 0)
-    if now - beat > ttl:
-        return f"no heartbeat for {int((now - beat) // 60)} min (ttl {ttl // 60} min)"
+    age = now - beat
+    if not isinstance(pid, int) and age > NO_PID_STALE_SECONDS:
+        return (
+            f"no pid and no heartbeat for {int(age // 60)} min "
+            f"(orphan grace {NO_PID_STALE_SECONDS // 60} min)"
+        )
+    if age > ttl:
+        return f"no heartbeat for {int(age // 60)} min (ttl {ttl // 60} min)"
     return None
 
 

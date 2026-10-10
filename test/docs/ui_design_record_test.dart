@@ -172,6 +172,8 @@ void main() {
       '-validated.png',
       'Required validated proof',
       'Never transition to Done if the close comment lacks a validated',
+      'preflight lock',
+      'skip refresh and continue',
     ]) {
       expect(command, contains(needle), reason: needle);
     }

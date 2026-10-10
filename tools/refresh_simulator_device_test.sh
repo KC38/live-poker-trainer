@@ -43,6 +43,9 @@ then
   fail "legacy multi-simulator wording still present"
 fi
 
+grep -qE '^[[:space:]]*--pid \$\$' "$REFRESH" \
+  || fail "refresh must claim the mini with --pid \$\$ so locks cannot orphan"
+
 export REFRESH_SIMULATOR_SOURCE_ONLY=1
 # shellcheck disable=SC1090
 source "$REFRESH"

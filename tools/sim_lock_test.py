@@ -184,6 +184,18 @@ class SimLockTest(unittest.TestCase):
         history = Path(self._tmp.name, "simulator-lock.log").read_text(encoding="utf-8")
         self.assertIn("stale-cleared", history)
 
+    def test_pid_less_lock_goes_stale_after_orphan_grace(self) -> None:
+        self._run("claim", "--owner", "orphan", "--ttl", "3600")
+        path = Path(self._tmp.name, "simulator-lock.json")
+        state = json.loads(path.read_text(encoding="utf-8"))
+        self.assertIsNone(state.get("pid"))
+        state["heartbeat_epoch"] = time.time() - (sim_lock.NO_PID_STALE_SECONDS + 5)
+        state["claimed_epoch"] = state["heartbeat_epoch"]
+        path.write_text(json.dumps(state), encoding="utf-8")
+        self.assertEqual(self._run("status")[0], sim_lock.EXIT_OK)
+        code, _, _ = self._run("claim", "--owner", "recovery")
+        self.assertEqual(code, sim_lock.EXIT_OK)
+
     def test_permission_error_on_pid_does_not_steal_the_lock(self) -> None:
         proc = subprocess.Popen([sys.executable, "-c", "pass"])
         proc.wait()
