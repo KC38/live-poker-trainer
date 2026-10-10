@@ -87,7 +87,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   memory of an earlier run's screenshot.
 - Prefer naming Jira shots `<surface>-issue.png` and
   `<KEY>-validated.png`. Never file without an issue shot; never close
-  without a validated shot on origin/main.
+  without a validated shot on origin/main. Every Markdown image in the
+  body must be a real on-disk path (or listed in `--attach`); `jira.py`
+  refuses comments/creates that would post `!file|thumbnail!` for a file
+  that did not upload — that is what shows as Preview unavailable in Jira
+  (LPT-59 closeout orphan `LPT-59-validated.png`).
 - Prefer, when fixing a stadium `FilledButton` → Theme elevated CTA on one
   surface (Settings, Profile, Save progress), grepping sibling guest
   **Create an account** call sites in the same walk so the twin does not
