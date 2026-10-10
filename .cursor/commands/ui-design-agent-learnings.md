@@ -61,6 +61,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   not spend or restore) or teach-by-doing gap over spacing chrome. When
   fixing multi SoftPulse, update tests that assert `findsNWidgets(N>1)` on
   `glow-highlight` for that surface — they may have locked the bug (LPT-55).
+  Ids in `lessonFrameSameConceptQuietIds` (e.g. guided-seven) stay SoftPulse
+  off until Hint by design — judge Hint-reopened SoftPulse, not first-press
+  gold (LPT-57). After SoftPulse lands on explain, grep the sibling picker.
+- Prefer card `agent_tap` needles as Semantics display (`A♣`), not ASCII
+  codes like `Ac` — short codes can miss the card or open Hearts.
 - Prefer a second open of the same lesson when judging card randomization —
   screenshot hole/board cards on attempt A and attempt B before deciding
   the deal is fixed. Read ranks from the latest PNG before tapping a
@@ -165,3 +170,5 @@ trimming. Durable rules belong in the sections above, not only here.
 - 2026-10-10: LPT-56 best-five explain dimmed leftovers before taps;
   guessed `lesson-01-01-05-…` → Unknown lesson; refresh stuck at Launching
   again — manual tmux flutter run.
+- 2026-10-10: LPT-57 guided-seven SoftPulse quiet until Hint; picker never
+  painted Hint-reopened gold — fix sibling after explain SoftPulse (LPT-55).
