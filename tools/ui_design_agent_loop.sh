@@ -12,9 +12,11 @@
 #   tools/ui_design_agent_loop.sh kill     stop now and free a lock this loop holds
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
-# Each run is a fresh `agent -p` (Cursor CLI) on the primary checkout. The
-# loop skips a run without starting the agent while another agent holds the
-# iPhone 13 mini, and frees the lock if a run dies while holding it.
+# Each run claims the mini, brings up Flutter programmatically (refresh +
+# wait for a Dart VM), and only then starts a fresh `agent -p`. If the mini
+# is busy or never reaches a Dart VM, the loop skips without starting the
+# agent (no agentic burn on SIM_NOT_READY). It frees the lock if a run dies
+# while holding it.
 #
 # Runs authenticate without the macOS keychain or a browser, so they keep
 # working over SSH and after a reboot. Keys live in
@@ -25,6 +27,8 @@
 #   UI_AGENT_MODEL              model for `agent --model` (default: CLI default)
 #   UI_AGENT_GAP                seconds between runs (default 60)
 #   UI_AGENT_BUSY_SLEEP         seconds to sleep when the mini is busy (default 300)
+#   UI_AGENT_SIM_NOT_READY_SLEEP  seconds after programmatic SIM_NOT_READY (default 600)
+#   UI_AGENT_VM_WAIT_SECONDS    seconds to wait for a Dart VM per refresh (default 180)
 #   UI_AGENT_MAX_RUN_SECONDS    hard cap per run (default 14400)
 set -euo pipefail
 
@@ -48,8 +52,11 @@ BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
 # After back-to-back SIM_NOT_READY (usually Flutter cache lock / pub get
 # killed), back off so other agents can finish and the mini can boot.
 SIM_NOT_READY_SLEEP="${UI_AGENT_SIM_NOT_READY_SLEEP:-600}"
+VM_WAIT_SECONDS="${UI_AGENT_VM_WAIT_SECONDS:-180}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
 COVERAGE_FILE="$STATE_DIR/ui-agent-coverage.jsonl"
+FLUTTER_RUN_LOG="/tmp/flutter-live-poker-trainer.run.log"
+REFRESH_SCRIPT="$(cd "$TOOLS/.." && pwd)/.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh"
 
 mkdir -p "$LOG_DIR"
 
@@ -66,7 +73,7 @@ lt() {
 }
 
 prompt() {
-  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md in this workspace and follow them exactly, from step 0. Update the learnings file in step 10 when this run hits a durable mistake. This is an unattended run. Do not ask questions or wait for input."
+  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md in this workspace and follow them exactly, from step 0. The loop already claimed the iPhone 13 mini (SIM_LOCK_RUN_ID is set — keep it; do not claim again) and the Dart VM is up on origin/main; start from step 2 (contract). Update the learnings file in step 10 when this run hits a durable mistake. This is an unattended run. Do not ask questions or wait for input."
 }
 
 load_secrets() {
@@ -131,7 +138,90 @@ PY
   return 1
 }
 
-# One run. Returns 0 after a run, 10 when the mini was busy, 11 when not logged in.
+# True when the Flutter run log already has a Dart VM service URI.
+dart_vm_ready() {
+  [[ -f "$FLUTTER_RUN_LOG" ]] || return 1
+  grep -qE 'http://127\.0\.0\.1:[0-9]+/[A-Za-z0-9_\-=]+/' "$FLUTTER_RUN_LOG" 2>/dev/null
+}
+
+wait_for_dart_vm() {
+  local deadline=$(( $(date +%s) + VM_WAIT_SECONDS ))
+  while (( $(date +%s) < deadline )); do
+    if dart_vm_ready; then
+      return 0
+    fi
+    sleep 5
+  done
+  return 1
+}
+
+# Refresh (or hot-restart) origin/main and wait for a Dart VM. Caller must
+# hold SIM_LOCK_RUN_ID. Returns 0 when ready.
+# Set UI_AGENT_SKIP_SIM_PREFLIGHT=1 in unit tests to skip the real device.
+ensure_sim_ready() {
+  if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" == "1" ]]; then
+    return 0
+  fi
+  local attempt
+  for attempt in 1 2; do
+    log "preflight refresh attempt $attempt (programmatic; no agent yet)"
+    if ! bash "$REFRESH_SCRIPT"; then
+      log "refresh-simulator exited non-zero on attempt $attempt"
+    fi
+    if wait_for_dart_vm; then
+      log "Dart VM ready in $FLUTTER_RUN_LOG"
+      return 0
+    fi
+    log "Dart VM not ready after attempt $attempt (${VM_WAIT_SECONDS}s)"
+  done
+  return 1
+}
+
+log_programmatic_sim_not_ready() {
+  local stamp="$1" seconds="$2" sha="$3"
+  local run_log="$LOG_DIR/run-$stamp.log"
+  {
+    echo "SIM_NOT_READY (programmatic preflight; agent not started)"
+    echo "sha=$sha"
+    echo "flutter_log=$FLUTTER_RUN_LOG"
+    tail -n 20 "$FLUTTER_RUN_LOG" 2>/dev/null | sed 's/^/  /' || true
+  } >"$run_log"
+  python3 - "$COVERAGE_FILE" "$sha" <<'PY'
+import json, sys
+from datetime import datetime
+path, sha = sys.argv[1], sys.argv[2]
+path_p = __import__("pathlib").Path(path)
+path_p.parent.mkdir(parents=True, exist_ok=True)
+with path_p.open("a", encoding="utf-8") as handle:
+    handle.write(json.dumps({
+        "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "sha": sha,
+        "surface": "none",
+        "result": "sim-not-ready",
+        "ticket": None,
+        "leads": ["programmatic preflight: Dart VM never appeared after two refreshes"],
+        "learnings": "unchanged",
+    }) + "\n")
+PY
+  python3 - "$HEALTH_FILE" "$stamp" "12" "$seconds" "$run_log" <<'PY'
+import json, sys
+path, stamp, code, seconds, log = sys.argv[1:]
+tail = ""
+try:
+    lines = open(log, encoding="utf-8", errors="replace").read().splitlines()
+    tail = " ".join(lines[-5:])[:400]
+except OSError:
+    pass
+with open(path, "a", encoding="utf-8") as handle:
+    handle.write(json.dumps({
+        "at": __import__("datetime").datetime.now().astimezone().isoformat(timespec="seconds"),
+        "stamp": stamp, "exit": int(code), "seconds": int(seconds), "tail": tail,
+    }) + "\n")
+PY
+}
+
+# One run. Returns 0 after an agent run, 10 when the mini was busy, 11 when
+# not logged in, 12 when the Dart VM never came up (agent not started).
 one_run() {
   sync_primary
   if ! logged_in; then
@@ -144,27 +234,50 @@ one_run() {
     return 10
   fi
 
-  local stamp run_log pid watchdog code start line text
+  local stamp run_log pid watchdog code start line text run_id sha
   local args=()
   stamp="$(date '+%Y%m%d-%H%M%S')"
   run_log="$LOG_DIR/run-$stamp.log"
+  start="$(date +%s)"
+  sha="$(git -C "$(primary)" rev-parse HEAD 2>/dev/null || echo unknown)"
+
+  # Claim before any agent work so preflight and the agent share one lock.
+  run_id="$(sim_lock claim --owner ui-design-agent --purpose "preflight: sim ready" --pid $$ 2>/dev/null)" || {
+    log "iPhone 13 mini is busy; skipping this run"
+    sim_lock status 2>&1 | sed 's/^/    /' || true
+    return 10
+  }
+  export SIM_LOCK_RUN_ID="$run_id"
+  export SIM_LOCK_PID=$$
+
+  if ! ensure_sim_ready; then
+    log "SIM_NOT_READY after programmatic preflight; not starting agent"
+    log_programmatic_sim_not_ready "$stamp" "$(( $(date +%s) - start ))" "$sha"
+    sim_lock release --run-id "$run_id" >/dev/null 2>&1 || true
+    unset SIM_LOCK_RUN_ID SIM_LOCK_PID
+    log "run $stamp exited 12 after $(( ($(date +%s) - start) / 60 )) min (no agent)"
+    return 12
+  fi
+
+  sim_lock heartbeat --purpose "agent starting" >/dev/null 2>&1 || true
   while IFS= read -r line; do args+=("$line"); done < <(agent_args)
   text="$(prompt)"
 
-  log "run $stamp starting (log $run_log)"
-  start="$(date +%s)"
+  log "run $stamp starting agent (log $run_log; lock $run_id)"
   # script(1) gives the CLI a terminal and flushes the log, so a run can be
   # tailed while it works and a crash still leaves output on disk.
   if command -v script >/dev/null 2>&1; then
     (
       cd "$(primary)"
-      exec bash -c 'export SIM_LOCK_PID=$$; exec script -q -F "$1" agent "${@:2}"' _ \
+      export SIM_LOCK_RUN_ID SIM_LOCK_PID
+      exec bash -c 'exec script -q -F "$1" agent "${@:2}"' _ \
         "$run_log" "${args[@]}" "$text"
     ) &
   else
     (
       cd "$(primary)"
-      exec bash -c 'export SIM_LOCK_PID=$$; exec agent "$@"' _ "${args[@]}" "$text"
+      export SIM_LOCK_RUN_ID SIM_LOCK_PID
+      exec agent "$@"
     ) >"$run_log" 2>&1 &
   fi
   pid=$!
@@ -185,7 +298,8 @@ one_run() {
   wait "$pid" || code=$?
   kill "$watchdog" 2>/dev/null || true
   rm -f "$PID_FILE"
-  sim_lock release --if-pid "$pid" >/dev/null 2>&1 || true
+  sim_lock release --run-id "$run_id" >/dev/null 2>&1 || true
+  unset SIM_LOCK_RUN_ID SIM_LOCK_PID
 
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min"
   tail -n 15 "$run_log" | sed 's/^/    /'
@@ -218,6 +332,10 @@ run_loop() {
     case "$code" in
       10) sleep "$BUSY_SLEEP" ;;
       11) sleep 600 ;;
+      12)
+        log "SIM_NOT_READY preflight; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
+        sleep "$SIM_NOT_READY_SLEEP"
+        ;;
       *)
         if last_run_sim_not_ready; then
           log "last run was SIM_NOT_READY; sleeping ${SIM_NOT_READY_SLEEP}s before retry"

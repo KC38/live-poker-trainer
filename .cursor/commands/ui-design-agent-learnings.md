@@ -77,6 +77,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   the whole line into `edit` / `get` / `comment`.
 - "Connection lost, reconnecting…" from the CLI is normal. Let it retry;
   do not kill the run or the loop for a single reconnect.
+- The unattended loop prepares the mini **programmatically** (claim →
+  refresh → wait for Dart VM) and only then starts `agent -p`. A
+  `SIM_NOT_READY` preflight never starts the agent. Do not re-claim the
+  lock when `SIM_LOCK_RUN_ID` already guards, and do not re-refresh when
+  the Flutter log already has a VM URI.
 - Flutter may stick at "Launching…" with no Dart VM line and no pid file.
   After the mandated one retry, end `SIM_NOT_READY` — do not uninstall the
   app or chase Device Hub UI. A common cause is `flutter pub get`
@@ -84,6 +89,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `refresh-simulator.sh` retries pub get — do not rewrite it mid-run.
 - After consecutive `SIM_NOT_READY`, the loop backs off (~10 min) so other
   flutter pub/test work can finish before the next claim.
+- `refresh-simulator` must claim with `--pid $$`. Pid-less locks go stale
+  after 10 minutes; never force-hold the mini without a pid.
 - `/tmp/flutter-live-poker-trainer.run.log` must be a normal file. If a
   stale symlink or directory is there, the refresh script should recreate
   it; do not hand-edit launcher scripts during a ticket run.
