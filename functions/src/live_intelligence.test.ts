@@ -69,9 +69,9 @@ function geminiResponse(value: unknown): Response {
 }
 
 describe("live intelligence boundaries", () => {
-  test("production coach defaults are 3.7-flash low/medium", () => {
+  test("production coach defaults are 3.8-flash low/medium", () => {
     expect(DEFAULT_COACH_INTELLIGENCE).toEqual({
-      modelId: "gemini-3.7-flash",
+      modelId: "gemini-3.8-flash",
       draftThinking: "low",
       criticThinking: "medium",
     });

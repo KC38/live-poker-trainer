@@ -17,7 +17,7 @@ describe("openai-compatible coach helpers", () => {
   it("routes gpt and deepseek model ids", () => {
     expect(openAiCompatibleProviderForModel("gpt-5-mini")).toBe("openai");
     expect(openAiCompatibleProviderForModel("deepseek-flash")).toBe("deepseek");
-    expect(openAiCompatibleProviderForModel("gemini-3.7-flash")).toBeNull();
+    expect(openAiCompatibleProviderForModel("gemini-3.8-flash")).toBeNull();
   });
 
   it("maps low thinking to minimal reasoning effort", () => {

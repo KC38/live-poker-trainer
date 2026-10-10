@@ -126,8 +126,8 @@ payouts, winners, or arbitrary amounts.
 ## Exploit coaching
 
 Every Hero node is evaluated before the action is revealed.
-`gemini-3.7-flash` (low draft, medium critic) drafts and critiques a rubric
-covering every action. Villain decisions use `gemini-3.8-flash` at low thinking
+`gemini-3.8-flash` (low draft, medium critic) drafts and critiques a rubric
+covering every action. Villain decisions use the same model at low thinking
 for latency.
 
 Server-computed facts include position, effective stack, SPR, pot odds, board

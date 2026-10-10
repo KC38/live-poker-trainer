@@ -16,7 +16,7 @@ import {
 describe("anthropic coach helpers", () => {
   it("routes Claude model ids to Anthropic", () => {
     expect(isAnthropicCoachModel("claude-haiku-4-5-20251001")).toBe(true);
-    expect(isAnthropicCoachModel("gemini-3.7-flash")).toBe(false);
+    expect(isAnthropicCoachModel("gemini-3.8-flash")).toBe(false);
   });
 
   it("maps low thinking to no extended budget", () => {
