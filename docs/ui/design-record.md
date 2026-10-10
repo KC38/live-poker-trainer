@@ -194,6 +194,10 @@ is the Theme elevated button on `ProfileScreen`
 amount copies that data type. Account primary / secondary copy the elevated
 and outlined Theme metrics.
 
+Heart refill sheet copy is Manrope with JetBrains Mono on the countdown
+(`lib/ui/course/widgets/heart_refill_sheet.dart`, LPT-58). The next help or
+economy sheet copies that Theme pair and does not bring Nunito back.
+
 ## Poker table
 
 One table, `FeltTableView` (`lib/ui/widgets/felt_table_view.dart`), is drawn
@@ -595,7 +599,9 @@ Five hearts per user, shared across lessons (`kHomeDefaultHearts`). Guided
 steps are free; any other miss costs one. Out of hearts blocks the lesson in
 place. The refill sheet (`heart_refill_sheet.dart`) offers Practice (+1
 heart on finishing a weak, already-played lesson) and a full refill for
-gems. Hearts update in place on Home without blanking it.
+gems. Hearts update in place on Home without blanking it. The sheet uses
+Theme Manrope for titles and option copy and JetBrains Mono for the next-
+heart countdown; it does not use Nunito.
 
 ## Profile
 
