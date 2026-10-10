@@ -140,8 +140,10 @@ PY
 
 # True when the Flutter run log already has a Dart VM service URI.
 dart_vm_ready() {
+  # macOS/BSD grep rejects [A-Za-z0-9_\-=] (invalid range). Keep '-' last.
+  # -a: treat Flutter logs as text even if they contain NULs later.
   [[ -f "$FLUTTER_RUN_LOG" ]] || return 1
-  grep -qE 'http://127\.0\.0\.1:[0-9]+/[A-Za-z0-9_\-=]+/' "$FLUTTER_RUN_LOG" 2>/dev/null
+  grep -aqE 'http://127\.0\.0\.1:[0-9]+/[A-Za-z0-9_=-]+/' "$FLUTTER_RUN_LOG" 2>/dev/null
 }
 
 wait_for_dart_vm() {
