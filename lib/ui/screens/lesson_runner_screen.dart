@@ -1200,7 +1200,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         livesMax: livesMax,
         onClose: onClose,
         speech: _error != null
-            ? kLessonStartErrorSpeech
+            ? lessonStartErrorSpeech(
+                previousLessonTitle: _previousLesson()?.title,
+              )
             : kLessonBootstrapSpeech,
         expression: LessonMascotExpression.thinking,
         onUndo: () {},
@@ -1419,7 +1421,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             ),
             const SizedBox(height: 12),
             if (_previousLesson() case final previous?) ...[
-              FilledButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
@@ -1437,7 +1439,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
               const SizedBox(height: 12),
             ],
             if (_error!.toLowerCase().contains('out of hearts')) ...[
-              FilledButton(
+              ElevatedButton(
                 onPressed: () async {
                   final home = ref.read(courseHomeProvider).asData?.value;
                   final action = await showHeartRefillSheet(
@@ -1464,7 +1466,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                     onPressed: _retryBootstrap,
                     child: const Text('Retry'),
                   )
-                : FilledButton(
+                : ElevatedButton(
                     onPressed: _retryBootstrap,
                     child: const Text('Retry'),
                   ),
