@@ -126,7 +126,8 @@ plist="$HOME/Library/LaunchAgents/com.livepokertrainer.ui-design-agent.plist"
 [[ -f "$plist" ]] || fail "install should write $plist ($install_out)"
 grep -q '<string>com.livepokertrainer.ui-design-agent</string>' "$plist" \
   || fail "plist label missing"
-grep -q '<string>start</string>' "$plist" || fail "plist must launch the start command"
+grep -q '<string>ensure</string>' "$plist" || fail "plist must launch ensure"
+grep -q '<key>StartInterval</key>' "$plist" || fail "plist must retry when the loop is down"
 grep -q 'ui_design_agent_loop.sh' "$plist" || fail "plist must name the loop script"
 grep -F -q "bootstrap gui/$(id -u) $plist" "$LAUNCH_LOG" \
   || fail "install should bootstrap the agent: $(cat "$LAUNCH_LOG")"

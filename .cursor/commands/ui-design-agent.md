@@ -71,8 +71,11 @@ SHA="$(git -C "$PRIMARY" rev-parse HEAD)"
 
 The script fast-forwards the primary clone and hot-restarts or starts the
 mini from it. Wait until `/tmp/flutter-live-poker-trainer.run.log` shows the
-Dart VM service. If the primary checkout is dirty, diverged, or the app will
-not launch, release the lock and end the run with that reason.
+Dart VM service, up to 3 minutes. If that line never arrives, run the
+refresh once more. If it is still down, release the lock and end the run
+with `SIM_NOT_READY`. Do not uninstall the app, edit the refresh script, or
+debug the launcher: the next run retries. End the same way when the primary
+checkout is dirty or diverged.
 
 ## 2. Read the contract
 

@@ -91,4 +91,12 @@ grep -q 'keep pbx' "$tmpdir/ios/Runner.xcodeproj/project.pbxproj" \
 [[ ! -e "$tmpdir/ios/Runner.xcworkspace/xcshareddata/swiftpm" ]] \
   || fail "Runner.xcworkspace swiftpm not removed"
 
+logdir="$(mktemp -d "${TMPDIR:-/tmp}/flutter-log.XXXXXX")"
+ln -s /nonexistent "$logdir/run.log"
+mkdir "$logdir/app.pid"
+prepare_flutter_log "$logdir/run.log" "$logdir/app.pid"
+[[ -f "$logdir/run.log" && ! -L "$logdir/run.log" ]] || fail "stale log symlink not replaced"
+[[ ! -e "$logdir/app.pid" ]] || fail "pid directory not removed"
+rm -rf "$logdir"
+
 echo "iphone 13 mini simulator helpers ok (udid=$udid)"
