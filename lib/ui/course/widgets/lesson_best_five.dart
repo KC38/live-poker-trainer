@@ -1,8 +1,9 @@
 /// Best-five / kicker teaching visuals and tap-five-of-seven mapping.
 ///
 /// Explain SoftPulse is one gold target at a time on `playOrder` next
-/// (`LessonBestFiveExplainTable`) — do not ring every remaining playing
-/// hole together (LPT-55).
+/// (`LessonBestFiveExplainTable`) — never every remaining playing hole
+/// together (LPT-55). Leftover hole/board cards stay undimmed until those
+/// five are tapped so dimming cannot spoil the answer (LPT-56).
 library;
 
 import 'dart:math';
@@ -509,14 +510,21 @@ class _LessonBestFiveExplainTableState
       for (var i = 0; i < _deal.board.length; i++)
         if (_tapped.contains(_deal.board[i])) i,
     };
-    final dimmedHero = <int>{
-      for (var i = 0; i < _deal.hero.length; i++)
-        if (!_deal.playing.contains(_deal.hero[i])) i,
-    };
-    final dimmedBoard = <int>{
-      for (var i = 0; i < _deal.board.length; i++)
-        if (!_deal.playing.contains(_deal.board[i])) i,
-    };
+    // Dim leftovers only after the five that play are in (LPT-56). Early
+    // dimming answers which cards play before the learner taps.
+    final revealLeftovers = next == null;
+    final dimmedHero = revealLeftovers
+        ? <int>{
+            for (var i = 0; i < _deal.hero.length; i++)
+              if (!_deal.playing.contains(_deal.hero[i])) i,
+          }
+        : <int>{};
+    final dimmedBoard = revealLeftovers
+        ? <int>{
+            for (var i = 0; i < _deal.board.length; i++)
+              if (!_deal.playing.contains(_deal.board[i])) i,
+          }
+        : <int>{};
     // One gold SoftPulse at a time on `_nextCode` (LPT-55). Ring the card,
     // never the You name box — same sequential cue as button → SB → BB.
     final highlightHero = <int>{};

@@ -14,6 +14,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
+import 'package:live_poker_trainer/ui/widgets/table_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 Widget _frame(Widget child) {
@@ -100,6 +101,71 @@ void main() {
       await tester.pump();
     }
     expect(ack, 1);
+  });
+
+  testWidgets('explain does not dim leftovers before playing cards are tapped', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-02-02-explain-five',
+      order: 1,
+      stage: ActivityStage.explain,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText: 'Only five of seven cards play.',
+      acceptedGrades: const [SoftGrade.recommended],
+      coachMedia: const [
+        CoachMediaRef(
+          id: 'm',
+          kind: 'dialogue',
+          text: 'You use five cards. Two are leftovers.',
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+    await tester.pumpWidget(
+      _frame(
+        CoachDialogueActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+          onFeltAcknowledge: () {},
+        ),
+      ),
+    );
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(
+      find.byWidgetPredicate((w) => w is TableCard && w.dimmed),
+      findsNothing,
+    );
+
+    for (final code in const ['Ah', 'Kd', 'As', '7c', '9h']) {
+      final heroIdx = BestFiveDemo.hero.indexOf(code);
+      if (heroIdx >= 0) {
+        await tester.tap(
+          find.byKey(ValueKey<String>('lesson-hero-card-$heroIdx')),
+        );
+      } else {
+        final boardIdx = BestFiveDemo.board.indexOf(code);
+        await tester.tap(
+          find.byKey(ValueKey<String>('lesson-board-card-$boardIdx')),
+        );
+      }
+      await tester.pump();
+    }
+
+    expect(
+      find.byWidgetPredicate((w) => w is TableCard && w.dimmed),
+      findsNWidgets(2),
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('explain SoftPulse is one next card, not both holes or You', (
