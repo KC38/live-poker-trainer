@@ -138,6 +138,10 @@ if [[ "\${1:-}" == "-L" && "\${3:-}" == "new-session" ]]; then
   touch "$SESSION_FLAG"
   exit 0
 fi
+if [[ "\${1:-}" == "-L" && "\${3:-}" == "kill-session" ]]; then
+  rm -f "$SESSION_FLAG"
+  exit 0
+fi
 exit 0
 EOF
 cat >"$HOME/.local/bin/launchctl" <<EOF
@@ -150,24 +154,36 @@ chmod +x "$HOME/.local/bin/tmux" "$HOME/.local/bin/launchctl"
 unset UI_AGENT_LOOP_SOURCE_ONLY
 start_out="$(bash "$LOOP" start)"
 grep -q 'started the loop' <<<"$start_out" || fail "start should report started: $start_out"
-grep -qx -- '-L ui-agent has-session -t =ui-design-agent' "$TMUX_LOG" \
-  || fail "start must probe socket ui-agent: $(cat "$TMUX_LOG")"
 grep -q -- '-L ui-agent new-session -d -s ui-design-agent ' "$TMUX_LOG" \
   || fail "start must create the session on socket ui-agent: $(cat "$TMUX_LOG")"
+grep -q "run-loop; echo 'loop exited'; exit" <<<"$(grep new-session "$TMUX_LOG")" \
+  || fail "start must exit after run-loop (no idle exec bash): $(cat "$TMUX_LOG")"
 while IFS= read -r line; do
   [[ "$line" == "-L ui-agent "* ]] || fail "tmux call left socket ui-agent: $line"
 done <"$TMUX_LOG"
 
+# Fake tmux does not exec run-loop; simulate a live loop pid for "already running".
+echo $$ >"$HOME/.live-poker-trainer/ui-agent-loop.pid"
 again="$(bash "$LOOP" start)"
-grep -q 'already running' <<<"$again" || fail "second start should see the session: $again"
+grep -q 'already running' <<<"$again" || fail "second start should see the live loop: $again"
 new_count="$(grep -c 'new-session' "$TMUX_LOG" || true)"
 [[ "$new_count" == 1 ]] || fail "a second start must not open another session (got $new_count)"
 
 status_out="$(bash "$LOOP" status)"
-grep -q 'loop: running (tmux -L ui-agent, session ui-design-agent)' <<<"$status_out" \
+grep -q 'loop: running (tmux -L ui-agent, session ui-design-agent' <<<"$status_out" \
   || fail "status should name the ui-agent socket: $status_out"
 grep -q 'login item: not installed' <<<"$status_out" \
   || fail "login item should start uninstalled: $status_out"
+
+# Idle leftover session (tmux up, run-loop dead) must be replaced by ensure.
+rm -f "$HOME/.live-poker-trainer/ui-agent-loop.pid"
+: >"$TMUX_LOG"
+ensure_out="$(bash "$LOOP" ensure)"
+grep -q 'replacing idle tmux session' <<<"$ensure_out$start_out$(cat "$TMUX_LOG")" \
+  || grep -q 'kill-session' "$TMUX_LOG" \
+  || fail "ensure must kill idle session when run-loop is dead: out=$ensure_out log=$(cat "$TMUX_LOG")"
+grep -q 'new-session' "$TMUX_LOG" \
+  || fail "ensure must start a fresh session after idle: $(cat "$TMUX_LOG")"
 
 install_out="$(bash "$LOOP" install)"
 plist="$HOME/Library/LaunchAgents/com.livepokertrainer.ui-design-agent.plist"
