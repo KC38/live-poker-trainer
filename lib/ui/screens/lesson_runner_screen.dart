@@ -549,19 +549,27 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       );
       if (!mounted) return;
       final displayResult = () {
-        if (controller.activity.id != kickerShowdownActivityId) {
-          return result;
+        var next = result;
+        if (controller.activity.id == kickerShowdownActivityId) {
+          final scene = dealtLessonTableScene(
+            controller.activity,
+            generation: controller.bindGeneration,
+          );
+          if (scene != null) {
+            next = rewriteKickerShowdownResult(
+              result: next,
+              heroCodes: scene.heroCodes,
+              boardCodes: scene.boardCodes,
+              villainCodes: scene.villainCodes,
+            );
+          }
         }
-        final scene = dealtLessonTableScene(
-          controller.activity,
+        // Bank feedback still names the template hand (e.g. "queens") while
+        // the felt may show another isomorphic premium pair.
+        return alignLessonActionSubmitResult(
+          activity: controller.activity,
+          result: next,
           generation: controller.bindGeneration,
-        );
-        if (scene == null) return result;
-        return rewriteKickerShowdownResult(
-          result: result,
-          heroCodes: scene.heroCodes,
-          boardCodes: scene.boardCodes,
-          villainCodes: scene.villainCodes,
         );
       }();
       controller.finishSubmit(displayResult);
@@ -935,23 +943,27 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     final attempt = _attempt;
     if (controller == null || attempt == null) return;
     controller.presentLocalMiss(
-      SubmitCourseStepResult(
-        attemptId: attempt.attemptId,
-        activityId: controller.activity.id,
-        grade: SoftGrade.clearMistake,
-        feedback: feedback,
-        accepted: false,
-        lifeLost: false,
-        livesRemaining: attempt.livesRemaining,
-        xpAwarded: 0,
-        remediationRequired: false,
-        resume: CourseResumePointer(
+      alignLessonActionSubmitResult(
+        activity: controller.activity,
+        generation: controller.bindGeneration,
+        result: SubmitCourseStepResult(
           attemptId: attempt.attemptId,
-          lessonId: attempt.lessonId,
           activityId: controller.activity.id,
-          activityIndex: attempt.activityIndex,
+          grade: SoftGrade.clearMistake,
+          feedback: feedback,
+          accepted: false,
+          lifeLost: false,
+          livesRemaining: attempt.livesRemaining,
+          xpAwarded: 0,
+          remediationRequired: false,
+          resume: CourseResumePointer(
+            attemptId: attempt.attemptId,
+            lessonId: attempt.lessonId,
+            activityId: controller.activity.id,
+            activityIndex: attempt.activityIndex,
+          ),
+          duplicate: false,
         ),
-        duplicate: false,
       ),
     );
   }

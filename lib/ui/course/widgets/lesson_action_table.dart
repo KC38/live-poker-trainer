@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_starting_hand_copy.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
@@ -115,6 +116,43 @@ String alignLessonActionCopy(
     text: text,
     templateHero: template.heroCodes,
     dealtHero: dealt.heroCodes,
+  );
+}
+
+/// Rewrites graded feedback so it names the dealt holes, not the template.
+///
+/// Server bank copy still says "queens" for [act-02-03-01-scaffolded-qq]
+/// while the felt may show aces (or another premium pair). Align before the
+/// Oops! / Nice! dock paints.
+SubmitCourseStepResult alignLessonActionSubmitResult({
+  required CourseActivity activity,
+  required SubmitCourseStepResult result,
+  int generation = 0,
+  Random? random,
+}) {
+  final feedback = alignLessonActionCopy(
+    activity,
+    result.feedback,
+    generation: generation,
+    random: random,
+  );
+  if (feedback == result.feedback) return result;
+  return SubmitCourseStepResult(
+    attemptId: result.attemptId,
+    activityId: result.activityId,
+    grade: result.grade,
+    feedback: feedback,
+    accepted: result.accepted,
+    lifeLost: result.lifeLost,
+    livesRemaining: result.livesRemaining,
+    xpAwarded: result.xpAwarded,
+    remediationRequired: result.remediationRequired,
+    resume: result.resume,
+    duplicate: result.duplicate,
+    betterChoiceId: result.betterChoiceId,
+    reversalRead: result.reversalRead,
+    masteryWeight: result.masteryWeight,
+    livesNextRefillAtMs: result.livesNextRefillAtMs,
   );
 }
 
