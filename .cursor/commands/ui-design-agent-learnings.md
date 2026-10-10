@@ -42,6 +42,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Never launch a subagent or a second parallel `/ui-design-agent` run.
 - Never edit the primary checkout. All code changes go through make-change
   in a `.worktrees/<slug>` worktree.
+- Never invent a GitHub owner/URL from a person's name (e.g.
+  `kushalchachan/...`). PR links must come from `gh pr create` output or
+  `gh pr view <n> --json url -q .url` (repo is `KC38/live-poker-trainer`).
 
 ## Prefer
 
