@@ -98,8 +98,12 @@ printf '%s\n' 'Launching lib/main.dart on iPhone 13 mini in debug mode...' >"$vm
 dart_vm_ready && fail "dart_vm_ready should fail before the VM line"
 
 # Stall helper: fresh heartbeat is fine; ancient heartbeat is stalled.
+# HEARTBEAT_ONLY skips host flutter/tmux probes so CI/dev machines with a
+# live mini build do not mask the age check.
 python3 "$ROOT/tools/sim_lock.py" claim --owner stall-test --purpose "fresh" --pid $$ >/dev/null
 STALL_SECONDS=600
+UI_AGENT_STALL_HEARTBEAT_ONLY=1
+export UI_AGENT_STALL_HEARTBEAT_ONLY
 lock_heartbeat_stalled && fail "fresh heartbeat must not look stalled"
 python3 - <<PY
 import json, time
@@ -110,6 +114,7 @@ state["heartbeat_epoch"] = time.time() - 601
 path.write_text(json.dumps(state))
 PY
 lock_heartbeat_stalled || fail "heartbeat older than STALL_SECONDS should be stalled"
+unset UI_AGENT_STALL_HEARTBEAT_ONLY
 python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 
 # Backoff helper: latest coverage result drives SIM_NOT_READY sleep.

@@ -175,15 +175,20 @@ wait_for_dart_vm() {
   return 1
 }
 
-# True when the holder’s heartbeat is older than STALL_SECONDS. A live
-# agent must heartbeat via sim_lock; Cursor reconnect hangs stop doing so
-# and used to burn the mini until MAX_RUN.
+# True when the holder looks dead: lock heartbeat older than STALL_SECONDS
+# and nothing is still working for this run. Heartbeat-only stalls
+# false-killed worktree `flutter run` (often started via tmux, not as a
+# child of agent -p) and long compiles that skip sim_lock heartbeats.
 lock_heartbeat_stalled() {
-  python3 - "$STALL_SECONDS" <<'PY'
-import json, os, sys, time
+  local agent_pid=""
+  [[ -f "$PID_FILE" ]] && agent_pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+  python3 - "$STALL_SECONDS" "${agent_pid:-}" <<'PY'
+import json, os, subprocess, sys, time
 from pathlib import Path
 
 stall = int(sys.argv[1])
+agent_pid = sys.argv[2].strip()
+now = time.time()
 lock_dir = Path(os.environ.get("SIM_LOCK_DIR") or Path.home() / ".live-poker-trainer")
 path = lock_dir / "simulator-lock.json"
 try:
@@ -193,7 +198,91 @@ except (OSError, json.JSONDecodeError):
 if state.get("state") != "in_use":
     raise SystemExit(1)
 beat = float(state.get("heartbeat_epoch") or state.get("claimed_epoch") or 0)
-raise SystemExit(0 if (time.time() - beat) > stall else 1)
+if (now - beat) <= stall:
+    raise SystemExit(1)
+
+# Unit tests set this to exercise heartbeat age without host flutter/tmux.
+if os.environ.get("UI_AGENT_STALL_HEARTBEAT_ONLY") == "1":
+    raise SystemExit(0)
+
+def _ps() -> str:
+    try:
+        return subprocess.check_output(
+            ["ps", "-o", "pid=,ppid=,command=", "-ax"],
+            text=True,
+            errors="replace",
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return ""
+
+ps_out = _ps()
+
+# Flutter/dart still targeting the mini or a repo worktree (often under
+# a separate tmux session, not a child of agent -p).
+for line in ps_out.splitlines():
+    low = line.lower()
+    if not any(tok in low for tok in ("flutter", "dartvm", "dart ", "xcodebuild")):
+        continue
+    if any(
+        tok in low
+        for tok in (".worktrees/", "iphone 13 mini", "f82057df-579c-42ad-ba8f-312a2a8b9de1")
+    ):
+        raise SystemExit(1)
+
+# tmux flutter-* sessions the ui-agent starts for worktree validates.
+try:
+    sessions = subprocess.check_output(
+        ["tmux", "list-sessions", "-F", "#{session_name}"],
+        text=True,
+        errors="replace",
+        stderr=subprocess.DEVNULL,
+    )
+except (OSError, subprocess.CalledProcessError):
+    sessions = ""
+for name in sessions.splitlines():
+    if name.startswith("flutter-iphone-13-mini"):
+        raise SystemExit(1)
+
+# Busy descendants under the script/agent pid.
+if agent_pid.isdigit():
+    children: dict[str, list[tuple[str, str]]] = {}
+    for line in ps_out.splitlines():
+        parts = line.strip().split(None, 2)
+        if len(parts) < 3:
+            continue
+        pid_s, ppid_s, cmd = parts
+        children.setdefault(ppid_s, []).append((pid_s, cmd))
+    stack = [agent_pid]
+    seen: set[str] = set()
+    descendants: set[str] = set()
+    busy_needles = (
+        "flutter", "dart", "xcodebuild", "git ", "rsync", "pub get",
+        "agent_tap", "simctl",
+    )
+    while stack:
+        cur = stack.pop()
+        if cur in seen:
+            continue
+        seen.add(cur)
+        descendants.add(cur)
+        for child_pid, cmd in children.get(cur, []):
+            stack.append(child_pid)
+            low = cmd.lower()
+            if any(n in low for n in busy_needles):
+                raise SystemExit(1)
+    for base in (Path("/tmp"), Path("/private/tmp")):
+        if not base.is_dir():
+            continue
+        for log in base.glob("cursor-agent-logs-*/session-*.log"):
+            if not any(f"-{pid}-" in log.name for pid in descendants):
+                continue
+            try:
+                if (now - log.stat().st_mtime) <= stall:
+                    raise SystemExit(1)
+            except OSError:
+                pass
+
+raise SystemExit(0)
 PY
 }
 
@@ -364,20 +453,60 @@ one_run() {
   fi
 
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min"
-  tail -n 15 "$run_log" | sed 's/^/    /'
-  python3 - "$HEALTH_FILE" "$stamp" "$code" "$(( $(date +%s) - start ))" "$run_log" <<'PY'
+  # Strip script(1) EOF noise (^D) so status/health stay readable.
+  if [[ -f "$run_log" ]]; then
+    python3 - "$run_log" <<'PY' || true
+import sys
+from pathlib import Path
+path = Path(sys.argv[1])
+try:
+    text = path.read_text(encoding="utf-8", errors="replace")
+except OSError:
+    raise SystemExit(0)
+cleaned = text.replace("\x04", "")
+if cleaned != text:
+    path.write_text(cleaned, encoding="utf-8")
+PY
+  fi
+  tail -n 15 "$run_log" 2>/dev/null | sed 's/^/    /' || true
+  python3 - "$HEALTH_FILE" "$stamp" "$code" "$(( $(date +%s) - start ))" "$run_log" "$COVERAGE_FILE" <<'PY'
 import json, sys
-path, stamp, code, seconds, log = sys.argv[1:]
+from datetime import datetime
+from pathlib import Path
+
+path, stamp, code, seconds, log, coverage = sys.argv[1:]
 tail = ""
 try:
-    lines = open(log, encoding="utf-8", errors="replace").read().splitlines()
+    lines = [
+        ln for ln in Path(log).read_text(encoding="utf-8", errors="replace").splitlines()
+        if ln.strip() and set(ln.strip()) != {"^", "D"} and "\x04" not in ln
+    ]
+    # Drop lines that are only caret-D artifacts already stripped.
+    lines = [ln for ln in lines if ln.replace("^D", "").strip()]
     tail = " ".join(lines[-5:])[:400]
 except OSError:
     pass
+ticket = None
+result = None
+try:
+    cov_lines = [ln for ln in Path(coverage).read_text(encoding="utf-8").splitlines() if ln.strip()]
+    if cov_lines:
+        cov = json.loads(cov_lines[-1])
+        ticket = cov.get("ticket")
+        result = cov.get("result")
+except (OSError, json.JSONDecodeError):
+    pass
+if not tail and result:
+    tail = f"coverage:{result}" + (f" ticket:{ticket}" if ticket else "")
 with open(path, "a", encoding="utf-8") as handle:
     handle.write(json.dumps({
-        "at": __import__("datetime").datetime.now().astimezone().isoformat(timespec="seconds"),
-        "stamp": stamp, "exit": int(code), "seconds": int(seconds), "tail": tail,
+        "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "stamp": stamp,
+        "exit": int(code),
+        "seconds": int(seconds),
+        "ticket": ticket,
+        "result": result,
+        "tail": tail,
     }) + "\n")
 PY
   find "$LOG_DIR" -name 'run-*.log' -mtime +14 -delete 2>/dev/null || true
