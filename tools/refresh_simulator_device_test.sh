@@ -99,4 +99,31 @@ prepare_flutter_log "$logdir/run.log" "$logdir/app.pid"
 [[ ! -e "$logdir/app.pid" ]] || fail "pid directory not removed"
 rm -rf "$logdir"
 
+# Resilient pub get: succeeds on a later attempt after a killed first call.
+fake_bin="$(mktemp -d "${TMPDIR:-/tmp}/fake-flutter.XXXXXX")"
+cat >"$fake_bin/flutter" <<'EOF'
+#!/usr/bin/env bash
+state_dir="${FAKE_FLUTTER_STATE:?}"
+n=0
+[[ -f "$state_dir/n" ]] && n="$(cat "$state_dir/n")"
+n=$((n + 1))
+echo "$n" >"$state_dir/n"
+if [[ "$n" -lt 3 ]]; then
+  echo "fake flutter pub get killed" >&2
+  exit 143
+fi
+echo "fake flutter pub get ok"
+exit 0
+EOF
+chmod +x "$fake_bin/flutter"
+export PATH="$fake_bin:$PATH"
+export FAKE_FLUTTER_STATE="$(mktemp -d "${TMPDIR:-/tmp}/fake-flutter-state.XXXXXX")"
+export FLUTTER_PUB_GET_LOCK_WAIT=0
+export FLUTTER_PUB_GET_ATTEMPTS=4
+flutter_pub_get_resilient >/dev/null \
+  || fail "flutter_pub_get_resilient should succeed after retries"
+[[ "$(cat "$FAKE_FLUTTER_STATE/n")" == 3 ]] \
+  || fail "expected three fake flutter invocations"
+rm -rf "$fake_bin" "$FAKE_FLUTTER_STATE"
+
 echo "iphone 13 mini simulator helpers ok (udid=$udid)"

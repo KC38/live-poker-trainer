@@ -73,6 +73,13 @@ rm -f "$LOG_DIR"/run-*.log
 (unset UI_AGENT_LOOP_SOURCE_ONLY; bash "$LOOP" status >/dev/null) \
   || fail "status should exit 0 before the first run"
 
+# Backoff helper: latest coverage result drives SIM_NOT_READY sleep.
+mkdir -p "$(dirname "$COVERAGE_FILE")"
+printf '%s\n' '{"result":"closed"}' >"$COVERAGE_FILE"
+last_run_sim_not_ready && fail "closed coverage must not look like SIM_NOT_READY"
+printf '%s\n' '{"result":"sim-not-ready","ticket":""}' >"$COVERAGE_FILE"
+last_run_sim_not_ready || fail "sim-not-ready coverage should trigger backoff"
+
 # The loop's own tmux server (socket ui-agent) and the login LaunchAgent.
 # $HOME/.local/bin is first on the script's PATH, so these fakes win.
 mkdir -p "$HOME/.local/bin"
