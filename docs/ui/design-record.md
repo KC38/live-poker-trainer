@@ -49,9 +49,10 @@ owner's own instructions to agents. When a screen is ambiguous, these win.
    the cards actually dealt, not a template combo.
 7. **The game economy is visible and fair.** Five hearts. A non-guided
    mistake costs a heart. At zero hearts the lesson is blocked in place and
-   the empty hearts breathe; tapping them opens the refill sheet. Practice
-   on a weak finished lesson earns a heart back. Streak, gems, XP, and the
-   daily goal are celebrated, not reported.
+   the empty hearts breathe; the refill sheet opens when the last heart is
+   spent (and from the Oops CTA / empty-heart chrome). Practice on a weak
+   finished lesson earns a heart back. Streak, gems, XP, and the daily goal
+   are celebrated, not reported.
 8. **Home is a path.** One section at a time, a sticky unit banner, circular
    nodes on a zig-zag, a pulse on the next lesson, and a Duolingo-style
    START / REVIEW bubble when a node is tapped.
@@ -335,7 +336,7 @@ One row, height 36.
 | --- | --- |
 | Close | `X` on the left. Leaves the lesson. It is not a back chevron. |
 | Progress | The lesson bar fills the space between close and the hearts. It advances by activity. |
-| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. At zero, the empty hearts breathe slowly, a blocked stage tap nudges, and a tap on the hearts opens the refill sheet. |
+| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. At zero, the empty hearts breathe slowly, the refill sheet opens, a blocked stage tap nudges, and the Oops CTA becomes Restore hearts (not Continue). |
 
 ### 2. Coach band
 

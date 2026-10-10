@@ -648,8 +648,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       _syncReadyHomeHearts(result);
       if (result.remediationRequired || result.livesRemaining <= 0) {
         _armPassiveHeartResync(livesNextRefillAtMs: result.livesNextRefillAtMs);
+        // Last heart spent — open refill. Do not leave a fake Continue path.
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) _nudgeEmptyHearts();
+          if (mounted) unawaited(_promptHeartRefill());
         });
       }
     } catch (error) {
@@ -762,7 +763,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
     if (!result.accepted) {
       if (_heartsGateActive) {
-        _nudgeEmptyHearts();
+        unawaited(_promptHeartRefill());
         return;
       }
       controller.clearFeedbackForRetry();
@@ -993,7 +994,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     Navigator.of(context).maybePop();
   }
 
-  /// Subtle chrome pulse — no refill sheet unless the learner taps hearts.
+  /// Subtle chrome pulse for a blocked felt tap (sheet opens on hearts / CTA).
   void _nudgeEmptyHearts() {
     if (!mounted || !_heartsGateActive) return;
     setState(() => _heartsNudgeTick += 1);
@@ -1259,8 +1260,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                           ? null
                           : _heroRecoveryChoiceId(activity)),
                 ),
-          onContinue: result == null ? null : _continueAfterFeedback,
-          continueLabel: 'Continue',
+          onContinue: result == null
+              ? null
+              : (_heartsGateActive
+                  ? () {
+                      unawaited(_promptHeartRefill());
+                    }
+                  : _continueAfterFeedback),
+          continueLabel: _heartsGateActive ? 'Restore hearts' : 'Continue',
           onRestoreHearts: _heartsGateActive ? _promptHeartRefill : null,
           onBlockedPlay: _heartsGateActive ? _nudgeEmptyHearts : null,
           emptyHeartsNudgeTick: _heartsNudgeTick,
@@ -1617,8 +1624,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                       result: result,
                       completing:
                           _completing || _advancingActivity || _heartRefillBusy,
-                      continueLabel: 'Continue',
-                      onContinue: _continueAfterFeedback,
+                      continueLabel:
+                          _heartsGateActive ? 'Restore hearts' : 'Continue',
+                      onContinue: _heartsGateActive
+                          ? () {
+                              unawaited(_promptHeartRefill());
+                            }
+                          : _continueAfterFeedback,
                       onRetry: result.accepted || _heartsGateActive
                           ? null
                           : () {
