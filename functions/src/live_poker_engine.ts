@@ -1,6 +1,8 @@
 /**
  * Authoritative No-Limit Hold'em state machine for live training.
  *
+ * Agent handbook: docs/agents/05-live-training.md and docs/agents/08-backend.md.
+ *
  * The engine accepts only server-generated fixed action ids, uses cent-exact
  * chip arithmetic, handles incomplete all-in raises, refunds unmatched chips,
  * and settles independent main/side pots. Gemini may choose among legal ids

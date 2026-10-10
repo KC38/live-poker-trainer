@@ -1,4 +1,12 @@
 /// Exploitative Poker Lab entrypoint.
+///
+/// Agent handbook: `docs/agents/03-client.md`.
+///
+/// Boots Firebase with Firestore persistence off (training is live-only),
+/// wires Riverpod + Crashlytics/Analytics, and hosts the auth/flags root.
+/// Debug builds also install agent UI driver hooks for simulator automation.
+///
+/// Preference: never add a client Gemini key or offline hand continuation here.
 library;
 
 import 'dart:async';

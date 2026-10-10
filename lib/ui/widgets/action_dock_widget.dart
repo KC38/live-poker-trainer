@@ -1,4 +1,12 @@
 /// Bottom thumb-zone action dock — simple labels, sizing presets.
+///
+/// Agent handbook: `docs/agents/05-live-training.md`
+/// (Fixed actions) and
+/// `docs/agents/07-reusable-components.md`.
+///
+/// Live mode renders **server** [LiveLegalActionModel]s only. Authored course
+/// edges use the same dock. Do not invent free-text bet amounts or offer Fold
+/// when Check is free — that preference is product law.
 library;
 
 import 'package:flutter/foundation.dart';

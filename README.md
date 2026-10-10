@@ -4,6 +4,11 @@ Online Flutter trainer for exploitative live No-Limit Hold'em. The server owns
 cards, legal fixed actions, opponent decisions, coaching, side pots, history,
 and progress. The app contains no LLM credential or offline gameplay fallback.
 
+**AI agents:** start at [docs/agents/README.md](docs/agents/README.md) for
+product goal, repo map, course/Live systems, UI preferences, reusable
+components, and the change workflow. Keep that handbook and code comments
+current when you ship (see `.cursor/rules/agent-docs-maintenance.mdc`).
+
 ## Quick start
 
 Requires Flutter 3.47+ / Dart 3.13+.

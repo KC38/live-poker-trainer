@@ -1,4 +1,10 @@
 /// Home: course path, status, and Rex coach.
+///
+/// Agent handbook: `docs/agents/04-course.md`.
+///
+/// Hosts the path, status strip, and section picker. Course starts respect
+/// `courseStartsEnabled`; in-progress attempts can still finish when starts
+/// are paused. Prefer [CoursePathView] — do not reintroduce a Resume card.
 library;
 
 import 'dart:async';

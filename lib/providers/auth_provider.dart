@@ -1,4 +1,10 @@
 /// Riverpod auth state, uid, and sign-in / sign-out actions.
+///
+/// Agent handbook: `docs/agents/03-client.md` (Guest vs account).
+///
+/// Anonymous guests share the `guest` navigator identity with signed-out
+/// until a real account links. Sign-out must not leave guest Home progress
+/// looking like a persisted account (see `sign-out-discards-guest` path).
 library;
 
 import 'dart:async';

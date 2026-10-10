@@ -1,4 +1,10 @@
 /// Which parts of the poker table are drawn, so early lessons stay focused.
+///
+/// Agent handbook: `docs/agents/04-course.md`
+/// (Table features by lesson).
+///
+/// Prefer [TableFeatures.forLessonId] from the runner, then per-step
+/// overrides on the stage. Do not fork [FeltTableView] to hide a layer.
 library;
 
 import 'package:flutter/widgets.dart';

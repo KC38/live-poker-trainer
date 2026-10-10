@@ -1,0 +1,59 @@
+---
+description: >-
+  Keep agent handbook docs and AI-oriented code comments current whenever
+  behavior, structure, preferences, or reusable APIs change.
+alwaysApply: true
+---
+
+# Keep agent docs and comments current
+
+These materials exist so the **next** AI agent can understand the goal, the
+structure, why decisions were made, and how to work here without rediscovering
+them.
+
+## Sources of truth
+
+| Layer | Path |
+| --- | --- |
+| Agent handbook (start here) | `docs/agents/README.md` and numbered sections |
+| Architecture / trust | `docs/architecture.md` |
+| UI contract | `docs/ui/design-record.md` |
+| Validation journeys | `docs/agent-paths.md` |
+| File-level why/gotchas | library and class dartdoc / JSDoc in code |
+
+## When you change code
+
+In the **same** change (same PR), update docs and comments if you did any of:
+
+1. Changed product behavior, routing, unlock rules, or kill switches.
+2. Added/removed/renamed a reusable widget, provider, callable, or content
+   renderer.
+3. Encoded or reversed a user preference (teach-by-doing, one table, separate
+   course/Live stats, fixed action buckets, lesson frame, etc.).
+4. Moved responsibility between client and server.
+5. Added an agent workflow, tool, or gotcha others will hit.
+
+### What to update
+
+- Touch the matching `docs/agents/0N-*.md` section(s). Add a new section file
+  and link it from `docs/agents/README.md` when a whole subsystem appears.
+- Update deep docs (`architecture.md`, `design-record.md`, `agent-paths.md`,
+  `coaching-quality.md`) when their contracts actually change — do not
+  duplicate them into the handbook.
+- Refresh library/file comments: purpose, preference, and "do not undo"
+  gotchas. Prefer short why-comments over narrating every line.
+- If you add a preferred reusable component, add a row to
+  `docs/agents/07-reusable-components.md`.
+
+### What not to do
+
+- Leave stale handbook claims that contradict the code you just shipped.
+- Add noisy comments that only restate the next line of code.
+- Put secrets, API keys, or private grading keys into docs or comments.
+- Skip handbook updates because "the PR description explains it" — PR text
+  is not durable context for the next agent.
+
+## Quick check before merge
+
+Ask: "If I were a new agent with only `docs/agents/` and the file headers,
+would I know what changed and why?" If no, update them before you open the PR.

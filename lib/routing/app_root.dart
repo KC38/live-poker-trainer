@@ -1,4 +1,12 @@
 /// Root destination for the course kill switch.
+///
+/// Agent handbook: `docs/agents/03-client.md`.
+///
+/// Maps auth + `CourseFlags` + onboarding draft → Welcome / guest course /
+/// Save progress / Auth / Shell. Navigator identity tokens
+/// ([rootNavigatorKeyFor], [rootStackToken]) exist so remounts cannot revive
+/// the first-lesson stack over Save progress or Home — do not collapse them
+/// back to a single global navigator key.
 library;
 
 import 'package:live_poker_trainer/models/course/course_flags.dart';

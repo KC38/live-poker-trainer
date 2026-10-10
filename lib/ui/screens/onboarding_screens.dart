@@ -1,5 +1,11 @@
 /// Guest welcome, coach intro, experience, goal, motivation, post-lesson
 /// streak/quest/gem beats, and start screens.
+///
+/// Agent handbook: `docs/agents/03-client.md` and `docs/agents/04-course.md`.
+/// Validation path: `fresh-guest-recommended` in `docs/agent-paths.md`.
+///
+/// Progress bar + Rex bubble — no "Step x of 4" title rows (rejected).
+/// Changing experience/goal must change the recommended lesson.
 library;
 
 import 'dart:async';

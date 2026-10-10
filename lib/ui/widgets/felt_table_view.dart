@@ -1,4 +1,11 @@
 /// The poker table: felt, seats, board, pot, and blinds.
+///
+/// Agent handbook: `docs/agents/07-reusable-components.md`
+/// and UI preferences in `docs/agents/06-ui-and-preferences.md`.
+///
+/// **Preference:** this is the only table. Live Training and every lesson
+/// hand use [FeltTableView]. Do not add a mini felt, suit-tile board, or
+/// second table widget. Optional layers gate through [TableFeatures].
 library;
 
 import 'dart:async';

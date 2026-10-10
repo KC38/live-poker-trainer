@@ -1,4 +1,11 @@
 /// Main gameplay table — strict vertical bands so nothing ever overlaps.
+///
+/// Agent handbook: `docs/agents/05-live-training.md` and
+/// `docs/agents/07-reusable-components.md`.
+///
+/// Composes [FeltTableView], coach shelf, and [ActionDockWidget]. Layout
+/// bands exist so the dock never covers seats/board on the mini — keep that
+/// discipline when adding chrome.
 library;
 
 import 'dart:async';

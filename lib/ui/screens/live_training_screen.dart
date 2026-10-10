@@ -1,4 +1,10 @@
 /// Live Training hub: table setup and Start training CTA.
+///
+/// Agent handbook: `docs/agents/05-live-training.md`.
+///
+/// Gates anonymous guests and locked accounts with product copy before any
+/// deal. Do not start a hand client-side when access is denied — assert the
+/// hub strings instead of inventing unlock text in tests.
 library;
 
 import 'dart:async';
