@@ -320,6 +320,395 @@ clear_stuck_cursor_keychain() {
   configure_agent_credentials
 }
 
+# Cursor CLI often leaves the script(1) TTY log empty or full of ^D /
+# reconnect noise while the real session lives under
+# /tmp/cursor-agent-logs-*/session-*-<pid>-*.log. Copy a readable summary
+# (and enough session text for stall/status) into the run log when needed.
+# Args: run_log start_epoch [root_pid]
+backfill_run_log_from_session() {
+  local run_log="$1" start_epoch="$2" root_pid="${3:-}"
+  python3 - "$run_log" "$start_epoch" "$root_pid" <<'PY' || true
+import os, re, sys
+from pathlib import Path
+
+run_log = Path(sys.argv[1])
+start_epoch = int(float(sys.argv[2]))
+root_pid = sys.argv[3].strip() if len(sys.argv) > 3 else ""
+
+NOISE = re.compile(
+    r"(Connection lost, reconnecting|Retry attempt |\^D|\x04|\x08)",
+    re.I,
+)
+# Cursor session logs are mostly structured telemetry; keep human/signal lines.
+DROP_LINE = re.compile(
+    r"("
+    r"\] logger |analytics\.track|structured-log\.|"
+    r"startup\.|privacy\.|protoPrivacy|ripgrep\.|sandbox\.|"
+    r"serverConfig\.|Stack trace:|^\s*at "
+    r")",
+    re.I,
+)
+
+
+def cleaned_text(path: Path) -> str:
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+    return text.replace("\x04", "").replace("^D", "")
+
+
+def useful(text: str) -> bool:
+    lines = []
+    for ln in text.splitlines():
+        s = ln.strip()
+        if not s or NOISE.search(s) or DROP_LINE.search(s):
+            continue
+        if s.startswith("# backfilled from"):
+            continue
+        if set(s) <= {"^", "D", "\x08", "."}:
+            continue
+        lines.append(s)
+    body = "\n".join(lines)
+    if len(body) < 80:
+        return False
+    # Prefer signal words over raw logger spam alone.
+    if re.search(r"\b(LPT-\d+|SIM_NOT_READY|closed|stalled|Lock|step\s*\d+)\b", body, re.I):
+        return True
+    return False
+
+
+def descendant_pids(root: str) -> set[str]:
+    if not root.isdigit():
+        return set()
+    try:
+        import subprocess
+        out = subprocess.check_output(
+            ["ps", "-ax", "-o", "pid=,ppid=,command="], text=True
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return {root}
+    children: dict[str, list[str]] = {}
+    for line in out.splitlines():
+        parts = line.strip().split(None, 2)
+        if len(parts) < 2:
+            continue
+        pid_s, ppid_s = parts[0], parts[1]
+        children.setdefault(ppid_s, []).append(pid_s)
+    seen: set[str] = set()
+    stack = [root]
+    while stack:
+        cur = stack.pop()
+        if cur in seen:
+            continue
+        seen.add(cur)
+        stack.extend(children.get(cur, []))
+    return seen
+
+
+cur = cleaned_text(run_log) if run_log.is_file() else ""
+# Refresh when the TTY log lacks ticket/result signal (typical for CLI).
+force_refresh = cur.lstrip().startswith("# backfilled from") or not useful(cur)
+if useful(cur) and not force_refresh:
+    raise SystemExit(0)
+
+pids = descendant_pids(root_pid) if root_pid else set()
+candidates: list[tuple[float, int, Path]] = []
+for base in (Path("/tmp"), Path("/private/tmp")):
+    if not base.is_dir():
+        continue
+    for sess in base.glob("cursor-agent-logs-*/session-*.log"):
+        try:
+            st = sess.stat()
+        except OSError:
+            continue
+        name = sess.name
+        pid_hit = any(f"-{p}-" in name for p in pids) if pids else False
+        # Session created/updated during this run window.
+        if not pid_hit and st.st_mtime < start_epoch - 15:
+            continue
+        # Prefer pid-matched logs; among those, largest wins (main vs sidecar).
+        rank = 2.0 if pid_hit else 1.0
+        candidates.append((rank, st.st_size, sess))
+
+if not candidates:
+    if not cur.strip():
+        run_log.parent.mkdir(parents=True, exist_ok=True)
+        run_log.write_text(
+            f"(empty TTY log; no cursor session log found after epoch {start_epoch})\n",
+            encoding="utf-8",
+        )
+    raise SystemExit(0)
+
+candidates.sort(key=lambda t: (t[0], t[1]), reverse=True)
+best = candidates[0][2]
+# Skip rewrite when already backfilled from same path at same/larger size.
+prev_src = ""
+prev_size = -1
+m = re.match(r"# backfilled from (.+) \((\d+) bytes\)", cur.splitlines()[0] if cur else "")
+if m:
+    prev_src, prev_size = m.group(1), int(m.group(2))
+try:
+    best_size = best.stat().st_size
+except OSError:
+    best_size = 0
+if prev_src == str(best) and prev_size >= best_size:
+    raise SystemExit(0)
+
+sess_text = cleaned_text(best)
+kept: list[str] = [
+    f"# backfilled from {best} ({best_size} bytes)",
+]
+for ln in sess_text.splitlines():
+    if DROP_LINE.search(ln) or NOISE.search(ln):
+        continue
+    kept.append(ln)
+if len(kept) < 3:
+    kept.append("(session log was telemetry-only; trailing lines:)")
+    kept.extend(sess_text.splitlines()[-15:])
+for ln in cur.splitlines():
+    if ln.startswith("# backfilled from"):
+        continue
+    if ln.strip() and not NOISE.search(ln) and not DROP_LINE.search(ln) and ln not in kept:
+        kept.append(ln)
+run_log.parent.mkdir(parents=True, exist_ok=True)
+run_log.write_text("\n".join(kept).rstrip() + "\n", encoding="utf-8")
+print(f"backfilled {run_log} from {best}", flush=True)
+PY
+}
+
+# Append health rows for coverage tickets that never got a health line
+# (loop killed before one_run cleanup, empty TTY log, etc.).
+reconcile_health_from_coverage() {
+  python3 - "$HEALTH_FILE" "$COVERAGE_FILE" <<'PY' || true
+import json, sys
+from pathlib import Path
+
+health_path, coverage_path = Path(sys.argv[1]), Path(sys.argv[2])
+if not coverage_path.is_file():
+    raise SystemExit(0)
+
+def load_jsonl(path: Path) -> list[dict]:
+    rows = []
+    try:
+        for ln in path.read_text(encoding="utf-8").splitlines():
+            if not ln.strip():
+                continue
+            try:
+                rows.append(json.loads(ln))
+            except json.JSONDecodeError:
+                pass
+    except OSError:
+        pass
+    return rows
+
+health = load_jsonl(health_path)
+coverage = load_jsonl(coverage_path)
+seen_tickets = {
+    h.get("ticket") for h in health
+    if h.get("ticket") and h.get("result") not in (None, "stalled", "sim-not-ready")
+}
+# Also treat stamps already recorded as done.
+seen_at = {h.get("at") for h in health if h.get("at")}
+appended = 0
+for cov in coverage:
+    ticket = cov.get("ticket")
+    result = cov.get("result")
+    at = cov.get("at")
+    if not ticket or result in (None, "sim-not-ready", "stalled"):
+        continue
+    if ticket in seen_tickets:
+        continue
+    if at and at in seen_at:
+        continue
+    row = {
+        "at": at or __import__("datetime").datetime.now().astimezone().isoformat(timespec="seconds"),
+        "stamp": "reconciled",
+        "exit": 0 if result == "closed" else -1,
+        "seconds": None,
+        "ticket": ticket,
+        "result": result,
+        "tail": f"reconciled from coverage surface={cov.get('surface')}",
+        "reconciled": True,
+    }
+    health_path.parent.mkdir(parents=True, exist_ok=True)
+    with health_path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(row) + "\n")
+    seen_tickets.add(ticket)
+    appended += 1
+if appended:
+    print(f"reconciled {appended} health row(s) from coverage", flush=True)
+PY
+}
+
+# Write one health.jsonl row. Prefer coverage lines at/after start_epoch so a
+# prior closed ticket is not attributed to a failed/empty run.
+# Args: stamp code seconds run_log [start_epoch]
+write_health_row() {
+  local stamp="$1" code="$2" seconds="$3" run_log="$4" start_epoch="${5:-0}"
+  python3 - "$HEALTH_FILE" "$stamp" "$code" "$seconds" "$run_log" \
+    "$COVERAGE_FILE" "$start_epoch" <<'PY' || true
+import json, re, sys
+from datetime import datetime
+from pathlib import Path
+
+path, stamp, code, seconds, log, coverage, start_epoch = sys.argv[1:]
+start_epoch = int(float(start_epoch or "0"))
+NOISE = re.compile(
+    r"(Connection lost, reconnecting|Retry attempt |\^D|backfilled from)",
+    re.I,
+)
+
+tail = ""
+try:
+    lines = []
+    for ln in Path(log).read_text(encoding="utf-8", errors="replace").splitlines():
+        s = ln.strip()
+        if not s or "\x04" in s or NOISE.search(s):
+            continue
+        if s.startswith("# "):
+            continue
+        if "] logger " in s:
+            continue
+        lines.append(s)
+    tail = " ".join(lines[-5:])[:400]
+except OSError:
+    pass
+
+ticket = None
+result = None
+try:
+    cov_rows = []
+    for ln in Path(coverage).read_text(encoding="utf-8").splitlines():
+        if not ln.strip():
+            continue
+        try:
+            cov_rows.append(json.loads(ln))
+        except json.JSONDecodeError:
+            pass
+    chosen = None
+    from datetime import datetime as dt
+    for cov in reversed(cov_rows):
+        at = cov.get("at")
+        if not at:
+            continue
+        try:
+            ts = dt.fromisoformat(at).timestamp()
+        except ValueError:
+            continue
+        # Never attribute a prior run's coverage to this stamp.
+        if start_epoch > 0 and ts + 5 < start_epoch:
+            continue
+        chosen = cov
+        break
+    if chosen:
+        ticket = chosen.get("ticket")
+        result = chosen.get("result")
+except (OSError, json.JSONDecodeError, TypeError, ValueError):
+    pass
+
+if not tail and result:
+    tail = f"coverage:{result}" + (f" ticket:{ticket}" if ticket else "")
+
+with open(path, "a", encoding="utf-8") as handle:
+    handle.write(json.dumps({
+        "at": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "stamp": stamp,
+        "exit": int(code),
+        "seconds": int(seconds),
+        "ticket": ticket,
+        "result": result,
+        "tail": tail,
+    }) + "\n")
+PY
+}
+
+# Record agent/node PIDs under root_pid into a stamp file (watchdog).
+# Args: root_pid pid_file
+record_agent_pids() {
+  local root_pid="$1" pid_file="$2"
+  python3 - "$root_pid" "$pid_file" <<'PY' || true
+import os, subprocess, sys
+from pathlib import Path
+
+root, path = sys.argv[1], Path(sys.argv[2])
+if not root.isdigit():
+    raise SystemExit(0)
+try:
+    os.kill(int(root), 0)
+except OSError:
+    raise SystemExit(0)
+try:
+    out = subprocess.check_output(
+        ["ps", "-ax", "-o", "pid=,ppid=,command="], text=True
+    )
+except (OSError, subprocess.CalledProcessError):
+    raise SystemExit(0)
+children: dict[str, list[str]] = {}
+cmds: dict[str, str] = {}
+for line in out.splitlines():
+    parts = line.strip().split(None, 2)
+    if len(parts) < 3:
+        continue
+    pid_s, ppid_s, cmd = parts
+    children.setdefault(ppid_s, []).append(pid_s)
+    cmds[pid_s] = cmd
+stack = [root]
+seen: set[str] = set()
+found: set[str] = set()
+while stack:
+    cur = stack.pop()
+    if cur in seen:
+        continue
+    seen.add(cur)
+    for child in children.get(cur, []):
+        stack.append(child)
+        low = cmds.get(child, "").lower()
+        if "ui_design_agent_loop" in low:
+            continue
+        if "agent" in low or low.rstrip().endswith("node") or "/node " in f" {low} ":
+            found.add(child)
+prior: set[str] = set()
+if path.is_file():
+    prior = {ln.strip() for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip().isdigit()}
+merged = sorted(prior | found, key=int)
+path.parent.mkdir(parents=True, exist_ok=True)
+path.write_text("\n".join(merged) + ("\n" if merged else ""), encoding="utf-8")
+PY
+}
+
+# After script(1) exits, the node agent may still be alive (TTY disconnect
+# reparents children). Wait only on PIDs recorded for this stamp.
+# Args: pid_file deadline_epoch
+wait_lingering_agent() {
+  local pid_file="$1" deadline="$2"
+  python3 - "$pid_file" "$deadline" <<'PY' || true
+import os, sys, time
+from pathlib import Path
+
+path, deadline = Path(sys.argv[1]), int(sys.argv[2])
+if not path.is_file():
+    raise SystemExit(0)
+
+def alive(pid: str) -> bool:
+    try:
+        os.kill(int(pid), 0)
+        return True
+    except (OSError, ValueError):
+        return False
+
+tracked = {ln.strip() for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip().isdigit()}
+if not tracked:
+    raise SystemExit(0)
+
+while time.time() < deadline:
+    live = {p for p in tracked if alive(p)}
+    if not live:
+        break
+    time.sleep(5)
+PY
+}
+
 # Refresh (or hot-restart) origin/main and wait for a Dart VM. Caller must
 # hold SIM_LOCK_RUN_ID. Returns 0 when ready.
 # Set UI_AGENT_SKIP_SIM_PREFLIGHT=1 in unit tests to skip the real device.
@@ -368,21 +757,7 @@ with path_p.open("a", encoding="utf-8") as handle:
         "learnings": "unchanged",
     }) + "\n")
 PY
-  python3 - "$HEALTH_FILE" "$stamp" "12" "$seconds" "$run_log" <<'PY'
-import json, sys
-path, stamp, code, seconds, log = sys.argv[1:]
-tail = ""
-try:
-    lines = open(log, encoding="utf-8", errors="replace").read().splitlines()
-    tail = " ".join(lines[-5:])[:400]
-except OSError:
-    pass
-with open(path, "a", encoding="utf-8") as handle:
-    handle.write(json.dumps({
-        "at": __import__("datetime").datetime.now().astimezone().isoformat(timespec="seconds"),
-        "stamp": stamp, "exit": int(code), "seconds": int(seconds), "tail": tail,
-    }) + "\n")
-PY
+  write_health_row "$stamp" "12" "$seconds" "$run_log" 0
 }
 
 # One run. Returns 0 after an agent run, 10 when the mini was busy, 11 when
@@ -401,9 +776,11 @@ one_run() {
   fi
 
   local stamp run_log pid watchdog code start line text run_id sha
+  local agent_pids_file
   local args=()
   stamp="$(date '+%Y%m%d-%H%M%S')"
   run_log="$LOG_DIR/run-$stamp.log"
+  agent_pids_file="$LOG_DIR/run-$stamp.agent-pids"
   start="$(date +%s)"
   sha="$(git -C "$(primary)" rev-parse HEAD 2>/dev/null || echo unknown)"
 
@@ -431,6 +808,8 @@ one_run() {
   text="$(prompt)"
 
   log "run $stamp starting agent (log $run_log; lock $run_id)"
+  # Heal gaps from prior runs that died before write_health_row.
+  reconcile_health_from_coverage
   # script(1) gives the CLI a terminal and flushes the log, so a run can be
   # tailed while it works and a crash still leaves output on disk.
   if command -v script >/dev/null 2>&1; then
@@ -449,6 +828,10 @@ one_run() {
   fi
   pid=$!
   echo "$pid" >"$PID_FILE"
+  : >"$agent_pids_file"
+  # Early snapshot so a fast TTY disconnect still has PIDs to wait on.
+  sleep 2
+  record_agent_pids "$pid" "$agent_pids_file"
   (
     deadline=$(( $(date +%s) + MAX_RUN ))
     while kill -0 "$pid" 2>/dev/null; do
@@ -468,6 +851,9 @@ one_run() {
         kill -KILL "$pid" 2>/dev/null || true
         break
       fi
+      record_agent_pids "$pid" "$agent_pids_file"
+      # Mid-run: keep run log useful for status while CLI writes only to /tmp.
+      backfill_run_log_from_session "$run_log" "$start" "$pid"
       sleep 30
     done
   ) &
@@ -475,9 +861,12 @@ one_run() {
 
   code=0
   wait "$pid" || code=$?
+  # Final PID snapshot before script tree disappears, then wait for node.
+  record_agent_pids "$pid" "$agent_pids_file"
+  wait_lingering_agent "$agent_pids_file" "$(( start + MAX_RUN ))"
   kill "$watchdog" 2>/dev/null || true
   wait "$watchdog" 2>/dev/null || true
-  rm -f "$PID_FILE"
+  rm -f "$PID_FILE" "$agent_pids_file"
   sim_lock release --run-id "$run_id" >/dev/null 2>&1 || true
   unset SIM_LOCK_RUN_ID SIM_LOCK_PID
 
@@ -522,47 +911,10 @@ if cleaned != text:
     path.write_text(cleaned, encoding="utf-8")
 PY
   fi
+  backfill_run_log_from_session "$run_log" "$start" "$pid"
   tail -n 15 "$run_log" 2>/dev/null | sed 's/^/    /' || true
-  python3 - "$HEALTH_FILE" "$stamp" "$code" "$(( $(date +%s) - start ))" "$run_log" "$COVERAGE_FILE" <<'PY'
-import json, sys
-from datetime import datetime
-from pathlib import Path
-
-path, stamp, code, seconds, log, coverage = sys.argv[1:]
-tail = ""
-try:
-    lines = [
-        ln for ln in Path(log).read_text(encoding="utf-8", errors="replace").splitlines()
-        if ln.strip() and set(ln.strip()) != {"^", "D"} and "\x04" not in ln
-    ]
-    # Drop lines that are only caret-D artifacts already stripped.
-    lines = [ln for ln in lines if ln.replace("^D", "").strip()]
-    tail = " ".join(lines[-5:])[:400]
-except OSError:
-    pass
-ticket = None
-result = None
-try:
-    cov_lines = [ln for ln in Path(coverage).read_text(encoding="utf-8").splitlines() if ln.strip()]
-    if cov_lines:
-        cov = json.loads(cov_lines[-1])
-        ticket = cov.get("ticket")
-        result = cov.get("result")
-except (OSError, json.JSONDecodeError):
-    pass
-if not tail and result:
-    tail = f"coverage:{result}" + (f" ticket:{ticket}" if ticket else "")
-with open(path, "a", encoding="utf-8") as handle:
-    handle.write(json.dumps({
-        "at": datetime.now().astimezone().isoformat(timespec="seconds"),
-        "stamp": stamp,
-        "exit": int(code),
-        "seconds": int(seconds),
-        "ticket": ticket,
-        "result": result,
-        "tail": tail,
-    }) + "\n")
-PY
+  write_health_row "$stamp" "$code" "$(( $(date +%s) - start ))" "$run_log" "$start"
+  reconcile_health_from_coverage
   find "$LOG_DIR" -name 'run-*.log' -mtime +14 -delete 2>/dev/null || true
   return "$code"
 }
@@ -761,6 +1113,7 @@ EOF
     echo "killed $SESSION"
     ;;
   status)
+    reconcile_health_from_coverage
     if loop_is_alive; then
       echo "loop: running (tmux -L $TMUX_SOCKET, session $SESSION, pid $(cat "$LOOP_PID_FILE"))"
     elif lt has-session -t "=$SESSION" 2>/dev/null; then
@@ -774,6 +1127,14 @@ EOF
     sim_lock status || true
     latest="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
     if [[ -n "$latest" ]]; then
+      # Best-effort mid-run backfill so status is not stuck on an empty TTY log.
+      if [[ ! -s "$latest" ]] || ! grep -q 'backfilled from\|LPT-\|SIM_NOT_READY' "$latest" 2>/dev/null; then
+        stamp_guess="$(basename "$latest" .log)"
+        stamp_guess="${stamp_guess#run-}"
+        start_guess="$(date -j -f '%Y%m%d-%H%M%S' "$stamp_guess" '+%s' 2>/dev/null || echo 0)"
+        root_guess="$(cat "$PID_FILE" 2>/dev/null || true)"
+        backfill_run_log_from_session "$latest" "$start_guess" "$root_guess"
+      fi
       echo "latest log: $latest"
       if [[ -s "$latest" ]]; then
         tail -n 10 "$latest"

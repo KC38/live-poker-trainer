@@ -237,4 +237,36 @@ bash "$LOOP" uninstall >/dev/null
 grep -q 'login item: not installed' <<<"$(bash "$LOOP" status)" \
   || fail "status should clear the login item"
 
+# Session-log backfill + health reconcile (TTY log often empty).
+export UI_AGENT_LOOP_SOURCE_ONLY=1
+# shellcheck disable=SC1090
+source "$LOOP"
+empty_run="$LOG_DIR/run-backfill-test.log"
+: >"$empty_run"
+sess_dir="/tmp/cursor-agent-logs-uiagenttest-$$"
+mkdir -p "$sess_dir"
+trap 'rm -rf "$tmp" "$sess_dir"' EXIT
+sess="$sess_dir/session-2026-10-10T12-00-00-000Z-$$-1.log"
+printf '%s\n' '--- Cursor Agent Debug Session ---' 'User prompt' \
+  'LPT-99 closed Lock released' >"$sess"
+start_epoch=$(( $(date +%s) - 5 ))
+backfill_run_log_from_session "$empty_run" "$start_epoch" ""
+grep -q 'backfilled from' "$empty_run" || fail "backfill should annotate source: $(cat "$empty_run")"
+grep -q 'LPT-99 closed' "$empty_run" || fail "backfill should copy session prose: $(cat "$empty_run")"
+
+: >"$HEALTH_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-10T15:29:26+05:30","sha":"x","surface":"s","result":"closed","ticket":"LPT-50","leads":[],"learnings":"updated"}' \
+  '{"at":"2026-10-10T15:51:14+05:30","sha":"y","surface":"s","result":"closed","ticket":"LPT-51","leads":[],"learnings":"updated"}' \
+  >"$COVERAGE_FILE"
+reconcile_health_from_coverage
+grep -q '"ticket": "LPT-50"' "$HEALTH_FILE" || fail "reconcile should add LPT-50: $(cat "$HEALTH_FILE")"
+grep -q '"ticket": "LPT-51"' "$HEALTH_FILE" || fail "reconcile should add LPT-51: $(cat "$HEALTH_FILE")"
+# Idempotent.
+reconcile_health_from_coverage
+[[ "$(grep -c LPT-50 "$HEALTH_FILE")" == 1 ]] || fail "reconcile must not duplicate LPT-50"
+
+write_health_row "20261010-160000" "0" "12" "$empty_run" "$start_epoch"
+grep -q '"stamp": "20261010-160000"' "$HEALTH_FILE" || fail "write_health_row should append"
+
 echo "ui-design-agent loop ok"
