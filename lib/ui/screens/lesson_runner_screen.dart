@@ -969,8 +969,20 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   }
 
   String _frameSpeech(LessonActivityController controller) {
-    // Graded dock owns the beat — never keep Hint copy in the bubble (LPT-60).
-    if (controller.hintVisible && controller.lastResult == null) {
+    // Graded beat: bubble carries the short why line beside celebrate/think
+    // (LPT-64). Never keep the idle ask — or Hint (LPT-60) — under the dock.
+    final result = controller.lastResult;
+    if (result != null) {
+      final feedback = result.feedback.trim();
+      if (feedback.isNotEmpty) {
+        return alignLessonActionCopy(
+          controller.activity,
+          feedback,
+          generation: controller.bindGeneration,
+        );
+      }
+    }
+    if (controller.hintVisible && result == null) {
       final authored = controller.activity.hintMedia.isNotEmpty
           ? controller.activity.hintMedia.first.text
           : null;
