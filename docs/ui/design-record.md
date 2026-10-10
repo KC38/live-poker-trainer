@@ -427,10 +427,13 @@ SoftPulse rules:
 
 Undo, redo, and hint sit in one fixed row under the stage while the step is
 unanswered. Undo reverts the local answer. Redo restores what undo cleared.
-Hint shows **one** hint for the current press in the speech bubble until it
-is tapped again — not stacked with the idle coach line. A step with no hint
-leaves the button visible and disabled, including mid multi-turn sequence
-when the current press has nothing left to hint.
+Best five card picks (including an invalid five that only shows "try a
+stronger five") stay in the activity draft so Undo clears them like any
+other local answer (LPT-62). Hint shows **one** hint for the current press
+in the speech bubble until it is tapped again — not stacked with the idle
+coach line. A step with no hint leaves the button visible and disabled,
+including mid multi-turn sequence when the current press has nothing left
+to hint.
 
 Bootstrap, locked-start, and start-error frames hide `LessonToolRow`; the tool row appears only after an activity is bound.
 
@@ -574,6 +577,13 @@ Hint clears on grade (LPT-60) in `LessonActivityController.finishSubmit` /
 while `lastResult` is set. `LessonRunnerScreen._frameSpeech` also ignores
 Hint when a result is present. The next graded coach beat copies that clear
 instead of leaving Hint copy under the dock.
+
+Best five picker picks (LPT-62) mirror into `ActivityDraft.orderedIds` whenever
+the tap set is not yet a mapped choice (`LessonBestFivePickerTable` /
+`BestFiveCardPicker` via `setOrderedIds`). `selectChoice` clears ordered ids
+and `setOrderedIds` clears `choiceId`, so Undo/Redo restore one draft shape.
+The next multi-tap felt picker that soft-rejects before grade copies that
+draft mirror instead of keeping picks only in widget state.
 
 The per-lesson state is the Lesson ledger at the end of this file.
 

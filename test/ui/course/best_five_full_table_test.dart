@@ -362,6 +362,74 @@ void main() {
     expect(autoSubmits, 1);
   });
 
+  testWidgets('invalid five enables Undo and clears local picks', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-02-02-guided-seven',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Tap five',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap your best five.',
+      choices: const [
+        CourseChoice(id: 'best-pair-k', label: 'Aces with king'),
+        CourseChoice(id: 'weak-kickers', label: 'Aces with nine'),
+        CourseChoice(id: 'ignore-ace', label: 'King high'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      _frame(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final spot = resolveBestFiveSpot(activity)!;
+    // Five cards that are not a catalog choice set.
+    for (final code in ['Ah', '9h', '7c', '3s', '2d']) {
+      final heroIdx = spot.heroCodes.indexOf(code);
+      if (heroIdx >= 0) {
+        await tester.tap(
+          find.byKey(ValueKey<String>('lesson-hero-card-$heroIdx')),
+        );
+      } else {
+        final boardIdx = spot.boardCodes.indexOf(code);
+        await tester.tap(
+          find.byKey(ValueKey<String>('lesson-board-card-$boardIdx')),
+        );
+      }
+      await tester.pump();
+    }
+
+    expect(find.text('Five tapped — try a stronger five.'), findsOneWidget);
+    expect(controller.draft.choiceId, isNull);
+    expect(controller.draft.orderedIds, hasLength(5));
+    expect(controller.canUndo, isTrue);
+
+    controller.undoDraft();
+    await tester.pump();
+
+    expect(controller.draft.orderedIds, isEmpty);
+    expect(controller.canUndo, isFalse);
+    expect(find.text('0/5 selected'), findsOneWidget);
+    expect(find.text('Five tapped — try a stronger five.'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('missed picker keeps cyan picks without multi SoftPulse', (
     tester,
   ) async {

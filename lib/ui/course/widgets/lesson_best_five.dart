@@ -567,7 +567,8 @@ class _LessonBestFiveExplainTableState
 /// untapped card in the recommended [BestFiveSpot.choiceSets] list — never
 /// every remaining recommended card, never the You name box (LPT-57). After
 /// grade, SoftPulse stays off; leftovers dim and cyan keeps the picks
-/// (LPT-61).
+/// (LPT-61). Partial or invalid fives mirror into [ActivityDraft.orderedIds]
+/// so Undo clears them (LPT-62).
 class LessonBestFivePickerTable extends StatefulWidget {
   /// Creates the picker stage.
   const LessonBestFivePickerTable({
@@ -599,7 +600,7 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
   void initState() {
     super.initState();
     widget.controller.addListener(_syncFromController);
-    _hydrateFromChoice(widget.controller.draft.choiceId);
+    _hydrateFromDraft();
   }
 
   @override
@@ -608,11 +609,11 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.removeListener(_syncFromController);
       widget.controller.addListener(_syncFromController);
-      _hydrateFromChoice(widget.controller.draft.choiceId);
+      _hydrateFromDraft();
       return;
     }
     if (oldWidget.activity.id != widget.activity.id) {
-      _hydrateFromChoice(widget.controller.draft.choiceId);
+      _hydrateFromDraft();
     }
   }
 
@@ -624,38 +625,53 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
 
   void _syncFromController() {
     final choiceId = widget.controller.draft.choiceId;
-    if (choiceId == null) {
-      final mapped = mapBestFiveSelectionToChoiceId(
-        selected: _selected,
-        spot: widget.spot,
-        choices: widget.activity.choices,
-      );
-      if (mapped != null && _selected.isNotEmpty && !widget.locked) {
+    final ordered = widget.controller.draft.orderedIds;
+    if (choiceId == null && ordered.isEmpty) {
+      // Undo / clear draft — drop local cyan picks (LPT-62).
+      if (_selected.isNotEmpty && !widget.locked) {
         setState(_selected.clear);
       }
       return;
     }
-    final fromChoice = _codesForChoice(choiceId);
-    if (fromChoice.isNotEmpty && !_setEquals(fromChoice, _selected)) {
-      final mapped = mapBestFiveSelectionToChoiceId(
-        selected: _selected,
-        spot: widget.spot,
-        choices: widget.activity.choices,
-      );
-      if (mapped != choiceId) {
-        setState(() {
-          _selected
-            ..clear()
-            ..addAll(fromChoice);
-        });
+    if (choiceId != null) {
+      final fromChoice = _codesForChoice(choiceId);
+      if (fromChoice.isNotEmpty && !_setEquals(fromChoice, _selected)) {
+        final mapped = mapBestFiveSelectionToChoiceId(
+          selected: _selected,
+          spot: widget.spot,
+          choices: widget.activity.choices,
+        );
+        if (mapped != choiceId) {
+          setState(() {
+            _selected
+              ..clear()
+              ..addAll(fromChoice);
+          });
+        }
       }
+      return;
+    }
+    final fromOrdered = ordered.toSet();
+    if (!_setEquals(fromOrdered, _selected)) {
+      setState(() {
+        _selected
+          ..clear()
+          ..addAll(fromOrdered);
+      });
     }
   }
 
-  void _hydrateFromChoice(String? choiceId) {
+  void _hydrateFromDraft() {
+    final choiceId = widget.controller.draft.choiceId;
+    if (choiceId != null) {
+      _selected
+        ..clear()
+        ..addAll(_codesForChoice(choiceId));
+      return;
+    }
     _selected
       ..clear()
-      ..addAll(_codesForChoice(choiceId));
+      ..addAll(widget.controller.draft.orderedIds);
   }
 
   Set<String> _codesForChoice(String? choiceId) {
@@ -706,8 +722,9 @@ class _LessonBestFivePickerTableState extends State<LessonBestFivePickerTable> {
     );
     if (mapped != null) {
       widget.controller.selectChoice(mapped, autoSubmit: true);
-    } else if (widget.controller.draft.choiceId != null) {
-      widget.controller.undoDraft();
+    } else {
+      // Keep Undo live for partial / invalid fives (LPT-62).
+      widget.controller.setOrderedIds(_selected.toList());
     }
   }
 
@@ -1232,7 +1249,7 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
   void initState() {
     super.initState();
     widget.controller.addListener(_syncFromController);
-    _hydrateFromChoice(widget.controller.draft.choiceId);
+    _hydrateFromDraft();
   }
 
   @override
@@ -1241,11 +1258,11 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.removeListener(_syncFromController);
       widget.controller.addListener(_syncFromController);
-      _hydrateFromChoice(widget.controller.draft.choiceId);
+      _hydrateFromDraft();
       return;
     }
     if (oldWidget.activity.id != widget.activity.id) {
-      _hydrateFromChoice(widget.controller.draft.choiceId);
+      _hydrateFromDraft();
     }
   }
 
@@ -1257,38 +1274,52 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
 
   void _syncFromController() {
     final choiceId = widget.controller.draft.choiceId;
-    if (choiceId == null) {
-      final mapped = mapBestFiveSelectionToChoiceId(
-        selected: _selected,
-        spot: widget.spot,
-        choices: widget.activity.choices,
-      );
-      if (mapped != null && _selected.isNotEmpty && !widget.locked) {
+    final ordered = widget.controller.draft.orderedIds;
+    if (choiceId == null && ordered.isEmpty) {
+      if (_selected.isNotEmpty && !widget.locked) {
         setState(_selected.clear);
       }
       return;
     }
-    final fromChoice = _codesForChoice(choiceId);
-    if (fromChoice.isNotEmpty && !_setEquals(fromChoice, _selected)) {
-      final mapped = mapBestFiveSelectionToChoiceId(
-        selected: _selected,
-        spot: widget.spot,
-        choices: widget.activity.choices,
-      );
-      if (mapped != choiceId) {
-        setState(() {
-          _selected
-            ..clear()
-            ..addAll(fromChoice);
-        });
+    if (choiceId != null) {
+      final fromChoice = _codesForChoice(choiceId);
+      if (fromChoice.isNotEmpty && !_setEquals(fromChoice, _selected)) {
+        final mapped = mapBestFiveSelectionToChoiceId(
+          selected: _selected,
+          spot: widget.spot,
+          choices: widget.activity.choices,
+        );
+        if (mapped != choiceId) {
+          setState(() {
+            _selected
+              ..clear()
+              ..addAll(fromChoice);
+          });
+        }
       }
+      return;
+    }
+    final fromOrdered = ordered.toSet();
+    if (!_setEquals(fromOrdered, _selected)) {
+      setState(() {
+        _selected
+          ..clear()
+          ..addAll(fromOrdered);
+      });
     }
   }
 
-  void _hydrateFromChoice(String? choiceId) {
+  void _hydrateFromDraft() {
+    final choiceId = widget.controller.draft.choiceId;
+    if (choiceId != null) {
+      _selected
+        ..clear()
+        ..addAll(_codesForChoice(choiceId));
+      return;
+    }
     _selected
       ..clear()
-      ..addAll(_codesForChoice(choiceId));
+      ..addAll(widget.controller.draft.orderedIds);
   }
 
   Set<String> _codesForChoice(String? choiceId) {
@@ -1314,8 +1345,8 @@ class _BestFiveCardPickerState extends State<BestFiveCardPicker> {
     );
     if (mapped != null) {
       widget.controller.selectChoice(mapped, autoSubmit: true);
-    } else if (widget.controller.draft.choiceId != null) {
-      widget.controller.undoDraft();
+    } else {
+      widget.controller.setOrderedIds(_selected.toList());
     }
   }
 
