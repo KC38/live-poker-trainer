@@ -237,11 +237,35 @@ class PokerActionSizingActivity extends StatelessWidget {
                         villainStackChips: spot.villainStackChips,
                       )
                       : null;
+              final felt =
+                  table ??
+                  LessonActionTable(
+                    spot: spot,
+                    coachOwnsCue: coachOwnsCue,
+                    potLabelOverride:
+                        applyFeltMoney
+                            ? lessonActionPotChipLabel(feltMoney)
+                            : null,
+                    facingBetAmount:
+                        applyFeltMoney &&
+                                spot.facingBet &&
+                                feltMoney.streetBets.length > 1
+                            ? feltMoney.streetBets[1]
+                            : null,
+                    heroBetAmount:
+                        applyFeltMoney && feltMoney.streetBets.isNotEmpty
+                            ? feltMoney.streetBets[0]
+                            : null,
+                  );
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: fill ? MainAxisSize.max : MainAxisSize.min,
                 children: [
-                  if (showCoach) RexCoachLine(text: coach),
+                  // Keep a coach slot even under Oops! — dropping Rex shifts
+                  // the Column and remounts the felt (redeal animation).
+                  showCoach
+                      ? RexCoachLine(text: coach)
+                      : const SizedBox.shrink(),
                   if (showPrompt) ...[
                     const SizedBox(height: 12),
                     Text(
@@ -257,49 +281,14 @@ class PokerActionSizingActivity extends StatelessWidget {
                   const SizedBox(height: 10),
                   if (fill)
                     Expanded(
-                      child:
-                          table ??
-                          LessonActionTable(
-                            spot: spot,
-                            coachOwnsCue: coachOwnsCue,
-                            potLabelOverride:
-                                applyFeltMoney
-                                    ? lessonActionPotChipLabel(feltMoney)
-                                    : null,
-                            facingBetAmount:
-                                applyFeltMoney &&
-                                        spot.facingBet &&
-                                        feltMoney.streetBets.length > 1
-                                    ? feltMoney.streetBets[1]
-                                    : null,
-                            heroBetAmount:
-                                applyFeltMoney &&
-                                        feltMoney.streetBets.isNotEmpty
-                                    ? feltMoney.streetBets[0]
-                                    : null,
-                          ),
+                      key: const ValueKey<String>('lesson-action-felt'),
+                      child: felt,
                     )
                   else
-                    table ??
-                        LessonActionTable(
-                          spot: spot,
-                          coachOwnsCue: coachOwnsCue,
-                          potLabelOverride:
-                              applyFeltMoney
-                                  ? lessonActionPotChipLabel(feltMoney)
-                                  : null,
-                          facingBetAmount:
-                              applyFeltMoney &&
-                                      spot.facingBet &&
-                                      feltMoney.streetBets.length > 1
-                                  ? feltMoney.streetBets[1]
-                                  : null,
-                          heroBetAmount:
-                              applyFeltMoney &&
-                                      feltMoney.streetBets.isNotEmpty
-                                  ? feltMoney.streetBets[0]
-                                  : null,
-                        ),
+                    KeyedSubtree(
+                      key: const ValueKey<String>('lesson-action-felt'),
+                      child: felt,
+                    ),
                   const SizedBox(height: 10),
                   dock,
                   status,
@@ -312,7 +301,9 @@ class PokerActionSizingActivity extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (showCoach) RexCoachLine(text: coach),
+            showCoach
+                ? RexCoachLine(text: coach)
+                : const SizedBox.shrink(),
             if (showPrompt) ...[
               const SizedBox(height: 12),
               Text(

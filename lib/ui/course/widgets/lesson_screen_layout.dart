@@ -1523,22 +1523,30 @@ class LessonScreenLayout extends StatelessWidget {
                   // Always wrap — swapping a bare [stage] for MediaQuery when
                   // Nice! shrinks the stage remounts stateful felts (peek
                   // face-up, blinds step, suit taps) and resets local state.
+                  // Same for out-of-hearts: toggling a Stack/AbsorbPointer
+                  // parent around the stage redeals hole cards on a wrong
+                  // answer that spends the last heart.
                   final stageChild = MediaQuery(
                     data: mq.copyWith(
                       size: Size(mq.size.width, mediaHeight),
                     ),
                     child: stage,
                   );
-                  if (!outOfHearts) return stageChild;
                   return Stack(
                     fit: StackFit.expand,
                     children: [
-                      AbsorbPointer(child: stageChild),
-                      GestureDetector(
-                        key: const ValueKey<String>('lesson-empty-hearts-block'),
-                        behavior: HitTestBehavior.opaque,
-                        onTap: onBlockedPlay,
+                      AbsorbPointer(
+                        absorbing: outOfHearts,
+                        child: stageChild,
                       ),
+                      if (outOfHearts)
+                        GestureDetector(
+                          key: const ValueKey<String>(
+                            'lesson-empty-hearts-block',
+                          ),
+                          behavior: HitTestBehavior.opaque,
+                          onTap: onBlockedPlay,
+                        ),
                     ],
                   );
                 },
