@@ -342,4 +342,21 @@ heal_stale_run_health "20261010-170515"
 [[ "$(grep -c '"stamp": "20261010-155514"' "$HEALTH_FILE")" == 1 ]] \
   || fail "heal must not duplicate stamps"
 
+# Repair telemetry tails left by older write_health_row builds.
+printf '%s\n' \
+  '{"at":"2026-10-10T18:35:16+05:30","stamp":"20261010-181016","exit":0,"seconds":1500,"ticket":"LPT-56","result":"closed","tail":"--- Cursor Agent Debug Session --- User does not belong to a team"}' \
+  >"$HEALTH_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-10T18:35:16+05:30","sha":"x","surface":"lesson-runner:best-five-kickers","result":"closed","ticket":"LPT-56","leads":[],"learnings":"updated"}' \
+  >"$COVERAGE_FILE"
+repair_health_tails
+grep -q 'coverage:closed ticket:LPT-56 surface:lesson-runner:best-five-kickers' "$HEALTH_FILE" \
+  || fail "repair should rewrite telemetry tail: $(cat "$HEALTH_FILE")"
+grep -q 'User does not belong' "$HEALTH_FILE" \
+  && fail "repaired health must drop telemetry: $(cat "$HEALTH_FILE")"
+# Idempotent.
+repair_health_tails
+[[ "$(grep -c tail_repaired "$HEALTH_FILE")" == 1 ]] \
+  || fail "repair must not rewrite clean tails repeatedly"
+
 echo "ui-design-agent loop ok"

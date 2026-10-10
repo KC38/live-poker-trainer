@@ -561,6 +561,101 @@ if appended:
 PY
 }
 
+# Rows written before coverage-preferring tails still store CLI telemetry.
+# Rewrite those tails in place from ticket/result/surface (coverage or row).
+repair_health_tails() {
+  python3 - "$HEALTH_FILE" "$COVERAGE_FILE" <<'PY' || true
+import json, re, sys
+from pathlib import Path
+
+health_path, coverage_path = Path(sys.argv[1]), Path(sys.argv[2])
+if not health_path.is_file():
+    raise SystemExit(0)
+
+TELEMETRY = re.compile(
+    r"("
+    r"Cursor Agent Debug Session|User does not belong to a team|"
+    r"Loaded global commands|telemetry-only|filtered out for missing|"
+    r"analytics\.track|structured-log"
+    r")",
+    re.I,
+)
+SIGNAL = re.compile(
+    r"\b(LPT-\d+|SIM_NOT_READY|closed|stalled|needs-human|coverage:)\b",
+    re.I,
+)
+
+def load_jsonl(path: Path) -> list[dict]:
+    rows = []
+    try:
+        for ln in path.read_text(encoding="utf-8").splitlines():
+            if not ln.strip():
+                continue
+            try:
+                rows.append(json.loads(ln))
+            except json.JSONDecodeError:
+                pass
+    except OSError:
+        return []
+    return rows
+
+coverage_by_ticket: dict[str, dict] = {}
+for cov in load_jsonl(coverage_path):
+    ticket = cov.get("ticket")
+    if ticket:
+        coverage_by_ticket[ticket] = cov
+
+rows = load_jsonl(health_path)
+if not rows:
+    raise SystemExit(0)
+
+changed = 0
+out = []
+for row in rows:
+    tail = row.get("tail") or ""
+    ticket = row.get("ticket")
+    result = row.get("result")
+    # Only rewrite pure CLI telemetry; leave coverage:/healed/reconciled tails.
+    needs = (
+        bool(tail)
+        and bool(ticket or result)
+        and TELEMETRY.search(tail) is not None
+        and SIGNAL.search(tail) is None
+        and not tail.startswith("coverage:")
+        and not tail.startswith("healed from")
+        and not tail.startswith("reconciled from")
+    )
+    if needs:
+        cov = coverage_by_ticket.get(ticket or "") or {}
+        surface = cov.get("surface")
+        parts = []
+        if result:
+            parts.append(f"coverage:{result}")
+        if ticket:
+            parts.append(f"ticket:{ticket}")
+        if surface:
+            parts.append(f"surface:{surface}")
+        if parts:
+            new_tail = " ".join(parts)
+            if new_tail != tail:
+                row = dict(row)
+                row["tail"] = new_tail
+                row["tail_repaired"] = True
+                changed += 1
+    out.append(row)
+
+if not changed:
+    raise SystemExit(0)
+
+tmp = health_path.with_suffix(health_path.suffix + ".tmp")
+with tmp.open("w", encoding="utf-8") as handle:
+    for row in out:
+        handle.write(json.dumps(row) + "\n")
+tmp.replace(health_path)
+print(f"repaired {changed} health tail(s)", flush=True)
+PY
+}
+
 # When the loop is killed before _one_run_finalize, run-*.health is missing
 # and tickets only show up as stamp=reconciled. Rebuild proper stamp rows
 # from run logs + coverage, and skip the in-flight run.
@@ -1033,6 +1128,7 @@ one_run() {
   # Heal gaps from prior runs that died before write_health_row.
   heal_stale_run_health "$stamp"
   reconcile_health_from_coverage
+  repair_health_tails
   # script(1) gives the CLI a terminal and flushes the log, so a run can be
   # tailed while it works and a crash still leaves output on disk.
   if command -v script >/dev/null 2>&1; then
@@ -1359,6 +1455,7 @@ EOF
     fi
     heal_stale_run_health "$active_stamp"
     reconcile_health_from_coverage
+    repair_health_tails
     if loop_is_alive; then
       echo "loop: running (tmux -L $TMUX_SOCKET, session $SESSION, pid $(cat "$LOOP_PID_FILE"))"
     elif lt has-session -t "=$SESSION" 2>/dev/null; then
