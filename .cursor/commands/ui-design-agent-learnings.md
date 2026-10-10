@@ -91,8 +91,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   body must be a real on-disk path (or listed in `--attach`); `jira.py`
   refuses comments/creates that would post `!file|thumbnail!` for a file
   that did not upload — that is what shows as Preview unavailable in Jira
-  (LPT-59 closeout orphan `LPT-59-validated.png`). After closeout,
-  `jira.py verify-embeds LPT-NN` must pass before Done.
+  (LPT-59 closeout orphan `LPT-59-validated.png`). If `jira.py comment`
+  exits non-zero, do **not** `transition … Done` — fix the attach/body and
+  re-comment first (LPT-62: first closeout failed, Done raced ahead). After
+  a successful closeout comment, `jira.py verify-embeds LPT-NN` must pass
+  before Done.
 - Prefer, when fixing a stadium `FilledButton` → Theme elevated CTA on one
   surface (Settings, Profile, Save progress), grepping sibling guest
   **Create an account** call sites in the same walk so the twin does not
@@ -118,6 +121,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   device", clearing `~/Library/Developer/Xcode/DerivedData/Runner-*` (and
   `/tmp/flutter_tools.*`) then retrying once — do not `needs-human` on the
   first disk-full build (LPT-61).
+- Prefer clearing Hint / SoftPulse before staging an invalid Best five for
+  Undo proof so the status line hits "Five tapped — try a stronger five"
+  and cyan matches the five taps (gold SoftPulse on the board can confuse
+  the count).
 
 ## Ops (simulator, CLI, Jira)
 
@@ -200,3 +207,6 @@ trimming. Durable rules belong in the sections above, not only here.
 - 2026-10-10: LPT-61 picker post-grade SoftPulsed all five correct cards;
   suite had locked `findsNWidgets(5)` on glow — dim leftovers + cyan only;
   worktree build hit disk-full until DerivedData cleared.
+- 2026-10-10: LPT-62 Best five invalid five left Undo disabled (picks only
+  in widget `_selected`); closeout comment failed once — do not Done until
+  comment+embeds succeed.
