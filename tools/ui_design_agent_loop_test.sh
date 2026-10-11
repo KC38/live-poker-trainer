@@ -466,6 +466,17 @@ if prepare_launcher; then
 fi
 SDK_DIR="$_sdk_backup"
 LAUNCHER=cli
+# Soft-stop exit path must schedule ensure (not wait for StartInterval).
+type schedule_ensure_after_soft_stop >/dev/null \
+  || fail "schedule_ensure_after_soft_stop should be defined"
+_soft_sched="$tmp/soft-stop-ensure"
+rm -f "$_soft_sched"
+schedule_ensure_after_soft_stop() { : >"$_soft_sched"; }
+# Mirror run_loop's soft-stop tail.
+soft_stopped=1
+if [[ "$soft_stopped" -eq 1 ]]; then schedule_ensure_after_soft_stop; fi
+[[ -f "$_soft_sched" ]] || fail "soft-stop should schedule ensure"
+unset -f schedule_ensure_after_soft_stop
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
 [[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \

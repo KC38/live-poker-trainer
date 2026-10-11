@@ -59,8 +59,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `KC38/live-poker-trainer`), or let LaunchAgent `ensure`/`start`
   kill-session a live run-loop when the pid file is stale — recover the
   pid from the tmux session instead. Soft-stop clears STOP on the next
-  `start`/`ensure` and runs `prepare_launcher` (SDK `npm ci`) before
-  claiming the mini so install never holds the sim lock.
+  `start`/`ensure`, runs `prepare_launcher` (SDK `npm ci`) before claiming
+  the mini, and schedules `ensure` after the soft-stopped loop exits so
+  the next ticket does not wait on LaunchAgent `StartInterval` (use
+  `kill`/`uninstall` to leave the loop down).
 
 ## Prefer
 

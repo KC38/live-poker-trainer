@@ -1612,16 +1612,31 @@ PY
   return "$code"
 }
 
+# Soft-stop means "restart with fresh code soon", not "stay down". Kick
+# ensure after a short delay so we do not sit idle until LaunchAgent's
+# StartInterval (300s). Override in unit tests. Use `kill`/`uninstall` to
+# leave the loop down.
+schedule_ensure_after_soft_stop() {
+  (
+    sleep 2
+    bash "$SCRIPT" ensure
+  ) >/dev/null 2>&1 &
+}
+
 run_loop() {
   echo $$ >"$LOOP_PID_FILE"
   # shellcheck disable=SC2064
   trap 'rm -f "$LOOP_PID_FILE"' EXIT
   rm -f "$STOP_FILE"
   log "ui-design-agent loop started (stop: $SCRIPT stop)"
+  local soft_stopped=0
   while [[ ! -f "$STOP_FILE" ]]; do
     local code=0
     one_run || code=$?
-    [[ -f "$STOP_FILE" ]] && break
+    if [[ -f "$STOP_FILE" ]]; then
+      soft_stopped=1
+      break
+    fi
     case "$code" in
       10) sleep "$BUSY_SLEEP" ;;
       11) sleep 600 ;;
@@ -1651,6 +1666,10 @@ run_loop() {
   rm -f "$STOP_FILE" "$LOOP_PID_FILE"
   trap - EXIT
   log "ui-design-agent loop stopped"
+  if [[ "$soft_stopped" -eq 1 ]]; then
+    log "soft-stop complete; scheduling ensure (skip LaunchAgent StartInterval wait)"
+    schedule_ensure_after_soft_stop
+  fi
 }
 
 # A real CLI run that calls tools/jira.py: proves the API key, shell access, and Jira.
