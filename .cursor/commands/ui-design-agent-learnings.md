@@ -136,7 +136,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   until the hero cards are face-up (not empty outlines) before `tap You`.
   On locked-start, capture the Open-previous / Retry gate and read Rex's
   bubble against the gold Open-previous CTA — Retry-only copy with that
-  button is a bug (LPT-51).
+  button is a bug (LPT-51). For board SoftPulse tickets, read the coach
+  line first — unguided-mix is "Tap the community cards."; hole SoftPulse
+  on guided/scaffolded is a different cue (LPT-68 closeout).
+- Prefer adopting the holder `run_id` from
+  `~/.live-poker-trainer/simulator-lock.json` when `$SIM_LOCK_RUN_ID` fails
+  `guard` but the lock owner is this loop's `ui-design-agent` — a stale
+  exported id from an older shell must not block an already-claimed mini.
 - Prefer clearing Hint / SoftPulse before staging an invalid Best five for
   Undo proof so the status hits "Five tapped — try a stronger five" and
   cyan matches the five taps.
@@ -198,10 +204,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-10: LPT-55–57 / LPT-61 best-five SoftPulse (one target; no post-grade
-  multi-glow; quiet ids until Hint; sibling picker after explain). LPT-59
-  guided free miss; LPT-60 clear Hint on grade. LPT-62 draft-mirror Undo;
-  closeout comment must succeed before Done. LPT-63 Hint off while
-  `showTargetCue` (incl. single-press scaffolded SoftPulse). LPT-64 graded
-  bubble uses `result.feedback` (not idle ask); post-merge refresh can leave
-  Launching+dead pid — start `flutter run` in tmux yourself.
+- 2026-10-12: LPT-68 board-group SoftPulse hugs dealt flop only (`CommunityCardsView`);
+  closeout must wait for "Tap the community cards." Adopt loop lock
+  `run_id` when shell `$SIM_LOCK_RUN_ID` is stale. Post-merge refresh can
+  still leave Launching+dead pid — start `flutter run` in tmux yourself.
+- 2026-10-10: LPT-55–57 / LPT-61 best-five SoftPulse; LPT-59 guided free miss;
+  LPT-60/63/64 Hint+grade coach; LPT-62 draft-mirror Undo.
