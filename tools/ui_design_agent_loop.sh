@@ -46,8 +46,10 @@ export DEVELOPER_DIR="${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Develope
 
 SCRIPT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 TOOLS="$(dirname "$SCRIPT")"
-SESSION="ui-design-agent"
-TMUX_SOCKET="ui-agent"
+# Tests set UI_AGENT_TMUX_SOCKET / UI_AGENT_TMUX_SESSION so status/ensure
+# cannot see the machine's live ui-agent session.
+SESSION="${UI_AGENT_TMUX_SESSION:-ui-design-agent}"
+TMUX_SOCKET="${UI_AGENT_TMUX_SOCKET:-ui-agent}"
 LAUNCH_LABEL="com.livepokertrainer.ui-design-agent"
 PLIST="$HOME/Library/LaunchAgents/$LAUNCH_LABEL.plist"
 STATE_DIR="$HOME/.live-poker-trainer"
@@ -88,14 +90,47 @@ lt() {
   tmux -L "$TMUX_SOCKET" "$@"
 }
 
+# Pid of bash `run-loop` under our tmux session (zsh wrapper → run-loop).
+# Empty when the session is missing or only an idle shell remains.
+tmux_run_loop_pid() {
+  local pane_pid="" child=""
+  lt has-session -t "=$SESSION" 2>/dev/null || return 1
+  pane_pid="$(lt list-panes -t "=$SESSION" -F '#{pane_pid}' 2>/dev/null | head -1 || true)"
+  [[ -n "$pane_pid" ]] || return 1
+  child="$(pgrep -P "$pane_pid" -f 'ui_design_agent_loop\.sh run-loop' 2>/dev/null | head -1 || true)"
+  if [[ -z "$child" ]]; then
+    # Pane may already be the run-loop bash (no zsh wrapper).
+    if ps -p "$pane_pid" -o command= 2>/dev/null | grep -q 'ui_design_agent_loop\.sh run-loop'; then
+      child="$pane_pid"
+    fi
+  fi
+  [[ -n "$child" ]] || return 1
+  echo "$child"
+}
+
 # True only while run-loop is alive. A leftover tmux session after stop
 # (idle shell) must not count — LaunchAgent ensure used to no-op forever.
+# Also recover when the pid file was cleared by one_run's EXIT trap (or a
+# crash) while the session is still running — otherwise ensure/start would
+# kill-session a healthy mid-ticket agent every 5 minutes.
 loop_is_alive() {
-  local pid=""
-  [[ -f "$LOOP_PID_FILE" ]] || return 1
-  pid="$(cat "$LOOP_PID_FILE" 2>/dev/null || true)"
-  [[ -n "$pid" ]] || return 1
-  kill -0 "$pid" 2>/dev/null
+  local pid="" recovered=""
+  if [[ -f "$LOOP_PID_FILE" ]]; then
+    pid="$(cat "$LOOP_PID_FILE" 2>/dev/null || true)"
+    if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
+      return 0
+    fi
+  fi
+  recovered="$(tmux_run_loop_pid 2>/dev/null || true)"
+  if [[ -n "$recovered" ]] && kill -0 "$recovered" 2>/dev/null; then
+    # Only adopt PIDs that are actually this script's run-loop.
+    if ps -p "$recovered" -o command= 2>/dev/null \
+      | grep -qF "ui_design_agent_loop.sh run-loop"; then
+      echo "$recovered" >"$LOOP_PID_FILE"
+      return 0
+    fi
+  fi
+  return 1
 }
 
 prompt() {
@@ -1484,9 +1519,15 @@ PY
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min"
   tail -n 15 "$run_log" 2>/dev/null | sed 's/^/    /' || true
   _one_run_finalize
-  trap - EXIT
+  # Restore run_loop's pid-file cleanup. `trap - EXIT` used to clear it, so
+  # after the first one_run LaunchAgent ensure saw a stale/missing pid file
+  # and `start` killed the live tmux session (mid-ticket) every 5 minutes.
+  trap 'rm -f "$LOOP_PID_FILE"' EXIT
   find "$LOG_DIR" -name 'run-*.log' -mtime +14 -delete 2>/dev/null || true
   find "$LOG_DIR" -name 'run-*.health' -mtime +14 -delete 2>/dev/null || true
+  # Reclaim disk from abandoned flutter tool scratch dirs (86%+ Data volume).
+  find /tmp -maxdepth 1 -type d -name 'flutter_tools.*' -mtime +1 \
+    -exec rm -rf {} + 2>/dev/null || true
   return "$code"
 }
 
