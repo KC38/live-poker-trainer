@@ -148,10 +148,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   button is a bug (LPT-51). For board SoftPulse tickets, read the coach
   line first — unguided-mix is "Tap the community cards."; hole SoftPulse
   on guided/scaffolded is a different cue (LPT-68 closeout).
-- Prefer adopting the holder `run_id` from
-  `~/.live-poker-trainer/simulator-lock.json` when `$SIM_LOCK_RUN_ID` fails
-  `guard` but the lock owner is this loop's `ui-design-agent` — a stale
-  exported id from an older shell must not block an already-claimed mini.
+- Prefer adopting `sim_lock_run_id` from
+  `~/.live-poker-trainer/ui-agent-handoff.json` (then
+  `simulator-lock.json`) when `$SIM_LOCK_RUN_ID` is unset in a
+  cloud/machine shell — export it once and continue; do not spend the first
+  minutes reconciling the lock or re-running `refresh-simulator` when the
+  handoff says `dart_vm_ready` / the flutter log already has a VM URI.
   Clear Hint / SoftPulse before staging an invalid Best five for Undo proof
   so cyan matches the five taps.
 - Never loop dozens of `tap Continue` to brute-force prerequisite lessons —
@@ -175,10 +177,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
   `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.
 - "Connection lost, reconnecting…" is normal; let the CLI retry once.
-- Loop preflight is programmatic (claim → refresh → Dart VM) before
-  `agent -p`. `dart_vm_ready` needs macOS-safe `[A-Za-z0-9_=-]`. One
-  refresh + one retry then `SIM_NOT_READY` (often `pub get` Terminated: 15);
-  do not rewrite refresh mid-run. Consecutive misses back off ~10 min.
+- Loop preflight is programmatic (claim → refresh → Dart VM → handoff
+  JSON) before the machine SDK agent. At step 2 trust that VM; refresh
+  only when switching builds. `dart_vm_ready` needs macOS-safe
+  `[A-Za-z0-9_=-]`. One refresh + one retry then `SIM_NOT_READY` (often
+  `pub get` Terminated: 15); do not rewrite refresh mid-run. Consecutive
+  misses back off ~10 min.
 - `refresh-simulator` must claim with `--pid $$`. Export `SIM_LOCK_RUN_ID`
   inside tmux `send-keys`. Worktree validate uses
   `/tmp/flutter-$SLUG.log`; origin/main uses
