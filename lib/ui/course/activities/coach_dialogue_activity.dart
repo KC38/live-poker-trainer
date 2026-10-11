@@ -696,7 +696,8 @@ class CoachDialogueActivity extends StatelessWidget {
             dealerIndex: lessonBlindsButtonIndex,
             sbIndex: lessonBlindsSmallBlindIndex,
             bbIndex: lessonBlindsBigBlindIndex,
-            cueSeatIndex: locked ? null : lessonBlindsButtonIndex,
+            // SoftPulse the D puck the coach names — not the seat box (LPT-69).
+            cuePuckLabel: locked ? null : 'D',
             selectedSeatIndexes: locked ? {lessonBlindsButtonIndex} : const {},
             positionLabels: true,
             enabled: !locked,

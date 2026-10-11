@@ -386,6 +386,7 @@ class LessonTableStage extends StatelessWidget {
     this.bbIndex,
     this.activeSeatIndex,
     this.cueSeatIndex,
+    this.cuePuckLabel,
     this.onHeroTap,
     this.onVillainTap,
     this.onBoardTap,
@@ -457,8 +458,13 @@ class LessonTableStage extends StatelessWidget {
   /// Seat that glows. Null glows nobody when [dealerIndex] is set.
   final int? activeSeatIndex;
 
-  /// Seat the step asks the learner to tap: a gold ring and a bouncing arrow.
+  /// Seat the step asks the learner to tap: a gold ring on the seat pod.
+  ///
+  /// Prefer [cuePuckLabel] when the coach names the D / SB / BB chip.
   final int? cueSeatIndex;
+
+  /// SoftPulse the D / SB / BB puck (`FeltTableView.cuePuckLabel`).
+  final String? cuePuckLabel;
 
   /// Learner tapped their own cards.
   final VoidCallback? onHeroTap;
@@ -663,6 +669,7 @@ class LessonTableStage extends StatelessWidget {
             dimmedHeroIndexes: dimmedHeroIndexes,
             seatOrderBadges: seatOrderBadges,
             cueSeatIndex: cueSeatIndex,
+            cuePuckLabel: cuePuckLabel,
             onDealReady: (ready) =>
                 reportLessonFeltDealReady(context, ready: ready),
             onBoardTap: !enabled || onBoardTap == null || onBoardCardTap != null
@@ -790,6 +797,9 @@ class _LessonBlindsClockwiseTableState
     lessonBlindsBigBlindIndex,
   ];
 
+  /// SoftPulse the named puck — not the seat name box (LPT-69).
+  static const _puckLabels = <String>['D', 'SB', 'BB'];
+
   int _step = 0;
 
   void _tap(int index) {
@@ -826,7 +836,7 @@ class _LessonBlindsClockwiseTableState
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
       selectedSeatIndexes: {for (var i = 0; i < _step; i++) _order[i]},
-      cueSeatIndex: showCue ? _order[_step] : null,
+      cuePuckLabel: showCue ? _puckLabels[_step] : null,
       enabled: teaching,
       features: features,
       onSeatIndexTap: _tap,

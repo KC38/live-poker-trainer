@@ -221,8 +221,10 @@ The table is built for a phone held upright:
   the seat toward the pot, starting just past the seat claim. Distances scale
   with the seat so markers stay tight and consistent for 2–9 players. When the
   table accepts seat taps, D / SB / BB pucks forward taps to that seat
-  (`FeltTableView`, LPT-67). Other action badges (FOLD, CALL, RAISE, …) hang
-  from the bottom of the box.
+  (`FeltTableView`, LPT-67). SoftPulse for button/blinds presses rings the D /
+  SB / BB puck on that lane (`cuePuckLabel`), not the seat name box — puck taps
+  and gold cue share the same target (LPT-69). Other action badges (FOLD,
+  CALL, RAISE, …) hang from the bottom of the box.
 - **Center.** The pot pill (`FLOP · POT $10`) above the board, five large
   board cards, and `Blinds $1/$2 NLH` under them (`CommunityCardsView`). The
   board leaves clear side margins on the felt (`TableLayout.boardSideInset`)
@@ -308,7 +310,10 @@ teaches another level passes `smallBlind` and `bigBlind` to
 
 `PokerTableScreen` is the Live Training table and the calibration warm-up.
 `LessonTableStage` draws the same `FeltTableView` for lessons, and
-`PokerTableBands` draws it for Your start.
+`PokerTableBands` draws it for Your start. Button / blinds SoftPulse uses
+`FeltTableView.cuePuckLabel` so gold rings the D / SB / BB puck (LPT-69);
+the next puck-named SoftPulse copies that instead of `cueSeatIndex` on the
+seat pod.
 
 ## Lesson screen layout
 
@@ -434,6 +439,9 @@ SoftPulse rules:
   outside the glow when `boardSlots` is on, and are omitted when
   `boardSlots` is off — a three-card flop cue never rings phantom street
   width (LPT-68).
+- Button / blinds SoftPulse (`cuePuckLabel` on `FeltTableView` via
+  `LessonBlindsClockwiseTable`) rings the D, then SB, then BB puck — not the
+  seat name box — so the gold cue matches the chip the coach names (LPT-69).
 
 ### 4. Tools
 
@@ -476,7 +484,8 @@ two cards step has no empty board outlines. Framed `act-01-01-01-*`
 (LPT-66). Board-group SoftPulse on `CommunityCardsView` wraps only the
 dealt flop/turn/river cards so empty street width stays outside the gold
 ring (LPT-68). `LessonBlindsClockwiseTable`
-turns `boardSlots` off the same way for Button and blinds explain. Blinds
+turns `boardSlots` off the same way for Button and blinds explain, and
+SoftPulses the D → SB → BB puck via `cuePuckLabel` (LPT-69). Blinds
 frame steps in `select_identify_activity.dart`
 (`isLessonBlindsFrameActivity`) pass `boardSlots: false` on
 `LessonTableStage` the same way (LPT-52). Pending frames pass

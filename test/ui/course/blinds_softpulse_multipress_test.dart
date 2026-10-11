@@ -1,4 +1,4 @@
-/// SoftPulse continuity on Button and blinds explain (LPT-49).
+/// SoftPulse continuity on Button and blinds explain (LPT-49 / LPT-69).
 library;
 
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets(
-    'blinds SoftPulse advances to SB after button when Hint cannot reopen',
+    'blinds SoftPulse rings D then SB pucks, not seat name boxes',
     (tester) async {
       tester.view.physicalSize = const Size(375, 812);
       tester.view.devicePixelRatio = 1;
@@ -66,7 +66,15 @@ void main() {
         );
       }
 
-      expect(seatGlow(lessonBlindsButtonIndex).highlighted, isTrue);
+      LessonTargetGlow puckGlow(String label) {
+        return tester.widget<LessonTargetGlow>(
+          find.byKey(ValueKey<String>('puck-cue-$label')),
+        );
+      }
+
+      expect(puckGlow('D').highlighted, isTrue);
+      expect(puckGlow('SB').highlighted, isFalse);
+      expect(seatGlow(lessonBlindsButtonIndex).highlighted, isFalse);
       expect(seatGlow(lessonBlindsSmallBlindIndex).highlighted, isFalse);
 
       await tester.tap(
@@ -77,8 +85,10 @@ void main() {
 
       expect(controller.showTargetCue, isTrue);
       expect(controller.canRequestHint, isFalse);
+      expect(puckGlow('D').highlighted, isFalse);
+      expect(puckGlow('SB').highlighted, isTrue);
       expect(seatGlow(lessonBlindsButtonIndex).highlighted, isFalse);
-      expect(seatGlow(lessonBlindsSmallBlindIndex).highlighted, isTrue);
+      expect(seatGlow(lessonBlindsSmallBlindIndex).highlighted, isFalse);
       expect(tester.takeException(), isNull);
     },
   );
