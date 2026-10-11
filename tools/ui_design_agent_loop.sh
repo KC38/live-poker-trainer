@@ -120,6 +120,7 @@ Path(path).write_text(
             "device": device or None,
             "dart_vm_ready": True,
             "do_not_refresh_at_start": True,
+            "skip_sim_verify_at_start": True,
             "start_from_step": 2,
         },
         indent=2,
@@ -189,7 +190,9 @@ prompt() {
     handoff_id="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("sim_lock_run_id") or "")' "$HANDOFF_FILE" 2>/dev/null || true)"
   fi
   [[ -n "$run_id" ]] || run_id="$handoff_id"
-  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md in this workspace and follow them exactly. Loop preflight already claimed the iPhone 13 mini and the Dart VM is up on origin/main — start from step 2 (contract). Do not claim again. Do not run refresh-simulator.sh at start. Cloud/machine shells often lack SIM_LOCK_RUN_ID in the environment: export SIM_LOCK_RUN_ID='${run_id}' (also in ${HANDOFF_FILE}) on every shell, then continue. Flutter log: ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Update learnings in step 10 when this run hits a durable mistake. When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
+  # Lead with READY facts: agents otherwise spend the first ~60s re-grepping
+  # the Dart VM / reconciling the lock even though preflight already did that.
+  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. For worktree flutter run / hot-restart waits use tools/wait_flutter_vm.sh (never bare AwaitShell/sleep). Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Update learnings in step 10 when this run hits a durable mistake. When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
 }
 
 load_secrets() {
