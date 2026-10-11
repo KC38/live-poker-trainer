@@ -13,12 +13,13 @@
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
 # Each run claims the mini, brings up Flutter programmatically (refresh +
-# wait for a Dart VM), and only then starts a fresh local Cursor SDK agent
-# (tools/ui-agent-sdk/run.mjs) so the chat appears under Agents → SDK while
-# still using this Mac's iPhone 13 mini. Set UI_AGENT_LAUNCHER=cli to fall
-# back to `agent -p`. If the mini is busy or never reaches a Dart VM, the
-# loop skips without starting the agent (no agentic burn on SIM_NOT_READY).
-# It frees the lock if a run dies while holding it.
+# wait for a Dart VM), and only then starts a Cursor SDK cloud agent aimed
+# at this Mac mini My Machines worker (tools/ui-agent-sdk/run.mjs) so the
+# chat shows up in the Agents sidebar as bc-* on the remote machine. Set
+# UI_AGENT_SDK_RUNTIME=local for on-process SDK, or UI_AGENT_LAUNCHER=cli
+# for `agent -p`. If the mini is busy or never reaches a Dart VM, the loop
+# skips without starting the agent. It frees the lock if a run dies while
+# holding it.
 #
 # Runs authenticate without the macOS keychain or a browser, so they keep
 # working over SSH and after a reboot. Keys live in
@@ -29,6 +30,9 @@
 #
 # Environment:
 #   UI_AGENT_LAUNCHER           sdk (default) or cli
+#   UI_AGENT_SDK_RUNTIME        machine (default, Agents sidebar bc-*) or local
+#   UI_AGENT_MACHINE_NAME       My Machines worker label (default:
+#                               cursor-agent-worker-4c8b3dc416 on this mini)
 #   UI_AGENT_MODEL              model id (default: auto / SDK `default`).
 #                               Non-auto values are passed through to the
 #                               SDK or `agent --model`.
@@ -76,8 +80,11 @@ USAGE_LIMIT_SLEEP="${UI_AGENT_USAGE_LIMIT_SLEEP:-}"
 VM_WAIT_SECONDS="${UI_AGENT_VM_WAIT_SECONDS:-180}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
 STALL_SECONDS="${UI_AGENT_STALL_SECONDS:-600}"
-# sdk = local @cursor/sdk (Agents UI source); cli = legacy `agent -p`.
+# sdk = @cursor/sdk; cli = legacy `agent -p`.
 LAUNCHER="${UI_AGENT_LAUNCHER:-sdk}"
+# machine = cloud SDK on My Machines worker (bc-* in Agents sidebar).
+SDK_RUNTIME="${UI_AGENT_SDK_RUNTIME:-machine}"
+MACHINE_NAME="${UI_AGENT_MACHINE_NAME:-cursor-agent-worker-4c8b3dc416}"
 COVERAGE_FILE="$STATE_DIR/ui-agent-coverage.jsonl"
 FLUTTER_RUN_LOG="/tmp/flutter-live-poker-trainer.run.log"
 REFRESH_SCRIPT="$(cd "$TOOLS/.." && pwd)/.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh"
@@ -1409,7 +1416,7 @@ one_run() {
   text="$(prompt)"
 
   _model="$(resolved_agent_model)"
-  log "run $stamp starting agent (launcher=$LAUNCHER model=${_model}; log $run_log; lock $run_id)"
+  log "run $stamp starting agent (launcher=$LAUNCHER runtime=$SDK_RUNTIME model=${_model}; log $run_log; lock $run_id)"
   unset _model
   # Heal gaps from prior runs that died before write_health_row.
   heal_stale_run_health "$stamp"
@@ -1425,9 +1432,12 @@ one_run() {
     (
       cd "$(primary)"
       export SIM_LOCK_RUN_ID SIM_LOCK_PID CURSOR_API_KEY
+      export ATLASSIAN_EMAIL ATLASSIAN_API_TOKEN FIREBASE_TOKEN
       exec node "$SDK_RUN" \
         --cwd "$(primary)" \
         --model "$(sdk_model_id)" \
+        --runtime "$SDK_RUNTIME" \
+        --machine "$MACHINE_NAME" \
         --log "$run_log" \
         --meta "$LOG_DIR/run-$stamp.sdk.json" \
         -- "$text"
@@ -1804,7 +1814,25 @@ EOF
       echo "loop: not running"
     fi
     echo "launcher: $LAUNCHER"
+    echo "sdk-runtime: $SDK_RUNTIME"
+    if [[ "$SDK_RUNTIME" == "machine" ]]; then
+      echo "machine: $MACHINE_NAME"
+    fi
     echo "model: $(resolved_agent_model)"
+    latest_meta="$(ls -t "$LOG_DIR"/run-*.sdk.json 2>/dev/null | head -1 || true)"
+    if [[ -n "$latest_meta" ]]; then
+      python3 - "$latest_meta" <<'PY' 2>/dev/null || true
+import json, sys
+from pathlib import Path
+obj = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+aid = obj.get("agentId") or ""
+url = obj.get("agentUrl") or (f"https://cursor.com/agents/{aid}" if str(aid).startswith("bc-") else "")
+if aid:
+    print(f"last sdk agent: {aid}")
+if url:
+    print(f"last sdk url: {url}")
+PY
+    fi
     if [[ -f "$PLIST" ]]; then echo "login item: installed ($LAUNCH_LABEL)"; else echo "login item: not installed ($SCRIPT install)"; fi
     if [[ -f "$STOP_FILE" ]]; then echo "loop: stop requested"; fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi

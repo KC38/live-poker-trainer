@@ -38,10 +38,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   before mini closeout — client chrome alone cannot prove a grade/hearts
   rule until that job succeeds.
 - Never thrash the unattended loop on Cursor `ActionRequiredError` /
-  Auto usage limit. The loop launches via local `@cursor/sdk` (Agents →
-  SDK) with Auto (`default`), backs off (exit 14) until the day after
-  the stated cycle end, and never floors a past reset midnight to a
-  30-minute retry forever. Use `UI_AGENT_LAUNCHER=cli` or a non-Auto
+  Auto usage limit. The loop launches via `@cursor/sdk` cloud+machine
+  (`cursor-agent-worker-4c8b3dc416` on this Mac mini) so chats appear as
+  `bc-*` in the Agents sidebar, with Auto (`default`). It backs off
+  (exit 14) until the day after the stated cycle end. Use
+  `UI_AGENT_SDK_RUNTIME=local`, `UI_AGENT_LAUNCHER=cli`, or a non-Auto
   `UI_AGENT_MODEL` only when required.
 - Never hardcode a simulator UDID (always
   `DEVICE="$(tools/iphone_13_mini_udid.sh)"`) or launch a subagent / second
