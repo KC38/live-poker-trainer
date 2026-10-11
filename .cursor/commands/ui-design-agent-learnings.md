@@ -68,6 +68,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   the mini, and schedules `ensure` after the soft-stopped loop exits so
   the next ticket does not wait on LaunchAgent `StartInterval` (use
   `kill`/`uninstall` to leave the loop down).
+- Never `gh pr merge` a draft, and never `git push --delete` the ticket
+  branch / remove the worktree until `mergedAt` is set (LPT-71: draft
+  merge failed then branch delete closed #1676 — recover via local commit
+  SHA, `gh pr reopen`, `gh pr ready`, then squash-merge).
 
 ## Prefer
 
@@ -136,7 +140,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   twins do not wait another run (LPT-45/46, LPT-50/52, LPT-55→57).
 - Prefer, when `openlesson` resumes mid-lesson past the beat under test,
   finishing/restarting or validating a sibling activity on the **same**
-  code path for closeout proof instead of filing unreachable.
+  code path for closeout proof instead of filing unreachable. Same-concept
+  quiet ids (`lessonFrameSameConceptQuietIds`, e.g. guided-suits ★) SoftPulse
+  only via Hint — after Oops Continue, Hint must work again
+  (`clearFeedbackForRetry` clears hintUsed; LPT-71).
 - Prefer trusting `refresh-simulator.sh` after hot-restart — it waits for a
   Dart VM URI and cold-starts if stuck on `Launching…`. If it still fails,
   start `flutter run` yourself in tmux with `SIM_LOCK_RUN_ID=…` exported.
@@ -219,9 +226,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-12: LPT-70 embedded Lesson Complete CONTINUE → Home via
-  `continueLearningAsGuest` on result (not during complete). ManagePullRequest
-  + make-change: `skip_branch_prefix_check` keeps `fix/LPT-*`. Fresh Welcome
-  locks Suits via openlesson — repro CONTINUE-routing on Your two cards.
-  LPT-69 SoftPulse on D/SB/BB pucks; LPT-68 board SoftPulse; adopt stale lock
-  `run_id`; Launching + dead pid → start `flutter run` in tmux yourself.
+- 2026-10-12: LPT-71 Hint/SoftPulse after Oops on guided-suits ★; undraft
+  before merge; do not delete remote branch until merged. LPT-70 CONTINUE →
+  Home; ManagePullRequest `skip_branch_prefix_check` for `fix/LPT-*`.
