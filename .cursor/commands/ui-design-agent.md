@@ -454,7 +454,9 @@ branch names.
 ## 7. Validate on the worktree build
 
 Move the mini to the worktree build. Stop the origin/main session, then run
-the worktree in tmux:
+the worktree in tmux. First worktree builds often spend several minutes in
+`pod install` + Xcode — wait with `tools/wait_flutter_vm.sh` (it heartbeats
+the lock). Do not busy-sleep with bare `AwaitShell` / `sleep`.
 
 ```bash
 python3 tools/sim_lock.py guard
@@ -462,6 +464,7 @@ kill "$(cat /tmp/flutter-live-poker-trainer.pid)" 2>/dev/null || true
 SESSION="flutter-iphone-13-mini-$SLUG"
 tmux has-session -t "$SESSION" 2>/dev/null || tmux new-session -d -s "$SESSION"
 tmux send-keys -t "$SESSION" "cd '$WT' && flutter run -d $DEVICE --pid-file /tmp/flutter-$SLUG.pid 2>&1 | tee /tmp/flutter-$SLUG.log; echo EXIT:\$?" Enter
+tools/wait_flutter_vm.sh "/tmp/flutter-$SLUG.log" 600 --purpose "$KEY: wait worktree VM"
 ```
 
 Drive with `python3 tools/agent_tap.py --log /tmp/flutter-$SLUG.log …`.
@@ -473,7 +476,9 @@ lens from step 4 on the touched screens. Screenshot each.
 1. Comment on the ticket: `Changes requested (attempt N)`, what failed, and
    the screenshot.
 2. Fix it in the same worktree, re-run the tests, hot-restart
-   (`kill -USR2 "$(cat /tmp/flutter-$SLUG.pid)"`), and validate again.
+   (`kill -USR2 "$(cat /tmp/flutter-$SLUG.pid)"`), then
+   `tools/wait_flutter_vm.sh "/tmp/flutter-$SLUG.log" 120 --purpose "$KEY: wait hot-restart"`,
+   and validate again.
 
 Stop after three failed attempts. Then comment the remaining failure, add
 `needs-human`, transition the ticket back to To Do, kill the worktree

@@ -182,8 +182,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `errSecDuplicateItem` / `auth.refresh.persistFailed` cannot burn the run.
 - Heartbeat during long worktree `flutter run`, validates, and Cloud
   Functions deploy; the stall watchdog kills a silent agent (tmux
-  `deploy-LPT-*` / `refresh-LPT-*` count as alive). Write coverage before
-  long compiles when the ticket is already Done in Jira.
+  `deploy-LPT-*` / `refresh-LPT-*` count as alive). Prefer
+  `tools/wait_flutter_vm.sh <log> [seconds] --purpose …` after worktree
+  `flutter run` / hot-restart (heartbeats for you) — do not bare-sleep
+  while Xcode builds. Write coverage before long compiles when the ticket
+  is already Done in Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
   `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.
