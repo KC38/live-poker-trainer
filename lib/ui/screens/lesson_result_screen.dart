@@ -18,11 +18,16 @@ class LessonResultScreen extends ConsumerStatefulWidget {
     super.key,
     required this.lessonTitle,
     required this.result,
+    this.dailyGoalMinutes,
     this.standalone = true,
   });
 
   final String lessonTitle;
   final CompleteCourseLessonResult result;
+
+  /// Onboarding daily goal in minutes. Null falls back to the draft, then
+  /// to accepted accuracy when no goal is known (LPT-39).
+  final int? dailyGoalMinutes;
 
   /// When false, CONTINUE pops the embedded runner (Home / openlesson).
   /// When true, CONTINUE pops to the first route (onboarding push).
@@ -103,10 +108,36 @@ class _LessonResultScreenState extends ConsumerState<LessonResultScreen>
     final result = widget.result;
     final accuracyPct =
         (result.acceptedAccuracy * 100).clamp(0, 100).round();
+    final explicitGoal = widget.dailyGoalMinutes;
+    final draftGoal =
+        ref.watch(onboardingControllerProvider).dailyGoalMinutes;
+    final int? dailyGoalMinutes =
+        (explicitGoal != null && explicitGoal > 0)
+            ? explicitGoal
+            : (draftGoal != null && draftGoal > 0)
+                ? draftGoal
+                : null;
     final bounce = CurvedAnimation(
       parent: _bounce,
       curve: Curves.elasticOut,
     );
+    final secondCard = dailyGoalMinutes != null
+        ? _ResultStatCard(
+            header: 'DAILY GOAL',
+            headerColor: AppColors.success,
+            borderColor: AppColors.success.withValues(alpha: 0.55),
+            icon: Icons.schedule_rounded,
+            iconColor: AppColors.success,
+            value: '$dailyGoalMinutes min',
+          )
+        : _ResultStatCard(
+            header: _accuracyLabel,
+            headerColor: AppColors.success,
+            borderColor: AppColors.success.withValues(alpha: 0.55),
+            icon: Icons.gps_fixed_rounded,
+            iconColor: AppColors.success,
+            value: '$accuracyPct%',
+          );
 
     return Scaffold(
       backgroundColor: AppColors.bgDark,
@@ -171,17 +202,7 @@ class _LessonResultScreenState extends ConsumerState<LessonResultScreen>
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
-                      child: _ResultStatCard(
-                        header: _accuracyLabel,
-                        headerColor: AppColors.success,
-                        borderColor:
-                            AppColors.success.withValues(alpha: 0.55),
-                        icon: Icons.gps_fixed_rounded,
-                        iconColor: AppColors.success,
-                        value: '$accuracyPct%',
-                      ),
-                    ),
+                    Expanded(child: secondCard),
                   ],
                 ),
                 const Spacer(flex: 3),
@@ -218,6 +239,23 @@ class _ResultStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final valueRow = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, color: iconColor, size: 26),
+        const SizedBox(width: 8),
+        Text(
+          value,
+          style: GoogleFonts.manrope(
+            color: AppColors.cream,
+            fontSize: 28,
+            fontWeight: FontWeight.w800,
+            height: 1,
+          ),
+        ),
+      ],
+    );
     return Container(
       decoration: BoxDecoration(
         color: AppColors.bgElevated,
@@ -231,37 +269,26 @@ class _ResultStatCard extends StatelessWidget {
           ColoredBox(
             color: headerColor,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                header,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.manrope(
-                  color: AppColors.bgDark,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.8,
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  header,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: GoogleFonts.manrope(
+                    color: AppColors.bgDark,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.8,
+                  ),
                 ),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, color: iconColor, size: 26),
-                const SizedBox(width: 8),
-                Text(
-                  value,
-                  style: GoogleFonts.manrope(
-                    color: AppColors.cream,
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    height: 1,
-                  ),
-                ),
-              ],
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 18),
+            child: FittedBox(fit: BoxFit.scaleDown, child: valueRow),
           ),
         ],
       ),

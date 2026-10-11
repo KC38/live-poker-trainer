@@ -923,6 +923,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           builder: (_) => LessonResultScreen(
             lessonTitle: _lesson?.title ?? 'Lesson',
             result: shown,
+            dailyGoalMinutes:
+                ref.read(onboardingControllerProvider).dailyGoalMinutes,
             standalone: !widget.embeddedInShell,
           ),
         ),
