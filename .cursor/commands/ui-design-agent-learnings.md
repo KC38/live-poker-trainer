@@ -103,7 +103,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `glow-highlight` for that surface — they may have locked the bug (LPT-55).
   Ids in `lessonFrameSameConceptQuietIds` (e.g. guided-seven) stay SoftPulse
   off until Hint by design — judge Hint-reopened SoftPulse, not first-press
-  gold (LPT-57). After SoftPulse lands on explain, grep the sibling picker —
+  gold (LPT-57). Quiet multi-press boards must report
+  `remainingPressCount` from untapped targets even when SoftPulse/
+  `showGuidance` is off after a wave closes — gating remaining on
+  SoftPulse visibility leaves Hint disabled for presses 2+ (LPT-72
+  `LessonSuitBoardTable`). After SoftPulse lands on explain, grep the sibling picker —
   blinds guided frames in `select_identify` still need `cuePuckLabel` (D/SB/BB),
   not only `LessonBlindsClockwiseTable` (LPT-69). Puck SoftPulse needs an
   inflated hit box + `reserveLayout: true` or the glow clips inside a tight
@@ -229,6 +233,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-12: LPT-71 Hint/SoftPulse after Oops on guided-suits ★; undraft
-  before merge; do not delete remote branch until merged. LPT-70 CONTINUE →
+- 2026-10-12: LPT-72 quiet multi-suit Hint reopen — do not tie
+  `remainingPressCount` to SoftPulse/`showGuidance`. LPT-71 Hint after Oops;
+  undraft before merge; do not delete remote until merged. LPT-70 CONTINUE →
   Home; ManagePullRequest `skip_branch_prefix_check` for `fix/LPT-*`.
