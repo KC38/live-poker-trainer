@@ -219,8 +219,10 @@ The table is built for a phone held upright:
 - **Around a seat.** Dealer, SB, and BB pucks, the street bet, and CHECK park
   on a fixed potward felt lane for that seat (`SeatFeltSpots`) — the ray from
   the seat toward the pot, starting just past the seat claim. Distances scale
-  with the seat so markers stay tight and consistent for 2–9 players. Other
-  action badges (FOLD, CALL, RAISE, …) hang from the bottom of the box.
+  with the seat so markers stay tight and consistent for 2–9 players. When the
+  table accepts seat taps, D / SB / BB pucks forward taps to that seat
+  (`FeltTableView`, LPT-67). Other action badges (FOLD, CALL, RAISE, …) hang
+  from the bottom of the box.
 - **Center.** The pot pill (`FLOP · POT $10`) above the board, five large
   board cards, and `Blinds $1/$2 NLH` under them (`CommunityCardsView`). The
   board leaves clear side margins on the felt (`TableLayout.boardSideInset`)

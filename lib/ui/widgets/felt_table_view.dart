@@ -528,10 +528,22 @@ class _FeltTableViewState extends State<FeltTableView> {
       );
 
       for (final puck in slot.pucks) {
+        final puckChild = SeatPuck(label: puck.label, scale: layout.seatScale);
         decoLayer.add(
           Positioned.fromRect(
             rect: puck.rect,
-            child: SeatPuck(label: puck.label, scale: layout.seatScale),
+            child:
+                seatTap == null
+                    ? puckChild
+                    : Semantics(
+                      button: true,
+                      label: _seatPuckSemanticsLabel(puck.label),
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: seatTap,
+                        child: puckChild,
+                      ),
+                    ),
           ),
         );
       }
@@ -791,6 +803,20 @@ class _FeltTableViewState extends State<FeltTableView> {
 
   static double _clamp(double v, double lo, double hi) =>
       Money.clamp(v, lo, math.max(lo, hi));
+}
+
+/// Semantics for position pucks so teach steps can tap D / SB / BB on the lane.
+String _seatPuckSemanticsLabel(String label) {
+  switch (label) {
+    case 'D':
+      return 'dealer button';
+    case 'SB':
+      return 'small blind';
+    case 'BB':
+      return 'big blind';
+    default:
+      return label;
+  }
 }
 
 /// A position puck on a seat's felt lane.

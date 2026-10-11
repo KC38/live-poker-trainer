@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/chip_format.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/game_state.dart';
 import 'package:live_poker_trainer/models/player_model.dart';
@@ -290,5 +291,46 @@ void main() {
         );
       }
     });
+  });
+
+  testWidgets('dealer puck tap forwards to onSeatTap at mini width', (
+    tester,
+  ) async {
+    CardDealPace.debugInstant = true;
+    addTearDown(() => CardDealPace.debugInstant = null);
+
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final game = _ring(seats: 6, dealerIndex: 3);
+    PlayerModel? tapped;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 375,
+            height: 420,
+            child: TableFeaturesScope(
+              features: TableFeatures.full,
+              child: FeltTableView(
+                game: game,
+                chipDisplayMode: ChipDisplayMode.dollars,
+                onSeatTap: (player) => tapped = player,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final puck = find.byKey(const ValueKey('puck-D'));
+    expect(puck, findsOneWidget);
+    await tester.tap(puck);
+    await tester.pump();
+    expect(tapped?.id, 3);
+    expect(tester.takeException(), isNull);
   });
 }
