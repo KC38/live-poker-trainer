@@ -113,7 +113,7 @@ preconditions are in [agent-paths.md](../agent-paths.md).
 | Answer dock | `LessonAnswerDock` in `lesson_screen_layout.dart` | Answer any step |
 | Hint | `lesson_runner_screen.dart` | Tools row → Hint |
 | Heart refill sheet | `lib/ui/course/widgets/heart_refill_sheet.dart` | Tap the hearts in lesson chrome or on Home |
-| Lesson result | `lib/ui/screens/lesson_result_screen.dart` | Finish a lesson |
+| Lesson result | `lib/ui/screens/lesson_result_screen.dart` | Finish a lesson. Lesson Complete CONTINUE never leaves an anonymous guest with course progress on Welcome — embedded completion (`openlesson` / Home) promotes the draft to shell so CONTINUE lands on Home (LPT-70). |
 | First-lesson celebration chain | `DayStreakScreen` → `StreakGoalScreen` → `DailyQuestsCompleteScreen` → `GemsRewardScreen` | After the first guest lesson |
 | Save progress | `SaveProgressScreen` in `onboarding_screens.dart` | After the celebration chain |
 | Home path | `lib/ui/screens/home_screen.dart`, `lib/ui/home/course_path_view.dart` | Home tab |
@@ -721,7 +721,10 @@ Home misses this loop. File one ticket per missing beat.
 uses `RexMascot` with `RexMood.celebrate` on a right answer and
 `RexMood.think` on a miss. `LessonResultScreen`
 (`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with
-`RexMood.celebrate` and a TOTAL XP and daily goal row.
+`RexMood.celebrate` and a TOTAL XP and daily goal row. Embedded CONTINUE
+(`standalone: false`) calls `continueLearningAsGuest` when the anonymous
+draft is still pre-shell so AppRoot remounts Home instead of Welcome
+(LPT-70).
 
 The locked Live Training hub copy is `liveTrainingLockedMessage`
 (`lib/models/live_access.dart`), which names Baseline jump check via
