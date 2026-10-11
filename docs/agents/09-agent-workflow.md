@@ -56,6 +56,24 @@ When the change is a ticket, branch/worktree slug includes the key
 (`fix/LPT-12-…` / `feature/LPT-12-…`), and the PR title starts with
 `LPT-12: …`.
 
+## Cloud Agent
+
+Linux Cloud Agents cannot boot the iPhone 13 mini. The committed
+`.cursor/environment.json` is the setup those agents use:
+
+- `install` (`.cursor/install.sh`) installs the pinned Flutter SDK, runs
+  `.cursor/bootstrap.sh` (gitignored `.env` and `lib/firebase_options.dart`),
+  fetches Dart packages, `npm ci`s Cloud Functions, and points system clang
+  at Debian's libstdc++ headers and library so `flutter test` can build the
+  soloud asset.
+- `start` (`.cursor/start.sh`) serves the Flutter web app on port 8080.
+  Do not move that server back into `terminals` without `start`: Cursor
+  ignores `terminals` when `start` is absent, so the app never comes up.
+
+Placeholder Firebase keys compile and render the UI. Live Auth, Firestore,
+and coaching need `FIREBASE_WEB_API_KEY` and `GEMINI_API_KEY` as environment
+secrets; they are not required to boot.
+
 ## Verification cheat sheet
 
 ```bash
