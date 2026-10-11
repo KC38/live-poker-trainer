@@ -467,6 +467,15 @@ class LessonActivityController extends ChangeNotifier {
     _draft = ActivityDraft(handStepIndex: _draft.handStepIndex);
     // Remount felt deals so the retry shows a fresh isomorphic hand in the
     // same starting-hand / hand-class family (not the missed layout).
+    // Same-concept quiet steps SoftPulse only via Hint — clear Hint-used and
+    // the SoftPulse wave so Oops Continue can Hint-reopen cues (LPT-71).
+    _hintVisible = false;
+    _hintUsedNodeKey = null;
+    _feltDealReady = false;
+    _feltDealTracked = false;
+    _sequentialCueNodeKey = null;
+    _sequentialPressesRemaining = false;
+    _sequentialSoftPulseWaveOpen = true;
     _bindGeneration += 1;
     notifyListeners();
   }
