@@ -44,9 +44,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (exit 14) until the day after the stated cycle end. Use
   `UI_AGENT_SDK_RUNTIME=local`, `UI_AGENT_LAUNCHER=cli`, or a non-Auto
   `UI_AGENT_MODEL` only when required. After `gh pr create`, rename
-  **this** chat via cloud MCP `rename-chat` to `LPT-NN PR-<n>` (step 8;
-  step 10 fallback). Skip when the tool is missing or either id is
-  unknown — never invent a title or rename another chat.
+  **this** chat via cloud MCP `rename-chat` (`cursor-cloud`) to
+  `LPT-NN PR-<n>` (step 8; step 10 fallback). That is the sidebar title
+  only — never rename a make-change branch to `cursor/…` (LPT-69). Keep
+  `fix/LPT-NN-…` / `feature/LPT-NN-…`. Skip when the tool is missing or
+  either id is unknown — never invent a title or rename another chat.
 - Never hardcode a simulator UDID (always
   `DEVICE="$(tools/iphone_13_mini_udid.sh)"`) or launch a subagent / second
   parallel `/ui-design-agent` run.

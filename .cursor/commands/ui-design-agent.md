@@ -414,6 +414,11 @@ BRANCH="fix/$SLUG"   # Bug → fix. Story or Task → feature.
 WT="$PRIMARY/.worktrees/$SLUG"
 ```
 
+Keep that `fix/` or `feature/` prefix for the whole run. Never rename the
+ticket branch to `cursor/…` — that prefix is for Cursor cloud auto-branches,
+not make-change worktrees. Chat rename (`rename-chat`) is unrelated to git
+branch names.
+
 - Move the ticket to In Progress (`jira.py transition --to "In Progress"`)
   and comment the branch name.
 - The ticket is the spec. Ship the smallest change that makes every
@@ -465,16 +470,14 @@ refresh uses your lock and returns the mini to origin/main. Kill the
 **Rename this Agents chat as soon as the PR exists.** When you have both
 the ticket key and the PR number (right after `gh pr create`, or from
 `gh pr view --json number,url`), call the Cursor cloud MCP tool
-`rename-chat` on **this** run with:
-
-```text
-title: LPT-NN PR-<number>
-```
+`rename-chat` (namespace `cursor-cloud`) on **this** run with
+`{ "title": "LPT-NN PR-<number>" }`.
 
 Example: `LPT-67 PR-1660`. Keep it under 200 characters; ticket key and
-`PR-<n>` only (no summary). Skip silently when `rename-chat` is missing
-(CLI / local launcher) or when either the ticket or the PR is unknown.
-Do not rename other chats — only this session.
+`PR-<n>` only (no summary). This renames the **sidebar chat title only** —
+never a git branch. Skip silently when `rename-chat` is missing (CLI /
+local launcher) or when either the ticket or the PR is unknown. Do not
+rename other chats — only this session.
 
 ## 9. Validate on origin/main and close
 
