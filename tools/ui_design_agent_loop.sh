@@ -13,21 +13,25 @@
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
 # Each run claims the mini, brings up Flutter programmatically (refresh +
-# wait for a Dart VM), and only then starts a fresh `agent -p`. If the mini
-# is busy or never reaches a Dart VM, the loop skips without starting the
-# agent (no agentic burn on SIM_NOT_READY). It frees the lock if a run dies
-# while holding it.
+# wait for a Dart VM), and only then starts a fresh local Cursor SDK agent
+# (tools/ui-agent-sdk/run.mjs) so the chat appears under Agents → SDK while
+# still using this Mac's iPhone 13 mini. Set UI_AGENT_LAUNCHER=cli to fall
+# back to `agent -p`. If the mini is busy or never reaches a Dart VM, the
+# loop skips without starting the agent (no agentic burn on SIM_NOT_READY).
+# It frees the lock if a run dies while holding it.
 #
 # Runs authenticate without the macOS keychain or a browser, so they keep
 # working over SSH and after a reboot. Keys live in
-# ~/.live-poker-trainer/secrets.env (mode 600): CURSOR_API_KEY for the CLI,
-# ATLASSIAN_EMAIL + ATLASSIAN_API_TOKEN for tools/jira.py (Jira REST), and
-# optionally FIREBASE_TOKEN (or GOOGLE_APPLICATION_CREDENTIALS path) so
+# ~/.live-poker-trainer/secrets.env (mode 600): CURSOR_API_KEY for the SDK/
+# CLI, ATLASSIAN_EMAIL + ATLASSIAN_API_TOKEN for tools/jira.py (Jira REST),
+# and optionally FIREBASE_TOKEN (or GOOGLE_APPLICATION_CREDENTIALS path) so
 # make-change / deploy-functions.sh can deploy from LaunchAgent runs.
 #
 # Environment:
-#   UI_AGENT_MODEL              model for `agent --model` (default: composer-2.5).
-#                               Set to `auto` to force the CLI Auto router.
+#   UI_AGENT_LAUNCHER           sdk (default) or cli
+#   UI_AGENT_MODEL              model id (default: auto / SDK `default`).
+#                               Non-auto values are passed through to the
+#                               SDK or `agent --model`.
 #   UI_AGENT_GAP                seconds between runs (default 60)
 #   UI_AGENT_BUSY_SLEEP         seconds to sleep when the mini is busy (default 300)
 #   UI_AGENT_SIM_NOT_READY_SLEEP  seconds after programmatic SIM_NOT_READY (default 600)
@@ -72,9 +76,13 @@ USAGE_LIMIT_SLEEP="${UI_AGENT_USAGE_LIMIT_SLEEP:-}"
 VM_WAIT_SECONDS="${UI_AGENT_VM_WAIT_SECONDS:-180}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
 STALL_SECONDS="${UI_AGENT_STALL_SECONDS:-600}"
+# sdk = local @cursor/sdk (Agents UI source); cli = legacy `agent -p`.
+LAUNCHER="${UI_AGENT_LAUNCHER:-sdk}"
 COVERAGE_FILE="$STATE_DIR/ui-agent-coverage.jsonl"
 FLUTTER_RUN_LOG="/tmp/flutter-live-poker-trainer.run.log"
 REFRESH_SCRIPT="$(cd "$TOOLS/.." && pwd)/.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh"
+SDK_DIR="$TOOLS/ui-agent-sdk"
+SDK_RUN="$SDK_DIR/run.mjs"
 
 mkdir -p "$LOG_DIR"
 
@@ -146,12 +154,30 @@ load_secrets() {
   fi
 }
 
-# Resolved model for `agent --model`. Empty / unset → composer-2.5 (included
-# models stay usable when Auto hits monthly API quota). Explicit `auto` keeps
-# the CLI default router (no --model flag).
+# Human-facing model label for logs/status (auto when unset).
 resolved_agent_model() {
-  local model="${UI_AGENT_MODEL:-composer-2.5}"
-  if [[ -z "$model" || "$model" == "auto" ]]; then
+  local model="${UI_AGENT_MODEL:-auto}"
+  if [[ -z "$model" || "$model" == "auto" || "$model" == "default" ]]; then
+    echo "auto"
+    return 0
+  fi
+  echo "$model"
+}
+
+# SDK catalog id. Agents UI Auto is `default` (not `auto`).
+sdk_model_id() {
+  local model="${UI_AGENT_MODEL:-auto}"
+  if [[ -z "$model" || "$model" == "auto" || "$model" == "default" ]]; then
+    echo "default"
+    return 0
+  fi
+  echo "$model"
+}
+
+# CLI `--model` flag value; empty means omit (CLI Auto router).
+cli_model_flag() {
+  local model="${UI_AGENT_MODEL:-auto}"
+  if [[ -z "$model" || "$model" == "auto" || "$model" == "default" ]]; then
     echo ""
     return 0
   fi
@@ -161,11 +187,23 @@ resolved_agent_model() {
 agent_args() {
   local args=(-p --force --trust --sandbox disabled --output-format text --workspace "$(primary)")
   local model
-  model="$(resolved_agent_model)"
+  model="$(cli_model_flag)"
   if [[ -n "$model" ]]; then
     args+=(--model "$model")
   fi
   printf '%s\n' "${args[@]}"
+}
+
+ensure_sdk_deps() {
+  [[ -f "$SDK_DIR/package.json" ]] || {
+    log "missing $SDK_DIR/package.json"
+    return 1
+  }
+  if [[ -d "$SDK_DIR/node_modules/@cursor/sdk" ]]; then
+    return 0
+  fi
+  log "installing @cursor/sdk into $SDK_DIR"
+  (cd "$SDK_DIR" && npm ci --omit=dev) || (cd "$SDK_DIR" && npm install --omit=dev)
 }
 
 sync_primary() {
@@ -1368,31 +1406,50 @@ one_run() {
 
   sim_lock heartbeat --purpose "agent starting" >/dev/null 2>&1 || true
   configure_agent_credentials
-  while IFS= read -r line; do args+=("$line"); done < <(agent_args)
   text="$(prompt)"
 
   _model="$(resolved_agent_model)"
-  log "run $stamp starting agent (model ${_model:-auto}; log $run_log; lock $run_id)"
+  log "run $stamp starting agent (launcher=$LAUNCHER model=${_model}; log $run_log; lock $run_id)"
   unset _model
   # Heal gaps from prior runs that died before write_health_row.
   heal_stale_run_health "$stamp"
   reconcile_health_from_coverage
   repair_health_tails
-  # script(1) gives the CLI a terminal and flushes the log, so a run can be
-  # tailed while it works and a crash still leaves output on disk.
-  if command -v script >/dev/null 2>&1; then
+  if [[ "$LAUNCHER" == "sdk" ]]; then
+    if ! ensure_sdk_deps; then
+      log "SDK deps unavailable; not starting agent"
+      sim_lock release --run-id "$run_id" >/dev/null 2>&1 || true
+      unset SIM_LOCK_RUN_ID SIM_LOCK_PID
+      return 11
+    fi
     (
       cd "$(primary)"
-      export SIM_LOCK_RUN_ID SIM_LOCK_PID
-      exec bash -c 'exec script -q -F "$1" agent "${@:2}"' _ \
-        "$run_log" "${args[@]}" "$text"
-    ) &
+      export SIM_LOCK_RUN_ID SIM_LOCK_PID CURSOR_API_KEY
+      exec node "$SDK_RUN" \
+        --cwd "$(primary)" \
+        --model "$(sdk_model_id)" \
+        --log "$run_log" \
+        --meta "$LOG_DIR/run-$stamp.sdk.json" \
+        -- "$text"
+    ) >>"$run_log" 2>&1 &
   else
-    (
-      cd "$(primary)"
-      export SIM_LOCK_RUN_ID SIM_LOCK_PID
-      exec agent "$@"
-    ) >"$run_log" 2>&1 &
+    while IFS= read -r line; do args+=("$line"); done < <(agent_args)
+    # script(1) gives the CLI a terminal and flushes the log, so a run can be
+    # tailed while it works and a crash still leaves output on disk.
+    if command -v script >/dev/null 2>&1; then
+      (
+        cd "$(primary)"
+        export SIM_LOCK_RUN_ID SIM_LOCK_PID
+        exec bash -c 'exec script -q -F "$1" agent "${@:2}"' _ \
+          "$run_log" "${args[@]}" "$text"
+      ) &
+    else
+      (
+        cd "$(primary)"
+        export SIM_LOCK_RUN_ID SIM_LOCK_PID
+        exec agent "${args[@]}" "$text"
+      ) >"$run_log" 2>&1 &
+    fi
   fi
   pid=$!
   echo "$pid" >"$PID_FILE"
@@ -1746,7 +1803,8 @@ EOF
     else
       echo "loop: not running"
     fi
-    echo "model: $(resolved_agent_model || echo auto)"
+    echo "launcher: $LAUNCHER"
+    echo "model: $(resolved_agent_model)"
     if [[ -f "$PLIST" ]]; then echo "login item: installed ($LAUNCH_LABEL)"; else echo "login item: not installed ($SCRIPT install)"; fi
     if [[ -f "$STOP_FILE" ]]; then echo "loop: stop requested"; fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
