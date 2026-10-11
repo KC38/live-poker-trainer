@@ -303,10 +303,19 @@ final class AgentUiDriver {
         (needleLower.startsWith('card ') ||
             needleLower == 'you' ||
             needleLower == 'them' ||
+            needleLower == 'd' ||
+            needleLower == 'dealer button' ||
+            needleLower == 'sb' ||
+            needleLower == 'bb' ||
+            needleLower == 'small blind' ||
+            needleLower == 'big blind' ||
             chosen.text.startsWith('card ') ||
             chosen.text.startsWith('board ') ||
             chosen.text.startsWith('your hole') ||
-            chosen.text.startsWith('them'));
+            chosen.text.startsWith('them') ||
+            chosen.text == 'dealer button' ||
+            chosen.text == 'small blind' ||
+            chosen.text == 'big blind');
     if (chosen.onPressed != null && !preferPointer) {
       // Run after the current microtask so setState lands in a frame.
       final cb = chosen.onPressed!;
