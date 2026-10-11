@@ -378,7 +378,8 @@ void main() {
       ],
     );
     final controller = LessonActivityController(activity: activity);
-    await tester.binding.setSurfaceSize(const Size(390, 720));
+    controller.notifyFeltDealReady(true);
+    await tester.binding.setSurfaceSize(const Size(375, 812));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       MaterialApp(
@@ -394,6 +395,7 @@ void main() {
                 animation: controller,
                 builder: (context, _) {
                   return SizedBox(
+                    width: 375,
                     height: 560,
                     child: SelectIdentifyActivity(
                       activity: activity,
@@ -409,18 +411,17 @@ void main() {
       ),
     );
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
 
     final bbSeat = find.byKey(
       ValueKey<String>('lesson-seat-$lessonBlindsBigBlindIndex'),
     );
     expect(bbSeat, findsOneWidget);
-    // No SoftPulse / action-glow spoiler before Hint.
-    expect(
-      find.byKey(ValueKey<String>('seat-cue-$lessonBlindsBigBlindIndex')),
-      findsNothing,
-    );
+    // Select-identify scaffolded: SoftPulse off and Hint enabled (LPT-73).
+    expect(controller.showTargetCue, isFalse);
+    expect(controller.canRequestHint, isTrue);
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
-    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+    expect(find.byKey(const ValueKey<String>('puck-BB')), findsNothing);
     expect(
       tester
           .widget<PlayerSeatWidget>(
@@ -435,12 +436,12 @@ void main() {
 
     controller.revealHint();
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
 
-    // Same SoftPulse as hole / board cues: GlowHighlight ring, no arrows.
-    expect(
-      find.byKey(ValueKey<String>('seat-cue-$lessonBlindsBigBlindIndex')),
-      findsOneWidget,
-    );
+    // Hint unlocks SoftPulse; Hint stays off while gold is on (LPT-63).
+    expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
+    // BB puck is not posted yet — SoftPulse falls back to the BB seat ring.
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
     expect(find.byIcon(Icons.arrow_downward_rounded), findsNothing);
     expect(tester.takeException(), isNull);
