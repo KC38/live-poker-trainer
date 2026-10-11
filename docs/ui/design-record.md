@@ -429,6 +429,11 @@ SoftPulse rules:
 - Review lessons hide cues by default.
 - The ring's outset is reserved in layout, so toggling it never moves or
   resizes a tile.
+- Board-group SoftPulse (`highlightBoardGroup` on `CommunityCardsView`)
+  sizes to the dealt community cards only. Empty turn/river columns stay
+  outside the glow when `boardSlots` is on, and are omitted when
+  `boardSlots` is off — a three-card flop cue never rings phantom street
+  width (LPT-68).
 
 ### 4. Tools
 
@@ -468,7 +473,9 @@ is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart
 is the stage. `LessonPeekTable` turns `boardSlots` off so the first Your
 two cards step has no empty board outlines. Framed `act-01-01-01-*`
 `LessonTableStage` copies the same gate for three-card flop teach steps
-(LPT-66). `LessonBlindsClockwiseTable`
+(LPT-66). Board-group SoftPulse on `CommunityCardsView` wraps only the
+dealt flop/turn/river cards so empty street width stays outside the gold
+ring (LPT-68). `LessonBlindsClockwiseTable`
 turns `boardSlots` off the same way for Button and blinds explain. Blinds
 frame steps in `select_identify_activity.dart`
 (`isLessonBlindsFrameActivity`) pass `boardSlots: false` on
