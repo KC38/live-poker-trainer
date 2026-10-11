@@ -208,6 +208,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   inside tmux `send-keys`. Worktree validate uses
   `/tmp/flutter-$SLUG.log`; origin/main uses
   `/tmp/flutter-live-poker-trainer.run.log` (must be a normal file).
+  When primary flutter dies during closeout, run `refresh-simulator.sh`
+  (then `wait_flutter_vm` on that log) — do not hand-roll tmux +
+  `AwaitShell`. A stale VM URI above a newer `Launching…` is not ready;
+  `tools/flutter_log_ready.py` / `wait_flutter_vm.sh` ignore it.
 - Attach pane only shows start/end; live detail is in
   `~/.live-poker-trainer/ui-agent-logs/run-*.log` and the agent transcript.
 

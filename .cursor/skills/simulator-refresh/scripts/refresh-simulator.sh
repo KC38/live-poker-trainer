@@ -53,7 +53,8 @@ discard_ios_machine_dirt() {
 }
 
 # Flutter's redirect dies at once when the log or pid path is a symlink or a
-# directory (a stale link has shown up under /tmp). Leave a regular file.
+# directory (a stale link has shown up under /tmp). Leave a regular empty file
+# so a prior Dart VM URI cannot fake readiness while Xcode is still building.
 prepare_flutter_log() {
   local log="$1" pidfile="$2"
   if [[ -L "$log" || -d "$log" ]]; then
@@ -63,7 +64,7 @@ prepare_flutter_log() {
     rm -rf "$pidfile"
   fi
   mkdir -p "$(dirname "$log")"
-  touch "$log"
+  : >"$log"
 }
 
 # Other agents often hold Flutter's global cache lock (pub get / test). A
@@ -105,13 +106,13 @@ flutter_pub_get_resilient() {
   return "$code"
 }
 
-# Hot-restart can leave the process stuck on "Launching…" with no Dart VM
-# URI (LPT-70 closeout). Callers must not treat USR2 alone as ready.
+# Hot-restart can leave the process stuck on "Launching…" while an older
+# Dart VM URI remains earlier in the log (LPT-70 / LPT-39 closeout). Ignore
+# URIs above the latest Launching line; accept "Restarted application in".
 log_has_dart_vm() {
   local log="${1:-${LOG_FILE:-/tmp/flutter-live-poker-trainer.run.log}}"
   [[ -f "$log" ]] || return 1
-  # macOS/BSD grep: keep '-' last in the character class.
-  grep -aqE 'http://127\.0\.0\.1:[0-9]+/[A-Za-z0-9_=-]+/' "$log" 2>/dev/null
+  python3 "$REPO_ROOT/tools/flutter_log_ready.py" "$log" >/dev/null 2>&1
 }
 
 wait_for_dart_vm_log() {

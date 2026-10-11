@@ -24,4 +24,13 @@ printf 'A Dart VM Service on iPhone 13 mini is available at: http://127.0.0.1:61
 out="$("$WAIT" "$tmp/ready.log" 5)"
 grep -q 'Dart VM ready' <<<"$out" || fail "should report ready: $out"
 
+cat >"$tmp/stale.log" <<'EOF'
+A Dart VM Service on iPhone 13 mini is available at: http://127.0.0.1:61234/abc_Def-9=/
+Launching lib/main.dart on iPhone 13 mini in debug mode...
+Running Xcode build...
+EOF
+if "$WAIT" "$tmp/stale.log" 1 >/dev/null 2>&1; then
+  fail "stale URI above Launching must not count as ready"
+fi
+
 echo "wait_flutter_vm ok"

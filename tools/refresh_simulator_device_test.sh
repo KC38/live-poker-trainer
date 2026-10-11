@@ -97,6 +97,9 @@ grep -q 'keep pbx' "$tmpdir/ios/Runner.xcodeproj/project.pbxproj" \
 logdir="$(mktemp -d "${TMPDIR:-/tmp}/flutter-log.XXXXXX")"
 ln -s /nonexistent "$logdir/run.log"
 mkdir "$logdir/app.pid"
+printf 'stale http://127.0.0.1:11111/old=/\n' >"$logdir/pre-truncate.log"
+prepare_flutter_log "$logdir/pre-truncate.log" "$logdir/pre.pid"
+[[ ! -s "$logdir/pre-truncate.log" ]] || fail "prepare_flutter_log must truncate prior VM URI"
 prepare_flutter_log "$logdir/run.log" "$logdir/app.pid"
 [[ -f "$logdir/run.log" && ! -L "$logdir/run.log" ]] || fail "stale log symlink not replaced"
 [[ ! -e "$logdir/app.pid" ]] || fail "pid directory not removed"
@@ -106,6 +109,12 @@ log_has_dart_vm "$logdir/run.log" && fail "Launching-only log must not count as 
 printf 'A Dart VM Service on iPhone 13 mini is available at: http://127.0.0.1:61234/abc_Def-9=/\n' \
   >>"$logdir/run.log"
 log_has_dart_vm "$logdir/run.log" || fail "VM URI should count as ready"
+cat >"$logdir/stale.log" <<'EOF'
+A Dart VM Service on iPhone 13 mini is available at: http://127.0.0.1:61234/abc_Def-9=/
+Launching lib/main.dart on iPhone 13 mini in debug mode...
+Running Xcode build...
+EOF
+log_has_dart_vm "$logdir/stale.log" && fail "stale URI before Launching must not count as ready"
 REFRESH_VM_WAIT_SECONDS=1
 wait_for_dart_vm_log "$logdir/empty.log" 1 >/dev/null 2>&1 \
   && fail "wait_for_dart_vm_log should time out without a URI"
