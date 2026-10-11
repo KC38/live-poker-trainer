@@ -67,6 +67,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer `openlesson` with the catalog id from `course_catalog` / `rg`
   (`lesson-01-02-02-best-five-kickers`), not the Home title and not a
   guessed `01-01-0N` from ledger order — both yield "Unknown lesson".
+  Button and blinds is `lesson-01-01-03-blinds-and-button` (not
+  `…-button-and-blinds`).
 - Prefer copying gitignored `lib/firebase_options.dart` (and iOS/Android
   Google services files) into the ticket worktree before `flutter run`;
   without them the worktree build fails even when primary runs fine. When a
