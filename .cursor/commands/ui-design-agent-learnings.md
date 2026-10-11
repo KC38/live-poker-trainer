@@ -155,6 +155,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `~/Library/Developer/Xcode/DerivedData/Runner-*`
   (and `/tmp/flutter_tools.*`) then retry once (LPT-61) — do not rewrite
   refresh or `needs-human` on the first disk-full build.
+- Prefer a full process restart (kill `flutter run`, relaunch) after
+  patching guest `flutter.onboarding_draft_v1` on disk — hot-restart keeps
+  cached SharedPreferences so `dailyGoalMinutes` stays null and Lesson
+  Complete still shows AMAZING (LPT-39). After the last Nice!, poll for
+  Lesson Complete before tapping CONTINUE — a second Continue can skip
+  the result onto Home.
 - Prefer waiting until the target beat is settled before
   `<KEY>-validated.png` (not bootstrap spinner). On hole-card peeks, wait
   until the hero cards are face-up (not empty outlines) before `tap You`.
