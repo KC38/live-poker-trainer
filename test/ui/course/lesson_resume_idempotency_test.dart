@@ -254,6 +254,71 @@ void main() {
     controller.dispose();
   });
 
+  test(
+    'clearFeedbackForRetry clears hintUsed so same-concept quiet can Hint again',
+    () {
+      final activity = CourseActivity(
+        id: 'act-01-01-02-guided-suits',
+        order: 1,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 30,
+        accessibilityText: 'Tap one community card of each suit.',
+        acceptedGrades: const [SoftGrade.recommended],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'h',
+            kind: 'hint',
+            text: 'Four suits — one card of each on the board.',
+          ),
+        ],
+        choices: const [
+          CourseChoice(id: 'suits-full', label: 'All four suits'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      controller.notifyFeltDealReady(true);
+      expect(controller.showTargetCue, isFalse);
+      expect(controller.canRequestHint, isTrue);
+      controller.revealHint();
+      expect(controller.hintUsed, isTrue);
+      expect(controller.showTargetCue, isTrue);
+      const miss = SubmitCourseStepResult(
+        attemptId: 'att',
+        activityId: 'act-01-01-02-guided-suits',
+        grade: SoftGrade.clearMistake,
+        feedback: 'Four real suits only — skip the star.',
+        accepted: false,
+        lifeLost: false,
+        livesRemaining: 5,
+        xpAwarded: 0,
+        remediationRequired: false,
+        resume: CourseResumePointer(
+          attemptId: 'att',
+          lessonId: 'lesson-01-01-02-suits-and-ranks',
+          activityId: 'act-01-01-02-guided-suits',
+          activityIndex: 1,
+        ),
+        duplicate: false,
+      );
+      controller.presentLocalMiss(miss);
+      expect(controller.hintVisible, isFalse);
+      expect(controller.showTargetCue, isFalse);
+      final generation = controller.bindGeneration;
+      controller.clearFeedbackForRetry();
+      expect(controller.bindGeneration, generation + 1);
+      expect(controller.hintUsed, isFalse);
+      expect(controller.hintVisible, isFalse);
+      expect(controller.showTargetCue, isFalse);
+      controller.notifyFeltDealReady(true);
+      expect(controller.canRequestHint, isTrue);
+      controller.revealHint();
+      expect(controller.hintVisible, isTrue);
+      expect(controller.showTargetCue, isTrue);
+      controller.dispose();
+    },
+  );
+
   test('binding a new activity clears hint used', () {
     final first = CourseActivity(
       id: 'a',
