@@ -91,6 +91,7 @@ class FeltTableView extends StatefulWidget {
     this.dimmedHeroIndexes = const {},
     this.seatOrderBadges = const {},
     this.cueSeatIndex,
+    this.cuePuckLabel,
     this.features,
     this.heroStatus,
     this.dealKey,
@@ -193,7 +194,17 @@ class FeltTableView extends StatefulWidget {
 
   /// Seat index SoftPulsed with shared [GlowHighlight] (same as hole / board
   /// card cues). Null leaves every seat unmarked.
+  ///
+  /// When [cuePuckLabel] is set, SoftPulse moves to that D / SB / BB puck
+  /// instead — the seat pod stays unmarked so the gold cue matches the chip
+  /// the coach names (LPT-69).
   final int? cueSeatIndex;
+
+  /// SoftPulse the position puck with this label (`D`, `SB`, or `BB`).
+  ///
+  /// Takes precedence over [cueSeatIndex] for the gold ring. Puck taps still
+  /// forward to the seat (LPT-67).
+  final String? cuePuckLabel;
 
   /// Optional layers. Null reads [TableFeaturesScope].
   final TableFeatures? features;
@@ -488,12 +499,17 @@ class _FeltTableViewState extends State<FeltTableView> {
                           ? 'Your hole cards, face up'
                           : 'Your hole cards')
                       : "${player.name}'s hole cards",
-              // Seat SoftPulse (showdown order, blinds) wraps the pod.
-              // Hole-card Hint rings each card via highlightHeroIndexes —
-              // never the You name box. Cyan selection stays on tapped seats.
+              // Seat SoftPulse (showdown order) wraps the pod. Button /
+              // blinds SoftPulse uses [cuePuckLabel] on the D / SB / BB
+              // puck instead (LPT-69). Hole-card Hint rings each card via
+              // highlightHeroIndexes — never the You name box. Cyan
+              // selection stays on tapped seats.
               child: LessonTargetGlow(
                 selected: widget.selectedSeatIndexes.contains(slot.index),
-                highlighted: _cuesReady && widget.cueSeatIndex == slot.index,
+                highlighted:
+                    _cuesReady &&
+                    widget.cuePuckLabel == null &&
+                    widget.cueSeatIndex == slot.index,
                 reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,
                 scale: layout.seatScale,
@@ -529,21 +545,36 @@ class _FeltTableViewState extends State<FeltTableView> {
 
       for (final puck in slot.pucks) {
         final puckChild = SeatPuck(label: puck.label, scale: layout.seatScale);
+        final puckHighlighted =
+            _cuesReady && widget.cuePuckLabel == puck.label;
+        // Reserve SoftPulse layout inside an inflated stack slot so the gold
+        // ring paints around the puck (a tight SizedBox was clipping it).
+        final glowPad =
+            (GlowHighlight.outset + GlowHighlight.softBleed + 2) *
+            layout.seatScale;
+        final glowedPuck = LessonTargetGlow(
+          key: ValueKey<String>('puck-cue-${puck.label}'),
+          highlighted: puckHighlighted,
+          reserveLayout: true,
+          borderRadius: SeatPuck.diameter * layout.seatScale / 2,
+          scale: layout.seatScale,
+          child: puckChild,
+        );
+        final hit = seatTap == null
+            ? glowedPuck
+            : Semantics(
+              button: true,
+              label: _seatPuckSemanticsLabel(puck.label),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: seatTap,
+                child: glowedPuck,
+              ),
+            );
         decoLayer.add(
           Positioned.fromRect(
-            rect: puck.rect,
-            child:
-                seatTap == null
-                    ? puckChild
-                    : Semantics(
-                      button: true,
-                      label: _seatPuckSemanticsLabel(puck.label),
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: seatTap,
-                        child: puckChild,
-                      ),
-                    ),
+            rect: puck.rect.inflate(glowPad),
+            child: Center(child: hit),
           ),
         );
       }

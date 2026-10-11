@@ -39,13 +39,16 @@ bool isLessonBlindsFrameActivity(String activityId) {
 /// Felt seat SoftPulse should mark for [highlight], if any.
 ///
 /// Shared by blinds / position frame steps so answer cues always go through
-/// [LessonTableStage.cueSeatIndex] ([GlowHighlight]) — never the action
-/// glow from [LessonTableStage.activeSeatIndex].
+/// [LessonTableStage.cueSeatIndex] or [LessonTableStage.cuePuckLabel]
+/// ([GlowHighlight]) — never the action glow from
+/// [LessonTableStage.activeSeatIndex]. Button / SB / BB use the puck label
+/// (LPT-69); other seat highlights still use the seat index.
 int? lessonSeatIndexForHighlight(LessonTableHighlight highlight) {
   return switch (highlight) {
-    LessonTableHighlight.button => lessonBlindsButtonIndex,
-    LessonTableHighlight.smallBlind => lessonBlindsSmallBlindIndex,
-    LessonTableHighlight.bigBlind => lessonBlindsBigBlindIndex,
+    LessonTableHighlight.button ||
+    LessonTableHighlight.smallBlind ||
+    LessonTableHighlight.bigBlind =>
+      null,
     LessonTableHighlight.cutoff => 2,
     LessonTableHighlight.hijack => 1,
     LessonTableHighlight.earlyPosition => 0,
@@ -53,6 +56,16 @@ int? lessonSeatIndexForHighlight(LessonTableHighlight highlight) {
     LessonTableHighlight.hero ||
     LessonTableHighlight.board =>
       null,
+  };
+}
+
+/// D / SB / BB puck SoftPulse label for [highlight], if any (LPT-69).
+String? lessonPuckLabelForHighlight(LessonTableHighlight highlight) {
+  return switch (highlight) {
+    LessonTableHighlight.button => 'D',
+    LessonTableHighlight.smallBlind => 'SB',
+    LessonTableHighlight.bigBlind => 'BB',
+    _ => null,
   };
 }
 
@@ -1604,8 +1617,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                       'act-01-01-03-checkpoint-layout' => _checkpointBbPosted,
                       _ => true,
                     },
-                    // SoftPulse (CuePulse + arrows) only — never gold-tip via
-                    // activeSeatIndex before Hint on quieter stages.
+                    // SoftPulse the D / SB / BB puck when that is the ask
+                    // (LPT-69) — never gold-tip the seat name box, and never
+                    // gold-tip via activeSeatIndex before Hint on quieter
+                    // stages.
+                    cuePuckLabel:
+                        _cuesAnswerSeat(locked)
+                            ? lessonPuckLabelForHighlight(scene.highlight)
+                            : null,
                     cueSeatIndex:
                         _cuesAnswerSeat(locked)
                             ? lessonSeatIndexForHighlight(scene.highlight)
