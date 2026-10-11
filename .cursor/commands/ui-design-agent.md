@@ -58,14 +58,28 @@ Run progress:
 
 From the primary checkout (`PRIMARY="$(tools/primary_checkout.sh)"`):
 
-The unattended loop usually already claimed the mini and set
-`SIM_LOCK_RUN_ID`. Prefer that lock:
+The unattended loop usually already claimed the mini and wrote
+`~/.live-poker-trainer/ui-agent-handoff.json` after a programmatic Dart VM
+preflight. Cloud/machine SDK shells often have **no** `SIM_LOCK_RUN_ID` in
+the environment even though the loop holds the lock — adopt it in one shot
+and move on (do not investigate for minutes):
 
 ```bash
 cd "$PRIMARY"
+HANDOFF="$HOME/.live-poker-trainer/ui-agent-handoff.json"
+LOCK_JSON="$HOME/.live-poker-trainer/simulator-lock.json"
+if [[ -z "${SIM_LOCK_RUN_ID:-}" && -f "$HANDOFF" ]]; then
+  SIM_LOCK_RUN_ID="$(python3 -c 'import json,os; print(json.load(open(os.path.expanduser("~/.live-poker-trainer/ui-agent-handoff.json")))["sim_lock_run_id"])')"
+  export SIM_LOCK_RUN_ID
+fi
 if [[ -n "${SIM_LOCK_RUN_ID:-}" ]] && python3 tools/sim_lock.py guard >/dev/null 2>&1; then
   : # keep the preflight lock
-else
+elif [[ -z "${SIM_LOCK_RUN_ID:-}" && -f "$LOCK_JSON" ]]; then
+  # Fallback: adopt the live ui-design-agent holder, else claim.
+  SIM_LOCK_RUN_ID="$(python3 -c 'import json,os; d=json.load(open(os.path.expanduser("~/.live-poker-trainer/simulator-lock.json"))); print(d["run_id"] if d.get("owner")=="ui-design-agent" else "")' 2>/dev/null || true)"
+  export SIM_LOCK_RUN_ID
+fi
+if [[ -z "${SIM_LOCK_RUN_ID:-}" ]] || ! python3 tools/sim_lock.py guard >/dev/null 2>&1; then
   SIM_LOCK_RUN_ID="$(python3 tools/sim_lock.py claim --owner ui-design-agent --purpose "ui-design-agent: starting")"
   export SIM_LOCK_RUN_ID
 fi
@@ -89,9 +103,15 @@ SHA="$(git -C "$PRIMARY" rev-parse HEAD)"
 
 The unattended loop brings the mini up **programmatically** before starting
 this agent (refresh + wait for a Dart VM URI in
-`/tmp/flutter-live-poker-trainer.run.log`). When that log already shows
-`http://127.0.0.1:<port>/<token>/`, skip refresh and continue — do not burn
-time re-booting a ready simulator.
+`/tmp/flutter-live-poker-trainer.run.log`) and sets
+`dart_vm_ready: true` in `ui-agent-handoff.json`. **At the start of a loop
+run: do not call `refresh-simulator.sh`.** Grep the flutter log for
+`http://127.0.0.1:` once; if present, continue to step 2 immediately.
+
+Only refresh when you are switching builds (worktree validate, or
+post-merge origin/main) or when that URI is missing. If refresh sticks on
+`Launching…` with no VM URI for ~30s, kill the dead pid and start
+`flutter run` in tmux yourself (see learnings) — do not wait minutes.
 
 If you are running outside the loop (or the VM is down), refresh yourself:
 

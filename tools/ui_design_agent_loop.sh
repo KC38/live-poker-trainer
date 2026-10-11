@@ -86,6 +86,8 @@ LAUNCHER="${UI_AGENT_LAUNCHER:-sdk}"
 SDK_RUNTIME="${UI_AGENT_SDK_RUNTIME:-machine}"
 MACHINE_NAME="${UI_AGENT_MACHINE_NAME:-cursor-agent-worker-4c8b3dc416}"
 COVERAGE_FILE="$STATE_DIR/ui-agent-coverage.jsonl"
+# Machine-SDK shells often lack cloud.envVars; agents read this handoff instead.
+HANDOFF_FILE="$STATE_DIR/ui-agent-handoff.json"
 FLUTTER_RUN_LOG="/tmp/flutter-live-poker-trainer.run.log"
 REFRESH_SCRIPT="$(cd "$TOOLS/.." && pwd)/.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh"
 SDK_DIR="$TOOLS/ui-agent-sdk"
@@ -95,6 +97,37 @@ mkdir -p "$LOG_DIR"
 
 primary() {
   bash "$TOOLS/primary_checkout.sh"
+}
+
+# Written after programmatic preflight so cloud agents (envVars often unset in
+# the tool shell) can adopt the lock and trust the ready Dart VM without
+# re-claiming or re-refreshing.
+write_sim_handoff() {
+  local run_id="$1" primary_dir device
+  primary_dir="$(primary)"
+  device="$(bash "$TOOLS/iphone_13_mini_udid.sh" 2>/dev/null || true)"
+  python3 - "$HANDOFF_FILE" "$run_id" "$primary_dir" "$FLUTTER_RUN_LOG" "$device" <<'PY'
+import json, sys, time
+from pathlib import Path
+path, run_id, primary, flutter_log, device = sys.argv[1:6]
+Path(path).write_text(
+    json.dumps(
+        {
+            "at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            "sim_lock_run_id": run_id,
+            "primary": primary,
+            "flutter_run_log": flutter_log,
+            "device": device or None,
+            "dart_vm_ready": True,
+            "do_not_refresh_at_start": True,
+            "start_from_step": 2,
+        },
+        indent=2,
+    )
+    + "\n",
+    encoding="utf-8",
+)
+PY
 }
 
 log() {
@@ -149,7 +182,14 @@ loop_is_alive() {
 }
 
 prompt() {
-  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md in this workspace and follow them exactly, from step 0. The loop already claimed the iPhone 13 mini (SIM_LOCK_RUN_ID is set — keep it; do not claim again) and the Dart VM is up on origin/main; start from step 2 (contract). Update the learnings file in step 10 when this run hits a durable mistake. When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
+  local run_id="${SIM_LOCK_RUN_ID:-}"
+  local handoff_id="" primary_dir
+  primary_dir="$(primary)"
+  if [[ -f "$HANDOFF_FILE" ]]; then
+    handoff_id="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("sim_lock_run_id") or "")' "$HANDOFF_FILE" 2>/dev/null || true)"
+  fi
+  [[ -n "$run_id" ]] || run_id="$handoff_id"
+  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md in this workspace and follow them exactly. Loop preflight already claimed the iPhone 13 mini and the Dart VM is up on origin/main — start from step 2 (contract). Do not claim again. Do not run refresh-simulator.sh at start. Cloud/machine shells often lack SIM_LOCK_RUN_ID in the environment: export SIM_LOCK_RUN_ID='${run_id}' (also in ${HANDOFF_FILE}) on every shell, then continue. Flutter log: ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Update learnings in step 10 when this run hits a durable mistake. When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
 }
 
 load_secrets() {
@@ -1425,6 +1465,7 @@ one_run() {
     return 12
   fi
 
+  write_sim_handoff "$run_id"
   sim_lock heartbeat --purpose "agent starting" >/dev/null 2>&1 || true
   configure_agent_credentials
   text="$(prompt)"

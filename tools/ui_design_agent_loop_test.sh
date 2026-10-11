@@ -85,12 +85,21 @@ one_run >/dev/null 2>&1 || fail "free mini run failed"
 grep -q 'ui-design-agent.md' "$tmp/agent-args" || fail "prompt should name the command"
 grep -q 'ui-design-agent-learnings.md' "$tmp/agent-args" \
   || fail "prompt should name the learnings file"
-grep -q 'SIM_LOCK_RUN_ID is set' <<<"$(prompt)" \
-  || fail "prompt should tell the agent the lock is preflight-claimed"
+grep -q 'Do not run refresh-simulator.sh at start' <<<"$(prompt)" \
+  || fail "prompt should forbid start-of-run refresh when preflighted"
 grep -q 'rename-chat' <<<"$(prompt)" \
   || fail "prompt should tell the agent to rename the chat after ticket+PR"
 grep -q 'LPT-NN PR-' <<<"$(prompt)" \
   || fail "prompt should give the LPT-NN PR-<number> title shape"
+# Handoff embeds the concrete lock id for cloud shells that lack envVars.
+SIM_LOCK_RUN_ID='ui-design-agent-test-lock-id'
+write_sim_handoff "$SIM_LOCK_RUN_ID"
+[[ -f "$HANDOFF_FILE" ]] || fail "write_sim_handoff should create $HANDOFF_FILE"
+grep -q 'ui-design-agent-test-lock-id' <<<"$(prompt)" \
+  || fail "prompt should embed SIM_LOCK_RUN_ID for cloud shells"
+grep -q 'ui-agent-handoff.json' <<<"$(prompt)" \
+  || fail "prompt should point at the handoff file"
+unset SIM_LOCK_RUN_ID
 [[ "$(cat "$tmp/agent-env")" == 'key with space|tok-123|memory' ]] \
   || fail "run should inherit keys and set AGENT_CLI_CREDENTIAL_STORE=memory: $(cat "$tmp/agent-env")"
 
