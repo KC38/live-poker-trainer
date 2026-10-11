@@ -96,13 +96,16 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `glow-highlight` for that surface — they may have locked the bug (LPT-55).
   Ids in `lessonFrameSameConceptQuietIds` (e.g. guided-seven) stay SoftPulse
   off until Hint by design — judge Hint-reopened SoftPulse, not first-press
-  gold (LPT-57). After SoftPulse lands on explain, grep the sibling picker.
-  After Hint then a grade, read the dock bubble — Hint copy under Oops is a
-  bug; clear `_hintVisible` on `finishSubmit` / `presentLocalMiss` (LPT-60).
-  Hint must stay off whenever `showTargetCue` is true (LPT-63); judge that by
-  greyed chrome + unchanged bubble — `agent_tap tap Hint` still returns ok
-  on a disabled control. Call `notifyFeltDealReady(true)` before asserting
-  `showTargetCue` in controller unit tests.
+  gold (LPT-57). After SoftPulse lands on explain, grep the sibling picker —
+  blinds guided frames in `select_identify` still need `cuePuckLabel` (D/SB/BB),
+  not only `LessonBlindsClockwiseTable` (LPT-69). Puck SoftPulse needs an
+  inflated hit box + `reserveLayout: true` or the glow clips inside a tight
+  `SizedBox`. After Hint then a grade, read the dock bubble — Hint copy under
+  Oops is a bug; clear `_hintVisible` on `finishSubmit` / `presentLocalMiss`
+  (LPT-60). Hint must stay off whenever `showTargetCue` is true (LPT-63);
+  judge that by greyed chrome + unchanged bubble — `agent_tap tap Hint` still
+  returns ok on a disabled control. Call `notifyFeltDealReady(true)` before
+  asserting `showTargetCue` in controller unit tests.
 - Prefer card `agent_tap` needles as Semantics display (`A♣`), not ASCII
   codes like `Ac` — short codes can miss the card or open Hearts.
 - Prefer a second open of the same lesson when judging card randomization —
@@ -118,11 +121,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   body must be a real on-disk path (or listed in `--attach`); `jira.py`
   refuses comments/creates that would post `!file|thumbnail!` for a file
   that did not upload — that is what shows as Preview unavailable in Jira
-  (LPT-59 closeout orphan `LPT-59-validated.png`). If `jira.py comment`
-  exits non-zero, do **not** `transition … Done` — fix the attach/body and
-  re-comment first (LPT-62: first closeout failed, Done raced ahead). After
-  a successful closeout comment, `jira.py verify-embeds LPT-NN` must pass
-  before Done.
+  (LPT-59 closeout orphan `LPT-59-validated.png`). Pass every closeout PNG in
+  one `--attach a.png b.png` list — repeating `--attach` with `nargs=*` keeps
+  only the last group and the comment fails on missing embeds (LPT-69). If
+  `jira.py comment` exits non-zero, do **not** `transition … Done` — fix the
+  attach/body and re-comment first (LPT-62: first closeout failed, Done raced
+  ahead). After a successful closeout comment, `jira.py verify-embeds LPT-NN`
+  must pass before Done.
 - Prefer, after a one-surface fix (Theme CTA, `boardSlots: false`, SoftPulse
   on explain), grepping sibling call sites / builders in the same walk so
   twins do not wait another run (LPT-45/46, LPT-50/52, LPT-55→57).
@@ -147,15 +152,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `~/.live-poker-trainer/simulator-lock.json` when `$SIM_LOCK_RUN_ID` fails
   `guard` but the lock owner is this loop's `ui-design-agent` — a stale
   exported id from an older shell must not block an already-claimed mini.
-- Prefer clearing Hint / SoftPulse before staging an invalid Best five for
-  Undo proof so the status hits "Five tapped — try a stronger five" and
-  cyan matches the five taps.
+  Clear Hint / SoftPulse before staging an invalid Best five for Undo proof
+  so cyan matches the five taps.
 - Never loop dozens of `tap Continue` to brute-force prerequisite lessons —
   course start rate-limits with "Too many course requests" and blocks the
   mini until Retry/backoff; finish Home's next node or pace taps instead.
-- Never run `sips -c` (or similar) in place on the only copy of an issue
-  or validated PNG — it can overwrite the file with a tiny crop. Copy
-  first, crop the copy.
+  Never run `sips -c` in place on the only issue/validated PNG — copy first,
+  then crop the copy.
 
 ## Ops (simulator, CLI, Jira)
 
@@ -208,9 +211,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-12: LPT-68 board-group SoftPulse hugs dealt flop only (`CommunityCardsView`);
-  closeout must wait for "Tap the community cards." Adopt loop lock
-  `run_id` when shell `$SIM_LOCK_RUN_ID` is stale. Post-merge refresh can
-  still leave Launching+dead pid — start `flutter run` in tmux yourself.
-- 2026-10-10: LPT-55–57 / LPT-61 best-five SoftPulse; LPT-59 guided free miss;
-  LPT-60/63/64 Hint+grade coach; LPT-62 draft-mirror Undo.
+- 2026-10-12: LPT-69 SoftPulse on D/SB/BB pucks (`cuePuckLabel` + inflated
+  puck box); also wire `select_identify` blinds frames, not only explain.
+  Closeout: one `--attach` list; never rename make-change to `cursor/…`.
+  LPT-68 board SoftPulse on dealt flop; adopt stale lock `run_id`; Launching
+  + dead pid → start `flutter run` in tmux yourself.
