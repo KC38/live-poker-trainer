@@ -547,15 +547,15 @@ class _FeltTableViewState extends State<FeltTableView> {
         final puckChild = SeatPuck(label: puck.label, scale: layout.seatScale);
         final puckHighlighted =
             _cuesReady && widget.cuePuckLabel == puck.label;
-        // Inflate the stack slot so SoftPulse outset is not clipped; the
-        // puck face stays [puck.rect] so toggling gold does not resize it.
+        // Reserve SoftPulse layout inside an inflated stack slot so the gold
+        // ring paints around the puck (a tight SizedBox was clipping it).
         final glowPad =
-            (GlowHighlight.outset + GlowHighlight.softBleed) *
+            (GlowHighlight.outset + GlowHighlight.softBleed + 2) *
             layout.seatScale;
         final glowedPuck = LessonTargetGlow(
           key: ValueKey<String>('puck-cue-${puck.label}'),
           highlighted: puckHighlighted,
-          reserveLayout: false,
+          reserveLayout: true,
           borderRadius: SeatPuck.diameter * layout.seatScale / 2,
           scale: layout.seatScale,
           child: puckChild,
@@ -574,13 +574,7 @@ class _FeltTableViewState extends State<FeltTableView> {
         decoLayer.add(
           Positioned.fromRect(
             rect: puck.rect.inflate(glowPad),
-            child: Center(
-              child: SizedBox(
-                width: puck.rect.width,
-                height: puck.rect.height,
-                child: hit,
-              ),
-            ),
+            child: Center(child: hit),
           ),
         );
       }

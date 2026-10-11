@@ -311,7 +311,8 @@ teaches another level passes `smallBlind` and `bigBlind` to
 `PokerTableScreen` is the Live Training table and the calibration warm-up.
 `LessonTableStage` draws the same `FeltTableView` for lessons, and
 `PokerTableBands` draws it for Your start. Button / blinds SoftPulse uses
-`FeltTableView.cuePuckLabel` so gold rings the D / SB / BB puck (LPT-69);
+`FeltTableView.cuePuckLabel` so gold rings the D / SB / BB puck (LPT-69),
+including Button and blinds frame steps via `lessonPuckLabelForHighlight`;
 the next puck-named SoftPulse copies that instead of `cueSeatIndex` on the
 seat pod.
 
