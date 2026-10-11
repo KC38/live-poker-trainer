@@ -10,6 +10,7 @@ firebase-debug.*.log
 ui-debug.log
 functions/node_modules/
 functions/lib/
+tools/ui-agent-sdk/node_modules/
 # Local Firebase app configs (API keys) — keep out of public repos
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist

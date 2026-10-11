@@ -47,6 +47,8 @@ export UI_AGENT_LOOP_SOURCE_ONLY=1
 export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 # one_run finalize must not poll 90s for coverage in unit tests.
 export UI_AGENT_COVERAGE_WAIT=0
+# Unit tests stub the CLI `agent` binary; keep launcher=cli here.
+export UI_AGENT_LAUNCHER=cli
 # Isolate from the machine's live ui-agent tmux session.
 export UI_AGENT_TMUX_SOCKET="ui-agent-test-$$"
 export UI_AGENT_TMUX_SESSION="ui-design-agent-test-$$"
@@ -432,15 +434,19 @@ printf '%s\n' \
 today_secs="$(sleep_usage_limit_seconds "$today_log")"
 (( today_secs >= 1800 && today_secs <= 86400 )) \
   || fail "today reset sleep out of range: $today_secs"
-# Default model is composer-2.5 (bypasses Auto quota); `auto` omits --model.
+# Default model is Auto; CLI omits --model; SDK maps to catalog id `default`.
+[[ "$(resolved_agent_model)" == "auto" ]] \
+  || fail "default model should be auto, got $(resolved_agent_model)"
+[[ "$(sdk_model_id)" == "default" ]] \
+  || fail "sdk_model_id should be default for Auto, got $(sdk_model_id)"
+agent_args | grep -q -- '--model' && fail "auto must omit --model on CLI"
+UI_AGENT_MODEL=composer-2.5
 [[ "$(resolved_agent_model)" == "composer-2.5" ]] \
-  || fail "default model should be composer-2.5, got $(resolved_agent_model)"
-agent_args | grep -qx -- '--model' || fail "agent_args should pass --model by default"
-agent_args | grep -qx -- 'composer-2.5' || fail "agent_args should default to composer-2.5"
-UI_AGENT_MODEL=auto
-[[ -z "$(resolved_agent_model)" ]] || fail "UI_AGENT_MODEL=auto should resolve empty"
-agent_args | grep -q -- '--model' && fail "auto must omit --model"
+  || fail "UI_AGENT_MODEL override ignored"
+agent_args | grep -qx -- 'composer-2.5' || fail "CLI should pass overridden model"
+[[ "$(sdk_model_id)" == "composer-2.5" ]] || fail "SDK should pass overridden model"
 unset UI_AGENT_MODEL
+[[ "$(resolved_agent_model)" == "auto" ]] || fail "unset should return to auto"
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
 [[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \
