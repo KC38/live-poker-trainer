@@ -149,7 +149,7 @@ loop_is_alive() {
 }
 
 prompt() {
-  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md in this workspace and follow them exactly, from step 0. The loop already claimed the iPhone 13 mini (SIM_LOCK_RUN_ID is set — keep it; do not claim again) and the Dart VM is up on origin/main; start from step 2 (contract). Update the learnings file in step 10 when this run hits a durable mistake. This is an unattended run. Do not ask questions or wait for input."
+  printf '%s' "Run the /ui-design-agent command: read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md in this workspace and follow them exactly, from step 0. The loop already claimed the iPhone 13 mini (SIM_LOCK_RUN_ID is set — keep it; do not claim again) and the Dart VM is up on origin/main; start from step 2 (contract). Update the learnings file in step 10 when this run hits a durable mistake. When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
 }
 
 load_secrets() {

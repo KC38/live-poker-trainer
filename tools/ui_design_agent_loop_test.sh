@@ -87,6 +87,10 @@ grep -q 'ui-design-agent-learnings.md' "$tmp/agent-args" \
   || fail "prompt should name the learnings file"
 grep -q 'SIM_LOCK_RUN_ID is set' <<<"$(prompt)" \
   || fail "prompt should tell the agent the lock is preflight-claimed"
+grep -q 'rename-chat' <<<"$(prompt)" \
+  || fail "prompt should tell the agent to rename the chat after ticket+PR"
+grep -q 'LPT-NN PR-' <<<"$(prompt)" \
+  || fail "prompt should give the LPT-NN PR-<number> title shape"
 [[ "$(cat "$tmp/agent-env")" == 'key with space|tok-123|memory' ]] \
   || fail "run should inherit keys and set AGENT_CLI_CREDENTIAL_STORE=memory: $(cat "$tmp/agent-env")"
 
