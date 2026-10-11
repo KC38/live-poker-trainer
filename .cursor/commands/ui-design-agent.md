@@ -60,9 +60,10 @@ From the primary checkout (`PRIMARY="$(tools/primary_checkout.sh)"`):
 
 The unattended loop usually already claimed the mini and wrote
 `~/.live-poker-trainer/ui-agent-handoff.json` after a programmatic Dart VM
-preflight. Cloud/machine SDK shells often have **no** `SIM_LOCK_RUN_ID` in
-the environment even though the loop holds the lock — adopt it in one shot
-and move on (do not investigate for minutes):
+preflight (`dart_vm_ready` / `skip_sim_verify_at_start`). Cloud/machine
+SDK shells often have **no** `SIM_LOCK_RUN_ID` in the environment even
+though the loop holds the lock — adopt it in **one** shell export and
+move to step 2 (do not investigate, re-claim, or re-verify the VM):
 
 ```bash
 cd "$PRIMARY"
@@ -104,14 +105,18 @@ SHA="$(git -C "$PRIMARY" rev-parse HEAD)"
 The unattended loop brings the mini up **programmatically** before starting
 this agent (refresh + wait for a Dart VM URI in
 `/tmp/flutter-live-poker-trainer.run.log`) and sets
-`dart_vm_ready: true` in `ui-agent-handoff.json`. **At the start of a loop
-run: do not call `refresh-simulator.sh`.** Grep the flutter log for
-`http://127.0.0.1:` once; if present, continue to step 2 immediately.
+`dart_vm_ready: true` / `skip_sim_verify_at_start: true` in
+`ui-agent-handoff.json`. **At the start of a loop run: trust that handoff.**
+Do not call `refresh-simulator.sh`, do not grep the flutter log, do not
+poll for a Dart VM URI, and do not spend tool turns "confirming" the sim
+is up. Export `SIM_LOCK_RUN_ID` once (from the prompt or handoff) and go
+to step 2.
 
 Only refresh when you are switching builds (worktree validate, or
-post-merge origin/main) or when that URI is missing. If refresh sticks on
-`Launching…` with no VM URI for ~30s, kill the dead pid and start
-`flutter run` in tmux yourself (see learnings) — do not wait minutes.
+post-merge origin/main) or when you later discover the URI is missing
+after a build switch. If refresh sticks on `Launching…` with no VM URI
+for ~30s, kill the dead pid and start `flutter run` in tmux yourself (see
+learnings) — do not wait minutes.
 
 If you are running outside the loop (or the VM is down), refresh yourself:
 

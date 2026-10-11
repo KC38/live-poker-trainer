@@ -166,9 +166,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer adopting `sim_lock_run_id` from
   `~/.live-poker-trainer/ui-agent-handoff.json` (then
   `simulator-lock.json`) when `$SIM_LOCK_RUN_ID` is unset in a
-  cloud/machine shell — export it once and continue; do not spend the first
-  minutes reconciling the lock or re-running `refresh-simulator` when the
-  handoff says `dart_vm_ready` / the flutter log already has a VM URI.
+  cloud/machine shell — export it once and continue. The ~40s before the
+  first assistant is SDK boot, not sim connect; loop preflight already
+  claimed + warmed the Dart VM (~1–2s). Do not spend another ~60s grepping
+  the flutter log / re-checking the lock when handoff has
+  `dart_vm_ready` / `skip_sim_verify_at_start` — go to step 2.
   Clear Hint / SoftPulse before staging an invalid Best five for Undo proof
   so cyan matches the five taps.
 - Never loop dozens of `tap Continue` to brute-force prerequisite lessons —
@@ -186,11 +188,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `errSecDuplicateItem` / `auth.refresh.persistFailed` cannot burn the run.
 - Heartbeat during long worktree `flutter run`, validates, and Cloud
   Functions deploy; the stall watchdog kills a silent agent (tmux
-  `deploy-LPT-*` / `refresh-LPT-*` count as alive). Prefer
-  `tools/wait_flutter_vm.sh <log> [seconds] --purpose …` after worktree
-  `flutter run` / hot-restart (heartbeats for you) — do not bare-sleep
-  while Xcode builds. Write coverage before long compiles when the ticket
-  is already Done in Jira.
+  `deploy-LPT-*` / `refresh-LPT-*` count as alive). After worktree
+  `flutter run` / hot-restart, **must** use
+  `tools/wait_flutter_vm.sh <log> [seconds] --purpose …` (heartbeats for
+  you). Bare `AwaitShell` / `sleep` while Xcode builds burns minutes and
+  risks stall (LPT-72). Write coverage before long compiles when the
+  ticket is already Done in Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
   `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.

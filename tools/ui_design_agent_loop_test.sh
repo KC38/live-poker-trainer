@@ -85,8 +85,14 @@ one_run >/dev/null 2>&1 || fail "free mini run failed"
 grep -q 'ui-design-agent.md' "$tmp/agent-args" || fail "prompt should name the command"
 grep -q 'ui-design-agent-learnings.md' "$tmp/agent-args" \
   || fail "prompt should name the learnings file"
-grep -q 'Do not run refresh-simulator.sh at start' <<<"$(prompt)" \
+grep -q 'READY (loop preflight done)' <<<"$(prompt)" \
+  || fail "prompt should lead with READY preflight facts"
+grep -q 'Skip steps 0' <<<"$(prompt)" \
+  || fail "prompt should tell the agent to skip steps 0-1 sim work"
+grep -q 'do not refresh-simulator.sh' <<<"$(prompt)" \
   || fail "prompt should forbid start-of-run refresh when preflighted"
+grep -q 'wait_flutter_vm.sh' <<<"$(prompt)" \
+  || fail "prompt should mandate wait_flutter_vm for worktree waits"
 grep -q 'rename-chat' <<<"$(prompt)" \
   || fail "prompt should tell the agent to rename the chat after ticket+PR"
 grep -q 'LPT-NN PR-' <<<"$(prompt)" \
@@ -95,6 +101,8 @@ grep -q 'LPT-NN PR-' <<<"$(prompt)" \
 SIM_LOCK_RUN_ID='ui-design-agent-test-lock-id'
 write_sim_handoff "$SIM_LOCK_RUN_ID"
 [[ -f "$HANDOFF_FILE" ]] || fail "write_sim_handoff should create $HANDOFF_FILE"
+grep -q 'skip_sim_verify_at_start' "$HANDOFF_FILE" \
+  || fail "handoff should set skip_sim_verify_at_start"
 grep -q 'ui-design-agent-test-lock-id' <<<"$(prompt)" \
   || fail "prompt should embed SIM_LOCK_RUN_ID for cloud shells"
 grep -q 'ui-agent-handoff.json' <<<"$(prompt)" \
