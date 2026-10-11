@@ -96,7 +96,7 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
         SnackBar(
           content: Text(
             access.warmUpAvailable
-                ? 'Unrestricted Live Training unlocks after the Section 4 jump. Warm-ups stay on Home.'
+                ? liveTrainingWarmUpUnrestrictedSnack()
                 : liveTrainingLockedSnack(),
           ),
         ),
@@ -382,7 +382,7 @@ class _LiveAccessGate extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             warm
-                ? 'Rex warm-ups are open. Random Live Training unlocks after the Section 4 jump test.'
+                ? liveTrainingWarmUpHubMessage()
                 : liveTrainingLockedMessage(),
             style: GoogleFonts.manrope(
               color: AppColors.cream,

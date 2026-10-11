@@ -98,4 +98,22 @@ void main() {
     );
     expect(liveTrainingLockedSnack(), isNot(contains('Section 2')));
   });
+
+  test('warm-up unrestricted copy names Section 4 jump check on Home', () {
+    expect(
+      liveTrainingWarmUpHubMessage(),
+      'Rex warm-ups are open. Random Live Training unlocks after '
+      'Section 4 jump check.',
+    );
+    expect(
+      liveTrainingWarmUpUnrestrictedSnack(),
+      'Unrestricted Live Training unlocks after Section 4 jump check. '
+      'Warm-ups stay on Home.',
+    );
+    expect(liveTrainingWarmUpHubMessage(), isNot(contains('jump test')));
+    expect(
+      liveTrainingWarmUpHubMessage(),
+      contains(kLiveUnrestrictedUnlockLessonTitle),
+    );
+  });
 }

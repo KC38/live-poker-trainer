@@ -41,6 +41,13 @@ export interface LiveAccessSnapshot {
 export const LIVE_WARMUP_UNLOCK_LESSON_ID =
   "lesson-02-07-02-section-two-jump";
 
+/** Section 4 jump that unlocks unrestricted random Live Training. */
+export const LIVE_UNRESTRICTED_UNLOCK_LESSON_ID =
+  "lesson-04-10-02-section-four-jump-test";
+
+/** Home path title for [LIVE_UNRESTRICTED_UNLOCK_LESSON_ID]. */
+export const LIVE_UNRESTRICTED_UNLOCK_LESSON_TITLE = "Section 4 jump check";
+
 /** Default cutoff: accounts created before this are grandfathered. */
 export const DEFAULT_LIVE_ROLLOUT_CUTOFF_MS =
   Date.parse("2026-09-21T00:00:00.000Z");
@@ -189,7 +196,7 @@ export async function assertUnrestrictedLiveAccess(
     throw new HttpsError(
       "permission-denied",
       access.tier === "warm_up" ?
-        "Finish the Section 4 jump test (or placement) to unlock unrestricted Live Training. Warm-ups stay available from Home." :
+        `Finish ${LIVE_UNRESTRICTED_UNLOCK_LESSON_TITLE} (or placement) to unlock unrestricted Live Training. Warm-ups stay available from Home.` :
         "Live Training unlocks after the Section 2 checkpoint. Continue on Home.",
     );
   }

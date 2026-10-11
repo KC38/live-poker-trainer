@@ -10,6 +10,13 @@ const kLiveWarmUpUnlockLessonId = 'lesson-02-07-02-section-two-jump';
 /// Locked-tab copy uses this Home path title so learners can match the node.
 const kLiveWarmUpUnlockLessonTitle = 'Baseline jump check';
 
+/// Lesson that unlocks unrestricted random Live Training.
+const kLiveUnrestrictedUnlockLessonId =
+    'lesson-04-10-02-section-four-jump-test';
+
+/// Catalog path-node title for [kLiveUnrestrictedUnlockLessonId].
+const kLiveUnrestrictedUnlockLessonTitle = 'Section 4 jump check';
+
 /// Locked-tab sentence. Points at the Home lesson that unlocks warm-ups.
 String liveTrainingLockedMessage() {
   return 'Live Training is advanced. Finish $kLiveWarmUpUnlockLessonTitle on '
@@ -20,6 +27,18 @@ String liveTrainingLockedMessage() {
 String liveTrainingLockedSnack() {
   return 'Live Training unlocks after $kLiveWarmUpUnlockLessonTitle. '
       'Continue on Home.';
+}
+
+/// Warm-up hub body when Rex warm-ups are open but random Live is still gated.
+String liveTrainingWarmUpHubMessage() {
+  return 'Rex warm-ups are open. Random Live Training unlocks after '
+      '$kLiveUnrestrictedUnlockLessonTitle.';
+}
+
+/// Snackbar when a warm-up learner tries unrestricted random Live.
+String liveTrainingWarmUpUnrestrictedSnack() {
+  return 'Unrestricted Live Training unlocks after '
+      '$kLiveUnrestrictedUnlockLessonTitle. Warm-ups stay on Home.';
 }
 
 /// Access level for the Live Training tab and start callables.
