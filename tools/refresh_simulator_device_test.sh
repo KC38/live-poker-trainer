@@ -100,6 +100,17 @@ mkdir "$logdir/app.pid"
 prepare_flutter_log "$logdir/run.log" "$logdir/app.pid"
 [[ -f "$logdir/run.log" && ! -L "$logdir/run.log" ]] || fail "stale log symlink not replaced"
 [[ ! -e "$logdir/app.pid" ]] || fail "pid directory not removed"
+# Dart VM readiness helpers (hot-restart must not exit before URI appears).
+printf 'Flutter run key commands.\n' >"$logdir/run.log"
+log_has_dart_vm "$logdir/run.log" && fail "Launching-only log must not count as ready"
+printf 'A Dart VM Service on iPhone 13 mini is available at: http://127.0.0.1:61234/abc_Def-9=/\n' \
+  >>"$logdir/run.log"
+log_has_dart_vm "$logdir/run.log" || fail "VM URI should count as ready"
+REFRESH_VM_WAIT_SECONDS=1
+wait_for_dart_vm_log "$logdir/empty.log" 1 >/dev/null 2>&1 \
+  && fail "wait_for_dart_vm_log should time out without a URI"
+wait_for_dart_vm_log "$logdir/run.log" 1 >/dev/null \
+  || fail "wait_for_dart_vm_log should succeed when URI present"
 rm -rf "$logdir"
 
 # Resilient pub get: succeeds on a later attempt after a killed first call.
