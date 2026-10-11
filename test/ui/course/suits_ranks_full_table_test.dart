@@ -293,6 +293,79 @@ void main() {
     },
   );
 
+  testWidgets(
+    'guided suits Hint reopens SoftPulse after first suit tap (LPT-72)',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final activity = CourseActivity(
+        id: 'act-01-01-02-guided-suits',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText:
+            'Tap hearts, diamonds, clubs, and spades on the board.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap one community card of each suit.',
+        choices: const [
+          CourseChoice(
+            id: 'suits-full',
+            label: 'Hearts, diamonds, clubs, spades',
+          ),
+        ],
+        coachMedia: const [
+          CoachMediaRef(
+            id: 'act-01-01-02-guided-suits-hint',
+            kind: 'hint',
+            text: 'Four suits — one card of each on the board.',
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(
+        _frame(
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, _) {
+              return SelectIdentifyActivity(
+                activity: activity,
+                controller: controller,
+                showGuidance: controller.showTargetCue,
+              );
+            },
+          ),
+          activityController: controller,
+        ),
+      );
+      await tester.pump();
+      controller.notifyFeltDealReady(true);
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+
+      controller.revealHint();
+      await tester.pump();
+      expect(controller.showTargetCue, isTrue);
+      expect(controller.canRequestHint, isFalse);
+
+      await tester.tap(find.byKey(const ValueKey('lesson-board-card-0')));
+      await tester.pump();
+      expect(controller.showTargetCue, isFalse);
+      expect(controller.canRequestHint, isTrue);
+      expect(controller.sequentialPressesRemaining, isTrue);
+
+      controller.revealHint();
+      await tester.pump();
+      expect(controller.showTargetCue, isTrue);
+      expect(controller.canRequestHint, isFalse);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets('guided suits star distractor is a miss', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;

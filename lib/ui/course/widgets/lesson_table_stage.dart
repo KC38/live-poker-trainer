@@ -1170,6 +1170,17 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
       for (var i = 0; i < _boardCodes.length; i++)
         if (_suitLetters[i] != null && _selected.contains(_suitLetters[i])) i,
     };
+    // Remaining presses must not depend on SoftPulse/showGuidance. Quiet
+    // same-concept steps gate showGuidance on showTargetCue; after the
+    // learner takes a Hint SoftPulse press, guidance is false until Hint
+    // reopens — reporting 0 here would leave canRequestHint false (LPT-72).
+    final remainingSuits = const {'h', 'd', 'c', 's'}
+        .where((s) => !_selected.contains(s))
+        .length;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: remainingSuits,
+    );
     int? nextIndex;
     if (widget.showGuidance && widget.enabled) {
       for (var i = 0; i < _suitLetters.length; i++) {
@@ -1180,10 +1191,6 @@ class _LessonSuitBoardTableState extends State<LessonSuitBoardTable> {
         }
       }
     }
-    reportLessonSequentialPressProgress(
-      context,
-      remainingPressCount: nextIndex == null ? 0 : 1,
-    );
     return LessonTableStage(
       heroCodes: _heroCodes,
       boardCodes: _boardCodes,
