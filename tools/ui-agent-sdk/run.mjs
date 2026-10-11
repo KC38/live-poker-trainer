@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 /**
- * Launch one local Cursor SDK agent run for the ui-design-agent loop.
+ * Launch one Cursor SDK agent run for the ui-design-agent loop.
  *
- * Local runtime keeps iPhone 13 mini / sim_lock access on this Mac while
- * registering the chat under the Agents UI "SDK" source (unlike `agent -p`).
+ * Default runtime is cloud + My Machines worker on this Mac mini so the chat
+ * appears in the Cursor Agents sidebar as a bc-* agent (same place as other
+ * remote-machine chats). Pass --runtime local for an on-process local agent.
  *
  * Usage:
- *   node run.mjs --cwd <repo> --model <id> --log <path> --meta <path> -- <prompt>
+ *   node run.mjs --cwd <repo> --model <id> --log <path> --meta <path> \
+ *     [--runtime machine|local] [--machine <worker-name>] [--repo <url>] \
+ *     -- <prompt>
  *
  * Exit codes: 0 ok, 1 startup/run error, 2 run status error, 14 usage limit.
  */
@@ -14,11 +17,17 @@
 import { createWriteStream } from "node:fs";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
+import { execFileSync } from "node:child_process";
 import { Agent, CursorAgentError } from "@cursor/sdk";
+
+/** Default My Machines worker label for ~/live-poker-trainer on Kushal's Mac mini. */
+const DEFAULT_MACHINE = "cursor-agent-worker-4c8b3dc416";
+const DEFAULT_REPO = "https://github.com/kc38/live-poker-trainer";
 
 function usage() {
   console.error(
-    "usage: node run.mjs --cwd <repo> [--model default] --log <path> [--meta <path>] -- <prompt>",
+    "usage: node run.mjs --cwd <repo> [--model default] --log <path> [--meta <path>] " +
+      "[--runtime machine|local] [--machine <name>] [--repo <url>] -- <prompt>",
   );
   process.exit(1);
 }
@@ -29,6 +38,9 @@ function parseArgs(argv) {
     model: "default",
     log: "",
     meta: "",
+    runtime: process.env.UI_AGENT_SDK_RUNTIME || "machine",
+    machine: process.env.UI_AGENT_MACHINE_NAME || DEFAULT_MACHINE,
+    repo: process.env.UI_AGENT_REPO_URL || "",
     prompt: "",
   };
   const args = [...argv];
@@ -42,12 +54,53 @@ function parseArgs(argv) {
     else if (arg === "--model") out.model = args.shift() || "default";
     else if (arg === "--log") out.log = args.shift() || "";
     else if (arg === "--meta") out.meta = args.shift() || "";
+    else if (arg === "--runtime") out.runtime = args.shift() || "machine";
+    else if (arg === "--machine") out.machine = args.shift() || DEFAULT_MACHINE;
+    else if (arg === "--repo") out.repo = args.shift() || "";
     else usage();
   }
   if (!out.cwd || !out.log || !out.prompt) usage();
-  // CLI "auto" and empty → SDK catalog id "default" (Agents UI Auto).
   if (!out.model || out.model === "auto") out.model = "default";
+  if (out.runtime !== "machine" && out.runtime !== "local") {
+    console.error(`unsupported runtime: ${out.runtime}`);
+    process.exit(1);
+  }
   return out;
+}
+
+function resolveRepoUrl(cwd, explicit) {
+  if (explicit) return explicit;
+  try {
+    const url = execFileSync("git", ["-C", cwd, "remote", "get-url", "origin"], {
+      encoding: "utf8",
+    }).trim();
+    if (url.startsWith("git@github.com:")) {
+      return `https://github.com/${url.slice("git@github.com:".length).replace(/\.git$/, "")}`;
+    }
+    if (url.startsWith("https://github.com/")) {
+      return url.replace(/\.git$/, "").replace("https://github.com/KC38/", "https://github.com/kc38/");
+    }
+    return url || DEFAULT_REPO;
+  } catch {
+    return DEFAULT_REPO;
+  }
+}
+
+function cloudEnvVars() {
+  const keys = [
+    "SIM_LOCK_RUN_ID",
+    "SIM_LOCK_PID",
+    "ATLASSIAN_EMAIL",
+    "ATLASSIAN_API_TOKEN",
+    "FIREBASE_TOKEN",
+  ];
+  /** @type {Record<string, string>} */
+  const envVars = {};
+  for (const key of keys) {
+    const value = process.env[key];
+    if (value) envVars[key] = value;
+  }
+  return envVars;
 }
 
 function appendLine(stream, line) {
@@ -81,19 +134,34 @@ async function main() {
     process.stdout.write(`${line}\n`);
   };
 
-  log(`# ui-agent-sdk start model=${opts.model} cwd=${opts.cwd}`);
+  const repoUrl = resolveRepoUrl(opts.cwd, opts.repo);
+  log(
+    `# ui-agent-sdk start runtime=${opts.runtime} model=${opts.model}` +
+      (opts.runtime === "machine" ? ` machine=${opts.machine} repo=${repoUrl}` : ` cwd=${opts.cwd}`),
+  );
+
+  /** @type {import("@cursor/sdk").AgentOptions} */
+  const createOpts = {
+    apiKey,
+    model: { id: opts.model },
+  };
+  if (opts.runtime === "machine") {
+    createOpts.cloud = {
+      env: { type: "machine", name: opts.machine },
+      repos: [{ url: repoUrl, startingRef: "main" }],
+      envVars: cloudEnvVars(),
+      skipReviewerRequest: true,
+    };
+  } else {
+    createOpts.local = {
+      cwd: opts.cwd,
+      sandboxOptions: { enabled: false },
+    };
+  }
 
   let agent;
   try {
-    agent = await Agent.create({
-      apiKey,
-      model: { id: opts.model },
-      local: {
-        cwd: opts.cwd,
-        // Headless unattended loop: no approval prompts (same as agent -p --force).
-        sandboxOptions: { enabled: false },
-      },
-    });
+    agent = await Agent.create(createOpts);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     log(`# ui-agent-sdk create failed: ${message}`);
@@ -104,7 +172,10 @@ async function main() {
   }
 
   const agentId = agent.agentId || "";
-  log(`# ui-agent-sdk agentId=${agentId}`);
+  const agentUrl = agentId.startsWith("bc-")
+    ? `https://cursor.com/agents/${agentId}`
+    : "";
+  log(`# ui-agent-sdk agentId=${agentId}${agentUrl ? ` url=${agentUrl}` : ""}`);
   if (opts.meta) {
     mkdirSync(dirname(opts.meta), { recursive: true });
     writeFileSync(
@@ -112,9 +183,13 @@ async function main() {
       `${JSON.stringify({
         at: new Date().toISOString(),
         agentId,
+        agentUrl,
         model: opts.model,
+        runtime: opts.runtime,
+        machine: opts.runtime === "machine" ? opts.machine : null,
+        repo: opts.runtime === "machine" ? repoUrl : null,
         cwd: opts.cwd,
-        source: "sdk-local",
+        source: opts.runtime === "machine" ? "sdk-machine" : "sdk-local",
       })}\n`,
       "utf8",
     );
