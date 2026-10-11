@@ -144,6 +144,8 @@ async function main() {
   const createOpts = {
     apiKey,
     model: { id: opts.model },
+    // Provisional sidebar title until the agent renames to LPT-NN PR-<n>.
+    name: "ui-design-agent",
   };
   if (opts.runtime === "machine") {
     createOpts.cloud = {
