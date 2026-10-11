@@ -49,7 +49,7 @@ Run progress:
 - [ ] 5. Every solid finding filed (or updated); one KEY chosen to fix now
 - [ ] 6. Implemented in that ticket's worktree only
 - [ ] 7. Validated on the worktree build (retry loop)
-- [ ] 8. Merged, deployed, mini refreshed to origin/main
+- [ ] 8. Merged, deployed, mini refreshed to origin/main; chat renamed
 - [ ] 9. Validated on origin/main, that one ticket closed
 - [ ] 10. Learnings updated if needed, coverage logged, lock released, report
 ```
@@ -462,6 +462,20 @@ include the key; the PR test plan is the acceptance criteria. Step 9's
 refresh uses your lock and returns the mini to origin/main. Kill the
 `flutter-iphone-13-mini-$SLUG` tmux session if it is still up.
 
+**Rename this Agents chat as soon as the PR exists.** When you have both
+the ticket key and the PR number (right after `gh pr create`, or from
+`gh pr view --json number,url`), call the Cursor cloud MCP tool
+`rename-chat` on **this** run with:
+
+```text
+title: LPT-NN PR-<number>
+```
+
+Example: `LPT-67 PR-1660`. Keep it under 200 characters; ticket key and
+`PR-<n>` only (no summary). Skip silently when `rename-chat` is missing
+(CLI / local launcher) or when either the ticket or the PR is unknown.
+Do not rename other chats — only this session.
+
 ## 9. Validate on origin/main and close
 
 Walk **Validate before closing** again on origin/main on the mini (log
@@ -542,7 +556,11 @@ for this ticket is still running. Then:
 python3 tools/sim_lock.py release
 ```
 
+If step 8's rename did not run yet and this report includes both a ticket
+key and a PR number/URL, call `rename-chat` now with `LPT-NN PR-<number>`
+before the final reply (same rules as step 8).
+
 Reply with one short block: SHA walked, surface, ticket fixed and result,
-other tickets filed this run, branch and PR URL, attempts used, functions
-deploy result, leads logged, learnings updated or unchanged, and the lock
-released.
+other tickets filed this run, branch and PR URL, chat title after rename
+(or `rename: skipped`), attempts used, functions deploy result, leads
+logged, learnings updated or unchanged, and the lock released.
