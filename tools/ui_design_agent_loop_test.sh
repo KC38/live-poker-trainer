@@ -447,6 +447,21 @@ agent_args | grep -qx -- 'composer-2.5' || fail "CLI should pass overridden mode
 [[ "$(sdk_model_id)" == "composer-2.5" ]] || fail "SDK should pass overridden model"
 unset UI_AGENT_MODEL
 [[ "$(resolved_agent_model)" == "auto" ]] || fail "unset should return to auto"
+# prepare_launcher is a no-op for cli (unit tests use the fake agent binary).
+LAUNCHER=cli
+prepare_launcher || fail "cli prepare_launcher should succeed"
+LAUNCHER=sdk
+# Missing node_modules in a throwaway SDK_DIR should attempt install and fail closed.
+_sdk_backup="$SDK_DIR"
+SDK_DIR="$tmp/missing-sdk"
+mkdir -p "$SDK_DIR"
+printf '%s\n' '{"name":"x","private":true}' >"$SDK_DIR/package.json"
+if prepare_launcher; then
+  SDK_DIR="$_sdk_backup"
+  fail "prepare_launcher should fail without installable @cursor/sdk"
+fi
+SDK_DIR="$_sdk_backup"
+LAUNCHER=cli
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
 [[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \
