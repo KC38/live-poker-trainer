@@ -394,6 +394,11 @@ down. Empty board slot outlines stay off (`boardSlots: false` on
 `LessonPeekTable`) until a step deals community cards. Tapping your cards
 turns them face up. Tapping another seat's cards is a miss.
 
+Your two cards region-tap steps that deal a three-card flop
+(`act-01-01-01-*` on `LessonTableStage` in `select_identify_activity.dart`)
+also keep `boardSlots: false` so undelt turn/river outlines do not draw
+(LPT-66).
+
 Button and blinds' explain step (`LessonBlindsClockwiseTable`) draws seats,
 pot, pucks, posted blinds, and hole-card backs with empty board slot
 outlines off (`boardSlots: false`) until a later step deals community cards.
@@ -459,7 +464,9 @@ answer, Continue advances.
 `LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
 is the stage. `LessonPeekTable` turns `boardSlots` off so the first Your
-two cards step has no empty board outlines. `LessonBlindsClockwiseTable`
+two cards step has no empty board outlines. Framed `act-01-01-01-*`
+`LessonTableStage` copies the same gate for three-card flop teach steps
+(LPT-66). `LessonBlindsClockwiseTable`
 turns `boardSlots` off the same way for Button and blinds explain. Blinds
 frame steps in `select_identify_activity.dart`
 (`isLessonBlindsFrameActivity`) pass `boardSlots: false` on
