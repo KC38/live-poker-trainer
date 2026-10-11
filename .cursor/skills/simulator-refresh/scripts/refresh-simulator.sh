@@ -105,6 +105,29 @@ flutter_pub_get_resilient() {
   return "$code"
 }
 
+# Hot-restart can leave the process stuck on "Launching…" with no Dart VM
+# URI (LPT-70 closeout). Callers must not treat USR2 alone as ready.
+log_has_dart_vm() {
+  local log="${1:-${LOG_FILE:-/tmp/flutter-live-poker-trainer.run.log}}"
+  [[ -f "$log" ]] || return 1
+  # macOS/BSD grep: keep '-' last in the character class.
+  grep -aqE 'http://127\.0\.0\.1:[0-9]+/[A-Za-z0-9_=-]+/' "$log" 2>/dev/null
+}
+
+wait_for_dart_vm_log() {
+  local log="${1:-${LOG_FILE:-/tmp/flutter-live-poker-trainer.run.log}}"
+  local seconds="${2:-${REFRESH_VM_WAIT_SECONDS:-45}}"
+  local deadline=$(( $(date +%s) + seconds ))
+  while (( $(date +%s) < deadline )); do
+    if log_has_dart_vm "$log"; then
+      echo "Dart VM ready in $log"
+      return 0
+    fi
+    sleep 2
+  done
+  return 1
+}
+
 if [[ "${REFRESH_SIMULATOR_SOURCE_ONLY:-}" == "1" ]]; then
   return 0 2>/dev/null || exit 0
 fi
@@ -178,6 +201,25 @@ command -v flutter >/dev/null 2>&1 || {
   exit 0
 }
 
+kill_device_flutter() {
+  local pid
+  while IFS= read -r pid; do
+    [[ -z "$pid" ]] && continue
+    pid_targets_device "$pid" || continue
+    kill "$pid" 2>/dev/null || true
+    echo "killed stuck flutter pid $pid on iPhone 13 mini ($DEVICE_ID)"
+  done < <(pgrep -f 'flutter_tools\.snapshot run -d' 2>/dev/null || true)
+  if [[ -f "$PID_FILE" ]]; then
+    pid="$(tr -d '[:space:]' <"$PID_FILE" 2>/dev/null || true)"
+    if [[ -n "${pid:-}" ]]; then
+      kill "$pid" 2>/dev/null || true
+    fi
+    rm -f "$PID_FILE"
+  fi
+  # Truncate so a stale VM URI from an earlier session cannot fake readiness.
+  prepare_flutter_log "$LOG_FILE" "$PID_FILE"
+}
+
 hot_restart_pid() {
   local pid="$1"
   if kill -0 "$pid" 2>/dev/null; then
@@ -241,7 +283,11 @@ fi
 
 if [[ "$restarted" -gt 0 ]]; then
   echo "hot-restarted $restarted flutter run session(s) on iPhone 13 mini"
-  exit 0
+  if wait_for_dart_vm_log "$LOG_FILE"; then
+    exit 0
+  fi
+  echo "Dart VM missing after hot-restart (stuck Launching?); cold-starting flutter run"
+  kill_device_flutter
 fi
 
 if pgrep -f "flutter_tools\\.snapshot run -d ${DEVICE_ID}" >/dev/null 2>&1; then
@@ -251,8 +297,12 @@ if pgrep -f "flutter_tools\\.snapshot run -d ${DEVICE_ID}" >/dev/null 2>&1; then
   done
 fi
 if pgrep -f "flutter_tools\\.snapshot run -d ${DEVICE_ID}" >/dev/null 2>&1; then
-  echo "skip-start: a flutter run is still active on $DEVICE_ID"
-  exit 0
+  if wait_for_dart_vm_log "$LOG_FILE"; then
+    echo "skip-start: flutter run already active with Dart VM on $DEVICE_ID"
+    exit 0
+  fi
+  echo "active flutter run has no Dart VM; cold-starting"
+  kill_device_flutter
 fi
 
 open -a /Applications/Xcode.app/Contents/Applications/DeviceHub.app 2>/dev/null || true
@@ -269,3 +319,8 @@ fi
 
 nohup flutter run -d "$DEVICE_ID" --pid-file "$PID_FILE" >"$LOG_FILE" 2>&1 &
 echo "started pid $! device=$DEVICE_ID log=$LOG_FILE"
+# Best-effort wait so agent closeout refresh does not return while stuck on Launching.
+if ! wait_for_dart_vm_log "$LOG_FILE" "${REFRESH_COLD_VM_WAIT_SECONDS:-120}"; then
+  echo "warning: Dart VM not in $LOG_FILE yet after cold start (callers may retry)"
+  exit 1
+fi

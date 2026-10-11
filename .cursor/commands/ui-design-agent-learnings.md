@@ -137,10 +137,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer, when `openlesson` resumes mid-lesson past the beat under test,
   finishing/restarting or validating a sibling activity on the **same**
   code path for closeout proof instead of filing unreachable.
-- Prefer, when `refresh-simulator.sh` leaves only a `Launching…` line and a
-  dead pid, starting `flutter run` yourself in tmux with
-  `SIM_LOCK_RUN_ID=…` exported on that command line. On Xcode "No space
-  left on device", clear `~/Library/Developer/Xcode/DerivedData/Runner-*`
+- Prefer trusting `refresh-simulator.sh` after hot-restart — it waits for a
+  Dart VM URI and cold-starts if stuck on `Launching…`. If it still fails,
+  start `flutter run` yourself in tmux with `SIM_LOCK_RUN_ID=…` exported.
+  On Xcode "No space left on device", clear
+  `~/Library/Developer/Xcode/DerivedData/Runner-*`
   (and `/tmp/flutter_tools.*`) then retry once (LPT-61) — do not rewrite
   refresh or `needs-human` on the first disk-full build.
 - Prefer waiting until the target beat is settled before
