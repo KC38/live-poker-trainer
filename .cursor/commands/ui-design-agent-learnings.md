@@ -132,6 +132,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer clearing Hint / SoftPulse before staging an invalid Best five for
   Undo proof so the status hits "Five tapped — try a stronger five" and
   cyan matches the five taps.
+- Never loop dozens of `tap Continue` to brute-force prerequisite lessons —
+  course start rate-limits with "Too many course requests" and blocks the
+  mini until Retry/backoff; finish Home's next node or pace taps instead.
 - Never run `sips -c` (or similar) in place on the only copy of an issue
   or validated PNG — it can overwrite the file with a tiny crop. Copy
   first, crop the copy.
