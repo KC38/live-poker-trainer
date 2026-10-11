@@ -33,7 +33,8 @@ fi
 log_has_dart_vm() {
   local log="$1"
   [[ -f "$log" ]] || return 1
-  grep -aqE 'http://127\.0\.0\.1:[0-9]+/[A-Za-z0-9_=-]+/' "$log" 2>/dev/null
+  # Ignore stale URIs left above a newer Launching… / Xcode rebuild.
+  python3 "$ROOT/tools/flutter_log_ready.py" "$log" >/dev/null 2>&1
 }
 
 deadline=$(( $(date +%s) + SECONDS_WAIT ))

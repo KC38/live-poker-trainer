@@ -113,10 +113,13 @@ is up. Export `SIM_LOCK_RUN_ID` once (from the prompt or handoff) and go
 to step 2.
 
 Only refresh when you are switching builds (worktree validate, or
-post-merge origin/main) or when you later discover the URI is missing
-after a build switch. If refresh sticks on `Launching…` with no VM URI
-for ~30s, kill the dead pid and start `flutter run` in tmux yourself (see
-learnings) — do not wait minutes.
+post-merge origin/main) or when primary flutter dies / the URI is missing
+after a build switch. Prefer
+`.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh` over a
+hand-rolled tmux restart. If refresh sticks on `Launching…` with no
+post-Launching VM URI for ~30s, kill the dead pid and start `flutter run`
+in tmux yourself (see learnings), then `tools/wait_flutter_vm.sh` — do not
+bare-`AwaitShell` for minutes.
 
 If you are running outside the loop (or the VM is down), refresh yourself:
 
