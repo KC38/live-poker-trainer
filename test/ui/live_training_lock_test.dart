@@ -21,6 +21,17 @@ import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('the unrestricted unlock lesson title is on the course catalog', () async {
+    final raw = await rootBundle.loadString(kCourseCatalogAssetPath);
+    final catalog = CourseCatalog.fromJson(
+      jsonDecode(raw) as Map<String, dynamic>,
+    );
+    expect(
+      catalog.lessonById(kLiveUnrestrictedUnlockLessonId)?.title,
+      kLiveUnrestrictedUnlockLessonTitle,
+    );
+  });
+
   test('the warm-up unlock lesson title is on the course catalog', () async {
     final raw = await rootBundle.loadString(kCourseCatalogAssetPath);
     final catalog = CourseCatalog.fromJson(
@@ -111,5 +122,10 @@ void main() {
     expect(find.byType(PokerTableScreen), findsNothing);
     expect(find.textContaining('Rex warm-ups are open'), findsOneWidget);
     expect(find.textContaining('Section 2 jump check'), findsNothing);
+    expect(find.textContaining('Section 4 jump test'), findsNothing);
+    expect(
+      find.textContaining(kLiveUnrestrictedUnlockLessonTitle),
+      findsOneWidget,
+    );
   });
 }
