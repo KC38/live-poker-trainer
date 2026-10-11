@@ -231,46 +231,61 @@ class CommunityCardsView extends StatelessWidget {
           ),
           SizedBox(height: 4 * scale),
         ],
-        GlowHighlight(
-          active: highlightBoardGroup,
-          reserveLayout: false,
-          borderRadius: 10 * scale,
-          padding: EdgeInsets.all(4 * scale),
-          child: SizedBox(
-            key: const ValueKey<String>('felt-board-row'),
-            height: CommunityCardsView.cardsHeight * scale,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                for (var i = 0; i < 5; i++)
+        // SoftPulse the dealt cards only. Empty turn/river columns (when
+        // boardSlots is on) sit outside the glow so a three-card flop cue
+        // never rings phantom street width (LPT-68). When boardSlots is off,
+        // omit those placeholders entirely (LPT-66).
+        SizedBox(
+          key: const ValueKey<String>('felt-board-row'),
+          height: CommunityCardsView.cardsHeight * scale,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              GlowHighlight(
+                active: highlightBoardGroup,
+                reserveLayout: false,
+                borderRadius: 10 * scale,
+                padding: EdgeInsets.all(4 * scale),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    for (var i = 0; i < shown; i++)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: i == 0 ? 0 : CommunityCardsView.cardGap * scale,
+                        ),
+                        child: _BoardCardTarget(
+                          key: ValueKey(
+                            'board-card-$i-${community[i].code}',
+                          ),
+                          index: i,
+                          card: community[i],
+                          width: w,
+                          selected: selectedBoardIndexes.contains(i),
+                          highlight:
+                              !highlightBoardGroup &&
+                              highlightBoardIndexes.contains(i),
+                          dimmed: dimmedBoardIndexes.contains(i),
+                          orderBadge: boardOrderBadges[i],
+                          onTap: onBoardCardTap == null
+                              ? null
+                              : () => onBoardCardTap!(i),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              if (features.boardSlots)
+                for (var i = shown; i < 5; i++)
                   Padding(
                     padding: EdgeInsets.only(
-                      left: i == 0 ? 0 : CommunityCardsView.cardGap * scale,
+                      left: CommunityCardsView.cardGap * scale,
                     ),
-                    child:
-                        i < shown
-                            ? _BoardCardTarget(
-                              key: ValueKey(
-                                'board-card-$i-${community[i].code}',
-                              ),
-                              index: i,
-                              card: community[i],
-                              width: w,
-                              selected: selectedBoardIndexes.contains(i),
-                              highlight:
-                                  !highlightBoardGroup &&
-                                  highlightBoardIndexes.contains(i),
-                              dimmed: dimmedBoardIndexes.contains(i),
-                              orderBadge: boardOrderBadges[i],
-                              onTap: onBoardCardTap == null
-                                  ? null
-                                  : () => onBoardCardTap!(i),
-                            )
-                            : slot,
+                    child: slot,
                   ),
-              ],
-            ),
+            ],
           ),
         ),
         if (features.blinds) ...[
