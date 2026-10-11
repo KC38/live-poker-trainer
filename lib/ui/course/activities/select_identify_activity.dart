@@ -1903,6 +1903,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                             ? const ['Ah', 'Kd']
                             : scene.heroCodes,
                     boardCodes: scene.boardCodes,
+                    // Three-card flop teach steps are not five-card board
+                    // lessons — hide undelt turn/river outlines (LPT-66).
+                    features: TableFeaturesScope.of(
+                      context,
+                    ).copyWith(boardSlots: false),
                     villainCount:
                         scene.villainSeatCount < 3 ? 3 : scene.villainSeatCount,
                     heroFaceUp: true,
