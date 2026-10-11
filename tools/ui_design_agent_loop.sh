@@ -210,7 +210,21 @@ ensure_sdk_deps() {
     return 0
   fi
   log "installing @cursor/sdk into $SDK_DIR"
-  (cd "$SDK_DIR" && npm ci --omit=dev) || (cd "$SDK_DIR" && npm install --omit=dev)
+  if ! (cd "$SDK_DIR" && npm ci --omit=dev) && ! (cd "$SDK_DIR" && npm install --omit=dev); then
+    log "SDK npm install failed in $SDK_DIR"
+    return 1
+  fi
+  if [[ ! -d "$SDK_DIR/node_modules/@cursor/sdk" ]]; then
+    log "SDK install left $SDK_DIR without @cursor/sdk"
+    return 1
+  fi
+}
+
+# Install SDK deps before claiming the mini so the first machine/local SDK
+# run after a soft-stop or reboot does not hold the lock during npm ci.
+prepare_launcher() {
+  [[ "$LAUNCHER" == "sdk" ]] || return 0
+  ensure_sdk_deps
 }
 
 sync_primary() {
@@ -1730,7 +1744,11 @@ case "${1:-}" in
       echo "replacing idle tmux session (run-loop not alive)"
       lt kill-session -t "=$SESSION" 2>/dev/null || true
     fi
-    rm -f "$LOOP_PID_FILE"
+    rm -f "$LOOP_PID_FILE" "$STOP_FILE"
+    if ! prepare_launcher; then
+      echo "launcher prep failed (SDK deps); not starting" >&2
+      exit 1
+    fi
     # A server of our own, started from this login session with a clean
     # environment: a tmux server begun from an SSH login cannot reach the
     # keychain the CLI touches at startup, even with CURSOR_API_KEY set.
@@ -1740,7 +1758,7 @@ case "${1:-}" in
       LANG="${LANG:-en_US.UTF-8}" TERM="${TERM:-xterm-256color}" SHELL=/bin/zsh \
       tmux -L "$TMUX_SOCKET" new-session -d -s "$SESSION" \
       "bash '$SCRIPT' run-loop; echo 'loop exited'; exit"
-    echo "started the loop (watch: $SCRIPT attach)"
+    echo "started the loop (launcher=$LAUNCHER runtime=$SDK_RUNTIME model=$(resolved_agent_model); watch: $SCRIPT attach)"
     ;;
   install)
     mkdir -p "$(dirname "$PLIST")"
@@ -1834,7 +1852,9 @@ if url:
 PY
     fi
     if [[ -f "$PLIST" ]]; then echo "login item: installed ($LAUNCH_LABEL)"; else echo "login item: not installed ($SCRIPT install)"; fi
-    if [[ -f "$STOP_FILE" ]]; then echo "loop: stop requested"; fi
+    if [[ -f "$STOP_FILE" ]]; then
+      echo "loop: stop requested (exits after current run; next ensure → launcher=$LAUNCHER runtime=$SDK_RUNTIME model=$(resolved_agent_model))"
+    fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
     sim_lock status || true
     latest="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
