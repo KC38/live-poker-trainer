@@ -182,7 +182,7 @@ void main() {
     }
   });
 
-  testWidgets('lesson result shows XP and accuracy side by side', (
+  testWidgets('lesson result shows XP and accuracy when goal is unknown', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(402, 874);
@@ -209,7 +209,7 @@ void main() {
     expect(find.text('25'), findsOneWidget);
     expect(find.text('AMAZING'), findsOneWidget);
     expect(find.text('100%'), findsOneWidget);
-    expect(find.text('Daily goal'), findsNothing);
+    expect(find.text('DAILY GOAL'), findsNothing);
     expect(find.text('Mastery'), findsNothing);
     expect(find.text('Study streak'), findsNothing);
     expect(find.widgetWithText(ElevatedButton, 'CONTINUE'), findsOneWidget);
@@ -225,6 +225,39 @@ void main() {
     final shape =
         style!.shape!.resolve(const <WidgetState>{})! as RoundedRectangleBorder;
     expect(shape.borderRadius, BorderRadius.circular(14));
+  });
+
+  testWidgets('lesson result shows XP and daily goal at mini width (LPT-39)', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: const LessonResultScreen(
+            lessonTitle: 'Suits and ranks',
+            result: _complete,
+            dailyGoalMinutes: 10,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1000));
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('TOTAL XP'), findsOneWidget);
+    expect(find.text('25'), findsOneWidget);
+    expect(find.text('DAILY GOAL'), findsOneWidget);
+    expect(find.text('10 min'), findsOneWidget);
+    expect(find.text('AMAZING'), findsNothing);
+    expect(find.text('100%'), findsNothing);
+    expect(find.widgetWithText(ElevatedButton, 'CONTINUE'), findsOneWidget);
   });
 
   testWidgets('lesson result TOTAL XP shows review-scaled award', (

@@ -733,10 +733,11 @@ Home misses this loop. File one ticket per missing beat.
 uses `RexMascot` with `RexMood.celebrate` on a right answer and
 `RexMood.think` on a miss. `LessonResultScreen`
 (`lib/ui/screens/lesson_result_screen.dart`) draws `RexMascot` with
-`RexMood.celebrate` and a TOTAL XP and daily goal row. Embedded CONTINUE
-(`standalone: false`) calls `continueLearningAsGuest` when the anonymous
-draft is still pre-shell so AppRoot remounts Home instead of Welcome
-(LPT-70).
+`RexMood.celebrate` and Duo celebration cards for TOTAL XP and the daily
+goal (LPT-39). When goal minutes are unknown, the second card shows
+accepted accuracy. Embedded CONTINUE (`standalone: false`) calls
+`continueLearningAsGuest` when the anonymous draft is still pre-shell so
+AppRoot remounts Home instead of Welcome (LPT-70).
 
 The locked Live Training hub copy is `liveTrainingLockedMessage`
 (`lib/models/live_access.dart`), which names Baseline jump check via
