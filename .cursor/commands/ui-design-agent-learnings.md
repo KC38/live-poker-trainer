@@ -136,7 +136,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   until the hero cards are face-up (not empty outlines) before `tap You`.
   On locked-start, capture the Open-previous / Retry gate and read Rex's
   bubble against the gold Open-previous CTA — Retry-only copy with that
-  button is a bug (LPT-51).
+  button is a bug (LPT-51). For board SoftPulse tickets, read the coach
+  line first — unguided-mix is "Tap the community cards."; hole SoftPulse
+  on guided/scaffolded is a different cue (LPT-68 closeout).
+- Prefer adopting the holder `run_id` from
+  `~/.live-poker-trainer/simulator-lock.json` when `$SIM_LOCK_RUN_ID` fails
+  `guard` but the lock owner is this loop's `ui-design-agent` — a stale
+  exported id from an older shell must not block an already-claimed mini.
 - Prefer clearing Hint / SoftPulse before staging an invalid Best five for
   Undo proof so the status hits "Five tapped — try a stronger five" and
   cyan matches the five taps.
