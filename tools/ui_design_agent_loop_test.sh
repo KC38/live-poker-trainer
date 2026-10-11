@@ -47,6 +47,9 @@ export UI_AGENT_LOOP_SOURCE_ONLY=1
 export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 # one_run finalize must not poll 90s for coverage in unit tests.
 export UI_AGENT_COVERAGE_WAIT=0
+# Isolate from the machine's live ui-agent tmux session.
+export UI_AGENT_TMUX_SOCKET="ui-agent-test-$$"
+export UI_AGENT_TMUX_SESSION="ui-design-agent-test-$$"
 # shellcheck disable=SC1090
 source "$LOOP"
 export PATH="$tmp/bin:$PATH"
@@ -176,6 +179,9 @@ if [[ "\${1:-}" == "-L" && "\${3:-}" == "kill-session" ]]; then
   rm -f "$SESSION_FLAG"
   exit 0
 fi
+if [[ "\${1:-}" == "-L" && "\${3:-}" == "list-panes" ]]; then
+  exit 0
+fi
 exit 0
 EOF
 cat >"$HOME/.local/bin/launchctl" <<EOF
@@ -188,14 +194,15 @@ chmod +x "$HOME/.local/bin/tmux" "$HOME/.local/bin/launchctl"
 unset UI_AGENT_LOOP_SOURCE_ONLY
 start_out="$(bash "$LOOP" start)"
 grep -q 'started the loop' <<<"$start_out" || fail "start should report started: $start_out"
-grep -q -- '-L ui-agent new-session -d -s ui-design-agent ' "$TMUX_LOG" \
-  || fail "start must create the session on socket ui-agent: $(cat "$TMUX_LOG")"
+grep -q -- "-L ${UI_AGENT_TMUX_SOCKET} new-session -d -s ${UI_AGENT_TMUX_SESSION} " "$TMUX_LOG" \
+  || fail "start must create the session on test socket: $(cat "$TMUX_LOG")"
 grep -q 'loop exited' "$TMUX_LOG" \
   || fail "start must exit after run-loop (no idle exec bash): $(cat "$TMUX_LOG")"
 grep -q 'exec bash' "$TMUX_LOG" \
   && fail "start must not leave idle exec bash: $(cat "$TMUX_LOG")"
 while IFS= read -r line; do
-  [[ "$line" == "-L ui-agent "* ]] || fail "tmux call left socket ui-agent: $line"
+  [[ "$line" == "-L ${UI_AGENT_TMUX_SOCKET} "* ]] \
+    || fail "tmux call left test socket: $line"
 done <"$TMUX_LOG"
 
 # Fake tmux does not exec run-loop; simulate a live loop pid for "already running".
@@ -206,8 +213,8 @@ new_count="$(grep -c 'new-session' "$TMUX_LOG" || true)"
 [[ "$new_count" == 1 ]] || fail "a second start must not open another session (got $new_count)"
 
 status_out="$(bash "$LOOP" status)"
-grep -q 'loop: running (tmux -L ui-agent, session ui-design-agent' <<<"$status_out" \
-  || fail "status should name the ui-agent socket: $status_out"
+grep -q "loop: running (tmux -L ${UI_AGENT_TMUX_SOCKET}, session ${UI_AGENT_TMUX_SESSION}" <<<"$status_out" \
+  || fail "status should name the test socket: $status_out"
 grep -q 'login item: not installed' <<<"$status_out" \
   || fail "login item should start uninstalled: $status_out"
 
@@ -440,6 +447,47 @@ USAGE_LIMIT_SLEEP=1234
   || fail "UI_AGENT_USAGE_LIMIT_SLEEP override ignored"
 unset UI_AGENT_USAGE_LIMIT_SLEEP
 USAGE_LIMIT_SLEEP=""
+
+# one_run must restore run_loop's LOOP_PID EXIT trap (not `trap - EXIT`).
+echo $$ >"$LOOP_PID_FILE"
+trap 'rm -f "$LOOP_PID_FILE"' EXIT
+python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1 || true
+one_run >/dev/null 2>&1 || true
+trap_out="$(trap -p EXIT || true)"
+# trap -p prints the literal "$LOOP_PID_FILE" (not the expanded path).
+[[ "$trap_out" == *LOOP_PID_FILE* ]] \
+  || fail "one_run must restore LOOP_PID EXIT trap, got: $trap_out"
+
+# Stale/dead pid file + live tmux run-loop → recover, do not report dead.
+# Need a process whose argv contains ui_design_agent_loop.sh run-loop (the
+# adoption guard). Prefer the machine's live loop; otherwise spawn a stub.
+recover_pid="$(pgrep -f 'ui_design_agent_loop\.sh run-loop' | head -1 || true)"
+recover_stub=""
+if [[ -z "$recover_pid" ]]; then
+  recover_stub="$tmp/ui_design_agent_loop.sh"
+  printf '%s\n' '#!/usr/bin/env bash' 'sleep 60' >"$recover_stub"
+  chmod +x "$recover_stub"
+  bash "$recover_stub" run-loop &
+  recover_pid=$!
+  sleep 0.2
+fi
+echo 999999 >"$LOOP_PID_FILE"
+tmux_run_loop_pid() { echo "$recover_pid"; }
+loop_is_alive || fail "loop_is_alive should recover via tmux_run_loop_pid"
+[[ "$(cat "$LOOP_PID_FILE")" == "$recover_pid" ]] \
+  || fail "loop_is_alive should rewrite LOOP_PID_FILE from tmux"
+# No live run-loop and dead pid → not alive.
+tmux_run_loop_pid() { return 1; }
+echo 999999 >"$LOOP_PID_FILE"
+loop_is_alive && fail "dead pid + no tmux run-loop must be not alive"
+# Drop mocks/pid so later start/ensure tests see a clean slate.
+unset -f tmux_run_loop_pid
+rm -f "$LOOP_PID_FILE"
+trap - EXIT
+if [[ -n "$recover_stub" ]]; then
+  kill "$recover_pid" 2>/dev/null || true
+  wait "$recover_pid" 2>/dev/null || true
+fi
 
 : >"$HEALTH_FILE"
 : >"$COVERAGE_FILE"

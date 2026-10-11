@@ -49,11 +49,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   tickets from one walk is required when several distinct bugs have
   screenshots; only the chosen KEY gets make-change → close. Later runs
   pick up the rest from the open queue.
-- Never edit the primary checkout. All code changes go through make-change
-  in a `.worktrees/<slug>` worktree.
-- Never invent a GitHub owner/URL from a person's name (e.g.
-  `kushalchachan/...`). PR links must come from `gh pr create` output or
-  `gh pr view <n> --json url -q .url` (repo is `KC38/live-poker-trainer`).
+- Never edit the primary checkout (make-change worktrees only) or invent
+  GitHub owner/URLs from a person's name — PR links from `gh` only
+  (`KC38/live-poker-trainer`).
+- Never let LaunchAgent `ensure`/`start` kill a live run-loop tmux session
+  when the pid file is stale after `one_run`; recover the pid from the
+  session instead of `kill-session`.
 
 ## Prefer
 
