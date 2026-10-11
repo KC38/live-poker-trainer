@@ -47,8 +47,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   **this** chat via cloud MCP `rename-chat` (`cursor-cloud`) to
   `LPT-NN PR-<n>` (step 8; step 10 fallback). That is the sidebar title
   only — never rename a make-change branch to `cursor/…` (LPT-69). Keep
-  `fix/LPT-NN-…` / `feature/LPT-NN-…`. Skip when the tool is missing or
-  either id is unknown — never invent a title or rename another chat.
+  `fix/LPT-NN-…` / `feature/LPT-NN-…`. When ManagePullRequest refuses a
+  make-change branch for lacking `cursor/`, recreate with
+  `skip_branch_prefix_check: true` — do not rename the ticket branch to
+  `cursor/…` (LPT-70). Skip rename-chat when the tool is missing or either
+  id is unknown — never invent a title or rename another chat.
 - Never hardcode a simulator UDID (always
   `DEVICE="$(tools/iphone_13_mini_udid.sh)"`) or launch a subagent / second
   parallel `/ui-design-agent` run.
@@ -215,8 +218,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-12: LPT-69 SoftPulse on D/SB/BB pucks (`cuePuckLabel` + inflated
-  puck box); also wire `select_identify` blinds frames, not only explain.
-  Closeout: one `--attach` list; never rename make-change to `cursor/…`.
-  LPT-68 board SoftPulse on dealt flop; adopt stale lock `run_id`; Launching
-  + dead pid → start `flutter run` in tmux yourself.
+- 2026-10-12: LPT-70 embedded Lesson Complete CONTINUE → Home via
+  `continueLearningAsGuest` on result (not during complete). ManagePullRequest
+  + make-change: `skip_branch_prefix_check` keeps `fix/LPT-*`. Fresh Welcome
+  locks Suits via openlesson — repro CONTINUE-routing on Your two cards.
+  LPT-69 SoftPulse on D/SB/BB pucks; LPT-68 board SoftPulse; adopt stale lock
+  `run_id`; Launching + dead pid → start `flutter run` in tmux yourself.
