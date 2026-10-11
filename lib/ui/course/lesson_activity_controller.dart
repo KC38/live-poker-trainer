@@ -165,17 +165,15 @@ class LessonActivityController extends ChangeNotifier {
   bool get showTargetCue {
     // Graded Nice! / Oops owns the beat — no Hint SoftPulse under the dock.
     if (_lastResult != null) return false;
-    // Unlock SoftPulse without Hint only when cues are painted by default.
-    // Select-identify scaffolded keeps SoftPulse off until Hint
-    // ([lessonFrameHintShownByDefault] is false) — do not set showTargetCue
-    // from stage alone or Hint stays disabled with no gold (LPT-73).
+    // Most scaffolded teaching SoftPulse by default (LPT-63 kicker). Blinds
+    // seat SoftPulse paints only after Hint ([_cuesAnswerSeat]) — keep
+    // showTargetCue off until then so Hint stays enabled (LPT-73).
     final unlocked = _hintVisible ||
         (!lessonFrameSoftPulseQuietByDefault(activity, isReview: isReview) &&
             (activity.stage == ActivityStage.explain ||
                 activity.stage == ActivityStage.guided ||
                 (activity.stage == ActivityStage.scaffolded &&
-                    activity.renderer !=
-                        ActivityRenderer.selectIdentify)));
+                    !lessonFrameBlindsSoftPulseWaitsForHint(activity))));
     if (!unlocked) return false;
     if (!_feltDealReady) return false;
     // Sequential wave-close is only for stages that can re-open via Hint.
