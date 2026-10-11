@@ -2,13 +2,17 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/models/course/onboarding_models.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/onboarding_provider.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Shown after [completeCourseLesson] succeeds.
-class LessonResultScreen extends StatefulWidget {
+class LessonResultScreen extends ConsumerStatefulWidget {
   /// Creates the result screen.
   const LessonResultScreen({
     super.key,
@@ -20,16 +24,19 @@ class LessonResultScreen extends StatefulWidget {
   final String lessonTitle;
   final CompleteCourseLessonResult result;
 
+  /// When false, CONTINUE pops the embedded runner (Home / openlesson).
+  /// When true, CONTINUE pops to the first route (onboarding push).
   final bool standalone;
 
   @override
-  State<LessonResultScreen> createState() => _LessonResultScreenState();
+  ConsumerState<LessonResultScreen> createState() => _LessonResultScreenState();
 }
 
-class _LessonResultScreenState extends State<LessonResultScreen>
+class _LessonResultScreenState extends ConsumerState<LessonResultScreen>
     with TickerProviderStateMixin {
   late final AnimationController _enter;
   late final AnimationController _bounce;
+  bool _continuing = false;
 
   @override
   void initState() {
@@ -58,9 +65,29 @@ class _LessonResultScreenState extends State<LessonResultScreen>
     return 'NICE';
   }
 
-  void _onContinue() {
+  Future<void> _onContinue() async {
+    if (_continuing) return;
     final nav = Navigator.of(context);
     if (!widget.standalone) {
+      // openlesson / Home push with embeddedInShell keeps Welcome (or another
+      // pre-shell draft) as the first route. Completing skips the celebration
+      // chain, so CONTINUE would pop onto Get started while the guest already
+      // has course progress. Promote to shell before pop so AppRoot remounts
+      // Home (LPT-70).
+      final isAnonymous = ref.read(authServiceProvider).isAnonymous;
+      final onboarding = ref.read(onboardingControllerProvider);
+      if (isAnonymous &&
+          onboarding.step != OnboardingStep.done &&
+          !onboarding.firstLessonCompleted) {
+        _continuing = true;
+        await ref
+            .read(onboardingControllerProvider.notifier)
+            .continueLearningAsGuest();
+        // PokerLabApp remounts onto shell and disposes this route. If the
+        // host did not remount (tests / edge), pop the result ourselves.
+        if (!mounted) return;
+      }
+      if (!nav.canPop()) return;
       nav.pop();
       return;
     }
@@ -159,7 +186,7 @@ class _LessonResultScreenState extends State<LessonResultScreen>
                 ),
                 const Spacer(flex: 3),
                 ElevatedButton(
-                  onPressed: _onContinue,
+                  onPressed: _continuing ? null : _onContinue,
                   child: const Text('CONTINUE'),
                 ),
               ],

@@ -1,10 +1,15 @@
 /// Lesson result CONTINUE must leave the screen.
 library;
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/models/course/onboarding_models.dart';
+import 'package:live_poker_trainer/providers/auth_provider.dart';
+import 'package:live_poker_trainer/providers/onboarding_provider.dart';
+import 'package:live_poker_trainer/services/auth_service.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_result_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
@@ -277,4 +282,184 @@ void main() {
     expect(find.text('100%'), findsNothing);
     expect(find.text('AMAZING'), findsNothing);
   });
+
+  testWidgets(
+    'embedded CONTINUE promotes anonymous Welcome draft to shell (LPT-70)',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final onboarding = OnboardingController(null);
+      expect(onboarding.state.step, OnboardingStep.welcome);
+      expect(onboarding.state.firstLessonCompleted, isFalse);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            onboardingControllerProvider.overrideWith((ref) => onboarding),
+            authServiceProvider.overrideWithValue(_AnonymousAuthService()),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: Builder(
+              builder: (context) {
+                return Scaffold(
+                  body: Center(
+                    child: FilledButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder:
+                                (_) => const LessonResultScreen(
+                                  lessonTitle: 'Your two cards',
+                                  result: _complete,
+                                  standalone: false,
+                                ),
+                          ),
+                        );
+                      },
+                      child: const Text('open-result'),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('open-result'));
+      await tester.pumpAndSettle();
+      expect(find.text('Lesson Complete!'), findsOneWidget);
+      expect(find.text('Get started'), findsNothing);
+
+      await tester.ensureVisible(
+        find.widgetWithText(ElevatedButton, 'CONTINUE'),
+      );
+      await tester.tap(find.widgetWithText(ElevatedButton, 'CONTINUE'));
+      await tester.pumpAndSettle();
+
+      expect(onboarding.state.step, OnboardingStep.done);
+      expect(onboarding.state.firstLessonCompleted, isTrue);
+      expect(onboarding.state.pendingSaveProgress, isFalse);
+      // Draft promotion remounts AppRoot onto shell in production; here the
+      // under-route remains because this harness is not PokerLabApp.
+      expect(find.text('Lesson Complete!'), findsNothing);
+      expect(find.text('open-result'), findsOneWidget);
+      expect(find.text('Get started'), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'embedded CONTINUE still pops when guest already finished onboarding',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      final onboarding = OnboardingController(null);
+      await onboarding.continueLearningAsGuest();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            onboardingControllerProvider.overrideWith((ref) => onboarding),
+            authServiceProvider.overrideWithValue(_AnonymousAuthService()),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: Builder(
+              builder: (context) {
+                return Scaffold(
+                  body: Center(
+                    child: FilledButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder:
+                                (_) => const LessonResultScreen(
+                                  lessonTitle: 'Suits and ranks',
+                                  result: _complete,
+                                  standalone: false,
+                                ),
+                          ),
+                        );
+                      },
+                      child: const Text('open-result'),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.text('open-result'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ElevatedButton, 'CONTINUE'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Lesson Complete!'), findsNothing);
+      expect(find.text('open-result'), findsOneWidget);
+      expect(onboarding.state.step, OnboardingStep.done);
+    },
+  );
+}
+
+/// Anonymous guest for embedded CONTINUE recovery.
+class _AnonymousAuthService implements AuthService {
+  @override
+  Stream<User?> get authStateChanges => const Stream.empty();
+
+  @override
+  User? get currentUser => null;
+
+  @override
+  String? get currentUid => 'guest';
+
+  @override
+  bool get isAnonymous => true;
+
+  @override
+  Future<User> registerWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<User> signInWithEmail({
+    required String email,
+    required String password,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<User> signInWithGoogle() => throw UnimplementedError();
+
+  @override
+  Future<User> signInAnonymously() => throw UnimplementedError();
+
+  @override
+  Future<User> linkWithEmail({
+    required String email,
+    required String password,
+    String? displayName,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<User> linkWithGoogle() => throw UnimplementedError();
+
+  @override
+  Future<void> sendPasswordResetEmail({required String email}) async {}
+
+  @override
+  Future<void> signOut() async {}
 }
