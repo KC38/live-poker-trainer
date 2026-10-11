@@ -416,6 +416,24 @@ run_log_has_usage_limit "$usage_log" || fail "should detect usage limit text"
 secs="$(sleep_usage_limit_seconds "$usage_log")"
 [[ "$secs" =~ ^[0-9]+$ ]] || fail "sleep seconds must be numeric, got $secs"
 (( secs >= 1800 && secs <= 86400 )) || fail "sleep seconds out of range: $secs"
+# Reset day = today must sleep until tomorrow (~minutes..24h), not floor at 1800 forever.
+today_mdy="$(date '+%m/%d/%Y')"
+today_log="$LOG_DIR/run-usage-limit-today.log"
+printf '%s\n' \
+  "Your usage limits will reset when your monthly cycle ends on ${today_mdy}." \
+  >"$today_log"
+today_secs="$(sleep_usage_limit_seconds "$today_log")"
+(( today_secs >= 1800 && today_secs <= 86400 )) \
+  || fail "today reset sleep out of range: $today_secs"
+# Default model is composer-2.5 (bypasses Auto quota); `auto` omits --model.
+[[ "$(resolved_agent_model)" == "composer-2.5" ]] \
+  || fail "default model should be composer-2.5, got $(resolved_agent_model)"
+agent_args | grep -qx -- '--model' || fail "agent_args should pass --model by default"
+agent_args | grep -qx -- 'composer-2.5' || fail "agent_args should default to composer-2.5"
+UI_AGENT_MODEL=auto
+[[ -z "$(resolved_agent_model)" ]] || fail "UI_AGENT_MODEL=auto should resolve empty"
+agent_args | grep -q -- '--model' && fail "auto must omit --model"
+unset UI_AGENT_MODEL
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
 [[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \

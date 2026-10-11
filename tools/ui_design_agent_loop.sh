@@ -26,8 +26,8 @@
 # make-change / deploy-functions.sh can deploy from LaunchAgent runs.
 #
 # Environment:
-#   UI_AGENT_MODEL              model for `agent --model` (default: CLI default /
-#                               Auto). Set this when Auto hits a usage limit.
+#   UI_AGENT_MODEL              model for `agent --model` (default: composer-2.5).
+#                               Set to `auto` to force the CLI Auto router.
 #   UI_AGENT_GAP                seconds between runs (default 60)
 #   UI_AGENT_BUSY_SLEEP         seconds to sleep when the mini is busy (default 300)
 #   UI_AGENT_SIM_NOT_READY_SLEEP  seconds after programmatic SIM_NOT_READY (default 600)
@@ -111,10 +111,24 @@ load_secrets() {
   fi
 }
 
+# Resolved model for `agent --model`. Empty / unset → composer-2.5 (included
+# models stay usable when Auto hits monthly API quota). Explicit `auto` keeps
+# the CLI default router (no --model flag).
+resolved_agent_model() {
+  local model="${UI_AGENT_MODEL:-composer-2.5}"
+  if [[ -z "$model" || "$model" == "auto" ]]; then
+    echo ""
+    return 0
+  fi
+  echo "$model"
+}
+
 agent_args() {
   local args=(-p --force --trust --sandbox disabled --output-format text --workspace "$(primary)")
-  if [[ -n "${UI_AGENT_MODEL:-}" ]]; then
-    args+=(--model "$UI_AGENT_MODEL")
+  local model
+  model="$(resolved_agent_model)"
+  if [[ -n "$model" ]]; then
+    args+=(--model "$model")
   fi
   printf '%s\n' "${args[@]}"
 }
@@ -167,6 +181,10 @@ try:
 except OSError:
     pass
 # "Your usage limits will reset when your monthly cycle ends on 10/11/2026."
+# That date is the *last* day of the cycle; midnight of that day is often
+# already past while Auto is still blocked. Sleep until the next local
+# midnight after the stated day (+5m), not until a past 00:05 that floors
+# forever at the 30m minimum and thrashes every half hour.
 match = re.search(
     r"ends on\s+(\d{1,2})/(\d{1,2})/(\d{4})",
     text,
@@ -176,10 +194,15 @@ now = datetime.now().astimezone()
 if match:
     month, day, year = (int(match.group(1)), int(match.group(2)), int(match.group(3)))
     try:
-        reset = datetime(year, month, day, 0, 5, tzinfo=now.tzinfo)
-        seconds = int((reset - now).total_seconds())
-        # Keep a floor so a mis-parsed "today" does not spin; cap at 24h so
-        # a wrong far-future date cannot freeze the loop for days.
+        day_start = datetime(year, month, day, 0, 0, tzinfo=now.tzinfo)
+        next_cycle = day_start + timedelta(days=1, minutes=5)
+        seconds = int((next_cycle - now).total_seconds())
+        if seconds < 1800:
+            tomorrow = (now + timedelta(days=1)).replace(
+                hour=0, minute=5, second=0, microsecond=0
+            )
+            seconds = int((tomorrow - now).total_seconds())
+        # Cap at 24h so a wrong far-future date cannot freeze the loop for days.
         print(max(1800, min(seconds, 86400)))
         raise SystemExit(0)
     except ValueError:
@@ -1313,7 +1336,9 @@ one_run() {
   while IFS= read -r line; do args+=("$line"); done < <(agent_args)
   text="$(prompt)"
 
-  log "run $stamp starting agent (log $run_log; lock $run_id)"
+  _model="$(resolved_agent_model)"
+  log "run $stamp starting agent (model ${_model:-auto}; log $run_log; lock $run_id)"
+  unset _model
   # Heal gaps from prior runs that died before write_health_row.
   heal_stale_run_health "$stamp"
   reconcile_health_from_coverage
@@ -1433,7 +1458,7 @@ with Path(path).open("a", encoding="utf-8") as handle:
 PY
   elif run_log_has_usage_limit "$run_log"; then
     code=14
-    log "run $stamp hit Cursor usage limit (exit 14); set UI_AGENT_MODEL to bypass Auto"
+    log "run $stamp hit Cursor usage limit (exit 14); model was $(resolved_agent_model || echo auto)"
     python3 - "$COVERAGE_FILE" "$sha" <<'PY' || true
 import json, sys
 from datetime import datetime
@@ -1448,8 +1473,8 @@ with Path(path).open("a", encoding="utf-8") as handle:
         "result": "usage-limit",
         "ticket": None,
         "leads": [
-            "Cursor Auto usage limit (ActionRequiredError); set UI_AGENT_MODEL "
-            "or wait for the monthly reset before retrying"
+            "Cursor usage limit (ActionRequiredError); switch UI_AGENT_MODEL "
+            "or wait for the monthly cycle reset (loop sleeps until next day)"
         ],
         "learnings": "unchanged",
     }) + "\n")
@@ -1488,7 +1513,7 @@ run_loop() {
         ;;
       14)
         _usage_sleep="$(sleep_usage_limit_seconds "$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1)")"
-        log "usage limit; sleeping ${_usage_sleep}s (set UI_AGENT_MODEL to use another model)"
+        log "usage limit; sleeping ${_usage_sleep}s (model=$(resolved_agent_model || echo auto))"
         sleep "$_usage_sleep"
         ;;
       *)
@@ -1680,6 +1705,7 @@ EOF
     else
       echo "loop: not running"
     fi
+    echo "model: $(resolved_agent_model || echo auto)"
     if [[ -f "$PLIST" ]]; then echo "login item: installed ($LAUNCH_LABEL)"; else echo "login item: not installed ($SCRIPT install)"; fi
     if [[ -f "$STOP_FILE" ]]; then echo "loop: stop requested"; fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
