@@ -17,6 +17,12 @@ Do **not** put both `ui-agent` and `grokbot` on the same issue. One owner.
 Content filings also carry `content` (from `/lesson-content-agent`). Fix and
 validate those on Chrome unless the ticket was labeled `ui-agent` instead.
 
+When a content ticket’s summary includes **`(catalog)`** or its body has an
+**Affected** table of many `act-…` ids, treat it as a **catalog-wide** fix:
+apply the same structural change to every listed activity (and any remaining
+catalog matches) in one PR, then spot-check ≥2 lessons on Chrome. Do not
+open follow-up PRs that only fix one lesson from that checklist.
+
 ## Jira queues
 
 **Mac mini (must exclude GrokBot):**

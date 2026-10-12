@@ -18,8 +18,8 @@ implement fixes, claim the iPhone 13 mini, or open make-change PRs.
 Hard rules:
 
 - One run, one audit pass: walk lessons / units from the coverage ledger,
-  file every solid finding, log coverage, end. Never launch a subagent or
-  parallel content-agent run.
+  file or **append to catalog-bundled** tickets for every solid finding,
+  log coverage, end. Never launch a subagent or parallel content-agent run.
 - **No simulator.** Do not call `sim_lock.py`, `refresh-simulator.sh`,
   `agent_tap.py`, or `agent_seed.py`. Leave the mini for `/ui-design-agent`.
 - Unattended: never ask the user a question. Product ambiguity → file with
@@ -38,7 +38,7 @@ Run progress:
 - [ ] 1. Contract + learnings read
 - [ ] 2. Audit target chosen (open ticket re-check or discovery walk)
 - [ ] 3. Catalog / schema / wave sources audited
-- [ ] 4. Every solid finding filed (or updated)
+- [ ] 4. Every solid finding filed/updated (catalog-bundled when structural)
 - [ ] 5. Coverage logged; learnings updated if needed; report
 ```
 
@@ -111,7 +111,11 @@ Prefer Section 1–2 foundations, then lessons missing `teachSpec`, then
 multi-objective lessons (split candidates).
 
 `surface` values: `lesson:<id>`, `unit:<id>`, `section:<id>`,
-`catalog:teachSpec`, `catalog:stages`, `catalog:curriculum-gaps`.
+`catalog:teachSpec`, `catalog:stages`, `catalog:curriculum-gaps`,
+`catalog:pressHints`, `catalog:deal-variants`, `catalog:nice-ladder`,
+`catalog:densify-tap`, `catalog:unguided-softpulse-map`,
+`catalog:explain-teachSpec`, `catalog:guideRegion`,
+`catalog:permanent-gold`.
 
 ## 3. Audit checklist
 
@@ -184,14 +188,85 @@ Never put both `grokbot` and `ui-agent` on one issue.
 
 ## 4. File tickets
 
-Match existing issues first (`text ~ "<phrase>"`). Update open matches;
-reopen Done if still true; else create.
+### Bundle structural gaps (default)
 
-Body template:
+When the **same structural ask** applies across lessons and only the
+activity/lesson ids differ, file **one catalog ticket**, not one ticket per
+lesson. The implementer must fix **every listed activity in one change**
+(same pattern, same fields, same validator proof).
+
+**Bundle these gap types** (search/update the open catalog ticket first):
+
+| Gap type | Catalog surface / summary stem | Owner |
+| --- | --- | --- |
+| Scaffolded missing `pressHints` | `catalog:pressHints` — “Scaffolded non-assessment steps missing authored pressHints (catalog)” | `grokbot` |
+| Missing `deal.variants` | `catalog:deal-variants` — “Interactive fixed steps missing authored deal.variants (catalog)” | `grokbot` |
+| SoftPulse explain Nice! short ladder | `catalog:nice-ladder` — “Explain SoftPulse Nice! repeats idle ask (catalog)” | `grokbot` |
+| Densify still “Tap the best answer” | `catalog:densify-tap` — “Densified asks still say Tap the best answer (catalog)” | `grokbot` |
+| Unguided SoftPulse map missing | `catalog:unguided-softpulse-map` — “Unguided SoftPulse maps missing (catalog)” | `grokbot` |
+| SoftPulse explain missing teachSpec/cues | `catalog:explain-teachSpec` — “SoftPulse explain steps missing teachSpec cues (catalog)” | `grokbot` |
+| Densify SoftPulse missing `guideRegion` | `catalog:guideRegion` — “Densified SoftPulse golds every tile / missing guideRegion (catalog)” | `ui-agent` |
+| Permanent gold / icon spoilers | `catalog:permanent-gold` — “Correct SoftPulse tiles permanently gold-tipped (catalog)” | `ui-agent` |
+| Same teachSpec field gap on many steps | `catalog:teachSpec` — name the field (e.g. “interactive steps missing teachSpec deal/cues (catalog)”) | `grokbot` |
+
+**Keep a per-lesson (or per-activity) ticket only when:**
+
+- Deal **honesty** / wrong cards / wrong streetLabel for a specific spot
+- Curriculum **split** / new unit (`needs-human`)
+- A one-off schema or renderer bug that is not a repeated content pattern
+- An In Progress ticket already owns that exact lesson fix — comment there
+
+**Match before create.** Search for the catalog summary stem (and
+`labels = content`). If an open catalog ticket exists: **edit its body** to
+append newly found `lessonId` / `activityId` rows (and SHA), comment the
+delta, do **not** open a sibling lesson ticket. If only old per-lesson
+tickets exist for that gap type: create/update the catalog parent, comment
+each child with “Bundled into LPT-NN”, link Relates, then transition
+children to **Done** (work tracked on the parent) — skip any child that is
+**In Progress**.
+
+### Body template (catalog bundle)
 
 ```markdown
 ## What happened
-<concrete content / schema / catalog path>
+Structural gap: <gap type>. Same fix applies across the catalog; do not
+ship lesson-by-lesson PRs for this pattern.
+
+## Affected (fix all in one change)
+| Lesson id | Activity id | Stage / role | Notes |
+| --- | --- | --- | --- |
+| lesson-… | act-… | scaffolded | e.g. pressHints length 0 |
+
+## Steps (for implementer)
+1. Apply the **same** field/pattern fix to **every** row above (and any
+   siblings still missing it when you re-scan `course.json` / wave sources).
+2. Keep wave helpers (`wave_*.mjs`) in sync with `course.json`.
+3. Validate: `node tools/course/validate_course.mjs`
+4. Spot-check ≥2 affected lessons on Flutter web / Chrome ~375×812
+   **or** iPhone 13 mini if `ui-agent`. Prefer one PR covering the catalog.
+
+## Expected
+Cite two-stage model + teachSpec contract (docs/agents/04-course.md,
+11-lesson-content-agent.md). Gap type: <pressHints | deal.variants |
+nice-ladder | densify-tap | softpulse-map | teachSpec | guideRegion |
+permanent-gold | …>.
+
+## Acceptance criteria
+1. Every listed activity (and any remaining catalog matches for this gap)
+   satisfies the contract
+2. Validator / unit test locks the rule when applicable
+3. Spot-check on owner device for ≥2 lessons
+4. Design-record / handbook sentence updated when behavior changes
+
+Device: GrokBot Chrome ~375×812 (or iPhone 13 mini when `ui-agent`).
+SHA audited: `<SHA>`.
+```
+
+### Body template (lesson-specific exception)
+
+```markdown
+## What happened
+<concrete content / schema / catalog path — why this is NOT a catalog bundle>
 
 ## Steps (for implementer)
 1. Open `content/course/v2/course.json` lesson `<id>` (or named schema).
@@ -200,29 +275,27 @@ Body template:
 4. Prove on Flutter web / Chrome ~375×812 **or** iPhone 13 mini if `ui-agent`.
 
 ## Expected
-Cite two-stage model + teachSpec contract (docs/agents/04-course.md,
-11-lesson-content-agent.md). Name which check failed: stage, teachSpec,
-randomization, variants, handFamily, suitFamily, pressHints, cues,
-assessment no-hint, or curriculum gap / lesson split.
+Cite two-stage model + teachSpec contract. Name the lesson-specific check.
 
 ## Acceptance criteria
 1. <observable in catalog / validator>
 2. <observable in app on the owner’s device>
 3. Validator / unit test locks the rule when applicable
-4. Design-record / handbook sentence updated in the same change when behavior changes
+4. Design-record / handbook sentence updated when behavior changes
 
 Device: GrokBot Chrome ~375×812 (or iPhone 13 mini when `ui-agent`).
 SHA audited: `<SHA>`.
 ```
 
 Priority: Highest = first lesson / onboarding broken; High = mis-teach or
-missing randomization on a core step; Medium = teachSpec / hint gaps;
+missing randomization on a core step; Medium = structural catalog gaps;
 Low = polish splits already marked needs-human.
 
 **Curriculum split / new unit proposals** always get `needs-human` until a
 human approves id migration.
 
-You may file many tickets per run. You never implement them.
+Prefer **few catalog tickets** per run over many lesson clones. You never
+implement them.
 
 ## 5. Coverage, learnings, report
 

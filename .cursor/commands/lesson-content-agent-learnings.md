@@ -33,13 +33,23 @@ Operational memory only — product contract stays in
 - Never run `build_seed_course.mjs` to patch one activity — prefer
   `course.json` + `validate_course.mjs` (full seed can wipe hand-maintained
   rows). Keep wave helpers in sync when you file wave-source tickets.
+- Never file a new per-lesson clone when an open catalog ticket already
+  covers that gap type — edit/append the parent checklist instead.
+- Never leave duplicate per-lesson structural tickets open after creating
+  a catalog parent — comment “Bundled into LPT-NN”, Relates-link, Done the
+  children (skip In Progress).
 
 ## Prefer
 
 - Prefer catalog surfaces `lesson:<id>` and `catalog:teachSpec` early in
   Section 1 before advanced sections.
-- Prefer one ticket per distinct gap (missing teachSpec vs missing
-  pressHints vs multi-concept split).
+- Prefer **one catalog ticket per structural gap type** listing every
+  affected `act-…` — not one ticket per lesson when only content ids differ
+  (pressHints, deal.variants, Nice! ladder, densify-tap, SoftPulse maps,
+  guideRegion, permanent-gold). Append to the open catalog parent instead
+  of filing siblings.
+- Prefer per-lesson tickets only for deal honesty / wrong cards /
+  curriculum splits (`needs-human`) / true one-offs.
 - Prefer citing activity ids (`act-…`) and field paths in Jira bodies.
 - Prefer GrokBot for schema/content/Dart wiring; `ui-agent` only for
   SoftPulse / Hint timing / hearts / iOS-only proofs.
