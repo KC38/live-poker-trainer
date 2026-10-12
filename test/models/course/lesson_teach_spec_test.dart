@@ -78,6 +78,13 @@ const _lessons = <String, List<String>>{
     'act-01-06-01-unguided-lab',
     'act-01-06-01-checkpoint-finish',
   ],
+  // LPT-110
+  'lesson-01-06-02-section-one-jump': [
+    'act-01-06-02-jump-ranks',
+    'act-01-06-02-jump-order',
+    'act-01-06-02-jump-legal',
+    'act-01-06-02-jump-hand',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -552,6 +559,51 @@ void main() {
       expect(cpDeal['suitFamily'], 'offsuit');
       expect(_list(cp, 'cues').every((c) => c['kind'] == 'none'), isTrue);
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+    });
+  });
+
+  group('Section 1 jump check (LPT-110)', () {
+    test('all jump_test steps author deal + kind none cues; no pressHints', () {
+      const ids = [
+        'act-01-06-02-jump-ranks',
+        'act-01-06-02-jump-order',
+        'act-01-06-02-jump-legal',
+        'act-01-06-02-jump-hand',
+      ];
+      for (final id in ids) {
+        final a = act(id);
+        expect(a.assessmentRole, AssessmentRole.jumpTest, reason: id);
+        expect(a.teachSpec!['deal'], isA<Map<String, dynamic>>(), reason: id);
+        expect(a.teachSpec!.containsKey('pressHints'), isFalse, reason: id);
+        expect(
+          _list(a, 'cues').every((c) => c['kind'] == 'none'),
+          isTrue,
+          reason: id,
+        );
+      }
+    });
+
+    test('ranks/order/legal/hand deal contracts', () {
+      final ranks = act('act-01-06-02-jump-ranks').teachSpec!['deal'] as Map;
+      expect(ranks['handFamily'], 'flush');
+      expect(
+        [for (final v in (ranks['variants'] as List)) (v as Map)['handFamily']],
+        ['straight', 'two_pair'],
+      );
+      expect(act('act-01-06-02-jump-order').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(act('act-01-06-02-jump-order').sequenceItems.map((s) => s.id), [
+        'j-utg',
+        'j-hj',
+        'j-co',
+        'j-btn',
+      ]);
+      final legal = act('act-01-06-02-jump-legal').teachSpec!['deal'] as Map;
+      expect(legal['mode'], 'fixed');
+      final hand = act('act-01-06-02-jump-hand').teachSpec!['deal'] as Map;
+      expect(hand['handFamily'], 'suited_ace');
+      expect(hand['suitFamily'], 'suited');
     });
   });
 }

@@ -543,7 +543,8 @@ match what `lesson_card_deal.dart` deals (`deal.mode` `none` when the step
 deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85), Hand
 ranks (LPT-88), Best five and kickers (LPT-91), Fold, check, call (LPT-94),
 Bet, raise, all-in (LPT-98), Streets and action order (LPT-101), How pots
-are won (LPT-104), Play a full toy hand (LPT-108).
+are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
+(LPT-110).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -670,6 +671,13 @@ hands deal `random_in_class` `suited_ace` / `suited` with SoftPulse cues on
 Checkpoint-finish deals `broadway` / `offsuit` with cues kind `none` on
 `open-kq`→`take-down` and has no `pressHints`. `multiStepAct` / `handLabAct`
 now carry `assessmentRole` and `teachSpec`.
+
+Section 1 jump check `teachSpec` (LPT-110): every step is `jump_test` with
+cues kind `none` and no `pressHints`. Jump-ranks deals `flush` with
+straight/two_pair seat variants; jump-order uses `deal.mode` `none` (wave CO
+seat synced); jump-legal authors the facing-bet flop as `fixed` QhJd/Td8s2c;
+jump-hand deals `suited_ace`/`suited` with ATs-specific copy softened to the
+class.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
