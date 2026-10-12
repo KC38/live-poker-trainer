@@ -3253,7 +3253,26 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "suited_ace",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-6",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "won-folds",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-06-01-scaffolded-multi",
@@ -3338,7 +3357,26 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "suited_ace",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ready-flop",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "cbet",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-06-01-unguided-lab",
@@ -3470,6 +3508,20 @@
                         ]
                       }
                     ]
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-bb",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -3557,7 +3609,26 @@
                       ]
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-kq",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "take-down",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },

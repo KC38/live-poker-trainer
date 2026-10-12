@@ -71,6 +71,13 @@ const _lessons = <String, List<String>>{
     'act-01-05-01-unguided-pot',
     'act-01-05-01-checkpoint-side',
   ],
+  // LPT-108
+  'lesson-01-06-01-guided-complete-hand': [
+    'act-01-06-01-guided-steps',
+    'act-01-06-01-scaffolded-multi',
+    'act-01-06-01-unguided-lab',
+    'act-01-06-01-checkpoint-finish',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -506,6 +513,44 @@ void main() {
       final cue = _list(cp, 'cues').single;
       expect(cue['target'], 'side-exists');
       expect(cue['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+    });
+  });
+
+  group('Play a full toy hand (LPT-108)', () {
+    test('multi-step SoftPulse targets match graded presses', () {
+      expect(
+        [
+          for (final c in _list(act('act-01-06-01-guided-steps'), 'cues'))
+            c['target'],
+        ],
+        ['open-6', 'won-folds'],
+      );
+      expect(
+        [
+          for (final c in _list(act('act-01-06-01-scaffolded-multi'), 'cues'))
+            c['target'],
+        ],
+        ['ready-flop', 'cbet'],
+      );
+      final guidedDeal =
+          act('act-01-06-01-guided-steps').teachSpec!['deal'] as Map;
+      expect(guidedDeal['handFamily'], 'suited_ace');
+      expect(guidedDeal['suitFamily'], 'suited');
+    });
+
+    test('lab and checkpoint author deal families; checkpoint kind none', () {
+      final lab = act('act-01-06-01-unguided-lab');
+      final labDeal = lab.teachSpec!['deal'] as Map;
+      expect(labDeal['handFamily'], 'high_card');
+      expect(labDeal['suitFamily'], 'offsuit');
+      expect(_list(lab, 'cues').single['target'], 'call-bb');
+
+      final cp = act('act-01-06-01-checkpoint-finish');
+      final cpDeal = cp.teachSpec!['deal'] as Map;
+      expect(cpDeal['handFamily'], 'broadway');
+      expect(cpDeal['suitFamily'], 'offsuit');
+      expect(_list(cp, 'cues').every((c) => c['kind'] == 'none'), isTrue);
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
     });
   });
