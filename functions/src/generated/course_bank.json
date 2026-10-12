@@ -12939,7 +12939,11 @@
                   ],
                   "objectives": [
                     "Tag extreme entry"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Raise → Barrel → Count."
+                  }
                 },
                 {
                   "id": "act-04-08-01-guided",
@@ -28380,7 +28384,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Raise → Barrel → Count."
+      }
     },
     "act-04-08-01-guided": {
       "activityId": "act-04-08-01-guided",

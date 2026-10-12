@@ -269,9 +269,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   prompts / Nice! / Oops naming the template flop — frame speech alone is
   not enough if grade lines still say “Pair of kings” (LPT-261).
 - Prefer waiting until Continue is enabled in `tree` after multi-press
-  explain grades (Clean→Dirty→Price) before tapping Continue — an early
-  Continue after PRICE nomatches and skips the Nice! dock (LPT-274
-  closeout).
+  explain grades (Clean→Dirty→Price, Raise→Barrel→Count, and other ladder
+  Nice!) before tapping Continue or SoftPulse validated shots — an early
+  Continue nomatches and can capture the Nice! dock instead of densify
+  gold (LPT-274, LPT-462 closeout).
 - Prefer extending `selectIdentifyDensifiedCoachLine` (not only
   `_coachText`) when a densified select_identify ask still shows catalog
   + "Tap the best answer." in the frame bubble — framed speech reads that

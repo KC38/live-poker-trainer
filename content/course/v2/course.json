@@ -12938,7 +12938,11 @@
                   ],
                   "objectives": [
                     "Tag extreme entry"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Raise \u2192 Barrel \u2192 Count."
+                  }
                 },
                 {
                   "id": "act-04-08-01-guided",
