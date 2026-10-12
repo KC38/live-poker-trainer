@@ -99,7 +99,17 @@ maps, densify `guideRegion`, permanent-gold spoilers.
 
 Per-lesson tickets stay for deal honesty / wrong cards, curriculum splits
 (`needs-human`), and true one-offs. See
-`.cursor/commands/lesson-content-agent.md` §4.
+`.cursor/commands/lesson-content-agent.md` §5.
+
+## Fast gap scan
+
+```bash
+node tools/course/scan_content_gaps.mjs --counts
+node tools/course/scan_content_gaps.mjs --gap pressHints --markdown
+```
+
+Gaps: `pressHints` | `deal-variants` | `teachSpec` | `explain-teachSpec`.
+The content agent runs this every pass to refresh `(catalog)` parents.
 
 ## Loop ops
 

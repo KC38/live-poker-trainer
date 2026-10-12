@@ -92,7 +92,7 @@ prompt() {
   if [[ -s "$STATE_DIR/content-agent-learnings-pending.md" ]]; then
     pending=" Pending learnings in $STATE_DIR/content-agent-learnings-pending.md."
   fi
-  printf '%s' "READY: lesson content agent (audit + file only). No simulator — do not claim sim_lock, refresh-simulator, agent_tap, or agent_seed. PRIMARY: ${primary_dir}. Read .cursor/commands/lesson-content-agent.md and lesson-content-agent-learnings.md and follow them exactly. Default Jira labels content,grokbot,lesson; use content,ui-agent,lesson only when Chrome cannot validate. File many tickets OK; never implement. Use python3 tools/jira.py only.${pending} Unattended: do not ask questions."
+  printf '%s' "READY: lesson content agent (audit + file only). No simulator — do not claim sim_lock, refresh-simulator, agent_tap, or agent_seed. PRIMARY: ${primary_dir}. Read .cursor/commands/lesson-content-agent.md and lesson-content-agent-learnings.md and follow them exactly. Every run: node tools/course/scan_content_gaps.mjs --counts then sync open (catalog) parents from --gap … --markdown (do not rediscover structural gaps lesson-by-lesson). Prefer catalog-bundled tickets; never implement. Default Jira labels content,grokbot,lesson; use content,ui-agent,lesson only when Chrome cannot validate. Use python3 tools/jira.py only.${pending} Unattended: do not ask questions."
 }
 
 ensure_sdk_deps() {
