@@ -34,7 +34,9 @@ void main() {
         'lesson-01-01-02-suits-and-ranks',
       ]) {
         final f = at(id);
-        expect(f.opponentCards && f.boardSlots, isTrue, reason: id);
+        expect(f.opponentCards, isTrue, reason: id);
+        // Empty board outlines stay off for every lesson (LPT-80).
+        expect(f.boardSlots, isFalse, reason: id);
         expect(
           [
             f.pot,
@@ -46,11 +48,26 @@ void main() {
             f.street,
             f.playerTypes,
             f.stats,
+            f.boardSlots,
           ],
           everyElement(isFalse),
           reason: id,
         );
       }
+    });
+
+    test('every lesson preset keeps boardSlots off (LPT-80)', () {
+      for (final id in [
+        'lesson-01-01-01-your-two-cards',
+        'lesson-01-01-03-blinds-and-button',
+        'lesson-01-03-01-fold-check-call',
+        'lesson-01-04-01-streets-and-order',
+        'lesson-04-06-01-observe-sticky-caller',
+        'lesson-07-12-01-five-type-final',
+      ]) {
+        expect(at(id).boardSlots, isFalse, reason: id);
+      }
+      expect(TableFeatures.full.boardSlots, isTrue);
     });
 
     test('Button and blinds turns on pucks, blinds, chips, and the pot', () {
@@ -72,9 +89,20 @@ void main() {
       final before = at('lesson-04-05-01-spr-commitment');
       final from = at('lesson-04-06-01-observe-sticky-caller');
       expect(before.playerTypes || before.stats, isFalse);
-      expect(before, TableFeatures.full.copyWith(playerTypes: false, stats: false));
-      expect(from, TableFeatures.full);
-      expect(at('lesson-07-12-01-five-type-final'), TableFeatures.full);
+      // Lessons keep boardSlots off; Live Training uses TableFeatures.full.
+      expect(
+        before,
+        TableFeatures.full.copyWith(
+          playerTypes: false,
+          stats: false,
+          boardSlots: false,
+        ),
+      );
+      expect(from, TableFeatures.full.copyWith(boardSlots: false));
+      expect(
+        at('lesson-07-12-01-five-type-final'),
+        TableFeatures.full.copyWith(boardSlots: false),
+      );
     });
 
     test('a layer stays on once it is taught', () {

@@ -4251,9 +4251,7 @@ class _LessonFlopLabelExplainTableState
             villainCount: 1,
             heroFaceUp: true,
             enabled: false,
-            features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
-            ),
+            features: lessonPassiveActionsTableFeatures,
           ),
         ),
         const SizedBox(height: 10),
@@ -4553,7 +4551,6 @@ class _LessonOutsPriceExplainTableState
             heroFaceUp: true,
             enabled: false,
             features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
               pot: true,
             ),
           ),
@@ -4837,9 +4834,7 @@ class _LessonFlopLinesExplainTableState
             villainCount: 1,
             heroFaceUp: true,
             enabled: false,
-            features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
-            ),
+            features: lessonPassiveActionsTableFeatures,
           ),
         ),
         const SizedBox(height: 10),
@@ -5141,9 +5136,7 @@ class _LessonTurnStoryExplainTableState
             villainCount: 1,
             heroFaceUp: true,
             enabled: false,
-            features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
-            ),
+            features: lessonPassiveActionsTableFeatures,
           ),
         ),
         const SizedBox(height: 10),
@@ -5443,9 +5436,7 @@ class _LessonRiverBinaryExplainTableState
             villainCount: 1,
             heroFaceUp: true,
             enabled: false,
-            features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
-            ),
+            features: lessonPassiveActionsTableFeatures,
           ),
         ),
         const SizedBox(height: 10),
@@ -5745,9 +5736,7 @@ class _LessonMultiwayPlanExplainTableState
             villainCount: 3,
             heroFaceUp: true,
             enabled: false,
-            features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
-            ),
+            features: lessonPassiveActionsTableFeatures,
           ),
         ),
         const SizedBox(height: 10),
@@ -6031,9 +6020,7 @@ class _LessonCommonLeaksExplainTableState
             villainCount: 2,
             heroFaceUp: true,
             enabled: false,
-            features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
-            ),
+            features: lessonPassiveActionsTableFeatures,
           ),
         ),
         const SizedBox(height: 10),
@@ -6333,9 +6320,7 @@ class _LessonRangeUpdateExplainTableState
             villainCount: 1,
             heroFaceUp: true,
             enabled: false,
-            features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
-            ),
+            features: lessonPassiveActionsTableFeatures,
           ),
         ),
         const SizedBox(height: 10),
@@ -6754,9 +6739,7 @@ class _LessonMultiStreetPlanExplainTableState
             villainCount: 1,
             heroFaceUp: true,
             enabled: false,
-            features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
-            ),
+            features: lessonPassiveActionsTableFeatures,
           ),
         ),
         const SizedBox(height: 10),
@@ -7204,7 +7187,6 @@ class _LessonSizingLanguageExplainTableState
             heroFaceUp: true,
             enabled: false,
             features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
               pot: true,
             ),
           ),
@@ -7498,7 +7480,6 @@ class _LessonSprDepthExplainTableState
             heroFaceUp: true,
             enabled: false,
             features: lessonPassiveActionsTableFeatures.copyWith(
-              boardSlots: true,
               pot: true,
               stacks: true,
             ),
