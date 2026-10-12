@@ -1410,13 +1410,8 @@ felt.
 | Advanced flop lines | X/R, Probe, Delay, Donk; densified SoftPulse one gold (LPT-517) | — |
 | Street-by-street updates | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518) | — |
 | Soft timing evidence | Timing, Sizing, Clues | timing quizzes |
-<<<<<<< HEAD
 | Live table dynamics | Stuck, Tilted, Gears; densified SoftPulse one gold (LPT-520) | — |
-| Keep cash session guardrails | Quit, Guard, First | discipline quizzes |
-=======
-| Live table dynamics | Stuck, Tilted, Gears | — |
 | Keep cash session guardrails | Quit, Guard, First | — |
->>>>>>> origin/main
 | Section 5 checkpoint | — | multiway, tell, and stop checks |
 | Spot range advantage and nut advantage | Range, Nut, Advantage | dry-board, paired-board, and press checks |
 | Realize equity in and out of position | Equity, Cash, Pos | realization quizzes |
