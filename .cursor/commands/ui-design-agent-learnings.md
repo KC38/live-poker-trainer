@@ -287,7 +287,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   a Dart-only worktree skips Xcode via the cached `Runner.app`. Bare
   `AwaitShell` / `sleep` while Xcode builds burns minutes and risks stall
   (LPT-72). Prefer named `test-LPT-*` tmux for long suites over anonymous
-  sessions. Write coverage before long compiles when the ticket is
+  sessions — run them with `tools/tee_exit.sh /tmp/test-LPT-….log flutter
+  test …` (same for `analyze-LPT-*` / `dart analyze`) so `EXIT:N` is the
+  command status; bare `cmd | tee; echo EXIT:$?` masks failures as 0
+  (LPT-367). Write coverage before long compiles when the ticket is
   already Done in Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
