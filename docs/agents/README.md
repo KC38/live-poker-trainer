@@ -22,6 +22,8 @@ orientation layer on top of those sources of truth.
 9. [09 — Working as an agent](09-agent-workflow.md) — change flow, sims, tools
 10. [10 — GrokBot](10-grokbot.md) — Linux / Chrome UI + content queue (`grokbot`)
 11. [11 — Lesson content agent](11-lesson-content-agent.md) — catalog audit / file (`content`)
+12. [content-agent-run-memory.md](content-agent-run-memory.md) — content-agent loop notes (grep by activity)
+13. [ui-agent-run-memory.md](ui-agent-run-memory.md) — ui-agent overflow notes (40-bullet cap spill)
 
 ## Hard rules (never skip)
 

@@ -111,6 +111,18 @@ node tools/course/scan_content_gaps.mjs --gap pressHints --markdown
 Gaps: `pressHints` | `deal-variants` | `teachSpec` | `explain-teachSpec`.
 The content agent runs this every pass to refresh `(catalog)` parents.
 
+## Learnings (must land in git)
+
+| File | Role |
+| --- | --- |
+| `.cursor/commands/lesson-content-agent-learnings.md` | ≤40 Never/Prefer rules — read every run |
+| `docs/agents/content-agent-run-memory.md` | Full lesson/catalog pattern notes — grep by `act-` / `lesson-` |
+| `tools/fold_agent_learnings.sh` | Folds `~/.live-poker-trainer/*-learnings-pending.md` into the repo |
+
+Durable loop notes must ship in a
+`chore/content-agent-learnings-<YYYYMMDD>` PR (or fold via the script +
+monitor). Do not leave them only in the home pending file.
+
 ## Loop ops
 
 ```bash

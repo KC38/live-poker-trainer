@@ -552,10 +552,11 @@ ticket branch to `cursor/…` — that prefix is for Cursor cloud auto-branches,
 not make-change worktrees. Chat rename (`rename-chat`) is unrelated to git
 branch names.
 
-- If `~/.live-poker-trainer/ui-agent-learnings-pending.md` exists, fold
-  its bullets into `.cursor/commands/ui-design-agent-learnings.md` in this
-  worktree (respect the 40-bullet cap) and delete the pending file once
-  the PR merges.
+- If `~/.live-poker-trainer/ui-agent-learnings-pending.md` has `- ` bullets,
+  fold them now (`tools/fold_agent_learnings.sh ui` or manually into
+  `ui-design-agent-learnings.md` / `docs/agents/ui-agent-run-memory.md`
+  when over the 40-bullet cap) and ship them in this ticket PR (or a
+  learnings chore PR). Do not leave pending unfolder.
 - Move each ticket (primary and companions) to In Progress (`jira.py transition --to "In Progress"`)
   and comment the branch name.
 - The ticket is the spec. Ship the smallest change that makes every
@@ -720,9 +721,10 @@ When the file did change, never open a learnings-only PR for one run:
 - Anything learned after the merge (steps 9–10), or on a run with no
   ticket PR (`clean`, `SIM_NOT_READY`, `JIRA_UNAVAILABLE`), is appended to
   `~/.live-poker-trainer/ui-agent-learnings-pending.md` instead; report
-  `learnings: pending`. The next run's step 6 folds it into its ticket PR.
-- Only when that pending file holds **5+** bullets and this run has no
-  ticket PR, ship them in one tiny chore make-change PR before releasing.
+  `learnings: pending`. The **next** run must fold via
+  `tools/fold_agent_learnings.sh ui` (or step 6) and ship — do not wait
+  for a 5+ backlog. Overflow past the 40-bullet cap goes to
+  `docs/agents/ui-agent-run-memory.md`.
 
 Append one coverage ledger row with the helper (do **not** hand-write
 JSON or `strftime` timestamps — `%z` emits compact `+0530`, which macOS

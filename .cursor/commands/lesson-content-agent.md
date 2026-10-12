@@ -24,11 +24,12 @@ Hard rules:
   `agent_tap.py`, or `agent_seed.py`. Leave the mini for `/ui-design-agent`.
 - Unattended: never ask the user a question. Product ambiguity → file with
   `needs-human` and continue auditing.
-- Never edit the primary checkout for product code. This agent only writes
-  under `$PRIMARY/.cursor/tmp/content-agent/` (ticket bodies) and may append
-  learnings via the pending file (see step 8).
+- Never edit the primary checkout for product code **except** learnings
+  files (see §6). Ticket bodies go under
+  `$PRIMARY/.cursor/tmp/content-agent/`.
 - Read [lesson-content-agent-learnings.md](lesson-content-agent-learnings.md)
-  every run; update it when you hit a durable mistake.
+  and grep [content-agent-run-memory.md](../../docs/agents/content-agent-run-memory.md)
+  for the target `act-` / `lesson-` id every run.
 - Default Jira owner label: **`grokbot`**. Use **`ui-agent`** only when the
   finding cannot be validated in Flutter web / Chrome (~375×812).
 
@@ -75,16 +76,22 @@ Use `python3 tools/jira.py` only (no Atlassian MCP). Bodies live under
 2. [docs/agents/11-lesson-content-agent.md](../../docs/agents/11-lesson-content-agent.md)
    — this agent's contract and routing.
 3. [lesson-content-agent-learnings.md](lesson-content-agent-learnings.md)
-   (≤40 bullets).
-4. [content/course/v2/README.md](../../content/course/v2/README.md) and
+   (≤40 bullets) and grep
+   [content-agent-run-memory.md](../../docs/agents/content-agent-run-memory.md)
+   for the surface’s lesson/activity ids.
+4. If `~/.live-poker-trainer/content-agent-learnings-pending.md` has
+   bullets, run `tools/fold_agent_learnings.sh content` and ship a
+   learnings-only chore PR before or after the audit (do not leave
+   pending unfolder).
+5. [content/course/v2/README.md](../../content/course/v2/README.md) and
    schemas under `content/course/v2/schemas/` (especially `activity`,
    `teach_spec`, `common`).
 
 **When auditing a lesson surface:**
 
-5. Design record **Lesson content** + that lesson's ledger row in
+6. Design record **Lesson content** + that lesson's ledger row in
    `docs/ui/design-record.md`.
-6. The lesson JSON in `content/course/v2/course.json` (and generated
+7. The lesson JSON in `content/course/v2/course.json` (and generated
    `assets/course/v2/catalog.json` / bank when relevant).
 
 ## 2. Fast catalog gap scan (every run)
@@ -322,11 +329,23 @@ Append one line to `~/.live-poker-trainer/content-agent-coverage.jsonl`:
 
 Update learnings per
 [lesson-content-agent-learnings.md](lesson-content-agent-learnings.md)
-**How to update**. Prefer appending to
-`~/.live-poker-trainer/content-agent-learnings-pending.md` (no product PR
-from this agent). A human or later chore folds pending into the command file.
+**How to update**:
+
+1. Distill a Never/Prefer bullet into
+   `.cursor/commands/lesson-content-agent-learnings.md` (cap 40).
+2. Append the full note to
+   `docs/agents/content-agent-run-memory.md` (no cap).
+3. **Ship a learnings-only chore PR**
+   (`chore/content-agent-learnings-<YYYYMMDD>`) in the same turn when
+   either file changed. This is the only product-repo write this agent
+   may open a PR for.
+4. Only if git/PR is unavailable: append to
+   `~/.live-poker-trainer/content-agent-learnings-pending.md` and set
+   coverage `learnings: pending`. The next run (or monitor) must run
+   `tools/fold_agent_learnings.sh content` and ship.
 
 Delete `$PRIMARY/.cursor/tmp/content-agent/` scratch bodies if desired.
 
-Reply short: SHA, surface, tickets filed, leads, learnings status.
+Reply short: SHA, surface, tickets filed, leads, learnings status
+(`updated` = shipped to git; `pending` = home file only).
 Never claim a simulator lock. Never start `/ui-design-agent` work.
