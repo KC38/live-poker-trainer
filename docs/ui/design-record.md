@@ -682,6 +682,14 @@ already runs on the grade path; catalog bank copy may keep the decade form.
 The next trash / low-rank Oops line that uses a decade compound copies that
 alias instead of hard-coding 72o on the dock.
 
+Versus an open AQs checkpoint remap (LPT-173) splits
+`LessonStartingHandFamily.strongSuitedBroadway` (Ace+broadway suited or
+KQs) from weaker `suitedBroadway` so preflop isomorphic deals for value
+3-bet templates never land on QTs / JTs / KTs. Deal helpers are
+`_dealStrongSuitedBroadway` / `_dealWeakSuitedBroadway` in
+`lesson_card_deal.dart`. The next value-3-bet suited-broadway template
+copies that strong bucket.
+
 Best five explain SoftPulse (`LessonBestFiveExplainTable` in
 `lesson_best_five.dart`, LPT-55) highlights only `_nextCode` from
 `playOrder` — one gold ring on that hole or board card. It does not ring
