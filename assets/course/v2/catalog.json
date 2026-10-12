@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "1c1c97ebbfc2a7051867f716b703a9dcca8e82db5f060578a1c62b32c0e24166",
+  "contentChecksum": "271dc015c62a387708c23aa1b11d15e27c403cd7c429c514d625206c22a224a1",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -16961,7 +16961,29 @@
                   ],
                   "objectives": [
                     "Choose bluffs that block call-downs"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BLOCK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "USE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "NO EV",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-06-01-guided",
@@ -16995,7 +17017,19 @@
                       "label": "Fake +EV",
                       "accessibilityText": "Fake +EV"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "as",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-06-01-scaffolded",
@@ -17024,7 +17058,19 @@
                       "label": "Block their air",
                       "accessibilityText": "Block their air"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "unblock",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-06-01-unguided",
@@ -17053,7 +17099,19 @@
                       "label": "Replace all reasoning",
                       "accessibilityText": "Replace all reasoning"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tweak",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-06-01-checkpoint",
@@ -17083,7 +17141,19 @@
                       "accessibilityText": "Invent EVs"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "no",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

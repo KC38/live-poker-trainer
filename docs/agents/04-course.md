@@ -67,8 +67,9 @@ reverse odds (LPT-228), Thin value and bluff-catches (LPT-231),
 Street-by-street updates (LPT-237), Advanced flop lines (LPT-234), Live
 table dynamics (LPT-245), Keep cash session guardrails (LPT-248), Section 5
 checkpoint (LPT-251), Choose polarized or merged betting (LPT-262), Use
-overbets and geometric pressure (LPT-265). Content gaps are audited by [11 —
-Lesson content agent](11-lesson-content-agent.md).
+overbets and geometric pressure (LPT-265), Use blockers without solver
+theater (LPT-268). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 `deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
 `teach_spec.schema.json` enum. Besides showdown ranks and starting-hand
