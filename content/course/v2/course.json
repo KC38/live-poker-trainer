@@ -13255,7 +13255,11 @@
                   ],
                   "playerTypeRefs": [
                     "maniac"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Maniac \u2192 Entry \u2192 Aggro."
+                  }
                 },
                 {
                   "id": "act-04-08-02-guided",
