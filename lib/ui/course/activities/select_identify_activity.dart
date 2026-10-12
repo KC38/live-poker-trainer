@@ -815,16 +815,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-04-06-01-checkpoint')!,
       // SoftPulse owns Station — don’t gold-tip the tile.
       'act-04-06-02-guided' =>
-        'Sticky second pair calls — treat them as a sticky caller for now.',
+        selectIdentifyDensifiedCoachLine('act-04-06-02-guided')!,
       // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-04-06-02-scaffolded' =>
-        'A player-type label comes from evidence — temporary, not a soul verdict.',
+        selectIdentifyDensifiedCoachLine('act-04-06-02-scaffolded')!,
       // SoftPulse owns Station — don’t gold-tip the tile.
       'act-04-06-02-unguided' =>
-        'Limps, calls, never folds turns — sticky caller fits better than wild aggression.',
+        selectIdentifyDensifiedCoachLine('act-04-06-02-unguided')!,
       // SoftPulse owns Low — don’t gold-tip the tile.
       'act-04-06-02-checkpoint' =>
-        'Only two hands so far — keep sampling before you lock a label.',
+        selectIdentifyDensifiedCoachLine('act-04-06-02-checkpoint')!,
       // SoftPulse owns Rarely folds — don’t gold-tip the tile.
       'act-04-06-03-checkpoint' =>
         'Why cut bluffs vs a station — they almost never leave.',
