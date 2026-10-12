@@ -990,11 +990,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Position + initiative — don’t gold-tip the tile.
       'act-06-02-01-checkpoint' =>
         'Equity realization climbs with position and initiative.',
+      // Recognize capped densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-636).
       'act-06-03-01-guided' =>
-        'Checks turn after flop bet — read their range shape.',
+        selectIdentifyDensifiedCoachLine('act-06-03-01-guided')!,
       'act-06-03-01-unguided' =>
-        'XR flop / bet turn / bomb — read their range shape.',
-      'act-06-03-01-checkpoint' => 'Caps are for — choose how you use them.',
+        selectIdentifyDensifiedCoachLine('act-06-03-01-unguided')!,
+      'act-06-03-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-06-03-01-checkpoint')!,
       'act-06-04-01-guided' => 'River overbet — pick the betting shape.',
       'act-06-04-01-unguided' => 'Mismatch to avoid — pick the sizing leak.',
       'act-06-04-01-checkpoint' => 'Merged betting aims to — pick the goal.',
