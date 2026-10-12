@@ -11704,7 +11704,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive mix reason — tap need a reason vs always random',
       semanticsStatic: 'Mix reason outcomes',
       caption: scene.caption ?? 'Randomness for its own sake?',
-      // No SoftPulse on unguided — still don’t gold-icon Need a reason.
+      // SoftPulse + Rex own the cue — one gold Need a reason only (LPT-500).
+      guideRegion: LessonTableRegion.mixNeedReason,
       phases: [
         (
           region: LessonTableRegion.mixNeedReason,

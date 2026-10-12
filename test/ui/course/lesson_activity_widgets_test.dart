@@ -21397,6 +21397,28 @@ await tester.tap(find.text('NIT'));
       find.text('Randomness for its own sake — tap Need a reason.'),
       findsNothing,
     );
+    expect(find.text('Need a reason'), findsOneWidget);
+    // LPT-500: guideRegion → one gold SoftPulse (Need a reason), not Always random.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Need a reason'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Always random'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Need a reason'));
     await tester.pump();
     expect(controller.draft.choiceId, 'no');
