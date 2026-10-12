@@ -1833,7 +1833,11 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-08-01-explain", 1,
                 "Some seats raise and barrel seemingly forever. Count it calmly.",
-                {objectives: ["Tag extreme entry"]}),
+                {
+                  objectives: ["Tag extreme entry"],
+                  // LPT-463: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Raise → Barrel → Count.",
+                }),
               selectAct({
                 id: "act-04-08-01-guided", order: 2, stage: "guided",
                 prompt: "Seat raises or 3-bets twelve of fifteen pots. Observation?",

@@ -378,6 +378,25 @@ describe("soft grading and life loss", () => {
     );
   });
 
+  it("uses authored explain Nice! feedback for Observe wild aggressors (LPT-463)", () => {
+    const observeWild = findLesson(
+      "lesson-04-08-01-observe-wild-aggressor",
+    )!.lesson;
+    const explain = observeWild.activities.find(
+      (activity) => activity.id === "act-04-08-01-explain",
+    )!;
+    const graded = gradeCourseResponse({activity: explain});
+    expect(graded).toMatchObject({
+      grade: "recommended",
+      accepted: true,
+      lifeLost: false,
+      feedback: "Raise → Barrel → Count.",
+    });
+    expect(graded.feedback).not.toMatch(
+      /raise and barrel seemingly forever|Count it calmly/i,
+    );
+  });
+
   it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",
