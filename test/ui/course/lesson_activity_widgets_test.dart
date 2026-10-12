@@ -19893,6 +19893,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Stuck / tilted'), findsWidgets);
+    // LPT-520: guideRegion → one gold SoftPulse (Stuck / tilted), not Ignore.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Stuck / tilted'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Ignore'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Stuck / tilted').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'stuck');
@@ -19936,6 +19957,27 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('Flats junk / donks — tap Gear change.'),
+      findsNothing,
+    );
+    // LPT-520: guideRegion → one gold SoftPulse (Gear change), not Old label.
+    final scaffoldCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(scaffoldCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Gear change'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Old label'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('Gear change'));
@@ -20028,6 +20070,27 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('Dynamic reads — tap Fresh samples.'),
+      findsNothing,
+    );
+    // LPT-520: guideRegion → one gold SoftPulse (Fresh samples), not Permanent.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Fresh samples'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Permanent seats'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('Fresh samples'));

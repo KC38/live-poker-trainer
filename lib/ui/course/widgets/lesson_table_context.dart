@@ -10642,6 +10642,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive table dynamics — tap stuck/tilted vs ignore',
       semanticsStatic: 'Table dynamics stuck outcomes',
       caption: scene.caption ?? 'Lost two buy-ins — note?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Stuck / tilted.
+      // Null guideRegion SoftPulses every phase (LPT-520).
+      guideRegion: LessonTableRegion.dynamicsStuckTilted,
       phases: [
         (
           region: LessonTableRegion.dynamicsStuckTilted,
@@ -10649,7 +10652,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Widen value',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10673,6 +10676,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive table dynamics — tap gear change vs old label',
       semanticsStatic: 'Table dynamics gear outcomes',
       caption: scene.caption ?? 'Solid player flats junk / donks?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Gear change.
+      // Null guideRegion SoftPulses every phase (LPT-520).
+      guideRegion: LessonTableRegion.dynamicsGearChange,
       phases: [
         (
           region: LessonTableRegion.dynamicsGearChange,
@@ -10680,7 +10686,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Resample',
           visual: const Icon(
             Icons.settings_suggest_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10704,6 +10710,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive table dynamics — tap fresh samples vs permanent seats',
       semanticsStatic: 'Table dynamics fresh outcomes',
       caption: scene.caption ?? 'Dynamic reads should be?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Fresh samples.
+      // Null guideRegion SoftPulses every phase (LPT-520).
+      guideRegion: LessonTableRegion.dynamicsFreshSamples,
       phases: [
         (
           region: LessonTableRegion.dynamicsFreshSamples,
@@ -10711,7 +10720,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Update often',
           visual: const Icon(
             Icons.refresh,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
