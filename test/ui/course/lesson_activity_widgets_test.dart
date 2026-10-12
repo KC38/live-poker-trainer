@@ -26383,6 +26383,29 @@ await tester.tap(find.text('NIT'));
       find.text('Multiway top set — pick the line lean.'),
       findsOneWidget,
     );
+    expect(find.text('Thicker value'), findsOneWidget);
+    // LPT-509: guideRegion → one gold SoftPulse (Thicker value), not
+    // Ultra-slow.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Thicker value'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Ultra-slow'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Thicker value'));
     await tester.pump();
     expect(controller.draft.choiceId, 'thick');

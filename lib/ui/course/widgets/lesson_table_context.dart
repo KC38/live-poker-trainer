@@ -13434,7 +13434,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive HU vs multiway — tap Thicker value or Ultra-slow',
       semanticsStatic: 'HU vs multiway unguided outcomes',
       caption: scene.caption ?? 'Multiway top set — line lean?',
-      // No SoftPulse on unguided — still don’t gold-icon Thicker value.
+      // SoftPulse + Rex own the cue — don’t gold-tip Thicker value.
+      // Null guideRegion SoftPulses every phase (LPT-509).
+      guideRegion: LessonTableRegion.huMwThickerValue,
       phases: [
         (
           region: LessonTableRegion.huMwThickerValue,
