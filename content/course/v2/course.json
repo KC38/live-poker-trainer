@@ -154,7 +154,7 @@
                     {
                       "id": "act-01-01-01-guided-find-holes-hint",
                       "kind": "hint",
-                      "text": "Your two cards sit at your seat — not the board."
+                      "text": "Your two cards sit at your seat \u2014 not the board."
                     }
                   ],
                   "teachSpec": {
@@ -178,7 +178,7 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Your two cards sit at your seat — not the board."
+                        "text": "Your two cards sit at your seat \u2014 not the board."
                       }
                     ],
                     "cues": [
@@ -196,7 +196,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap your private hole cards — not the board or other seats.",
+                  "accessibilityText": "Tap your private hole cards \u2014 not the board or other seats.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -465,7 +465,7 @@
                     {
                       "id": "act-01-01-02-guided-suits-hint",
                       "kind": "hint",
-                      "text": "Four suits — one card of each on the board."
+                      "text": "Four suits \u2014 one card of each on the board."
                     }
                   ],
                   "teachSpec": {
@@ -573,7 +573,7 @@
                       "accessibilityText": "Suited",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Same suit — that is suited."
+                        "feedback": "Same suit \u2014 that is suited."
                       }
                     },
                     {
@@ -645,7 +645,7 @@
                       "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Matching ranks — that is a pocket pair."
+                        "feedback": "Matching ranks \u2014 that is a pocket pair."
                       }
                     },
                     {
@@ -1109,7 +1109,7 @@
                   "stage": "guided",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Showdown — tap You (high card), Sam (pair), then Jo (flush).",
+                  "accessibilityText": "Showdown \u2014 tap You (high card), Sam (pair), then Jo (flush).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1190,7 +1190,7 @@
                   "stage": "scaffolded",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Showdown — tap You (pair), Sam (straight), then Jo (flush).",
+                  "accessibilityText": "Showdown \u2014 tap You (pair), Sam (straight), then Jo (flush).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1271,7 +1271,7 @@
                   "stage": "scaffolded",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Showdown — tap You (full house), Sam (trips), then Jo (two pair).",
+                  "accessibilityText": "Showdown \u2014 tap You (full house), Sam (trips), then Jo (two pair).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1352,7 +1352,7 @@
                   "stage": "scaffolded",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Showdown — tap You (flush), Sam (straight), then Jo (high card).",
+                  "accessibilityText": "Showdown \u2014 tap You (flush), Sam (straight), then Jo (high card).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -1474,7 +1474,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Exactly five cards — leave the extras out."
+                    "feedback": "Exactly five cards \u2014 leave the extras out."
                   },
                   "teachSpec": {
                     "deal": {
@@ -1552,7 +1552,7 @@
                       "accessibilityText": "High card only",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "You paired a board card — use the pair.",
+                        "feedback": "You paired a board card \u2014 use the pair.",
                         "betterChoiceId": "best-pair-k"
                       }
                     }
@@ -1613,12 +1613,12 @@
                   "objectives": [
                     "Use kickers when categories tie"
                   ],
-                  "prompt": "Same pair — tap who wins on kickers.",
+                  "prompt": "Same pair \u2014 tap who wins on kickers.",
                   "choices": [
                     {
                       "id": "you-kicker",
-                      "label": "You win — better kicker",
-                      "accessibilityText": "You win — better kicker",
+                      "label": "You win \u2014 better kicker",
+                      "accessibilityText": "You win \u2014 better kicker",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Same pair; higher kicker wins."
@@ -1626,18 +1626,18 @@
                     },
                     {
                       "id": "they-kicker",
-                      "label": "They win — their kicker",
-                      "accessibilityText": "They win — their kicker",
+                      "label": "They win \u2014 their kicker",
+                      "accessibilityText": "They win \u2014 their kicker",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Higher kicker takes it — look again.",
+                        "feedback": "Higher kicker takes it \u2014 look again.",
                         "betterChoiceId": "you-kicker"
                       }
                     },
                     {
                       "id": "chop-kicker",
-                      "label": "Chop — same pair always ties",
-                      "accessibilityText": "Chop — same pair always ties",
+                      "label": "Chop \u2014 same pair always ties",
+                      "accessibilityText": "Chop \u2014 same pair always ties",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Kickers decide when pairs match.",
@@ -1681,12 +1681,12 @@
                   "objectives": [
                     "Spot board-tied pots"
                   ],
-                  "prompt": "Both checked down — tap who takes the pot.",
+                  "prompt": "Both checked down \u2014 tap who takes the pot.",
                   "choices": [
                     {
                       "id": "chop-broadway",
-                      "label": "Chop — both play the board",
-                      "accessibilityText": "Chop — both play the board",
+                      "label": "Chop \u2014 both play the board",
+                      "accessibilityText": "Chop \u2014 both play the board",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Neither hole card beats this straight flush board."
@@ -1755,8 +1755,8 @@
                   "choices": [
                     {
                       "id": "fh-eights",
-                      "label": "Full house — trips over the higher pair",
-                      "accessibilityText": "Full house — trips over the higher pair",
+                      "label": "Full house \u2014 trips over the higher pair",
+                      "accessibilityText": "Full house \u2014 trips over the higher pair",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Trips plus the stronger pair."
@@ -1764,8 +1764,8 @@
                     },
                     {
                       "id": "fh-deuces",
-                      "label": "Full house — trips over the lower pair",
-                      "accessibilityText": "Full house — trips over the lower pair",
+                      "label": "Full house \u2014 trips over the lower pair",
+                      "accessibilityText": "Full house \u2014 trips over the lower pair",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Use the higher pair under your trips.",
@@ -1778,7 +1778,7 @@
                       "accessibilityText": "Two pair only",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "You have trips plus a pair — full house.",
+                        "feedback": "You have trips plus a pair \u2014 full house.",
                         "betterChoiceId": "fh-eights"
                       }
                     }
@@ -1807,7 +1807,7 @@
           "id": "unit-01-03-five-actions",
           "order": 3,
           "title": "The five actions",
-          "summary": "Fold, check, call, bet, raise — and all-in limits.",
+          "summary": "Fold, check, call, bet, raise \u2014 and all-in limits.",
           "lessons": [
             {
               "id": "lesson-01-03-01-fold-check-call",
@@ -1836,7 +1836,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Three quiet buttons — each has a different job.",
+                  "accessibilityText": "Three quiet buttons \u2014 each has a different job.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -1844,7 +1844,7 @@
                     {
                       "id": "act-01-03-01-explain-passive-media",
                       "kind": "dialogue",
-                      "text": "Three quiet buttons — each has a different job."
+                      "text": "Three quiet buttons \u2014 each has a different job."
                     }
                   ],
                   "objectives": [
@@ -1866,7 +1866,7 @@
                   "objectives": [
                     "Fold to give up the hand"
                   ],
-                  "prompt": "Worst hand vs a raise — pick how you leave.",
+                  "prompt": "Worst hand vs a raise \u2014 pick how you leave.",
                   "choices": [
                     {
                       "id": "fold-72",
@@ -1939,7 +1939,7 @@
                   "objectives": [
                     "Check when no bet faces you"
                   ],
-                  "prompt": "Nothing faces you — pick the free action.",
+                  "prompt": "Nothing faces you \u2014 pick the free action.",
                   "choices": [
                     {
                       "id": "check-free",
@@ -1947,7 +1947,7 @@
                       "accessibilityText": "Check free",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "No bet to match — check is available."
+                        "feedback": "No bet to match \u2014 check is available."
                       },
                       "action": "CHECK"
                     },
@@ -2003,7 +2003,7 @@
                   "objectives": [
                     "Call to match the current bet"
                   ],
-                  "prompt": "A bet is out — pick how you continue.",
+                  "prompt": "A bet is out \u2014 pick how you continue.",
                   "choices": [
                     {
                       "id": "call-5",
@@ -2021,7 +2021,7 @@
                       "accessibilityText": "Check",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "A bet faces you — check is not legal.",
+                        "feedback": "A bet faces you \u2014 check is not legal.",
                         "betterChoiceId": "call-5"
                       },
                       "action": "CHECK"
@@ -2057,7 +2057,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Tap Check — it is illegal facing a bet.",
+                  "accessibilityText": "Tap Check \u2014 it is illegal facing a bet.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2075,7 +2075,7 @@
                       "accessibilityText": "Check",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "You must fold, call, or raise — check is off."
+                        "feedback": "You must fold, call, or raise \u2014 check is off."
                       },
                       "action": "CHECK"
                     },
@@ -2146,7 +2146,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Three chip-pushing buttons — each has a different job.",
+                  "accessibilityText": "Three chip-pushing buttons \u2014 each has a different job.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -2154,7 +2154,7 @@
                     {
                       "id": "act-01-03-02-explain-aggro-media",
                       "kind": "dialogue",
-                      "text": "Three chip-pushing buttons — each has a different job."
+                      "text": "Three chip-pushing buttons \u2014 each has a different job."
                     }
                   ],
                   "objectives": [
@@ -2205,7 +2205,7 @@
                       "accessibilityText": "Raise",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Nothing to raise yet — bet instead.",
+                        "feedback": "Nothing to raise yet \u2014 bet instead.",
                         "betterChoiceId": "bet-half"
                       },
                       "action": "RAISE",
@@ -2216,7 +2216,7 @@
                     {
                       "id": "act-01-03-02-guided-bet-hint",
                       "kind": "hint",
-                      "text": "Nobody put in a bet yet — betting is open."
+                      "text": "Nobody put in a bet yet \u2014 betting is open."
                     }
                   ],
                   "teachSpec": {
@@ -2248,7 +2248,7 @@
                   "objectives": [
                     "Raise to increase a facing bet"
                   ],
-                  "prompt": "Villain bets 5. Strong hand — tap how you charge.",
+                  "prompt": "Villain bets 5. Strong hand \u2014 tap how you charge.",
                   "choices": [
                     {
                       "id": "raise-15",
@@ -2277,7 +2277,7 @@
                       "accessibilityText": "Bet 5",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Facing a bet you raise or call — you do not 'bet'.",
+                        "feedback": "Facing a bet you raise or call \u2014 you do not 'bet'.",
                         "betterChoiceId": "raise-15"
                       },
                       "action": "BET",
@@ -2304,7 +2304,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Tap All-in 12 — capped by your remaining stack.",
+                  "accessibilityText": "Tap All-in 12 \u2014 capped by your remaining stack.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2368,7 +2368,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Tap Bet — first chips into an unchecked pot.",
+                  "accessibilityText": "Tap Bet \u2014 first chips into an unchecked pot.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2483,7 +2483,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Preflop → flop → turn → river."
+                    "feedback": "Preflop \u2192 flop \u2192 turn \u2192 river."
                   }
                 },
                 {
@@ -2529,7 +2529,7 @@
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "Preflop → flop → turn → river."
+                      "feedback": "Preflop \u2192 flop \u2192 turn \u2192 river."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
@@ -2607,7 +2607,7 @@
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "UTG → HJ → CO → BTN. Button acts last preflop."
+                      "feedback": "UTG \u2192 HJ \u2192 CO \u2192 BTN. Button acts last preflop."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
@@ -2648,7 +2648,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap bets matched — a street ends when action is complete.",
+                  "accessibilityText": "Tap bets matched \u2014 a street ends when action is complete.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2708,7 +2708,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the seat left of the button — first to act postflop.",
+                  "accessibilityText": "Tap the seat left of the button \u2014 first to act postflop.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2726,7 +2726,7 @@
                       "accessibilityText": "SB",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Postflop starts left of the button — usually the small blind if live."
+                        "feedback": "Postflop starts left of the button \u2014 usually the small blind if live."
                       }
                     },
                     {
@@ -2822,7 +2822,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap take pot — uncontested pots do not require a show.",
+                  "accessibilityText": "Tap take pot \u2014 uncontested pots do not require a show.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2895,7 +2895,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap showdown — best five-card hand wins.",
+                  "accessibilityText": "Tap showdown \u2014 best five-card hand wins.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2968,7 +2968,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the pot total — blinds plus the open. Open size varies each attempt.",
+                  "accessibilityText": "Tap the pot total \u2014 blinds plus the open. Open size varies each attempt.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3004,7 +3004,7 @@
                       "accessibilityText": "Too big",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Add both blinds and the open — do not double the raise.",
+                        "feedback": "Add both blinds and the open \u2014 do not double the raise.",
                         "betterChoiceId": "pot-correct"
                       }
                     }
@@ -3054,7 +3054,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Tap side pot — unmatched chips form a side pot you cannot win.",
+                  "accessibilityText": "Tap side pot \u2014 unmatched chips form a side pot you cannot win.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3167,7 +3167,7 @@
                   "stage": "guided",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "Button with a suited ace — open to 6, then take the pot when blinds fold.",
+                  "accessibilityText": "Button with a suited ace \u2014 open to 6, then take the pot when blinds fold.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3221,7 +3221,7 @@
                       "id": "step-01-06-flop",
                       "street": "flop",
                       "prompt": "Blinds fold. What happened?",
-                      "accessibilityText": "You won — everyone folded.",
+                      "accessibilityText": "You won \u2014 everyone folded.",
                       "choices": [
                         {
                           "id": "won-folds",
@@ -3280,7 +3280,7 @@
                   "stage": "scaffolded",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "BB calls your open — confirm the flop, then bet top pair.",
+                  "accessibilityText": "BB calls your open \u2014 confirm the flop, then bet top pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3294,7 +3294,7 @@
                       "id": "step-01-06-bb-defend",
                       "street": "preflop",
                       "prompt": "You open BTN to 6. BB calls. Next?",
-                      "accessibilityText": "Yes — watch the flop next.",
+                      "accessibilityText": "Yes \u2014 watch the flop next.",
                       "choices": [
                         {
                           "id": "ready-flop",
@@ -3384,7 +3384,7 @@
                   "stage": "scaffolded",
                   "renderer": "full_table_hand_lab",
                   "estimatedSeconds": 90,
-                  "accessibilityText": "Big blind vs button open — call, fold, or jam.",
+                  "accessibilityText": "Big blind vs button open \u2014 call, fold, or jam.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3530,7 +3530,7 @@
                   "stage": "scaffolded",
                   "renderer": "authored_multi_step_hand",
                   "estimatedSeconds": 70,
-                  "accessibilityText": "Button with offsuit broadway — open, then take the blinds when they fold.",
+                  "accessibilityText": "Button with offsuit broadway \u2014 open, then take the blinds when they fold.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -3593,7 +3593,7 @@
                           "accessibilityText": "Win blinds",
                           "grading": {
                             "grade": "recommended",
-                            "feedback": "Terminal state — pot is yours."
+                            "feedback": "Terminal state \u2014 pot is yours."
                           }
                         },
                         {
@@ -3779,7 +3779,7 @@
                   "sequenceGrading": {
                     "correct": {
                       "grade": "recommended",
-                      "feedback": "UTG → HJ → CO → BTN. Left of big blind first; button last."
+                      "feedback": "UTG \u2192 HJ \u2192 CO \u2192 BTN. Left of big blind first; button last."
                     },
                     "incorrect": {
                       "grade": "clear_mistake",
@@ -4052,7 +4052,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the button seat — last to act after the flop.",
+                  "accessibilityText": "Tap the button seat \u2014 last to act after the flop.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -4248,7 +4248,7 @@
                   "objectives": [
                     "Prefer later seats when choosing hands"
                   ],
-                  "prompt": "Same hand — tap where it is stronger to play.",
+                  "prompt": "Same hand \u2014 tap where it is stronger to play.",
                   "choices": [
                     {
                       "id": "prefer-btn",
@@ -4339,7 +4339,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "UTG → HJ → CO → BTN."
+                    "feedback": "UTG \u2192 HJ \u2192 CO \u2192 BTN."
                   }
                 },
                 {
@@ -4487,8 +4487,8 @@
                   "choices": [
                     {
                       "id": "wait",
-                      "label": "Wait — do not act yet",
-                      "accessibilityText": "Wait — do not act yet",
+                      "label": "Wait \u2014 do not act yet",
+                      "accessibilityText": "Wait \u2014 do not act yet",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Acting out of turn creates messes."
@@ -4627,7 +4627,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Pairs, broadways, suited aces, connectors — trash is everything else.",
+                  "accessibilityText": "Pairs, broadways, suited aces, connectors \u2014 trash is everything else.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -4635,7 +4635,7 @@
                     {
                       "id": "act-02-02-01-explain-families-media",
                       "kind": "dialogue",
-                      "text": "Pairs, broadways, suited aces, connectors — trash is everything else."
+                      "text": "Pairs, broadways, suited aces, connectors \u2014 trash is everything else."
                     }
                   ],
                   "objectives": [
@@ -4648,7 +4648,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Look at the pocket pair on the felt — tap Pocket pair.",
+                  "accessibilityText": "Look at the pocket pair on the felt \u2014 tap Pocket pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -4665,7 +4665,7 @@
                       "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Matching ranks — pocket pair."
+                        "feedback": "Matching ranks \u2014 pocket pair."
                       }
                     },
                     {
@@ -4717,7 +4717,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Look at the broadway holes on the felt — tap Broadway.",
+                  "accessibilityText": "Look at the broadway holes on the felt \u2014 tap Broadway.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -4734,7 +4734,7 @@
                       "accessibilityText": "Broadway",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Both cards ten-or-better — broadway."
+                        "feedback": "Both cards ten-or-better \u2014 broadway."
                       }
                     },
                     {
@@ -4743,7 +4743,7 @@
                       "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Ranks do not match — not a pair.",
+                        "feedback": "Ranks do not match \u2014 not a pair.",
                         "betterChoiceId": "hf-broadway"
                       }
                     },
@@ -4778,7 +4778,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Look at seven-six suited on the felt — tap Suited connector.",
+                  "accessibilityText": "Look at seven-six suited on the felt \u2014 tap Suited connector.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -4804,7 +4804,7 @@
                       "accessibilityText": "Offsuit connector",
                       "grading": {
                         "grade": "questionable",
-                        "feedback": "Connected but offsuit — weaker family."
+                        "feedback": "Connected but offsuit \u2014 weaker family."
                       }
                     },
                     {
@@ -4839,7 +4839,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Look at seven-two offsuit on the felt — tap Offsuit trash.",
+                  "accessibilityText": "Look at seven-two offsuit on the felt \u2014 tap Offsuit trash.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -4856,7 +4856,7 @@
                       "accessibilityText": "Offsuit trash",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Worst starting shape — fold early."
+                        "feedback": "Worst starting shape \u2014 fold early."
                       }
                     },
                     {
@@ -4865,7 +4865,7 @@
                       "accessibilityText": "Pocket pair",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Ranks do not match — premium pairs look like matching face cards.",
+                        "feedback": "Ranks do not match \u2014 premium pairs look like matching face cards.",
                         "betterChoiceId": "hf-trash"
                       }
                     },
@@ -4875,7 +4875,7 @@
                       "accessibilityText": "Suited ace",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Suited ace has playability — this is offsuit junk.",
+                        "feedback": "Suited ace has playability \u2014 this is offsuit junk.",
                         "betterChoiceId": "hf-trash"
                       }
                     }
@@ -4933,7 +4933,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Who opens — and how wide. Position shapes the first action.",
+                  "accessibilityText": "Who opens \u2014 and how wide. Position shapes the first action.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -4941,7 +4941,7 @@
                     {
                       "id": "act-02-03-01-explain-open-media",
                       "kind": "dialogue",
-                      "text": "Who opens — and how wide. Position shapes the first action."
+                      "text": "Who opens \u2014 and how wide. Position shapes the first action."
                     }
                   ],
                   "objectives": [
@@ -5493,7 +5493,7 @@
                       "accessibilityText": "3-bet to 18",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Strong suited broadway — value 3-bet."
+                        "feedback": "Strong suited broadway \u2014 value 3-bet."
                       },
                       "action": "RAISE",
                       "amountBb": 9
@@ -5731,7 +5731,7 @@
                       "accessibilityText": "50bb",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Shallower — stack-off pressure shows up sooner."
+                        "feedback": "Shallower \u2014 stack-off pressure shows up sooner."
                       }
                     },
                     {
@@ -5749,7 +5749,7 @@
                       "accessibilityText": "200bb",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Deep — more postflop room, not shove-or-fold.",
+                        "feedback": "Deep \u2014 more postflop room, not shove-or-fold.",
                         "betterChoiceId": "depth-50"
                       }
                     }
@@ -5791,7 +5791,7 @@
                       "accessibilityText": "200bb",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "1000 / 5 = 200 big blinds — deep."
+                        "feedback": "1000 / 5 = 200 big blinds \u2014 deep."
                       }
                     },
                     {
@@ -5882,7 +5882,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Watch → Say → Cover → Wait."
+                    "feedback": "Watch \u2192 Say \u2192 Cover \u2192 Wait."
                   },
                   "teachSpec": {
                     "deal": {
@@ -6010,7 +6010,7 @@
                       "accessibilityText": "Toss chips without a word",
                       "grading": {
                         "grade": "questionable",
-                        "feedback": "Risky — dealers may mishear the amount."
+                        "feedback": "Risky \u2014 dealers may mishear the amount."
                       }
                     },
                     {
@@ -6255,7 +6255,7 @@
                       "accessibilityText": "Limp",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Raise or fold — do not limp.",
+                        "feedback": "Raise or fold \u2014 do not limp.",
                         "betterChoiceId": "open-ajs"
                       },
                       "action": "CALL"
@@ -6326,7 +6326,7 @@
                       "accessibilityText": "3-bet to 18",
                       "grading": {
                         "grade": "questionable",
-                        "feedback": "Sometimes as a bluff later — not the baseline yet."
+                        "feedback": "Sometimes as a bluff later \u2014 not the baseline yet."
                       },
                       "action": "RAISE",
                       "amountBb": 9
@@ -6391,7 +6391,7 @@
                       "accessibilityText": "3-bet to 18",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Strong offsuit broadway — value 3-bet is clean."
+                        "feedback": "Strong offsuit broadway \u2014 value 3-bet is clean."
                       },
                       "action": "RAISE",
                       "amountBb": 9
@@ -6471,7 +6471,7 @@
                             "accessibilityText": "3-bet to 18",
                             "grading": {
                               "grade": "recommended",
-                              "feedback": "Strong offsuit broadway — value 3-bet is clean."
+                              "feedback": "Strong offsuit broadway \u2014 value 3-bet is clean."
                             },
                             "action": "RAISE",
                             "amountBb": 9
@@ -7131,8 +7131,8 @@
                   "choices": [
                     {
                       "id": "bound",
-                      "label": "The raise stands — verbal is binding",
-                      "accessibilityText": "The raise stands — verbal is binding",
+                      "label": "The raise stands \u2014 verbal is binding",
+                      "accessibilityText": "The raise stands \u2014 verbal is binding",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Live rooms treat clear verbal action as final."
@@ -7331,8 +7331,8 @@
                   "choices": [
                     {
                       "id": "made-tp",
-                      "label": "Made hand — top pair",
-                      "accessibilityText": "Made hand — top pair",
+                      "label": "Made hand \u2014 top pair",
+                      "accessibilityText": "Made hand \u2014 top pair",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Pair of kings is already showdown-ready."
@@ -7402,8 +7402,8 @@
                   "choices": [
                     {
                       "id": "nfd",
-                      "label": "Strong draw — nut flush draw",
-                      "accessibilityText": "Strong draw — nut flush draw",
+                      "label": "Strong draw \u2014 nut flush draw",
+                      "accessibilityText": "Strong draw \u2014 nut flush draw",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "You need a heart or sometimes an ace; not made yet."
@@ -7459,7 +7459,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "No pair and almost no draw — air.",
+                  "accessibilityText": "No pair and almost no draw \u2014 air.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -7472,8 +7472,8 @@
                   "choices": [
                     {
                       "id": "air",
-                      "label": "Air — little equity, no pair",
-                      "accessibilityText": "Air — little equity, no pair",
+                      "label": "Air \u2014 little equity, no pair",
+                      "accessibilityText": "Air \u2014 little equity, no pair",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Gutshot-ish trash multiway is give-up territory."
@@ -7544,8 +7544,8 @@
                   "choices": [
                     {
                       "id": "oesd",
-                      "label": "Draw — open-ended straight draw",
-                      "accessibilityText": "Draw — open-ended straight draw",
+                      "label": "Draw \u2014 open-ended straight draw",
+                      "accessibilityText": "Draw \u2014 open-ended straight draw",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Eight or queen completes; treat it as a draw."
@@ -7567,7 +7567,7 @@
                       "accessibilityText": "Pure air",
                       "grading": {
                         "grade": "questionable",
-                        "feedback": "You have real equity — still a draw, not air."
+                        "feedback": "You have real equity \u2014 still a draw, not air."
                       }
                     }
                   ],
@@ -7646,7 +7646,29 @@
                   ],
                   "objectives": [
                     "Count clean versus dirty outs"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CLEAN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DIRTY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "PRICE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-03-01-guided",
@@ -7667,8 +7689,8 @@
                   "choices": [
                     {
                       "id": "outs-3",
-                      "label": "About 3 — clean overs",
-                      "accessibilityText": "About 3 — clean overs",
+                      "label": "About 3 \u2014 clean overs",
+                      "accessibilityText": "About 3 \u2014 clean overs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Overs that make the best hand are clean; underpair outs are dirty."
@@ -7676,8 +7698,8 @@
                     },
                     {
                       "id": "outs-6",
-                      "label": "6 — clean and dirty",
-                      "accessibilityText": "6 — clean and dirty",
+                      "label": "6 \u2014 clean and dirty",
+                      "accessibilityText": "6 \u2014 clean and dirty",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Some of those outs leave you second-best."
@@ -7685,15 +7707,48 @@
                     },
                     {
                       "id": "outs-0",
-                      "label": "0 — never improve",
-                      "accessibilityText": "0 — never improve",
+                      "label": "0 \u2014 never improve",
+                      "accessibilityText": "0 \u2014 never improve",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Clean overs improve you to the best hand often.",
                         "betterChoiceId": "outs-3"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Kc",
+                          "8h",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "As",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "Ad",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "Ac",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-03-01-scaffolded",
@@ -7737,11 +7792,23 @@
                       "accessibilityText": "30",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "That is the pot after you call — you only put in 10.",
+                        "feedback": "That is the pot after you call \u2014 you only put in 10.",
                         "betterChoiceId": "call-10"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-10",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-03-01-unguided",
@@ -7762,8 +7829,8 @@
                   "choices": [
                     {
                       "id": "call-draw",
-                      "label": "Call — price is acceptable with outs",
-                      "accessibilityText": "Call — price is acceptable with outs",
+                      "label": "Call \u2014 price is acceptable with outs",
+                      "accessibilityText": "Call \u2014 price is acceptable with outs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Getting 3:1 with real outs is a continue, especially deep."
@@ -7788,7 +7855,30 @@
                         "feedback": "Sometimes; here the assignment is whether the call prices."
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Kc",
+                          "8h",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-draw",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-03-01-checkpoint",
@@ -7809,8 +7899,8 @@
                   "choices": [
                     {
                       "id": "implied-yes",
-                      "label": "Implied odds improve — they pay when you hit",
-                      "accessibilityText": "Implied odds improve — they pay when you hit",
+                      "label": "Implied odds improve \u2014 they pay when you hit",
+                      "accessibilityText": "Implied odds improve \u2014 they pay when you hit",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Deep stacks plus a caller who sticks around pay off the nuts."
@@ -7837,7 +7927,30 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Kh",
+                          "7h",
+                          "2c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "implied-yes",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -8168,8 +8281,8 @@
                   "choices": [
                     {
                       "id": "brick",
-                      "label": "Brick — rarely helps the caller",
-                      "accessibilityText": "Brick — rarely helps the caller",
+                      "label": "Brick \u2014 rarely helps the caller",
+                      "accessibilityText": "Brick \u2014 rarely helps the caller",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Low blank keeps the ace-high story intact."
@@ -8240,7 +8353,7 @@
                       "accessibilityText": "Fold to a future bet preemptively",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "You act first — decide to bet or check.",
+                        "feedback": "You act first \u2014 decide to bet or check.",
                         "betterChoiceId": "barrel"
                       },
                       "action": "FOLD"
@@ -8317,8 +8430,8 @@
                   "choices": [
                     {
                       "id": "give-up",
-                      "label": "Often give up — changing card hurts air",
-                      "accessibilityText": "Often give up — changing card hurts air",
+                      "label": "Often give up \u2014 changing card hurts air",
+                      "accessibilityText": "Often give up \u2014 changing card hurts air",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Unsupported second barrels die on draw-completing turns."
@@ -8480,8 +8593,8 @@
                     },
                     {
                       "id": "giveup",
-                      "label": "Give up — never bluff rivers",
-                      "accessibilityText": "Give up — never bluff rivers",
+                      "label": "Give up \u2014 never bluff rivers",
+                      "accessibilityText": "Give up \u2014 never bluff rivers",
                       "grading": {
                         "grade": "questionable",
                         "feedback": "Some rivers are bluff candidates; this one is."
@@ -8572,8 +8685,8 @@
                   "choices": [
                     {
                       "id": "role-catch",
-                      "label": "Bluff-catch or fold — not thin value",
-                      "accessibilityText": "Bluff-catch or fold — not thin value",
+                      "label": "Bluff-catch or fold \u2014 not thin value",
+                      "accessibilityText": "Bluff-catch or fold \u2014 not thin value",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Versus a big bet you decide if they bluff enough."
@@ -8825,8 +8938,8 @@
                   "choices": [
                     {
                       "id": "obs-many",
-                      "label": "They play many hands — note it",
-                      "accessibilityText": "They play many hands — note it",
+                      "label": "They play many hands \u2014 note it",
+                      "accessibilityText": "They play many hands \u2014 note it",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Record participation. Labels come later."
@@ -8913,7 +9026,7 @@
                   "stage": "guided",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Fold or play cautious — do not stack with weak top pair.",
+                  "accessibilityText": "Fold or play cautious \u2014 do not stack with weak top pair.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -9083,7 +9196,7 @@
                       "accessibilityText": "A raises a lot; B plays few hands",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Behavior notes only — no fixed labels yet."
+                        "feedback": "Behavior notes only \u2014 no fixed labels yet."
                       }
                     },
                     {
@@ -9174,7 +9287,7 @@
                       "accessibilityText": "Only table talk",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Useful later — not instead of pot/stacks.",
+                        "feedback": "Useful later \u2014 not instead of pot/stacks.",
                         "betterChoiceId": "j3-track"
                       }
                     }
@@ -9200,8 +9313,8 @@
                   "choices": [
                     {
                       "id": "j3-draw",
-                      "label": "Draw — straight and flush potential",
-                      "accessibilityText": "Draw — straight and flush potential",
+                      "label": "Draw \u2014 straight and flush potential",
+                      "accessibilityText": "Draw \u2014 straight and flush potential",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Open-ender plus flush draw."
@@ -9223,7 +9336,7 @@
                       "accessibilityText": "Air",
                       "grading": {
                         "grade": "questionable",
-                        "feedback": "This has strong equity — still a draw."
+                        "feedback": "This has strong equity \u2014 still a draw."
                       }
                     }
                   ],
@@ -9342,8 +9455,8 @@
                   "choices": [
                     {
                       "id": "j3-foldprice",
-                      "label": "Fold — price is wrong",
-                      "accessibilityText": "Fold — price is wrong",
+                      "label": "Fold \u2014 price is wrong",
+                      "accessibilityText": "Fold \u2014 price is wrong",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Stop chasing bad prices."
@@ -9408,7 +9521,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "You never know one hand. You know a range — then update it.",
+                  "accessibilityText": "You never know one hand. You know a range \u2014 then update it.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -9416,7 +9529,7 @@
                     {
                       "id": "act-04-01-01-explain-media",
                       "kind": "dialogue",
-                      "text": "You never know one hand. You know a range — then update it."
+                      "text": "You never know one hand. You know a range \u2014 then update it."
                     }
                   ],
                   "objectives": [
@@ -9538,8 +9651,8 @@
                   "choices": [
                     {
                       "id": "too-exact",
-                      "label": "Too exact — keep a weighted range",
-                      "accessibilityText": "Too exact — keep a weighted range",
+                      "label": "Too exact \u2014 keep a weighted range",
+                      "accessibilityText": "Too exact \u2014 keep a weighted range",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "AK is one node in a range, not the whole story."
@@ -9805,7 +9918,7 @@
                       "accessibilityText": "Limp behind",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "You already posted; raise or fold — do not limp.",
+                        "feedback": "You already posted; raise or fold \u2014 do not limp.",
                         "betterChoiceId": "squeeze"
                       },
                       "action": "CALL"
@@ -10128,8 +10241,8 @@
                   "choices": [
                     {
                       "id": "branches",
-                      "label": "Brick → barrel · flush → abort",
-                      "accessibilityText": "Brick → barrel · flush → abort",
+                      "label": "Brick \u2192 barrel \u00b7 flush \u2192 abort",
+                      "accessibilityText": "Brick \u2192 barrel \u00b7 flush \u2192 abort",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "If X card, continue; if Y card, shut down."
@@ -10407,7 +10520,7 @@
                       "accessibilityText": "Bet 15",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Half pot is fine value — not the worst size.",
+                        "feedback": "Half pot is fine value \u2014 not the worst size.",
                         "betterChoiceId": "bad-1"
                       },
                       "action": "BET",
@@ -10778,8 +10891,8 @@
                   "choices": [
                     {
                       "id": "sticky",
-                      "label": "Sticky calls — low folding",
-                      "accessibilityText": "Sticky calls — low folding",
+                      "label": "Sticky calls \u2014 low folding",
+                      "accessibilityText": "Sticky calls \u2014 low folding",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "They continue without strong hands."
@@ -10816,8 +10929,8 @@
                   "choices": [
                     {
                       "id": "low-conf",
-                      "label": "Low confidence — need samples",
-                      "accessibilityText": "Low confidence — need samples",
+                      "label": "Low confidence \u2014 need samples",
+                      "accessibilityText": "Low confidence \u2014 need samples",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "One hand is a note, not a verdict."
@@ -10854,8 +10967,8 @@
                   "choices": [
                     {
                       "id": "bundle",
-                      "label": "Many hands · rarely folds",
-                      "accessibilityText": "Many hands · rarely folds",
+                      "label": "Many hands \u00b7 rarely folds",
+                      "accessibilityText": "Many hands \u00b7 rarely folds",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "That is the evidence bundle."
@@ -10982,7 +11095,7 @@
                   "objectives": [
                     "Introduce Calling Station"
                   ],
-                  "prompt": "A label is…",
+                  "prompt": "A label is\u2026",
                   "choices": [
                     {
                       "id": "model",
@@ -11067,8 +11180,8 @@
                   "choices": [
                     {
                       "id": "low",
-                      "label": "Low — keep collecting samples",
-                      "accessibilityText": "Low — keep collecting samples",
+                      "label": "Low \u2014 keep collecting samples",
+                      "accessibilityText": "Low \u2014 keep collecting samples",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Display sample limits; do not overfit."
@@ -11159,7 +11272,7 @@
                       "accessibilityText": "Bet thin value",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "They call too wide — value thinner.",
+                        "feedback": "They call too wide \u2014 value thinner.",
                         "reversalRead": "If they suddenly fold rivers, stop thinning value."
                       },
                       "action": "BET",
@@ -11388,8 +11501,8 @@
                   "choices": [
                     {
                       "id": "narrow",
-                      "label": "Narrow entry — plays few hands",
-                      "accessibilityText": "Narrow entry — plays few hands",
+                      "label": "Narrow entry \u2014 plays few hands",
+                      "accessibilityText": "Narrow entry \u2014 plays few hands",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Participation is very low."
@@ -11464,8 +11577,8 @@
                   "choices": [
                     {
                       "id": "wait",
-                      "label": "No — sample too small",
-                      "accessibilityText": "No — sample too small",
+                      "label": "No \u2014 sample too small",
+                      "accessibilityText": "No \u2014 sample too small",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Confidence scales with samples."
@@ -11473,8 +11586,8 @@
                     },
                     {
                       "id": "now",
-                      "label": "Yes — two folds is enough forever",
-                      "accessibilityText": "Yes — two folds is enough forever",
+                      "label": "Yes \u2014 two folds is enough forever",
+                      "accessibilityText": "Yes \u2014 two folds is enough forever",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too thin.",
@@ -11792,7 +11905,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Respect nit aggression — often fold.",
+                  "accessibilityText": "Respect nit aggression \u2014 often fold.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -12058,8 +12171,8 @@
                   "choices": [
                     {
                       "id": "calm",
-                      "label": "Frequencies and shows — no ego story",
-                      "accessibilityText": "Frequencies and shows — no ego story",
+                      "label": "Frequencies and shows \u2014 no ego story",
+                      "accessibilityText": "Frequencies and shows \u2014 no ego story",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "You will exploit later; do not tilt notes."
@@ -12148,7 +12261,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Maniac means extreme entry and aggression — a model, not an insult.",
+                  "accessibilityText": "Maniac means extreme entry and aggression \u2014 a model, not an insult.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -12156,7 +12269,7 @@
                     {
                       "id": "act-04-08-02-explain-media",
                       "kind": "dialogue",
-                      "text": "Maniac means extreme entry and aggression — a model, not an insult."
+                      "text": "Maniac means extreme entry and aggression \u2014 a model, not an insult."
                     }
                   ],
                   "objectives": [
@@ -12256,7 +12369,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Station, Nit, and Maniac — already introduced.",
+                  "accessibilityText": "Station, Nit, and Maniac \u2014 already introduced.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -12561,7 +12674,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Observation ≠ certainty. Confidence grows with samples and showdowns.",
+                  "accessibilityText": "Observation \u2260 certainty. Confidence grows with samples and showdowns.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -12569,7 +12682,7 @@
                     {
                       "id": "act-04-09-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Observation ≠ certainty. Confidence grows with samples and showdowns."
+                      "text": "Observation \u2260 certainty. Confidence grows with samples and showdowns."
                     }
                   ],
                   "objectives": [
@@ -12595,8 +12708,8 @@
                   "choices": [
                     {
                       "id": "one-note",
-                      "label": "One note — low certainty",
-                      "accessibilityText": "One note — low certainty",
+                      "label": "One note \u2014 low certainty",
+                      "accessibilityText": "One note \u2014 low certainty",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Log it; do not crown a type yet."
@@ -12633,8 +12746,8 @@
                   "choices": [
                     {
                       "id": "rise",
-                      "label": "Rise — still revisable",
-                      "accessibilityText": "Rise — still revisable",
+                      "label": "Rise \u2014 still revisable",
+                      "accessibilityText": "Rise \u2014 still revisable",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "More samples, higher confidence, still a model."
@@ -12744,7 +12857,7 @@
           "id": "unit-04-10-exploits",
           "order": 10,
           "title": "Exploit checkpoints",
-          "summary": "Same hand, different types — then the section jump.",
+          "summary": "Same hand, different types \u2014 then the section jump.",
           "lessons": [
             {
               "id": "lesson-04-10-01-exploit-checkpoints",
@@ -12753,7 +12866,7 @@
               "summary": "Change only when the authored read justifies it.",
               "objectives": [
                 "Change lines by type with justification",
-                "Combine type × position × stack × board",
+                "Combine type \u00d7 position \u00d7 stack \u00d7 board",
                 "Keep baseline when evidence is missing"
               ],
               "prerequisites": [
@@ -12950,9 +13063,9 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Combine type × position × stack × board"
+                    "Combine type \u00d7 position \u00d7 stack \u00d7 board"
                   ],
-                  "prompt": "Full ring. Type × position × stack decide the line.",
+                  "prompt": "Full ring. Type \u00d7 position \u00d7 stack decide the line.",
                   "choices": [
                     {
                       "id": "lab-steal",
@@ -12960,7 +13073,7 @@
                       "accessibilityText": "Open to 6",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Deep BTN vs nit BB — steal wider.",
+                        "feedback": "Deep BTN vs nit BB \u2014 steal wider.",
                         "reversalRead": "Unknown BB: tighter open."
                       },
                       "action": "RAISE",
@@ -13040,7 +13153,7 @@
                             "accessibilityText": "Open to 6",
                             "grading": {
                               "grade": "recommended",
-                              "feedback": "Deep BTN vs nit BB — steal wider.",
+                              "feedback": "Deep BTN vs nit BB \u2014 steal wider.",
                               "reversalRead": "Unknown BB: tighter open."
                             },
                             "action": "RAISE",
@@ -13304,7 +13417,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Jump: Calling Station — value more, bluff less.",
+                  "accessibilityText": "Jump: Calling Station \u2014 value more, bluff less.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -13317,8 +13430,8 @@
                   "choices": [
                     {
                       "id": "j4-cs",
-                      "label": "Calling Station — thicker value, fewer bluffs",
-                      "accessibilityText": "Calling Station — thicker value, fewer bluffs",
+                      "label": "Calling Station \u2014 thicker value, fewer bluffs",
+                      "accessibilityText": "Calling Station \u2014 thicker value, fewer bluffs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Cite low folding.",
@@ -13327,8 +13440,8 @@
                     },
                     {
                       "id": "j4-cs-wrong",
-                      "label": "Calling Station — bluff more",
-                      "accessibilityText": "Calling Station — bluff more",
+                      "label": "Calling Station \u2014 bluff more",
+                      "accessibilityText": "Calling Station \u2014 bluff more",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Opposite exploit.",
@@ -13347,7 +13460,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Jump: Nit — respect heat.",
+                  "accessibilityText": "Jump: Nit \u2014 respect heat.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -13360,8 +13473,8 @@
                   "choices": [
                     {
                       "id": "j4-nit",
-                      "label": "Nit — respect the raise; steal more elsewhere",
-                      "accessibilityText": "Nit — respect the raise; steal more elsewhere",
+                      "label": "Nit \u2014 respect the raise; steal more elsewhere",
+                      "accessibilityText": "Nit \u2014 respect the raise; steal more elsewhere",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Narrow entry + strong aggression.",
@@ -13370,8 +13483,8 @@
                     },
                     {
                       "id": "j4-nit-bluff",
-                      "label": "Nit — bluff-catch light always",
-                      "accessibilityText": "Nit — bluff-catch light always",
+                      "label": "Nit \u2014 bluff-catch light always",
+                      "accessibilityText": "Nit \u2014 bluff-catch light always",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Wrong direction versus nit heat.",
@@ -13390,7 +13503,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Jump: Maniac — call wider.",
+                  "accessibilityText": "Jump: Maniac \u2014 call wider.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -13403,8 +13516,8 @@
                   "choices": [
                     {
                       "id": "j4-man",
-                      "label": "Maniac — widen bluff-catch; avoid ego raises",
-                      "accessibilityText": "Maniac — widen bluff-catch; avoid ego raises",
+                      "label": "Maniac \u2014 widen bluff-catch; avoid ego raises",
+                      "accessibilityText": "Maniac \u2014 widen bluff-catch; avoid ego raises",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Over-aggression cited.",
@@ -13413,8 +13526,8 @@
                     },
                     {
                       "id": "j4-man-fold",
-                      "label": "Maniac — fold all one-pair forever",
-                      "accessibilityText": "Maniac — fold all one-pair forever",
+                      "label": "Maniac \u2014 fold all one-pair forever",
+                      "accessibilityText": "Maniac \u2014 fold all one-pair forever",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "You should call wider.",
@@ -13560,7 +13673,7 @@
                       "accessibilityText": "Fold",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "OOP multiway with medium connectors is −EV often."
+                        "feedback": "OOP multiway with medium connectors is \u2212EV often."
                       },
                       "action": "FOLD"
                     },
@@ -13689,12 +13802,12 @@
           "id": "unit-05-02-deep-stacks",
           "order": 2,
           "title": "Deep-stack play",
-          "summary": "150–300bb decisions and implied-odds geometry.",
+          "summary": "150\u2013300bb decisions and implied-odds geometry.",
           "lessons": [
             {
               "id": "lesson-05-02-01-deep-stack-play",
               "order": 1,
-              "title": "Play 150–300bb stacks with a plan",
+              "title": "Play 150\u2013300bb stacks with a plan",
               "summary": "Deep stacks reward implied odds, position, and disciplined folds.",
               "objectives": [
                 "Use depth for speculative implied odds",
@@ -13804,7 +13917,7 @@
                       "accessibilityText": "Fold",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Deep money + wet board + huge raise ≠ light stack-off.",
+                        "feedback": "Deep money + wet board + huge raise \u2260 light stack-off.",
                         "reversalRead": "Shallow SPR or maniac history can widen calls."
                       },
                       "action": "FOLD"
@@ -13885,7 +13998,7 @@
                   "objectives": [
                     "Plan future streets when SPR is high"
                   ],
-                  "prompt": "150–300bb cash play rewards?",
+                  "prompt": "150\u2013300bb cash play rewards?",
                   "choices": [
                     {
                       "id": "pos",
@@ -13917,7 +14030,7 @@
           "id": "unit-05-03-implied-odds",
           "order": 3,
           "title": "Implied and reverse implied odds",
-          "summary": "When depth pays you — and when it taxes you.",
+          "summary": "When depth pays you \u2014 and when it taxes you.",
           "lessons": [
             {
               "id": "lesson-05-03-01-implied-odds",
@@ -13970,7 +14083,7 @@
                   "stage": "guided",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Station pays — implied odds improve. Call.",
+                  "accessibilityText": "Station pays \u2014 implied odds improve. Call.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -14014,7 +14127,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Reverse implied odds — fold dominated broadway.",
+                  "accessibilityText": "Reverse implied odds \u2014 fold dominated broadway.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -14031,7 +14144,7 @@
                       "accessibilityText": "Fold",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Nit heat + broadway underpairs to ace — reverse implied."
+                        "feedback": "Nit heat + broadway underpairs to ace \u2014 reverse implied."
                       },
                       "action": "FOLD"
                     },
@@ -14041,7 +14154,7 @@
                       "accessibilityText": "Call",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Wrong direction — often second-best.",
+                        "feedback": "Wrong direction \u2014 often second-best.",
                         "betterChoiceId": "rio"
                       },
                       "action": "CALL"
@@ -14057,7 +14170,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Non-nut flush draw — fold the domination leak.",
+                  "accessibilityText": "Non-nut flush draw \u2014 fold the domination leak.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -14303,7 +14416,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Check back — thin value dies.",
+                  "accessibilityText": "Check back \u2014 thin value dies.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -14368,12 +14481,12 @@
                   "objectives": [
                     "Choose thin value versus sticky callers"
                   ],
-                  "prompt": "Same hand, different types — what must change?",
+                  "prompt": "Same hand, different types \u2014 what must change?",
                   "choices": [
                     {
                       "id": "read",
-                      "label": "The line — only when the authored read justifies it",
-                      "accessibilityText": "The line — only when the authored read justifies it",
+                      "label": "The line \u2014 only when the authored read justifies it",
+                      "accessibilityText": "The line \u2014 only when the authored read justifies it",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Baseline first; exploit second."
@@ -14429,7 +14542,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Lines mean ranges. Check-raise, probe, delay, donk — each updates the story.",
+                  "accessibilityText": "Lines mean ranges. Check-raise, probe, delay, donk \u2014 each updates the story.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -14437,7 +14550,7 @@
                     {
                       "id": "act-05-05-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Lines mean ranges. Check-raise, probe, delay, donk — each updates the story."
+                      "text": "Lines mean ranges. Check-raise, probe, delay, donk \u2014 each updates the story."
                     }
                   ],
                   "objectives": [
@@ -14463,8 +14576,8 @@
                   "choices": [
                     {
                       "id": "strong",
-                      "label": "Value-heavy — respect",
-                      "accessibilityText": "Value-heavy — respect",
+                      "label": "Value-heavy \u2014 respect",
+                      "accessibilityText": "Value-heavy \u2014 respect",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Nit check-raises are rarely air.",
@@ -14544,7 +14657,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Often polarized — ace or air.",
+                  "accessibilityText": "Often polarized \u2014 ace or air.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -14557,8 +14670,8 @@
                   "choices": [
                     {
                       "id": "polar",
-                      "label": "Often polarized — strong or bluff",
-                      "accessibilityText": "Often polarized — strong or bluff",
+                      "label": "Often polarized \u2014 strong or bluff",
+                      "accessibilityText": "Often polarized \u2014 strong or bluff",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Live donks skew polar on dry ace boards."
@@ -14686,8 +14799,8 @@
                   "choices": [
                     {
                       "id": "capped",
-                      "label": "Capped — fewer nuts",
-                      "accessibilityText": "Capped — fewer nuts",
+                      "label": "Capped \u2014 fewer nuts",
+                      "accessibilityText": "Capped \u2014 fewer nuts",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Check-back turn removes many strong hands."
@@ -14789,7 +14902,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Strong uncapped pressure — respect without a read.",
+                  "accessibilityText": "Strong uncapped pressure \u2014 respect without a read.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -14802,8 +14915,8 @@
                   "choices": [
                     {
                       "id": "uncap",
-                      "label": "Uncapped — respect unless type says otherwise",
-                      "accessibilityText": "Uncapped — respect unless type says otherwise",
+                      "label": "Uncapped \u2014 respect unless type says otherwise",
+                      "accessibilityText": "Uncapped \u2014 respect unless type says otherwise",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Baseline respect; exploit only with evidence."
@@ -14830,7 +14943,7 @@
           "id": "unit-05-07-timing-sizing",
           "order": 7,
           "title": "Live timing and sizing evidence",
-          "summary": "Use timing/sizing as soft evidence — never magic tells.",
+          "summary": "Use timing/sizing as soft evidence \u2014 never magic tells.",
           "lessons": [
             {
               "id": "lesson-05-07-01-timing-sizing-evidence",
@@ -14880,7 +14993,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Soft evidence — not proof.",
+                  "accessibilityText": "Soft evidence \u2014 not proof.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -14928,7 +15041,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Weak or blocking — not solver gospel.",
+                  "accessibilityText": "Weak or blocking \u2014 not solver gospel.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -15074,7 +15187,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Tables change. Stuck, tilted, tired, or shifting gears — update.",
+                  "accessibilityText": "Tables change. Stuck, tilted, tired, or shifting gears \u2014 update.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -15082,7 +15195,7 @@
                     {
                       "id": "act-05-08-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Tables change. Stuck, tilted, tired, or shifting gears — update."
+                      "text": "Tables change. Stuck, tilted, tired, or shifting gears \u2014 update."
                     }
                   ],
                   "objectives": [
@@ -15095,7 +15208,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Stuck/tilted — widen value, choose spots.",
+                  "accessibilityText": "Stuck/tilted \u2014 widen value, choose spots.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -15133,7 +15246,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Possible gear change — sample again.",
+                  "accessibilityText": "Possible gear change \u2014 sample again.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -15171,7 +15284,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Reset or step away — bankroll guardrail.",
+                  "accessibilityText": "Reset or step away \u2014 bankroll guardrail.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -15302,7 +15415,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Leave or move down — do not reload emotionally.",
+                  "accessibilityText": "Leave or move down \u2014 do not reload emotionally.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -15415,7 +15528,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Winning strategy — not soft extra credit.",
+                  "accessibilityText": "Winning strategy \u2014 not soft extra credit.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -16263,7 +16376,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Uncapped — respect.",
+                  "accessibilityText": "Uncapped \u2014 respect.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -16879,7 +16992,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Unblock bluffs — no flush blockers.",
+                  "accessibilityText": "Unblock bluffs \u2014 no flush blockers.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -16917,7 +17030,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Nothing — they tweak choices.",
+                  "accessibilityText": "Nothing \u2014 they tweak choices.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -16996,7 +17109,7 @@
           "id": "unit-06-07-min-defense",
           "order": 7,
           "title": "Minimum-defense intuition",
-          "summary": "Defend enough to punish over-bluffing — without frequency theater.",
+          "summary": "Defend enough to punish over-bluffing \u2014 without frequency theater.",
           "lessons": [
             {
               "id": "lesson-06-07-01-minimum-defense",
@@ -17124,7 +17237,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Intuition only — no fake precision.",
+                  "accessibilityText": "Intuition only \u2014 no fake precision.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -17203,13 +17316,13 @@
           "id": "unit-06-08-mixed",
           "order": 8,
           "title": "Mixed strategy as frequency",
-          "summary": "Mix for balance and unpredictability — not randomness for its own sake.",
+          "summary": "Mix for balance and unpredictability \u2014 not randomness for its own sake.",
           "lessons": [
             {
               "id": "lesson-06-08-01-mixed-strategy",
               "order": 1,
               "title": "Mix with a reason",
-              "summary": "Sometimes check strong; sometimes bet medium — with an exploit purpose.",
+              "summary": "Sometimes check strong; sometimes bet medium \u2014 with an exploit purpose.",
               "objectives": [
                 "Mix strong hands sometimes",
                 "Avoid pure randomness",
@@ -17234,7 +17347,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Mixing is frequency with a purpose — not coin-flip theater.",
+                  "accessibilityText": "Mixing is frequency with a purpose \u2014 not coin-flip theater.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -17242,7 +17355,7 @@
                     {
                       "id": "act-06-08-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Mixing is frequency with a purpose — not coin-flip theater."
+                      "text": "Mixing is frequency with a purpose \u2014 not coin-flip theater."
                     }
                   ],
                   "objectives": [
@@ -17255,7 +17368,7 @@
                   "stage": "guided",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Check — protect checking range / induce.",
+                  "accessibilityText": "Check \u2014 protect checking range / induce.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -17295,7 +17408,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Less — they do not fold.",
+                  "accessibilityText": "Less \u2014 they do not fold.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -17354,7 +17467,7 @@
                       "accessibilityText": "Need a reason",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Frequency ≠ chaos."
+                        "feedback": "Frequency \u2260 chaos."
                       }
                     },
                     {
@@ -17466,7 +17579,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Often committed-ish — careful.",
+                  "accessibilityText": "Often committed-ish \u2014 careful.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -17504,7 +17617,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Small c-bet or give-up — not auto-jam.",
+                  "accessibilityText": "Small c-bet or give-up \u2014 not auto-jam.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -17929,7 +18042,7 @@
                       "accessibilityText": "Label now",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Observe first — need samples.",
+                        "feedback": "Observe first \u2014 need samples.",
                         "betterChoiceId": "sel"
                       }
                     }
@@ -17941,7 +18054,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Disciplined — not maniac.",
+                  "accessibilityText": "Disciplined \u2014 not maniac.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -18030,8 +18143,8 @@
                   "choices": [
                     {
                       "id": "bundle",
-                      "label": "Tight · plan · give",
-                      "accessibilityText": "Tight · plan · give",
+                      "label": "Tight \u00b7 plan \u00b7 give",
+                      "accessibilityText": "Tight \u00b7 plan \u00b7 give",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "That's the bundle."
@@ -18082,7 +18195,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "TAG: tight in, aggressive after — a working model.",
+                  "accessibilityText": "TAG: tight in, aggressive after \u2014 a working model.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -18090,7 +18203,7 @@
                     {
                       "id": "act-06-11-02-explain-media",
                       "kind": "dialogue",
-                      "text": "TAG: tight in, aggressive after — a working model."
+                      "text": "TAG: tight in, aggressive after \u2014 a working model."
                     }
                   ],
                   "objectives": [
@@ -18204,7 +18317,7 @@
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Fits.",
-                        "reversalRead": "Loose opens + endless barrels → not TAG."
+                        "reversalRead": "Loose opens + endless barrels \u2192 not TAG."
                       }
                     },
                     {
@@ -18580,7 +18693,7 @@
                       "accessibilityText": "Label now",
                       "grading": {
                         "grade": "clear_mistake",
-                        "feedback": "Observe first — need samples.",
+                        "feedback": "Observe first \u2014 need samples.",
                         "betterChoiceId": "wide"
                       }
                     }
@@ -18681,8 +18794,8 @@
                   "choices": [
                     {
                       "id": "bundle",
-                      "label": "Wide · barrels · folds",
-                      "accessibilityText": "Wide · barrels · folds",
+                      "label": "Wide \u00b7 barrels \u00b7 folds",
+                      "accessibilityText": "Wide \u00b7 barrels \u00b7 folds",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Bundle ready."
@@ -18733,7 +18846,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "LAG: wide in, pressure on — still a working model.",
+                  "accessibilityText": "LAG: wide in, pressure on \u2014 still a working model.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -18741,7 +18854,7 @@
                     {
                       "id": "act-06-12-02-explain-media",
                       "kind": "dialogue",
-                      "text": "LAG: wide in, pressure on — still a working model."
+                      "text": "LAG: wide in, pressure on \u2014 still a working model."
                     }
                   ],
                   "objectives": [
@@ -19151,7 +19264,7 @@
           "id": "unit-06-13-mix",
           "order": 13,
           "title": "Mix TAG/LAG with earlier types",
-          "summary": "Same spot, five models — then section checkpoint.",
+          "summary": "Same spot, five models \u2014 then section checkpoint.",
           "lessons": [
             {
               "id": "lesson-06-13-01-mix-five-types",
@@ -19340,7 +19453,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "TAG — respect.",
+                  "accessibilityText": "TAG \u2014 respect.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -19353,8 +19466,8 @@
                   "choices": [
                     {
                       "id": "tag",
-                      "label": "TAG — respect the raise",
-                      "accessibilityText": "TAG — respect the raise",
+                      "label": "TAG \u2014 respect the raise",
+                      "accessibilityText": "TAG \u2014 respect the raise",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Cite selective aggression.",
@@ -19363,8 +19476,8 @@
                     },
                     {
                       "id": "wrong",
-                      "label": "Calling Station — bluff more",
-                      "accessibilityText": "Calling Station — bluff more",
+                      "label": "Calling Station \u2014 bluff more",
+                      "accessibilityText": "Calling Station \u2014 bluff more",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Wrong model.",
@@ -19544,7 +19657,7 @@
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Fits.",
-                        "reversalRead": "Wide sticky aggression → LAG/maniac."
+                        "reversalRead": "Wide sticky aggression \u2192 LAG/maniac."
                       }
                     },
                     {
@@ -19587,7 +19700,7 @@
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Fits.",
-                        "reversalRead": "Never folds → maniac."
+                        "reversalRead": "Never folds \u2192 maniac."
                       }
                     },
                     {
@@ -19673,7 +19786,7 @@
                   "stage": "guided",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "Give up more — plan dead.",
+                  "accessibilityText": "Give up more \u2014 plan dead.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -19686,8 +19799,8 @@
                   "choices": [
                     {
                       "id": "dead",
-                      "label": "Plan is sick — give up more",
-                      "accessibilityText": "Plan is sick — give up more",
+                      "label": "Plan is sick \u2014 give up more",
+                      "accessibilityText": "Plan is sick \u2014 give up more",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Value thesis died."
@@ -19928,8 +20041,8 @@
                   "choices": [
                     {
                       "id": "give",
-                      "label": "Give up — map included this kill",
-                      "accessibilityText": "Give up — map included this kill",
+                      "label": "Give up \u2014 map included this kill",
+                      "accessibilityText": "Give up \u2014 map included this kill",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Pre-planned."
@@ -19966,8 +20079,8 @@
                   "choices": [
                     {
                       "id": "avoid",
-                      "label": "Avoid — map first",
-                      "accessibilityText": "Avoid — map first",
+                      "label": "Avoid \u2014 map first",
+                      "accessibilityText": "Avoid \u2014 map first",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Integration standard."
@@ -20367,7 +20480,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
-                  "accessibilityText": "High commitment — tighter.",
+                  "accessibilityText": "High commitment \u2014 tighter.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -20380,8 +20493,8 @@
                   "choices": [
                     {
                       "id": "commit",
-                      "label": "Higher commitment — fewer spewy bluffs",
-                      "accessibilityText": "Higher commitment — fewer spewy bluffs",
+                      "label": "Higher commitment \u2014 fewer spewy bluffs",
+                      "accessibilityText": "Higher commitment \u2014 fewer spewy bluffs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "SPR is short."
@@ -20716,8 +20829,8 @@
                   "choices": [
                     {
                       "id": "commit",
-                      "label": "Closer to stacking — SPR is low",
-                      "accessibilityText": "Closer to stacking — SPR is low",
+                      "label": "Closer to stacking \u2014 SPR is low",
+                      "accessibilityText": "Closer to stacking \u2014 SPR is low",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Short stack math."
@@ -21085,7 +21198,7 @@
         {
           "id": "unit-07-08-checkpoints",
           "order": 8,
-          "title": "Type × board × line × sizing",
+          "title": "Type \u00d7 board \u00d7 line \u00d7 sizing",
           "summary": "Integrated checkpoints.",
           "lessons": [
             {
@@ -21119,7 +21232,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Type × board × line × size. One answer.",
+                  "accessibilityText": "Type \u00d7 board \u00d7 line \u00d7 size. One answer.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -21127,7 +21240,7 @@
                     {
                       "id": "act-07-08-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Type × board × line × size. One answer."
+                      "text": "Type \u00d7 board \u00d7 line \u00d7 size. One answer."
                     }
                   ],
                   "objectives": [
@@ -21376,8 +21489,8 @@
                   "choices": [
                     {
                       "id": "spec",
-                      "label": "I overcall river vs unknowns — fold more second pair",
-                      "accessibilityText": "I overcall river vs unknowns — fold more second pair",
+                      "label": "I overcall river vs unknowns \u2014 fold more second pair",
+                      "accessibilityText": "I overcall river vs unknowns \u2014 fold more second pair",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Actionable."
@@ -21461,8 +21574,8 @@
                     },
                     {
                       "id": "never",
-                      "label": "Never — memory is enough",
-                      "accessibilityText": "Never — memory is enough",
+                      "label": "Never \u2014 memory is enough",
+                      "accessibilityText": "Never \u2014 memory is enough",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Leaks return.",
@@ -21834,7 +21947,7 @@
                       "id": "step-3b-river",
                       "street": "river",
                       "prompt": "TAG check-raises huge. Action?",
-                      "accessibilityText": "Respect TAG — fold top pair often.",
+                      "accessibilityText": "Respect TAG \u2014 fold top pair often.",
                       "choices": [
                         {
                           "id": "fold",
@@ -21842,7 +21955,7 @@
                           "accessibilityText": "Fold",
                           "grading": {
                             "grade": "recommended",
-                            "feedback": "TAG heat — difficult fold.",
+                            "feedback": "TAG heat \u2014 difficult fold.",
                             "reversalRead": "Maniac raise: call wider."
                           },
                           "action": "FOLD"
@@ -22019,7 +22132,7 @@
                           "accessibilityText": "Check",
                           "grading": {
                             "grade": "recommended",
-                            "feedback": "Multiway missed draw — no crowd bluff."
+                            "feedback": "Multiway missed draw \u2014 no crowd bluff."
                           },
                           "action": "CHECK"
                         },
@@ -22350,7 +22463,7 @@
                       "id": "step-4b-river",
                       "street": "river",
                       "prompt": "Called. River Ad. Opponent jams. Action?",
-                      "accessibilityText": "Ace is a bad card — fold more without a read.",
+                      "accessibilityText": "Ace is a bad card \u2014 fold more without a read.",
                       "choices": [
                         {
                           "id": "fold",
@@ -22637,7 +22750,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Calling Station — value more.",
+                  "accessibilityText": "Calling Station \u2014 value more.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -22650,8 +22763,8 @@
                   "choices": [
                     {
                       "id": "cs",
-                      "label": "Calling Station — thicker value, fewer bluffs",
-                      "accessibilityText": "Calling Station — thicker value, fewer bluffs",
+                      "label": "Calling Station \u2014 thicker value, fewer bluffs",
+                      "accessibilityText": "Calling Station \u2014 thicker value, fewer bluffs",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Cite low folding.",
@@ -22660,8 +22773,8 @@
                     },
                     {
                       "id": "cs-wrong",
-                      "label": "Calling Station — bluff more",
-                      "accessibilityText": "Calling Station — bluff more",
+                      "label": "Calling Station \u2014 bluff more",
+                      "accessibilityText": "Calling Station \u2014 bluff more",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Opposite.",
@@ -22680,7 +22793,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Nit — respect.",
+                  "accessibilityText": "Nit \u2014 respect.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -22693,8 +22806,8 @@
                   "choices": [
                     {
                       "id": "nit",
-                      "label": "Nit — respect heat; steal elsewhere",
-                      "accessibilityText": "Nit — respect heat; steal elsewhere",
+                      "label": "Nit \u2014 respect heat; steal elsewhere",
+                      "accessibilityText": "Nit \u2014 respect heat; steal elsewhere",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Cite narrow entry.",
@@ -22703,8 +22816,8 @@
                     },
                     {
                       "id": "nit-wrong",
-                      "label": "Nit — call down light always",
-                      "accessibilityText": "Nit — call down light always",
+                      "label": "Nit \u2014 call down light always",
+                      "accessibilityText": "Nit \u2014 call down light always",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Wrong.",
@@ -22723,7 +22836,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Maniac — call wider.",
+                  "accessibilityText": "Maniac \u2014 call wider.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -22736,8 +22849,8 @@
                   "choices": [
                     {
                       "id": "man",
-                      "label": "Maniac — widen catches; avoid ego raises",
-                      "accessibilityText": "Maniac — widen catches; avoid ego raises",
+                      "label": "Maniac \u2014 widen catches; avoid ego raises",
+                      "accessibilityText": "Maniac \u2014 widen catches; avoid ego raises",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Cite over-aggression.",
@@ -22746,8 +22859,8 @@
                     },
                     {
                       "id": "man-wrong",
-                      "label": "Maniac — fold all one-pair forever",
-                      "accessibilityText": "Maniac — fold all one-pair forever",
+                      "label": "Maniac \u2014 fold all one-pair forever",
+                      "accessibilityText": "Maniac \u2014 fold all one-pair forever",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Too tight.",
@@ -22766,7 +22879,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "TAG — respect.",
+                  "accessibilityText": "TAG \u2014 respect.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -22779,18 +22892,18 @@
                   "choices": [
                     {
                       "id": "tag",
-                      "label": "TAG — respect raises; steal less than vs nits",
-                      "accessibilityText": "TAG — respect raises; steal less than vs nits",
+                      "label": "TAG \u2014 respect raises; steal less than vs nits",
+                      "accessibilityText": "TAG \u2014 respect raises; steal less than vs nits",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Cite selective aggression.",
-                        "reversalRead": "Entry widens → reconsider LAG."
+                        "reversalRead": "Entry widens \u2192 reconsider LAG."
                       }
                     },
                     {
                       "id": "tag-wrong",
-                      "label": "TAG — bluff their check-raises light",
-                      "accessibilityText": "TAG — bluff their check-raises light",
+                      "label": "TAG \u2014 bluff their check-raises light",
+                      "accessibilityText": "TAG \u2014 bluff their check-raises light",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Bad.",
@@ -22809,7 +22922,7 @@
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "LAG — trap/call wider.",
+                  "accessibilityText": "LAG \u2014 trap/call wider.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -22822,18 +22935,18 @@
                   "choices": [
                     {
                       "id": "lag",
-                      "label": "LAG — trap more; call wider; fancy less",
-                      "accessibilityText": "LAG — trap more; call wider; fancy less",
+                      "label": "LAG \u2014 trap more; call wider; fancy less",
+                      "accessibilityText": "LAG \u2014 trap more; call wider; fancy less",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Cite wide pressure.",
-                        "reversalRead": "Never folds → maniac."
+                        "reversalRead": "Never folds \u2192 maniac."
                       }
                     },
                     {
                       "id": "lag-wrong",
-                      "label": "LAG — bluff into them more",
-                      "accessibilityText": "LAG — bluff into them more",
+                      "label": "LAG \u2014 bluff into them more",
+                      "accessibilityText": "LAG \u2014 bluff into them more",
                       "grading": {
                         "grade": "clear_mistake",
                         "feedback": "Wrong.",
@@ -22852,7 +22965,7 @@
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
-                  "accessibilityText": "Low — keep baseline heavier.",
+                  "accessibilityText": "Low \u2014 keep baseline heavier.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -22865,8 +22978,8 @@
                   "choices": [
                     {
                       "id": "low",
-                      "label": "Low — lean baseline until samples grow",
-                      "accessibilityText": "Low — lean baseline until samples grow",
+                      "label": "Low \u2014 lean baseline until samples grow",
+                      "accessibilityText": "Low \u2014 lean baseline until samples grow",
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Uncertainty is honest."
@@ -22909,7 +23022,7 @@
                       "grading": {
                         "grade": "recommended",
                         "feedback": "Evidence flipped.",
-                        "reversalRead": "Sticky calls return → model can return."
+                        "reversalRead": "Sticky calls return \u2192 model can return."
                       }
                     },
                     {

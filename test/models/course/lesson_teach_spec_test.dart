@@ -166,6 +166,14 @@ const _lessons = <String, List<String>>{
     'act-03-02-01-unguided',
     'act-03-02-01-checkpoint',
   ],
+  // LPT-144
+  'lesson-03-03-01-outs-and-price': [
+    'act-03-03-01-explain',
+    'act-03-03-01-guided',
+    'act-03-03-01-scaffolded',
+    'act-03-03-01-unguided',
+    'act-03-03-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -995,6 +1003,37 @@ void main() {
       expect(_list(cp, 'cues').single['target'], 'oesd');
       final d = cp.teachSpec!['deal'] as Map;
       expect((d['fixedCards'] as Map)['hero'], ['Js', '8d']);
+    });
+  });
+
+  group('Count outs, pay the right price (LPT-144)', () {
+    test('explain SoftPulse walks CLEAN → DIRTY → PRICE', () {
+      expect(
+        _list(
+          act('act-03-03-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['CLEAN', 'DIRTY', 'PRICE'],
+      );
+    });
+
+    test('guided clean aces + call-price none; checkpoint quiet', () {
+      expect(
+        _list(
+          act('act-03-03-01-guided'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['As', 'Ad', 'Ac'],
+      );
+      expect(act('act-03-03-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      final u = act('act-03-03-01-unguided').teachSpec!['deal'] as Map;
+      expect(u['mode'], 'fixed');
+      final cp = act('act-03-03-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(_list(cp, 'cues').single['kind'], 'none');
     });
   });
 }
