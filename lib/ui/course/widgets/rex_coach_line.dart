@@ -126,6 +126,14 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Mismatch to avoid — pick the sizing leak.',
     'act-06-04-01-checkpoint' =>
       'Merged betting aims to — pick the goal.',
+    // Use overbets densified asks (LPT-638) — same path as LPT-637.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-05-01-guided' =>
+      'Best overbet river — pick the polar candidate.',
+    'act-06-05-01-unguided' =>
+      'Random 3x pot medium — pick the disciplined line.',
+    'act-06-05-01-checkpoint' =>
+      'Geometric sizing helps — pick what it links.',
     _ => null,
   };
 }
