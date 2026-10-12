@@ -2484,14 +2484,20 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-03-01-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.potMultiwayOutcomes,
+        // Conceptual pot math — no decoy Them holes (LPT-241; same as LPT-220).
+        villainSeatCount: 0,
         caption: '1/2 · UTG 6 · BTN call · BB call',
       );
     case 'act-03-01-01-scaffolded':
+      // Nine-handed numbered seats so "button is on seat 7" matches the felt
+      // (LPT-240). blindsSeats draws all n chips; positionLabels is six-max only.
       return const LessonTableScene(
-        layout: LessonTableLayout.positionLabels,
+        layout: LessonTableLayout.blindsSeats,
         highlight: LessonTableHighlight.earlyPosition,
         seatCount: 9,
         buttonSeat: 7,
+        numberSeats: true,
+        showRoleLabels: false,
         // Structural spot — Rex owns the “tap who acts first” SoftPulse cue.
         caption: 'Nine-handed · button seat 7',
       );
@@ -2499,11 +2505,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
       return const LessonTableScene(
         layout: LessonTableLayout.verbalBindingOutcomes,
         // Structural spot — Rex owns “You said raise.”
+        villainSeatCount: 0,
         caption: 'Live table · verbal action',
       );
     case 'act-03-01-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.tableReadMattersOutcomes,
+        villainSeatCount: 0,
         caption: 'Hero 140bb · Villain 55bb · pot 18',
       );
     case 'act-03-02-01-guided':
