@@ -272,6 +272,18 @@ void main() {
     );
     expect(
       startingHandFamilyFromCodes(['Ah', 'Kd']),
+      LessonStartingHandFamily.strongOffsuitBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Kh', 'Qd']),
+      LessonStartingHandFamily.strongOffsuitBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Jh', 'Td']),
+      LessonStartingHandFamily.offsuitBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Kh', 'Jd']),
       LessonStartingHandFamily.offsuitBroadway,
     );
     expect(
@@ -320,6 +332,35 @@ void main() {
     expect(labels.contains('QTs'), isFalse);
     expect(labels.contains('JTs'), isFalse);
     expect(labels.contains('KTs'), isFalse);
+    expect(labels.length, greaterThan(1));
+  });
+
+  test('preflop AKo remap stays in strong offsuit broadway (LPT-406)', () {
+    final labels = <String>{};
+    for (var seed = 0; seed < 48; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [
+          ['Ah', 'Kd'],
+          <String>[],
+        ],
+        Random(seed),
+      );
+      expect(
+        startingHandFamilyFromCodes(groups[0]),
+        LessonStartingHandFamily.strongOffsuitBroadway,
+        reason: 'seed $seed dealt ${groups[0]}',
+      );
+      labels.add(startingHandLabelFromCodes(groups[0]));
+    }
+    expect(labels.contains('JTo'), isFalse);
+    expect(labels.contains('KJo'), isFalse);
+    expect(labels.contains('QTo'), isFalse);
+    expect(labels.contains('KTo'), isFalse);
+    expect(labels.contains('QJo'), isFalse);
+    expect(
+      labels.any((l) => l == 'AKo' || l == 'AQo' || l == 'AJo' || l == 'ATo' || l == 'KQo'),
+      isTrue,
+    );
     expect(labels.length, greaterThan(1));
   });
 

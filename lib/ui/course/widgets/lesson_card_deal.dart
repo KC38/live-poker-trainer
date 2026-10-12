@@ -134,7 +134,13 @@ enum LessonStartingHandFamily {
   /// Weaker suited broadway (KJs, KTs, QJs, QTs, JTs) — not Ace+ or KQs.
   suitedBroadway,
 
-  /// Two distinct broadway ranks, different suits.
+  /// Value offsuit broadway: Ace+broadway offsuit, or KQo.
+  ///
+  /// Keeps squeeze / value templates (e.g. AKo) from remapping into weaker
+  /// offsuit broadway like JTo / KJo (LPT-406; parallel to LPT-173).
+  strongOffsuitBroadway,
+
+  /// Weaker offsuit broadway (KJo, KTo, QJo, QTo, JTo) — not Ace+ or KQo.
   offsuitBroadway,
 
   /// Ace plus a non-broadway kicker, same suit.
@@ -180,12 +186,17 @@ LessonStartingHandFamily startingHandFamilyFromCodes(List<String> hero) {
 
   final bothBroadway = high.rank >= 10 && low.rank >= 10;
   if (bothBroadway) {
+    // Ace+broadway, or KQ — value class for 3-bet / squeeze teaches.
+    final strongBroadway =
+        high.rank == 14 || (high.rank == 13 && low.rank == 12);
     if (suited) {
-      // Ace+broadway suited, or KQs — value class for 3-bet teaches.
-      if (high.rank == 14 || (high.rank == 13 && low.rank == 12)) {
+      if (strongBroadway) {
         return LessonStartingHandFamily.strongSuitedBroadway;
       }
       return LessonStartingHandFamily.suitedBroadway;
+    }
+    if (strongBroadway) {
+      return LessonStartingHandFamily.strongOffsuitBroadway;
     }
     return LessonStartingHandFamily.offsuitBroadway;
   }
@@ -231,8 +242,10 @@ List<String> dealStartingHandFamily(
         _dealStrongSuitedBroadway(rng),
       LessonStartingHandFamily.suitedBroadway =>
         _dealWeakSuitedBroadway(rng),
+      LessonStartingHandFamily.strongOffsuitBroadway =>
+        _dealStrongOffsuitBroadway(rng),
       LessonStartingHandFamily.offsuitBroadway =>
-        _dealBroadway(rng, suited: false),
+        _dealWeakOffsuitBroadway(rng),
       LessonStartingHandFamily.suitedAce => _dealSuitedAceNonBroadway(rng),
       LessonStartingHandFamily.weakAceOffsuit =>
         _dealAceOffsuit(rng: rng, minKicker: 2, maxKicker: 9),
@@ -263,7 +276,9 @@ List<String> dealStartingHandFamily(
     LessonStartingHandFamily.suitedTrash ||
     LessonStartingHandFamily.suitedNonPair =>
       LessonHoleKind.suitedNonPair,
-    LessonStartingHandFamily.offsuitBroadway => LessonHoleKind.broadway,
+    LessonStartingHandFamily.strongOffsuitBroadway ||
+    LessonStartingHandFamily.offsuitBroadway =>
+      LessonHoleKind.broadway,
     LessonStartingHandFamily.junkOffsuit => LessonHoleKind.offsuitTrash,
     _ => LessonHoleKind.offsuitNonPair,
   };
@@ -1089,6 +1104,34 @@ List<String> _dealWeakSuitedBroadway(Random rng) {
   final pair = pairs[rng.nextInt(pairs.length)];
   final suit = _suits[rng.nextInt(_suits.length)];
   return [_code(pair.$1, suit), _code(pair.$2, suit)];
+}
+
+/// Ace+broadway offsuit (AKo–ATo) or KQo.
+List<String> _dealStrongOffsuitBroadway(Random rng) {
+  const pairs = <(int, int)>[
+    (14, 13),
+    (14, 12),
+    (14, 11),
+    (14, 10),
+    (13, 12),
+  ];
+  final pair = pairs[rng.nextInt(pairs.length)];
+  final suits = _twoDistinctSuits(rng);
+  return [_code(pair.$1, suits[0]), _code(pair.$2, suits[1])];
+}
+
+/// Offsuit broadway that is not Ace+ or KQo (KJo, KTo, QJo, QTo, JTo).
+List<String> _dealWeakOffsuitBroadway(Random rng) {
+  const pairs = <(int, int)>[
+    (13, 11),
+    (13, 10),
+    (12, 11),
+    (12, 10),
+    (11, 10),
+  ];
+  final pair = pairs[rng.nextInt(pairs.length)];
+  final suits = _twoDistinctSuits(rng);
+  return [_code(pair.$1, suits[0]), _code(pair.$2, suits[1])];
 }
 
 List<String> _dealConnector(Random rng, {required bool suited}) {
