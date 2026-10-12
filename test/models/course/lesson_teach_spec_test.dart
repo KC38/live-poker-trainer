@@ -222,6 +222,14 @@ const _lessons = <String, List<String>>{
     'act-03-08-02-jump-river',
     'act-03-08-02-jump-leak',
   ],
+  // LPT-167
+  'lesson-04-01-01-ranges-not-hands': [
+    'act-04-01-01-explain',
+    'act-04-01-01-guided',
+    'act-04-01-01-scaffolded',
+    'act-04-01-01-unguided',
+    'act-04-01-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1301,6 +1309,44 @@ void main() {
         _list(act('act-03-08-02-jump-leak'), 'cues').single['target'],
         'j3-foldprice',
       );
+    });
+  });
+
+  group('Think in ranges (LPT-167)', () {
+    test('explain SoftPulse walks ONE HAND → RANGE → UPDATE', () {
+      expect(
+        _list(
+          act('act-04-01-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['ONE HAND', 'RANGE', 'UPDATE'],
+      );
+    });
+
+    test('range tiles deal none; felt steps fixed; checkpoint quiet', () {
+      expect(act('act-04-01-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-01-01-guided'), 'cues').single['target'],
+        'strong-narrow',
+      );
+      expect(
+        _list(act('act-04-01-01-scaffolded'), 'cues').single['target'],
+        'bb-stronger',
+      );
+      expect(act('act-04-01-01-unguided').teachSpec!['deal']['fixedCards'], {
+        'hero': ['Ah', 'Kd'],
+        'board': ['As', '7c', '2d', 'Kh'],
+      });
+      expect(
+        _list(act('act-04-01-01-unguided'), 'cues').single['target'],
+        'too-exact',
+      );
+      final cp = act('act-04-01-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.teachSpec!['deal']['fixedCards']['hero'], ['Qh', 'Qd']);
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'read-drives');
     });
   });
 }

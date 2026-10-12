@@ -551,7 +551,8 @@ hand (LPT-135), Baseline jump check (LPT-137), Read the table first
 (LPT-138), Name your flop class (LPT-141), Count outs, pay the right price
 (LPT-144), Choose a flop line (LPT-149), Plan the turn card (LPT-152), Close
 the river correctly (LPT-155), Play tighter multiway (LPT-158), Patch the
-common leaks (LPT-161), Section 3 jump check (LPT-165).
+common leaks (LPT-161), Section 3 jump check (LPT-165), Think in ranges
+(LPT-167).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -815,6 +816,12 @@ jump-table uses `deal.mode` `none` (cue `j3-track`); jump-class, jump-mw,
 jump-river, and jump-leak author fixed JdTd/Qd9d3c, 9h8d/AhKh7h,
 AhKd/AsKc7d2h3c, and Jh9d/KsTc2d (the LPT-389 true gutshot) with cues
 `j3-draw` / `j3-fold` / `j3-val` / `j3-foldprice`.
+
+Think in ranges `teachSpec` (LPT-167): explain SoftPulse advances ONE HAND →
+RANGE → UPDATE; guided/scaffolded range tiles use `deal.mode` `none` with
+SoftPulse `strong-narrow` / `bb-stronger`; unguided authors fixed
+AhKd/As7c2dKh with SoftPulse `too-exact`; checkpoint authors fixed
+QhQd/Qc7s2d with cue `read-drives` kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
