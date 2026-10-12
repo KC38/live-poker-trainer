@@ -99,6 +99,13 @@ const _lessons = <String, List<String>>{
     'act-02-01-02-unguided-wait',
     'act-02-01-02-checkpoint-full',
   ],
+  // LPT-119
+  'lesson-02-02-01-hand-families': [
+    'act-02-02-01-guided-pair',
+    'act-02-02-01-scaffolded-broadway',
+    'act-02-02-01-unguided-sc',
+    'act-02-02-01-checkpoint-trash',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -671,6 +678,41 @@ void main() {
       final cue = _list(cp, 'cues').single;
       expect(cue['target'], 'last-btn');
       expect(cue['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.coachMedia.where((m) => m.kind == 'hint'), isEmpty);
+    });
+  });
+
+  group('Hand families (LPT-119)', () {
+    test('random_in_class families + SoftPulse targets; checkpoint quiet', () {
+      final pair = act('act-02-02-01-guided-pair');
+      expect(pair.teachSpec!['deal'], {
+        'mode': 'random_in_class',
+        'handFamily': 'pair',
+        'suitFamily': 'pair',
+      });
+      expect(_list(pair, 'cues').single['target'], 'hf-pair');
+      expect(_list(pair, 'cues').single['kind'], 'soft_pulse');
+
+      final bw = act('act-02-02-01-scaffolded-broadway');
+      expect(bw.teachSpec!['deal']['handFamily'], 'broadway');
+      expect(_list(bw, 'cues').single['target'], 'hf-broadway');
+
+      final sc = act('act-02-02-01-unguided-sc');
+      expect(sc.teachSpec!['deal'], {
+        'mode': 'random_in_class',
+        'handFamily': 'connector',
+        'suitFamily': 'suited',
+      });
+      expect(_list(sc, 'cues').single['target'], 'hf-sc');
+
+      final cp = act('act-02-02-01-checkpoint-trash');
+      expect(cp.teachSpec!['deal'], {
+        'mode': 'random_in_class',
+        'handFamily': 'trash',
+        'suitFamily': 'offsuit',
+      });
+      expect(_list(cp, 'cues').single['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
       expect(cp.coachMedia.where((m) => m.kind == 'hint'), isEmpty);
     });
