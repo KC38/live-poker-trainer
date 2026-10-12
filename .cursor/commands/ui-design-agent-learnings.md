@@ -16,11 +16,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 4. Keep each bullet one or two lines: **Do / Never / Prefer**, then why.
 5. Cap: at most **40** bullets total across all sections. When over the
    cap, merge the oldest low-signal ones before adding.
-6. Ship the edit with the ticket PR when this run has one. When the run
-   ends without a product PR (for example `SIM_NOT_READY`, `clean`,
-   `JIRA_UNAVAILABLE`) but learnings changed, open a tiny chore PR via
-   make-change (`feature/ui-agent-learnings-<YYYYMMDD>`) before releasing
-   the lock. One commit, this file only (plus the test lock if needed).
+6. Ship the edit in the ticket PR (write it before step 8's merge). After
+   the merge, or on a run without a product PR (`SIM_NOT_READY`, `clean`,
+   `JIRA_UNAVAILABLE`), append to
+   `~/.live-poker-trainer/ui-agent-learnings-pending.md` instead — the
+   next run's step 6 folds it into its ticket PR. A learnings-only chore
+   PR (`chore/ui-agent-learnings-<YYYYMMDD>`) only when pending holds 5+
+   bullets and this run has no ticket PR.
 7. Never log secrets, tokens, UDIDs, or full crash dumps here.
 
 ## Never again

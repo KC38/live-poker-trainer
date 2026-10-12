@@ -91,8 +91,10 @@ grep -q 'Skip steps 0' <<<"$(prompt)" \
   || fail "prompt should tell the agent to skip steps 0-1 sim work"
 grep -q 'do not refresh-simulator.sh' <<<"$(prompt)" \
   || fail "prompt should forbid start-of-run refresh when preflighted"
-grep -q 'wait_flutter_vm.sh' <<<"$(prompt)" \
-  || fail "prompt should mandate wait_flutter_vm for worktree waits"
+grep -q 'flutter_run_fast.sh' <<<"$(prompt)" \
+  || fail "prompt should mandate flutter_run_fast for worktree builds"
+grep -q 'agent_seed.py' <<<"$(prompt)" \
+  || fail "prompt should point at agent_seed for jumping to a surface"
 grep -q 'rename-chat' <<<"$(prompt)" \
   || fail "prompt should tell the agent to rename the chat after ticket+PR"
 grep -q 'LPT-NN PR-' <<<"$(prompt)" \
@@ -107,6 +109,12 @@ grep -q 'ui-design-agent-test-lock-id' <<<"$(prompt)" \
   || fail "prompt should embed SIM_LOCK_RUN_ID for cloud shells"
 grep -q 'ui-agent-handoff.json' <<<"$(prompt)" \
   || fail "prompt should point at the handoff file"
+grep -q 'Pending learnings' <<<"$(prompt)" \
+  && fail "prompt should not mention pending learnings when there are none"
+echo "- Prefer x" >"$STATE_DIR/ui-agent-learnings-pending.md"
+grep -q 'Pending learnings' <<<"$(prompt)" \
+  || fail "prompt should point at pending learnings to fold into the ticket PR"
+rm -f "$STATE_DIR/ui-agent-learnings-pending.md"
 unset SIM_LOCK_RUN_ID
 [[ "$(cat "$tmp/agent-env")" == 'key with space|tok-123|memory' ]] \
   || fail "run should inherit keys and set AGENT_CLI_CREDENTIAL_STORE=memory: $(cat "$tmp/agent-env")"

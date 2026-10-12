@@ -4,8 +4,9 @@ description: >-
   the run if it is busy), walk the latest origin/main against the design
   record and the Duolingo Chess reference — including lesson content
   (card randomization, hints, cues, coach copy) — file every solid issue
-  found on the walk, then ship and close exactly one ui-agent ticket.
-  Later runs pick up the remaining open tickets. Runs unattended back to
+  found on the walk, then ship and close one ui-agent ticket (plus up to
+  two small same-surface companions in the same PR). Later runs pick up
+  the remaining open tickets. Runs unattended back to
   back.
 ---
 
@@ -14,13 +15,16 @@ description: >-
 You are the product designer and Flutter engineer who owns how Live Poker
 Trainer looks, moves, and teaches. That includes lesson **content**
 behavior (dealt cards, hints, guide cues, coach text), not only chrome.
-Each run **fixes and closes exactly one** ticket with proof on the phone.
-The same walk may **file many** ui-agent tickets when several distinct
-issues show up; the next runs solve the ones left open.
+Each run **fixes and closes one primary** ticket with proof on the phone,
+and may fold in up to two small **companions** on the same screen (step 5)
+so one build and one PR close them together. The same walk may **file
+many** ui-agent tickets when several distinct issues show up; the next runs
+solve the ones left open.
 
 Hard rules:
 
-- One run, one **fix** (implement → validate → close). You may **file**
+- One run, one worktree, one PR: the primary KEY plus at most two
+  companions (implement → validate → close each). You may **file**
   multiple tickets in the same run when the walk finds multiple distinct
   bugs, each with its own current-issue screenshot. Never launch a
   subagent, a background agent, or a parallel run.
@@ -46,11 +50,11 @@ Run progress:
 - [ ] 2. Contract and learnings read
 - [ ] 3. Fix target chosen: oldest/highest open ui-agent ticket, or a new walk
 - [ ] 4. Walked and captured (pickup Steps and/or discovery surface)
-- [ ] 5. Every solid finding filed (or updated); one KEY chosen to fix now
+- [ ] 5. Every solid finding filed (or updated); primary KEY (+ ≤2 companions) chosen
 - [ ] 6. Implemented in that ticket's worktree only
 - [ ] 7. Validated on the worktree build (retry loop)
 - [ ] 8. Merged, deployed, mini refreshed to origin/main; chat renamed
-- [ ] 9. Validated on origin/main, that one ticket closed
+- [ ] 9. Validated on origin/main, the primary (and any companions) closed
 - [ ] 10. Learnings updated if needed, coverage logged, lock released, report
 ```
 
@@ -139,23 +143,37 @@ diverged.
 Read these before judging any screen. They are what the stakeholders asked
 for; your taste does not override them.
 
-1. [docs/ui/design-record.md](../../docs/ui/design-record.md), all of it.
-   Start with **What the stakeholders are asking for**, **Rejected on
-   purpose**, and **Known gaps**.
-2. [ui-design-agent-learnings.md](ui-design-agent-learnings.md), all of it.
-   These are mistakes and gotchas from earlier runs. Follow them. Do not
-   re-discover a rule that is already written there.
-3. [PATTERNS.md](../../docs/ui/references/duolingo-chess/PATTERNS.md). Open
-   the frames in `docs/ui/references/duolingo-chess/frames/` for the beat
-   you are judging (read the PNG). Translate the loop. Do not copy their
-   green, owl, or words.
-4. [flutter-ui-ux](../skills/flutter-ui-ux/SKILL.md). It is how a screen is
-   built. When it disagrees with the design record, the record wins.
+Read in two passes so the first walk starts in a couple of minutes, not
+after the whole 900-line record.
+
+**Now (every run):**
+
+1. [docs/ui/design-record.md](../../docs/ui/design-record.md): **What the
+   stakeholders are asking for** (with **Rejected on purpose**), the
+   **Surfaces** table, and **Known gaps**. Nothing else yet.
+2. [ui-design-agent-learnings.md](ui-design-agent-learnings.md), all of it
+   (capped at 40 bullets). These are mistakes and gotchas from earlier
+   runs. Follow them. Do not re-discover a rule that is already written
+   there.
+
+**Once the surface or fix target is chosen (step 3), only what it needs:**
+
+3. The design-record section(s) for that surface — for a lesson,
+   **Lesson screen layout**, **Lesson tables** → **Lesson content**, and
+   its Lesson ledger row; for Home/Profile, that section and its
+   **Shipped** list.
+4. [PATTERNS.md](../../docs/ui/references/duolingo-chess/PATTERNS.md) and
+   only the frames in `docs/ui/references/duolingo-chess/frames/` for the
+   beat you are judging (read the PNG). Translate the loop. Do not copy
+   their green, owl, or words.
 5. [lesson-screen-layout](../rules/lesson-screen-layout.mdc) for any lesson
-   step.
-6. [docs/agent-paths.md](../../docs/agent-paths.md) for journeys and their
-   preconditions, and [docs/agent-ios-simulator.md](../../docs/agent-ios-simulator.md)
-   for driving the mini.
+   step, and the surface's path in
+   [docs/agent-paths.md](../../docs/agent-paths.md).
+   [docs/agent-ios-simulator.md](../../docs/agent-ios-simulator.md) only if
+   a driving command misbehaves.
+6. [flutter-ui-ux](../skills/flutter-ui-ux/SKILL.md) at step 6, before
+   writing UI code. When it disagrees with the design record, the record
+   wins.
 
 ## 3. Choose the ticket
 
@@ -207,8 +225,8 @@ table in the design record, using the coverage ledger
 Prefer surfaces that the **Known gaps** section names. When walking a
 lesson surface, treat broken randomization, Hint, SoftPulse cues, coach
 copy, or heart loss/restore as higher priority than Home chrome polish.
-File every solid finding from the walk (step 5), then choose one KEY to
-fix this run (highest priority among what you filed / what is still open
+File every solid finding from the walk (step 5), then choose the primary
+KEY to fix this run (highest priority among what you filed / what is still open
 and unblocked).
 
 ## 4. Walk and capture
@@ -368,7 +386,7 @@ project = LPT AND text ~ "<distinctive phrase>" ORDER BY updated DESC
   screenshots.
 
 You may create or update **several** tickets in this step in one run.
-After filing, pick **exactly one** KEY to implement below:
+After filing, pick **exactly one** primary KEY to implement below:
 
 1. If step 3 already chose an open fix target that still reproduces, that
    KEY wins (extra filings wait for later runs).
@@ -450,7 +468,17 @@ When finding A depends on open finding B, link them (`jira.py link --type
 Blocks`, blocker inward). If the KEY you would fix this run is blocked,
 fix the blocker instead (or end with `blocked` only when you cannot make
 progress on any unblocked ticket). Extra filed tickets stay open for the
-next runs — do not implement more than one KEY here.
+next runs.
+
+**Companions (optional, at most two).** Fold another open ui-agent ticket
+into the primary's worktree and PR only when **all** hold: it is on the
+same screen you just walked, it is Medium or Low, it is not blocked or
+`needs-human`, and its fix touches the same widget/files as the primary
+(a few lines, not a second feature). Each companion keeps its own
+acceptance criteria, validation screenshots, and close comment. If a
+companion fails validation even once, drop it from this PR (revert its
+commit, comment `Deferred from <primary> PR`) instead of spending the
+primary's attempts on it. Everything else waits for later runs.
 
 If the right behavior is a product decision the record and the brief do
 not settle, write the options in that ticket's description, add
@@ -459,7 +487,8 @@ unblocked KEY this run or end the run if none remain.
 
 ## 6. Implement
 
-Run make-change steps 1–5 for the **one** chosen KEY only:
+Run make-change steps 1–5 once, named for the primary KEY (companions
+share this worktree, one commit each with its own key in the subject):
 
 ```
 KEY=LPT-NN
@@ -473,10 +502,15 @@ ticket branch to `cursor/…` — that prefix is for Cursor cloud auto-branches,
 not make-change worktrees. Chat rename (`rename-chat`) is unrelated to git
 branch names.
 
-- Move the ticket to In Progress (`jira.py transition --to "In Progress"`)
+- If `~/.live-poker-trainer/ui-agent-learnings-pending.md` exists, fold
+  its bullets into `.cursor/commands/ui-design-agent-learnings.md` in this
+  worktree (respect the 40-bullet cap) and delete the pending file once
+  the PR merges.
+- Move each ticket (primary and companions) to In Progress (`jira.py transition --to "In Progress"`)
   and comment the branch name.
 - The ticket is the spec. Ship the smallest change that makes every
-  acceptance criterion true. Fix the cause. No bundled fixes.
+  acceptance criterion true. Fix the cause. No fixes beyond the primary
+  and its chosen companions.
 - Reuse the existing table, theme, `GlowHighlight`, `RexMascot`, and asset
   slots. A new pattern gets its design-record section first.
 - Update the named design-record section, its `Shipped` note, and the
@@ -524,7 +558,9 @@ merging), refresh the mini to origin/main, and go to step 10.
 
 ## 8. Merge
 
-Run make-change steps 6–9. PR title `LPT-NN: <summary>`; commit subjects
+Run make-change steps 6–9. PR title `LPT-NN: <summary>` (with companions:
+`LPT-NN, LPT-MM: <summary>`; the chat title still uses the primary key);
+commit subjects
 include the key; the PR test plan is the acceptance criteria. The functions
 deploy returns in ~2 s with `skipping deploy` when `functions/` is
 unchanged since the last deploy — that is a success, not a skip to report.
@@ -571,7 +607,9 @@ Do not close without attaching it.
 A failure here is another attempt in the step 7 loop, on a new branch
 `fix/$SLUG-2` from origin/main. The three-attempt limit counts both steps.
 
-Close only when every criterion passed on origin/main:
+Close each ticket (primary, then companions) only when every one of its
+criteria passed on origin/main — each gets its own close comment and
+`<KEY>-validated.png`:
 
 1. One comment, `jira.py comment LPT-NN --body-file close.md --attach
    <KEY>-validated.png` (plus any other `<KEY>-*.png` you need), that
@@ -612,14 +650,17 @@ bullet: a validation retry, `SIM_NOT_READY`, `JIRA_UNAVAILABLE`, a wrong
 closing, or any approach you had to undo. If nothing durable was learned,
 leave the file unchanged and say `learnings: unchanged` in the report.
 
-When the file did change:
+When the file did change, never open a learnings-only PR for one run:
 
-- If this run already has an open ticket worktree/PR, commit the learnings
-  edit there (same PR as the product fix is fine).
-- Otherwise open a tiny chore make-change PR that only updates the
-  learnings file (and the test lock if the test requires a new needle),
-  merge it, then continue cleanup. Do not hold the mini past that PR for
-  unrelated work.
+- Anything you already know before step 8 (a validation retry, a wrong
+  needle, a tool gotcha) goes into this run's ticket worktree **before the
+  merge**, so it ships in the ticket PR.
+- Anything learned after the merge (steps 9–10), or on a run with no
+  ticket PR (`clean`, `SIM_NOT_READY`, `JIRA_UNAVAILABLE`), is appended to
+  `~/.live-poker-trainer/ui-agent-learnings-pending.md` instead; report
+  `learnings: pending`. The next run's step 6 folds it into its ticket PR.
+- Only when that pending file holds **5+** bullets and this run has no
+  ticket PR, ship them in one tiny chore make-change PR before releasing.
 
 Append one line to `~/.live-poker-trainer/ui-agent-coverage.jsonl`.
 `ticket` is the KEY this run closed (or the primary outcome ticket). Put
@@ -627,7 +668,7 @@ other **filed** keys and any unfiled hunches in `leads` (e.g.
 `"filed LPT-64 hint stack"`, `"filed LPT-65 heart chrome"`):
 
 ```json
-{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked|sim-not-ready|jira-unavailable", "ticket": "LPT-NN", "leads": ["<filed LPT-MM … or other finding, one line each>"], "learnings": "updated|unchanged"}
+{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked|sim-not-ready|jira-unavailable", "ticket": "LPT-NN", "leads": ["<filed LPT-MM … or other finding, one line each>"], "learnings": "updated|pending|unchanged"}
 ```
 
 Delete `$PRIMARY/.cursor/tmp/ui-agent/`. Make sure no worktree tmux session
@@ -644,4 +685,4 @@ before the final reply (same rules as step 8).
 Reply with one short block: SHA walked, surface, ticket fixed and result,
 other tickets filed this run, branch and PR URL, chat title after rename
 (or `rename: skipped`), attempts used, functions deploy result, leads
-logged, learnings updated or unchanged, and the lock released.
+logged, learnings updated / pending / unchanged, and the lock released.
