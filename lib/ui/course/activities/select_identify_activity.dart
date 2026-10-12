@@ -1741,6 +1741,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                             choices: displayChoices,
                             selectedId: selected,
                             locked: locked,
+                            // Same Hint → SoftPulse dock gate as fold-win /
+                            // showdown densify (LPT-84). Ids stay pot-correct
+                            // after labeledChoices / shuffle.
+                            pulseChoiceId: _framedDockPulseChoiceId(
+                              locked: locked,
+                              selected: selected,
+                            ),
                             onSelect:
                                 (id) => widget.controller.selectChoice(
                                   id,

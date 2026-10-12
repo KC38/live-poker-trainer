@@ -10133,6 +10133,108 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('open-pot SoftPulse after Hint on correct chips choice', (
+    tester,
+  ) async {
+    // LPT-84: Hint must SoftPulse pot-correct, not unlock an empty wave.
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final deal = dealLessonOpenPot(activityId: kOpenPotActivityId, generation: 0);
+    final activity = CourseActivity(
+      id: 'act-01-05-01-unguided-pot',
+      order: 4,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Tap the pot total — blinds plus the open. Open size varies each attempt.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Blinds 1/2. BTN opens. Tap the pot before blinds act.',
+      choices: const [
+        CourseChoice(id: 'pot-correct', label: 'Correct pot'),
+        CourseChoice(id: 'pot-miss-blind', label: 'Miss a blind'),
+        CourseChoice(id: 'pot-too-big', label: 'Too big'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId(
+                'lesson-01-05-01-winning-pots',
+              ),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: AnimatedBuilder(
+                  animation: controller,
+                  builder: (context, _) {
+                    return LessonSoftPulseScope(
+                      allowed: controller.showTargetCue,
+                      child: SizedBox(
+                        width: 375,
+                        height: 560,
+                        child: SelectIdentifyActivity(
+                          activity: activity,
+                          controller: controller,
+                          showGuidance: controller.showTargetCue,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+
+    expect(controller.showTargetCue, isFalse);
+    expect(controller.canRequestHint, isTrue);
+    expect(
+      tester
+          .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+          .where((g) => g.active)
+          .length,
+      0,
+    );
+
+    controller.revealHint();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
+    final activeGlows =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active)
+            .toList(growable: false);
+    expect(activeGlows, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(activeGlows.single),
+        matching: find.text('${deal.correctPot} chips'),
+      ),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+    controller.dispose();
+  });
+
   testWidgets('baseline habit checkpoint taps Cover + wait on felt', (
     tester,
   ) async {

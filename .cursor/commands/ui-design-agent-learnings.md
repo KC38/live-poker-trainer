@@ -219,6 +219,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `/tmp/flutter-iphone-13-mini.active.log` at the worktree session. Passing
   the primary `/tmp/flutter-live-poker-trainer.run.log` while the worktree
   owns the mini talks to the wrong VM (LPT-78).
+- Prefer `tools/flutter_hot_restart.sh` (or worktree `flutter_run_fast.sh`) and re-judge Hint/SoftPulse after `origin/main` advances mid-walk — a stale Dart isolate can look like SoftPulse-off + Hint-disabled deadlock (how-pots before #1706 hot-restart).
 
 ## Ops (simulator, CLI, Jira)
 

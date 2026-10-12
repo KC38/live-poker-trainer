@@ -670,6 +670,12 @@ disabled, including single-press scaffolded SoftPulse (kicker showdown). The
 next SoftPulse teach beat copies that gate instead of only disabling Hint
 when `sequentialPressesRemaining` is true.
 
+How pots open-pot densify (LPT-84, `act-01-05-01-unguided-pot`) SoftPulses
+the correct chip-amount dock choice after Hint via the same
+`pulseChoiceId: _framedDockPulseChoiceId` gate as fold-win / showdown —
+Hint must not unlock an empty SoftPulse wave. The next densify chip-total
+dock that waits for Hint copies that `pulseChoiceId` pass.
+
 Bet, raise, all-in checkpoint-names (LPT-78) sets
 `identifyUnavailable: true` on its `LessonActionSpot` so Raise and Call stay
 live-looking on the unanswered dock — same gate as Fold, check, call
