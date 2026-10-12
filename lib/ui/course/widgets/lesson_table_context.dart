@@ -11505,7 +11505,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive blocker role — tap tweak evidence vs replace all reasoning',
       semanticsStatic: 'Blockers tweak outcomes',
       caption: scene.caption ?? 'Blockers replace?',
-      // No SoftPulse on unguided — still don’t gold-icon Tweak evidence.
+      // SoftPulse + Rex own the cue — one gold Tweak evidence only (LPT-498).
+      guideRegion: LessonTableRegion.blockersTweak,
       phases: [
         (
           region: LessonTableRegion.blockersTweak,
