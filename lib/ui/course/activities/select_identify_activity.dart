@@ -491,7 +491,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   /// learner asked for a hint, which restores the answer cue.
   bool _cuesAnswerSeat(bool locked) =>
       !locked &&
-      widget.showGuidance &&
+      // Prefer controller.showTargetCue over [widget.showGuidance]: this
+      // State rebuilds from the controller AnimatedBuilder as soon as Hint
+      // flips, while the parent prop can lag one frame (LPT-84 open-pot).
+      widget.controller.showTargetCue &&
       (widget.activity.stage == ActivityStage.guided ||
           widget.controller.hintVisible);
 
@@ -504,6 +507,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
     required String? selected,
   }) {
     if (!_cuesAnswerSeat(locked) || selected != null) return null;
+    if (widget.activity.id == kOpenPotActivityId) {
+      return kOpenPotCorrectChoiceId;
+    }
     if (widget.activity.choices.isEmpty) return null;
     return widget.activity.choices.first.id;
   }
