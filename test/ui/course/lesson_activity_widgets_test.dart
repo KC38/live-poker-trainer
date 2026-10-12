@@ -10539,6 +10539,97 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets(
+    'framed acting checkpoint-full deals flop board matching Six-max ask',
+    (tester) async {
+      // LPT-148: coach names a flop — felt must show FLOP + three cards.
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final activity = CourseActivity(
+        id: 'act-02-01-02-checkpoint-full',
+        order: 5,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Six-max flop everyone in — who acts last?',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Six-max flop · everyone in · who acts last?',
+        choices: const [
+          CourseChoice(id: 'last-btn', label: 'BTN'),
+          CourseChoice(id: 'last-bb', label: 'BB'),
+          CourseChoice(id: 'last-utg', label: 'UTG'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme().copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: Scaffold(
+              body: TableFeaturesScope(
+                features: TableFeatures.forLessonId(
+                  'lesson-02-01-02-acting-order',
+                ),
+                child: LessonFrameScope(
+                  onLocalMiss: (_) {},
+                  child: SizedBox(
+                    width: 375,
+                    height: 560,
+                    child: SelectIdentifyActivity(
+                      activity: activity,
+                      controller: controller,
+                      showGuidance: false,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      // Deal animates one card at a time; settle past the flop land.
+      await tester.pump(const Duration(seconds: 2));
+
+      expect(find.byType(LessonTableStage), findsOneWidget);
+      expect(find.byType(LessonTableContext), findsNothing);
+      final table = tester.widget<LessonTableStage>(
+        find.byType(LessonTableStage),
+      );
+      expect(table.boardCodes, ['Qs', '7c', '2d']);
+      expect(find.textContaining('FLOP'), findsOneWidget);
+      expect(find.textContaining('PREFLOP'), findsNothing);
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is TableCard && w.card.display == 'Q♠',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is TableCard && w.card.display == '7♣',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is TableCard && w.card.display == '2♦',
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
   testWidgets('SoftPulse-quiet family checkpoint uses pick-family cue', (
     tester,
   ) async {

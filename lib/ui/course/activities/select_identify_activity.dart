@@ -1877,6 +1877,21 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     children: [
                       Expanded(
                         child: LessonTableStage(
+                          // Checkpoint-full asks "Six-max flop" — deal the same
+                          // three-card board as scaffolded-post so street chrome
+                          // is FLOP, not blinds-only PREFLOP (LPT-148).
+                          boardCodes:
+                              widget.activity.id ==
+                                      'act-02-01-02-checkpoint-full'
+                                  ? const ['Qs', '7c', '2d']
+                                  : const <String>[],
+                          features:
+                              widget.activity.id ==
+                                      'act-02-01-02-checkpoint-full'
+                                  ? TableFeaturesScope.of(
+                                    context,
+                                  ).copyWith(boardSlots: false)
+                                  : null,
                           villainCount: lessonBlindsVillainCount,
                           dealerIndex: lessonBlindsButtonIndex,
                           sbIndex: lessonBlindsSmallBlindIndex,
