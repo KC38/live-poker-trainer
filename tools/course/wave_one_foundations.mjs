@@ -1135,20 +1135,42 @@ export function buildSectionOne() {
                 correct: ["st-pre", "st-flop", "st-turn", "st-river"],
                 okFeedback: "Preflop → flop → turn → river.",
                 missFeedback: "Holes first; flop is three; turn then river.",
+                // LPT-101: guided streets SoftPulse st-pre→st-river; deal none
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [
+                    {press: 1, target: "st-pre", kind: "soft_pulse"},
+                    {press: 2, target: "st-flop", kind: "soft_pulse"},
+                    {press: 3, target: "st-turn", kind: "soft_pulse"},
+                    {press: 4, target: "st-river", kind: "soft_pulse"},
+                  ],
+                },
               }),
               sequenceAct({
                 id: "act-01-04-01-scaffolded-order", order: 3, stage: "scaffolded",
                 prompt: "Tap seats in the order they act preflop after blinds.",
-                a11y: "Put UTG, HJ, and BTN in preflop action order.",
+                a11y: "Put UTG, HJ, CO, and BTN in preflop action order.",
                 objectives: ["Know preflop order starts left of the big blind"],
                 items: [
                   {id: "seat-utg", label: "UTG"},
                   {id: "seat-hj", label: "HJ"},
+                  {id: "seat-co", label: "CO"},
                   {id: "seat-btn", label: "BTN"},
                 ],
-                correct: ["seat-utg", "seat-hj", "seat-btn"],
-                okFeedback: "UTG acts first. Button acts last preflop.",
-                missFeedback: "Start under the gun, then move toward the button.",
+                correct: ["seat-utg", "seat-hj", "seat-co", "seat-btn"],
+                okFeedback: "UTG → HJ → CO → BTN. Button acts last preflop.",
+                missFeedback: "Start under the gun, then HJ, CO, and the button.",
+                // LPT-101: scaffolded order SoftPulse UTG→HJ→CO→BTN; deal none;
+                // CO synced
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [
+                    {press: 1, target: "seat-utg", kind: "soft_pulse"},
+                    {press: 2, target: "seat-hj", kind: "soft_pulse"},
+                    {press: 3, target: "seat-co", kind: "soft_pulse"},
+                    {press: 4, target: "seat-btn", kind: "soft_pulse"},
+                  ],
+                },
               }),
               selectAct({
                 id: "act-01-04-01-unguided-end", order: 4, stage: "scaffolded",
@@ -1165,6 +1187,8 @@ export function buildSectionOne() {
                     "Folding removes a player; others may still act.",
                     {betterChoiceId: "matched"}),
                 ],
+                // LPT-101: unguided-end SoftPulse matched; deal none
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "matched", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-01-04-01-checkpoint-postflop", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1183,6 +1207,8 @@ export function buildSectionOne() {
                     "clear_mistake",
                     "Big blind acts last preflop only.", {betterChoiceId: "sb-first"}),
                 ],
+                // LPT-101: checkpoint-postflop sb-first kind none; no pressHints
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sb-first", kind: "none"}]},
               }),
             ],
           }),

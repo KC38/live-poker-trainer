@@ -542,7 +542,7 @@ fields live in `teachSpec` (see course schemas). Audited by
 match what `lesson_card_deal.dart` deals (`deal.mode` `none` when the step
 deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85), Hand
 ranks (LPT-88), Best five and kickers (LPT-91), Fold, check, call (LPT-94),
-Bet, raise, all-in (LPT-98).
+Bet, raise, all-in (LPT-98), Streets and action order (LPT-101).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -646,6 +646,14 @@ overpair on the flop templates); checkpoint-names stays `air`. Cues name the
 graded dock choice (`bet-half`, `raise-15`, `shove-12`) as `soft_pulse`; the
 checkpoint cues `named-bet` with kind `none` and has no `pressHints` or Hint
 media.
+
+Streets and action order `teachSpec` (LPT-101): each interactive step uses
+`deal.mode` `none` (street/seat/identify teach — no handFamily). Guided
+streets SoftPulse cues advance `st-pre` → `st-flop` → `st-turn` →
+`st-river`; scaffolded order SoftPulse cues advance `seat-utg` → `seat-hj` →
+`seat-co` → `seat-btn` (wave helper CO seat synced to course.json);
+unguided-end SoftPulse cues `matched`; checkpoint-postflop cues `sb-first`
+with kind `none` and has no `pressHints` or Hint media.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

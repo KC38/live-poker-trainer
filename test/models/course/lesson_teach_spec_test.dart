@@ -57,6 +57,13 @@ const _lessons = <String, List<String>>{
     'act-01-03-02-unguided-allin',
     'act-01-03-02-checkpoint-names',
   ],
+  // LPT-101
+  'lesson-01-04-01-streets-and-order': [
+    'act-01-04-01-guided-streets',
+    'act-01-04-01-scaffolded-order',
+    'act-01-04-01-unguided-end',
+    'act-01-04-01-checkpoint-postflop',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -405,6 +412,48 @@ void main() {
           expect(spot.openPot, template.openPot, reason: id);
         }
       }
+    });
+  });
+
+  group('Streets and action order (LPT-101)', () {
+    test('guided streets SoftPulse targets chronological tiles', () {
+      final cues = _list(act('act-01-04-01-guided-streets'), 'cues');
+      expect(
+        [for (final c in cues) c['target']],
+        ['st-pre', 'st-flop', 'st-turn', 'st-river'],
+      );
+      expect(cues.every((c) => c['kind'] == 'soft_pulse'), isTrue);
+      expect(act('act-01-04-01-guided-streets').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+    });
+
+    test('scaffolded order SoftPulse includes CO seat', () {
+      final a = act('act-01-04-01-scaffolded-order');
+      expect(
+        [for (final c in _list(a, 'cues')) c['target']],
+        ['seat-utg', 'seat-hj', 'seat-co', 'seat-btn'],
+      );
+      expect(a.sequenceItems.map((s) => s.id).toList(), [
+        'seat-utg',
+        'seat-hj',
+        'seat-co',
+        'seat-btn',
+      ]);
+      expect(a.teachSpec!['deal'], {'mode': 'none'});
+    });
+
+    test('unguided-end SoftPulse matched; checkpoint kind none', () {
+      expect(
+        _list(act('act-01-04-01-unguided-end'), 'cues').single['target'],
+        'matched',
+      );
+      final cp = act('act-01-04-01-checkpoint-postflop');
+      final cue = _list(cp, 'cues').single;
+      expect(cue['target'], 'sb-first');
+      expect(cue['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.coachMedia.where((m) => m.kind == 'hint'), isEmpty);
     });
   });
 }
