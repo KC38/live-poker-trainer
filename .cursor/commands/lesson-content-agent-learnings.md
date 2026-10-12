@@ -41,8 +41,11 @@ Operational memory only — product contract stays in
 
 ## Prefer
 
-- Prefer catalog surfaces `lesson:<id>` and `catalog:teachSpec` early in
-  Section 1 before advanced sections.
+- Prefer `node tools/course/scan_content_gaps.mjs --counts` then
+  `--gap <type> --markdown` every run before any lesson walk — sync open
+  `(catalog)` parents from that table in one edit.
+- Prefer catalog surfaces `catalog:pressHints` / `deal-variants` /
+  `explain-teachSpec` over re-walking all 90 lessons for structural gaps.
 - Prefer **one catalog ticket per structural gap type** listing every
   affected `act-…` — not one ticket per lesson when only content ids differ
   (pressHints, deal.variants, Nice! ladder, densify-tap, SoftPulse maps,

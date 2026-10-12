@@ -36,9 +36,9 @@ Hard rules:
 Run progress:
 - [ ] 0. Primary synced; Jira available
 - [ ] 1. Contract + learnings read
-- [ ] 2. Audit target chosen (open ticket re-check or discovery walk)
-- [ ] 3. Catalog / schema / wave sources audited
-- [ ] 4. Every solid finding filed/updated (catalog-bundled when structural)
+- [ ] 2. Fast catalog gap scan (scan_content_gaps.mjs)
+- [ ] 3. Audit target chosen (catalog parent sync, High re-check, or lesson walk)
+- [ ] 4. Findings filed/updated (catalog-bundled when structural)
 - [ ] 5. Coverage logged; learnings updated if needed; report
 ```
 
@@ -87,28 +87,43 @@ Use `python3 tools/jira.py` only (no Atlassian MCP). Bodies live under
 6. The lesson JSON in `content/course/v2/course.json` (and generated
    `assets/course/v2/catalog.json` / bank when relevant).
 
-## 2. Choose the audit target
+## 2. Fast catalog gap scan (every run)
 
-**First, unfinished content tickets** (re-verify still valid on this SHA):
+Before choosing a lesson walk, run:
 
+```bash
+node tools/course/scan_content_gaps.mjs --counts
+# Then for the gap you will sync:
+node tools/course/scan_content_gaps.mjs --gap pressHints --markdown
+# gaps: pressHints | deal-variants | teachSpec | explain-teachSpec
 ```
-project = LPT AND labels = content AND labels != needs-human AND statusCategory != Done ORDER BY priority DESC, created ASC
-```
 
-If an open ticket no longer applies (content already fixed), comment the SHA
-and transition to Done, then pick the next.
+Use the markdown table to **edit the matching open `(catalog)` parent**
+(LPT pressHints / deal-variants / explain-teachSpec / teachSpec) in one
+shot. Do not re-walk 90 lessons to rediscover the same structural gaps.
 
-**Otherwise, discovery walk.** Use
-`~/.live-poker-trainer/content-agent-coverage.jsonl`
-(`at`, `sha`, `surface`, `result`, `ticket`, `leads`):
+Time-box: ≤10 minutes on scan → parent sync unless a High honesty ticket
+needs a tip re-check.
 
-1. A surface with prior `leads`.
-2. A lesson / unit never walked.
-3. A lesson whose `content/course` or wave source changed since last walk.
-4. The surface walked longest ago.
+## 3. Choose the audit target
 
-Prefer Section 1–2 foundations, then lessons missing `teachSpec`, then
-multi-objective lessons (split candidates).
+**Priority order:**
+
+1. **Open `(catalog)` parents** whose checklist is stale vs
+   `scan_content_gaps.mjs` — edit body + comment SHA.
+2. **High / In Progress content tickets** — re-verify still valid on this
+   SHA; Done + comment when fixed; leave In Progress alone unless tip
+   already satisfies acceptance.
+3. **Discovery walk** only for honesty / curriculum / one-offs the scanner
+   cannot see. Use
+   `~/.live-poker-trainer/content-agent-coverage.jsonl`
+   (`at`, `sha`, `surface`, `result`, `ticket`, `leads`):
+   - A surface with prior `leads`.
+   - A lesson whose `content/course` or wave source changed since last walk.
+   - The surface walked longest ago.
+
+Prefer honesty Highs and fingerprint gaps over re-auditing densify /
+pressHints lesson-by-lesson when catalog parents already exist.
 
 `surface` values: `lesson:<id>`, `unit:<id>`, `section:<id>`,
 `catalog:teachSpec`, `catalog:stages`, `catalog:curriculum-gaps`,
@@ -117,7 +132,7 @@ multi-objective lessons (split candidates).
 `catalog:explain-teachSpec`, `catalog:guideRegion`,
 `catalog:permanent-gold`.
 
-## 3. Audit checklist
+## 4. Audit checklist
 
 Work from the catalog JSON and schemas. For each activity / lesson in the
 surface, check:
@@ -186,7 +201,7 @@ live-cash NLH scope (validator bans tournaments / PLO / rake / HUD).
 
 Never put both `grokbot` and `ui-agent` on one issue.
 
-## 4. File tickets
+## 5. File tickets
 
 ### Bundle structural gaps (default)
 
@@ -297,7 +312,7 @@ human approves id migration.
 Prefer **few catalog tickets** per run over many lesson clones. You never
 implement them.
 
-## 5. Coverage, learnings, report
+## 6. Coverage, learnings, report
 
 Append one line to `~/.live-poker-trainer/content-agent-coverage.jsonl`:
 
