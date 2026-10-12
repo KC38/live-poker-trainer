@@ -2482,7 +2482,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-10-01-explain", 1,
                 "Same cards. Different seats. Exploits change only with evidence.",
-                {objectives: ["Change lines by type with justification"]}),
+                {
+                  objectives: ["Change lines by type with justification"],
+                  // LPT-216
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CARDS", kind: "soft_pulse"},
+                      {press: 2, target: "SEATS", kind: "soft_pulse"},
+                      {press: 3, target: "EVIDENCE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-04-10-01-guided", order: 2, stage: "guided",
                 prompt: "River, second pair. Versus Calling Station. Action?",
@@ -2495,6 +2506,14 @@ export function buildSectionFour() {
                   choice("st-bluff", "Huge bluff", "clear_mistake",
                     "They do not fold.", {action: "BET", amountBb: 30, betterChoiceId: "st-val"})
                 ],
+                // LPT-216
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "st-val", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-10-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2508,6 +2527,14 @@ export function buildSectionFour() {
                   choice("nit-call", "Call", "clear_mistake",
                     "Different type, different line.", {action: "CALL", betterChoiceId: "nit-fold"})
                 ],
+                // LPT-216
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "nit-fold", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-10-01-unguided", order: 4, stage: "scaffolded",
@@ -2523,6 +2550,14 @@ export function buildSectionFour() {
                   choice("m-ego", "Raise for ego", "clear_mistake",
                     "No ego battles.", {action: "RAISE", amountBb: 60, betterChoiceId: "m-call"})
                 ],
+                // LPT-216
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "m-call", kind: "soft_pulse"}],
+                },
               }),
               handLabAct({
                 id: "act-04-10-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2568,6 +2603,11 @@ export function buildSectionFour() {
                     "Raise or fold.", {action: "CALL", betterChoiceId: "lab-steal"})
                     ],
                   }],
+                },
+                // LPT-216
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Td"]}},
+                  cues: [{press: 1, target: "lab-steal", kind: "none"}],
                 },
               }),
             ],

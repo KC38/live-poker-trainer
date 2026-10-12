@@ -558,7 +558,7 @@ sticky callers (LPT-184), Meet the Calling Station (LPT-187), Adjust versus
 Calling Station (LPT-190), Observe narrow players (LPT-193), Meet the Nit
 (LPT-196), Adjust versus Nit (LPT-200), Observe wild aggressors (LPT-203),
 Meet the Maniac (LPT-206), Adjust versus Maniac (LPT-210), Confidence and
-samples (LPT-213).
+samples (LPT-213), Same hand, different types (LPT-216).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -930,6 +930,12 @@ Confidence and samples `teachSpec` (LPT-213): explain SoftPulse advances
 OBSERVE → SAMPLES → SHOWDOWNS; guided `none` → `one-note`; scaffolded `none`
 → `rise`; unguided `none` → `update`; checkpoint `none` → `limits`;
 assessment steps use cue kind `none` (no pressHints).
+
+Same hand, different types `teachSpec` (LPT-216): explain SoftPulse advances
+CARDS → SEATS → EVIDENCE; guided fixed JhTd/QcTs3h2d7c → `st-val`;
+scaffolded fixed JhTd/QcTs3h2d7c → `nit-fold`; unguided fixed
+JhTd/QcTs3h2d7c → `m-call`; checkpoint fixed KhTd → `lab-steal`; assessment
+steps use cue kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
