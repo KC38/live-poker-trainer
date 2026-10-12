@@ -584,9 +584,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Facing raise · multiway',
       );
     case 'act-03-08-01-scaffolded':
+      // True gutshot (four outs to Q): J9 on KT2. Authored JT on A72 had
+      // zero straight outs, so isomorphic remap kept air under a
+      // “gutshot / four outs” coach line (LPT-381).
       return const LessonActionSpot(
-        heroCodes: ['Jh', 'Td'],
-        boardCodes: ['As', '7c', '2d'],
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Ks', 'Tc', '2d'],
         potLabel: 'Pot 12',
         villainLine: 'Bets 18',
         // Structural — don’t tip Fold / terrible price on the felt.

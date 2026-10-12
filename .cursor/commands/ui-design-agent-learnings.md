@@ -236,7 +236,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   fixed board (LPT-107 deal test). Postflop teach fingerprints must keep a
   made-pair bit — `HandClassifier` labels underpair+strong-draw as
   `strongDraw`, so a “missed” air template can otherwise remap to TT/QQ
-  (LPT-367 multiway scaffolded).
+  (LPT-367 multiway scaffolded). Prefer verifying gutshot/OESD templates
+  with `HandClassifier.drawOuts` (four consecutive-looking ranks like
+  A-J-T-9-8 are not a straight) before locking coach “four outs” copy —
+  JT on A72 remapped as air under a gutshot ask (LPT-381).
 - Prefer merging + Functions deploy before mini-proving a
   `gradeCourseResponse` / Nice! / `course_bank` sequence-id change — the
   worktree app still hits production until that deploy lands (LPT-74,
