@@ -292,9 +292,11 @@ blinds explain, and Button and blinds frame steps that share
 `isLessonBlindsFrameActivity` without a dealt board) turns `boardSlots`
 off so empty outlines do not draw. Framed Fold / Check / Call (and sibling)
 `poker_action_sizing` `LessonTableStage` steps pass `boardSlots: false` so
-preflop and short boards do not draw empty street outlines (LPT-77). Live
-Training and an id that is not `lesson-SS-UU-LL` get `TableFeatures.full`.
-Your start uses the preset of the lesson it recommends.
+preflop and short boards do not draw empty street outlines (LPT-77). Streets
+explain/order (`lessonStreetsTableFeatures`) pass `boardSlots: false` the
+same way (LPT-80). Live Training and an id that is not `lesson-SS-UU-LL`
+get `TableFeatures.full`. Your start uses the preset of the lesson it
+recommends.
 
 A lesson seat shows a player type only when the step names it
 (`villainArchetypes`); a seat never shows a made-up type. A spot that says
@@ -421,6 +423,11 @@ Fold, check, call framed action steps (`PokerActionSizingActivity` →
 pass `boardSlots: false` so preflop spots draw no empty community slots and
 flop spots show the dealt flop without empty turn/river outlines (LPT-77).
 
+Streets explain/order `LessonTableStage` (`LessonStreetsExplainTable` /
+`LessonStreetsOrderTable` via `lessonStreetsTableFeatures`) passes
+`boardSlots: false` so preflop and short boards do not draw empty
+later-street outlines (LPT-80).
+
 ### Cues
 
 `GlowHighlight` (`lib/ui/widgets/glow_highlight.dart`) is the one cue. There
@@ -496,9 +503,11 @@ turns `boardSlots` off the same way for Button and blinds explain, and
 SoftPulses the D → SB → BB puck via `cuePuckLabel` (LPT-69). Blinds
 frame steps in `select_identify_activity.dart`
 (`isLessonBlindsFrameActivity`) pass `boardSlots: false` on
-`LessonTableStage` the same way (LPT-52). Pending frames pass
-`showToolRow: false` so Undo / Redo / Hint stay off until an activity
-binds (LPT-53).
+`LessonTableStage` the same way (LPT-52). Streets explain/order
+(`lessonStreetsTableFeatures`) pass `boardSlots: false` so preflop and
+short boards do not draw empty later-street outlines (LPT-80). Pending
+frames pass `showToolRow: false` so Undo / Redo / Hint stay off until an
+activity binds (LPT-53).
 `LessonCoachBand` maps `LessonMascotExpression` to calm, celebrate, or
 think. `LessonChoiceButton` (`lib/ui/course/widgets/rex_coach_line.dart`)
 is the one framed option button.

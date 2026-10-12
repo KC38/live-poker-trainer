@@ -27,7 +27,8 @@ TableFeatures get lessonStreetsTableFeatures => const TableFeatures(
   opponentCards: false,
   playerTypes: false,
   stats: false,
-  boardSlots: true,
+  // Preflop / short boards must not draw empty later-street outlines (LPT-80).
+  boardSlots: false,
 );
 
 /// Board codes for a guided street sequence id.
