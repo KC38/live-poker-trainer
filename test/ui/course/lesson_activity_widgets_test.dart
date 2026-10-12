@@ -14698,6 +14698,21 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Crowd — fold air'), findsNothing);
     // SoftPulse + Rex own the cue — no third gold felt status.
     expect(find.text('Facing a bet · 4-way'), findsNothing);
+    // True-air template — never 9h heart-draw seed (LPT-391).
+    final spot = dealtLessonActionSpot(activity, generation: 0)!;
+    expect(spot.heroCodes[0].toLowerCase()[0], isNot(equals('9')));
+    expect(
+      CardModel.fromCode(spot.heroCodes[0]).rank ==
+          CardModel.fromCode(spot.heroCodes[1]).rank,
+      isFalse,
+    );
+    final boardSuit = CardModel.fromCode(spot.boardCodes.first).suit;
+    expect(
+      spot.heroCodes.any(
+        (code) => CardModel.fromCode(code).suit == boardSuit,
+      ),
+      isFalse,
+    );
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-fold');

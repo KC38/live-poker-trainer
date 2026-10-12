@@ -609,9 +609,13 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Facing a bet · 4-way',
       );
     case 'act-03-08-02-jump-mw':
+      // True air on a wet monotone flop — no board-suit hole, no pair —
+      // so “air / fold the crowd” stays honest after isomorphic remap
+      // (9h 8d on Ah Kh 7h was already a flush draw; LPT-391, same
+      // contract as multiway scaffolded LPT-367).
       return const LessonActionSpot(
-        heroCodes: ['9h', '8d'],
-        boardCodes: ['Ah', 'Kh', '7h'],
+        heroCodes: ['7s', '3d'],
+        boardCodes: ['Ah', 'Kh', '9h'],
         potLabel: 'Pot 20',
         villainLine: 'Someone bets · 4-way',
         // Structural — don’t tip Fold air on the felt.
