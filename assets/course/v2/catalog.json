@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "4c359c0bca3b8bd5e9b541d2ac4b71a1407235824cfd9b2070b4f781a3008456",
+  "contentChecksum": "8eda06839d0f64d71399652a76528c82b618bf0177f72b7d7515b0a4c19e50d0",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -473,7 +473,21 @@
                       "mode": "random_in_class",
                       "handFamily": "high_card",
                       "suitFamily": "rainbow"
-                    }
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Start with the lowest rank."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Next comes the middle rank."
+                      },
+                      {
+                        "press": 3,
+                        "text": "The highest rank goes last."
+                      }
+                    ]
                   }
                 },
                 {
@@ -526,6 +540,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Look for the two hole cards that share a suit."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,

@@ -1279,7 +1279,7 @@ felt.
 | Lesson | Explain taps | Still a list |
 | --- | --- | --- |
 | Your two cards | Your hole cards on the felt | — |
-| Suits and ranks | Suit taps on board cards, board ranks low to high, suited / pair seats | — |
+| Suits and ranks | Suit taps on board cards, board ranks low to high, suited / pair seats; scaffolded pressHints (LPT-82) | — |
 | Button and blinds | Dealer button, SB, BB on the seats | — |
 | Hand ranks | Showdown seats weakest to strongest | — |
 | Best five and kickers | The five cards that play; You / Them / Board | — |

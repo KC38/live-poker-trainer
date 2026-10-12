@@ -547,7 +547,21 @@
                       "mode": "random_in_class",
                       "handFamily": "high_card",
                       "suitFamily": "rainbow"
-                    }
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Start with the lowest rank."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Next comes the middle rank."
+                      },
+                      {
+                        "press": 3,
+                        "text": "The highest rank goes last."
+                      }
+                    ]
                   }
                 },
                 {
@@ -613,6 +627,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Look for the two hole cards that share a suit."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
