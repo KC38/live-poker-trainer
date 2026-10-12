@@ -133,10 +133,11 @@ post-Launching VM URI for ~30s, kill the dead pid and start `flutter run`
 in tmux yourself (see learnings), then `tools/wait_flutter_vm.sh` — do not
 bare-`AwaitShell` for minutes.
 
-If you are running outside the loop (or the VM is down), refresh yourself:
+If you are running outside the loop (or the VM is down), refresh yourself.
+When you already hold the mini lock, set `REFRESH_ALLOW_HOLDER=1`:
 
 ```bash
-.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
+REFRESH_ALLOW_HOLDER=1 .cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
 ```
 
 Wait until the log shows the Dart VM service, up to 3 minutes. If that line
@@ -251,7 +252,7 @@ Meet the surface's path precondition from `docs/agent-paths.md`.
 
 ```bash
 python3 tools/sim_lock.py guard && xcrun simctl uninstall "$DEVICE" com.pokerlab.livePokerTrainer
-.cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
+REFRESH_ALLOW_HOLDER=1 .cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
 ```
 
 **Jump, do not walk, to the surface.** When the surface is a later lesson

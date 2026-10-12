@@ -1388,7 +1388,9 @@ ensure_sim_ready() {
   local attempt
   for attempt in 1 2; do
     log "preflight refresh attempt $attempt (programmatic; no agent yet)"
-    if ! bash "$REFRESH_SCRIPT"; then
+    # We already hold the lock as ui-design-agent; allow refresh without
+    # reclaiming as refresh-simulator (see refresh-simulator.sh).
+    if ! REFRESH_ALLOW_HOLDER=1 bash "$REFRESH_SCRIPT"; then
       log "refresh-simulator exited non-zero on attempt $attempt"
     fi
     if wait_for_dart_vm; then

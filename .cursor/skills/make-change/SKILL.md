@@ -210,14 +210,13 @@ Only after step 7's `git pull --ff-only origin main` succeeded:
 That hot-restarts an existing primary `flutter run` on the iPhone 13 mini
 when one is attached, or starts one from the primary checkout when none is.
 It respects the [simulator lock](../../rules/simulator-lock.mdc): it claims
-as `refresh-simulator`, or reuses `$SIM_LOCK_RUN_ID` only when that lock's
-owner is already `refresh-simulator`. A leaked ui-agent run id must not
-pass through and kill a mid-ticket worktree flutter — the script skips.
-A skip is not a ship failure. Before calling it from a health / ops shell,
-`unset SIM_LOCK_RUN_ID` unless you intentionally hold a refresh claim.
-Skip this step when the primary pull failed (see above), or when the mini
-is busy with another agent. If the mini cannot boot, skip and report — do
-not fail the ship.
+as `refresh-simulator`, or reuses `$SIM_LOCK_RUN_ID` when the owner is
+already `refresh-simulator`, or when `REFRESH_ALLOW_HOLDER=1` (ui-agent
+preflight). A leaked ui-agent run id in a health/ops shell must not pass
+through — `unset SIM_LOCK_RUN_ID` first (do not set `REFRESH_ALLOW_HOLDER`
+there). A skip is not a ship failure. Skip this step when the primary pull
+failed (see above), or when the mini is busy with another agent. If the
+mini cannot boot, skip and report — do not fail the ship.
 
 Do not drive the UI or take screenshots as part of this skill.
 
