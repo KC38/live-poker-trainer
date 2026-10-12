@@ -20751,7 +20751,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 overbet unguided taps Avoid on felt', (tester) async {
+  testWidgets('s6 overbet unguided SoftPulse Avoid — not Always fine', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-06-05-01-unguided',
       order: 4,
@@ -20783,6 +20785,28 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('Random 3x pot medium — tap Avoid.'),
+      findsNothing,
+    );
+    expect(find.text('Avoid'), findsOneWidget);
+    // LPT-497: guideRegion → one gold SoftPulse (Avoid), not Always fine.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Avoid'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Always fine'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('Avoid'));

@@ -11355,7 +11355,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive overbet discipline — tap avoid vs always fine',
       semanticsStatic: 'Overbet avoid outcomes',
       caption: scene.caption ?? 'Random 3x pot medium?',
-      // No SoftPulse on unguided — still don’t gold-icon Avoid.
+      // SoftPulse + Rex own the cue — one gold Avoid only (LPT-497).
+      guideRegion: LessonTableRegion.overbetAvoid,
       phases: [
         (
           region: LessonTableRegion.overbetAvoid,

@@ -605,6 +605,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Observe wide SoftPulse one gold | Observe wide sustained pressure unguided densified ask (`act-06-12-01-unguided`) passes `guideRegion` (`lagObserveKeepSampling`) so SoftPulse-after-Hint paints one gold Keep sampling tile — never both Keep sampling and Label now (LPT-493). Guided / scaffolded / checkpoint already pass `lagObserveWidePressure` / `lagObserveSomeFolds` / `lagObserveBundle`. |
 | Observe selective SoftPulse one gold | Observe selective aggression unguided densified ask (`act-06-11-01-unguided`) passes `guideRegion` (`selectiveKeepSampling`) so SoftPulse-after-Hint paints one gold Keep sampling tile — never both Keep sampling and Max certainty (LPT-494). Guided / scaffolded / checkpoint already pass `selectivePlanOk` / `selectiveDisciplined` / `selectiveEvidenceBundle`. |
 | Confidence and samples SoftPulse one gold | Confidence and samples densified asks (`act-04-09-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`confidenceOneNote` / `confidenceRiseRevisable` / `confidenceUpdateModel` / `confidenceShowLimits`) so SoftPulse paints one gold tile — never both One note and Proven, Rise and Stay zero, Update and Freeze, or Limits and Destiny. Correct-answer chips/icons stay slate; SoftPulse owns the gold (LPT-495). |
+| Use overbets SoftPulse one gold | Use overbets and geometric pressure unguided densified ask (`act-06-05-01-unguided`) passes `guideRegion` (`overbetAvoid`) so SoftPulse-after-Hint paints one gold Avoid tile — never both Avoid and Always fine (LPT-497). Guided / checkpoint already pass `overbetNutsBluffs` / `overbetMultiStreet`. |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1309,7 +1310,7 @@ felt.
 | Realize equity in and out of position | Equity, Cash, Pos | realization quizzes |
 | Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts | check-turn, bomb, and attack checks |
 | Choose polarized or merged betting | Polar, Merged, Size | overbet, mismatch, and aim checks |
-| Use overbets and geometric pressure | Overbet, Polar, Geo | candidate, avoid, and plan checks |
+| Use overbets and geometric pressure | Overbet, Polar, Geo; unguided SoftPulse one gold (LPT-497) | candidate, avoid, and plan checks |
 | Use blockers without solver theater | Block, Use, No EV | unblock, tweak, and EV checks |
 | Defend enough without frequency theater | Defend, Bluff, Enough | continue, intuition, and punish checks |
 | Mix with a reason | Mix, Purpose, Strong | station, reason, and purpose checks |
