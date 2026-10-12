@@ -20,6 +20,21 @@ const Map<int, String> _rankWords = {
   2: 'two',
 };
 
+/// English decade stems for low-rank compounds (`Seventy-two`, `eighty-five`).
+///
+/// Catalog Oops lines sometimes use this form instead of `seven-two`. Only
+/// ranks 2–9 have decade words; broadway uses [_rankWords] alone.
+const Map<int, String> _decadeWords = {
+  9: 'ninety',
+  8: 'eighty',
+  7: 'seventy',
+  6: 'sixty',
+  5: 'fifty',
+  4: 'forty',
+  3: 'thirty',
+  2: 'twenty',
+};
+
 /// Chart label for two hole codes (`K9s`, `ATo`, `QQ`).
 String startingHandLabelFromCodes(List<String> hero) {
   if (hero.length < 2) return '';
@@ -49,6 +64,24 @@ String _spokenStartingHand(List<String> hero) {
   if (high == low) return 'pocket ${_pairPluralWord(high)}';
   final fit = a.suit == b.suit ? 'suited' : 'offsuit';
   return '${_rankWords[high]}-${_rankWords[low]} $fit';
+}
+
+/// Decade-compound spoken hand (`seventy-two offsuit`) when both ranks are 2–9.
+///
+/// Returns empty when the hand is a pair or uses a broadway rank — those stay
+/// on [_spokenStartingHand] / pair plurals only.
+String _decadeCompoundStartingHand(List<String> hero) {
+  if (hero.length < 2) return '';
+  final a = CardModel.fromCode(hero[0]);
+  final b = CardModel.fromCode(hero[1]);
+  final high = a.rank >= b.rank ? a.rank : b.rank;
+  final low = a.rank >= b.rank ? b.rank : a.rank;
+  if (high == low) return '';
+  final decade = _decadeWords[high];
+  final lowWord = _rankWords[low];
+  if (decade == null || lowWord == null) return '';
+  final fit = a.suit == b.suit ? 'suited' : 'offsuit';
+  return '$decade-$lowWord $fit';
 }
 
 String _replaceIgnoringCase(String source, String from, String to) {
@@ -102,11 +135,18 @@ String alignStartingHandCopy({
   final dealtHigh = dealtA.rank >= dealtB.rank ? dealtA.rank : dealtB.rank;
 
   var next = text;
+  final dealtSpoken = _spokenStartingHand(dealtHero);
   next = _replaceIgnoringCase(
     next,
     _spokenStartingHand(templateHero),
-    _spokenStartingHand(dealtHero),
+    dealtSpoken,
   );
+  // Catalog Open-or-fold trash Oops uses "Seventy-two offsuit" (decade
+  // compound), not "seven-two offsuit" — rewrite that alias too (LPT-164).
+  final templateDecade = _decadeCompoundStartingHand(templateHero);
+  if (templateDecade.isNotEmpty && dealtSpoken.isNotEmpty) {
+    next = _replaceIgnoringCase(next, templateDecade, dealtSpoken);
+  }
   if (templatePair && dealtPair) {
     next = _replaceIgnoringCase(
       next,
