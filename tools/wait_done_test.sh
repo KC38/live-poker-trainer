@@ -74,4 +74,22 @@ code=$?
 set -e
 [[ "$code" == 124 ]] || fail "expected timeout 124, got $code"
 
+# --purpose as arg2 must not become the timeout (LPT-462: bash arithmetic
+# treated `--purpose` as decrementing unbound `purpose` under set -u).
+printf '0\n' >"$tmp/flag.done"
+set +e
+out="$(bash "$WAIT" "$tmp/flag.done" --purpose "LPT-462: tests" 5 2>&1)"
+code=$?
+set -e
+[[ "$code" == 0 ]] || fail "--purpose before timeout should work, got $code: $out"
+grep -q 'unbound variable' <<<"$out" \
+  && fail "--purpose must not trip unbound purpose: $out"
+
+printf '0\n' >"$tmp/flag2.done"
+set +e
+out="$(bash "$WAIT" "$tmp/flag2.done" --timeout 5 --purpose "LPT-462: tests" 2>&1)"
+code=$?
+set -e
+[[ "$code" == 0 ]] || fail "--timeout/--purpose flags should work, got $code: $out"
+
 echo "wait_done ok"
