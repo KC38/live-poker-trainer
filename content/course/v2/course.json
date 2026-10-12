@@ -2869,7 +2869,25 @@
                       "kind": "hint",
                       "text": "No contest means no showdown."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "no-show",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-05-01-scaffolded-showdown",
@@ -2917,7 +2935,32 @@
                         "betterChoiceId": "showdown"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "Qs",
+                          "7c",
+                          "2d",
+                          "9h",
+                          "3s"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "showdown",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-05-01-unguided-pot",
@@ -2965,7 +3008,45 @@
                         "betterChoiceId": "pot-correct"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none",
+                      "variants": [
+                        {
+                          "id": "open-5",
+                          "label": "Open to 5"
+                        },
+                        {
+                          "id": "open-6",
+                          "label": "Open to 6"
+                        },
+                        {
+                          "id": "open-7",
+                          "label": "Open to 7"
+                        },
+                        {
+                          "id": "open-8",
+                          "label": "Open to 8"
+                        },
+                        {
+                          "id": "open-9",
+                          "label": "Open to 9"
+                        },
+                        {
+                          "id": "open-10",
+                          "label": "Open to 10"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pot-correct",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-05-01-checkpoint-side",
@@ -3014,7 +3095,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "side-exists",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
