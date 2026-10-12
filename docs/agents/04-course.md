@@ -48,8 +48,9 @@ kickers (LPT-91), Fold, check, call (LPT-94), Bet, raise, all-in (LPT-98),
 Streets and action order (LPT-101), How pots are won (LPT-104), Play a full
 toy hand (LPT-108), Section 1 jump check (LPT-110), Position labels
 (LPT-112), Acting order (LPT-115), Hand families (LPT-119), Open or fold
-baseline (LPT-122), Versus an open (LPT-125). Content gaps are audited by
-[11 — Lesson content agent](11-lesson-content-agent.md).
+baseline (LPT-122), Versus an open (LPT-125), Effective stacks (LPT-128).
+Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 ### Activity renderers
 

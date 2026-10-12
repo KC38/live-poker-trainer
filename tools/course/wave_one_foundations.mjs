@@ -2228,6 +2228,8 @@ export function buildSectionTwo() {
                   choice("bb-200", "200bb", "clear_mistake",
                     "Divide your chips by the big blind.", {betterChoiceId: "bb-100"}),
                 ],
+                // LPT-128: teachSpec authored
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "bb-100", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-05-01-scaffolded-eff", order: 3, stage: "scaffolded",
@@ -2244,6 +2246,8 @@ export function buildSectionTwo() {
                     "Effective is the minimum, not the sum.",
                     {betterChoiceId: "eff-60"}),
                 ],
+                // LPT-128: SoftPulse cues + deal
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "eff-60", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-05-01-unguided-depth", order: 4, stage: "scaffolded",
@@ -2259,6 +2263,8 @@ export function buildSectionTwo() {
                     "Deep — more postflop room, not shove-or-fold.",
                     {betterChoiceId: "depth-50"}),
                 ],
+                // LPT-128: checkpoint quiet
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "depth-50", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-05-01-checkpoint-200", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2276,6 +2282,8 @@ export function buildSectionTwo() {
                   choice("bb-500", "500bb", "clear_mistake",
                     "Divide buy-in by the big blind (5).", {betterChoiceId: "bb-200"}),
                 ],
+                // LPT-128: wave synced
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "bb-200", kind: "none"}]},
               }),
             ],
           }),
