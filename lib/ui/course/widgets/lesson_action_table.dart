@@ -788,6 +788,9 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         heroCodes: ['Jh', '9d'],
         boardCodes: ['Qc', '9s', '3h'],
         potLabel: 'Pot 12 · SPR 20',
+        // Shared remaining depth 240 into pot 12 = SPR 20, matching Rex and
+        // the catalog (LPT-415; same pattern as Stacks left 60 / 55).
+        stackLabel: 'Stacks left 240',
         villainLine: 'Multiway · deep stacks',
         // Structural — don’t tip Keep pot small on the felt.
         streetLabel: 'Flop · second pair',
