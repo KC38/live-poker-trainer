@@ -1390,6 +1390,7 @@ PY
 
 # Print the last meaningful lines of a machine-SDK run log for `status`.
 # Strips interleaved NDJSON stream markers so health checks are readable.
+# Machine SDK often emits one token per line; those are coalesced into prose.
 # Args: log_path [max_lines=10]
 print_run_log_preview() {
   local log="${1:-}" max_lines="${2:-10}"
@@ -1424,6 +1425,53 @@ def scrub_sdk_stream(text: str) -> str:
     return re.sub(r"\s+", " ", cleaned).strip()
 
 
+def is_token_fragment(text: str) -> bool:
+    """True when a scrubbed line looks like a single streamed token."""
+    if len(text) <= 24 and len(text.split()) <= 3:
+        return True
+    return text in {".", ",", ":", ";", "/", "-", "—", "…"}
+
+
+def coalesce_token_lines(lines: list[str]) -> list[str]:
+    """Join one-token-per-line SDK streams; keep longer prose lines intact."""
+    if not lines:
+        return []
+    sample = lines[-min(len(lines), 40) :]
+    tokenish = sum(1 for s in sample if is_token_fragment(s))
+    if tokenish < max(3, len(sample) * 2 // 3):
+        return lines
+    # Rejoin punctuation without spaces; words with a single space.
+    parts: list[str] = []
+    for s in lines:
+        if not parts:
+            parts.append(s)
+            continue
+        # Glue path separators and trailing punctuation; keep spaces around
+        # em/en dashes so "confirmed — jumping" stays readable.
+        if s in {".", ",", ":", ";", "/", "!", "?", "'", '"'} or parts[-1].endswith(
+            ("/",)
+        ):
+            parts[-1] = parts[-1] + s
+        else:
+            parts.append(s)
+    joined = " ".join(parts)
+    joined = re.sub(r"\s+([.,:;!?])", r"\1", joined)
+    joined = re.sub(r"\s+", " ", joined).strip()
+    # Soft-wrap for status readability (~80 cols).
+    width = 80
+    wrapped: list[str] = []
+    while joined:
+        if len(joined) <= width:
+            wrapped.append(joined)
+            break
+        cut = joined.rfind(" ", 0, width + 1)
+        if cut < width // 2:
+            cut = width
+        wrapped.append(joined[:cut].rstrip())
+        joined = joined[cut:].lstrip()
+    return wrapped
+
+
 try:
     lines = []
     for ln in log.read_text(encoding="utf-8", errors="replace").splitlines():
@@ -1435,7 +1483,7 @@ try:
         if "] logger " in s or "analytics.track" in s or "structured-log" in s:
             continue
         lines.append(s)
-    for s in lines[-max_lines:]:
+    for s in coalesce_token_lines(lines)[-max_lines:]:
         print(s)
 except OSError:
     pass
