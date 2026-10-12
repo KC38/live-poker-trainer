@@ -248,14 +248,17 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   sets `AGENT_CLI_CREDENTIAL_STORE=memory` and clears a stuck
   `cursor-access-token` keychain item before each start so
   `errSecDuplicateItem` / `auth.refresh.persistFailed` cannot burn the run.
-- Heartbeat during long worktree `flutter run`, validates, and Cloud
-  Functions deploy; the stall watchdog kills a silent agent (tmux
-  `deploy-LPT-*` / `refresh-LPT-*` count as alive). Launch builds with
-  `tools/flutter_run_fast.sh` and hot-restart with
+- Heartbeat during long worktree `flutter run`, validates, `flutter test` /
+  analyze, and Cloud Functions deploy; the stall watchdog kills a silent
+  agent (tmux `deploy-LPT-*` / `refresh-LPT-*` / `test-LPT-*` /
+  `analyze-LPT-*` count as alive, and a growing ui-agent run log also
+  counts — machine SDK streams can skip heartbeats for >10 min). Launch
+  builds with `tools/flutter_run_fast.sh` and hot-restart with
   `tools/flutter_hot_restart.sh` — both block and heartbeat for you, and
   a Dart-only worktree skips Xcode via the cached `Runner.app`. Bare
   `AwaitShell` / `sleep` while Xcode builds burns minutes and risks stall
-  (LPT-72). Write coverage before long compiles when the ticket is
+  (LPT-72). Prefer named `test-LPT-*` tmux for long suites over anonymous
+  sessions. Write coverage before long compiles when the ticket is
   already Done in Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
