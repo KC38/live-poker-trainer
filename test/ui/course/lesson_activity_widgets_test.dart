@@ -2290,6 +2290,68 @@ void main() {
     controller.dispose();
   });
 
+  testWidgets('hand-families unguided SoftPulse one gold Suited conn', (
+    tester,
+  ) async {
+    // LPT-634: guideRegion handFamilyUgSc — not every family tile.
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final activity = CourseActivity(
+      id: 'act-02-02-01-unguided-sc',
+      order: 4,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Look at 76s on the felt — tap Suited connector.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Name the family for your holes.',
+      choices: const [
+        CourseChoice(id: 'hf-sc', label: 'Suited connector'),
+        CourseChoice(id: 'hf-offsuit-conn', label: 'Offsuit connector'),
+        CourseChoice(id: 'hf-trash', label: 'Offsuit trash'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    final cues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(cues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Suited conn'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Offsuit conn'),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Offsuit trash'),
+      ),
+      findsNothing,
+    );
+    controller.dispose();
+  });
+
   testWidgets('hand-families checkpoint taps Offsuit trash on densified felt', (
     tester,
   ) async {
@@ -11982,6 +12044,74 @@ await tester.tap(find.text('NIT'));
     await tester.tap(find.text('Call'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-draw');
+    controller.dispose();
+  });
+
+  testWidgets('s3 outs unguided SoftPulse one gold Call', (tester) async {
+    // LPT-634: guideRegion drawPriceCall — not Call + Fold + Raise.
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final activity = CourseActivity(
+      id: 'act-03-03-01-unguided',
+      order: 4,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Nine-outish equity is close; with implied odds deep, call is fine.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt:
+          'Pot 20, bet 10 (call 10 into 30). You have ~8 clean outs on the turn. Call?',
+      choices: const [
+        CourseChoice(
+          id: 'call-draw',
+          label: 'Call — price is acceptable with outs',
+        ),
+        CourseChoice(
+          id: 'fold-draw',
+          label: 'Fold always without a made hand',
+        ),
+        CourseChoice(id: 'raise-auto', label: 'Raise every draw'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    final cues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(cues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Call'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Fold'),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Raise'),
+      ),
+      findsNothing,
+    );
     controller.dispose();
   });
 

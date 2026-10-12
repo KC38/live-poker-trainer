@@ -7465,6 +7465,8 @@ class LessonTableContext extends StatelessWidget {
       caption: scene.caption ?? 'Pot 20 · bet 10 · outs',
       // SoftPulse + Rex own the cue — no Tap footer / spoiler captions.
       cueLabel: '',
+      // Call only — null SoftPulses every tile (LPT-634 / LPT-526).
+      guideRegion: LessonTableRegion.drawPriceCall,
       phases: [
         (
           region: LessonTableRegion.drawPriceCall,
@@ -7670,6 +7672,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive hand family — tap Suited connector, Offsuit connector, or trash',
       semanticsStatic: 'Hand family unguided outcomes',
       caption: scene.caption ?? 'Your holes',
+      // Suited conn only — null SoftPulses every tile (LPT-634 / LPT-527).
+      guideRegion: LessonTableRegion.handFamilyUgSc,
       phases: [
         (
           region: LessonTableRegion.handFamilyUgSc,
@@ -7700,6 +7704,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive hand family — tap Offsuit trash, Pocket pair, or Suited ace',
       semanticsStatic: 'Hand family checkpoint outcomes',
       caption: scene.caption ?? 'Your holes · early position',
+      // Offsuit trash only — null SoftPulses every tile (LPT-634 / LPT-527).
+      guideRegion: LessonTableRegion.handFamilyCpTrash,
       phases: [
         (
           region: LessonTableRegion.handFamilyCpTrash,
@@ -7730,6 +7736,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive jump family — tap Suited ace, Pocket pair, or Offsuit trash',
       semanticsStatic: 'Jump family outcomes',
       caption: scene.caption ?? 'Your holes',
+      // Suited ace only — null SoftPulses every tile (LPT-634 / LPT-528).
+      guideRegion: LessonTableRegion.jumpFamilySuitedAce,
       phases: [
         (
           region: LessonTableRegion.jumpFamilySuitedAce,
@@ -8537,6 +8545,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive over-precision — tap keep range, exact always, or ignore',
       semanticsStatic: 'Ranges unguided outcomes',
       caption: scene.caption ?? 'Villain bet flop + turn',
+      // Keep range only — null SoftPulses every tile (LPT-634 / LPT-529).
+      guideRegion: LessonTableRegion.rangesTooExact,
       phases: [
         (
           region: LessonTableRegion.rangesTooExact,
@@ -8585,6 +8595,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive range advice — tap read drives, always same, or random',
       semanticsStatic: 'Ranges checkpoint outcomes',
       caption: scene.caption ?? 'Same board · different villain lines',
+      // Read drives only — null SoftPulses every tile (LPT-634 / LPT-529).
+      guideRegion: LessonTableRegion.rangesReadDrives,
       phases: [
         (
           region: LessonTableRegion.rangesReadDrives,
@@ -8626,6 +8638,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive multi-street plan — tap branches, vibes, or one street',
       semanticsStatic: 'Plan checkpoint outcomes',
       caption: scene.caption ?? 'Flop plan ready — name the turn branches',
+      // Branches only — null SoftPulses every tile (LPT-634 / LPT-530).
+      guideRegion: LessonTableRegion.planBranches,
       phases: [
         (
           region: LessonTableRegion.planBranches,
@@ -8667,6 +8681,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive sizing grades — tap soft band, one-only, or tiny ok',
       semanticsStatic: 'Sizing unguided outcomes',
       caption: scene.caption ?? 'Two value sizes · same story',
+      // Soft band only — null SoftPulses every tile (LPT-634 / LPT-504).
+      guideRegion: LessonTableRegion.sizingSoftBand,
       phases: [
         (
           region: LessonTableRegion.sizingSoftBand,
@@ -9229,6 +9245,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive bluff cite — tap why you bluff less',
       semanticsStatic: 'Station bluff cite outcomes',
       caption: scene.caption ?? 'Why cut bluffs vs a Calling Station?',
+      // Rarely folds only — null SoftPulses every tile (LPT-634 / LPT-531).
+      guideRegion: LessonTableRegion.citeRarelyFolds,
       phases: [
         (
           region: LessonTableRegion.citeRarelyFolds,
@@ -9485,6 +9503,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive nit respect — tap why you respect the check-raise',
       semanticsStatic: 'Nit respect cite outcomes',
       caption: scene.caption ?? 'Why respect a Nit check-raise?',
+      // Strong range only — null SoftPulses every tile (LPT-634 / LPT-532).
+      guideRegion: LessonTableRegion.citeNitStrongRange,
       phases: [
         (
           region: LessonTableRegion.citeNitStrongRange,
@@ -9752,6 +9772,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive maniac cite — tap why you call wider',
       semanticsStatic: 'Maniac call cite outcomes',
       caption: scene.caption ?? 'Why call wider versus a Maniac?',
+      // Wide bets only — null SoftPulses every tile (LPT-634 / LPT-533).
+      guideRegion: LessonTableRegion.citeManiacWideBet,
       phases: [
         (
           region: LessonTableRegion.citeManiacWideBet,
@@ -9910,6 +9932,8 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive jump — tap narrower or any two',
       semanticsStatic: 'UTG range jump outcomes',
       caption: scene.caption ?? 'UTG open — describe the range',
+      // Narrower only — null SoftPulses every tile (LPT-634 / LPT-534).
+      guideRegion: LessonTableRegion.jumpUtgNarrower,
       phases: [
         (
           region: LessonTableRegion.jumpUtgNarrower,
