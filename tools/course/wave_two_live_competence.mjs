@@ -2165,6 +2165,15 @@ export function buildSectionFour() {
                   playerTypeRefs: ["maniac"],
                   // LPT-490: short Nice! why — not accessibilityText / idle ask.
                   okFeedback: "Maniac → Entry → Aggro.",
+                  // LPT-206
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "MANIAC", kind: "soft_pulse"},
+                      {press: 2, target: "ENTRY", kind: "soft_pulse"},
+                      {press: 3, target: "AGGRO", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               classifyAct({
                 id: "act-04-08-02-guided", order: 2, stage: "guided",
@@ -2178,6 +2187,8 @@ export function buildSectionFour() {
                   choice("pt-nit-m", "Nit", "clear_mistake",
                     "Nits do not open 60%.", {betterChoiceId: "pt-maniac"})
                 ],
+                // LPT-206
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pt-maniac", kind: "soft_pulse"}]},
               }),
               classifyAct({
                 id: "act-04-08-02-unguided", order: 3, stage: "scaffolded",
@@ -2191,6 +2202,8 @@ export function buildSectionFour() {
                   choice("station-m", "Calling Station", "clear_mistake",
                     "Stations call; maniacs raise.", {betterChoiceId: "maniac2"})
                 ],
+                // LPT-206
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "maniac2", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-08-02-checkpoint", order: 4, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2204,6 +2217,8 @@ export function buildSectionFour() {
                   choice("early", "Add an unlabeled loose seat", "clear_mistake",
                     "Only mix Calling Station, Nit, and Maniac.", {betterChoiceId: "three"})
                 ],
+                // LPT-206
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "three", kind: "none"}]},
               }),
             ],
           }),

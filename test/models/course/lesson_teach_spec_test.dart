@@ -317,6 +317,13 @@ const _lessons = <String, List<String>>{
     'act-04-08-01-unguided',
     'act-04-08-01-checkpoint',
   ],
+  // LPT-206
+  'lesson-04-08-02-meet-maniac': [
+    'act-04-08-02-explain',
+    'act-04-08-02-guided',
+    'act-04-08-02-unguided',
+    'act-04-08-02-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -2008,6 +2015,53 @@ void main() {
       });
       expect(
         act('act-04-08-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Meet the Maniac (LPT-206)', () {
+    test('explain SoftPulse walks MANIAC → ENTRY → AGGRO', () {
+      expect(
+        _list(
+          act('act-04-08-02-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['MANIAC', 'ENTRY', 'AGGRO'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-04-08-02-guided'), 'cues').single['target'],
+        'pt-maniac',
+      );
+      expect(act('act-04-08-02-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-08-02-unguided'), 'cues').single['target'],
+        'maniac2',
+      );
+      expect(act('act-04-08-02-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-08-02-checkpoint'), 'cues').single['target'],
+        'three',
+      );
+      expect(
+        _list(
+          act('act-04-08-02-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-08-02-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-04-08-02-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-04-08-02-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });

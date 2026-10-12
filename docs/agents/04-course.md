@@ -59,8 +59,9 @@ Navigate 3-bet pots (LPT-170), Plan beyond the flop (LPT-174), Size with a
 message (LPT-177), SPR decides commitment (LPT-180), Observe sticky callers
 (LPT-184), Meet the Calling Station (LPT-187), Adjust versus Calling Station
 (LPT-190), Observe narrow players (LPT-193), Meet the Nit (LPT-196), Adjust
-versus Nit (LPT-200), Observe wild aggressors (LPT-203). Content gaps are
-audited by [11 — Lesson content agent](11-lesson-content-agent.md).
+versus Nit (LPT-200), Observe wild aggressors (LPT-203), Meet the Maniac
+(LPT-206). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 ### Activity renderers
 
