@@ -2417,6 +2417,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-02-07-02-jump-stack':
       return const LessonTableScene(
         layout: LessonTableLayout.effectiveStackOutcomes,
+        // Stack-math tiles — no decoy face-down "Them" (LPT-220).
+        villainSeatCount: 0,
         caption: 'You 120bb · Villain 55bb',
       );
     case 'act-02-05-01-guided-convert':
@@ -2436,12 +2438,16 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-02-05-01-scaffolded-eff':
       return const LessonTableScene(
         layout: LessonTableLayout.effectiveStack150Outcomes,
+        // Stack-math tiles — no decoy face-down "Them" (LPT-220).
+        villainSeatCount: 0,
         caption: 'You 150bb · Villain 60bb',
       );
     case 'act-02-05-01-unguided-depth':
       return const LessonTableScene(
         layout: LessonTableLayout.stackDepthOutcomes,
         // Structural depths — Rex owns the shove-game cue.
+        // No decoy face-down "Them" (LPT-220).
+        villainSeatCount: 0,
         caption: 'Common live depths',
       );
     case 'act-02-06-01-guided-follow':
