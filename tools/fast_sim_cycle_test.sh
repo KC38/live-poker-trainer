@@ -176,4 +176,22 @@ HOME="$tmp/home" PRIMARY="$repo" python3 "$ROOT/tools/disk_guard.py" --quiet --m
 [[ ! -e "$dd/Runner-gone" ]] || fail "orphan DerivedData must be removed"
 [[ -d "$dd/Runner-live" ]] || fail "DerivedData for a live workspace must stay"
 
+# --- heartbeats keep the holder's purpose --------------------------------------
+lock_home="$tmp/lock-home"
+mkdir -p "$lock_home"
+run_id="$(HOME="$lock_home" python3 "$ROOT/tools/sim_lock.py" claim --owner ui-design-agent --purpose "LPT-1: validate" --pid $$)"
+printf 'Launching lib/main.dart ...\n' >"$tmp/slow.log"
+HOME="$lock_home" SIM_LOCK_RUN_ID="$run_id" "$ROOT/tools/wait_flutter_vm.sh" "$tmp/slow.log" 1 >/dev/null 2>&1 || true
+sleep 30 &
+sleeper=$!
+echo "$sleeper" >"$tmp/slow.pid"
+HOME="$lock_home" SIM_LOCK_RUN_ID="$run_id" "$ROOT/tools/flutter_hot_restart.sh" "$tmp/slow.log" "$tmp/slow.pid" 1 >/dev/null 2>&1 || true
+kill "$sleeper" 2>/dev/null || true
+lock_status() { HOME="$lock_home" python3 "$ROOT/tools/sim_lock.py" status 2>&1 || true; }
+grep -q 'purpose: LPT-1: validate' <<<"$(lock_status)" \
+  || fail "wait helpers must not overwrite the holder's purpose: $(lock_status)"
+HOME="$lock_home" SIM_LOCK_RUN_ID="$run_id" "$ROOT/tools/wait_flutter_vm.sh" "$tmp/slow.log" 1 --purpose "LPT-1: wait VM" >/dev/null 2>&1 || true
+grep -q 'purpose: LPT-1: wait VM' <<<"$(lock_status)" \
+  || fail "an explicit --purpose must still replace the purpose"
+
 echo "fast sim cycle ok"
