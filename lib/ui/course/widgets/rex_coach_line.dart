@@ -102,6 +102,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'One dramatic call — pick Low conf.',
     'act-04-06-01-checkpoint' =>
       'Before you label — pick Bundle.',
+    // Meet the Calling Station densified asks (LPT-420) — same path.
+    'act-04-06-02-guided' =>
+      'Sticky second pair called three streets — pick Station.',
+    'act-04-06-02-scaffolded' =>
+      'A player-type label is temporary evidence — pick Working model.',
+    'act-04-06-02-unguided' =>
+      'Limps, calls, never folds turns — pick Station.',
+    'act-04-06-02-checkpoint' =>
+      'Only two hands so far — pick Low conf.',
     _ => null,
   };
 }
