@@ -85,6 +85,19 @@ interactive steps is a content gap the agent files.
 
 One owner per issue. Content agent default = `grokbot`.
 
+## Catalog-bundled tickets
+
+Structural gaps that only differ by lesson/activity id are filed as **one
+catalog ticket** with a full affected checklist. The fixer applies the same
+pattern across every listed activity in one change (not lesson-by-lesson
+PRs). Examples: missing `pressHints`, missing `deal.variants`, SoftPulse
+explain Nice! short ladder, densify “Tap the best answer”, unguided SoftPulse
+maps, densify `guideRegion`, permanent-gold spoilers.
+
+Per-lesson tickets stay for deal honesty / wrong cards, curriculum splits
+(`needs-human`), and true one-offs. See
+`.cursor/commands/lesson-content-agent.md` §4.
+
 ## Loop ops
 
 ```bash
