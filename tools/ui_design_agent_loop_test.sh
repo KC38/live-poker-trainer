@@ -546,6 +546,45 @@ grep -q '"stamp": "20261012-123827"' "$HEALTH_FILE" \
 [[ "$(grep -c LPT-240 "$HEALTH_FILE")" == 1 ]] \
   || fail "LPT-240 should appear once after dedupe: $(cat "$HEALTH_FILE")"
 
+# A stalled or sim-not-ready stamp is not a durable hold. Dropping the
+# reconciled close would erase the only successful result for that ticket.
+printf '%s\n' \
+  '{"at":"2026-10-12T13:00:15+05:30","stamp":"20261012-130015","exit":13,"seconds":100,"ticket":"LPT-241","result":"stalled","tail":"stall"}' \
+  '{"at":"2026-10-12T13:05:09+05:30","stamp":"reconciled","exit":0,"seconds":null,"ticket":"LPT-241","result":"closed","tail":"reconciled from coverage","reconciled":true}' \
+  >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+repair_health_tails
+grep -q 'LPT-241' "$HEALTH_FILE" \
+  || fail "stalled stamp must keep reconciled close: $(cat "$HEALTH_FILE")"
+grep -q '"stamp":"reconciled"' "$HEALTH_FILE" \
+  || fail "stalled stamp must not drop reconciled: $(cat "$HEALTH_FILE")"
+[[ "$(grep -c LPT-241 "$HEALTH_FILE")" == 2 ]] \
+  || fail "stalled+reconciled should both remain: $(cat "$HEALTH_FILE")"
+
+printf '%s\n' \
+  '{"at":"2026-10-12T13:00:15+05:30","stamp":"20261012-130016","exit":1,"seconds":10,"ticket":"LPT-242","result":"sim-not-ready","tail":"sim"}' \
+  '{"at":"2026-10-12T13:05:09+05:30","stamp":"reconciled","exit":0,"seconds":null,"ticket":"LPT-242","result":"closed","tail":"reconciled from coverage","reconciled":true}' \
+  >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+repair_health_tails
+[[ "$(grep -c LPT-242 "$HEALTH_FILE")" == 2 ]] \
+  || fail "sim-not-ready must not drop reconciled: $(cat "$HEALTH_FILE")"
+
+# Closed on a different ticket, or a reconciled row without the flag, stays.
+printf '%s\n' \
+  '{"at":"2026-10-12T13:00:15+05:30","stamp":"20261012-130017","exit":0,"seconds":40,"ticket":"LPT-244","result":"closed","tail":"coverage:closed ticket:LPT-244"}' \
+  '{"at":"2026-10-12T13:05:09+05:30","stamp":"reconciled","exit":0,"seconds":null,"ticket":"LPT-245","result":"closed","tail":"reconciled from coverage","reconciled":true}' \
+  '{"at":"2026-10-12T13:06:09+05:30","stamp":"reconciled","exit":0,"seconds":null,"ticket":"LPT-244","result":"closed","tail":"reconciled without flag"}' \
+  >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+repair_health_tails
+grep -q 'LPT-245' "$HEALTH_FILE" \
+  || fail "other ticket must not drop reconciled: $(cat "$HEALTH_FILE")"
+grep -q 'reconciled without flag' "$HEALTH_FILE" \
+  || fail "reconciled row without flag must stay: $(cat "$HEALTH_FILE")"
+[[ "$(grep -c LPT-244 "$HEALTH_FILE")" == 2 ]] \
+  || fail "unflagged reconciled duplicate must stay: $(cat "$HEALTH_FILE")"
+
 # Usage-limit detection + sleep length from reset date in the run log.
 usage_log="$LOG_DIR/run-usage-limit.log"
 printf '%s\n' \
