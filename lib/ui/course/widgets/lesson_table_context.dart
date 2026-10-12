@@ -2168,6 +2168,10 @@ class LessonTableScene {
   }
 }
 
+/// Table scenes whose teaching depends on exact draw outs (gutshot vs
+/// open-ender), so remaps must keep the teach fingerprint (LPT-389).
+const _drawOutsLessonTableScenes = {'act-03-08-02-jump-leak'};
+
 /// Authored scene with hand-class isomorphic cards for this attempt.
 LessonTableScene? dealtLessonTableScene(
   CourseActivity activity, {
@@ -2192,7 +2196,11 @@ LessonTableScene? dealtLessonTableScene(
   final remapped = isomorphicLessonCardGroups(
     [scene.heroCodes, scene.boardCodes, scene.villainCodes],
     rng,
-    coordinated: scene.boardCodes.length >= 3,
+    // Outs-teaching scenes take the postflop teach-fingerprint path (HandClass
+    // + draw outs): run-gap rank remaps turned the jump-leak gutshot into an
+    // open-ender (LPT-389).
+    coordinated: scene.boardCodes.length >= 3 &&
+        !_drawOutsLessonTableScenes.contains(activity.id),
   );
   return scene.copyWithCodes(
     heroCodes: remapped[0],
@@ -2654,10 +2662,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         caption: 'Flop · class?',
       );
     case 'act-03-08-02-jump-leak':
+      // True gutshot (four outs to Q): J9 on KT2, same template as the
+      // leak-repair scaffolded step (LPT-381). JT on A72 had zero straight
+      // outs under a gutshot price ask (LPT-389).
       return const LessonTableScene(
         layout: LessonTableLayout.jumpLeakPriceOutcomes,
-        heroCodes: ['Jh', 'Td'],
-        boardCodes: ['As', '7c', '2d'],
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Ks', 'Tc', '2d'],
         villainSeatCount: 1,
         highlight: LessonTableHighlight.none,
         caption: 'Gutshot · pot 10 · bet 20',
