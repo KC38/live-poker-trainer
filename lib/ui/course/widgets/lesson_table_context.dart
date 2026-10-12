@@ -9127,6 +9127,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive label model — tap working model or permanent verdict',
       semanticsStatic: 'Label model outcomes',
       caption: scene.caption ?? 'Update the label as samples change',
+      // SoftPulse + Rex own the cue — one gold Working model only (LPT-424).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.labelWorkingModel,
       phases: [
         (
           region: LessonTableRegion.labelWorkingModel,
@@ -9158,6 +9161,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive player type — tap Calling Station or Maniac',
       semanticsStatic: 'Calling Station vs Maniac outcomes',
       caption: scene.caption ?? 'Limps · calls raises · never folds turns',
+      // SoftPulse + Rex own the cue — one gold Station only (LPT-424).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.playerTypeStationLimp,
       phases: [
         (
           region: LessonTableRegion.playerTypeStationLimp,
