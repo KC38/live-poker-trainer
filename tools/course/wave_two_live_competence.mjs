@@ -139,7 +139,19 @@ export function buildSectionThree() {
             activities: [
               dialogue("act-03-02-01-explain", 1,
                 "Flop first: made, draw, showdown value, or air. Label before you bet.",
-                {objectives: ["Identify made hands on the flop"]}),
+                {
+                  objectives: ["Identify made hands on the flop"],
+                  // LPT-141
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "MADE", kind: "soft_pulse"},
+                      {press: 2, target: "DRAW", kind: "soft_pulse"},
+                      {press: 3, target: "SDV", kind: "soft_pulse"},
+                      {press: 4, target: "AIR", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-03-02-01-guided", order: 2, stage: "guided",
                 prompt: "Board Ks 9d 2c. You hold Kh Qh. Class?",
@@ -153,6 +165,11 @@ export function buildSectionThree() {
                   choice("air-tp", "Air", "clear_mistake",
                     "Top pair is not air.", {betterChoiceId: "made-tp"})
                 ],
+                // LPT-141
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Qh"], board: ["Ks", "9d", "2c"]}},
+                  cues: [{press: 1, target: "made-tp", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-03-02-01-scaffolded", order: 3, stage: "scaffolded",
@@ -167,6 +184,11 @@ export function buildSectionThree() {
                   choice("sdv", "Strong showdown value already", "questionable",
                     "Ace-high can win sometimes, but this is primarily a draw.")
                 ],
+                // LPT-141
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "9h"], board: ["Jh", "8h", "3c"]}},
+                  cues: [{press: 1, target: "nfd", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-03-02-01-unguided", order: 4, stage: "scaffolded",
@@ -181,12 +203,17 @@ export function buildSectionThree() {
                   choice("made-54", "Made hand", "clear_mistake",
                     "No pair on board matches your cards.", {betterChoiceId: "air"})
                 ],
+                // LPT-141
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["5h", "4h"], board: ["Qc", "7d", "2s"]}},
+                  cues: [{press: 1, target: "air", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-03-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Board Ts 9s 4d. You hold Js 8d. Best label?",
                 a11y: "Open-ender with a spade is a draw class.",
-                objectives: ["Recognize air that needs equity or fold equity"],
+                objectives: ["Separate draws from showdown value", "Identify made hands on the flop"],
                 choices: [
                   choice("oesd", "Draw — open-ended straight draw", "recommended",
                     "Eight or queen completes; treat it as a draw."),
@@ -195,6 +222,11 @@ export function buildSectionThree() {
                   choice("air-j8", "Pure air", "questionable",
                     "You have real equity — still a draw, not air.")
                 ],
+                // LPT-141
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Js", "8d"], board: ["Ts", "9s", "4d"]}},
+                  cues: [{press: 1, target: "oesd", kind: "none"}],
+                },
               }),
             ],
           }),

@@ -548,7 +548,7 @@ are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
 (LPT-119), Open or fold baseline (LPT-122), Versus an open (LPT-125),
 Effective stacks (LPT-128), Live table habits (LPT-131), Full-ring baseline
 hand (LPT-135), Baseline jump check (LPT-137), Read the table first
-(LPT-138).
+(LPT-138), Name your flop class (LPT-141).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -746,6 +746,12 @@ STACKS → BUTTON → WHO ACTS; guided/scaffolded/unguided SoftPulse `pot-21` /
 `utg-first` / `bound`; checkpoint cues `eff-55` with kind `none` (no
 pressHints). All steps use `deal.mode` `none` (pot/seat/verbal tiles — not
 hole-card families). Checkpoint objectives retagged to pot/stack tracking.
+
+Name your flop class `teachSpec` (LPT-141): explain SoftPulse advances MADE
+→ DRAW → SDV → AIR; guided/scaffolded/unguided author fixed KhQh/Ks9d2c,
+Ah9h/Jh8h3c, and 5h4h/Qc7d2s with SoftPulse `made-tp` / `nfd` / `air`;
+checkpoint authors Js8d/Ts9s4d and cues `oesd` with kind `none` (no
+pressHints). Checkpoint objectives retagged to draw labeling.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

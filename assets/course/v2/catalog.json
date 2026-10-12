@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "00d385ee2f246c4fdba4ff17822f7990b9e3114756f9a4404fc3c7333f856a48",
+  "contentChecksum": "6082a1993eafc71257f5d9061ae9e8d1aa58af9af823fd3066b106f713a93daf",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -5904,7 +5904,34 @@
                   ],
                   "objectives": [
                     "Identify made hands on the flop"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MADE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DRAW",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SDV",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "AIR",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-02-01-guided",
@@ -5938,7 +5965,30 @@
                       "label": "Air",
                       "accessibilityText": "Air"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Ks",
+                          "9d",
+                          "2c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "made-tp",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-02-01-scaffolded",
@@ -5972,7 +6022,30 @@
                       "label": "Strong showdown value already",
                       "accessibilityText": "Strong showdown value already"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "9h"
+                        ],
+                        "board": [
+                          "Jh",
+                          "8h",
+                          "3c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "nfd",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-02-01-unguided",
@@ -6006,7 +6079,30 @@
                       "label": "Made hand",
                       "accessibilityText": "Made hand"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "5h",
+                          "4h"
+                        ],
+                        "board": [
+                          "Qc",
+                          "7d",
+                          "2s"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "air",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-02-01-checkpoint",
@@ -6021,7 +6117,8 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Recognize air that needs equity or fold equity"
+                    "Separate draws from showdown value",
+                    "Identify made hands on the flop"
                   ],
                   "prompt": "Board Ts 9s 4d. You hold Js 8d. Best label?",
                   "choices": [
@@ -6041,7 +6138,30 @@
                       "accessibilityText": "Pure air"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Js",
+                          "8d"
+                        ],
+                        "board": [
+                          "Ts",
+                          "9s",
+                          "4d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "oesd",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
