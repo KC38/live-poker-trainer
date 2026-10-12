@@ -294,6 +294,13 @@ const _lessons = <String, List<String>>{
     'act-04-07-01-unguided',
     'act-04-07-01-checkpoint',
   ],
+  // LPT-196
+  'lesson-04-07-02-meet-nit': [
+    'act-04-07-02-explain',
+    'act-04-07-02-guided',
+    'act-04-07-02-unguided',
+    'act-04-07-02-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1818,6 +1825,53 @@ void main() {
       });
       expect(
         act('act-04-07-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Meet the Nit (LPT-196)', () {
+    test('explain SoftPulse walks NIT → NARROW → RESPECT', () {
+      expect(
+        _list(
+          act('act-04-07-02-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['NIT', 'NARROW', 'RESPECT'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-04-07-02-guided'), 'cues').single['target'],
+        'pt-nit',
+      );
+      expect(act('act-04-07-02-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-07-02-unguided'), 'cues').single['target'],
+        'nit2',
+      );
+      expect(act('act-04-07-02-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-07-02-checkpoint'), 'cues').single['target'],
+        'model-n',
+      );
+      expect(
+        _list(
+          act('act-04-07-02-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-07-02-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-04-07-02-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-04-07-02-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });

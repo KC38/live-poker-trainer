@@ -1917,7 +1917,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-07-02-explain", 1,
                 "Nit means narrow entry and respect for their heavy action.",
-                {objectives: ["Introduce Nit"], playerTypeRefs: ["nit"]}),
+                {
+                  objectives: ["Introduce Nit"], playerTypeRefs: ["nit"],
+                  // LPT-196
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "NIT", kind: "soft_pulse"},
+                      {press: 2, target: "NARROW", kind: "soft_pulse"},
+                      {press: 3, target: "RESPECT", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               classifyAct({
                 id: "act-04-07-02-guided", order: 2, stage: "guided",
                 prompt: "Seat plays ~8% of hands and 3-bets rarely but large. Label?",
@@ -1930,6 +1941,8 @@ export function buildSectionFour() {
                   choice("pt-station-n", "Calling Station", "clear_mistake",
                     "Stations call wide; this seat rarely enters.", {betterChoiceId: "pt-nit", reversalRead: "Station evidence is sticky calling."})
                 ],
+                // LPT-196
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pt-nit", kind: "soft_pulse"}]},
               }),
               classifyAct({
                 id: "act-04-07-02-unguided", order: 3, stage: "scaffolded",
@@ -1943,6 +1956,8 @@ export function buildSectionFour() {
                   choice("maniac-n", "Maniac", "clear_mistake",
                     "Maniacs are always involved.", {betterChoiceId: "nit2"})
                 ],
+                // LPT-196
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "nit2", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-07-02-checkpoint", order: 4, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1955,6 +1970,8 @@ export function buildSectionFour() {
                   choice("insult-n", "An insult", "clear_mistake",
                     "Keep it technical.", {betterChoiceId: "model-n"})
                 ],
+                // LPT-196
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "model-n", kind: "none"}]},
               }),
             ],
           }),

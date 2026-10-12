@@ -60,8 +60,9 @@ interactive step: `lesson-01-01-02-suits-and-ranks` (LPT-81),
 `lesson-04-06-01-observe-sticky-caller` (LPT-184),
 `lesson-04-06-02-meet-calling-station` (LPT-187),
 `lesson-04-06-03-adjust-calling-station` (LPT-190),
-`lesson-04-07-01-observe-narrow-player` (LPT-193). Missing teachSpec on
-interactive steps is a content gap the agent files.
+`lesson-04-07-01-observe-narrow-player` (LPT-193),
+`lesson-04-07-02-meet-nit` (LPT-196). Missing teachSpec on interactive steps
+is a content gap the agent files.
 
 ## Jira routing
 
