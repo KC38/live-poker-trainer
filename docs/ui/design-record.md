@@ -550,7 +550,7 @@ Effective stacks (LPT-128), Live table habits (LPT-131), Full-ring baseline
 hand (LPT-135), Baseline jump check (LPT-137), Read the table first
 (LPT-138), Name your flop class (LPT-141), Count outs, pay the right price
 (LPT-144), Choose a flop line (LPT-149), Plan the turn card (LPT-152), Close
-the river correctly (LPT-155).
+the river correctly (LPT-155), Play tighter multiway (LPT-158).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -784,6 +784,12 @@ VALUE → BLUFF → CATCH → FOLD; guided/scaffolded/unguided author fixed
 AhKd/AsKc7d2h3c, 9s8s/Kh7h2c3dAh, and Ah4d/As9c7d2h3c with SoftPulse
 `val-bet` / `bluff` / `fold-weak`; checkpoint uses `deal.mode` `none` and
 cues `role-catch` with kind `none` (no pressHints).
+
+Play tighter multiway `teachSpec` (LPT-158): explain SoftPulse advances
+STRONGER → FEWER → NUTS; guided/scaffolded author fixed 7h9d/Kc7s2d and
+7s3d/AhKh9h with SoftPulse `check-2p` / `mw-check`; unguided uses
+`deal.mode` `none` and SoftPulse `sc`; checkpoint uses `deal.mode` `none`
+and cues `obs-many` with kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
