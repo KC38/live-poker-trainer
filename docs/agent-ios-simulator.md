@@ -155,6 +155,20 @@ python3 tools/agent_tap.py openlesson --text lesson-01-01-01-your-two-cards
 python3 tools/agent_tap.py tap --text "Continue"
 python3 tools/agent_tap.py tap --text "Your hole cards"
 python3 tools/agent_tap.py back   # dismiss modal sheets / pop top route
+python3 tools/agent_tap.py tree   # visible labels, tap state, gold/cyan glow
+python3 tools/agent_tap.py whoami # guest uid
+```
+
+Each UI command prints the app's `outcome:` and exits 3 when a tap found
+no matching label.
+
+Jump the guest to a later lesson or wallet state instead of playing
+prerequisites (guest only; needs `FIREBASE_TOKEN` in
+`~/.live-poker-trainer/secrets.env`):
+
+```bash
+python3 tools/agent_seed.py unlock --lesson "Hand ranks" --open --hearts 2
+python3 tools/agent_seed.py gems 50
 ```
 
 Ticket worktree before merge (pass that session's log):

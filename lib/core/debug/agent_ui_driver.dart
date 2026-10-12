@@ -21,6 +21,27 @@ final class AgentUiDriver {
   static Future<void> Function()? _signOut;
   static Future<void> Function(String lessonId)? _openLesson;
   static int _pointerSeq = 100;
+  static int _lastSeq = 0;
+  static String _lastCmd = '';
+  static String _lastOutcome = '';
+
+  /// Outcome of the most recent driver command (`last` agent query).
+  ///
+  /// `seq` increases per handled command so a host can wait for the
+  /// command it just sent. Outcomes start with `nomatch` when a tap found
+  /// no visible label.
+  static Map<String, Object?> get lastOutcome => {
+    'seq': _lastSeq,
+    'cmd': _lastCmd,
+    'outcome': _lastOutcome,
+  };
+
+  static void _record(String cmd, String outcome) {
+    _lastSeq++;
+    _lastCmd = cmd;
+    _lastOutcome = outcome;
+    debugPrint('AgentUiDriver: $cmd -> $outcome');
+  }
 
   /// Registers the driver. Call once from app startup.
   ///
@@ -35,12 +56,14 @@ final class AgentUiDriver {
     _openLesson = openLesson;
     unawaited(_sub?.cancel());
     _sub = AgentCommands.stream.listen(_onCommand);
+    AgentCommands.registerQuery('last', (_) => lastOutcome);
   }
 
   static Future<void> _onCommand(String cmd) async {
     final normalized = cmd.trim().toLowerCase();
     if (normalized == 'signout' || normalized == 'sign_out') {
       await _signOut?.call();
+      _record(cmd, 'signed-out');
       return;
     }
     // Pop the top route (modal bottom sheets, dialogs, pushed screens).
@@ -48,20 +71,21 @@ final class AgentUiDriver {
     // refill and other sheets that never registered their own listener.
     // Leave `dismiss` to GameProvider (mid-hand coach).
     if (normalized == 'back') {
-      await _popTopRoute();
+      _record(cmd, await _popTopRoute());
       return;
     }
     if (normalized.startsWith('openlesson:') ||
         normalized.startsWith('open_lesson:')) {
       final id = cmd.substring(cmd.indexOf(':') + 1).trim();
       if (id.isEmpty) return;
+      // The runner push only completes when it pops; record on push.
+      _record(cmd, 'opened lesson "$id"');
       await _openLesson?.call(id);
-      debugPrint('AgentUiDriver: openLesson "$id"');
       return;
     }
     if (normalized.startsWith('type:') || normalized.startsWith('enter:')) {
       final value = cmd.substring(cmd.indexOf(':') + 1);
-      await _typeText(value);
+      _record(cmd, await _typeText(value));
       return;
     }
 
@@ -70,11 +94,11 @@ final class AgentUiDriver {
       needle = normalized.substring(normalized.indexOf(':') + 1).trim();
     }
     if (needle == null || needle.isEmpty) return;
-    await _tapText(needle);
+    _record(cmd, await _tapText(needle));
   }
 
   /// Pops the deepest navigator that can pop (sheet/dialog/route).
-  static Future<void> _popTopRoute() async {
+  static Future<String> _popTopRoute() async {
     final navigators = <NavigatorState>[];
     void visit(Element element) {
       if (element is StatefulElement && element.state is NavigatorState) {
@@ -87,13 +111,12 @@ final class AgentUiDriver {
     for (final nav in navigators.reversed) {
       if (!nav.mounted || !nav.canPop()) continue;
       final didPop = await nav.maybePop();
-      debugPrint('AgentUiDriver: back -> popped=$didPop');
-      return;
+      return 'back popped=$didPop';
     }
-    debugPrint('AgentUiDriver: back -> nothing to pop');
+    return 'nomatch: nothing to pop';
   }
 
-  static Future<void> _typeText(String value) async {
+  static Future<String> _typeText(String value) async {
     final binding = WidgetsBinding.instance;
     EditableTextState? focused;
     EditableTextState? fallback;
@@ -111,10 +134,7 @@ final class AgentUiDriver {
 
     binding.rootElement?.visitChildren(visit);
     final target = focused ?? fallback;
-    if (target == null) {
-      debugPrint('AgentUiDriver: no EditableText for type');
-      return;
-    }
+    if (target == null) return 'nomatch: no EditableText for type';
     target.userUpdateTextEditingValue(
       TextEditingValue(
         text: value,
@@ -127,10 +147,10 @@ final class AgentUiDriver {
       text: value,
       selection: TextSelection.collapsed(offset: value.length),
     );
-    debugPrint('AgentUiDriver: typed "$value"');
+    return 'typed "$value"';
   }
 
-  static Future<void> _tapText(String needle) async {
+  static Future<String> _tapText(String needle) async {
     final binding = WidgetsBinding.instance;
     final needleLower = needle.toLowerCase();
     final candidates = <_TapCandidate>[];
@@ -163,10 +183,7 @@ final class AgentUiDriver {
               ro.localToGlobal(ro.size.center(Offset.zero)),
               label: 'key:$keyNeedle',
             );
-            debugPrint(
-              'AgentUiDriver: pointer-tapped "$needle" -> key:$keyNeedle',
-            );
-            return;
+            return 'pointer-tapped "$needle" -> key:$keyNeedle';
           }
         }
       }
@@ -182,54 +199,7 @@ final class AgentUiDriver {
       final ro = element.renderObject;
       if (ro is! RenderBox || !ro.hasSize || !ro.attached) return;
 
-      VoidCallback? onPressed;
-      var filledStyle = false;
-      element.visitAncestorElements((ancestor) {
-        final w = ancestor.widget;
-        if (w is ButtonStyleButton) {
-          onPressed = w.onPressed;
-          filledStyle = true;
-          return false;
-        }
-        if (w is InkWell) {
-          onPressed = w.onTap;
-          return false;
-        }
-        if (w is GestureDetector) {
-          onPressed = w.onTap;
-          return false;
-        }
-        if (w is IconButton) {
-          onPressed = w.onPressed;
-          return false;
-        }
-        return true;
-      });
-      // Semantics(button) often wraps InkWell as a child, not an ancestor.
-      if (onPressed == null) {
-        element.visitChildren((child) {
-          void dig(Element e) {
-            if (onPressed != null) return;
-            final w = e.widget;
-            if (w is InkWell) {
-              onPressed = w.onTap;
-              return;
-            }
-            if (w is GestureDetector) {
-              onPressed = w.onTap;
-              return;
-            }
-            if (w is ButtonStyleButton) {
-              onPressed = w.onPressed;
-              filledStyle = true;
-              return;
-            }
-            e.visitChildren(dig);
-          }
-
-          dig(child);
-        });
-      }
+      final (:onPressed, :filledStyle, isControl: _) = agentTapHandler(element);
       final route = ModalRoute.of(element);
       candidates.add(
         _TapCandidate(
@@ -269,10 +239,7 @@ final class AgentUiDriver {
     }
 
     binding.rootElement?.visitChildren(visit);
-    if (candidates.isEmpty) {
-      debugPrint('AgentUiDriver: no match for "$needle"');
-      return;
-    }
+    if (candidates.isEmpty) return 'nomatch: no visible label for "$needle"';
 
     candidates.sort((a, b) {
       if (a.exact != b.exact) return a.exact ? -1 : 1;
@@ -326,16 +293,13 @@ final class AgentUiDriver {
       });
       binding.scheduleFrame();
       await completer.future;
-      debugPrint(
-        'AgentUiDriver: invoked onPressed for "$needle" -> "${chosen.text}"',
-      );
-      return;
+      return 'invoked onPressed for "$needle" -> "${chosen.text}"';
     }
 
     await _pointerTap(chosen.offset, label: chosen.text);
-    debugPrint(
-      'AgentUiDriver: pointer-tapped "$needle" -> "${chosen.text}" at ${chosen.offset}',
-    );
+    final disabled = chosen.buttonish ? '' : ' (no tap handler found)';
+    return 'pointer-tapped "$needle" -> "${chosen.text}" at '
+        '${chosen.offset}$disabled';
   }
 
   static Future<void> _pointerTap(Offset point, {required String label}) async {
@@ -362,6 +326,92 @@ final class AgentUiDriver {
     // Allow the framework to settle selection / auto-submit.
     await Future<void>.delayed(const Duration(milliseconds: 50));
   }
+}
+
+/// The route [element] belongs to, without registering a dependency.
+///
+/// `ModalRoute.of` calls `dependOnInheritedWidgetOfExactType`; doing that
+/// from a host query (outside build) leaves stale dependents that trip
+/// framework asserts on the next navigation. The route scope widget is
+/// private, so it is matched by type name (debug-only code).
+ModalRoute<Object?>? agentRouteOf(Element element) {
+  ModalRoute<Object?>? route;
+  element.visitAncestorElements((ancestor) {
+    final widget = ancestor.widget;
+    if (widget is InheritedWidget &&
+        widget.runtimeType.toString() == '_ModalScopeStatus') {
+      final Object? found = (widget as dynamic).route;
+      route = found is ModalRoute<Object?> ? found : null;
+      return false;
+    }
+    return true;
+  });
+  return route;
+}
+
+/// The tap handler an agent tap on [element] would use.
+///
+/// Looks at ancestors first (Text inside a button), then descendants
+/// (Semantics wrapping an InkWell). [isControl] is true when a button-like
+/// widget exists even if its handler is null (disabled).
+({VoidCallback? onPressed, bool filledStyle, bool isControl}) agentTapHandler(
+  Element element,
+) {
+  VoidCallback? onPressed;
+  var filledStyle = false;
+  var isControl = false;
+  element.visitAncestorElements((ancestor) {
+    final w = ancestor.widget;
+    if (w is ButtonStyleButton) {
+      onPressed = w.onPressed;
+      filledStyle = true;
+      isControl = true;
+      return false;
+    }
+    if (w is InkWell) {
+      onPressed = w.onTap;
+      isControl = true;
+      return false;
+    }
+    if (w is GestureDetector) {
+      onPressed = w.onTap;
+      isControl = true;
+      return false;
+    }
+    if (w is IconButton) {
+      onPressed = w.onPressed;
+      isControl = true;
+      return false;
+    }
+    return true;
+  });
+  // Semantics(button) often wraps InkWell as a child, not an ancestor.
+  if (onPressed == null) {
+    void dig(Element e) {
+      if (onPressed != null) return;
+      final w = e.widget;
+      if (w is InkWell) {
+        onPressed = w.onTap;
+        isControl = true;
+        return;
+      }
+      if (w is GestureDetector) {
+        onPressed = w.onTap;
+        isControl = true;
+        return;
+      }
+      if (w is ButtonStyleButton) {
+        onPressed = w.onPressed;
+        filledStyle = true;
+        isControl = true;
+        return;
+      }
+      e.visitChildren(dig);
+    }
+
+    element.visitChildren(dig);
+  }
+  return (onPressed: onPressed, filledStyle: filledStyle, isControl: isControl);
 }
 
 /// Whether visible [label] text is an allowable agent tap for [needle].

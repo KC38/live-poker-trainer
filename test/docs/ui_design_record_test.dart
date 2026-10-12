@@ -183,6 +183,8 @@ void main() {
       'trust that handoff',
       'tools/flutter_run_fast.sh',
       'tools/main_matches_validated.sh',
+      'tools/agent_seed.py unlock',
+      'python3 tools/agent_tap.py tree',
     ]) {
       expect(command, contains(needle), reason: needle);
     }

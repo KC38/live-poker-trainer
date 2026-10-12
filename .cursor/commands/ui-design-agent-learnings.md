@@ -189,7 +189,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   so cyan matches the five taps.
 - Never loop dozens of `tap Continue` to brute-force prerequisite lessons —
   course start rate-limits with "Too many course requests" and blocks the
-  mini until Retry/backoff; finish Home's next node or pace taps instead.
+  mini until Retry/backoff. Use `python3 tools/agent_seed.py unlock
+  --lesson "<title>" --open` (and `hearts N` / `gems N`) to jump there;
+  "later lessons need a guest progress chain" is no longer unreachable.
   Never run `sips -c` in place on the only issue/validated PNG — copy first,
   then crop the copy.
 

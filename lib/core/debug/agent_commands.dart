@@ -15,6 +15,11 @@
 /// `signout`.
 /// Optional `amount` query param becomes `raise:<amount>`.
 ///
+/// Read-only queries registered with [registerQuery] answer in the
+/// extension response instead of the command bus: `tree` (visible labels,
+/// rects, tap targets, SoftPulse/selection glow), `last` (outcome of the
+/// most recent UI-driver command), `whoami` (Firebase uid for seeding).
+///
 /// Not for make-change ship verification — that skill only analyzes/tests,
 /// then simulator-refresh after primary pull.
 library;
@@ -25,12 +30,36 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 
+/// Answers a read-only agent query with a JSON-encodable value.
+typedef AgentQuery = FutureOr<Object?> Function(Map<String, String> params);
+
 /// Broadcasts agent commands to interested screens / controllers.
 final class AgentCommands {
   AgentCommands._();
 
   static final StreamController<String> _controller =
       StreamController<String>.broadcast();
+
+  static final Map<String, AgentQuery> _queries = {};
+
+  /// Registers a read-only query answered in the extension response.
+  ///
+  /// Queries never reach [stream]. Re-registering [name] replaces it.
+  static void registerQuery(String name, AgentQuery handler) {
+    if (!kDebugMode) return;
+    _queries[name.toLowerCase()] = handler;
+  }
+
+  /// Runs a registered query the way the VM extension would.
+  @visibleForTesting
+  static Future<Object?> debugQuery(
+    String name, [
+    Map<String, String> params = const {},
+  ]) async {
+    final handler = _queries[name.toLowerCase()];
+    if (handler == null) throw StateError('No agent query "$name"');
+    return handler(params);
+  }
 
   /// Live command stream (debug builds only; empty otherwise).
   static Stream<String> get stream => _controller.stream;
@@ -54,6 +83,20 @@ final class AgentCommands {
           developer.ServiceExtensionResponse.invalidParams,
           'Missing cmd',
         );
+      }
+      final query = _queries[cmd];
+      if (query != null) {
+        try {
+          final result = await query(params);
+          return developer.ServiceExtensionResponse.result(
+            jsonEncode({'ok': true, 'cmd': cmd, 'result': result}),
+          );
+        } catch (e) {
+          return developer.ServiceExtensionResponse.error(
+            developer.ServiceExtensionResponse.extensionError,
+            'Query $cmd failed: $e',
+          );
+        }
       }
       final amountRaw = (params['amount'] ?? '').trim();
       if (amountRaw.isNotEmpty &&
