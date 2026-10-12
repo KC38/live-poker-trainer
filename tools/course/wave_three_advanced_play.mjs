@@ -1178,7 +1178,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-04-01-explain", 1,
                 "Polar: nuts or air. Merged: many medium-strong hands. Size accordingly.",
-                {objectives: ["Recognize polarized sizing"]}),
+                {
+                  objectives: ["Recognize polarized sizing"],
+                  // LPT-262
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "POLAR", kind: "soft_pulse"},
+                      {press: 2, target: "MERGED", kind: "soft_pulse"},
+                      {press: 3, target: "SIZE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-04-01-guided", order: 2, stage: "guided",
                 prompt: "River overbet usually wants which shape?",
@@ -1190,6 +1201,8 @@ export function buildSectionSix() {
                   choice("merged", "Merged", "clear_mistake",
                     "Thin value prefers smaller.", {betterChoiceId: "polar"})
                 ],
+                // LPT-262
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "polar", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-06-04-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1205,6 +1218,14 @@ export function buildSectionSix() {
                   choice("check", "Check", "questionable",
                     "Misses value.", {action: "CHECK"})
                 ],
+                // LPT-262
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "mid", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-04-01-unguided", order: 4, stage: "scaffolded",
@@ -1217,6 +1238,8 @@ export function buildSectionSix() {
                   choice("ok", "Any size", "clear_mistake",
                     "Sizes communicate.", {betterChoiceId: "mismatch"})
                 ],
+                // LPT-262
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "mismatch", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1229,6 +1252,8 @@ export function buildSectionSix() {
                   choice("only-nuts", "Only nuts", "clear_mistake",
                     "Too polar.", {betterChoiceId: "thin"})
                 ],
+                // LPT-262
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "thin", kind: "none"}]},
               }),
             ],
           }),

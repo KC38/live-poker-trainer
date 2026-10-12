@@ -430,6 +430,14 @@ const _lessons = <String, List<String>>{
     'act-05-09-02-cp-tell',
     'act-05-09-02-cp-stop',
   ],
+  // LPT-262
+  'lesson-06-04-01-polar-merged': [
+    'act-06-04-01-explain',
+    'act-06-04-01-guided',
+    'act-06-04-01-scaffolded',
+    'act-06-04-01-unguided',
+    'act-06-04-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -3155,6 +3163,66 @@ void main() {
       expect(act('act-05-09-02-cp-stop').teachSpec!['deal'], {'mode': 'none'});
       expect(
         act('act-05-09-02-cp-stop').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Choose polarized or merged betting (LPT-262)', () {
+    test('explain SoftPulse walks POLAR → MERGED → SIZE', () {
+      expect(
+        _list(
+          act('act-06-04-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['POLAR', 'MERGED', 'SIZE'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-06-04-01-guided'), 'cues').single['target'],
+        'polar',
+      );
+      expect(act('act-06-04-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-04-01-scaffolded'), 'cues').single['target'],
+        'mid',
+      );
+      expect(
+        act('act-06-04-01-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', 'Td'],
+      );
+      expect(
+        act('act-06-04-01-scaffolded')
+            .teachSpec!['deal']['fixedCards']['board'],
+        ['Qc', 'Ts', '3h', '2d', '7c'],
+      );
+      expect(
+        _list(act('act-06-04-01-unguided'), 'cues').single['target'],
+        'mismatch',
+      );
+      expect(act('act-06-04-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-04-01-checkpoint'), 'cues').single['target'],
+        'thin',
+      );
+      expect(
+        _list(
+          act('act-06-04-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-04-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-04-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-04-01-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });
