@@ -23146,7 +23146,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 lag observe unguided taps Keep sampling on felt', (tester) async {
+  testWidgets('s6 lag observe unguided SoftPulse Keep sampling — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-06-12-01-unguided',
       order: 4,
@@ -23178,6 +23180,28 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('One wide open — tap Keep sampling.'),
+      findsNothing,
+    );
+    expect(find.text('Keep sampling'), findsOneWidget);
+    // LPT-493: guideRegion → one gold SoftPulse (Keep sampling), not Label now.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Keep sampling'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Label now'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('Keep sampling'));
