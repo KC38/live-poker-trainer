@@ -64,6 +64,9 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Deep multiway — pick the better speculative hand.',
     'act-03-07-01-checkpoint' =>
       'Seat enters most pots — pick what you note.',
+    // Patch the common leaks checkpoint densified ask (LPT-382) — same path.
+    'act-03-08-01-checkpoint' =>
+      'Two seats, different frequencies — pick how often each seat enters.',
     _ => null,
   };
 }

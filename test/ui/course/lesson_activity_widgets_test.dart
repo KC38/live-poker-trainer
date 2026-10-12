@@ -14504,9 +14504,29 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-382: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('Two seats, different frequencies — note how often each seat enters.'),
+      lessonFrameSpeech(activity),
+      'Two seats, different frequencies — tap how often each seat enters.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text(
+        'Two seats, different frequencies — pick how often each seat enters.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Two seats, different frequencies — note how often each seat enters.',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text(
+        'Seat A raises often; Seat B almost never enters. Best notes?',
+      ),
+      findsNothing,
     );
     expect(find.text('Note freqs'), findsOneWidget);
     expect(find.text('A high · B low'), findsOneWidget);
