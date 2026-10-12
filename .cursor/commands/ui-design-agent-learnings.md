@@ -116,7 +116,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (LPT-60). Hint must stay off whenever `showTargetCue` is true (LPT-63);
   judge that by greyed chrome + unchanged bubble — `agent_tap tap Hint` still
   returns ok on a disabled control. Call `notifyFeltDealReady(true)` before
-  asserting `showTargetCue` in controller unit tests.
+  asserting `showTargetCue` in controller unit tests. Blinds scaffolded
+  SoftPulse paints only after Hint — do not auto-unlock `showTargetCue` for
+  those ids or Hint stays dead with no gold (LPT-73
+  `lessonFrameBlindsSoftPulseWaitsForHint`); keep Best five kicker SoftPulse
+  on by default. When the cued BB puck is not posted yet, SoftPulse must
+  fall back to the seat ring. Never judge Hint SoftPulse at zero hearts —
+  `_heartsGateActive` disables Hint unless Practice
+  (`allowZeroHeartsPractice`); earn a heart or use Practice first.
 - Prefer card `agent_tap` needles as Semantics display (`A♣`), not ASCII
   codes like `Ac` — short codes can miss the card or open Hearts.
 - Prefer a second open of the same lesson when judging card randomization —
@@ -246,7 +253,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-12: LPT-72 quiet multi-suit Hint reopen — do not tie
-  `remainingPressCount` to SoftPulse/`showGuidance`. LPT-71 Hint after Oops;
-  undraft before merge; do not delete remote until merged. LPT-70 CONTINUE →
-  Home; ManagePullRequest `skip_branch_prefix_check` for `fix/LPT-*`.
+- 2026-10-12: LPT-73 blinds scaffolded Hint/SoftPulse deadlock —
+  `lessonFrameBlindsSoftPulseWaitsForHint`; seat SoftPulse when BB puck
+  absent; validate Hint only with lives > 0 (or Practice). LPT-72 quiet
+  multi-suit Hint reopen — do not tie `remainingPressCount` to SoftPulse/
+  `showGuidance`. LPT-71 Hint after Oops; undraft before merge; do not
+  delete remote until merged. LPT-70 CONTINUE → Home; ManagePullRequest
+  `skip_branch_prefix_check` for `fix/LPT-*`.
