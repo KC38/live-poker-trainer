@@ -985,7 +985,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-01-01-explain", 1,
                 "Range advantage: more strong hands overall. Nut advantage: more of the nuts.",
-                {objectives: ["Identify range advantage"]}),
+                {
+                  objectives: ["Identify range advantage"],
+                  // LPT-252
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "RANGE", kind: "soft_pulse"},
+                      {press: 2, target: "NUT", kind: "soft_pulse"},
+                      {press: 3, target: "ADVANTAGE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-01-01-guided", order: 2, stage: "guided",
                 prompt: "PFR on A-high dry flop. Who often has range advantage?",
@@ -997,6 +1008,8 @@ export function buildSectionSix() {
                   choice("caller", "Flatting BB", "clear_mistake",
                     "Usually not.", {betterChoiceId: "pfr"})
                 ],
+                // LPT-252
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pfr", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-01-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1009,6 +1022,11 @@ export function buildSectionSix() {
                   choice("pfr-always", "PFR always", "clear_mistake",
                     "Not on paired boards.", {betterChoiceId: "caller-nuts"})
                 ],
+                // LPT-252
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "caller-nuts", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-06-01-01-unguided", order: 4, stage: "scaffolded",
@@ -1023,6 +1041,11 @@ export function buildSectionSix() {
                   choice("jam", "Jam", "clear_mistake",
                     "Too much.", {action: "RAISE", amountBb: 200, betterChoiceId: "cbet"})
                 ],
+                // LPT-252
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["Kc", "7s", "2d"]}},
+                  cues: [{press: 1, target: "cbet", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1035,6 +1058,8 @@ export function buildSectionSix() {
                   choice("random", "Bet any two", "clear_mistake",
                     "Still need a plan.", {betterChoiceId: "press"})
                 ],
+                // LPT-252
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "press", kind: "none"}]},
               }),
             ],
           }),
