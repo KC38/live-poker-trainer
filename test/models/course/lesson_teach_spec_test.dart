@@ -135,6 +135,13 @@ const _lessons = <String, List<String>>{
     'act-02-06-01-unguided-protect',
     'act-02-06-01-checkpoint-oot',
   ],
+  // LPT-135
+  'lesson-02-07-01-baseline-full-hand': [
+    'act-02-07-01-guided-ep',
+    'act-02-07-01-scaffolded-vs',
+    'act-02-07-01-unguided-lab',
+    'act-02-07-01-checkpoint-habit',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -833,6 +840,31 @@ void main() {
         'chip-on-cards',
       );
       final cp = act('act-02-06-01-checkpoint-oot');
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+    });
+  });
+
+  group('Full-ring baseline hand (LPT-135)', () {
+    test('class deals + SoftPulse; habit checkpoint quiet', () {
+      expect(
+        act('act-02-07-01-guided-ep').teachSpec!['deal']['handFamily'],
+        'broadway',
+      );
+      expect(
+        _list(act('act-02-07-01-guided-ep'), 'cues').single['target'],
+        'open-ajs',
+      );
+      expect(
+        _list(act('act-02-07-01-scaffolded-vs'), 'cues').single['target'],
+        'call-22',
+      );
+      expect(
+        _list(act('act-02-07-01-unguided-lab'), 'cues').single['target'],
+        'lab-3bet',
+      );
+      final cp = act('act-02-07-01-checkpoint-habit');
+      expect(cp.teachSpec!['deal'], {'mode': 'none'});
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
     });

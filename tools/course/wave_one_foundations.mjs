@@ -2425,6 +2425,11 @@ export function buildSectionTwo() {
                     "Raise or fold — do not limp.",
                     {action: "CALL", betterChoiceId: "open-ajs"}),
                 ],
+                // LPT-135: teachSpec authored
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "broadway", suitFamily: "suited"},
+                  cues: [{press: 1, target: "open-ajs", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-02-07-01-scaffolded-vs", order: 3, stage: "scaffolded",
@@ -2441,6 +2446,11 @@ export function buildSectionTwo() {
                     "Sometimes as a bluff later — not the baseline yet.",
                     {action: "RAISE", amountBb: 9}),
                 ],
+                // LPT-135: SoftPulse cues + deal
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "pair"},
+                  cues: [{press: 1, target: "call-22", kind: "soft_pulse"}],
+                },
               }),
               handLabAct({
                 id: "act-02-07-01-unguided-lab", order: 4, stage: "scaffolded",
@@ -2493,6 +2503,11 @@ export function buildSectionTwo() {
                     ],
                   }],
                 },
+                // LPT-135: checkpoint quiet
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "broadway", suitFamily: "offsuit"},
+                  cues: [{press: 1, target: "lab-3bet", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-07-01-checkpoint-habit", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2508,6 +2523,8 @@ export function buildSectionTwo() {
                     "clear_mistake",
                     "Never expose live cards.", {betterChoiceId: "cover-wait"}),
                 ],
+                // LPT-135: wave synced
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cover-wait", kind: "none"}]},
               }),
             ],
           }),

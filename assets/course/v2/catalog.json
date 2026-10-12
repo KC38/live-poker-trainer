@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "cda1191d4f6245b434ac22bd83ba10ec089ed3b1b27d0b0ea513a897126d9abe",
+  "contentChecksum": "7be1ccd205ccde43121d8314f0b82de8166d7c92afeb898a34d6d33df7a538f9",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -5128,7 +5128,21 @@
                       "kind": "hint",
                       "text": "Suited broadway opens from early seats."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-ajs",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-07-01-scaffolded-vs",
@@ -5166,7 +5180,20 @@
                       "action": "RAISE",
                       "amountBb": 9
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-22",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-07-01-unguided-lab",
@@ -5206,6 +5233,20 @@
                       "amountBb": 9
                     }
                   ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "lab-3bet",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
                   "handLabSpecId": "lab-02-07-01-full-ring-btn"
                 },
                 {
@@ -5241,7 +5282,19 @@
                       "accessibilityText": "Leave cards bare so the table can see you are folding"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cover-wait",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
