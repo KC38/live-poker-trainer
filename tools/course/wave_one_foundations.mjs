@@ -2025,6 +2025,11 @@ export function buildSectionTwo() {
                     "Limping junk builds multiway pots you do not want.",
                     {action: "CALL"}),
                 ],
+                // LPT-122: teachSpec authored
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "trash", suitFamily: "offsuit"},
+                  cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-02-03-01-scaffolded-qq", order: 3, stage: "scaffolded",
@@ -2039,6 +2044,11 @@ export function buildSectionTwo() {
                   choice("fold-qq", "Fold", "clear_mistake",
                     "Never fold queens here.", {action: "FOLD", betterChoiceId: "open-qq"}),
                 ],
+                // LPT-122: SoftPulse cues + deal
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "pair"},
+                  cues: [{press: 1, target: "open-qq", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-02-03-01-unguided-btn", order: 4, stage: "scaffolded",
@@ -2054,6 +2064,11 @@ export function buildSectionTwo() {
                     "Prefer a raise on the button.",
                     {action: "CALL", betterChoiceId: "open-k9s"}),
                 ],
+                // LPT-122: checkpoint quiet
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "high_card", suitFamily: "suited"},
+                  cues: [{press: 1, target: "open-k9s", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-02-03-01-checkpoint-hj", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2072,6 +2087,11 @@ export function buildSectionTwo() {
                     "No need to stack off preflop here.",
                     {action: "ALL_IN", betterChoiceId: "open-ato"}),
                 ],
+                // LPT-122: wave synced
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "broadway", suitFamily: "offsuit"},
+                  cues: [{press: 1, target: "open-ato", kind: "none"}],
+                },
               }),
             ],
           }),

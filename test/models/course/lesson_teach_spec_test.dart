@@ -106,6 +106,13 @@ const _lessons = <String, List<String>>{
     'act-02-02-01-unguided-sc',
     'act-02-02-01-checkpoint-trash',
   ],
+  // LPT-122
+  'lesson-02-03-01-open-fold': [
+    'act-02-03-01-guided-utg',
+    'act-02-03-01-scaffolded-qq',
+    'act-02-03-01-unguided-btn',
+    'act-02-03-01-checkpoint-hj',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -715,6 +722,35 @@ void main() {
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
       expect(cp.coachMedia.where((m) => m.kind == 'hint'), isEmpty);
+    });
+  });
+
+  group('Open or fold baseline (LPT-122)', () {
+    test('random_in_class + SoftPulse dock targets; checkpoint quiet', () {
+      expect(act('act-02-03-01-guided-utg').teachSpec!['deal'], {
+        'mode': 'random_in_class',
+        'handFamily': 'trash',
+        'suitFamily': 'offsuit',
+      });
+      expect(
+        _list(act('act-02-03-01-guided-utg'), 'cues').single['target'],
+        'fold',
+      );
+      expect(
+        _list(act('act-02-03-01-scaffolded-qq'), 'cues').single['target'],
+        'open-qq',
+      );
+      expect(
+        act('act-02-03-01-unguided-btn').teachSpec!['deal']['suitFamily'],
+        'suited',
+      );
+      expect(
+        _list(act('act-02-03-01-unguided-btn'), 'cues').single['target'],
+        'open-k9s',
+      );
+      final cp = act('act-02-03-01-checkpoint-hj');
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
     });
   });
 }
