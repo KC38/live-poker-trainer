@@ -1025,6 +1025,11 @@ export function buildSectionOne() {
                     "Nothing to raise yet — bet instead.",
                     {action: "RAISE", amountBb: 5, betterChoiceId: "bet-half"}),
                 ],
+                // LPT-98: guided bet keeps top_pair SoftPulse on bet-half
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "top_pair"},
+                  cues: [{press: 1, target: "bet-half", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-01-03-02-scaffolded-raise", order: 3, stage: "scaffolded",
@@ -1041,6 +1046,11 @@ export function buildSectionOne() {
                     "Facing a bet you raise or call — you do not 'bet'.",
                     {action: "BET", amountBb: 2.5, betterChoiceId: "raise-15"}),
                 ],
+                // LPT-98: scaffolded raise keeps top_pair SoftPulse on raise-15
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "top_pair"},
+                  cues: [{press: 1, target: "raise-15", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-01-03-02-unguided-allin", order: 4, stage: "scaffolded",
@@ -1057,6 +1067,11 @@ export function buildSectionOne() {
                     "All-in for less is legal and creates a side pot later.",
                     {action: "FOLD", betterChoiceId: "shove-12"}),
                 ],
+                // LPT-98: unguided all-in keeps top_pair SoftPulse on shove-12
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "top_pair"},
+                  cues: [{press: 1, target: "shove-12", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-01-03-02-checkpoint-names", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1077,6 +1092,12 @@ export function buildSectionOne() {
                     "Call matches; it does not open.",
                     {action: "CALL", betterChoiceId: "named-bet"}),
                 ],
+                // LPT-98: checkpoint-names air + named-bet kind none; no
+                // pressHints
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "air"},
+                  cues: [{press: 1, target: "named-bet", kind: "none"}],
+                },
               }),
             ],
           }),

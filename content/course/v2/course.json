@@ -2218,7 +2218,20 @@
                       "kind": "hint",
                       "text": "Nobody put in a bet yet \u2014 betting is open."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "top_pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bet-half",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-02-scaffolded-raise",
@@ -2270,7 +2283,20 @@
                       "action": "BET",
                       "amountBb": 2.5
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "top_pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "raise-15",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-02-unguided-allin",
@@ -2321,7 +2347,20 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "top_pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "shove-12",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-02-checkpoint-names",
@@ -2376,7 +2415,20 @@
                       "action": "CALL"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "air"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "named-bet",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

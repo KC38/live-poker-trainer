@@ -31,7 +31,8 @@ Pilot: `lesson-01-01-01-your-two-cards`. Lessons that follow it on every
 interactive step: `lesson-01-01-02-suits-and-ranks` (LPT-81),
 `lesson-01-01-03-blinds-and-button` (LPT-85), `lesson-01-02-01-hand-ranks`
 (LPT-88), `lesson-01-02-02-best-five-kickers` (LPT-91),
-`lesson-01-03-01-fold-check-call` (LPT-94). Missing teachSpec on interactive
+`lesson-01-03-01-fold-check-call` (LPT-94),
+`lesson-01-03-02-bet-raise-allin` (LPT-98). Missing teachSpec on interactive
 steps is a content gap the agent files.
 
 ## Jira routing
