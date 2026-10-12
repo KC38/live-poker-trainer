@@ -438,19 +438,21 @@ beat = float(state.get("heartbeat_epoch") or state.get("claimed_epoch") or 0)
 if (now - beat) <= stall:
     raise SystemExit(1)
 
-# Unit tests set this to exercise heartbeat age without host flutter/tmux.
-if os.environ.get("UI_AGENT_STALL_HEARTBEAT_ONLY") == "1":
-    raise SystemExit(0)
-
 # Machine SDK (and CLI) append thinking/tool_call lines to the run log while
 # skipping sim_lock heartbeats. A fresh mtime means the agent is still live —
 # false stall exit 13 killed mid-flutter-test on 20261012-123827.
+# Checked before HEARTBEAT_ONLY so unit tests can cover it without host
+# flutter/tmux probes masking the age check.
 if run_log is not None and run_log.is_file():
     try:
         if (now - run_log.stat().st_mtime) <= stall:
             raise SystemExit(1)
     except OSError:
         pass
+
+# Unit tests set this to exercise heartbeat age without host flutter/tmux.
+if os.environ.get("UI_AGENT_STALL_HEARTBEAT_ONLY") == "1":
+    raise SystemExit(0)
 
 def _ps() -> str:
     try:
@@ -903,13 +905,14 @@ for row in rows:
     result = row.get("result")
     stamp = row.get("stamp") or ""
 
-    # Fill empty stamp rows from coverage in the run window (Z timestamps).
-    # Pad the end so a ticket closed after SIGTERM + reconcile still matches.
+    # Fill empty / false-stall stamp rows from coverage in the run window.
+    # Pad the end so a ticket closed after SIGTERM / stall-kill + reconcile
+    # still matches (LPT-134 exit 143, LPT-240 exit 13 then closed).
     if (
         stamp
         and stamp != "reconciled"
-        and (not ticket or not result)
-        and result not in ("usage-limit", "stalled", "sim-not-ready")
+        and result not in ("usage-limit", "sim-not-ready")
+        and (not ticket or not result or result == "stalled")
     ):
         start_ep = stamp_epoch(stamp)
         seconds = row.get("seconds")
@@ -926,6 +929,7 @@ for row in rows:
                 if cov.get("result") in (None, "sim-not-ready", "stalled"):
                     continue
                 if start_ep - 5 <= cov_ts <= end_ep:
+                    was_stalled = result == "stalled"
                     ticket = cov.get("ticket")
                     result = cov.get("result")
                     row["ticket"] = ticket
@@ -936,6 +940,8 @@ for row in rows:
                         parts.append(f"surface:{surface}")
                     row["tail"] = " ".join(parts)
                     row["tail_repaired"] = True
+                    if was_stalled:
+                        row["stall_upgraded"] = True
                     changed += 1
                     tail = row["tail"]
                     break

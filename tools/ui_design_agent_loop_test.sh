@@ -193,11 +193,15 @@ fresh_run_log="$LOG_DIR/run-stall-fresh.log"
 : >"$fresh_run_log"
 lock_heartbeat_stalled "$fresh_run_log" \
   && fail "recent run log mtime must count as alive when heartbeat is stale"
-# Ancient run log does not mask a dead agent.
+# Ancient run log does not mask a dead agent (HEARTBEAT_ONLY skips host probes
+# that would otherwise look alive on a busy mini).
 touch -t 202601010101.00 "$fresh_run_log" 2>/dev/null \
   || touch -d '2026-01-01 01:01:00' "$fresh_run_log"
+UI_AGENT_STALL_HEARTBEAT_ONLY=1
+export UI_AGENT_STALL_HEARTBEAT_ONLY
 lock_heartbeat_stalled "$fresh_run_log" \
   || fail "stale heartbeat + ancient run log should still be stalled"
+unset UI_AGENT_STALL_HEARTBEAT_ONLY
 python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 
 # configure_agent_credentials is a no-op without CURSOR_API_KEY; with a key
@@ -512,6 +516,21 @@ printf '%s\n' \
 repair_health_tails
 grep -q 'coverage:closed ticket:LPT-134 surface:hand-families' "$HEALTH_FILE" \
   || fail "repair should match late coverage after kill: $(cat "$HEALTH_FILE")"
+
+# False stall (exit 13) then ticket closed → upgrade stalled stamp from coverage.
+printf '%s\n' \
+  '{"at":"2026-10-12T13:00:15+05:30","stamp":"20261012-123827","exit":13,"seconds":1308,"ticket":null,"result":"stalled","tail":"coverage:stalled surface:none"}' \
+  >"$HEALTH_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-12T13:05:09+05:30","sha":"e","surface":"lesson-runner:read-the-table-first","result":"closed","ticket":"LPT-240","leads":[],"learnings":"pending"}' \
+  >"$COVERAGE_FILE"
+repair_health_tails
+grep -q 'coverage:closed ticket:LPT-240 surface:lesson-runner:read-the-table-first' "$HEALTH_FILE" \
+  || fail "repair should upgrade stalled stamp from later closed coverage: $(cat "$HEALTH_FILE")"
+grep -q '"stall_upgraded": true' "$HEALTH_FILE" \
+  || fail "upgraded stall row should set stall_upgraded: $(cat "$HEALTH_FILE")"
+grep -q '"result": "stalled"' "$HEALTH_FILE" \
+  && fail "upgraded stall must not keep result=stalled: $(cat "$HEALTH_FILE")"
 
 # Usage-limit detection + sleep length from reset date in the run log.
 usage_log="$LOG_DIR/run-usage-limit.log"
