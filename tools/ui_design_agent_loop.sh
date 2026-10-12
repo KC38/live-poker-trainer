@@ -2095,11 +2095,18 @@ PY
 # ensure after a short delay so we do not sit idle until LaunchAgent's
 # StartInterval (300s). Override in unit tests. Use `kill`/`uninstall` to
 # leave the loop down.
+#
+# Must survive the tmux pane exiting after `run-loop` returns (`…; exit`).
+# A plain `( sleep; ensure ) &` stayed in that process group and died on
+# SIGHUP, leaving the mini down until LaunchAgent or a manual ensure
+# (2026-10-13 soft-stop after LPT-513).
 schedule_ensure_after_soft_stop() {
-  (
-    sleep 2
-    bash "$SCRIPT" ensure
-  ) >/dev/null 2>&1 &
+  mkdir -p "$LOG_DIR"
+  local ensure_log="$LOG_DIR/soft-stop-ensure.log"
+  # nohup + disown: detach from the dying run-loop / tmux pane.
+  nohup bash -c 'sleep 2; exec bash "$1" ensure' _ "$SCRIPT" \
+    >>"$ensure_log" 2>&1 &
+  disown $! 2>/dev/null || true
 }
 
 run_loop() {
