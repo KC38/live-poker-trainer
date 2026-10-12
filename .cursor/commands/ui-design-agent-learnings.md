@@ -300,6 +300,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   footer. A local `_coachText` string alone leaves framed speech on catalog.
 
 - Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
+- Prefer `rg '<<<<<<<|=======|>>>>>>>'` on conflicted files after a merge resolution **before** `git commit` — an earlier StrReplace can leave markers in HEAD while the working tree looks clean until the next edit (LPT-520).
 
 ## Ops (simulator, CLI, Jira)
 
