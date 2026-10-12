@@ -1356,7 +1356,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-04-01-explain", 1,
                 "Size is language. Value looks like value; pressure looks like pressure.",
-                {objectives: ["Match size to value versus polar pressure"]}),
+                {
+                  objectives: ["Match size to value versus polar pressure"],
+                  // LPT-177
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "VALUE", kind: "soft_pulse"},
+                      {press: 2, target: "PRESSURE", kind: "soft_pulse"},
+                      {press: 3, target: "SIZE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-04-04-01-guided", order: 2, stage: "guided",
                 prompt: "Dry board, top pair, heads-up. Choose a value size into 20.",
@@ -1372,6 +1383,11 @@ export function buildSectionFour() {
                   choice("one-chip", "Bet 1", "clear_mistake",
                     "Does not look like value.", {action: "BET", amountBb: 0.5, betterChoiceId: "half"})
                 ],
+                // LPT-177
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]}},
+                  cues: [{press: 1, target: "half", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-04-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1386,6 +1402,14 @@ export function buildSectionFour() {
                   choice("check-bluff", "Check and hope", "questionable",
                     "Giving up is fine; tiny bets are worse.", {action: "CHECK"})
                 ],
+                // LPT-177
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["9h", "8h"], board: ["Kh", "7h", "2c", "3d", "As"]},
+                  },
+                  cues: [{press: 1, target: "big", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-04-01-unguided", order: 4, stage: "scaffolded",
@@ -1400,6 +1424,8 @@ export function buildSectionFour() {
                   choice("random-size", "Even 1-chip bets are fine", "clear_mistake",
                     "Nonsensical sizes still fail.", {betterChoiceId: "soft"})
                 ],
+                // LPT-177
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "soft", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-04-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1416,6 +1442,11 @@ export function buildSectionFour() {
                     "A real value size, not the worst.",
                     {action: "BET", amountBb: 10, betterChoiceId: "bad-1"})
                 ],
+                // LPT-177
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Ad"], board: ["Kc", "9s", "3h"]}},
+                  cues: [{press: 1, target: "bad-1", kind: "none"}],
+                },
               }),
             ],
           }),

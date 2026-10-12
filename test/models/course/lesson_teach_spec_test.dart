@@ -246,6 +246,14 @@ const _lessons = <String, List<String>>{
     'act-04-03-01-unguided',
     'act-04-03-01-checkpoint',
   ],
+  // LPT-177
+  'lesson-04-04-01-sizing-communicates': [
+    'act-04-04-01-explain',
+    'act-04-04-01-guided',
+    'act-04-04-01-scaffolded',
+    'act-04-04-01-unguided',
+    'act-04-04-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1454,6 +1462,45 @@ void main() {
       expect(cp.teachSpec!['deal'], {'mode': 'none'});
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'branches');
+    });
+  });
+
+  group('Size with a message (LPT-177)', () {
+    test('explain SoftPulse walks VALUE → PRESSURE → SIZE', () {
+      expect(
+        _list(
+          act('act-04-04-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['VALUE', 'PRESSURE', 'SIZE'],
+      );
+    });
+
+    test('sizing spots author fixed deals; checkpoint quiet', () {
+      expect(
+        _list(act('act-04-04-01-guided'), 'cues').single['target'],
+        'half',
+      );
+      // Real missed flush draw (LPT-398), never Kd 7c 2s 3d Ah.
+      expect(act('act-04-04-01-scaffolded').teachSpec!['deal']['fixedCards'], {
+        'hero': ['9h', '8h'],
+        'board': ['Kh', '7h', '2c', '3d', 'As'],
+      });
+      expect(
+        _list(act('act-04-04-01-scaffolded'), 'cues').single['target'],
+        'big',
+      );
+      expect(act('act-04-04-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-04-01-unguided'), 'cues').single['target'],
+        'soft',
+      );
+      final cp = act('act-04-04-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.teachSpec!['deal']['fixedCards']['hero'], ['Ah', 'Ad']);
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'bad-1');
     });
   });
 }

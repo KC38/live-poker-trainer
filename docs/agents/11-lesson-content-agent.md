@@ -54,7 +54,8 @@ interactive step: `lesson-01-01-02-suits-and-ranks` (LPT-81),
 `lesson-03-08-02-section-three-jump-test` (LPT-165),
 `lesson-04-01-01-ranges-not-hands` (LPT-167),
 `lesson-04-02-01-threebet-squeeze` (LPT-170),
-`lesson-04-03-01-continuation-plans` (LPT-174). Missing teachSpec on
+`lesson-04-03-01-continuation-plans` (LPT-174),
+`lesson-04-04-01-sizing-communicates` (LPT-177). Missing teachSpec on
 interactive steps is a content gap the agent files.
 
 ## Jira routing
