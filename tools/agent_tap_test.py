@@ -26,11 +26,15 @@ agent_tap = _load_agent_tap()
 class AgentTapLogTest(unittest.TestCase):
     """Log selection defaults to the iPhone 13 mini session."""
 
-    def test_default_log_is_the_mini_session(self) -> None:
+    def test_default_log_follows_active_pointer(self) -> None:
         args = agent_tap.build_parser().parse_args(["tap", "--text", "Continue"])
-        self.assertEqual(args.log, agent_tap.DEFAULT_LOG)
+        self.assertIsNone(args.log)
         self.assertEqual(
             agent_tap.DEFAULT_LOG,
+            Path("/tmp/flutter-iphone-13-mini.active.log"),
+        )
+        self.assertEqual(
+            agent_tap.PRIMARY_LOG,
             Path("/tmp/flutter-live-poker-trainer.run.log"),
         )
 
@@ -40,6 +44,12 @@ class AgentTapLogTest(unittest.TestCase):
             ["tap", "--log", str(worktree), "--text", "Fold"]
         )
         self.assertEqual(args.log, worktree)
+
+    def test_resolve_log_prefers_explicit_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            worktree = Path(tmp) / "flutter-LPT-12.log"
+            worktree.write_text("vm\n", encoding="utf-8")
+            self.assertEqual(agent_tap.resolve_log(worktree), worktree)
 
     def test_vm_base_uses_the_log_it_is_given(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

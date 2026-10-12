@@ -132,9 +132,16 @@ prepare_log() {
   : >"$LOG"
 }
 
+# So agent_tap / agent_seed find this worktree log without an explicit --log.
+mark_active_log() {
+  [[ "$DEVICE" == "$MINI" ]] || return 0
+  python3 "$ROOT/tools/flutter_active_log.py" set "$LOG" >/dev/null
+}
+
 # New session so agent shells that kill their process group on exit (Cursor
 # tool calls) do not take the app session down with them.
 start_flutter() {
+  mark_active_log
   FLUTTER_PID="$(
     python3 - "$LOG" "$CHECKOUT" "$FLUTTER_BIN" run -d "$DEVICE" \
       --pid-file "$PIDFILE" "$@" <<'PY'
