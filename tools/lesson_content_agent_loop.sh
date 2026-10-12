@@ -89,10 +89,10 @@ sdk_model_id() {
 prompt() {
   local primary_dir pending=""
   primary_dir="$(primary)"
-  if [[ -s "$STATE_DIR/content-agent-learnings-pending.md" ]]; then
-    pending=" Pending learnings in $STATE_DIR/content-agent-learnings-pending.md."
+  if [[ -s "$STATE_DIR/content-agent-learnings-pending.md" ]] && grep -q '^- ' "$STATE_DIR/content-agent-learnings-pending.md" 2>/dev/null; then
+    pending=" Pending learnings in $STATE_DIR/content-agent-learnings-pending.md — run tools/fold_agent_learnings.sh content, distill into lesson-content-agent-learnings.md + content-agent-run-memory.md, and ship chore/content-agent-learnings-YYYYMMDD before or after the audit."
   fi
-  printf '%s' "READY: lesson content agent (audit + file only). No simulator — do not claim sim_lock, refresh-simulator, agent_tap, or agent_seed. PRIMARY: ${primary_dir}. Read .cursor/commands/lesson-content-agent.md and lesson-content-agent-learnings.md and follow them exactly. Every run: node tools/course/scan_content_gaps.mjs --counts then sync open (catalog) parents from --gap … --markdown (do not rediscover structural gaps lesson-by-lesson). Prefer catalog-bundled tickets; never implement. Default Jira labels content,grokbot,lesson; use content,ui-agent,lesson only when Chrome cannot validate. Use python3 tools/jira.py only.${pending} Unattended: do not ask questions."
+  printf '%s' "READY: lesson content agent (audit + file only). No simulator — do not claim sim_lock, refresh-simulator, agent_tap, or agent_seed. PRIMARY: ${primary_dir}. Read .cursor/commands/lesson-content-agent.md, lesson-content-agent-learnings.md, and grep docs/agents/content-agent-run-memory.md for the target act-/lesson- id. Every run: node tools/course/scan_content_gaps.mjs --counts then sync open (catalog) parents from --gap … --markdown. Store durable loop learnings in git (learnings + run-memory chore PR) — never leave them only in the home pending file. Prefer catalog-bundled tickets; never implement product fixes. Default Jira labels content,grokbot,lesson; use content,ui-agent,lesson only when Chrome cannot validate. Use python3 tools/jira.py only.${pending} Unattended: do not ask questions."
 }
 
 ensure_sdk_deps() {

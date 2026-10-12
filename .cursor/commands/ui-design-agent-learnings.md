@@ -19,10 +19,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 6. Ship the edit in the ticket PR (write it before step 8's merge). After
    the merge, or on a run without a product PR (`SIM_NOT_READY`, `clean`,
    `JIRA_UNAVAILABLE`), append to
-   `~/.live-poker-trainer/ui-agent-learnings-pending.md` instead — the
-   next run's step 6 folds it into its ticket PR. A learnings-only chore
-   PR (`chore/ui-agent-learnings-<YYYYMMDD>`) only when pending holds 5+
-   bullets and this run has no ticket PR.
+   `~/.live-poker-trainer/ui-agent-learnings-pending.md` — the **next**
+   run's step 6 must fold it (or run `tools/fold_agent_learnings.sh ui`
+   and ship `chore/ui-agent-learnings-<YYYYMMDD>`). Do not leave pending
+   unfolder across many loops. Overflow past the 40-bullet cap goes to
+   `docs/agents/ui-agent-run-memory.md`.
 7. Never log secrets, tokens, UDIDs, or full crash dumps here.
 
 ## Never again
