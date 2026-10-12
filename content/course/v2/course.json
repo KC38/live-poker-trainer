@@ -14008,6 +14008,28 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "Maniac \u2192 Entry \u2192 Aggro."
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MANIAC",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "ENTRY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "AGGRO",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -14050,7 +14072,19 @@
                   ],
                   "playerTypeRefs": [
                     "maniac"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pt-maniac",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-08-02-unguided",
@@ -14092,7 +14126,19 @@
                   ],
                   "playerTypeRefs": [
                     "maniac"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "maniac2",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-08-02-checkpoint",
@@ -14136,7 +14182,19 @@
                     "nit",
                     "maniac"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "three",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
