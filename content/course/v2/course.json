@@ -1475,6 +1475,39 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "Exactly five cards \u2014 leave the extras out."
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_pair",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "hero_kicker",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "board_pair",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_second_kicker",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 5,
+                        "target": "board_top_kicker",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -1530,7 +1563,40 @@
                       "kind": "hint",
                       "text": "Use your pair plus the strongest kickers."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_pair",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "board_pair",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "hero_kicker",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_top_kicker",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 5,
+                        "target": "board_second_kicker",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-02-scaffolded-kicker",
@@ -1578,7 +1644,27 @@
                         "betterChoiceId": "you-kicker"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair",
+                      "variants": [
+                        {
+                          "id": "var-villain-weaker-kicker",
+                          "handFamily": "pair",
+                          "label": "Villain plays the same board pair with a weaker kicker"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_holes",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-02-unguided-board",
@@ -1626,7 +1712,28 @@
                         "betterChoiceId": "chop-broadway"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "straight_flush",
+                      "suitFamily": "monotone",
+                      "variants": [
+                        {
+                          "id": "var-hero-small-pair",
+                          "handFamily": "pair",
+                          "label": "Hero small pocket pair under the board"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "board",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-02-checkpoint-build",
@@ -1676,7 +1783,21 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "full_house",
+                      "suitFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_holes",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

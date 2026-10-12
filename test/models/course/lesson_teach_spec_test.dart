@@ -9,6 +9,7 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 
@@ -29,6 +30,14 @@ const _lessons = <String, List<String>>{
     'act-01-02-01-scaffolded-spot',
     'act-01-02-01-unguided-compare',
     'act-01-02-01-checkpoint-winner',
+  ],
+  // LPT-91
+  'lesson-01-02-02-best-five-kickers': [
+    'act-01-02-02-explain-five',
+    'act-01-02-02-guided-seven',
+    'act-01-02-02-scaffolded-kicker',
+    'act-01-02-02-unguided-board',
+    'act-01-02-02-checkpoint-build',
   ],
 };
 
@@ -187,6 +196,83 @@ void main() {
           expect(deal.correctOrder, ['you', 'sam', 'jo']);
         }
       }
+    });
+  });
+
+  group('Best five and kickers (LPT-91)', () {
+    String rank(String code) => code.substring(0, code.length - 1);
+    List<String> targets(String id) => [
+      for (final c in _list(act(id), 'cues')) c['target'] as String,
+    ];
+
+    /// Names each card of a top-pair + kicker deal the way the cues do.
+    Map<String, String> roles(List<String> hero, List<String> board) {
+      final pairRank = rank(
+        hero.firstWhere((h) => board.any((b) => rank(b) == rank(h))),
+      );
+      final kickers = [
+        for (final b in board)
+          if (rank(b) != pairRank) b,
+      ];
+      return {
+        for (final h in hero)
+          h: rank(h) == pairRank ? 'hero_pair' : 'hero_kicker',
+        board.firstWhere((b) => rank(b) == pairRank): 'board_pair',
+        kickers[0]: 'board_top_kicker',
+        kickers[1]: 'board_second_kicker',
+      };
+    }
+
+    test('explain cues follow the dealt playOrder', () {
+      for (var seed = 0; seed < 16; seed++) {
+        final deal = dealBestFiveExplainLayout(random: Random(seed));
+        final named = roles(deal.hero, deal.board);
+        expect(
+          [for (final c in deal.playOrder) named[c]],
+          targets('act-01-02-02-explain-five'),
+          reason: '$seed ${deal.playOrder}',
+        );
+      }
+    });
+
+    test('guided seven cues follow the picker guide order', () {
+      final a = act('act-01-02-02-guided-seven');
+      expect(a.choices.first.id, 'best-pair-k');
+      for (var seed = 0; seed < 16; seed++) {
+        final spot = dealtBestFiveSpot(a, random: Random(seed))!;
+        final named = roles(spot.heroCodes, spot.boardCodes);
+        expect(
+          [for (final c in spot.choiceSets['best-pair-k']!) named[c]],
+          targets('act-01-02-02-guided-seven'),
+          reason: '$seed',
+        );
+      }
+    });
+
+    test('checkpoint deals a pocket pair into a full house', () {
+      final a = act('act-01-02-02-checkpoint-build');
+      final deal = a.teachSpec!['deal'] as Map<String, dynamic>;
+      expect(deal['handFamily'], 'full_house');
+      expect(deal['suitFamily'], 'pair');
+      for (var seed = 0; seed < 16; seed++) {
+        final spot = dealtBestFiveSpot(a, random: Random(seed))!;
+        expect(rank(spot.heroCodes[0]), rank(spot.heroCodes[1]));
+        final fh = spot.choiceSets['fh-eights']!;
+        final counts = <String, int>{};
+        for (final c in fh) {
+          counts[rank(c)] = (counts[rank(c)] ?? 0) + 1;
+        }
+        expect(counts.values.toList()..sort(), [2, 3], reason: '$fh');
+      }
+    });
+
+    test('showdown steps cue the graded region', () {
+      expect(targets('act-01-02-02-scaffolded-kicker'), ['hero_holes']);
+      expect(targets('act-01-02-02-unguided-board'), ['board']);
+      final board =
+          act('act-01-02-02-unguided-board').teachSpec!['deal'] as Map;
+      expect(board['handFamily'], 'straight_flush');
+      expect(board['suitFamily'], 'monotone');
     });
   });
 }

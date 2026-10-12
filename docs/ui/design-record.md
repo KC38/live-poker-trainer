@@ -541,7 +541,7 @@ fields live in `teachSpec` (see course schemas). Audited by
 `teachSpec` on every interactive step the same way, with deal classes that
 match what `lesson_card_deal.dart` deals (`deal.mode` `none` when the step
 deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85), Hand
-ranks (LPT-88).
+ranks (LPT-88), Best five and kickers (LPT-91).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -614,6 +614,18 @@ target the role ids `you` → `sam` → `jo` in press order, not physical seats,
 because `_shuffleShowdownSeatRoles` moves each role to a random seat and
 SoftPulse / Hint follow the role (LPT-54). The checkpoint cues are `none`,
 with no `pressHints` or Hint media.
+
+Best five and kickers `teachSpec` (LPT-91): explain and guided seven deal
+`random_in_class` / `pair` (`_dealTopPairBestKicker`, fresh pair and kicker
+ranks). Explain cues follow `BestFiveExplainDeal.playOrder` (hero pair, hero
+kicker, board pair, second then top board kicker); guided seven cues follow
+the picker's guide order, the `best-pair-k` set (hero pair, board pair, hero
+kicker, top then second board kicker). Scaffolded kicker deals a board
+`pair` with a same-pair, weaker-kicker villain `variant` and cues
+`hero_holes`; unguided board deals a `monotone` `straight_flush` board with
+a small hero pair `variant` and cues `board`; the checkpoint deals
+`full_house` from a pocket `pair` (`_dealTripsOverTwoPairs`) with a `none`
+cue and no `pressHints` or Hint media.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
