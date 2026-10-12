@@ -142,6 +142,14 @@ const _lessons = <String, List<String>>{
     'act-02-07-01-unguided-lab',
     'act-02-07-01-checkpoint-habit',
   ],
+  // LPT-137
+  'lesson-02-07-02-section-two-jump': [
+    'act-02-07-02-jump-pos',
+    'act-02-07-02-jump-family',
+    'act-02-07-02-jump-open',
+    'act-02-07-02-jump-vs',
+    'act-02-07-02-jump-stack',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -867,6 +875,45 @@ void main() {
       expect(cp.teachSpec!['deal'], {'mode': 'none'});
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+    });
+  });
+
+  group('Baseline jump check (LPT-137)', () {
+    test('all jump_test steps author deal + kind none cues; no pressHints', () {
+      const ids = [
+        'act-02-07-02-jump-pos',
+        'act-02-07-02-jump-family',
+        'act-02-07-02-jump-open',
+        'act-02-07-02-jump-vs',
+        'act-02-07-02-jump-stack',
+      ];
+      for (final id in ids) {
+        final a = act(id);
+        expect(a.assessmentRole, AssessmentRole.jumpTest, reason: id);
+        expect(a.teachSpec!['deal'], isA<Map<String, dynamic>>(), reason: id);
+        expect(a.teachSpec!.containsKey('pressHints'), isFalse, reason: id);
+        expect(
+          _list(a, 'cues').every((c) => c['kind'] == 'none'),
+          isTrue,
+          reason: id,
+        );
+      }
+    });
+
+    test('pos/family/open/vs/stack deal contracts', () {
+      expect(act('act-02-07-02-jump-pos').teachSpec!['deal'], {'mode': 'none'});
+      final family = act('act-02-07-02-jump-family').teachSpec!['deal'] as Map;
+      expect(family['handFamily'], 'suited_ace');
+      expect(family['suitFamily'], 'suited');
+      final open = act('act-02-07-02-jump-open').teachSpec!['deal'] as Map;
+      expect(open['handFamily'], 'trash');
+      expect(open['suitFamily'], 'offsuit');
+      final vs = act('act-02-07-02-jump-vs').teachSpec!['deal'] as Map;
+      expect(vs['mode'], 'fixed');
+      expect((vs['fixedCards'] as Map)['hero'], ['Ah', 'Ad']);
+      expect(act('act-02-07-02-jump-stack').teachSpec!['deal'], {
+        'mode': 'none',
+      });
     });
   });
 }

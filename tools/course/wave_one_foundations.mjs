@@ -2553,6 +2553,8 @@ export function buildSectionTwo() {
                   choice("j2-sb", "Small blind", "clear_mistake",
                     "Blinds are left of the button.", {betterChoiceId: "j2-co"}),
                 ],
+                // LPT-137
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "j2-co", kind: "none"}]},
               }),
               selectAct({
                 id: "act-02-07-02-jump-family", order: 2, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2566,6 +2568,19 @@ export function buildSectionTwo() {
                   choice("j2-trash", "Offsuit trash", "clear_mistake",
                     "It is suited.", {betterChoiceId: "j2-sa"}),
                 ],
+                // LPT-137
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "suited_ace",
+                    suitFamily: "suited",
+                    variants: [
+                      {id: "var-pair-distractor", handFamily: "pair", label: "Pair distractor"},
+                      {id: "var-trash-distractor", handFamily: "trash", label: "Trash distractor"},
+                    ],
+                  },
+                  cues: [{press: 1, target: "j2-sa", kind: "none"}],
+                },
               }),
               actionAct({
                 id: "act-02-07-02-jump-open", order: 3, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2578,11 +2593,16 @@ export function buildSectionTwo() {
                   choice("j2-open", "Open to 6", "clear_mistake",
                     "Not from UTG.", {action: "RAISE", amountBb: 3, betterChoiceId: "j2-fold"}),
                 ],
+                // LPT-137
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "trash", suitFamily: "offsuit"},
+                  cues: [{press: 1, target: "j2-fold", kind: "none"}],
+                },
               }),
               actionAct({
                 id: "act-02-07-02-jump-vs", order: 4, stage: "scaffolded", assessmentRole: "jump_test",
-                prompt: "Open to 6. You have AA in the big blind. Action?",
-                a11y: "Jump test: value 3-bet aces.",
+                prompt: "Open to 6. You have pocket aces in the big blind. Action?",
+                a11y: "Jump test: value 3-bet pocket aces.",
                 objectives: ["Confirm facing a raise"],
                 choices: [
                   choice("j2-3bet", "3-bet to 18", "recommended",
@@ -2592,6 +2612,11 @@ export function buildSectionTwo() {
                   choice("j2-fold-aa", "Fold", "clear_mistake",
                     "Never.", {action: "FOLD", betterChoiceId: "j2-3bet"}),
                 ],
+                // LPT-137
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Ad"]}},
+                  cues: [{press: 1, target: "j2-3bet", kind: "none"}],
+                },
               }),
               selectAct({
                 id: "act-02-07-02-jump-stack", order: 5, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2605,6 +2630,8 @@ export function buildSectionTwo() {
                   choice("j2-175", "175bb", "clear_mistake",
                     "Do not add stacks.", {betterChoiceId: "j2-55"}),
                 ],
+                // LPT-137
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "j2-55", kind: "none"}]},
               }),
             ],
           }),

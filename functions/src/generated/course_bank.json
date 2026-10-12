@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "0ead35e56e913850dbb1aa93032ec46a041cce3b4b7dd3a56467f2bfc08ab8f3",
+  "contentChecksum": "89204ec8b2b8f54314ef6e376251dfd0856deb59cc9735327d66f81439fe5c9f",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -6629,7 +6629,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j2-co",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-07-02-jump-family",
@@ -6678,7 +6690,33 @@
                       }
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "suited_ace",
+                      "suitFamily": "suited",
+                      "variants": [
+                        {
+                          "id": "var-pair-distractor",
+                          "handFamily": "pair",
+                          "label": "Pair distractor"
+                        },
+                        {
+                          "id": "var-trash-distractor",
+                          "handFamily": "trash",
+                          "label": "Trash distractor"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j2-sa",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-07-02-jump-open",
@@ -6720,7 +6758,21 @@
                       "amountBb": 3
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "trash",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j2-fold",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-07-02-jump-vs",
@@ -6728,7 +6780,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Jump test: value 3-bet aces.",
+                  "accessibilityText": "Jump test: value 3-bet pocket aces.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -6737,7 +6789,7 @@
                   "objectives": [
                     "Confirm facing a raise"
                   ],
-                  "prompt": "Open to 6. You have AA in the big blind. Action?",
+                  "prompt": "Open to 6. You have pocket aces in the big blind. Action?",
                   "choices": [
                     {
                       "id": "j2-3bet",
@@ -6772,7 +6824,25 @@
                       "action": "FOLD"
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Ad"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j2-3bet",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-07-02-jump-stack",
@@ -6821,7 +6891,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j2-55",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
