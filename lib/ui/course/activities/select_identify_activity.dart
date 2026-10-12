@@ -10,6 +10,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/kicker_showdown.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
@@ -1874,68 +1875,130 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: LessonTableStage(
-                          // Checkpoint-full asks "Six-max flop" — deal the same
-                          // three-card board as scaffolded-post so street chrome
-                          // is FLOP, not blinds-only PREFLOP (LPT-148).
-                          boardCodes:
-                              widget.activity.id ==
-                                      'act-02-01-02-checkpoint-full'
-                                  ? const ['Qs', '7c', '2d']
-                                  : const <String>[],
-                          features:
-                              widget.activity.id ==
-                                      'act-02-01-02-checkpoint-full'
-                                  ? TableFeaturesScope.of(
-                                    context,
-                                  ).copyWith(boardSlots: false)
-                                  : null,
-                          villainCount: lessonBlindsVillainCount,
-                          dealerIndex: lessonBlindsButtonIndex,
-                          sbIndex: lessonBlindsSmallBlindIndex,
-                          bbIndex: lessonBlindsBigBlindIndex,
-                          positionLabels: true,
-                          // SoftPulse the D / SB / BB puck when that is the ask
-                          // (LPT-118; same contract as blinds LPT-69) — never
-                          // gold-tip the seat name box while the puck is on
-                          // the felt. Seat index remains the fallback when the
-                          // puck is not posted yet; activeSeatIndex would spoil
-                          // quieter stages before Hint.
-                          cuePuckLabel:
-                              _cuesAnswerSeat(locked)
-                                  ? lessonPuckLabelForHighlight(scene.highlight)
-                                  : null,
-                          cueSeatIndex:
-                              _cuesAnswerSeat(locked)
-                                  ? lessonSeatIndexForHighlight(scene.highlight)
-                                  : null,
-                          selectedSeatIndexes: {
-                            ?_selectedSeatIndex,
+                        child: Builder(
+                          builder: (context) {
+                            // Read-the-table scaffolded: nine-handed numbered
+                            // seats with button on seat 7 (LPT-240). Six-max
+                            // positionLabels lied next to "Nine-handed… seat 7".
+                            final nineHandedWhoOpens =
+                                widget.activity.id ==
+                                'act-03-01-01-scaffolded';
+                            const nineSeatCount = 9;
+                            const nineButtonSeat = 7;
+                            final nineUtgSeat = positionEarlySeat(
+                              buttonSeat: nineButtonSeat,
+                              seatCount: nineSeatCount,
+                            );
+                            return LessonTableStage(
+                              // Checkpoint-full asks "Six-max flop" — deal the same
+                              // three-card board as scaffolded-post so street chrome
+                              // is FLOP, not blinds-only PREFLOP (LPT-148).
+                              boardCodes:
+                                  widget.activity.id ==
+                                          'act-02-01-02-checkpoint-full'
+                                      ? const ['Qs', '7c', '2d']
+                                      : const <String>[],
+                              features:
+                                  widget.activity.id ==
+                                          'act-02-01-02-checkpoint-full'
+                                      ? TableFeaturesScope.of(
+                                        context,
+                                      ).copyWith(boardSlots: false)
+                                      : null,
+                              villainCount:
+                                  nineHandedWhoOpens
+                                      ? lessonNineMaxVillainCount
+                                      : lessonBlindsVillainCount,
+                              dealerIndex:
+                                  nineHandedWhoOpens
+                                      ? nineButtonSeat
+                                      : lessonBlindsButtonIndex,
+                              sbIndex:
+                                  nineHandedWhoOpens
+                                      ? blindsSmallBlindSeat(
+                                        buttonSeat: nineButtonSeat,
+                                        seatCount: nineSeatCount,
+                                      )
+                                      : lessonBlindsSmallBlindIndex,
+                              bbIndex:
+                                  nineHandedWhoOpens
+                                      ? blindsBigBlindSeat(
+                                        buttonSeat: nineButtonSeat,
+                                        seatCount: nineSeatCount,
+                                      )
+                                      : lessonBlindsBigBlindIndex,
+                              positionLabels: !nineHandedWhoOpens,
+                              seatNames:
+                                  nineHandedWhoOpens
+                                      ? [
+                                        for (var i = 0; i < nineSeatCount; i++)
+                                          'Seat $i',
+                                      ]
+                                      : null,
+                              // SoftPulse the D / SB / BB puck when that is the ask
+                              // (LPT-118; same contract as blinds LPT-69) — never
+                              // gold-tip the seat name box while the puck is on
+                              // the felt. Seat index remains the fallback when the
+                              // puck is not posted yet; activeSeatIndex would spoil
+                              // quieter stages before Hint.
+                              cuePuckLabel:
+                                  nineHandedWhoOpens
+                                      ? null
+                                      : (_cuesAnswerSeat(locked)
+                                          ? lessonPuckLabelForHighlight(
+                                            scene.highlight,
+                                          )
+                                          : null),
+                              cueSeatIndex:
+                                  _cuesAnswerSeat(locked)
+                                      ? (nineHandedWhoOpens
+                                          ? nineUtgSeat
+                                          : lessonSeatIndexForHighlight(
+                                            scene.highlight,
+                                          ))
+                                      : null,
+                              selectedSeatIndexes: {
+                                ?_selectedSeatIndex,
+                              },
+                              enabled: !locked,
+                              onSeatIndexTap:
+                                  locked
+                                      ? null
+                                      : (index) {
+                                        final region =
+                                            nineHandedWhoOpens
+                                                ? positionRoleForSeat(
+                                                  seatIndex: index,
+                                                  buttonSeat: nineButtonSeat,
+                                                  seatCount: nineSeatCount,
+                                                )
+                                                : switch (index) {
+                                                  0 =>
+                                                    LessonTableRegion
+                                                        .earlyPosition,
+                                                  1 =>
+                                                    LessonTableRegion.hijack,
+                                                  2 =>
+                                                    LessonTableRegion.cutoff,
+                                                  lessonBlindsButtonIndex =>
+                                                    LessonTableRegion.button,
+                                                  lessonBlindsSmallBlindIndex =>
+                                                    LessonTableRegion
+                                                        .smallBlind,
+                                                  lessonBlindsBigBlindIndex =>
+                                                    LessonTableRegion.bigBlind,
+                                                  _ =>
+                                                    LessonTableRegion.emptySeat,
+                                                };
+                                        _submitRegion(
+                                          LessonTableTapTarget(
+                                            region,
+                                            seatIndex: index,
+                                          ),
+                                        );
+                                      },
+                            );
                           },
-                          enabled: !locked,
-                          onSeatIndexTap:
-                              locked
-                                  ? null
-                                  : (index) {
-                                    final region = switch (index) {
-                                      0 => LessonTableRegion.earlyPosition,
-                                      1 => LessonTableRegion.hijack,
-                                      2 => LessonTableRegion.cutoff,
-                                      lessonBlindsButtonIndex =>
-                                        LessonTableRegion.button,
-                                      lessonBlindsSmallBlindIndex =>
-                                        LessonTableRegion.smallBlind,
-                                      lessonBlindsBigBlindIndex =>
-                                        LessonTableRegion.bigBlind,
-                                      _ => LessonTableRegion.emptySeat,
-                                    };
-                                    _submitRegion(
-                                      LessonTableTapTarget(
-                                        region,
-                                        seatIndex: index,
-                                      ),
-                                    );
-                                  },
                         ),
                       ),
                       _LessonChoiceStack(

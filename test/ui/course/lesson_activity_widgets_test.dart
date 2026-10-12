@@ -11028,12 +11028,13 @@ await tester.tap(find.text('NIT'));
       ],
     );
     expect(isTableRegionTapActivity(activity), isTrue);
-    expect(
-      resolveLessonTableScene(activity)?.layout,
-      LessonTableLayout.positionLabels,
-    );
-    expect(resolveLessonTableScene(activity)?.seatCount, 9);
-    expect(resolveLessonTableScene(activity)?.buttonSeat, 7);
+    final scene = resolveLessonTableScene(activity);
+    // Densify / no-frame path: numbered blindsSeats (LPT-240), not six-max
+    // positionLabels that dropped three seats.
+    expect(scene?.layout, LessonTableLayout.blindsSeats);
+    expect(scene?.seatCount, 9);
+    expect(scene?.buttonSeat, 7);
+    expect(scene?.numberSeats, isTrue);
     expect(
       mapTableRegionToChoiceId(
         activityId: activity.id,
@@ -11042,6 +11043,8 @@ await tester.tap(find.text('NIT'));
       ),
       'utg-first',
     );
+    final utgSeat = positionEarlySeat(buttonSeat: 7, seatCount: 9);
+    expect(utgSeat, 1);
 
     final controller = LessonActivityController(activity: activity);
     await tester.pumpWidget(
@@ -11070,13 +11073,99 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Seat left of the big blind (UTG)'), findsNothing);
-    expect(find.text('UTG'), findsOneWidget);
-    expect(find.text('EP'), findsOneWidget);
-    await tester.tap(find.text('UTG'));
+    // Nine numbered seats — UTG is seat 1 when the button is seat 7.
+    expect(find.text('Seat 7'), findsWidgets);
+    expect(find.text('Seat $utgSeat'), findsWidgets);
+    expect(find.text('EP'), findsNothing);
+    await tester.tap(find.text('Seat $utgSeat').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'utg-first');
     controller.dispose();
   });
+
+  testWidgets('s3 table-read guided/unguided/checkpoint omit decoy Them holes', (
+    tester,
+  ) async {
+    for (final id in const [
+      'act-03-01-01-guided',
+      'act-03-01-01-unguided',
+      'act-03-01-01-checkpoint',
+    ]) {
+      final scene = resolveLessonTableScene(
+        CourseActivity(
+          id: id,
+          order: 1,
+          stage: ActivityStage.guided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: id,
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      );
+      expect(scene?.villainSeatCount, 0, reason: id);
+    }
+  });
+
+  testWidgets(
+    's3 table-read scaffolded framed LessonTableStage is nine-handed seat 7',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-03-01-01-scaffolded',
+        order: 3,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Find UTG left of the big blind.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt:
+            'Nine-handed. Dealer button is on seat 7. Who acts first preflop?',
+        choices: const [
+          CourseChoice(
+            id: 'utg-first',
+            label: 'Seat left of the big blind (UTG)',
+          ),
+          CourseChoice(id: 'btn-first', label: 'The button'),
+          CourseChoice(id: 'sb-first', label: 'Small blind'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: Scaffold(
+              body: SizedBox(
+                width: 375,
+                height: 812,
+                child: LessonFrameScope(
+                  onLocalMiss: (_) {},
+                  child: LessonSoftPulseScope(
+                    allowed: true,
+                    child: SelectIdentifyActivity(
+                      activity: activity,
+                      controller: controller,
+                      showGuidance: true,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(LessonTableStage), findsOneWidget);
+      // Nine numbered seats — not six-max EP/HJ/CO.
+      expect(find.text('Seat 7'), findsWidgets);
+      expect(find.text('Seat 1'), findsWidgets);
+      expect(find.text('EP'), findsNothing);
+      expect(find.text('HJ'), findsNothing);
+      await tester.tap(find.text('Seat 1').first);
+      await tester.pump();
+      expect(controller.draft.choiceId, 'utg-first');
+      controller.dispose();
+    },
+  );
 
   testWidgets('s3 table-read unguided taps Raise stands on felt', (
     tester,
