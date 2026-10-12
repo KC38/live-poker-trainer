@@ -32,6 +32,23 @@ import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
   return (coach: fallback, showPrompt: false);
 }
 
+/// Felt-first densified asks for select_identify steps whose catalog prompt
+/// is still quiz-list language.
+///
+/// Under [LessonFrameScope], [RexCoachLine] shrinks and the runner bubble
+/// uses [lessonFrameSpeech]. Without these lines, frame speech falls through
+/// to catalog + "Tap the best answer." (LPT-221). Shared with the activity's
+/// own coach so unframed and framed paths stay identical.
+String? selectIdentifyDensifiedCoachLine(String activityId) {
+  return switch (activityId) {
+    'act-02-07-02-jump-family' =>
+      'Look at your holes — pick the family they belong to.',
+    'act-02-07-02-jump-stack' =>
+      'You 120bb · villain 55bb — pick the effective stack.',
+    _ => null,
+  };
+}
+
 /// Whether Rex should render for [activity] given [showGuidance] and resolved
 /// coach copy (covers prompt-as-Rex on unguided steps).
 bool shouldShowLessonCoach({

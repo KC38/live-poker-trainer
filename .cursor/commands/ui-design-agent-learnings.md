@@ -237,6 +237,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Actions failure does not mean the merge SHA is undeployed if the local
   script finished Successful update for `submitCourseStep` / course
   graders (LPT-199).
+- Prefer `villainSeatCount: 0` on conceptual outcome scenes that do not
+  deal holes (effective-stack / depth tiles). Default `1` paints a decoy
+  face-down Them pair — LPT-220.
 
 ## Ops (simulator, CLI, Jira)
 
