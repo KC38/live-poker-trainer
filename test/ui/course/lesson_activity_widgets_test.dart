@@ -18164,9 +18164,98 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Nut FD'), findsOneWidget);
+    // LPT-513: guideRegion → one gold SoftPulse (Nut FD), not Weak FD / Air stab.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Nut FD'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Weak FD'),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Air stab'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Nut FD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nfd');
+    controller.dispose();
+  });
+
+  testWidgets('s5 multiway checkpoint SoftPulse Nut potential — one gold', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-01-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Nut potential and domination avoidance.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Multiway construction priority?',
+      choices: const [
+        CourseChoice(id: 'nuts', label: 'Nut potential and clean equity'),
+        CourseChoice(id: 'any-two', label: 'Any two for initiative'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Nut potential'), findsOneWidget);
+    // LPT-513: guideRegion → one gold SoftPulse (Nut potential), not Any two.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Nut potential'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Any two'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Nut potential'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'nuts');
     controller.dispose();
   });
 

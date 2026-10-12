@@ -10038,6 +10038,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive multiway — tap nut flush draw, weak draw, or air',
       semanticsStatic: 'Multiway continue outcomes',
       caption: scene.caption ?? 'Four-way flop — best continue',
+      // SoftPulse + Rex own the cue — don’t gold-tip Nut FD.
+      // Null guideRegion SoftPulses every phase (LPT-513).
+      guideRegion: LessonTableRegion.multiwayNutFd,
       phases: [
         (
           region: LessonTableRegion.multiwayNutFd,
@@ -10045,7 +10048,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Best equity',
           visual: const Icon(
             Icons.workspace_premium_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10079,6 +10082,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive multiway — tap nut potential or any two',
       semanticsStatic: 'Multiway priority outcomes',
       caption: scene.caption ?? 'Multiway construction priority',
+      // SoftPulse + Rex own the cue — don’t gold-tip Nut potential.
+      // Null guideRegion SoftPulses every phase (LPT-513).
+      guideRegion: LessonTableRegion.multiwayNutsPriority,
       phases: [
         (
           region: LessonTableRegion.multiwayNutsPriority,
@@ -10086,7 +10092,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Clean equity',
           visual: const Icon(
             Icons.workspace_premium_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
