@@ -118,7 +118,9 @@ void main() {
   test('lesson ledger names each lesson once with its explain taps', () {
     expect(
       record,
-      contains('| Meet the TAG | Tight, Aggro, Model | label quizzes |'),
+      contains(
+        '| Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491) | label quizzes |',
+      ),
     );
     expect(
       record,

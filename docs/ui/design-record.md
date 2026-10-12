@@ -595,6 +595,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Meet the Nit SoftPulse one gold | Meet the Nit densified asks (`act-04-07-02-guided` / unguided / checkpoint) pass `guideRegion` (`meetNitLabel` / `meetNitLabel2` / `meetNitWorkingModel`) so SoftPulse paints one gold tile — never both Nit and Station, Nit and Maniac, or Working model and An insult (LPT-440). |
 | Observe wild SoftPulse one gold | Observe wild aggressors densified asks (`act-04-08-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`observeExtremeEntry` / `observeWidePressure` / `observeCalmNotes` / `observeManiacBundle`) so SoftPulse paints one gold tile — never both Extreme and Timid, Wide heat and Never bets, Frequencies and Revenge, or Enter+barrel and Never plays (LPT-462). |
 | Meet the Maniac SoftPulse one gold | Meet the Maniac densified asks (`act-04-08-02-guided` / unguided / checkpoint) pass `guideRegion` (`meetManiacLabel` / `meetManiacLabel2` / `meetManiacMixThree`) so SoftPulse paints one gold tile — never both Maniac and Nit, Maniac and Station, or Three types and Unlabeled (LPT-489). |
+| Meet the TAG SoftPulse one gold | Meet the TAG unguided densified ask (`act-06-11-02-unguided`) passes `guideRegion` (`meetTagLabel2`) so SoftPulse-after-Hint paints one gold TAG tile — never both TAG and Maniac (LPT-491). Guided / scaffolded / checkpoint already pass `meetTagLabel` / `meetTagSelectiveDiff` / `meetTagWorkingModel`. |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1263,7 +1264,7 @@ felt.
 | Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth | commit, ego, and SPR checks |
 | Make difficult folds; review coolers fairly | Hard, Cooler, Ego | cooler, ego, and review checks |
 | Observe selective aggression | Tight, Barrel, Sample | entry quizzes |
-| Meet the TAG | Tight, Aggro, Model | label quizzes |
+| Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491) | label quizzes |
 | Adjust versus TAG | Credit, Tighter, No light | respect check |
 | Observe wide sustained pressure | Wide, Pressure, Sample | entry quizzes |
 | Meet the LAG | Wide, Pressure, Model | label quizzes |

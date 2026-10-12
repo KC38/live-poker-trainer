@@ -12206,7 +12206,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'TAG vs Maniac outcomes',
       caption: scene.caption ??
           'Opens tight · folds to 3-bets · selective c-bets',
-      // No SoftPulse on unguided — still don’t gold-icon TAG.
+      // SoftPulse + Rex own the cue — one gold TAG only (LPT-491).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.meetTagLabel2,
       phases: [
         (
           region: LessonTableRegion.meetTagLabel2,
