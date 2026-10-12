@@ -290,9 +290,11 @@ Your two cards and Suits and ranks show only seats, cards, and the board
 when a step deals one. A hole-only step (Your two cards peek, Button and
 blinds explain, and Button and blinds frame steps that share
 `isLessonBlindsFrameActivity` without a dealt board) turns `boardSlots`
-off so empty outlines do not draw. Live Training and an id that is not
-`lesson-SS-UU-LL` get `TableFeatures.full`. Your start uses the preset of
-the lesson it recommends.
+off so empty outlines do not draw. Framed Fold / Check / Call (and sibling)
+`poker_action_sizing` `LessonTableStage` steps pass `boardSlots: false` so
+preflop and short boards do not draw empty street outlines (LPT-77). Live
+Training and an id that is not `lesson-SS-UU-LL` get `TableFeatures.full`.
+Your start uses the preset of the lesson it recommends.
 
 A lesson seat shows a player type only when the step names it
 (`villainArchetypes`); a seat never shows a made-up type. A spot that says
@@ -413,6 +415,11 @@ outlines off (`boardSlots: false`) until a later step deals community cards.
 Button and blinds hole-only frame steps (`act-01-01-03-guided-button` and
 siblings that share `isLessonBlindsFrameActivity` without a dealt board)
 pass the same `boardSlots: false` gate on their `LessonTableStage` (LPT-52).
+
+Fold, check, call framed action steps (`PokerActionSizingActivity` →
+`LessonTableStage` for `act-01-03-01-*` and the other framed action ids)
+pass `boardSlots: false` so preflop spots draw no empty community slots and
+flop spots show the dealt flop without empty turn/river outlines (LPT-77).
 
 ### Cues
 
