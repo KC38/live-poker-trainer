@@ -59,6 +59,22 @@ double? parseFacingBetChips(String? villainLine) {
   return null;
 }
 
+/// Whether resolved money should paint onto [LessonTableStage].
+///
+/// Authored spots often set `potLabel` without `facingBet` (BB called the
+/// open, blinds folded, flop after the call). Those still need the labeled
+/// pot — otherwise the full table falls back to blinds-only / street defaults
+/// (LPT-97).
+bool shouldApplyLessonActionFeltMoney({
+  required LessonActionSpot spot,
+  required LessonActionFeltMoney money,
+}) {
+  if (spot.facingBet) return true;
+  if (money.heroActionLabel != null) return true;
+  if (money.streetBets.any((b) => b > 0)) return true;
+  return parseLessonPotChips(spot.potLabel) != null;
+}
+
 /// Chip amount embedded in a choice label (`Call 5`, `Bet 5`, `Raise 15`).
 ///
 /// Falls back to [CourseChoice.amountBb] as dollar chips when the label has
@@ -107,6 +123,8 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
           ? 0
           : (villainSeatIndex >= seats ? (seats > 1 ? 1 : 0) : villainSeatIndex);
   final bets = List<double>.filled(seats, 0);
+  final labeledPot = parseLessonPotChips(spot.potLabel);
+  final line = spot.villainLine?.toLowerCase() ?? '';
   final facing =
       spot.facingBet
           ? (parseFacingBetChips(spot.villainLine) ??
@@ -127,7 +145,37 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
   }
   bets[0] = heroBet;
 
-  final labeledPot = parseLessonPotChips(spot.potLabel);
+  String? villainLabel;
+  String? heroLabel;
+
+  // Completed preflop lines (not facingBet): put the open/call on the felt.
+  // BB calls your open → Pot 13 with matched $6 street bets (LPT-97).
+  // Blinds fold after an open → Pot 9 with the hero's raise still out.
+  if (!spot.facingBet && spot.boardCodes.isEmpty && labeledPot != null) {
+    final callsOpen =
+        line.contains('calls your open') ||
+        line.contains('called your open') ||
+        (line.contains('calls') && line.contains('open'));
+    final blindsFold =
+        line.contains('blinds fold') || line.contains('both blinds fold');
+    if (callsOpen && villainSeat != 0) {
+      final openTo =
+          parseFacingBetChips(spot.villainLine) ?? (labeledPot - 1) / 2;
+      if (openTo > 0) {
+        bets[0] = openTo;
+        bets[villainSeat] = openTo;
+        heroLabel = 'RAISE';
+        villainLabel = 'CALL';
+      }
+    } else if (blindsFold) {
+      final openTo = parseFacingBetChips(spot.villainLine) ?? (labeledPot - 3);
+      if (openTo > 0) {
+        bets[0] = openTo;
+        heroLabel = 'RAISE';
+      }
+    }
+  }
+
   final streetSum = bets.fold<double>(0, (sum, b) => sum + b);
   var potTotal = labeledPot ?? streetSum;
   // `Pot 3` + `opens to 6` is collected blinds only — add street bets.
@@ -135,10 +183,8 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
     potTotal = labeledPot + streetSum;
   }
 
-  String? villainLabel;
   if (facing > 0) {
     villainLabel = 'BET';
-    final line = spot.villainLine?.toLowerCase() ?? '';
     if (line.contains('raise') ||
         line.contains('3-bet') ||
         line.contains('3bet') ||
@@ -147,7 +193,6 @@ LessonActionFeltMoney resolveLessonActionFeltMoney({
     }
   }
 
-  String? heroLabel;
   if (selected != null) {
     final action = (selected.action ?? selected.label).toUpperCase();
     final amount = parseChoiceChipAmount(selected);

@@ -216,10 +216,10 @@ class PokerActionSizingActivity extends StatelessWidget {
                 seatCount: layout.seatCount,
                 villainSeatIndex: layout.villainSeatIndex,
               );
-              final applyFeltMoney =
-                  spot.facingBet ||
-                  feltMoney.heroActionLabel != null ||
-                  feltMoney.streetBets.any((b) => b > 0);
+              final applyFeltMoney = shouldApplyLessonActionFeltMoney(
+                spot: spot,
+                money: feltMoney,
+              );
               final seatLabels = <int, String>{
                 ...layout.seatActionLabels,
                 if (feltMoney.heroActionLabel != null)
