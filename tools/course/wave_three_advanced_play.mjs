@@ -334,7 +334,18 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-04-01-explain", 1,
                 "Thin value needs calls. Bluff-catches need wide barrels.",
-                {objectives: ["Choose thin value versus sticky callers"]}),
+                {
+                  objectives: ["Choose thin value versus sticky callers"],
+                  // LPT-231
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "THIN", kind: "soft_pulse"},
+                      {press: 2, target: "CATCH", kind: "soft_pulse"},
+                      {press: 3, target: "BARRELS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-05-04-01-guided", order: 2, stage: "guided",
                 prompt: "River second pair. Calling Station checked twice. Action?",
@@ -349,6 +360,14 @@ export function buildSectionFive() {
                   choice("overbet", "Overbet bluff", "clear_mistake",
                     "They do not fold.", {action: "BET", amountBb: 40, betterChoiceId: "tv"})
                 ],
+                // LPT-231
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Kc", "9s", "4h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "tv", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-05-04-01-scaffolded", order: 3, stage: "scaffolded",
@@ -364,6 +383,14 @@ export function buildSectionFive() {
                   choice("raise-m", "Hero-raise for ego", "clear_mistake",
                     "No ego.", {action: "RAISE", amountBb: 50, betterChoiceId: "call-m"})
                 ],
+                // LPT-231
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Kc", "9s", "4h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "call-m", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-05-04-01-unguided", order: 4, stage: "scaffolded",
@@ -379,6 +406,14 @@ export function buildSectionFive() {
                   choice("jam-nit", "Overbet", "clear_mistake",
                     "No.", {action: "BET", amountBb: 60, betterChoiceId: "check-nit"})
                 ],
+                // LPT-231
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Kc", "9s", "4h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "check-nit", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -391,6 +426,8 @@ export function buildSectionFive() {
                   choice("random", "Flip a coin every time", "clear_mistake",
                     "Not strategy.", {betterChoiceId: "read"})
                 ],
+                // LPT-231
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "read", kind: "none"}]},
               }),
             ],
           }),
