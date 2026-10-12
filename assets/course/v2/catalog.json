@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "9cde240e567032b8b97a5a08e420e02f3adda6d43b52ac487e1e6f276ba01952",
+  "contentChecksum": "d24ab20a4a9597212beb13fcd2cd397d235485f6f6561299fd78bb97518de068",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -9633,7 +9633,29 @@
                   ],
                   "objectives": [
                     "Estimate stack-to-pot ratio"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SPR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "LOW",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "HIGH",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-05-01-guided",
@@ -9667,7 +9689,19 @@
                       "label": "8",
                       "accessibilityText": "8"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "spr-4",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-05-01-scaffolded",
@@ -9699,7 +9733,30 @@
                       "accessibilityText": "Check forever",
                       "action": "CHECK"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "Kd"
+                        ],
+                        "board": [
+                          "Kc",
+                          "7s",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "commit",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-05-01-unguided",
@@ -9730,7 +9787,30 @@
                       "accessibilityText": "Jam day one",
                       "action": "ALL_IN"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Qc",
+                          "9s",
+                          "3h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "flexible",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-05-01-checkpoint",
@@ -9766,7 +9846,31 @@
                       "accessibilityText": "Wait for showdown"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "Qs",
+                          "7c",
+                          "2d",
+                          "9h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "before",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
