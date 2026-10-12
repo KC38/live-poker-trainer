@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "b8034c31192e17d48094cbeea2b11ff76e7ead70e5763d0f2834176548587939",
+  "contentChecksum": "eef5d6d25aaa766ef50bf5252f2674e03cc8a6efa19c3d3d12f0baae64b104d8",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -408,7 +408,35 @@
                       "kind": "hint",
                       "text": "Four suits — one card of each on the board."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "suitFamily": "four_suits"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "board_hearts",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "board_diamonds",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "board_clubs",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_spades",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-02-scaffolded-ranks",
@@ -439,7 +467,14 @@
                       "id": "rank-A",
                       "label": "A"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "suitFamily": "rainbow"
+                    }
+                  }
                 },
                 {
                   "id": "act-01-01-02-unguided-suited",
@@ -473,7 +508,32 @@
                       "label": "Pocket pair",
                       "accessibilityText": "Pocket pair"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "suitFamily": "suited",
+                      "variants": [
+                        {
+                          "id": "var-offsuit-seat",
+                          "suitFamily": "offsuit",
+                          "label": "Offsuit distractor seat"
+                        },
+                        {
+                          "id": "var-pair-seat",
+                          "handFamily": "pair",
+                          "label": "Pocket pair distractor seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "suited_seat",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-02-checkpoint-pair",
@@ -508,7 +568,32 @@
                       "accessibilityText": "Offsuit"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair",
+                      "variants": [
+                        {
+                          "id": "var-suited-seat",
+                          "suitFamily": "suited",
+                          "label": "Suited distractor seat"
+                        },
+                        {
+                          "id": "var-offsuit-seat",
+                          "suitFamily": "offsuit",
+                          "label": "Offsuit distractor seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pair_seat",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },

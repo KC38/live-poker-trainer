@@ -48,10 +48,12 @@ export function choice(id, label, grade, feedback, extra = {}) {
 
 export function selectAct({
   id, order, stage, prompt, a11y, objectives, choices, hint, playerTypeRefs = [],
+  assessmentRole, teachSpec,
 }) {
   const act = {
     id, order, stage, renderer: "select_identify",
-    estimatedSeconds: stage === "checkpoint" ? 45 : 40,
+    estimatedSeconds:
+      stage === "checkpoint" || assessmentRole === "checkpoint" ? 45 : 40,
     accessibilityText: a11y,
     acceptedGrades: ACC,
     objectives,
@@ -62,14 +64,17 @@ export function selectAct({
   if (hint) {
     act.coachMedia = [{id: `${id}-hint`, kind: "hint", text: hint}];
   }
+  // Same key order as content/course/v2/course.json (LPT-81).
+  if (assessmentRole) act.assessmentRole = assessmentRole;
+  if (teachSpec) act.teachSpec = teachSpec;
   return act;
 }
 
 export function sequenceAct({
   id, order, stage, prompt, a11y, objectives, items, correct,
-  okFeedback, missFeedback, renderer = "order_sequence",
+  okFeedback, missFeedback, renderer = "order_sequence", teachSpec,
 }) {
-  return {
+  const act = {
     id, order, stage, renderer,
     estimatedSeconds: 50,
     accessibilityText: a11y,
@@ -83,6 +88,8 @@ export function sequenceAct({
       incorrect: {grade: "clear_mistake", feedback: missFeedback},
     },
   };
+  if (teachSpec) act.teachSpec = teachSpec;
+  return act;
 }
 
 export function numericAct({
@@ -337,6 +344,18 @@ export function buildSectionOne() {
                   choice("suits-full", "Hearts, diamonds, clubs, spades", "recommended",
                     "Those four cover the deck."),
                 ],
+                // LPT-81: dealSuitLessonBoard — one real card per suit (fresh
+                // ranks) plus the star decoy. SoftPulse walks the next untapped
+                // suit in board order, one gold card per press.
+                teachSpec: {
+                  deal: {mode: "random_in_class", suitFamily: "four_suits"},
+                  cues: [
+                    {press: 1, target: "board_hearts", kind: "soft_pulse"},
+                    {press: 2, target: "board_diamonds", kind: "soft_pulse"},
+                    {press: 3, target: "board_clubs", kind: "soft_pulse"},
+                    {press: 4, target: "board_spades", kind: "soft_pulse"},
+                  ],
+                },
               }),
               sequenceAct({
                 id: "act-01-01-02-scaffolded-ranks", order: 3, stage: "scaffolded",
@@ -351,6 +370,15 @@ export function buildSectionOne() {
                 correct: ["rank-2", "rank-T", "rank-A"],
                 okFeedback: "Lowest first, then the middle rank, highest last.",
                 missFeedback: "Start with the smallest rank and climb up.",
+                // LPT-81: dealRankOrderSpot — three distinct fresh ranks on a
+                // rainbow board; item ids stay authored low → high.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "high_card",
+                    suitFamily: "rainbow",
+                  },
+                },
               }),
               selectAct({
                 id: "act-01-01-02-unguided-suited", order: 4, stage: "scaffolded",
@@ -365,6 +393,19 @@ export function buildSectionOne() {
                   choice("pair-77", "Pocket pair", "questionable",
                     "That is a pair, not suited. Look for matching suits."),
                 ],
+                // LPT-81: dealHoleHandSeatPlan — suited answer seat plus
+                // offsuit and pocket-pair distractor seats, shuffled.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    suitFamily: "suited",
+                    variants: [
+                      {id: "var-offsuit-seat", suitFamily: "offsuit", label: "Offsuit distractor seat"},
+                      {id: "var-pair-seat", handFamily: "pair", label: "Pocket pair distractor seat"},
+                    ],
+                  },
+                  cues: [{press: 1, target: "suited_seat", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-01-02-checkpoint-pair", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -381,6 +422,19 @@ export function buildSectionOne() {
                     "High cards, not a pair. Matching ranks make a pair.",
                     {betterChoiceId: "pocket-pair"}),
                 ],
+                // LPT-81: checkpoint — no pressHints / Hint media. Pocket pair
+                // answer seat plus suited and offsuit distractor seats.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "pair",
+                    variants: [
+                      {id: "var-suited-seat", suitFamily: "suited", label: "Suited distractor seat"},
+                      {id: "var-offsuit-seat", suitFamily: "offsuit", label: "Offsuit distractor seat"},
+                    ],
+                  },
+                  cues: [{press: 1, target: "pair_seat", kind: "none"}],
+                },
               }),
             ],
           }),
