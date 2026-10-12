@@ -586,6 +586,9 @@ int _drawOutsFor(List<String> hero, List<String> board) {
 /// [isSet] and [distinctBoardPairingHoles] keep [HandClass.strongMade]
 /// top-two templates (two distinct holes each pairing the board) from
 /// remapping into a set — both collapse to strongMade (LPT-392).
+/// [earlierStreets] keeps turn / river templates honest about how hero got
+/// there: the flop (and turn) class + draw outs must match, so a river
+/// "missed draw" really flopped a draw instead of any air (LPT-398).
 ({
   HandClass handClass,
   int drawOuts,
@@ -595,6 +598,7 @@ int _drawOutsFor(List<String> hero, List<String> board) {
   bool hasMadePair,
   bool isSet,
   int distinctBoardPairingHoles,
+  String earlierStreets,
 }) _postflopTeachKey(List<String> hero, List<String> board) {
   return (
     handClass: _handClassFor(hero, board),
@@ -605,7 +609,21 @@ int _drawOutsFor(List<String> hero, List<String> board) {
     hasMadePair: _heroHasMadePair(hero, board),
     isSet: _heroHasSet(hero, board),
     distinctBoardPairingHoles: _distinctBoardPairingHoleCount(hero, board),
+    earlierStreets: _earlierStreetsKey(hero, board),
   );
+}
+
+/// Class + draw outs on each earlier street (flop, then turn) of [board].
+String _earlierStreetsKey(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length <= 3) return '';
+  final parts = <String>[];
+  for (var n = 3; n < board.length; n++) {
+    final street = board.sublist(0, n);
+    parts.add(
+      '${_handClassFor(hero, street).name}:${_drawOutsFor(hero, street)}',
+    );
+  }
+  return parts.join('|');
 }
 
 /// Whether [hero] already has a made pair (pocket pair or pairs the board).
