@@ -5603,7 +5603,11 @@
                   ],
                   "objectives": [
                     "Follow the action before deciding"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Watch \u2192 Say \u2192 Cover \u2192 Wait."
+                  }
                 },
                 {
                   "id": "act-02-06-01-guided-follow",

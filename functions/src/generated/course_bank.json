@@ -5604,7 +5604,11 @@
                   ],
                   "objectives": [
                     "Follow the action before deciding"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Watch → Say → Cover → Wait."
+                  }
                 },
                 {
                   "id": "act-02-06-01-guided-follow",
@@ -24228,7 +24232,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Watch → Say → Cover → Wait."
+      }
     },
     "act-02-06-01-guided-follow": {
       "activityId": "act-02-06-01-guided-follow",

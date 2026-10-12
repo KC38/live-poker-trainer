@@ -2210,7 +2210,11 @@ export function buildSectionTwo() {
             activities: [
               dialogue("act-02-06-01-explain-habits", 1,
                 "Watch the action. Say your action. Cover your cards. Wait your turn.",
-                {objectives: ["Follow the action before deciding"]}),
+                {
+                  objectives: ["Follow the action before deciding"],
+                  // LPT-199: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Watch → Say → Cover → Wait.",
+                }),
               selectAct({
                 id: "act-02-06-01-guided-follow", order: 2, stage: "guided",
                 prompt: "Two seats act before you. What first?",
