@@ -85,6 +85,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 ## Prefer
 
+- Prefer `tester.element(finder)` (or `tester.state<State>(…)`) when asserting a StatefulWidget did not remount — `tester.state<DealtCardReveal>` fails to compile because `state<T>` requires a `State` subtype (LPT-97).
 - Prefer exact `agent_tap` labels from the screen. Broad needles like
   `Continue` can hit Home chrome instead of the lesson control.
 - Prefer `python3 tools/agent_tap.py back` (no `--text`) to dismiss modal

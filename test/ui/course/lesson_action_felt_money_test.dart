@@ -275,6 +275,95 @@ void main() {
       expect(money.potTotal, 10);
       expect(money.villainActionLabel, 'BET');
     });
+
+    test('BB calls your open places matched street bets at Pot 13', () {
+      final money = resolveLessonActionFeltMoney(
+        spot: const LessonActionSpot(
+          heroCodes: ['Ah', '9h'],
+          potLabel: 'Pot 13',
+          villainLine: 'BB calls your open',
+          streetLabel: 'Preflop · Heading to flop',
+          facingBet: false,
+          feltStatusLine: 'Call keeps the hand alive',
+        ),
+        choices: const [
+          CourseChoice(id: 'ready-flop', label: 'See flop'),
+          CourseChoice(id: 'already-won', label: 'Already over'),
+        ],
+        seatCount: 6,
+        villainSeatIndex: 2,
+      );
+
+      expect(money.potTotal, 13);
+      expect(money.streetBets[0], 6);
+      expect(money.streetBets[2], 6);
+      expect(money.heroActionLabel, 'RAISE');
+      expect(money.villainActionLabel, 'CALL');
+      expect(
+        shouldApplyLessonActionFeltMoney(
+          spot: const LessonActionSpot(
+            heroCodes: ['Ah', '9h'],
+            potLabel: 'Pot 13',
+            villainLine: 'BB calls your open',
+            facingBet: false,
+          ),
+          money: money,
+        ),
+        isTrue,
+      );
+    });
+
+    test('blinds fold after open keeps hero raise at Pot 9', () {
+      final money = resolveLessonActionFeltMoney(
+        spot: const LessonActionSpot(
+          heroCodes: ['Ah', '9h'],
+          potLabel: 'Pot 9',
+          villainLine: 'Blinds fold',
+          streetLabel: 'Hand over',
+          facingBet: false,
+          feltStatusLine: 'Hand over · blinds folded',
+        ),
+        choices: const [
+          CourseChoice(id: 'won-folds', label: 'Won pot'),
+          CourseChoice(id: 'must-deal', label: 'Must flop'),
+        ],
+        seatCount: 6,
+        villainSeatIndex: 2,
+      );
+
+      expect(money.potTotal, 9);
+      expect(money.streetBets[0], 6);
+      expect(money.heroActionLabel, 'RAISE');
+    });
+
+    test('flop after the call applies labeled Pot 13 with empty street', () {
+      final spot = const LessonActionSpot(
+        heroCodes: ['Ah', '9h'],
+        boardCodes: ['As', '7c', '2d'],
+        potLabel: 'Pot 13',
+        villainLine: 'BB checks',
+        streetLabel: 'Flop · A72 rainbow',
+        facingBet: false,
+        openPot: true,
+        feltStatusLine: 'Checked to you on A72',
+      );
+      final money = resolveLessonActionFeltMoney(
+        spot: spot,
+        choices: const [
+          CourseChoice(id: 'cbet', label: 'Bet 6', action: 'BET', amountBb: 3),
+          CourseChoice(id: 'check-back', label: 'Check', action: 'CHECK'),
+        ],
+        seatCount: 6,
+        villainSeatIndex: 2,
+      );
+
+      expect(money.potTotal, 13);
+      expect(money.streetBets.every((b) => b == 0), isTrue);
+      expect(
+        shouldApplyLessonActionFeltMoney(spot: spot, money: money),
+        isTrue,
+      );
+    });
   });
 
   group('pot and choice chip parsing', () {
@@ -560,7 +649,7 @@ void main() {
 
     final hole = find.byKey(const ValueKey<String>('dealt-hole-0-0'));
     expect(hole, findsOneWidget);
-    final before = tester.state<DealtCardReveal>(hole);
+    final before = tester.element(hole);
 
     controller.selectChoice('fold-k9s', autoSubmit: false);
     controller.finishSubmit(
@@ -587,7 +676,7 @@ void main() {
 
     expect(hole, findsOneWidget);
     expect(
-      identical(before, tester.state<DealtCardReveal>(hole)),
+      identical(before, tester.element(hole)),
       isTrue,
       reason: 'wrong Fold remounted DealtCardReveal (redeal)',
     );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/activities/authored_multi_step_activity.dart';
 import 'package:live_poker_trainer/ui/course/activities/coach_dialogue_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
@@ -80,5 +81,75 @@ void main() {
       await tester.pump();
     }
     expect(ack, 1);
+  });
+
+  testWidgets('scaffolded BB-call street paints authored Pot 13 on full table', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-06-01-scaffolded-multi',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.authoredMultiStepHand,
+      estimatedSeconds: 70,
+      accessibilityText: 'BB calls your open — confirm the flop.',
+      acceptedGrades: const [SoftGrade.recommended],
+      handSteps: const [
+        CourseHandStep(
+          id: 'step-01-06-bb-defend',
+          street: 'preflop',
+          prompt: 'You open BTN to 6. BB calls. Next?',
+          choices: [
+            CourseChoice(id: 'ready-flop', label: 'See flop'),
+            CourseChoice(id: 'already-won', label: 'Already over'),
+          ],
+        ),
+        CourseHandStep(
+          id: 'step-01-06-flop-cbet',
+          street: 'flop',
+          prompt: 'Flop Ace-high rainbow. BB checks.',
+          choices: [
+            CourseChoice(
+              id: 'cbet',
+              label: 'Bet 6',
+              action: 'BET',
+              amountBb: 3,
+            ),
+            CourseChoice(id: 'check-back', label: 'Check', action: 'CHECK'),
+          ],
+        ),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      _frame(
+        AuthoredMultiStepActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.byType(FeltTableView), findsOneWidget);
+    expect(find.textContaining('POT \$13'), findsOneWidget);
+    expect(find.textContaining('POT \$3'), findsNothing);
+    expect(tester.takeException(), isNull);
+
+    controller.setHandStepIndex(1);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(find.textContaining('POT \$13'), findsOneWidget);
+    expect(find.textContaining('POT \$10'), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 }
