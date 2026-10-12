@@ -23357,6 +23357,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Nit'), findsOneWidget);
+    // LPT-440: guideRegion → one gold SoftPulse (Nit), not Station.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Nit'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Station'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Nit'));
     await tester.pump();
     expect(controller.draft.choiceId, 'pt-nit');
@@ -23400,6 +23421,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Nit'), findsOneWidget);
+    // LPT-440: guideRegion → one gold SoftPulse (Nit), not Maniac.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Nit'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Maniac'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Nit'));
     await tester.pump();
     expect(controller.draft.choiceId, 'nit2');
@@ -23446,6 +23488,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Working model'), findsOneWidget);
+    // LPT-440: guideRegion → one gold SoftPulse (Working model), not An insult.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Working model'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('An insult'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Working model'));
     await tester.pump();
     expect(controller.draft.choiceId, 'model-n');
