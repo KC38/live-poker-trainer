@@ -169,13 +169,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `Seventy-two offsuit` (decade compound) while `_spokenStartingHand` is
   `seven-two offsuit` — both aliases must rewrite via
   `alignStartingHandCopy` or remapped trash still grades as 72o (LPT-164).
-- Prefer a second open of the same lesson when judging card randomization —
-  screenshot hole/board cards on attempt A and attempt B before deciding
-  the deal is fixed. Read ranks from the latest PNG before tapping a
-  SoftPulse target; a stale rank needle misses the gold card.
-- Prefer screenshotting the heart count before and after a paid miss (and
-  after Practice/refill) before claiming hearts work. Read PNGs you just
-  captured; do not close from memory of an earlier run.
+- Prefer a second open when judging card randomization (screenshot hole/board
+  A vs B) and screenshot heart counts before/after a paid miss (and after
+  Practice/refill) before claiming cards or hearts work. Read ranks from the
+  latest PNG before tapping SoftPulse; a stale rank needle misses the gold
+  card. Read PNGs you just captured — do not close from memory.
 - Prefer naming Jira shots `<surface>-issue.png` and
   `<KEY>-validated.png`. Never file without an issue shot; never close
   without a validated shot on origin/main. Every Markdown image in the
@@ -300,14 +298,18 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   footer. A local `_coachText` string alone leaves framed speech on catalog.
 
 - Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
+- Prefer `rg '<<<<<<<|=======|>>>>>>>'` on conflicted files after a merge resolution **before** `git commit` — an earlier StrReplace can leave markers in HEAD while the working tree looks clean until the next edit (LPT-520).
 
 ## Ops (simulator, CLI, Jira)
 
-- Cursor CLI over SSH / LaunchAgent needs `CURSOR_API_KEY` in
-  `~/.live-poker-trainer/secrets.env`. Do not call `agent login`. The loop
-  sets `AGENT_CLI_CREDENTIAL_STORE=memory` and clears a stuck
-  `cursor-access-token` keychain item before each start so
-  `errSecDuplicateItem` / `auth.refresh.persistFailed` cannot burn the run.
+- Secrets in `~/.live-poker-trainer/secrets.env`: `CURSOR_API_KEY` for CLI /
+  LaunchAgent (do not `agent login`; loop uses
+  `AGENT_CLI_CREDENTIAL_STORE=memory` and clears a stuck
+  `cursor-access-token` keychain item so `errSecDuplicateItem` /
+  `auth.refresh.persistFailed` cannot burn the run);
+  `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` for Jira — `jira.py check`
+  failure → `JIRA_UNAVAILABLE`; `create` prints `KEY<TAB>URL` (column 1
+  only for `edit` / `get` / `comment`).
 - Heartbeat during long worktree `flutter run`, validates, `flutter test` /
   analyze, and Cloud Functions deploy — including immediately before and
   after long `test-LPT-*` / `analyze-LPT-*` tmux sessions (LPT-240: lock
@@ -333,19 +335,15 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   bash arithmetic treated it as `--purpose` decrement). Bare
   `cmd | tee; echo EXIT:$?` also masks failures as 0 (LPT-367). Write
   coverage before long compiles when the ticket is already Done in Jira.
-- Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
-  `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
-  `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.
 - Loop preflight is programmatic (claim → refresh → Dart VM → handoff
   JSON) before the machine SDK agent. At step 2 trust that VM; refresh
   only when switching builds. `dart_vm_ready` needs macOS-safe
   `[A-Za-z0-9_=-]`. One refresh + one retry then `SIM_NOT_READY` (often
   `pub get` Terminated: 15); do not rewrite refresh mid-run. Consecutive
-  misses back off ~10 min.
-- `refresh-simulator` must claim with `--pid $$`. Worktree validate uses
-  `/tmp/flutter-$SLUG.log`; origin/main uses
-  `/tmp/flutter-live-poker-trainer.run.log` (must be a normal file).
-  When primary flutter dies during closeout, run
+  misses back off ~10 min. `refresh-simulator` must claim with `--pid $$`.
+  Worktree validate uses `/tmp/flutter-$SLUG.log`; origin/main uses
+  `/tmp/flutter-live-poker-trainer.run.log` (must be a normal file). When
+  primary flutter dies during closeout, run
   `REFRESH_ALLOW_HOLDER=1 …/refresh-simulator.sh` (you hold the
   ui-design-agent lock) — do not hand-roll tmux + `AwaitShell`. A stale
   VM URI above a newer `Launching…` is not ready, and a cached-app launch

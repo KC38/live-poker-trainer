@@ -10744,6 +10744,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive session guardrails — tap stop vs reload',
       semanticsStatic: 'Session discipline stop outcomes',
       caption: scene.caption ?? 'Hit planned stop-loss — next?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Stop / move down.
+      // Null guideRegion SoftPulses every phase (LPT-521).
+      guideRegion: LessonTableRegion.disciplineStop,
       phases: [
         (
           region: LessonTableRegion.disciplineStop,
@@ -10751,7 +10754,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Plans beat feelings',
           visual: const Icon(
             Icons.front_hand_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10775,6 +10778,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive session guardrails — tap decline vs jump',
       semanticsStatic: 'Session discipline stakes outcomes',
       caption: scene.caption ?? '40 BI for 1/2 — 2/5 opens?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Decline.
+      // Null guideRegion SoftPulses every phase (LPT-521).
+      guideRegion: LessonTableRegion.disciplineDecline,
       phases: [
         (
           region: LessonTableRegion.disciplineDecline,
@@ -10782,7 +10788,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Outside the plan',
           visual: const Icon(
             Icons.block,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10806,6 +10812,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive session guardrails — tap cash out vs stay',
       semanticsStatic: 'Session discipline cash-out outcomes',
       caption: scene.caption ?? 'Tired, up small, table wild?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Cash out.
+      // Null guideRegion SoftPulses every phase (LPT-521).
+      guideRegion: LessonTableRegion.disciplineCashOut,
       phases: [
         (
           region: LessonTableRegion.disciplineCashOut,
@@ -10813,7 +10822,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Fatigue is a leak',
           visual: const Icon(
             Icons.logout,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10837,6 +10846,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive session guardrails — tap your edge vs soft skills',
       semanticsStatic: 'Session discipline edge outcomes',
       caption: scene.caption ?? 'Session discipline is part of?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Your edge.
+      // Null guideRegion SoftPulses every phase (LPT-521).
+      guideRegion: LessonTableRegion.disciplineEdge,
       phases: [
         (
           region: LessonTableRegion.disciplineEdge,
@@ -10844,7 +10856,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Same as technical skill',
           visual: const Icon(
             Icons.emoji_events_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
