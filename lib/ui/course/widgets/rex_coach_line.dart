@@ -90,6 +90,9 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Size with a message unguided densified ask (LPT-410) — same path.
     'act-04-04-01-unguided' =>
       'Two value sizes both get calls — pick nearby soft-grade over one exact chip.',
+    // SPR decides commitment guided densified ask (LPT-412) — same path.
+    'act-04-05-01-guided' =>
+      'Effective 80 into pot 20 — pick SPR 4.',
     _ => null,
   };
 }
