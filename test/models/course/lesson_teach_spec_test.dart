@@ -238,6 +238,14 @@ const _lessons = <String, List<String>>{
     'act-04-02-01-unguided',
     'act-04-02-01-checkpoint',
   ],
+  // LPT-174
+  'lesson-04-03-01-continuation-plans': [
+    'act-04-03-01-explain',
+    'act-04-03-01-guided',
+    'act-04-03-01-scaffolded',
+    'act-04-03-01-unguided',
+    'act-04-03-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1400,6 +1408,52 @@ void main() {
       expect(cp.teachSpec!['deal']['fixedCards']['hero'], ['Kh', 'Kd']);
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'size-18');
+    });
+  });
+
+  group('Plan beyond the flop (LPT-174)', () {
+    test('explain SoftPulse walks FLOP → TURN → RIVER', () {
+      expect(
+        _list(
+          act('act-04-03-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['FLOP', 'TURN', 'RIVER'],
+      );
+    });
+
+    test('multi-street and action spots author fixed deals', () {
+      expect(
+        _list(
+          act('act-04-03-01-guided'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['flop-bet', 'turn-bet'],
+      );
+      expect(
+        act('act-04-03-01-guided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Kd'],
+      );
+      // True four-heart turn (LPT-400), never Kh 7h 2c 3h.
+      expect(
+        act('act-04-03-01-scaffolded')
+            .teachSpec!['deal']['fixedCards']['board'],
+        ['Kh', '7h', '2h', '3h'],
+      );
+      expect(
+        _list(act('act-04-03-01-scaffolded'), 'cues').single['target'],
+        'abort',
+      );
+      expect(
+        _list(act('act-04-03-01-unguided'), 'cues').single['target'],
+        'small-pot',
+      );
+      final cp = act('act-04-03-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.teachSpec!['deal'], {'mode': 'none'});
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'branches');
     });
   });
 }
