@@ -294,10 +294,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (LPT-72). Prefer named `test-LPT-*` tmux for long suites over anonymous
   sessions — run them with `tools/tee_exit.sh /tmp/test-LPT-….log flutter
   test …` (same for `analyze-LPT-*` / `dart analyze`) so `EXIT:N` is the
-  command status; bare `cmd | tee; echo EXIT:$?` masks failures as 0
-  (LPT-367).
-- Prefer a `/tmp/test-LPT-NN.done` (or `DONE_*:N` log line) marker after named `test-LPT-*` / `analyze-LPT-*` tmux work over grepping the pane for `EXIT:` — the send-keys command text itself contains `EXIT:$?` and can false-trigger an early session kill before tests finish. Write coverage before long compiles when the ticket is
-  already Done in Jira.
+  command status and `/tmp/test-LPT-….done` appears only when finished;
+  wait on that `.done` file, never grep the pane for `EXIT:` (send-keys
+  text itself contains `EXIT:$?` and false-kills mid-suite — LPT-391).
+  Bare `cmd | tee; echo EXIT:$?` also masks failures as 0 (LPT-367).
+  Write coverage before long compiles when the ticket is already Done in
+  Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
   `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.
