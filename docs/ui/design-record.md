@@ -613,6 +613,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Meet the Calling Station densified asks | Meet the Calling Station densified asks (`act-04-06-02-guided` / `act-04-06-02-scaffolded` / `act-04-06-02-unguided` / `act-04-06-02-checkpoint`) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-420). |
 | Recognize capped densified asks | Recognize capped versus uncapped densified asks (`act-06-03-01-guided` / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-636). |
 | Choose polarized densified asks | Choose polarized or merged betting densified asks (`act-06-04-01-guided` / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-637). |
+| Use overbets densified asks | Use overbets and geometric pressure densified asks (`act-06-05-01-guided` / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-638). |
 | Meet Calling Station SoftPulse one gold | Meet Calling Station scaffolded / unguided outcome SoftPulse passes `guideRegion` (`labelWorkingModel` / `playerTypeStationLimp`) so Hint paints one gold tile — never both Working model and Permanent, or Station and Maniac (LPT-424). |
 | Observe narrow SoftPulse one gold | Observe narrow players densified asks (`act-04-07-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`observeNarrowEntry` / `observeStrongAggression` / `observeWaitSamples` / `observeNitBundle`) so SoftPulse paints one gold tile — never both Narrow and Wide, Strong heat and Passive, Wait and Label now, or Few+heat and Calls all (LPT-433). |
 | Meet the Nit SoftPulse one gold | Meet the Nit densified asks (`act-04-07-02-guided` / unguided / checkpoint) pass `guideRegion` (`meetNitLabel` / `meetNitLabel2` / `meetNitWorkingModel`) so SoftPulse paints one gold tile — never both Nit and Station, Nit and Maniac, or Working model and An insult (LPT-440). |
@@ -1449,7 +1450,7 @@ felt.
 | Realize equity in and out of position | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524) | realization quizzes |
 | Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts; densified frame asks (LPT-636) | check-turn, bomb, and attack checks |
 | Choose polarized or merged betting | Polar, Merged, Size; densified frame asks (LPT-637) | — |
-| Use overbets and geometric pressure | Overbet, Polar, Geo; unguided SoftPulse one gold (LPT-497) | — |
+| Use overbets and geometric pressure | Overbet, Polar, Geo; densified frame asks (LPT-638); unguided SoftPulse one gold (LPT-497) | — |
 | Use blockers without solver theater | Block, Use, No EV; unguided SoftPulse one gold (LPT-498) | — |
 | Defend enough without frequency theater | Defend, Bluff, Enough; unguided SoftPulse one gold (LPT-499) | continue, intuition, and punish checks |
 | Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500) | station, reason, and purpose checks |

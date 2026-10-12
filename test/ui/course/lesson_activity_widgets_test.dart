@@ -22136,6 +22136,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-638: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Best overbet river — tap the polar candidate.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Best overbet river — pick the polar candidate.'),
       findsOneWidget,
@@ -22239,6 +22245,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-638: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Random 3x pot medium — tap the disciplined line.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Random 3x pot medium — pick the disciplined line.'),
       findsOneWidget,
@@ -22304,6 +22316,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-638: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Geometric sizing helps — tap what it links.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Geometric sizing helps — pick what it links.'),
       findsOneWidget,
