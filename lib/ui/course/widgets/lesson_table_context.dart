@@ -13301,7 +13301,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive pot type — tap Higher commitment or 300bb deep',
       semanticsStatic: 'Pot-type unguided outcomes',
       caption: scene.caption ?? '4-bet pot 100bb — mindset?',
-      // No SoftPulse on unguided — still don’t gold-icon Higher commitment.
+      // SoftPulse + Rex own the cue — don’t gold-tip Higher commitment.
+      // Null guideRegion SoftPulses every phase (LPT-508).
+      guideRegion: LessonTableRegion.potTypeHigherCommit,
       phases: [
         (
           region: LessonTableRegion.potTypeHigherCommit,
