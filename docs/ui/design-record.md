@@ -557,6 +557,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Identify / naming docks | Action-name quizzes (`identifyUnavailable` on `LessonActionSpot`) keep every dock button looking live until the learner taps — no `CALL (off)` / `RAISE (off)` spoilers. Fold, check, call `checkpoint-legal` and Bet, raise, all-in `checkpoint-names` both set that flag (LPT-78). Live realism `(off)` chrome stays on guided / scaffolded / short-stack spots that are not identify quizzes. |
 | Toy-hand authored pot | Authored multi-step toy-hand spots apply labeled `potLabel` and completed call/open street bets on `LessonTableStage` even when `facingBet` is false — BB-calls-your-open shows Pot 13 with matched raise/call chips; flop c-bet keeps Pot 13 (not blinds-only $3 or the $10 street default) (LPT-97). |
 | Section 1 jump ranks | `act-01-06-02-jump-ranks` orders three face-up showdown seats strongest→weakest (Flush → Straight → Two pair) via `LessonShowdownOrderTable` — not under-felt Flush/Straight/Two pair text chips on `LessonMadeHandTable` (LPT-107). |
+| Acting order checkpoint flop | `act-02-01-02-checkpoint-full` deals a three-card flop (`Qs 7c 2d`) on framed `LessonTableStage` so street chrome is FLOP when the ask names a flop — not blinds-only PREFLOP (LPT-148; same board as scaffolded-post). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
 rebuilds until all four real suits are in; `syncSelection` only mirrors a
@@ -757,6 +758,12 @@ Section 1 jump ranks (LPT-107) is `handRanksShowdownSpot` /
 `dealShowdownOrderCards` for `act-01-06-02-jump-ranks` (Flush → Straight →
 Two pair on You / Sam / Jo), rendered by `LessonShowdownOrderTable` like Hand
 ranks compare — not `LessonMadeHandTable` plus under-felt hand-class chips.
+
+Acting order checkpoint-full (LPT-148) passes flop `boardCodes` (`Qs 7c 2d`)
+on the framed `LessonTableStage` for `act-02-01-02-checkpoint-full` — same
+board as scaffolded-post — so FLOP street chrome matches the "Six-max flop"
+ask. The next seat-map checkpoint whose coach names a street copies that
+board pass instead of a blinds-only empty board.
 The next jump-test rank order copies that showdown-seat path.
 
 The per-lesson state is the Lesson ledger at the end of this file.
