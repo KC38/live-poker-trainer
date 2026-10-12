@@ -20547,6 +20547,268 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('s6 eq-realize guided SoftPulse In position — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-02-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'In position.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Same draw OOP vs IP. Where does it realize better?',
+      choices: const [
+        CourseChoice(id: 'ip', label: 'In position'),
+        CourseChoice(id: 'oop', label: 'Out of position'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Same draw — equity realizes better when you act last.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Same draw OOP vs IP. Where does it realize better?'),
+      findsNothing,
+    );
+    // LPT-524: guideRegion → one gold SoftPulse (In position), not Out of position.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('In position'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Out of position'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('In position'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'ip');
+    controller.dispose();
+  });
+
+  testWidgets('s6 eq-realize scaffold SoftPulse Discount / fold — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-02-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Discount and fold more.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Weak showdown value OOP facing dual barrels. Default?',
+      choices: const [
+        CourseChoice(id: 'discount', label: 'Discount / fold'),
+        CourseChoice(id: 'hero', label: 'Hero-call'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Weak showdown value OOP vs dual barrels — tighten continues.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('Weak showdown value OOP facing dual barrels. Default?'),
+      findsNothing,
+    );
+    // LPT-524: guideRegion → one gold SoftPulse (Discount / fold), not Hero-call.
+    final scaffoldCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(scaffoldCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Discount / fold'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Hero-call'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Discount / fold'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'discount');
+    controller.dispose();
+  });
+
+  testWidgets('s6 eq-realize unguided SoftPulse Fold equity — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-02-01-unguided',
+      order: 4,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Realize equity via fold equity + outs.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Semi-bluff check-raise with nut draw IP-denied. Purpose?',
+      choices: const [
+        CourseChoice(id: 'realize', label: 'Fold equity'),
+        CourseChoice(id: 'fancy', label: 'Fancy play'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Nut draw check-raise — pressure folds plus your outs.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Semi-bluff check-raise with nut draw IP-denied. Purpose?',
+      ),
+      findsNothing,
+    );
+    // LPT-524: guideRegion → one gold SoftPulse (Fold equity), not Fancy play.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Fold equity'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Fancy play'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Fold equity'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'realize');
+    controller.dispose();
+  });
+
+  testWidgets(
+    's6 eq-realize checkpoint SoftPulse Position + initiative — no gold tip',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-06-02-01-checkpoint',
+        order: 5,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 45,
+        accessibilityText: 'Position and initiative.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Equity realization rises with?',
+        choices: const [
+          CourseChoice(id: 'pos', label: 'Position + initiative'),
+          CourseChoice(id: 'hope', label: 'Hope alone'),
+        ],
+      );
+      expect(isTableRegionTapActivity(activity), isTrue);
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      expect(
+        find.text(
+          'Equity realization climbs with position and initiative.',
+        ),
+        findsOneWidget,
+      );
+      // Felt caption may reuse the catalog prompt; SoftPulse owns the teach cue.
+      expect(find.textContaining('Tap the best answer'), findsNothing);
+      // LPT-524: guideRegion → one gold SoftPulse (Position + initiative).
+      final checkpointCues =
+          tester
+              .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+              .where((g) => g.active && g.kind == GlowKind.cue)
+              .toList(growable: false);
+      expect(checkpointCues, hasLength(1));
+      expect(
+        find.descendant(
+          of: find.byWidget(checkpointCues.single),
+          matching: find.text('Position + initiative'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byWidget(checkpointCues.single),
+          matching: find.text('Hope alone'),
+        ),
+        findsNothing,
+      );
+      await tester.tap(find.text('Position + initiative'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'pos');
+      controller.dispose();
+    },
+  );
+
   testWidgets('s5 guardrails explain hides interactive footer dupe', (
     tester,
   ) async {
