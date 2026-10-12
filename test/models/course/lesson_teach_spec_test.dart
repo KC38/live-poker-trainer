@@ -5,9 +5,11 @@ library;
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 
 /// Lesson id -> interactive activity ids that must author `teachSpec`.
@@ -19,6 +21,14 @@ const _lessons = <String, List<String>>{
     'act-01-01-03-scaffolded-blinds',
     'act-01-01-03-unguided-when',
     'act-01-01-03-checkpoint-layout',
+  ],
+  // LPT-88
+  'lesson-01-02-01-hand-ranks': [
+    'act-01-02-01-explain-ladder',
+    'act-01-02-01-guided-ladder',
+    'act-01-02-01-scaffolded-spot',
+    'act-01-02-01-unguided-compare',
+    'act-01-02-01-checkpoint-winner',
   ],
 };
 
@@ -124,6 +134,59 @@ void main() {
         act('act-01-01-03-unguided-when').choices.map((c) => c.id),
         contains('before-deal'),
       );
+    });
+  });
+
+  group('Hand ranks (LPT-88)', () {
+    const classes = {
+      'act-01-02-01-explain-ladder': ['high_card', 'pair', 'flush'],
+      'act-01-02-01-guided-ladder': ['high_card', 'pair', 'flush'],
+      'act-01-02-01-scaffolded-spot': ['pair', 'straight', 'flush'],
+      'act-01-02-01-unguided-compare': ['full_house', 'trips', 'two_pair'],
+      'act-01-02-01-checkpoint-winner': ['flush', 'straight', 'high_card'],
+    };
+
+    test('deal families list the press-order classes', () {
+      for (final MapEntry(key: id, value: want) in classes.entries) {
+        final deal = act(id).teachSpec!['deal'] as Map<String, dynamic>;
+        final variants = [
+          for (final v in deal['variants'] as List<dynamic>)
+            (v as Map)['handFamily'],
+        ];
+        expect([deal['handFamily'], ...variants], want, reason: id);
+      }
+    });
+
+    test('cues follow the role ids in press order', () {
+      for (final id in classes.keys) {
+        final a = act(id);
+        final cues = _list(a, 'cues');
+        expect([for (final c in cues) c['target']], ['you', 'sam', 'jo']);
+        // Role ids are the authored sequence items (grading stays on them).
+        final items = [for (final i in a.sequenceItems) i.id];
+        if (items.isNotEmpty) {
+          expect(items, ['you', 'sam', 'jo'], reason: id);
+        }
+        final kind = a.assessmentRole == null ? 'soft_pulse' : 'none';
+        expect(cues.every((c) => c['kind'] == kind), isTrue, reason: id);
+      }
+    });
+
+    test('Dart deal classes match the authored families per role', () {
+      String spoken(String family) => family.replaceAll('_', ' ');
+      for (final MapEntry(key: id, value: want) in classes.entries) {
+        for (var seed = 0; seed < 12; seed++) {
+          final deal = dealShowdownOrderCards(id, random: Random(seed))!;
+          final hint = showdownOrderHintSpeech(id, deal: deal)!;
+          // Hint names each role's class in press order: "You (pair), ...".
+          final named = RegExp(r'\(([^)]+)\)')
+              .allMatches(hint)
+              .map((m) => m.group(1))
+              .toList();
+          expect(named, [for (final f in want) spoken(f)], reason: hint);
+          expect(deal.correctOrder, ['you', 'sam', 'jo']);
+        }
+      }
     });
   });
 }

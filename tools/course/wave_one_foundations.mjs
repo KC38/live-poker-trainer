@@ -26,6 +26,12 @@ export function dialogue(id, order, text, extra = {}) {
       feedback: okFeedback.trim(),
     };
   }
+  // teachSpec stays the last key, as in content/course/v2/course.json.
+  if (out.teachSpec) {
+    const {teachSpec} = out;
+    delete out.teachSpec;
+    out.teachSpec = teachSpec;
+  }
   return out;
 }
 
@@ -72,7 +78,8 @@ export function selectAct({
 
 export function sequenceAct({
   id, order, stage, prompt, a11y, objectives, items, correct,
-  okFeedback, missFeedback, renderer = "order_sequence", teachSpec,
+  okFeedback, missFeedback, renderer = "order_sequence", assessmentRole,
+  teachSpec,
 }) {
   const act = {
     id, order, stage, renderer,
@@ -88,6 +95,8 @@ export function sequenceAct({
       incorrect: {grade: "clear_mistake", feedback: missFeedback},
     },
   };
+  // Same key order as content/course/v2/course.json (LPT-88).
+  if (assessmentRole) act.assessmentRole = assessmentRole;
   if (teachSpec) act.teachSpec = teachSpec;
   return act;
 }
@@ -579,6 +588,23 @@ export function buildSectionOne() {
                 {
                   objectives: ["Order common hand ranks"],
                   okFeedback: "High card, then pair, then flush.",
+                  // LPT-88: dealShowdownOrderCards classes (role ids you/sam/jo = press order);
+                  // seat roles shuffle in Dart, cues follow the role ids.
+                  teachSpec: {
+                    deal: {
+                      mode: "random_in_class",
+                      handFamily: "high_card",
+                      variants: [
+                        {id: "var-pair-seat", handFamily: "pair", label: "Pair seat"},
+                        {id: "var-flush-seat", handFamily: "flush", label: "Flush seat"},
+                      ],
+                    },
+                    cues: [
+                      {press: 1, target: "you", kind: "soft_pulse"},
+                      {press: 2, target: "sam", kind: "soft_pulse"},
+                      {press: 3, target: "jo", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               sequenceAct({
                 id: "act-01-02-01-guided-ladder", order: 2, stage: "guided",
@@ -594,6 +620,23 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "High card, then pair, then flush.",
                 missFeedback: "Flush is strongest of these three.",
+                // LPT-88: dealShowdownOrderCards classes (role ids you/sam/jo = press order);
+                // seat roles shuffle in Dart, cues follow the role ids.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "high_card",
+                    variants: [
+                      {id: "var-pair-seat", handFamily: "pair", label: "Pair seat"},
+                      {id: "var-flush-seat", handFamily: "flush", label: "Flush seat"},
+                    ],
+                  },
+                  cues: [
+                    {press: 1, target: "you", kind: "soft_pulse"},
+                    {press: 2, target: "sam", kind: "soft_pulse"},
+                    {press: 3, target: "jo", kind: "soft_pulse"},
+                  ],
+                },
               }),
               sequenceAct({
                 id: "act-01-02-01-scaffolded-spot", order: 3, stage: "scaffolded",
@@ -609,6 +652,23 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "Pair, then straight, then flush.",
                 missFeedback: "Flush beats straight; straight beats pair.",
+                // LPT-88: dealShowdownOrderCards classes (role ids you/sam/jo = press order);
+                // seat roles shuffle in Dart, cues follow the role ids.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "pair",
+                    variants: [
+                      {id: "var-straight-seat", handFamily: "straight", label: "Straight seat"},
+                      {id: "var-flush-seat", handFamily: "flush", label: "Flush seat"},
+                    ],
+                  },
+                  cues: [
+                    {press: 1, target: "you", kind: "soft_pulse"},
+                    {press: 2, target: "sam", kind: "soft_pulse"},
+                    {press: 3, target: "jo", kind: "soft_pulse"},
+                  ],
+                },
               }),
               sequenceAct({
                 id: "act-01-02-01-unguided-compare", order: 4, stage: "scaffolded",
@@ -624,6 +684,23 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "Full house, then trips, then two pair.",
                 missFeedback: "Full house tops trips; trips top two pair.",
+                // LPT-88: dealShowdownOrderCards classes (role ids you/sam/jo = press order);
+                // seat roles shuffle in Dart, cues follow the role ids.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "full_house",
+                    variants: [
+                      {id: "var-trips-seat", handFamily: "trips", label: "Trips seat"},
+                      {id: "var-two-pair-seat", handFamily: "two_pair", label: "Two pair seat"},
+                    ],
+                  },
+                  cues: [
+                    {press: 1, target: "you", kind: "soft_pulse"},
+                    {press: 2, target: "sam", kind: "soft_pulse"},
+                    {press: 3, target: "jo", kind: "soft_pulse"},
+                  ],
+                },
               }),
               sequenceAct({
                 id: "act-01-02-01-checkpoint-winner", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -639,6 +716,23 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "Flush beats straight; straight beats high card.",
                 missFeedback: "Flush is strongest; high card is weakest.",
+                // LPT-88: dealShowdownOrderCards classes (role ids you/sam/jo = press order);
+                // seat roles shuffle in Dart, cues follow the role ids.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "flush",
+                    variants: [
+                      {id: "var-straight-seat", handFamily: "straight", label: "Straight seat"},
+                      {id: "var-high-card-seat", handFamily: "high_card", label: "High card seat"},
+                    ],
+                  },
+                  cues: [
+                    {press: 1, target: "you", kind: "none"},
+                    {press: 2, target: "sam", kind: "none"},
+                    {press: 3, target: "jo", kind: "none"},
+                  ],
+                },
               }),
             ],
           }),

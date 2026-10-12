@@ -41,10 +41,10 @@ old checkpoint/jump_test stages→scaffolded+role.
 
 Optional authored deal / hint / cue contract on each activity
 (`teach_spec.schema.json`): `deal` (`none` | `fixed` | `random_in_class` +
-hand/suit families + `variants`), `pressHints`, `cues`. Pilot:
-Your two cards. Lessons that follow it on every interactive step: Suits and
-ranks (LPT-81), Button and blinds (LPT-85). Content gaps are audited by
-[11 — Lesson content agent](11-lesson-content-agent.md).
+hand/suit families + `variants`), `pressHints`, `cues`. Pilot: Your two
+cards. Lessons that follow it on every interactive step: Suits and ranks
+(LPT-81), Button and blinds (LPT-85), Hand ranks (LPT-88). Content gaps are
+audited by [11 — Lesson content agent](11-lesson-content-agent.md).
 
 ### Activity renderers
 
