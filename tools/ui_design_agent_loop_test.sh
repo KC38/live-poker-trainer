@@ -723,6 +723,17 @@ schedule_ensure_after_soft_stop() { : >"$_soft_sched"; }
 soft_stopped=1
 if [[ "$soft_stopped" -eq 1 ]]; then schedule_ensure_after_soft_stop; fi
 [[ -f "$_soft_sched" ]] || fail "soft-stop should schedule ensure"
+# STOP_FILE present after while (e.g. during gap sleep) still soft-stops.
+soft_stopped=0
+touch "$STOP_FILE"
+if [[ -f "$STOP_FILE" ]]; then soft_stopped=1; fi
+[[ "$soft_stopped" -eq 1 ]] || fail "STOP_FILE after while must set soft_stopped"
+rm -f "$STOP_FILE"
+# CLI accepts soft-stop as an alias for stop (child must not inherit SOURCE_ONLY).
+UI_AGENT_LOOP_SOURCE_ONLY= bash "$SCRIPT" soft-stop >/dev/null \
+  || fail "soft-stop CLI alias should succeed"
+[[ -f "$STOP_FILE" ]] || fail "soft-stop should touch STOP_FILE"
+rm -f "$STOP_FILE"
 unset -f schedule_ensure_after_soft_stop
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
@@ -855,6 +866,45 @@ grep -q '"ticket": "LPT-492"' "$HEALTH_FILE" \
   || fail "repair should fill stamp from +0530 coverage: $(cat "$HEALTH_FILE")"
 grep -q 'coverage:closed ticket:LPT-492' "$HEALTH_FILE" \
   || fail "repair should scrub prose after +0530 fill: $(cat "$HEALTH_FILE")"
+
+# Overlapping padded windows: pick coverage closest to start+seconds, not latest.
+python3 - "$COVERAGE_FILE" <<'PY'
+import json, sys
+from pathlib import Path
+rows = [
+    {
+        "at": "2026-10-12T21:22:17+05:30",
+        "sha": "a",
+        "surface": "lesson-runner:meet-the-maniac",
+        "result": "closed",
+        "ticket": "LPT-490",
+        "leads": [],
+        "learnings": "unchanged",
+    },
+    {
+        "at": "2026-10-12T21:38:31+05:30",
+        "sha": "b",
+        "surface": "lesson-runner:meet-the-tag",
+        "result": "closed",
+        "ticket": "LPT-491",
+        "leads": [],
+        "learnings": "unchanged",
+    },
+]
+Path(sys.argv[1]).write_text(
+    "".join(json.dumps(r) + "\n" for r in rows),
+    encoding="utf-8",
+)
+PY
+# stamp 21:05:27 + 1139s ≈ 21:24:26 → LPT-490; LPT-491 is later but still in +900 pad.
+printf '%s\n' \
+  '{"at":"2026-10-12T21:24:26+05:30","stamp":"20261012-210527","exit":0,"seconds":1139,"ticket":null,"result":null,"tail":""}' \
+  >"$HEALTH_FILE"
+repair_health_tails
+grep -q '"ticket": "LPT-490"' "$HEALTH_FILE" \
+  || fail "repair should prefer closest-to-run-end (LPT-490): $(cat "$HEALTH_FILE")"
+grep -q 'LPT-491' "$HEALTH_FILE" \
+  && fail "repair must not steal next ticket into earlier stamp: $(cat "$HEALTH_FILE")"
 
 # Prose with an LPT key (and no coverage match) still attributes the stamp.
 : >"$COVERAGE_FILE"

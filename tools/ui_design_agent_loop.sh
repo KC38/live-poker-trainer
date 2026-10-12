@@ -8,7 +8,8 @@
 #   tools/ui_design_agent_loop.sh ensure   start the loop only when run-loop is alive
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
-#   tools/ui_design_agent_loop.sh stop     finish the current run, then stop
+#   tools/ui_design_agent_loop.sh stop     soft-stop: finish current run, then ensure restarts
+#   tools/ui_design_agent_loop.sh soft-stop  alias for stop (reload bash / structural fixes)
 #   tools/ui_design_agent_loop.sh kill     stop now and free a lock this loop holds
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
@@ -923,8 +924,9 @@ for row in rows:
     # Fill empty / false-stall stamp rows from coverage in the run window.
     # Pad the end so a ticket closed after SIGTERM / stall-kill + reconcile
     # still matches (LPT-134 exit 143, LPT-240 exit 13 then closed).
-    # Prefer the latest coverage in the window (closest to run end) so an
-    # overlapping prior close does not steal the stamp.
+    # Prefer coverage closest to the recorded run end (start+seconds), not
+    # the latest row in the padded window — overlapping pads used to pin
+    # the next ticket onto the previous stamp (LPT-490/491).
     if (
         stamp
         and stamp != "reconciled"
@@ -933,14 +935,17 @@ for row in rows:
     ):
         start_ep = stamp_epoch(stamp)
         seconds = row.get("seconds")
+        run_end = None
         end_ep = None
         if start_ep is not None and isinstance(seconds, int):
-            end_ep = start_ep + max(seconds, 0) + 900
+            run_end = start_ep + max(seconds, 0)
+            end_ep = run_end + 900
         elif start_ep is not None:
             end_ep = start_ep + 4 * 3600
+            run_end = end_ep
         if start_ep is not None and end_ep is not None:
             best = None
-            best_ts = None
+            best_delta = None
             for cov in coverage_rows:
                 cov_ts = _parse_iso_epoch(cov.get("at"))
                 if cov_ts is None or not cov.get("ticket"):
@@ -948,9 +953,10 @@ for row in rows:
                 if cov.get("result") in (None, "sim-not-ready", "stalled"):
                     continue
                 if start_ep - 5 <= cov_ts <= end_ep:
-                    if best_ts is None or cov_ts >= best_ts:
+                    delta = abs(cov_ts - run_end)
+                    if best_delta is None or delta < best_delta:
                         best = cov
-                        best_ts = cov_ts
+                        best_delta = delta
             if best is not None:
                 was_stalled = result == "stalled"
                 ticket = best.get("ticket")
@@ -2025,7 +2031,7 @@ run_loop() {
   # shellcheck disable=SC2064
   trap 'rm -f "$LOOP_PID_FILE"' EXIT
   rm -f "$STOP_FILE"
-  log "ui-design-agent loop started (stop: $SCRIPT stop)"
+  log "ui-design-agent loop started (stop: $SCRIPT stop|soft-stop)"
   local soft_stopped=0
   while [[ ! -f "$STOP_FILE" ]]; do
     local code=0
@@ -2060,6 +2066,11 @@ run_loop() {
         ;;
     esac
   done
+  # STOP_FILE during busy/gap sleep exits the while without the post-one_run
+  # check — still treat that as soft-stop so ensure restarts promptly.
+  if [[ -f "$STOP_FILE" ]]; then
+    soft_stopped=1
+  fi
   rm -f "$STOP_FILE" "$LOOP_PID_FILE"
   trap - EXIT
   log "ui-design-agent loop stopped"
@@ -2215,9 +2226,12 @@ EOF
   once)
     one_run
     ;;
-  stop)
+  stop|soft-stop)
+    # Soft-stop: finish the current run, exit run-loop, then schedule ensure
+    # so a fresh bash reloads structural loop changes. `kill`/`uninstall`
+    # leave the loop down.
     touch "$STOP_FILE"
-    echo "the loop stops after the current run"
+    echo "soft-stop requested: loop finishes the current run, then ensure restarts it"
     ;;
   kill)
     touch "$STOP_FILE"
