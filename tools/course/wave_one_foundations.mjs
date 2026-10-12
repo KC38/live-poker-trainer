@@ -6,7 +6,8 @@
 export const ACC = ["recommended", "strong", "reasonable"];
 
 export function dialogue(id, order, text, extra = {}) {
-  return {
+  const {okFeedback, ...rest} = extra;
+  const out = {
     id,
     order,
     stage: "explain",
@@ -15,8 +16,17 @@ export function dialogue(id, order, text, extra = {}) {
     accessibilityText: text,
     acceptedGrades: ["recommended"],
     coachMedia: [{id: `${id}-media`, kind: "dialogue", text}],
-    ...extra,
+    ...rest,
   };
+  // Optional Nice! why line — private bank only (LPT-74). Without it,
+  // gradeCourseResponse falls back to accessibilityText (often the ask).
+  if (typeof okFeedback === "string" && okFeedback.trim()) {
+    out.explainGrading = {
+      grade: "recommended",
+      feedback: okFeedback.trim(),
+    };
+  }
+  return out;
 }
 
 export function choice(id, label, grade, feedback, extra = {}) {
@@ -481,7 +491,10 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-02-01-explain-ladder", 1,
                 "Pair beats high card. Flush beats straight. Tap seats weakest to strongest.",
-                {objectives: ["Order common hand ranks"]}),
+                {
+                  objectives: ["Order common hand ranks"],
+                  okFeedback: "High card, then pair, then flush.",
+                }),
               sequenceAct({
                 id: "act-01-02-01-guided-ladder", order: 2, stage: "guided",
                 renderer: "compare_rank",

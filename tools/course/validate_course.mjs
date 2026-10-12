@@ -209,6 +209,9 @@ function stripActivityPrivate(activity, errors, path) {
   if (out.sequenceGrading !== undefined) {
     delete out.sequenceGrading;
   }
+  if (out.explainGrading !== undefined) {
+    delete out.explainGrading;
+  }
   if (out.numericPrompt && typeof out.numericPrompt === "object") {
     const np = {
       .../** @type {Record<string, unknown>} */ (out.numericPrompt),
@@ -423,6 +426,9 @@ export function validateAndGenerate(course) {
           }
           if (act.sequenceGrading !== undefined) {
             privatePayload.sequenceGrading = act.sequenceGrading;
+          }
+          if (act.explainGrading !== undefined) {
+            privatePayload.explainGrading = act.explainGrading;
           }
           if (act.numericPrompt && typeof act.numericPrompt === "object") {
             const np = /** @type {Record<string, unknown>} */ (act.numericPrompt);
