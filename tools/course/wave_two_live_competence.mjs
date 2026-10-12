@@ -1833,7 +1833,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-07-01-explain", 1,
                 "Some seats almost never enter. When they do, they mean it. Note both.",
-                {objectives: ["Tag narrow entry"]}),
+                {
+                  objectives: ["Tag narrow entry"],
+                  // LPT-193
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "RARE", kind: "soft_pulse"},
+                      {press: 2, target: "ENTER", kind: "soft_pulse"},
+                      {press: 3, target: "MEAN IT", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-04-07-01-guided", order: 2, stage: "guided",
                 prompt: "Seat folded 20 of 22 hands. Observation?",
@@ -1845,6 +1856,8 @@ export function buildSectionFour() {
                   choice("wide", "Wide entry", "clear_mistake",
                     "Opposite.", {betterChoiceId: "narrow"})
                 ],
+                // LPT-193
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "narrow", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-07-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1857,6 +1870,11 @@ export function buildSectionFour() {
                   choice("passive", "They are passive callers", "clear_mistake",
                     "Raising and barreling is aggression.", {betterChoiceId: "strong-aggr"})
                 ],
+                // LPT-193
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "strong-aggr", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-07-01-unguided", order: 4, stage: "scaffolded",
@@ -1869,6 +1887,8 @@ export function buildSectionFour() {
                   choice("now", "Yes — two folds is enough forever", "clear_mistake",
                     "Too thin.", {betterChoiceId: "wait"})
                 ],
+                // LPT-193
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "wait", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1881,6 +1901,8 @@ export function buildSectionFour() {
                   choice("bundle-station", "Calls every street", "clear_mistake",
                     "Different evidence.", {betterChoiceId: "bundle-nit"})
                 ],
+                // LPT-193
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "bundle-nit", kind: "none"}]},
               }),
             ],
           }),

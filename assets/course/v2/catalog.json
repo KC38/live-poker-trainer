@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "ade90caf4dc656d65e461d813fe2df7874d7356ec78325c012a5d99ead43233f",
+  "contentChecksum": "f2121520ace193a1b3b8faa4196e1dcf15d8ad2b5bef7e0d7d8a1ae09f9072bb",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -10703,7 +10703,29 @@
                   ],
                   "objectives": [
                     "Tag narrow entry"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RARE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "ENTER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "MEAN IT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-07-01-guided",
@@ -10732,7 +10754,19 @@
                       "label": "Wide entry",
                       "accessibilityText": "Wide entry"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "narrow",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-07-01-scaffolded",
@@ -10761,7 +10795,19 @@
                       "label": "They are passive callers",
                       "accessibilityText": "They are passive callers"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "strong-aggr",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-07-01-unguided",
@@ -10790,7 +10836,19 @@
                       "label": "Yes — two folds is enough forever",
                       "accessibilityText": "Yes — two folds is enough forever"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "wait",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-07-01-checkpoint",
@@ -10820,7 +10878,19 @@
                       "accessibilityText": "Calls every street"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bundle-nit",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
