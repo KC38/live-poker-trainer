@@ -478,6 +478,77 @@ void main() {
     }
   });
 
+  test('postflop TPTK template never remaps to weak kicker (LPT-311)', () {
+    const hero = ['Ah', 'Kd'];
+    const board = ['As', '7c', '2d'];
+    final kickers = <int>{};
+    for (var seed = 0; seed < 48; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [hero, board],
+        Random(seed),
+      );
+      final dealtHero = [
+        for (final c in groups[0]) CardModel.fromCode(c),
+      ];
+      final dealtBoard = [
+        for (final c in groups[1]) CardModel.fromCode(c),
+      ];
+      var boardTop = -1;
+      for (final c in dealtBoard) {
+        if (c.rank > boardTop) boardTop = c.rank;
+      }
+      expect(
+        dealtHero.any((c) => c.rank == boardTop),
+        isTrue,
+        reason: 'seed $seed must pair board top: ${groups[0]} on ${groups[1]}',
+      );
+      final kicker = dealtHero.firstWhere((c) => c.rank != boardTop).rank;
+      for (final c in dealtBoard.where((c) => c.rank != boardTop)) {
+        expect(
+          kicker,
+          greaterThan(c.rank),
+          reason: 'seed $seed TPTK kicker: ${groups[0]} on ${groups[1]}',
+        );
+      }
+      kickers.add(kicker);
+      expect(
+        dealtHero[0].suit == dealtHero[1].suit,
+        isFalse,
+        reason: 'seed $seed keeps offsuit AK template',
+      );
+    }
+    expect(kickers.length, greaterThan(1));
+  });
+
+  test('postflop dual-broadway air never remaps to Q9o (LPT-311)', () {
+    const hero = ['Kh', 'Qd'];
+    const board = ['As', '7d', '2c'];
+    final rankKeys = <String>{};
+    for (var seed = 0; seed < 48; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [hero, board],
+        Random(seed),
+      );
+      final dealtHero = [
+        for (final c in groups[0]) CardModel.fromCode(c),
+      ];
+      expect(
+        dealtHero.where((c) => c.rank >= 10).length,
+        2,
+        reason: 'seed $seed dual broadway: ${groups[0]} on ${groups[1]}',
+      );
+      expect(
+        dealtHero[0].suit == dealtHero[1].suit,
+        isFalse,
+        reason: 'seed $seed keeps offsuit',
+      );
+      rankKeys.add(
+        ([for (final c in dealtHero) c.rank]..sort()).join(','),
+      );
+    }
+    expect(rankKeys.length, greaterThan(1));
+  });
+
   test('suitOnly isomorphic path keeps ranks', () {
     final groups = isomorphicLessonCardGroups(
       [
