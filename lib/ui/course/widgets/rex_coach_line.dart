@@ -54,6 +54,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
     'act-03-03-01-checkpoint' =>
       'Nut flush draw, deep and sticky — pick when future payoffs justify the price.',
+    // Close the river checkpoint densified ask (LPT-343) — same path as
+    // baseline jump (LPT-221) / count outs (LPT-279). Use pick/tap so
+    // withLessonTapInstruction does not append "Tap the best answer."
+    'act-03-06-01-checkpoint' =>
+      'Medium one pair faces a big bet — pick the river job.',
     _ => null,
   };
 }

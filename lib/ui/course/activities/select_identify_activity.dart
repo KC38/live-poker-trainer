@@ -744,8 +744,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-03-05-01-checkpoint' =>
         'Air bluff meets a draw-completing queen — weigh shutting down.',
       // SoftPulse owns the river job — don’t gold-tip the tile.
+      // Close the river densified ask: selectIdentifyDensifiedCoachLine (LPT-343).
       'act-03-06-01-checkpoint' =>
-        'Medium one pair faces a big bet — weigh the river job.',
+        selectIdentifyDensifiedCoachLine('act-03-06-01-checkpoint')!,
       // SoftPulse owns the speculative hand — don’t gold-tip the tile.
       'act-03-07-01-unguided' =>
         'Deep multiway — pick the better speculative hand.',
@@ -2222,8 +2223,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-03-05-01-checkpoint' =>
       'Air bluff meets a draw-completing queen — weigh shutting down.',
     // SoftPulse owns the river job — don’t gold-tip the tile.
+    // Close the river densified ask: selectIdentifyDensifiedCoachLine (LPT-343).
     'act-03-06-01-checkpoint' =>
-      'Medium one pair faces a big bet — weigh the river job.',
+      selectIdentifyDensifiedCoachLine('act-03-06-01-checkpoint')!,
     // SoftPulse owns the speculative hand — don’t gold-tip the tile.
     'act-03-07-01-unguided' =>
       'Deep multiway — pick the better speculative hand.',

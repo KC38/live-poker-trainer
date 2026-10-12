@@ -13979,14 +13979,20 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-343: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Medium one pair faces a big bet — tap the river job.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text(
-        'Medium one pair faces a big bet — weigh the river job.',
+        'Medium one pair faces a big bet — pick the river job.',
       ),
       findsOneWidget,
     );
     expect(
-      find.text('Medium one pair faces a big bet — tap the river job.'),
+      find.text('Medium one pair faces a big bet — weigh the river job.'),
       findsNothing,
     );
     expect(
