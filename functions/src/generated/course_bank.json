@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "ab852cbc8c214a2ae20f0af1fc6997793f23fa8607f3eab65fef8cc5d9acdf5b",
+  "contentChecksum": "cda1191d4f6245b434ac22bd83ba10ec089ed3b1b27d0b0ea513a897126d9abe",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -5884,6 +5884,33 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "Watch → Say → Cover → Wait."
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "WATCH",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "COVER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "WAIT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -5938,7 +5965,19 @@
                       "kind": "hint",
                       "text": "Information first."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "watch",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-06-01-scaffolded-verbal",
@@ -5985,7 +6024,19 @@
                         "betterChoiceId": "say-raise"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "say-raise",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-06-01-unguided-protect",
@@ -6033,7 +6084,19 @@
                         "betterChoiceId": "chip-on-cards"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "chip-on-cards",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-06-01-checkpoint-oot",
@@ -6083,7 +6146,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "oot-bad",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

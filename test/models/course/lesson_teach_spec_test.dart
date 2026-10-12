@@ -127,6 +127,14 @@ const _lessons = <String, List<String>>{
     'act-02-05-01-unguided-depth',
     'act-02-05-01-checkpoint-200',
   ],
+  // LPT-131
+  'lesson-02-06-01-live-habits': [
+    'act-02-06-01-explain-habits',
+    'act-02-06-01-guided-follow',
+    'act-02-06-01-scaffolded-verbal',
+    'act-02-06-01-unguided-protect',
+    'act-02-06-01-checkpoint-oot',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -799,6 +807,32 @@ void main() {
         expect(_list(act(e.key), 'cues').single['target'], e.value);
       }
       final cp = act('act-02-05-01-checkpoint-200');
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+    });
+  });
+
+  group('Live table habits (LPT-131)', () {
+    test('deal.mode none + SoftPulse habit tiles; checkpoint quiet', () {
+      final explain = act('act-02-06-01-explain-habits');
+      expect(
+        [for (final c in _list(explain, 'cues')) c['target']],
+        ['WATCH', 'SAY', 'COVER', 'WAIT'],
+      );
+      expect(explain.teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-02-06-01-guided-follow'), 'cues').single['target'],
+        'watch',
+      );
+      expect(
+        _list(act('act-02-06-01-scaffolded-verbal'), 'cues').single['target'],
+        'say-raise',
+      );
+      expect(
+        _list(act('act-02-06-01-unguided-protect'), 'cues').single['target'],
+        'chip-on-cards',
+      );
+      final cp = act('act-02-06-01-checkpoint-oot');
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
     });
