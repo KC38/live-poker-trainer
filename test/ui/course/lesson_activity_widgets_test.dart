@@ -11879,6 +11879,18 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Villain bet'), findsOneWidget);
     // SoftPulse + Rex own the cue — no Tap footer mid-teach.
     expect(find.text('Tap how many chips to call.'), findsNothing);
+    // LPT-633: Call 10 chip is slate — not a permanent gold tip.
+    final callTenChip = tester.widget<Container>(
+      find
+          .ancestor(
+            of: find.text('10').at(1),
+            matching: find.byType(Container),
+          )
+          .first,
+    );
+    final callTenDecoration = callTenChip.decoration! as BoxDecoration;
+    expect(callTenDecoration.border, isA<Border>());
+    expect((callTenDecoration.border! as Border).top.color, AppColors.slate);
     await tester.tap(find.text('Call 10'));
     await tester.pump();
     expect(controller.draft.choiceId, 'call-10');
@@ -16170,6 +16182,18 @@ await tester.tap(find.text('NIT'));
     expect(find.text('7/9'), findsNothing);
     expect(find.text('Many pots'), findsOneWidget);
     expect(find.text('HI'), findsOneWidget);
+    // LPT-633: HI chip border stays slate; SoftPulse owns gold.
+    final hiChip = tester.widget<Container>(
+      find
+          .ancestor(
+            of: find.text('HI'),
+            matching: find.byType(Container),
+          )
+          .first,
+    );
+    final hiDecoration = hiChip.decoration! as BoxDecoration;
+    expect(hiDecoration.border, isA<Border>());
+    expect((hiDecoration.border! as Border).top.color, AppColors.slate);
     await tester.tap(find.text('High part.'));
     await tester.pump();
     expect(controller.draft.choiceId, 'high-part');
@@ -16238,6 +16262,14 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Sticky'), findsOneWidget);
+    // LPT-633: Sticky icon is slate — SoftPulse owns gold.
+    final stickyIcons = tester.widgetList<Icon>(
+      find.byIcon(Icons.handshake_outlined),
+    );
+    expect(stickyIcons, isNotEmpty);
+    for (final icon in stickyIcons) {
+      expect(icon.color, AppColors.slate);
+    }
     await tester.tap(find.text('Sticky'));
     await tester.pump();
     expect(controller.draft.choiceId, 'sticky');

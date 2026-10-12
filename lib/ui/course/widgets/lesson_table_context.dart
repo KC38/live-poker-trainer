@@ -6259,7 +6259,7 @@ class LessonTableContext extends StatelessWidget {
                       cueLabel,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.manrope(
-                        color: AppColors.gold,
+                        color: AppColors.slate,
                         fontSize: 17,
                         fontWeight: FontWeight.w700,
                       ),
@@ -6299,7 +6299,7 @@ class LessonTableContext extends StatelessWidget {
                       cueLabel,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.manrope(
-                        color: AppColors.gold,
+                        color: AppColors.slate,
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
@@ -6448,7 +6448,7 @@ class LessonTableContext extends StatelessWidget {
               'Tap BTN — the latest seat',
               textAlign: TextAlign.center,
               style: GoogleFonts.manrope(
-                color: AppColors.gold,
+                color: AppColors.slate,
                 fontSize: densifyShell ? 16 : 14,
                 fontWeight: FontWeight.w700,
               ),
@@ -6774,7 +6774,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No show',
           visual: const Icon(
             Icons.savings_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -7026,7 +7026,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Then decide',
           visual: const Icon(
             Icons.visibility_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -7070,7 +7070,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Clear + chips',
           visual: const Icon(
             Icons.record_voice_over_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -7427,7 +7427,7 @@ class LessonTableContext extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const _PotChipDot(label: '10', gold: true),
+              const _PotChipDot(label: '10', gold: false),
               const SizedBox(height: 6),
               stackLabel('Villain bet'),
             ],
@@ -7445,7 +7445,7 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.callChipsTen,
           title: 'Call 10',
           detail: 'chips',
-          visual: const _PotChipDot(label: '10', gold: true),
+          visual: const _PotChipDot(label: '10', gold: false),
         ),
         (
           region: LessonTableRegion.callChipsThirty,
@@ -7472,7 +7472,7 @@ class LessonTableContext extends StatelessWidget {
           detail: ' ',
           visual: const Icon(
             Icons.check_circle_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -7936,7 +7936,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Card hurts air',
           visual: const Icon(
             Icons.flag_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -7980,7 +7980,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not thin value',
           visual: const Icon(
             Icons.back_hand_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8067,7 +8067,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Play many',
           visual: const Icon(
             Icons.visibility_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8111,7 +8111,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'A high · B low',
           visual: const Icon(
             Icons.notes_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8154,7 +8154,7 @@ class LessonTableContext extends StatelessWidget {
           // Structural — Rex owns “Pot 16 / 40bb”; don’t echo on the tile.
           title: 'Pot · effective',
           detail: 'Price frame',
-          visual: const _PotChipDot(label: '16', gold: true),
+          visual: const _PotChipDot(label: '16', gold: false),
         ),
         (
           region: LessonTableRegion.jumpTrackHoles,
@@ -8196,7 +8196,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'OESD + flush',
           visual: const Icon(
             Icons.waterfall_chart,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8418,7 +8418,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Price wrong',
           visual: const Icon(
             Icons.cancel_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8452,7 +8452,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'UTG opens',
           visual: const Icon(
             Icons.filter_list,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8503,7 +8503,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Stronger',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8544,7 +8544,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Weighted',
           visual: const Icon(
             Icons.stacked_bar_chart,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8592,7 +8592,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Advice shifts',
           visual: const Icon(
             Icons.alt_route,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8633,7 +8633,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Brick · flush',
           visual: const Icon(
             Icons.account_tree_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8674,7 +8674,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Nearby OK',
           visual: const Icon(
             Icons.straighten,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -8750,13 +8750,13 @@ class LessonTableContext extends StatelessWidget {
       header: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          chipsBbChip(value: chips, label: 'Chips', gold: true),
+          chipsBbChip(value: chips, label: 'Chips', gold: false),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Text(
               '÷',
               style: GoogleFonts.manrope(
-                color: AppColors.gold,
+                color: AppColors.slate,
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
               ),
@@ -8833,13 +8833,13 @@ class LessonTableContext extends StatelessWidget {
       header: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          stackPotChip(value: stack, label: 'Stack', gold: true),
+          stackPotChip(value: stack, label: 'Stack', gold: false),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Text(
               '÷',
               style: GoogleFonts.manrope(
-                color: AppColors.gold,
+                color: AppColors.slate,
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
               ),
@@ -8853,7 +8853,7 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.sprRatioFour,
           title: 'SPR 4',
           detail: 'Stack ÷ pot',
-          visual: const _PotChipDot(label: '4', gold: true),
+          visual: const _PotChipDot(label: '4', gold: false),
         ),
         (
           region: LessonTableRegion.sprRatioTwo,
@@ -8966,7 +8966,7 @@ class LessonTableContext extends StatelessWidget {
           // Structural — don’t tip High with matching “7 of 9” on the tile.
           title: 'High part.',
           detail: 'Many pots',
-          visual: const _PotChipDot(label: 'HI', gold: true),
+          visual: const _PotChipDot(label: 'HI', gold: false),
         ),
         (
           region: LessonTableRegion.observeLowParticipation,
@@ -9004,7 +9004,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Low folding',
           visual: const Icon(
             Icons.handshake_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9107,7 +9107,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Calls down',
           visual: const Icon(
             Icons.people_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9141,7 +9141,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'From evidence',
           visual: const Icon(
             Icons.science_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9175,7 +9175,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Calls sticky',
           visual: const Icon(
             Icons.people_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9207,7 +9207,7 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.sampleConfidenceLow,
           title: 'Low',
           detail: 'Keep sampling',
-          visual: const _PotChipDot(label: 'LO', gold: true),
+          visual: const _PotChipDot(label: 'LO', gold: false),
         ),
         (
           region: LessonTableRegion.sampleConfidenceMax,
@@ -9236,7 +9236,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Cite tendency',
           visual: const Icon(
             Icons.do_not_touch_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9267,7 +9267,7 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.observeNarrowEntry,
           title: 'Narrow',
           detail: '20 of 22 fold',
-          visual: const _PotChipDot(label: '2', gold: true),
+          visual: const _PotChipDot(label: '2', gold: false),
         ),
         (
           region: LessonTableRegion.observeWideEntry,
@@ -9295,7 +9295,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'When involved',
           visual: const Icon(
             Icons.whatshot_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9328,7 +9328,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Need samples',
           visual: const Icon(
             Icons.hourglass_empty,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9361,7 +9361,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Pre-label',
           visual: const Icon(
             Icons.inventory_2_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9394,7 +9394,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Rare + strong',
           visual: const Icon(
             Icons.lock_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9427,7 +9427,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Narrow range',
           visual: const Icon(
             Icons.lock_outline,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9461,7 +9461,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Sample limits',
           visual: const Icon(
             Icons.science_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9492,7 +9492,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'When they raise',
           visual: const Icon(
             Icons.shield_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9526,7 +9526,7 @@ class LessonTableContext extends StatelessWidget {
           detail: '12 of 15 pots',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9560,7 +9560,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Barrels light',
           visual: const Icon(
             Icons.whatshot_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9594,7 +9594,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No ego story',
           visual: const Icon(
             Icons.edit_note_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9627,7 +9627,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Pre-label',
           visual: const Icon(
             Icons.inventory_2_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9660,7 +9660,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Extreme fire',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9694,7 +9694,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Pressure wide',
           visual: const Icon(
             Icons.local_fire_department_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9728,7 +9728,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Station · Nit · Maniac',
           visual: const Icon(
             Icons.groups_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9759,7 +9759,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Too many hands',
           visual: const Icon(
             Icons.expand_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9917,7 +9917,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Stronger UTG',
           visual: const Icon(
             Icons.filter_list,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11902,7 +11902,7 @@ class LessonTableContext extends StatelessWidget {
       header: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          depthChip('100bb', gold: true),
+          depthChip('100bb', gold: false),
           const SizedBox(width: 8),
           depthChip('4-bet pot', gold: false),
           const SizedBox(width: 8),
