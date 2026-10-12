@@ -19384,6 +19384,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Fewer nuts'), findsOneWidget);
+    // LPT-518: guideRegion → one gold SoftPulse (Fewer nuts), not Still nuts.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Fewer nuts'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Still nuts'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Fewer nuts'));
     await tester.pump();
     expect(controller.draft.choiceId, 'capped');
@@ -19468,6 +19489,27 @@ await tester.tap(find.text('NIT'));
       findsOneWidget,
     );
     expect(find.text('Best habit — tap Rebuild.'), findsNothing);
+    // LPT-518: guideRegion → one gold SoftPulse (Rebuild), not Lock flop.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Rebuild'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Lock flop'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Rebuild'));
     await tester.pump();
     expect(controller.draft.choiceId, 'update');
@@ -19513,6 +19555,27 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('XR / bet / shove — tap Uncapped.'),
+      findsNothing,
+    );
+    // LPT-518: guideRegion → one gold SoftPulse (Uncapped), not Always bluff.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Uncapped'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Always bluff'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('Uncapped'));

@@ -10394,6 +10394,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive line reading — tap capped vs still nuts',
       semanticsStatic: 'Line reading capped outcomes',
       caption: scene.caption ?? 'Bet flop, check turn — range now?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Fewer nuts.
+      // Null guideRegion SoftPulses every phase (LPT-518).
+      guideRegion: LessonTableRegion.lineReadCapped,
       phases: [
         (
           region: LessonTableRegion.lineReadCapped,
@@ -10401,7 +10404,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Check-back caps',
           visual: const Icon(
             Icons.vertical_align_bottom,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10425,6 +10428,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive line reading — tap rebuild vs lock flop',
       semanticsStatic: 'Line reading rebuild outcomes',
       caption: scene.caption ?? 'Best line-reading habit?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Rebuild.
+      // Null guideRegion SoftPulses every phase (LPT-518).
+      guideRegion: LessonTableRegion.lineReadRebuild,
       phases: [
         (
           region: LessonTableRegion.lineReadRebuild,
@@ -10432,7 +10438,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Every action',
           visual: const Icon(
             Icons.refresh,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10456,6 +10462,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive line reading — tap uncapped vs always bluff',
       semanticsStatic: 'Line reading uncapped outcomes',
       caption: scene.caption ?? 'XR / bet / shove usually means?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Uncapped.
+      // Null guideRegion SoftPulses every phase (LPT-518).
+      guideRegion: LessonTableRegion.lineReadUncapped,
       phases: [
         (
           region: LessonTableRegion.lineReadUncapped,
@@ -10463,7 +10472,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Respect',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
