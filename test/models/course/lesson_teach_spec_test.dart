@@ -174,6 +174,14 @@ const _lessons = <String, List<String>>{
     'act-03-03-01-unguided',
     'act-03-03-01-checkpoint',
   ],
+  // LPT-149
+  'lesson-03-04-01-flop-decisions': [
+    'act-03-04-01-explain',
+    'act-03-04-01-guided',
+    'act-03-04-01-scaffolded',
+    'act-03-04-01-unguided',
+    'act-03-04-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1034,6 +1042,38 @@ void main() {
       expect(cp.assessmentRole, AssessmentRole.checkpoint);
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
       expect(_list(cp, 'cues').single['kind'], 'none');
+    });
+  });
+
+  group('Choose a flop line (LPT-149)', () {
+    test('explain SoftPulse walks VALUE → … → RAISE', () {
+      expect(
+        _list(
+          act('act-03-04-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['VALUE', 'C-BET', 'CHECK', 'CALL', 'FOLD', 'RAISE'],
+      );
+    });
+
+    test('action steps author fixed deals; checkpoint quiet', () {
+      expect(
+        _list(act('act-03-04-01-guided'), 'cues').single['target'],
+        'bet-tp',
+      );
+      expect(
+        _list(act('act-03-04-01-scaffolded'), 'cues').single['target'],
+        'cbet',
+      );
+      expect(
+        _list(act('act-03-04-01-unguided'), 'cues').single['target'],
+        'raise-set',
+      );
+      final cp = act('act-03-04-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'fold-bp');
     });
   });
 }

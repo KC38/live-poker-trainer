@@ -346,7 +346,21 @@ export function buildSectionThree() {
             activities: [
               dialogue("act-03-04-01-explain", 1,
                 "Flop lines: value, c-bet, check back, call, fold, raise. One plan.",
-                {objectives: ["Value bet strong made hands"]}),
+                {
+                  objectives: ["Value bet strong made hands"],
+                  // LPT-149
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "VALUE", kind: "soft_pulse"},
+                      {press: 2, target: "C-BET", kind: "soft_pulse"},
+                      {press: 3, target: "CHECK", kind: "soft_pulse"},
+                      {press: 4, target: "CALL", kind: "soft_pulse"},
+                      {press: 5, target: "FOLD", kind: "soft_pulse"},
+                      {press: 6, target: "RAISE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-03-04-01-guided", order: 2, stage: "guided",
                 prompt: "Heads-up. You hold top pair top kicker. Checked to you. Action?",
@@ -360,6 +374,11 @@ export function buildSectionThree() {
                   choice("fold-tp", "Fold", "clear_mistake",
                     "Do not fold TPTK unbet into.", {action: "FOLD", betterChoiceId: "bet-tp"})
                 ],
+                // LPT-149
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]}},
+                  cues: [{press: 1, target: "bet-tp", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-04-01-scaffolded", order: 3, stage: "scaffolded",
@@ -374,6 +393,11 @@ export function buildSectionThree() {
                   choice("jam-kq", "Jam all-in", "clear_mistake",
                     "Oversizing with air is a leak.", {action: "ALL_IN", betterChoiceId: "cbet"})
                 ],
+                // LPT-149
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Qd"], board: ["As", "7d", "2c"]}},
+                  cues: [{press: 1, target: "cbet", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-04-01-unguided", order: 4, stage: "scaffolded",
@@ -388,6 +412,11 @@ export function buildSectionThree() {
                   choice("fold-set", "Fold", "clear_mistake",
                     "Never fold a set here.", {action: "FOLD", betterChoiceId: "raise-set"})
                 ],
+                // LPT-149
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["7h", "7d"], board: ["7c", "Kd", "2s"]}},
+                  cues: [{press: 1, target: "raise-set", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -402,6 +431,11 @@ export function buildSectionThree() {
                   choice("raise-bp", "Raise", "clear_mistake",
                     "Do not bluff-raise crowds with bottom pair.", {action: "RAISE", amountBb: 15, betterChoiceId: "fold-bp"})
                 ],
+                // LPT-149
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["5h", "2d"], board: ["Ah", "7c", "2s"]}},
+                  cues: [{press: 1, target: "fold-bp", kind: "none"}],
+                },
               }),
             ],
           }),
