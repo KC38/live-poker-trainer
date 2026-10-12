@@ -199,6 +199,20 @@ prompt() {
   printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Launch worktree builds with tools/flutter_run_fast.sh (cached Runner.app, ~20 s for Dart-only) and hot-restart with tools/flutter_hot_restart.sh — both block; never bare AwaitShell/sleep. Jump to later lessons / heart states with tools/agent_seed.py and read screens with agent_tap.py tree; after openlesson use agent_tap.py wait-gold before taps; screenshot for judgment and proof only. Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Never claim or fix tickets labeled grokbot (GrokBot / Chrome layout on Linux); queue JQL must include labels != grokbot. Filing only grokbot tickets is not a finished run — keep walking until you have a ui-agent KEY (do not end early so the loop starts another agent). Learnings ride the ticket PR (write them before the merge; after it, append to the pending file).${pending} When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
 }
 
+# Long-lived run-loop bash keeps function bodies from process start. Re-eval
+# prompt() from on-disk $SCRIPT before each agent so merges (wait-gold,
+# grokbot continue, …) apply without soft-stop. Soft-stop still reloads the
+# whole script for structural loop changes.
+reload_prompt_from_disk() {
+  local def
+  def="$(sed -n '/^prompt() {/,/^}$/p' "$SCRIPT" 2>/dev/null || true)"
+  if [[ -z "$def" ]]; then
+    return 0
+  fi
+  # shellcheck disable=SC1090
+  eval "$def"
+}
+
 load_secrets() {
   if [[ -f "$SECRETS_FILE" ]]; then
     set -a
@@ -1515,6 +1529,7 @@ one_run() {
   write_sim_handoff "$run_id"
   sim_lock heartbeat --purpose "agent starting" >/dev/null 2>&1 || true
   configure_agent_credentials
+  reload_prompt_from_disk
   text="$(prompt)"
 
   _model="$(resolved_agent_model)"

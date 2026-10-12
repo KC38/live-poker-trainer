@@ -73,6 +73,30 @@ unset UI_AGENT_MODEL
 
 sync_primary() { :; }
 
+# Long-lived run-loop must pick up on-disk prompt() edits without soft-stop.
+cp "$LOOP" "$tmp/loop-prompt-reload.sh"
+python3 - "$tmp/loop-prompt-reload.sh" <<'PY'
+from pathlib import Path
+import sys
+path = Path(sys.argv[1])
+text = path.read_text(encoding="utf-8")
+old = "after openlesson use agent_tap.py wait-gold before taps"
+new = "after openlesson use agent_tap.py wait-gold UNIQUE_RELOAD before taps"
+if old not in text:
+    raise SystemExit(f"missing prompt needle in {path}")
+path.write_text(text.replace(old, new, 1), encoding="utf-8")
+PY
+_saved_script="$SCRIPT"
+SCRIPT="$tmp/loop-prompt-reload.sh"
+reload_prompt_from_disk
+prompt | grep -q 'UNIQUE_RELOAD' \
+  || fail "reload_prompt_from_disk should pick up on-disk prompt edits"
+SCRIPT="$_saved_script"
+reload_prompt_from_disk
+prompt | grep -q 'UNIQUE_RELOAD' \
+  && fail "restored SCRIPT should drop the test marker"
+unset _saved_script
+
 python3 "$ROOT/tools/sim_lock.py" claim --owner other-agent --purpose "holding" >/dev/null 2>&1
 code=0
 one_run >/dev/null 2>&1 || code=$?
