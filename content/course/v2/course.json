@@ -9989,13 +9989,13 @@
                       "mode": "fixed",
                       "fixedCards": {
                         "hero": [
-                          "9h",
-                          "8d"
+                          "7s",
+                          "3d"
                         ],
                         "board": [
                           "Ah",
                           "Kh",
-                          "7h"
+                          "9h"
                         ]
                       }
                     },

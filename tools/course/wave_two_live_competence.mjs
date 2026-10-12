@@ -914,7 +914,8 @@ export function buildSectionThree() {
                 ],
                 // LPT-165
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["9h", "8d"], board: ["Ah", "Kh", "7h"]}},
+                  // True air, matching the Dart spot (LPT-425 / LPT-391).
+                  deal: {mode: "fixed", fixedCards: {hero: ["7s", "3d"], board: ["Ah", "Kh", "9h"]}},
                   cues: [{press: 1, target: "j3-fold", kind: "none"}],
                 },
               }),
