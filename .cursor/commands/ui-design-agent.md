@@ -42,6 +42,10 @@ Hard rules:
   [ui-design-agent-learnings.md](ui-design-agent-learnings.md) every run,
   and update it in step 10 when this run hit a durable mistake so the next
   run does not repeat it.
+- Never claim, implement, or close a ticket labeled `grokbot`. Those are
+  for GrokBot on Linux (Chrome / Flutter web). Skip them in the queue and
+  route new browser-validatable layout findings to that label instead
+  (see **GrokBot routing** in step 5).
 
 ```
 Run progress:
@@ -190,7 +194,8 @@ learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 | --- | --- |
 | Search | `python3 tools/jira.py search '<JQL>'` |
 | Read an issue, comments, links | `python3 tools/jira.py get LPT-NN` |
-| Create | `python3 tools/jira.py create --type Story --summary "…" --priority Medium --labels ui,ui-agent,lesson --body-file body.md --attach <surface>-issue.png` |
+| Create (Mac mini) | `python3 tools/jira.py create --type Story --summary "…" --priority Medium --labels ui,ui-agent,lesson --body-file body.md --attach <surface>-issue.png` |
+| Create (GrokBot) | `python3 tools/jira.py create --type Bug --summary "…" --priority Medium --labels ui,grokbot,home --body-file body.md --attach <surface>-issue.png` |
 | Edit fields or labels | `python3 tools/jira.py edit LPT-NN [--body-file body.md] [--add-label needs-human] [--remove-label …]` |
 | Comment with screenshots | `python3 tools/jira.py comment LPT-NN --body-file note.md --attach shot.png` |
 | Verify thumbs resolve | `python3 tools/jira.py verify-embeds LPT-NN` (must exit 0 before Done) |
@@ -200,16 +205,18 @@ learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 **First, unfinished work.** Search:
 
 ```
-project = LPT AND labels = ui-agent AND labels != needs-human AND statusCategory != Done ORDER BY priority DESC, created ASC
+project = LPT AND labels = ui-agent AND labels != needs-human AND labels != grokbot AND statusCategory != Done ORDER BY priority DESC, created ASC
 ```
 
-Skip any issue that an open issue **Blocks**. Take the first remaining one
-as this run's **fix target**, read it with `jira.py get` (description,
-comments, links), and walk its **Steps** on this build. If it no longer
-reproduces, comment that with a screenshot and the SHA, transition it to
-Done, and go back to this step for the next open ticket. If it reproduces,
-keep it as the fix target — but while you walk, still file any **other**
-distinct issues you see (step 5), then go to step 6 for the fix target only.
+Skip any issue that an open issue **Blocks**. Also skip any issue that
+carries `grokbot` even if it somehow still has `ui-agent` — GrokBot owns
+those. Take the first remaining one as this run's **fix target**, read
+it with `jira.py get` (description, comments, links), and walk its
+**Steps** on this build. If it no longer reproduces, comment that with a
+screenshot and the SHA, transition it to Done, and go back to this step
+for the next open ticket. If it reproduces, keep it as the fix target —
+but while you walk, still file any **other** distinct issues you see
+(step 5), then go to step 6 for the fix target only.
 
 **Otherwise, a discovery walk.** Pick one surface from the **Surfaces**
 table in the design record, using the coverage ledger
@@ -398,12 +405,27 @@ Fields:
 
 - **Type.** Bug when behavior is wrong. Story when it works but misses the
   design record or the stakeholder brief.
-- **Labels.** `ui`, `ui-agent`, and one area: `onboarding`, `lesson`,
-  `home`, `live-training`, `profile`, `settings`, or `account`.
+- **Labels.** Choose the owner, then one area:
+  - **Mac mini (this agent):** `ui`, `ui-agent`, and one area
+    (`onboarding`, `lesson`, `home`, `live-training`, `profile`,
+    `settings`, or `account`).
+  - **GrokBot (Linux / Chrome):** `ui`, `grokbot`, and the same area
+    label. Do **not** add `ui-agent` on GrokBot tickets.
 - **Priority.** Highest: a new guest cannot finish the first lesson or
   reach Home. High: a primary action is missing or wrong, the teach loop is
   broken, or a main surface clips on the mini. Medium: a clear gap against
   the record or brief. Low: polish.
+
+**GrokBot routing.** File with `grokbot` (and without `ui-agent`) when
+the finding is **pure UI layout / theme / spacing / type / clipping** and
+can be validated on Flutter web in Chrome at a phone-sized viewport
+(~375×812). Keep it on `ui-agent` (this Mac mini) when validation needs
+the iPhone 13 mini simulator: SoftPulse / cyan cues, Hint waves, hearts
+spend/restore, card randomization, deal timing, `agent_seed` /
+`openlesson` lesson teach-loop proofs, or any iOS-only / felt timing
+issue. You may still **discover** GrokBot candidates on the mini walk —
+file them for GrokBot, then continue; never implement them here. Full
+contract: [docs/agents/10-grokbot.md](../../docs/agents/10-grokbot.md).
 
 Body (match LPT-36):
 
@@ -412,7 +434,8 @@ Body (match LPT-36):
 <what the screen does, in concrete UI text and code paths>
 
 ## Steps
-1. <precondition from docs/agent-paths.md> on the iPhone 13 mini.
+1. <precondition from docs/agent-paths.md> on the iPhone 13 mini
+   (or: Flutter web / Chrome ~375×812 when labeling `grokbot`).
 2. <exact taps>
 
 ## Expected
@@ -472,10 +495,10 @@ next runs.
 
 **Companions (optional, at most two).** Fold another open ui-agent ticket
 into the primary's worktree and PR only when **all** hold: it is on the
-same screen you just walked, it is Medium or Low, it is not blocked or
-`needs-human`, and its fix touches the same widget/files as the primary
-(a few lines, not a second feature). Each companion keeps its own
-acceptance criteria, validation screenshots, and close comment. If a
+same screen you just walked, it is Medium or Low, it is not blocked,
+`needs-human`, or `grokbot`, and its fix touches the same widget/files as
+the primary (a few lines, not a second feature). Each companion keeps its
+own acceptance criteria, validation screenshots, and close comment. If a
 companion fails validation even once, drop it from this PR (revert its
 commit, comment `Deferred from <primary> PR`) instead of spending the
 primary's attempts on it. Everything else waits for later runs.

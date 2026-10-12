@@ -28,6 +28,7 @@ void main() {
       '07-reusable-components.md',
       '08-backend.md',
       '09-agent-workflow.md',
+      '10-grokbot.md',
     ]) {
       expect(File('docs/agents/$name').existsSync(), isTrue, reason: name);
       expect(index, contains(name), reason: 'index links $name');
@@ -80,6 +81,12 @@ void main() {
         '# 09 — Working as an agent',
         '## Default change flow',
         '## Documentation duty',
+      ],
+      '10-grokbot.md': [
+        '# 10 — GrokBot (Linux / Chrome UI layout)',
+        '## Split of work',
+        'labels != grokbot',
+        'labels = grokbot',
       ],
     };
 

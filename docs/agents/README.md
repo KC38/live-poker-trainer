@@ -20,6 +20,7 @@ orientation layer on top of those sources of truth.
 7. [07 — Reusable components](07-reusable-components.md) — what to reuse
 8. [08 — Backend](08-backend.md) — Cloud Functions and Firestore
 9. [09 — Working as an agent](09-agent-workflow.md) — change flow, sims, tools
+10. [10 — GrokBot](10-grokbot.md) — Linux / Chrome UI layout queue (`grokbot`)
 
 ## Hard rules (never skip)
 
@@ -33,6 +34,7 @@ orientation layer on top of those sources of truth.
 | Server owns cards, legal actions, pots, coaching | architecture |
 | Keep these agent docs and code comments current | `.cursor/rules/agent-docs-maintenance.mdc` |
 | iPhone 13 mini only; claim with `tools/sim_lock.py` | simulator-lock rule |
+| Mac mini ui-agent never claims `grokbot` tickets | [10-grokbot.md](10-grokbot.md) |
 
 ## Related deep docs
 
