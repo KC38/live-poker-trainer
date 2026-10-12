@@ -548,6 +548,33 @@ grep -q 'Only one match was found' <<<"$mixed_out" \
 [[ "$(grep -c '^ing$' <<<"$mixed_out" || true)" == "0" ]] \
   || fail "mixed stream leaked token line 'ing': $mixed_out"
 
+# Closeout reports must rejoin LPT-NN / Learnings / grokbot crumbs.
+report_log="$LOG_DIR/run-status-report.log"
+{
+  for w in \
+    '**' Lear nings ':**' updated '(' L PT - 410 ')' \
+    ';' L PT - 44 needs - human ';' L PT - 177 / 178 gro k bot \
+    '**' Branch ':**' '`' fix / L PT - 410 - sizing - ung uided - densify '`'
+  do
+    printf '%s{"t":1,"type":"assistant"}\n' "$w"
+  done
+} >"$report_log"
+report_out="$(print_run_log_preview "$report_log" 10)"
+grep -q 'Learnings' <<<"$report_out" \
+  || fail "report should rejoin Learnings: $report_out"
+grep -q 'LPT-410' <<<"$report_out" \
+  || fail "report should rejoin LPT-410: $report_out"
+grep -q 'LPT-44' <<<"$report_out" \
+  || fail "report should rejoin LPT-44: $report_out"
+grep -q 'grokbot' <<<"$report_out" \
+  || fail "report should rejoin grokbot: $report_out"
+grep -q 'unguided' <<<"$report_out" \
+  || fail "report should rejoin unguided: $report_out"
+grep -q 'fix/LPT-410' <<<"$report_out" \
+  || fail "report should rejoin fix/LPT-410 path: $report_out"
+grep -q 'L PT' <<<"$report_out" \
+  && fail "report leaked spaced L PT: $report_out"
+
 # repair_health_tails scrubs SDK pollution when coverage is late/missing.
 printf '%s\n' \
   '{"at":"2026-10-12T09:52:24+05:30","stamp":"20261012-093041","exit":143,"seconds":1303,"ticket":null,"result":null,"tail":"the process and rerun{\"t\":1791778842861,\"type\":\"thinking\"} flutter_run_fast.sh{\"t\":1791778843540,\"type\":\"assistant\"}"}' \

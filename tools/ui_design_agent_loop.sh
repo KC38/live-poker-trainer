@@ -1435,6 +1435,25 @@ def is_token_fragment(text: str) -> bool:
     return 1 <= len(text) <= 24
 
 
+def repair_stream_prose(text: str) -> str:
+    """Fix common SDK token splits that survive join (LPT closeout reports)."""
+    repairs = (
+        (r"\bL PT\b", "LPT"),
+        (r"\bLPT\s*-\s*(\d+)\b", r"LPT-\1"),
+        (r"\bLear nings\b", "Learnings"),
+        (r"\bgro ?k ?bot\b", "grokbot"),
+        (r"\bung uided\b", "unguided"),
+        (r"\bKC 38\b", "KC38"),
+        (r"\b(fix|feature)\s*/\s*LPT\b", r"\1/LPT"),
+        (r"\blive\s*-\s*poker\s*-\s*trainer\b", "live-poker-trainer"),
+        (r"\bneeds\s*-\s*human\b", "needs-human"),
+        (r"\bui\s*-\s*agent\b", "ui-agent"),
+    )
+    for pat, repl in repairs:
+        text = re.sub(pat, repl, text, flags=re.I)
+    return text
+
+
 def join_token_run(parts: list[str]) -> str:
     """Rejoin a contiguous token run into one prose string."""
     if not parts:
@@ -1447,18 +1466,39 @@ def join_token_run(parts: list[str]) -> str:
         prev = out[-1]
         # Glue path separators and trailing punctuation; keep spaces around
         # em/en dashes so "confirmed — jumping" stays readable.
-        if s in {".", ",", ":", ";", "/", "!", "?", "'", '"'} or prev.endswith("/"):
+        if s in {".", ",", ":", ";", "/", "!", "?", "'", '"', "-"} or prev.endswith(
+            ("/", "-")
+        ):
+            out[-1] = prev + s
+            continue
+        # Ticket digits after LPT-: "LPT-" + "410".
+        if prev.endswith("-") and s.isdigit():
+            out[-1] = prev + s
+            continue
+        # Single-letter crumbs: "L"+"PT" handled below; "gro"+"k".
+        if len(s) == 1 and s.isalnum() and prev[-1:].isalnum():
+            out[-1] = prev + s
+            continue
+        # Short acronym crumbs: "L" + "PT".
+        if (
+            prev.isalpha()
+            and 1 <= len(prev) <= 2
+            and s.isalpha()
+            and s.isupper()
+            and 1 <= len(s) <= 3
+        ):
             out[-1] = prev + s
             continue
         # Mid-word continuations only for common suffixes
-        # ("Implement"+"ing", "dens"+"ify") — never glue short words like
-        # "the" / "fix" / "in".
+        # ("Implement"+"ing", "dens"+"ify", "Lear"+"nings").
         if (
             prev[-1:].isalpha()
             and s.isalpha()
             and s.lower()
             in {
                 "ing",
+                "ings",
+                "nings",
                 "ed",
                 "er",
                 "ly",
@@ -1479,7 +1519,8 @@ def join_token_run(parts: list[str]) -> str:
         out.append(s)
     joined = " ".join(out)
     joined = re.sub(r"\s+([.,:;!?])", r"\1", joined)
-    return re.sub(r"\s+", " ", joined).strip()
+    joined = re.sub(r"\s+", " ", joined).strip()
+    return repair_stream_prose(joined)
 
 
 def soft_wrap(text: str, width: int = 80) -> list[str]:
