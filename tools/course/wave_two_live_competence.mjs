@@ -2336,7 +2336,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-09-01-explain", 1,
                 "Observation ≠ certainty. Confidence grows with samples and showdowns.",
-                {objectives: ["Separate observation from certainty"]}),
+                {
+                  objectives: ["Separate observation from certainty"],
+                  // LPT-213
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "OBSERVE", kind: "soft_pulse"},
+                      {press: 2, target: "SAMPLES", kind: "soft_pulse"},
+                      {press: 3, target: "SHOWDOWNS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-04-09-01-guided", order: 2, stage: "guided",
                 prompt: "You saw one huge bluff. What do you know?",
@@ -2348,6 +2359,8 @@ export function buildSectionFour() {
                   choice("proven", "Type proven forever", "clear_mistake",
                     "Insufficient samples.", {betterChoiceId: "one-note"})
                 ],
+                // LPT-213
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "one-note", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-09-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2361,6 +2374,8 @@ export function buildSectionFour() {
                   choice("zero", "Stay at zero forever", "clear_mistake",
                     "Evidence matters.", {betterChoiceId: "rise"})
                 ],
+                // LPT-213
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "rise", kind: "soft_pulse"}]},
               }),
               classifyAct({
                 id: "act-04-09-01-unguided", order: 4, stage: "scaffolded",
@@ -2374,6 +2389,8 @@ export function buildSectionFour() {
                   choice("freeze", "Keep the old label forever", "clear_mistake",
                     "Models must update.", {betterChoiceId: "update"})
                 ],
+                // LPT-213
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "update", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2386,6 +2403,8 @@ export function buildSectionFour() {
                   choice("destiny", "Destiny and aura", "clear_mistake",
                     "Stay empirical.", {betterChoiceId: "limits"})
                 ],
+                // LPT-213
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "limits", kind: "none"}]},
               }),
             ],
           }),
