@@ -10693,6 +10693,16 @@ await tester.tap(find.text('NIT'));
         CourseChoice(id: 'j2-trash', label: 'Offsuit trash'),
       ],
     );
+    // LPT-221: frame bubble uses densified ask, not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Look at your holes — tap the family they belong to.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      lessonFrameSpeech(activity),
+      isNot(contains('These holes belong to which family?')),
+    );
     expect(
       resolveSelectIdentifyPresentation(activity),
       SelectIdentifyPresentation.tableRegionTap,
@@ -10768,6 +10778,16 @@ await tester.tap(find.text('NIT'));
         CourseChoice(id: 'j2-120', label: '120bb'),
         CourseChoice(id: 'j2-175', label: '175bb'),
       ],
+    );
+    // LPT-221: frame bubble uses densified ask, not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'You 120bb · villain 55bb — tap the effective stack.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      lessonFrameSpeech(activity),
+      isNot(contains('You 120bb, villain 55bb. Effective stack?')),
     );
     expect(isTableRegionTapActivity(activity), isTrue);
     final scene = resolveLessonTableScene(activity);

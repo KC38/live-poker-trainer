@@ -611,6 +611,8 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   String get _coachText {
     final authored = widget.activity.primaryCoachLine?.text;
     if (authored != null) return authored;
+    final densified = selectIdentifyDensifiedCoachLine(widget.activity.id);
+    if (densified != null) return densified;
     return switch (widget.activity.id) {
       'act-01-01-01-guided-find-holes' => 'Tap your two cards.',
       'act-01-01-01-scaffolded-private' => 'Tap the cards only you can see.',
@@ -681,8 +683,6 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse-quiet jump: ask on the map — don't name Cutoff as the answer.
       'act-02-07-02-jump-pos' =>
         'Seat just before the button — pick it on the map.',
-      'act-02-07-02-jump-family' =>
-        'Look at your holes — pick the family they belong to.',
       // SoftPulse owns Flush — don’t gold-tip the tile.
       'act-01-02-01-scaffolded-spot' =>
         'Board and holes show five clubs — name the category.',
@@ -692,9 +692,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns the You seat once — don’t gold-tip the kicker winner.
       'act-01-02-02-scaffolded-kicker' =>
         'Same pair on the board — tap your cards, their cards, or Chop.',
-      // Jump densify — SoftPulse off; pick without gold-tipping 55bb.
-      'act-02-07-02-jump-stack' =>
-        'You 120bb · villain 55bb — pick the effective stack.',
+      // jump-family / jump-stack densified asks: selectIdentifyDensifiedCoachLine
       'act-02-02-01-guided-pair' =>
         'Matching ranks in the hole — both cards share a rank.',
       'act-02-02-01-scaffolded-broadway' =>

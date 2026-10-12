@@ -705,6 +705,10 @@ String _lessonFrameLine(
       generation: bindGeneration,
     );
   }
+  // Densified select_identify asks (Baseline jump family/stack) must beat
+  // catalog quiz prompts before resolveLessonCoachPrompt (LPT-221).
+  final densifiedSelect = selectIdentifyDensifiedCoachLine(activity.id);
+  if (densifiedSelect != null) return densifiedSelect;
   final resolved = resolveLessonCoachPrompt(
     activity: activity,
     fallback: activity.accessibilityText,
