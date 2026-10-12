@@ -558,7 +558,8 @@ sticky callers (LPT-184), Meet the Calling Station (LPT-187), Adjust versus
 Calling Station (LPT-190), Observe narrow players (LPT-193), Meet the Nit
 (LPT-196), Adjust versus Nit (LPT-200), Observe wild aggressors (LPT-203),
 Meet the Maniac (LPT-206), Adjust versus Maniac (LPT-210), Confidence and
-samples (LPT-213), Same hand, different types (LPT-216).
+samples (LPT-213), Same hand, different types (LPT-216), Section 4 jump
+check (LPT-219).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -939,6 +940,12 @@ CARDS → SEATS → EVIDENCE; guided fixed JhTd/QcTs3h2d7c → `st-val`;
 scaffolded fixed JhTd/QcTs3h2d7c → `nit-fold`; unguided fixed
 JhTd/QcTs3h2d7c → `m-call`; checkpoint fixed KhTd → `lab-steal`; assessment
 steps use cue kind `none` (no pressHints).
+
+Section 4 jump check `teachSpec` (LPT-219): jump-range `none` → `j4-range`;
+jump-3bet fixed KhKd → `j4-3bet`; jump-spr `none` → `spr-4`; jump-size fixed
+AhKd/As7c2d → `j4-10`; jump-station `none` → `j4-cs`; jump-nit `none` →
+`j4-nit`; jump-maniac `none` → `j4-man`; assessment steps use cue kind
+`none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
@@ -1338,7 +1345,7 @@ felt.
 | Adjust versus Maniac | Wider, Hang, Ego | call-wider reason |
 | Confidence and samples | Observe, Samples, Showdowns; densified SoftPulse one gold (LPT-495) | confidence quizzes |
 | Same hand, different types | Cards, Seats, Evidence | — |
-| Section 4 jump check | — | range, SPR, and player-type checks |
+| Section 4 jump check | — | — |
 | Build multiway ranges with nut potential | Nutted, Air, Domination | continue and priority checks |
 | Play 150–300bb stacks with a plan | Deep, Realize, Stack | implied, plan, and reward checks |
 | Implied and reverse odds | Implied, Reverse, Second | rise check |

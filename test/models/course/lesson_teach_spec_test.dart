@@ -348,6 +348,16 @@ const _lessons = <String, List<String>>{
     'act-04-10-01-unguided',
     'act-04-10-01-checkpoint',
   ],
+  // LPT-219
+  'lesson-04-10-02-section-four-jump-test': [
+    'act-04-10-02-jump-range',
+    'act-04-10-02-jump-3bet',
+    'act-04-10-02-jump-spr',
+    'act-04-10-02-jump-size',
+    'act-04-10-02-jump-station',
+    'act-04-10-02-jump-nit',
+    'act-04-10-02-jump-maniac',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -2295,6 +2305,167 @@ void main() {
       expect(
         act('act-04-10-01-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Section 4 jump check (LPT-219)', () {
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-04-10-02-jump-range'), 'cues').single['target'],
+        'j4-range',
+      );
+      expect(
+        _list(
+          act('act-04-10-02-jump-range'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-10-02-jump-range').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-04-10-02-jump-range').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-04-10-02-jump-range').assessmentRole,
+        AssessmentRole.jumpTest,
+      );
+      expect(
+        _list(act('act-04-10-02-jump-3bet'), 'cues').single['target'],
+        'j4-3bet',
+      );
+      expect(
+        _list(
+          act('act-04-10-02-jump-3bet'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-10-02-jump-3bet').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(
+        act('act-04-10-02-jump-3bet').teachSpec!['deal']['fixedCards']['hero'],
+        ['Kh', 'Kd'],
+      );
+      expect(
+        act('act-04-10-02-jump-3bet').assessmentRole,
+        AssessmentRole.jumpTest,
+      );
+      expect(
+        _list(act('act-04-10-02-jump-spr'), 'cues').single['target'],
+        'spr-4',
+      );
+      expect(
+        _list(
+          act('act-04-10-02-jump-spr'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-10-02-jump-spr').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-04-10-02-jump-spr').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-04-10-02-jump-spr').assessmentRole,
+        AssessmentRole.jumpTest,
+      );
+      expect(
+        _list(act('act-04-10-02-jump-size'), 'cues').single['target'],
+        'j4-10',
+      );
+      expect(
+        _list(
+          act('act-04-10-02-jump-size'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-10-02-jump-size').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(
+        act('act-04-10-02-jump-size').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Kd'],
+      );
+      expect(
+        act('act-04-10-02-jump-size').teachSpec!['deal']['fixedCards']['board'],
+        ['As', '7c', '2d'],
+      );
+      expect(
+        act('act-04-10-02-jump-size').assessmentRole,
+        AssessmentRole.jumpTest,
+      );
+      expect(
+        _list(act('act-04-10-02-jump-station'), 'cues').single['target'],
+        'j4-cs',
+      );
+      expect(
+        _list(
+          act('act-04-10-02-jump-station'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-10-02-jump-station').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-04-10-02-jump-station').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-04-10-02-jump-station').assessmentRole,
+        AssessmentRole.jumpTest,
+      );
+      expect(
+        _list(act('act-04-10-02-jump-nit'), 'cues').single['target'],
+        'j4-nit',
+      );
+      expect(
+        _list(
+          act('act-04-10-02-jump-nit'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-10-02-jump-nit').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-04-10-02-jump-nit').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-04-10-02-jump-nit').assessmentRole,
+        AssessmentRole.jumpTest,
+      );
+      expect(
+        _list(act('act-04-10-02-jump-maniac'), 'cues').single['target'],
+        'j4-man',
+      );
+      expect(
+        _list(
+          act('act-04-10-02-jump-maniac'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-10-02-jump-maniac').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-04-10-02-jump-maniac').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-04-10-02-jump-maniac').assessmentRole,
+        AssessmentRole.jumpTest,
       );
     });
   });
