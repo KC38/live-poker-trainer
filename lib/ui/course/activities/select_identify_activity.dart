@@ -761,34 +761,43 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-03-08-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-03-08-01-checkpoint')!,
       // SoftPulse owns Pot · effective — don’t gold-tip the tile.
+      // Section 3 jump densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-390).
       'act-03-08-02-jump-table' =>
-        'Pot 16, shorter 40bb — start with pot and effective stack.',
+        selectIdentifyDensifiedCoachLine('act-03-08-02-jump-table')!,
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-08-02-jump-class' =>
-        'Qd9d3c with JdTd — you need runout for both straight and flush.',
+        selectIdentifyDensifiedCoachLine('act-03-08-02-jump-class')!,
       // SoftPulse owns Fold — don’t gold-tip the tile.
       'act-03-08-02-jump-leak' =>
-        'Gutshot vs a 2x pot bet — the price is usually too steep.',
+        selectIdentifyDensifiedCoachLine('act-03-08-02-jump-leak')!,
       // SoftPulse owns Strong narrow — don’t gold-tip the tile.
+      // Think in ranges densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-403).
       'act-04-01-01-guided' =>
-        'UTG opens at 1/2 — early seats usually play tighter.',
+        selectIdentifyDensifiedCoachLine('act-04-01-01-guided')!,
       // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
       'act-04-01-01-scaffolded' =>
-        'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+        selectIdentifyDensifiedCoachLine('act-04-01-01-scaffolded')!,
       // SoftPulse owns Keep range — don’t gold-tip the tile.
       'act-04-01-01-unguided' =>
-        'They bet twice — pinning Exactly AK collapses the range.',
+        selectIdentifyDensifiedCoachLine('act-04-01-01-unguided')!,
       // SoftPulse owns Read drives — don’t gold-tip the tile.
       'act-04-01-01-checkpoint' =>
-        'Same board, different villain lines — advice follows the range, not the cards alone.',
+        selectIdentifyDensifiedCoachLine('act-04-01-01-checkpoint')!,
       // SoftPulse owns Branches — don’t gold-tip the tile.
+      // Plan beyond densified ask: selectIdentifyDensifiedCoachLine (LPT-407).
       'act-04-03-01-checkpoint' =>
-        'You have a flop plan — map brick vs flush turns.',
+        selectIdentifyDensifiedCoachLine('act-04-03-01-checkpoint')!,
       // SoftPulse owns Soft band — don’t gold-tip the tile.
+      // Size with a message densified ask: selectIdentifyDensifiedCoachLine
+      // (LPT-410).
       'act-04-04-01-unguided' =>
-        'Two value sizes both get calls — nearby sizes can both grade soft.',
+        selectIdentifyDensifiedCoachLine('act-04-04-01-unguided')!,
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-      'act-04-05-01-guided' => 'Effective 80 into pot 20 — stack ÷ pot.',
+      // SPR densified ask: selectIdentifyDensifiedCoachLine (LPT-412).
+      'act-04-05-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-04-05-01-guided')!,
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
       'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
       // SoftPulse owns High part. — don’t gold-tip the tile.
@@ -2250,32 +2259,41 @@ class _HandCategoryTapActivity extends StatelessWidget {
     // Patch the common leaks checkpoint densified ask (LPT-382).
     'act-03-08-01-checkpoint' =>
       selectIdentifyDensifiedCoachLine('act-03-08-01-checkpoint')!,
+    // Section 3 jump densified asks: selectIdentifyDensifiedCoachLine
+    // (LPT-390).
     'act-03-08-02-jump-table' =>
-      'Pot 16, shorter 40bb — start with pot and effective stack.',
+      selectIdentifyDensifiedCoachLine('act-03-08-02-jump-table')!,
     'act-03-08-02-jump-class' =>
-      'Qd9d3c with JdTd — you need runout for both straight and flush.',
+      selectIdentifyDensifiedCoachLine('act-03-08-02-jump-class')!,
     'act-03-08-02-jump-leak' =>
-      'Gutshot vs a 2x pot bet — the price is usually too steep.',
+      selectIdentifyDensifiedCoachLine('act-03-08-02-jump-leak')!,
     // SoftPulse owns Strong narrow — don’t gold-tip the tile.
+    // Think in ranges densified asks: selectIdentifyDensifiedCoachLine
+    // (LPT-403).
     'act-04-01-01-guided' =>
-      'UTG opens at 1/2 — early seats usually play tighter.',
+      selectIdentifyDensifiedCoachLine('act-04-01-01-guided')!,
     // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
     'act-04-01-01-scaffolded' =>
-      'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+      selectIdentifyDensifiedCoachLine('act-04-01-01-scaffolded')!,
     // SoftPulse owns Keep range — don’t gold-tip the tile.
     'act-04-01-01-unguided' =>
-      'They bet twice — pinning Exactly AK collapses the range.',
+      selectIdentifyDensifiedCoachLine('act-04-01-01-unguided')!,
     // SoftPulse owns Read drives — don’t gold-tip the tile.
     'act-04-01-01-checkpoint' =>
-      'Same board, different villain lines — advice follows the range, not the cards alone.',
+      selectIdentifyDensifiedCoachLine('act-04-01-01-checkpoint')!,
     // SoftPulse owns Branches — don’t gold-tip the tile.
+    // Plan beyond densified ask: selectIdentifyDensifiedCoachLine (LPT-407).
     'act-04-03-01-checkpoint' =>
-      'You have a flop plan — map brick vs flush turns.',
+      selectIdentifyDensifiedCoachLine('act-04-03-01-checkpoint')!,
     // SoftPulse owns Soft band — don’t gold-tip the tile.
+    // Size with a message densified ask: selectIdentifyDensifiedCoachLine
+    // (LPT-410).
     'act-04-04-01-unguided' =>
-      'Two value sizes both get calls — nearby sizes can both grade soft.',
+      selectIdentifyDensifiedCoachLine('act-04-04-01-unguided')!,
     // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-    'act-04-05-01-guided' => 'Effective 80 into pot 20 — stack ÷ pot.',
+    // SPR densified ask: selectIdentifyDensifiedCoachLine (LPT-412).
+    'act-04-05-01-guided' =>
+      selectIdentifyDensifiedCoachLine('act-04-05-01-guided')!,
     // SoftPulse owns SPR 4 — don’t gold-tip the tile.
     'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
     // SoftPulse owns High part. — don’t gold-tip the tile.

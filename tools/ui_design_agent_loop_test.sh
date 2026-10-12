@@ -528,6 +528,26 @@ grep -q 'origin/main validated shot' <<<"$token_out" \
 grep -q 'then closing' <<<"$token_out" \
   || fail "token stream should keep trailing prose: $token_out"
 
+# Mixed thinking prose + assistant tokens must still coalesce the token run.
+mixed_log="$LOG_DIR/run-status-mixed.log"
+{
+  printf '%s{"t":1,"type":"thinking"}\n' 'begins now.'
+  for w in Implement ing the dens ify fix in the work tree .; do
+    printf '%s{"t":1,"type":"assistant"}\n' "$w"
+  done
+  printf '%s{"t":1,"type":"thinking"}\n' 'Only one match was found'
+} >"$mixed_log"
+mixed_out="$(print_run_log_preview "$mixed_log" 10)"
+grep -q 'Implementing the densify fix in the work tree' <<<"$mixed_out" \
+  || fail "mixed stream should coalesce assistant tokens: $mixed_out"
+grep -q 'begins now' <<<"$mixed_out" \
+  || fail "mixed stream should keep thinking prose: $mixed_out"
+grep -q 'Only one match was found' <<<"$mixed_out" \
+  || fail "mixed stream should keep trailing thinking: $mixed_out"
+# Must not dump one word per line for the assistant run.
+[[ "$(grep -c '^ing$' <<<"$mixed_out" || true)" == "0" ]] \
+  || fail "mixed stream leaked token line 'ing': $mixed_out"
+
 # repair_health_tails scrubs SDK pollution when coverage is late/missing.
 printf '%s\n' \
   '{"at":"2026-10-12T09:52:24+05:30","stamp":"20261012-093041","exit":143,"seconds":1303,"ticket":null,"result":null,"tail":"the process and rerun{\"t\":1791778842861,\"type\":\"thinking\"} flutter_run_fast.sh{\"t\":1791778843540,\"type\":\"assistant\"}"}' \

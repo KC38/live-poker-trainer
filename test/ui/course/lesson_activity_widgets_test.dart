@@ -11999,12 +11999,18 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-412: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('Effective 80 into pot 20 — stack ÷ pot.'),
+      lessonFrameSpeech(activity),
+      'Effective 80 into pot 20 — tap SPR 4.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Effective 80 into pot 20 — pick SPR 4.'),
       findsOneWidget,
     );
     expect(
-      find.text('Effective 80 into pot 20 — tap the SPR.'),
+      find.text('Effective 80 into pot 20 — stack ÷ pot.'),
       findsNothing,
     );
     expect(find.text('Effective stack 80bb, pot 20bb. SPR?'), findsNothing);
@@ -12014,8 +12020,6 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Pot'), findsOneWidget);
     expect(find.text('÷'), findsOneWidget);
     expect(find.text('SPR 4'), findsOneWidget);
-    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
-    expect(find.text('Tap SPR 4.'), findsNothing);
     expect(find.byType(TextField), findsNothing);
     await tester.tap(find.text('SPR 4'));
     await tester.pump();
@@ -14580,9 +14584,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Pot 16, shorter 40bb — tap pot and effective stack first.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Pot 16, shorter 40bb — pick pot and effective stack first.'),
+      findsOneWidget,
+    );
     expect(
       find.text('Pot 16, shorter 40bb — start with pot and effective stack.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Pot 16 · shorter stack 40bb'), findsNothing);
     expect(find.text('Pot + 40bb'), findsNothing);
@@ -14644,9 +14658,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Straight and flush both need runout — tap the hand class.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Straight and flush both need runout — pick the hand class.'),
+      findsOneWidget,
+    );
     expect(
       find.text('Qd9d3c with JdTd — you need runout for both straight and flush.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Draw'), findsOneWidget);
     expect(find.text('OESD + flush'), findsOneWidget);
@@ -14698,6 +14722,21 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Crowd — fold air'), findsNothing);
     // SoftPulse + Rex own the cue — no third gold felt status.
     expect(find.text('Facing a bet · 4-way'), findsNothing);
+    // True-air template — never 9h heart-draw seed (LPT-391).
+    final spot = dealtLessonActionSpot(activity, generation: 0)!;
+    expect(spot.heroCodes[0].toLowerCase()[0], isNot(equals('9')));
+    expect(
+      CardModel.fromCode(spot.heroCodes[0]).rank ==
+          CardModel.fromCode(spot.heroCodes[1]).rank,
+      isFalse,
+    );
+    final boardSuit = CardModel.fromCode(spot.boardCodes.first).suit;
+    expect(
+      spot.heroCodes.any(
+        (code) => CardModel.fromCode(code).suit == boardSuit,
+      ),
+      isFalse,
+    );
     await tester.tap(find.text('FOLD'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j3-fold');
@@ -14802,9 +14841,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Gutshot vs a 2x pot bet — tap Fold when the price is wrong.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Gutshot vs a 2x pot bet — pick Fold when the price is wrong.'),
+      findsOneWidget,
+    );
     expect(
       find.text('Gutshot vs a 2x pot bet — the price is usually too steep.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Fold'), findsOneWidget);
     expect(find.text('Price wrong'), findsOneWidget);
@@ -14862,9 +14911,23 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.'),
+      lessonFrameSpeech(activity),
+      'BTN open, BB 3-bet, BTN calls — tap whose range is stronger.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text(
+        'BTN open, BB 3-bet, BTN calls — pick whose range is stronger.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+      ),
+      findsNothing,
     );
     expect(find.text('BB 3-bet'), findsOneWidget);
     expect(find.text('Stronger'), findsOneWidget);
@@ -14919,9 +14982,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'UTG opens at 1/2 — tap the stronger, narrower range.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('UTG opens at 1/2 — pick the stronger, narrower range.'),
+      findsOneWidget,
+    );
     expect(
       find.text('UTG opens at 1/2 — early seats usually play tighter.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('UTG opens at 1/2. Best description?'), findsNothing);
     expect(find.text('Strong narrow'), findsOneWidget);
@@ -14988,9 +15061,26 @@ await tester.tap(find.text('NIT'));
           ),
         ),
       );
+      // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
       expect(
-        find.text('Same board, different villain lines — advice follows the range, not the cards alone.'),
+        lessonFrameSpeech(activity),
+        'Same board, different villain lines — tap how advice should change.',
+      );
+      expect(
+        lessonFrameSpeech(activity),
+        isNot(contains('Tap the best answer')),
+      );
+      expect(
+        find.text(
+          'Same board, different villain lines — pick how advice should change.',
+        ),
         findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Same board, different villain lines — advice follows the range, not the cards alone.',
+        ),
+        findsNothing,
       );
       expect(find.text('Read drives'), findsOneWidget);
       expect(find.text('Advice shifts'), findsOneWidget);
@@ -15055,9 +15145,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'They bet twice — tap why Exactly AK is too precise.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('They bet twice — pick why Exactly AK is too precise.'),
+      findsOneWidget,
+    );
     expect(
       find.text('They bet twice — pinning Exactly AK collapses the range.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Keep range'), findsOneWidget);
     expect(find.text('Weighted'), findsOneWidget);
@@ -15487,9 +15587,29 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-410: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('Two value sizes both get calls — nearby sizes can both grade soft.'),
+      lessonFrameSpeech(activity),
+      'Two value sizes both get calls — tap nearby soft-grade over one exact chip.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text(
+        'Two value sizes both get calls — pick nearby soft-grade over one exact chip.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Two value sizes both get calls — nearby sizes can both grade soft.',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text(
+        'Two value sizes both get worse hands to call. Grading idea?',
+      ),
+      findsNothing,
     );
     expect(find.text('Soft band'), findsOneWidget);
     expect(find.text('Nearby OK'), findsOneWidget);
@@ -15548,14 +15668,21 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-407: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('You have a flop plan — map brick vs flush turns.'),
+      lessonFrameSpeech(activity),
+      'You have a flop plan — tap brick→barrel vs flush→abort.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('You have a flop plan — pick brick→barrel vs flush→abort.'),
       findsOneWidget,
     );
     expect(
-      find.text('You have a flop plan — tap the turn branches.'),
+      find.text('You have a flop plan — map brick vs flush turns.'),
       findsNothing,
     );
+    expect(find.text('Good multi-street plans do what?'), findsNothing);
     expect(find.text('Branches'), findsOneWidget);
     expect(find.text('Brick · flush'), findsOneWidget);
     await tester.tap(find.text('Branches'));

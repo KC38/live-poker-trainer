@@ -67,6 +67,32 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Patch the common leaks checkpoint densified ask (LPT-382) — same path.
     'act-03-08-01-checkpoint' =>
       'Two seats, different frequencies — pick how often each seat enters.',
+    // Section 3 jump select_identify densified asks (LPT-390) — same path.
+    // jump-class stays felt-first (no hard-coded template ranks/suits).
+    'act-03-08-02-jump-table' =>
+      'Pot 16, shorter 40bb — pick pot and effective stack first.',
+    'act-03-08-02-jump-class' =>
+      'Straight and flush both need runout — pick the hand class.',
+    'act-03-08-02-jump-leak' =>
+      'Gutshot vs a 2x pot bet — pick Fold when the price is wrong.',
+    // Think in ranges densified asks (LPT-403) — same path as LPT-390.
+    'act-04-01-01-guided' =>
+      'UTG opens at 1/2 — pick the stronger, narrower range.',
+    'act-04-01-01-scaffolded' =>
+      'BTN open, BB 3-bet, BTN calls — pick whose range is stronger.',
+    'act-04-01-01-unguided' =>
+      'They bet twice — pick why Exactly AK is too precise.',
+    'act-04-01-01-checkpoint' =>
+      'Same board, different villain lines — pick how advice should change.',
+    // Plan beyond the flop checkpoint densified ask (LPT-407) — same path.
+    'act-04-03-01-checkpoint' =>
+      'You have a flop plan — pick brick→barrel vs flush→abort.',
+    // Size with a message unguided densified ask (LPT-410) — same path.
+    'act-04-04-01-unguided' =>
+      'Two value sizes both get calls — pick nearby soft-grade over one exact chip.',
+    // SPR decides commitment guided densified ask (LPT-412) — same path.
+    'act-04-05-01-guided' =>
+      'Effective 80 into pot 20 — pick SPR 4.',
     _ => null,
   };
 }

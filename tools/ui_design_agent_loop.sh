@@ -196,7 +196,7 @@ prompt() {
   fi
   # Lead with READY facts: agents otherwise spend the first ~60s re-grepping
   # the Dart VM / reconciling the lock even though preflight already did that.
-  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Launch worktree builds with tools/flutter_run_fast.sh (cached Runner.app, ~20 s for Dart-only) and hot-restart with tools/flutter_hot_restart.sh — both block; never bare AwaitShell/sleep. Jump to later lessons / heart states with tools/agent_seed.py and read screens with agent_tap.py tree; after openlesson use agent_tap.py wait-gold before taps; screenshot for judgment and proof only. Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Never claim or fix tickets labeled grokbot (GrokBot / Chrome layout on Linux); queue JQL must include labels != grokbot. Filing only grokbot tickets is not a finished run — keep walking until you have a ui-agent KEY (do not end early so the loop starts another agent). Learnings ride the ticket PR (write them before the merge; after it, append to the pending file).${pending} When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
+  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Launch worktree builds with tools/flutter_run_fast.sh (cached Runner.app, ~20 s for Dart-only) and hot-restart with tools/flutter_hot_restart.sh — both block; never bare AwaitShell/sleep. Long flutter test/analyze: tools/tee_exit.sh in test-LPT-*/analyze-LPT-* tmux, then tools/wait_done.sh on the sibling .done. Jump to later lessons / heart states with tools/agent_seed.py and read screens with agent_tap.py tree; after openlesson use agent_tap.py wait-gold before taps; screenshot for judgment and proof only. Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Never claim or fix tickets labeled grokbot (GrokBot / Chrome layout on Linux); queue JQL must include labels != grokbot. Filing only grokbot tickets is not a finished run — keep walking until you have a ui-agent KEY (do not end early so the loop starts another agent). Learnings ride the ticket PR (write them before the merge; after it, append to the pending file).${pending} When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
 }
 
 # Long-lived run-loop bash keeps function bodies from process start. Re-eval
@@ -1427,49 +1427,105 @@ def scrub_sdk_stream(text: str) -> str:
 
 def is_token_fragment(text: str) -> bool:
     """True when a scrubbed line looks like a single streamed token."""
-    if len(text) <= 24 and len(text.split()) <= 3:
+    if text in {".", ",", ":", ";", "/", "-", "—", "…", "!", "?", "'", '"'}:
         return True
-    return text in {".", ",", ":", ";", "/", "-", "—", "…"}
+    # Multi-word thinking prose stays as its own line.
+    if " " in text:
+        return False
+    return 1 <= len(text) <= 24
+
+
+def join_token_run(parts: list[str]) -> str:
+    """Rejoin a contiguous token run into one prose string."""
+    if not parts:
+        return ""
+    out: list[str] = []
+    for s in parts:
+        if not out:
+            out.append(s)
+            continue
+        prev = out[-1]
+        # Glue path separators and trailing punctuation; keep spaces around
+        # em/en dashes so "confirmed — jumping" stays readable.
+        if s in {".", ",", ":", ";", "/", "!", "?", "'", '"'} or prev.endswith("/"):
+            out[-1] = prev + s
+            continue
+        # Mid-word continuations only for common suffixes
+        # ("Implement"+"ing", "dens"+"ify") — never glue short words like
+        # "the" / "fix" / "in".
+        if (
+            prev[-1:].isalpha()
+            and s.isalpha()
+            and s.lower()
+            in {
+                "ing",
+                "ed",
+                "er",
+                "ly",
+                "ify",
+                "ion",
+                "tion",
+                "ness",
+                "ment",
+                "ous",
+                "ive",
+                "est",
+                "ies",
+                "ied",
+            }
+        ):
+            out[-1] = prev + s
+            continue
+        out.append(s)
+    joined = " ".join(out)
+    joined = re.sub(r"\s+([.,:;!?])", r"\1", joined)
+    return re.sub(r"\s+", " ", joined).strip()
+
+
+def soft_wrap(text: str, width: int = 80) -> list[str]:
+    wrapped: list[str] = []
+    while text:
+        if len(text) <= width:
+            wrapped.append(text)
+            break
+        cut = text.rfind(" ", 0, width + 1)
+        if cut < width // 2:
+            cut = width
+        wrapped.append(text[:cut].rstrip())
+        text = text[cut:].lstrip()
+    return wrapped
 
 
 def coalesce_token_lines(lines: list[str]) -> list[str]:
-    """Join one-token-per-line SDK streams; keep longer prose lines intact."""
+    """Join contiguous one-token runs; keep multi-word prose lines intact.
+
+    Mixed thinking prose + assistant token streams used to skip coalescing
+    when the whole sample was under 2/3 tokenish — status then printed one
+    word per line again.
+    """
     if not lines:
         return []
-    sample = lines[-min(len(lines), 40) :]
-    tokenish = sum(1 for s in sample if is_token_fragment(s))
-    if tokenish < max(3, len(sample) * 2 // 3):
-        return lines
-    # Rejoin punctuation without spaces; words with a single space.
-    parts: list[str] = []
-    for s in lines:
-        if not parts:
-            parts.append(s)
-            continue
-        # Glue path separators and trailing punctuation; keep spaces around
-        # em/en dashes so "confirmed — jumping" stays readable.
-        if s in {".", ",", ":", ";", "/", "!", "?", "'", '"'} or parts[-1].endswith(
-            ("/",)
-        ):
-            parts[-1] = parts[-1] + s
+    result: list[str] = []
+    run: list[str] = []
+
+    def flush_run() -> None:
+        nonlocal run
+        if not run:
+            return
+        if len(run) >= 3:
+            result.extend(soft_wrap(join_token_run(run)))
         else:
-            parts.append(s)
-    joined = " ".join(parts)
-    joined = re.sub(r"\s+([.,:;!?])", r"\1", joined)
-    joined = re.sub(r"\s+", " ", joined).strip()
-    # Soft-wrap for status readability (~80 cols).
-    width = 80
-    wrapped: list[str] = []
-    while joined:
-        if len(joined) <= width:
-            wrapped.append(joined)
-            break
-        cut = joined.rfind(" ", 0, width + 1)
-        if cut < width // 2:
-            cut = width
-        wrapped.append(joined[:cut].rstrip())
-        joined = joined[cut:].lstrip()
-    return wrapped
+            result.extend(run)
+        run = []
+
+    for s in lines:
+        if is_token_fragment(s):
+            run.append(s)
+            continue
+        flush_run()
+        result.append(s)
+    flush_run()
+    return result
 
 
 try:

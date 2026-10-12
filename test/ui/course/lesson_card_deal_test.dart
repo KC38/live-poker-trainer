@@ -272,6 +272,18 @@ void main() {
     );
     expect(
       startingHandFamilyFromCodes(['Ah', 'Kd']),
+      LessonStartingHandFamily.strongOffsuitBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Kh', 'Qd']),
+      LessonStartingHandFamily.strongOffsuitBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Jh', 'Td']),
+      LessonStartingHandFamily.offsuitBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Kh', 'Jd']),
       LessonStartingHandFamily.offsuitBroadway,
     );
     expect(
@@ -320,6 +332,35 @@ void main() {
     expect(labels.contains('QTs'), isFalse);
     expect(labels.contains('JTs'), isFalse);
     expect(labels.contains('KTs'), isFalse);
+    expect(labels.length, greaterThan(1));
+  });
+
+  test('preflop AKo remap stays in strong offsuit broadway (LPT-406)', () {
+    final labels = <String>{};
+    for (var seed = 0; seed < 48; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [
+          ['Ah', 'Kd'],
+          <String>[],
+        ],
+        Random(seed),
+      );
+      expect(
+        startingHandFamilyFromCodes(groups[0]),
+        LessonStartingHandFamily.strongOffsuitBroadway,
+        reason: 'seed $seed dealt ${groups[0]}',
+      );
+      labels.add(startingHandLabelFromCodes(groups[0]));
+    }
+    expect(labels.contains('JTo'), isFalse);
+    expect(labels.contains('KJo'), isFalse);
+    expect(labels.contains('QTo'), isFalse);
+    expect(labels.contains('KTo'), isFalse);
+    expect(labels.contains('QJo'), isFalse);
+    expect(
+      labels.any((l) => l == 'AKo' || l == 'AQo' || l == 'AJo' || l == 'ATo' || l == 'KQo'),
+      isTrue,
+    );
     expect(labels.length, greaterThan(1));
   });
 
@@ -591,6 +632,136 @@ void main() {
         );
       }
       expect(rankKeys.length, greaterThan(1));
+    },
+  );
+
+  test(
+    'section 3 jump-mw air template never remaps to a flush draw (LPT-391)',
+    () {
+      final activity = CourseActivity(
+        id: 'act-03-08-02-jump-mw',
+        order: 3,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.jumpTest,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 40,
+        accessibilityText: 'Jump: fold air multiway.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Four-way. You have air on a wet flop. Action?',
+      );
+      final template = resolveLessonActionSpot(activity)!;
+      expect(template.heroCodes, ['7s', '3d']);
+      expect(template.boardCodes, ['Ah', 'Kh', '9h']);
+      final rankKeys = <String>{};
+      for (var seed = 0; seed < 64; seed++) {
+        final spot = dealtLessonActionSpot(
+          activity,
+          generation: seed,
+          random: Random(seed),
+        )!;
+        final dealtHero = [
+          for (final c in spot.heroCodes) CardModel.fromCode(c),
+        ];
+        final dealtBoard = [
+          for (final c in spot.boardCodes) CardModel.fromCode(c),
+        ];
+        expect(
+          dealtHero[0].rank == dealtHero[1].rank,
+          isFalse,
+          reason: 'seed $seed no pocket pair: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        final boardRanks = {for (final c in dealtBoard) c.rank};
+        expect(
+          boardRanks.contains(dealtHero[0].rank) ||
+              boardRanks.contains(dealtHero[1].rank),
+          isFalse,
+          reason: 'seed $seed no board pair: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        final boardSuit = dealtBoard.first.suit;
+        expect(
+          dealtHero.any((c) => c.suit == boardSuit),
+          isFalse,
+          reason:
+              'seed $seed no board-suit hole: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        rankKeys.add(
+          ([for (final c in dealtHero) c.rank]..sort()).join(','),
+        );
+      }
+      expect(rankKeys.length, greaterThan(1));
+    },
+  );
+
+  test(
+    'section 3 jump-river top-two template never remaps to a set (LPT-392)',
+    () {
+      final activity = CourseActivity(
+        id: 'act-03-08-02-jump-river',
+        order: 4,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.jumpTest,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 40,
+        accessibilityText: 'Jump: value bet two pair.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Brick river. You have top two. Villain checks. Action?',
+      );
+      final template = resolveLessonActionSpot(activity)!;
+      expect(template.heroCodes, ['Ah', 'Kd']);
+      expect(template.boardCodes, ['As', 'Kc', '7d', '2h', '3c']);
+      // On this brick board the only dual-broadway top-two holes are A+K, so
+      // ranks stay fixed; suits must still vary and never collapse to a set.
+      final suitKeys = <String>{};
+      for (var seed = 0; seed < 64; seed++) {
+        final spot = dealtLessonActionSpot(
+          activity,
+          generation: seed,
+          random: Random(seed),
+        )!;
+        final dealtHero = [
+          for (final c in spot.heroCodes) CardModel.fromCode(c),
+        ];
+        final dealtBoard = [
+          for (final c in spot.boardCodes) CardModel.fromCode(c),
+        ];
+        expect(
+          dealtHero[0].rank == dealtHero[1].rank,
+          isFalse,
+          reason:
+              'seed $seed no pocket pair/set: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        final boardRanks = {for (final c in dealtBoard) c.rank};
+        expect(
+          boardRanks.contains(dealtHero[0].rank),
+          isTrue,
+          reason:
+              'seed $seed hole0 pairs board: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        expect(
+          boardRanks.contains(dealtHero[1].rank),
+          isTrue,
+          reason:
+              'seed $seed hole1 pairs board: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        expect(
+          dealtHero[0].rank != dealtHero[1].rank,
+          isTrue,
+          reason:
+              'seed $seed two distinct pairing ranks: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        // Dual broadway on A/K brick → always Ace + King ranks.
+        final ranks = [for (final c in dealtHero) c.rank]..sort();
+        expect(ranks, [13, 14], reason: 'seed $seed top-two A+K ranks');
+        expect(
+          dealtHero[0].suit != dealtHero[1].suit,
+          isTrue,
+          reason: 'seed $seed keeps offsuit: ${spot.heroCodes}',
+        );
+        suitKeys.add(
+          ([for (final c in dealtHero) '${c.rank}${c.suit}']..sort()).join(','),
+        );
+      }
+      expect(suitKeys.length, greaterThan(1));
     },
   );
 

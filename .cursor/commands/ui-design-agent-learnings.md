@@ -49,8 +49,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   **this** chat via cloud MCP `rename-chat` (`cursor-cloud`) to
   `LPT-NN PR-<n>` (step 8; step 10 fallback). That is the sidebar title
   only — never rename a make-change branch to `cursor/…` (LPT-69). Keep
-  `fix/LPT-NN-…` / `feature/LPT-NN-…`. When ManagePullRequest refuses a
-  make-change branch for lacking `cursor/`, recreate with
+  `fix/LPT-NN-…` / `feature/LPT-NN-…`. On this Mac mini ui-agent loop prefer
+  `gh pr create` / `gh pr merge` from make-change; only reach for
+  ManagePullRequest when `gh` is unavailable — its `cursor/` prefix check
+  burns minutes (LPT-390). When ManagePullRequest refuses a make-change
+  branch for lacking `cursor/`, recreate with
   `skip_branch_prefix_check: true` — do not rename the ticket branch to
   `cursor/…` (LPT-70). Skip rename-chat when the tool is missing or either
   id is unknown — never invent a title or rename another chat.
@@ -239,7 +242,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (LPT-367 multiway scaffolded). Prefer verifying gutshot/OESD templates
   with `HandClassifier.drawOuts` (four consecutive-looking ranks like
   A-J-T-9-8 are not a straight) before locking coach “four outs” copy —
-  JT on A72 remapped as air under a gutshot ask (LPT-381).
+  JT on A72 remapped as air under a gutshot ask (LPT-381). Split `HandClass.strongMade` with `isSet` + `distinctBoardPairingHoles` so top-two river templates never remap to a set (LPT-392).
 - Prefer merging + Functions deploy before mini-proving a
   `gradeCourseResponse` / Nice! / `course_bank` sequence-id change — the
   worktree app still hits production until that deploy lands (LPT-74,
@@ -253,11 +256,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   required origin/main re-walk, not a failed fix — LPT-173 squash matched
   the worktree lib change while catalog moved on main.
 - Prefer `villainSeatCount: 0` on conceptual outcome scenes that do not
-  deal holes (effective-stack / depth tiles). Default `1` paints a decoy
-  face-down Them pair — LPT-220.
-- Prefer framed `LessonTableStage` with `lessonNineMaxVillainCount` +
-  `seatNames: Seat N` when coach copy names seat numbers on a nine-handed
-  ask (LPT-240 Read the table scaffolded); densify `blindsSeats`+
+  deal holes (effective-stack / depth tiles; default `1` paints a decoy
+  Them pair — LPT-220). Prefer framed `LessonTableStage` with
+  `lessonNineMaxVillainCount` + `seatNames: Seat N` when coach copy names
+  seat numbers on a nine-handed ask (LPT-240); densify `blindsSeats`+
   `numberSeats` covers the no-frame path.
 - Prefer extending `alignLessonTableCopy` (board+hole card tokens and
   spoken rank/suit words) when densified isomorphic remap leaves catalog
@@ -273,6 +275,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   helper before `resolveLessonCoachPrompt` (LPT-221, LPT-279, LPT-343
   Close the river checkpoint). Densified lines need a pick/tap verb so
   `withLessonTapInstruction` does not append the generic footer.
+
+- Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
 
 ## Ops (simulator, CLI, Jira)
 
@@ -295,9 +299,15 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (LPT-72). Prefer named `test-LPT-*` tmux for long suites over anonymous
   sessions — run them with `tools/tee_exit.sh /tmp/test-LPT-….log flutter
   test …` (same for `analyze-LPT-*` / `dart analyze`) so `EXIT:N` is the
-  command status; bare `cmd | tee; echo EXIT:$?` masks failures as 0
-  (LPT-367). Write coverage before long compiles when the ticket is
-  already Done in Jira.
+  command status and `/tmp/test-LPT-….done` appears only when finished;
+  block with `tools/wait_done.sh /tmp/test-LPT-….done` (heartbeats the
+  lock) — never bare AwaitShell/sleep, never grep the pane for `EXIT:`
+  (send-keys text itself contains `EXIT:$?` and false-kills mid-suite —
+  LPT-391). Prefer `tee_exit` writing the numeric code into `.done`;
+  `wait_done` also accepts `DONE` / `DONE:N` / `EXIT:N` (LPT-410 hung on
+  a bare `DONE` marker before that parse). Bare `cmd | tee; echo EXIT:$?`
+  also masks failures as 0 (LPT-367). Write coverage before long compiles
+  when the ticket is already Done in Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
   `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.

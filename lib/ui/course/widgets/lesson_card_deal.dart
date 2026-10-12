@@ -134,7 +134,13 @@ enum LessonStartingHandFamily {
   /// Weaker suited broadway (KJs, KTs, QJs, QTs, JTs) — not Ace+ or KQs.
   suitedBroadway,
 
-  /// Two distinct broadway ranks, different suits.
+  /// Value offsuit broadway: Ace+broadway offsuit, or KQo.
+  ///
+  /// Keeps squeeze / value templates (e.g. AKo) from remapping into weaker
+  /// offsuit broadway like JTo / KJo (LPT-406; parallel to LPT-173).
+  strongOffsuitBroadway,
+
+  /// Weaker offsuit broadway (KJo, KTo, QJo, QTo, JTo) — not Ace+ or KQo.
   offsuitBroadway,
 
   /// Ace plus a non-broadway kicker, same suit.
@@ -180,12 +186,17 @@ LessonStartingHandFamily startingHandFamilyFromCodes(List<String> hero) {
 
   final bothBroadway = high.rank >= 10 && low.rank >= 10;
   if (bothBroadway) {
+    // Ace+broadway, or KQ — value class for 3-bet / squeeze teaches.
+    final strongBroadway =
+        high.rank == 14 || (high.rank == 13 && low.rank == 12);
     if (suited) {
-      // Ace+broadway suited, or KQs — value class for 3-bet teaches.
-      if (high.rank == 14 || (high.rank == 13 && low.rank == 12)) {
+      if (strongBroadway) {
         return LessonStartingHandFamily.strongSuitedBroadway;
       }
       return LessonStartingHandFamily.suitedBroadway;
+    }
+    if (strongBroadway) {
+      return LessonStartingHandFamily.strongOffsuitBroadway;
     }
     return LessonStartingHandFamily.offsuitBroadway;
   }
@@ -231,8 +242,10 @@ List<String> dealStartingHandFamily(
         _dealStrongSuitedBroadway(rng),
       LessonStartingHandFamily.suitedBroadway =>
         _dealWeakSuitedBroadway(rng),
+      LessonStartingHandFamily.strongOffsuitBroadway =>
+        _dealStrongOffsuitBroadway(rng),
       LessonStartingHandFamily.offsuitBroadway =>
-        _dealBroadway(rng, suited: false),
+        _dealWeakOffsuitBroadway(rng),
       LessonStartingHandFamily.suitedAce => _dealSuitedAceNonBroadway(rng),
       LessonStartingHandFamily.weakAceOffsuit =>
         _dealAceOffsuit(rng: rng, minKicker: 2, maxKicker: 9),
@@ -263,7 +276,9 @@ List<String> dealStartingHandFamily(
     LessonStartingHandFamily.suitedTrash ||
     LessonStartingHandFamily.suitedNonPair =>
       LessonHoleKind.suitedNonPair,
-    LessonStartingHandFamily.offsuitBroadway => LessonHoleKind.broadway,
+    LessonStartingHandFamily.strongOffsuitBroadway ||
+    LessonStartingHandFamily.offsuitBroadway =>
+      LessonHoleKind.broadway,
     LessonStartingHandFamily.junkOffsuit => LessonHoleKind.offsuitTrash,
     _ => LessonHoleKind.offsuitNonPair,
   };
@@ -568,6 +583,9 @@ int _drawOutsFor(List<String> hero, List<String> board) {
 /// pocket pair or board pair that [HandClassifier] still labels as a draw
 /// when outs are strong (underpair + flush draw → [HandClass.strongDraw];
 /// LPT-367).
+/// [isSet] and [distinctBoardPairingHoles] keep [HandClass.strongMade]
+/// top-two templates (two distinct holes each pairing the board) from
+/// remapping into a set — both collapse to strongMade (LPT-392).
 ({
   HandClass handClass,
   int drawOuts,
@@ -575,6 +593,8 @@ int _drawOutsFor(List<String> hero, List<String> board) {
   int broadwayCount,
   bool heroSuited,
   bool hasMadePair,
+  bool isSet,
+  int distinctBoardPairingHoles,
 }) _postflopTeachKey(List<String> hero, List<String> board) {
   return (
     handClass: _handClassFor(hero, board),
@@ -583,6 +603,8 @@ int _drawOutsFor(List<String> hero, List<String> board) {
     broadwayCount: _broadwayHoleCount(hero),
     heroSuited: _heroHolesSuited(hero),
     hasMadePair: _heroHasMadePair(hero, board),
+    isSet: _heroHasSet(hero, board),
+    distinctBoardPairingHoles: _distinctBoardPairingHoleCount(hero, board),
   );
 }
 
@@ -596,6 +618,32 @@ bool _heroHasMadePair(List<String> hero, List<String> board) {
     for (final code in board) CardModel.fromCode(code).rank,
   };
   return boardRanks.contains(h0.rank) || boardRanks.contains(h1.rank);
+}
+
+/// Whether [hero] makes a set: pocket pair whose rank appears on the board.
+bool _heroHasSet(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length < 3) return false;
+  final h0 = CardModel.fromCode(hero[0]);
+  final h1 = CardModel.fromCode(hero[1]);
+  if (h0.rank != h1.rank) return false;
+  return board.any((code) => CardModel.fromCode(code).rank == h0.rank);
+}
+
+/// Count of distinct hero hole ranks that also appear on the board.
+///
+/// Top two / two pair from holes is 2 (each hole pairs a different board
+/// rank). A set is 1 (both holes share one board-matching rank).
+int _distinctBoardPairingHoleCount(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length < 3) return 0;
+  final boardRanks = <int>{
+    for (final code in board) CardModel.fromCode(code).rank,
+  };
+  final pairing = <int>{};
+  for (final code in hero) {
+    final rank = CardModel.fromCode(code).rank;
+    if (boardRanks.contains(rank)) pairing.add(rank);
+  }
+  return pairing.length;
 }
 
 /// Ten or higher (T, J, Q, K, A).
@@ -1056,6 +1104,34 @@ List<String> _dealWeakSuitedBroadway(Random rng) {
   final pair = pairs[rng.nextInt(pairs.length)];
   final suit = _suits[rng.nextInt(_suits.length)];
   return [_code(pair.$1, suit), _code(pair.$2, suit)];
+}
+
+/// Ace+broadway offsuit (AKo–ATo) or KQo.
+List<String> _dealStrongOffsuitBroadway(Random rng) {
+  const pairs = <(int, int)>[
+    (14, 13),
+    (14, 12),
+    (14, 11),
+    (14, 10),
+    (13, 12),
+  ];
+  final pair = pairs[rng.nextInt(pairs.length)];
+  final suits = _twoDistinctSuits(rng);
+  return [_code(pair.$1, suits[0]), _code(pair.$2, suits[1])];
+}
+
+/// Offsuit broadway that is not Ace+ or KQo (KJo, KTo, QJo, QTo, JTo).
+List<String> _dealWeakOffsuitBroadway(Random rng) {
+  const pairs = <(int, int)>[
+    (13, 11),
+    (13, 10),
+    (12, 11),
+    (12, 10),
+    (11, 10),
+  ];
+  final pair = pairs[rng.nextInt(pairs.length)];
+  final suits = _twoDistinctSuits(rng);
+  return [_code(pair.$1, suits[0]), _code(pair.$2, suits[1])];
 }
 
 List<String> _dealConnector(Random rng, {required bool suited}) {
