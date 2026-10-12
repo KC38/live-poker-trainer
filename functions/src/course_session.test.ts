@@ -361,6 +361,23 @@ describe("soft grading and life loss", () => {
     );
   });
 
+  it("uses authored explain Nice! feedback for Live table habits (LPT-199)", () => {
+    const liveHabits = findLesson("lesson-02-06-01-live-habits")!.lesson;
+    const explain = liveHabits.activities.find(
+      (activity) => activity.id === "act-02-06-01-explain-habits",
+    )!;
+    const graded = gradeCourseResponse({activity: explain});
+    expect(graded).toMatchObject({
+      grade: "recommended",
+      accepted: true,
+      lifeLost: false,
+      feedback: "Watch → Say → Cover → Wait.",
+    });
+    expect(graded.feedback).not.toMatch(
+      /Say your action|Cover your cards|Tap Watch/i,
+    );
+  });
+
   it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",
