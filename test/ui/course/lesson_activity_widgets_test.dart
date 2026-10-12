@@ -11608,8 +11608,20 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-279: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('Count only the outs that make the best hand.'),
+      lessonFrameSpeech(activity),
+      'Count only the outs that make the best hand — tap every clean out.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      lessonFrameSpeech(activity),
+      isNot(contains('Clean outs to the best hand?')),
+    );
+    expect(
+      find.text(
+        'Count only the outs that make the best hand — pick every clean out.',
+      ),
       findsOneWidget,
     );
     expect(
@@ -11706,7 +11718,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Pot 20, bet 10 — the call equals the bet in front of you.'),
+      lessonFrameSpeech(activity),
+      'Pot 20, bet 10 — tap the call that equals the bet.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Pot 20, bet 10 — pick the call that equals the bet.'),
       findsOneWidget,
     );
     expect(
@@ -11781,6 +11798,11 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    expect(
+      lessonFrameSpeech(activity),
+      'Getting 3:1 with real outs — tap Call, Fold, or Raise.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Getting 3:1 with real outs — pick Call, Fold, or Raise.'),
       findsOneWidget,
@@ -11873,7 +11895,14 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Nut flush draw, deep and sticky — future payoffs can justify the price.'),
+      lessonFrameSpeech(activity),
+      'Nut flush draw, deep and sticky — tap when future payoffs justify the price.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text(
+        'Nut flush draw, deep and sticky — pick when future payoffs justify the price.',
+      ),
       findsOneWidget,
     );
     expect(

@@ -252,6 +252,16 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   spoken rank/suit words) when densified isomorphic remap leaves catalog
   prompts / Nice! / Oops naming the template flop — frame speech alone is
   not enough if grade lines still say “Pair of kings” (LPT-261).
+- Prefer waiting until Continue is enabled in `tree` after multi-press
+  explain grades (Clean→Dirty→Price) before tapping Continue — an early
+  Continue after PRICE nomatches and skips the Nice! dock (LPT-274
+  closeout).
+- Prefer extending `selectIdentifyDensifiedCoachLine` (not only
+  `_coachText`) when a densified select_identify ask still shows catalog
+  + "Tap the best answer." in the frame bubble — framed speech reads that
+  helper before `resolveLessonCoachPrompt` (LPT-221, LPT-279). Densified
+  lines need a pick/tap verb so `withLessonTapInstruction` does not append
+  the generic footer.
 
 ## Ops (simulator, CLI, Jira)
 

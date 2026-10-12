@@ -365,7 +365,8 @@ class SelectIdentifyActivity extends StatelessWidget {
       SelectIdentifyPresentation.bestFiveCardTap =>
         'Tap the five cards that play in your best hand.',
       SelectIdentifyPresentation.outsCleanAcesTap =>
-        'Count only the outs that make the best hand.',
+        selectIdentifyDensifiedCoachLine('act-03-03-01-guided') ??
+            'Count only the outs that make the best hand — pick every clean out.',
       SelectIdentifyPresentation.text =>
         hasScene
             ? 'Look at the table, then pick the answer that matches.'
@@ -735,18 +736,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-checkpoint' =>
         'Eight or queen completes — your hand needs the right runout.',
-      // SoftPulse owns remaining aces — don’t gold-tip the cards.
-      'act-03-03-01-guided' =>
-        'Count only the outs that make the best hand.',
-      // SoftPulse owns Call 10 — don’t gold-tip the tile.
-      'act-03-03-01-scaffolded' =>
-        'Pot 20, bet 10 — the call equals the bet in front of you.',
-      // SoftPulse owns Call — don’t gold-tip the tile.
-      'act-03-03-01-unguided' =>
-        'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
-      // SoftPulse owns Implied — don’t gold-tip the tile.
-      'act-03-03-01-checkpoint' =>
-        'Nut flush draw, deep and sticky — future payoffs can justify the price.',
+      // Count outs densified asks: selectIdentifyDensifiedCoachLine (LPT-279).
       // SoftPulse owns Brick — don’t gold-tip the tile.
       'act-03-05-01-guided' =>
         'Dry ace flop, blank three — rarely helps a missed caller.',
@@ -2218,12 +2208,13 @@ class _HandCategoryTapActivity extends StatelessWidget {
       'No pair, almost no draw multiway — equity is thin here.',
     'act-03-02-01-checkpoint' =>
       'Eight or queen completes — your hand needs the right runout.',
+    // Count outs densified asks: selectIdentifyDensifiedCoachLine (LPT-279).
     'act-03-03-01-guided' =>
-      'Count only the outs that make the best hand.',
+      selectIdentifyDensifiedCoachLine('act-03-03-01-guided')!,
     'act-03-03-01-unguided' =>
-      'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
+      selectIdentifyDensifiedCoachLine('act-03-03-01-unguided')!,
     'act-03-03-01-checkpoint' =>
-      'Nut flush draw, deep and sticky — future payoffs can justify the price.',
+      selectIdentifyDensifiedCoachLine('act-03-03-01-checkpoint')!,
     // SoftPulse owns Brick — don’t gold-tip the tile.
     'act-03-05-01-guided' =>
       'Dry ace flop, blank three — rarely helps a missed caller.',
@@ -2944,8 +2935,9 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
   final LessonActivityController controller;
   final bool showGuidance;
 
-  static const _coach =
-      'Count only the outs that make the best hand.';
+  String get _coach =>
+      selectIdentifyDensifiedCoachLine(activity.id) ??
+      'Count only the outs that make the best hand — pick every clean out.';
 
   @override
   Widget build(BuildContext context) {
