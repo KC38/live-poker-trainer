@@ -541,7 +541,7 @@ fields live in `teachSpec` (see course schemas). Audited by
 `teachSpec` on every interactive step the same way, with deal classes that
 match what `lesson_card_deal.dart` deals (`deal.mode` `none` when the step
 deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85), Hand
-ranks (LPT-88), Best five and kickers (LPT-91).
+ranks (LPT-88), Best five and kickers (LPT-91), Fold, check, call (LPT-94).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -626,6 +626,16 @@ kicker, top then second board kicker). Scaffolded kicker deals a board
 a small hero pair `variant` and cues `board`; the checkpoint deals
 `full_house` from a pocket `pair` (`_dealTripsOverTwoPairs`) with a `none`
 cue and no `pressHints` or Hint media.
+
+Fold, check, call `teachSpec` (LPT-94): each `poker_action_sizing` step deals
+`random_in_class` in the class `dealtLessonActionSpot` keeps: guided fold
+re-deals `trash` / `offsuit` preflop holes; the flop steps keep the hero's
+`HandClassifier` class (scaffolded check and checkpoint `weak_draw`,
+unguided call `strong_draw`). Cues name the graded dock choice (`fold-72`,
+`check-free`, `call-5`) as `soft_pulse`; the checkpoint cues
+`check-illegal` with kind `none` and has no `pressHints` or Hint media.
+`actionAct` in the wave helper now carries `assessmentRole` and
+`teachSpec`.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

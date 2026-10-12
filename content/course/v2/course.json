@@ -1908,7 +1908,21 @@
                       "kind": "hint",
                       "text": "Trash hands fold to raises."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "trash",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-72",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-01-scaffolded-check",
@@ -1959,7 +1973,20 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "weak_draw"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "check-free",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-01-unguided-call",
@@ -2009,7 +2036,20 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "strong_draw"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-5",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-01-checkpoint-legal",
@@ -2062,7 +2102,20 @@
                       "action": "FOLD"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "weak_draw"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "check-illegal",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -3840,7 +3893,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "UTG → HJ → CO → BTN."
+                    "feedback": "UTG \u2192 HJ \u2192 CO \u2192 BTN."
                   }
                 },
                 {
