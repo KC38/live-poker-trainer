@@ -609,6 +609,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Use overbets SoftPulse one gold | Use overbets and geometric pressure unguided densified ask (`act-06-05-01-unguided`) passes `guideRegion` (`overbetAvoid`) so SoftPulse-after-Hint paints one gold Avoid tile — never both Avoid and Always fine (LPT-497). Guided / checkpoint already pass `overbetNutsBluffs` / `overbetMultiStreet`. |
 | Use blockers SoftPulse one gold | Use blockers without solver theater unguided densified ask (`act-06-06-01-unguided`) passes `guideRegion` (`blockersTweak`) so SoftPulse-after-Hint paints one gold Tweak evidence tile — never both Tweak evidence and Replace all reasoning (LPT-498). Guided / scaffolded / checkpoint already pass `blockersAce` / `blockersUnblock` / `blockersNoFakeEv`. |
 | Defend enough SoftPulse one gold | Defend enough without frequency theater unguided densified ask (`act-06-07-01-unguided`) passes `guideRegion` (`defendIntuition`) so SoftPulse-after-Hint paints one gold Intuition tile — never both Intuition and Exact percents (LPT-499). Guided / checkpoint already pass `defendStrongCatchers` / `defendPunishOverbluffs`. |
+| Mix with a reason SoftPulse one gold | Mix with a reason unguided densified ask (`act-06-08-01-unguided`) passes `guideRegion` (`mixNeedReason`) so SoftPulse-after-Hint paints one gold Need a reason tile — never both Need a reason and Always random (LPT-500). Scaffolded / checkpoint already pass `mixLessBluff` / `mixPurposeFreq`. |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1332,7 +1333,7 @@ felt.
 | Use overbets and geometric pressure | Overbet, Polar, Geo; unguided SoftPulse one gold (LPT-497) | candidate, avoid, and plan checks |
 | Use blockers without solver theater | Block, Use, No EV; unguided SoftPulse one gold (LPT-498) | unblock, tweak, and EV checks |
 | Defend enough without frequency theater | Defend, Bluff, Enough; unguided SoftPulse one gold (LPT-499) | continue, intuition, and punish checks |
-| Mix with a reason | Mix, Purpose, Strong | station, reason, and purpose checks |
+| Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500) | station, reason, and purpose checks |
 | Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth | commit, ego, and SPR checks |
 | Make difficult folds; review coolers fairly | Hard, Cooler, Ego | cooler, ego, and review checks |
 | Observe selective aggression | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494) | entry quizzes |
