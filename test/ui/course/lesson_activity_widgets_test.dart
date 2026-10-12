@@ -25657,6 +25657,28 @@ await tester.tap(find.text('NIT'));
       find.text('No turn idea — pick what to do first.'),
       findsOneWidget,
     );
+    expect(find.text('Map first'), findsOneWidget);
+    // LPT-506: guideRegion → one gold SoftPulse (Map first), not Yolo barrels.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Map first'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Yolo barrels'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Map first'));
     await tester.pump();
     expect(controller.draft.choiceId, 'avoid');

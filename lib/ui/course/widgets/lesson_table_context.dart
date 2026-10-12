@@ -13068,7 +13068,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn map — tap Map first or Yolo barrels',
       semanticsStatic: 'Turn-map unguided outcomes',
       caption: scene.caption ?? 'Bet flop with no turn idea?',
-      // No SoftPulse on unguided — still don’t gold-icon Map first.
+      // SoftPulse + Rex own the cue — don’t gold-tip Map first.
+      // Null guideRegion SoftPulses every phase (LPT-506).
+      guideRegion: LessonTableRegion.turnMapMapFirst,
       phases: [
         (
           region: LessonTableRegion.turnMapMapFirst,
