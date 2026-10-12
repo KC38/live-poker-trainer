@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "7e92e36c078d041f8aaa7afc06701714a03034431652d5faa65a8502df981bfb",
+  "contentChecksum": "97af328ed17766db64644d287cb23ad0e1a874d2f2b1a3c809f7574bd279215c",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -8675,7 +8675,29 @@
                   ],
                   "objectives": [
                     "Value 3-bet strong hands"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "3-BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "RANGES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SQUEEZE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-02-01-guided",
@@ -8713,7 +8735,25 @@
                       "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Qh",
+                          "Qd"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "3bet-qq",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-02-01-scaffolded",
@@ -8751,7 +8791,27 @@
                       "action": "RAISE",
                       "amountBb": 50
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "handFamily": "trash",
+                      "suitFamily": "offsuit",
+                      "fixedCards": {
+                        "hero": [
+                          "7h",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-72",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-02-01-unguided",
@@ -8789,7 +8849,27 @@
                       "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "handFamily": "broadway",
+                      "suitFamily": "offsuit",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "squeeze",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-02-01-checkpoint",
@@ -8837,7 +8917,26 @@
                       "amountBb": 3.5
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "handFamily": "pair",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "Kd"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "size-18",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
