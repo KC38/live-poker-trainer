@@ -495,6 +495,24 @@ grep -q '"type":"thinking"' "$HEALTH_FILE" \
 grep -q 'flutter_run_fast' "$HEALTH_FILE" \
   || fail "health tail should keep human text after scrub: $(cat "$HEALTH_FILE")"
 
+# status preview must scrub the same SDK markers (readable health checks).
+preview_log="$LOG_DIR/run-status-preview.log"
+printf '%s\n' \
+  '{"t":1791798325055,"type":"assistant"}' \
+  'Worktree VM is up.{"t":1791798295492,"type":"thinking"} Running analyze' \
+  '{"t":1791798328178,"type":"tool_call"}' \
+  'Validating checkpoint on device.' \
+  >"$preview_log"
+preview_out="$(print_run_log_preview "$preview_log" 10)"
+grep -q '"type":"assistant"' <<<"$preview_out" \
+  && fail "status preview must strip SDK assistant markers: $preview_out"
+grep -q '"type":"thinking"' <<<"$preview_out" \
+  && fail "status preview must strip SDK thinking markers: $preview_out"
+grep -q 'Worktree VM is up' <<<"$preview_out" \
+  || fail "status preview should keep prose: $preview_out"
+grep -q 'Validating checkpoint on device' <<<"$preview_out" \
+  || fail "status preview should keep last prose lines: $preview_out"
+
 # repair_health_tails scrubs SDK pollution when coverage is late/missing.
 printf '%s\n' \
   '{"at":"2026-10-12T09:52:24+05:30","stamp":"20261012-093041","exit":143,"seconds":1303,"ticket":null,"result":null,"tail":"the process and rerun{\"t\":1791778842861,\"type\":\"thinking\"} flutter_run_fast.sh{\"t\":1791778843540,\"type\":\"assistant\"}"}' \

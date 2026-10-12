@@ -1388,6 +1388,60 @@ with open(path, "a", encoding="utf-8") as handle:
 PY
 }
 
+# Print the last meaningful lines of a machine-SDK run log for `status`.
+# Strips interleaved NDJSON stream markers so health checks are readable.
+# Args: log_path [max_lines=10]
+print_run_log_preview() {
+  local log="${1:-}" max_lines="${2:-10}"
+  if [[ -z "$log" || ! -s "$log" ]]; then
+    return 0
+  fi
+  python3 - "$log" "$max_lines" <<'PY' || true
+import re, sys
+from pathlib import Path
+
+log = Path(sys.argv[1])
+try:
+    max_lines = max(1, int(sys.argv[2]))
+except ValueError:
+    max_lines = 10
+
+NOISE = re.compile(
+    r"("
+    r"Connection lost, reconnecting|Retry attempt |\^D|backfilled from|"
+    r"Cursor Agent Debug Session|User does not belong to a team|"
+    r"Loaded global commands|telemetry-only|filtered out for missing"
+    r")",
+    re.I,
+)
+SDK_STREAM = re.compile(
+    r'\{\s*"t"\s*:\s*\d+\s*,\s*"type"\s*:\s*"(?:thinking|assistant|tool_call|status)"\s*\}'
+)
+
+
+def scrub_sdk_stream(text: str) -> str:
+    cleaned = SDK_STREAM.sub(" ", text or "")
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
+try:
+    lines = []
+    for ln in log.read_text(encoding="utf-8", errors="replace").splitlines():
+        s = scrub_sdk_stream(ln)
+        if not s or "\x04" in s or NOISE.search(s):
+            continue
+        if s.startswith("# "):
+            continue
+        if "] logger " in s or "analytics.track" in s or "structured-log" in s:
+            continue
+        lines.append(s)
+    for s in lines[-max_lines:]:
+        print(s)
+except OSError:
+    pass
+PY
+}
+
 # Record agent/node PIDs under root_pid into a stamp file (watchdog).
 # Args: root_pid pid_file
 record_agent_pids() {
@@ -2039,13 +2093,14 @@ PY
       backfill_run_log_from_session "$latest" "$start_guess" "$root_guess"
       echo "latest log: $latest"
       if [[ -s "$latest" ]]; then
-        tail -n 10 "$latest"
+        # Machine SDK logs interleave NDJSON markers; scrub before preview.
+        print_run_log_preview "$latest" 10
       else
         echo "(run log empty — Cursor CLI often writes to /tmp/cursor-agent-logs-*/)"
         sess="$(ls -t /tmp/cursor-agent-logs-*/session-*.log 2>/dev/null | head -1 || true)"
         if [[ -n "$sess" ]]; then
           echo "cursor session log: $sess"
-          tail -n 10 "$sess"
+          print_run_log_preview "$sess" 10
         fi
       fi
     else
