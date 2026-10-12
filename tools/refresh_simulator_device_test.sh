@@ -46,6 +46,11 @@ fi
 grep -qE '^[[:space:]]*--pid \$\$' "$REFRESH" \
   || fail "refresh must claim the mini with --pid \$\$ so locks cannot orphan"
 
+grep -q 'belongs to' "$REFRESH" \
+  || fail "refresh must skip when SIM_LOCK_RUN_ID belongs to another owner"
+grep -q 'refresh-simulator' "$REFRESH" \
+  || fail "refresh must only reuse a lock owned by refresh-simulator"
+
 export REFRESH_SIMULATOR_SOURCE_ONLY=1
 # shellcheck disable=SC1090
 source "$REFRESH"

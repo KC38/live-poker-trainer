@@ -207,6 +207,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   mini until Retry/backoff. Use `python3 tools/agent_seed.py unlock
   --lesson "<title>" --open` (and `hearts N` / `gems N`) to jump there;
   "later lessons need a guest progress chain" is no longer unreachable.
+  When SoftPulse/cues are missing because the lesson is already complete
+  (review mode), use `fresh --lesson … --open` — not ad-hoc Firestore
+  patches or `unlock` alone (unlock keeps the lesson in completedLessonIds).
   Never run `sips -c` in place on the only issue/validated PNG — copy first,
   then crop the copy.
 

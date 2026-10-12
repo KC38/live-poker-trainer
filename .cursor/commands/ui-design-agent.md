@@ -253,6 +253,7 @@ prerequisite lessons:
 ```bash
 python3 tools/agent_seed.py lessons --grep "<title words>"
 python3 tools/agent_seed.py unlock --lesson "<title or id>" --open   # + --hearts N / --gems N
+python3 tools/agent_seed.py fresh --lesson "<title or id>" --open    # prereqs only; not review mode
 python3 tools/agent_seed.py hearts 0                                 # refill / restore checks
 ```
 

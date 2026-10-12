@@ -187,6 +187,7 @@ void main() {
       'tools/flutter_run_fast.sh',
       'tools/main_matches_validated.sh',
       'tools/agent_seed.py unlock',
+      'tools/agent_seed.py fresh',
       'Companions (optional, at most two)',
       'ui-agent-learnings-pending.md',
       'never open a learnings-only PR for one run',
