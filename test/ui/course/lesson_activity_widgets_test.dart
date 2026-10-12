@@ -19049,6 +19049,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('The line'), findsOneWidget);
+    // LPT-516: guideRegion → one gold SoftPulse (The line), not Coin flip.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('The line'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Coin flip'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('The line'));
     await tester.pump();
     expect(controller.draft.choiceId, 'read');

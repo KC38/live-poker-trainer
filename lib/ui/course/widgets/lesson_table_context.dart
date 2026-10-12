@@ -10258,6 +10258,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive thin value — tap what must change with the type',
       semanticsStatic: 'Thin value read outcomes',
       caption: scene.caption ?? 'Same hand, different types — what changes?',
+      // SoftPulse + Rex own the cue — don’t gold-tip The line.
+      // Null guideRegion SoftPulses every phase (LPT-516).
+      guideRegion: LessonTableRegion.thinValueReadLine,
       phases: [
         (
           region: LessonTableRegion.thinValueReadLine,
@@ -10265,7 +10268,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'When the read fits',
           visual: const Icon(
             Icons.alt_route,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
