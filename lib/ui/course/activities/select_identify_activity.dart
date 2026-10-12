@@ -786,8 +786,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-04-01-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-04-01-01-checkpoint')!,
       // SoftPulse owns Branches — don’t gold-tip the tile.
+      // Plan beyond densified ask: selectIdentifyDensifiedCoachLine (LPT-407).
       'act-04-03-01-checkpoint' =>
-        'You have a flop plan — map brick vs flush turns.',
+        selectIdentifyDensifiedCoachLine('act-04-03-01-checkpoint')!,
       // SoftPulse owns Soft band — don’t gold-tip the tile.
       'act-04-04-01-unguided' =>
         'Two value sizes both get calls — nearby sizes can both grade soft.',
@@ -2277,8 +2278,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-04-01-01-checkpoint' =>
       selectIdentifyDensifiedCoachLine('act-04-01-01-checkpoint')!,
     // SoftPulse owns Branches — don’t gold-tip the tile.
+    // Plan beyond densified ask: selectIdentifyDensifiedCoachLine (LPT-407).
     'act-04-03-01-checkpoint' =>
-      'You have a flop plan — map brick vs flush turns.',
+      selectIdentifyDensifiedCoachLine('act-04-03-01-checkpoint')!,
     // SoftPulse owns Soft band — don’t gold-tip the tile.
     'act-04-04-01-unguided' =>
       'Two value sizes both get calls — nearby sizes can both grade soft.',

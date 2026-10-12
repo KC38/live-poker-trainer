@@ -84,6 +84,9 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'They bet twice — pick why Exactly AK is too precise.',
     'act-04-01-01-checkpoint' =>
       'Same board, different villain lines — pick how advice should change.',
+    // Plan beyond the flop checkpoint densified ask (LPT-407) — same path.
+    'act-04-03-01-checkpoint' =>
+      'You have a flop plan — pick brick→barrel vs flush→abort.',
     _ => null,
   };
 }
