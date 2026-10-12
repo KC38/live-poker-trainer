@@ -14907,9 +14907,23 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.'),
+      lessonFrameSpeech(activity),
+      'BTN open, BB 3-bet, BTN calls — tap whose range is stronger.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text(
+        'BTN open, BB 3-bet, BTN calls — pick whose range is stronger.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+      ),
+      findsNothing,
     );
     expect(find.text('BB 3-bet'), findsOneWidget);
     expect(find.text('Stronger'), findsOneWidget);
@@ -14964,9 +14978,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'UTG opens at 1/2 — tap the stronger, narrower range.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('UTG opens at 1/2 — pick the stronger, narrower range.'),
+      findsOneWidget,
+    );
     expect(
       find.text('UTG opens at 1/2 — early seats usually play tighter.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('UTG opens at 1/2. Best description?'), findsNothing);
     expect(find.text('Strong narrow'), findsOneWidget);
@@ -15033,9 +15057,26 @@ await tester.tap(find.text('NIT'));
           ),
         ),
       );
+      // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
       expect(
-        find.text('Same board, different villain lines — advice follows the range, not the cards alone.'),
+        lessonFrameSpeech(activity),
+        'Same board, different villain lines — tap how advice should change.',
+      );
+      expect(
+        lessonFrameSpeech(activity),
+        isNot(contains('Tap the best answer')),
+      );
+      expect(
+        find.text(
+          'Same board, different villain lines — pick how advice should change.',
+        ),
         findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Same board, different villain lines — advice follows the range, not the cards alone.',
+        ),
+        findsNothing,
       );
       expect(find.text('Read drives'), findsOneWidget);
       expect(find.text('Advice shifts'), findsOneWidget);
@@ -15100,9 +15141,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'They bet twice — tap why Exactly AK is too precise.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('They bet twice — pick why Exactly AK is too precise.'),
+      findsOneWidget,
+    );
     expect(
       find.text('They bet twice — pinning Exactly AK collapses the range.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Keep range'), findsOneWidget);
     expect(find.text('Weighted'), findsOneWidget);

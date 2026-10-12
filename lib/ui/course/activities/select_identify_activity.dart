@@ -772,17 +772,19 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-03-08-02-jump-leak' =>
         selectIdentifyDensifiedCoachLine('act-03-08-02-jump-leak')!,
       // SoftPulse owns Strong narrow — don’t gold-tip the tile.
+      // Think in ranges densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-403).
       'act-04-01-01-guided' =>
-        'UTG opens at 1/2 — early seats usually play tighter.',
+        selectIdentifyDensifiedCoachLine('act-04-01-01-guided')!,
       // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
       'act-04-01-01-scaffolded' =>
-        'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+        selectIdentifyDensifiedCoachLine('act-04-01-01-scaffolded')!,
       // SoftPulse owns Keep range — don’t gold-tip the tile.
       'act-04-01-01-unguided' =>
-        'They bet twice — pinning Exactly AK collapses the range.',
+        selectIdentifyDensifiedCoachLine('act-04-01-01-unguided')!,
       // SoftPulse owns Read drives — don’t gold-tip the tile.
       'act-04-01-01-checkpoint' =>
-        'Same board, different villain lines — advice follows the range, not the cards alone.',
+        selectIdentifyDensifiedCoachLine('act-04-01-01-checkpoint')!,
       // SoftPulse owns Branches — don’t gold-tip the tile.
       'act-04-03-01-checkpoint' =>
         'You have a flop plan — map brick vs flush turns.',
@@ -2261,17 +2263,19 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-03-08-02-jump-leak' =>
       selectIdentifyDensifiedCoachLine('act-03-08-02-jump-leak')!,
     // SoftPulse owns Strong narrow — don’t gold-tip the tile.
+    // Think in ranges densified asks: selectIdentifyDensifiedCoachLine
+    // (LPT-403).
     'act-04-01-01-guided' =>
-      'UTG opens at 1/2 — early seats usually play tighter.',
+      selectIdentifyDensifiedCoachLine('act-04-01-01-guided')!,
     // SoftPulse owns BB 3-bet — don’t gold-tip the tile.
     'act-04-01-01-scaffolded' =>
-      'BTN open, BB 3-bet, BTN calls — 3-bet ranges start narrower than flatting opens.',
+      selectIdentifyDensifiedCoachLine('act-04-01-01-scaffolded')!,
     // SoftPulse owns Keep range — don’t gold-tip the tile.
     'act-04-01-01-unguided' =>
-      'They bet twice — pinning Exactly AK collapses the range.',
+      selectIdentifyDensifiedCoachLine('act-04-01-01-unguided')!,
     // SoftPulse owns Read drives — don’t gold-tip the tile.
     'act-04-01-01-checkpoint' =>
-      'Same board, different villain lines — advice follows the range, not the cards alone.',
+      selectIdentifyDensifiedCoachLine('act-04-01-01-checkpoint')!,
     // SoftPulse owns Branches — don’t gold-tip the tile.
     'act-04-03-01-checkpoint' =>
       'You have a flop plan — map brick vs flush turns.',
