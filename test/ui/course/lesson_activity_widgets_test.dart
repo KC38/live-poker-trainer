@@ -18391,9 +18391,161 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.text('200bb with 55 — tap why you call.'), findsNothing);
     expect(find.text('Implied'), findsOneWidget);
+    // LPT-514: guideRegion → one gold SoftPulse (Implied), not Low SPR / Bluff all.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Implied'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Low SPR'),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Bluff all'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Implied'));
     await tester.pump();
     expect(controller.draft.choiceId, 'impl');
+    controller.dispose();
+  });
+
+  testWidgets('s5 deep unguided SoftPulse Map streets — one gold', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-02-01-unguided',
+      order: 4,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Plan turn and river before stacking.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'SPR ~12 on the flop. Your first job?',
+      choices: const [
+        CourseChoice(id: 'plan', label: 'Map turn/river plans before committing'),
+        CourseChoice(id: 'jamnow', label: 'Jam any pair now'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Map streets'), findsOneWidget);
+    // LPT-514: guideRegion → one gold SoftPulse (Map streets), not Jam now.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Map streets'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Jam now'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Map streets'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'plan');
+    controller.dispose();
+  });
+
+  testWidgets('s5 deep checkpoint SoftPulse Skill edges — one gold', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-05-02-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Depth rewards skill edges.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: '150–300bb cash play rewards?',
+      choices: const [
+        CourseChoice(
+          id: 'pos',
+          label: 'Position, implied odds, and disciplined folds',
+        ),
+        CourseChoice(id: 'spew', label: 'Light stack-offs become automatic'),
+      ],
+    );
+    expect(
+      resolveSelectIdentifyPresentation(activity),
+      SelectIdentifyPresentation.tableRegionTap,
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(find.text('Skill edges'), findsOneWidget);
+    // LPT-514: guideRegion → one gold SoftPulse (Skill edges), not Light stacks.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Skill edges'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Light stacks'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Skill edges'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pos');
     controller.dispose();
   });
 
