@@ -11081,6 +11081,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive equity realization — tap in position vs out of position',
       semanticsStatic: 'Equity realization IP outcomes',
       caption: scene.caption ?? 'Same draw OOP vs IP — better where?',
+      // SoftPulse + Rex own the cue — don’t gold-tip In position.
+      // Null guideRegion SoftPulses every phase (LPT-524).
+      guideRegion: LessonTableRegion.eqRealizeIp,
       phases: [
         (
           region: LessonTableRegion.eqRealizeIp,
@@ -11088,7 +11091,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Realize better',
           visual: const Icon(
             Icons.chair_alt,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -11112,6 +11115,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive equity realization — tap discount vs hero-call',
       semanticsStatic: 'Equity realization discount outcomes',
       caption: scene.caption ?? 'Weak SDV OOP vs dual barrels?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Discount / fold.
+      // Null guideRegion SoftPulses every phase (LPT-524).
+      guideRegion: LessonTableRegion.eqRealizeDiscount,
       phases: [
         (
           region: LessonTableRegion.eqRealizeDiscount,
@@ -11119,7 +11125,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'OOP one-pair dies',
           visual: const Icon(
             Icons.trending_down,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -11143,6 +11149,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive equity realization — tap fold equity vs fancy play',
       semanticsStatic: 'Equity realization aggression outcomes',
       caption: scene.caption ?? 'Semi-bluff XR purpose?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Fold equity.
+      // Null guideRegion SoftPulses every phase (LPT-524).
+      guideRegion: LessonTableRegion.eqRealizeFoldEq,
       phases: [
         (
           region: LessonTableRegion.eqRealizeFoldEq,
@@ -11150,7 +11159,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Deny cheap cards',
           visual: const Icon(
             Icons.flash_on,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -11174,6 +11183,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive equity realization — tap position+initiative vs hope',
       semanticsStatic: 'Equity realization position outcomes',
       caption: scene.caption ?? 'Equity realization rises with?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Position + initiative.
+      // Null guideRegion SoftPulses every phase (LPT-524).
+      guideRegion: LessonTableRegion.eqRealizePosInit,
       phases: [
         (
           region: LessonTableRegion.eqRealizePosInit,
@@ -11181,7 +11193,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Core levers',
           visual: const Icon(
             Icons.insights,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),

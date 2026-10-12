@@ -641,6 +641,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Live table dynamics SoftPulse one gold | Live table dynamics densified asks (`act-05-08-01-guided` / scaffolded / checkpoint) pass `guideRegion` (`dynamicsStuckTilted` / `dynamicsGearChange` / `dynamicsFreshSamples`) so SoftPulse paints one gold tile — never Stuck/tilted + Ignore, Gear change + Old label, or Fresh samples + Permanent seats. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal (LPT-520). Unguided is `poker_action_sizing` (out of densify SoftPulse path). |
 | Keep cash session guardrails SoftPulse one gold | Keep cash session guardrails densified asks (`act-05-09-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`disciplineStop` / `disciplineDecline` / `disciplineCashOut` / `disciplineEdge`) so SoftPulse paints one gold tile — never Stop/move down + Reload/chase, Decline + Jump up, Cash out + Stay forever, or Your edge + Soft skills only. Correct-answer icons stay cream; SoftPulse is the only gold teach signal (LPT-521). |
 | Spot range advantage SoftPulse one gold | Spot range advantage and nut advantage densified asks (`act-06-01-01-guided` / scaffolded / checkpoint) pass `guideRegion` (`rangeAdvPfr` / `rangeAdvWideCaller` / `rangeAdvPress`) so SoftPulse paints one gold tile — never Preflop raiser + Flatting BB, Wide caller + PFR always, or Apply pressure + Bet any two. Correct-answer icons stay cream; SoftPulse is the only gold teach signal (LPT-523). Unguided is `poker_action_sizing` (out of densify SoftPulse path). |
+| Realize equity SoftPulse one gold | Realize equity in and out of position densified asks (`act-06-02-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`eqRealizeIp` / `eqRealizeDiscount` / `eqRealizeFoldEq` / `eqRealizePosInit`) so SoftPulse paints one gold tile — never In position + Out of position, Discount / fold + Hero-call, Fold equity + Fancy play, or Position + initiative + Hope alone. Correct-answer icons stay cream; SoftPulse is the only gold teach signal (LPT-524). |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1421,7 +1422,7 @@ felt.
 | Keep cash session guardrails | Quit, Guard, First; densified SoftPulse one gold (LPT-521) | — |
 | Section 5 checkpoint | — | — |
 | Spot range advantage and nut advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523) | dry-board, paired-board, and press checks |
-| Realize equity in and out of position | Equity, Cash, Pos | realization quizzes |
+| Realize equity in and out of position | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524) | realization quizzes |
 | Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts | check-turn, bomb, and attack checks |
 | Choose polarized or merged betting | Polar, Merged, Size | overbet, mismatch, and aim checks |
 | Use overbets and geometric pressure | Overbet, Polar, Geo; unguided SoftPulse one gold (LPT-497) | candidate, avoid, and plan checks |
