@@ -559,7 +559,8 @@ Calling Station (LPT-190), Observe narrow players (LPT-193), Meet the Nit
 (LPT-196), Adjust versus Nit (LPT-200), Observe wild aggressors (LPT-203),
 Meet the Maniac (LPT-206), Adjust versus Maniac (LPT-210), Confidence and
 samples (LPT-213), Same hand, different types (LPT-216), Section 4 jump
-check (LPT-219), Build multiway ranges (LPT-222).
+check (LPT-219), Build multiway ranges (LPT-222), Play 150–300bb stacks
+(LPT-225).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -957,6 +958,11 @@ Build multiway ranges `teachSpec` (LPT-222): explain SoftPulse advances
 NUTTED → AIR → DOMINATION; guided `none` → `nfd`; scaffolded fixed 7h6h →
 `fold-76`; unguided fixed 9h9d/9s8c7h → `bet-set`; checkpoint `none` →
 `nuts`; assessment steps use cue kind `none` (no pressHints).
+
+Play 150–300bb stacks `teachSpec` (LPT-225): explain SoftPulse advances DEEP
+→ REALIZE → STACK; guided `none` → `impl`; scaffolded fixed Ad9c/AsTh7h →
+`fold-tp`; unguided `none` → `plan`; checkpoint `none` → `pos`; assessment
+steps use cue kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
@@ -1358,7 +1364,7 @@ felt.
 | Same hand, different types | Cards, Seats, Evidence | — |
 | Section 4 jump check | — | — |
 | Build multiway ranges with nut potential | Nutted, Air, Domination | — |
-| Play 150–300bb stacks with a plan | Deep, Realize, Stack | implied, plan, and reward checks |
+| Play 150–300bb stacks with a plan | Deep, Realize, Stack | — |
 | Implied and reverse odds | Implied, Reverse, Second; densified SoftPulse one gold (LPT-515) | rise check |
 | Thin value and bluff-catches | Thin, Catch, Barrels | read check |
 | Advanced flop lines | X/R, Probe, Delay, Donk | nit, donk, and delay checks |
