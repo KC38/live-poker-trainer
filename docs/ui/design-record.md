@@ -645,6 +645,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Spot range advantage SoftPulse one gold | Spot range advantage and nut advantage densified asks (`act-06-01-01-guided` / scaffolded / checkpoint) pass `guideRegion` (`rangeAdvPfr` / `rangeAdvWideCaller` / `rangeAdvPress`) so SoftPulse paints one gold tile — never Preflop raiser + Flatting BB, Wide caller + PFR always, or Apply pressure + Bet any two. Correct-answer icons stay cream; SoftPulse is the only gold teach signal (LPT-523). Unguided is `poker_action_sizing` (out of densify SoftPulse path). |
 | Realize equity SoftPulse one gold | Realize equity in and out of position densified asks (`act-06-02-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`eqRealizeIp` / `eqRealizeDiscount` / `eqRealizeFoldEq` / `eqRealizePosInit`) so SoftPulse paints one gold tile — never In position + Out of position, Discount / fold + Hero-call, Fold equity + Fancy play, or Position + initiative + Hope alone. Correct-answer icons stay cream; SoftPulse is the only gold teach signal (LPT-524). |
 | How pots SoftPulse one gold | How pots are won densified asks (`act-01-05-01-unguided-pot` / `act-01-05-01-checkpoint-side`) pass `guideRegion` (`potChipsNine` / `potSideForms`) so SoftPulse paints one gold tile — never every chip total, or Side pot + Win all + Hand dead. Side pot M/S chips stay slate; SoftPulse is the only gold teach signal (LPT-525). Framed open-pot SoftPulse stays on `_LessonChoiceStack` (`pot-correct`). Guided fold-win / scaffolded showdown already pass `potTakeQuiet` / `potShowdown`. |
+| Catalog densify SoftPulse one gold | Remaining densify builders that still omitted `guideRegion` now pass it so SoftPulse paints one gold tile — Count outs unguided (`drawPriceCall`), Hand families unguided/checkpoint (`handFamilyUgSc` / `handFamilyCpTrash`), Baseline jump-family (`jumpFamilySuitedAce`), Think in ranges unguided/checkpoint (`rangesTooExact` / `rangesReadDrives`), Plan beyond the flop checkpoint (`planBranches`), Size with a message unguided (`sizingSoftBand`), Adjust vs Station/Nit/Maniac cite checkpoints (`citeRarelyFolds` / `citeNitStrongRange` / `citeManiacWideBet`), Section 4 jump-range (`jumpUtgNarrower`). Null SoftPulses every phase (LPT-634). |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1381,39 +1382,39 @@ felt.
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
 | Position labels | Six-max seats labeled on the table | — |
 | Acting order | UTG, HJ, CO, BTN on the table | — |
-| Hand families | Pairs, Broadways, Suited aces, Connectors | — |
+| Hand families | Pairs, Broadways, Suited aces, Connectors; densified SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Open or fold baseline | Early, Button, Live 3x | — |
 | Versus an open | Fold, Call, 3-bet | — |
 | Effective stacks | Chips→BB, Shorter, Depth | — |
 | Live table habits | Watch, Say, Cover, Wait | — |
 | Full-ring baseline hand | Nine, Same, Position | — |
-| Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221) | — |
+| Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221); jump-family SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Read the table first | Pot, Stacks, Button, Who Acts | — |
 | Name your flop class | Made, Draw, SDV, Air; fixed steps author suit-rotated `deal.variants` (LPT-384) | — |
-| Count outs, pay the right price | Clean, Dirty, Price; densified frame asks (LPT-279) | — |
+| Count outs, pay the right price | Clean, Dirty, Price; densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Choose a flop line | Value, C-bet, Check, Call, Fold, Raise; postflop TPTK/broadway remap fingerprint (LPT-311) | — |
 | Plan the turn card | Brick, Change, Barrel, Delay | — |
 | Close the river correctly | Value, Bluff, Catch, Fold; densified frame ask (LPT-343) | — |
 | Play tighter multiway | Stronger, Fewer, Nuts | — |
 | Patch the common leaks | Top pair, Prices, Passive, Crowds | — |
 | Section 3 jump check | densified frame asks (LPT-390) | — |
-| Think in ranges | One hand, Range, Update; densified frame asks (LPT-403) | — |
+| Think in ranges | One hand, Range, Update; densified frame asks (LPT-403); unguided/checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Navigate 3-bet pots | 3-bet, Ranges, Squeeze | — |
-| Plan beyond the flop | Flop, Turn, River; densified frame ask (LPT-407) | — |
-| Size with a message | Value, Pressure, Size; densified frame ask (LPT-410) | — |
+| Plan beyond the flop | Flop, Turn, River; densified frame ask (LPT-407); checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | — |
+| Size with a message | Value, Pressure, Size; densified frame ask (LPT-410); unguided SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | SPR decides commitment | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413) | — |
 | Observe sticky callers | Enters, Calls, Folds; densified frame asks (LPT-416) | participation note, observation bundle |
 | Meet the Calling Station | Station, High, Low; scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420) | label quizzes |
-| Adjust versus Calling Station | Value, Bluffs, Cite | bluff-less reason |
+| Adjust versus Calling Station | Value, Bluffs, Cite; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | bluff-less reason |
 | Observe narrow players | Rare, Enter, Mean It | entry quizzes |
 | Meet the Nit | Nit, Narrow, Respect; densified SoftPulse one gold (LPT-440) | label quizzes |
-| Adjust versus Nit | Steal, Credit, Explode | respect reason |
+| Adjust versus Nit | Steal, Credit, Explode; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | respect reason |
 | Observe wild aggressors | Raise, Barrel, Count; densified SoftPulse one gold (LPT-462) | entry quizzes |
 | Meet the Maniac | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490) | label quizzes |
-| Adjust versus Maniac | Wider, Hang, Ego | call-wider reason |
+| Adjust versus Maniac | Wider, Hang, Ego; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | call-wider reason |
 | Confidence and samples | Observe, Samples, Showdowns; densified SoftPulse one gold (LPT-495) | confidence quizzes |
 | Same hand, different types | Cards, Seats, Evidence | — |
-| Section 4 jump check | — | — |
+| Section 4 jump check | jump-range SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Build multiway ranges with nut potential | Nutted, Air, Domination | — |
 | Play 150–300bb stacks with a plan | Deep, Realize, Stack | — |
 | Implied and reverse odds | Implied, Reverse, Second; densified SoftPulse one gold (LPT-515) | — |
