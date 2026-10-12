@@ -26147,6 +26147,29 @@ await tester.tap(find.text('NIT'));
       find.text('4-bet 100bb — pick the mindset.'),
       findsOneWidget,
     );
+    expect(find.text('Higher commitment'), findsOneWidget);
+    // LPT-508: guideRegion → one gold SoftPulse (Higher commitment), not
+    // 300bb deep.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Higher commitment'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('300bb deep'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Higher commitment'));
     await tester.pump();
     expect(controller.draft.choiceId, 'commit');
