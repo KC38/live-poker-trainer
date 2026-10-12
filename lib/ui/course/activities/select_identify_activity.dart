@@ -756,8 +756,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-03-07-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-03-07-01-checkpoint')!,
       // SoftPulse owns Note freqs — don’t gold-tip the tile.
+      // Patch the common leaks checkpoint densified ask:
+      // selectIdentifyDensifiedCoachLine (LPT-382).
       'act-03-08-01-checkpoint' =>
-        'Two seats, different frequencies — note how often each seat enters.',
+        selectIdentifyDensifiedCoachLine('act-03-08-01-checkpoint')!,
       // SoftPulse owns Pot · effective — don’t gold-tip the tile.
       'act-03-08-02-jump-table' =>
         'Pot 16, shorter 40bb — start with pot and effective stack.',
@@ -2245,8 +2247,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
     // SoftPulse owns the note — don’t gold-tip the tile.
     'act-03-07-01-checkpoint' =>
       selectIdentifyDensifiedCoachLine('act-03-07-01-checkpoint')!,
+    // Patch the common leaks checkpoint densified ask (LPT-382).
     'act-03-08-01-checkpoint' =>
-      'Two seats, different frequencies — note how often each seat enters.',
+      selectIdentifyDensifiedCoachLine('act-03-08-01-checkpoint')!,
     'act-03-08-02-jump-table' =>
       'Pot 16, shorter 40bb — start with pot and effective stack.',
     'act-03-08-02-jump-class' =>
