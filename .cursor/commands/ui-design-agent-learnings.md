@@ -92,6 +92,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   without them the worktree build fails even when primary runs fine. When a
   prior-run worktree for the same KEY is behind `origin/main`,
   `reset --hard origin/main` and re-apply the patch before tests (LPT-63).
+- Prefer patching `content/course/v2/course.json` + `npm --prefix functions
+  run course:generate` over `node tools/course/build_seed_course.mjs` when
+  only one activity needs a bank field — full seed rebuilds from wave
+  sources and can wipe hand-maintained catalog rows that diverged (LPT-74
+  streets `seat-co`). Keep wave helpers in sync for the next full seed.
+- Prefer merging + Functions deploy before mini-proving a
+  `gradeCourseResponse` / Nice! feedback change — the worktree app still
+  hits production Cloud Functions until that deploy lands (LPT-74).
 - Prefer not to treat `tap --text Gems` as proof the gem control works:
   the strip Tooltip is "Gems" with no `onTap`, and the needle can land on
   Hearts / the refill sheet instead.
@@ -259,10 +267,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-12: LPT-73 blinds scaffolded Hint/SoftPulse deadlock —
-  `lessonFrameBlindsSoftPulseWaitsForHint`; seat SoftPulse when BB puck
-  absent; validate Hint only with lives > 0 (or Practice). LPT-72 quiet
-  multi-suit Hint reopen — do not tie `remainingPressCount` to SoftPulse/
-  `showGuidance`. LPT-71 Hint after Oops; undraft before merge; do not
-  delete remote until merged. LPT-70 CONTINUE → Home; ManagePullRequest
-  `skip_branch_prefix_check` for `fix/LPT-*`.
+- 2026-10-12: LPT-74 Hand ranks explain Nice! ask-as-feedback — author
+  `explainGrading` + prefer it in `gradeCourseResponse`; do not full-seed
+  when content diverged from waves; deploy Functions before mini proof.
+  LPT-73 blinds SoftPulse/Hint; LPT-72 quiet multi-suit Hint; LPT-71 Hint
+  after Oops; ManagePullRequest `skip_branch_prefix_check` for `fix/LPT-*`.
