@@ -254,6 +254,14 @@ const _lessons = <String, List<String>>{
     'act-04-04-01-unguided',
     'act-04-04-01-checkpoint',
   ],
+  // LPT-180
+  'lesson-04-05-01-spr-commitment': [
+    'act-04-05-01-explain',
+    'act-04-05-01-guided',
+    'act-04-05-01-scaffolded',
+    'act-04-05-01-unguided',
+    'act-04-05-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1501,6 +1509,49 @@ void main() {
       expect(cp.teachSpec!['deal']['fixedCards']['hero'], ['Ah', 'Ad']);
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'bad-1');
+    });
+  });
+
+  group('SPR decides commitment (LPT-180)', () {
+    test('explain SoftPulse walks SPR → LOW → HIGH', () {
+      expect(
+        _list(
+          act('act-04-05-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['SPR', 'LOW', 'HIGH'],
+      );
+    });
+
+    test('SPR math deals none; action spots fixed; checkpoint quiet', () {
+      expect(act('act-04-05-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-05-01-guided'), 'cues').single['target'],
+        'spr-4',
+      );
+      expect(act('act-04-05-01-scaffolded').teachSpec!['deal']['fixedCards'], {
+        'hero': ['Kh', 'Kd'],
+        'board': ['Kc', '7s', '2d'],
+      });
+      expect(
+        _list(act('act-04-05-01-scaffolded'), 'cues').single['target'],
+        'commit',
+      );
+      expect(
+        _list(act('act-04-05-01-unguided'), 'cues').single['target'],
+        'flexible',
+      );
+      final cp = act('act-04-05-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.teachSpec!['deal']['fixedCards']['board'], [
+        'Qs',
+        '7c',
+        '2d',
+        '9h',
+      ]);
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'before');
     });
   });
 }

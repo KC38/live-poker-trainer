@@ -553,7 +553,7 @@ hand (LPT-135), Baseline jump check (LPT-137), Read the table first
 the river correctly (LPT-155), Play tighter multiway (LPT-158), Patch the
 common leaks (LPT-161), Section 3 jump check (LPT-165), Think in ranges
 (LPT-167), Navigate 3-bet pots (LPT-170), Plan beyond the flop (LPT-174),
-Size with a message (LPT-177).
+Size with a message (LPT-177), SPR decides commitment (LPT-180).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -850,6 +850,12 @@ scaffolded authors the LPT-398 missed draw 9h8h/Kh7h2c3dAs with SoftPulse
 `big`; unguided soft-grade tiles use `deal.mode` `none` with SoftPulse
 `soft`; checkpoint authors fixed AhAd/Kc9s3h with cue `bad-1` kind `none`
 (no pressHints).
+
+SPR decides commitment `teachSpec` (LPT-180): explain SoftPulse advances SPR
+→ LOW → HIGH; guided SPR math uses `deal.mode` `none` with SoftPulse
+`spr-4`; scaffolded/unguided author fixed KhKd/Kc7s2d and Jh9d/Qc9s3h with
+SoftPulse `commit` / `flexible`; checkpoint authors fixed AhKd/Qs7c2d9h with
+cue `before` kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

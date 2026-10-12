@@ -1462,7 +1462,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-05-01-explain", 1,
                 "SPR = effective stack / pot. Low SPR: commit. High SPR: maneuver.",
-                {objectives: ["Estimate stack-to-pot ratio"]}),
+                {
+                  objectives: ["Estimate stack-to-pot ratio"],
+                  // LPT-180
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "SPR", kind: "soft_pulse"},
+                      {press: 2, target: "LOW", kind: "soft_pulse"},
+                      {press: 3, target: "HIGH", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-04-05-01-guided", order: 2, stage: "guided",
                 prompt: "Effective stack 80bb, pot 20bb. SPR?",
@@ -1476,6 +1487,8 @@ export function buildSectionFour() {
                   choice("spr-8", "8", "clear_mistake",
                     "Divide stack by pot: 80/20 = 4.", {betterChoiceId: "spr-4"})
                 ],
+                // LPT-180
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "spr-4", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-04-05-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1489,6 +1502,11 @@ export function buildSectionFour() {
                     "You are missing value and risking free cards.",
                     {action: "CHECK", betterChoiceId: "commit"})
                 ],
+                // LPT-180
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Kd"], board: ["Kc", "7s", "2d"]}},
+                  cues: [{press: 1, target: "commit", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-05-01-unguided", order: 4, stage: "scaffolded",
@@ -1501,6 +1519,11 @@ export function buildSectionFour() {
                   choice("spr-jam", "Jam day one", "clear_mistake",
                     "Over-commitment.", {action: "ALL_IN", betterChoiceId: "flexible"})
                 ],
+                // LPT-180
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Qc", "9s", "3h"]}},
+                  cues: [{press: 1, target: "flexible", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1516,6 +1539,14 @@ export function buildSectionFour() {
                   choice("showdown-only", "Wait for showdown", "clear_mistake",
                     "Decide earlier.", {betterChoiceId: "before"})
                 ],
+                // LPT-180
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["Qs", "7c", "2d", "9h"]},
+                  },
+                  cues: [{press: 1, target: "before", kind: "none"}],
+                },
               }),
             ],
           }),
