@@ -1613,7 +1613,10 @@ export function buildSectionTwo() {
             activities: [
               dialogue("act-02-01-02-explain-order", 1,
                 "Preflop starts left of the big blind. Postflop starts left of the button.",
-                {objectives: ["Order preflop action after the blinds"]}),
+                {
+                  objectives: ["Order preflop action after the blinds"],
+                  okFeedback: "UTG → HJ → CO → BTN.",
+                }),
               sequenceAct({
                 id: "act-02-01-02-guided-pre", order: 2, stage: "guided",
                 prompt: "Order CO, BTN, SB to act preflop after an open folds to them.",

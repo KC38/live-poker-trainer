@@ -344,6 +344,23 @@ describe("soft grading and life loss", () => {
     expect(graded.feedback).not.toMatch(/Match bets|Tap each street/i);
   });
 
+  it("uses authored explain Nice! feedback for Acting order (LPT-147)", () => {
+    const actingOrder = findLesson("lesson-02-01-02-acting-order")!.lesson;
+    const explain = actingOrder.activities.find(
+      (activity) => activity.id === "act-02-01-02-explain-order",
+    )!;
+    const graded = gradeCourseResponse({activity: explain});
+    expect(graded).toMatchObject({
+      grade: "recommended",
+      accepted: true,
+      lifeLost: false,
+      feedback: "UTG → HJ → CO → BTN.",
+    });
+    expect(graded.feedback).not.toMatch(
+      /Postflop starts left|Tap UTG|accessibility/i,
+    );
+  });
+
   it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",
