@@ -26622,6 +26622,27 @@ await tester.tap(find.text('NIT'));
       find.text('Hero 200 / Villain 40 — pick effective stack.'),
       findsOneWidget,
     );
+    // LPT-510: guideRegion → one gold SoftPulse (40bb), not 200bb.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('40bb'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('200bb'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('40bb'));
     await tester.pump();
     expect(controller.draft.choiceId, '40');
