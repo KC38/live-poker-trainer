@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "e4d4bd9c785a8671379a4bbcfc1c31e98dc0e4861b2ad2827e163a115fa6693e",
+  "contentChecksum": "65b64032403b85d8615dcad93c9ebc004d30baa78b0c93f5085f826ff3ca9979",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -4387,6 +4387,28 @@
                       "grade": "clear_mistake",
                       "feedback": "Move toward the blinds after the button."
                     }
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ord-co",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "ord-btn",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "ord-sb",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -4428,6 +4450,23 @@
                       "grade": "clear_mistake",
                       "feedback": "Left of the button acts first."
                     }
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "post-sb",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "post-btn",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -4476,7 +4515,19 @@
                         "betterChoiceId": "wait"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "wait",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-01-02-checkpoint-full",
@@ -4526,7 +4577,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "last-btn",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
