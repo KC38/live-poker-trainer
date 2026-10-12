@@ -120,6 +120,13 @@ const _lessons = <String, List<String>>{
     'act-02-04-01-unguided-3bet',
     'act-02-04-01-checkpoint-aq',
   ],
+  // LPT-128
+  'lesson-02-05-01-effective-stack': [
+    'act-02-05-01-guided-convert',
+    'act-02-05-01-scaffolded-eff',
+    'act-02-05-01-unguided-depth',
+    'act-02-05-01-checkpoint-200',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -776,6 +783,22 @@ void main() {
         '3bet-kk',
       );
       final cp = act('act-02-04-01-checkpoint-aq');
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+    });
+  });
+
+  group('Effective stacks (LPT-128)', () {
+    test('deal.mode none + SoftPulse tiles; checkpoint quiet', () {
+      for (final e in {
+        'act-02-05-01-guided-convert': 'bb-100',
+        'act-02-05-01-scaffolded-eff': 'eff-60',
+        'act-02-05-01-unguided-depth': 'depth-50',
+      }.entries) {
+        expect(act(e.key).teachSpec!['deal'], {'mode': 'none'});
+        expect(_list(act(e.key), 'cues').single['target'], e.value);
+      }
+      final cp = act('act-02-05-01-checkpoint-200');
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
     });

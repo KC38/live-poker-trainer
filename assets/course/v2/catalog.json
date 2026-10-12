@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "3e3b899424c02a1087c6c76bc243c3b13d0d871ba8f69eb8b0d12e3af0c17022",
+  "contentChecksum": "ab852cbc8c214a2ae20f0af1fc6997793f23fa8607f3eab65fef8cc5d9acdf5b",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -4607,7 +4607,19 @@
                       "label": "200bb",
                       "accessibilityText": "200bb"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bb-100",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-05-01-scaffolded-eff",
@@ -4641,7 +4653,19 @@
                       "label": "210bb combined",
                       "accessibilityText": "210bb combined"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "eff-60",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-05-01-unguided-depth",
@@ -4675,7 +4699,19 @@
                       "label": "200bb",
                       "accessibilityText": "200bb"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "depth-50",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-05-01-checkpoint-200",
@@ -4711,7 +4747,19 @@
                       "accessibilityText": "500bb"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bb-200",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
