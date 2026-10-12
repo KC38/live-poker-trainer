@@ -813,6 +813,15 @@ USAGE_LIMIT = re.compile(
     r"ActionRequiredError|usage limit|error_code=upgrade|resource_exhausted",
     re.I,
 )
+SDK_STREAM = re.compile(
+    r'\{\s*"t"\s*:\s*\d+\s*,\s*"type"\s*:\s*"(?:thinking|assistant|tool_call|status)"\s*\}'
+)
+
+
+def scrub_sdk_stream(text: str) -> str:
+    cleaned = SDK_STREAM.sub(" ", text or "")
+    return re.sub(r"\s+", " ", cleaned).strip()
+
 
 def _parse_iso_epoch(value):
     if not value:
@@ -866,6 +875,7 @@ for row in rows:
     stamp = row.get("stamp") or ""
 
     # Fill empty stamp rows from coverage in the run window (Z timestamps).
+    # Pad the end so a ticket closed after SIGTERM + reconcile still matches.
     if (
         stamp
         and stamp != "reconciled"
@@ -876,7 +886,7 @@ for row in rows:
         seconds = row.get("seconds")
         end_ep = None
         if start_ep is not None and isinstance(seconds, int):
-            end_ep = start_ep + max(seconds, 0) + 120
+            end_ep = start_ep + max(seconds, 0) + 900
         elif start_ep is not None:
             end_ep = start_ep + 4 * 3600
         if start_ep is not None and end_ep is not None:
@@ -915,6 +925,7 @@ for row in rows:
         or tail.startswith("healed from")
         or tail.startswith("reconciled from")
     )
+    sdk_polluted = bool(tail) and not structured and SDK_STREAM.search(tail) is not None
     prose_report = (
         bool(tail)
         and bool(ticket or result)
@@ -925,6 +936,7 @@ for row in rows:
             or len(tail) > 120
             or "Functions deploy:" in tail
             or "Leads:" in tail
+            or sdk_polluted
         )
     )
     if prose_report:
@@ -945,6 +957,17 @@ for row in rows:
                 row["tail"] = new_tail
                 row["tail_repaired"] = True
                 changed += 1
+                tail = new_tail
+                structured = True
+    if sdk_polluted and not structured:
+        cleaned = scrub_sdk_stream(tail)[:400]
+        if not cleaned:
+            exit_code = row.get("exit")
+            cleaned = f"exit:{exit_code}" if exit_code is not None else "sdk-stream"
+        if cleaned != tail:
+            row["tail"] = cleaned
+            row["tail_repaired"] = True
+            changed += 1
     out.append(row)
 
 if not changed:
@@ -1202,11 +1225,23 @@ NOISE = re.compile(
     r")",
     re.I,
 )
+# Machine SDK streams interleave assistant text with NDJSON markers; those
+# used to land in health.jsonl tails on kill/empty coverage (exit 143).
+SDK_STREAM = re.compile(
+    r'\{\s*"t"\s*:\s*\d+\s*,\s*"type"\s*:\s*"(?:thinking|assistant|tool_call|status)"\s*\}'
+)
+
+
+def scrub_sdk_stream(text: str) -> str:
+    cleaned = SDK_STREAM.sub(" ", text or "")
+    return re.sub(r"\s+", " ", cleaned).strip()
+
+
 tail = ""
 try:
     lines = []
     for ln in Path(log).read_text(encoding="utf-8", errors="replace").splitlines():
-        s = ln.strip()
+        s = scrub_sdk_stream(ln)
         if not s or "\x04" in s or NOISE.search(s):
             continue
         if s.startswith("# "):
@@ -1214,7 +1249,7 @@ try:
         if "] logger " in s or "analytics.track" in s or "structured-log" in s:
             continue
         lines.append(s)
-    tail = " ".join(lines[-5:])[:400]
+    tail = scrub_sdk_stream(" ".join(lines[-5:]))[:400]
 except OSError:
     pass
 
