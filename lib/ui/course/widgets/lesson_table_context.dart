@@ -10116,6 +10116,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive deep stacks — tap why you call with 55',
       semanticsStatic: 'Deep implied outcomes',
       caption: scene.caption ?? '200bb · why call a raise with 55?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Implied.
+      // Null guideRegion SoftPulses every phase (LPT-514).
+      guideRegion: LessonTableRegion.deepImpliedOdds,
       phases: [
         (
           region: LessonTableRegion.deepImpliedOdds,
@@ -10123,7 +10126,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'They pay sets',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10153,6 +10156,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive deep stacks — tap map plans or jam now',
       semanticsStatic: 'Deep plan outcomes',
       caption: scene.caption ?? 'SPR ~12 on the flop',
+      // SoftPulse + Rex own the cue — don’t gold-tip Map streets.
+      // Null guideRegion SoftPulses every phase (LPT-514).
+      guideRegion: LessonTableRegion.deepMapPlans,
       phases: [
         (
           region: LessonTableRegion.deepMapPlans,
@@ -10160,7 +10166,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Before commit',
           visual: const Icon(
             Icons.map_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10184,6 +10190,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive deep stacks — tap what depth rewards',
       semanticsStatic: 'Deep rewards outcomes',
       caption: scene.caption ?? '150–300bb cash play rewards?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Skill edges.
+      // Null guideRegion SoftPulses every phase (LPT-514).
+      guideRegion: LessonTableRegion.deepRewardsPos,
       phases: [
         (
           region: LessonTableRegion.deepRewardsPos,
@@ -10191,7 +10200,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Pos · odds · folds',
           visual: const Icon(
             Icons.psychology_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
