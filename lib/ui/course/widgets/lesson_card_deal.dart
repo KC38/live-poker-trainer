@@ -1018,6 +1018,7 @@ const Map<String, List<String>> _showdownOrderHintClassesByActivity = {
   'act-01-02-01-scaffolded-spot': ['pair', 'straight', 'flush'],
   'act-01-02-01-unguided-compare': ['full house', 'trips', 'two pair'],
   'act-01-02-01-checkpoint-winner': ['flush', 'straight', 'high card'],
+  'act-01-06-02-jump-ranks': ['flush', 'straight', 'two pair'],
 };
 
 /// Physical seat label for a showdown-order hole index (hero, Sam, Jo).
@@ -1092,6 +1093,7 @@ ShowdownOrderDeal? dealShowdownOrderCards(
     'act-01-02-01-scaffolded-spot' => _dealPairStraightFlushWeakToStrong(rng),
     'act-01-02-01-unguided-compare' => _dealFullTripsTwoPairStrongToWeak(rng),
     'act-01-02-01-checkpoint-winner' => _dealFlushStraightHighStrongToWeak(rng),
+    'act-01-06-02-jump-ranks' => _dealFlushStraightTwoPairStrongToWeak(rng),
     _ => null,
   };
   if (dealt == null) return null;
@@ -1220,6 +1222,56 @@ ShowdownOrderDeal _dealFlushStraightHighStrongToWeak(Random rng) {
     villainHoleCodes: [
       ['6s', '5h'],
       ['Ah', 'Kd'],
+    ],
+    seatIds: ['you', 'sam', 'jo'],
+    correctOrder: ['you', 'sam', 'jo'],
+  );
+}
+
+ShowdownOrderDeal _dealFlushStraightTwoPairStrongToWeak(Random rng) {
+  // Section 1 jump ranks: Flush → Straight → Two pair (LPT-107).
+  // Three flush-suit board cards + two suited holes; leave A/K out so rank
+  // remaps have room to shift (span < 12).
+  const templateBoard = ['9h', '8h', '7h', '4c', '2s'];
+  const templateHero = ['Qh', 'Jh'];
+  const templateSam = ['6c', '5d'];
+  const templateJo = ['9d', '4d'];
+  for (var attempt = 0; attempt < 40; attempt++) {
+    final remapped = _remapSpotCards(
+      board: templateBoard,
+      hero: templateHero,
+      sam: templateSam,
+      jo: templateJo,
+      rng: rng,
+      preserveStraightGaps: true,
+    );
+    if (remapped == null) continue;
+    if (!_namesMatch(
+      board: remapped.board,
+      hero: remapped.hero,
+      sam: remapped.sam,
+      jo: remapped.jo,
+      expected: const ['Flush', 'Straight', 'Two Pair'],
+    )) {
+      continue;
+    }
+    return ShowdownOrderDeal(
+      boardCodes: List<String>.unmodifiable(remapped.board),
+      heroCodes: List<String>.unmodifiable(remapped.hero),
+      villainHoleCodes: List<List<String>>.unmodifiable([
+        List<String>.unmodifiable(remapped.sam),
+        List<String>.unmodifiable(remapped.jo),
+      ]),
+      seatIds: const ['you', 'sam', 'jo'],
+      correctOrder: const ['you', 'sam', 'jo'],
+    );
+  }
+  return const ShowdownOrderDeal(
+    boardCodes: ['9h', '8h', '7h', '4c', '2s'],
+    heroCodes: ['Qh', 'Jh'],
+    villainHoleCodes: [
+      ['6c', '5d'],
+      ['9d', '4d'],
     ],
     seatIds: ['you', 'sam', 'jo'],
     correctOrder: ['you', 'sam', 'jo'],

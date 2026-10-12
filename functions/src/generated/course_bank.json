@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "b8034c31192e17d48094cbeea2b11ff76e7ead70e5763d0f2834176548587939",
+  "contentChecksum": "afec85610ebd03d0d177ebea559448d77deed2cb5c0c2b2d10f0c1aa9a308c36",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -2863,7 +2863,7 @@
                   "stage": "scaffolded",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
-                  "accessibilityText": "Jump test: pick strongest hand first, then weaker.",
+                  "accessibilityText": "Jump test: tap showdown seats strongest to weakest (flush, straight, two pair).",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
@@ -2872,25 +2872,25 @@
                   "objectives": [
                     "Confirm hand ranking"
                   ],
-                  "prompt": "Pick strongest hand first, then weaker.",
+                  "prompt": "Tap the hands from strongest to weakest.",
                   "sequenceItems": [
                     {
-                      "id": "j-flush",
-                      "label": "Flush"
+                      "id": "you",
+                      "label": "You"
                     },
                     {
-                      "id": "j-straight",
-                      "label": "Straight"
+                      "id": "sam",
+                      "label": "Sam"
                     },
                     {
-                      "id": "j-two",
-                      "label": "Two pair"
+                      "id": "jo",
+                      "label": "Jo"
                     }
                   ],
                   "correctSequence": [
-                    "j-flush",
-                    "j-straight",
-                    "j-two"
+                    "you",
+                    "sam",
+                    "jo"
                   ],
                   "sequenceGrading": {
                     "correct": {
@@ -22489,9 +22489,9 @@
       ],
       "assessmentRole": "jump_test",
       "correctSequence": [
-        "j-flush",
-        "j-straight",
-        "j-two"
+        "you",
+        "sam",
+        "jo"
       ],
       "sequenceGrading": {
         "correct": {

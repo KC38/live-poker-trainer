@@ -737,9 +737,6 @@ LessonHandExample? resolveHandExample({
 /// Whether this activity should render sequence items as hand examples.
 bool isHandExampleSequenceActivity(CourseActivity activity) {
   if (isShowdownOrderSequenceActivity(activity.id)) return false;
-  if (activity.id == 'act-01-06-02-jump-ranks') {
-    return true;
-  }
   if (activity.sequenceItems.isEmpty) return false;
   return activity.sequenceItems.every(
     (item) => resolveHandExample(id: item.id, label: item.label) != null,
