@@ -12361,40 +12361,52 @@ await tester.tap(find.text('NIT'));
     allInController.dispose();
   });
 
-  testWidgets('open-pot checkpoint marks Raise and Call off', (tester) async {
-    final activity = CourseActivity(
-      id: 'act-01-03-02-checkpoint-names',
-      order: 5,
-      stage: ActivityStage.checkpoint,
-      renderer: ActivityRenderer.pokerActionSizing,
-      estimatedSeconds: 55,
-      accessibilityText: 'Tap Bet',
-      acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Pot is unchecked. Tap the first chips into the pot.',
-      choices: const [
-        CourseChoice(id: 'named-bet', label: 'Bet 4', action: 'BET'),
-        CourseChoice(id: 'named-raise', label: 'Raise', action: 'RAISE'),
-        CourseChoice(id: 'named-call', label: 'Call', action: 'CALL'),
-      ],
-    );
-    final controller = LessonActivityController(activity: activity);
-    await tester.pumpWidget(
-      _wrap(
-        PokerActionSizingActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
+  testWidgets(
+    'bet-raise checkpoint keeps Raise and Call live so naming is not spoiled',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-01-03-02-checkpoint-names',
+        order: 5,
+        stage: ActivityStage.checkpoint,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 55,
+        accessibilityText: 'Tap Bet',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Pot is unchecked. Tap the first chips into the pot.',
+        choices: const [
+          CourseChoice(id: 'named-bet', label: 'Bet 4', action: 'BET'),
+          CourseChoice(id: 'named-raise', label: 'Raise', action: 'RAISE'),
+          CourseChoice(id: 'named-call', label: 'Call', action: 'CALL'),
+        ],
+      );
+      expect(
+        resolveLessonActionSpot(activity)!.identifyUnavailable,
+        isTrue,
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.pumpWidget(
+        _wrap(
+          PokerActionSizingActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
         ),
-      ),
-    );
-    expect(find.text('BET 4'), findsOneWidget);
-    expect(find.text('RAISE (off)'), findsOneWidget);
-    expect(find.text('CALL (off)'), findsOneWidget);
-    await tester.tap(find.text('RAISE (off)'));
-    await tester.pump();
-    expect(controller.draft.choiceId, 'named-raise');
-    controller.dispose();
-  });
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.text('BET 4'), findsOneWidget);
+      expect(find.text('RAISE (off)'), findsNothing);
+      expect(find.text('CALL (off)'), findsNothing);
+      expect(find.text('RAISE'), findsOneWidget);
+      expect(find.text('CALL'), findsOneWidget);
+      await tester.tap(find.text('RAISE'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'named-raise');
+      controller.dispose();
+    },
+  );
 
   test('baseline full-hand action spots resolve mini-table dock mode', () {
     final guided = CourseActivity(

@@ -221,6 +221,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   it now nulls `course/main.resume`, clears matching `currentLessonId`, and
   deletes open `courseAttempts` for that lesson (LPT-76). Do not hand-patch
   Firestore for resume when `fresh` is available.
+- Prefer, when `refresh-simulator.sh` skips because `$SIM_LOCK_RUN_ID` is
+  still `ui-design-agent`, `tools/flutter_run_fast.sh --checkout "$PRIMARY"`
+  to put origin/main back on the mini (LPT-77 closeout).
+- Prefer reading `agent_seed.py fresh` output for `resume reset` after a
+  main pull — if mid-lesson SoftPulse/ask still shows, hot-restart then
+  `fresh --open` again before judging explain (LPT-77).
 
 ## Ops (simulator, CLI, Jira)
 
