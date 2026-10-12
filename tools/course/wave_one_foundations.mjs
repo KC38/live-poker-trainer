@@ -386,14 +386,14 @@ export function buildSectionOne() {
                 correct: ["rank-2", "rank-T", "rank-A"],
                 okFeedback: "Lowest first, then the middle rank, highest last.",
                 missFeedback: "Start with the smallest rank and climb up.",
-                // LPT-81: dealRankOrderSpot — three distinct fresh ranks on a
-                // rainbow board; item ids stay authored low → high.
+                // LPT-82
                 teachSpec: {
-                  deal: {
-                    mode: "random_in_class",
-                    handFamily: "high_card",
-                    suitFamily: "rainbow",
-                  },
+                  deal: {mode: "random_in_class", handFamily: "high_card", suitFamily: "rainbow"},
+                  pressHints: [
+                    {press: 1, text: "Start with the lowest rank."},
+                    {press: 2, text: "Next comes the middle rank."},
+                    {press: 3, text: "The highest rank goes last."},
+                  ],
                 },
               }),
               selectAct({
@@ -409,17 +409,25 @@ export function buildSectionOne() {
                   choice("pair-77", "Pocket pair", "questionable",
                     "That is a pair, not suited. Look for matching suits."),
                 ],
-                // LPT-81: dealHoleHandSeatPlan — suited answer seat plus
-                // offsuit and pocket-pair distractor seats, shuffled.
+                // LPT-82
                 teachSpec: {
                   deal: {
                     mode: "random_in_class",
                     suitFamily: "suited",
                     variants: [
-                      {id: "var-offsuit-seat", suitFamily: "offsuit", label: "Offsuit distractor seat"},
-                      {id: "var-pair-seat", handFamily: "pair", label: "Pocket pair distractor seat"},
+                      {
+                        id: "var-offsuit-seat",
+                        suitFamily: "offsuit",
+                        label: "Offsuit distractor seat",
+                      },
+                      {
+                        id: "var-pair-seat",
+                        handFamily: "pair",
+                        label: "Pocket pair distractor seat",
+                      },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Look for the two hole cards that share a suit."}],
                   cues: [{press: 1, target: "suited_seat", kind: "soft_pulse"}],
                 },
               }),
