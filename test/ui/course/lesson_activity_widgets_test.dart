@@ -13555,7 +13555,7 @@ await tester.tap(find.text('NIT'));
       stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
-      accessibilityText: 'Second barrel value with top pair top kicker.',
+      accessibilityText: 'Second barrel value with top pair on a brick.',
       acceptedGrades: const [SoftGrade.recommended],
       prompt:
           'You c-bet A-high flop with AK. Brick turn. Villain called flop. Action?',
