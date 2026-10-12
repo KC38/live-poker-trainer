@@ -21762,6 +21762,28 @@ await tester.tap(find.text('NIT'));
       find.text('Two hands of tightness — tap Keep sampling.'),
       findsNothing,
     );
+    expect(find.text('Keep sampling'), findsOneWidget);
+    // LPT-494: guideRegion → one gold SoftPulse (Keep sampling), not Max certainty.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Keep sampling'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Max certainty'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Keep sampling'));
     await tester.pump();
     expect(controller.draft.choiceId, 'low');

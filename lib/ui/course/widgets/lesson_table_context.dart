@@ -12075,7 +12075,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive sample confidence — tap keep sampling vs max certainty',
       semanticsStatic: 'Selective sample outcomes',
       caption: scene.caption ?? 'Two hands of tightness. Confidence?',
-      // No SoftPulse on unguided — still don’t gold-icon Keep sampling.
+      // SoftPulse + Rex own the cue — one gold Keep sampling only (LPT-494).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.selectiveKeepSampling,
       phases: [
         (
           region: LessonTableRegion.selectiveKeepSampling,
