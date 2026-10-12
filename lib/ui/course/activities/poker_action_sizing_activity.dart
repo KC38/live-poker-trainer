@@ -33,9 +33,13 @@ class PokerActionSizingActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     final spot = dealtLessonActionSpot(activity, generation: controller.bindGeneration);
     final tableMode = isLessonActionTableActivity(activity) && spot != null;
-    final dockChoices = shuffledLessonChoices(
-      activity.choices,
-      activityId: activity.id,
+    final dockChoices = alignLessonActionChoices(
+      activity,
+      shuffledLessonChoices(
+        activity.choices,
+        activityId: activity.id,
+        generation: controller.bindGeneration,
+      ),
       generation: controller.bindGeneration,
     );
     final villainType = lessonNamedVillainType([

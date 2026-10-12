@@ -144,6 +144,42 @@ String alignLessonActionCopy(
   );
 }
 
+/// Rewrites choice labels / a11y onto the isomorphic deal for [activity].
+///
+/// Coach already goes through [alignLessonActionCopy]; dock pills that name a
+/// template starting hand (e.g. "Always steal K9o") must follow the same
+/// remapped holes or the learner sees two hands for one ask (LPT-455).
+List<CourseChoice> alignLessonActionChoices(
+  CourseActivity activity,
+  List<CourseChoice> choices, {
+  int generation = 0,
+  Random? random,
+}) {
+  if (choices.isEmpty) return choices;
+  return [
+    for (final choice in choices)
+      CourseChoice(
+        id: choice.id,
+        label: alignLessonActionCopy(
+          activity,
+          choice.label,
+          generation: generation,
+          random: random,
+        ),
+        accessibilityText: choice.accessibilityText == null
+            ? null
+            : alignLessonActionCopy(
+                activity,
+                choice.accessibilityText!,
+                generation: generation,
+                random: random,
+              ),
+        action: choice.action,
+        amountBb: choice.amountBb,
+      ),
+  ];
+}
+
 /// Rewrites graded feedback so it names the dealt holes, not the template.
 ///
 /// Server bank copy still says "queens" for [act-02-03-01-scaffolded-qq]
