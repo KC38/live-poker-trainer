@@ -467,7 +467,35 @@
                       "kind": "hint",
                       "text": "Four suits \u2014 one card of each on the board."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "suitFamily": "four_suits"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "board_hearts",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "board_diamonds",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "board_clubs",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_spades",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-02-scaffolded-ranks",
@@ -512,6 +540,13 @@
                     "incorrect": {
                       "grade": "clear_mistake",
                       "feedback": "Start with the smallest rank and climb up."
+                    }
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "suitFamily": "rainbow"
                     }
                   }
                 },
@@ -560,7 +595,32 @@
                         "feedback": "That is a pair, not suited. Look for matching suits."
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "suitFamily": "suited",
+                      "variants": [
+                        {
+                          "id": "var-offsuit-seat",
+                          "suitFamily": "offsuit",
+                          "label": "Offsuit distractor seat"
+                        },
+                        {
+                          "id": "var-pair-seat",
+                          "handFamily": "pair",
+                          "label": "Pocket pair distractor seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "suited_seat",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-02-checkpoint-pair",
@@ -609,7 +669,32 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair",
+                      "variants": [
+                        {
+                          "id": "var-suited-seat",
+                          "suitFamily": "suited",
+                          "label": "Suited distractor seat"
+                        },
+                        {
+                          "id": "var-offsuit-seat",
+                          "suitFamily": "offsuit",
+                          "label": "Offsuit distractor seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pair_seat",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },

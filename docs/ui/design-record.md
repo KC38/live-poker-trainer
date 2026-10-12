@@ -532,7 +532,9 @@ Stages are only **guided** (SoftPulse teach, free misses) and **scaffolded**
 (Hint unlocks SoftPulse, paid misses). Checkpoints and jump tests are
 scaffolded with `assessmentRole` and **no Hint**. Authored deal/hint/cue
 fields live in `teachSpec` (see course schemas). Audited by
-`/lesson-content-agent`.
+`/lesson-content-agent`. Your two cards is the pilot; Suits and ranks
+authors `teachSpec` on all four interactive steps the same way, with deal
+classes that match what `lesson_card_deal.dart` deals (LPT-81).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -575,6 +577,17 @@ Guided suits (`act-01-01-02-guided-suits` via `LessonSuitBoardTable` in
 only syncs selection when the draft is already `suits-full`. The next
 multi-press board picker that rebuilds from `LessonActivityController`
 copies that gate so SoftPulse/Hint notifyListeners cannot clear cyan.
+
+Suits and ranks `teachSpec` (LPT-81, `content/course/v2/course.json`, kept
+in sync with `tools/course/wave_one_foundations.mjs`): guided suits deals
+`random_in_class` / `four_suits` (`dealSuitLessonBoard`) with one
+`soft_pulse` cue per suit press in board order; ranks deals
+`random_in_class` / `high_card` + `rainbow` (`dealRankOrderSpot`);
+unguided suited deals `suited` with offsuit and pocket-pair distractor
+`variants` (`dealHoleHandSeatPlan`); the pair checkpoint deals `pair` with
+suited and offsuit distractor `variants`, a `none` cue, and no
+`pressHints` or Hint media. The next lesson that moves its deal into
+`teachSpec` names the Dart dealer it mirrors the same way.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
