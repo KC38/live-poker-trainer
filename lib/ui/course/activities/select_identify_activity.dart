@@ -1788,22 +1788,49 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: LessonTableStage(
-                          heroCodes:
-                              scene.heroCodes.isEmpty
-                                  ? const ['Ah', 'Kd']
-                                  : scene.heroCodes,
-                          boardCodes: scene.boardCodes,
-                          villainCount:
-                              scene.villainSeatCount < 1
-                                  ? 0
-                                  : scene.villainSeatCount,
-                          heroFaceUp: true,
-                          enabled: !locked,
-                          winnerIds: lessonPotAwardWinnerIds(
-                            activityId: widget.activity.id,
-                            selectedId: selected,
-                          ),
+                        child: Builder(
+                          builder: (context) {
+                            // Count outs framed money (LPT-274 / LPT-278):
+                            // unguided coach says Pot 20 / bet 10; checkpoint
+                            // says 200bb deep with a pot-sized sticky bet.
+                            final outsUnguided =
+                                widget.activity.id == 'act-03-03-01-unguided';
+                            final outsCheckpoint =
+                                widget.activity.id ==
+                                'act-03-03-01-checkpoint';
+                            final villainCount = outsUnguided
+                                ? 1
+                                : (scene.villainSeatCount < 1
+                                    ? 0
+                                    : scene.villainSeatCount);
+                            return LessonTableStage(
+                              heroCodes:
+                                  scene.heroCodes.isEmpty
+                                      ? const ['Ah', 'Kd']
+                                      : scene.heroCodes,
+                              boardCodes: scene.boardCodes,
+                              villainCount: villainCount,
+                              heroFaceUp: true,
+                              enabled: !locked,
+                              potTotal: outsUnguided || outsCheckpoint
+                                  ? 20
+                                  : null,
+                              streetBets: outsUnguided || outsCheckpoint
+                                  ? const [0.0, 10.0]
+                                  : null,
+                              villainActionLabel:
+                                  outsUnguided || outsCheckpoint
+                                      ? 'BET'
+                                      : null,
+                              // $1/$2 → 200bb = $400 (LPT-278).
+                              heroStackChips: outsCheckpoint ? 400 : null,
+                              villainStackChips: outsCheckpoint ? 400 : null,
+                              winnerIds: lessonPotAwardWinnerIds(
+                                activityId: widget.activity.id,
+                                selectedId: selected,
+                              ),
+                            );
+                          },
                         ),
                       ),
                       _LessonChoiceStack(

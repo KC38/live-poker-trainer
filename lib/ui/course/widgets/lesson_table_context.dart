@@ -2572,7 +2572,8 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         layout: LessonTableLayout.drawPriceOutcomes,
         heroCodes: ['Ah', 'Qh'],
         boardCodes: ['Kc', '8h', '2d'],
-        villainSeatCount: 0,
+        // Villain seat holds the $10 street bet on the framed stage (LPT-274).
+        villainSeatCount: 1,
         highlight: LessonTableHighlight.none,
         // Structural spot — Rex owns “real outs”; don’t spoil the count.
         caption: 'Pot 20 · bet 10',
