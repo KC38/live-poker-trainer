@@ -93,6 +93,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // SPR decides commitment guided densified ask (LPT-412) — same path.
     'act-04-05-01-guided' =>
       'Effective 80 into pot 20 — pick SPR 4.',
+    // Observe sticky callers densified asks (LPT-416) — same path.
+    'act-04-06-01-guided' =>
+      'Seat calls 7 of 9 preflops — pick High part.',
+    'act-04-06-01-scaffolded' =>
+      'Second pair called three streets twice — pick Sticky.',
+    'act-04-06-01-unguided' =>
+      'One dramatic call — pick Low conf.',
+    'act-04-06-01-checkpoint' =>
+      'Before you label — pick Bundle.',
     _ => null,
   };
 }
