@@ -537,9 +537,10 @@ Stages are only **guided** (SoftPulse teach, free misses) and **scaffolded**
 (Hint unlocks SoftPulse, paid misses). Checkpoints and jump tests are
 scaffolded with `assessmentRole` and **no Hint**. Authored deal/hint/cue
 fields live in `teachSpec` (see course schemas). Audited by
-`/lesson-content-agent`. Your two cards is the pilot; Suits and ranks
-authors `teachSpec` on all four interactive steps the same way, with deal
-classes that match what `lesson_card_deal.dart` deals (LPT-81).
+`/lesson-content-agent`. Your two cards is the pilot. These lessons author
+`teachSpec` on every interactive step the same way, with deal classes that
+match what `lesson_card_deal.dart` deals (`deal.mode` `none` when the step
+deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -593,6 +594,15 @@ unguided suited deals `suited` with offsuit and pocket-pair distractor
 suited and offsuit distractor `variants`, a `none` cue, and no
 `pressHints` or Hint media. The next lesson that moves its deal into
 `teachSpec` names the Dart dealer it mirrors the same way.
+
+Button and blinds `teachSpec` (LPT-85): every step is `deal.mode` `none`
+(seat/puck teaching; the felt shows card backs, no dealt classes). The
+explain step authors three `soft_pulse` cues D → SB → BB, the guided button
+step D, scaffolded blinds BB (the seat-ring fallback when the BB puck is
+hidden stays in Dart), the timing step `before-deal`, and the checkpoint a
+`none` cue on SB with no `pressHints` or Hint media. Cue targets are the
+puck labels `lessonPuckLabelForHighlight` returns, so there is no second
+cue system.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

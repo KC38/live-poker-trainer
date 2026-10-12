@@ -27,8 +27,9 @@ Authored on activities (`content/course/v2/schemas/teach_spec.schema.json`):
 - `pressHints[]`: one text per press
 - `cues[]`: SoftPulse targets per press
 
-Pilot: `lesson-01-01-01-your-two-cards`; `lesson-01-01-02-suits-and-ranks`
-follows it on all four interactive steps (LPT-81). Missing teachSpec on
+Pilot: `lesson-01-01-01-your-two-cards`. Lessons that follow it on every
+interactive step: `lesson-01-01-02-suits-and-ranks` (LPT-81),
+`lesson-01-01-03-blinds-and-button` (LPT-85). Missing teachSpec on
 interactive steps is a content gap the agent files.
 
 ## Jira routing

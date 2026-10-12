@@ -458,6 +458,16 @@ export function buildSectionOne() {
                   ],
                   accessibilityText:
                     "Clockwise from the button: small blind, then big blind.",
+                  // LPT-85: seat/puck lesson, no cards dealt. SoftPulse walks
+                  // the pucks D -> SB -> BB (lessonPuckLabelForHighlight).
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "D", kind: "soft_pulse"},
+                      {press: 2, target: "SB", kind: "soft_pulse"},
+                      {press: 3, target: "BB", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               selectAct({
                 id: "act-01-01-03-guided-button", order: 2, stage: "guided",
@@ -475,6 +485,11 @@ export function buildSectionOne() {
                     "Empty seats do not hold the button.",
                     {betterChoiceId: "btn-seat"}),
                 ],
+                // LPT-85: same-concept quiet guided step; gold D after Hint.
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "D", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-01-03-scaffolded-blinds", order: 3, stage: "scaffolded",
@@ -491,6 +506,12 @@ export function buildSectionOne() {
                     "Button deals later; blinds post to the left.",
                     {betterChoiceId: "bb-two"}),
                 ],
+                // LPT-85: authored target stays BB; the seat-ring fallback when
+                // the BB puck is hidden stays in Dart.
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "BB", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-01-03-unguided-when", order: 4, stage: "scaffolded",
@@ -507,6 +528,11 @@ export function buildSectionOne() {
                     "Blinds are forced bets every hand.",
                     {betterChoiceId: "before-deal"}),
                 ],
+                // LPT-85: phase strip, no cards dealt; Hint golds Before deal.
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "before-deal", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-01-03-checkpoint-layout", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -526,6 +552,11 @@ export function buildSectionOne() {
                     "Seat 1 would be big blind when seat 0 is small blind.",
                     {betterChoiceId: "sb-seat0"}),
                 ],
+                // LPT-85: checkpoint, no pressHints / Hint media.
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "SB", kind: "none"}],
+                },
               }),
             ],
           }),
