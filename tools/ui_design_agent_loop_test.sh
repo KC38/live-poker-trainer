@@ -207,6 +207,47 @@ export UI_AGENT_STALL_HEARTBEAT_ONLY
 lock_heartbeat_stalled "$fresh_run_log" \
   || fail "stale heartbeat + ancient run log should still be stalled"
 unset UI_AGENT_STALL_HEARTBEAT_ONLY
+# Sandbox snap hang: quiet log + only zsh/cat <&3 descendants stall early.
+python3 - <<PY
+import json, time
+from pathlib import Path
+path = Path("$SIM_LOCK_DIR") / "simulator-lock.json"
+state = json.loads(path.read_text())
+state["heartbeat_epoch"] = time.time() - 200
+path.write_text(json.dumps(state))
+PY
+touch -t 202601010101.00 "$fresh_run_log" 2>/dev/null \
+  || touch -d '2026-01-01 01:01:00' "$fresh_run_log"
+echo 4242 >"$PID_FILE"
+_ps_fixture="$tmp/stall-ps.txt"
+cat >"$_ps_fixture" <<'EOF'
+4242 1 node tools/ui-agent-sdk/run.mjs
+9784 4242 /bin/zsh -c builtin export PATH=…; snap=$(command cat <&3); dump_zsh_state
+9785 9784 cat
+EOF
+UI_AGENT_SANDBOX_STALL_SECONDS=180
+SANDBOX_STALL_SECONDS=180
+export UI_AGENT_STALL_PS_FILE="$_ps_fixture"
+lock_heartbeat_stalled "$fresh_run_log" \
+  || fail "sandbox snap-only descendants should stall after SANDBOX_STALL"
+# Busy descendant must not trip the fast path (past full STALL_SECONDS too).
+python3 - <<PY
+import json, time
+from pathlib import Path
+path = Path("$SIM_LOCK_DIR") / "simulator-lock.json"
+state = json.loads(path.read_text())
+state["heartbeat_epoch"] = time.time() - 601
+path.write_text(json.dumps(state))
+PY
+cat >"$_ps_fixture" <<'EOF'
+4242 1 node tools/ui-agent-sdk/run.mjs
+9784 4242 /bin/zsh -c builtin export PATH=…; snap=$(command cat <&3); dump_zsh_state
+9900 9784 flutter test test/ui/course/lesson_activity_widgets_test.dart
+EOF
+lock_heartbeat_stalled "$fresh_run_log" \
+  && fail "sandbox path must not stall when a flutter child is present"
+unset UI_AGENT_STALL_PS_FILE
+rm -f "$PID_FILE"
 python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 
 # configure_agent_credentials is a no-op without CURSOR_API_KEY; with a key
