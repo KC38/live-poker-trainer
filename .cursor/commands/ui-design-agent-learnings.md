@@ -115,9 +115,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer one lesson-content bug (fixed cards, stacked/enabled-empty Hint,
   Hint stuck under Oops/Nice! after a Hint press, multi-target or
   inconsistent SoftPulse, bad coach copy, hearts that do not spend or
-  restore) or teach-by-doing gap over spacing chrome. When fixing multi
-  SoftPulse, update tests that assert `findsNWidgets(N>1)` on
-  `glow-highlight` for that surface — they may have locked the bug (LPT-55).
+  restore) or teach-by-doing gap over spacing chrome. When SoftPulse golds
+  every densified tile, check `_buildOutcomePhases` for a missing
+  `guideRegion` (`null` SoftPulses all phases — LPT-424 Meet Calling
+  Station; LPT-433 Observe narrow). When fixing multi SoftPulse, update
+  tests that assert `findsNWidgets(N>1)` on `glow-highlight` for that
+  surface — they may have locked the bug (LPT-55).
   Ids in `lessonFrameSameConceptQuietIds` (e.g. guided-seven) stay SoftPulse
   off until Hint by design — judge Hint-reopened SoftPulse, not first-press
   gold (LPT-57). Quiet multi-press boards must report
