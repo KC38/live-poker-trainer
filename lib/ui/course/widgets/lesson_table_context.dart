@@ -13766,7 +13766,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive leak review — tap On a schedule or Never',
       semanticsStatic: 'Leak-review unguided outcomes',
       caption: scene.caption ?? 'When to review the book?',
-      // No SoftPulse on unguided — still don’t gold-icon On a schedule.
+      // SoftPulse + Rex own the cue — don’t gold-tip On a schedule.
+      // Null guideRegion SoftPulses every phase (LPT-511).
+      guideRegion: LessonTableRegion.leakReviewOnSchedule,
       phases: [
         (
           region: LessonTableRegion.leakReviewOnSchedule,

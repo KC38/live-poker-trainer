@@ -27303,6 +27303,27 @@ await tester.tap(find.text('NIT'));
       find.text('Review the book — pick when to do it.'),
       findsOneWidget,
     );
+    // LPT-511: guideRegion → one gold SoftPulse (On a schedule), not Never.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('On a schedule'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Never'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('On a schedule'));
     await tester.pump();
     expect(controller.draft.choiceId, 'sched');
