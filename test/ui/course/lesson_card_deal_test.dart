@@ -595,6 +595,84 @@ void main() {
   );
 
   test(
+    'leak-repair scaffolded gutshot template keeps four outs after remap '
+    '(LPT-381)',
+    () {
+      final activity = CourseActivity(
+        id: 'act-03-08-01-scaffolded',
+        order: 3,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 55,
+        accessibilityText: 'Fold a gutshot to an oversized bet.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Gutshot only. Pot 12, bet 18. Action?',
+      );
+      final template = resolveLessonActionSpot(activity)!;
+      final templateOuts = HandClassifier.drawOuts(
+        FastEvaluator.encode(CardModel.fromCode(template.heroCodes[0])),
+        FastEvaluator.encode(CardModel.fromCode(template.heroCodes[1])),
+        [
+          for (final c in template.boardCodes)
+            FastEvaluator.encode(CardModel.fromCode(c)),
+        ],
+      );
+      expect(templateOuts, DrawOuts.weak);
+      expect(
+        HandClassifier.classify(
+          FastEvaluator.encode(CardModel.fromCode(template.heroCodes[0])),
+          FastEvaluator.encode(CardModel.fromCode(template.heroCodes[1])),
+          [
+            for (final c in template.boardCodes)
+              FastEvaluator.encode(CardModel.fromCode(c)),
+          ],
+        ),
+        HandClass.weakDraw,
+      );
+
+      final rankKeys = <String>{};
+      for (var generation = 0; generation < 64; generation++) {
+        final spot = dealtLessonActionSpot(activity, generation: generation)!;
+        final outs = HandClassifier.drawOuts(
+          FastEvaluator.encode(CardModel.fromCode(spot.heroCodes[0])),
+          FastEvaluator.encode(CardModel.fromCode(spot.heroCodes[1])),
+          [
+            for (final c in spot.boardCodes)
+              FastEvaluator.encode(CardModel.fromCode(c)),
+          ],
+        );
+        expect(
+          outs,
+          DrawOuts.weak,
+          reason:
+              'generation $generation must stay gutshot (4 outs): '
+              '${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        expect(
+          HandClassifier.classify(
+            FastEvaluator.encode(CardModel.fromCode(spot.heroCodes[0])),
+            FastEvaluator.encode(CardModel.fromCode(spot.heroCodes[1])),
+            [
+              for (final c in spot.boardCodes)
+                FastEvaluator.encode(CardModel.fromCode(c)),
+            ],
+          ),
+          HandClass.weakDraw,
+          reason:
+              'generation $generation weakDraw: '
+              '${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        rankKeys.add(
+          ([
+            for (final c in spot.heroCodes) CardModel.fromCode(c).rank,
+          ]..sort()).join(','),
+        );
+      }
+      expect(rankKeys.length, greaterThan(1));
+    },
+  );
+
+  test(
     'Plan the turn scaffolded Hint never claims TPTK over a weak-kicker deal '
     '(LPT-327)',
     () {
