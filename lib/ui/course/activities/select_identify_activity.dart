@@ -790,8 +790,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-04-03-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-04-03-01-checkpoint')!,
       // SoftPulse owns Soft band — don’t gold-tip the tile.
+      // Size with a message densified ask: selectIdentifyDensifiedCoachLine
+      // (LPT-410).
       'act-04-04-01-unguided' =>
-        'Two value sizes both get calls — nearby sizes can both grade soft.',
+        selectIdentifyDensifiedCoachLine('act-04-04-01-unguided')!,
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
       'act-04-05-01-guided' => 'Effective 80 into pot 20 — stack ÷ pot.',
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
@@ -2282,8 +2284,10 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-04-03-01-checkpoint' =>
       selectIdentifyDensifiedCoachLine('act-04-03-01-checkpoint')!,
     // SoftPulse owns Soft band — don’t gold-tip the tile.
+    // Size with a message densified ask: selectIdentifyDensifiedCoachLine
+    // (LPT-410).
     'act-04-04-01-unguided' =>
-      'Two value sizes both get calls — nearby sizes can both grade soft.',
+      selectIdentifyDensifiedCoachLine('act-04-04-01-unguided')!,
     // SoftPulse owns SPR 4 — don’t gold-tip the tile.
     'act-04-05-01-guided' => 'Effective 80 into pot 20 — stack ÷ pot.',
     // SoftPulse owns SPR 4 — don’t gold-tip the tile.

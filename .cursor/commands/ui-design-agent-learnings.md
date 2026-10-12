@@ -276,6 +276,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Close the river checkpoint). Densified lines need a pick/tap verb so
   `withLessonTapInstruction` does not append the generic footer.
 
+- Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
+
 ## Ops (simulator, CLI, Jira)
 
 - Cursor CLI over SSH / LaunchAgent needs `CURSOR_API_KEY` in
