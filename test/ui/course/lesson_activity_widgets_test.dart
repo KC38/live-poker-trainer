@@ -10770,10 +10770,10 @@ await tester.tap(find.text('NIT'));
       ],
     );
     expect(isTableRegionTapActivity(activity), isTrue);
-    expect(
-      resolveLessonTableScene(activity)?.layout,
-      LessonTableLayout.effectiveStackOutcomes,
-    );
+    final scene = resolveLessonTableScene(activity);
+    expect(scene?.layout, LessonTableLayout.effectiveStackOutcomes);
+    // LPT-220: stack-math panels must not invent a face-down Them seat.
+    expect(scene?.villainSeatCount, 0);
     expect(
       mapTableRegionToChoiceId(
         activityId: activity.id,
@@ -10784,6 +10784,8 @@ await tester.tap(find.text('NIT'));
     );
 
     final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       _wrap(
         SelectIdentifyActivity(
@@ -10793,6 +10795,8 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    await tester.pump();
+    expect(tester.takeException(), isNull);
     expect(
       find.text('You 120bb · villain 55bb — pick the effective stack.'),
       findsOneWidget,
@@ -10812,6 +10816,8 @@ await tester.tap(find.text('NIT'));
     expect(find.text('55bb'), findsOneWidget);
     expect(find.text('Shorter'), findsNothing);
     expect(find.text('Villain'), findsOneWidget);
+    // Decoy face-down Them pair must stay off (LPT-220).
+    expect(find.text('Them'), findsNothing);
     // Jump stage: SoftPulse off — no spoiler cue / gold tip.
     expect(find.text('Tap 55bb.'), findsNothing);
     expect(find.text('Tap your answer on the felt.'), findsNothing);
