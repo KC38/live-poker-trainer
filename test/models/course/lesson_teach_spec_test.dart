@@ -182,6 +182,14 @@ const _lessons = <String, List<String>>{
     'act-03-04-01-unguided',
     'act-03-04-01-checkpoint',
   ],
+  // LPT-152
+  'lesson-03-05-01-turn-decisions': [
+    'act-03-05-01-explain',
+    'act-03-05-01-guided',
+    'act-03-05-01-scaffolded',
+    'act-03-05-01-unguided',
+    'act-03-05-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1074,6 +1082,38 @@ void main() {
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'fold-bp');
+    });
+  });
+
+  group('Plan the turn card (LPT-152)', () {
+    test('explain SoftPulse walks BRICK → CHANGE → BARREL → DELAY', () {
+      expect(
+        _list(
+          act('act-03-05-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['BRICK', 'CHANGE', 'BARREL', 'DELAY'],
+      );
+    });
+
+    test('card/action steps author fixed deals; checkpoint quiet', () {
+      expect(
+        _list(act('act-03-05-01-guided'), 'cues').single['target'],
+        'brick',
+      );
+      expect(
+        _list(act('act-03-05-01-scaffolded'), 'cues').single['target'],
+        'barrel',
+      );
+      expect(
+        _list(act('act-03-05-01-unguided'), 'cues').single['target'],
+        'delay-bet',
+      );
+      final cp = act('act-03-05-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'give-up');
     });
   });
 }

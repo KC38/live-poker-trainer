@@ -8389,7 +8389,34 @@
                   ],
                   "objectives": [
                     "Recognize brick versus changing turns"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BRICK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHANGE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BARREL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "DELAY",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-05-01-guided",
@@ -8436,7 +8463,31 @@
                         "feedback": "Some turns matter more than others."
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "As",
+                          "7d",
+                          "2c",
+                          "3h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "brick",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-05-01-scaffolded",
@@ -8487,7 +8538,31 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "As",
+                          "7d",
+                          "2c",
+                          "3h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "barrel",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-05-01-unguided",
@@ -8538,7 +8613,31 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "9h"
+                        ],
+                        "board": [
+                          "Kh",
+                          "7h",
+                          "2c",
+                          "3h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "delay-bet",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-05-01-checkpoint",
@@ -8587,7 +8686,31 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Kc",
+                          "8d",
+                          "3s",
+                          "Qh"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "give-up",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
