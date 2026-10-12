@@ -451,7 +451,19 @@ export function buildSectionThree() {
             activities: [
               dialogue("act-03-05-01-explain", 1,
                 "Turn cards either brick or change the story. Barrel or delay with intent.",
-                {objectives: ["Recognize brick versus changing turns"]}),
+                {
+                  objectives: ["Recognize brick versus changing turns"],
+                  // LPT-152
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "BRICK", kind: "soft_pulse"},
+                      {press: 2, target: "CHANGE", kind: "soft_pulse"},
+                      {press: 3, target: "BARREL", kind: "soft_pulse"},
+                      {press: 4, target: "DELAY", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-03-05-01-guided", order: 2, stage: "guided",
                 prompt: "Flop As 7d 2c. Turn 3h. For a missed c-bettor, is this a brick?",
@@ -465,11 +477,19 @@ export function buildSectionThree() {
                   choice("always-change", "Every turn changes everything", "questionable",
                     "Some turns matter more than others.")
                 ],
+                // LPT-152
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7d", "2c", "3h"]},
+                  },
+                  cues: [{press: 1, target: "brick", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-05-01-scaffolded", order: 3, stage: "scaffolded",
                 prompt: "You c-bet A-high flop with AK. Brick turn. Villain called flop. Action?",
-                a11y: "Second barrel value with top pair top kicker.",
+                a11y: "Second barrel value with top pair on a brick.",
                 objectives: ["Fire a second barrel with a plan"],
                 choices: [
                   choice("barrel", "Bet again for value", "recommended",
@@ -479,6 +499,14 @@ export function buildSectionThree() {
                   choice("fold-ak", "Fold to a future bet preemptively", "clear_mistake",
                     "You act first — decide to bet or check.", {action: "FOLD", betterChoiceId: "barrel"})
                 ],
+                // LPT-152
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7d", "2c", "3h"]},
+                  },
+                  cues: [{press: 1, target: "barrel", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-05-01-unguided", order: 4, stage: "scaffolded",
@@ -493,6 +521,14 @@ export function buildSectionThree() {
                   choice("delay-fold", "Fold the nuts", "clear_mistake",
                     "You have the flush.", {action: "FOLD", betterChoiceId: "delay-bet"})
                 ],
+                // LPT-152
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "9h"], board: ["Kh", "7h", "2c", "3h"]},
+                  },
+                  cues: [{press: 1, target: "delay-bet", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-03-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -507,6 +543,14 @@ export function buildSectionThree() {
                   choice("ignore", "Treat every turn like a brick", "clear_mistake",
                     "Board texture matters.", {betterChoiceId: "give-up"})
                 ],
+                // LPT-152
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Kc", "8d", "3s", "Qh"]},
+                  },
+                  cues: [{press: 1, target: "give-up", kind: "none"}],
+                },
               }),
             ],
           }),
