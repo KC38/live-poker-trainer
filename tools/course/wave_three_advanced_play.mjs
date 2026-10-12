@@ -773,7 +773,18 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-09-01-explain", 1,
                 "Winning 1/2 includes knowing when to quit. Guardrails first.",
-                {objectives: ["Set session stop-losses"]}),
+                {
+                  objectives: ["Set session stop-losses"],
+                  // LPT-248
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "QUIT", kind: "soft_pulse"},
+                      {press: 2, target: "GUARD", kind: "soft_pulse"},
+                      {press: 3, target: "FIRST", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-05-09-01-guided", order: 2, stage: "guided",
                 prompt: "You hit a planned stop-loss. Next step?",
@@ -785,6 +796,8 @@ export function buildSectionFive() {
                   choice("reload", "Reload / chase", "clear_mistake",
                     "Bankroll leak.", {betterChoiceId: "stop"})
                 ],
+                // LPT-248
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "stop", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-09-01-scaffolded", order: 3, stage: "scaffolded",
@@ -797,6 +810,8 @@ export function buildSectionFive() {
                   choice("jump", "Jump up", "clear_mistake",
                     "Risk of ruin.", {betterChoiceId: "decline"})
                 ],
+                // LPT-248
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "decline", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-09-01-unguided", order: 4, stage: "scaffolded",
@@ -809,6 +824,8 @@ export function buildSectionFive() {
                   choice("punish", "Stay forever", "questionable",
                     "Only if sharp and planned.")
                 ],
+                // LPT-248
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cash", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -821,6 +838,8 @@ export function buildSectionFive() {
                   choice("soft", "Soft skills only", "clear_mistake",
                     "It is core.", {betterChoiceId: "edge"})
                 ],
+                // LPT-248
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "edge", kind: "none"}]},
               }),
             ],
           }),
