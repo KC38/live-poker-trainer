@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "26965200605acf7533f71e6bb7937c12d9a31dc89a53e90daf36d377c9485a9f",
+  "contentChecksum": "616e0ff603b554cced70bed15304b0654f302c483f56a21817c4c864117eaaa0",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -13566,7 +13566,29 @@
                   ],
                   "objectives": [
                     "Use depth for speculative implied odds"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "DEEP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "REALIZE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "STACK",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-02-01-guided",
@@ -13600,7 +13622,19 @@
                       "label": "You will bluff every flop",
                       "accessibilityText": "You will bluff every flop"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "impl",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-02-01-scaffolded",
@@ -13637,7 +13671,30 @@
                       "action": "RAISE",
                       "amountBb": 200
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ad",
+                          "9c"
+                        ],
+                        "board": [
+                          "As",
+                          "Th",
+                          "7h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-tp",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-02-01-unguided",
@@ -13666,7 +13723,19 @@
                       "label": "Jam any pair now",
                       "accessibilityText": "Jam any pair now"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "plan",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-02-01-checkpoint",
@@ -13696,7 +13765,19 @@
                       "accessibilityText": "Automatic light stacks"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pos",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

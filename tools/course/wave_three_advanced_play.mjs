@@ -147,7 +147,18 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-02-01-explain", 1,
                 "Deep: more room to realize. Also more room to lose a stack.",
-                {objectives: ["Use depth for speculative implied odds"]}),
+                {
+                  objectives: ["Use depth for speculative implied odds"],
+                  // LPT-225
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "DEEP", kind: "soft_pulse"},
+                      {press: 2, target: "REALIZE", kind: "soft_pulse"},
+                      {press: 3, target: "STACK", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-05-02-01-guided", order: 2, stage: "guided",
                 prompt: "200bb effective. Best reason to call a raise with 55 BTN?",
@@ -161,6 +172,8 @@ export function buildSectionFive() {
                   choice("bluff", "You will bluff every flop", "clear_mistake",
                     "Not the thesis.", {betterChoiceId: "impl"})
                 ],
+                // LPT-225
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "impl", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-05-02-01-scaffolded", order: 3, stage: "scaffolded",
@@ -175,6 +188,11 @@ export function buildSectionFive() {
                   choice("jam-tp", "Jam for value", "clear_mistake",
                     "Too thin deep.", {action: "RAISE", amountBb: 200, betterChoiceId: "fold-tp"})
                 ],
+                // LPT-225
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ad", "9c"], board: ["As", "Th", "7h"]}},
+                  cues: [{press: 1, target: "fold-tp", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-02-01-unguided", order: 4, stage: "scaffolded",
@@ -187,6 +205,8 @@ export function buildSectionFive() {
                   choice("jamnow", "Jam any pair now", "clear_mistake",
                     "Too early.", {betterChoiceId: "plan"})
                 ],
+                // LPT-225
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "plan", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -199,6 +219,8 @@ export function buildSectionFive() {
                   choice("spew", "Automatic light stacks", "clear_mistake",
                     "Opposite.", {betterChoiceId: "pos"})
                 ],
+                // LPT-225
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pos", kind: "none"}]},
               }),
             ],
           }),
