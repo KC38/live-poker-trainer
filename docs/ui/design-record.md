@@ -556,7 +556,7 @@ common leaks (LPT-161), Section 3 jump check (LPT-165), Think in ranges
 Size with a message (LPT-177), SPR decides commitment (LPT-180), Observe
 sticky callers (LPT-184), Meet the Calling Station (LPT-187), Adjust versus
 Calling Station (LPT-190), Observe narrow players (LPT-193), Meet the Nit
-(LPT-196), Adjust versus Nit (LPT-200).
+(LPT-196), Adjust versus Nit (LPT-200), Observe wild aggressors (LPT-203).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -898,6 +898,11 @@ Adjust versus Nit `teachSpec` (LPT-200): explain SoftPulse advances STEAL →
 CREDIT → EXPLODE; guided fixed Kh9d → `steal`; scaffolded fixed Jh9d/Qc9s3h
 → `fold-mid`; unguided fixed Kh9d → `tighter`; checkpoint `none` → `cite-
 strong`; assessment steps use cue kind `none` (no pressHints).
+
+Observe wild aggressors `teachSpec` (LPT-203): explain SoftPulse advances
+RAISE → BARREL → COUNT; guided `none` → `extreme`; scaffolded `none` →
+`pressure`; unguided `none` → `calm`; checkpoint `none` → `bundle-m`;
+assessment steps use cue kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

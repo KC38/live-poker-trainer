@@ -309,6 +309,14 @@ const _lessons = <String, List<String>>{
     'act-04-07-03-unguided',
     'act-04-07-03-checkpoint',
   ],
+  // LPT-203
+  'lesson-04-08-01-observe-wild-aggressor': [
+    'act-04-08-01-explain',
+    'act-04-08-01-guided',
+    'act-04-08-01-scaffolded',
+    'act-04-08-01-unguided',
+    'act-04-08-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1946,6 +1954,60 @@ void main() {
       });
       expect(
         act('act-04-07-03-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Observe wild aggressors (LPT-203)', () {
+    test('explain SoftPulse walks RAISE → BARREL → COUNT', () {
+      expect(
+        _list(
+          act('act-04-08-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['RAISE', 'BARREL', 'COUNT'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-04-08-01-guided'), 'cues').single['target'],
+        'extreme',
+      );
+      expect(act('act-04-08-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-08-01-scaffolded'), 'cues').single['target'],
+        'pressure',
+      );
+      expect(act('act-04-08-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-04-08-01-unguided'), 'cues').single['target'],
+        'calm',
+      );
+      expect(act('act-04-08-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-04-08-01-checkpoint'), 'cues').single['target'],
+        'bundle-m',
+      );
+      expect(
+        _list(
+          act('act-04-08-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-04-08-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-04-08-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-04-08-01-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });

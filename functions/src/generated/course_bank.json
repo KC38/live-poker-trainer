@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "cfffb2b174aa9fc66c684a09a1d43ea8df3c5af6ec885ae509086910a50854a9",
+  "contentChecksum": "30f9a91f92cc21d1c94bc2a101f871007cc6a1a375ccb40145b4d059d6b8669e",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -13732,6 +13732,28 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "Raise → Barrel → Count."
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BARREL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "COUNT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -13770,7 +13792,19 @@
                         "betterChoiceId": "extreme"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "extreme",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-08-01-scaffolded",
@@ -13808,7 +13842,19 @@
                         "betterChoiceId": "pressure"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pressure",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-08-01-unguided",
@@ -13846,7 +13892,19 @@
                         "betterChoiceId": "calm"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "calm",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-08-01-checkpoint",
@@ -13885,7 +13943,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bundle-m",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
