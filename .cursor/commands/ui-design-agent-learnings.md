@@ -85,9 +85,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   kill-session a live run-loop when the pid file is stale — recover the
   pid from the tmux session instead. Soft-stop clears STOP on the next
   `start`/`ensure`, runs `prepare_launcher` (SDK `npm ci`) before claiming
-  the mini, and schedules `ensure` after the soft-stopped loop exits so
-  the next ticket does not wait on LaunchAgent `StartInterval` (use
-  `kill`/`uninstall` to leave the loop down).
+  the mini, and schedules `ensure` via `nohup`/`disown` after the
+  soft-stopped loop exits (a plain background `&` died with the tmux
+  pane on SIGHUP — 2026-10-13) so the next ticket does not wait on
+  LaunchAgent `StartInterval` (use `kill`/`uninstall` to leave the loop
+  down).
 - Never `gh pr merge` a draft, and never `git push --delete` the ticket
   branch / remove the worktree until `mergedAt` is set (LPT-71: draft
   merge failed then branch delete closed #1676 — recover via local commit

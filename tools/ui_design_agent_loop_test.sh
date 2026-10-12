@@ -740,6 +740,11 @@ UI_AGENT_LOOP_SOURCE_ONLY= bash "$SCRIPT" soft-stop >/dev/null \
 [[ -f "$STOP_FILE" ]] || fail "soft-stop should touch STOP_FILE"
 rm -f "$STOP_FILE"
 unset -f schedule_ensure_after_soft_stop
+# Delayed ensure must outlive the tmux pane that runs `run-loop; exit`.
+grep -q 'nohup bash -c' "$LOOP" \
+  || fail "schedule_ensure_after_soft_stop must nohup ensure (SIGHUP)"
+grep -q 'disown' "$LOOP" \
+  || fail "schedule_ensure_after_soft_stop must disown ensure"
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
 [[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \
