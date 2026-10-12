@@ -105,7 +105,7 @@ describe("course catalog bank", () => {
     const located = findLesson("lesson-01-01-01-your-two-cards");
     expect(located?.section.id).toBe("sec-01-never-played");
     expect(findActivity(located!.lesson, "act-01-01-01-explain-hole-cards")?.stage)
-      .toBe("explain");
+      .toBe("guided");
     expect(lessonRequiresPlacementFlag(located!.lesson)).toBe(false);
     const jump = findLesson("lesson-01-06-02-section-one-jump");
     expect(lessonRequiresPlacementFlag(jump!.lesson)).toBe(true);

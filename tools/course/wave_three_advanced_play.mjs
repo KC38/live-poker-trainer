@@ -82,7 +82,7 @@ export function buildSectionFive() {
                 ],
               }),
               actionAct({
-                id: "act-05-01-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-01-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Three callers. You flop top set on a wet board. Action?",
                 a11y: "Bet for value; protect and build.",
                 objectives: ["Value thicker when capped opponents call"],
@@ -97,7 +97,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-01-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Multiway construction priority?",
                 a11y: "Nut potential and domination avoidance.",
                 objectives: ["Prefer nut potential multiway"],
@@ -152,7 +152,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-02-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-02-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "SPR ~12 on the flop. Your first job?",
                 a11y: "Plan turn and river before stacking.",
                 objectives: ["Plan future streets when SPR is high"],
@@ -164,7 +164,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-02-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "150–300bb cash play rewards?",
                 a11y: "Position, implied odds, disciplined folds.",
                 objectives: ["Plan future streets when SPR is high"],
@@ -221,7 +221,7 @@ export function buildSectionFive() {
                 ],
               }),
               actionAct({
-                id: "act-05-03-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-03-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Four-way. 7h6h on Kh 9h 2c facing a bet. Action?",
                 a11y: "Non-nut flush draw — fold the domination leak.",
                 objectives: ["Skip dominated draws multiway"],
@@ -233,7 +233,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-03-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Implied odds rise most when?",
                 a11y: "Depth plus paying tendencies.",
                 objectives: ["Estimate implied odds from depth and tendencies"],
@@ -291,7 +291,7 @@ export function buildSectionFive() {
                 ],
               }),
               actionAct({
-                id: "act-05-04-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-04-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Same second pair river. Nit checked to you. Action?",
                 a11y: "Check back — thin value dies.",
                 objectives: ["Skip thin value versus overfolders"],
@@ -306,7 +306,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-04-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Same hand, different types — what must change?",
                 a11y: "The recommendation only when the read justifies it.",
                 objectives: ["Choose thin value versus sticky callers"],
@@ -360,7 +360,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-05-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-05-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "BB donks large on A-high dry flop into PFR. Meaning?",
                 a11y: "Often polarized — ace or air.",
                 objectives: ["Treat donks as polarized information"],
@@ -372,7 +372,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-05-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Delayed c-bet is best when?",
                 a11y: "Flop check then turn barrel after they show weakness.",
                 objectives: ["Use probes and delayed c-bets with a plan"],
@@ -423,7 +423,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-06-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-06-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Best line-reading habit?",
                 a11y: "Street-by-street updates.",
                 objectives: ["Update ranges after each street"],
@@ -435,7 +435,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-06-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Check-raise flop, bet turn, shove river usually means?",
                 a11y: "Strong uncapped pressure — respect without a read.",
                 objectives: ["Notice capped versus uncapped lines"],
@@ -488,7 +488,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-07-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-07-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Coach says \"look left means bluff.\" Response?",
                 a11y: "Reject magic tells.",
                 objectives: ["Reject magic-tell claims"],
@@ -500,7 +500,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-07-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Best use of live timing?",
                 a11y: "Tiny confidence update alongside stronger evidence.",
                 objectives: ["Treat timing as soft evidence only"],
@@ -551,7 +551,7 @@ export function buildSectionFive() {
                 ],
               }),
               actionAct({
-                id: "act-05-08-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-08-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "You are steaming after a cooler. Best action?",
                 a11y: "Reset or step away — bankroll guardrail.",
                 objectives: ["Avoid chasing emotional pots"],
@@ -563,7 +563,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-08-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Dynamic reads should be?",
                 a11y: "Temporary working models with samples.",
                 objectives: ["Recognize gear changes mid-session"],
@@ -614,7 +614,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-09-01-unguided", order: 4, stage: "unguided",
+                id: "act-05-09-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Tired, winning small, table getting wild. Best?",
                 a11y: "Cash out while ahead of fatigue.",
                 objectives: ["End sessions before leaks spiral"],
@@ -626,7 +626,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-09-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-05-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Session discipline is part of?",
                 a11y: "Winning strategy — not soft extra credit.",
                 objectives: ["End sessions before leaks spiral"],
@@ -648,7 +648,7 @@ export function buildSectionFive() {
             playerTypeRefs: ["calling_station", "maniac", "nit"],
             activities: [
               selectAct({
-                id: "act-05-09-02-cp-multi", order: 1, stage: "checkpoint",
+                id: "act-05-09-02-cp-multi", order: 1, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Four-way pot priority?",
                 a11y: "Nut potential.",
                 objectives: ["Confirm multiway and deep-stack priorities"],
@@ -660,7 +660,7 @@ export function buildSectionFive() {
                 ],
               }),
               actionAct({
-                id: "act-05-09-02-cp-value", order: 2, stage: "checkpoint",
+                id: "act-05-09-02-cp-value", order: 2, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "River second pair vs Calling Station. Action?",
                 a11y: "Thin value.",
                 objectives: ["Confirm thin value versus types"],
@@ -673,7 +673,7 @@ export function buildSectionFive() {
                 ],
               }),
               actionAct({
-                id: "act-05-09-02-cp-catch", order: 3, stage: "checkpoint",
+                id: "act-05-09-02-cp-catch", order: 3, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Maniac river barrel. Second pair. Action?",
                 a11y: "Call.",
                 objectives: ["Confirm thin value versus types"],
@@ -686,7 +686,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-09-02-cp-tell", order: 4, stage: "checkpoint",
+                id: "act-05-09-02-cp-tell", order: 4, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Instant shove proves?",
                 a11y: "Nothing absolute.",
                 objectives: ["Confirm soft evidence and discipline"],
@@ -698,7 +698,7 @@ export function buildSectionFive() {
                 ],
               }),
               selectAct({
-                id: "act-05-09-02-cp-stop", order: 5, stage: "checkpoint",
+                id: "act-05-09-02-cp-stop", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Hit stop-loss. Do?",
                 a11y: "Stop.",
                 objectives: ["Confirm soft evidence and discipline"],
@@ -785,7 +785,7 @@ export function buildSectionSix() {
                 ],
               }),
               actionAct({
-                id: "act-06-01-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-01-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "You are PFR on K72r. Action with range+nut lean?",
                 a11y: "C-bet with advantage.",
                 objectives: ["Choose pressure when you own both"],
@@ -799,7 +799,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-01-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Advantage is a reason to?",
                 a11y: "Apply pressure selectively.",
                 objectives: ["Choose pressure when you own both"],
@@ -850,7 +850,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-02-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-02-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Semi-bluff check-raise with nut draw IP-denied. Purpose?",
                 a11y: "Realize equity via fold equity + outs.",
                 objectives: ["Use aggression to realize when appropriate"],
@@ -862,7 +862,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-02-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Equity realization rises with?",
                 a11y: "Position and initiative.",
                 objectives: ["Prefer IP for marginal equity"],
@@ -915,7 +915,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-03-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-03-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Check-raise flop, bet turn, bomb river. Treat as?",
                 a11y: "Uncapped — respect.",
                 objectives: ["Respect uncapped aggression"],
@@ -927,7 +927,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-03-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Caps are for?",
                 a11y: "Attacking.",
                 objectives: ["Attack caps with thin value and bluffs"],
@@ -981,7 +981,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-04-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-04-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Mismatch to avoid?",
                 a11y: "Tiny bets as pure polar bluffs without a story.",
                 objectives: ["Avoid mismatched shapes"],
@@ -993,7 +993,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-04-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Merged betting aims to?",
                 a11y: "Get called by worse / fold out some better sometimes.",
                 objectives: ["Use merged sizes for thin value"],
@@ -1049,7 +1049,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-05-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-05-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Random 3x pot bet with medium strength?",
                 a11y: "Avoid.",
                 objectives: ["Avoid random huge bets"],
@@ -1061,7 +1061,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-05-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Geometric sizing primarily helps?",
                 a11y: "Multi-street stack pressure.",
                 objectives: ["Plan geometric street sizes"],
@@ -1114,7 +1114,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-06-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-06-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Blockers replace?",
                 a11y: "Nothing — they tweak choices.",
                 objectives: ["Avoid fabricated EV claims"],
@@ -1126,7 +1126,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-06-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Course stance on solver EV quotes?",
                 a11y: "No fabricated EV.",
                 objectives: ["Avoid fabricated EV claims"],
@@ -1178,7 +1178,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-07-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-07-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "MDF numbers in this course?",
                 a11y: "Intuition only — no fake precision.",
                 objectives: ["Ignore fake MDF percentages"],
@@ -1190,7 +1190,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-07-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Minimum defense goal?",
                 a11y: "Punish over-bluffing with sensible continues.",
                 objectives: ["Continue with stronger catchers"],
@@ -1244,7 +1244,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-08-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-08-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Randomness for its own sake?",
                 a11y: "No.",
                 objectives: ["Avoid pure randomness"],
@@ -1256,7 +1256,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-08-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Best mix description?",
                 a11y: "Frequency with purpose.",
                 objectives: ["Avoid pure randomness"],
@@ -1307,7 +1307,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-09-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-09-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Light 4-bet bluff with no blockers for ego?",
                 a11y: "Avoid.",
                 objectives: ["Avoid ego 4-bets"],
@@ -1319,7 +1319,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-09-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Depth change in 3-bet pots mainly changes?",
                 a11y: "SPR and commitment thresholds.",
                 objectives: ["Plan 3-bet pots by SPR"],
@@ -1372,7 +1372,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-10-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-10-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Calling because you are \"due\"?",
                 a11y: "Mistake.",
                 objectives: ["Avoid ego call-downs"],
@@ -1384,7 +1384,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-10-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-10-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Review question after a big loss?",
                 a11y: "Cooler or mistake?",
                 objectives: ["Separate coolers from mistakes"],
@@ -1438,7 +1438,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-11-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-11-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Two hands of tightness. Confidence?",
                 a11y: "Low.",
                 objectives: ["Delay the label until samples exist"],
@@ -1450,7 +1450,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-11-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-11-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Best pre-label note bundle?",
                 a11y: "Tight in, aggressive with discipline.",
                 objectives: ["Delay the label until samples exist"],
@@ -1501,7 +1501,7 @@ export function buildSectionSix() {
                 ],
               }),
               classifyAct({
-                id: "act-06-11-02-unguided", order: 4, stage: "unguided",
+                id: "act-06-11-02-unguided", order: 4, stage: "scaffolded",
                 prompt: "Seat opens tight, folds to 3-bets, c-bets selectively. Label?",
                 a11y: "TAG.",
                 objectives: ["Identify TAG from evidence"],
@@ -1514,7 +1514,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-11-02-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-11-02-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "TAG is?",
                 a11y: "Working model.",
                 objectives: ["Introduce TAG"],
@@ -1565,7 +1565,7 @@ export function buildSectionSix() {
                 ],
               }),
               actionAct({
-                id: "act-06-11-03-unguided", order: 4, stage: "unguided",
+                id: "act-06-11-03-unguided", order: 4, stage: "scaffolded",
                 prompt: "River thin value vs TAG who rarely calls light. Action?",
                 a11y: "Check more.",
                 objectives: ["Value thin only when they call"],
@@ -1578,7 +1578,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-11-03-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-11-03-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Versus TAG, cite which tendency?",
                 a11y: "Selective aggression / tighter call-downs.",
                 objectives: ["Respect TAG aggression"],
@@ -1632,7 +1632,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-12-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-12-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Label after one wide open?",
                 a11y: "No.",
                 objectives: ["Note sustained pressure"],
@@ -1644,7 +1644,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-12-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-12-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Best pre-label note bundle?",
                 a11y: "Wide + pressure + some discipline.",
                 objectives: ["Separate planned pressure from maniac samples"],
@@ -1695,7 +1695,7 @@ export function buildSectionSix() {
                 ],
               }),
               classifyAct({
-                id: "act-06-12-02-unguided", order: 4, stage: "unguided",
+                id: "act-06-12-02-unguided", order: 4, stage: "scaffolded",
                 prompt: "Wide opens, 3-bets light, keeps barreling. Label?",
                 a11y: "LAG.",
                 objectives: ["Identify LAG from evidence"],
@@ -1708,7 +1708,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-12-02-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-12-02-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Show beside LAG label?",
                 a11y: "Sample/confidence limits.",
                 objectives: ["Introduce LAG"],
@@ -1761,7 +1761,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-12-03-unguided", order: 4, stage: "unguided",
+                id: "act-06-12-03-unguided", order: 4, stage: "scaffolded",
                 prompt: "Inventing triple-barrel bluffs into a LAG?",
                 a11y: "Usually bad.",
                 objectives: ["Avoid fancy bluffs into pressure"],
@@ -1774,7 +1774,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-12-03-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-12-03-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "LAG exploit cites?",
                 a11y: "Wide entry and sustained pressure.",
                 objectives: ["Widen bluff-catches versus LAG"],
@@ -1829,7 +1829,7 @@ export function buildSectionSix() {
                 ],
               }),
               actionAct({
-                id: "act-06-13-01-unguided", order: 4, stage: "unguided",
+                id: "act-06-13-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Same hand. LAG barrels. Action?",
                 a11y: "Call.",
                 objectives: ["Adjust across all five types"],
@@ -1842,7 +1842,7 @@ export function buildSectionSix() {
                 ],
               }),
               classifyAct({
-                id: "act-06-13-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-06-13-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Selective entry + disciplined barrels. Label + line vs their raise?",
                 a11y: "TAG — respect.",
                 objectives: ["Cite the tendency that changes the line"],
@@ -1865,7 +1865,7 @@ export function buildSectionSix() {
             playerTypeRefs: ["tag", "lag"],
             activities: [
               selectAct({
-                id: "act-06-13-02-cp-adv", order: 1, stage: "checkpoint",
+                id: "act-06-13-02-cp-adv", order: 1, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "PFR on dry A-high often has?",
                 a11y: "Range advantage.",
                 objectives: ["Confirm advantage and caps"],
@@ -1877,7 +1877,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-13-02-cp-cap", order: 2, stage: "checkpoint",
+                id: "act-06-13-02-cp-cap", order: 2, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Check-back turn often makes river range?",
                 a11y: "Capped.",
                 objectives: ["Confirm advantage and caps"],
@@ -1889,7 +1889,7 @@ export function buildSectionSix() {
                 ],
               }),
               selectAct({
-                id: "act-06-13-02-cp-polar", order: 3, stage: "checkpoint",
+                id: "act-06-13-02-cp-polar", order: 3, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "River overbet shape?",
                 a11y: "Polar.",
                 objectives: ["Confirm polar/merged and blockers"],
@@ -1901,7 +1901,7 @@ export function buildSectionSix() {
                 ],
               }),
               classifyAct({
-                id: "act-06-13-02-cp-tag", order: 4, stage: "checkpoint",
+                id: "act-06-13-02-cp-tag", order: 4, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Tight entry, planned barrels. Label?",
                 a11y: "TAG.",
                 objectives: ["Confirm TAG and LAG"],
@@ -1914,7 +1914,7 @@ export function buildSectionSix() {
                 ],
               }),
               classifyAct({
-                id: "act-06-13-02-cp-lag", order: 5, stage: "checkpoint",
+                id: "act-06-13-02-cp-lag", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Wide entry, sustained pressure, some folds. Label?",
                 a11y: "LAG.",
                 objectives: ["Confirm TAG and LAG"],
@@ -2000,7 +2000,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-01-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-01-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Best habit?",
                 a11y: "Write the thesis before flop.",
                 objectives: ["State a preflop thesis"],
@@ -2012,7 +2012,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-01-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Dead plan response?",
                 a11y: "Abandon quickly.",
                 objectives: ["Abandon dead plans quickly"],
@@ -2063,7 +2063,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-02-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-02-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Bet flop with no turn idea?",
                 a11y: "Avoid.",
                 objectives: ["Bet flop only with a turn map"],
@@ -2075,7 +2075,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-02-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Turn map is?",
                 a11y: "Continue vs kill list.",
                 objectives: ["Bet flop only with a turn map"],
@@ -2127,7 +2127,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-03-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-03-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "No value, no blockers, no fold equity. River?",
                 a11y: "Check.",
                 objectives: ["Check trash without a story"],
@@ -2139,7 +2139,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-03-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "River composition rule?",
                 a11y: "Value needs calls; bluffs need folds.",
                 objectives: ["Choose river value candidates"],
@@ -2190,7 +2190,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-04-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-04-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "4-bet pot 100bb. Mindset?",
                 a11y: "High commitment — tighter.",
                 objectives: ["Plan 3-bet/4-bet pots"],
@@ -2202,7 +2202,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-04-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Pot type changes?",
                 a11y: "Ranges and SPR.",
                 objectives: ["Plan 3-bet/4-bet pots"],
@@ -2254,7 +2254,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-05-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-05-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Multiway top set. Line lean?",
                 a11y: "Thicker value / protection.",
                 objectives: ["Value thicker multiway"],
@@ -2266,7 +2266,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-05-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Player count is?",
                 a11y: "A first-class input.",
                 objectives: ["Bluff less multiway"],
@@ -2317,7 +2317,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-06-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-06-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Hero 200bb, villain 40bb. Effective?",
                 a11y: "40bb.",
                 objectives: ["Recalculate effective stacks each hand"],
@@ -2329,7 +2329,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-06-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Stack depth is?",
                 a11y: "Plan input every hand.",
                 objectives: ["Recalculate effective stacks each hand"],
@@ -2383,7 +2383,7 @@ export function buildSectionSeven() {
                 ],
               }),
               actionAct({
-                id: "act-07-07-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-07-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Same top pair. LAG barrels turn. Action?",
                 a11y: "Call.",
                 objectives: ["Practice all five types"],
@@ -2396,7 +2396,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-07-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "No type evidence yet. Default?",
                 a11y: "Baseline strategy.",
                 objectives: ["Keep identical lines when evidence is absent"],
@@ -2450,7 +2450,7 @@ export function buildSectionSeven() {
                 ],
               }),
               actionAct({
-                id: "act-07-08-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-08-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "TAG pots river after strong line. Second pair. Action?",
                 a11y: "Fold.",
                 objectives: ["Produce one coherent action"],
@@ -2463,7 +2463,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-08-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Integrated decision uses?",
                 a11y: "All four inputs.",
                 objectives: ["Produce one coherent action"],
@@ -2514,7 +2514,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-09-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-09-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "When to review the book?",
                 a11y: "After sessions / on a schedule.",
                 objectives: ["Schedule review habits"],
@@ -2526,7 +2526,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-09-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Default book purpose?",
                 a11y: "Baseline before exploits.",
                 objectives: ["Write default lines for common spots"],
@@ -2553,7 +2553,7 @@ export function buildSectionSeven() {
                 "Capstone SRP. No hints. Trust your map.",
                 {objectives: ["Execute a full SRP plan"]}),
               multiStepAct({
-                id: "act-07-10-01-hand", order: 2, stage: "unguided",
+                id: "act-07-10-01-hand", order: 2, stage: "scaffolded",
                 a11y: "BTN open, BB call. Play three streets.",
                 objectives: ["Execute a full SRP plan", "Update streets without hints", "Finish river coherently"],
                 steps: [
@@ -2613,7 +2613,7 @@ export function buildSectionSeven() {
                 "Capstone 3-bet. Short prompts. No hints.",
                 {objectives: ["Plan a 3-bet pot by SPR"], playerTypeRefs: ["tag"]}),
               multiStepAct({
-                id: "act-07-10-02-hand", order: 2, stage: "unguided",
+                id: "act-07-10-02-hand", order: 2, stage: "scaffolded",
                 a11y: "You 3-bet TAG open with AQ; 120bb deep.",
                 objectives: ["Plan a 3-bet pot by SPR", "Continue or kill on turn", "Close river without ego"],
                 playerTypeRefs: ["tag"],
@@ -2668,7 +2668,7 @@ export function buildSectionSeven() {
                 "Capstone multiway deep. No hints.",
                 {objectives: ["Prefer nut potential multiway"]}),
               multiStepAct({
-                id: "act-07-10-03-hand", order: 2, stage: "unguided",
+                id: "act-07-10-03-hand", order: 2, stage: "scaffolded",
                 a11y: "Four-way, 200bb, you hold AhQh.",
                 objectives: ["Prefer nut potential multiway", "Use deep implied odds correctly", "Avoid bluffing crowds"],
                 steps: [
@@ -2724,7 +2724,7 @@ export function buildSectionSeven() {
                 "Capstone limped pot. Crowded. No hints.",
                 {objectives: ["Prefer nut potential limped multiway"]}),
               multiStepAct({
-                id: "act-07-10-04-hand", order: 2, stage: "unguided",
+                id: "act-07-10-04-hand", order: 2, stage: "scaffolded",
                 a11y: "Four-way limp, 150bb, you hold AhKh on BTN.",
                 objectives: ["Prefer nut potential limped multiway", "Avoid light multiway bluffs", "Use depth for draws carefully"],
                 steps: [
@@ -2780,7 +2780,7 @@ export function buildSectionSeven() {
                 "Capstone 4-bet. Short SPR. No hints.",
                 {objectives: ["Respect short SPR commitment"]}),
               multiStepAct({
-                id: "act-07-10-05-hand", order: 2, stage: "unguided",
+                id: "act-07-10-05-hand", order: 2, stage: "scaffolded",
                 a11y: "100bb 4-bet pot; you hold a premium pair after 4-betting.",
                 objectives: ["Respect short SPR commitment", "Avoid ego bluffs in 4-bet pots", "Close river without hero calls"],
                 steps: [
@@ -2863,7 +2863,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-11-01-unguided", order: 4, stage: "unguided",
+                id: "act-07-11-01-unguided", order: 4, stage: "scaffolded",
                 prompt: "Scope reminder?",
                 a11y: "Live cash NLH only.",
                 objectives: ["Stay inside live cash NLH scope"],
@@ -2875,7 +2875,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-11-01-checkpoint", order: 5, stage: "checkpoint",
+                id: "act-07-11-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Warm-up goal?",
                 a11y: "Load the plan, then execute one hand.",
                 objectives: ["Carry defaults into Live"],
@@ -2900,7 +2900,7 @@ export function buildSectionSeven() {
             playerTypeRefs: ["calling_station", "nit", "maniac", "tag", "lag"],
             activities: [
               classifyAct({
-                id: "act-07-12-01-cs", order: 1, stage: "checkpoint",
+                id: "act-07-12-01-cs", order: 1, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Sticky calls three streets. Label + exploit?",
                 a11y: "Calling Station — value more.",
                 objectives: ["Identify all five types from behavior"],
@@ -2913,7 +2913,7 @@ export function buildSectionSeven() {
                 ],
               }),
               classifyAct({
-                id: "act-07-12-01-nit", order: 2, stage: "checkpoint",
+                id: "act-07-12-01-nit", order: 2, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Tiny range, huge check-raise. Label + line?",
                 a11y: "Nit — respect.",
                 objectives: ["Identify all five types from behavior"],
@@ -2926,7 +2926,7 @@ export function buildSectionSeven() {
                 ],
               }),
               classifyAct({
-                id: "act-07-12-01-maniac", order: 3, stage: "checkpoint",
+                id: "act-07-12-01-maniac", order: 3, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Endless barrels, never folds. Label + line?",
                 a11y: "Maniac — call wider.",
                 objectives: ["Select adjustments with citations"],
@@ -2939,7 +2939,7 @@ export function buildSectionSeven() {
                 ],
               }),
               classifyAct({
-                id: "act-07-12-01-tag", order: 4, stage: "checkpoint",
+                id: "act-07-12-01-tag", order: 4, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Selective entry, disciplined barrels. Label + vs raise?",
                 a11y: "TAG — respect.",
                 objectives: ["Select adjustments with citations"],
@@ -2952,7 +2952,7 @@ export function buildSectionSeven() {
                 ],
               }),
               classifyAct({
-                id: "act-07-12-01-lag", order: 5, stage: "checkpoint",
+                id: "act-07-12-01-lag", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Wide entry, sustained pressure, some folds. Label + line?",
                 a11y: "LAG — trap/call wider.",
                 objectives: ["Select adjustments with citations"],
@@ -2965,7 +2965,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-12-01-uncertain", order: 6, stage: "checkpoint",
+                id: "act-07-12-01-uncertain", order: 6, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Three mixed samples only. Confidence?",
                 a11y: "Low — keep baseline heavier.",
                 objectives: ["Retire labels when evidence flips"],
@@ -2977,7 +2977,7 @@ export function buildSectionSeven() {
                 ],
               }),
               selectAct({
-                id: "act-07-12-01-retire", order: 7, stage: "checkpoint",
+                id: "act-07-12-01-retire", order: 7, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Old Calling Station now folds rivers and 3-bets light. Do?",
                 a11y: "Retire/update the label.",
                 objectives: ["Retire labels when evidence flips"],

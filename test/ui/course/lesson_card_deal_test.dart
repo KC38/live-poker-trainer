@@ -61,7 +61,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the seat whose hole cards share a suit.',
@@ -107,7 +107,8 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-02-checkpoint-pair',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Tap the seat with a pocket pair.',
@@ -611,7 +612,7 @@ void main() {
       const CourseActivity(
         id: 'act-01-01-02-unguided-suited',
         order: 1,
-        stage: ActivityStage.unguided,
+        stage: ActivityStage.scaffolded,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 40,
         accessibilityText: 'suited',
@@ -749,7 +750,8 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-02-02-checkpoint-build',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Tap five',

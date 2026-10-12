@@ -29,6 +29,7 @@ void main() {
       '08-backend.md',
       '09-agent-workflow.md',
       '10-grokbot.md',
+      '11-lesson-content-agent.md',
     ]) {
       expect(File('docs/agents/$name').existsSync(), isTrue, reason: name);
       expect(index, contains(name), reason: 'index links $name');
@@ -88,6 +89,13 @@ void main() {
         'labels != grokbot',
         'labels = grokbot',
         'finished Mac-mini run',
+      ],
+      '11-lesson-content-agent.md': [
+        '# 11 — Lesson content agent',
+        '## Two-stage model',
+        '## teachSpec (optional → required over time)',
+        '## Jira routing',
+        'content,grokbot',
       ],
     };
 

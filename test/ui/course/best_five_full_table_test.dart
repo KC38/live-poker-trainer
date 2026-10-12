@@ -55,7 +55,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-02-02-explain-five',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Only five of seven cards play.',
@@ -113,7 +113,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-02-02-explain-five',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Only five of seven cards play.',
@@ -178,7 +178,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-02-02-explain-five',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Only five of seven cards play.',

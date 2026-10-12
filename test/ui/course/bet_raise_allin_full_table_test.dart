@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-03-02-explain-aggro',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Bet, raise, and all-in.',

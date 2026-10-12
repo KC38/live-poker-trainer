@@ -57,7 +57,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-02-01-explain-ladder',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Pair beats high card.',

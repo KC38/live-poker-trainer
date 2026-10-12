@@ -41,7 +41,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-06-11-03-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Versus TAG: respect raises; do not invent light bluff-raises.',

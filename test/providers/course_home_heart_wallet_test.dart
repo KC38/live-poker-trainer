@@ -353,7 +353,7 @@ CourseCatalog _catalog() {
   const activity = CourseActivity(
     id: 'act-a',
     order: 1,
-    stage: ActivityStage.explain,
+    stage: ActivityStage.guided,
     renderer: ActivityRenderer.coachDialogue,
     estimatedSeconds: 30,
     accessibilityText: 'Explain',
@@ -410,7 +410,7 @@ CourseCatalog _catalog() {
                   CourseActivity(
                     id: 'act-b',
                     order: 1,
-                    stage: ActivityStage.explain,
+                    stage: ActivityStage.guided,
                     renderer: ActivityRenderer.coachDialogue,
                     estimatedSeconds: 30,
                     accessibilityText: 'Explain',

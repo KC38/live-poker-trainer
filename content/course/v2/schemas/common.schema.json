@@ -18,7 +18,13 @@
     },
     "activityStage": {
       "type": "string",
-      "enum": ["explain", "guided", "scaffolded", "unguided", "checkpoint", "jump_test"]
+      "enum": ["guided", "scaffolded"],
+      "description": "guided = SoftPulse teach, free misses; scaffolded = Hint unlocks SoftPulse, paid misses. Legacy explain maps to guided; unguided/checkpoint/jump_test map to scaffolded (+ assessmentRole)."
+    },
+    "assessmentRole": {
+      "type": "string",
+      "enum": ["checkpoint", "jump_test"],
+      "description": "Optional path/assessment role on a scaffolded step. Disables Hint entirely."
     },
     "activityRenderer": {
       "type": "string",

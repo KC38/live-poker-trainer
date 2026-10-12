@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-06-11-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Before labels: who enters tight, then barrels with a plan? Count samples.',

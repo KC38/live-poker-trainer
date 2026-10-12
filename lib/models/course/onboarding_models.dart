@@ -143,7 +143,7 @@ String? _publishedPlacementJumpLessonId(CourseSection? section) {
           id.contains('jump-test') ||
           id.contains('jump_test');
       final hasJumpStage = lesson.activities.any(
-        (activity) => activity.stage == ActivityStage.jumpTest,
+        (activity) => activity.assessmentRole == AssessmentRole.jumpTest,
       );
       if (looksLikePlacement && hasJumpStage) {
         return id;

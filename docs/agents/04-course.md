@@ -25,6 +25,26 @@ First production lesson id: `lesson-01-01-01-your-two-cards`
 4. Steps that use the shared frame go through `LessonScreenLayout`
    (chrome → coach band → stage → tools / answer dock).
 
+### Stages (two only)
+
+| Stage | SoftPulse | Hint | Miss |
+| --- | --- | --- | --- |
+| `guided` | Walks presses | Off while gold SoftPulse on | Free |
+| `scaffolded` | After Hint | Authored `teachSpec.pressHints` (one/press) | Heart |
+
+Optional `assessmentRole`: `checkpoint` | `jump_test` on scaffolded → **no
+Hint**. Home path node kinds and jump-test placement use this role (not a
+separate stage). Legacy catalogs map explain→guided; unguided→scaffolded;
+old checkpoint/jump_test stages→scaffolded+role.
+
+### teachSpec
+
+Optional authored deal / hint / cue contract on each activity
+(`teach_spec.schema.json`): `deal` (`none` | `fixed` | `random_in_class` +
+hand/suit families + `variants`), `pressHints`, `cues`. Pilot:
+Your two cards. Content gaps are audited by
+[11 — Lesson content agent](11-lesson-content-agent.md).
+
 ### Activity renderers
 
 | Renderer | Typical use |
@@ -39,8 +59,8 @@ First production lesson id: `lesson-01-01-01-your-two-cards`
 | `authoredMultiStepHand` | Multi-beat authored hand |
 | `fullTableHandLab` | Full-table lab / warm-up bridge |
 
-Stages (`explain` → `guided` → `scaffolded` → `unguided` → checkpoints /
-jump tests) control how much SoftPulse guidance appears. Reviews hide cues.
+Stages (`guided` / `scaffolded`, plus optional `assessmentRole`) control
+SoftPulse and Hint. Reviews hide cues.
 
 ## Shared lesson frame (mandatory for new/edited steps)
 

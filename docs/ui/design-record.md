@@ -525,6 +525,12 @@ Your start’s hand preview uses the Poker table bands (`FeltTableView`,
 
 ### Lesson content
 
+Stages are only **guided** (SoftPulse teach, free misses) and **scaffolded**
+(Hint unlocks SoftPulse, paid misses). Checkpoints and jump tests are
+scaffolded with `assessmentRole` and **no Hint**. Authored deal/hint/cue
+fields live in `teachSpec` (see course schemas). Audited by
+`/lesson-content-agent`.
+
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
 

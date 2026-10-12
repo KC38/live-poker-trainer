@@ -185,7 +185,7 @@ void main() {
     final activity = CourseActivity(
       id: 'a',
       order: 1,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'a',
@@ -323,7 +323,7 @@ void main() {
     final first = CourseActivity(
       id: 'a',
       order: 1,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'a',
@@ -335,7 +335,7 @@ void main() {
     final second = CourseActivity(
       id: 'b',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'b',
@@ -357,7 +357,7 @@ void main() {
     final activity = CourseActivity(
       id: 'multi',
       order: 1,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 60,
       accessibilityText: 'Play two streets',
@@ -403,7 +403,7 @@ void main() {
     final activity = CourseActivity(
       id: 'a',
       order: 1,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'a',
@@ -460,7 +460,7 @@ void main() {
     final activity = CourseActivity(
       id: 'multi-press',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 40,
       accessibilityText: 'Tap Fold, Check, and Call.',
@@ -586,7 +586,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-03-explain-button',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Clockwise from the button: small blind, then big blind.',
@@ -644,7 +644,7 @@ void main() {
     final activity = CourseActivity(
       id: 'a',
       order: 1,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'a',
@@ -690,7 +690,8 @@ void main() {
     final activity = CourseActivity(
       id: 'a',
       order: 1,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'a',
@@ -725,7 +726,8 @@ void main() {
     final next = CourseActivity(
       id: 'b',
       order: 2,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'b',
@@ -756,7 +758,7 @@ void main() {
     final activity = CourseActivity(
       id: 'lab',
       order: 1,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.fullTableHandLab,
       estimatedSeconds: 40,
       accessibilityText: 'lab',
@@ -915,7 +917,7 @@ void main() {
     final activity = CourseActivity(
       id: 'a',
       order: 1,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'a',

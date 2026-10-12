@@ -37,31 +37,48 @@ SoftGrade softGradeFromWire(String value) {
 
 /// Activity scaffolding stage.
 enum ActivityStage {
-  explain,
+  /// SoftPulse teach; free misses. Includes former `explain` steps.
   guided,
+
+  /// Hint unlocks SoftPulse; paid misses. Includes former unguided steps.
   scaffolded,
-  unguided,
+}
+
+/// Path/assessment role on a scaffolded step (Hint disabled).
+enum AssessmentRole {
   checkpoint,
   jumpTest,
 }
 
-/// Maps wire-format stage strings.
+/// Maps wire-format stage strings (including legacy six-stage catalogs).
 ActivityStage activityStageFromWire(String value) {
   switch (value) {
     case 'explain':
-      return ActivityStage.explain;
     case 'guided':
       return ActivityStage.guided;
     case 'scaffolded':
-      return ActivityStage.scaffolded;
     case 'unguided':
-      return ActivityStage.unguided;
     case 'checkpoint':
-      return ActivityStage.checkpoint;
     case 'jump_test':
-      return ActivityStage.jumpTest;
+      return ActivityStage.scaffolded;
     default:
       throw FormatException('Unknown activity stage: $value');
+  }
+}
+
+/// Maps wire assessmentRole, or legacy stage names on older catalogs.
+AssessmentRole? assessmentRoleFromWire({
+  String? assessmentRole,
+  String? legacyStage,
+}) {
+  final role = assessmentRole ?? legacyStage;
+  switch (role) {
+    case 'checkpoint':
+      return AssessmentRole.checkpoint;
+    case 'jump_test':
+      return AssessmentRole.jumpTest;
+    default:
+      return null;
   }
 }
 
@@ -268,6 +285,8 @@ class CourseActivity {
     required this.estimatedSeconds,
     required this.accessibilityText,
     required this.acceptedGrades,
+    this.assessmentRole,
+    this.teachSpec,
     this.objectives = const <String>[],
     this.playerTypeRefs = const <CoursePlayerTypeId>[],
     this.coachMedia = const <CoachMediaRef>[],
@@ -288,6 +307,12 @@ class CourseActivity {
 
   /// Stage.
   final ActivityStage stage;
+
+  /// Optional checkpoint / jump-test role (scaffolded only).
+  final AssessmentRole? assessmentRole;
+
+  /// Authored deal / hint / cue contract when present.
+  final Map<String, dynamic>? teachSpec;
 
   /// Renderer.
   final ActivityRenderer renderer;
@@ -330,6 +355,9 @@ class CourseActivity {
 
   /// Authored multi-step streets (public choices only).
   final List<CourseHandStep> handSteps;
+
+  /// True when Hint must stay off (checkpoint / jump test).
+  bool get hintsDisabledByAssessment => assessmentRole != null;
 
   /// Hint media lines for this activity.
   List<CoachMediaRef> get hintMedia =>
@@ -411,10 +439,23 @@ class CourseActivity {
         }
       }
     }
+    final stageWire = json['stage'] as String;
+    final teachRaw = json['teachSpec'];
+    Map<String, dynamic>? teachSpec;
+    if (teachRaw is Map<String, dynamic>) {
+      teachSpec = Map<String, dynamic>.from(teachRaw);
+    } else if (teachRaw is Map) {
+      teachSpec = Map<String, dynamic>.from(teachRaw);
+    }
     return CourseActivity(
       id: json['id'] as String,
       order: json['order'] as int,
-      stage: activityStageFromWire(json['stage'] as String),
+      stage: activityStageFromWire(stageWire),
+      assessmentRole: assessmentRoleFromWire(
+        assessmentRole: json['assessmentRole'] as String?,
+        legacyStage: stageWire,
+      ),
+      teachSpec: teachSpec,
       renderer: activityRendererFromWire(json['renderer'] as String),
       estimatedSeconds: json['estimatedSeconds'] as int,
       accessibilityText: json['accessibilityText'] as String,

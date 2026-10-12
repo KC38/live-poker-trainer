@@ -67,10 +67,14 @@ void main() {
     final lesson = catalog.lessonById(kFirstCourseLessonId)!;
     expect(lesson.title, 'Your two cards');
     final stages = lesson.activities.map((a) => a.stage).toList();
-    expect(stages.first, ActivityStage.explain);
+    expect(stages.first, ActivityStage.guided);
     expect(stages, contains(ActivityStage.guided));
     expect(stages, contains(ActivityStage.scaffolded));
-    expect(stages, contains(ActivityStage.unguided));
-    expect(stages, contains(ActivityStage.checkpoint));
+    expect(
+      lesson.activities.any(
+        (a) => a.assessmentRole == AssessmentRole.checkpoint,
+      ),
+      isTrue,
+    );
   });
 }

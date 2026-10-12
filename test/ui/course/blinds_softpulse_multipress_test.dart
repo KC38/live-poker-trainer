@@ -24,7 +24,7 @@ void main() {
       final activity = CourseActivity(
         id: 'act-01-01-03-explain-button',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:

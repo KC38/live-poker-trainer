@@ -157,7 +157,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-01-explain-hole-cards',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'These two are yours alone.',
@@ -216,7 +216,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-02-explain-suits',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Four suits, thirteen ranks. Ace is high here.',
@@ -294,7 +294,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-03-explain-button',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Button marks the dealer. Blinds sit left of it.',
@@ -367,7 +367,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-01-01-explain-pos',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Later seats see more action.',
@@ -440,7 +440,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-01-explain-hole-cards',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'These two are yours alone.',
@@ -509,7 +509,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-02-01-explain-ladder',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -590,7 +590,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-02-02-explain-five',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Only five of seven cards play.',
@@ -676,7 +676,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-03-01-explain-passive',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Fold, check, and call.',
@@ -749,7 +749,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-03-02-explain-aggro',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Bet, raise, and all-in.',
@@ -820,7 +820,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-03-02-explain-aggro',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Bet, raise, and all-in.',
@@ -947,7 +947,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-hint-identify',
       order: 1,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 30,
       accessibilityText: 'Pick the board',
@@ -1000,7 +1000,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-03-01-unguided-btn',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Button open decision',
@@ -1059,7 +1059,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-04-01-explain-streets',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Four streets of a hand.',
@@ -1137,7 +1137,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-04-01-explain-streets',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Four streets of a hand.',
@@ -1197,7 +1197,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-05-01-explain-win',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'How a pot is won.',
@@ -1269,7 +1269,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-05-01-explain-win',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'How a pot is won.',
@@ -1335,7 +1335,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-06-01-explain-run',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'One short hand.',
@@ -1401,7 +1401,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-06-01-explain-run',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'One short hand.',
@@ -1464,7 +1464,7 @@ void main() {
         CourseActivity(
           id: 'act-01-01-02-explain-suits',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Four suits',
@@ -1478,7 +1478,7 @@ void main() {
         CourseActivity(
           id: 'act-02-01-02-explain-order',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1494,7 +1494,7 @@ void main() {
         CourseActivity(
           id: 'act-generic-pos-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Later seats see more. That is the whole edge.',
@@ -1509,7 +1509,7 @@ void main() {
         CourseActivity(
           id: 'act-generic-button-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Button marks the dealer. Blinds sit left of it.',
@@ -1524,7 +1524,7 @@ void main() {
         CourseActivity(
           id: 'act-02-02-01-explain-families',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1539,7 +1539,7 @@ void main() {
         CourseActivity(
           id: 'act-02-03-01-explain-open',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1554,7 +1554,7 @@ void main() {
         CourseActivity(
           id: 'act-02-04-01-explain-vs',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1569,7 +1569,7 @@ void main() {
         CourseActivity(
           id: 'act-02-05-01-explain-bb',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1584,7 +1584,7 @@ void main() {
         CourseActivity(
           id: 'act-02-06-01-explain-habits',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1599,7 +1599,7 @@ void main() {
         CourseActivity(
           id: 'act-02-07-01-explain-full',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1614,7 +1614,7 @@ void main() {
         CourseActivity(
           id: 'act-03-01-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1629,7 +1629,7 @@ void main() {
         CourseActivity(
           id: 'act-03-02-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1644,7 +1644,7 @@ void main() {
         CourseActivity(
           id: 'act-03-03-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1659,7 +1659,7 @@ void main() {
         CourseActivity(
           id: 'act-03-04-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1674,7 +1674,7 @@ void main() {
         CourseActivity(
           id: 'act-03-05-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1689,7 +1689,7 @@ void main() {
         CourseActivity(
           id: 'act-03-06-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1704,7 +1704,7 @@ void main() {
         CourseActivity(
           id: 'act-03-07-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1719,7 +1719,7 @@ void main() {
         CourseActivity(
           id: 'act-03-08-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1734,7 +1734,7 @@ void main() {
         CourseActivity(
           id: 'act-04-01-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1749,7 +1749,7 @@ void main() {
         CourseActivity(
           id: 'act-04-02-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1764,7 +1764,7 @@ void main() {
         CourseActivity(
           id: 'act-generic-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Listen up.',
@@ -1779,7 +1779,7 @@ void main() {
         CourseActivity(
           id: 'act-04-08-03-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1795,7 +1795,7 @@ void main() {
         CourseActivity(
           id: 'act-generic-maniac-only',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'A maniac sat down.',
@@ -1809,7 +1809,7 @@ void main() {
         CourseActivity(
           id: 'act-05-04-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1825,7 +1825,7 @@ void main() {
         CourseActivity(
           id: 'act-04-06-03-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1841,7 +1841,7 @@ void main() {
         CourseActivity(
           id: 'act-04-07-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1856,7 +1856,7 @@ void main() {
         CourseActivity(
           id: 'act-generic-enter-only',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Enter the pot carefully.',
@@ -1870,7 +1870,7 @@ void main() {
         CourseActivity(
           id: 'act-04-05-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1886,7 +1886,7 @@ void main() {
         CourseActivity(
           id: 'act-04-06-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1902,7 +1902,7 @@ void main() {
         CourseActivity(
           id: 'act-04-06-02-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1919,7 +1919,7 @@ void main() {
         CourseActivity(
           id: 'act-generic-multiway-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1934,7 +1934,7 @@ void main() {
         CourseActivity(
           id: 'act-generic-river-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -1952,7 +1952,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-01-02-explain-order',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -2037,7 +2037,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-02-01-explain-families',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -2239,7 +2239,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-02-01-unguided-sc',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Look at 76s on the felt — tap Suited connector.',
@@ -2295,7 +2295,8 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-02-01-checkpoint-trash',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Look at 72o early — tap Offsuit trash.',
@@ -2389,7 +2390,7 @@ void main() {
         CourseActivity(
           id: 'act-02-02-01-unguided-sc',
           order: 4,
-          stage: ActivityStage.unguided,
+          stage: ActivityStage.scaffolded,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'classify',
@@ -2407,7 +2408,8 @@ void main() {
         CourseActivity(
           id: 'act-02-02-01-checkpoint-trash',
           order: 5,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'classify',
@@ -2425,7 +2427,7 @@ void main() {
         CourseActivity(
           id: 'act-02-02-01-unguided-sc',
           order: 4,
-          stage: ActivityStage.unguided,
+          stage: ActivityStage.scaffolded,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'sc',
@@ -2447,7 +2449,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-03-01-explain-open',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -2592,7 +2594,7 @@ void main() {
         CourseActivity(
           id: 'act-02-03-01-unguided-btn',
           order: 4,
-          stage: ActivityStage.unguided,
+          stage: ActivityStage.scaffolded,
           renderer: ActivityRenderer.pokerActionSizing,
           estimatedSeconds: 55,
           accessibilityText: 'btn',
@@ -2607,7 +2609,8 @@ void main() {
         CourseActivity(
           id: 'act-02-03-01-checkpoint-hj',
           order: 5,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.pokerActionSizing,
           estimatedSeconds: 55,
           accessibilityText: 'hj',
@@ -2626,7 +2629,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-04-01-explain-vs',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -2864,7 +2867,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-04-01-unguided-3bet',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Value three-bet kings.',
@@ -2910,7 +2913,8 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-04-01-checkpoint-aq',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Value three-bet ace-queen suited.',
@@ -2952,7 +2956,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-05-01-explain-bb',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3033,7 +3037,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-06-01-explain-habits',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3160,7 +3164,7 @@ void main() {
       final activity = CourseActivity(
         id: 'act-02-06-01-unguided-protect',
         order: 4,
-        stage: ActivityStage.unguided,
+        stage: ActivityStage.scaffolded,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 40,
         accessibilityText: 'Protect hole cards with a chip or hand.',
@@ -3227,7 +3231,8 @@ void main() {
       final activity = CourseActivity(
         id: 'act-02-06-01-checkpoint-oot',
         order: 5,
-        stage: ActivityStage.checkpoint,
+        stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 45,
         accessibilityText: 'Recognize acting out of turn.',
@@ -3283,7 +3288,8 @@ void main() {
       final activity = CourseActivity(
         id: 'act-02-07-01-checkpoint-habit',
         order: 5,
-        stage: ActivityStage.checkpoint,
+        stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 45,
         accessibilityText: 'Cover cards and wait your turn.',
@@ -3342,7 +3348,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-07-01-explain-full',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3421,7 +3427,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-03-01-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3513,7 +3519,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-03-02-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3607,7 +3613,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-03-03-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3693,7 +3699,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-03-04-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3785,7 +3791,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-03-05-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3876,7 +3882,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-03-06-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -3970,7 +3976,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-03-08-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4066,7 +4072,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-01-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4159,7 +4165,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-02-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4249,7 +4255,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-03-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4339,7 +4345,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-04-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4431,7 +4437,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-05-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4519,7 +4525,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-06-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4584,7 +4590,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-06-02-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4652,7 +4658,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-06-03-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4741,7 +4747,7 @@ await tester.tap(find.text('VALUE'));
     final activity = CourseActivity(
       id: 'act-04-07-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4817,7 +4823,7 @@ await tester.tap(find.text('RARE'));
     final activity = CourseActivity(
       id: 'act-04-07-02-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4893,7 +4899,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-07-03-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -4971,7 +4977,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-08-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5043,7 +5049,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-08-02-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5119,7 +5125,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-08-03-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5197,7 +5203,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-09-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5275,7 +5281,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-10-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5351,7 +5357,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-01-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5427,7 +5433,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-02-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5497,7 +5503,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-03-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5575,7 +5581,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-04-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5665,7 +5671,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-05-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5740,7 +5746,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-06-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5810,7 +5816,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-07-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5882,7 +5888,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-08-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -5955,7 +5961,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -6024,7 +6030,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-01-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -6094,7 +6100,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-02-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6166,7 +6172,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-03-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6237,7 +6243,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-04-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6309,7 +6315,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-05-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6381,7 +6387,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-06-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6451,7 +6457,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-07-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -6541,7 +6547,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-07-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6614,7 +6620,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-08-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6691,7 +6697,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-09-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6768,7 +6774,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-10-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6826,7 +6832,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-11-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -6884,7 +6890,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-11-02-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -7093,7 +7099,7 @@ await tester.tap(find.text('NIT'));
       activity: CourseActivity(
         id: 'act-01-01-01-unguided-mix',
         order: 4,
-        stage: ActivityStage.unguided,
+        stage: ActivityStage.scaffolded,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 40,
         accessibilityText: 'Tap the shared cards.',
@@ -7113,7 +7119,8 @@ await tester.tap(find.text('NIT'));
       activity: CourseActivity(
         id: 'act-01-01-01-checkpoint-table',
         order: 5,
-        stage: ActivityStage.checkpoint,
+        stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 45,
         accessibilityText: 'Tap your private cards.',
@@ -7272,7 +7279,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-01-03-unguided-when',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the hand phase when blinds are posted.',
@@ -7337,7 +7344,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-01-01-03-unguided-when',
         order: 4,
-        stage: ActivityStage.unguided,
+        stage: ActivityStage.scaffolded,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 40,
         accessibilityText: 'Tap the hand phase when blinds are posted.',
@@ -7477,7 +7484,8 @@ await tester.tap(find.text('NIT'));
     final checkpoint = CourseActivity(
       id: 'act-01-01-02-checkpoint-pair',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Tap the pocket nines among the hole-card options.',
@@ -7499,7 +7507,7 @@ await tester.tap(find.text('NIT'));
     final suited = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the hole-card pair that shares a suit.',
@@ -7517,7 +7525,7 @@ await tester.tap(find.text('NIT'));
     final catalogSuited = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the seat whose hole cards share a suit.',
@@ -7831,7 +7839,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-04-01-unguided-end',
           order: 4,
-          stage: ActivityStage.unguided,
+          stage: ActivityStage.scaffolded,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'end',
@@ -7846,7 +7854,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-04-01-explain-streets',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Four streets',
@@ -7888,7 +7896,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-04-01-checkpoint-postflop',
           order: 5,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'postflop',
@@ -7907,7 +7916,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-04-01-checkpoint-postflop',
           order: 5,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'postflop',
@@ -7926,7 +7936,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-04-01-checkpoint-postflop',
           order: 5,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'postflop',
@@ -7995,7 +8006,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-05-01-unguided-pot',
           order: 4,
-          stage: ActivityStage.unguided,
+          stage: ActivityStage.scaffolded,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'pot size',
@@ -8014,7 +8025,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-05-01-unguided-pot',
           order: 4,
-          stage: ActivityStage.unguided,
+          stage: ActivityStage.scaffolded,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'pot size',
@@ -8031,7 +8042,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-05-01-checkpoint-side',
           order: 5,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'side pot',
@@ -8063,7 +8075,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-05-01-explain-win',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Folds win pots',
@@ -8077,7 +8089,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-06-01-explain-run',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -8127,7 +8139,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-06-01-unguided-lab',
           order: 4,
-          stage: ActivityStage.unguided,
+          stage: ActivityStage.scaffolded,
           renderer: ActivityRenderer.fullTableHandLab,
           estimatedSeconds: 90,
           accessibilityText: 'bb',
@@ -8144,7 +8156,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-06-01-unguided-lab',
           order: 4,
-          stage: ActivityStage.unguided,
+          stage: ActivityStage.scaffolded,
           renderer: ActivityRenderer.fullTableHandLab,
           estimatedSeconds: 90,
           accessibilityText: 'bb',
@@ -8175,7 +8187,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-06-02-jump-ranks',
           order: 1,
-          stage: ActivityStage.jumpTest,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
           renderer: ActivityRenderer.compareRank,
           estimatedSeconds: 40,
           accessibilityText: 'ranks',
@@ -8194,7 +8207,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-06-02-jump-order',
           order: 2,
-          stage: ActivityStage.jumpTest,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
           renderer: ActivityRenderer.orderSequence,
           estimatedSeconds: 40,
           accessibilityText: 'order',
@@ -8222,7 +8236,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-06-02-jump-legal',
           order: 3,
-          stage: ActivityStage.jumpTest,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
           renderer: ActivityRenderer.pokerActionSizing,
           estimatedSeconds: 40,
           accessibilityText: 'legal',
@@ -8246,7 +8261,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-06-02-jump-hand',
           order: 4,
-          stage: ActivityStage.jumpTest,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
           renderer: ActivityRenderer.authoredMultiStepHand,
           estimatedSeconds: 70,
           accessibilityText: 'hand',
@@ -8260,7 +8276,8 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-05-01-checkpoint-side',
           order: 5,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 40,
           accessibilityText: 'side',
@@ -8340,7 +8357,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-02-01-01-explain-pos',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Later seats',
@@ -8557,7 +8574,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the hole-card pair that shares a suit.',
@@ -8620,7 +8637,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the hole-card pair that shares a suit.',
@@ -8703,7 +8720,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-01-02-checkpoint-pair',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Tap the pocket nines among the hole-card options.',
@@ -9187,7 +9205,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-ranks',
       order: 1,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
       accessibilityText: 'Jump test: pick strongest hand first, then weaker.',
@@ -9234,7 +9253,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-ranks',
       order: 1,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
       accessibilityText: 'Jump test: pick strongest hand first, then weaker.',
@@ -9272,7 +9292,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-02-01-unguided-compare',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
       accessibilityText: 'Showdown — tap highest to lowest.',
@@ -9319,7 +9339,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-04-01-unguided-end',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'end',
@@ -9379,7 +9399,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-04-01-checkpoint-postflop',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'postflop',
@@ -9570,7 +9591,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-06-01-checkpoint-finish',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'checkpoint',
@@ -9621,7 +9643,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-06-01-checkpoint-finish',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'checkpoint',
@@ -9679,7 +9702,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-legal',
       order: 3,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'legal',
@@ -9714,7 +9738,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-hand',
       order: 4,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'hand',
@@ -9765,7 +9790,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-hand',
       order: 4,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'hand',
@@ -9811,7 +9837,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-order',
       order: 2,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.orderSequence,
       estimatedSeconds: 40,
       accessibilityText: 'Jump test: pick seats in the order they act.',
@@ -9987,7 +10014,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-05-01-unguided-pot',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'pot size',
@@ -10043,7 +10070,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-05-01-unguided-pot',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'pot size',
@@ -10112,7 +10139,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-07-01-checkpoint-habit',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Protect cards and wait for action on a full ring.',
@@ -10188,7 +10216,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-07-02-jump-pos',
       order: 1,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 35,
       accessibilityText: 'Jump test: cutoff label.',
@@ -10260,7 +10289,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-01-01-unguided-co',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the cutoff seat on the six-max table.',
@@ -10301,7 +10330,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-01-02-unguided-wait',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Wait for your turn before acting.',
@@ -10380,7 +10409,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-01-02-checkpoint-full',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Six-max flop everyone in — who acts last?',
@@ -10423,7 +10453,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-02-01-checkpoint-trash',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Look at seven-two offsuit on the felt — tap Offsuit trash.',
@@ -10466,7 +10497,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-07-02-jump-family',
       order: 2,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 35,
       accessibilityText: 'Jump test: suited ace family.',
@@ -10541,7 +10573,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-07-02-jump-stack',
       order: 5,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 35,
       accessibilityText: 'Jump test: effective stack is 55bb.',
@@ -10652,7 +10685,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-05-01-unguided-depth',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Identify 50bb as shallower than 100 or 200.',
@@ -10826,7 +10859,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-01-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Verbal raise binds at a live table.',
@@ -10901,7 +10934,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-01-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Effective stack is the shorter committed stack.',
@@ -11107,7 +11141,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-02-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'No pair and almost no draw — air.',
@@ -11168,7 +11202,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-02-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Open-ender with a spade is a draw class.',
@@ -11383,7 +11418,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-03-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText:
@@ -11466,7 +11501,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-03-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Deep stacks add implied odds versus sticky players.',
@@ -11647,7 +11683,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-10-02-jump-spr',
       order: 3,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Jump: SPR 4.',
@@ -11774,7 +11811,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-05-01-checkpoint-200',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Convert a 1000 chip buy-in at 2/5 to big blinds.',
@@ -11959,7 +11997,8 @@ await tester.tap(find.text('NIT'));
     final checkpoint = CourseActivity(
       id: 'act-01-03-01-checkpoint-legal',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Tap Check',
@@ -11977,7 +12016,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-03-01-explain-passive',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Fold check call',
@@ -12013,7 +12052,7 @@ await tester.tap(find.text('NIT'));
     final allIn = CourseActivity(
       id: 'act-01-03-02-unguided-allin',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Tap All-in',
@@ -12033,7 +12072,8 @@ await tester.tap(find.text('NIT'));
     final stacksLeft = CourseActivity(
       id: 'act-04-05-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Weigh SPR',
@@ -12053,7 +12093,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-03-02-explain-aggro',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Bet opens',
@@ -12167,7 +12207,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-03-01-unguided-call',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Tap Call',
@@ -12204,7 +12244,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-03-01-checkpoint-legal',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Tap Check',
@@ -12324,7 +12365,7 @@ await tester.tap(find.text('NIT'));
     final allIn = CourseActivity(
       id: 'act-01-03-02-unguided-allin',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Tap All-in',
@@ -12367,7 +12408,8 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-01-03-02-checkpoint-names',
         order: 5,
-        stage: ActivityStage.checkpoint,
+        stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
         renderer: ActivityRenderer.pokerActionSizing,
         estimatedSeconds: 55,
         accessibilityText: 'Tap Bet',
@@ -12455,7 +12497,7 @@ await tester.tap(find.text('NIT'));
     final lab = CourseActivity(
       id: 'act-02-07-01-unguided-lab',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.fullTableHandLab,
       estimatedSeconds: 70,
       accessibilityText: 'Full-ring hand lab: button versus cutoff open',
@@ -12584,7 +12626,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-07-01-unguided-lab',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.fullTableHandLab,
       estimatedSeconds: 70,
       accessibilityText: 'Full-ring hand lab: button versus cutoff open',
@@ -12636,7 +12678,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-07-02-jump-open',
       order: 3,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Jump test: fold trash early.',
@@ -12681,7 +12724,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-02-07-02-jump-vs',
       order: 4,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Jump test: value 3-bet aces.',
@@ -12772,7 +12816,7 @@ await tester.tap(find.text('NIT'));
     final unguided = CourseActivity(
       id: 'act-03-04-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
       accessibilityText: 'Raise a set for value multiway.',
@@ -12790,7 +12834,8 @@ await tester.tap(find.text('NIT'));
     final checkpoint = CourseActivity(
       id: 'act-03-04-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
       accessibilityText: 'Fold weak one-pair multiway to heat.',
@@ -12918,7 +12963,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-04-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
       accessibilityText: 'Raise a set for value multiway.',
@@ -12971,7 +13016,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-04-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
       accessibilityText: 'Fold weak one-pair multiway to heat.',
@@ -13176,7 +13222,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-05-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
       accessibilityText: 'Delayed value bet when the draw comes in.',
@@ -13236,7 +13282,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-05-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Scare cards often end unsupported barrels.',
@@ -13436,7 +13483,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-06-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
       accessibilityText: 'Often fold weak top pair to a huge river jam.',
@@ -13491,7 +13538,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-06-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Medium one pair is often a bluff-catch decision.',
@@ -13667,7 +13715,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-07-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText:
@@ -13729,7 +13777,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-07-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText:
@@ -13908,7 +13957,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-08-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
       accessibilityText:
@@ -13963,7 +14012,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-08-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText:
@@ -14025,7 +14075,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-08-02-jump-table',
       order: 1,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Jump: pot and effective stack.',
@@ -14085,7 +14136,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-08-02-jump-class',
       order: 2,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Jump: combo draw.',
@@ -14143,7 +14195,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-08-02-jump-mw',
       order: 3,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Jump: fold air multiway.',
@@ -14190,7 +14243,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-08-02-jump-river',
       order: 4,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Jump: value bet two pair.',
@@ -14241,7 +14295,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-03-08-02-jump-leak',
       order: 5,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Jump: fold bad price.',
@@ -14418,7 +14473,8 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-04-01-01-checkpoint',
         order: 5,
-        stage: ActivityStage.checkpoint,
+        stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 45,
         accessibilityText:
@@ -14486,7 +14542,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-01-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Over-precision is a leak.',
@@ -14646,7 +14702,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-02-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Squeeze with strong hands multiway.',
@@ -14712,7 +14768,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-02-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Pick a live 3-bet size with kings.',
@@ -14877,7 +14934,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-03-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Keep medium hands in smaller pots.',
@@ -14926,7 +14983,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-04-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Nearby sizes earn soft grades.',
@@ -14983,7 +15040,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-03-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Plans state flop intent and turn/river branches.',
@@ -15150,7 +15208,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-04-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'One-chip value bets are clear mistakes.',
@@ -15249,7 +15308,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-05-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 45,
       accessibilityText: 'Check SPR before committing the rest.',
@@ -15422,7 +15482,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-06-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'One sample is weak confidence.',
@@ -15484,7 +15544,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-06-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Bundle evidence before labeling.',
@@ -15649,7 +15710,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-06-02-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'Calling Station.',
@@ -15694,7 +15755,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-06-02-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Low sample confidence.',
@@ -15846,7 +15908,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-06-03-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Baseline is more cautious without the station read.',
@@ -15906,7 +15968,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-06-03-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Because they fold too little.',
@@ -16043,7 +16106,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-07-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Sample too small.',
@@ -16088,7 +16151,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-07-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Few hands; heavy action when involved.',
@@ -16230,7 +16294,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-08-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Frequencies and shows — no ego story.',
@@ -16275,7 +16339,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-08-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Enters constantly; barrels without mercy.',
@@ -16372,7 +16437,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-08-02-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'Maniac.',
@@ -16417,7 +16482,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-08-02-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Calling Station, Nit, and Maniac.',
@@ -16462,7 +16528,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-08-03-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Their betting range is too wide.',
@@ -16704,7 +16771,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-09-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Update/retire the Calling Station model.',
@@ -16749,7 +16816,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-09-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Sample and confidence limits.',
@@ -16890,7 +16958,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-10-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Call wider versus maniac.',
@@ -16936,7 +17004,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-10-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.fullTableHandLab,
       estimatedSeconds: 70,
       accessibilityText: 'Button vs nit BB steal; deep stack.',
@@ -16981,7 +17050,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-10-02-jump-3bet',
       order: 2,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Jump: value 3-bet.',
@@ -17021,7 +17091,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-10-02-jump-range',
       order: 1,
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Jump: stronger narrower range.',
@@ -17157,7 +17228,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-01-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 40,
       accessibilityText: 'Bet for value; protect and build.',
@@ -17398,7 +17469,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-03-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Non-nut flush draw — fold the domination leak.',
@@ -17445,7 +17516,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-03-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Depth plus paying tendencies.',
@@ -17616,7 +17688,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-04-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Check back — thin value dies.',
@@ -17679,7 +17751,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-04-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'The recommendation only when the read justifies it.',
@@ -17838,7 +17911,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-05-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Often polarized — ace or air.',
@@ -17887,7 +17960,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-05-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText:
@@ -18026,7 +18100,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-06-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Street-by-street updates.',
@@ -18065,7 +18139,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-06-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText:
@@ -18202,7 +18277,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-07-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Reject magic tells.',
@@ -18243,7 +18318,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-07-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText:
@@ -18379,7 +18455,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-08-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Reset or step away — bankroll guardrail.',
@@ -18426,7 +18502,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-08-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Temporary working models with samples.',
@@ -18553,7 +18630,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Cash out while ahead of fatigue.',
@@ -18597,7 +18674,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Winning strategy — not soft extra credit.',
@@ -18639,7 +18717,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -18678,7 +18756,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-02-cp-multi',
       order: 1,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Nut potential.',
@@ -18717,7 +18796,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-02-cp-value',
       order: 2,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Thin value.',
@@ -18772,7 +18852,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-02-cp-catch',
       order: 3,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Call.',
@@ -18817,7 +18898,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-02-cp-tell',
       order: 4,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Nothing absolute.',
@@ -18857,7 +18939,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-05-09-02-cp-stop',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Stop.',
@@ -18981,7 +19064,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-01-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'C-bet with advantage.',
@@ -19027,7 +19110,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-01-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Apply pressure selectively.',
@@ -19151,7 +19235,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-02-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Realize equity via fold equity + outs.',
@@ -19192,7 +19276,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-02-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Position and initiative.',
@@ -19320,7 +19405,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-03-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Uncapped — respect.',
@@ -19360,7 +19445,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-03-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Attacking.',
@@ -19492,7 +19578,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-04-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Tiny bets as pure polar bluffs without a story.',
@@ -19532,7 +19618,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-04-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Get called by worse / fold out some better sometimes.',
@@ -19673,7 +19760,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-05-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Avoid.',
@@ -19715,7 +19802,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-05-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Multi-street stack pressure.',
@@ -19887,7 +19975,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-06-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Nothing — they tweak choices.',
@@ -19929,7 +20017,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-06-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'No fabricated EV.',
@@ -20051,7 +20140,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-07-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Intuition only — no fake precision.',
@@ -20093,7 +20182,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-07-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Punish over-bluffing with sensible continues.',
@@ -20212,7 +20302,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-08-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'No.',
@@ -20252,7 +20342,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-08-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Frequency with purpose.',
@@ -20384,7 +20475,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-09-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Avoid.',
@@ -20426,7 +20517,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-09-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'SPR and commitment thresholds.',
@@ -20558,7 +20650,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-10-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Mistake.',
@@ -20600,7 +20692,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-10-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Cooler or mistake?',
@@ -20728,7 +20821,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-11-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Low.',
@@ -20770,7 +20863,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-11-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Tight in, aggressive with discipline.',
@@ -20896,7 +20990,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-11-02-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 45,
       accessibilityText: 'TAG.',
@@ -20938,7 +21032,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-11-02-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Working model.',
@@ -20980,7 +21075,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-06-11-03-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -20999,7 +21094,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-11-03-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText:
@@ -21159,7 +21254,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-11-03-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Check more.',
@@ -21202,7 +21297,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-11-03-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Selective aggression / tighter call-downs.',
@@ -21248,7 +21344,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-06-12-03-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Versus LAG: trap more, call wider, fancy less.',
@@ -21266,7 +21362,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-12-03-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Versus LAG: trap more, call wider, fancy less.',
@@ -21424,7 +21520,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-12-03-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Usually bad.',
@@ -21474,7 +21570,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-12-03-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Wide entry and sustained pressure.',
@@ -21522,7 +21619,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-06-13-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -21538,7 +21635,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-06-13-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -21646,7 +21743,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-13-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Call.',
@@ -21700,7 +21797,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-13-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 45,
       accessibilityText: 'TAG — respect.',
@@ -21748,7 +21846,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-13-02-cp-adv',
       order: 1,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Range advantage.',
@@ -21792,7 +21891,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-13-02-cp-cap',
       order: 2,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Capped.',
@@ -21829,7 +21929,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-13-02-cp-polar',
       order: 3,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Polar.',
@@ -21866,7 +21967,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-13-02-cp-tag',
       order: 4,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'TAG.',
@@ -21910,7 +22012,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-13-02-cp-lag',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'LAG.',
@@ -21956,7 +22059,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-06-12-01-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -21975,7 +22078,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-12-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -22112,7 +22215,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-12-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'No.',
@@ -22154,7 +22257,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-12-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Wide + pressure + some discipline.',
@@ -22198,7 +22302,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-06-12-02-explain',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText:
@@ -22215,7 +22319,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-generic-working-model-only',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Still a working model.',
@@ -22232,7 +22336,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-06-12-02-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -22373,7 +22477,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-12-02-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 45,
       accessibilityText: 'LAG.',
@@ -22415,7 +22519,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-06-12-02-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Sample/confidence limits.',
@@ -22498,7 +22603,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-07-02-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'Nit.',
@@ -22543,7 +22648,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-07-02-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Working model with sample limits.',
@@ -22588,7 +22694,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-04-07-03-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Range is strong when they raise.',
@@ -23016,7 +23123,8 @@ await tester.tap(find.text('NIT'));
     final showdown = CourseActivity(
       id: 'act-01-02-01-checkpoint-winner',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
       accessibilityText: 'Showdown — tap highest to lowest.',
@@ -23036,7 +23144,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-02-01-explain-ladder',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Ladder',
@@ -23237,7 +23345,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-02-01-checkpoint-winner',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
       accessibilityText: 'Showdown — tap highest to lowest.',
@@ -23339,7 +23448,8 @@ await tester.tap(find.text('NIT'));
     final checkpoint = CourseActivity(
       id: 'act-01-02-02-checkpoint-build',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap five',
@@ -23366,7 +23476,7 @@ await tester.tap(find.text('NIT'));
         CourseActivity(
           id: 'act-01-02-02-explain-five',
           order: 1,
-          stage: ActivityStage.explain,
+          stage: ActivityStage.guided,
           renderer: ActivityRenderer.coachDialogue,
           estimatedSeconds: 30,
           accessibilityText: 'Five',
@@ -23692,7 +23802,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-01-02-02-unguided-board',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap chop when the board plays',
@@ -23804,7 +23914,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-01-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Enter with a reason. Flop confirms or cancels.',
@@ -23948,7 +24058,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-01-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Write the thesis before flop.',
@@ -23993,7 +24103,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-01-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Abandon quickly.',
@@ -24035,7 +24146,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-02-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Flop bet needs a turn map. Continue or kill.',
@@ -24188,7 +24299,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-02-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Avoid.',
@@ -24226,7 +24337,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-02-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Continue vs kill list.',
@@ -24270,7 +24382,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-03-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -24411,7 +24523,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-03-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Check.',
@@ -24449,7 +24561,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-03-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Value needs calls; bluffs need folds.',
@@ -24490,7 +24603,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-04-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Pot type sets ranges and SPR. Plan accordingly.',
@@ -24629,7 +24742,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-04-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'High commitment — tighter.',
@@ -24670,7 +24783,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-04-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Ranges and SPR.',
@@ -24708,7 +24822,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-05-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'More players: fewer bluffs, thicker value.',
@@ -24844,7 +24958,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-05-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Thicker value / protection.',
@@ -24882,7 +24996,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-05-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'A first-class input.',
@@ -24920,7 +25035,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-06-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Effective stack rewrites the plan every hand.',
@@ -25059,7 +25174,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-06-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: '40bb.',
@@ -25097,7 +25212,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-06-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Plan input every hand.',
@@ -25135,7 +25251,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-07-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Same cards. Five models. Cite the tendency.',
@@ -25265,7 +25381,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-07-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Call.',
@@ -25304,7 +25420,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-07-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Baseline strategy.',
@@ -25346,7 +25463,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-08-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Type × board × line × size. One answer.',
@@ -25490,7 +25607,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-08-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Fold.',
@@ -25533,7 +25650,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-08-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'All four inputs.',
@@ -25578,7 +25696,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-09-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Defaults beat vibes. Write the book; review leaks.',
@@ -25716,7 +25834,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-09-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'After sessions / on a schedule.',
@@ -25752,7 +25870,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-09-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Baseline before exploits.',
@@ -25794,7 +25913,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-10-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Capstone SRP. No hints. Trust your map.',
@@ -25848,7 +25967,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-01-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'BTN open, BB call. Play three streets.',
@@ -25937,7 +26056,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-01-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'BTN open, BB call. Play three streets.',
@@ -26015,7 +26134,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-01-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'BTN open, BB call. Play three streets.',
@@ -26099,7 +26218,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-10-02-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Capstone 3-bet. Short prompts. No hints.',
@@ -26155,7 +26274,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-02-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'You 3-bet TAG open with AQ; 120bb deep.',
@@ -26236,7 +26355,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-02-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'You 3-bet TAG open with AQ; 120bb deep.',
@@ -26305,7 +26424,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-02-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'You 3-bet TAG open with AQ; 120bb deep.',
@@ -26381,7 +26500,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-10-03-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Capstone multiway deep. No hints.',
@@ -26455,7 +26574,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-03-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'Four-way, 200bb, you hold AhQh.',
@@ -26540,7 +26659,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-03-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'Four-way, 200bb, you hold AhQh.',
@@ -26618,7 +26737,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-03-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'Four-way, 200bb, you hold AhQh.',
@@ -26700,7 +26819,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-10-04-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Capstone limped pot. Crowded. No hints.',
@@ -26775,7 +26894,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-04-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'Four-way limp, 150bb, you hold AhKh on BTN.',
@@ -26864,7 +26983,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-04-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'Four-way limp, 150bb, you hold AhKh on BTN.',
@@ -26938,7 +27057,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-04-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: 'Four-way limp, 150bb, you hold AhKh on BTN.',
@@ -27019,7 +27138,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-10-05-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText: 'Capstone 4-bet. Short SPR. No hints.',
@@ -27090,7 +27209,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-05-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: '100bb 4-bet pot; you hold KK after 4-betting.',
@@ -27168,7 +27287,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-05-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: '100bb 4-bet pot; you hold KK after 4-betting.',
@@ -27240,7 +27359,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-10-05-hand',
       order: 2,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.authoredMultiStepHand,
       estimatedSeconds: 70,
       accessibilityText: '100bb 4-bet pot; you hold KK after 4-betting.',
@@ -27320,7 +27439,7 @@ await tester.tap(find.text('NIT'));
       final activity = CourseActivity(
         id: 'act-07-11-01-explain',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 30,
         accessibilityText:
@@ -27488,7 +27607,7 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-11-01-unguided',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Live cash NLH only.',
@@ -27529,7 +27648,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-11-01-checkpoint',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 45,
       accessibilityText: 'Load the plan, then execute one hand.',
@@ -27569,7 +27689,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-12-01-cs',
       order: 1,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'Calling Station — value more.',
@@ -27612,7 +27733,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-12-01-nit',
       order: 2,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'Nit — respect.',
@@ -27653,7 +27775,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-12-01-maniac',
       order: 3,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'Maniac — call wider.',
@@ -27694,7 +27817,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-12-01-tag',
       order: 4,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'TAG — respect.',
@@ -27735,7 +27859,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-12-01-lag',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.playerReadClassify,
       estimatedSeconds: 40,
       accessibilityText: 'LAG — trap/call wider.',
@@ -27775,7 +27900,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-12-01-uncertain',
       order: 6,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Low — keep baseline heavier.',
@@ -27818,7 +27944,8 @@ await tester.tap(find.text('NIT'));
     final activity = CourseActivity(
       id: 'act-07-12-01-retire',
       order: 7,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Retire/update the label.',

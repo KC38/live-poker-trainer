@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-06-10-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Hard folds save buy-ins. Coolers happen; ego call-downs are mistakes.',

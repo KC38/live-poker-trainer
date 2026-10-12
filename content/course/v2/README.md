@@ -51,3 +51,12 @@ All are composed by `build_seed_course.mjs`.
 
 `scope` is always `live_cash_nlh`. The validator rejects tournaments,
 online/HUD instruction, PLO/other variants, and rake lessons.
+
+## Stages and teachSpec
+
+Activities use only `guided` | `scaffolded`. Optional `assessmentRole`
+(`checkpoint` | `jump_test`) marks path assessments (no Hint). Optional
+`teachSpec` authors deal randomization, hand/suit families, press hints,
+and SoftPulse cues. Migrate legacy six-stage content with
+`node tools/course/migrate_two_stages.mjs --waves`.
+

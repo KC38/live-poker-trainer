@@ -125,7 +125,16 @@ void main() {
 
   group('wire parsers fail closed', () {
     test('known stage, renderer, and player type ids map', () {
-      expect(activityStageFromWire('jump_test'), ActivityStage.jumpTest);
+      expect(activityStageFromWire('jump_test'), ActivityStage.scaffolded);
+      expect(activityStageFromWire('explain'), ActivityStage.guided);
+      expect(
+        assessmentRoleFromWire(legacyStage: 'jump_test'),
+        AssessmentRole.jumpTest,
+      );
+      expect(
+        assessmentRoleFromWire(assessmentRole: 'checkpoint'),
+        AssessmentRole.checkpoint,
+      );
       expect(
         activityRendererFromWire('full_table_hand_lab'),
         ActivityRenderer.fullTableHandLab,

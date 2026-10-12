@@ -116,13 +116,13 @@ describe("soft grading and life loss", () => {
     expect(
       evaluateLifeAndAcceptance({
         grade: "questionable",
-        stage: "unguided",
+        stage: "scaffolded",
       }),
     ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
-        stage: "checkpoint",
+        stage: "scaffolded",
       }).lifeLost,
     ).toBe(true);
     expect(
@@ -146,22 +146,22 @@ describe("soft grading and life loss", () => {
     expect(
       evaluateLifeAndAcceptance({
         grade: "questionable",
-        stage: "explain",
+        stage: "guided",
       }).lifeLost,
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("loses a life on jump_test mistakes", () => {
     expect(
       evaluateLifeAndAcceptance({
         grade: "clear_mistake",
-        stage: "jump_test",
+        stage: "scaffolded",
       }),
     ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
     expect(
       evaluateLifeAndAcceptance({
         grade: "questionable",
-        stage: "jump_test",
+        stage: "scaffolded",
       }),
     ).toMatchObject({accepted: false, lifeLost: true, masteryWeight: 0});
   });
@@ -170,13 +170,13 @@ describe("soft grading and life loss", () => {
     expect(
       evaluateLifeAndAcceptance({
         grade: "strong",
-        stage: "unguided",
+        stage: "scaffolded",
       }),
     ).toMatchObject({accepted: true, lifeLost: false, masteryWeight: 0.85});
     expect(
       evaluateLifeAndAcceptance({
         grade: "reasonable",
-        stage: "checkpoint",
+        stage: "scaffolded",
       }),
     ).toMatchObject({accepted: true, lifeLost: false, masteryWeight: 0.7});
   });
@@ -617,7 +617,7 @@ describe("accepted accuracy", () => {
   it("does not let one explain cancel one mistake on the result screen", () => {
     // Bet, raise, all-in: 1 explain + 4 scored. One wrong then four accepts
     // used to report 5/5 = 100% because explain inflated acceptedAnswers.
-    expect(lesson.activities.filter((a) => a.stage === "explain")).toHaveLength(
+    expect(lesson.activities.filter((a) => a.renderer === "coach_dialogue")).toHaveLength(
       1,
     );
     expect(

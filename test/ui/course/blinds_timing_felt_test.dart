@@ -27,7 +27,7 @@ void main() {
     const activity = CourseActivity(
       id: 'act-01-01-03-unguided-when',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the hand phase when blinds are posted.',

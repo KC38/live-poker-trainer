@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-07-03-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'River: value if they call worse; bluff if they fold better.',

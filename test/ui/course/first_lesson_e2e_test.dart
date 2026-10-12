@@ -26,6 +26,7 @@ class _ScriptedCourseService extends CourseService {
     String timezone = 'UTC',
     String? experienceBand,
     int? dailyGoalMinutes,
+    int? streakGoalDays,
     String? recommendedLessonId,
   }) async {
     log.add('init');
@@ -145,12 +146,16 @@ void main() {
       final lesson = catalog.lessonById(kFirstCourseLessonId)!;
       expect(lesson.title, 'Your two cards');
       expect(lesson.activities.map((a) => a.stage).toList(), [
-        ActivityStage.explain,
+        ActivityStage.guided,
         ActivityStage.guided,
         ActivityStage.scaffolded,
-        ActivityStage.unguided,
-        ActivityStage.checkpoint,
+        ActivityStage.scaffolded,
+        ActivityStage.scaffolded,
       ]);
+      expect(
+        lesson.activities.last.assessmentRole,
+        AssessmentRole.checkpoint,
+      );
 
       final service = _ScriptedCourseService(catalog);
       await service.initializeProfile(catalogVersion: catalog.catalogVersion);

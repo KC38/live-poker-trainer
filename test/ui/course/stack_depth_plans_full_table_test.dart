@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-07-06-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Effective stack rewrites the plan every hand.',
