@@ -795,7 +795,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-04-04-01-unguided' =>
         selectIdentifyDensifiedCoachLine('act-04-04-01-unguided')!,
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-      'act-04-05-01-guided' => 'Effective 80 into pot 20 — stack ÷ pot.',
+      // SPR densified ask: selectIdentifyDensifiedCoachLine (LPT-412).
+      'act-04-05-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-04-05-01-guided')!,
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
       'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
       // SoftPulse owns High part. — don’t gold-tip the tile.
@@ -2289,7 +2291,9 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-04-04-01-unguided' =>
       selectIdentifyDensifiedCoachLine('act-04-04-01-unguided')!,
     // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-    'act-04-05-01-guided' => 'Effective 80 into pot 20 — stack ÷ pot.',
+    // SPR densified ask: selectIdentifyDensifiedCoachLine (LPT-412).
+    'act-04-05-01-guided' =>
+      selectIdentifyDensifiedCoachLine('act-04-05-01-guided')!,
     // SoftPulse owns SPR 4 — don’t gold-tip the tile.
     'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
     // SoftPulse owns High part. — don’t gold-tip the tile.

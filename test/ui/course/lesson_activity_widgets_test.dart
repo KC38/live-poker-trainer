@@ -11999,12 +11999,18 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-412: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('Effective 80 into pot 20 — stack ÷ pot.'),
+      lessonFrameSpeech(activity),
+      'Effective 80 into pot 20 — tap SPR 4.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Effective 80 into pot 20 — pick SPR 4.'),
       findsOneWidget,
     );
     expect(
-      find.text('Effective 80 into pot 20 — tap the SPR.'),
+      find.text('Effective 80 into pot 20 — stack ÷ pot.'),
       findsNothing,
     );
     expect(find.text('Effective stack 80bb, pot 20bb. SPR?'), findsNothing);
@@ -12014,8 +12020,6 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Pot'), findsOneWidget);
     expect(find.text('÷'), findsOneWidget);
     expect(find.text('SPR 4'), findsOneWidget);
-    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
-    expect(find.text('Tap SPR 4.'), findsNothing);
     expect(find.byType(TextField), findsNothing);
     await tester.tap(find.text('SPR 4'));
     await tester.pump();
