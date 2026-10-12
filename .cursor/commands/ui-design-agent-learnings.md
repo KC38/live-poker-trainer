@@ -86,11 +86,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 ## Prefer
 
 - Prefer `tester.element(finder)` (or `tester.state<State>(…)`) when asserting a StatefulWidget did not remount — `tester.state<DealtCardReveal>` fails to compile because `state<T>` requires a `State` subtype (LPT-97).
-- Prefer exact `agent_tap` labels from the screen. Broad needles like
-  `Continue` can hit Home chrome instead of the lesson control.
-- Prefer `python3 tools/agent_tap.py back` (no `--text`) to dismiss modal
-  bottom sheets (Hearts refill, legends). A `tap --text Back` needle is
-  not required and often missing on sheets.
+- Prefer exact `agent_tap` labels from the screen (card Semantics `A♣`, not
+  ASCII `Ac`). Broad needles like `Continue` can hit Home chrome; short
+  codes can miss the card or open Hearts. Prefer
+  `python3 tools/agent_tap.py back` (no `--text`) to dismiss modal bottom
+  sheets (Hearts refill, legends) — a `tap --text Back` needle is often
+  missing.
 - Prefer `openlesson` with the catalog id from `course_catalog` / `rg`
   (`lesson-01-02-02-best-five-kickers`), not the Home title and not a
   guessed `01-01-0N` from ledger order — both yield "Unknown lesson".
@@ -139,8 +140,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   fall back to the seat ring. Never judge Hint SoftPulse at zero hearts —
   `_heartsGateActive` disables Hint unless Practice
   (`allowZeroHeartsPractice`); earn a heart or use Practice first.
-- Prefer card `agent_tap` needles as Semantics display (`A♣`), not ASCII
-  codes like `Ac` — short codes can miss the card or open Hearts.
+  Densified classify Hint (Hand families unguided/checkpoint) must name the
+  remapped hero holes — `alignLessonActionCopy` falls through to
+  `dealtLessonTableScene` when there is no action spot, or Hint keeps
+  authored 76s / 72o (LPT-134).
 - Prefer a second open of the same lesson when judging card randomization —
   screenshot hole/board cards on attempt A and attempt B before deciding
   the deal is fixed. Read ranks from the latest PNG before tapping a

@@ -6,7 +6,9 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_starting_hand_copy.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 
 void main() {
   tearDown(() {
@@ -239,6 +241,89 @@ void main() {
     );
     expect(aligned.feedback, expected);
     expect(aligned.feedback, isNot(contains('queens')));
+  });
+
+  test('hand-families classify Hint follows remapped hero holes', () {
+    final activity = CourseActivity(
+      id: 'act-02-02-01-unguided-sc',
+      order: 4,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Look at seven-six suited on the felt — tap Suited connector.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Name the family for your holes.',
+    );
+    late int generation;
+    late List<String> dealtHero;
+    for (generation = 0; generation < 64; generation++) {
+      final scene = dealtLessonTableScene(activity, generation: generation);
+      expect(scene, isNotNull);
+      if (startingHandLabelFromCodes(scene!.heroCodes) != '76s') {
+        dealtHero = scene.heroCodes;
+        break;
+      }
+    }
+    expect(generation, lessThan(64));
+    final expected = alignStartingHandCopy(
+      text: activity.accessibilityText,
+      templateHero: const ['7h', '6h'],
+      dealtHero: dealtHero,
+    );
+    expect(
+      alignLessonActionCopy(
+        activity,
+        activity.accessibilityText,
+        generation: generation,
+      ),
+      expected,
+    );
+    expect(expected, isNot(contains('seven-six')));
+    expect(
+      lessonFrameHintFallback(activity, bindGeneration: generation),
+      expected,
+    );
+  });
+
+  test('hand-families checkpoint Hint follows remapped trash holes', () {
+    final activity = CourseActivity(
+      id: 'act-02-02-01-checkpoint-trash',
+      order: 5,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText:
+          'Look at seven-two offsuit on the felt — tap Offsuit trash.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Name the family for your holes.',
+    );
+    late int generation;
+    late List<String> dealtHero;
+    for (generation = 0; generation < 64; generation++) {
+      final scene = dealtLessonTableScene(activity, generation: generation);
+      expect(scene, isNotNull);
+      if (startingHandLabelFromCodes(scene!.heroCodes) != '72o') {
+        dealtHero = scene.heroCodes;
+        break;
+      }
+    }
+    expect(generation, lessThan(64));
+    final expected = alignStartingHandCopy(
+      text: activity.accessibilityText,
+      templateHero: const ['7c', '2d'],
+      dealtHero: dealtHero,
+    );
+    expect(
+      alignLessonActionCopy(
+        activity,
+        activity.accessibilityText,
+        generation: generation,
+      ),
+      expected,
+    );
+    expect(expected, isNot(contains('seven-two')));
   });
 }
 
