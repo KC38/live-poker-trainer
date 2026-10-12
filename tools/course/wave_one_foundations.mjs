@@ -2127,6 +2127,11 @@ export function buildSectionTwo() {
                     "Do not invent a bluff with junk yet.",
                     {action: "RAISE", amountBb: 9, betterChoiceId: "fold-j3"}),
                 ],
+                // LPT-125: teachSpec authored
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "trash", suitFamily: "offsuit"},
+                  cues: [{press: 1, target: "fold-j3", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-02-04-01-scaffolded-call", order: 3, stage: "scaffolded",
@@ -2142,6 +2147,11 @@ export function buildSectionTwo() {
                     "Sometimes fine later; baseline is call.",
                     {action: "RAISE", amountBb: 9}),
                 ],
+                // LPT-125: SoftPulse cues + deal
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "connector", suitFamily: "suited"},
+                  cues: [{press: 1, target: "call-87s", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-02-04-01-unguided-3bet", order: 4, stage: "scaffolded",
@@ -2157,6 +2167,11 @@ export function buildSectionTwo() {
                   choice("fold-kk", "Fold", "clear_mistake",
                     "Never fold kings here.", {action: "FOLD", betterChoiceId: "3bet-kk"}),
                 ],
+                // LPT-125: checkpoint quiet
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "pair"},
+                  cues: [{press: 1, target: "3bet-kk", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-02-04-01-checkpoint-aq", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2175,6 +2190,11 @@ export function buildSectionTwo() {
                   choice("fold-aqs", "Fold", "clear_mistake",
                     "Too strong to fold.", {action: "FOLD", betterChoiceId: "3bet-aqs"}),
                 ],
+                // LPT-125: wave synced
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "broadway", suitFamily: "suited"},
+                  cues: [{press: 1, target: "3bet-aqs", kind: "none"}],
+                },
               }),
             ],
           }),
