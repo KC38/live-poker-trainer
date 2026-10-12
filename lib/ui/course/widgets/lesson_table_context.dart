@@ -9380,6 +9380,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive player type — tap Nit or Calling Station',
       semanticsStatic: 'Nit vs Calling Station outcomes',
       caption: scene.caption ?? '~8% hands · rare but large 3-bets',
+      // SoftPulse + Rex own the cue — one gold Nit only (LPT-440).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.meetNitLabel,
       phases: [
         (
           region: LessonTableRegion.meetNitLabel,
@@ -9410,6 +9413,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive player type — tap Nit or Maniac',
       semanticsStatic: 'Nit vs Maniac outcomes',
       caption: scene.caption ?? 'Folds forever · then check-raises a barrel',
+      // SoftPulse + Rex own the cue — one gold Nit only (LPT-440).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.meetNitLabel2,
       phases: [
         (
           region: LessonTableRegion.meetNitLabel2,
@@ -9441,6 +9447,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive label model — tap working model or insult',
       semanticsStatic: 'Nit model outcomes',
       caption: scene.caption ?? 'How to treat the Nit label',
+      // SoftPulse + Rex own the cue — one gold Working model only (LPT-440).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.meetNitWorkingModel,
       phases: [
         (
           region: LessonTableRegion.meetNitWorkingModel,
