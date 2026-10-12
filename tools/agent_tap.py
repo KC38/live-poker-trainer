@@ -16,6 +16,9 @@ Queries answer directly:
     tap state and `gold` (SoftPulse cue) / `cyan` (selection) glow.
     Add `--json` for the raw payload.
   * `whoami` — Firebase uid + anonymous flag (used by tools/agent_seed.py).
+  * `wait-gold` — poll `tree` until gold SoftPulse appears (after
+    `openlesson` / deal settle). Optional `--text` needle; `--timeout`
+    seconds (default 45). Prints the tree and exits 0, or 1 on timeout.
 
 Only the holder of the simulator lock (`tools/sim_lock.py`) may drive the
 mini. Pass the run id with `--run-id` or `$SIM_LOCK_RUN_ID`.
@@ -59,6 +62,7 @@ LOG = DEFAULT_LOG
 QUERIES = {"tree", "whoami", "last"}
 UI_COMMANDS = ("tap", "taptext", "openlesson", "open_lesson", "type", "enter", "back")
 EXIT_NOMATCH = 3
+EXIT_TIMEOUT = 1
 
 
 def resolve_log(log: Path | None = None) -> Path:
@@ -135,6 +139,39 @@ def wait_outcome(
     return None
 
 
+def gold_ready(tree: dict[str, Any], needle: str = "") -> bool:
+    """True when [tree] reports gold SoftPulse (optionally matching [needle])."""
+    gold = list(tree.get("gold") or [])
+    if not gold:
+        return False
+    if not needle.strip():
+        return True
+    lowered = needle.strip().lower()
+    return any(lowered in label.lower() for label in gold)
+
+
+def wait_gold(
+    log: Path | None = None,
+    timeout: float = 45.0,
+    text: str = "",
+    poll: float = 0.4,
+    tree_fn: Any = None,
+) -> dict[str, Any]:
+    """Poll `tree` until gold SoftPulse appears or [timeout] seconds elapse."""
+    fetch = tree_fn or (lambda: query("tree", log=log) or {})
+    deadline = time.monotonic() + timeout
+    last: dict[str, Any] = {}
+    while time.monotonic() < deadline:
+        last = fetch() or {}
+        if gold_ready(last, text):
+            return last
+        time.sleep(poll)
+    detail = f" matching {text!r}" if text.strip() else ""
+    raise SystemExit(
+        f"agent_tap: no gold SoftPulse within {timeout:.0f}s{detail}"
+    )
+
+
 def format_tree(tree: dict[str, Any]) -> str:
     """Render the `tree` payload as one line per visible label."""
     lines = [
@@ -164,7 +201,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "cmd", help="Agent command (tap, openlesson, type, back, tree, whoami, ...)"
     )
-    parser.add_argument("--text", default="", help="Label/text for tap/type/openlesson")
+    parser.add_argument(
+        "--text",
+        default="",
+        help="Label/text for tap/type/openlesson/wait-gold",
+    )
+    parser.add_argument(
+        "--timeout",
+        type=float,
+        default=45.0,
+        help="Seconds to wait for wait-gold (default 45)",
+    )
     parser.add_argument(
         "--log",
         type=Path,
@@ -191,7 +238,18 @@ def main(argv: list[str] | None = None) -> int:
     lock_args = ["guard"] + (["--run-id", args.run_id] if args.run_id else [])
     if sim_lock.main(lock_args) != sim_lock.EXIT_OK:
         raise SystemExit("agent_tap: the iPhone 13 mini lock is not yours (tools/sim_lock.py status)")
-    cmd = args.cmd.strip().lower()
+    cmd = args.cmd.strip().lower().replace("_", "-")
+    if cmd == "wait-gold":
+        try:
+            tree = wait_gold(log=log, timeout=args.timeout, text=args.text)
+        except SystemExit as exc:
+            print(str(exc), file=sys.stderr)
+            return EXIT_TIMEOUT
+        if args.json:
+            print(json.dumps(tree, indent=2, ensure_ascii=False))
+        else:
+            print(format_tree(tree))
+        return 0
     if cmd in QUERIES:
         result = query(cmd, log=log)
         if cmd == "tree" and not args.json:
