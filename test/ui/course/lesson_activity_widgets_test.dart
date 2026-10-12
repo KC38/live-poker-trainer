@@ -20988,7 +20988,7 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 blockers unguided taps Tweak evidence on felt', (
+  testWidgets('s6 blockers unguided SoftPulse Tweak evidence — not Replace', (
     tester,
   ) async {
     final activity = CourseActivity(
@@ -21022,6 +21022,28 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('Blockers replace — tap Tweak evidence.'),
+      findsNothing,
+    );
+    expect(find.text('Tweak evidence'), findsOneWidget);
+    // LPT-498: guideRegion → one gold SoftPulse (Tweak evidence), not Replace.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Tweak evidence'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Replace all reasoning'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('Tweak evidence'));
