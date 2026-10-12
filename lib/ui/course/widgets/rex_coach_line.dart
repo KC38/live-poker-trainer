@@ -67,6 +67,14 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Patch the common leaks checkpoint densified ask (LPT-382) — same path.
     'act-03-08-01-checkpoint' =>
       'Two seats, different frequencies — pick how often each seat enters.',
+    // Section 3 jump select_identify densified asks (LPT-390) — same path.
+    // jump-class stays felt-first (no hard-coded template ranks/suits).
+    'act-03-08-02-jump-table' =>
+      'Pot 16, shorter 40bb — pick pot and effective stack first.',
+    'act-03-08-02-jump-class' =>
+      'Straight and flush both need runout — pick the hand class.',
+    'act-03-08-02-jump-leak' =>
+      'Gutshot vs a 2x pot bet — pick Fold when the price is wrong.',
     _ => null,
   };
 }
