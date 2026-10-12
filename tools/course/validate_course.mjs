@@ -45,6 +45,20 @@ const SOFT_GRADES = new Set([
 const STAGES = new Set(["guided", "scaffolded"]);
 const ASSESSMENT_ROLES = new Set(["checkpoint", "jump_test"]);
 const DEAL_MODES = new Set(["none", "fixed", "random_in_class"]);
+// Legal teachSpec deal families come from teach_spec.schema.json so the
+// schema enum and the validator never drift apart (LPT-166).
+const TEACH_SPEC_SCHEMA = JSON.parse(
+  readFileSync(
+    new URL("../../content/course/v2/schemas/teach_spec.schema.json", import.meta.url),
+    "utf8",
+  ),
+);
+const HAND_FAMILIES = new Set(
+  TEACH_SPEC_SCHEMA.properties.deal.properties.handFamily.enum,
+);
+const SUIT_FAMILIES = new Set(
+  TEACH_SPEC_SCHEMA.properties.deal.properties.suitFamily.enum,
+);
 const RENDERERS = new Set([
   "coach_dialogue",
   "select_identify",
@@ -432,6 +446,31 @@ export function validateAndGenerate(course) {
                       `${actPath}.teachSpec.deal: random_in_class needs ` +
                         "handFamily and/or suitFamily",
                     );
+                  }
+                  const dealVariants = Array.isArray(deal.variants)
+                    ? deal.variants
+                    : [];
+                  for (const [di, entry] of [deal, ...dealVariants].entries()) {
+                    const where = di === 0 ? "deal" : `deal.variants[${di - 1}]`;
+                    const fam = /** @type {Record<string, unknown>} */ (entry);
+                    if (
+                      fam.handFamily !== undefined &&
+                      !HAND_FAMILIES.has(/** @type {string} */ (fam.handFamily))
+                    ) {
+                      errors.push(
+                        `${actPath}.teachSpec.${where}: unknown handFamily ` +
+                          `"${fam.handFamily}"`,
+                      );
+                    }
+                    if (
+                      fam.suitFamily !== undefined &&
+                      !SUIT_FAMILIES.has(/** @type {string} */ (fam.suitFamily))
+                    ) {
+                      errors.push(
+                        `${actPath}.teachSpec.${where}: unknown suitFamily ` +
+                          `"${fam.suitFamily}"`,
+                      );
+                    }
                   }
                 }
               }

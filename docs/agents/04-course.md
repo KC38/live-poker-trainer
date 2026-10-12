@@ -64,6 +64,13 @@ versus Nit (LPT-200), Observe wild aggressors (LPT-203), Meet the Maniac
 Content gaps are audited by [11 — Lesson content
 agent](11-lesson-content-agent.md).
 
+`deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
+`teach_spec.schema.json` enum. Besides showdown ranks and starting-hand
+families, the enum includes the flop action classes `top_pair`, `air`,
+`weak_draw`, and `strong_draw`, as used by Fold, check, call and Bet,
+raise, all-in. These match `HandClassifier` snake-case names.
+`validate_course.mjs` rejects unknown hand or suit families (LPT-166).
+
 ### Activity renderers
 
 | Renderer | Typical use |
