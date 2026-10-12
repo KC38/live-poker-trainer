@@ -12383,7 +12383,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive sample confidence — tap keep sampling or label now',
       semanticsStatic: 'LAG observe sample outcomes',
       caption: scene.caption ?? 'Label after one wide open?',
-      // No SoftPulse on unguided — still don’t gold-icon Keep sampling.
+      // SoftPulse + Rex own the cue — one gold Keep sampling only (LPT-493).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.lagObserveKeepSampling,
       phases: [
         (
           region: LessonTableRegion.lagObserveKeepSampling,
