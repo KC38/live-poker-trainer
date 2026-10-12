@@ -879,6 +879,8 @@ export function buildSectionThree() {
                   choice("j3-chat", "Only table talk", "clear_mistake",
                     "Useful later — not instead of pot/stacks.", {betterChoiceId: "j3-track"})
                 ],
+                // LPT-165
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "j3-track", kind: "none"}]},
               }),
               selectAct({
                 id: "act-03-08-02-jump-class", order: 2, stage: "scaffolded", assessmentRole: "jump_test",
@@ -893,6 +895,11 @@ export function buildSectionThree() {
                   choice("j3-air", "Air", "questionable",
                     "This has strong equity — still a draw.")
                 ],
+                // LPT-165
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Jd", "Td"], board: ["Qd", "9d", "3c"]}},
+                  cues: [{press: 1, target: "j3-draw", kind: "none"}],
+                },
               }),
               actionAct({
                 id: "act-03-08-02-jump-mw", order: 3, stage: "scaffolded", assessmentRole: "jump_test",
@@ -905,6 +912,11 @@ export function buildSectionThree() {
                   choice("j3-bluff", "Bluff large", "clear_mistake",
                     "Multiway bluffs fail.", {action: "BET", amountBb: 12, betterChoiceId: "j3-fold"})
                 ],
+                // LPT-165
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["9h", "8d"], board: ["Ah", "Kh", "7h"]}},
+                  cues: [{press: 1, target: "j3-fold", kind: "none"}],
+                },
               }),
               actionAct({
                 id: "act-03-08-02-jump-river", order: 4, stage: "scaffolded", assessmentRole: "jump_test",
@@ -919,6 +931,14 @@ export function buildSectionThree() {
                   choice("j3-fold2", "Fold", "clear_mistake",
                     "You are ahead.", {action: "FOLD", betterChoiceId: "j3-val"})
                 ],
+                // LPT-165
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "Kc", "7d", "2h", "3c"]},
+                  },
+                  cues: [{press: 1, target: "j3-val", kind: "none"}],
+                },
               }),
               selectAct({
                 id: "act-03-08-02-jump-leak", order: 5, stage: "scaffolded", assessmentRole: "jump_test",
@@ -931,6 +951,11 @@ export function buildSectionThree() {
                   choice("j3-callprice", "Call because any draw is lucky", "clear_mistake",
                     "Math first.", {betterChoiceId: "j3-foldprice"})
                 ],
+                // LPT-165
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Ks", "Tc", "2d"]}},
+                  cues: [{press: 1, target: "j3-foldprice", kind: "none"}],
+                },
               }),
             ],
           }),

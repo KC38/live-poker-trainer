@@ -214,6 +214,14 @@ const _lessons = <String, List<String>>{
     'act-03-08-01-unguided',
     'act-03-08-01-checkpoint',
   ],
+  // LPT-165
+  'lesson-03-08-02-section-three-jump-test': [
+    'act-03-08-02-jump-table',
+    'act-03-08-02-jump-class',
+    'act-03-08-02-jump-mw',
+    'act-03-08-02-jump-river',
+    'act-03-08-02-jump-leak',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1246,6 +1254,53 @@ void main() {
       expect(cp.teachSpec!['deal'], {'mode': 'none'});
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'notes');
+    });
+  });
+
+  group('Section 3 jump check (LPT-165)', () {
+    const ids = [
+      'act-03-08-02-jump-table',
+      'act-03-08-02-jump-class',
+      'act-03-08-02-jump-mw',
+      'act-03-08-02-jump-river',
+      'act-03-08-02-jump-leak',
+    ];
+
+    test('every jump step is assessment-safe: no hints, quiet cues', () {
+      for (final id in ids) {
+        final a = act(id);
+        expect(a.assessmentRole, AssessmentRole.jumpTest, reason: id);
+        expect(a.teachSpec!.containsKey('pressHints'), isFalse, reason: id);
+        expect(_list(a, 'cues').single['kind'], 'none', reason: id);
+      }
+    });
+
+    test('deals match the felt templates; table read stays none', () {
+      expect(act('act-03-08-02-jump-table').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-03-08-02-jump-table'), 'cues').single['target'],
+        'j3-track',
+      );
+      expect(
+        act('act-03-08-02-jump-class').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jd', 'Td'],
+      );
+      expect(
+        act('act-03-08-02-jump-river')
+            .teachSpec!['deal']['fixedCards']['board'],
+        ['As', 'Kc', '7d', '2h', '3c'],
+      );
+      // True gutshot (LPT-389), never the zero-outs JT on A72.
+      expect(act('act-03-08-02-jump-leak').teachSpec!['deal']['fixedCards'], {
+        'hero': ['Jh', '9d'],
+        'board': ['Ks', 'Tc', '2d'],
+      });
+      expect(
+        _list(act('act-03-08-02-jump-leak'), 'cues').single['target'],
+        'j3-foldprice',
+      );
     });
   });
 }
