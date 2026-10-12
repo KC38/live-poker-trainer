@@ -75,6 +75,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Never hand-write coverage JSONL or `strftime(..., '%z')` timestamps
   (`+0530` breaks macOS Python 3.9 health repair). Use
   `python3 tools/ui_agent_coverage.py append …` in step 10.
+- Never pipe `deploy-functions.sh` through `| tee … | tail` (masks the
+  real exit). Run it directly (or via `tools/tee_exit.sh`). Concurrent
+  deploys share a lock under `~/.live-poker-trainer/functions-deploy.lock.d`
+  and prune dead `deploy-<pid>` worktrees — do not hand-delete a live one.
 - Never edit the primary checkout (make-change worktrees only), invent
   GitHub owner/URLs from a person's name (`gh` only,
   `KC38/live-poker-trainer`), or let LaunchAgent `ensure`/`start`

@@ -14,6 +14,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 # shellcheck source=../../../../tools/primary_checkout.sh
 source "$REPO_ROOT/tools/primary_checkout.sh"
+# shellcheck source=../../../../tools/functions_deploy_lock.sh
+source "$REPO_ROOT/tools/functions_deploy_lock.sh"
 PRIMARY="$(resolve_primary_checkout)"
 NODE22_BIN="$(brew --prefix node@22 2>/dev/null)/bin"
 if [[ -d "$NODE22_BIN" ]]; then
@@ -68,12 +70,30 @@ if [[ -z "${GOOGLE_APPLICATION_CREDENTIALS:-}" && -z "${FIREBASE_TOKEN:-}" ]]; t
 fi
 
 mkdir -p "$PRIMARY/.worktrees"
+# Drop orphan deploy-<pid> trees from crashed / killed deploys before locking.
+prune_stale_deploy_worktrees "$PRIMARY"
+if ! acquire_functions_deploy_lock "$TARGET_SHA"; then
+  exit 1
+fi
+# Another waiter may have deployed the same tip while we waited.
+if [[ "${FORCE_FUNCTIONS_DEPLOY:-}" != "1" && -s "$DEPLOYED_SHA_FILE" ]]; then
+  last_sha="$(tr -d '[:space:]' <"$DEPLOYED_SHA_FILE")"
+  if git -C "$PRIMARY" rev-parse -q --verify "$last_sha^{commit}" >/dev/null &&
+    git -C "$PRIMARY" diff --quiet "$last_sha" "$TARGET_SHA" -- functions firebase.json
+  then
+    echo "Functions unchanged since ${last_sha:0:8} (after waiting on deploy lock); skipping."
+    release_functions_deploy_lock
+    exit 0
+  fi
+fi
+
 WORKTREE="$PRIMARY/.worktrees/deploy-$$"
 cleanup() {
   if [[ -n "$auth_file" ]]; then
     rm -f "$auth_file"
   fi
   git -C "$PRIMARY" worktree remove --force "$WORKTREE" 2>/dev/null || rm -rf "$WORKTREE"
+  release_functions_deploy_lock
 }
 trap cleanup EXIT
 
