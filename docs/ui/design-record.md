@@ -633,6 +633,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Implied and reverse odds SoftPulse one gold | Implied and reverse odds checkpoint densified ask (`act-05-03-01-checkpoint`) passes `guideRegion` (`ioDepthPay`) so SoftPulse paints one gold Depth + pay tile — never both Depth + pay and Short always. Correct-answer icon stays cream; SoftPulse is the only gold teach signal (LPT-515). |
 | Thin value SoftPulse one gold | Thin value and bluff-catches checkpoint densified ask (`act-05-04-01-checkpoint`) passes `guideRegion` (`thinValueReadLine`) so SoftPulse paints one gold The line tile — never both The line and Coin flip. Correct-answer icon stays cream; SoftPulse is the only gold teach signal (LPT-516). |
 | Advanced flop lines SoftPulse one gold | Advanced flop lines densified asks (`act-05-05-01-guided` / unguided / checkpoint) pass `guideRegion` (`linesNitValueHeavy` / `linesDonkPolar` / `linesDelayAfterWeak`) so SoftPulse paints one gold tile — never Value-heavy + Always bluff, Polarized + Medium pairs, or After weakness + Every hand. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal (LPT-517). |
+| Street-by-street SoftPulse one gold | Street-by-street updates densified asks (`act-05-06-01-guided` / unguided / checkpoint) pass `guideRegion` (`lineReadCapped` / `lineReadRebuild` / `lineReadUncapped`) so SoftPulse paints one gold tile — never Fewer nuts + Still nuts, Rebuild + Lock flop, or Uncapped + Always bluff. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal (LPT-518). |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1376,7 +1377,7 @@ felt.
 | Implied and reverse odds | Implied, Reverse, Second; densified SoftPulse one gold (LPT-515) | — |
 | Thin value and bluff-catches | Thin, Catch, Barrels; densified SoftPulse one gold (LPT-516) | read check |
 | Advanced flop lines | X/R, Probe, Delay, Donk; densified SoftPulse one gold (LPT-517) | nit, donk, and delay checks |
-| Street-by-street updates | Action, Rewrite, Update | capped, habit, and shove checks |
+| Street-by-street updates | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518) | capped, habit, and shove checks |
 | Soft timing evidence | Timing, Sizing, Clues | timing quizzes |
 | Live table dynamics | Stuck, Tilted, Gears | stuck, gear, and freshness checks |
 | Keep cash session guardrails | Quit, Guard, First | discipline quizzes |
