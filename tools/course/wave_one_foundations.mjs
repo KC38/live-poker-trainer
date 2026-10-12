@@ -752,6 +752,19 @@ export function buildSectionOne() {
                 {
                   objectives: ["Build the best five-card hand from seven"],
                   okFeedback: "Exactly five cards — leave the extras out.",
+                  // LPT-91: dealBestFiveExplainLayout (_dealTopPairBestKicker):
+                  // top pair + best kicker, fresh ranks; cues follow its
+                  // playOrder, one gold card per press.
+                  teachSpec: {
+                    deal: {mode: "random_in_class", handFamily: "pair"},
+                    cues: [
+                      {press: 1, target: "hero_pair", kind: "soft_pulse"},
+                      {press: 2, target: "hero_kicker", kind: "soft_pulse"},
+                      {press: 3, target: "board_pair", kind: "soft_pulse"},
+                      {press: 4, target: "board_second_kicker", kind: "soft_pulse"},
+                      {press: 5, target: "board_top_kicker", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               selectAct({
                 id: "act-01-02-02-guided-seven", order: 2, stage: "guided",
@@ -768,6 +781,18 @@ export function buildSectionOne() {
                   choice("ignore-ace", "High card only", "clear_mistake",
                     "You paired a board card — use the pair.", {betterChoiceId: "best-pair-k"}),
                 ],
+                // LPT-91: dealtBestFiveSpot (_dealTopPairBestKicker): picker gold
+                // walks the best-pair-k set in catalog order.
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "pair"},
+                  cues: [
+                    {press: 1, target: "hero_pair", kind: "soft_pulse"},
+                    {press: 2, target: "board_pair", kind: "soft_pulse"},
+                    {press: 3, target: "hero_kicker", kind: "soft_pulse"},
+                    {press: 4, target: "board_top_kicker", kind: "soft_pulse"},
+                    {press: 5, target: "board_second_kicker", kind: "soft_pulse"},
+                  ],
+                },
               }),
               selectAct({
                 id: "act-01-02-02-scaffolded-kicker", order: 3, stage: "scaffolded",
@@ -782,6 +807,22 @@ export function buildSectionOne() {
                   choice("chop-kicker", "Chop — same pair always ties", "clear_mistake",
                     "Kickers decide when pairs match.", {betterChoiceId: "you-kicker"}),
                 ],
+                // LPT-91: kicker showdown remap: same board pair, hero kicker
+                // beats villain; Hint golds the You seat.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "pair",
+                    variants: [
+                      {
+                        id: "var-villain-weaker-kicker",
+                        handFamily: "pair",
+                        label: "Villain plays the same board pair with a weaker kicker",
+                      },
+                    ],
+                  },
+                  cues: [{press: 1, target: "hero_holes", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-02-02-unguided-board", order: 4, stage: "scaffolded",
@@ -798,6 +839,23 @@ export function buildSectionOne() {
                     "Hole cards do not improve this board.",
                     {betterChoiceId: "chop-broadway"}),
                 ],
+                // LPT-91: board-plays chop: monotone straight-flush board, small
+                // hero pair; Hint golds the board.
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "straight_flush",
+                    suitFamily: "monotone",
+                    variants: [
+                      {
+                        id: "var-hero-small-pair",
+                        handFamily: "pair",
+                        label: "Hero small pocket pair under the board",
+                      },
+                    ],
+                  },
+                  cues: [{press: 1, target: "board", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-02-02-checkpoint-build", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -817,6 +875,13 @@ export function buildSectionOne() {
                     "You have trips plus a pair — full house.",
                     {betterChoiceId: "fh-eights"}),
                 ],
+                // LPT-91: checkpoint (_dealTripsOverTwoPairs): pocket pair +
+                // board trips card over two board pairs; no pressHints / Hint
+                // media.
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "full_house", suitFamily: "pair"},
+                  cues: [{press: 1, target: "hero_holes", kind: "none"}],
+                },
               }),
             ],
           }),

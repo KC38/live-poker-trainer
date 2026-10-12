@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "89f94c40c506838de32b0da4577080b7d950a4a083011a86df27f95e8a6f4b52",
+  "contentChecksum": "abd8af3f2a2c0c819b1853de42c1155dbaf13bc833cd581786eec4f5e5224905",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1250,7 +1250,40 @@
                   ],
                   "objectives": [
                     "Build the best five-card hand from seven"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_pair",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "hero_kicker",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "board_pair",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_second_kicker",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 5,
+                        "target": "board_top_kicker",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-02-guided-seven",
@@ -1291,7 +1324,40 @@
                       "kind": "hint",
                       "text": "Use your pair plus the strongest kickers."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_pair",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "board_pair",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "hero_kicker",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_top_kicker",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 5,
+                        "target": "board_second_kicker",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-02-scaffolded-kicker",
@@ -1325,7 +1391,27 @@
                       "label": "Chop — same pair always ties",
                       "accessibilityText": "Chop — same pair always ties"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair",
+                      "variants": [
+                        {
+                          "id": "var-villain-weaker-kicker",
+                          "handFamily": "pair",
+                          "label": "Villain plays the same board pair with a weaker kicker"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_holes",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-02-unguided-board",
@@ -1359,7 +1445,28 @@
                       "label": "Higher hole card wins",
                       "accessibilityText": "Higher hole card wins"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "straight_flush",
+                      "suitFamily": "monotone",
+                      "variants": [
+                        {
+                          "id": "var-hero-small-pair",
+                          "handFamily": "pair",
+                          "label": "Hero small pocket pair under the board"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "board",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-02-checkpoint-build",
@@ -1395,7 +1502,21 @@
                       "accessibilityText": "Two pair only"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "full_house",
+                      "suitFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_holes",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
