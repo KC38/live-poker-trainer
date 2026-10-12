@@ -21742,12 +21742,22 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-636: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('Checks turn after flop bet — read their range shape.'),
+      lessonFrameSpeech(activity),
+      'Checks turn after flop bet — tap Capped.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Checks turn after flop bet — pick Capped.'),
       findsOneWidget,
     );
     expect(
-      find.text('Checks turn after flop bet — tap Capped.'),
+      find.text('Checks turn after flop bet — read their range shape.'),
+      findsNothing,
+    );
+    expect(
+      find.text('Villain checks turn after betting flop. Often?'),
       findsNothing,
     );
     await tester.tap(find.text('Capped'));
@@ -21828,12 +21838,22 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-636: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('XR flop / bet turn / bomb — read their range shape.'),
+      lessonFrameSpeech(activity),
+      'XR flop / bet turn / bomb — tap Uncapped.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('XR flop / bet turn / bomb — pick Uncapped.'),
       findsOneWidget,
     );
     expect(
-      find.text('XR flop / bet turn / bomb — tap Uncapped.'),
+      find.text('XR flop / bet turn / bomb — read their range shape.'),
+      findsNothing,
+    );
+    expect(
+      find.text('Check-raise flop, bet turn, bomb river. Treat as?'),
       findsNothing,
     );
     await tester.tap(find.text('Uncapped'));
@@ -21869,11 +21889,22 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-636: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Caps are for — tap Attack.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(find.text('Caps are for — pick Attack.'), findsOneWidget);
     expect(
       find.text('Caps are for — choose how you use them.'),
-      findsOneWidget,
+      findsNothing,
     );
-    expect(find.text('Caps are for — tap Attack caps.'), findsNothing);
+    // Felt caption may still say "Caps are for?" — coach/frame must not.
+    expect(
+      lessonFrameSpeech(activity),
+      isNot(equals('Caps are for? Tap the best answer.')),
+    );
     await tester.tap(find.text('Attack caps'));
     await tester.pump();
     expect(controller.draft.choiceId, 'attack');

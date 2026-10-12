@@ -122,7 +122,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   only one activity needs a bank field — full seed rebuilds from wave
   sources and can wipe hand-maintained catalog rows that diverged (LPT-74
   streets `seat-co`). Keep wave helpers in sync for the next full seed.
-- Prefer reopening a Done `ui-agent` ticket that still reproduces over
+  Prefer reopening a Done `ui-agent` ticket that still reproduces over
   filing a near-duplicate.
 - Prefer one lesson-content bug (fixed cards, stacked/enabled-empty Hint,
   Hint stuck under Oops/Nice! after a Hint press, multi-target or
@@ -293,9 +293,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `_coachText`) when a densified select_identify ask still shows catalog
   + "Tap the best answer." in the frame bubble — framed speech reads that
   helper before `resolveLessonCoachPrompt` (LPT-221, LPT-279, LPT-343
-  Close the river checkpoint, LPT-412 SPR guided). Densified lines need a
-  pick/tap verb so `withLessonTapInstruction` does not append the generic
-  footer. A local `_coachText` string alone leaves framed speech on catalog.
+  Close the river checkpoint, LPT-412 SPR guided, LPT-636 Recognize
+  capped). Densified lines need a pick/tap verb so
+  `withLessonTapInstruction` does not append the generic footer. A local
+  `_coachText` string alone leaves framed speech on catalog.
+- Prefer densify tile titles (`Call 10`, `Suited conn`, `Call`) over
+  shared gold fragments like `chips` / suit-only glyphs when advancing
+  SoftPulse asks — a `chips` needle can hit the wrong Call-price column
+  and burn hearts (LPT-634).
 
 - Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
 - Prefer `rg '<<<<<<<|=======|>>>>>>>'` on conflicted files after a merge resolution **before** `git commit` — an earlier StrReplace can leave markers in HEAD while the working tree looks clean until the next edit (LPT-520).

@@ -111,6 +111,13 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Limps, calls, never folds turns — pick Station.',
     'act-04-06-02-checkpoint' =>
       'Only two hands so far — pick Low conf.',
+    // Recognize capped densified asks (LPT-636) — same path as LPT-416.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-03-01-guided' =>
+      'Checks turn after flop bet — pick Capped.',
+    'act-06-03-01-unguided' =>
+      'XR flop / bet turn / bomb — pick Uncapped.',
+    'act-06-03-01-checkpoint' => 'Caps are for — pick Attack.',
     _ => null,
   };
 }
