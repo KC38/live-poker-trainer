@@ -603,6 +603,10 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Meet the TAG SoftPulse one gold | Meet the TAG unguided densified ask (`act-06-11-02-unguided`) passes `guideRegion` (`meetTagLabel2`) so SoftPulse-after-Hint paints one gold TAG tile — never both TAG and Maniac (LPT-491). Guided / scaffolded / checkpoint already pass `meetTagLabel` / `meetTagSelectiveDiff` / `meetTagWorkingModel`. |
 | Meet the LAG SoftPulse one gold | Meet the LAG unguided densified ask (`act-06-12-02-unguided`) passes `guideRegion` (`meetLagLabel2`) so SoftPulse-after-Hint paints one gold LAG tile — never both LAG and Nit (LPT-492). Guided / scaffolded / checkpoint already pass `meetLagLabel` / `meetLagPressureDiff` / `meetLagSampleLimits`. |
 | Observe wide SoftPulse one gold | Observe wide sustained pressure unguided densified ask (`act-06-12-01-unguided`) passes `guideRegion` (`lagObserveKeepSampling`) so SoftPulse-after-Hint paints one gold Keep sampling tile — never both Keep sampling and Label now (LPT-493). Guided / scaffolded / checkpoint already pass `lagObserveWidePressure` / `lagObserveSomeFolds` / `lagObserveBundle`. |
+| Observe selective SoftPulse one gold | Observe selective aggression unguided densified ask (`act-06-11-01-unguided`) passes `guideRegion` (`selectiveKeepSampling`) so SoftPulse-after-Hint paints one gold Keep sampling tile — never both Keep sampling and Max certainty (LPT-494). Guided / scaffolded / checkpoint already pass `selectivePlanOk` / `selectiveDisciplined` / `selectiveEvidenceBundle`. |
+| Confidence and samples SoftPulse one gold | Confidence and samples densified asks (`act-04-09-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`confidenceOneNote` / `confidenceRiseRevisable` / `confidenceUpdateModel` / `confidenceShowLimits`) so SoftPulse paints one gold tile — never both One note and Proven, Rise and Stay zero, Update and Freeze, or Limits and Destiny. Correct-answer chips/icons stay slate; SoftPulse owns the gold (LPT-495). |
+| Use overbets SoftPulse one gold | Use overbets and geometric pressure unguided densified ask (`act-06-05-01-unguided`) passes `guideRegion` (`overbetAvoid`) so SoftPulse-after-Hint paints one gold Avoid tile — never both Avoid and Always fine (LPT-497). Guided / checkpoint already pass `overbetNutsBluffs` / `overbetMultiStreet`. |
+| Use blockers SoftPulse one gold | Use blockers without solver theater unguided densified ask (`act-06-06-01-unguided`) passes `guideRegion` (`blockersTweak`) so SoftPulse-after-Hint paints one gold Tweak evidence tile — never both Tweak evidence and Replace all reasoning (LPT-498). Guided / scaffolded / checkpoint already pass `blockersAce` / `blockersUnblock` / `blockersNoFakeEv`. |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1295,7 +1299,7 @@ felt.
 | Observe wild aggressors | Raise, Barrel, Count; densified SoftPulse one gold (LPT-462) | entry quizzes |
 | Meet the Maniac | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490) | label quizzes |
 | Adjust versus Maniac | Wider, Hang, Ego | call-wider reason |
-| Confidence and samples | Observe, Samples, Showdowns | confidence quizzes |
+| Confidence and samples | Observe, Samples, Showdowns; densified SoftPulse one gold (LPT-495) | confidence quizzes |
 | Same hand, different types | Cards, Seats, Evidence | — |
 | Section 4 jump check | — | range, SPR, and player-type checks |
 | Build multiway ranges with nut potential | Nutted, Air, Domination | continue and priority checks |
@@ -1312,13 +1316,13 @@ felt.
 | Realize equity in and out of position | Equity, Cash, Pos | realization quizzes |
 | Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts | check-turn, bomb, and attack checks |
 | Choose polarized or merged betting | Polar, Merged, Size | overbet, mismatch, and aim checks |
-| Use overbets and geometric pressure | Overbet, Polar, Geo | candidate, avoid, and plan checks |
-| Use blockers without solver theater | Block, Use, No EV | unblock, tweak, and EV checks |
+| Use overbets and geometric pressure | Overbet, Polar, Geo; unguided SoftPulse one gold (LPT-497) | candidate, avoid, and plan checks |
+| Use blockers without solver theater | Block, Use, No EV; unguided SoftPulse one gold (LPT-498) | unblock, tweak, and EV checks |
 | Defend enough without frequency theater | Defend, Bluff, Enough | continue, intuition, and punish checks |
 | Mix with a reason | Mix, Purpose, Strong | station, reason, and purpose checks |
 | Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth | commit, ego, and SPR checks |
 | Make difficult folds; review coolers fairly | Hard, Cooler, Ego | cooler, ego, and review checks |
-| Observe selective aggression | Tight, Barrel, Sample | entry quizzes |
+| Observe selective aggression | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494) | entry quizzes |
 | Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491) | label quizzes |
 | Adjust versus TAG | Credit, Tighter, No light | respect check |
 | Observe wide sustained pressure | Wide, Pressure, Sample; unguided SoftPulse one gold (LPT-493) | entry quizzes |

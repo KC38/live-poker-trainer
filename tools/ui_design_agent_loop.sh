@@ -8,7 +8,8 @@
 #   tools/ui_design_agent_loop.sh ensure   start the loop only when run-loop is alive
 #   tools/ui_design_agent_loop.sh status   loop, simulator lock, and latest run log
 #   tools/ui_design_agent_loop.sh attach   watch the loop
-#   tools/ui_design_agent_loop.sh stop     finish the current run, then stop
+#   tools/ui_design_agent_loop.sh stop     soft-stop: finish current run, then ensure restarts
+#   tools/ui_design_agent_loop.sh soft-stop  alias for stop (reload bash / structural fixes)
 #   tools/ui_design_agent_loop.sh kill     stop now and free a lock this loop holds
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
@@ -855,11 +856,16 @@ def scrub_sdk_stream(text: str) -> str:
 
 
 def _parse_iso_epoch(value):
+    """Epoch seconds; accept Z and compact ±HHMM (macOS Python 3.9)."""
     if not value:
         return None
     text = str(value).strip()
     if text.endswith("Z"):
         text = text[:-1] + "+00:00"
+    else:
+        m = re.search(r"([+-])(\d{2})(\d{2})$", text)
+        if m is not None:
+            text = text[: m.start()] + f"{m.group(1)}{m.group(2)}:{m.group(3)}"
     try:
         return datetime.fromisoformat(text).timestamp()
     except ValueError:
@@ -885,6 +891,8 @@ def load_jsonl(path: Path) -> list[dict]:
         return []
     return rows
 
+TICKET_RE = re.compile(r"\bLPT-\d+\b")
+
 coverage_rows = load_jsonl(coverage_path)
 coverage_by_ticket: dict[str, dict] = {}
 for cov in coverage_rows:
@@ -905,9 +913,20 @@ for row in rows:
     result = row.get("result")
     stamp = row.get("stamp") or ""
 
+    # Pull LPT-NN out of closeout prose when ticket was never attributed
+    # (coverage +0530 parse miss left stamp rows with null ticket).
+    prose_ticket = None
+    if not ticket and tail:
+        m = TICKET_RE.search(tail)
+        if m is not None:
+            prose_ticket = m.group(0)
+
     # Fill empty / false-stall stamp rows from coverage in the run window.
     # Pad the end so a ticket closed after SIGTERM / stall-kill + reconcile
     # still matches (LPT-134 exit 143, LPT-240 exit 13 then closed).
+    # Prefer coverage closest to the recorded run end (start+seconds), not
+    # the latest row in the padded window — overlapping pads used to pin
+    # the next ticket onto the previous stamp (LPT-490/491).
     if (
         stamp
         and stamp != "reconciled"
@@ -916,35 +935,45 @@ for row in rows:
     ):
         start_ep = stamp_epoch(stamp)
         seconds = row.get("seconds")
+        run_end = None
         end_ep = None
         if start_ep is not None and isinstance(seconds, int):
-            end_ep = start_ep + max(seconds, 0) + 900
+            run_end = start_ep + max(seconds, 0)
+            end_ep = run_end + 900
         elif start_ep is not None:
             end_ep = start_ep + 4 * 3600
+            run_end = end_ep
         if start_ep is not None and end_ep is not None:
-            for cov in reversed(coverage_rows):
+            best = None
+            best_delta = None
+            for cov in coverage_rows:
                 cov_ts = _parse_iso_epoch(cov.get("at"))
                 if cov_ts is None or not cov.get("ticket"):
                     continue
                 if cov.get("result") in (None, "sim-not-ready", "stalled"):
                     continue
                 if start_ep - 5 <= cov_ts <= end_ep:
-                    was_stalled = result == "stalled"
-                    ticket = cov.get("ticket")
-                    result = cov.get("result")
-                    row["ticket"] = ticket
-                    row["result"] = result
-                    surface = cov.get("surface")
-                    parts = [f"coverage:{result}", f"ticket:{ticket}"]
-                    if surface:
-                        parts.append(f"surface:{surface}")
-                    row["tail"] = " ".join(parts)
-                    row["tail_repaired"] = True
-                    if was_stalled:
-                        row["stall_upgraded"] = True
-                    changed += 1
-                    tail = row["tail"]
-                    break
+                    delta = abs(cov_ts - run_end)
+                    if best_delta is None or delta < best_delta:
+                        best = cov
+                        best_delta = delta
+            if best is not None:
+                was_stalled = result == "stalled"
+                ticket = best.get("ticket")
+                result = best.get("result")
+                row["ticket"] = ticket
+                row["result"] = result
+                surface = best.get("surface")
+                parts = [f"coverage:{result}", f"ticket:{ticket}"]
+                if surface:
+                    parts.append(f"surface:{surface}")
+                row["tail"] = " ".join(parts)
+                row["tail_repaired"] = True
+                if was_stalled:
+                    row["stall_upgraded"] = True
+                changed += 1
+                tail = row["tail"]
+                prose_ticket = None
 
     if not result and USAGE_LIMIT.search(tail):
         row["result"] = "usage-limit"
@@ -963,7 +992,7 @@ for row in rows:
     sdk_polluted = bool(tail) and not structured and SDK_STREAM.search(tail) is not None
     prose_report = (
         bool(tail)
-        and bool(ticket or result)
+        and bool(ticket or result or prose_ticket)
         and not structured
         and (
             TELEMETRY.search(tail) is not None
@@ -972,13 +1001,23 @@ for row in rows:
             or "Functions deploy:" in tail
             or "Leads:" in tail
             or sdk_polluted
+            or prose_ticket is not None
         )
     )
     if prose_report:
-        cov = coverage_by_ticket.get(ticket or "") or {}
+        use_ticket = ticket or prose_ticket
+        cov = coverage_by_ticket.get(use_ticket or "") or {}
         surface = cov.get("surface")
         use_result = result or cov.get("result")
-        use_ticket = ticket or cov.get("ticket")
+        use_ticket = use_ticket or cov.get("ticket")
+        if use_ticket and not ticket:
+            row["ticket"] = use_ticket
+            ticket = use_ticket
+            changed += 1
+        if use_result and not result:
+            row["result"] = use_result
+            result = use_result
+            changed += 1
         parts = []
         if use_result:
             parts.append(f"coverage:{use_result}")
@@ -1059,12 +1098,16 @@ active = (sys.argv[4] or "").strip()
 stamp_re = re.compile(r"run-(\d{8}-\d{6})\.log$")
 
 def _parse_iso_epoch(value):
-    """Epoch seconds; accept trailing Z (macOS Python 3.9)."""
+    """Epoch seconds; accept Z and compact ±HHMM (macOS Python 3.9)."""
     if not value:
         return None
     text = str(value).strip()
     if text.endswith("Z"):
         text = text[:-1] + "+00:00"
+    else:
+        m = re.search(r"([+-])(\d{2})(\d{2})$", text)
+        if m is not None:
+            text = text[: m.start()] + f"{m.group(1)}{m.group(2)}:{m.group(3)}"
     try:
         return datetime.fromisoformat(text).timestamp()
     except ValueError:
@@ -1199,7 +1242,7 @@ PY
 wait_for_coverage_after() {
   local start_epoch="$1" timeout="${2:-90}"
   python3 - "$COVERAGE_FILE" "$start_epoch" "$timeout" <<'PY' || true
-import json, sys, time
+import json, re, sys, time
 from datetime import datetime
 from pathlib import Path
 
@@ -1207,12 +1250,16 @@ path, start_epoch, timeout = Path(sys.argv[1]), float(sys.argv[2]), int(sys.argv
 deadline = time.time() + max(0, timeout)
 
 def _parse_iso_epoch(value):
-    """Epoch seconds; accept trailing Z (macOS Python 3.9)."""
+    """Epoch seconds; accept Z and compact ±HHMM (macOS Python 3.9)."""
     if not value:
         return None
     text = str(value).strip()
     if text.endswith("Z"):
         text = text[:-1] + "+00:00"
+    else:
+        m = re.search(r"([+-])(\d{2})(\d{2})$", text)
+        if m is not None:
+            text = text[: m.start()] + f"{m.group(1)}{m.group(2)}:{m.group(3)}"
     try:
         return datetime.fromisoformat(text).timestamp()
     except ValueError:
@@ -1267,12 +1314,16 @@ path, stamp, code, seconds, log, coverage, start_epoch = sys.argv[1:]
 start_epoch = int(float(start_epoch or "0"))
 
 def _parse_iso_epoch(value):
-    """Epoch seconds; accept trailing Z (macOS Python 3.9)."""
+    """Epoch seconds; accept Z and compact ±HHMM (macOS Python 3.9)."""
     if not value:
         return None
     text = str(value).strip()
     if text.endswith("Z"):
         text = text[:-1] + "+00:00"
+    else:
+        m = re.search(r"([+-])(\d{2})(\d{2})$", text)
+        if m is not None:
+            text = text[: m.start()] + f"{m.group(1)}{m.group(2)}:{m.group(3)}"
     try:
         return datetime.fromisoformat(text).timestamp()
     except ValueError:
@@ -1980,7 +2031,7 @@ run_loop() {
   # shellcheck disable=SC2064
   trap 'rm -f "$LOOP_PID_FILE"' EXIT
   rm -f "$STOP_FILE"
-  log "ui-design-agent loop started (stop: $SCRIPT stop)"
+  log "ui-design-agent loop started (stop: $SCRIPT stop|soft-stop)"
   local soft_stopped=0
   while [[ ! -f "$STOP_FILE" ]]; do
     local code=0
@@ -2015,6 +2066,11 @@ run_loop() {
         ;;
     esac
   done
+  # STOP_FILE during busy/gap sleep exits the while without the post-one_run
+  # check — still treat that as soft-stop so ensure restarts promptly.
+  if [[ -f "$STOP_FILE" ]]; then
+    soft_stopped=1
+  fi
   rm -f "$STOP_FILE" "$LOOP_PID_FILE"
   trap - EXIT
   log "ui-design-agent loop stopped"
@@ -2170,9 +2226,12 @@ EOF
   once)
     one_run
     ;;
-  stop)
+  stop|soft-stop)
+    # Soft-stop: finish the current run, exit run-loop, then schedule ensure
+    # so a fresh bash reloads structural loop changes. `kill`/`uninstall`
+    # leave the loop down.
     touch "$STOP_FILE"
-    echo "the loop stops after the current run"
+    echo "soft-stop requested: loop finishes the current run, then ensure restarts it"
     ;;
   kill)
     touch "$STOP_FILE"

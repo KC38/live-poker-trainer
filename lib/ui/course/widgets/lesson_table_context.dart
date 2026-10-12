@@ -9779,12 +9779,15 @@ class LessonTableContext extends StatelessWidget {
           'Interactive confidence — tap one note or proven forever',
       semanticsStatic: 'Confidence one-note outcomes',
       caption: scene.caption ?? 'One huge bluff so far',
+      // SoftPulse + Rex own the cue — one gold One note only (LPT-495).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.confidenceOneNote,
       phases: [
         (
           region: LessonTableRegion.confidenceOneNote,
           title: 'One note',
           detail: 'Low certainty',
-          visual: const _PotChipDot(label: '1', gold: true),
+          visual: const _PotChipDot(label: '1', gold: false),
         ),
         (
           region: LessonTableRegion.confidenceProvenForever,
@@ -9806,6 +9809,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive confidence — tap rise or stay zero',
       semanticsStatic: 'Confidence rise outcomes',
       caption: scene.caption ?? '30 hands of sticky calls',
+      // SoftPulse + Rex own the cue — one gold Rise only (LPT-495).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.confidenceRiseRevisable,
       phases: [
         (
           region: LessonTableRegion.confidenceRiseRevisable,
@@ -9813,7 +9819,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Still revisable',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9833,6 +9839,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive model — tap update or freeze forever',
       semanticsStatic: 'Confidence update outcomes',
       caption: scene.caption ?? "Former station starts folding streets",
+      // SoftPulse + Rex own the cue — one gold Update only (LPT-495).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.confidenceUpdateModel,
       phases: [
         (
           region: LessonTableRegion.confidenceUpdateModel,
@@ -9840,7 +9849,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Evidence flipped',
           visual: const Icon(
             Icons.sync_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -9864,6 +9873,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive label UI — tap limits or destiny',
       semanticsStatic: 'Confidence limits outcomes',
       caption: scene.caption ?? 'What belongs beside a type label?',
+      // SoftPulse + Rex own the cue — one gold Limits only (LPT-495).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.confidenceShowLimits,
       phases: [
         (
           region: LessonTableRegion.confidenceShowLimits,
@@ -9871,7 +9883,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Samples · confidence',
           visual: const Icon(
             Icons.rule_outlined,
-            color: AppColors.gold,
+            color: AppColors.slate,
             size: 24,
           ),
         ),
@@ -11343,7 +11355,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive overbet discipline — tap avoid vs always fine',
       semanticsStatic: 'Overbet avoid outcomes',
       caption: scene.caption ?? 'Random 3x pot medium?',
-      // No SoftPulse on unguided — still don’t gold-icon Avoid.
+      // SoftPulse + Rex own the cue — one gold Avoid only (LPT-497).
+      guideRegion: LessonTableRegion.overbetAvoid,
       phases: [
         (
           region: LessonTableRegion.overbetAvoid,
@@ -11492,7 +11505,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive blocker role — tap tweak evidence vs replace all reasoning',
       semanticsStatic: 'Blockers tweak outcomes',
       caption: scene.caption ?? 'Blockers replace?',
-      // No SoftPulse on unguided — still don’t gold-icon Tweak evidence.
+      // SoftPulse + Rex own the cue — one gold Tweak evidence only (LPT-498).
+      guideRegion: LessonTableRegion.blockersTweak,
       phases: [
         (
           region: LessonTableRegion.blockersTweak,
@@ -12075,7 +12089,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive sample confidence — tap keep sampling vs max certainty',
       semanticsStatic: 'Selective sample outcomes',
       caption: scene.caption ?? 'Two hands of tightness. Confidence?',
-      // No SoftPulse on unguided — still don’t gold-icon Keep sampling.
+      // SoftPulse + Rex own the cue — one gold Keep sampling only (LPT-494).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.selectiveKeepSampling,
       phases: [
         (
           region: LessonTableRegion.selectiveKeepSampling,
