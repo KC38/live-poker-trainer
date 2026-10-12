@@ -12490,6 +12490,27 @@ await tester.tap(find.text('NIT'));
     expect(resolveLessonActionSpot(stacksLeft)!.heroStackAmount, 55);
     expect(resolveLessonActionSpot(stacksLeft)!.appliesStackToVillains, isTrue);
     expect(resolveLessonActionSpot(stacksLeft)!.villainStackChips, 55);
+
+    final sprScaffolded = CourseActivity(
+      id: 'act-04-05-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 45,
+      accessibilityText: 'Get it in with top set at low SPR.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'SPR ~1 after a 3-bet. You flop top set. Action?',
+      choices: const [
+        CourseChoice(id: 'commit', label: 'Commit for stacks', action: 'RAISE'),
+        CourseChoice(id: 'tiny', label: 'Check forever', action: 'CHECK'),
+      ],
+    );
+    final sprSpot = resolveLessonActionSpot(sprScaffolded)!;
+    expect(sprSpot.potLabel, 'Pot ~60 · SPR ~1');
+    expect(sprSpot.stackLabel, 'Stacks left 60');
+    expect(sprSpot.heroStackAmount, 60);
+    expect(sprSpot.appliesStackToVillains, isTrue);
+    expect(sprSpot.villainStackChips, 60);
     expect(
       resolveCoachDialogueVisual(
         CourseActivity(
@@ -15886,6 +15907,10 @@ await tester.tap(find.text('NIT'));
     expect(find.text('Low SPR — get it in'), findsNothing);
     // SoftPulse + Rex own the cue — felt gold status suppressed; villain line stays.
     expect(find.text('3-bet pot · short SPR'), findsOneWidget);
+    // LPT-413: remaining stacks ≈ pot so SPR ~1 matches Rex (not default $200).
+    expect(resolveLessonActionSpot(activity)!.stackLabel, 'Stacks left 60');
+    expect(resolveLessonActionSpot(activity)!.heroStackAmount, 60);
+    expect(resolveLessonActionSpot(activity)!.appliesStackToVillains, isTrue);
     final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
     expect(dock.pulseChoiceId, 'commit');
     await tester.tap(find.text('COMMIT FOR STACKS'));

@@ -583,6 +583,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Plan beyond the flop densified ask | Plan beyond the flop checkpoint densified ask (`act-04-03-01-checkpoint`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-407). |
 | Size with a message densified ask | Size with a message unguided densified ask (`act-04-04-01-unguided`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-410). |
 | SPR decides commitment densified ask | SPR decides commitment guided densified ask (`act-04-05-01-guided`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-412). |
+| SPR decides commitment scaffolded stacks | SPR decides commitment scaffolded (`act-04-05-01-scaffolded`) framed stage posts remaining stacks that match Rex’s SPR ~1 ask (`Stacks left 60` into pot ~60; same shared-stack contract as checkpoint `Stacks left 55` for SPR ~1.4) (LPT-413). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
 rebuilds until all four real suits are in; `syncSelection` only mirrors a
@@ -1178,7 +1179,7 @@ felt.
 | Navigate 3-bet pots | 3-bet, Ranges, Squeeze | — |
 | Plan beyond the flop | Flop, Turn, River; densified frame ask (LPT-407) | — |
 | Size with a message | Value, Pressure, Size; densified frame ask (LPT-410) | — |
-| SPR decides commitment | SPR, Low, High; densified frame ask (LPT-412) | — |
+| SPR decides commitment | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413) | — |
 | Observe sticky callers | Enters, Calls, Folds | participation note, observation bundle |
 | Meet the Calling Station | Station, High, Low | label quizzes |
 | Adjust versus Calling Station | Value, Bluffs, Cite | bluff-less reason |
