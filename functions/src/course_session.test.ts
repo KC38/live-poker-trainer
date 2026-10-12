@@ -397,6 +397,25 @@ describe("soft grading and life loss", () => {
     );
   });
 
+  it("uses authored explain Nice! feedback for Meet the Maniac (LPT-490)", () => {
+    const meetManiac = findLesson(
+      "lesson-04-08-02-meet-maniac",
+    )!.lesson;
+    const explain = meetManiac.activities.find(
+      (activity) => activity.id === "act-04-08-02-explain",
+    )!;
+    const graded = gradeCourseResponse({activity: explain});
+    expect(graded).toMatchObject({
+      grade: "recommended",
+      accepted: true,
+      lifeLost: false,
+      feedback: "Maniac → Entry → Aggro.",
+    });
+    expect(graded.feedback).not.toMatch(
+      /extreme entry and aggression|model, not an insult/i,
+    );
+  });
+
   it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",

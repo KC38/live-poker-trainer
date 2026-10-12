@@ -1936,7 +1936,12 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-08-02-explain", 1,
                 "Maniac means extreme entry and aggression — a model, not an insult.",
-                {objectives: ["Introduce Maniac"], playerTypeRefs: ["maniac"]}),
+                {
+                  objectives: ["Introduce Maniac"],
+                  playerTypeRefs: ["maniac"],
+                  // LPT-490: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Maniac → Entry → Aggro.",
+                }),
               classifyAct({
                 id: "act-04-08-02-guided", order: 2, stage: "guided",
                 prompt: "Seat open-raises 60% and triple-barrels light. Label?",
