@@ -513,6 +513,21 @@ grep -q 'Worktree VM is up' <<<"$preview_out" \
 grep -q 'Validating checkpoint on device' <<<"$preview_out" \
   || fail "status preview should keep last prose lines: $preview_out"
 
+# One-token-per-line machine SDK streams must coalesce into prose.
+token_log="$LOG_DIR/run-status-tokens.log"
+{
+  for w in jumping to the origin / main validated shot , then closing .; do
+    printf '%s{"t":1,"type":"assistant"}\n' "$w"
+  done
+} >"$token_log"
+token_out="$(print_run_log_preview "$token_log" 10)"
+line_count="$(wc -l <<<"$token_out" | tr -d ' ')"
+[[ "$line_count" -le 3 ]] || fail "token stream should coalesce (got $line_count lines): $token_out"
+grep -q 'origin/main validated shot' <<<"$token_out" \
+  || fail "token stream should rejoin path + prose: $token_out"
+grep -q 'then closing' <<<"$token_out" \
+  || fail "token stream should keep trailing prose: $token_out"
+
 # repair_health_tails scrubs SDK pollution when coverage is late/missing.
 printf '%s\n' \
   '{"at":"2026-10-12T09:52:24+05:30","stamp":"20261012-093041","exit":143,"seconds":1303,"ticket":null,"result":null,"tail":"the process and rerun{\"t\":1791778842861,\"type\":\"thinking\"} flutter_run_fast.sh{\"t\":1791778843540,\"type\":\"assistant\"}"}' \
