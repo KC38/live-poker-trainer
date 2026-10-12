@@ -10,7 +10,7 @@ export function dialogue(id, order, text, extra = {}) {
   const out = {
     id,
     order,
-    stage: "explain",
+    stage: "guided",
     renderer: "coach_dialogue",
     estimatedSeconds: 30,
     accessibilityText: text,
@@ -271,7 +271,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-01-01-unguided-mix", order: 4, stage: "unguided",
+                id: "act-01-01-01-unguided-mix", order: 4, stage: "scaffolded",
                 prompt: "Tap the community cards.",
                 a11y: "Tap the shared community cards on the flop.",
                 objectives: ["Distinguish hole cards from community cards"],
@@ -287,7 +287,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-01-01-checkpoint-table", order: 5, stage: "checkpoint",
+                id: "act-01-01-01-checkpoint-table", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Tap the cards that are only yours.",
                 a11y: "On a fuller table, tap your private hole cards again.",
                 objectives: [
@@ -353,7 +353,7 @@ export function buildSectionOne() {
                 missFeedback: "Start with the smallest rank and climb up.",
               }),
               selectAct({
-                id: "act-01-01-02-unguided-suited", order: 4, stage: "unguided",
+                id: "act-01-01-02-unguided-suited", order: 4, stage: "scaffolded",
                 prompt: "Tap the suited hole cards.",
                 a11y: "Tap the seat whose hole cards share a suit.",
                 objectives: ["Spot pairs and suited cards"],
@@ -367,7 +367,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-01-02-checkpoint-pair", order: 5, stage: "checkpoint",
+                id: "act-01-01-02-checkpoint-pair", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Tap the pocket pair.",
                 a11y: "Tap the seat with a pocket pair.",
                 objectives: ["Spot pairs and suited cards"],
@@ -439,7 +439,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-01-03-unguided-when", order: 4, stage: "unguided",
+                id: "act-01-01-03-unguided-when", order: 4, stage: "scaffolded",
                 prompt: "Tap when the blinds go in.",
                 a11y: "Tap the hand phase when blinds are posted.",
                 objectives: ["Know blinds post before cards are dealt"],
@@ -455,7 +455,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-01-03-checkpoint-layout", order: 5, stage: "checkpoint",
+                id: "act-01-01-03-checkpoint-layout", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Button is seat 5. Tap the small blind.",
                 a11y: "On a six-handed table, tap the small blind seat.",
                 objectives: [
@@ -526,7 +526,7 @@ export function buildSectionOne() {
                 missFeedback: "Flush beats straight; straight beats pair.",
               }),
               sequenceAct({
-                id: "act-01-02-01-unguided-compare", order: 4, stage: "unguided",
+                id: "act-01-02-01-unguided-compare", order: 4, stage: "scaffolded",
                 renderer: "compare_rank",
                 prompt: "Tap highest to lowest.",
                 a11y: "Showdown — tap You (full house), Sam (trips), then Jo (two pair).",
@@ -541,7 +541,7 @@ export function buildSectionOne() {
                 missFeedback: "Full house tops trips; trips top two pair.",
               }),
               sequenceAct({
-                id: "act-01-02-01-checkpoint-winner", order: 5, stage: "checkpoint",
+                id: "act-01-02-01-checkpoint-winner", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 renderer: "compare_rank",
                 prompt: "Tap highest to lowest.",
                 a11y: "Showdown — tap You (flush), Sam (straight), then Jo (high card).",
@@ -605,7 +605,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-02-02-unguided-board", order: 4, stage: "unguided",
+                id: "act-01-02-02-unguided-board", order: 4, stage: "scaffolded",
                 prompt: "Both checked down — tap who takes the pot.",
                 a11y: "Tap chop when the board plays for everyone.",
                 objectives: ["Spot board-tied pots"],
@@ -621,7 +621,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-02-02-checkpoint-build", order: 5, stage: "checkpoint",
+                id: "act-01-02-02-checkpoint-build", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Tap the five cards for your strongest hand.",
                 a11y: "Tap three of a kind plus a pair for a full house.",
                 objectives: [
@@ -690,7 +690,7 @@ export function buildSectionOne() {
                 ],
               }),
               actionAct({
-                id: "act-01-03-01-unguided-call", order: 4, stage: "unguided",
+                id: "act-01-03-01-unguided-call", order: 4, stage: "scaffolded",
                 prompt: "A bet is out — pick how you continue.",
                 a11y: "Tap Call to match a half-pot bet.",
                 objectives: ["Call to match the current bet"],
@@ -706,7 +706,7 @@ export function buildSectionOne() {
                 ],
               }),
               actionAct({
-                id: "act-01-03-01-checkpoint-legal", order: 5, stage: "checkpoint",
+                id: "act-01-03-01-checkpoint-legal", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "A bet faces you. Tap the action you cannot take.",
                 a11y: "Tap Check — it is illegal facing a bet.",
                 objectives: [
@@ -776,7 +776,7 @@ export function buildSectionOne() {
                 ],
               }),
               actionAct({
-                id: "act-01-03-02-unguided-allin", order: 4, stage: "unguided",
+                id: "act-01-03-02-unguided-allin", order: 4, stage: "scaffolded",
                 prompt: "Stack 12. Villain bets 20. Tap what you can put in.",
                 a11y: "Tap All-in 12 — capped by your remaining stack.",
                 objectives: ["Treat all-in as a sized bet or raise"],
@@ -792,7 +792,7 @@ export function buildSectionOne() {
                 ],
               }),
               actionAct({
-                id: "act-01-03-02-checkpoint-names", order: 5, stage: "checkpoint",
+                id: "act-01-03-02-checkpoint-names", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Pot is unchecked. Tap the first chips into the pot.",
                 a11y: "Tap Bet — first chips into an unchecked pot.",
                 objectives: [
@@ -863,7 +863,7 @@ export function buildSectionOne() {
                 missFeedback: "Start under the gun, then move toward the button.",
               }),
               selectAct({
-                id: "act-01-04-01-unguided-end", order: 4, stage: "unguided",
+                id: "act-01-04-01-unguided-end", order: 4, stage: "scaffolded",
                 prompt: "Flop betting is live. Tap when this street ends.",
                 a11y: "Tap bets matched — a street ends when action is complete.",
                 objectives: ["Know a street ends when bets are matched"],
@@ -879,7 +879,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-04-01-checkpoint-postflop", order: 5, stage: "checkpoint",
+                id: "act-01-04-01-checkpoint-postflop", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Postflop multiway. Tap who acts first.",
                 a11y: "Tap the seat left of the button — first to act postflop.",
                 objectives: [
@@ -947,7 +947,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-05-01-unguided-pot", order: 4, stage: "unguided",
+                id: "act-01-05-01-unguided-pot", order: 4, stage: "scaffolded",
                 prompt: "Blinds 1/2. BTN opens. Tap the pot before blinds act.",
                 a11y: "Tap the pot total — blinds plus the open. Open size varies each attempt.",
                 objectives: ["Sense main pot versus side pot without deep math"],
@@ -963,7 +963,7 @@ export function buildSectionOne() {
                 ],
               }),
               selectAct({
-                id: "act-01-05-01-checkpoint-side", order: 5, stage: "checkpoint",
+                id: "act-01-05-01-checkpoint-side", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "You are all-in for less; two big stacks keep betting. Tap what is true.",
                 a11y: "Tap side pot — unmatched chips form a side pot you cannot win.",
                 objectives: ["Sense main pot versus side pot without deep math"],
@@ -1073,7 +1073,7 @@ export function buildSectionOne() {
                 ],
               }),
               handLabAct({
-                id: "act-01-06-01-unguided-lab", order: 4, stage: "unguided",
+                id: "act-01-06-01-unguided-lab", order: 4, stage: "scaffolded",
                 prompt: "BTN opens to 6. You hold a weak ace offsuit in the big blind.",
                 a11y: "Big blind vs button open — call, fold, or jam.",
                 objectives: ["Finish without freezing on basic decisions"],
@@ -1124,7 +1124,7 @@ export function buildSectionOne() {
                 },
               }),
               multiStepAct({
-                id: "act-01-06-01-checkpoint-finish", order: 5, stage: "checkpoint",
+                id: "act-01-06-01-checkpoint-finish", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 a11y: "Button with offsuit broadway — open, then take the blinds when they fold.",
                 objectives: [
                   "Follow a hand from blinds to a terminal state",
@@ -1175,7 +1175,7 @@ export function buildSectionOne() {
             prereq: L010601, remediation: L010201, minutes: 8, band: 2,
             activities: [
               sequenceAct({
-                id: "act-01-06-02-jump-ranks", order: 1, stage: "jump_test",
+                id: "act-01-06-02-jump-ranks", order: 1, stage: "scaffolded", assessmentRole: "jump_test",
                 renderer: "compare_rank",
                 prompt: "Pick strongest hand first, then weaker.",
                 a11y: "Jump test: pick strongest hand first, then weaker.",
@@ -1190,7 +1190,7 @@ export function buildSectionOne() {
                 missFeedback: "Flush beats straight; straight beats two pair.",
               }),
               sequenceAct({
-                id: "act-01-06-02-jump-order", order: 2, stage: "jump_test",
+                id: "act-01-06-02-jump-order", order: 2, stage: "scaffolded", assessmentRole: "jump_test",
                 prompt: "Pick seats in the order they act.",
                 a11y: "Jump test: pick seats in the order they act.",
                 objectives: ["Confirm acting order"],
@@ -1204,7 +1204,7 @@ export function buildSectionOne() {
                 missFeedback: "UTG, then toward the button.",
               }),
               actionAct({
-                id: "act-01-06-02-jump-legal", order: 3, stage: "jump_test",
+                id: "act-01-06-02-jump-legal", order: 3, stage: "scaffolded", assessmentRole: "jump_test",
                 prompt: "A bet faces you. Pick the action you cannot take.",
                 a11y: "Jump test: check is illegal facing a bet.",
                 objectives: ["Confirm legal action"],
@@ -1219,7 +1219,7 @@ export function buildSectionOne() {
                 ],
               }),
               multiStepAct({
-                id: "act-01-06-02-jump-hand", order: 4, stage: "jump_test",
+                id: "act-01-06-02-jump-hand", order: 4, stage: "scaffolded", assessmentRole: "jump_test",
                 a11y: "Jump test: complete a tiny button steal hand.",
                 objectives: ["Confirm a complete toy hand"],
                 steps: [
@@ -1326,7 +1326,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-01-01-unguided-co", order: 4, stage: "unguided",
+                id: "act-02-01-01-unguided-co", order: 4, stage: "scaffolded",
                 prompt: "Tap the seat right before the button.",
                 a11y: "Tap the cutoff seat on the six-max table.",
                 objectives: ["Label EP, HJ, CO, and BTN"],
@@ -1341,7 +1341,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-01-01-checkpoint-edge", order: 5, stage: "checkpoint",
+                id: "act-02-01-01-checkpoint-edge", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Same hand — tap where it is stronger to play.",
                 a11y: "Tap the button rather than early position.",
                 objectives: ["Prefer later seats when choosing hands"],
@@ -1398,7 +1398,7 @@ export function buildSectionTwo() {
                 missFeedback: "Left of the button acts first.",
               }),
               selectAct({
-                id: "act-02-01-02-unguided-wait", order: 4, stage: "unguided",
+                id: "act-02-01-02-unguided-wait", order: 4, stage: "scaffolded",
                 prompt: "Action is on UTG. You are on the button. What do you do?",
                 a11y: "Wait for earlier seats before acting.",
                 objectives: ["Wait for your turn before acting"],
@@ -1412,7 +1412,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-01-02-checkpoint-full", order: 5, stage: "checkpoint",
+                id: "act-02-01-02-checkpoint-full", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Six-max flop, everyone in. Who acts last?",
                 a11y: "Confirm button acts last postflop multiway.",
                 objectives: [
@@ -1483,7 +1483,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-02-01-unguided-sc", order: 4, stage: "unguided",
+                id: "act-02-02-01-unguided-sc", order: 4, stage: "scaffolded",
                 prompt: "Name the family for your holes.",
                 a11y: "Look at seven-six suited on the felt — tap Suited connector.",
                 objectives: ["Recognize suited connectors versus offsuit trash"],
@@ -1498,7 +1498,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-02-01-checkpoint-trash", order: 5, stage: "checkpoint",
+                id: "act-02-02-01-checkpoint-trash", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Name the family for your holes.",
                 a11y: "Look at seven-two offsuit on the felt — tap Offsuit trash.",
                 objectives: ["Recognize suited connectors versus offsuit trash"],
@@ -1564,7 +1564,7 @@ export function buildSectionTwo() {
                 ],
               }),
               actionAct({
-                id: "act-02-03-01-unguided-btn", order: 4, stage: "unguided",
+                id: "act-02-03-01-unguided-btn", order: 4, stage: "scaffolded",
                 prompt: "Folds to you on the button with K9s. Action?",
                 a11y: "Open king-nine suited on the button.",
                 objectives: ["Widen opens on the button"],
@@ -1579,7 +1579,7 @@ export function buildSectionTwo() {
                 ],
               }),
               actionAct({
-                id: "act-02-03-01-checkpoint-hj", order: 5, stage: "checkpoint",
+                id: "act-02-03-01-checkpoint-hj", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "HJ with ATo. Folds to you. Action?",
                 a11y: "Open ace-ten offsuit from the hijack.",
                 objectives: [
@@ -1647,7 +1647,7 @@ export function buildSectionTwo() {
                 ],
               }),
               actionAct({
-                id: "act-02-04-01-unguided-3bet", order: 4, stage: "unguided",
+                id: "act-02-04-01-unguided-3bet", order: 4, stage: "scaffolded",
                 prompt: "BTN opens to 6. You have a premium pair in the small blind. Action?",
                 a11y: "Value three-bet kings.",
                 objectives: ["Value 3-bet strong hands"],
@@ -1662,7 +1662,7 @@ export function buildSectionTwo() {
                 ],
               }),
               actionAct({
-                id: "act-02-04-01-checkpoint-aq", order: 5, stage: "checkpoint",
+                id: "act-02-04-01-checkpoint-aq", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "HJ opens to 6. You have AQs on the CO. Action?",
                 a11y: "Value three-bet ace-queen suited.",
                 objectives: [
@@ -1729,7 +1729,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-05-01-unguided-depth", order: 4, stage: "unguided",
+                id: "act-02-05-01-unguided-depth", order: 4, stage: "scaffolded",
                 prompt: "Which depth plays closest to a short-stack shove game?",
                 a11y: "Identify 50bb as shallower than 100 or 200.",
                 objectives: ["Sense 50bb vs 100bb vs 200bb depth"],
@@ -1744,7 +1744,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-05-01-checkpoint-200", order: 5, stage: "checkpoint",
+                id: "act-02-05-01-checkpoint-200", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
                 a11y: "Convert a 1000 chip buy-in at 2/5 to big blinds.",
                 objectives: [
@@ -1810,7 +1810,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-06-01-unguided-protect", order: 4, stage: "unguided",
+                id: "act-02-06-01-unguided-protect", order: 4, stage: "scaffolded",
                 prompt: "Your cards sit near the muck. Best habit?",
                 a11y: "Protect hole cards with a chip or hand.",
                 objectives: ["Protect cards and avoid acting out of turn"],
@@ -1824,7 +1824,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-06-01-checkpoint-oot", order: 5, stage: "checkpoint",
+                id: "act-02-06-01-checkpoint-oot", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Action is two seats left. You toss in a raise early. Problem?",
                 a11y: "Recognize acting out of turn.",
                 objectives: [
@@ -1893,7 +1893,7 @@ export function buildSectionTwo() {
                 ],
               }),
               handLabAct({
-                id: "act-02-07-01-unguided-lab", order: 4, stage: "unguided",
+                id: "act-02-07-01-unguided-lab", order: 4, stage: "scaffolded",
                 prompt: "Full ring. Decide versus a cutoff open.",
                 a11y: "Full-ring hand lab: button versus cutoff open.",
                 objectives: [
@@ -1945,7 +1945,7 @@ export function buildSectionTwo() {
                 },
               }),
               selectAct({
-                id: "act-02-07-01-checkpoint-habit", order: 5, stage: "checkpoint",
+                id: "act-02-07-01-checkpoint-habit", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Full ring. Action two seats left. Your cards are uncovered. Fix?",
                 a11y: "Protect cards and wait for action on a full ring.",
                 objectives: ["Keep live habits while deciding"],
@@ -1975,7 +1975,7 @@ export function buildSectionTwo() {
             prereq: L020701, remediation: L020101, minutes: 8, band: 2,
             activities: [
               selectAct({
-                id: "act-02-07-02-jump-pos", order: 1, stage: "jump_test",
+                id: "act-02-07-02-jump-pos", order: 1, stage: "scaffolded", assessmentRole: "jump_test",
                 prompt: "Seat right before the button?",
                 a11y: "Jump test: cutoff label.",
                 objectives: ["Confirm position labels"],
@@ -1988,7 +1988,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-07-02-jump-family", order: 2, stage: "jump_test",
+                id: "act-02-07-02-jump-family", order: 2, stage: "scaffolded", assessmentRole: "jump_test",
                 prompt: "These holes belong to which family?",
                 a11y: "Jump test: suited ace family.",
                 objectives: ["Confirm starting-hand family"],
@@ -2001,7 +2001,7 @@ export function buildSectionTwo() {
                 ],
               }),
               actionAct({
-                id: "act-02-07-02-jump-open", order: 3, stage: "jump_test",
+                id: "act-02-07-02-jump-open", order: 3, stage: "scaffolded", assessmentRole: "jump_test",
                 prompt: "UTG with trash offsuit. Action?",
                 a11y: "Jump test: fold trash early.",
                 objectives: ["Confirm open or fold"],
@@ -2013,7 +2013,7 @@ export function buildSectionTwo() {
                 ],
               }),
               actionAct({
-                id: "act-02-07-02-jump-vs", order: 4, stage: "jump_test",
+                id: "act-02-07-02-jump-vs", order: 4, stage: "scaffolded", assessmentRole: "jump_test",
                 prompt: "Open to 6. You have AA in the big blind. Action?",
                 a11y: "Jump test: value 3-bet aces.",
                 objectives: ["Confirm facing a raise"],
@@ -2027,7 +2027,7 @@ export function buildSectionTwo() {
                 ],
               }),
               selectAct({
-                id: "act-02-07-02-jump-stack", order: 5, stage: "jump_test",
+                id: "act-02-07-02-jump-stack", order: 5, stage: "scaffolded", assessmentRole: "jump_test",
                 prompt: "You 120bb, villain 55bb. Effective stack?",
                 a11y: "Jump test: effective stack is 55bb.",
                 objectives: ["Confirm effective stack"],

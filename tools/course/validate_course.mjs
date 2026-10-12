@@ -42,14 +42,9 @@ const SOFT_GRADES = new Set([
   "questionable",
   "clear_mistake",
 ]);
-const STAGES = new Set([
-  "explain",
-  "guided",
-  "scaffolded",
-  "unguided",
-  "checkpoint",
-  "jump_test",
-]);
+const STAGES = new Set(["guided", "scaffolded"]);
+const ASSESSMENT_ROLES = new Set(["checkpoint", "jump_test"]);
+const DEAL_MODES = new Set(["none", "fixed", "random_in_class"]);
 const RENDERERS = new Set([
   "coach_dialogue",
   "select_identify",
@@ -386,6 +381,89 @@ export function validateAndGenerate(course) {
           if (!STAGES.has(/** @type {string} */ (act.stage))) {
             errors.push(`${actPath}: unknown stage`);
           }
+          if (act.assessmentRole !== undefined) {
+            if (!ASSESSMENT_ROLES.has(/** @type {string} */ (act.assessmentRole))) {
+              errors.push(`${actPath}: unknown assessmentRole`);
+            }
+            if (act.stage !== "scaffolded") {
+              errors.push(
+                `${actPath}: assessmentRole requires stage scaffolded`,
+              );
+            }
+            const media = Array.isArray(act.coachMedia) ? act.coachMedia : [];
+            if (media.some((m) => m && /** @type {Record<string, unknown>} */ (m).kind === "hint")) {
+              errors.push(
+                `${actPath}: assessmentRole steps must not author Hint media`,
+              );
+            }
+            const teach = act.teachSpec && typeof act.teachSpec === "object" ?
+              /** @type {Record<string, unknown>} */ (act.teachSpec) :
+              null;
+            if (teach && Array.isArray(teach.pressHints) && teach.pressHints.length > 0) {
+              errors.push(
+                `${actPath}: assessmentRole steps must not author pressHints`,
+              );
+            }
+          }
+          if (act.teachSpec !== undefined) {
+            if (act.teachSpec === null || typeof act.teachSpec !== "object") {
+              errors.push(`${actPath}: teachSpec must be an object`);
+            } else {
+              const teach = /** @type {Record<string, unknown>} */ (act.teachSpec);
+              if (teach.deal !== undefined) {
+                if (teach.deal === null || typeof teach.deal !== "object") {
+                  errors.push(`${actPath}.teachSpec.deal must be an object`);
+                } else {
+                  const deal = /** @type {Record<string, unknown>} */ (teach.deal);
+                  if (!DEAL_MODES.has(/** @type {string} */ (deal.mode))) {
+                    errors.push(`${actPath}.teachSpec.deal: unknown mode`);
+                  }
+                  if (deal.mode === "fixed" && deal.fixedCards === undefined) {
+                    errors.push(
+                      `${actPath}.teachSpec.deal: fixed mode needs fixedCards`,
+                    );
+                  }
+                  if (
+                    deal.mode === "random_in_class" &&
+                    deal.handFamily === undefined &&
+                    deal.suitFamily === undefined
+                  ) {
+                    errors.push(
+                      `${actPath}.teachSpec.deal: random_in_class needs ` +
+                        "handFamily and/or suitFamily",
+                    );
+                  }
+                }
+              }
+              if (teach.pressHints !== undefined) {
+                if (!Array.isArray(teach.pressHints)) {
+                  errors.push(`${actPath}.teachSpec.pressHints must be an array`);
+                } else {
+                  const presses = new Set();
+                  for (const [hi, hint] of teach.pressHints.entries()) {
+                    const h = /** @type {Record<string, unknown>} */ (hint);
+                    if (typeof h.press !== "number" || h.press < 1) {
+                      errors.push(
+                        `${actPath}.teachSpec.pressHints[${hi}]: press >= 1`,
+                      );
+                    } else if (presses.has(h.press)) {
+                      errors.push(
+                        `${actPath}.teachSpec.pressHints: duplicate press ` +
+                          `${h.press}`,
+                      );
+                    } else {
+                      presses.add(h.press);
+                    }
+                    if (typeof h.text !== "string" || !h.text.trim()) {
+                      errors.push(
+                        `${actPath}.teachSpec.pressHints[${hi}]: text required`,
+                      );
+                    }
+                  }
+                }
+              }
+            }
+          }
           if (!RENDERERS.has(/** @type {string} */ (act.renderer))) {
             errors.push(`${actPath}: unknown activity renderer`);
           }
@@ -412,6 +490,9 @@ export function validateAndGenerate(course) {
             stage: act.stage,
             renderer: act.renderer,
             acceptedGrades: act.acceptedGrades,
+            ...(act.assessmentRole ?
+              {assessmentRole: act.assessmentRole} :
+              {}),
           };
           if (Array.isArray(act.choices)) {
             privatePayload.choiceGrading = Object.fromEntries(

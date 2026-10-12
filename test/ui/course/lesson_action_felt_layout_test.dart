@@ -98,7 +98,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-03-01-unguided-btn',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Button open decision',

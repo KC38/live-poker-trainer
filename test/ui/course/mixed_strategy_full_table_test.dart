@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-06-08-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Mixing is frequency with a purpose — not coin-flip theater.',

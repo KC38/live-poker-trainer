@@ -60,7 +60,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-02-explain-suits',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Four suits, thirteen ranks. Ace is high here.',
@@ -542,7 +542,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-02-unguided-suited',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the seat whose hole cards share a suit.',
@@ -597,7 +597,7 @@ void main() {
       final activity = CourseActivity(
         id: 'act-01-01-02-unguided-suited',
         order: 4,
-        stage: ActivityStage.unguided,
+        stage: ActivityStage.scaffolded,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 40,
         accessibilityText: 'Tap the seat whose hole cards share a suit.',

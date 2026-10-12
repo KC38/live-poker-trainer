@@ -1,18 +1,21 @@
 # 10 — GrokBot (Linux / Chrome UI layout)
 
 GrokBot is a separate agent on a Linux machine. It owns **browser-validatable
-UI layout** tickets. The Mac mini `/ui-design-agent` owns simulator-backed
-work (felt cues, lesson teach-loop, iOS layout proofs) and must never pick
-up GrokBot's queue.
+UI layout** tickets and **course content** tickets filed by
+`/lesson-content-agent` (label `grokbot`). The Mac mini `/ui-design-agent`
+owns simulator-backed work and must never pick up GrokBot's queue.
 
 ## Split of work
 
 | Owner | Label | Validates on | Typical tickets |
 | --- | --- | --- | --- |
-| Mac mini `/ui-design-agent` | `ui-agent` | iPhone 13 mini simulator | SoftPulse / cyan cues, Hint waves, hearts, card randomization, deal timing, `agent_seed` / `openlesson`, iOS-only clipping |
-| GrokBot | `grokbot` | Flutter web in Chrome (~375×812) | Pure layout / theme / spacing / type / clipping that reproduces in a phone-sized web viewport |
+| Mac mini `/ui-design-agent` | `ui-agent` | iPhone 13 mini simulator | SoftPulse / cyan cues, Hint waves, hearts, deal timing, `agent_seed` / `openlesson`, iOS-only clipping |
+| GrokBot | `grokbot` | Flutter web in Chrome (~375×812) | Layout / theme / spacing / type / clipping; course `teachSpec` / stage / hint / family / catalog wiring that can be proved on web |
 
 Do **not** put both `ui-agent` and `grokbot` on the same issue. One owner.
+
+Content filings also carry `content` (from `/lesson-content-agent`). Fix and
+validate those on Chrome unless the ticket was labeled `ui-agent` instead.
 
 ## Jira queues
 

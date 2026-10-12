@@ -41,7 +41,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-06-01-explain-habits',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Watch, say, cover, wait.',

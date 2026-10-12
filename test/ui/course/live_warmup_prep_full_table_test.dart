@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-07-11-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Live warm-up: short checklist, then play. Plan 10 wires the bridge.',

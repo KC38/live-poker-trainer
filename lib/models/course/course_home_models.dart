@@ -299,9 +299,10 @@ class CourseProfileView {
 
 /// Derives [CourseNodeKind] from public lesson content.
 CourseNodeKind deriveCourseNodeKind(CourseLesson lesson) {
+  final roles = lesson.activities.map((a) => a.assessmentRole).toSet();
   final stages = lesson.activities.map((a) => a.stage).toSet();
   final renderers = lesson.activities.map((a) => a.renderer).toSet();
-  if (stages.contains(ActivityStage.jumpTest)) {
+  if (roles.contains(AssessmentRole.jumpTest)) {
     return CourseNodeKind.jumpTest;
   }
   if (renderers.contains(ActivityRenderer.fullTableHandLab)) {
@@ -311,7 +312,8 @@ CourseNodeKind deriveCourseNodeKind(CourseLesson lesson) {
       lesson.title.toLowerCase().contains('reward')) {
     return CourseNodeKind.reward;
   }
-  if (stages.length == 1 && stages.contains(ActivityStage.checkpoint)) {
+  if (roles.contains(AssessmentRole.checkpoint) &&
+      !stages.contains(ActivityStage.guided)) {
     return CourseNodeKind.checkpoint;
   }
   if (lesson.id.contains('-practice-') ||
@@ -319,8 +321,7 @@ CourseNodeKind deriveCourseNodeKind(CourseLesson lesson) {
     return CourseNodeKind.practice;
   }
   if (lesson.activities.isNotEmpty &&
-      lesson.activities.last.stage == ActivityStage.checkpoint &&
-      !stages.contains(ActivityStage.explain) &&
+      lesson.activities.last.assessmentRole == AssessmentRole.checkpoint &&
       !stages.contains(ActivityStage.guided)) {
     return CourseNodeKind.checkpoint;
   }

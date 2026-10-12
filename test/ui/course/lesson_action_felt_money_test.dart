@@ -456,7 +456,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-03-01-unguided-call',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Tap Call',
@@ -535,7 +535,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-03-01-unguided-btn',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.pokerActionSizing,
       estimatedSeconds: 55,
       accessibilityText: 'Open king-nine suited on the button.',

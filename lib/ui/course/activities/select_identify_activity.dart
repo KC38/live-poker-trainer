@@ -1981,7 +1981,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                                   widget.activity.stage ==
                                       ActivityStage.scaffolded ||
                                   widget.activity.stage ==
-                                      ActivityStage.checkpoint ||
+                                      AssessmentRole.checkpoint ||
                                   widget.controller.hintVisible)) ||
                           widget.activity.id == 'act-01-02-02-unguided-board'),
                   showInviteCue: !feltFirstSelect,

@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-06-12-01-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Before labels: wide entry plus pressure that still has a plan. Count samples.',

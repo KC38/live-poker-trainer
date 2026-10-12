@@ -20,7 +20,7 @@ void main() {
       final activity = CourseActivity(
         id: 'act-01-03-01-explain-passives',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 40,
         accessibilityText: 'Tap Fold, Check, and Call.',
@@ -126,7 +126,7 @@ void main() {
       final activity = CourseActivity(
         id: 'act-01-02-01-explain-ladder',
         order: 1,
-        stage: ActivityStage.explain,
+        stage: ActivityStage.guided,
         renderer: ActivityRenderer.coachDialogue,
         estimatedSeconds: 40,
         accessibilityText:

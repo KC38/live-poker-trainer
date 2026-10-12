@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-05-01-explain-bb',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Chips to BB, shorter, depth.',

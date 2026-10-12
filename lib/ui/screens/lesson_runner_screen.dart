@@ -382,8 +382,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     if (c == null || c.submitting || c.lastResult != null) return false;
     if (_heartsGateActive) return false;
     final activity = c.activity;
-    if (activity.renderer == ActivityRenderer.coachDialogue ||
-        activity.stage == ActivityStage.explain) {
+    // Coach dialogue acknowledges without a draft choice.
+    if (activity.renderer == ActivityRenderer.coachDialogue) {
       return true;
     }
     if (activity.renderer == ActivityRenderer.orderSequence ||
@@ -640,7 +640,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             ),
           );
         }
-        if (controller.activity.stage == ActivityStage.jumpTest) {
+        if (controller.activity.assessmentRole == AssessmentRole.jumpTest) {
           unawaited(
             analytics.logJumpTest(
               lessonId: attempt.lessonId,
@@ -1842,12 +1842,8 @@ String _gradeWire(SoftGrade grade) {
 
 String _stageWire(ActivityStage stage) {
   return switch (stage) {
-    ActivityStage.explain => 'explain',
     ActivityStage.guided => 'guided',
     ActivityStage.scaffolded => 'scaffolded',
-    ActivityStage.unguided => 'unguided',
-    ActivityStage.checkpoint => 'checkpoint',
-    ActivityStage.jumpTest => 'jump_test',
   };
 }
 

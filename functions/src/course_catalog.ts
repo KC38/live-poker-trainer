@@ -16,13 +16,10 @@ export type SoftGrade =
   | "questionable"
   | "clear_mistake";
 
-export type ActivityStage =
-  | "explain"
-  | "guided"
-  | "scaffolded"
-  | "unguided"
-  | "checkpoint"
-  | "jump_test";
+export type ActivityStage = "guided" | "scaffolded";
+
+/** Path/assessment role on a scaffolded step (Hint disabled). */
+export type AssessmentRole = "checkpoint" | "jump_test";
 
 export type ActivityRenderer =
   | "coach_dialogue"
@@ -67,6 +64,8 @@ export interface CourseActivity {
   id: string;
   order: number;
   stage: ActivityStage;
+  assessmentRole?: AssessmentRole;
+  teachSpec?: Record<string, unknown>;
   renderer: ActivityRenderer;
   estimatedSeconds: number;
   accessibilityText: string;
@@ -195,7 +194,9 @@ export function findActivity(
 
 /** True when the lesson contains a jump-test or placement-style activity. */
 export function lessonRequiresPlacementFlag(lesson: CourseLesson): boolean {
-  return lesson.activities.some((activity) => activity.stage === "jump_test");
+  return lesson.activities.some(
+      (activity) => activity.assessmentRole === "jump_test",
+  );
 }
 
 /**

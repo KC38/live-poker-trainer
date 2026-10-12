@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://livepokertrainer.local/schemas/course/v2/teach_spec.schema.json",
+  "title": "Lesson teach spec (deal, hints, cues)",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "deal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["none", "fixed", "random_in_class"]
+        },
+        "handFamily": {
+          "type": "string",
+          "enum": [
+            "any",
+            "high_card",
+            "pair",
+            "two_pair",
+            "trips",
+            "straight",
+            "flush",
+            "full_house",
+            "quads",
+            "straight_flush",
+            "broadway",
+            "suited_ace",
+            "connector",
+            "trash"
+          ]
+        },
+        "suitFamily": {
+          "type": "string",
+          "enum": [
+            "any",
+            "suited",
+            "offsuit",
+            "pair",
+            "four_suits",
+            "rainbow",
+            "two_tone",
+            "monotone"
+          ]
+        },
+        "fixedCards": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "hero": {
+              "type": "array",
+              "items": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "board": {
+              "type": "array",
+              "items": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+              "maxItems": 5
+            },
+            "villains": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          }
+        },
+        "variants": {
+          "type": "array",
+          "description": "Authored variation pool for review/practice re-deals.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+              "id": { "$ref": "common.schema.json#/definitions/idString" },
+              "handFamily": { "type": "string" },
+              "suitFamily": { "type": "string" },
+              "fixedCards": { "$ref": "#/properties/deal/properties/fixedCards" },
+              "label": { "$ref": "common.schema.json#/definitions/nonEmptyString" }
+            }
+          }
+        }
+      }
+    },
+    "pressHints": {
+      "type": "array",
+      "description": "One authored Hint line per press (1-based).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["press", "text"],
+        "properties": {
+          "press": { "$ref": "common.schema.json#/definitions/positiveInt" },
+          "text": { "$ref": "common.schema.json#/definitions/nonEmptyString" }
+        }
+      }
+    },
+    "cues": {
+      "type": "array",
+      "description": "SoftPulse gold targets per press (1-based).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["press", "target"],
+        "properties": {
+          "press": { "$ref": "common.schema.json#/definitions/positiveInt" },
+          "target": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
+          "kind": {
+            "type": "string",
+            "enum": ["soft_pulse", "none"],
+            "default": "soft_pulse"
+          }
+        }
+      }
+    }
+  }
+}

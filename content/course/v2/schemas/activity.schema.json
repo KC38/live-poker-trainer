@@ -13,6 +13,8 @@
     "estimatedSeconds": { "$ref": "common.schema.json#/definitions/positiveInt" },
     "accessibilityText": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
     "acceptedGrades": { "$ref": "common.schema.json#/definitions/acceptedGrades" },
+    "assessmentRole": { "$ref": "common.schema.json#/definitions/assessmentRole" },
+    "teachSpec": { "$ref": "teach_spec.schema.json" },
     "objectives": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/nonEmptyString" }, "uniqueItems": true },
     "playerTypeRefs": { "type": "array", "items": { "$ref": "common.schema.json#/definitions/playerTypeId" }, "uniqueItems": true },
     "coachMedia": { "type": "array", "items": { "$ref": "coach_media.schema.json" } },

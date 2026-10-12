@@ -39,7 +39,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-02-02-01-explain-families',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Four families.',

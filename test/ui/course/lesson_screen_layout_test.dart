@@ -60,7 +60,7 @@ void main() {
 
     final unguided = _hintActivity(
       id: 'act-01-01-01-unguided-mix',
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       accessibilityText: 'Tap the shared community cards on the flop.',
       prompt: 'Tap the community cards.',
     );
@@ -160,7 +160,7 @@ void main() {
 
     final explain = _hintActivity(
       id: 'act-01-01-02-explain-suits',
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       accessibilityText: 'You found all four suits. Ace is still the high card.',
     );
     expect(
@@ -176,14 +176,15 @@ void main() {
   test('hint fallback stays off for explain, jump tests, and no-hint caps', () {
     final explain = _hintActivity(
       id: 'act-01-01-02-explain-suits',
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       accessibilityText: 'You found all four suits. Ace is still the high card.',
     );
     expect(lessonFrameHintFallback(explain), isNull);
 
     final jump = _hintActivity(
       id: 'act-01-06-02-jump-legal',
-      stage: ActivityStage.jumpTest,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.jumpTest,
       accessibilityText: 'Jump test: check is illegal facing a bet.',
       prompt: 'A bet faces you. Pick the action you cannot take.',
     );
@@ -192,7 +193,7 @@ void main() {
 
     final capstone = _hintActivity(
       id: 'act-07-10-01-hand',
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       accessibilityText: 'Capstone single-raised pot. No hints. Trust your map.',
       prompt: 'Play the street.',
     );
@@ -203,7 +204,7 @@ void main() {
   test('hole-cards explain keeps its authored seat hint', () {
     final activity = _hintActivity(
       id: 'act-01-01-01-explain-hole-cards',
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       accessibilityText: 'These two are yours alone. Nobody else sees them.',
     );
     expect(

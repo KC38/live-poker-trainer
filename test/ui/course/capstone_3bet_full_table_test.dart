@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-07-10-02-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Capstone 3-bet. Short prompts. No hints.',

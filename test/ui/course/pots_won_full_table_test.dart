@@ -39,7 +39,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-05-01-explain-win',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Three paths.',

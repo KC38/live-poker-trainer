@@ -311,7 +311,11 @@ export function lessonAttemptAcceptedAccuracy(
     Math.max(
       0,
       attempt.acceptedCount -
-        sortedActivities(lesson).filter((a) => a.stage === "explain").length,
+        // Legacy attempts subtracted unscored explain steps; those are now
+        // guided coach-dialogue (still often unscored via renderer path).
+        sortedActivities(lesson).filter(
+            (a) => a.renderer === "coach_dialogue",
+        ).length,
     );
   return acceptedAccuracyRatio(acceptedScored, attempt.scoredCount);
 }
@@ -364,8 +368,8 @@ export function evaluateLifeAndAcceptance(options: {
   stage: ActivityStage;
 }): Pick<GradeOutcome, "accepted" | "lifeLost" | "masteryWeight"> {
   const accepted = ACCEPTED_GRADES.has(options.grade);
-  // Guided practice is a free miss — SoftPulse / Hint teaching. Scaffolded,
-  // unguided, checkpoint, and jump_test still spend a heart (LPT-59).
+  // Guided practice is a free miss — SoftPulse teaching. Scaffolded
+  // (including checkpoint / jump_test assessmentRole) still spends a heart.
   const lifeLost = !accepted && options.stage !== "guided";
   return {
     accepted,
@@ -387,8 +391,7 @@ export function gradeCourseResponse(options: {
     | Record<string, unknown>
     | undefined;
 
-  if (options.activity.stage === "explain" ||
-    options.activity.renderer === "coach_dialogue") {
+  if (options.activity.renderer === "coach_dialogue") {
     // Prefer authored Nice! why line from the private bank (LPT-74). Falling
     // back to accessibilityText reuses the idle ask when that line ends in
     // "Tap …" (Hand ranks explain ladder).
@@ -1105,7 +1108,8 @@ export async function submitCourseStepForUser(options: {
       });
     }
     const remediationRequired = lifeLost && livesRemaining <= 0;
-    const scored = activity.stage !== "explain";
+    // Coach dialogue is teach acknowledge; other guided/scaffolded steps score.
+    const scored = activity.renderer !== "coach_dialogue";
     const activities = sortedActivities(located.lesson);
     const currentIndex = activities.findIndex((item) => item.id === activityId);
     // Multi-step hands grade each street in place; only the last street
@@ -1129,7 +1133,7 @@ export async function submitCourseStepForUser(options: {
     const masteryPoints = attempt.masteryPoints + outcome.masteryWeight;
     const masteryWeight = attempt.masteryWeight + (countsAsScored ? 1 : 0);
     const jumpTestPassed = attempt.jumpTestPassed ||
-      (activity.stage === "jump_test" && advanceActivity);
+      (activity.assessmentRole === "jump_test" && advanceActivity);
 
     const advance = advanceActivity;
     const nextIndex = advance ?
@@ -1833,7 +1837,7 @@ export function shouldAdvanceActivityAfterSubmit(options: {
   accepted: boolean;
 }): boolean {
   const {activity, choiceId, accepted} = options;
-  if (activity.stage === "explain") return true;
+  if (activity.renderer === "coach_dialogue") return true;
   if (!accepted) return false;
   const steps = activity.handSteps;
   if (!Array.isArray(steps) || steps.length <= 1) return true;

@@ -725,7 +725,8 @@ bool lessonFrameHintsDisabled(
   CourseActivity activity, {
   bool isReview = false,
 }) {
-  if (activity.stage == ActivityStage.jumpTest) return true;
+  // Checkpoint / jump-test assessments: no Hint at all.
+  if (activity.assessmentRole != null) return true;
   // Teaching SoftPulse / tap cues are already on — tapping Hint would only
   // re-show what the learner already sees.
   if (lessonFrameHintShownByDefault(activity, isReview: isReview)) {
@@ -805,14 +806,12 @@ bool lessonFrameHintShownByDefault(
   CourseActivity activity, {
   bool isReview = false,
 }) {
+  if (activity.assessmentRole != null) return false;
   if (lessonFrameSoftPulseQuietByDefault(activity, isReview: isReview)) {
     return false;
   }
-  if (activity.stage == ActivityStage.guided) return true;
-  if (activity.stage != ActivityStage.scaffolded) return false;
-  // Select-identify still waits for Hint (answer vs scene-context
-  // highlights). Other scaffolded teaching steps already SoftPulse.
-  return activity.renderer != ActivityRenderer.selectIdentify;
+  // Guided SoftPulse teaches by default. Scaffolded waits for Hint.
+  return activity.stage == ActivityStage.guided;
 }
 
 /// Hint copy when the catalog step has no hint media.
@@ -832,9 +831,27 @@ String? lessonFrameHintFallback(
     return 'Your two cards are at your seat, along the bottom of the table.';
   }
 
-  // Explain steps already speak the teach line in the bubble. Reviews still
-  // need a fallback so Hint can unlock the cues that stay off by default.
-  if (activity.stage == ActivityStage.explain && !isReview) return null;
+  // Coach-dialogue guided steps already speak the teach line in the bubble.
+  // Reviews still need a fallback so Hint can unlock quiet SoftPulse.
+  if (activity.renderer == ActivityRenderer.coachDialogue && !isReview) {
+    return null;
+  }
+
+  // Prefer authored teachSpec press hints when present.
+  final teachHints = activity.teachSpec?['pressHints'];
+  if (teachHints is List && teachHints.isNotEmpty) {
+    final first = teachHints.first;
+    if (first is Map && first['text'] is String) {
+      final text = (first['text'] as String).trim();
+      if (text.isNotEmpty) {
+        return alignLessonActionCopy(
+          activity,
+          text,
+          generation: bindGeneration,
+        );
+      }
+    }
+  }
 
   // Hand ranks showdown-order: seat roles shuffle; catalog accessibility
   // still names authored You/Sam/Jo classes. Build Hint from the deal.
@@ -856,10 +873,8 @@ String? lessonFrameHintFallback(
   final prompt = activity.prompt?.trim() ?? '';
   if (prompt.isNotEmpty &&
       accessibility.toLowerCase() == prompt.toLowerCase()) {
-    // Still enable Hint on quieter stages so tap cues can unlock.
-    if (isReview ||
-        activity.stage == ActivityStage.unguided ||
-        activity.stage == ActivityStage.checkpoint) {
+    // Scaffolded / review: reuse accessibility so Hint can unlock SoftPulse.
+    if (isReview || activity.stage == ActivityStage.scaffolded) {
       return alignLessonActionCopy(
         activity,
         accessibility,

@@ -58,7 +58,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-04-01-explain-streets',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'Four streets.',

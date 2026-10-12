@@ -43,7 +43,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-06-12-02-explain',
       order: 1,
-      stage: ActivityStage.explain,
+      stage: ActivityStage.guided,
       renderer: ActivityRenderer.coachDialogue,
       estimatedSeconds: 30,
       accessibilityText: 'LAG: wide in, pressure on — still a working model.',

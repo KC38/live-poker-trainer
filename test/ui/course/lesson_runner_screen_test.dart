@@ -5064,7 +5064,7 @@ void main() {
       activity: CourseActivity(
         id: 'act-numeric',
         order: 1,
-        stage: ActivityStage.unguided,
+        stage: ActivityStage.scaffolded,
         renderer: ActivityRenderer.numericPotPrice,
         estimatedSeconds: 30,
         accessibilityText: 'Pot',
@@ -5118,7 +5118,7 @@ void main() {
       activity: CourseActivity(
         id: 'act-one',
         order: 1,
-        stage: ActivityStage.unguided,
+        stage: ActivityStage.scaffolded,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 20,
         accessibilityText: 'Pick',
@@ -5214,7 +5214,8 @@ void main() {
         activity: CourseActivity(
           id: 'act-one',
           order: 1,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 20,
           accessibilityText: 'Pick',
@@ -5301,7 +5302,8 @@ void main() {
         activity: CourseActivity(
           id: 'act-one',
           order: 1,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 20,
           accessibilityText: 'Pick',
@@ -5383,7 +5385,8 @@ void main() {
         activity: CourseActivity(
           id: 'act-one',
           order: 1,
-          stage: ActivityStage.checkpoint,
+          stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 20,
           accessibilityText: 'Pick',

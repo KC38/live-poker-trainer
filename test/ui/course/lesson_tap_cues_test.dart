@@ -297,7 +297,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-01-01-unguided-mix',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Tap the shared community cards on the flop.',
@@ -454,7 +454,8 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-04-01-checkpoint-postflop',
       order: 5,
-      stage: ActivityStage.checkpoint,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText:
@@ -531,7 +532,7 @@ void main() {
     final activity = CourseActivity(
       id: 'act-01-04-01-unguided-end',
       order: 4,
-      stage: ActivityStage.unguided,
+      stage: ActivityStage.scaffolded,
       renderer: ActivityRenderer.selectIdentify,
       estimatedSeconds: 40,
       accessibilityText: 'Betting is live — pick when this street ends.',
@@ -674,7 +675,8 @@ void main() {
       final activity = CourseActivity(
         id: 'act-01-01-03-checkpoint-layout',
         order: 5,
-        stage: ActivityStage.checkpoint,
+        stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
         renderer: ActivityRenderer.selectIdentify,
         estimatedSeconds: 45,
         accessibilityText: 'On a six-handed table, tap the small blind seat.',
@@ -792,7 +794,7 @@ void main() {
               }
               CourseActivity? explain;
               for (final prior in acts) {
-                if (prior.stage == ActivityStage.explain &&
+                if (prior.stage == ActivityStage.guided &&
                     prior.order < activity.order) {
                   explain = prior;
                   break;
