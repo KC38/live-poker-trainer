@@ -595,6 +595,63 @@ void main() {
   );
 
   test(
+    'section 3 jump-mw air template never remaps to a flush draw (LPT-391)',
+    () {
+      final activity = CourseActivity(
+        id: 'act-03-08-02-jump-mw',
+        order: 3,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.jumpTest,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 40,
+        accessibilityText: 'Jump: fold air multiway.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Four-way. You have air on a wet flop. Action?',
+      );
+      final template = resolveLessonActionSpot(activity)!;
+      expect(template.heroCodes, ['7s', '3d']);
+      expect(template.boardCodes, ['Ah', 'Kh', '9h']);
+      final rankKeys = <String>{};
+      for (var seed = 0; seed < 64; seed++) {
+        final spot = dealtLessonActionSpot(
+          activity,
+          generation: seed,
+          random: Random(seed),
+        )!;
+        final dealtHero = [
+          for (final c in spot.heroCodes) CardModel.fromCode(c),
+        ];
+        final dealtBoard = [
+          for (final c in spot.boardCodes) CardModel.fromCode(c),
+        ];
+        expect(
+          dealtHero[0].rank == dealtHero[1].rank,
+          isFalse,
+          reason: 'seed $seed no pocket pair: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        final boardRanks = {for (final c in dealtBoard) c.rank};
+        expect(
+          boardRanks.contains(dealtHero[0].rank) ||
+              boardRanks.contains(dealtHero[1].rank),
+          isFalse,
+          reason: 'seed $seed no board pair: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        final boardSuit = dealtBoard.first.suit;
+        expect(
+          dealtHero.any((c) => c.suit == boardSuit),
+          isFalse,
+          reason:
+              'seed $seed no board-suit hole: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        rankKeys.add(
+          ([for (final c in dealtHero) c.rank]..sort()).join(','),
+        );
+      }
+      expect(rankKeys.length, greaterThan(1));
+    },
+  );
+
+  test(
     'leak-repair scaffolded gutshot template keeps four outs after remap '
     '(LPT-381)',
     () {
