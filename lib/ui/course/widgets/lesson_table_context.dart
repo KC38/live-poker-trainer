@@ -11604,7 +11604,8 @@ class LessonTableContext extends StatelessWidget {
           'Interactive MDF stance — tap intuition vs exact percents',
       semanticsStatic: 'Defend intuition outcomes',
       caption: scene.caption ?? 'MDF numbers in this course?',
-      // No SoftPulse on unguided — still don’t gold-icon Intuition.
+      // SoftPulse + Rex own the cue — one gold Intuition only (LPT-499).
+      guideRegion: LessonTableRegion.defendIntuition,
       phases: [
         (
           region: LessonTableRegion.defendIntuition,
