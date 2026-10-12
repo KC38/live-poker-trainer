@@ -282,6 +282,45 @@ void main() {
       startingHandFamilyFromCodes(['Ah', '9h']),
       LessonStartingHandFamily.suitedAce,
     );
+    expect(
+      startingHandFamilyFromCodes(['Ah', 'Qh']),
+      LessonStartingHandFamily.strongSuitedBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Kh', 'Qh']),
+      LessonStartingHandFamily.strongSuitedBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Qh', 'Th']),
+      LessonStartingHandFamily.suitedBroadway,
+    );
+    expect(
+      startingHandFamilyFromCodes(['Jh', 'Th']),
+      LessonStartingHandFamily.suitedBroadway,
+    );
+  });
+
+  test('preflop AQs remap stays in strong suited broadway (LPT-173)', () {
+    final labels = <String>{};
+    for (var seed = 0; seed < 48; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [
+          ['Ah', 'Qh'],
+          <String>[],
+        ],
+        Random(seed),
+      );
+      expect(
+        startingHandFamilyFromCodes(groups[0]),
+        LessonStartingHandFamily.strongSuitedBroadway,
+        reason: 'seed $seed dealt ${groups[0]}',
+      );
+      labels.add(startingHandLabelFromCodes(groups[0]));
+    }
+    expect(labels.contains('QTs'), isFalse);
+    expect(labels.contains('JTs'), isFalse);
+    expect(labels.contains('KTs'), isFalse);
+    expect(labels.length, greaterThan(1));
   });
 
   test('startingHandLabelFromCodes uses chart notation', () {
