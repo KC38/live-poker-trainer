@@ -1182,9 +1182,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Half-pot flop → pot-ish turn',
       );
     case 'act-06-07-01-scaffolded':
+      // True third pair: 97 pairs the 9 on K Q 9 4 8, and the river 8s is
+      // scary (JT gets there) while hero blocks none of it. Kc Qh Jd 2c Ts
+      // gave 9-7 a K-high straight under a “third pair” label (LPT-397).
       return const LessonActionSpot(
         heroCodes: ['9h', '7d'],
-        boardCodes: ['Kc', 'Qh', 'Jd', '2c', 'Ts'],
+        boardCodes: ['Kc', 'Qh', '9d', '4c', '8s'],
         potLabel: 'Pot 48',
         villainLine: 'Bombs river · no blockers',
         streetLabel: 'River · third pair',
