@@ -13,6 +13,7 @@ import 'package:live_poker_trainer/models/player_model.dart';
 import 'package:live_poker_trainer/providers/profile_provider.dart';
 import 'package:live_poker_trainer/ui/course/activities/poker_action_sizing_activity.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_felt_money.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
@@ -362,6 +363,71 @@ void main() {
       expect(
         shouldApplyLessonActionFeltMoney(spot: spot, money: money),
         isTrue,
+      );
+    });
+
+    test('preflop folds-to-you Pot 3 keeps posted blinds', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['Ah', 'Jh'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · UTG · 9-max',
+        facingBet: false,
+        openPot: true,
+      );
+      final layout = resolveLessonActionFeltLayout(spot);
+      final money = resolveLessonActionFeltMoney(
+        spot: spot,
+        choices: const [
+          CourseChoice(id: 'fold', label: 'Fold', action: 'FOLD'),
+          CourseChoice(id: 'open', label: 'Raise to 6', action: 'RAISE'),
+        ],
+        seatCount: layout.seatCount,
+        villainSeatIndex: layout.villainSeatIndex,
+      );
+
+      expect(layout.seatCount, 9);
+      expect(money.streetBets.every((bet) => bet == 0), isTrue);
+      expect(
+        shouldApplyLessonActionFeltMoney(spot: spot, money: money),
+        isFalse,
+      );
+
+      final game = lessonTableStageGame(
+        heroCodes: spot.heroCodes,
+        villainCount: layout.villainCount,
+        dealerIndex: layout.dealerIndex,
+        sbIndex: layout.sbIndex,
+        bbIndex: layout.bbIndex,
+        foldedSeatIndexes: layout.foldedSeatIndexes,
+      );
+      expect(game.players[layout.sbIndex!].currentBet, 1);
+      expect(game.players[layout.bbIndex!].currentBet, 2);
+      expect(game.mainPot, 0);
+      expect(game.displayPot, 3);
+    });
+
+    test('button open Pot 3 does not paint a zero street-bet list', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['Ah', '9h'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · Button',
+        facingBet: false,
+        openPot: true,
+      );
+      final money = resolveLessonActionFeltMoney(
+        spot: spot,
+        choices: const [
+          CourseChoice(id: 'open', label: 'Raise to 6', action: 'RAISE'),
+        ],
+        seatCount: 6,
+        villainSeatIndex: 1,
+      );
+
+      expect(
+        shouldApplyLessonActionFeltMoney(spot: spot, money: money),
+        isFalse,
       );
     });
   });

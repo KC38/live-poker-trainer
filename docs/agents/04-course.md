@@ -94,6 +94,11 @@ placeholders are wanted. Do not re-opt lesson stages into `boardSlots: true`.
 
 Default lesson stakes: `$1/$2` NLH unless the step overrides blinds.
 
+Preflop folds-to-you spots (`Pot 3`, no board) keep those blinds posted in
+front of SB/BB. `shouldApplyLessonActionFeltMoney` must not paint a zero
+street-bet list over them. Completed lines ("BB calls your open", "Blinds
+fold") and dealt-board pots still apply the labeled pot (LPT-97).
+
 ## Hearts economy
 
 - Five hearts. Non-guided mistakes cost a heart. Guided-stage misses do not
