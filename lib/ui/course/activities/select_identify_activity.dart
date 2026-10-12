@@ -1036,7 +1036,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns High commit — don’t gold-tip the tile.
       'act-06-09-01-guided' =>
         '100bb 4-bet pot · top pair — pick the depth mindset.',
-      // Unguided SoftPulse identify — don’t tip Avoid ego.
+      // SoftPulse owns Avoid ego — don’t gold-tip the tile (LPT-501).
       'act-06-09-01-unguided' => 'Light 4-bet for ego — pick the discipline.',
       // SoftPulse owns SPR / commit — don’t gold-tip the tile.
       'act-06-09-01-checkpoint' =>

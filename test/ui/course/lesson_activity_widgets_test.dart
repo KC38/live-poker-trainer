@@ -21592,6 +21592,28 @@ await tester.tap(find.text('NIT'));
       find.text('Light 4-bet for ego — tap Avoid ego.'),
       findsNothing,
     );
+    expect(find.text('Avoid ego'), findsOneWidget);
+    // LPT-501: guideRegion → one gold SoftPulse (Avoid ego), not Ego 4-bet.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Avoid ego'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Ego 4-bet'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Avoid ego'));
     await tester.pump();
     expect(controller.draft.choiceId, 'avoid');

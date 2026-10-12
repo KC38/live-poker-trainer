@@ -11844,8 +11844,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: '3-bet ego outcomes',
       caption:
           scene.caption ?? 'Light 4-bet bluff with no blockers for ego?',
-      // Unguided — densify only; don’t gold-icon Avoid ego.
+      // SoftPulse + Rex own the cue — one gold Avoid ego only (LPT-501).
       cueLabel: '',
+      guideRegion: LessonTableRegion.threeBetAvoidEgo,
       minHeightFactor: 0.55,
       phases: [
         (
