@@ -1784,11 +1784,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                             // Count outs framed money (LPT-274 / LPT-278):
                             // unguided coach says Pot 20 / bet 10; checkpoint
                             // says 200bb deep with a pot-sized sticky bet.
+                            // Close the river checkpoint (LPT-344): coach
+                            // names a big river bet — never blinds-only $10.
                             final outsUnguided =
                                 widget.activity.id == 'act-03-03-01-unguided';
                             final outsCheckpoint =
                                 widget.activity.id ==
                                 'act-03-03-01-checkpoint';
+                            final riverCheckpoint =
+                                widget.activity.id ==
+                                'act-03-06-01-checkpoint';
                             final villainCount = outsUnguided
                                 ? 1
                                 : (scene.villainSeatCount < 1
@@ -1805,12 +1810,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                               enabled: !locked,
                               potTotal: outsUnguided || outsCheckpoint
                                   ? 20
-                                  : null,
+                                  : (riverCheckpoint ? 40 : null),
                               streetBets: outsUnguided || outsCheckpoint
                                   ? const [0.0, 10.0]
-                                  : null,
+                                  : (riverCheckpoint
+                                      ? const [0.0, 40.0]
+                                      : null),
                               villainActionLabel:
-                                  outsUnguided || outsCheckpoint
+                                  outsUnguided ||
+                                          outsCheckpoint ||
+                                          riverCheckpoint
                                       ? 'BET'
                                       : null,
                               // $1/$2 → 200bb = $400 (LPT-278).
