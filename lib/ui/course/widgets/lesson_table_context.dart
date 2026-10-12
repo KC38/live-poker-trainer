@@ -6863,8 +6863,10 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive side pot — tap what is true',
       semanticsStatic: 'Side pot outcomes',
       caption: scene.caption ?? 'You all-in short · others keep betting',
-      // No spot cards — keep teach densify; Rex owns the cue.
+      // SoftPulse Side pot only — null guideRegion SoftPulses every tile
+      // (LPT-525). Rex owns the cue; no permanent gold tip on M/S chips.
       cueLabel: '',
+      guideRegion: LessonTableRegion.potSideForms,
       minHeightFactor: 0.58,
       phases: [
         (
@@ -6874,7 +6876,7 @@ class LessonTableContext extends StatelessWidget {
           visual: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _PotChipDot(label: 'M', gold: true),
+              _PotChipDot(label: 'M', gold: false),
               SizedBox(width: 4),
               _PotChipDot(label: 'S', gold: false),
             ],
@@ -6910,8 +6912,10 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive pot size — tap the chip total',
       semanticsStatic: 'Open pot size outcomes',
       caption: scene.caption ?? deal.caption,
-      // No spot cards — keep teach densify; Rex owns the cue.
+      // SoftPulse correct pot only — null guideRegion SoftPulses every tile
+      // (LPT-525). Framed open-pot SoftPulse stays on _LessonChoiceStack.
       cueLabel: '',
+      guideRegion: LessonTableRegion.potChipsNine,
       minHeightFactor: 0.58,
       phases: [
         (
