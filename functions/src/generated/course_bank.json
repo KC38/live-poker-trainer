@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "a3e1cc3429100f074b36c150e220ba09a235eca10813898e138f5b67155443b9",
+  "contentChecksum": "2d96edc981e89b6255116efd2355d5a11af2ee523ceae8b226150feb2882d129",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -19644,7 +19644,29 @@
                   ],
                   "objectives": [
                     "Recognize polarized sizing"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "POLAR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MERGED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SIZE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-04-01-guided",
@@ -19682,7 +19704,19 @@
                         "betterChoiceId": "polar"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "polar",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-04-01-scaffolded",
@@ -19736,7 +19770,32 @@
                   ],
                   "playerTypeRefs": [
                     "calling_station"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "Td"
+                        ],
+                        "board": [
+                          "Qc",
+                          "Ts",
+                          "3h",
+                          "2d",
+                          "7c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "mid",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-04-01-unguided",
@@ -19774,7 +19833,19 @@
                         "betterChoiceId": "mismatch"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "mismatch",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-04-01-checkpoint",
@@ -19813,7 +19884,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "thin",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
