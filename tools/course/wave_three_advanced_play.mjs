@@ -52,7 +52,18 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-01-01-explain", 1,
                 "Multiway: nutted hands up, air down. Domination hurts more.",
-                {objectives: ["Prefer nut potential multiway"]}),
+                {
+                  objectives: ["Prefer nut potential multiway"],
+                  // LPT-222
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "NUTTED", kind: "soft_pulse"},
+                      {press: 2, target: "AIR", kind: "soft_pulse"},
+                      {press: 3, target: "DOMINATION", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-05-01-01-guided", order: 2, stage: "guided",
                 prompt: "Four-way flop. Best continue with?",
@@ -66,6 +77,8 @@ export function buildSectionFive() {
                   choice("air", "Complete air for a stab", "clear_mistake",
                     "Bluffing crowds is expensive.", {betterChoiceId: "nfd"})
                 ],
+                // LPT-222
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "nfd", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-05-01-01-scaffolded", order: 3, stage: "scaffolded",
@@ -80,6 +93,11 @@ export function buildSectionFive() {
                   choice("shove-76", "Jam 100bb", "clear_mistake",
                     "Not a shove.", {action: "RAISE", amountBb: 100, betterChoiceId: "fold-76"})
                 ],
+                // LPT-222
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["7h", "6h"]}},
+                  cues: [{press: 1, target: "fold-76", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-05-01-01-unguided", order: 4, stage: "scaffolded",
@@ -95,6 +113,11 @@ export function buildSectionFive() {
                   choice("tiny", "Bet 1bb", "clear_mistake",
                     "Not value language.", {action: "BET", amountBb: 1, betterChoiceId: "bet-set"})
                 ],
+                // LPT-222
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["9h", "9d"], board: ["9s", "8c", "7h"]}},
+                  cues: [{press: 1, target: "bet-set", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -107,6 +130,8 @@ export function buildSectionFive() {
                   choice("any-two", "Any two for initiative", "clear_mistake",
                     "Crowds punish air.", {betterChoiceId: "nuts"})
                 ],
+                // LPT-222
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "nuts", kind: "none"}]},
               }),
             ],
           }),

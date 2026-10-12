@@ -358,6 +358,14 @@ const _lessons = <String, List<String>>{
     'act-04-10-02-jump-nit',
     'act-04-10-02-jump-maniac',
   ],
+  // LPT-222
+  'lesson-05-01-01-multiway-ranges': [
+    'act-05-01-01-explain',
+    'act-05-01-01-guided',
+    'act-05-01-01-scaffolded',
+    'act-05-01-01-unguided',
+    'act-05-01-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -2466,6 +2474,65 @@ void main() {
       expect(
         act('act-04-10-02-jump-maniac').assessmentRole,
         AssessmentRole.jumpTest,
+      );
+    });
+  });
+
+  group('Build multiway ranges (LPT-222)', () {
+    test('explain SoftPulse walks NUTTED → AIR → DOMINATION', () {
+      expect(
+        _list(
+          act('act-05-01-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['NUTTED', 'AIR', 'DOMINATION'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-05-01-01-guided'), 'cues').single['target'], 'nfd');
+      expect(act('act-05-01-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-05-01-01-scaffolded'), 'cues').single['target'],
+        'fold-76',
+      );
+      expect(
+        act('act-05-01-01-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['7h', '6h'],
+      );
+      expect(
+        _list(act('act-05-01-01-unguided'), 'cues').single['target'],
+        'bet-set',
+      );
+      expect(
+        act('act-05-01-01-unguided').teachSpec!['deal']['fixedCards']['hero'],
+        ['9h', '9d'],
+      );
+      expect(
+        act('act-05-01-01-unguided').teachSpec!['deal']['fixedCards']['board'],
+        ['9s', '8c', '7h'],
+      );
+      expect(
+        _list(act('act-05-01-01-checkpoint'), 'cues').single['target'],
+        'nuts',
+      );
+      expect(
+        _list(
+          act('act-05-01-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-05-01-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-05-01-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-05-01-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
       );
     });
   });
