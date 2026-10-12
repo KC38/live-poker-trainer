@@ -152,6 +152,7 @@ void main() {
       'act-01-02-01-checkpoint-winner': ['Flush', 'Straight', 'High Card'],
       'act-01-02-01-explain-ladder': ['High Card', 'One Pair', 'Flush'],
       'act-01-02-01-scaffolded-spot': ['One Pair', 'Straight', 'Flush'],
+      'act-01-06-02-jump-ranks': ['Flush', 'Straight', 'Two Pair'],
     };
 
     for (final entry in cases.entries) {

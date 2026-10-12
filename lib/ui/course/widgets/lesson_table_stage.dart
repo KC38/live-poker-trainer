@@ -1522,6 +1522,18 @@ LessonShowdownOrderSpot? handRanksShowdownSpot(String activityId) {
         seatIds: ['you', 'sam', 'jo'],
         correctOrder: ['you', 'sam', 'jo'],
       );
+    case 'act-01-06-02-jump-ranks':
+      // Strong → weak: You flush, Sam straight, Jo two pair (LPT-107).
+      return const LessonShowdownOrderSpot(
+        boardCodes: ['9h', '8h', '7h', '4c', '2s'],
+        heroCodes: ['Qh', 'Jh'],
+        villainHoleCodes: [
+          ['6c', '5d'],
+          ['9d', '4d'],
+        ],
+        seatIds: ['you', 'sam', 'jo'],
+        correctOrder: ['you', 'sam', 'jo'],
+      );
     default:
       return null;
   }
