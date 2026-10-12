@@ -7283,7 +7283,34 @@
                   ],
                   "objectives": [
                     "Identify made hands on the flop"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MADE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DRAW",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SDV",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "AIR",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-02-01-guided",
@@ -7331,7 +7358,30 @@
                         "betterChoiceId": "made-tp"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Ks",
+                          "9d",
+                          "2c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "made-tp",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-02-01-scaffolded",
@@ -7378,7 +7428,30 @@
                         "feedback": "Ace-high can win sometimes, but this is primarily a draw."
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "9h"
+                        ],
+                        "board": [
+                          "Jh",
+                          "8h",
+                          "3c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "nfd",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-02-01-unguided",
@@ -7426,7 +7499,30 @@
                         "betterChoiceId": "air"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "5h",
+                          "4h"
+                        ],
+                        "board": [
+                          "Qc",
+                          "7d",
+                          "2s"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "air",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-02-01-checkpoint",
@@ -7441,7 +7537,8 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Recognize air that needs equity or fold equity"
+                    "Separate draws from showdown value",
+                    "Identify made hands on the flop"
                   ],
                   "prompt": "Board Ts 9s 4d. You hold Js 8d. Best label?",
                   "choices": [
@@ -7474,7 +7571,30 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Js",
+                          "8d"
+                        ],
+                        "board": [
+                          "Ts",
+                          "9s",
+                          "4d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "oesd",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

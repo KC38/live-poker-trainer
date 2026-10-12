@@ -158,6 +158,14 @@ const _lessons = <String, List<String>>{
     'act-03-01-01-unguided',
     'act-03-01-01-checkpoint',
   ],
+  // LPT-141
+  'lesson-03-02-01-flop-hand-classes': [
+    'act-03-02-01-explain',
+    'act-03-02-01-guided',
+    'act-03-02-01-scaffolded',
+    'act-03-02-01-unguided',
+    'act-03-02-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -954,6 +962,39 @@ void main() {
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'eff-55');
+    });
+  });
+
+  group('Name your flop class (LPT-141)', () {
+    test('explain SoftPulse walks MADE → DRAW → SDV → AIR', () {
+      expect(
+        _list(
+          act('act-03-02-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['MADE', 'DRAW', 'SDV', 'AIR'],
+      );
+    });
+
+    test('classify steps author fixed deals; checkpoint quiet', () {
+      final g = act('act-03-02-01-guided').teachSpec!['deal'] as Map;
+      expect(g['mode'], 'fixed');
+      expect((g['fixedCards'] as Map)['hero'], ['Kh', 'Qh']);
+      expect(
+        _list(act('act-03-02-01-scaffolded'), 'cues').single['target'],
+        'nfd',
+      );
+      expect(
+        _list(act('act-03-02-01-unguided'), 'cues').single['target'],
+        'air',
+      );
+      final cp = act('act-03-02-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'oesd');
+      final d = cp.teachSpec!['deal'] as Map;
+      expect((d['fixedCards'] as Map)['hero'], ['Js', '8d']);
     });
   });
 }
