@@ -17273,6 +17273,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Maniac'), findsOneWidget);
+    // LPT-489: guideRegion → one gold SoftPulse (Maniac), not Nit.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Maniac'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Nit'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Maniac'));
     await tester.pump();
     expect(controller.draft.choiceId, 'pt-maniac');
@@ -17318,6 +17339,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Maniac'), findsOneWidget);
+    // LPT-489: guideRegion → one gold SoftPulse (Maniac), not Station.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Maniac'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Station'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Maniac'));
     await tester.pump();
     expect(controller.draft.choiceId, 'maniac2');
@@ -17364,6 +17406,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Three types'), findsOneWidget);
+    // LPT-489: guideRegion → one gold SoftPulse (Three types), not Unlabeled.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Three types'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Unlabeled'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Three types'));
     await tester.pump();
     expect(controller.draft.choiceId, 'three');

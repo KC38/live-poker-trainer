@@ -9646,6 +9646,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive player type — tap Maniac or Nit',
       semanticsStatic: 'Maniac vs Nit outcomes',
       caption: scene.caption ?? 'Opens 60% · triple-barrels light',
+      // SoftPulse + Rex own the cue — one gold Maniac only (LPT-489).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.meetManiacLabel,
       phases: [
         (
           region: LessonTableRegion.meetManiacLabel,
@@ -9677,6 +9680,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive player type — tap Maniac or Calling Station',
       semanticsStatic: 'Maniac vs Station outcomes',
       caption: scene.caption ?? '3-bets light · never gives up rivers',
+      // SoftPulse + Rex own the cue — one gold Maniac only (LPT-489).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.meetManiacLabel2,
       phases: [
         (
           region: LessonTableRegion.meetManiacLabel2,
@@ -9708,6 +9714,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive mix — tap introduced types or unlabeled seat',
       semanticsStatic: 'Maniac mix outcomes',
       caption: scene.caption ?? 'Which types are legal to mix now?',
+      // SoftPulse + Rex own the cue — one gold Three types only (LPT-489).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.meetManiacMixThree,
       phases: [
         (
           region: LessonTableRegion.meetManiacMixThree,
