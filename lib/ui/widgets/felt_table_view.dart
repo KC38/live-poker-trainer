@@ -445,6 +445,14 @@ class _FeltTableViewState extends State<FeltTableView> {
   ) {
     final h = layout.size.height;
     final winners = game.winnerIds.toSet();
+    // SoftPulse prefers the D / SB / BB puck (LPT-69). When that puck is not
+    // on the felt yet (scaffolded blinds hide BB until a correct tap), fall
+    // back to the seat ring so Hint still shows one gold target (LPT-73).
+    final cuePuckLabel = widget.cuePuckLabel;
+    final cuePuckOnFelt = cuePuckLabel != null &&
+        layout.seats.any(
+          (slot) => slot.pucks.any((puck) => puck.label == cuePuckLabel),
+        );
     final villains = <Widget>[];
     final hero = <Widget>[];
     final decorations = <Widget>[];
@@ -508,7 +516,7 @@ class _FeltTableViewState extends State<FeltTableView> {
                 selected: widget.selectedSeatIndexes.contains(slot.index),
                 highlighted:
                     _cuesReady &&
-                    widget.cuePuckLabel == null &&
+                    !cuePuckOnFelt &&
                     widget.cueSeatIndex == slot.index,
                 reserveLayout: false,
                 borderRadius: 12 * layout.seatScale,

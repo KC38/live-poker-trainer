@@ -780,6 +780,18 @@ bool lessonFrameSoftPulseQuietByDefault(
   return lessonFrameSameConceptQuietIds.contains(activity.id);
 }
 
+/// Blinds scaffolded SoftPulse that paints only after Hint.
+///
+/// `SelectIdentifyActivity._cuesAnswerSeat` requires guided stage or
+/// `hintVisible`. If [LessonActivityController.showTargetCue] auto-unlocked
+/// these as generic scaffolded SoftPulse, Hint stayed disabled with no gold
+/// (LPT-73). Other select-identify scaffolded beats (Best five kicker) still
+/// SoftPulse by default (LPT-63).
+bool lessonFrameBlindsSoftPulseWaitsForHint(CourseActivity activity) {
+  return activity.id == 'act-01-01-03-scaffolded-blinds' ||
+      activity.id == 'act-02-01-01-scaffolded-blinds';
+}
+
 /// Whether SoftPulse / answer cues are already visible without Hint.
 ///
 /// Guided (new-concept) steps SoftPulse the answer by default, so Hint would

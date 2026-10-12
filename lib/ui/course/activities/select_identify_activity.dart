@@ -44,11 +44,13 @@ bool isLessonBlindsFrameActivity(String activityId) {
 /// [LessonTableStage.activeSeatIndex]. Button / SB / BB use the puck label
 /// (LPT-69); other seat highlights still use the seat index.
 int? lessonSeatIndexForHighlight(LessonTableHighlight highlight) {
+  // Button / blinds SoftPulse prefers the D / SB / BB puck (LPT-69). Still
+  // return the seat index so FeltTableView can fall back to the seat ring
+  // when that puck is not posted yet (scaffolded blinds hide BB; LPT-73).
   return switch (highlight) {
-    LessonTableHighlight.button ||
-    LessonTableHighlight.smallBlind ||
-    LessonTableHighlight.bigBlind =>
-      null,
+    LessonTableHighlight.button => lessonBlindsButtonIndex,
+    LessonTableHighlight.smallBlind => lessonBlindsSmallBlindIndex,
+    LessonTableHighlight.bigBlind => lessonBlindsBigBlindIndex,
     LessonTableHighlight.cutoff => 2,
     LessonTableHighlight.hijack => 1,
     LessonTableHighlight.earlyPosition => 0,
