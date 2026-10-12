@@ -6,7 +6,7 @@
 # before signalling and waits for one more (or a compile error).
 #
 # Usage:
-#   tools/flutter_hot_restart.sh <log> <pid-file> [seconds=90]
+#   tools/flutter_hot_restart.sh <log> <pid-file> [seconds=90] [--purpose TEXT]
 #
 # Exit 0 restarted, 1 timeout / compile error, 2 no live flutter pid.
 set -euo pipefail
@@ -15,6 +15,9 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG="${1:-}"
 PIDFILE="${2:-}"
 SECONDS_WAIT="${3:-90}"
+# Empty PURPOSE keeps the holder's own purpose (e.g. "LPT-74: validate").
+PURPOSE=""
+[[ "${4:-}" == "--purpose" ]] && PURPOSE="${5:-}"
 if [[ -z "$LOG" || -z "$PIDFILE" ]]; then
   echo "usage: $0 <log> <pid-file> [seconds=90]" >&2
   exit 2
@@ -45,7 +48,7 @@ while (( $(date +%s) < deadline )); do
   fi
   now=$(date +%s)
   if [[ -n "${SIM_LOCK_RUN_ID:-}" ]] && (( now - last_beat >= 30 )); then
-    python3 "$ROOT/tools/sim_lock.py" heartbeat --purpose "hot restart" >/dev/null 2>&1 || true
+    python3 "$ROOT/tools/sim_lock.py" heartbeat ${PURPOSE:+--purpose "$PURPOSE"} >/dev/null 2>&1 || true
     last_beat=$now
   fi
   sleep 1

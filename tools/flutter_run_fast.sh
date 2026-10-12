@@ -37,7 +37,8 @@ LOG=""
 PIDFILE=""
 DEVICE=""
 TIMEOUT=600
-PURPOSE="flutter run"
+# Empty PURPOSE keeps the holder's own purpose (e.g. "LPT-74: validate").
+PURPOSE=""
 USE_CACHE=1
 MODE="run"
 KEY=""
@@ -78,7 +79,7 @@ heartbeat() {
   # The lock only covers the iPhone 13 mini; never beat it for another sim.
   [[ "$DEVICE" == "$MINI" ]] || return 0
   if [[ -n "${SIM_LOCK_RUN_ID:-}" ]] && (( now - last_beat >= 30 )); then
-    python3 "$ROOT/tools/sim_lock.py" heartbeat --purpose "$PURPOSE" >/dev/null 2>&1 || true
+    python3 "$ROOT/tools/sim_lock.py" heartbeat ${PURPOSE:+--purpose "$PURPOSE"} >/dev/null 2>&1 || true
     last_beat=$now
   fi
 }

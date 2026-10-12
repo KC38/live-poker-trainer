@@ -14,7 +14,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG="${1:-}"
 SECONDS_WAIT="${2:-300}"
-PURPOSE="wait Flutter Dart VM"
+# Empty PURPOSE keeps the holder's own purpose (e.g. "LPT-74: validate").
+PURPOSE=""
 
 if [[ -z "$LOG" || "$LOG" == -* ]]; then
   echo "usage: $0 <log-path> [seconds=300] [--purpose <text>]" >&2
@@ -46,7 +47,7 @@ while (( $(date +%s) < deadline )); do
   fi
   now=$(date +%s)
   if [[ -n "${SIM_LOCK_RUN_ID:-}" ]] && (( now - last_beat >= 30 )); then
-    python3 "$ROOT/tools/sim_lock.py" heartbeat --purpose "$PURPOSE" >/dev/null 2>&1 || true
+    python3 "$ROOT/tools/sim_lock.py" heartbeat ${PURPOSE:+--purpose "$PURPOSE"} >/dev/null 2>&1 || true
     last_beat=$now
   fi
   sleep 2
