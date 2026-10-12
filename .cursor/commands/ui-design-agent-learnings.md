@@ -184,7 +184,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   on guided/scaffolded is a different cue (LPT-68 closeout). Prefer
   `python3 tools/agent_tap.py wait-gold` after `openlesson` / deal settle
   (and wait for Nice! after the last explain tap) before taps or validated
-  shots — early taps nomatch Home (LPT-79/97).
+  shots — early taps nomatch Home (LPT-79/97). Acting order explain can take
+  ~7s before `gold SoftPulse:` names UTG; do not file SoftPulse-off from a
+  1–2s tree (LPT-147).
 - Prefer adopting `sim_lock_run_id` from
   `~/.live-poker-trainer/ui-agent-handoff.json` (then
   `simulator-lock.json`) when `$SIM_LOCK_RUN_ID` is unset in a
