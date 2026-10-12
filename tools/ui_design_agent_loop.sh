@@ -1005,6 +1005,29 @@ for row in rows:
             changed += 1
     out.append(row)
 
+# Drop stamp=reconciled rows when a real stamp already has the same ticket
+# with a durable result (false-stall upgrade left LPT-240 duplicated).
+held = {
+    r.get("ticket")
+    for r in out
+    if r.get("ticket")
+    and r.get("stamp") not in (None, "", "reconciled")
+    and r.get("result") not in (None, "stalled", "sim-not-ready")
+}
+deduped = []
+dropped = 0
+for row in out:
+    if (
+        row.get("stamp") == "reconciled"
+        and row.get("reconciled")
+        and row.get("ticket") in held
+    ):
+        dropped += 1
+        changed += 1
+        continue
+    deduped.append(row)
+out = deduped
+
 if not changed:
     raise SystemExit(0)
 
@@ -1013,7 +1036,10 @@ with tmp.open("w", encoding="utf-8") as handle:
     for row in out:
         handle.write(json.dumps(row) + "\n")
 tmp.replace(health_path)
-print(f"repaired {changed} health tail(s)", flush=True)
+msg = f"repaired {changed} health tail(s)"
+if dropped:
+    msg += f" (dropped {dropped} duplicate reconciled)"
+print(msg, flush=True)
 PY
 }
 
@@ -1558,8 +1584,10 @@ one_run() {
   unset _model
   # Heal gaps from prior runs that died before write_health_row.
   heal_stale_run_health "$stamp"
-  reconcile_health_from_coverage
+  # Repair before reconcile so a false-stall stamp upgraded from coverage
+  # is already seen and does not spawn a duplicate stamp=reconciled row.
   repair_health_tails
+  reconcile_health_from_coverage
   if [[ "$LAUNCHER" == "sdk" ]]; then
     if ! ensure_sdk_deps; then
       log "SDK deps unavailable; not starting agent"
@@ -1655,6 +1683,7 @@ PY
     # Coverage is often flushed after script(1) returns; wait briefly.
     wait_for_coverage_after "$start" "${UI_AGENT_COVERAGE_WAIT:-90}"
     write_health_row "$stamp" "${code:-1}" "$(( $(date +%s) - start ))" "$run_log" "$start"
+    repair_health_tails
     reconcile_health_from_coverage
     touch "$marker"
     rm -f "$agent_pids_file"
@@ -1965,8 +1994,8 @@ EOF
       active_stamp="${active_stamp#run-}"
     fi
     heal_stale_run_health "$active_stamp"
-    reconcile_health_from_coverage
     repair_health_tails
+    reconcile_health_from_coverage
     if loop_is_alive; then
       echo "loop: running (tmux -L $TMUX_SOCKET, session $SESSION, pid $(cat "$LOOP_PID_FILE"))"
     elif lt has-session -t "=$SESSION" 2>/dev/null; then
