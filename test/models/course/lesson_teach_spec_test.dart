@@ -230,6 +230,14 @@ const _lessons = <String, List<String>>{
     'act-04-01-01-unguided',
     'act-04-01-01-checkpoint',
   ],
+  // LPT-170
+  'lesson-04-02-01-threebet-squeeze': [
+    'act-04-02-01-explain',
+    'act-04-02-01-guided',
+    'act-04-02-01-scaffolded',
+    'act-04-02-01-unguided',
+    'act-04-02-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1347,6 +1355,51 @@ void main() {
       expect(cp.teachSpec!['deal']['fixedCards']['hero'], ['Qh', 'Qd']);
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'read-drives');
+    });
+  });
+
+  group('Navigate 3-bet pots (LPT-170)', () {
+    test('explain SoftPulse walks 3-BET → RANGES → SQUEEZE', () {
+      expect(
+        _list(
+          act('act-04-02-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['3-BET', 'RANGES', 'SQUEEZE'],
+      );
+    });
+
+    test('preflop spots author fixed holes; checkpoint quiet', () {
+      expect(
+        act('act-04-02-01-guided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Qh', 'Qd'],
+      );
+      expect(
+        _list(act('act-04-02-01-guided'), 'cues').single['target'],
+        '3bet-qq',
+      );
+      final scaf = act('act-04-02-01-scaffolded').teachSpec!['deal'];
+      expect(scaf['fixedCards']['hero'], ['7h', '2d']);
+      expect(scaf['handFamily'], 'trash');
+      expect(scaf['suitFamily'], 'offsuit');
+      expect(
+        _list(act('act-04-02-01-scaffolded'), 'cues').single['target'],
+        'fold-72',
+      );
+      expect(
+        act('act-04-02-01-unguided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Kd'],
+      );
+      expect(
+        _list(act('act-04-02-01-unguided'), 'cues').single['target'],
+        'squeeze',
+      );
+      final cp = act('act-04-02-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.teachSpec!['deal']['fixedCards']['hero'], ['Kh', 'Kd']);
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'size-18');
     });
   });
 }

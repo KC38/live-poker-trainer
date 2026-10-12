@@ -1116,7 +1116,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-02-01-explain", 1,
                 "3-bets define ranges. Squeezes punish multiway limps and flatting.",
-                {objectives: ["Value 3-bet strong hands"]}),
+                {
+                  objectives: ["Value 3-bet strong hands"],
+                  // LPT-170
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "3-BET", kind: "soft_pulse"},
+                      {press: 2, target: "RANGES", kind: "soft_pulse"},
+                      {press: 3, target: "SQUEEZE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-04-02-01-guided", order: 2, stage: "guided",
                 prompt: "CO opens to 6. You have QQ on the button. Action?",
@@ -1130,6 +1141,11 @@ export function buildSectionFour() {
                   choice("fold-qq", "Fold", "clear_mistake",
                     "Do not fold queens.", {action: "FOLD", betterChoiceId: "3bet-qq"})
                 ],
+                // LPT-170
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Qh", "Qd"]}},
+                  cues: [{press: 1, target: "3bet-qq", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-02-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1144,6 +1160,16 @@ export function buildSectionFour() {
                   choice("4bet-72", "4-bet bluff", "clear_mistake",
                     "Not with trash offsuit.", {action: "RAISE", amountBb: 50, betterChoiceId: "fold-72"})
                 ],
+                // LPT-170
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    handFamily: "trash",
+                    suitFamily: "offsuit",
+                    fixedCards: {hero: ["7h", "2d"]},
+                  },
+                  cues: [{press: 1, target: "fold-72", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-02-01-unguided", order: 4, stage: "scaffolded",
@@ -1160,6 +1186,16 @@ export function buildSectionFour() {
                   choice("fold-ak", "Fold", "clear_mistake",
                     "Too strong.", {action: "FOLD", betterChoiceId: "squeeze"})
                 ],
+                // LPT-170
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    handFamily: "broadway",
+                    suitFamily: "offsuit",
+                    fixedCards: {hero: ["Ah", "Kd"]},
+                  },
+                  cues: [{press: 1, target: "squeeze", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1176,6 +1212,11 @@ export function buildSectionFour() {
                   choice("size-7", "3-bet to 7", "clear_mistake",
                     "That is not a real re-raise.", {action: "RAISE", amountBb: 3.5, betterChoiceId: "size-18"})
                 ],
+                // LPT-170
+                teachSpec: {
+                  deal: {mode: "fixed", handFamily: "pair", fixedCards: {hero: ["Kh", "Kd"]}},
+                  cues: [{press: 1, target: "size-18", kind: "none"}],
+                },
               }),
             ],
           }),
