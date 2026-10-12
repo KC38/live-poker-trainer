@@ -849,7 +849,7 @@ void main() {
     final early = TableFeatures.forLessonId(
       'lesson-01-01-01-your-two-cards',
     );
-    expect(early.boardSlots, isTrue);
+    expect(early.boardSlots, isFalse);
 
     await tester.pumpWidget(
       MaterialApp(

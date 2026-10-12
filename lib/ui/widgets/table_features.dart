@@ -15,7 +15,11 @@ import 'package:flutter/widgets.dart';
 /// concept a lesson leaves out until the course teaches it.
 @immutable
 class TableFeatures {
-  /// Creates a feature set. Every layer is on unless turned off.
+  /// Creates a feature set.
+  ///
+  /// Most layers default on. [boardSlots] defaults **off** so lesson felts
+  /// never draw empty turn/river outlines unless a Live / full table opts in
+  /// (LPT-80). Use [full] when empty street placeholders should show.
   const TableFeatures({
     this.stacks = true,
     this.pot = true,
@@ -27,7 +31,7 @@ class TableFeatures {
     this.opponentCards = true,
     this.playerTypes = true,
     this.stats = true,
-    this.boardSlots = true,
+    this.boardSlots = false,
   });
 
   /// Stack amount inside each seat box.
@@ -63,8 +67,11 @@ class TableFeatures {
   /// Empty outlines where the rest of the board will be dealt.
   final bool boardSlots;
 
-  /// Every layer. Live Training and lessons past the last switch-on point.
-  static const TableFeatures full = TableFeatures();
+  /// Every layer, including empty board slot outlines.
+  ///
+  /// Live Training and unparsed ids use this. Lesson presets from [forLesson]
+  /// keep [boardSlots] off so short boards never show phantom streets.
+  static const TableFeatures full = TableFeatures(boardSlots: true);
 
   /// Lesson that first teaches the button, the blinds, and the pot they
   /// start. Pucks, the blinds line, posted chips, and the pot switch on here.
@@ -89,9 +96,10 @@ class TableFeatures {
   /// Layers a learner has been taught by [at].
   ///
   /// Each layer switches on at the lesson that teaches it and stays on for
-  /// the rest of the course. Cards, seats, opponents' face-down cards, and
-  /// board slots default on from the first lesson; a hole-only step may set
-  /// [boardSlots] false so empty outlines do not draw.
+  /// the rest of the course. Cards, seats, and opponents' face-down cards
+  /// stay on from the first lesson. Empty board slot outlines stay **off**
+  /// for every lesson (LPT-80) — only dealt community cards draw; Live
+  /// Training uses [full] when placeholders are wanted.
   static TableFeatures forLesson(LessonPosition at) {
     bool from(LessonPosition start) => compareLessons(at, start) >= 0;
     final blinds = from(blindsLesson);
@@ -106,6 +114,7 @@ class TableFeatures {
       street: from(streetLesson),
       playerTypes: types,
       stats: types,
+      boardSlots: false,
     );
   }
 

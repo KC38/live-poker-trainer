@@ -25,7 +25,7 @@ void main() {
       final blinds = TableFeatures.forLessonId(
         'lesson-01-01-03-blinds-and-button',
       );
-      expect(blinds.boardSlots, isTrue);
+      expect(blinds.boardSlots, isFalse);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -57,7 +57,7 @@ void main() {
       final blinds = TableFeatures.forLessonId(
         'lesson-01-01-03-blinds-and-button',
       );
-      expect(blinds.boardSlots, isTrue);
+      expect(blinds.boardSlots, isFalse);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -71,7 +71,7 @@ void main() {
                 dealerIndex: lessonBlindsButtonIndex,
                 sbIndex: lessonBlindsSmallBlindIndex,
                 bbIndex: lessonBlindsBigBlindIndex,
-                features: blinds.copyWith(boardSlots: false),
+                features: blinds,
                 cueSeatIndex: lessonBlindsButtonIndex,
                 onSeatIndexTap: (_) {},
               ),
