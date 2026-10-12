@@ -3717,7 +3717,11 @@
                   ],
                   "objectives": [
                     "Order preflop action after the blinds"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "UTG → HJ → CO → BTN."
+                  }
                 },
                 {
                   "id": "act-02-01-02-guided-pre",
@@ -23048,7 +23052,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "UTG → HJ → CO → BTN."
+      }
     },
     "act-02-01-02-guided-pre": {
       "activityId": "act-02-01-02-guided-pre",
