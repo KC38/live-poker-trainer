@@ -13,6 +13,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 /// Action + sizing choices styled like the live action dock.
 class PokerActionSizingActivity extends StatelessWidget {
@@ -254,6 +255,11 @@ class PokerActionSizingActivity extends StatelessWidget {
                         potTotal: applyFeltMoney ? feltMoney.potTotal : null,
                         heroStackChips: spot.heroStackAmount?.toDouble(),
                         villainStackChips: spot.villainStackChips,
+                        // Preflop and short boards must not draw empty street
+                        // outlines (LPT-77; same gate as LPT-66).
+                        features: TableFeaturesScope.of(
+                          context,
+                        ).copyWith(boardSlots: false),
                       )
                       : null;
               final felt =
