@@ -857,6 +857,17 @@ String? lessonFrameHintFallback(
     }
   }
 
+  // Plan the turn scaffolded: isomorphic remap can deal AT/AJ under the AK
+  // template. Catalog accessibility used to say TPTK; keep a Dart line that
+  // survives asset-cache hot-restarts and never claims nut kicker (LPT-327).
+  if (activity.id == 'act-03-05-01-scaffolded') {
+    return alignLessonActionCopy(
+      activity,
+      'Second barrel value with top pair on a brick.',
+      generation: bindGeneration,
+    );
+  }
+
   // Hand ranks showdown-order: seat roles shuffle; catalog accessibility
   // still names authored You/Sam/Jo classes. Build Hint from the deal.
   final showdownHint = showdownOrderHintSpeech(
