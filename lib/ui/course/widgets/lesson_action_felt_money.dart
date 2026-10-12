@@ -65,6 +65,10 @@ double? parseFacingBetChips(String? villainLine) {
 /// open, blinds folded, flop after the call). Those still need the labeled
 /// pot — otherwise the full table falls back to blinds-only / street defaults
 /// (LPT-97).
+///
+/// A preflop "Pot 3" / folds-to-you line has no street bets yet. Applying
+/// that zero-bet list pulls the posted SB/BB chips into the center and
+/// refunds their stacks. Leave those spots on the default posted blinds.
 bool shouldApplyLessonActionFeltMoney({
   required LessonActionSpot spot,
   required LessonActionFeltMoney money,
@@ -72,6 +76,7 @@ bool shouldApplyLessonActionFeltMoney({
   if (spot.facingBet) return true;
   if (money.heroActionLabel != null) return true;
   if (money.streetBets.any((b) => b > 0)) return true;
+  if (spot.boardCodes.isEmpty) return false;
   return parseLessonPotChips(spot.potLabel) != null;
 }
 
