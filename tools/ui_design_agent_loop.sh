@@ -48,6 +48,10 @@
 #                               than this while the process is still alive
 #                               (default 600). Covers Cursor reconnect hangs
 #                               that otherwise hold the mini until MAX_RUN.
+#   UI_AGENT_SANDBOX_STALL_SECONDS
+#                               faster stall when the run log is quiet and
+#                               the only agent descendants are private-worker
+#                               shells stuck on sandbox `cat <&3` (default 180).
 set -euo pipefail
 
 export PATH="$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/Applications/flutter/bin:${PATH:-}"
@@ -81,6 +85,7 @@ USAGE_LIMIT_SLEEP="${UI_AGENT_USAGE_LIMIT_SLEEP:-}"
 VM_WAIT_SECONDS="${UI_AGENT_VM_WAIT_SECONDS:-180}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
 STALL_SECONDS="${UI_AGENT_STALL_SECONDS:-600}"
+SANDBOX_STALL_SECONDS="${UI_AGENT_SANDBOX_STALL_SECONDS:-180}"
 # sdk = @cursor/sdk; cli = legacy `agent -p`.
 LAUNCHER="${UI_AGENT_LAUNCHER:-sdk}"
 # machine = cloud SDK on My Machines worker (bc-* in Agents sidebar).
@@ -419,13 +424,14 @@ wait_for_dart_vm() {
 lock_heartbeat_stalled() {
   local agent_pid="" run_log="${1:-}"
   [[ -f "$PID_FILE" ]] && agent_pid="$(cat "$PID_FILE" 2>/dev/null || true)"
-  python3 - "$STALL_SECONDS" "${agent_pid:-}" "$run_log" <<'PY'
+  python3 - "$STALL_SECONDS" "${agent_pid:-}" "$run_log" "$SANDBOX_STALL_SECONDS" <<'PY'
 import json, os, subprocess, sys, time
 from pathlib import Path
 
 stall = int(sys.argv[1])
 agent_pid = sys.argv[2].strip()
 run_log = Path(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[3] else None
+sandbox_stall = int(sys.argv[4]) if len(sys.argv) > 4 else 180
 now = time.time()
 lock_dir = Path(os.environ.get("SIM_LOCK_DIR") or Path.home() / ".live-poker-trainer")
 path = lock_dir / "simulator-lock.json"
@@ -436,7 +442,9 @@ except (OSError, json.JSONDecodeError):
 if state.get("state") != "in_use":
     raise SystemExit(1)
 beat = float(state.get("heartbeat_epoch") or state.get("claimed_epoch") or 0)
-if (now - beat) <= stall:
+beat_age = now - beat
+# Truly fresh heartbeat/log — never stall (also bounds the sandbox fast path).
+if beat_age <= sandbox_stall:
     raise SystemExit(1)
 
 # Machine SDK (and CLI) append thinking/tool_call lines to the run log while
@@ -444,18 +452,22 @@ if (now - beat) <= stall:
 # false stall exit 13 killed mid-flutter-test on 20261012-123827.
 # Checked before HEARTBEAT_ONLY so unit tests can cover it without host
 # flutter/tmux probes masking the age check.
+log_age = None
 if run_log is not None and run_log.is_file():
     try:
-        if (now - run_log.stat().st_mtime) <= stall:
+        log_age = now - run_log.stat().st_mtime
+        if log_age <= sandbox_stall:
             raise SystemExit(1)
     except OSError:
         pass
 
-# Unit tests set this to exercise heartbeat age without host flutter/tmux.
-if os.environ.get("UI_AGENT_STALL_HEARTBEAT_ONLY") == "1":
-    raise SystemExit(0)
-
 def _ps() -> str:
+    fixture = os.environ.get("UI_AGENT_STALL_PS_FILE", "").strip()
+    if fixture:
+        try:
+            return Path(fixture).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            return ""
     try:
         return subprocess.check_output(
             ["ps", "-o", "pid=,ppid=,command=", "-ax"],
@@ -464,6 +476,96 @@ def _ps() -> str:
         )
     except (OSError, subprocess.CalledProcessError):
         return ""
+
+
+def _parse_children(ps_out: str) -> dict[str, list[tuple[str, str]]]:
+    children: dict[str, list[tuple[str, str]]] = {}
+    for line in ps_out.splitlines():
+        parts = line.strip().split(None, 2)
+        if len(parts) < 3:
+            continue
+        pid_s, ppid_s, cmd = parts
+        children.setdefault(ppid_s, []).append((pid_s, cmd))
+    return children
+
+
+def _descendants(root: str, children: dict[str, list[tuple[str, str]]]) -> list[tuple[str, str]]:
+    stack = [root]
+    seen: set[str] = set()
+    out: list[tuple[str, str]] = []
+    while stack:
+        cur = stack.pop()
+        if cur in seen:
+            continue
+        seen.add(cur)
+        for child_pid, cmd in children.get(cur, []):
+            out.append((child_pid, cmd))
+            stack.append(child_pid)
+    return out
+
+
+def _only_sandbox_snap_waiters(root: str, ps_out: str) -> bool:
+    """True when every agent descendant is an idle private-worker snap shell.
+
+    Cursor machine shells start as ``zsh -c '… snap=$(command cat <&3) …'``
+    with a child ``cat``. When fd3 never arrives the tool_call never runs and
+    the run log freezes (LPT-637, 2026-10-13) — not a live flutter/test.
+    """
+    if not root.isdigit() or not ps_out.strip():
+        return False
+    children = _parse_children(ps_out)
+    desc = _descendants(root, children)
+    if not desc:
+        return False
+    busy_needles = (
+        "flutter", "dart", "xcodebuild", "git ", "rsync", "pub get",
+        "agent_tap", "simctl", "firebase", "npm ", "gh ", "deploy-functions",
+        "tee_exit", "wait_done",
+    )
+    snap_markers = ("cat <&3", "command cat <&3", "snap=$(command cat")
+    for _pid, cmd in desc:
+        low = cmd.lower()
+        if any(n in low for n in busy_needles):
+            return False
+        base = Path(cmd.split(None, 1)[0]).name.lower() if cmd.strip() else ""
+        is_shell = base in {"zsh", "bash", "sh", "dash"}
+        is_cat = base == "cat" or low.strip() == "cat" or low.endswith(" cat")
+        looks_snap = any(m in cmd for m in snap_markers) or (
+            is_shell and "cursor" in low and "sandbox" in low
+        )
+        # Accept bare `cat` children of snap shells; reject anything else.
+        if is_cat:
+            continue
+        if is_shell and looks_snap:
+            continue
+        if is_shell and "builtin export path=" in low and "dump_zsh_state" in low:
+            continue
+        return False
+    return True
+
+
+# Faster stall: quiet log + only sandbox snap waiters (default 180s).
+# Runs before the full STALL_SECONDS gate so a 3–10 min snap hang does not
+# wait the full 600s (LPT-637).
+if (
+    agent_pid.isdigit()
+    and log_age is not None
+    and log_age > sandbox_stall
+    and beat_age > sandbox_stall
+):
+    ps_out_early = _ps()
+    if _only_sandbox_snap_waiters(agent_pid, ps_out_early):
+        raise SystemExit(0)
+
+# Within the full stall window and not a sandbox-only hang — still alive.
+if beat_age <= stall:
+    raise SystemExit(1)
+if log_age is not None and log_age <= stall:
+    raise SystemExit(1)
+
+# Unit tests set this to exercise heartbeat age without host flutter/tmux.
+if os.environ.get("UI_AGENT_STALL_HEARTBEAT_ONLY") == "1":
+    raise SystemExit(0)
 
 ps_out = _ps()
 
