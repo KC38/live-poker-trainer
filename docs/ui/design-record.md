@@ -562,6 +562,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Section 1 jump ranks | `act-01-06-02-jump-ranks` orders three face-up showdown seats strongest→weakest (Flush → Straight → Two pair) via `LessonShowdownOrderTable` — not under-felt Flush/Straight/Two pair text chips on `LessonMadeHandTable` (LPT-107). |
 | Acting order checkpoint flop | `act-02-01-02-checkpoint-full` deals a three-card flop (`Qs 7c 2d`) on framed `LessonTableStage` so street chrome is FLOP when the ask names a flop — not blinds-only PREFLOP (LPT-148; same board as scaffolded-post). |
 | Effective stacks SoftPulse | BB-convert and effective-stack outcome tiles keep correct-answer `_PotChipDot` chips slate (no permanent gold tip). SoftPulse on densified `_TappableRegion` phases uses `GlowHighlight` so guided / Hint waves report gold SoftPulse in the agent tree (LPT-183). |
+| Full-ring / `9-max` action spots | Spots whose street label names `9-max` (Full-ring baseline hand guided open, scaffolded vs-open, hand lab, and section jump opens) resolve nine seats on `LessonTableStage` via `resolveLessonActionFeltLayout` — not the six-max default — so coach "Nine-handed" / "Full ring" matches the felt (LPT-209). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
 rebuilds until all four real suits are in; `syncSelection` only mirrors a
@@ -811,6 +812,12 @@ the correct chip-amount dock choice after Hint via the same
 `pulseChoiceId: _framedDockPulseChoiceId` gate as fold-win / showdown —
 Hint must not unlock an empty SoftPulse wave. The next densify chip-total
 dock that waits for Hint copies that `pulseChoiceId` pass.
+
+Full-ring / `9-max` action spots (LPT-209) resolve nine seats through
+`resolveLessonActionFeltLayout` / `lessonActionSpotIsNineMax` in
+`lesson_action_felt_layout.dart` when the street label names `9-max`. The
+next full-ring poker-action dock copies that nine-seat layout instead of
+the six-max default under a nine-handed coach line.
 
 Toy-hand authored pot / street bets (LPT-97) are
 `shouldApplyLessonActionFeltMoney` + completed-line parsing in

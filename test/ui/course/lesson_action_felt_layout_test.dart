@@ -86,6 +86,44 @@ void main() {
       expect(layout.seatCount, 2);
       expect(layout.foldedSeatIndexes, isEmpty);
     });
+
+    test('9-max UTG open uses nine seats with no early folds', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['Ah', 'Jh'],
+        potLabel: 'Pot 3',
+        villainLine: 'Folds to you',
+        streetLabel: 'Preflop · UTG · 9-max',
+        facingBet: false,
+        openPot: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(layout.headsUp, isFalse);
+      expect(layout.seatCount, 9);
+      expect(layout.villainCount, lessonNineMaxVillainCount);
+      expect(layout.dealerIndex, 6);
+      expect(layout.foldedSeatIndexes, isEmpty);
+    });
+
+    test('9-max button vs UTG folds the middle of the nine-max ring', () {
+      const spot = LessonActionSpot(
+        heroCodes: ['2h', '2d'],
+        potLabel: 'Pot 3 → 9',
+        villainLine: 'UTG opens to 6',
+        streetLabel: 'Preflop · Button · 9-max',
+        facingBet: true,
+      );
+
+      final layout = resolveLessonActionFeltLayout(spot);
+
+      expect(layout.seatCount, 9);
+      expect(layout.villainCount, lessonNineMaxVillainCount);
+      expect(layout.dealerIndex, 0);
+      expect(layout.villainSeatIndex, 3);
+      expect(layout.seatActionLabels[3], 'RAISE');
+      expect(layout.foldedSeatIndexes.toSet(), {4, 5, 6, 7, 8});
+    });
   });
 
   testWidgets('button open-fold dock renders folded early seats', (
@@ -154,5 +192,69 @@ void main() {
         .where((seat) => seat.player.folded)
         .length;
     expect(foldedSeats, 3);
+  });
+
+  testWidgets('full-ring guided EP dock renders nine seats at mini size', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-02-07-01-guided-ep',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.pokerActionSizing,
+      estimatedSeconds: 55,
+      accessibilityText: 'Open ace-jack suited under the gun full ring.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Nine-handed. UTG with suited broadway. Action?',
+      choices: const [
+        CourseChoice(id: 'open-ajs', label: 'Open to 6', action: 'RAISE'),
+        CourseChoice(id: 'fold-ajs', label: 'Fold', action: 'FOLD'),
+        CourseChoice(id: 'limp-ajs', label: 'Limp', action: 'CALL'),
+      ],
+    );
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId(
+                'lesson-02-07-01-baseline-full-hand',
+              ),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: PokerActionSizingActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: true,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final table = tester.widget<LessonTableStage>(
+      find.byType(LessonTableStage),
+    );
+    expect(table.villainCount, lessonNineMaxVillainCount);
+    expect(find.byType(PlayerSeatWidget), findsNWidgets(9));
+    final overflow = tester.takeException();
+    expect(overflow, isNull);
   });
 }
