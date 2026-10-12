@@ -617,11 +617,15 @@ merging), refresh the mini to origin/main, and go to step 10.
 Run make-change steps 6–9. PR title `LPT-NN: <summary>` (with companions:
 `LPT-NN, LPT-MM: <summary>`; the chat title still uses the primary key);
 commit subjects
-include the key; the PR test plan is the acceptance criteria. The functions
-deploy returns in ~2 s with `skipping deploy` when `functions/` is
-unchanged since the last deploy — that is a success, not a skip to report.
-Step 9's refresh uses your lock and returns the mini to origin/main (it
-stops the worktree session itself).
+include the key; the PR test plan is the acceptance criteria. Open the PR
+with `gh pr create` (not ManagePullRequest — that defaults to draft and
+blocks squash-merge). Before `gh pr merge --squash`, run `gh pr ready`
+(idempotent when already ready). Never merge a draft; never
+`--delete-branch` until you have left the worktree (make-change step 7).
+The functions deploy returns in ~2 s with `skipping deploy` when
+`functions/` is unchanged since the last deploy — that is a success, not
+a skip to report. Step 9's refresh uses your lock and returns the mini to
+origin/main (it stops the worktree session itself).
 
 **Rename this Agents chat as soon as the PR exists.** When you have both
 the ticket key and the PR number (right after `gh pr create`, or from
