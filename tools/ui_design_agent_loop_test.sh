@@ -819,8 +819,50 @@ mod = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mod)
 assert mod.parse_iso_epoch("2026-10-10T16:37:37Z") is not None
 assert mod.parse_iso_epoch("2026-10-10T22:09:09+05:30") is not None
+# Compact ±HHMM (no colon) — macOS Python 3.9 fromisoformat rejects raw form.
+assert mod.parse_iso_epoch("2026-10-12T21:48:30+0530") is not None
+assert mod.parse_iso_epoch("2026-10-12T21:22:17+0530") is not None
 assert mod.parse_iso_epoch("not-a-date") is None
+# Colon and compact forms must land on the same instant.
+assert mod.parse_iso_epoch("2026-10-12T21:48:30+0530") == mod.parse_iso_epoch(
+    "2026-10-12T21:48:30+05:30"
+)
 print("ui_agent_iso ok")
 PY
+
+# Compact +0530 coverage must fill a null-ticket stamp (not leave reconciled-only).
+python3 - "$COVERAGE_FILE" <<'PY'
+import json, sys
+from pathlib import Path
+Path(sys.argv[1]).write_text(
+    json.dumps({
+        "at": "2026-10-12T21:48:30+0530",
+        "sha": "compact",
+        "surface": "lesson-runner:meet-the-lag",
+        "result": "closed",
+        "ticket": "LPT-492",
+        "leads": [],
+        "learnings": "unchanged",
+    }) + "\n",
+    encoding="utf-8",
+)
+PY
+printf '%s\n' \
+  '{"at":"2026-10-12T21:51:07+05:30","stamp":"20261012-214009","exit":0,"seconds":658,"ticket":null,"result":null,"tail":"- **Attempts:** 1 - **Functions deploy:** complete - **Leads:** SoftPulse queue LPT-493+ - **Learnings:** unchanged - **Lock:** released"}' \
+  >"$HEALTH_FILE"
+repair_health_tails
+grep -q '"ticket": "LPT-492"' "$HEALTH_FILE" \
+  || fail "repair should fill stamp from +0530 coverage: $(cat "$HEALTH_FILE")"
+grep -q 'coverage:closed ticket:LPT-492' "$HEALTH_FILE" \
+  || fail "repair should scrub prose after +0530 fill: $(cat "$HEALTH_FILE")"
+
+# Prose with an LPT key (and no coverage match) still attributes the stamp.
+: >"$COVERAGE_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-12T22:00:00+05:30","stamp":"20261012-215500","exit":0,"seconds":100,"ticket":null,"result":null,"tail":"**Ticket:** LPT-499 closed on origin/main. **Functions deploy:** complete. **Leads:** next. **Learnings:** unchanged"}' \
+  >"$HEALTH_FILE"
+repair_health_tails
+grep -q '"ticket": "LPT-499"' "$HEALTH_FILE" \
+  || fail "repair should extract ticket from closeout prose: $(cat "$HEALTH_FILE")"
 
 echo "ui-design-agent loop ok"
