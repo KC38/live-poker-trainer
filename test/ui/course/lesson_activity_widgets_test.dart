@@ -25401,6 +25401,28 @@ await tester.tap(find.text('NIT'));
       find.text('Best habit — tap Name the thesis.'),
       findsNothing,
     );
+    expect(find.text('Name the thesis'), findsOneWidget);
+    // LPT-505: guideRegion → one gold SoftPulse (Name the thesis), not Wing it.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Name the thesis'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Wing it'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Name the thesis'));
     await tester.pump();
     expect(controller.draft.choiceId, 'thesis');
@@ -25635,6 +25657,28 @@ await tester.tap(find.text('NIT'));
       find.text('No turn idea — pick what to do first.'),
       findsOneWidget,
     );
+    expect(find.text('Map first'), findsOneWidget);
+    // LPT-506: guideRegion → one gold SoftPulse (Map first), not Yolo barrels.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Map first'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Yolo barrels'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Map first'));
     await tester.pump();
     expect(controller.draft.choiceId, 'avoid');
@@ -25858,6 +25902,28 @@ await tester.tap(find.text('NIT'));
     expect(
       find.text('No story — pick the river action.'),
       findsOneWidget,
+    );
+    expect(find.text('Check'), findsOneWidget);
+    // LPT-507: guideRegion → one gold SoftPulse (Check), not Blast off.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Check'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Blast off'),
+      ),
+      findsNothing,
     );
     await tester.tap(find.text('Check'));
     await tester.pump();

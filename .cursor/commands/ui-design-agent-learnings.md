@@ -72,6 +72,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   new agent) when this run's filings are only `grokbot` — keep walking
   until you have a `ui-agent` KEY or every remaining surface is clean for
   Mac-mini work.
+- Never hand-write coverage JSONL or `strftime(..., '%z')` timestamps
+  (`+0530` breaks macOS Python 3.9 health repair). Use
+  `python3 tools/ui_agent_coverage.py append …` in step 10.
 - Never edit the primary checkout (make-change worktrees only), invent
   GitHub owner/URLs from a person's name (`gh` only,
   `KC38/live-poker-trainer`), or let LaunchAgent `ensure`/`start`
@@ -115,10 +118,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer one lesson-content bug (fixed cards, stacked/enabled-empty Hint,
   Hint stuck under Oops/Nice! after a Hint press, multi-target or
   inconsistent SoftPulse, bad coach copy, hearts that do not spend or
-  restore) or teach-by-doing gap over spacing chrome. When SoftPulse golds
+  restore) or teach-by-doing gap over spacing chrome.   When SoftPulse golds
   every densified tile, check `_buildOutcomePhases` for a missing
   `guideRegion` (`null` SoftPulses all phases — LPT-424 Meet Calling
-  Station; LPT-433 Observe narrow). When fixing multi SoftPulse, update
+  Station; LPT-433 Observe narrow; LPT-505/506 LessonTableContext densify).
+  Verify with Hint+`tree` before implementing: framed `_LessonChoiceStack`
+  + `_framedDockPulseChoiceId` (e.g. Size with a message unguided) already
+  SoftPulses only the first choice — close as no-repro (LPT-504); densify
+  builders still need `guideRegion`. When fixing multi SoftPulse, update
   tests that assert `findsNWidgets(N>1)` on `glow-highlight` for that
   surface — they may have locked the bug (LPT-55).
   Ids in `lessonFrameSameConceptQuietIds` (e.g. guided-seven) stay SoftPulse

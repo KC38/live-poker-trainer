@@ -12935,7 +12935,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive preflop-to-flop — tap Name the thesis or Wing it',
       semanticsStatic: 'Preflop-to-flop unguided outcomes',
       caption: scene.caption ?? 'Best habit before acting the flop?',
-      // No SoftPulse on unguided — still don’t gold-icon Name the thesis.
+      // SoftPulse + Rex own the cue — one gold Name the thesis only (LPT-505).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.preflopFlopNameThesis,
       phases: [
         (
           region: LessonTableRegion.preflopFlopNameThesis,
@@ -13066,7 +13068,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive turn map — tap Map first or Yolo barrels',
       semanticsStatic: 'Turn-map unguided outcomes',
       caption: scene.caption ?? 'Bet flop with no turn idea?',
-      // No SoftPulse on unguided — still don’t gold-icon Map first.
+      // SoftPulse + Rex own the cue — don’t gold-tip Map first.
+      // Null guideRegion SoftPulses every phase (LPT-506).
+      guideRegion: LessonTableRegion.turnMapMapFirst,
       phases: [
         (
           region: LessonTableRegion.turnMapMapFirst,
@@ -13164,7 +13168,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive river composition — tap Check or Blast off',
       semanticsStatic: 'River composition unguided outcomes',
       caption: scene.caption ?? 'No value, no blockers, no fold equity?',
-      // No SoftPulse on unguided — still don’t gold-icon Check.
+      // SoftPulse + Rex own the cue — don’t gold-tip Check.
+      // Null guideRegion SoftPulses every phase (LPT-507).
+      guideRegion: LessonTableRegion.riverCompCheck,
       phases: [
         (
           region: LessonTableRegion.riverCompCheck,
