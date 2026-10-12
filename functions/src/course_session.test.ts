@@ -315,6 +315,21 @@ describe("soft grading and life loss", () => {
     expect(graded.feedback).not.toMatch(/Tap seats/i);
   });
 
+  it("uses authored explain Nice! feedback for Best five (LPT-76)", () => {
+    const bestFive = findLesson("lesson-01-02-02-best-five-kickers")!.lesson;
+    const explain = bestFive.activities.find(
+      (activity) => activity.id === "act-01-02-02-explain-five",
+    )!;
+    const graded = gradeCourseResponse({activity: explain});
+    expect(graded).toMatchObject({
+      grade: "recommended",
+      accepted: true,
+      lifeLost: false,
+      feedback: "Exactly five cards — leave the extras out.",
+    });
+    expect(graded.feedback).not.toMatch(/Pick the strongest|Tap each card/i);
+  });
+
   it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",

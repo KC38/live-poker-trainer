@@ -216,6 +216,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Never run `sips -c` in place on the only issue/validated PNG — copy first,
   then crop the copy.
 
+- Prefer, on Best five SoftPulse closeout: clear the lesson from `completedLessonIds` + hot-restart so review mode does not hide cues; judge seat SoftPulse by the PNG (`You [enabled gold]`), not only the gold summary (hole labels nest under seat glow); and tap picker SoftPulse twice when the first press leaves `0/5 selected` (LPT-75).
+- Prefer clearing guest `course/main.resume` and abandoning in-progress `courseAttempts` for the target lesson before `fresh --open` when the walk must start at activity 0 — `fresh` only trims `completedLessonIds`, so mid-lesson resume skips explain (LPT-76).
+
 ## Ops (simulator, CLI, Jira)
 
 - Cursor CLI over SSH / LaunchAgent needs `CURSOR_API_KEY` in
@@ -235,7 +238,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
   `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.
-- "Connection lost, reconnecting…" is normal; let the CLI retry once.
 - Loop preflight is programmatic (claim → refresh → Dart VM → handoff
   JSON) before the machine SDK agent. At step 2 trust that VM; refresh
   only when switching builds. `dart_vm_ready` needs macOS-safe
@@ -250,25 +252,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `Launching…` is not ready, and a cached-app launch is not ready until
   its first `Restarted application` (`<log>.prebuilt` sidecar);
   `tools/flutter_log_ready.py` / `wait_flutter_vm.sh` handle both.
-- Attach pane only shows start/end; live detail is in
-  `~/.live-poker-trainer/ui-agent-logs/run-*.log` and the agent transcript.
 
 ## Product judgment
 
-- Live Training lock copy names the Home lesson that unlocks it (for
-  example "Baseline jump check"). It must not say "Section 2".
-- Profile Course place should show `SECTION N, UNIT N` and the unit title
-  when progress exists — not a bare "Never Played" once the learner has
-  a place in the course.
 - "Your two cards" and similar peeks must not show empty board slots when
   no board is in play for that beat.
-- Lesson walks must exercise Hint (one line, disabled when empty — including
-  multiturn), one gold SoftPulse at a time with the same cue UI for guide
-  and Hint, coach mood/copy, hearts lose/restore, and a second attempt for
-  card randomization — not only Continue through the happy path.
-- Every ticket needs a current-issue screenshot on file and a validated
-  origin/main screenshot on the Done comment. Text-only closeouts are not
-  enough.
 - When the design record and a shipped screen disagree, the record (plus
   stakeholder brief) wins; file or reopen the ticket rather than
   "accepting" the screen as intentional chrome.
@@ -278,8 +266,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
 
-- 2026-10-12: LPT-74 Hand ranks explain Nice! ask-as-feedback — author
-  `explainGrading` + prefer it in `gradeCourseResponse`; do not full-seed
-  when content diverged from waves; deploy Functions before mini proof.
-  LPT-73 blinds SoftPulse/Hint; LPT-72 quiet multi-suit Hint; LPT-71 Hint
-  after Oops; ManagePullRequest `skip_branch_prefix_check` for `fix/LPT-*`.
+- 2026-10-12: LPT-76 Best five explain Nice! `okFeedback` (same path as
+  LPT-74); clear resume/`courseAttempts` before explain walks; deploy
+  Functions before mini proof. LPT-75 kicker SoftPulse; LPT-73–71 Hint/
+  SoftPulse; ManagePullRequest `skip_branch_prefix_check` for `fix/LPT-*`.

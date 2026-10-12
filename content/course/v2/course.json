@@ -1037,7 +1037,11 @@
                   ],
                   "objectives": [
                     "Build the best five-card hand from seven"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Exactly five cards — leave the extras out."
+                  }
                 },
                 {
                   "id": "act-01-02-02-guided-seven",
