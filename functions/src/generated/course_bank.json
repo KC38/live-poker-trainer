@@ -13256,7 +13256,11 @@
                   ],
                   "playerTypeRefs": [
                     "maniac"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Maniac → Entry → Aggro."
+                  }
                 },
                 {
                   "id": "act-04-08-02-guided",
@@ -28591,7 +28595,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Maniac → Entry → Aggro."
+      }
     },
     "act-04-08-02-guided": {
       "activityId": "act-04-08-02-guided",
