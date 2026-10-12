@@ -549,7 +549,7 @@ are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
 Effective stacks (LPT-128), Live table habits (LPT-131), Full-ring baseline
 hand (LPT-135), Baseline jump check (LPT-137), Read the table first
 (LPT-138), Name your flop class (LPT-141), Count outs, pay the right price
-(LPT-144).
+(LPT-144), Choose a flop line (LPT-149).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -760,6 +760,12 @@ SoftPulse As→Ad→Ac; scaffolded call-price uses `deal.mode` `none` +
 `call-10`; unguided fixed AhQh/Kc8h2d SoftPulse `call-draw`; checkpoint
 fixed AhQh/Kh7h2c cues `implied-yes` kind `none`. Ledger Still-a-list "clean
 aces (card picker)" cleared (already on the felt).
+
+Choose a flop line `teachSpec` (LPT-149): explain SoftPulse advances VALUE →
+C-BET → CHECK → CALL → FOLD → RAISE; guided/scaffolded/unguided author fixed
+AhKd/As7c2d, KhQd/As7d2c, and 7h7d/7cKd2s with SoftPulse `bet-tp` / `cbet` /
+`raise-set`; checkpoint authors 5h2d/Ah7c2s and cues `fold-bp` with kind
+`none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

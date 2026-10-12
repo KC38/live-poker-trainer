@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "2729eca69936005a1ca0864bef6bfb024e131daf522cd76070e2ca6d1ef33f98",
+  "contentChecksum": "cc9932722306740372304432ff2189857b5246cf981edd4e486f720551ff5597",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -8003,7 +8003,44 @@
                   ],
                   "objectives": [
                     "Value bet strong made hands"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "VALUE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "C-BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CHECK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 5,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 6,
+                        "target": "RAISE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-04-01-guided",
@@ -8054,7 +8091,30 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "As",
+                          "7c",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bet-tp",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-04-01-scaffolded",
@@ -8105,7 +8165,30 @@
                       },
                       "action": "ALL_IN"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "Qd"
+                        ],
+                        "board": [
+                          "As",
+                          "7d",
+                          "2c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cbet",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-04-01-unguided",
@@ -8156,7 +8239,30 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "7h",
+                          "7d"
+                        ],
+                        "board": [
+                          "7c",
+                          "Kd",
+                          "2s"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "raise-set",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-04-01-checkpoint",
@@ -8209,7 +8315,30 @@
                       "amountBb": 15
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "5h",
+                          "2d"
+                        ],
+                        "board": [
+                          "Ah",
+                          "7c",
+                          "2s"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-bp",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
