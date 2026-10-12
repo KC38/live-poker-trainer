@@ -53,8 +53,9 @@ Live table habits (LPT-131), Full-ring baseline hand (LPT-135), Baseline
 jump check (LPT-137), Read the table first (LPT-138), Name your flop class
 (LPT-141), Count outs, pay the right price (LPT-144), Choose a flop line
 (LPT-149), Plan the turn card (LPT-152), Close the river correctly
-(LPT-155), Play tighter multiway (LPT-158). Content gaps are audited by [11
-— Lesson content agent](11-lesson-content-agent.md).
+(LPT-155), Play tighter multiway (LPT-158), Patch the common leaks
+(LPT-161). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 ### Activity renderers
 

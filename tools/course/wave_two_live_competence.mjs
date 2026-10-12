@@ -771,7 +771,19 @@ export function buildSectionThree() {
             activities: [
               dialogue("act-03-08-01-explain", 1,
                 "Common leaks: worship top pair, chase bad prices, call too passive, bluff crowds.",
-                {objectives: ["Stop overplaying weak top pair"]}),
+                {
+                  objectives: ["Stop overplaying weak top pair"],
+                  // LPT-161
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "TOP PAIR", kind: "soft_pulse"},
+                      {press: 2, target: "PRICES", kind: "soft_pulse"},
+                      {press: 3, target: "PASSIVE", kind: "soft_pulse"},
+                      {press: 4, target: "CROWDS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-03-08-01-guided", order: 2, stage: "guided",
                 prompt: "Multiway raise-reraise pot. You have top pair weak kicker. Action?",
@@ -785,6 +797,11 @@ export function buildSectionThree() {
                   choice("call-down", "Silent call-down forever", "questionable",
                     "Sometimes; default is not stacking lightly.", {action: "CALL"})
                 ],
+                // LPT-161
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "4d"], board: ["As", "9c", "7d"]}},
+                  cues: [{press: 1, target: "careful", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-08-01-scaffolded", order: 3, stage: "scaffolded",
@@ -799,6 +816,11 @@ export function buildSectionThree() {
                   choice("raise-gut", "Bluff-raise", "questionable",
                     "Rarely; not the leak repair baseline.", {action: "RAISE", amountBb: 40})
                 ],
+                // LPT-161
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Ks", "Tc", "2d"]}},
+                  cues: [{press: 1, target: "fold-gut", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-08-01-unguided", order: 4, stage: "scaffolded",
@@ -813,6 +835,11 @@ export function buildSectionThree() {
                   choice("bluff-crowd", "Raise as a bluff", "clear_mistake",
                     "Crowds call.", {action: "RAISE", amountBb: 20, betterChoiceId: "fold-air"})
                 ],
+                // LPT-161
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["9h", "8d"], board: ["Kc", "7s", "2d"]}},
+                  cues: [{press: 1, target: "fold-air", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-03-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -827,6 +854,8 @@ export function buildSectionThree() {
                   choice("same", "Treat every seat identically forever", "clear_mistake",
                     "You already have evidence.", {betterChoiceId: "notes"})
                 ],
+                // LPT-161
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "notes", kind: "none"}]},
               }),
             ],
           }),

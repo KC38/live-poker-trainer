@@ -9476,7 +9476,34 @@
                   ],
                   "objectives": [
                     "Stop overplaying weak top pair"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TOP PAIR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PRICES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "PASSIVE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "CROWDS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-08-01-guided",
@@ -9526,7 +9553,30 @@
                       },
                       "action": "CALL"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "4d"
+                        ],
+                        "board": [
+                          "As",
+                          "9c",
+                          "7d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "careful",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-08-01-scaffolded",
@@ -9577,7 +9627,30 @@
                       "action": "RAISE",
                       "amountBb": 40
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Ks",
+                          "Tc",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-gut",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-08-01-unguided",
@@ -9629,7 +9702,30 @@
                       "action": "RAISE",
                       "amountBb": 20
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "9h",
+                          "8d"
+                        ],
+                        "board": [
+                          "Kc",
+                          "7s",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-air",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-08-01-checkpoint",
@@ -9678,7 +9774,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "notes",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },

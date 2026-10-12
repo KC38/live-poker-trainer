@@ -206,6 +206,14 @@ const _lessons = <String, List<String>>{
     'act-03-07-01-unguided',
     'act-03-07-01-checkpoint',
   ],
+  // LPT-161
+  'lesson-03-08-01-leak-repair': [
+    'act-03-08-01-explain',
+    'act-03-08-01-guided',
+    'act-03-08-01-scaffolded',
+    'act-03-08-01-unguided',
+    'act-03-08-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1201,6 +1209,43 @@ void main() {
       expect(cp.teachSpec!['deal'], {'mode': 'none'});
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'obs-many');
+    });
+  });
+
+  group('Patch the common leaks (LPT-161)', () {
+    test('explain SoftPulse walks TOP PAIR → PRICES → PASSIVE → CROWDS', () {
+      expect(
+        _list(
+          act('act-03-08-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['TOP PAIR', 'PRICES', 'PASSIVE', 'CROWDS'],
+      );
+    });
+
+    test('action steps author fixed deals; checkpoint quiet none', () {
+      expect(
+        _list(act('act-03-08-01-guided'), 'cues').single['target'],
+        'careful',
+      );
+      expect(
+        _list(act('act-03-08-01-scaffolded'), 'cues').single['target'],
+        'fold-gut',
+      );
+      expect(
+        act('act-03-08-01-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', '9d'],
+      );
+      expect(
+        _list(act('act-03-08-01-unguided'), 'cues').single['target'],
+        'fold-air',
+      );
+      final cp = act('act-03-08-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.teachSpec!['deal'], {'mode': 'none'});
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'notes');
     });
   });
 }
