@@ -272,7 +272,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   explain grades (Clean→Dirty→Price, Raise→Barrel→Count, and other ladder
   Nice!) before tapping Continue or SoftPulse validated shots — an early
   Continue nomatches and can capture the Nice! dock instead of densify
-  gold (LPT-274, LPT-462 closeout).
+  gold (LPT-274, LPT-462 closeout). Prefer `tap --text Continue` over
+  `agent_tap next` on a Nice! dock — `next` can report ok while the
+  lesson stays on Nice! and burn minutes in a wait-gold loop (LPT-502).
 - Prefer extending `selectIdentifyDensifiedCoachLine` (not only
   `_coachText`) when a densified select_identify ask still shows catalog
   + "Tap the best answer." in the frame bubble — framed speech reads that

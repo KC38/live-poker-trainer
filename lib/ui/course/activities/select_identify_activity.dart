@@ -1044,7 +1044,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Cooler — don’t gold-tip the tile.
       'act-06-10-01-scaffolded' =>
         'KK loses to AA all-in — pick the review label.',
-      // Unguided: name the leak; don’t tip Ego call.
+      // SoftPulse owns Ego call — don’t gold-tip the tile (LPT-502).
       'act-06-10-01-unguided' =>
         'Calling because you are "due" — pick the real reason.',
       // SoftPulse owns Cooler / mistake? — don’t gold-tip the tile.

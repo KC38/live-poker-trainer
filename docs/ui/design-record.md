@@ -613,6 +613,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Defend enough SoftPulse one gold | Defend enough without frequency theater unguided densified ask (`act-06-07-01-unguided`) passes `guideRegion` (`defendIntuition`) so SoftPulse-after-Hint paints one gold Intuition tile — never both Intuition and Exact percents (LPT-499). Guided / checkpoint already pass `defendStrongCatchers` / `defendPunishOverbluffs`. |
 | Mix with a reason SoftPulse one gold | Mix with a reason unguided densified ask (`act-06-08-01-unguided`) passes `guideRegion` (`mixNeedReason`) so SoftPulse-after-Hint paints one gold Need a reason tile — never both Need a reason and Always random (LPT-500). Scaffolded / checkpoint already pass `mixLessBluff` / `mixPurposeFreq`. |
 | Navigate 3-bet SoftPulse one gold | Navigate 3-bet and 4-bet pots by depth unguided densified ask (`act-06-09-01-unguided`) passes `guideRegion` (`threeBetAvoidEgo`) so SoftPulse-after-Hint paints one gold Avoid ego tile — never both Avoid ego and Ego 4-bet (LPT-501). Guided / checkpoint already pass `threeBetHighCommit` / `threeBetSprCommit`. |
+| Make difficult folds SoftPulse one gold | Make difficult folds; review coolers fairly unguided densified ask (`act-06-10-01-unguided`) passes `guideRegion` (`hardFoldEgoCall`) so SoftPulse-after-Hint paints one gold Ego call tile — never both Ego call and Sound play (LPT-502). Guided / scaffolded / checkpoint already pass `hardFoldCoolerOk` / `hardFoldAskReview`. |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1343,7 +1344,7 @@ felt.
 | Defend enough without frequency theater | Defend, Bluff, Enough; unguided SoftPulse one gold (LPT-499) | continue, intuition, and punish checks |
 | Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500) | station, reason, and purpose checks |
 | Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501) | commit, ego, and SPR checks |
-| Make difficult folds; review coolers fairly | Hard, Cooler, Ego | cooler, ego, and review checks |
+| Make difficult folds; review coolers fairly | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502) | cooler, ego, and review checks |
 | Observe selective aggression | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494) | entry quizzes |
 | Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491) | label quizzes |
 | Adjust versus TAG | Credit, Tighter, No light | respect check |
