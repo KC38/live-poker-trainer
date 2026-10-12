@@ -55,8 +55,9 @@ jump check (LPT-137), Read the table first (LPT-138), Name your flop class
 (LPT-149), Plan the turn card (LPT-152), Close the river correctly
 (LPT-155), Play tighter multiway (LPT-158), Patch the common leaks
 (LPT-161), Section 3 jump check (LPT-165), Think in ranges (LPT-167),
-Navigate 3-bet pots (LPT-170), Plan beyond the flop (LPT-174). Content gaps
-are audited by [11 — Lesson content agent](11-lesson-content-agent.md).
+Navigate 3-bet pots (LPT-170), Plan beyond the flop (LPT-174), Size with a
+message (LPT-177). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 ### Activity renderers
 

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "6ce933aea30f28db607ae45fcf6ca695e56a8dd90988cd29884dc39abb1969ab",
+  "contentChecksum": "9cde240e567032b8b97a5a08e420e02f3adda6d43b52ac487e1e6f276ba01952",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -11295,7 +11295,29 @@
                   ],
                   "objectives": [
                     "Match size to value versus polar pressure"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "VALUE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PRESSURE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SIZE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-04-01-guided",
@@ -11359,7 +11381,30 @@
                       "action": "BET",
                       "amountBb": 0.5
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "As",
+                          "7c",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "half",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-04-01-scaffolded",
@@ -11411,7 +11456,32 @@
                       },
                       "action": "CHECK"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "9h",
+                          "8h"
+                        ],
+                        "board": [
+                          "Kh",
+                          "7h",
+                          "2c",
+                          "3d",
+                          "As"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "big",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-04-01-unguided",
@@ -11459,7 +11529,19 @@
                         "betterChoiceId": "soft"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "soft",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-04-01-checkpoint",
@@ -11514,7 +11596,30 @@
                       "amountBb": 10
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Ad"
+                        ],
+                        "board": [
+                          "Kc",
+                          "9s",
+                          "3h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bad-1",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
