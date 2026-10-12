@@ -829,7 +829,10 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-04-01-explain-streets", 1,
                 "Four streets: preflop, flop, turn, river. Match bets to move on.",
-                {objectives: ["Name preflop, flop, turn, and river"]}),
+                {
+                  objectives: ["Name preflop, flop, turn, and river"],
+                  okFeedback: "Preflop → flop → turn → river.",
+                }),
               sequenceAct({
                 id: "act-01-04-01-guided-streets", order: 2, stage: "guided",
                 prompt: "Tap the streets from first to last.",

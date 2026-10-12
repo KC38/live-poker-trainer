@@ -330,6 +330,20 @@ describe("soft grading and life loss", () => {
     expect(graded.feedback).not.toMatch(/Pick the strongest|Tap each card/i);
   });
 
+  it("uses authored explain Nice! feedback for Streets (LPT-79)", () => {
+    const explain = streets.activities.find(
+      (activity) => activity.id === "act-01-04-01-explain-streets",
+    )!;
+    const graded = gradeCourseResponse({activity: explain});
+    expect(graded).toMatchObject({
+      grade: "recommended",
+      accepted: true,
+      lifeLost: false,
+      feedback: "Preflop → flop → turn → river.",
+    });
+    expect(graded.feedback).not.toMatch(/Match bets|Tap each street/i);
+  });
+
   it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",
