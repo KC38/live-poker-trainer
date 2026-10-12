@@ -570,7 +570,10 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-02-02-explain-five", 1,
                 "Only five cards count. Pick the strongest five.",
-                {objectives: ["Build the best five-card hand from seven"]}),
+                {
+                  objectives: ["Build the best five-card hand from seven"],
+                  okFeedback: "Exactly five cards — leave the extras out.",
+                }),
               selectAct({
                 id: "act-01-02-02-guided-seven", order: 2, stage: "guided",
                 prompt: "Tap the five cards that make your best hand.",
