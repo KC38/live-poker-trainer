@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "e16bb1546d3744cc959284f5277e183f39449cb9b5b0839f31f77e7a833cbc89",
+  "contentChecksum": "5bdaea30b33a93d6b4423bf39ef9a71ca28d79fe6e992bd5293ac7b3031d2558",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -14618,7 +14618,29 @@
                   ],
                   "objectives": [
                     "Update ranges after each street"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ACTION",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "REWRITE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "UPDATE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-06-01-guided",
@@ -14647,7 +14669,19 @@
                       "label": "Still nuts",
                       "accessibilityText": "Still nuts"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "capped",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-06-01-scaffolded",
@@ -14678,7 +14712,31 @@
                       "accessibilityText": "Call",
                       "action": "CALL"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "7h",
+                          "6h"
+                        ],
+                        "board": [
+                          "Kh",
+                          "9h",
+                          "2c",
+                          "3d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "repr",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-06-01-unguided",
@@ -14707,7 +14765,19 @@
                       "label": "Lock flop forever",
                       "accessibilityText": "Lock flop forever"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "update",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-06-01-checkpoint",
@@ -14737,7 +14807,19 @@
                       "accessibilityText": "Always bluff"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "uncap",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
