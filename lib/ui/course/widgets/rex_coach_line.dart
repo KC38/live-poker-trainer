@@ -59,6 +59,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // withLessonTapInstruction does not append "Tap the best answer."
     'act-03-06-01-checkpoint' =>
       'Medium one pair faces a big bet — pick the river job.',
+    // Play tighter multiway densified asks (LPT-368) — same path.
+    'act-03-07-01-unguided' =>
+      'Deep multiway — pick the better speculative hand.',
+    'act-03-07-01-checkpoint' =>
+      'Seat enters most pots — pick what you note.',
     _ => null,
   };
 }
