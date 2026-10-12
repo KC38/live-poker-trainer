@@ -232,6 +232,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `assets/course/v2/catalog.json` (or other concurrent-main files) as a
   required origin/main re-walk, not a failed fix — LPT-173 squash matched
   the worktree lib change while catalog moved on main.
+- Prefer waiting for local `deploy-functions.sh` EXIT:0 when it races
+  GitHub Deploy Cloud Functions (HTTP 409 unable to queue) — a concurrent
+  Actions failure does not mean the merge SHA is undeployed if the local
+  script finished Successful update for `submitCourseStep` / course
+  graders (LPT-199).
 
 ## Ops (simulator, CLI, Jira)
 
@@ -287,8 +292,3 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
-
-- 2026-10-12: LPT-76 Best five explain Nice! `okFeedback` (same path as
-  LPT-74); clear resume/`courseAttempts` before explain walks; deploy
-  Functions before mini proof. LPT-75 kicker SoftPulse; LPT-73–71 Hint/
-  SoftPulse; ManagePullRequest `skip_branch_prefix_check` for `fix/LPT-*`.

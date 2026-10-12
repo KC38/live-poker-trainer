@@ -1,7 +1,8 @@
-/// Six-max seating for poker-action teaching spots.
+/// Six-max and nine-max seating for poker-action teaching spots.
 ///
-/// Action docks default to a full ring so "folds to you" is visible. Only
-/// spots authored as heads-up keep the two-seat layout.
+/// Action docks default to six-max so "folds to you" is visible. Spots whose
+/// street label names `9-max` (full-ring / nine-handed lessons) resolve nine
+/// seats. Only spots authored as heads-up keep the two-seat layout.
 library;
 
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
@@ -17,8 +18,44 @@ const Map<String, int> _sixMaxOffsetFromButton = {
   'CO': 5,
 };
 
-/// Preflop act order left of the big blind through the blinds.
-const List<String> _preflopOrder = ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+/// Clockwise offsets from the dealer button on a nine-max ring.
+const Map<String, int> _nineMaxOffsetFromButton = {
+  'BTN': 0,
+  'SB': 1,
+  'BB': 2,
+  'UTG': 3,
+  'UTG+1': 4,
+  'MP': 5,
+  'MP+1': 6,
+  'HJ': 7,
+  'CO': 8,
+};
+
+/// Preflop act order on six-max (left of the big blind through the blinds).
+const List<String> _sixMaxPreflopOrder = [
+  'UTG',
+  'HJ',
+  'CO',
+  'BTN',
+  'SB',
+  'BB',
+];
+
+/// Preflop act order on nine-max.
+const List<String> _nineMaxPreflopOrder = [
+  'UTG',
+  'UTG+1',
+  'MP',
+  'MP+1',
+  'HJ',
+  'CO',
+  'BTN',
+  'SB',
+  'BB',
+];
+
+/// Opponents on a nine-max teaching felt (`9 - 1`).
+const int lessonNineMaxVillainCount = 8;
 
 /// Felt seating + fold state for a [LessonActionSpot].
 class LessonActionFeltLayout {
@@ -83,6 +120,25 @@ bool lessonActionSpotIsHeadsUp(LessonActionSpot spot) {
   return false;
 }
 
+/// Whether [spot] is authored as nine-max / full-ring (nine seats).
+bool lessonActionSpotIsNineMax(LessonActionSpot spot) {
+  for (final text in <String?>[
+    spot.streetLabel,
+    spot.villainLine,
+    spot.feltStatusLine,
+  ]) {
+    if (text == null || text.isEmpty) continue;
+    final lower = text.toLowerCase();
+    if (lower.contains('9-max') ||
+        lower.contains('nine-max') ||
+        lower.contains('nine-handed') ||
+        lower.contains('nine handed')) {
+      return true;
+    }
+  }
+  return false;
+}
+
 /// Hero position token from [streetLabel], when present.
 String? parseLessonActionHeroPosition(String? streetLabel) {
   if (streetLabel == null || streetLabel.isEmpty) return null;
@@ -129,6 +185,16 @@ String? parseLessonActionVillainPosition(String? villainLine) {
   if (lower.contains('big blind') || RegExp(r'\bbb\b').hasMatch(lower)) {
     return 'BB';
   }
+  // Prefer UTG+1 before bare UTG so "UTG+1 opens" does not collapse to UTG.
+  if (lower.contains('utg+1') || lower.contains('utg +1')) {
+    return 'UTG+1';
+  }
+  if (lower.contains('mp+1') || lower.contains('mp +1')) {
+    return 'MP+1';
+  }
+  if (RegExp(r'\bmp\b').hasMatch(lower)) {
+    return 'MP';
+  }
   if (lower.contains('utg') || RegExp(r'\bep\b').hasMatch(lower)) {
     return 'UTG';
   }
@@ -143,7 +209,7 @@ int lessonSixMaxDealerIndexForHero(String heroPosition) {
   return (6 - offset) % 6;
 }
 
-/// Seat index for [position] when [dealerIndex] is the button.
+/// Seat index for [position] when [dealerIndex] is the button (six-max).
 int lessonSixMaxSeatIndex({
   required String position,
   required int dealerIndex,
@@ -153,41 +219,216 @@ int lessonSixMaxSeatIndex({
   return (dealerIndex + offset) % 6;
 }
 
-/// Seats that folded before [heroPosition] on an open pot.
+/// Seats that folded before [heroPosition] on an open pot (six-max).
 List<int> lessonSixMaxOpenFoldIndexes({
   required String heroPosition,
   required int dealerIndex,
 }) {
-  final heroOrder = _preflopOrder.indexOf(heroPosition);
+  final heroOrder = _sixMaxPreflopOrder.indexOf(heroPosition);
   if (heroOrder <= 0) return const <int>[];
   return [
     for (var i = 0; i < heroOrder; i++)
       lessonSixMaxSeatIndex(
-        position: _preflopOrder[i],
+        position: _sixMaxPreflopOrder[i],
         dealerIndex: dealerIndex,
       ),
   ];
 }
 
-/// Seats that folded after [openerPosition] before the hero acts.
+/// Seats that folded after [openerPosition] before the hero acts (six-max).
 List<int> lessonSixMaxFoldsBetween({
   required String openerPosition,
   required String heroPosition,
   required int dealerIndex,
 }) {
-  final start = _preflopOrder.indexOf(openerPosition);
-  final end = _preflopOrder.indexOf(heroPosition);
+  final start = _sixMaxPreflopOrder.indexOf(openerPosition);
+  final end = _sixMaxPreflopOrder.indexOf(heroPosition);
   if (start < 0 || end < 0 || end <= start + 1) return const <int>[];
   return [
     for (var i = start + 1; i < end; i++)
       lessonSixMaxSeatIndex(
-        position: _preflopOrder[i],
+        position: _sixMaxPreflopOrder[i],
         dealerIndex: dealerIndex,
       ),
   ];
 }
 
-/// Resolves six-max vs heads-up seating for an action teaching [spot].
+/// Dealer seat so the hero (index 0) sits in [heroPosition] on nine-max.
+int lessonNineMaxDealerIndexForHero(String heroPosition) {
+  final offset = _nineMaxOffsetFromButton[heroPosition];
+  if (offset == null) return 0;
+  return (9 - offset) % 9;
+}
+
+/// Seat index for [position] when [dealerIndex] is the button (nine-max).
+int lessonNineMaxSeatIndex({
+  required String position,
+  required int dealerIndex,
+}) {
+  final offset = _nineMaxOffsetFromButton[position];
+  if (offset == null) return 0;
+  return (dealerIndex + offset) % 9;
+}
+
+/// Seats that folded before [heroPosition] on an open pot (nine-max).
+List<int> lessonNineMaxOpenFoldIndexes({
+  required String heroPosition,
+  required int dealerIndex,
+}) {
+  final heroOrder = _nineMaxPreflopOrder.indexOf(heroPosition);
+  if (heroOrder <= 0) return const <int>[];
+  return [
+    for (var i = 0; i < heroOrder; i++)
+      lessonNineMaxSeatIndex(
+        position: _nineMaxPreflopOrder[i],
+        dealerIndex: dealerIndex,
+      ),
+  ];
+}
+
+/// Seats that folded after [openerPosition] before the hero acts (nine-max).
+List<int> lessonNineMaxFoldsBetween({
+  required String openerPosition,
+  required String heroPosition,
+  required int dealerIndex,
+}) {
+  final start = _nineMaxPreflopOrder.indexOf(openerPosition);
+  final end = _nineMaxPreflopOrder.indexOf(heroPosition);
+  if (start < 0 || end < 0 || end <= start + 1) return const <int>[];
+  return [
+    for (var i = start + 1; i < end; i++)
+      lessonNineMaxSeatIndex(
+        position: _nineMaxPreflopOrder[i],
+        dealerIndex: dealerIndex,
+      ),
+  ];
+}
+
+String _raiseOrBetLabel(String? villainLine) {
+  final lower = villainLine?.toLowerCase() ?? '';
+  if (lower.contains('open') ||
+      lower.contains('raise') ||
+      lower.contains('3-bet')) {
+    return 'RAISE';
+  }
+  return 'BET';
+}
+
+LessonActionFeltLayout _resolveRingLayout({
+  required LessonActionSpot spot,
+  required bool nineMax,
+  required String heroPos,
+  required bool preflop,
+}) {
+  final seatCount = nineMax ? 9 : 6;
+  final villainCount =
+      nineMax ? lessonNineMaxVillainCount : lessonBlindsVillainCount;
+  final dealer =
+      nineMax
+          ? lessonNineMaxDealerIndexForHero(heroPos)
+          : lessonSixMaxDealerIndexForHero(heroPos);
+  final sb =
+      nineMax
+          ? lessonNineMaxSeatIndex(position: 'SB', dealerIndex: dealer)
+          : lessonSixMaxSeatIndex(position: 'SB', dealerIndex: dealer);
+  final bb =
+      nineMax
+          ? lessonNineMaxSeatIndex(position: 'BB', dealerIndex: dealer)
+          : lessonSixMaxSeatIndex(position: 'BB', dealerIndex: dealer);
+
+  if (preflop) {
+    if (spot.openPot || _foldsToYou(spot.villainLine)) {
+      final folded =
+          nineMax
+              ? lessonNineMaxOpenFoldIndexes(
+                heroPosition: heroPos,
+                dealerIndex: dealer,
+              )
+              : lessonSixMaxOpenFoldIndexes(
+                heroPosition: heroPos,
+                dealerIndex: dealer,
+              );
+      return LessonActionFeltLayout(
+        villainCount: villainCount,
+        seatCount: seatCount,
+        dealerIndex: dealer,
+        sbIndex: sb,
+        bbIndex: bb,
+        activeSeatIndex: 0,
+        foldedSeatIndexes: folded,
+        villainSeatIndex: bb == 0 ? sb : bb,
+      );
+    }
+
+    if (spot.facingBet) {
+      final opener =
+          parseLessonActionVillainPosition(spot.villainLine) ?? 'UTG';
+      final openerSeat =
+          nineMax
+              ? lessonNineMaxSeatIndex(position: opener, dealerIndex: dealer)
+              : lessonSixMaxSeatIndex(position: opener, dealerIndex: dealer);
+      final folded =
+          nineMax
+              ? lessonNineMaxFoldsBetween(
+                openerPosition: opener,
+                heroPosition: heroPos,
+                dealerIndex: dealer,
+              )
+              : lessonSixMaxFoldsBetween(
+                openerPosition: opener,
+                heroPosition: heroPos,
+                dealerIndex: dealer,
+              );
+      return LessonActionFeltLayout(
+        villainCount: villainCount,
+        seatCount: seatCount,
+        dealerIndex: dealer,
+        sbIndex: sb,
+        bbIndex: bb,
+        activeSeatIndex: 0,
+        foldedSeatIndexes: folded,
+        seatActionLabels: {openerSeat: _raiseOrBetLabel(spot.villainLine)},
+        villainSeatIndex: openerSeat,
+      );
+    }
+
+    // Preflop without a named open/facing line — ring, hero to act.
+    return LessonActionFeltLayout(
+      villainCount: villainCount,
+      seatCount: seatCount,
+      dealerIndex: dealer,
+      sbIndex: sb,
+      bbIndex: bb,
+      activeSeatIndex: 0,
+      villainSeatIndex: bb == 0 ? sb : bb,
+    );
+  }
+
+  // Postflop: ring with one villain still in (unless heads-up above).
+  final villainPos =
+      parseLessonActionVillainPosition(spot.villainLine) ?? 'BB';
+  final villainSeat =
+      nineMax
+          ? lessonNineMaxSeatIndex(position: villainPos, dealerIndex: dealer)
+          : lessonSixMaxSeatIndex(position: villainPos, dealerIndex: dealer);
+  final folded = [
+    for (var i = 1; i < seatCount; i++)
+      if (i != villainSeat) i,
+  ];
+  return LessonActionFeltLayout(
+    villainCount: villainCount,
+    seatCount: seatCount,
+    dealerIndex: dealer,
+    sbIndex: sb,
+    bbIndex: bb,
+    activeSeatIndex: 0,
+    foldedSeatIndexes: folded,
+    villainSeatIndex: villainSeat,
+  );
+}
+
+/// Resolves six-max, nine-max, or heads-up seating for an action teaching
+/// [spot].
 LessonActionFeltLayout resolveLessonActionFeltLayout(LessonActionSpot spot) {
   if (lessonActionSpotIsHeadsUp(spot)) {
     return const LessonActionFeltLayout(
@@ -203,92 +444,11 @@ LessonActionFeltLayout resolveLessonActionFeltLayout(LessonActionSpot spot) {
   final heroPos =
       parseLessonActionHeroPosition(spot.streetLabel) ??
       (preflop ? 'BTN' : 'BTN');
-  final dealer = lessonSixMaxDealerIndexForHero(heroPos);
-  final sb = lessonSixMaxSeatIndex(position: 'SB', dealerIndex: dealer);
-  final bb = lessonSixMaxSeatIndex(position: 'BB', dealerIndex: dealer);
-
-  if (preflop) {
-    if (spot.openPot || _foldsToYou(spot.villainLine)) {
-      final folded = lessonSixMaxOpenFoldIndexes(
-        heroPosition: heroPos,
-        dealerIndex: dealer,
-      );
-      return LessonActionFeltLayout(
-        villainCount: lessonBlindsVillainCount,
-        seatCount: 6,
-        dealerIndex: dealer,
-        sbIndex: sb,
-        bbIndex: bb,
-        activeSeatIndex: 0,
-        foldedSeatIndexes: folded,
-        villainSeatIndex: bb == 0 ? sb : bb,
-      );
-    }
-
-    if (spot.facingBet) {
-      final opener =
-          parseLessonActionVillainPosition(spot.villainLine) ?? 'UTG';
-      final openerSeat = lessonSixMaxSeatIndex(
-        position: opener,
-        dealerIndex: dealer,
-      );
-      final folded = lessonSixMaxFoldsBetween(
-        openerPosition: opener,
-        heroPosition: heroPos,
-        dealerIndex: dealer,
-      );
-      final raiseLabel =
-          (spot.villainLine?.toLowerCase().contains('open') ?? false) ||
-                  (spot.villainLine?.toLowerCase().contains('raise') ??
-                      false) ||
-                  (spot.villainLine?.toLowerCase().contains('3-bet') ?? false)
-              ? 'RAISE'
-              : 'BET';
-      return LessonActionFeltLayout(
-        villainCount: lessonBlindsVillainCount,
-        seatCount: 6,
-        dealerIndex: dealer,
-        sbIndex: sb,
-        bbIndex: bb,
-        activeSeatIndex: 0,
-        foldedSeatIndexes: folded,
-        seatActionLabels: {openerSeat: raiseLabel},
-        villainSeatIndex: openerSeat,
-      );
-    }
-
-    // Preflop without a named open/facing line — full ring, hero to act.
-    return LessonActionFeltLayout(
-      villainCount: lessonBlindsVillainCount,
-      seatCount: 6,
-      dealerIndex: dealer,
-      sbIndex: sb,
-      bbIndex: bb,
-      activeSeatIndex: 0,
-      villainSeatIndex: bb == 0 ? sb : bb,
-    );
-  }
-
-  // Postflop: full ring with one villain still in (unless heads-up above).
-  final villainPos =
-      parseLessonActionVillainPosition(spot.villainLine) ?? 'BB';
-  final villainSeat = lessonSixMaxSeatIndex(
-    position: villainPos,
-    dealerIndex: dealer,
-  );
-  final folded = [
-    for (var i = 1; i < 6; i++)
-      if (i != villainSeat) i,
-  ];
-  return LessonActionFeltLayout(
-    villainCount: lessonBlindsVillainCount,
-    seatCount: 6,
-    dealerIndex: dealer,
-    sbIndex: sb,
-    bbIndex: bb,
-    activeSeatIndex: 0,
-    foldedSeatIndexes: folded,
-    villainSeatIndex: villainSeat,
+  return _resolveRingLayout(
+    spot: spot,
+    nineMax: lessonActionSpotIsNineMax(spot),
+    heroPos: heroPos,
+    preflop: preflop,
   );
 }
 
