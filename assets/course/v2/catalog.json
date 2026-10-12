@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "e8738b931d156f4437c9a04a77b3ef4cbc14e593f053099baf71a34f674c8552",
+  "contentChecksum": "a89cf33526aada727aa0b20c6cf9566f9fe0c121fdf4310e7773c8f28debcb9b",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -3010,7 +3010,42 @@
                       "label": "Jo"
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "flush",
+                      "variants": [
+                        {
+                          "id": "var-straight-seat",
+                          "handFamily": "straight",
+                          "label": "Straight seat"
+                        },
+                        {
+                          "id": "var-two-pair-seat",
+                          "handFamily": "two_pair",
+                          "label": "Two pair seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-06-02-jump-order",
@@ -3046,7 +3081,34 @@
                       "label": "BTN"
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j-utg",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "j-hj",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 3,
+                        "target": "j-co",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 4,
+                        "target": "j-btn",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-06-02-jump-legal",
@@ -3084,7 +3146,30 @@
                       "action": "RAISE"
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Qh",
+                          "Jd"
+                        ],
+                        "board": [
+                          "Td",
+                          "8s",
+                          "2c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j-check",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-06-02-jump-hand",
@@ -3105,8 +3190,8 @@
                     {
                       "id": "j-hand-open",
                       "street": "preflop",
-                      "prompt": "Button with ATs. Folds to you. Action?",
-                      "accessibilityText": "Raise to 6 with ace-ten suited on the button.",
+                      "prompt": "Button with a suited ace. Folds to you. Action?",
+                      "accessibilityText": "Raise to 6 with a suited ace on the button.",
                       "choices": [
                         {
                           "id": "j-open",
@@ -3142,7 +3227,26 @@
                       ]
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "suited_ace",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j-open",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "j-yes",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

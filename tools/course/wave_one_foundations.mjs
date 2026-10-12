@@ -1569,6 +1569,22 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "Flush, straight, two pair.",
                 missFeedback: "Flush beats straight; straight beats two pair.",
+                // LPT-110: jump-ranks flush+variants cues kind none
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "flush",
+                    variants: [
+                      {id: "var-straight-seat", handFamily: "straight", label: "Straight seat"},
+                      {id: "var-two-pair-seat", handFamily: "two_pair", label: "Two pair seat"},
+                    ],
+                  },
+                  cues: [
+                    {press: 1, target: "you", kind: "none"},
+                    {press: 2, target: "sam", kind: "none"},
+                    {press: 3, target: "jo", kind: "none"},
+                  ],
+                },
               }),
               sequenceAct({
                 id: "act-01-06-02-jump-order", order: 2, stage: "scaffolded", assessmentRole: "jump_test",
@@ -1578,11 +1594,22 @@ export function buildSectionOne() {
                 items: [
                   {id: "j-utg", label: "UTG"},
                   {id: "j-hj", label: "HJ"},
+                  {id: "j-co", label: "CO"},
                   {id: "j-btn", label: "BTN"},
                 ],
-                correct: ["j-utg", "j-hj", "j-btn"],
-                okFeedback: "Left of big blind first; button last.",
-                missFeedback: "UTG, then toward the button.",
+                correct: ["j-utg", "j-hj", "j-co", "j-btn"],
+                okFeedback: "UTG → HJ → CO → BTN. Left of big blind first; button last.",
+                missFeedback: "UTG, then HJ, CO, and the button.",
+                // LPT-110: jump-order none + CO synced cues kind none
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [
+                    {press: 1, target: "j-utg", kind: "none"},
+                    {press: 2, target: "j-hj", kind: "none"},
+                    {press: 3, target: "j-co", kind: "none"},
+                    {press: 4, target: "j-btn", kind: "none"},
+                  ],
+                },
               }),
               actionAct({
                 id: "act-01-06-02-jump-legal", order: 3, stage: "scaffolded", assessmentRole: "jump_test",
@@ -1598,6 +1625,11 @@ export function buildSectionOne() {
                   choice("j-raise", "Raise", "clear_mistake",
                     "Raise is legal.", {action: "RAISE", betterChoiceId: "j-check"}),
                 ],
+                // LPT-110: jump-legal fixed QhJd/Td8s2c cue j-check kind none
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Qh", "Jd"], board: ["Td", "8s", "2c"]}},
+                  cues: [{press: 1, target: "j-check", kind: "none"}],
+                },
               }),
               multiStepAct({
                 id: "act-01-06-02-jump-hand", order: 4, stage: "scaffolded", assessmentRole: "jump_test",
@@ -1607,8 +1639,8 @@ export function buildSectionOne() {
                   {
                     id: "j-hand-open",
                     street: "preflop",
-                    prompt: "Button with ATs. Folds to you. Action?",
-                    accessibilityText: "Raise to 6 with ace-ten suited on the button.",
+                    prompt: "Button with a suited ace. Folds to you. Action?",
+                    accessibilityText: "Raise to 6 with a suited ace on the button.",
                     choices: [
                       choice("j-open", "Raise to 6", "recommended",
                         "Standard steal-plus open.", {action: "RAISE", amountBb: 3}),
@@ -1629,6 +1661,14 @@ export function buildSectionOne() {
                     ],
                   },
                 ],
+                // LPT-110: jump-hand suited_ace cues kind none; ATs copy softened
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "suited_ace", suitFamily: "suited"},
+                  cues: [
+                    {press: 1, target: "j-open", kind: "none"},
+                    {press: 2, target: "j-yes", kind: "none"},
+                  ],
+                },
               }),
             ],
           }),
