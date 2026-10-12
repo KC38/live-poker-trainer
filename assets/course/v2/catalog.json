@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "89204ec8b2b8f54314ef6e376251dfd0856deb59cc9735327d66f81439fe5c9f",
+  "contentChecksum": "00d385ee2f246c4fdba4ff17822f7990b9e3114756f9a4404fc3c7333f856a48",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -5639,7 +5639,34 @@
                   ],
                   "objectives": [
                     "Track pot size and stack depths"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "POT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STACKS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BUTTON",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "WHO ACTS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-01-01-guided",
@@ -5673,7 +5700,19 @@
                       "label": "12",
                       "accessibilityText": "12"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pot-21",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-01-01-scaffolded",
@@ -5707,7 +5746,19 @@
                       "label": "Small blind",
                       "accessibilityText": "Small blind"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "utg-first",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-01-01-unguided",
@@ -5741,7 +5792,19 @@
                       "label": "Only the dealer decides after cards move",
                       "accessibilityText": "Only the dealer decides after cards move"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bound",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-01-01-checkpoint",
@@ -5756,7 +5819,8 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Honor verbal declarations at a live table"
+                    "Track pot size and stack depths",
+                    "Locate the button and action seat"
                   ],
                   "prompt": "Hero 140bb, villain 55bb, pot 18. What matters most next?",
                   "choices": [
@@ -5776,7 +5840,19 @@
                       "accessibilityText": "Ignore pot until the river"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "eff-55",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

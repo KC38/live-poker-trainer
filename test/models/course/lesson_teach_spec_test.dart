@@ -150,6 +150,14 @@ const _lessons = <String, List<String>>{
     'act-02-07-02-jump-vs',
     'act-02-07-02-jump-stack',
   ],
+  // LPT-138
+  'lesson-03-01-01-reading-live-table': [
+    'act-03-01-01-explain',
+    'act-03-01-01-guided',
+    'act-03-01-01-scaffolded',
+    'act-03-01-01-unguided',
+    'act-03-01-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -914,6 +922,38 @@ void main() {
       expect(act('act-02-07-02-jump-stack').teachSpec!['deal'], {
         'mode': 'none',
       });
+    });
+  });
+
+  group('Read the table first (LPT-138)', () {
+    test('explain SoftPulse walks POT → STACKS → BUTTON → WHO ACTS', () {
+      expect(
+        _list(
+          act('act-03-01-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['POT', 'STACKS', 'BUTTON', 'WHO ACTS'],
+      );
+    });
+
+    test('guided/scaffolded SoftPulse; checkpoint quiet', () {
+      expect(
+        _list(act('act-03-01-01-guided'), 'cues').single['target'],
+        'pot-21',
+      );
+      expect(
+        _list(act('act-03-01-01-scaffolded'), 'cues').single['target'],
+        'utg-first',
+      );
+      expect(
+        _list(act('act-03-01-01-unguided'), 'cues').single['target'],
+        'bound',
+      );
+      final cp = act('act-03-01-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'eff-55');
     });
   });
 }

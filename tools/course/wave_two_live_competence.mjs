@@ -48,7 +48,19 @@ export function buildSectionThree() {
             activities: [
               dialogue("act-03-01-01-explain", 1,
                 "Before cards, read pot, stacks, button, and who acts. Words count live.",
-                {objectives: ["Track pot size and stack depths"]}),
+                {
+                  objectives: ["Track pot size and stack depths"],
+                  // LPT-138
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "POT", kind: "soft_pulse"},
+                      {press: 2, target: "STACKS", kind: "soft_pulse"},
+                      {press: 3, target: "BUTTON", kind: "soft_pulse"},
+                      {press: 4, target: "WHO ACTS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-03-01-01-guided", order: 2, stage: "guided",
                 prompt: "Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now?",
@@ -62,6 +74,8 @@ export function buildSectionThree() {
                   choice("pot-12", "12", "clear_mistake",
                     "Only counted the open.", {betterChoiceId: "pot-21"})
                 ],
+                // LPT-138
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pot-21", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-03-01-01-scaffolded", order: 3, stage: "scaffolded",
@@ -76,6 +90,8 @@ export function buildSectionThree() {
                   choice("sb-first", "Small blind", "clear_mistake",
                     "Blinds already posted; UTG opens the voluntary action.", {betterChoiceId: "utg-first"})
                 ],
+                // LPT-138
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "utg-first", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-03-01-01-unguided", order: 4, stage: "scaffolded",
@@ -90,12 +106,14 @@ export function buildSectionThree() {
                   choice("dealer-choice", "Only the dealer decides after cards move", "questionable",
                     "Dealer enforces the rule; the raise already happened.")
                 ],
+                // LPT-138
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "bound", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-03-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
                 prompt: "Hero 140bb, villain 55bb, pot 18. What matters most next?",
                 a11y: "Effective stack is the shorter committed stack.",
-                objectives: ["Honor verbal declarations at a live table"],
+                objectives: ["Track pot size and stack depths", "Locate the button and action seat"],
                 choices: [
                   choice("eff-55", "Effective 55bb and the 18 pot", "recommended",
                     "Shorter stack caps the matchup; pot frames price."),
@@ -104,6 +122,8 @@ export function buildSectionThree() {
                   choice("ignore-pot", "Ignore pot until the river", "clear_mistake",
                     "Pot drives every price.", {betterChoiceId: "eff-55"})
                 ],
+                // LPT-138
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "eff-55", kind: "none"}]},
               }),
             ],
           }),
