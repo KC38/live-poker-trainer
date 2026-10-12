@@ -272,6 +272,8 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         streetLabel: 'Flop',
         facingBet: false,
         openPot: true,
+        // Naming quiz: do not spoil Bet with RAISE/CALL (off) chrome (LPT-78).
+        identifyUnavailable: true,
       );
     case 'act-01-06-01-unguided-lab':
       return const LessonActionSpot(
