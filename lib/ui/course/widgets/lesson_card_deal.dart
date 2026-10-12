@@ -276,7 +276,8 @@ List<String> dealStartingHandFamily(
 /// then apply one shared suit permutation to every group.
 ///
 /// Postflop: suit-permute board (and villains), then resample hero holes until
-/// [HandClassifier] matches the authored class (capped retries → suit-only).
+/// the teach fingerprint matches (HandClass + draw outs + top-kicker tier +
+/// broadway count + hero suitedness; capped retries → suit-only).
 ///
 /// When [suitOnly] is true (multi-step / toy runouts), only suits change.
 ///
@@ -514,8 +515,10 @@ List<List<String>> _isomorphicPostflopGroups({
     for (final g in rest)
       [for (final code in g) _applySuitMap(code, suitMap)],
   ];
-  final targetClass = _handClassFor(hero, board);
-  final targetOuts = _drawOutsFor(hero, board);
+  // HandClass alone collapses TPTK into any top pair (and dual-broadway air
+  // into any high-card air). Match the teach fingerprint so coach copy that
+  // names TPTK / offsuit broadway still describes the felt (LPT-311).
+  final targetKey = _postflopTeachKey(hero, board);
   final used = <String>{
     ...mappedBoard,
     for (final g in mappedRest)
@@ -525,9 +528,7 @@ List<List<String>> _isomorphicPostflopGroups({
   for (var attempt = 0; attempt < 120; attempt++) {
     final candidate = _dealRandomHoleAvoiding(rng, used);
     if (candidate == null) break;
-    if (_handClassFor(candidate, mappedBoard) != targetClass) continue;
-    // Keep flush-draw vs straight-draw vs combo distinct for teach spots.
-    if (_drawOutsFor(candidate, mappedBoard) != targetOuts) continue;
+    if (_postflopTeachKey(candidate, mappedBoard) != targetKey) continue;
     return [
       List<String>.unmodifiable(candidate),
       List<String>.unmodifiable(mappedBoard),
@@ -553,6 +554,76 @@ HandClass _handClassFor(List<String> hero, List<String> board) {
 int _drawOutsFor(List<String> hero, List<String> board) {
   final encoded = _encodeHeroBoard(hero, board);
   return HandClassifier.drawOuts(encoded.a, encoded.b, encoded.board);
+}
+
+/// Teach-critical postflop strength beyond bare [HandClass].
+///
+/// [topKicker] is true when the holding is top pair (or better pair class)
+/// and the unpaired hole outranks every unpaired board card — i.e. TPTK on
+/// an Ace-high board keeps an Ace + broadway-or-better kicker, never A6.
+/// [broadwayCount] keeps dual-broadway air from remapping to Q9o / K8o.
+/// [heroSuited] keeps "offsuit broadway" from flipping to suited.
+({
+  HandClass handClass,
+  int drawOuts,
+  bool topKicker,
+  int broadwayCount,
+  bool heroSuited,
+}) _postflopTeachKey(List<String> hero, List<String> board) {
+  return (
+    handClass: _handClassFor(hero, board),
+    drawOuts: _drawOutsFor(hero, board),
+    topKicker: _hasTopPairTopKicker(hero, board),
+    broadwayCount: _broadwayHoleCount(hero),
+    heroSuited: _heroHolesSuited(hero),
+  );
+}
+
+/// Ten or higher (T, J, Q, K, A).
+const int _broadwayRankFloor = 10;
+
+int _broadwayHoleCount(List<String> hero) {
+  var count = 0;
+  for (final code in hero) {
+    if (CardModel.fromCode(code).rank >= _broadwayRankFloor) count++;
+  }
+  return count;
+}
+
+bool _heroHolesSuited(List<String> hero) {
+  if (hero.length < 2) return false;
+  return CardModel.fromCode(hero[0]).suit == CardModel.fromCode(hero[1]).suit;
+}
+
+/// Whether [hero] makes top pair with a kicker above every unpaired board card.
+bool _hasTopPairTopKicker(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length < 3) return false;
+  if (_handClassFor(hero, board) != HandClass.topPair) return false;
+
+  final heroCards = [for (final c in hero) CardModel.fromCode(c)];
+  final boardCards = [for (final c in board) CardModel.fromCode(c)];
+  var boardTop = -1;
+  for (final c in boardCards) {
+    if (c.rank > boardTop) boardTop = c.rank;
+  }
+  // Overpair above the board: both holes share a rank ≥ board top.
+  if (heroCards[0].rank == heroCards[1].rank &&
+      heroCards[0].rank >= boardTop) {
+    return true;
+  }
+  final boardRankCounts = <int, int>{};
+  for (final c in boardCards) {
+    boardRankCounts[c.rank] = (boardRankCounts[c.rank] ?? 0) + 1;
+  }
+  // Pair the board top with one hole; the other hole is the kicker.
+  final pairsBoardTop = heroCards.any((c) => c.rank == boardTop);
+  if (!pairsBoardTop) return false;
+  final kicker = heroCards.firstWhere((c) => c.rank != boardTop).rank;
+  for (final entry in boardRankCounts.entries) {
+    if (entry.key == boardTop) continue;
+    if (kicker <= entry.key) return false;
+  }
+  return true;
 }
 
 ({int a, int b, List<int> board}) _encodeHeroBoard(
