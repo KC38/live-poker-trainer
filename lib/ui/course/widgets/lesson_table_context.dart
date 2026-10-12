@@ -13168,7 +13168,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive river composition — tap Check or Blast off',
       semanticsStatic: 'River composition unguided outcomes',
       caption: scene.caption ?? 'No value, no blockers, no fold equity?',
-      // No SoftPulse on unguided — still don’t gold-icon Check.
+      // SoftPulse + Rex own the cue — don’t gold-tip Check.
+      // Null guideRegion SoftPulses every phase (LPT-507).
+      guideRegion: LessonTableRegion.riverCompCheck,
       phases: [
         (
           region: LessonTableRegion.riverCompCheck,
