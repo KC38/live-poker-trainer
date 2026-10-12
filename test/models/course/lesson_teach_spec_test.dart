@@ -8,7 +8,11 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/engine/fast_evaluator.dart';
+import 'package:live_poker_trainer/engine/hand_class.dart';
+import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
@@ -38,6 +42,13 @@ const _lessons = <String, List<String>>{
     'act-01-02-02-scaffolded-kicker',
     'act-01-02-02-unguided-board',
     'act-01-02-02-checkpoint-build',
+  ],
+  // LPT-94
+  'lesson-01-03-01-fold-check-call': [
+    'act-01-03-01-guided-fold',
+    'act-01-03-01-scaffolded-check',
+    'act-01-03-01-unguided-call',
+    'act-01-03-01-checkpoint-legal',
   ],
 };
 
@@ -273,6 +284,68 @@ void main() {
           act('act-01-02-02-unguided-board').teachSpec!['deal'] as Map;
       expect(board['handFamily'], 'straight_flush');
       expect(board['suitFamily'], 'monotone');
+    });
+  });
+
+  group('Fold, check, call (LPT-94)', () {
+    const want = {
+      'act-01-03-01-guided-fold': ('fold-72', 'FOLD', 'trash'),
+      'act-01-03-01-scaffolded-check': ('check-free', 'CHECK', 'weak_draw'),
+      'act-01-03-01-unguided-call': ('call-5', 'CALL', 'strong_draw'),
+      'act-01-03-01-checkpoint-legal': ('check-illegal', 'CHECK', 'weak_draw'),
+    };
+    int enc(String c) => FastEvaluator.encode(CardModel.fromCode(c));
+    String snake(HandClass c) => c.name.replaceAllMapped(
+      RegExp('[A-Z]'),
+      (m) => '_${m[0]!.toLowerCase()}',
+    );
+    HandClass classOf(LessonActionSpot s) => HandClassifier.classify(
+      enc(s.heroCodes[0]),
+      enc(s.heroCodes[1]),
+      [for (final b in s.boardCodes) enc(b)],
+    );
+    String suit(String c) => c.substring(c.length - 1);
+
+    test('cues target the graded dock choice', () {
+      for (final MapEntry(key: id, value: w) in want.entries) {
+        final a = act(id);
+        final cues = _list(a, 'cues');
+        expect(cues, hasLength(1), reason: id);
+        expect(cues.single['target'], w.$1, reason: id);
+        final choice = a.choices.firstWhere((c) => c.id == w.$1);
+        expect(choice.action, w.$2, reason: id);
+        final deal = a.teachSpec!['deal'] as Map<String, dynamic>;
+        expect(deal['handFamily'], w.$3, reason: id);
+      }
+      expect(
+        _list(act('act-01-03-01-checkpoint-legal'), 'cues').single['kind'],
+        'none',
+      );
+    });
+
+    test('preflop fold deals trash offsuit holes', () {
+      final a = act('act-01-03-01-guided-fold');
+      final deal = a.teachSpec!['deal'] as Map<String, dynamic>;
+      expect(deal['suitFamily'], 'offsuit');
+      for (var seed = 0; seed < 16; seed++) {
+        final h = dealtLessonActionSpot(a, random: Random(seed))!.heroCodes;
+        expect(suit(h[0]), isNot(suit(h[1])), reason: '$seed $h');
+      }
+    });
+
+    test('postflop deals stay in the authored hand class', () {
+      for (final id in want.keys.skip(1)) {
+        final a = act(id);
+        final family =
+            (a.teachSpec!['deal'] as Map<String, dynamic>)['handFamily'];
+        final template = resolveLessonActionSpot(a)!;
+        expect(snake(classOf(template)), family, reason: id);
+        for (var seed = 0; seed < 16; seed++) {
+          final spot = dealtLessonActionSpot(a, random: Random(seed))!;
+          expect(snake(classOf(spot)), family, reason: '$id $seed');
+          expect(spot.facingBet, template.facingBet, reason: id);
+        }
+      }
     });
   });
 }

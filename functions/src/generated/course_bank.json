@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "abd8af3f2a2c0c819b1853de42c1155dbaf13bc833cd581786eec4f5e5224905",
+  "contentChecksum": "035eb3d78c28d35927b02ac493dd3b2c057651922ca33dcb813e559b87e3b3f8",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1909,7 +1909,21 @@
                       "kind": "hint",
                       "text": "Trash hands fold to raises."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "trash",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-72",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-01-scaffolded-check",
@@ -1960,7 +1974,20 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "weak_draw"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "check-free",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-01-unguided-call",
@@ -2010,7 +2037,20 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "strong_draw"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-5",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-01-checkpoint-legal",
@@ -2063,7 +2103,20 @@
                       "action": "FOLD"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "weak_draw"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "check-illegal",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },

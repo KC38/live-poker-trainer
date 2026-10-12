@@ -124,6 +124,7 @@ export function numericAct({
 
 export function actionAct({
   id, order, stage, prompt, a11y, objectives, choices, hint, playerTypeRefs = [],
+  assessmentRole, teachSpec,
 }) {
   const act = {
     id, order, stage, renderer: "poker_action_sizing",
@@ -138,6 +139,8 @@ export function actionAct({
   if (hint) {
     act.coachMedia = [{id: `${id}-hint`, kind: "hint", text: hint}];
   }
+  if (assessmentRole) act.assessmentRole = assessmentRole;
+  if (teachSpec) act.teachSpec = teachSpec;
   return act;
 }
 
@@ -917,6 +920,11 @@ export function buildSectionOne() {
                     "Do not invent aggression with trash offsuit.",
                     {action: "RAISE", amountBb: 9, betterChoiceId: "fold-72"}),
                 ],
+                // LPT-94
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "trash", suitFamily: "offsuit"},
+                  cues: [{press: 1, target: "fold-72", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-01-03-01-scaffolded-check", order: 3, stage: "scaffolded",
@@ -932,6 +940,11 @@ export function buildSectionOne() {
                     "Folding for free throws away equity.",
                     {action: "FOLD", betterChoiceId: "check-free"}),
                 ],
+                // LPT-94
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "weak_draw"},
+                  cues: [{press: 1, target: "check-free", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-01-03-01-unguided-call", order: 4, stage: "scaffolded",
@@ -948,6 +961,11 @@ export function buildSectionOne() {
                     "Sometimes fold, but here the price is fine if you planned to continue.",
                     {action: "FOLD"}),
                 ],
+                // LPT-94
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "strong_draw"},
+                  cues: [{press: 1, target: "call-5", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-01-03-01-checkpoint-legal", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -968,6 +986,11 @@ export function buildSectionOne() {
                     "Fold is always available.",
                     {action: "FOLD", betterChoiceId: "check-illegal"}),
                 ],
+                // LPT-94
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "weak_draw"},
+                  cues: [{press: 1, target: "check-illegal", kind: "none"}],
+                },
               }),
             ],
           }),
