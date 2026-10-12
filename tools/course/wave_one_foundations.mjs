@@ -1920,6 +1920,12 @@ export function buildSectionTwo() {
                     "Broadway needs both cards ten-or-better.",
                     {betterChoiceId: "hf-pair"}),
                 ],
+                // LPT-119: random_in_class
+                // pair/broadway/connector+suited/trash+offsuit
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "pair", suitFamily: "pair"},
+                  cues: [{press: 1, target: "hf-pair", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-02-01-scaffolded-broadway", order: 3, stage: "scaffolded",
@@ -1936,6 +1942,12 @@ export function buildSectionTwo() {
                     "Ace-king is a premium broadway, not trash.",
                     {betterChoiceId: "hf-broadway"}),
                 ],
+                // LPT-119: SoftPulse hf-pair/hf-broadway/hf-sc; checkpoint
+                // hf-trash kind none
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "broadway"},
+                  cues: [{press: 1, target: "hf-broadway", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-02-01-unguided-sc", order: 4, stage: "scaffolded",
@@ -1951,6 +1963,11 @@ export function buildSectionTwo() {
                     "Connected and suited is a real family, not trash.",
                     {betterChoiceId: "hf-sc"}),
                 ],
+                // LPT-119: isomorphic preflop redeals in family
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "connector", suitFamily: "suited"},
+                  cues: [{press: 1, target: "hf-sc", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-02-01-checkpoint-trash", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1967,6 +1984,11 @@ export function buildSectionTwo() {
                     "Suited ace has playability — this is offsuit junk.",
                     {betterChoiceId: "hf-trash"}),
                 ],
+                // LPT-119: no pressHints on checkpoint
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "trash", suitFamily: "offsuit"},
+                  cues: [{press: 1, target: "hf-trash", kind: "none"}],
+                },
               }),
             ],
           }),

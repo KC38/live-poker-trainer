@@ -544,7 +544,8 @@ deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85), Hand
 ranks (LPT-88), Best five and kickers (LPT-91), Fold, check, call (LPT-94),
 Bet, raise, all-in (LPT-98), Streets and action order (LPT-101), How pots
 are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
-(LPT-110), Position labels (LPT-112), Acting order (LPT-115).
+(LPT-110), Position labels (LPT-112), Acting order (LPT-115), Hand families
+(LPT-119).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -693,6 +694,13 @@ advance `ord-co` → `ord-btn` → `ord-sb`; scaffolded-post SoftPulse cues
 advance `post-sb` → `post-btn`; unguided-wait SoftPulse cues `wait`;
 checkpoint-full cues `last-btn` with kind `none` and has no `pressHints` or
 Hint media.
+
+Hand families `teachSpec` (LPT-119): each interactive step deals
+`random_in_class` in the teaching family (`pair`/`pair`, `broadway`,
+`connector`/`suited`, `trash`/`offsuit`). SoftPulse cues target `hf-pair`,
+`hf-broadway`, and `hf-sc`; checkpoint-trash cues `hf-trash` with kind
+`none` and has no `pressHints` or Hint media. Hero holes already randomize
+in-class via `_isomorphicPreflopGroups` / `dealStartingHandFamily`.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

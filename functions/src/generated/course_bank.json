@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "65b64032403b85d8615dcad93c9ebc004d30baa78b0c93f5085f826ff3ca9979",
+  "contentChecksum": "d02e811cb09a439648d09124f34df69b8ac88de8633a43e148cf965e394429c1",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -4696,7 +4696,21 @@
                       "kind": "hint",
                       "text": "Matching ranks in the hole."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair",
+                      "suitFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hf-pair",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-02-01-scaffolded-broadway",
@@ -4744,7 +4758,20 @@
                         "betterChoiceId": "hf-broadway"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hf-broadway",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-02-01-unguided-sc",
@@ -4791,7 +4818,21 @@
                         "betterChoiceId": "hf-sc"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "connector",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hf-sc",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-02-01-checkpoint-trash",
@@ -4840,7 +4881,21 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "trash",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hf-trash",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
