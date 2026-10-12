@@ -547,7 +547,7 @@ are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
 (LPT-110), Position labels (LPT-112), Acting order (LPT-115), Hand families
 (LPT-119), Open or fold baseline (LPT-122), Versus an open (LPT-125),
 Effective stacks (LPT-128), Live table habits (LPT-131), Full-ring baseline
-hand (LPT-135).
+hand (LPT-135), Baseline jump check (LPT-137).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -732,6 +732,13 @@ Full-ring baseline hand `teachSpec` (LPT-135): action/lab steps deal
 `random_in_class` (broadway/suited, pair, broadway/offsuit) with SoftPulse
 dock cues `open-ajs`, `call-22`, and `lab-3bet`; checkpoint-habit uses
 `deal.mode` `none` and cues `cover-wait` with kind `none` (no pressHints).
+
+Baseline jump check `teachSpec` (LPT-137): every step is `jump_test` with
+cues kind `none` and no `pressHints`. Jump-pos and jump-stack use
+`deal.mode` `none` (stack ask already densified on felt — Still-a-list
+cleared); jump-family deals `suited_ace`/`suited` with pair/trash distractor
+variants; jump-open deals `trash`/`offsuit`; jump-vs authors fixed AA
+(`AhAd`) so coach copy follows the deal.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
