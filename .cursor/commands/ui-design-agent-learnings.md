@@ -170,7 +170,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer `tools/flutter_run_fast.sh` / `flutter_hot_restart.sh` /
   `refresh-simulator.sh` over hand-rolled tmux `flutter run`. Trust
   refresh after hot-restart (it waits for Dart VM / cold-starts cached
-  `Runner.app`). On Xcode "No space left on device", run
+  `Runner.app`). Re-judge Hint/SoftPulse after `origin/main` advances
+  mid-walk — a stale Dart isolate can look like SoftPulse-off +
+  Hint-disabled deadlock (how-pots before #1706). On How pots open-pot,
+  wait until the felt deal settles before judging Hint SoftPulse — early
+  Hint greys the button while `feltDealReady` is still false (LPT-84). On
+  Xcode "No space left on device", run
   `python3 tools/disk_guard.py --min-free-gb 40` then retry once (LPT-61)
   — do not wipe primary DerivedData or `needs-human` on the first disk-full
   build. After patching guest `flutter.onboarding_draft_v1` on disk, prefer
@@ -179,7 +184,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (LPT-39). After the last Nice!, poll for Lesson Complete before CONTINUE.
 - Prefer waiting until the target beat is settled before
   `<KEY>-validated.png` (not bootstrap spinner). On hole-card peeks, wait
-  until the hero cards are face-up (not empty outlines) before `tap You`.
+  until the hero cards are face-up (not empty outlines) before `tap You`,
+  and do not show empty board slots when no board is in play for that beat.
   On locked-start, capture the Open-previous / Retry gate and read Rex's
   bubble against the gold Open-previous CTA — Retry-only copy with that
   button is a bug (LPT-51). For board SoftPulse tickets, read the coach
@@ -219,7 +225,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `/tmp/flutter-iphone-13-mini.active.log` at the worktree session. Passing
   the primary `/tmp/flutter-live-poker-trainer.run.log` while the worktree
   owns the mini talks to the wrong VM (LPT-78).
-- Prefer `tools/flutter_hot_restart.sh` (or worktree `flutter_run_fast.sh`) and re-judge Hint/SoftPulse after `origin/main` advances mid-walk — a stale Dart isolate can look like SoftPulse-off + Hint-disabled deadlock (how-pots before #1706 hot-restart). On How pots open-pot, wait until the felt deal settles before judging Hint SoftPulse — early Hint greys the button while `feltDealReady` is still false (LPT-84).
 - Prefer flush/straight showdown remap templates with **five** suited cards
   in the made flush (board + holes) and rank span < 12 so `_remapSpotCards`
   can vary boards; a four-suited flush template always falls back to one
@@ -227,19 +232,26 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer merging + Functions deploy before mini-proving a
   `gradeCourseResponse` / Nice! / `course_bank` sequence-id change — the
   worktree app still hits production until that deploy lands (LPT-74,
-  LPT-107).
+  LPT-107). When local `deploy-functions.sh` races GitHub Deploy Cloud
+  Functions (HTTP 409 unable to queue), wait for local EXIT:0 — a
+  concurrent Actions failure does not mean the merge SHA is undeployed if
+  the local script finished Successful update for `submitCourseStep` /
+  course graders (LPT-199).
 - Prefer treating `tools/main_matches_validated.sh` `differs` on
   `assets/course/v2/catalog.json` (or other concurrent-main files) as a
   required origin/main re-walk, not a failed fix — LPT-173 squash matched
   the worktree lib change while catalog moved on main.
-- Prefer waiting for local `deploy-functions.sh` EXIT:0 when it races
-  GitHub Deploy Cloud Functions (HTTP 409 unable to queue) — a concurrent
-  Actions failure does not mean the merge SHA is undeployed if the local
-  script finished Successful update for `submitCourseStep` / course
-  graders (LPT-199).
 - Prefer `villainSeatCount: 0` on conceptual outcome scenes that do not
   deal holes (effective-stack / depth tiles). Default `1` paints a decoy
   face-down Them pair — LPT-220.
+- Prefer framed `LessonTableStage` with `lessonNineMaxVillainCount` +
+  `seatNames: Seat N` when coach copy names seat numbers on a nine-handed
+  ask (LPT-240 Read the table scaffolded); densify `blindsSeats`+
+  `numberSeats` covers the no-frame path.
+- Prefer extending `alignLessonTableCopy` (board+hole card tokens and
+  spoken rank/suit words) when densified isomorphic remap leaves catalog
+  prompts / Nice! / Oops naming the template flop — frame speech alone is
+  not enough if grade lines still say “Pair of kings” (LPT-261).
 
 ## Ops (simulator, CLI, Jira)
 
@@ -249,9 +261,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `cursor-access-token` keychain item before each start so
   `errSecDuplicateItem` / `auth.refresh.persistFailed` cannot burn the run.
 - Heartbeat during long worktree `flutter run`, validates, `flutter test` /
-  analyze, and Cloud Functions deploy; the stall watchdog kills a silent
-  agent (tmux `deploy-LPT-*` / `refresh-LPT-*` / `test-LPT-*` /
-  `analyze-LPT-*` count as alive, and a growing ui-agent run log also
+  analyze, and Cloud Functions deploy — including immediately before and
+  after long `test-LPT-*` / `analyze-LPT-*` tmux sessions (LPT-240: lock
+  freed mid-suite while tests were quiet; reclaim with `sim_lock.py claim`
+  then continue). The stall watchdog kills a silent agent (those named
+  tmux sessions count as alive, and a growing ui-agent run log also
   counts — machine SDK streams can skip heartbeats for >10 min). Launch
   builds with `tools/flutter_run_fast.sh` and hot-restart with
   `tools/flutter_hot_restart.sh` — both block and heartbeat for you, and
@@ -281,18 +295,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 ## Product judgment
 
-- "Your two cards" and similar peeks must not show empty board slots when
-  no board is in play for that beat.
-- Lesson walks must exercise Hint (one line, disabled when empty — including
-  multiturn), one gold SoftPulse at a time, coach mood/copy, hearts
-  lose/restore, and a second attempt for card randomization — not only
-  Continue through the happy path.
-- Every ticket needs a current-issue screenshot on file and a validated
-  origin/main screenshot on the Done comment. Text-only closeouts are not
-  enough.
-- When the design record and a shipped screen disagree, the record (plus
-  stakeholder brief) wins; file or reopen the ticket rather than
-  "accepting" the screen as intentional chrome.
+- Lesson walks must exercise Hint (one at a time), one gold SoftPulse,
+  coach mood/copy that names the felt, hearts lose/restore, and a second
+  attempt for card randomization — not only Continue through the happy
+  path. Hole-card peeks must not show empty board slots when no board is
+  in play. Every ticket needs a current-issue screenshot and a validated
+  origin/main closeout shot; text-only closeouts are not enough. When the
+  design record and a shipped screen disagree, the record wins — file or
+  reopen rather than accepting the screen as intentional chrome.
 
 ## Recent run notes
 
