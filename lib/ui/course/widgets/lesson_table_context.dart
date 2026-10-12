@@ -14386,7 +14386,7 @@ class LessonTableContext extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               if (header != null) ...[
-                header!,
+                header,
                 if (!expandTeach) SizedBox(height: 10),
               ],
               if (showSpotCards) ...[
