@@ -2307,6 +2307,16 @@ export function buildSectionTwo() {
                   objectives: ["Follow the action before deciding"],
                   // LPT-199: short Nice! why — not accessibilityText / idle ask.
                   okFeedback: "Watch → Say → Cover → Wait.",
+                  // LPT-131: teachSpec authored
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "WATCH", kind: "soft_pulse"},
+                      {press: 2, target: "SAY", kind: "soft_pulse"},
+                      {press: 3, target: "COVER", kind: "soft_pulse"},
+                      {press: 4, target: "WAIT", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               selectAct({
                 id: "act-02-06-01-guided-follow", order: 2, stage: "guided",
@@ -2323,6 +2333,8 @@ export function buildSectionTwo() {
                   choice("decide-now", "Decide your action before they act", "questionable",
                     "Have a plan, but update with their actions."),
                 ],
+                // LPT-131: SoftPulse cues + deal
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "watch", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-06-01-scaffolded-verbal", order: 3, stage: "scaffolded",
@@ -2337,6 +2349,8 @@ export function buildSectionTwo() {
                   choice("tap-table", "Tap the table then shove a stack", "clear_mistake",
                     "A tap looks like a check.", {betterChoiceId: "say-raise"}),
                 ],
+                // LPT-131: checkpoint quiet
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "say-raise", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-06-01-unguided-protect", order: 4, stage: "scaffolded",
@@ -2351,6 +2365,11 @@ export function buildSectionTwo() {
                   choice("leave-loose", "Leave them loose near the dealer", "clear_mistake",
                     "Loose cards get killed.", {betterChoiceId: "chip-on-cards"}),
                 ],
+                // LPT-131: wave synced
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "chip-on-cards", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-06-01-checkpoint-oot", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2369,6 +2388,8 @@ export function buildSectionTwo() {
                     "clear_mistake",
                     "Your job is still to wait.", {betterChoiceId: "oot-bad"}),
                 ],
+                // LPT-131
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "oot-bad", kind: "none"}]},
               }),
             ],
           }),

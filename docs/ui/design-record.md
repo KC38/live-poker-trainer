@@ -546,7 +546,7 @@ Bet, raise, all-in (LPT-98), Streets and action order (LPT-101), How pots
 are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
 (LPT-110), Position labels (LPT-112), Acting order (LPT-115), Hand families
 (LPT-119), Open or fold baseline (LPT-122), Versus an open (LPT-125),
-Effective stacks (LPT-128).
+Effective stacks (LPT-128), Live table habits (LPT-131).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -719,6 +719,12 @@ Effective stacks `teachSpec` (LPT-128): chip/BB depth lesson — every
 interactive step uses `deal.mode` `none`. SoftPulse cues target `bb-100`,
 `eff-60`, and `depth-50`; checkpoint-200 cues `bb-200` with kind `none` and
 has no `pressHints` or Hint media.
+
+Live table habits `teachSpec` (LPT-131): habit/etiquette lesson — every step
+uses `deal.mode` `none`. Explain SoftPulse advances `WATCH` → `SAY` →
+`COVER` → `WAIT`; interactive SoftPulse cues target `watch`, `say-raise`,
+and `chip-on-cards`; checkpoint-oot cues `oot-bad` with kind `none` and has
+no `pressHints` or Hint media.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
