@@ -583,6 +583,66 @@ void main() {
     );
   });
 
+  test(
+    'Adjust Nit unguided dock Always-steal label follows remapped holes',
+    () {
+      final activity = CourseActivity(
+        id: 'act-04-07-03-unguided',
+        order: 4,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 55,
+        accessibilityText: 'Without nit evidence, K9o steal is thinner.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Same K9o steal. Unknown BB. Action?',
+        choices: const [
+          CourseChoice(
+            id: 'tighter',
+            label: 'Tighter baseline',
+            accessibilityText: 'Tighter baseline',
+            action: 'FOLD',
+          ),
+          CourseChoice(
+            id: 'same-always',
+            label: 'Always steal K9o',
+            accessibilityText: 'Always steal K9o',
+            action: 'RAISE',
+            amountBb: 3,
+          ),
+        ],
+      );
+      late int generation;
+      late List<String> dealtHero;
+      for (generation = 0; generation < 64; generation++) {
+        final dealt = dealtLessonActionSpot(activity, generation: generation);
+        expect(dealt, isNotNull);
+        if (startingHandLabelFromCodes(dealt!.heroCodes) != 'K9o') {
+          dealtHero = dealt.heroCodes;
+          break;
+        }
+      }
+      expect(generation, lessThan(64));
+      final dealtLabel = startingHandLabelFromCodes(dealtHero);
+      final aligned = alignLessonActionChoices(
+        activity,
+        activity.choices,
+        generation: generation,
+      );
+      final steal = aligned.firstWhere((c) => c.id == 'same-always');
+      expect(steal.label, 'Always steal $dealtLabel');
+      expect(steal.accessibilityText, 'Always steal $dealtLabel');
+      expect(steal.label, isNot(contains('K9o')));
+      expect(
+        alignLessonActionCopy(
+          activity,
+          activity.prompt!,
+          generation: generation,
+        ),
+        contains(dealtLabel),
+      );
+    },
+  );
+
   test('flop-class scaffolded Oops follows remapped board rank', () {
     final activity = CourseActivity(
       id: 'act-03-02-01-scaffolded',
