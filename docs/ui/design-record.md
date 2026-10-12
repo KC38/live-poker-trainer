@@ -604,6 +604,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Meet the LAG SoftPulse one gold | Meet the LAG unguided densified ask (`act-06-12-02-unguided`) passes `guideRegion` (`meetLagLabel2`) so SoftPulse-after-Hint paints one gold LAG tile — never both LAG and Nit (LPT-492). Guided / scaffolded / checkpoint already pass `meetLagLabel` / `meetLagPressureDiff` / `meetLagSampleLimits`. |
 | Observe wide SoftPulse one gold | Observe wide sustained pressure unguided densified ask (`act-06-12-01-unguided`) passes `guideRegion` (`lagObserveKeepSampling`) so SoftPulse-after-Hint paints one gold Keep sampling tile — never both Keep sampling and Label now (LPT-493). Guided / scaffolded / checkpoint already pass `lagObserveWidePressure` / `lagObserveSomeFolds` / `lagObserveBundle`. |
 | Observe selective SoftPulse one gold | Observe selective aggression unguided densified ask (`act-06-11-01-unguided`) passes `guideRegion` (`selectiveKeepSampling`) so SoftPulse-after-Hint paints one gold Keep sampling tile — never both Keep sampling and Max certainty (LPT-494). Guided / scaffolded / checkpoint already pass `selectivePlanOk` / `selectiveDisciplined` / `selectiveEvidenceBundle`. |
+| Confidence and samples SoftPulse one gold | Confidence and samples densified asks (`act-04-09-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`confidenceOneNote` / `confidenceRiseRevisable` / `confidenceUpdateModel` / `confidenceShowLimits`) so SoftPulse paints one gold tile — never both One note and Proven, Rise and Stay zero, Update and Freeze, or Limits and Destiny. Correct-answer chips/icons stay slate; SoftPulse owns the gold (LPT-495). |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1291,7 +1292,7 @@ felt.
 | Observe wild aggressors | Raise, Barrel, Count; densified SoftPulse one gold (LPT-462) | entry quizzes |
 | Meet the Maniac | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490) | label quizzes |
 | Adjust versus Maniac | Wider, Hang, Ego | call-wider reason |
-| Confidence and samples | Observe, Samples, Showdowns | confidence quizzes |
+| Confidence and samples | Observe, Samples, Showdowns; densified SoftPulse one gold (LPT-495) | confidence quizzes |
 | Same hand, different types | Cards, Seats, Evidence | — |
 | Section 4 jump check | — | range, SPR, and player-type checks |
 | Build multiway ranges with nut potential | Nutted, Air, Domination | continue and priority checks |
