@@ -64,6 +64,13 @@ const _lessons = <String, List<String>>{
     'act-01-04-01-unguided-end',
     'act-01-04-01-checkpoint-postflop',
   ],
+  // LPT-104
+  'lesson-01-05-01-winning-pots': [
+    'act-01-05-01-guided-fold-win',
+    'act-01-05-01-scaffolded-showdown',
+    'act-01-05-01-unguided-pot',
+    'act-01-05-01-checkpoint-side',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -454,6 +461,52 @@ void main() {
       expect(cue['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
       expect(cp.coachMedia.where((m) => m.kind == 'hint'), isEmpty);
+    });
+  });
+
+  group('How pots are won (LPT-104)', () {
+    test('fold-win and showdown author fixed felt cards + SoftPulse', () {
+      final fold = act('act-01-05-01-guided-fold-win');
+      final foldDeal = fold.teachSpec!['deal'] as Map<String, dynamic>;
+      expect(foldDeal['mode'], 'fixed');
+      expect((foldDeal['fixedCards'] as Map)['hero'], ['Ah', 'Kd']);
+      expect(_list(fold, 'cues').single['target'], 'no-show');
+
+      final sd = act('act-01-05-01-scaffolded-showdown');
+      final sdDeal = sd.teachSpec!['deal'] as Map<String, dynamic>;
+      expect(sdDeal['mode'], 'fixed');
+      expect((sdDeal['fixedCards'] as Map)['board'], [
+        'Qs',
+        '7c',
+        '2d',
+        '9h',
+        '3s',
+      ]);
+      expect(_list(sd, 'cues').single['target'], 'showdown');
+    });
+
+    test('unguided-pot variants cover open-to sizes; checkpoint kind none', () {
+      final pot = act('act-01-05-01-unguided-pot');
+      final deal = pot.teachSpec!['deal'] as Map<String, dynamic>;
+      expect(deal['mode'], 'none');
+      final variants = [
+        for (final v in (deal['variants'] as List)) (v as Map)['id'] as String,
+      ];
+      expect(variants, [
+        'open-5',
+        'open-6',
+        'open-7',
+        'open-8',
+        'open-9',
+        'open-10',
+      ]);
+      expect(_list(pot, 'cues').single['target'], 'pot-correct');
+
+      final cp = act('act-01-05-01-checkpoint-side');
+      final cue = _list(cp, 'cues').single;
+      expect(cue['target'], 'side-exists');
+      expect(cue['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
     });
   });
 }

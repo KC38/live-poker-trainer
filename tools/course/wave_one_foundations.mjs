@@ -1245,6 +1245,11 @@ export function buildSectionOne() {
                     "Your cards stay private if uncalled.",
                     {betterChoiceId: "no-show"}),
                 ],
+                // LPT-104: guided fold-win fixed AhKd SoftPulse no-show
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"]}},
+                  cues: [{press: 1, target: "no-show", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-05-01-scaffolded-showdown", order: 3, stage: "scaffolded",
@@ -1259,6 +1264,14 @@ export function buildSectionOne() {
                   choice("chop-default", "Always chop", "clear_mistake",
                     "Hands still compare.", {betterChoiceId: "showdown"}),
                 ],
+                // LPT-104: scaffolded showdown fixed river SoftPulse showdown
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["Qs", "7c", "2d", "9h", "3s"]},
+                  },
+                  cues: [{press: 1, target: "showdown", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-05-01-unguided-pot", order: 4, stage: "scaffolded",
@@ -1275,6 +1288,22 @@ export function buildSectionOne() {
                     "Add both blinds and the open — do not double the raise.",
                     {betterChoiceId: "pot-correct"}),
                 ],
+                // LPT-104: unguided-pot none + open-to variants 5-10 SoftPulse
+                // pot-correct
+                teachSpec: {
+                  deal: {
+                    mode: "none",
+                    variants: [
+                      {id: "open-5", label: "Open to 5"},
+                      {id: "open-6", label: "Open to 6"},
+                      {id: "open-7", label: "Open to 7"},
+                      {id: "open-8", label: "Open to 8"},
+                      {id: "open-9", label: "Open to 9"},
+                      {id: "open-10", label: "Open to 10"},
+                    ],
+                  },
+                  cues: [{press: 1, target: "pot-correct", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-05-01-checkpoint-side", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1293,6 +1322,8 @@ export function buildSectionOne() {
                     "You remain live for the main pot.",
                     {betterChoiceId: "side-exists"}),
                 ],
+                // LPT-104: checkpoint-side side-exists kind none; no pressHints
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "side-exists", kind: "none"}]},
               }),
             ],
           }),
