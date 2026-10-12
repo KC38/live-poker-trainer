@@ -567,7 +567,9 @@ branch names.
   Lesson ledger row (when a step moved onto the felt) in the same change.
   Remove the item from **Known gaps** if this closes it.
 - Tests lock the criteria. A layout change pumps the screen at 375 × 812
-  and fails on overflow. Run `dart analyze` and the touched tests.
+  and fails on overflow. Run `dart analyze` and the touched tests via
+  `tools/tee_exit.sh` in named `test-LPT-*` / `analyze-LPT-*` tmux so
+  `EXIT:N` is the real status (bare `| tee` masks failures).
 
 ## 7. Validate on the worktree build
 
