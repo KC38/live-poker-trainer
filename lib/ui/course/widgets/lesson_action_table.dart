@@ -114,15 +114,19 @@ String alignLessonActionCopy(
       random: random,
     );
     if (dealt != null) {
-      return alignStartingHandCopy(
+      return alignLessonTableCopy(
         text: text,
         templateHero: template.heroCodes,
         dealtHero: dealt.heroCodes,
+        templateBoard: template.boardCodes,
+        dealtBoard: dealt.boardCodes,
       );
     }
   }
   // Hand-family densified classify scenes remap hero holes the same way
   // action spots do — Hint / a11y still named authored 76s / 72o (LPT-134).
+  // Flop-class densify also remaps the board; rewrite card tokens + spoken
+  // ranks/suits so frame speech and grade lines match the felt (LPT-261).
   final scene = resolveLessonTableScene(activity);
   if (scene == null || scene.heroCodes.length < 2) return text;
   final dealtScene = dealtLessonTableScene(
@@ -131,10 +135,12 @@ String alignLessonActionCopy(
     random: random,
   );
   if (dealtScene == null || dealtScene.heroCodes.length < 2) return text;
-  return alignStartingHandCopy(
+  return alignLessonTableCopy(
     text: text,
     templateHero: scene.heroCodes,
     dealtHero: dealtScene.heroCodes,
+    templateBoard: scene.boardCodes,
+    dealtBoard: dealtScene.boardCodes,
   );
 }
 

@@ -170,3 +170,126 @@ String alignStartingHandCopy({
   }
   return next;
 }
+
+final _tableCardToken = RegExp(
+  r'\b([2-9TJQKA][shdc])\b',
+  caseSensitive: false,
+);
+
+const Map<String, (String singular, String plural)> _suitWords = {
+  's': ('spade', 'spades'),
+  'h': ('heart', 'hearts'),
+  'd': ('diamond', 'diamonds'),
+  'c': ('club', 'clubs'),
+};
+
+void _pairTemplateDealtCodes(
+  Map<String, String> codeMap,
+  List<String> template,
+  List<String> dealt,
+) {
+  final n = template.length < dealt.length ? template.length : dealt.length;
+  for (var i = 0; i < n; i++) {
+    final from = template[i].trim();
+    final to = dealt[i].trim();
+    if (from.isEmpty || to.isEmpty) continue;
+    codeMap[from.toLowerCase()] = to;
+  }
+}
+
+/// Rewrites densified table-scene coach / grade copy onto the remapped felt.
+///
+/// Flop-class (and other board+hole densify) catalog prompts name template
+/// codes (`Board Ks 9d 2c. You hold Kh Qh`) and bank feedback names template
+/// ranks/suits (`Pair of kings`, `No jack`, `need a heart`) while
+/// [dealtLessonTableScene] isomorphic-remaps both holes and board (LPT-261).
+String alignLessonTableCopy({
+  required String text,
+  required List<String> templateHero,
+  required List<String> dealtHero,
+  List<String> templateBoard = const <String>[],
+  List<String> dealtBoard = const <String>[],
+}) {
+  if (text.isEmpty) return text;
+  final codeMap = <String, String>{};
+  _pairTemplateDealtCodes(codeMap, templateHero, dealtHero);
+  _pairTemplateDealtCodes(codeMap, templateBoard, dealtBoard);
+  if (codeMap.isEmpty) {
+    return alignStartingHandCopy(
+      text: text,
+      templateHero: templateHero,
+      dealtHero: dealtHero,
+    );
+  }
+
+  final rankMap = <int, int>{};
+  final suitMap = <String, String>{};
+  for (final entry in codeMap.entries) {
+    final from = CardModel.fromCode(entry.key);
+    final to = CardModel.fromCode(entry.value);
+    rankMap[from.rank] = to.rank;
+    suitMap[from.suit.code] = to.suit.code;
+  }
+
+  var next = text.replaceAllMapped(_tableCardToken, (match) {
+    final token = match[1]!;
+    return codeMap[token.toLowerCase()] ?? token;
+  });
+
+  // Hero chart / spoken starting-hand rewrite first so board rank/suit
+  // word swaps cannot turn a correct "six-five" into "five-five".
+  if (templateHero.length >= 2 && dealtHero.length >= 2) {
+    next = alignStartingHandCopy(
+      text: next,
+      templateHero: templateHero,
+      dealtHero: dealtHero,
+    );
+  }
+
+  // Spoken rank/suit words only when a board remapped — hole-only densify
+  // (hand families) is fully handled by alignStartingHandCopy above.
+  if (templateBoard.isEmpty || dealtBoard.isEmpty) {
+    return next;
+  }
+
+  // Plurals before singulars so "kings" is not left as "aces"+"s".
+  for (final entry in rankMap.entries) {
+    if (entry.key == entry.value) continue;
+    next = _replaceIgnoringCase(
+      next,
+      _pairPluralWord(entry.key),
+      _pairPluralWord(entry.value),
+    );
+  }
+  for (final entry in rankMap.entries) {
+    if (entry.key == entry.value) continue;
+    final fromWord = _rankWords[entry.key];
+    final toWord = _rankWords[entry.value];
+    if (fromWord == null || toWord == null) continue;
+    next = _replaceIgnoringCase(next, fromWord, toWord);
+  }
+
+  for (final entry in suitMap.entries) {
+    if (entry.key == entry.value) continue;
+    final from = _suitWords[entry.key];
+    final to = _suitWords[entry.value];
+    if (from == null || to == null) continue;
+    next = _replaceIgnoringCase(next, from.$2, to.$2);
+    next = _replaceIgnoringCase(next, from.$1, to.$1);
+  }
+
+  return _fixIndefiniteArticles(next);
+}
+
+/// Fixes `an queen` / `a ace` after rank-word remaps.
+String _fixIndefiniteArticles(String text) {
+  var next = text.replaceAllMapped(
+    RegExp(r'\b([Aa])n\s+([bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ])'),
+    (m) => '${m[1]} ${m[2]}',
+  );
+  next = next.replaceAllMapped(
+    RegExp(r'\b([Aa])\s+([aeiouAEIOU])'),
+    (m) => '${m[1]}n ${m[2]}',
+  );
+  return next;
+}

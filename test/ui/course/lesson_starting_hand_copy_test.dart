@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
@@ -389,6 +390,159 @@ void main() {
       expected,
     );
     expect(expected, isNot(contains('seven-two')));
+  });
+
+  test('alignLessonTableCopy rewrites board codes and spoken ranks/suits', () {
+    const prompt = 'Board Ks 9d 2c. You hold Kh Qh. Class?';
+    const feedback = 'Pair of kings is already showdown-ready.';
+    const oops = 'No jack in your hand.';
+    const hintSuit = 'You need a heart or sometimes an ace.';
+    expect(
+      alignLessonTableCopy(
+        text: prompt,
+        templateHero: const ['Kh', 'Qh'],
+        dealtHero: const ['Ac', 'Kc'],
+        templateBoard: const ['Ks', '9d', '2c'],
+        dealtBoard: const ['As', '8d', '6h'],
+      ),
+      'Board As 8d 6h. You hold Ac Kc. Class?',
+    );
+    expect(
+      alignLessonTableCopy(
+        text: feedback,
+        templateHero: const ['Kh', 'Qh'],
+        dealtHero: const ['Ac', 'Kc'],
+        templateBoard: const ['Ks', '9d', '2c'],
+        dealtBoard: const ['As', '8d', '6h'],
+      ),
+      'Pair of aces is already showdown-ready.',
+    );
+    expect(
+      alignLessonTableCopy(
+        text: oops,
+        templateHero: const ['Ah', '9h'],
+        dealtHero: const ['Qs', '6s'],
+        templateBoard: const ['Jh', '8h', '3c'],
+        dealtBoard: const ['Ts', '5s', '2h'],
+      ),
+      'No ten in your hand.',
+    );
+    expect(
+      alignLessonTableCopy(
+        text: hintSuit,
+        templateHero: const ['Ah', '9h'],
+        dealtHero: const ['Qs', '6s'],
+        templateBoard: const ['Jh', '8h', '3c'],
+        dealtBoard: const ['Ts', '5s', '2h'],
+      ),
+      'You need a spade or sometimes a queen.',
+    );
+  });
+
+  test('flop-class guided prompt and Nice follow remapped board+holes', () {
+    final activity = CourseActivity(
+      id: 'act-03-02-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Top pair is a made hand.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Board Ks 9d 2c. You hold Kh Qh. Class?',
+    );
+    late int generation;
+    late List<String> dealtHero;
+    late List<String> dealtBoard;
+    for (generation = 0; generation < 64; generation++) {
+      final scene = dealtLessonTableScene(activity, generation: generation);
+      expect(scene, isNotNull);
+      final sameHero = scene!.heroCodes.join() == 'KhQh';
+      final sameBoard = scene.boardCodes.join() == 'Ks9d2c';
+      if (!sameHero || !sameBoard) {
+        dealtHero = scene.heroCodes;
+        dealtBoard = scene.boardCodes;
+        break;
+      }
+    }
+    expect(generation, lessThan(64));
+    final expectedPrompt = alignLessonTableCopy(
+      text: activity.prompt!,
+      templateHero: const ['Kh', 'Qh'],
+      dealtHero: dealtHero,
+      templateBoard: const ['Ks', '9d', '2c'],
+      dealtBoard: dealtBoard,
+    );
+    expect(
+      alignLessonActionCopy(activity, activity.prompt!, generation: generation),
+      expectedPrompt,
+    );
+    expect(expectedPrompt, isNot(contains('Ks')));
+    expect(expectedPrompt, isNot(contains('Kh Qh')));
+    for (final code in [...dealtHero, ...dealtBoard]) {
+      expect(expectedPrompt.toLowerCase(), contains(code.toLowerCase()));
+    }
+    const bankNice = 'Pair of kings is already showdown-ready.';
+    final expectedNice = alignLessonTableCopy(
+      text: bankNice,
+      templateHero: const ['Kh', 'Qh'],
+      dealtHero: dealtHero,
+      templateBoard: const ['Ks', '9d', '2c'],
+      dealtBoard: dealtBoard,
+    );
+    expect(
+      alignLessonActionCopy(activity, bankNice, generation: generation),
+      expectedNice,
+    );
+    expect(expectedNice.toLowerCase(), isNot(contains('king')));
+    expect(
+      lessonFrameSpeech(activity, bindGeneration: generation),
+      '$expectedPrompt Tap the best answer.',
+    );
+  });
+
+  test('flop-class scaffolded Oops follows remapped board rank', () {
+    final activity = CourseActivity(
+      id: 'act-03-02-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Nut flush draw with overcard equity.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Board Jh 8h 3c. You hold Ah 9h. Class?',
+    );
+    late int generation;
+    late List<String> dealtHero;
+    late List<String> dealtBoard;
+    for (generation = 0; generation < 128; generation++) {
+      final scene = dealtLessonTableScene(activity, generation: generation);
+      expect(scene, isNotNull);
+      // Need the board jack rank to move so "No jack" must rewrite.
+      final board = scene!.boardCodes;
+      if (board.isEmpty) continue;
+      if (CardModel.fromCode(board[0]).rank == 11) continue;
+      dealtHero = scene.heroCodes;
+      dealtBoard = board;
+      break;
+    }
+    expect(generation, lessThan(128));
+    const bankOops = 'No jack in your hand.';
+    final expected = alignLessonTableCopy(
+      text: bankOops,
+      templateHero: const ['Ah', '9h'],
+      dealtHero: dealtHero,
+      templateBoard: const ['Jh', '8h', '3c'],
+      dealtBoard: dealtBoard,
+    );
+    expect(
+      alignLessonActionCopy(activity, bankOops, generation: generation),
+      expected,
+    );
+    expect(expected.toLowerCase(), isNot(contains('jack')));
+    expect(
+      alignLessonActionCopy(activity, activity.prompt!, generation: generation),
+      isNot(contains('Jh')),
+    );
   });
 }
 
