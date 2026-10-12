@@ -805,7 +805,11 @@
                   ],
                   "objectives": [
                     "Order common hand ranks"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "High card, then pair, then flush."
+                  }
                 },
                 {
                   "id": "act-01-02-01-guided-ladder",
@@ -21399,7 +21403,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "High card, then pair, then flush."
+      }
     },
     "act-01-02-01-guided-ladder": {
       "activityId": "act-01-02-01-guided-ladder",

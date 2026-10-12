@@ -389,9 +389,21 @@ export function gradeCourseResponse(options: {
 
   if (options.activity.stage === "explain" ||
     options.activity.renderer === "coach_dialogue") {
+    // Prefer authored Nice! why line from the private bank (LPT-74). Falling
+    // back to accessibilityText reuses the idle ask when that line ends in
+    // "Tap …" (Hand ranks explain ladder).
+    const explainGrading = privateEntry?.explainGrading as
+      | {feedback?: unknown}
+      | undefined;
+    const authoredFeedback =
+      typeof explainGrading?.feedback === "string" ?
+        explainGrading.feedback.trim() :
+        "";
     return {
       grade: "recommended",
-      feedback: options.activity.accessibilityText || "Keep going.",
+      feedback: authoredFeedback ||
+        options.activity.accessibilityText ||
+        "Keep going.",
       ...evaluateLifeAndAcceptance({
         grade: "recommended",
         stage: options.activity.stage,

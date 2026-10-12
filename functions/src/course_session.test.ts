@@ -300,6 +300,21 @@ describe("soft grading and life loss", () => {
     });
   });
 
+  it("uses authored explain Nice! feedback for Hand ranks ladder (LPT-74)", () => {
+    const handRanks = findLesson("lesson-01-02-01-hand-ranks")!.lesson;
+    const explain = handRanks.activities.find(
+      (activity) => activity.id === "act-01-02-01-explain-ladder",
+    )!;
+    const graded = gradeCourseResponse({activity: explain});
+    expect(graded).toMatchObject({
+      grade: "recommended",
+      accepted: true,
+      lifeLost: false,
+      feedback: "High card, then pair, then flush.",
+    });
+    expect(graded.feedback).not.toMatch(/Tap seats/i);
+  });
+
   it("accepts UTG HJ CO BTN and rejects the order that skips CO", () => {
     const scaffolded = streets.activities.find(
       (activity) => activity.id === "act-01-04-01-scaffolded-order",
