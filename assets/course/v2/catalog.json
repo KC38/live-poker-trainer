@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "d02e811cb09a439648d09124f34df69b8ac88de8633a43e148cf965e394429c1",
+  "contentChecksum": "e26effe4d4211f008fafa37cd3df4cebdc979c8d71b8f360dcb20717141a0790",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -4082,7 +4082,21 @@
                       "kind": "hint",
                       "text": "Trash from early position is an easy fold."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "trash",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-03-01-scaffolded-qq",
@@ -4120,7 +4134,20 @@
                       "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-qq",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-03-01-unguided-btn",
@@ -4158,7 +4185,21 @@
                       "accessibilityText": "Limp",
                       "action": "CALL"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-k9s",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-03-01-checkpoint-hj",
@@ -4198,7 +4239,21 @@
                       "action": "ALL_IN"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-ato",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

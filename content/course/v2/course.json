@@ -5004,7 +5004,21 @@
                       "kind": "hint",
                       "text": "Trash from early position is an easy fold."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "trash",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-03-01-scaffolded-qq",
@@ -5055,7 +5069,20 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-qq",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-03-01-unguided-btn",
@@ -5106,7 +5133,21 @@
                       },
                       "action": "CALL"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-k9s",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-03-01-checkpoint-hj",
@@ -5159,7 +5200,21 @@
                       "action": "ALL_IN"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-ato",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
