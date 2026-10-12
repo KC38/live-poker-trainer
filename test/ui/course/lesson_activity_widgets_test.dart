@@ -25401,6 +25401,28 @@ await tester.tap(find.text('NIT'));
       find.text('Best habit — tap Name the thesis.'),
       findsNothing,
     );
+    expect(find.text('Name the thesis'), findsOneWidget);
+    // LPT-505: guideRegion → one gold SoftPulse (Name the thesis), not Wing it.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Name the thesis'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Wing it'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Name the thesis'));
     await tester.pump();
     expect(controller.draft.choiceId, 'thesis');

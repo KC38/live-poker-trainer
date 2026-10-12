@@ -12935,7 +12935,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive preflop-to-flop — tap Name the thesis or Wing it',
       semanticsStatic: 'Preflop-to-flop unguided outcomes',
       caption: scene.caption ?? 'Best habit before acting the flop?',
-      // No SoftPulse on unguided — still don’t gold-icon Name the thesis.
+      // SoftPulse + Rex own the cue — one gold Name the thesis only (LPT-505).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.preflopFlopNameThesis,
       phases: [
         (
           region: LessonTableRegion.preflopFlopNameThesis,
