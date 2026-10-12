@@ -998,9 +998,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-06-03-01-unguided')!,
       'act-06-03-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-03-01-checkpoint')!,
-      'act-06-04-01-guided' => 'River overbet — pick the betting shape.',
-      'act-06-04-01-unguided' => 'Mismatch to avoid — pick the sizing leak.',
-      'act-06-04-01-checkpoint' => 'Merged betting aims to — pick the goal.',
+      // Choose polarized densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-637).
+      'act-06-04-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-06-04-01-guided')!,
+      'act-06-04-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-06-04-01-unguided')!,
+      'act-06-04-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-06-04-01-checkpoint')!,
       // SoftPulse owns Nuts / bluffs — don’t gold-tip the tile.
       'act-06-05-01-guided' => 'Best overbet river — pick the polar candidate.',
       // Unguided: name the leak; SoftPulse isn’t on — still don’t tip Avoid.

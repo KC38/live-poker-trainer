@@ -118,6 +118,14 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-06-03-01-unguided' =>
       'XR flop / bet turn / bomb — pick Uncapped.',
     'act-06-03-01-checkpoint' => 'Caps are for — pick Attack.',
+    // Choose polarized densified asks (LPT-637) — same path as LPT-636.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-04-01-guided' =>
+      'River overbet — pick the betting shape.',
+    'act-06-04-01-unguided' =>
+      'Mismatch to avoid — pick the sizing leak.',
+    'act-06-04-01-checkpoint' =>
+      'Merged betting aims to — pick the goal.',
     _ => null,
   };
 }
