@@ -10224,6 +10224,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive implied odds — tap when implied odds rise most',
       semanticsStatic: 'Implied odds rise outcomes',
       caption: scene.caption ?? 'When do implied odds rise most?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Depth + pay.
+      // Null guideRegion SoftPulses every phase (LPT-515).
+      guideRegion: LessonTableRegion.ioDepthPay,
       phases: [
         (
           region: LessonTableRegion.ioDepthPay,
@@ -10231,7 +10234,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'They call off',
           visual: const Icon(
             Icons.trending_up,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),

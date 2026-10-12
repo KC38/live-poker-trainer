@@ -627,6 +627,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Prep Live warm-up SoftPulse one gold | Prep a coached Live warm-up hand unguided densified ask (`act-07-11-01-unguided`) passes `guideRegion` (`liveWarmupCashScope`) so SoftPulse-after-Hint paints one gold Live cash NLH tile — never both Live cash NLH and Other games (LPT-512). Guided / scaffolded / checkpoint already pass `liveWarmupFullList` / `liveWarmupDefaults` / `liveWarmupOneHand`. |
 | Build multiway ranges SoftPulse one gold | Build multiway ranges guided densified ask (`act-05-01-01-guided`) passes `guideRegion` (`multiwayNutFd`) so SoftPulse paints one gold Nut FD tile — never Nut FD + Weak FD + Air stab (LPT-513). Checkpoint (`act-05-01-01-checkpoint`) passes `multiwayNutsPriority` so SoftPulse paints one gold Nut potential tile — never both Nut potential and Any two. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal. |
 | Play 150–300bb SoftPulse one gold | Play 150–300bb stacks densified asks (`act-05-02-01-guided` / unguided / checkpoint) pass `guideRegion` (`deepImpliedOdds` / `deepMapPlans` / `deepRewardsPos`) so SoftPulse paints one gold tile — never Implied + Low SPR + Bluff all, Map streets + Jam now, or Skill edges + Light stacks. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal (LPT-514). |
+| Implied and reverse odds SoftPulse one gold | Implied and reverse odds checkpoint densified ask (`act-05-03-01-checkpoint`) passes `guideRegion` (`ioDepthPay`) so SoftPulse paints one gold Depth + pay tile — never both Depth + pay and Short always. Correct-answer icon stays cream; SoftPulse is the only gold teach signal (LPT-515). |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1357,7 +1358,7 @@ felt.
 | Section 4 jump check | — | — |
 | Build multiway ranges with nut potential | Nutted, Air, Domination | — |
 | Play 150–300bb stacks with a plan | Deep, Realize, Stack | implied, plan, and reward checks |
-| Implied and reverse odds | Implied, Reverse, Second | rise check |
+| Implied and reverse odds | Implied, Reverse, Second; densified SoftPulse one gold (LPT-515) | rise check |
 | Thin value and bluff-catches | Thin, Catch, Barrels | read check |
 | Advanced flop lines | X/R, Probe, Delay, Donk | nit, donk, and delay checks |
 | Street-by-street updates | Action, Rewrite, Update | capped, habit, and shove checks |

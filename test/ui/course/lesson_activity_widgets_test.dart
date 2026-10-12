@@ -18797,6 +18797,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Depth + pay'), findsOneWidget);
+    // LPT-515: guideRegion → one gold SoftPulse (Depth + pay), not Short always.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Depth + pay'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Short always'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Depth + pay'));
     await tester.pump();
     expect(controller.draft.choiceId, 'depth-pay');
