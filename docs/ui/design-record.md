@@ -638,6 +638,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Advanced flop lines SoftPulse one gold | Advanced flop lines densified asks (`act-05-05-01-guided` / unguided / checkpoint) pass `guideRegion` (`linesNitValueHeavy` / `linesDonkPolar` / `linesDelayAfterWeak`) so SoftPulse paints one gold tile — never Value-heavy + Always bluff, Polarized + Medium pairs, or After weakness + Every hand. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal (LPT-517). |
 | Street-by-street SoftPulse one gold | Street-by-street updates densified asks (`act-05-06-01-guided` / unguided / checkpoint) pass `guideRegion` (`lineReadCapped` / `lineReadRebuild` / `lineReadUncapped`) so SoftPulse paints one gold tile — never Fewer nuts + Still nuts, Rebuild + Lock flop, or Uncapped + Always bluff. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal (LPT-518). |
 | Soft timing SoftPulse one gold | Soft timing evidence densified asks (`act-05-07-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`timingSoftEvidence` / `timingWeakerBlocking` / `timingRejectMagic` / `timingTinyUpdate`) so SoftPulse paints one gold tile — never Soft evidence + Proven nuts + Proven bluff, Weaker + Solver known, Reject + Trust book, or Tiny update + Only evidence. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal (LPT-519). |
+| Live table dynamics SoftPulse one gold | Live table dynamics densified asks (`act-05-08-01-guided` / scaffolded / checkpoint) pass `guideRegion` (`dynamicsStuckTilted` / `dynamicsGearChange` / `dynamicsFreshSamples`) so SoftPulse paints one gold tile — never Stuck/tilted + Ignore, Gear change + Old label, or Fresh samples + Permanent seats. Correct-answer icons stay cream/slate; SoftPulse is the only gold teach signal (LPT-520). Unguided is `poker_action_sizing` (out of densify SoftPulse path). |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1409,7 +1410,7 @@ felt.
 | Advanced flop lines | X/R, Probe, Delay, Donk; densified SoftPulse one gold (LPT-517) | — |
 | Street-by-street updates | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518) | — |
 | Soft timing evidence | Timing, Sizing, Clues | timing quizzes |
-| Live table dynamics | Stuck, Tilted, Gears | — |
+| Live table dynamics | Stuck, Tilted, Gears; densified SoftPulse one gold (LPT-520) | — |
 | Keep cash session guardrails | Quit, Guard, First | — |
 | Section 5 checkpoint | — | multiway, tell, and stop checks |
 | Spot range advantage and nut advantage | Range, Nut, Advantage | dry-board, paired-board, and press checks |
