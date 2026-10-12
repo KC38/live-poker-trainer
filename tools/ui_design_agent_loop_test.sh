@@ -745,6 +745,47 @@ grep -q 'nohup bash -c' "$LOOP" \
   || fail "schedule_ensure_after_soft_stop must nohup ensure (SIGHUP)"
 grep -q 'disown' "$LOOP" \
   || fail "schedule_ensure_after_soft_stop must disown ensure"
+grep -q 'ensure: scheduled' "$LOOP" \
+  || fail "schedule_ensure_after_soft_stop must log schedule"
+grep -q 'ensure: waking' "$LOOP" \
+  || fail "schedule_ensure_after_soft_stop must log wake"
+grep -q 'ensure: exit=' "$LOOP" \
+  || fail "schedule_ensure_after_soft_stop must log ensure exit"
+grep -q 'ensure: already running' "$LOOP" \
+  || fail "ensure must log when loop already alive"
+# Stub above replaced the sourced function; re-source before a live call.
+UI_AGENT_LOOP_SOURCE_ONLY=1 source "$LOOP" \
+  || fail "re-source loop after soft-stop stub"
+# Functional: fake ensure + short sleep writes schedule/wake/exit to log.
+_fake_ensure="$tmp/fake-ensure.sh"
+cat >"$_fake_ensure" <<'EOF'
+#!/usr/bin/env bash
+echo "ensure: fake ok"
+EOF
+chmod +x "$_fake_ensure"
+_prev_script="$SCRIPT"
+_prev_log_dir="$LOG_DIR"
+SCRIPT="$_fake_ensure"
+LOG_DIR="$tmp/soft-logs"
+mkdir -p "$LOG_DIR"
+UI_AGENT_SOFT_STOP_ENSURE_SLEEP=0
+schedule_ensure_after_soft_stop
+# Wait for background nohup child.
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  grep -q 'ensure: exit=' "$LOG_DIR/soft-stop-ensure.log" 2>/dev/null && break
+  sleep 0.1
+done
+grep -q 'ensure: scheduled' "$LOG_DIR/soft-stop-ensure.log" \
+  || fail "soft-stop-ensure.log missing schedule: $(cat "$LOG_DIR/soft-stop-ensure.log" 2>/dev/null)"
+grep -q 'ensure: waking' "$LOG_DIR/soft-stop-ensure.log" \
+  || fail "soft-stop-ensure.log missing wake"
+grep -q 'ensure: fake ok' "$LOG_DIR/soft-stop-ensure.log" \
+  || fail "soft-stop-ensure.log missing ensure stdout"
+grep -q 'ensure: exit=0' "$LOG_DIR/soft-stop-ensure.log" \
+  || fail "soft-stop-ensure.log missing exit=0: $(cat "$LOG_DIR/soft-stop-ensure.log")"
+SCRIPT="$_prev_script"
+LOG_DIR="$_prev_log_dir"
+unset UI_AGENT_SOFT_STOP_ENSURE_SLEEP
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
 [[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \
