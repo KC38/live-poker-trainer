@@ -992,9 +992,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Multiway sets — bet thick',
       );
     case 'act-05-02-01-scaffolded':
+      // True top pair weak kicker on a wet flop: Ad 9c on As Th 7h (9 loses
+      // to the ten; hero holds no heart and no straight draw). Ah 9d on
+      // As 8h 7h was TPTK under a “weak kicker” label (LPT-404).
       return const LessonActionSpot(
-        heroCodes: ['Ah', '9d'],
-        boardCodes: ['As', '8h', '7h'],
+        heroCodes: ['Ad', '9c'],
+        boardCodes: ['As', 'Th', '7h'],
         potLabel: 'Pot 40',
         villainLine: 'Huge check-raise · wet flop',
         streetLabel: 'Flop · top pair weak · 250bb',
