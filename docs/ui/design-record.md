@@ -617,6 +617,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Make difficult folds SoftPulse one gold | Make difficult folds; review coolers fairly unguided densified ask (`act-06-10-01-unguided`) passes `guideRegion` (`hardFoldEgoCall`) so SoftPulse-after-Hint paints one gold Ego call tile — never both Ego call and Sound play (LPT-502). Guided / scaffolded / checkpoint already pass `hardFoldCoolerOk` / `hardFoldAskReview`. |
 | Adjust versus LAG SoftPulse one gold | Adjust versus LAG unguided densified ask (`act-06-12-03-unguided`) passes `guideRegion` (`citeLagAvoid`) so SoftPulse-after-Hint paints one gold Usually avoid tile — never both Usually avoid and Bluff more (LPT-503). Checkpoint already passes `citeLagWidePressure`. |
 | Carry a preflop plan SoftPulse one gold | Carry a preflop plan onto the flop unguided densified ask (`act-07-01-01-unguided`) passes `guideRegion` (`preflopFlopNameThesis`) so SoftPulse-after-Hint paints one gold Name the thesis tile — never both Name the thesis and Wing it (LPT-505). Guided / scaffolded / checkpoint already pass `preflopFlopPlanSick` / `preflopFlopValueContinues` / `preflopFlopAbandon`. |
+| Map turn barrels SoftPulse one gold | Map turn barrels before you bet flop unguided densified ask (`act-07-02-01-unguided`) passes `guideRegion` (`turnMapMapFirst`) so SoftPulse-after-Hint paints one gold Map first tile — never both Map first and Yolo barrels (LPT-506). Guided / scaffolded / checkpoint already pass `turnMapAcesBlanks` / `turnMapGiveUp` / `turnMapContinueKill`. |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1357,7 +1358,7 @@ felt.
 | Same cards, five type models | Cards, seats, and evidence in the stage | label check |
 | Section 6 checkpoint | — | advantage, cap, polar, TAG, and LAG checks |
 | Carry a preflop plan onto the flop | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505) | plan quizzes |
-| Map turn barrels before you bet flop | Barrel, Give-up, Map | no-plan and definition checks |
+| Map turn barrels before you bet flop | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506) | no-plan and definition checks |
 | Compose river value and bluffs | Value, Bluff, Hold | blocker, empty, and rule checks |
 | Change plans by pot type | Limped, SRP, 3-4bet | pot-type quizzes |
 | Switch gears between HU and multiway | Fewer, Thicker, Widen | player-count quizzes |
