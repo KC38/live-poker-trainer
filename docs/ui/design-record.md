@@ -642,6 +642,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Keep cash session guardrails SoftPulse one gold | Keep cash session guardrails densified asks (`act-05-09-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`disciplineStop` / `disciplineDecline` / `disciplineCashOut` / `disciplineEdge`) so SoftPulse paints one gold tile — never Stop/move down + Reload/chase, Decline + Jump up, Cash out + Stay forever, or Your edge + Soft skills only. Correct-answer icons stay cream; SoftPulse is the only gold teach signal (LPT-521). |
 | Spot range advantage SoftPulse one gold | Spot range advantage and nut advantage densified asks (`act-06-01-01-guided` / scaffolded / checkpoint) pass `guideRegion` (`rangeAdvPfr` / `rangeAdvWideCaller` / `rangeAdvPress`) so SoftPulse paints one gold tile — never Preflop raiser + Flatting BB, Wide caller + PFR always, or Apply pressure + Bet any two. Correct-answer icons stay cream; SoftPulse is the only gold teach signal (LPT-523). Unguided is `poker_action_sizing` (out of densify SoftPulse path). |
 | Realize equity SoftPulse one gold | Realize equity in and out of position densified asks (`act-06-02-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`eqRealizeIp` / `eqRealizeDiscount` / `eqRealizeFoldEq` / `eqRealizePosInit`) so SoftPulse paints one gold tile — never In position + Out of position, Discount / fold + Hero-call, Fold equity + Fancy play, or Position + initiative + Hope alone. Correct-answer icons stay cream; SoftPulse is the only gold teach signal (LPT-524). |
+| How pots SoftPulse one gold | How pots are won densified asks (`act-01-05-01-unguided-pot` / `act-01-05-01-checkpoint-side`) pass `guideRegion` (`potChipsNine` / `potSideForms`) so SoftPulse paints one gold tile — never every chip total, or Side pot + Win all + Hand dead. Side pot M/S chips stay slate; SoftPulse is the only gold teach signal (LPT-525). Framed open-pot SoftPulse stays on `_LessonChoiceStack` (`pot-correct`). Guided fold-win / scaffolded showdown already pass `potTakeQuiet` / `potShowdown`. |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1373,7 +1374,7 @@ felt.
 | Fold, check, call | Fold, Check, Call under a flop | — |
 | Bet, raise, all-in | Bet, Raise, All-in under a flop | — |
 | Streets and action order | Board advances by street; seat order on the table | — |
-| How pots are won | Fold win, Showdown, Side pot | — |
+| How pots are won | Fold win, Showdown, Side pot; densified SoftPulse one gold via `guideRegion` (LPT-525) | — |
 | Play a full toy hand | Blinds, You act, Ending | — |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
 | Position labels | Six-max seats labeled on the table | — |

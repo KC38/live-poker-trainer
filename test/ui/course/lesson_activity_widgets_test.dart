@@ -10050,6 +10050,147 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('how pots unguided densify SoftPulse one gold correct pot', (
+    tester,
+  ) async {
+    // LPT-525: guideRegion potChipsNine — not every chip total.
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final deal = dealLessonOpenPot(activityId: kOpenPotActivityId, generation: 0);
+    final activity = CourseActivity(
+      id: 'act-01-05-01-unguided-pot',
+      order: 4,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'pot size',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Blinds 1/2. BTN opens. Tap the pot before blinds act.',
+      choices: const [
+        CourseChoice(id: 'pot-correct', label: 'Correct pot'),
+        CourseChoice(id: 'pot-miss-blind', label: 'Miss a blind'),
+        CourseChoice(id: 'pot-too-big', label: 'Too big'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    final cues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(cues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('${deal.correctPot} chips'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('${deal.missBlindPot} chips'),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('${deal.tooBigPot} chips'),
+      ),
+      findsNothing,
+    );
+    controller.dispose();
+  });
+
+  testWidgets('how pots checkpoint SoftPulse Side pot — no gold tip', (
+    tester,
+  ) async {
+    // LPT-525: guideRegion potSideForms; M/S chips stay slate.
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    final activity = CourseActivity(
+      id: 'act-01-05-01-checkpoint-side',
+      order: 5,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'side pot',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'You are all-in for less; two big stacks keep betting. Tap what is true.',
+      choices: const [
+        CourseChoice(id: 'side-exists', label: 'Side pot'),
+        CourseChoice(id: 'you-win-all', label: 'Win all'),
+        CourseChoice(id: 'hand-void', label: 'Hand dead'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    final cues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(cues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Side pot'),
+      ),
+      findsWidgets,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Win all'),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(cues.single),
+        matching: find.text('Hand dead'),
+      ),
+      findsNothing,
+    );
+    // Permanent gold tip removed — M chip border is slate, not gold.
+    final mChip = tester.widget<Container>(
+      find
+          .ancestor(
+            of: find.text('M'),
+            matching: find.byType(Container),
+          )
+          .first,
+    );
+    final decoration = mChip.decoration! as BoxDecoration;
+    expect(decoration.border, isA<Border>());
+    final border = decoration.border! as Border;
+    expect(border.top.color, AppColors.slate);
+    controller.dispose();
+  });
+
   testWidgets('framed open-pot quiz uses live table with pot hidden', (
     tester,
   ) async {
