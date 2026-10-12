@@ -551,7 +551,7 @@ hand (LPT-135), Baseline jump check (LPT-137), Read the table first
 (LPT-138), Name your flop class (LPT-141), Count outs, pay the right price
 (LPT-144), Choose a flop line (LPT-149), Plan the turn card (LPT-152), Close
 the river correctly (LPT-155), Play tighter multiway (LPT-158), Patch the
-common leaks (LPT-161).
+common leaks (LPT-161), Section 3 jump check (LPT-165).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -807,6 +807,13 @@ PAIR → PRICES → PASSIVE → CROWDS; guided/scaffolded/unguided author fixed
 Ah4d/As9c7d, Jh9d/KsTc2d, and 9h8d/Kc7s2d with SoftPulse `careful` /
 `fold-gut` / `fold-air`; checkpoint uses `deal.mode` `none` and cues `notes`
 with kind `none` (no pressHints).
+
+Section 3 jump check `teachSpec` (LPT-165): all five jump steps stay
+`assessmentRole: jump_test` with no pressHints and cue kind `none`;
+jump-table uses `deal.mode` `none` (cue `j3-track`); jump-class, jump-mw,
+jump-river, and jump-leak author fixed JdTd/Qd9d3c, 9h8d/AhKh7h,
+AhKd/AsKc7d2h3c, and Jh9d/KsTc2d (the LPT-389 true gutshot) with cues
+`j3-draw` / `j3-fold` / `j3-val` / `j3-foldprice`.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
@@ -1189,7 +1196,7 @@ felt.
 | Close the river correctly | Value, Bluff, Catch, Fold; densified frame ask (LPT-343) | — |
 | Play tighter multiway | Stronger, Fewer, Nuts | — |
 | Patch the common leaks | Top pair, Prices, Passive, Crowds | — |
-| Section 3 jump check | densified frame asks (LPT-390) | table-read |
+| Section 3 jump check | densified frame asks (LPT-390) | — |
 | Think in ranges | One hand, Range, Update; densified frame asks (LPT-403) | — |
 | Navigate 3-bet pots | 3-bet, Ranges, Squeeze | — |
 | Plan beyond the flop | Flop, Turn, River; densified frame ask (LPT-407) | — |

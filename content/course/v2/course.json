@@ -9858,7 +9858,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j3-track",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-08-02-jump-class",
@@ -9906,7 +9918,30 @@
                       }
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jd",
+                          "Td"
+                        ],
+                        "board": [
+                          "Qd",
+                          "9d",
+                          "3c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j3-draw",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-08-02-jump-mw",
@@ -9948,7 +9983,30 @@
                       "amountBb": 12
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "9h",
+                          "8d"
+                        ],
+                        "board": [
+                          "Ah",
+                          "Kh",
+                          "7h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j3-fold",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-08-02-jump-river",
@@ -10000,7 +10058,32 @@
                       "action": "FOLD"
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "As",
+                          "Kc",
+                          "7d",
+                          "2h",
+                          "3c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j3-val",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-08-02-jump-leak",
@@ -10039,7 +10122,30 @@
                       }
                     }
                   ],
-                  "assessmentRole": "jump_test"
+                  "assessmentRole": "jump_test",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Ks",
+                          "Tc",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "j3-foldprice",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
