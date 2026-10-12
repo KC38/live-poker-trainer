@@ -373,12 +373,11 @@ PY
   return 1
 }
 
-# True when the Flutter run log already has a Dart VM service URI.
+# True when the Flutter run log has a Dart VM URI after the latest Launching
+# (and, for a cached-Runner.app launch, after the first hot restart).
 dart_vm_ready() {
-  # macOS/BSD grep rejects [A-Za-z0-9_\-=] (invalid range). Keep '-' last.
-  # -a: treat Flutter logs as text even if they contain NULs later.
   [[ -f "$FLUTTER_RUN_LOG" ]] || return 1
-  grep -aqE 'http://127\.0\.0\.1:[0-9]+/[A-Za-z0-9_=-]+/' "$FLUTTER_RUN_LOG" 2>/dev/null
+  python3 "$TOOLS/flutter_log_ready.py" "$FLUTTER_RUN_LOG" >/dev/null 2>&1
 }
 
 wait_for_dart_vm() {
@@ -1458,6 +1457,10 @@ one_run() {
   }
   export SIM_LOCK_RUN_ID="$run_id"
   export SIM_LOCK_PID=$$
+
+  if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]]; then
+    python3 "$TOOLS/disk_guard.py" --quiet 2>&1 | while IFS= read -r line; do log "$line"; done || true
+  fi
 
   if ! ensure_sim_ready; then
     log "SIM_NOT_READY after programmatic preflight; not starting agent"

@@ -318,10 +318,16 @@ if [[ "${SHIP_FLUTTER_FOREGROUND:-}" == "1" ]]; then
   exec flutter run -d "$DEVICE_ID" --pid-file "$PID_FILE"
 fi
 
-nohup flutter run -d "$DEVICE_ID" --pid-file "$PID_FILE" >"$LOG_FILE" 2>&1 &
-echo "started pid $! device=$DEVICE_ID log=$LOG_FILE"
-# Best-effort wait so agent closeout refresh does not return while stuck on Launching.
-if ! wait_for_dart_vm_log "$LOG_FILE" "${REFRESH_COLD_VM_WAIT_SECONDS:-120}"; then
+# Reuses a cached Runner.app when native inputs match (no Xcode), else builds
+# and caches. Best-effort wait so closeout refresh does not return while
+# stuck on Launching; the build keeps going after a timeout.
+if ! "$REPO_ROOT/tools/flutter_run_fast.sh" \
+  --checkout "$CHECKOUT" \
+  --log "$LOG_FILE" \
+  --pid-file "$PID_FILE" \
+  --device "$DEVICE_ID" \
+  --timeout "${REFRESH_COLD_VM_WAIT_SECONDS:-120}" \
+  --purpose "refresh to origin/main"; then
   echo "warning: Dart VM not in $LOG_FILE yet after cold start (callers may retry)"
   exit 1
 fi

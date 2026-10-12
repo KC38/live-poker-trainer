@@ -180,7 +180,9 @@ void main() {
       'Required validated proof',
       'Never transition to Done if the close comment lacks a validated',
       'preflight lock',
-      'skip refresh and continue',
+      'trust that handoff',
+      'tools/flutter_run_fast.sh',
+      'tools/main_matches_validated.sh',
     ]) {
       expect(command, contains(needle), reason: needle);
     }

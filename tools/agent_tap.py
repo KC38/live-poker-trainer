@@ -45,10 +45,11 @@ def vm_base(log: Path | None = None) -> tuple[str, str]:
     """Return (port, token) from a Flutter run log."""
     path = LOG if log is None else log
     text = path.read_bytes().replace(b"\x00", b"").decode("utf-8", "replace")
-    match = re.search(r"http://127\.0\.0\.1:(\d+)/([A-Za-z0-9_\-=]+)/", text)
-    if not match:
+    # Last URI: a relaunch appends a new VM service after the old one.
+    matches = re.findall(r"http://127\.0\.0\.1:(\d+)/([A-Za-z0-9_\-=]+)/", text)
+    if not matches:
         raise SystemExit(f"No Dart VM URI in {path} yet")
-    return match.group(1), match.group(2)
+    return matches[-1]
 
 
 def isolate_id(port: str, token: str) -> str:

@@ -195,7 +195,7 @@ Ask before discarding local dirt. Never discard it on your own.
 .cursor/skills/make-change/scripts/deploy-functions.sh
 ```
 
-The script deploys `origin/main` from `.worktrees/deploy-<pid>` and removes that worktree. It needs Node 22 and one of `FIREBASE_SERVICE_ACCOUNT`, `GOOGLE_APPLICATION_CREDENTIALS`, or `FIREBASE_TOKEN`.
+The script deploys `origin/main` from `.worktrees/deploy-<pid>` and removes that worktree. When `functions/` and `firebase.json` are unchanged since the last successful local deploy (`~/.live-poker-trainer/functions-deployed-sha`) it prints `skipping deploy` and exits 0 in a couple of seconds; `FORCE_FUNCTIONS_DEPLOY=1` always deploys. It needs Node 22 and one of `FIREBASE_SERVICE_ACCOUNT`, `GOOGLE_APPLICATION_CREDENTIALS`, or `FIREBASE_TOKEN`.
 
 If none of those are set, skip the local script and report that production depends on `.github/workflows/deploy-functions.yml`. Do not run `firebase login`. If the local deploy fails, report the error.
 
