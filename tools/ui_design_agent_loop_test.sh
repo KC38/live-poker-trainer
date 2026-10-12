@@ -111,6 +111,11 @@ grep -q 'ui-design-agent-learnings.md' "$tmp/agent-args" \
   || fail "prompt should name the learnings file"
 grep -q 'READY (loop preflight done)' <<<"$(prompt)" \
   || fail "prompt should lead with READY preflight facts"
+prompt_out="$(prompt)"
+grep -q 'ui_agent_coverage.py append' <<<"$prompt_out" \
+  || fail "prompt should require coverage helper (not hand-written +0530)"
+grep -q 'gh pr ready' <<<"$prompt_out" \
+  || fail "prompt should require gh pr ready before merge"
 grep -q 'Skip steps 0' <<<"$(prompt)" \
   || fail "prompt should tell the agent to skip steps 0-1 sim work"
 grep -q 'do not refresh-simulator.sh' <<<"$(prompt)" \

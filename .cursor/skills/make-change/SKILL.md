@@ -137,12 +137,17 @@ gh pr create --title "<concise title>" --body "$(cat <<'EOF'
 EOF
 )"
 
+# ManagePullRequest / some create paths land as draft and block squash-merge
+# (ui-agent LPT-508). Mark ready before merge; idempotent when already open.
+gh pr ready
 # DO NOT use --delete-branch here. Deleting the remote ref before leaving
 # the worktree causes Cursor's background ref fetcher to crash the session.
 gh pr merge --squash
 ```
 
-Never force-push `main`. If `gh` fails, stop and report.
+Prefer `gh pr create` + `gh pr ready` + `gh pr merge --squash` over
+ManagePullRequest for ticket ships on this Mac mini (MCP create defaults
+to draft). Never force-push `main`. If `gh` fails, stop and report.
 
 ### 7. Delete the branch and worktree, then sync primary
 

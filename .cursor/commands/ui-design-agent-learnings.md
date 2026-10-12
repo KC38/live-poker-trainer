@@ -87,7 +87,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Never `gh pr merge` a draft, and never `git push --delete` the ticket
   branch / remove the worktree until `mergedAt` is set (LPT-71: draft
   merge failed then branch delete closed #1676 — recover via local commit
-  SHA, `gh pr reopen`, `gh pr ready`, then squash-merge).
+  SHA, `gh pr reopen`, `gh pr ready`, then squash-merge). Prefer
+  make-change's `gh pr create` → `gh pr ready` → `gh pr merge --squash`
+  over ManagePullRequest (MCP create defaults to draft; LPT-508 burned a
+  merge attempt on a draft).
 
 ## Prefer
 
