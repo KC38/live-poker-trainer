@@ -190,9 +190,13 @@ prompt() {
     handoff_id="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("sim_lock_run_id") or "")' "$HANDOFF_FILE" 2>/dev/null || true)"
   fi
   [[ -n "$run_id" ]] || run_id="$handoff_id"
+  local pending=""
+  if [[ -s "$STATE_DIR/ui-agent-learnings-pending.md" ]]; then
+    pending=" Pending learnings in $STATE_DIR/ui-agent-learnings-pending.md: fold them into this run's ticket PR (step 6)."
+  fi
   # Lead with READY facts: agents otherwise spend the first ~60s re-grepping
   # the Dart VM / reconciling the lock even though preflight already did that.
-  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. For worktree flutter run / hot-restart waits use tools/wait_flutter_vm.sh (never bare AwaitShell/sleep). Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Update learnings in step 10 when this run hits a durable mistake. When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
+  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Launch worktree builds with tools/flutter_run_fast.sh (cached Runner.app, ~20 s for Dart-only) and hot-restart with tools/flutter_hot_restart.sh — both block; never bare AwaitShell/sleep. Jump to later lessons / heart states with tools/agent_seed.py and read screens with agent_tap.py tree; screenshot for judgment and proof only. Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Learnings ride the ticket PR (write them before the merge; after it, append to the pending file).${pending} When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
 }
 
 load_secrets() {

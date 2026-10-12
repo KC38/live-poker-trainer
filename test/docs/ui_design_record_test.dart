@@ -184,6 +184,9 @@ void main() {
       'tools/flutter_run_fast.sh',
       'tools/main_matches_validated.sh',
       'tools/agent_seed.py unlock',
+      'Companions (optional, at most two)',
+      'ui-agent-learnings-pending.md',
+      'never open a learnings-only PR for one run',
       'python3 tools/agent_tap.py tree',
     ]) {
       expect(command, contains(needle), reason: needle);
