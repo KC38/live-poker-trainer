@@ -422,6 +422,14 @@ const _lessons = <String, List<String>>{
     'act-05-09-01-unguided',
     'act-05-09-01-checkpoint',
   ],
+  // LPT-251
+  'lesson-05-09-02-section-five-checkpoint': [
+    'act-05-09-02-cp-multi',
+    'act-05-09-02-cp-value',
+    'act-05-09-02-cp-catch',
+    'act-05-09-02-cp-tell',
+    'act-05-09-02-cp-stop',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -3028,6 +3036,125 @@ void main() {
       });
       expect(
         act('act-05-09-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Section 5 checkpoint (LPT-251)', () {
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-05-09-02-cp-multi'), 'cues').single['target'],
+        'nut',
+      );
+      expect(
+        _list(
+          act('act-05-09-02-cp-multi'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-05-09-02-cp-multi').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-05-09-02-cp-multi').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-05-09-02-cp-multi').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+      expect(
+        _list(act('act-05-09-02-cp-value'), 'cues').single['target'],
+        'bet',
+      );
+      expect(
+        _list(
+          act('act-05-09-02-cp-value'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-05-09-02-cp-value').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(
+        act('act-05-09-02-cp-value').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', '9d'],
+      );
+      expect(
+        act('act-05-09-02-cp-value').teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', '9s', '4h', '2d', '7c'],
+      );
+      expect(
+        act('act-05-09-02-cp-value').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+      expect(
+        _list(act('act-05-09-02-cp-catch'), 'cues').single['target'],
+        'call',
+      );
+      expect(
+        _list(
+          act('act-05-09-02-cp-catch'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-05-09-02-cp-catch').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(
+        act('act-05-09-02-cp-catch').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', '9d'],
+      );
+      expect(
+        act('act-05-09-02-cp-catch').teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', '9s', '4h', '2d', '7c'],
+      );
+      expect(
+        act('act-05-09-02-cp-catch').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+      expect(
+        _list(act('act-05-09-02-cp-tell'), 'cues').single['target'],
+        'soft',
+      );
+      expect(
+        _list(
+          act('act-05-09-02-cp-tell'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-05-09-02-cp-tell').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-05-09-02-cp-tell').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-05-09-02-cp-tell').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+      expect(
+        _list(act('act-05-09-02-cp-stop'), 'cues').single['target'],
+        'stop',
+      );
+      expect(
+        _list(
+          act('act-05-09-02-cp-stop'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-05-09-02-cp-stop').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-05-09-02-cp-stop').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-05-09-02-cp-stop').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });

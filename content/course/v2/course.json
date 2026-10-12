@@ -18685,7 +18685,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "nut",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-09-02-cp-value",
@@ -18732,7 +18744,32 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Kc",
+                          "9s",
+                          "4h",
+                          "2d",
+                          "7c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bet",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-09-02-cp-catch",
@@ -18776,7 +18813,32 @@
                   "playerTypeRefs": [
                     "maniac"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Kc",
+                          "9s",
+                          "4h",
+                          "2d",
+                          "7c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-09-02-cp-tell",
@@ -18815,7 +18877,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "soft",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-09-02-cp-stop",
@@ -18854,7 +18928,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "stop",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
