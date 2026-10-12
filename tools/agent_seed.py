@@ -18,6 +18,9 @@ with Firestore admin access, then optionally opens the lesson:
 lesson start. `fresh` sets completedLessonIds to **exactly** those
 prerequisites — clearing the lesson itself and any later progress — so a
 completed lesson is not opened in review mode (SoftPulse/cues hidden).
+`fresh` also nulls `course/main.resume` (and `currentLessonId` when it
+names that lesson) and deletes open `courseAttempts` for the lesson so
+`openlesson` lands on activity 0 instead of mid-lesson resume (LPT-76).
 Hearts/gems set the wallet for refill/restore checks.
 
 Safety: the uid comes from the running debug app (`whoami`), the profile
@@ -175,7 +178,7 @@ def access_token() -> str:
 
 
 def _request(method: str, url: str, token: str, body: Any = None) -> dict[str, Any]:
-    """Authenticated Firestore REST call returning decoded JSON."""
+    """Authenticated Firestore REST call returning decoded JSON ({} if empty)."""
     data = None if body is None else json.dumps(body).encode()
     req = urllib.request.Request(
         url,
@@ -185,7 +188,10 @@ def _request(method: str, url: str, token: str, body: Any = None) -> dict[str, A
     )
     try:
         with urllib.request.urlopen(req) as resp:
-            return json.load(resp)
+            raw = resp.read()
+            if not raw:
+                return {}
+            return json.loads(raw.decode("utf-8"))
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", "replace")[:300]
         raise SystemExit(f"agent_seed: Firestore {method} {exc.code}: {detail}") from exc
@@ -196,12 +202,62 @@ def profile_url(uid: str) -> str:
     return f"{FIRESTORE}/users/{urllib.parse.quote(uid)}/course/main"
 
 
+def attempts_collection_url(uid: str) -> str:
+    """REST URL of the guest's courseAttempts collection."""
+    return f"{FIRESTORE}/users/{urllib.parse.quote(uid)}/courseAttempts"
+
+
 def patch_profile(uid: str, token: str, fields: dict[str, Any]) -> None:
     """Update only [fields]; fail when the profile does not exist."""
     params = [("updateMask.fieldPaths", name) for name in fields]
     params.append(("currentDocument.exists", "true"))
     url = f"{profile_url(uid)}?{urllib.parse.urlencode(params)}"
     _request("PATCH", url, token, {"fields": fields})
+
+
+def list_attempt_documents(uid: str, token: str) -> list[dict[str, Any]]:
+    """All courseAttempts documents for [uid] (paginated)."""
+    docs: list[dict[str, Any]] = []
+    page_token = ""
+    while True:
+        params: list[tuple[str, str]] = [("pageSize", "100")]
+        if page_token:
+            params.append(("pageToken", page_token))
+        url = f"{attempts_collection_url(uid)}?{urllib.parse.urlencode(params)}"
+        payload = _request("GET", url, token)
+        docs.extend(payload.get("documents") or [])
+        page_token = payload.get("nextPageToken") or ""
+        if not page_token:
+            break
+    return docs
+
+
+def clear_open_attempts(uid: str, token: str, lesson_id: str) -> int:
+    """Delete in_progress/remediation courseAttempts for [lesson_id]."""
+    deleted = 0
+    for doc in list_attempt_documents(uid, token):
+        fields = doc.get("fields") or {}
+        lesson = (fields.get("lessonId") or {}).get("stringValue")
+        status = (fields.get("status") or {}).get("stringValue")
+        if lesson != lesson_id or status not in ("in_progress", "remediation"):
+            continue
+        name = doc.get("name")
+        if not name:
+            continue
+        _request("DELETE", f"https://firestore.googleapis.com/v1/{name}", token)
+        deleted += 1
+    return deleted
+
+
+def apply_fresh_resume_clear(
+    profile: dict[str, Any], lesson_id: str
+) -> dict[str, Any]:
+    """Profile field patches that drop mid-lesson resume for [lesson_id]."""
+    fields: dict[str, Any] = {"resume": {"nullValue": None}}
+    current = (profile.get("currentLessonId") or {}).get("stringValue")
+    if current == lesson_id:
+        fields["currentLessonId"] = {"nullValue": None}
+    return fields
 
 
 def current_guest(agent_tap: types.ModuleType, log: Path, allow_account: bool) -> str:
@@ -243,7 +299,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     fresh = sub.add_parser(
         "fresh",
-        help="Prereqs only — clear lesson (+ later) for a non-review SoftPulse attempt",
+        help="Prereqs only; clear resume/open attempts for activity-0 SoftPulse",
     )
     fresh.add_argument("--lesson", required=True, help="Lesson id, id prefix, or title")
     fresh.add_argument("--hearts", type=int, default=None)
@@ -295,10 +351,13 @@ def main(argv: list[str]) -> int:
         done = read_string_array(profile.get("completedLessonIds"))
         needed = prerequisite_closure(lessons, target["id"])
         fields["completedLessonIds"] = string_array(needed)
+        fields.update(apply_fresh_resume_clear(profile, target["id"]))
         removed = [lesson_id for lesson_id in done if lesson_id not in needed]
+        abandoned = clear_open_attempts(uid, token, target["id"])
         print(
             f"fresh {target['id']} ({target['title']}): "
-            f"{len(needed)} prerequisite(s), cleared {len(removed)} completed id(s)"
+            f"{len(needed)} prerequisite(s), cleared {len(removed)} completed id(s), "
+            f"resume reset, abandoned {abandoned} open attempt(s)"
         )
     hearts = args.count if args.action == "hearts" else getattr(args, "hearts", None)
     if hearts is not None:

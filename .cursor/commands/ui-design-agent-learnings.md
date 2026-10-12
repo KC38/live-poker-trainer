@@ -217,7 +217,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   then crop the copy.
 
 - Prefer, on Best five SoftPulse closeout: clear the lesson from `completedLessonIds` + hot-restart so review mode does not hide cues; judge seat SoftPulse by the PNG (`You [enabled gold]`), not only the gold summary (hole labels nest under seat glow); and tap picker SoftPulse twice when the first press leaves `0/5 selected` (LPT-75).
-- Prefer clearing guest `course/main.resume` and abandoning in-progress `courseAttempts` for the target lesson before `fresh --open` when the walk must start at activity 0 — `fresh` only trims `completedLessonIds`, so mid-lesson resume skips explain (LPT-76).
+- Prefer `fresh --lesson … --open` when the walk must start at activity 0 —
+  it now nulls `course/main.resume`, clears matching `currentLessonId`, and
+  deletes open `courseAttempts` for that lesson (LPT-76). Do not hand-patch
+  Firestore for resume when `fresh` is available.
 
 ## Ops (simulator, CLI, Jira)
 
