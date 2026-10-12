@@ -647,7 +647,9 @@ tools/main_matches_validated.sh "$VALIDATED_SHA"
   `functions/`. Do not re-walk. Go straight to the fixed state, capture
   `<KEY>-validated.png`, and confirm the criteria visible in that shot.
 - **`differs`** (exit 1): walk **Validate before closing** again on
-  origin/main.
+  origin/main. Concurrent catalog / teachSpec merges often flip
+  `assets/course/v2/catalog.json` while your lib fix is already on main —
+  that is a re-walk, not a failed fix (LPT-173).
 
 Save the closeout screenshots to `$PRIMARY/.cursor/tmp/ui-agent/<KEY>-*.png`.
 
