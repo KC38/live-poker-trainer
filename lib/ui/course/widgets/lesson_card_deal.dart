@@ -589,6 +589,8 @@ int _drawOutsFor(List<String> hero, List<String> board) {
 /// [earlierStreets] keeps turn / river templates honest about how hero got
 /// there: the flop (and turn) class + draw outs must match, so a river
 /// "missed draw" really flopped a draw instead of any air (LPT-398).
+/// [overcardCount] keeps "gutshot + overs" templates from remapping to a
+/// gutshot whose holes are not both above the board (LPT-393).
 ({
   HandClass handClass,
   int drawOuts,
@@ -599,6 +601,7 @@ int _drawOutsFor(List<String> hero, List<String> board) {
   bool isSet,
   int distinctBoardPairingHoles,
   String earlierStreets,
+  int overcardCount,
 }) _postflopTeachKey(List<String> hero, List<String> board) {
   return (
     handClass: _handClassFor(hero, board),
@@ -610,7 +613,21 @@ int _drawOutsFor(List<String> hero, List<String> board) {
     isSet: _heroHasSet(hero, board),
     distinctBoardPairingHoles: _distinctBoardPairingHoleCount(hero, board),
     earlierStreets: _earlierStreetsKey(hero, board),
+    overcardCount: _overcardHoleCount(hero, board),
   );
+}
+
+/// How many hero hole cards outrank every board card (true overcards).
+int _overcardHoleCount(List<String> hero, List<String> board) {
+  if (hero.isEmpty || board.isEmpty) return 0;
+  final boardTop = [
+    for (final code in board) CardModel.fromCode(code).rank,
+  ].reduce((a, b) => a > b ? a : b);
+  var count = 0;
+  for (final code in hero) {
+    if (CardModel.fromCode(code).rank > boardTop) count++;
+  }
+  return count;
 }
 
 /// Class + draw outs on each earlier street (flop, then turn) of [board].

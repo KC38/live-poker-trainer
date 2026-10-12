@@ -1005,9 +1005,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Deep + wet + heat — fold light TP',
       );
     case 'act-05-03-01-guided':
+      // Gutshot plus two overs: J9 on 872 (a ten makes 7-8-9-T-J; J and 9
+      // both beat the 8). Kc 7s 2h had zero straight outs and no overs
+      // (LPT-393).
       return const LessonActionSpot(
         heroCodes: ['Jh', '9d'],
-        boardCodes: ['Kc', '7s', '2h'],
+        boardCodes: ['8s', '7c', '2d'],
         potLabel: 'Pot 28',
         villainLine: 'Calling Station bets 6',
         // Structural — SoftPulse + Rex own Call / implied cue.
