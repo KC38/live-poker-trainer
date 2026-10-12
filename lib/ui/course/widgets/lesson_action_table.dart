@@ -672,9 +672,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Pick a live 3-bet size',
       );
     case 'act-04-03-01-scaffolded':
+      // Four hearts on the turn (Kh 7h 2h 3h) so the “four hearts” label and
+      // flush-card abort are true; Kh 7h 2c 3h was only three hearts
+      // (LPT-400). Hero Qd 9c holds no heart and no draw — air.
       return const LessonActionSpot(
         heroCodes: ['Qd', '9c'],
-        boardCodes: ['Kh', '7h', '2c', '3h'],
+        boardCodes: ['Kh', '7h', '2h', '3h'],
         potLabel: 'Pot 18',
         villainLine: 'Called your flop bluff',
         streetLabel: 'Turn · four hearts · air',
