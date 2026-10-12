@@ -20353,6 +20353,200 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('s6 range-adv guided SoftPulse Preflop raiser — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-01-01-guided',
+      order: 2,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Preflop raiser.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'PFR on A-high dry flop. Who often has range advantage?',
+      choices: const [
+        CourseChoice(id: 'pfr', label: 'Preflop raiser'),
+        CourseChoice(id: 'caller', label: 'Flatting BB'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'A-high dry flop — the preflop raiser’s range usually leads.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text('PFR on A-high dry flop. Who often has range advantage?'),
+      findsNothing,
+    );
+    // LPT-523: guideRegion → one gold SoftPulse (Preflop raiser), not Flatting BB.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Preflop raiser'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Flatting BB'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Preflop raiser'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'pfr');
+    controller.dispose();
+  });
+
+  testWidgets('s6 range-adv scaffold SoftPulse Wide caller — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-01-01-scaffolded',
+      order: 3,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 40,
+      accessibilityText: 'Often the wider caller has more trips/fulls.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Paired board. Caller defends wide. Who may have nut advantage?',
+      choices: const [
+        CourseChoice(id: 'caller-nuts', label: 'Wide caller'),
+        CourseChoice(id: 'pfr-always', label: 'PFR always'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text(
+        'Paired board — the wider defender often owns more of the nuts.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Paired board. Caller defends wide. Who may have nut advantage?',
+      ),
+      findsNothing,
+    );
+    // LPT-523: guideRegion → one gold SoftPulse (Wide caller), not PFR always.
+    final scaffoldCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(scaffoldCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Wide caller'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('PFR always'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Wide caller'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'caller-nuts');
+    controller.dispose();
+  });
+
+  testWidgets('s6 range-adv checkpoint SoftPulse Apply pressure — no gold tip', (
+    tester,
+  ) async {
+    final activity = CourseActivity(
+      id: 'act-06-01-01-checkpoint',
+      order: 5,
+      stage: ActivityStage.scaffolded,
+      assessmentRole: AssessmentRole.checkpoint,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Apply pressure selectively.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Advantage is a reason to?',
+      choices: const [
+        CourseChoice(id: 'press', label: 'Apply pressure'),
+        CourseChoice(id: 'random', label: 'Bet any two'),
+      ],
+    );
+    expect(isTableRegionTapActivity(activity), isTrue);
+    final controller = LessonActivityController(activity: activity);
+    await tester.pumpWidget(
+      _wrap(
+        SelectIdentifyActivity(
+          activity: activity,
+          controller: controller,
+          showGuidance: true,
+        ),
+      ),
+    );
+    expect(
+      find.text('When you own more value — apply selective pressure.'),
+      findsOneWidget,
+    );
+    // Felt caption may reuse the catalog prompt; SoftPulse owns the teach cue.
+    expect(find.textContaining('Tap the best answer'), findsNothing);
+    // LPT-523: guideRegion → one gold SoftPulse (Apply pressure), not Bet any two.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Apply pressure'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Bet any two'),
+      ),
+      findsNothing,
+    );
+    await tester.tap(find.text('Apply pressure'));
+    await tester.pump();
+    expect(controller.draft.choiceId, 'press');
+    controller.dispose();
+  });
+
   testWidgets('s5 guardrails explain hides interactive footer dupe', (
     tester,
   ) async {

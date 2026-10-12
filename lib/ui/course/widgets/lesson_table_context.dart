@@ -10979,6 +10979,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive range advantage — tap PFR vs flatting BB',
       semanticsStatic: 'Range advantage PFR outcomes',
       caption: scene.caption ?? 'A-high dry flop — range advantage?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Preflop raiser.
+      // Null guideRegion SoftPulses every phase (LPT-523).
+      guideRegion: LessonTableRegion.rangeAdvPfr,
       phases: [
         (
           region: LessonTableRegion.rangeAdvPfr,
@@ -10986,7 +10989,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Owns strong hands',
           visual: const Icon(
             Icons.north_east,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -11010,6 +11013,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive nut advantage — tap wide caller vs PFR always',
       semanticsStatic: 'Nut advantage outcomes',
       caption: scene.caption ?? 'Paired board — nut advantage?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Wide caller.
+      // Null guideRegion SoftPulses every phase (LPT-523).
+      guideRegion: LessonTableRegion.rangeAdvWideCaller,
       phases: [
         (
           region: LessonTableRegion.rangeAdvWideCaller,
@@ -11017,7 +11023,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'More trips / fulls',
           visual: const Icon(
             Icons.workspace_premium_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -11041,6 +11047,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive range advantage — tap apply pressure vs bet any two',
       semanticsStatic: 'Range advantage pressure outcomes',
       caption: scene.caption ?? 'Advantage is a reason to?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Apply pressure.
+      // Null guideRegion SoftPulses every phase (LPT-523).
+      guideRegion: LessonTableRegion.rangeAdvPress,
       phases: [
         (
           region: LessonTableRegion.rangeAdvPress,
@@ -11048,7 +11057,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'With a turn plan',
           visual: const Icon(
             Icons.bolt,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
