@@ -1882,8 +1882,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                           sbIndex: lessonBlindsSmallBlindIndex,
                           bbIndex: lessonBlindsBigBlindIndex,
                           positionLabels: true,
-                          // SoftPulse only — activeSeatIndex would spoil the
-                          // answer seat before Hint on scaffolded / quieter.
+                          // SoftPulse the D / SB / BB puck when that is the ask
+                          // (LPT-118; same contract as blinds LPT-69) — never
+                          // gold-tip the seat name box while the puck is on
+                          // the felt. Seat index remains the fallback when the
+                          // puck is not posted yet; activeSeatIndex would spoil
+                          // quieter stages before Hint.
+                          cuePuckLabel:
+                              _cuesAnswerSeat(locked)
+                                  ? lessonPuckLabelForHighlight(scene.highlight)
+                                  : null,
                           cueSeatIndex:
                               _cuesAnswerSeat(locked)
                                   ? lessonSeatIndexForHighlight(scene.highlight)

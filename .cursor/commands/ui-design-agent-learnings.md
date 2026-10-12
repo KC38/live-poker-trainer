@@ -106,9 +106,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   only one activity needs a bank field — full seed rebuilds from wave
   sources and can wipe hand-maintained catalog rows that diverged (LPT-74
   streets `seat-co`). Keep wave helpers in sync for the next full seed.
-- Prefer merging + Functions deploy before mini-proving a
-  `gradeCourseResponse` / Nice! feedback change — the worktree app still
-  hits production Cloud Functions until that deploy lands (LPT-74).
 - Prefer reopening a Done `ui-agent` ticket that still reproduces over
   filing a near-duplicate.
 - Prefer one lesson-content bug (fixed cards, stacked/enabled-empty Hint,
@@ -125,9 +122,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   SoftPulse visibility leaves Hint disabled for presses 2+ (LPT-72
   `LessonSuitBoardTable`). After SoftPulse lands on explain, grep the sibling picker —
   blinds guided frames in `select_identify` still need `cuePuckLabel` (D/SB/BB),
-  not only `LessonBlindsClockwiseTable` (LPT-69). Puck SoftPulse needs an
-  inflated hit box + `reserveLayout: true` or the glow clips inside a tight
-  `SizedBox`. After Hint then a grade, read the dock bubble — Hint copy under
+  not only `LessonBlindsClockwiseTable` (LPT-69). Position labels
+  `act-02-01-01-*` on `LessonTableStage` need the same `cuePuckLabel` + seat
+  fallback — seat-only SoftPulse leaves D/SB pucks uncued (LPT-118). Puck
+  SoftPulse needs an inflated hit box + `reserveLayout: true` or the glow
+  clips inside a tight `SizedBox`. After Hint then a grade, read the dock bubble — Hint copy under
   Oops is a bug; clear `_hintVisible` on `finishSubmit` / `presentLocalMiss`
   (LPT-60). Hint must stay off whenever `showTargetCue` is true (LPT-63);
   judge that by greyed chrome + unchanged bubble — `agent_tap tap Hint` still
@@ -162,20 +161,16 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   attach/body and re-comment first (LPT-62: first closeout failed, Done raced
   ahead). After a successful closeout comment, `jira.py verify-embeds LPT-NN`
   must pass before Done.
-- Prefer trusting `refresh-simulator.sh` after hot-restart — it waits for a
-  Dart VM URI and cold-starts (cached `Runner.app` when native inputs
-  match) if stuck on `Launching…`. If it still fails, relaunch with
-  `tools/flutter_run_fast.sh` — never a hand-rolled tmux `flutter run`.
-  On Xcode "No space left on device", run `python3 tools/disk_guard.py
-  --min-free-gb 40` (orphan DerivedData, idle worktree builds) then retry
-  once (LPT-61) — do not wipe the primary's DerivedData, rewrite refresh,
-  or `needs-human` on the first disk-full build.
-- Prefer a full process restart (kill `flutter run`, relaunch) after
-  patching guest `flutter.onboarding_draft_v1` on disk — hot-restart keeps
-  cached SharedPreferences so `dailyGoalMinutes` stays null and Lesson
-  Complete still shows AMAZING (LPT-39). After the last Nice!, poll for
-  Lesson Complete before tapping CONTINUE — a second Continue can skip
-  the result onto Home.
+- Prefer `tools/flutter_run_fast.sh` / `flutter_hot_restart.sh` /
+  `refresh-simulator.sh` over hand-rolled tmux `flutter run`. Trust
+  refresh after hot-restart (it waits for Dart VM / cold-starts cached
+  `Runner.app`). On Xcode "No space left on device", run
+  `python3 tools/disk_guard.py --min-free-gb 40` then retry once (LPT-61)
+  — do not wipe primary DerivedData or `needs-human` on the first disk-full
+  build. After patching guest `flutter.onboarding_draft_v1` on disk, prefer
+  a full process restart — hot-restart keeps cached SharedPreferences so
+  `dailyGoalMinutes` stays null and Lesson Complete still shows AMAZING
+  (LPT-39). After the last Nice!, poll for Lesson Complete before CONTINUE.
 - Prefer waiting until the target beat is settled before
   `<KEY>-validated.png` (not bootstrap spinner). On hole-card peeks, wait
   until the hero cards are face-up (not empty outlines) before `tap You`.
@@ -221,6 +216,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   the primary `/tmp/flutter-live-poker-trainer.run.log` while the worktree
   owns the mini talks to the wrong VM (LPT-78).
 - Prefer `tools/flutter_hot_restart.sh` (or worktree `flutter_run_fast.sh`) and re-judge Hint/SoftPulse after `origin/main` advances mid-walk — a stale Dart isolate can look like SoftPulse-off + Hint-disabled deadlock (how-pots before #1706 hot-restart). On How pots open-pot, wait until the felt deal settles before judging Hint SoftPulse — early Hint greys the button while `feltDealReady` is still false (LPT-84).
+- Prefer flush/straight showdown remap templates with **five** suited cards
+  in the made flush (board + holes) and rank span < 12 so `_remapSpotCards`
+  can vary boards; a four-suited flush template always falls back to one
+  fixed board (LPT-107 deal test).
+- Prefer merging + Functions deploy before mini-proving a
+  `gradeCourseResponse` / Nice! / `course_bank` sequence-id change — the
+  worktree app still hits production until that deploy lands (LPT-74,
+  LPT-107).
 
 ## Ops (simulator, CLI, Jira)
 
