@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "ad9ee29b7b5278b52c1ca104e06d678fd1c4a419abc7c658a8a95c65a184b4cb",
+  "contentChecksum": "f36963f0beeb5001e0e3a65679b491709143081a54246aaefb558b317b387005",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -15131,7 +15131,29 @@
                   ],
                   "objectives": [
                     "Identify tilted or stuck opponents"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STUCK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "TILTED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "GEARS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-08-01-guided",
@@ -15160,7 +15182,19 @@
                       "label": "Ignore dynamics",
                       "accessibilityText": "Ignore dynamics"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "stuck",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-08-01-scaffolded",
@@ -15189,7 +15223,19 @@
                       "label": "Old label",
                       "accessibilityText": "Old label"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "gear",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-08-01-unguided",
@@ -15220,7 +15266,32 @@
                       "accessibilityText": "All-in",
                       "action": "ALL_IN"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "Td"
+                        ],
+                        "board": [
+                          "Kc",
+                          "9s",
+                          "4h",
+                          "2d",
+                          "7c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "reset",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-08-01-checkpoint",
@@ -15250,7 +15321,19 @@
                       "accessibilityText": "Permanent seats"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "temp",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

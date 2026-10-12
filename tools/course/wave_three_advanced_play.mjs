@@ -685,7 +685,18 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-08-01-explain", 1,
                 "Tables change. Stuck, tilted, tired, or shifting gears — update.",
-                {objectives: ["Identify tilted or stuck opponents"]}),
+                {
+                  objectives: ["Identify tilted or stuck opponents"],
+                  // LPT-245
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "STUCK", kind: "soft_pulse"},
+                      {press: 2, target: "TILTED", kind: "soft_pulse"},
+                      {press: 3, target: "GEARS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-05-08-01-guided", order: 2, stage: "guided",
                 prompt: "Villain lost two buy-ins, now open-raises every hand. Note?",
@@ -697,6 +708,8 @@ export function buildSectionFive() {
                   choice("ignore", "Ignore dynamics", "clear_mistake",
                     "Dynamics are evidence.", {betterChoiceId: "stuck"})
                 ],
+                // LPT-245
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "stuck", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-08-01-scaffolded", order: 3, stage: "scaffolded",
@@ -709,6 +722,8 @@ export function buildSectionFive() {
                   choice("same", "Old label", "clear_mistake",
                     "Evidence flipped.", {betterChoiceId: "gear"})
                 ],
+                // LPT-245
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "gear", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-05-08-01-unguided", order: 4, stage: "scaffolded",
@@ -721,6 +736,14 @@ export function buildSectionFive() {
                   choice("revenge", "All-in", "clear_mistake",
                     "Emotional leak.", {action: "ALL_IN", betterChoiceId: "reset"})
                 ],
+                // LPT-245
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Kc", "9s", "4h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "reset", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -733,6 +756,8 @@ export function buildSectionFive() {
                   choice("perm", "Permanent seats", "clear_mistake",
                     "Too rigid.", {betterChoiceId: "temp"})
                 ],
+                // LPT-245
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "temp", kind: "none"}]},
               }),
             ],
           }),
