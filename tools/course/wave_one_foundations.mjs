@@ -349,6 +349,16 @@ export function buildSectionOne() {
                   objectives: ["Name the four suits"],
                   accessibilityText:
                     "You found all four suits. Ace is still the high card.",
+                  // LPT-353
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "hearts", kind: "soft_pulse"},
+                      {press: 2, target: "diamonds", kind: "soft_pulse"},
+                      {press: 3, target: "clubs", kind: "soft_pulse"},
+                      {press: 4, target: "spades", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               selectAct({
                 id: "act-01-01-02-guided-suits", order: 2, stage: "guided",
