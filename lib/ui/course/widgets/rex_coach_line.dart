@@ -75,6 +75,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Straight and flush both need runout — pick the hand class.',
     'act-03-08-02-jump-leak' =>
       'Gutshot vs a 2x pot bet — pick Fold when the price is wrong.',
+    // Think in ranges densified asks (LPT-403) — same path as LPT-390.
+    'act-04-01-01-guided' =>
+      'UTG opens at 1/2 — pick the stronger, narrower range.',
+    'act-04-01-01-scaffolded' =>
+      'BTN open, BB 3-bet, BTN calls — pick whose range is stronger.',
+    'act-04-01-01-unguided' =>
+      'They bet twice — pick why Exactly AK is too precise.',
+    'act-04-01-01-checkpoint' =>
+      'Same board, different villain lines — pick how advice should change.',
     _ => null,
   };
 }
