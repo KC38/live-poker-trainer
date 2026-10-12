@@ -237,7 +237,18 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-03-01-explain", 1,
                 "Implied odds: future money. Reverse implied: future losses when second-best.",
-                {objectives: ["Estimate implied odds from depth and tendencies"]}),
+                {
+                  objectives: ["Estimate implied odds from depth and tendencies"],
+                  // LPT-228
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "IMPLIED", kind: "soft_pulse"},
+                      {press: 2, target: "REVERSE", kind: "soft_pulse"},
+                      {press: 3, target: "SECOND", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-05-03-01-guided", order: 2, stage: "guided",
                 prompt: "Deep vs Calling Station. Gutshot with overs facing a small bet. Action?",
@@ -251,6 +262,11 @@ export function buildSectionFive() {
                   choice("fold-io", "Fold", "clear_mistake",
                     "Ignore tendency and depth.", {action: "FOLD", betterChoiceId: "call-io"})
                 ],
+                // LPT-228
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["8s", "7c", "2d"]}},
+                  cues: [{press: 1, target: "call-io", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-05-03-01-scaffolded", order: 3, stage: "scaffolded",
@@ -266,6 +282,11 @@ export function buildSectionFive() {
                     "Wrong direction — often second-best.",
                     {action: "CALL", betterChoiceId: "rio"})
                 ],
+                // LPT-228
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Jd"], board: ["As", "Th", "8h"]}},
+                  cues: [{press: 1, target: "rio", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-05-03-01-unguided", order: 4, stage: "scaffolded",
@@ -278,6 +299,11 @@ export function buildSectionFive() {
                   choice("auto", "Call", "clear_mistake",
                     "Ignore domination.", {action: "CALL", betterChoiceId: "nonut"})
                 ],
+                // LPT-228
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["7h", "6h"], board: ["Kh", "9h", "2c"]}},
+                  cues: [{press: 1, target: "nonut", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -290,6 +316,8 @@ export function buildSectionFive() {
                   choice("short", "Short stacks always", "clear_mistake",
                     "Short stacks cut implied odds.", {betterChoiceId: "depth-pay"})
                 ],
+                // LPT-228
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "depth-pay", kind: "none"}]},
               }),
             ],
           }),
