@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "a0b41c6bc2cdf5dc95cdb5808346a83bf153575d2567f06b78d15d007c6d186e",
+  "contentChecksum": "4c359c0bca3b8bd5e9b541d2ac4b71a1407235824cfd9b2070b4f781a3008456",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -9990,13 +9990,13 @@
                       "mode": "fixed",
                       "fixedCards": {
                         "hero": [
-                          "9h",
-                          "8d"
+                          "7s",
+                          "3d"
                         ],
                         "board": [
                           "Ah",
                           "Kh",
-                          "7h"
+                          "9h"
                         ]
                       }
                     },

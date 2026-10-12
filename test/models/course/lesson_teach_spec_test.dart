@@ -1405,6 +1405,11 @@ void main() {
         act('act-03-08-02-jump-class').teachSpec!['deal']['fixedCards']['hero'],
         ['Jd', 'Td'],
       );
+      // True air under the fold-crowd ask (LPT-425), never 98 on AK7h.
+      expect(act('act-03-08-02-jump-mw').teachSpec!['deal']['fixedCards'], {
+        'hero': ['7s', '3d'],
+        'board': ['Ah', 'Kh', '9h'],
+      });
       expect(
         act('act-03-08-02-jump-river')
             .teachSpec!['deal']['fixedCards']['board'],
