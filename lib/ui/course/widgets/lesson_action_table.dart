@@ -744,9 +744,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Pick a value size',
       );
     case 'act-04-04-01-scaffolded':
+      // Real missed draw: 98hh flopped a flush draw on Kh 7h 2c, bricked the
+      // turn, and the river As scares without completing hearts. Kd 7c 2s 3d
+      // Ah never gave hero a draw (LPT-398).
       return const LessonActionSpot(
         heroCodes: ['9h', '8h'],
-        boardCodes: ['Kd', '7c', '2s', '3d', 'Ah'],
+        boardCodes: ['Kh', '7h', '2c', '3d', 'As'],
         potLabel: 'Pot 40',
         villainLine: 'Checked to you',
         streetLabel: 'River · scare Ace · missed draw',
