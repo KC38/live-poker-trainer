@@ -40,6 +40,7 @@ import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
 import 'package:live_poker_trainer/services/analytics/crashlytics_diagnostics_sink.dart';
 import 'package:live_poker_trainer/services/guest_install.dart';
 import 'package:live_poker_trainer/services/legacy_local_data_cleanup.dart';
+import 'package:live_poker_trainer/ui/debug/agent_screen_tree.dart';
 import 'package:live_poker_trainer/ui/screens/app_shell.dart';
 import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/lesson_runner_screen.dart';
@@ -87,11 +88,7 @@ Future<void> main() async {
   await _installCrashReporting(enabled: analyticsEnabled);
 
   AgentCommands.install();
-  runApp(
-    const ProviderScope(
-      child: _AgentUiBootstrap(child: PokerLabApp()),
-    ),
-  );
+  runApp(const ProviderScope(child: _AgentUiBootstrap(child: PokerLabApp())));
 }
 
 Future<void> _installCrashReporting({required bool enabled}) async {
@@ -231,19 +228,16 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
       theme: buildPokerTheme(),
       navigatorObservers: [navObserver],
       home: auth.when(
-        data:
-            (session) => _homeForDestination(
-              _destinationFor(session, onboarding, flags, flagsReady),
-              onboarding,
-            ),
+        data: (session) => _homeForDestination(
+          _destinationFor(session, onboarding, flags, flagsReady),
+          onboarding,
+        ),
         loading: () => const _AuthLoadingScreen(),
-        error:
-            (_, _) =>
-                flagsReady && guestCourseEntryEnabled(flags)
-                    ? const WelcomeScreen()
-                    : flagsReady
-                    ? const AuthScreen()
-                    : const _AuthLoadingScreen(),
+        error: (_, _) => flagsReady && guestCourseEntryEnabled(flags)
+            ? const WelcomeScreen()
+            : flagsReady
+            ? const AuthScreen()
+            : const _AuthLoadingScreen(),
       ),
     );
   }
@@ -313,8 +307,8 @@ class _PokerLabAppState extends ConsumerState<PokerLabApp> {
         // Back from Your start rewinds the step. The new navigator's home is
         // that step, with the stored band and daily goal still selected.
         return switch (onboarding.step) {
-          OnboardingStep.dailyGoal || OnboardingStep.rexIntro =>
-            const DailyGoalScreen(),
+          OnboardingStep.dailyGoal ||
+          OnboardingStep.rexIntro => const DailyGoalScreen(),
           OnboardingStep.experience => const ExperienceChoiceScreen(),
           _ => const ExperienceChoiceScreen(),
         };
@@ -394,10 +388,8 @@ class _AgentUiBootstrapState extends ConsumerState<_AgentUiBootstrap> {
         // stack under a second runner.
         await nav.pushAndRemoveUntil(
           MaterialPageRoute<void>(
-            builder: (_) => LessonRunnerScreen(
-              lessonId: lessonId,
-              embeddedInShell: true,
-            ),
+            builder: (_) =>
+                LessonRunnerScreen(lessonId: lessonId, embeddedInShell: true),
           ),
           (route) => route.isFirst,
         );
@@ -408,6 +400,13 @@ class _AgentUiBootstrapState extends ConsumerState<_AgentUiBootstrap> {
         }
       },
     );
+    AgentCommands.registerQuery('tree', (_) => describeAgentScreen());
+    // Host seeding (tools/agent_seed.py) needs the guest uid to edit the
+    // course profile; it refuses signed-in accounts.
+    AgentCommands.registerQuery('whoami', (_) {
+      final auth = ref.read(authServiceProvider);
+      return {'uid': auth.currentUid, 'isAnonymous': auth.isAnonymous};
+    });
   }
 
   @override

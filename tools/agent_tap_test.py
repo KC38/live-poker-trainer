@@ -58,6 +58,44 @@ class AgentTapLogTest(unittest.TestCase):
             self.assertEqual(agent_tap.vm_base(default_log), ("1111", "miniToken"))
             self.assertEqual(agent_tap.vm_base(other_log), ("2222", "workToken"))
 
+    def test_vm_base_prefers_the_newest_uri(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            log = Path(tmp) / "relaunch.log"
+            log.write_text(
+                "at: http://127.0.0.1:1111/old=/\n"
+                "Launching lib/main.dart ...\n"
+                "at: http://127.0.0.1:2222/new=/\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(agent_tap.vm_base(log), ("2222", "new="))
+
+
+class AgentTapTreeTest(unittest.TestCase):
+    """The tree printout names tap state and glow per label."""
+
+    def test_format_tree(self) -> None:
+        text = agent_tap.format_tree(
+            {
+                "screen": "LessonRunnerScreen",
+                "size": [375, 812],
+                "gold": ["A♠"],
+                "entries": [
+                    {"label": "A♠", "rect": [10, 20, 40, 60], "tap": None, "glow": "gold"},
+                    {
+                        "label": "HINT",
+                        "rect": [0, 700, 80, 44],
+                        "tap": "disabled",
+                        "glow": None,
+                        "key": "lesson-hint",
+                    },
+                ],
+            }
+        )
+        self.assertIn("screen: LessonRunnerScreen", text)
+        self.assertIn("gold SoftPulse: A♠", text)
+        self.assertIn("'A♠' [gold]", text)
+        self.assertIn("'HINT' [disabled key=lesson-hint]", text)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -200,4 +200,37 @@ void main() {
 
     expect(find.text('Hearts sheet'), findsNothing);
   });
+
+  testWidgets('last query reports each tap outcome, including misses', (
+    tester,
+  ) async {
+    var taps = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: FilledButton(
+            onPressed: () => taps++,
+            child: const Text('CONTINUE'),
+          ),
+        ),
+      ),
+    );
+    AgentUiDriver.install();
+    final before =
+        (await AgentCommands.debugQuery('last') as Map)['seq'] as int;
+
+    AgentCommands.debugEmit('tap:continue');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+    final hit = await AgentCommands.debugQuery('last') as Map;
+    expect(taps, 1);
+    expect(hit['seq'], before + 1);
+    expect(hit['outcome'], contains('invoked onPressed'));
+
+    AgentCommands.debugEmit('tap:nowhere');
+    await tester.pump();
+    final miss = await AgentCommands.debugQuery('last') as Map;
+    expect(miss['seq'], before + 2);
+    expect(miss['outcome'], startsWith('nomatch'));
+  });
 }

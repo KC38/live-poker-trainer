@@ -221,22 +221,48 @@ python3 tools/sim_lock.py guard && xcrun simctl uninstall "$DEVICE" com.pokerlab
 .cursor/skills/simulator-refresh/scripts/refresh-simulator.sh
 ```
 
+**Jump, do not walk, to the surface.** When the surface is a later lesson
+or needs hearts/gems in a given state, seed the guest instead of playing
+prerequisite lessons:
+
+```bash
+python3 tools/agent_seed.py lessons --grep "<title words>"
+python3 tools/agent_seed.py unlock --lesson "<title or id>" --open   # + --hearts N / --gems N
+python3 tools/agent_seed.py hearts 0                                 # refill / restore checks
+```
+
+It marks the lesson's prerequisites complete for the simulator guest only
+(refuses signed-in accounts), so the server allows the start. The guest
+must exist (finish onboarding once). A ticket's **Steps** may say
+`agent_seed.py unlock --lesson …` as the precondition; repro and
+validation then start at the screen under test.
+
 Drive with `python3 tools/agent_tap.py <cmd> --text "<label>"` (`tap`,
 `openlesson`, `type`, `back`, `next`, plus the table commands in
-`lib/core/debug/agent_commands.dart`). Prefer exact labels; broad needles
-like `Continue` can hit Home controls. Screenshot every state you judge:
+`lib/core/debug/agent_commands.dart`). Each UI command prints the app's
+`outcome:`; a tap that matched nothing exits 3 (`nomatch`) — fix the needle
+instead of screenshotting to find out. Prefer exact labels; broad needles
+like `Continue` can hit Home controls.
+
+**Read the screen with `tree`, not a screenshot, between steps.**
+`python3 tools/agent_tap.py tree` lists every visible label top-to-bottom
+with its rect, `[enabled]`/`[disabled]` tap state, `gold` (SoftPulse cue)
+or `cyan` (selection) glow, and widget key, plus a `gold SoftPulse:` summary
+line. Use it to navigate, to check Hint disabled/enabled, one gold target,
+coach copy, and heart counts. Screenshot only the states you judge
+visually (layout, theme, Duolingo beat) and every issue/validated proof:
 
 ```bash
 mkdir -p "$PRIMARY/.cursor/tmp/ui-agent"
 python3 tools/sim_lock.py guard && xcrun simctl io "$DEVICE" screenshot "$PRIMARY/.cursor/tmp/ui-agent/<surface>-<n>.png"
 ```
 
-Read each PNG. Walk the whole surface: every step of a lesson, both the
+Read each PNG you take. Walk the whole surface: every step of a lesson, both the
 right and the wrong answer, Hint, the dock, the result. On a lesson, also
 run the **Lesson content** checks below (randomization, hints, cues, coach
 text, hearts) — those are first-class findings, not polish. A surface you
-cannot reach with `agent_tap` is logged as `unreachable` in step 10. Choose
-another surface for this run.
+cannot reach with `agent_seed` + `agent_tap` is logged as `unreachable` in
+step 10. Choose another surface for this run.
 
 Judge each screen with this lens, in this order:
 
