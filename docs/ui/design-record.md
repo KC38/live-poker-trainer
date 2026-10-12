@@ -578,6 +578,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Patch the common leaks densified ask | Patch the common leaks checkpoint (`act-03-08-01-checkpoint`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-382). |
 | Section 3 jump multiway air | `act-03-08-02-jump-mw` templates `7s 3d` on `Ah Kh 9h` (true air) and postflop remap keeps made-pair / board-suit teach bits so Rex’s air / fold-crowd ask never sits over a remapped flush draw or pair (LPT-391; same contract as LPT-367). |
 | Section 3 jump river top two | `act-03-08-02-jump-river` templates `Ah Kd` on `As Kc 7d 2h 3c` (top two) and isomorphic remap keeps `isSet` / `distinctBoardPairingHoles` teach bits so Rex’s “top two” / “Two pair value bets.” never sits over a remapped set (LPT-392; `HandClass.strongMade` alone collapses two pair and set). |
+| Section 3 jump densified asks | Section 3 jump check densified asks (`act-03-08-02-jump-table` / `jump-class` / `jump-leak`) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-390). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
 rebuilds until all four real suits are in; `syncSelection` only mirrors a
@@ -1161,7 +1162,7 @@ felt.
 | Close the river correctly | Value, Bluff, Catch, Fold; densified frame ask (LPT-343) | — |
 | Play tighter multiway | Stronger, Fewer, Nuts | — |
 | Patch the common leaks | Top pair, Prices, Passive, Crowds | — |
-| Section 3 jump check | — | table-read |
+| Section 3 jump check | densified frame asks (LPT-390) | table-read |
 | Think in ranges | One hand, Range, Update | — |
 | Navigate 3-bet pots | 3-bet, Ranges, Squeeze | — |
 | Plan beyond the flop | Flop, Turn, River | — |

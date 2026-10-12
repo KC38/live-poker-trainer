@@ -14580,9 +14580,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Pot 16, shorter 40bb — tap pot and effective stack first.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Pot 16, shorter 40bb — pick pot and effective stack first.'),
+      findsOneWidget,
+    );
     expect(
       find.text('Pot 16, shorter 40bb — start with pot and effective stack.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Pot 16 · shorter stack 40bb'), findsNothing);
     expect(find.text('Pot + 40bb'), findsNothing);
@@ -14644,9 +14654,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Straight and flush both need runout — tap the hand class.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Straight and flush both need runout — pick the hand class.'),
+      findsOneWidget,
+    );
     expect(
       find.text('Qd9d3c with JdTd — you need runout for both straight and flush.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Draw'), findsOneWidget);
     expect(find.text('OESD + flush'), findsOneWidget);
@@ -14817,9 +14837,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Gutshot vs a 2x pot bet — tap Fold when the price is wrong.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Gutshot vs a 2x pot bet — pick Fold when the price is wrong.'),
+      findsOneWidget,
+    );
     expect(
       find.text('Gutshot vs a 2x pot bet — the price is usually too steep.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(find.text('Fold'), findsOneWidget);
     expect(find.text('Price wrong'), findsOneWidget);

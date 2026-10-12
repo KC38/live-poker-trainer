@@ -761,14 +761,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-03-08-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-03-08-01-checkpoint')!,
       // SoftPulse owns Pot · effective — don’t gold-tip the tile.
+      // Section 3 jump densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-390).
       'act-03-08-02-jump-table' =>
-        'Pot 16, shorter 40bb — start with pot and effective stack.',
+        selectIdentifyDensifiedCoachLine('act-03-08-02-jump-table')!,
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-08-02-jump-class' =>
-        'Qd9d3c with JdTd — you need runout for both straight and flush.',
+        selectIdentifyDensifiedCoachLine('act-03-08-02-jump-class')!,
       // SoftPulse owns Fold — don’t gold-tip the tile.
       'act-03-08-02-jump-leak' =>
-        'Gutshot vs a 2x pot bet — the price is usually too steep.',
+        selectIdentifyDensifiedCoachLine('act-03-08-02-jump-leak')!,
       // SoftPulse owns Strong narrow — don’t gold-tip the tile.
       'act-04-01-01-guided' =>
         'UTG opens at 1/2 — early seats usually play tighter.',
@@ -2250,12 +2252,14 @@ class _HandCategoryTapActivity extends StatelessWidget {
     // Patch the common leaks checkpoint densified ask (LPT-382).
     'act-03-08-01-checkpoint' =>
       selectIdentifyDensifiedCoachLine('act-03-08-01-checkpoint')!,
+    // Section 3 jump densified asks: selectIdentifyDensifiedCoachLine
+    // (LPT-390).
     'act-03-08-02-jump-table' =>
-      'Pot 16, shorter 40bb — start with pot and effective stack.',
+      selectIdentifyDensifiedCoachLine('act-03-08-02-jump-table')!,
     'act-03-08-02-jump-class' =>
-      'Qd9d3c with JdTd — you need runout for both straight and flush.',
+      selectIdentifyDensifiedCoachLine('act-03-08-02-jump-class')!,
     'act-03-08-02-jump-leak' =>
-      'Gutshot vs a 2x pot bet — the price is usually too steep.',
+      selectIdentifyDensifiedCoachLine('act-03-08-02-jump-leak')!,
     // SoftPulse owns Strong narrow — don’t gold-tip the tile.
     'act-04-01-01-guided' =>
       'UTG opens at 1/2 — early seats usually play tighter.',
