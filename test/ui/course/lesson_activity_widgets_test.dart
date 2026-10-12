@@ -15583,9 +15583,29 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-410: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('Two value sizes both get calls — nearby sizes can both grade soft.'),
+      lessonFrameSpeech(activity),
+      'Two value sizes both get calls — tap nearby soft-grade over one exact chip.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text(
+        'Two value sizes both get calls — pick nearby soft-grade over one exact chip.',
+      ),
       findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Two value sizes both get calls — nearby sizes can both grade soft.',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text(
+        'Two value sizes both get worse hands to call. Grading idea?',
+      ),
+      findsNothing,
     );
     expect(find.text('Soft band'), findsOneWidget);
     expect(find.text('Nearby OK'), findsOneWidget);

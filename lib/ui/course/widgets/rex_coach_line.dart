@@ -87,6 +87,9 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Plan beyond the flop checkpoint densified ask (LPT-407) — same path.
     'act-04-03-01-checkpoint' =>
       'You have a flop plan — pick brick→barrel vs flush→abort.',
+    // Size with a message unguided densified ask (LPT-410) — same path.
+    'act-04-04-01-unguided' =>
+      'Two value sizes both get calls — pick nearby soft-grade over one exact chip.',
     _ => null,
   };
 }
