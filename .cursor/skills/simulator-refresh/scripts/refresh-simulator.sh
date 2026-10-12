@@ -133,11 +133,14 @@ if [[ "${REFRESH_SIMULATOR_SOURCE_ONLY:-}" == "1" ]]; then
   return 0 2>/dev/null || exit 0
 fi
 
-# The mini is shared. Claim as refresh-simulator, or reuse a run id only when
-# that claim is already ours. A leaked SIM_LOCK_RUN_ID from ui-design-agent /
-# another owner must NOT pass guard and then kill their worktree flutter.
-# Someone else holding the lock means skip, not wait. Always record this
-# shell's pid so a hung refresh cannot orphan the lock for the full TTL.
+# The mini is shared. Claim as refresh-simulator, or reuse a run id when:
+#   - the holder is already refresh-simulator, or
+#   - REFRESH_ALLOW_HOLDER=1 (ui-agent loop preflight / intentional holder).
+# A leaked SIM_LOCK_RUN_ID in a health/ops shell must NOT pass guard and
+# kill a mid-ticket worktree flutter — leave REFRESH_ALLOW_HOLDER unset
+# and unset SIM_LOCK_RUN_ID so this script claims or skips. Someone else
+# holding the lock means skip, not wait. Always record this shell's pid
+# so a hung refresh cannot orphan the lock for the full TTL.
 SIM_LOCK="$REPO_ROOT/tools/sim_lock.py"
 lock_owner() {
   python3 -c "
@@ -152,8 +155,10 @@ print(json.loads(path.read_text()).get('owner') or '')
 }
 if [[ -n "${SIM_LOCK_RUN_ID:-}" ]] && python3 "$SIM_LOCK" guard >/dev/null 2>&1; then
   owner="$(lock_owner)"
-  if [[ "$owner" != "refresh-simulator" ]]; then
-    echo "skip: SIM_LOCK_RUN_ID belongs to ${owner:-unknown}, not refresh-simulator (unset it to claim)"
+  if [[ "$owner" == "refresh-simulator" || "${REFRESH_ALLOW_HOLDER:-}" == "1" ]]; then
+    :
+  else
+    echo "skip: SIM_LOCK_RUN_ID belongs to ${owner:-unknown} (unset it to claim, or REFRESH_ALLOW_HOLDER=1 if you hold it)"
     python3 "$SIM_LOCK" status || true
     exit 0
   fi

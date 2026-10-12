@@ -48,8 +48,10 @@ grep -qE '^[[:space:]]*--pid \$\$' "$REFRESH" \
 
 grep -q 'belongs to' "$REFRESH" \
   || fail "refresh must skip when SIM_LOCK_RUN_ID belongs to another owner"
+grep -q 'REFRESH_ALLOW_HOLDER' "$REFRESH" \
+  || fail "refresh must honor REFRESH_ALLOW_HOLDER for ui-agent preflight"
 grep -q 'refresh-simulator' "$REFRESH" \
-  || fail "refresh must only reuse a lock owned by refresh-simulator"
+  || fail "refresh must mention refresh-simulator owner"
 
 export REFRESH_SIMULATOR_SOURCE_ONLY=1
 # shellcheck disable=SC1090

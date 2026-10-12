@@ -249,11 +249,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - `refresh-simulator` must claim with `--pid $$`. Worktree validate uses
   `/tmp/flutter-$SLUG.log`; origin/main uses
   `/tmp/flutter-live-poker-trainer.run.log` (must be a normal file).
-  When primary flutter dies during closeout, run `refresh-simulator.sh`
-  — do not hand-roll tmux + `AwaitShell`. A stale VM URI above a newer
-  `Launching…` is not ready, and a cached-app launch is not ready until
-  its first `Restarted application` (`<log>.prebuilt` sidecar);
-  `tools/flutter_log_ready.py` / `wait_flutter_vm.sh` handle both.
+  When primary flutter dies during closeout, run
+  `REFRESH_ALLOW_HOLDER=1 …/refresh-simulator.sh` (you hold the
+  ui-design-agent lock) — do not hand-roll tmux + `AwaitShell`. A stale
+  VM URI above a newer `Launching…` is not ready, and a cached-app launch
+  is not ready until its first `Restarted application` (`<log>.prebuilt`
+  sidecar); `tools/flutter_log_ready.py` / `wait_flutter_vm.sh` handle both.
 
 ## Product judgment
 

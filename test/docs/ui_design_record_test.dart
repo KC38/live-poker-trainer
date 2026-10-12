@@ -187,6 +187,7 @@ void main() {
       'preflight lock',
       'trust that handoff',
       'tools/flutter_run_fast.sh',
+      'REFRESH_ALLOW_HOLDER=1',
       'tools/main_matches_validated.sh',
       'tools/agent_seed.py unlock',
       'tools/agent_seed.py fresh',
