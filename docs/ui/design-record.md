@@ -564,7 +564,8 @@ check (LPT-219), Build multiway ranges (LPT-222), Play 150–300bb stacks
 (LPT-231), Street-by-street updates (LPT-237), Advanced flop lines
 (LPT-234), Live table dynamics (LPT-245), Keep cash session guardrails
 (LPT-248), Section 5 checkpoint (LPT-251), Choose polarized or merged
-betting (LPT-262), Use overbets and geometric pressure (LPT-265).
+betting (LPT-262), Use overbets and geometric pressure (LPT-265), Use
+blockers without solver theater (LPT-268).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1027,6 +1028,11 @@ advances OVERBET → POLAR → GEO; guided `none` → `polar-ob`; scaffolded fix
 AsKd/Ah7c2d9s → `mid`; unguided `none` → `avoid`; checkpoint `none` →
 `multi`; assessment steps use cue kind `none` (no pressHints).
 
+Use blockers without solver theater `teachSpec` (LPT-268): explain SoftPulse
+advances BLOCK → USE → NO EV; guided `none` → `as`; scaffolded `none` →
+`unblock`; unguided `none` → `tweak`; checkpoint `none` → `no`; assessment
+steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1441,7 +1447,7 @@ felt.
 | Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts | check-turn, bomb, and attack checks |
 | Choose polarized or merged betting | Polar, Merged, Size | — |
 | Use overbets and geometric pressure | Overbet, Polar, Geo; unguided SoftPulse one gold (LPT-497) | — |
-| Use blockers without solver theater | Block, Use, No EV; unguided SoftPulse one gold (LPT-498) | unblock, tweak, and EV checks |
+| Use blockers without solver theater | Block, Use, No EV; unguided SoftPulse one gold (LPT-498) | — |
 | Defend enough without frequency theater | Defend, Bluff, Enough; unguided SoftPulse one gold (LPT-499) | continue, intuition, and punish checks |
 | Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500) | station, reason, and purpose checks |
 | Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501) | commit, ego, and SPR checks |

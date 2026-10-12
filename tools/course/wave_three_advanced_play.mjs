@@ -1362,7 +1362,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-06-01-explain", 1,
                 "Blockers remove hands. Use them; do not invent EV decimals.",
-                {objectives: ["Choose bluffs that block call-downs"]}),
+                {
+                  objectives: ["Choose bluffs that block call-downs"],
+                  // LPT-268
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "BLOCK", kind: "soft_pulse"},
+                      {press: 2, target: "USE", kind: "soft_pulse"},
+                      {press: 3, target: "NO EV", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-06-01-guided", order: 2, stage: "guided",
                 prompt: "River bluff on completed flush board. Better blocker?",
@@ -1376,6 +1387,8 @@ export function buildSectionSix() {
                   choice("ev", "Fake +EV", "clear_mistake",
                     "No fabricated EV.", {betterChoiceId: "as"})
                 ],
+                // LPT-268
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "as", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-06-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1388,6 +1401,8 @@ export function buildSectionSix() {
                   choice("block-nuts", "Block their air", "clear_mistake",
                     "Opposite.", {betterChoiceId: "unblock"})
                 ],
+                // LPT-268
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "unblock", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-06-01-unguided", order: 4, stage: "scaffolded",
@@ -1400,6 +1415,8 @@ export function buildSectionSix() {
                   choice("replace", "Replace all reasoning", "clear_mistake",
                     "Too narrow.", {betterChoiceId: "tweak"})
                 ],
+                // LPT-268
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tweak", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1412,6 +1429,8 @@ export function buildSectionSix() {
                   choice("fake", "Invent EVs", "clear_mistake",
                     "Forbidden.", {betterChoiceId: "no"})
                 ],
+                // LPT-268
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "no", kind: "none"}]},
               }),
             ],
           }),
