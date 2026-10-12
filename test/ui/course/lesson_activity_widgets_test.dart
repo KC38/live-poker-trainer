@@ -23,6 +23,7 @@ import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/equity_realize_demo.dart';
@@ -23586,6 +23587,10 @@ await tester.tap(find.text('NIT'));
   testWidgets('framed kicker showdown taps hero holes on LessonTableStage', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
     final activity = CourseActivity(
       id: 'act-01-02-02-scaffolded-kicker',
       order: 3,
@@ -23602,6 +23607,7 @@ await tester.tap(find.text('NIT'));
       ],
     );
     final controller = LessonActivityController(activity: activity);
+    controller.notifyFeltDealReady(true);
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
@@ -23619,10 +23625,14 @@ await tester.tap(find.text('NIT'));
                     ),
                     child: LessonFrameScope(
                       onLocalMiss: (_) {},
-                      child: SelectIdentifyActivity(
-                        activity: activity,
-                        controller: controller,
-                        showGuidance: true,
+                      activityController: controller,
+                      child: LessonSoftPulseScope(
+                        allowed: true,
+                        child: SelectIdentifyActivity(
+                          activity: activity,
+                          controller: controller,
+                          showGuidance: true,
+                        ),
                       ),
                     ),
                   ),
@@ -23638,9 +23648,23 @@ await tester.tap(find.text('NIT'));
     expect(find.byType(HandExampleTile), findsOneWidget);
     expect(find.text('Chop'), findsOneWidget);
 
+    // SoftPulse waits for deal settle — one You seat ring (LPT-75).
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 900));
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    final heroSeat = find.byKey(const ValueKey('lesson-seat-hero'));
+    final activeGlows = find.byWidgetPredicate(
+      (widget) => widget is LessonTargetGlow && widget.highlighted,
+    );
+    expect(activeGlows, findsOneWidget);
+    expect(
+      find.descendant(of: heroSeat, matching: activeGlows),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+
     var autoSubmits = 0;
     controller.onAutoSubmit = () => autoSubmits += 1;
-    final heroSeat = find.byKey(const ValueKey('lesson-seat-hero'));
     expect(heroSeat, findsOneWidget);
     await tester.ensureVisible(heroSeat);
     await tester.tap(heroSeat);

@@ -683,7 +683,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns You — don’t gold-tip the winner.
       'act-01-02-01-checkpoint-winner' =>
         'Flush vs straight on the river — stronger category takes it.',
-      // SoftPulse owns your holes — don’t gold-tip the kicker winner.
+      // SoftPulse owns the You seat once — don’t gold-tip the kicker winner.
       'act-01-02-02-scaffolded-kicker' =>
         'Same pair on the board — tap your cards, their cards, or Chop.',
       // Jump densify — SoftPulse off; pick without gold-tipping 55bb.
@@ -1458,11 +1458,14 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                           villainCodes: scene.villainCodes,
                           villainCount: 1,
                           heroFaceUp: true,
-                          cue:
+                          // Region ask: one gold seat SoftPulse (LPT-75), not
+                          // LessonTableCue.hero which rings both hole cards.
+                          cue: LessonTableCue.none,
+                          cueSeatIndex:
                               widget.showGuidance ||
                                       widget.controller.hintVisible
-                                  ? LessonTableCue.hero
-                                  : LessonTableCue.none,
+                                  ? 0
+                                  : null,
                           enabled: !locked,
                           onHeroTap:
                               locked
@@ -2471,7 +2474,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
 
   String get _coachFallback {
     if (widget.activity.id == 'act-01-02-02-scaffolded-kicker') {
-      // SoftPulse owns your holes — don’t gold-tip the kicker winner.
+      // SoftPulse owns the You seat once — don’t gold-tip the kicker winner.
       return 'Same pair on the board — tap your cards, their cards, or Chop.';
     }
     if (widget.activity.id == 'act-01-02-02-unguided-board') {
@@ -2588,6 +2591,12 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
                   villainCodes: scene.villainCodes,
                   villainCount: 1,
                   heroFaceUp: true,
+                  // Kicker region ask: one seat SoftPulse (LPT-75).
+                  cue: LessonTableCue.none,
+                  cueSeatIndex:
+                      widget.showGuidance && selected == null && !locked
+                          ? 0
+                          : null,
                   enabled: !locked,
                   onHeroTap:
                       locked
