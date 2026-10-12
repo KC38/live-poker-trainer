@@ -146,7 +146,7 @@ export function actionAct({
 
 export function multiStepAct({
   id, order, stage, a11y, objectives, steps,
-  playerTypeRefs = [],
+  playerTypeRefs = [], assessmentRole, teachSpec,
 }) {
   const act = {
     id, order, stage, renderer: "authored_multi_step_hand",
@@ -157,12 +157,14 @@ export function multiStepAct({
     handSteps: steps,
   };
   if (playerTypeRefs.length) act.playerTypeRefs = playerTypeRefs;
+  if (assessmentRole) act.assessmentRole = assessmentRole;
+  if (teachSpec) act.teachSpec = teachSpec;
   return act;
 }
 
 export function handLabAct({
   id, order, stage, prompt, a11y, objectives, choices, lab,
-  playerTypeRefs = [],
+  playerTypeRefs = [], assessmentRole, teachSpec,
 }) {
   const act = {
     id, order, stage, renderer: "full_table_hand_lab",
@@ -175,6 +177,8 @@ export function handLabAct({
     handLabSpec: lab,
   };
   if (playerTypeRefs.length) act.playerTypeRefs = playerTypeRefs;
+  if (assessmentRole) act.assessmentRole = assessmentRole;
+  if (teachSpec) act.teachSpec = teachSpec;
   return act;
 }
 
@@ -1381,6 +1385,15 @@ export function buildSectionOne() {
                     ],
                   },
                 ],
+                // LPT-108: guided-steps suited_ace SoftPulse open-6 then
+                // won-folds
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "suited_ace", suitFamily: "suited"},
+                  cues: [
+                    {press: 1, target: "open-6", kind: "soft_pulse"},
+                    {press: 2, target: "won-folds", kind: "soft_pulse"},
+                  ],
+                },
               }),
               multiStepAct({
                 id: "act-01-06-01-scaffolded-multi", order: 3, stage: "scaffolded",
@@ -1416,6 +1429,15 @@ export function buildSectionOne() {
                     ],
                   },
                 ],
+                // LPT-108: scaffolded-multi suited_ace SoftPulse ready-flop then
+                // cbet
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "suited_ace", suitFamily: "suited"},
+                  cues: [
+                    {press: 1, target: "ready-flop", kind: "soft_pulse"},
+                    {press: 2, target: "cbet", kind: "soft_pulse"},
+                  ],
+                },
               }),
               handLabAct({
                 id: "act-01-06-01-unguided-lab", order: 4, stage: "scaffolded",
@@ -1467,6 +1489,11 @@ export function buildSectionOne() {
                     ],
                   }],
                 },
+                // LPT-108: unguided-lab high_card offsuit SoftPulse call-bb
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "high_card", suitFamily: "offsuit"},
+                  cues: [{press: 1, target: "call-bb", kind: "soft_pulse"}],
+                },
               }),
               multiStepAct({
                 id: "act-01-06-01-checkpoint-finish", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1504,6 +1531,15 @@ export function buildSectionOne() {
                     ],
                   },
                 ],
+                // LPT-108: checkpoint-finish broadway offsuit cues kind none; no
+                // pressHints
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "broadway", suitFamily: "offsuit"},
+                  cues: [
+                    {press: 1, target: "open-kq", kind: "none"},
+                    {press: 2, target: "take-down", kind: "none"},
+                  ],
+                },
               }),
             ],
           }),

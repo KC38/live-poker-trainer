@@ -543,7 +543,7 @@ match what `lesson_card_deal.dart` deals (`deal.mode` `none` when the step
 deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85), Hand
 ranks (LPT-88), Best five and kickers (LPT-91), Fold, check, call (LPT-94),
 Bet, raise, all-in (LPT-98), Streets and action order (LPT-101), How pots
-are won (LPT-104).
+are won (LPT-104), Play a full toy hand (LPT-108).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -662,6 +662,14 @@ SoftPulse cues `no-show` / `showdown`. Unguided open-pot uses `deal.mode`
 `none` with authored `variants` for open-to sizes 5–10
 (`kLessonOpenToAmounts`) and SoftPulse cues `pot-correct`. Checkpoint-side
 cues `side-exists` with kind `none` and has no `pressHints` or Hint media.
+
+Play a full toy hand `teachSpec` (LPT-108): guided and scaffolded multi-step
+hands deal `random_in_class` `suited_ace` / `suited` with SoftPulse cues on
+`open-6`→`won-folds` and `ready-flop`→`cbet`. Unguided BB lab deals
+`high_card` / `offsuit` (weak ace class) with SoftPulse on `call-bb`.
+Checkpoint-finish deals `broadway` / `offsuit` with cues kind `none` on
+`open-kq`→`take-down` and has no `pressHints`. `multiStepAct` / `handLabAct`
+now carry `assessmentRole` and `teachSpec`.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

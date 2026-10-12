@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "c1ba13d6f43a51f9a7d5cd983d4155e4a9d8f89b83a90010c894299015753564",
+  "contentChecksum": "e8738b931d156f4437c9a04a77b3ef4cbc14e593f053099baf71a34f674c8552",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -2717,7 +2717,26 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "suited_ace",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-6",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "won-folds",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-06-01-scaffolded-multi",
@@ -2780,7 +2799,26 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "suited_ace",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ready-flop",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "cbet",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-06-01-unguided-lab",
@@ -2818,6 +2856,20 @@
                       "action": "ALL_IN"
                     }
                   ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-bb",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
                   "handLabSpecId": "lab-01-06-01-bb-defend"
                 },
                 {
@@ -2883,7 +2935,26 @@
                       ]
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-kq",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "take-down",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
