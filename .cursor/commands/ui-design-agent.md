@@ -568,10 +568,10 @@ branch names.
   Remove the item from **Known gaps** if this closes it.
 - Tests lock the criteria. A layout change pumps the screen at 375 × 812
   and fails on overflow. Run `dart analyze` and the touched tests via
-  `tools/tee_exit.sh` in named `test-LPT-*` / `analyze-LPT-*` tmux so
-  `EXIT:N` is the real status and wait on the sibling `.done` file (bare
+  `tools/tee_exit.sh` in named `test-LPT-*` / `analyze-LPT-*` tmux, then
+  `tools/wait_done.sh` on the sibling `.done` (heartbeats the lock; bare
   `| tee` masks failures; pane greps for `EXIT:` false-trigger on
-  send-keys).
+  send-keys; bare AwaitShell/sleep risks stall).
 
 ## 7. Validate on the worktree build
 
