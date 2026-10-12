@@ -45,6 +45,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Look at your holes — pick the family they belong to.',
     'act-02-07-02-jump-stack' =>
       'You 120bb · villain 55bb — pick the effective stack.',
+    // Count outs densified asks (LPT-279) — same path as baseline jump (LPT-221).
+    'act-03-03-01-guided' =>
+      'Count only the outs that make the best hand — pick every clean out.',
+    'act-03-03-01-scaffolded' =>
+      'Pot 20, bet 10 — pick the call that equals the bet.',
+    'act-03-03-01-unguided' =>
+      'Getting 3:1 with real outs — pick Call, Fold, or Raise.',
+    'act-03-03-01-checkpoint' =>
+      'Nut flush draw, deep and sticky — pick when future payoffs justify the price.',
     _ => null,
   };
 }
