@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "8eda06839d0f64d71399652a76528c82b618bf0177f72b7d7515b0a4c19e50d0",
+  "contentChecksum": "f05701974728ce18efb3c6d8e51478b05e54678cd4f32f4da972d7bb09490952",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -433,7 +433,34 @@
                   ],
                   "objectives": [
                     "Name the four suits"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hearts",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "diamonds",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "clubs",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "spades",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-02-guided-suits",
