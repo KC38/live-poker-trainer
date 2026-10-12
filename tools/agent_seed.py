@@ -283,7 +283,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--log", type=Path, default=Path("/tmp/flutter-live-poker-trainer.run.log"))
+    parser.add_argument(
+        "--log",
+        type=Path,
+        default=None,
+        help="Flutter run log (default: active mini session via flutter_active_log)",
+    )
     parser.add_argument("--run-id", default=None, help="Sim lock run id (default $SIM_LOCK_RUN_ID)")
     parser.add_argument("--allow-account", action="store_true")
     sub = parser.add_subparsers(dest="action", required=True)
@@ -326,10 +331,11 @@ def main(argv: list[str]) -> int:
         return 0
 
     agent_tap = _load_agent_tap()
+    log = agent_tap.resolve_log(args.log)
     lock_args = ["guard"] + (["--run-id", args.run_id] if args.run_id else [])
     if agent_tap.sim_lock.main(lock_args) != agent_tap.sim_lock.EXIT_OK:
         raise SystemExit("agent_seed: the iPhone 13 mini lock is not yours")
-    uid = current_guest(agent_tap, args.log, args.allow_account)
+    uid = current_guest(agent_tap, log, args.allow_account)
     token = access_token()
     profile = _request("GET", profile_url(uid), token).get("fields", {})
     fields: dict[str, Any] = {}
@@ -375,7 +381,7 @@ def main(argv: list[str]) -> int:
         patch_profile(uid, token, fields)
         print(f"seeded guest {uid[:8]}…")
     if target is not None and args.open:
-        agent_tap.agent("openlesson", log=args.log, text=target["id"])
+        agent_tap.agent("openlesson", log=log, text=target["id"])
     elif fields:
         print("open a lesson (agent_tap openlesson) or relaunch to see the new state")
     return 0

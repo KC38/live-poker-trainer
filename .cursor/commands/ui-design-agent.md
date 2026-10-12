@@ -581,7 +581,9 @@ tools/flutter_run_fast.sh --checkout "$WT" --log "/tmp/flutter-$SLUG.log" \
   --pid-file "/tmp/flutter-$SLUG.pid" --timeout 900 --purpose "$KEY: worktree VM"
 ```
 
-Drive with `python3 tools/agent_tap.py --log /tmp/flutter-$SLUG.log …`.
+Drive with `python3 tools/agent_tap.py …` (no `--log` needed —
+`flutter_run_fast.sh` points `/tmp/flutter-iphone-13-mini.active.log` at
+this worktree). Pass `--log /tmp/flutter-$SLUG.log` only to override.
 Walk **Validate before closing**, every acceptance criterion, and the
 lens from step 4 on the touched screens. Screenshot each. When every check
 passes, record the build you validated for step 9:

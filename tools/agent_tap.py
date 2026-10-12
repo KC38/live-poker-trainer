@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Drive the debug app via ext.poker.agent (tap / openlesson / type / tree).
 
-The default log is the iPhone 13 mini session
-(`/tmp/flutter-live-poker-trainer.run.log`). Ticket worktree sessions pass
-`--log /tmp/flutter-$SLUG.log`.
+The default log follows the mini's **active** flutter session
+(`/tmp/flutter-iphone-13-mini.active.log`, set by `flutter_run_fast.sh` /
+`flutter_hot_restart.sh`). Ticket worktrees no longer need
+`--log /tmp/flutter-$SLUG.log` unless you override. Falls back to the
+primary checkout log when no active pointer exists.
 
 UI commands (`tap`, `openlesson`, `type`, `back`) wait for the app's
 `last` outcome and print it. A tap that matched nothing exits 3, so a
@@ -34,10 +36,10 @@ from pathlib import Path
 from typing import Any
 
 
-def _load_sim_lock() -> types.ModuleType:
-    """Load the sibling sim_lock.py whether or not tools/ is a package."""
-    path = Path(__file__).with_name("sim_lock.py")
-    spec = importlib.util.spec_from_file_location("sim_lock", path)
+def _load_module(name: str) -> types.ModuleType:
+    """Load a sibling tools/*.py module."""
+    path = Path(__file__).with_name(f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot load {path}")
     module = importlib.util.module_from_spec(spec)
@@ -45,11 +47,13 @@ def _load_sim_lock() -> types.ModuleType:
     return module
 
 
-sim_lock = _load_sim_lock()
+sim_lock = _load_module("sim_lock")
+flutter_active_log = _load_module("flutter_active_log")
 
-DEFAULT_LOG = Path("/tmp/flutter-live-poker-trainer.run.log")
+DEFAULT_LOG = flutter_active_log.ACTIVE_LINK
+PRIMARY_LOG = flutter_active_log.PRIMARY_LOG
 # Back-compat alias for older callers/tests.
-QA_LOG = DEFAULT_LOG
+QA_LOG = PRIMARY_LOG
 LOG = DEFAULT_LOG
 
 QUERIES = {"tree", "whoami", "last"}
@@ -57,9 +61,14 @@ UI_COMMANDS = ("tap", "taptext", "openlesson", "open_lesson", "type", "enter", "
 EXIT_NOMATCH = 3
 
 
+def resolve_log(log: Path | None = None) -> Path:
+    """Resolve the flutter log (active pointer, env, or primary)."""
+    return flutter_active_log.resolve(log)
+
+
 def vm_base(log: Path | None = None) -> tuple[str, str]:
     """Return (port, token) from a Flutter run log."""
-    path = LOG if log is None else log
+    path = resolve_log(log)
     text = path.read_bytes().replace(b"\x00", b"").decode("utf-8", "replace")
     # Last URI: a relaunch appends a new VM service after the old one.
     matches = re.findall(r"http://127\.0\.0\.1:(\d+)/([A-Za-z0-9_\-=]+)/", text)
@@ -159,11 +168,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--log",
         type=Path,
-        default=DEFAULT_LOG,
+        default=None,
         help=(
             "Flutter run log to read the Dart VM URI from. "
-            f"Default {DEFAULT_LOG} (iPhone 13 mini). "
-            "Ticket worktrees pass /tmp/flutter-$SLUG.log."
+            f"Default: active mini session ({DEFAULT_LOG}) or "
+            f"{PRIMARY_LOG}."
         ),
     )
     parser.add_argument(
@@ -178,23 +187,24 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     """CLI entrypoint. Refuses unless this run holds the simulator lock."""
     args = build_parser().parse_args(argv)
+    log = resolve_log(args.log)
     lock_args = ["guard"] + (["--run-id", args.run_id] if args.run_id else [])
     if sim_lock.main(lock_args) != sim_lock.EXIT_OK:
         raise SystemExit("agent_tap: the iPhone 13 mini lock is not yours (tools/sim_lock.py status)")
     cmd = args.cmd.strip().lower()
     if cmd in QUERIES:
-        result = query(cmd, log=args.log)
+        result = query(cmd, log=log)
         if cmd == "tree" and not args.json:
             print(format_tree(result or {}))
         else:
             print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
     extra = {"text": args.text} if args.text else {}
-    before = int((last_outcome(log=args.log) or {}).get("seq", 0))
-    agent(cmd, log=args.log, **extra)
+    before = int((last_outcome(log=log) or {}).get("seq", 0))
+    agent(cmd, log=log, **extra)
     if not cmd.startswith(UI_COMMANDS):
         return 0
-    outcome = wait_outcome(before, log=args.log)
+    outcome = wait_outcome(before, log=log)
     if outcome is None:
         print("outcome: (no driver outcome within 3 s)")
         return 0

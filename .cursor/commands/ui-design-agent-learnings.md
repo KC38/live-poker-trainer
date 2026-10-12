@@ -108,9 +108,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer merging + Functions deploy before mini-proving a
   `gradeCourseResponse` / Nice! feedback change — the worktree app still
   hits production Cloud Functions until that deploy lands (LPT-74).
-- Prefer not to treat `tap --text Gems` as proof the gem control works:
-  the strip Tooltip is "Gems" with no `onTap`, and the needle can land on
-  Hearts / the refill sheet instead.
 - Prefer reopening a Done `ui-agent` ticket that still reproduces over
   filing a near-duplicate.
 - Prefer one lesson-content bug (fixed cards, stacked/enabled-empty Hint,
@@ -164,15 +161,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   attach/body and re-comment first (LPT-62: first closeout failed, Done raced
   ahead). After a successful closeout comment, `jira.py verify-embeds LPT-NN`
   must pass before Done.
-- Prefer, after a one-surface fix (Theme CTA, `boardSlots: false`, SoftPulse
-  on explain), grepping sibling call sites / builders in the same walk so
-  twins do not wait another run (LPT-45/46, LPT-50/52, LPT-55→57).
-- Prefer, when `openlesson` resumes mid-lesson past the beat under test,
-  finishing/restarting or validating a sibling activity on the **same**
-  code path for closeout proof instead of filing unreachable. Same-concept
-  quiet ids (`lessonFrameSameConceptQuietIds`, e.g. guided-suits ★) SoftPulse
-  only via Hint — after Oops Continue, Hint must work again
-  (`clearFeedbackForRetry` clears hintUsed; LPT-71).
 - Prefer trusting `refresh-simulator.sh` after hot-restart — it waits for a
   Dart VM URI and cold-starts (cached `Runner.app` when native inputs
   match) if stuck on `Launching…`. If it still fails, relaunch with
@@ -216,19 +204,17 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Never run `sips -c` in place on the only issue/validated PNG — copy first,
   then crop the copy.
 
-- Prefer, on Best five SoftPulse closeout: clear the lesson from `completedLessonIds` + hot-restart so review mode does not hide cues; judge seat SoftPulse by the PNG (`You [enabled gold]`), not only the gold summary (hole labels nest under seat glow); and tap picker SoftPulse twice when the first press leaves `0/5 selected` (LPT-75).
 - Prefer `fresh --lesson … --open` when the walk must start at activity 0 —
-  it now nulls `course/main.resume`, clears matching `currentLessonId`, and
-  deletes open `courseAttempts` for that lesson (LPT-76). Do not hand-patch
-  Firestore for resume when `fresh` is available.
-- Prefer, when `refresh-simulator.sh` skips because `$SIM_LOCK_RUN_ID` is
-  still `ui-design-agent`, `tools/flutter_run_fast.sh --checkout "$PRIMARY"`
-  to put origin/main back on the mini (LPT-77 closeout).
-- Prefer reading `agent_seed.py fresh` output for `resume reset` after a
-  main pull — if mid-lesson SoftPulse/ask still shows, hot-restart then
-  `fresh --open` again before judging explain (LPT-77).
-
-- Prefer `agent_seed.py --log /tmp/flutter-$SLUG.log` (and every `agent_tap --log`) on worktree validate — the default log targets the primary VM, so seed/openlesson can succeed against the wrong session while taps nomatch on Home (LPT-78).
+  it nulls `course/main.resume`, clears matching `currentLessonId`, and
+  deletes open `courseAttempts` (LPT-76). Do not hand-patch Firestore for
+  resume. On Best five SoftPulse closeout, judge seat glow by the PNG
+  (`You [enabled gold]`); retap picker SoftPulse when the first press
+  leaves `0/5 selected` (LPT-75).
+- Prefer omitting `--log` on `agent_tap` / `agent_seed` after
+  `flutter_run_fast.sh` / `flutter_hot_restart.sh` — they point
+  `/tmp/flutter-iphone-13-mini.active.log` at the worktree session. Passing
+  the primary `/tmp/flutter-live-poker-trainer.run.log` while the worktree
+  owns the mini talks to the wrong VM (LPT-78).
 
 ## Ops (simulator, CLI, Jira)
 
@@ -268,6 +254,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 - "Your two cards" and similar peeks must not show empty board slots when
   no board is in play for that beat.
+- Lesson walks must exercise Hint (one line, disabled when empty — including
+  multiturn), one gold SoftPulse at a time, coach mood/copy, hearts
+  lose/restore, and a second attempt for card randomization — not only
+  Continue through the happy path.
+- Every ticket needs a current-issue screenshot on file and a validated
+  origin/main screenshot on the Done comment. Text-only closeouts are not
+  enough.
 - When the design record and a shipped screen disagree, the record (plus
   stakeholder brief) wins; file or reopen the ticket rather than
   "accepting" the screen as intentional chrome.

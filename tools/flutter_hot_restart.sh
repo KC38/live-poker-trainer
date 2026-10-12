@@ -29,6 +29,9 @@ if [[ -z "$pid" ]] || ! kill -0 "$pid" 2>/dev/null; then
   exit 2
 fi
 
+# Keep agent_tap / agent_seed aimed at this session (worktree vs primary).
+python3 "$ROOT/tools/flutter_active_log.py" set "$LOG" >/dev/null 2>&1 || true
+
 count() { grep -ac "$1" "$LOG" 2>/dev/null || true; }
 before_ok="$(count 'Restarted application in')"
 before_err="$(count 'Error: \|Hot restart failed\|Try again after fixing')"
