@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "5545df2a8c99a3e07ff7c00343962cae6603f55555ec33452b217d569171feae",
+  "contentChecksum": "a63db06c86b84b9ca56523bc78b803fc9ba239932b4d6cca3c59ee03e911da5c",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -638,7 +638,29 @@
                   "objectives": [
                     "Locate the dealer button",
                     "Identify the small and big blinds"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "D",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SB",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BB",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-03-guided-button",
@@ -679,7 +701,19 @@
                       "kind": "hint",
                       "text": "Look for the chip labeled D."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "D",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-03-scaffolded-blinds",
@@ -713,7 +747,19 @@
                       "label": "The button posts both blinds",
                       "accessibilityText": "The button posts both blinds"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BB",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-03-unguided-when",
@@ -747,7 +793,19 @@
                       "label": "Only if the hand reaches showdown",
                       "accessibilityText": "Only if the hand reaches showdown"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "before-deal",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-01-03-checkpoint-layout",
@@ -783,7 +841,19 @@
                       "accessibilityText": "Seat 1 (big blind seat)"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SB",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
