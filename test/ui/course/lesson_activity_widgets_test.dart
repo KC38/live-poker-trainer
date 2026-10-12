@@ -22735,6 +22735,28 @@ await tester.tap(find.text('NIT'));
       ),
       findsNothing,
     );
+    expect(find.text('Usually avoid'), findsOneWidget);
+    // LPT-503: guideRegion → one gold SoftPulse (Usually avoid), not Bluff more.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Usually avoid'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Bluff more'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Usually avoid'));
     await tester.pump();
     expect(controller.draft.choiceId, 'avoid');
