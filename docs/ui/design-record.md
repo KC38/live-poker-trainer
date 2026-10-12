@@ -587,6 +587,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | SPR decides commitment densified ask | SPR decides commitment guided densified ask (`act-04-05-01-guided`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-412). |
 | SPR decides commitment scaffolded stacks | SPR decides commitment scaffolded (`act-04-05-01-scaffolded`) framed stage posts remaining stacks that match Rex’s SPR ~1 ask (`Stacks left 60` into pot ~60; same shared-stack contract as checkpoint `Stacks left 55` for SPR ~1.4) (LPT-413). |
 | Observe sticky callers densified asks | Observe sticky callers densified asks (`act-04-06-01-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-416). |
+| Meet Calling Station SoftPulse one gold | Meet Calling Station scaffolded / unguided outcome SoftPulse passes `guideRegion` (`labelWorkingModel` / `playerTypeStationLimp`) so Hint paints one gold tile — never both Working model and Permanent, or Station and Maniac (LPT-424). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
 rebuilds until all four real suits are in; `syncSelection` only mirrors a
@@ -1203,7 +1204,7 @@ felt.
 | Size with a message | Value, Pressure, Size; densified frame ask (LPT-410) | — |
 | SPR decides commitment | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413) | — |
 | Observe sticky callers | Enters, Calls, Folds; densified frame asks (LPT-416) | participation note, observation bundle |
-| Meet the Calling Station | Station, High, Low | label quizzes |
+| Meet the Calling Station | Station, High, Low; scaffolded/unguided SoftPulse one gold (LPT-424) | label quizzes |
 | Adjust versus Calling Station | Value, Bluffs, Cite | bluff-less reason |
 | Observe narrow players | Rare, Enter, Mean It | entry quizzes |
 | Meet the Nit | Nit, Narrow, Respect | label quizzes |

@@ -16336,6 +16336,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Working model'), findsOneWidget);
+    // LPT-424: guideRegion → one gold SoftPulse (Working model), not Permanent.
+    final scaffoldCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(scaffoldCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Working model'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Permanent'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Working model'));
     await tester.pump();
     expect(controller.draft.choiceId, 'model');
@@ -16381,6 +16402,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Station'), findsOneWidget);
+    // LPT-424: guideRegion → one gold SoftPulse (Station), not Maniac.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Station'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Maniac'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Station'));
     await tester.pump();
     expect(controller.draft.choiceId, 'station2');
