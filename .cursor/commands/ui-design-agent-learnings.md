@@ -305,13 +305,15 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   test …` (same for `analyze-LPT-*` / `dart analyze`) so `EXIT:N` is the
   command status and `/tmp/test-LPT-….done` appears only when finished;
   block with `tools/wait_done.sh /tmp/test-LPT-….done` (heartbeats the
-  lock) — never bare AwaitShell/sleep, never grep the pane for `EXIT:`
-  (send-keys text itself contains `EXIT:$?` and false-kills mid-suite —
-  LPT-391). Prefer `tee_exit` writing the numeric code into `.done`;
-  `wait_done` also accepts `DONE` / `DONE:N` / `EXIT:N` (LPT-410 hung on
-  a bare `DONE` marker before that parse). Bare `cmd | tee; echo EXIT:$?`
-  also masks failures as 0 (LPT-367). Write coverage before long compiles
-  when the ticket is already Done in Jira.
+  lock; optional `--timeout N` / `--purpose TEXT` in any order) — never
+  bare AwaitShell/sleep, never grep the pane for `EXIT:` (send-keys text
+  itself contains `EXIT:$?` and false-kills mid-suite — LPT-391). Prefer
+  `tee_exit` writing the numeric code into `.done`; `wait_done` also
+  accepts `DONE` / `DONE:N` / `EXIT:N` (LPT-410 hung on a bare `DONE`
+  marker). Do not pass `--purpose` as the positional timeout (LPT-462:
+  bash arithmetic treated it as `--purpose` decrement). Bare
+  `cmd | tee; echo EXIT:$?` also masks failures as 0 (LPT-367). Write
+  coverage before long compiles when the ticket is already Done in Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
   `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.
