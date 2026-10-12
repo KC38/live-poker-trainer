@@ -143,7 +143,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Densified classify Hint (Hand families unguided/checkpoint) must name the
   remapped hero holes — `alignLessonActionCopy` falls through to
   `dealtLessonTableScene` when there is no action spot, or Hint keeps
-  authored 76s / 72o (LPT-134).
+  authored 76s / 72o (LPT-134). Open or fold catalog Oops may say
+  `Seventy-two offsuit` (decade compound) while `_spokenStartingHand` is
+  `seven-two offsuit` — both aliases must rewrite via
+  `alignStartingHandCopy` or remapped trash still grades as 72o (LPT-164).
 - Prefer a second open of the same lesson when judging card randomization —
   screenshot hole/board cards on attempt A and attempt B before deciding
   the deal is fixed. Read ranks from the latest PNG before tapping a
