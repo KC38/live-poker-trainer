@@ -1645,7 +1645,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-06-02-explain", 1,
                 "Calling Station is a working model: high participation, low folding.",
-                {objectives: ["Introduce Calling Station"], playerTypeRefs: ["calling_station"]}),
+                {
+                  objectives: ["Introduce Calling Station"], playerTypeRefs: ["calling_station"],
+                  // LPT-187
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "STATION", kind: "soft_pulse"},
+                      {press: 2, target: "HIGH", kind: "soft_pulse"},
+                      {press: 3, target: "LOW", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               classifyAct({
                 id: "act-04-06-02-guided", order: 2, stage: "guided",
                 prompt: "Seat called three streets with second pair. Best working label?",
@@ -1658,6 +1669,11 @@ export function buildSectionFour() {
                   choice("pt-nit", "Nit", "clear_mistake",
                     "Nits fold too much; this seat calls too much.", {betterChoiceId: "pt-station", reversalRead: "Nit evidence is narrow entry and overfolding."})
                 ],
+                // LPT-187
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "pt-station", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-06-02-scaffolded", order: 3, stage: "scaffolded",
@@ -1670,6 +1686,8 @@ export function buildSectionFour() {
                   choice("soul", "A permanent personality verdict", "clear_mistake",
                     "Too rigid.", {betterChoiceId: "model"})
                 ],
+                // LPT-187
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "model", kind: "soft_pulse"}]},
               }),
               classifyAct({
                 id: "act-04-06-02-unguided", order: 4, stage: "scaffolded",
@@ -1683,6 +1701,8 @@ export function buildSectionFour() {
                   choice("maniac2", "Maniac", "clear_mistake",
                     "Maniacs raise and barrel; this seat calls.", {betterChoiceId: "station2", reversalRead: "Maniac evidence is extreme aggression."})
                 ],
+                // LPT-187
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "station2", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-06-02-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1695,6 +1715,8 @@ export function buildSectionFour() {
                   choice("max", "Maximum certainty", "clear_mistake",
                     "Two hands are thin.", {betterChoiceId: "low"})
                 ],
+                // LPT-187
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "low", kind: "none"}]},
               }),
             ],
           }),

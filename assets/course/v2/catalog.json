@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "13658458ef8997556f0a692b7f0bc4d097286ae042ccc42efe21fca226b48f70",
+  "contentChecksum": "695845f6a664621b9d42391d1455aa48334f0a9ad38255a216cc8abd8fb88d60",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -10164,7 +10164,29 @@
                   ],
                   "playerTypeRefs": [
                     "calling_station"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STATION",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "HIGH",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "LOW",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-06-02-guided",
@@ -10196,7 +10218,19 @@
                   ],
                   "playerTypeRefs": [
                     "calling_station"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pt-station",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-06-02-scaffolded",
@@ -10225,7 +10259,19 @@
                       "label": "A permanent personality verdict",
                       "accessibilityText": "A permanent personality verdict"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "model",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-06-02-unguided",
@@ -10257,7 +10303,19 @@
                   ],
                   "playerTypeRefs": [
                     "calling_station"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "station2",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-06-02-checkpoint",
@@ -10287,7 +10345,19 @@
                       "accessibilityText": "Maximum certainty"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "low",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
