@@ -1817,7 +1817,11 @@
                   ],
                   "objectives": [
                     "Name preflop, flop, turn, and river"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Preflop \u2192 flop \u2192 turn \u2192 river."
+                  }
                 },
                 {
                   "id": "act-01-04-01-guided-streets",

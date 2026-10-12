@@ -1818,7 +1818,11 @@
                   ],
                   "objectives": [
                     "Name preflop, flop, turn, and river"
-                  ]
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Preflop → flop → turn → river."
+                  }
                 },
                 {
                   "id": "act-01-04-01-guided-streets",
@@ -21856,7 +21860,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Preflop → flop → turn → river."
+      }
     },
     "act-01-04-01-guided-streets": {
       "activityId": "act-01-04-01-guided-streets",

@@ -228,6 +228,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   main pull — if mid-lesson SoftPulse/ask still shows, hot-restart then
   `fresh --open` again before judging explain (LPT-77).
 
+- Prefer `agent_seed.py --log /tmp/flutter-$SLUG.log` (and every `agent_tap --log`) on worktree validate — the default log targets the primary VM, so seed/openlesson can succeed against the wrong session while taps nomatch on Home (LPT-78).
+
 ## Ops (simulator, CLI, Jira)
 
 - Cursor CLI over SSH / LaunchAgent needs `CURSOR_API_KEY` in
