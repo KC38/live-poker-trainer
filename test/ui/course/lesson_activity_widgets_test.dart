@@ -19116,6 +19116,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Value-heavy'), findsOneWidget);
+    // LPT-517: guideRegion → one gold SoftPulse (Value-heavy), not Always bluff.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Value-heavy'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Always bluff'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Value-heavy'));
     await tester.pump();
     expect(controller.draft.choiceId, 'strong');
@@ -19226,6 +19247,27 @@ await tester.tap(find.text('NIT'));
       find.text('Large BB donk on dry ace — tap the meaning.'),
       findsNothing,
     );
+    // LPT-517: guideRegion → one gold SoftPulse (Polarized), not Medium pairs.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Polarized'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Medium pairs'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Polarized'));
     await tester.pump();
     expect(controller.draft.choiceId, 'polar');
@@ -19273,6 +19315,27 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('Delayed c-bet — tap when it is best.'),
+      findsNothing,
+    );
+    // LPT-517: guideRegion → one gold SoftPulse (After weakness), not Every hand.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('After weakness'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Every hand'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('After weakness'));
