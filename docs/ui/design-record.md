@@ -592,6 +592,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Meet Calling Station SoftPulse one gold | Meet Calling Station scaffolded / unguided outcome SoftPulse passes `guideRegion` (`labelWorkingModel` / `playerTypeStationLimp`) so Hint paints one gold tile — never both Working model and Permanent, or Station and Maniac (LPT-424). |
 | Observe narrow SoftPulse one gold | Observe narrow players densified asks (`act-04-07-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`observeNarrowEntry` / `observeStrongAggression` / `observeWaitSamples` / `observeNitBundle`) so SoftPulse paints one gold tile — never both Narrow and Wide, Strong heat and Passive, Wait and Label now, or Few+heat and Calls all (LPT-433). |
 | Meet the Nit SoftPulse one gold | Meet the Nit densified asks (`act-04-07-02-guided` / unguided / checkpoint) pass `guideRegion` (`meetNitLabel` / `meetNitLabel2` / `meetNitWorkingModel`) so SoftPulse paints one gold tile — never both Nit and Station, Nit and Maniac, or Working model and An insult (LPT-440). |
+| Observe wild SoftPulse one gold | Observe wild aggressors densified asks (`act-04-08-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`observeExtremeEntry` / `observeWidePressure` / `observeCalmNotes` / `observeManiacBundle`) so SoftPulse paints one gold tile — never both Extreme and Timid, Wide heat and Never bets, Frequencies and Revenge, or Enter+barrel and Never plays (LPT-462). |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1226,7 +1227,7 @@ felt.
 | Observe narrow players | Rare, Enter, Mean It | entry quizzes |
 | Meet the Nit | Nit, Narrow, Respect; densified SoftPulse one gold (LPT-440) | label quizzes |
 | Adjust versus Nit | Steal, Credit, Explode | respect reason |
-| Observe wild aggressors | Raise, Barrel, Count | entry quizzes |
+| Observe wild aggressors | Raise, Barrel, Count; densified SoftPulse one gold (LPT-462) | entry quizzes |
 | Meet the Maniac | Maniac, Entry, Aggro | label quizzes |
 | Adjust versus Maniac | Wider, Hang, Ego | call-wider reason |
 | Confidence and samples | Observe, Samples, Showdowns | confidence quizzes |
