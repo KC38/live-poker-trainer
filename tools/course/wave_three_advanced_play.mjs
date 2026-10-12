@@ -1269,7 +1269,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-05-01-explain", 1,
                 "Overbets need a polar story. Geometry links flop-turn-river sizes.",
-                {objectives: ["Select overbets for polar spots"]}),
+                {
+                  objectives: ["Select overbets for polar spots"],
+                  // LPT-265
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "OVERBET", kind: "soft_pulse"},
+                      {press: 2, target: "POLAR", kind: "soft_pulse"},
+                      {press: 3, target: "GEO", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-05-01-guided", order: 2, stage: "guided",
                 prompt: "Best overbet river candidate?",
@@ -1281,6 +1292,8 @@ export function buildSectionSix() {
                   choice("tpwk", "Top pair weak", "clear_mistake",
                     "Merged hand, wrong size.", {betterChoiceId: "polar-ob"})
                 ],
+                // LPT-265
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "polar-ob", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-06-05-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1298,6 +1311,14 @@ export function buildSectionSix() {
                     "Think pot-sized continuation.",
                     {action: "BET", amountBb: 60})
                 ],
+                // LPT-265
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["As", "Kd"], board: ["Ah", "7c", "2d", "9s"]},
+                  },
+                  cues: [{press: 1, target: "mid", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-05-01-unguided", order: 4, stage: "scaffolded",
@@ -1310,6 +1331,8 @@ export function buildSectionSix() {
                   choice("yolo", "Always fine", "clear_mistake",
                     "Leaks stacks.", {betterChoiceId: "avoid"})
                 ],
+                // LPT-265
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "avoid", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1322,6 +1345,8 @@ export function buildSectionSix() {
                   choice("style", "Look flashy", "clear_mistake",
                     "Not the goal.", {betterChoiceId: "multi"})
                 ],
+                // LPT-265
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "multi", kind: "none"}]},
               }),
             ],
           }),

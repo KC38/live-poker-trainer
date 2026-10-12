@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "2d96edc981e89b6255116efd2355d5a11af2ee523ceae8b226150feb2882d129",
+  "contentChecksum": "1c1c97ebbfc2a7051867f716b703a9dcca8e82db5f060578a1c62b32c0e24166",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -16699,7 +16699,29 @@
                   ],
                   "objectives": [
                     "Select overbets for polar spots"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "OVERBET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "POLAR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "GEO",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-05-01-guided",
@@ -16728,7 +16750,19 @@
                       "label": "Top pair weak",
                       "accessibilityText": "Top pair weak"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "polar-ob",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-05-01-scaffolded",
@@ -16768,7 +16802,31 @@
                       "action": "BET",
                       "amountBb": 60
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "As",
+                          "Kd"
+                        ],
+                        "board": [
+                          "Ah",
+                          "7c",
+                          "2d",
+                          "9s"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "mid",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-05-01-unguided",
@@ -16797,7 +16855,19 @@
                       "label": "Always fine",
                       "accessibilityText": "Always fine"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "avoid",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-05-01-checkpoint",
@@ -16827,7 +16897,19 @@
                       "accessibilityText": "Look flashy"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "multi",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

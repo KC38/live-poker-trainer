@@ -564,7 +564,7 @@ check (LPT-219), Build multiway ranges (LPT-222), Play 150–300bb stacks
 (LPT-231), Street-by-street updates (LPT-237), Advanced flop lines
 (LPT-234), Live table dynamics (LPT-245), Keep cash session guardrails
 (LPT-248), Section 5 checkpoint (LPT-251), Choose polarized or merged
-betting (LPT-262).
+betting (LPT-262), Use overbets and geometric pressure (LPT-265).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1022,6 +1022,11 @@ advances POLAR → MERGED → SIZE; guided `none` → `polar`; scaffolded fixed
 JhTd/QcTs3h2d7c → `mid`; unguided `none` → `mismatch`; checkpoint `none` →
 `thin`; assessment steps use cue kind `none` (no pressHints).
 
+Use overbets and geometric pressure `teachSpec` (LPT-265): explain SoftPulse
+advances OVERBET → POLAR → GEO; guided `none` → `polar-ob`; scaffolded fixed
+AsKd/Ah7c2d9s → `mid`; unguided `none` → `avoid`; checkpoint `none` →
+`multi`; assessment steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1435,7 +1440,7 @@ felt.
 | Realize equity in and out of position | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524) | realization quizzes |
 | Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts | check-turn, bomb, and attack checks |
 | Choose polarized or merged betting | Polar, Merged, Size | — |
-| Use overbets and geometric pressure | Overbet, Polar, Geo; unguided SoftPulse one gold (LPT-497) | candidate, avoid, and plan checks |
+| Use overbets and geometric pressure | Overbet, Polar, Geo; unguided SoftPulse one gold (LPT-497) | — |
 | Use blockers without solver theater | Block, Use, No EV; unguided SoftPulse one gold (LPT-498) | unblock, tweak, and EV checks |
 | Defend enough without frequency theater | Defend, Bluff, Enough; unguided SoftPulse one gold (LPT-499) | continue, intuition, and punish checks |
 | Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500) | station, reason, and purpose checks |
