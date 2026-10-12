@@ -1730,7 +1730,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-06-03-explain", 1,
                 "Versus stations: thicker value, fewer pure bluffs. Cite their calling.",
-                {objectives: ["Value wider versus Calling Station"], playerTypeRefs: ["calling_station"]}),
+                {
+                  objectives: ["Value wider versus Calling Station"], playerTypeRefs: ["calling_station"],
+                  // LPT-190
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "VALUE", kind: "soft_pulse"},
+                      {press: 2, target: "BLUFFS", kind: "soft_pulse"},
+                      {press: 3, target: "CITE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-04-06-03-guided", order: 2, stage: "guided",
                 prompt: "Known sticky caller. You have second pair good kicker on river. Action?",
@@ -1744,6 +1755,14 @@ export function buildSectionFour() {
                   choice("bluff-air", "Bluff-raise later with air", "clear_mistake",
                     "They do not fold.", {action: "RAISE", amountBb: 20, betterChoiceId: "thin-val", reversalRead: "Bluffs need folders; stations are not folders."})
                 ],
+                // LPT-190
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "thin-val", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-06-03-scaffolded", order: 3, stage: "scaffolded",
@@ -1756,6 +1775,14 @@ export function buildSectionFour() {
                   choice("bluff-station", "Bluff large anyway", "clear_mistake",
                     "Tendency cited: low folding.", {action: "BET", amountBb: 20, betterChoiceId: "give-up", reversalRead: "Only bluff seats that fold enough."})
                 ],
+                // LPT-190
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["8h", "7h"], board: ["Kh", "9h", "2c", "3d", "5s"]},
+                  },
+                  cues: [{press: 1, target: "give-up", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-06-03-unguided", order: 4, stage: "scaffolded",
@@ -1768,6 +1795,14 @@ export function buildSectionFour() {
                   choice("auto-thin", "Always thin-value strangers", "questionable",
                     "Needs the calling tendency.", {action: "BET", amountBb: 8})
                 ],
+                // LPT-190
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "baseline-check", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-06-03-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1781,6 +1816,8 @@ export function buildSectionFour() {
                   choice("cite-mean", "The label sounds mean", "clear_mistake",
                     "Cite behavior, not vibe.", {betterChoiceId: "cite-fold"})
                 ],
+                // LPT-190
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cite-fold", kind: "none"}]},
               }),
             ],
           }),
