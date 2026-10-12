@@ -9512,6 +9512,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive observe — tap extreme entry or timid',
       semanticsStatic: 'Wild entry outcomes',
       caption: scene.caption ?? 'Raises or 3-bets 12 of 15 pots',
+      // SoftPulse + Rex own the cue — one gold Extreme only (LPT-462).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.observeExtremeEntry,
       phases: [
         (
           region: LessonTableRegion.observeExtremeEntry,
@@ -9543,6 +9546,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive observe — tap wide pressure or never bets',
       semanticsStatic: 'Wild pressure outcomes',
       caption: scene.caption ?? 'Bets flop · turn · river · weak shows',
+      // SoftPulse + Rex own the cue — one gold Wide heat only (LPT-462).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.observeWidePressure,
       phases: [
         (
           region: LessonTableRegion.observeWidePressure,
@@ -9574,6 +9580,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive observe — tap calm notes or ego notes',
       semanticsStatic: 'Wild notes outcomes',
       caption: scene.caption ?? 'Best note style vs wild aggression',
+      // SoftPulse + Rex own the cue — one gold Frequencies only (LPT-462).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.observeCalmNotes,
       phases: [
         (
           region: LessonTableRegion.observeCalmNotes,
@@ -9604,6 +9613,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsInteractive: 'Interactive observe — tap the evidence bundle',
       semanticsStatic: 'Wild bundle outcomes',
       caption: scene.caption ?? 'Bundle the pre-label notes',
+      // SoftPulse + Rex own the cue — one gold Enter + barrel only (LPT-462).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.observeManiacBundle,
       phases: [
         (
           region: LessonTableRegion.observeManiacBundle,

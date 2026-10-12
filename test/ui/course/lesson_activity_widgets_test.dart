@@ -17001,6 +17001,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Extreme'), findsOneWidget);
+    // LPT-462: guideRegion → one gold SoftPulse (Extreme), not Timid.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Extreme'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Timid'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Extreme'));
     await tester.pump();
     expect(controller.draft.choiceId, 'extreme');
@@ -17046,6 +17067,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Wide heat'), findsOneWidget);
+    // LPT-462: guideRegion → one gold SoftPulse (Wide heat), not Never bets.
+    final scaffoldCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(scaffoldCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Wide heat'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Never bets'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Wide heat'));
     await tester.pump();
     expect(controller.draft.choiceId, 'pressure');
@@ -17091,6 +17133,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Frequencies'), findsOneWidget);
+    // LPT-462: guideRegion → one gold SoftPulse (Frequencies), not Revenge.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Frequencies'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Revenge'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Frequencies'));
     await tester.pump();
     expect(controller.draft.choiceId, 'calm');
@@ -17140,6 +17203,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Enter + barrel'), findsOneWidget);
+    // LPT-462: guideRegion → one gold SoftPulse (Enter + barrel), not Never plays.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Enter + barrel'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Never plays'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Enter + barrel'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bundle-m');
