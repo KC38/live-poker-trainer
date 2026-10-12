@@ -1815,6 +1815,16 @@ export function buildSectionTwo() {
                 correct: ["ord-co", "ord-btn", "ord-sb"],
                 okFeedback: "Cutoff, button, then small blind.",
                 missFeedback: "Move toward the blinds after the button.",
+                // LPT-115: SoftPulse ord-co→ord-btn→ord-sb / post-sb→post-btn;
+                // wait soft_pulse; checkpoint last-btn kind none
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [
+                    {press: 1, target: "ord-co", kind: "soft_pulse"},
+                    {press: 2, target: "ord-btn", kind: "soft_pulse"},
+                    {press: 3, target: "ord-sb", kind: "soft_pulse"},
+                  ],
+                },
               }),
               sequenceAct({
                 id: "act-02-01-02-scaffolded-post", order: 3, stage: "scaffolded",
@@ -1828,6 +1838,15 @@ export function buildSectionTwo() {
                 correct: ["post-sb", "post-btn"],
                 okFeedback: "Small blind first; button last.",
                 missFeedback: "Left of the button acts first.",
+                // LPT-115: scaffolded-post SoftPulse after Hint; deal.mode none
+                // on all four
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [
+                    {press: 1, target: "post-sb", kind: "soft_pulse"},
+                    {press: 2, target: "post-btn", kind: "soft_pulse"},
+                  ],
+                },
               }),
               selectAct({
                 id: "act-02-01-02-unguided-wait", order: 4, stage: "scaffolded",
@@ -1842,6 +1861,8 @@ export function buildSectionTwo() {
                   choice("flash-cards", "Show your cards while waiting", "clear_mistake",
                     "Protect your cards; still wait.", {betterChoiceId: "wait"}),
                 ],
+                // LPT-115: unguided SoftPulse wait; checkpoint no pressHints
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "wait", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-01-02-checkpoint-full", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1859,6 +1880,8 @@ export function buildSectionTwo() {
                   choice("last-utg", "UTG", "clear_mistake",
                     "UTG is early.", {betterChoiceId: "last-btn"}),
                 ],
+                // LPT-115: checkpoint last-btn kind none
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "last-btn", kind: "none"}]},
               }),
             ],
           }),

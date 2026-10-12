@@ -92,6 +92,13 @@ const _lessons = <String, List<String>>{
     'act-02-01-01-unguided-co',
     'act-02-01-01-checkpoint-edge',
   ],
+  // LPT-115
+  'lesson-02-01-02-acting-order': [
+    'act-02-01-02-guided-pre',
+    'act-02-01-02-scaffolded-post',
+    'act-02-01-02-unguided-wait',
+    'act-02-01-02-checkpoint-full',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -632,6 +639,40 @@ void main() {
       expect(_list(cp, 'cues').single['target'], 'prefer-btn');
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+    });
+  });
+
+  group('Acting order (LPT-115)', () {
+    test('guided/scaffolded SoftPulse seat order; checkpoint kind none', () {
+      final guided = act('act-02-01-02-guided-pre');
+      expect(
+        [for (final c in _list(guided, 'cues')) c['target']],
+        ['ord-co', 'ord-btn', 'ord-sb'],
+      );
+      expect(
+        _list(guided, 'cues').every((c) => c['kind'] == 'soft_pulse'),
+        isTrue,
+      );
+      expect(guided.teachSpec!['deal'], {'mode': 'none'});
+
+      final post = act('act-02-01-02-scaffolded-post');
+      expect(
+        [for (final c in _list(post, 'cues')) c['target']],
+        ['post-sb', 'post-btn'],
+      );
+      expect(post.teachSpec!['deal'], {'mode': 'none'});
+
+      expect(
+        _list(act('act-02-01-02-unguided-wait'), 'cues').single['target'],
+        'wait',
+      );
+
+      final cp = act('act-02-01-02-checkpoint-full');
+      final cue = _list(cp, 'cues').single;
+      expect(cue['target'], 'last-btn');
+      expect(cue['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.coachMedia.where((m) => m.kind == 'hint'), isEmpty);
     });
   });
 }
