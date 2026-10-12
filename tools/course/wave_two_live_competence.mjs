@@ -165,9 +165,24 @@ export function buildSectionThree() {
                   choice("air-tp", "Air", "clear_mistake",
                     "Top pair is not air.", {betterChoiceId: "made-tp"})
                 ],
-                // LPT-141
+                // LPT-384
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Qh"], board: ["Ks", "9d", "2c"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Kh", "Qh"], board: ["Ks", "9d", "2c"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["Ks", "Qs"], board: ["Kd", "9c", "2h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Kd", "Qd"], board: ["Kc", "9s", "2h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "made-tp", kind: "soft_pulse"}],
                 },
               }),
@@ -184,9 +199,24 @@ export function buildSectionThree() {
                   choice("sdv", "Strong showdown value already", "questionable",
                     "Ace-high can win sometimes, but this is primarily a draw.")
                 ],
-                // LPT-141
+                // LPT-384
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "9h"], board: ["Jh", "8h", "3c"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "9h"], board: ["Jh", "8h", "3c"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["As", "9s"], board: ["Js", "8s", "3h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Ad", "9d"], board: ["Jd", "8d", "3h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "nfd", kind: "soft_pulse"}],
                 },
               }),
@@ -203,9 +233,24 @@ export function buildSectionThree() {
                   choice("made-54", "Made hand", "clear_mistake",
                     "No pair on board matches your cards.", {betterChoiceId: "air"})
                 ],
-                // LPT-141
+                // LPT-384
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["5h", "4h"], board: ["Qc", "7d", "2s"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["5h", "4h"], board: ["Qc", "7d", "2s"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["5s", "4s"], board: ["Qh", "7c", "2d"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["5d", "4d"], board: ["Qh", "7s", "2c"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "air", kind: "soft_pulse"}],
                 },
               }),
@@ -222,9 +267,24 @@ export function buildSectionThree() {
                   choice("air-j8", "Pure air", "questionable",
                     "You have real equity — still a draw, not air.")
                 ],
-                // LPT-141
+                // LPT-384
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Js", "8d"], board: ["Ts", "9s", "4d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Js", "8d"], board: ["Ts", "9s", "4d"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["Jd", "8c"], board: ["Td", "9d", "4c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["Jc", "8s"], board: ["Tc", "9c", "4s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "oesd", kind: "none"}],
                 },
               }),

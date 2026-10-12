@@ -1300,7 +1300,7 @@ felt.
 | Full-ring baseline hand | Nine, Same, Position | — |
 | Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221) | — |
 | Read the table first | Pot, Stacks, Button, Who Acts | — |
-| Name your flop class | Made, Draw, SDV, Air | — |
+| Name your flop class | Made, Draw, SDV, Air; fixed steps author suit-rotated `deal.variants` (LPT-384) | — |
 | Count outs, pay the right price | Clean, Dirty, Price; densified frame asks (LPT-279) | — |
 | Choose a flop line | Value, C-bet, Check, Call, Fold, Raise; postflop TPTK/broadway remap fingerprint (LPT-311) | — |
 | Plan the turn card | Brick, Change, Barrel, Delay | — |
