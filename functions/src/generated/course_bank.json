@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "e16bb1546d3744cc959284f5277e183f39449cb9b5b0839f31f77e7a833cbc89",
+  "contentChecksum": "c8d49a1a6ed516ebb6ae6eba824bcf41d3ea8bb2883870f65f0c94b4649e6284",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -17295,7 +17295,34 @@
                   ],
                   "objectives": [
                     "Interpret check-raises by strength and type"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "X/R",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PROBE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "DELAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "DONK",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-05-01-guided",
@@ -17337,7 +17364,19 @@
                   ],
                   "playerTypeRefs": [
                     "nit"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "strong",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-05-01-scaffolded",
@@ -17389,7 +17428,30 @@
                       },
                       "action": "CHECK"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "9h",
+                          "8d"
+                        ],
+                        "board": [
+                          "Kc",
+                          "9s",
+                          "3h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "probe",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-05-01-unguided",
@@ -17427,7 +17489,19 @@
                         "betterChoiceId": "polar"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "polar",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-05-01-checkpoint",
@@ -17466,7 +17540,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "delay",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

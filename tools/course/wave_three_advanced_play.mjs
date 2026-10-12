@@ -443,7 +443,19 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-05-01-explain", 1,
                 "Lines mean ranges. Check-raise, probe, delay, donk — each updates the story.",
-                {objectives: ["Interpret check-raises by strength and type"]}),
+                {
+                  objectives: ["Interpret check-raises by strength and type"],
+                  // LPT-234
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "X/R", kind: "soft_pulse"},
+                      {press: 2, target: "PROBE", kind: "soft_pulse"},
+                      {press: 3, target: "DELAY", kind: "soft_pulse"},
+                      {press: 4, target: "DONK", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-05-05-01-guided", order: 2, stage: "guided",
                 prompt: "Nit check-raises flop. Default read?",
@@ -456,6 +468,8 @@ export function buildSectionFive() {
                   choice("air", "Always a bluff", "clear_mistake",
                     "Wrong type.", {betterChoiceId: "strong"})
                 ],
+                // LPT-234
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "strong", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-05-05-01-scaffolded", order: 3, stage: "scaffolded",
@@ -470,6 +484,11 @@ export function buildSectionFive() {
                   choice("never", "Check back", "clear_mistake",
                     "Misses value and folds.", {action: "CHECK", betterChoiceId: "probe"})
                 ],
+                // LPT-234
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["9h", "8d"], board: ["Kc", "9s", "3h"]}},
+                  cues: [{press: 1, target: "probe", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-05-01-unguided", order: 4, stage: "scaffolded",
@@ -482,6 +501,8 @@ export function buildSectionFive() {
                   choice("merged", "Always medium pairs", "clear_mistake",
                     "Less common for large donks.", {betterChoiceId: "polar"})
                 ],
+                // LPT-234
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "polar", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -494,6 +515,8 @@ export function buildSectionFive() {
                   choice("always", "Every hand regardless", "clear_mistake",
                     "Need a reason.", {betterChoiceId: "delay"})
                 ],
+                // LPT-234
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "delay", kind: "none"}]},
               }),
             ],
           }),
