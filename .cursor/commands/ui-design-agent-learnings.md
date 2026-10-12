@@ -319,7 +319,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   analyze, and Cloud Functions deploy — including immediately before and
   after long `test-LPT-*` / `analyze-LPT-*` tmux sessions (LPT-240: lock
   freed mid-suite while tests were quiet; reclaim with `sim_lock.py claim`
-  then continue). The stall watchdog kills a silent agent (those named
+  then continue). If heartbeat / guard prints FREE / not the holder mid-run,
+  reclaim immediately and keep the new `SIM_LOCK_RUN_ID` — do not keep
+  driving the mini with a stale preflight id (LPT-637). The stall watchdog kills a silent agent (those named
   tmux sessions count as alive, and a growing ui-agent run log also
   counts — machine SDK streams can skip heartbeats for >10 min). Launch
   builds with `tools/flutter_run_fast.sh` and hot-restart with

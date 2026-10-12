@@ -21937,6 +21937,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-637: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'River overbet — tap the betting shape.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('River overbet — pick the betting shape.'),
       findsOneWidget,
@@ -22032,6 +22038,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-637: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Mismatch to avoid — tap the sizing leak.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Mismatch to avoid — pick the sizing leak.'),
       findsOneWidget,
@@ -22040,6 +22052,7 @@ await tester.tap(find.text('NIT'));
       find.text('Mismatch to avoid — tap Tiny bluffs.'),
       findsNothing,
     );
+    // Felt caption may still show catalog "Mismatch to avoid?" — coach/frame must not.
     await tester.tap(find.text('Tiny bluffs'));
     await tester.pump();
     expect(controller.draft.choiceId, 'mismatch');
@@ -22073,6 +22086,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-637: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Merged betting aims to — tap the goal.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Merged betting aims to — pick the goal.'),
       findsOneWidget,
@@ -22080,6 +22099,10 @@ await tester.tap(find.text('NIT'));
     expect(
       find.text('Merged betting aims to — tap Thin value.'),
       findsNothing,
+    );
+    expect(
+      lessonFrameSpeech(activity),
+      isNot(equals('Merged betting aims to? Tap the best answer.')),
     );
     await tester.tap(find.text('Thin value'));
     await tester.pump();
