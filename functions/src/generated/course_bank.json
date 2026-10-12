@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "a89cf33526aada727aa0b20c6cf9566f9fe0c121fdf4310e7773c8f28debcb9b",
+  "contentChecksum": "e4d4bd9c785a8671379a4bbcfc1c31e98dc0e4861b2ad2827e163a115fa6693e",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -4100,7 +4100,19 @@
                       "kind": "hint",
                       "text": "Look for the D chip. Button closes postflop action."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pos-btn",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-01-01-scaffolded-blinds",
@@ -4148,7 +4160,19 @@
                         "betterChoiceId": "sb-bb"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "sb-bb",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-01-01-unguided-co",
@@ -4196,7 +4220,19 @@
                         "betterChoiceId": "label-co"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "label-co",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-01-01-checkpoint-edge",
@@ -4245,7 +4281,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "prefer-btn",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
