@@ -87,6 +87,7 @@ void main() {
         '## Split of work',
         'labels != grokbot',
         'labels = grokbot',
+        'finished Mac-mini run',
       ],
     };
 

@@ -43,7 +43,13 @@ ui-design agent does.
 
 During a discovery walk, if a finding is layout-only and would show the
 same way on web, file it with `grokbot` and **leave it open** — do not
-implement it on the mini. Continue the walk / fix an `ui-agent` ticket.
+implement it on the mini.
+
+Filing GrokBot tickets is **not** a finished Mac-mini run. The same
+`/ui-design-agent` session must keep walking surfaces until it has a
+`ui-agent` KEY to fix (or every remaining surface is clean of Mac-mini
+work). Do not release the lock / end the run so the loop starts a new
+agent when the only tickets filed so far are `grokbot`.
 
 Keep on `ui-agent` whenever proving the fix needs the simulator lock,
 SoftPulse gold/cyan state, Hint / hearts / randomization, or iOS-only

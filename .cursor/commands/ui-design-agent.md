@@ -45,7 +45,11 @@ Hard rules:
 - Never claim, implement, or close a ticket labeled `grokbot`. Those are
   for GrokBot on Linux (Chrome / Flutter web). Skip them in the queue and
   route new browser-validatable layout findings to that label instead
-  (see **GrokBot routing** in step 5).
+  (see **GrokBot routing** in step 5). Filing `grokbot` tickets is not a
+  run outcome — keep walking / filing in **this** session until you have
+  a `ui-agent` KEY to fix (or every remaining surface is truly clean of
+  Mac-mini work). Do not end the run (and let the loop start a new agent)
+  when the only tickets you filed this run are for GrokBot.
 
 ```
 Run progress:
@@ -232,9 +236,13 @@ table in the design record, using the coverage ledger
 Prefer surfaces that the **Known gaps** section names. When walking a
 lesson surface, treat broken randomization, Hint, SoftPulse cues, coach
 copy, or heart loss/restore as higher priority than Home chrome polish.
-File every solid finding from the walk (step 5), then choose the primary
-KEY to fix this run (highest priority among what you filed / what is still open
-and unblocked).
+File every solid finding from the walk (step 5). Choose the primary KEY
+only among **`ui-agent`** tickets (never `grokbot`). If this surface
+produced only GrokBot filings (or nothing Mac-mini can fix), **do not**
+go to step 10 — pick the next surface from the list above and keep
+walking in this same run until you have a `ui-agent` KEY, an open
+`ui-agent` queue hit from step 3, or you have exhausted the surfaces that
+still need a walk on this SHA.
 
 ## 4. Walk and capture
 
@@ -373,7 +381,10 @@ one that blocks or misleads a learner beats a missing beat, which beats
 polish; a lesson-content bug or teach-by-doing gap beats spacing chrome.
 Findings that are only hunches, unreachable, or screenshot-less stay in
 `leads` for the ledger — do not invent tickets for them. If nothing on the
-surface misses the contract, log `clean` in step 10, release, and end.
+surface misses the contract for **this** agent (`ui-agent` work), move to
+the next surface rather than ending — unless every remaining surface has
+already been walked clean on this SHA (then log `clean` in step 10).
+GrokBot-only findings on a surface never count as a finished run.
 
 ## 5. File tickets (many OK); choose one to fix
 
@@ -393,14 +404,23 @@ project = LPT AND text ~ "<distinctive phrase>" ORDER BY updated DESC
 - No match: `jira.py create` with the body below and that finding's
   screenshots.
 
-You may create or update **several** tickets in this step in one run.
-After filing, pick **exactly one** primary KEY to implement below:
+You may create or update **several** tickets in this step in one run
+(including many `grokbot` handoffs). After filing, pick **exactly one**
+primary KEY to implement below — and only from **`ui-agent`** tickets:
 
-1. If step 3 already chose an open fix target that still reproduces, that
-   KEY wins (extra filings wait for later runs).
-2. Otherwise take the highest-priority newly filed / updated ticket from
-   this walk (same priority rules as the Fields list). Skip any still
-   blocked by an open **Blocks** link.
+1. If step 3 already chose an open `ui-agent` fix target that still
+   reproduces, that KEY wins (extra filings, including GrokBot, wait).
+2. Otherwise take the highest-priority newly filed / updated **`ui-agent`**
+   ticket from this walk (same priority rules as the Fields list). Skip
+   any still blocked by an open **Blocks** link. Never choose a `grokbot`
+   ticket as KEY.
+3. If every solid finding this walk was filed for GrokBot (or there is
+   still no unblocked `ui-agent` KEY), return to step 3's discovery-walk
+   surface picker and continue in **this** run. Do not release the lock,
+   do not log a terminal coverage row yet, and do not end so the loop can
+   spawn another agent. Only when no further surface remains for a Mac-mini
+   walk on this SHA may you go to step 10 (result `clean`, with GrokBot
+   keys listed in `leads`).
 
 Fields:
 
@@ -425,7 +445,9 @@ the iPhone 13 mini simulator: SoftPulse / cyan cues, Hint waves, hearts
 spend/restore, card randomization, deal timing, `agent_seed` /
 `openlesson` lesson teach-loop proofs, or any iOS-only / felt timing
 issue. You may still **discover** GrokBot candidates on the mini walk —
-file them for GrokBot, then continue; never implement them here. Full
+file them for GrokBot, then **keep this same agent run going** until you
+file or claim a `ui-agent` ticket for yourself; never implement GrokBot
+tickets here, and never end the run just because you filed some. Full
 contract: [docs/agents/10-grokbot.md](../../docs/agents/10-grokbot.md).
 
 Body (match LPT-36):

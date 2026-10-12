@@ -65,7 +65,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   this Mac mini. Queue JQL must keep `labels != grokbot`. File
   browser-validatable layout-only findings as `ui,grokbot,<area>` (no
   `ui-agent`); SoftPulse / Hint / hearts / randomization / deal timing /
-  iOS-only stay on `ui-agent`.
+  iOS-only stay on `ui-agent`. Never end a run (or let the loop spawn a
+  new agent) when this run's filings are only `grokbot` — keep walking
+  until you have a `ui-agent` KEY or every remaining surface is clean for
+  Mac-mini work.
 - Never edit the primary checkout (make-change worktrees only), invent
   GitHub owner/URLs from a person's name (`gh` only,
   `KC38/live-poker-trainer`), or let LaunchAgent `ensure`/`start`

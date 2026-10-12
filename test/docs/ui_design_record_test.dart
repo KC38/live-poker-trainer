@@ -158,6 +158,8 @@ void main() {
       'needs-human',
       'GrokBot routing',
       'docs/agents/10-grokbot.md',
+      'only tickets you filed this run are for GrokBot',
+      'keep walking',
       'Changes requested (attempt N)',
       'Stop after three failed attempts.',
       'Validate before closing',
