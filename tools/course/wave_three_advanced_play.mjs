@@ -862,6 +862,8 @@ export function buildSectionFive() {
                   choice("bluff", "Bluff more", "clear_mistake",
                     "Opposite.", {betterChoiceId: "nut"})
                 ],
+                // LPT-251
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "nut", kind: "none"}]},
               }),
               actionAct({
                 id: "act-05-09-02-cp-value", order: 2, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -875,6 +877,14 @@ export function buildSectionFive() {
                   choice("bluff", "Huge bluff", "clear_mistake",
                     "They call.", {action: "BET", amountBb: 40, betterChoiceId: "bet"})
                 ],
+                // LPT-251
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Kc", "9s", "4h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "bet", kind: "none"}],
+                },
               }),
               actionAct({
                 id: "act-05-09-02-cp-catch", order: 3, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -888,6 +898,14 @@ export function buildSectionFive() {
                   choice("fold", "Fold", "questionable",
                     "Too tight.", {action: "FOLD"})
                 ],
+                // LPT-251
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Kc", "9s", "4h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "call", kind: "none"}],
+                },
               }),
               selectAct({
                 id: "act-05-09-02-cp-tell", order: 4, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -900,6 +918,8 @@ export function buildSectionFive() {
                   choice("nuts", "Absolute nuts", "clear_mistake",
                     "Overclaim.", {betterChoiceId: "soft"})
                 ],
+                // LPT-251
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "soft", kind: "none"}]},
               }),
               selectAct({
                 id: "act-05-09-02-cp-stop", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -912,6 +932,8 @@ export function buildSectionFive() {
                   choice("chase", "Chase", "clear_mistake",
                     "Leak.", {betterChoiceId: "stop"})
                 ],
+                // LPT-251
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "stop", kind: "none"}]},
               }),
             ],
           }),
