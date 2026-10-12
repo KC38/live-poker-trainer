@@ -16729,6 +16729,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Narrow'), findsOneWidget);
+    // LPT-433: guideRegion → one gold SoftPulse (Narrow), not Wide.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Narrow'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Wide'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Narrow'));
     await tester.pump();
     expect(controller.draft.choiceId, 'narrow');
@@ -16774,6 +16795,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Strong heat'), findsOneWidget);
+    // LPT-433: guideRegion → one gold SoftPulse (Strong heat), not Passive.
+    final scaffoldCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(scaffoldCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Strong heat'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Passive'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Strong heat'));
     await tester.pump();
     expect(controller.draft.choiceId, 'strong-aggr');
@@ -16819,6 +16861,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Wait'), findsOneWidget);
+    // LPT-433: guideRegion → one gold SoftPulse (Wait), not Label now.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Wait'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Label now'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Wait'));
     await tester.pump();
     expect(controller.draft.choiceId, 'wait');
@@ -16868,6 +16931,27 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Few + heat'), findsOneWidget);
+    // LPT-433: guideRegion → one gold SoftPulse (Few + heat), not Calls all.
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Few + heat'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Calls all'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Few + heat'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bundle-nit');
