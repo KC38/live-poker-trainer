@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "2197ec1fa6352cd8adcc61d1271770a9855c8c68b9bd5e6893232db4edf1f9e6",
+  "contentChecksum": "cfffb2b174aa9fc66c684a09a1d43ea8df3c5af6ec885ae509086910a50854a9",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -13417,7 +13417,29 @@
                   ],
                   "playerTypeRefs": [
                     "nit"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STEAL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CREDIT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "EXPLODE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-07-03-guided",
@@ -13458,7 +13480,25 @@
                       },
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "9d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "steal",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-07-03-scaffolded",
@@ -13499,7 +13539,30 @@
                       },
                       "action": "CALL"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Qc",
+                          "9s",
+                          "3h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-mid",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-07-03-unguided",
@@ -13540,7 +13603,25 @@
                       "action": "RAISE",
                       "amountBb": 3
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "9d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tighter",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-07-03-checkpoint",
@@ -13583,7 +13664,19 @@
                   "playerTypeRefs": [
                     "nit"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cite-strong",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
