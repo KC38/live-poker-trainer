@@ -10858,6 +10858,22 @@ await tester.tap(find.text('NIT'));
     // SoftPulse + Rex own the cue — no Tap 60bb footer mid-teach.
     expect(find.text('Tap 60bb.'), findsNothing);
     expect(find.text('Tap your answer on the felt.'), findsNothing);
+    // LPT-183: SoftPulse via GlowHighlight on 60bb; no permanent gold tip.
+    final cueGlows = tester
+        .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+        .where((g) => g.active && g.kind == GlowKind.cue)
+        .toList(growable: false);
+    expect(cueGlows, hasLength(1));
+    final sixty = find.text('60bb');
+    expect(
+      find.ancestor(of: sixty, matching: find.byType(GlowHighlight)),
+      findsWidgets,
+    );
+    final sixtyGlow = tester.widget<GlowHighlight>(
+      find.ancestor(of: sixty, matching: find.byType(GlowHighlight)).first,
+    );
+    expect(sixtyGlow.active, isTrue);
+    expect(sixtyGlow.kind, GlowKind.cue);
     await tester.tap(find.text('60bb'));
     await tester.pump();
     expect(controller.draft.choiceId, 'eff-60');
@@ -11982,11 +11998,65 @@ await tester.tap(find.text('NIT'));
     // SoftPulse + Rex own the cue — no third "Tap 100bb" status line.
     expect(find.text('Tap 100bb.'), findsNothing);
     expect(find.byType(TextField), findsNothing);
+    // LPT-183: GlowHighlight SoftPulse on 100bb; answer chips stay slate.
+    final cueGlows = tester
+        .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+        .where((g) => g.active && g.kind == GlowKind.cue)
+        .toList(growable: false);
+    expect(cueGlows, hasLength(1));
+    final hundred = find.text('100bb');
+    final hundredGlow = tester.widget<GlowHighlight>(
+      find.ancestor(of: hundred, matching: find.byType(GlowHighlight)).first,
+    );
+    expect(hundredGlow.active, isTrue);
+    expect(hundredGlow.kind, GlowKind.cue);
     await tester.tap(find.text('100bb'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bb-100');
     controller.dispose();
   });
+
+  testWidgets(
+    's2 bb convert SoftPulse off without guidance keeps chips untipped',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-02-05-01-guided-convert',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Convert 200 chips at 1/2 into big blinds.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Blinds 1/2. You have 200 chips. How many big blinds?',
+        choices: const [
+          CourseChoice(id: 'bb-100', label: '100bb'),
+          CourseChoice(id: 'bb-50', label: '50bb'),
+          CourseChoice(id: 'bb-200', label: '200bb'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          MediaQuery(
+            data: const MediaQueryData(size: Size(375, 812)),
+            child: SelectIdentifyActivity(
+              activity: activity,
+              controller: controller,
+              showGuidance: false,
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      final cueGlows = tester
+          .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+          .where((g) => g.active && g.kind == GlowKind.cue)
+          .toList(growable: false);
+      expect(cueGlows, isEmpty);
+      controller.dispose();
+    },
+  );
 
   testWidgets('s2 bb convert checkpoint taps 200bb on densified 1000÷5 felt', (
     tester,
