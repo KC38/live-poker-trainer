@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "6082a1993eafc71257f5d9061ae9e8d1aa58af9af823fd3066b106f713a93daf",
+  "contentChecksum": "2729eca69936005a1ca0864bef6bfb024e131daf522cd76070e2ca6d1ef33f98",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -7647,7 +7647,29 @@
                   ],
                   "objectives": [
                     "Count clean versus dirty outs"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CLEAN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DIRTY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "PRICE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-03-01-guided",
@@ -7694,7 +7716,40 @@
                         "betterChoiceId": "outs-3"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Kc",
+                          "8h",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "As",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "Ad",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "Ac",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-03-01-scaffolded",
@@ -7742,7 +7797,19 @@
                         "betterChoiceId": "call-10"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-10",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-03-01-unguided",
@@ -7789,7 +7856,30 @@
                         "feedback": "Sometimes; here the assignment is whether the call prices."
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Kc",
+                          "8h",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-draw",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-03-01-checkpoint",
@@ -7838,7 +7928,30 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Kh",
+                          "7h",
+                          "2c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "implied-yes",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

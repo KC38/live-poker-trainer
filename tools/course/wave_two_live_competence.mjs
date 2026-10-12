@@ -242,7 +242,18 @@ export function buildSectionThree() {
             activities: [
               dialogue("act-03-03-01-explain", 1,
                 "Clean outs help. Dirty outs improve you into second-best. Price the call.",
-                {objectives: ["Count clean versus dirty outs"]}),
+                {
+                  objectives: ["Count clean versus dirty outs"],
+                  // LPT-144
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CLEAN", kind: "soft_pulse"},
+                      {press: 2, target: "DIRTY", kind: "soft_pulse"},
+                      {press: 3, target: "PRICE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-03-03-01-guided", order: 2, stage: "guided",
                 prompt: "Clean outs to the best hand?",
@@ -256,6 +267,15 @@ export function buildSectionThree() {
                   choice("outs-0", "0 — never improve", "clear_mistake",
                     "Clean overs improve you to the best hand often.", {betterChoiceId: "outs-3"})
                 ],
+                // LPT-144
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Qh"], board: ["Kc", "8h", "2d"]}},
+                  cues: [
+                    {press: 1, target: "As", kind: "soft_pulse"},
+                    {press: 2, target: "Ad", kind: "soft_pulse"},
+                    {press: 3, target: "Ac", kind: "soft_pulse"},
+                  ],
+                },
               }),
               selectAct({
                 id: "act-03-03-01-scaffolded", order: 3, stage: "scaffolded",
@@ -271,6 +291,8 @@ export function buildSectionThree() {
                     "That is the pot after you call — you only put in 10.",
                     {betterChoiceId: "call-10"})
                 ],
+                // LPT-144
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "call-10", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-03-03-01-unguided", order: 4, stage: "scaffolded",
@@ -285,6 +307,11 @@ export function buildSectionThree() {
                   choice("raise-auto", "Raise every draw", "questionable",
                     "Sometimes; here the assignment is whether the call prices.")
                 ],
+                // LPT-144
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Qh"], board: ["Kc", "8h", "2d"]}},
+                  cues: [{press: 1, target: "call-draw", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-03-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -299,6 +326,11 @@ export function buildSectionThree() {
                   choice("fold-nfd", "Fold nut flush draws to any bet", "clear_mistake",
                     "This is a premium continue.", {betterChoiceId: "implied-yes"})
                 ],
+                // LPT-144
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Qh"], board: ["Kh", "7h", "2c"]}},
+                  cues: [{press: 1, target: "implied-yes", kind: "none"}],
+                },
               }),
             ],
           }),

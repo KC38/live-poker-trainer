@@ -548,7 +548,8 @@ are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
 (LPT-119), Open or fold baseline (LPT-122), Versus an open (LPT-125),
 Effective stacks (LPT-128), Live table habits (LPT-131), Full-ring baseline
 hand (LPT-135), Baseline jump check (LPT-137), Read the table first
-(LPT-138), Name your flop class (LPT-141).
+(LPT-138), Name your flop class (LPT-141), Count outs, pay the right price
+(LPT-144).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -752,6 +753,13 @@ Name your flop class `teachSpec` (LPT-141): explain SoftPulse advances MADE
 Ah9h/Jh8h3c, and 5h4h/Qc7d2s with SoftPulse `made-tp` / `nfd` / `air`;
 checkpoint authors Js8d/Ts9s4d and cues `oesd` with kind `none` (no
 pressHints). Checkpoint objectives retagged to draw labeling.
+
+Count outs, pay the right price `teachSpec` (LPT-144): explain SoftPulse
+advances CLEAN → DIRTY → PRICE; guided authors fixed AhQh/Kc8h2d with
+SoftPulse As→Ad→Ac; scaffolded call-price uses `deal.mode` `none` +
+`call-10`; unguided fixed AhQh/Kc8h2d SoftPulse `call-draw`; checkpoint
+fixed AhQh/Kh7h2c cues `implied-yes` kind `none`. Ledger Still-a-list "clean
+aces (card picker)" cleared (already on the felt).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
