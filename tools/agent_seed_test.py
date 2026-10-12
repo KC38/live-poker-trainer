@@ -97,5 +97,36 @@ class EncodingTest(unittest.TestCase):
         self.assertEqual(agent_seed.read_int(None, 5), 5)
 
 
+class FreshResumeClearTest(unittest.TestCase):
+    """fresh always nulls resume; currentLessonId only when it matches."""
+
+    def test_nulls_resume_and_matching_current_lesson(self) -> None:
+        lesson_id = "lesson-01-01-03-blinds-and-button"
+        fields = agent_seed.apply_fresh_resume_clear(
+            {
+                "resume": {
+                    "mapValue": {
+                        "fields": {
+                            "lessonId": {"stringValue": lesson_id},
+                            "attemptId": {"stringValue": "att-1"},
+                        }
+                    }
+                },
+                "currentLessonId": {"stringValue": lesson_id},
+            },
+            lesson_id,
+        )
+        self.assertEqual(fields["resume"], {"nullValue": None})
+        self.assertEqual(fields["currentLessonId"], {"nullValue": None})
+
+    def test_keeps_other_current_lesson(self) -> None:
+        fields = agent_seed.apply_fresh_resume_clear(
+            {"currentLessonId": {"stringValue": "lesson-other"}},
+            "lesson-01-01-03-blinds-and-button",
+        )
+        self.assertEqual(fields["resume"], {"nullValue": None})
+        self.assertNotIn("currentLessonId", fields)
+
+
 if __name__ == "__main__":
     unittest.main()
