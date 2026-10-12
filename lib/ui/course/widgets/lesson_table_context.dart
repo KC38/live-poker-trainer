@@ -12605,7 +12605,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'LAG adjust avoid outcomes',
       caption:
           scene.caption ?? 'Inventing triple-barrel bluffs into a LAG?',
-      // No SoftPulse on unguided — still don’t gold-icon Usually avoid.
+      // SoftPulse + Rex own the cue — one gold Usually avoid only (LPT-503).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.citeLagAvoid,
       phases: [
         (
           region: LessonTableRegion.citeLagAvoid,
