@@ -570,7 +570,7 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
       'Bottom pair vs bet and raise multiway — pick your line.',
     // SoftPulse owns barrel — don’t gold-tip the dock.
     'act-03-05-01-scaffolded' =>
-      'TPTK on a brick turn after a call — keep value pressure.',
+      'Top pair on a brick turn after a call — keep value pressure.',
     // Unguided: name the spot; SoftPulse isn’t on.
     'act-03-05-01-unguided' =>
       'Flush comes in; checked to you — pick delayed value or give up.',

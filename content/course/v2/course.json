@@ -7924,7 +7924,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Second barrel value with top pair top kicker.",
+                  "accessibilityText": "Second barrel value with top pair on a brick.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",

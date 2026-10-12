@@ -549,6 +549,58 @@ void main() {
     expect(rankKeys.length, greaterThan(1));
   });
 
+  test(
+    'Plan the turn scaffolded Hint never claims TPTK over a weak-kicker deal '
+    '(LPT-327)',
+    () {
+      final activity = CourseActivity(
+        id: 'act-03-05-01-scaffolded',
+        order: 3,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 55,
+        accessibilityText: 'Second barrel value with top pair on a brick.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt:
+            'You c-bet A-high flop with AK. Brick turn. Villain called flop. '
+            'Action?',
+      );
+      late int generation;
+      for (generation = 0; generation < 64; generation++) {
+        final spot = dealtLessonActionSpot(activity, generation: generation);
+        expect(spot, isNotNull);
+        final hero = [
+          for (final code in spot!.heroCodes) CardModel.fromCode(code),
+        ];
+        final board = [
+          for (final code in spot.boardCodes) CardModel.fromCode(code),
+        ];
+        var boardTop = -1;
+        for (final c in board) {
+          if (c.rank > boardTop) boardTop = c.rank;
+        }
+        if (!hero.any((c) => c.rank == boardTop)) continue;
+        final kicker = hero.firstWhere((c) => c.rank != boardTop).rank;
+        // Absolute top kicker on Ace-high is King (13).
+        if (boardTop == 14 && kicker < 13) break;
+      }
+      expect(
+        generation,
+        lessThan(64),
+        reason: 'expected a non-nut Ace-kicker isomorphic deal',
+      );
+      final hint = lessonFrameHintFallback(
+        activity,
+        bindGeneration: generation,
+      );
+      expect(hint, isNotNull);
+      expect(hint!.toLowerCase(), isNot(contains('top kicker')));
+      expect(hint.toLowerCase(), isNot(contains('tptk')));
+      expect(hint.toLowerCase(), contains('top pair'));
+      expect(hint.toLowerCase(), contains('brick'));
+    },
+  );
+
   test('suitOnly isomorphic path keeps ranks', () {
     final groups = isomorphicLessonCardGroups(
       [

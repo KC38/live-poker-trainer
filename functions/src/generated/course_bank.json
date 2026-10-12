@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "7be1ccd205ccde43121d8314f0b82de8166d7c92afeb898a34d6d33df7a538f9",
+  "contentChecksum": "0ead35e56e913850dbb1aa93032ec46a041cce3b4b7dd3a56467f2bfc08ab8f3",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -7925,7 +7925,7 @@
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
-                  "accessibilityText": "Second barrel value with top pair top kicker.",
+                  "accessibilityText": "Second barrel value with top pair on a brick.",
                   "acceptedGrades": [
                     "recommended",
                     "strong",
