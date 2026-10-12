@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "f05701974728ce18efb3c6d8e51478b05e54678cd4f32f4da972d7bb09490952",
+  "contentChecksum": "26f84f60a6009d77c2613323c025d3a897a5d492b4b6d98829c2b76d75a72d08",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -7420,7 +7420,39 @@
                           "9d",
                           "2c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Kd",
+                              "9c",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Qd"
+                            ],
+                            "board": [
+                              "Kc",
+                              "9s",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -7490,7 +7522,39 @@
                           "8h",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "9s"
+                            ],
+                            "board": [
+                              "Js",
+                              "8s",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "9d"
+                            ],
+                            "board": [
+                              "Jd",
+                              "8d",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -7561,7 +7625,39 @@
                           "7d",
                           "2s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "5s",
+                              "4s"
+                            ],
+                            "board": [
+                              "Qh",
+                              "7c",
+                              "2d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "5d",
+                              "4d"
+                            ],
+                            "board": [
+                              "Qh",
+                              "7s",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -7633,7 +7729,39 @@
                           "9s",
                           "4d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "8c"
+                            ],
+                            "board": [
+                              "Td",
+                              "9d",
+                              "4c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jc",
+                              "8s"
+                            ],
+                            "board": [
+                              "Tc",
+                              "9c",
+                              "4s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
