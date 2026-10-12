@@ -10292,6 +10292,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive lines — tap Nit check-raise default read',
       semanticsStatic: 'Lines Nit XR outcomes',
       caption: scene.caption ?? 'Nit check-raises flop — default read?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Value-heavy.
+      // Null guideRegion SoftPulses every phase (LPT-517).
+      guideRegion: LessonTableRegion.linesNitValueHeavy,
       phases: [
         (
           region: LessonTableRegion.linesNitValueHeavy,
@@ -10299,7 +10302,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Respect',
           visual: const Icon(
             Icons.shield_outlined,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10323,6 +10326,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive lines — tap what a large donk means',
       semanticsStatic: 'Lines donk polar outcomes',
       caption: scene.caption ?? 'Large BB donk on dry ace — meaning?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Polarized.
+      // Null guideRegion SoftPulses every phase (LPT-517).
+      guideRegion: LessonTableRegion.linesDonkPolar,
       phases: [
         (
           region: LessonTableRegion.linesDonkPolar,
@@ -10330,7 +10336,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Ace or air',
           visual: const Icon(
             Icons.compare_arrows,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10354,6 +10360,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive lines — tap when delayed c-bet is best',
       semanticsStatic: 'Lines delay outcomes',
       caption: scene.caption ?? 'Delayed c-bet is best when?',
+      // SoftPulse + Rex own the cue — don’t gold-tip After weakness.
+      // Null guideRegion SoftPulses every phase (LPT-517).
+      guideRegion: LessonTableRegion.linesDelayAfterWeak,
       phases: [
         (
           region: LessonTableRegion.linesDelayAfterWeak,
@@ -10361,7 +10370,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Flop check caps them',
           visual: const Icon(
             Icons.schedule,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
