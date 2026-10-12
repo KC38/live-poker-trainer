@@ -188,6 +188,16 @@ path.write_text(json.dumps(state))
 PY
 lock_heartbeat_stalled || fail "heartbeat older than STALL_SECONDS should be stalled"
 unset UI_AGENT_STALL_HEARTBEAT_ONLY
+# Stale heartbeat + recent run log (machine SDK stream) must not look stalled.
+fresh_run_log="$LOG_DIR/run-stall-fresh.log"
+: >"$fresh_run_log"
+lock_heartbeat_stalled "$fresh_run_log" \
+  && fail "recent run log mtime must count as alive when heartbeat is stale"
+# Ancient run log does not mask a dead agent.
+touch -t 202601010101.00 "$fresh_run_log" 2>/dev/null \
+  || touch -d '2026-01-01 01:01:00' "$fresh_run_log"
+lock_heartbeat_stalled "$fresh_run_log" \
+  || fail "stale heartbeat + ancient run log should still be stalled"
 python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1
 
 # configure_agent_credentials is a no-op without CURSOR_API_KEY; with a key

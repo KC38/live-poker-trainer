@@ -413,15 +413,18 @@ wait_for_dart_vm() {
 # and nothing is still working for this run. Heartbeat-only stalls
 # false-killed worktree `flutter run` (often started via tmux, not as a
 # child of agent -p) and long compiles that skip sim_lock heartbeats.
+# Args: [run_log] — when set, a recently written run log counts as alive
+# (machine SDK streams tool/thinking here while skipping heartbeats).
 lock_heartbeat_stalled() {
-  local agent_pid=""
+  local agent_pid="" run_log="${1:-}"
   [[ -f "$PID_FILE" ]] && agent_pid="$(cat "$PID_FILE" 2>/dev/null || true)"
-  python3 - "$STALL_SECONDS" "${agent_pid:-}" <<'PY'
+  python3 - "$STALL_SECONDS" "${agent_pid:-}" "$run_log" <<'PY'
 import json, os, subprocess, sys, time
 from pathlib import Path
 
 stall = int(sys.argv[1])
 agent_pid = sys.argv[2].strip()
+run_log = Path(sys.argv[3]) if len(sys.argv) > 3 and sys.argv[3] else None
 now = time.time()
 lock_dir = Path(os.environ.get("SIM_LOCK_DIR") or Path.home() / ".live-poker-trainer")
 path = lock_dir / "simulator-lock.json"
@@ -438,6 +441,16 @@ if (now - beat) <= stall:
 # Unit tests set this to exercise heartbeat age without host flutter/tmux.
 if os.environ.get("UI_AGENT_STALL_HEARTBEAT_ONLY") == "1":
     raise SystemExit(0)
+
+# Machine SDK (and CLI) append thinking/tool_call lines to the run log while
+# skipping sim_lock heartbeats. A fresh mtime means the agent is still live —
+# false stall exit 13 killed mid-flutter-test on 20261012-123827.
+if run_log is not None and run_log.is_file():
+    try:
+        if (now - run_log.stat().st_mtime) <= stall:
+            raise SystemExit(1)
+    except OSError:
+        pass
 
 def _ps() -> str:
     try:
@@ -485,6 +498,8 @@ alive_prefixes = (
     "deploy-LPT-",
     "refresh-LPT-",
     "ship-refresh",
+    "test-LPT-",
+    "analyze-LPT-",
 )
 for name in session_names:
     if any(name.startswith(p) for p in alive_prefixes):
@@ -1594,7 +1609,7 @@ one_run() {
         kill -KILL "$pid" 2>/dev/null || true
         break
       fi
-      if lock_heartbeat_stalled; then
+      if lock_heartbeat_stalled "$run_log"; then
         # Marker before kill so wait-return cannot race past it.
         echo 1 >"$LOG_DIR/run-$stamp.stalled"
         log "agent stalled (lock heartbeat > ${STALL_SECONDS}s); killing pid $pid"
