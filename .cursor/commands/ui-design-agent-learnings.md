@@ -61,6 +61,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   tickets from one walk is required when several distinct bugs have
   screenshots; only the chosen KEY gets make-change → close. Later runs
   pick up the rest from the open queue.
+- Never claim, implement, companion-fold, or close a `grokbot` ticket on
+  this Mac mini. Queue JQL must keep `labels != grokbot`. File
+  browser-validatable layout-only findings as `ui,grokbot,<area>` (no
+  `ui-agent`); SoftPulse / Hint / hearts / randomization / deal timing /
+  iOS-only stay on `ui-agent`.
 - Never edit the primary checkout (make-change worktrees only), invent
   GitHub owner/URLs from a person's name (`gh` only,
   `KC38/live-poker-trainer`), or let LaunchAgent `ensure`/`start`

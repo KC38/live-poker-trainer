@@ -45,6 +45,11 @@ make-change does **not** drive UI or take screenshots; that is for UI design
 Command: `.cursor/commands/ui-design-agent.md`. Loop:
 `tools/ui_design_agent_loop.sh`. Keep learnings file updated.
 
+Browser-validatable layout tickets go to **GrokBot** (`grokbot` label) on
+Linux / Chrome — see [10-grokbot.md](10-grokbot.md). The Mac mini agent
+must keep `labels != grokbot` in its unfinished-work JQL and never
+implement those issues.
+
 ## Tmp files
 
 Do not litter the repo root with agent scratch logs. Follow
