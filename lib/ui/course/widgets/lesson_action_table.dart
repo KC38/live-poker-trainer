@@ -731,6 +731,9 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         heroCodes: ['Kh', 'Kd'],
         boardCodes: ['Kc', '7s', '2d'],
         potLabel: 'Pot ~60 · SPR ~1',
+        // Remaining depth ≈ pot so SPR ~1 matches Rex (LPT-413; same
+        // shared-stack pattern as checkpoint Stacks left 55).
+        stackLabel: 'Stacks left 60',
         villainLine: '3-bet pot · short SPR',
         // Structural — Rex owns commit SoftPulse cue; don’t gold-tip get-it-in.
         streetLabel: 'Flop · top set',

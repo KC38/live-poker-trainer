@@ -273,8 +273,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `_coachText`) when a densified select_identify ask still shows catalog
   + "Tap the best answer." in the frame bubble — framed speech reads that
   helper before `resolveLessonCoachPrompt` (LPT-221, LPT-279, LPT-343
-  Close the river checkpoint). Densified lines need a pick/tap verb so
-  `withLessonTapInstruction` does not append the generic footer.
+  Close the river checkpoint, LPT-412 SPR guided). Densified lines need a
+  pick/tap verb so `withLessonTapInstruction` does not append the generic
+  footer. A local `_coachText` string alone leaves framed speech on catalog.
 
 - Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
 
