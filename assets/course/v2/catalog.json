@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "d24ab20a4a9597212beb13fcd2cd397d235485f6f6561299fd78bb97518de068",
+  "contentChecksum": "13658458ef8997556f0a692b7f0bc4d097286ae042ccc42efe21fca226b48f70",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -9922,7 +9922,29 @@
                   ],
                   "objectives": [
                     "Tag high participation"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ENTERS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CALLS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FOLDS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-06-01-guided",
@@ -9956,7 +9978,19 @@
                       "label": "Label archetype now",
                       "accessibilityText": "Label archetype now"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "high-part",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-06-01-scaffolded",
@@ -9985,7 +10019,19 @@
                       "label": "They fold too much",
                       "accessibilityText": "They fold too much"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "sticky",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-06-01-unguided",
@@ -10014,7 +10060,19 @@
                       "label": "Certain forever",
                       "accessibilityText": "Certain forever"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "low-conf",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-06-01-checkpoint",
@@ -10044,7 +10102,19 @@
                       "accessibilityText": "They are a bad person"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bundle",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },

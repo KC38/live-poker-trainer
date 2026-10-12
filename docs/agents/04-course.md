@@ -56,8 +56,9 @@ jump check (LPT-137), Read the table first (LPT-138), Name your flop class
 (LPT-155), Play tighter multiway (LPT-158), Patch the common leaks
 (LPT-161), Section 3 jump check (LPT-165), Think in ranges (LPT-167),
 Navigate 3-bet pots (LPT-170), Plan beyond the flop (LPT-174), Size with a
-message (LPT-177), SPR decides commitment (LPT-180). Content gaps are
-audited by [11 — Lesson content agent](11-lesson-content-agent.md).
+message (LPT-177), SPR decides commitment (LPT-180), Observe sticky callers
+(LPT-184). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 ### Activity renderers
 
