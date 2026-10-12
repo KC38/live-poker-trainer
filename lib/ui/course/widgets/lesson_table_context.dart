@@ -10496,6 +10496,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive timing evidence — tap soft evidence, proven nuts, or proven bluff',
       semanticsStatic: 'Timing soft evidence outcomes',
       caption: scene.caption ?? 'Instant river shove — framing?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Soft evidence.
+      // Null guideRegion SoftPulses every phase (LPT-519).
+      guideRegion: LessonTableRegion.timingSoftEvidence,
       phases: [
         (
           region: LessonTableRegion.timingSoftEvidence,
@@ -10503,7 +10506,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Slight bump',
           visual: const Icon(
             Icons.tune,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10537,6 +10540,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive timing sizing — tap weaker/blocking vs solver known',
       semanticsStatic: 'Timing sizing weak outcomes',
       caption: scene.caption ?? 'Tiny flop bet into huge pot?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Weaker / blocking.
+      // Null guideRegion SoftPulses every phase (LPT-519).
+      guideRegion: LessonTableRegion.timingWeakerBlocking,
       phases: [
         (
           region: LessonTableRegion.timingWeakerBlocking,
@@ -10544,7 +10550,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Not proof',
           visual: const Icon(
             Icons.compress,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10568,6 +10574,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive timing tells — tap reject magic vs trust book',
       semanticsStatic: 'Timing reject magic outcomes',
       caption: scene.caption ?? 'Look-left means bluff?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Reject.
+      // Null guideRegion SoftPulses every phase (LPT-519).
+      guideRegion: LessonTableRegion.timingRejectMagic,
       phases: [
         (
           region: LessonTableRegion.timingRejectMagic,
@@ -10575,7 +10584,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'No magic tells',
           visual: const Icon(
             Icons.block,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),
@@ -10599,6 +10608,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive timing use — tap tiny update vs only evidence',
       semanticsStatic: 'Timing tiny update outcomes',
       caption: scene.caption ?? 'Best use of live timing?',
+      // SoftPulse + Rex own the cue — don’t gold-tip Tiny update.
+      // Null guideRegion SoftPulses every phase (LPT-519).
+      guideRegion: LessonTableRegion.timingTinyUpdate,
       phases: [
         (
           region: LessonTableRegion.timingTinyUpdate,
@@ -10606,7 +10618,7 @@ class LessonTableContext extends StatelessWidget {
           detail: 'Beside stronger',
           visual: const Icon(
             Icons.stacked_line_chart,
-            color: AppColors.gold,
+            color: AppColors.cream,
             size: 24,
           ),
         ),

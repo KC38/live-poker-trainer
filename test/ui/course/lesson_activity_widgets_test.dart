@@ -19625,6 +19625,34 @@ await tester.tap(find.text('NIT'));
       findsNothing,
     );
     expect(find.text('Soft evidence'), findsWidgets);
+    // LPT-519: guideRegion → one gold SoftPulse (Soft evidence), not Proven *.
+    final guidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(guidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Soft evidence'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Proven nuts'),
+      ),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(guidedCues.single),
+        matching: find.text('Proven bluff'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Soft evidence').first);
     await tester.pump();
     expect(controller.draft.choiceId, 'soft');
@@ -19669,6 +19697,27 @@ await tester.tap(find.text('NIT'));
       find.text('Tiny flop bet — tap Weaker / blocking.'),
       findsNothing,
     );
+    // LPT-519: guideRegion → one gold SoftPulse (Weaker / blocking).
+    final scaffoldCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(scaffoldCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Weaker / blocking'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(scaffoldCues.single),
+        matching: find.text('Solver known'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Weaker / blocking'));
     await tester.pump();
     expect(controller.draft.choiceId, 'weakish');
@@ -19710,6 +19759,27 @@ await tester.tap(find.text('NIT'));
       findsOneWidget,
     );
     expect(find.text('Look-left tell — tap Reject.'), findsNothing);
+    // LPT-519: guideRegion → one gold SoftPulse (Reject), not Trust book.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Reject'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Trust book'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Reject'));
     await tester.pump();
     expect(controller.draft.choiceId, 'reject');
@@ -19752,6 +19822,27 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('Best use of timing — tap Tiny update.'),
+      findsNothing,
+    );
+    // LPT-519: guideRegion → one gold SoftPulse (Tiny update).
+    final checkpointCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(checkpointCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Tiny update'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(checkpointCues.single),
+        matching: find.text('Only evidence'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('Tiny update'));
