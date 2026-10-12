@@ -30,6 +30,22 @@ if [[ -f "$SECRETS_FILE" ]]; then
   set +a
 fi
 
+# Skip the ~1 min npm ci + firebase deploy when functions/ has not changed
+# since the last successful local deploy (firebase would skip every function
+# anyway). FORCE_FUNCTIONS_DEPLOY=1 always deploys.
+DEPLOYED_SHA_FILE="${FUNCTIONS_DEPLOYED_SHA_FILE:-$HOME/.live-poker-trainer/functions-deployed-sha}"
+git -C "$PRIMARY" fetch -q origin main
+TARGET_SHA="$(git -C "$PRIMARY" rev-parse origin/main)"
+if [[ "${FORCE_FUNCTIONS_DEPLOY:-}" != "1" && -s "$DEPLOYED_SHA_FILE" ]]; then
+  last_sha="$(tr -d '[:space:]' <"$DEPLOYED_SHA_FILE")"
+  if git -C "$PRIMARY" rev-parse -q --verify "$last_sha^{commit}" >/dev/null &&
+    git -C "$PRIMARY" diff --quiet "$last_sha" "$TARGET_SHA" -- functions firebase.json
+  then
+    echo "Functions unchanged since ${last_sha:0:8}; skipping deploy (FORCE_FUNCTIONS_DEPLOY=1 to force)."
+    exit 0
+  fi
+fi
+
 if ! command -v node >/dev/null 2>&1 || ! node -v | grep -q '^v22\.'; then
   echo "Node 22 required for functions deploy (found $(command -v node >/dev/null 2>&1 && node -v || echo missing))." >&2
   exit 1
@@ -61,8 +77,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-git -C "$PRIMARY" fetch origin
-git -C "$PRIMARY" worktree add --detach "$WORKTREE" origin/main
+git -C "$PRIMARY" worktree add --detach "$WORKTREE" "$TARGET_SHA"
 
 # firebase-tools <15 breaks on jose ESM during analysis; predeploy
 # `npm --prefix "$RESOURCE_DIR"` also fails under /bin/sh -c.
@@ -87,4 +102,6 @@ PY
   npx -y firebase-tools@15.30.2 deploy --only functions --project live-poker-trainer --non-interactive
 )
 
+mkdir -p "$(dirname "$DEPLOYED_SHA_FILE")"
+echo "$TARGET_SHA" >"$DEPLOYED_SHA_FILE"
 echo "Functions deploy complete from origin/main."

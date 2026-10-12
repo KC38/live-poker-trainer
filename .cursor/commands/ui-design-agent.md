@@ -461,32 +461,35 @@ branch names.
 
 ## 7. Validate on the worktree build
 
-Move the mini to the worktree build. Stop the origin/main session, then run
-the worktree in tmux. First worktree builds often spend several minutes in
-`pod install` + Xcode — wait with `tools/wait_flutter_vm.sh` (it heartbeats
-the lock). Do not busy-sleep with bare `AwaitShell` / `sleep`.
+Move the mini to the worktree build with one blocking command. It stops the
+origin/main session, then launches the worktree detached (it survives your
+shell). When `ios/` and `pubspec.lock` match a cached build (almost every
+Dart-only fix) it installs the cached debug `Runner.app` and hot-restarts
+onto the worktree's Dart in ~20 s — no Xcode. A native change does one
+full build (several minutes) and caches it. It heartbeats the lock while
+it waits; do not wrap it in tmux, `AwaitShell`, or `sleep`.
 
 ```bash
 python3 tools/sim_lock.py guard
-kill "$(cat /tmp/flutter-live-poker-trainer.pid)" 2>/dev/null || true
-SESSION="flutter-iphone-13-mini-$SLUG"
-tmux has-session -t "$SESSION" 2>/dev/null || tmux new-session -d -s "$SESSION"
-tmux send-keys -t "$SESSION" "cd '$WT' && flutter run -d $DEVICE --pid-file /tmp/flutter-$SLUG.pid 2>&1 | tee /tmp/flutter-$SLUG.log; echo EXIT:\$?" Enter
-tools/wait_flutter_vm.sh "/tmp/flutter-$SLUG.log" 600 --purpose "$KEY: wait worktree VM"
+tools/flutter_run_fast.sh --checkout "$WT" --log "/tmp/flutter-$SLUG.log" \
+  --pid-file "/tmp/flutter-$SLUG.pid" --timeout 900 --purpose "$KEY: worktree VM"
 ```
 
 Drive with `python3 tools/agent_tap.py --log /tmp/flutter-$SLUG.log …`.
 Walk **Validate before closing**, every acceptance criterion, and the
-lens from step 4 on the touched screens. Screenshot each.
+lens from step 4 on the touched screens. Screenshot each. When every check
+passes, record the build you validated for step 9:
+`VALIDATED_SHA="$(git -C "$WT" rev-parse HEAD)"`.
 
 **Retry loop.** When any check fails:
 
 1. Comment on the ticket: `Changes requested (attempt N)`, what failed, and
    the screenshot.
-2. Fix it in the same worktree, re-run the tests, hot-restart
-   (`kill -USR2 "$(cat /tmp/flutter-$SLUG.pid)"`), then
-   `tools/wait_flutter_vm.sh "/tmp/flutter-$SLUG.log" 120 --purpose "$KEY: wait hot-restart"`,
-   and validate again.
+2. Fix it in the same worktree, re-run the tests, then
+   `tools/flutter_hot_restart.sh "/tmp/flutter-$SLUG.log" "/tmp/flutter-$SLUG.pid"`
+   (waits for that restart, ~1 s; exit 1 prints the compile error), and
+   validate again. Relaunch with `flutter_run_fast.sh` only after an
+   `ios/` or `pubspec.lock` change.
 
 Stop after three failed attempts. Then comment the remaining failure, add
 `needs-human`, transition the ticket back to To Do, kill the worktree
@@ -496,9 +499,11 @@ merging), refresh the mini to origin/main, and go to step 10.
 ## 8. Merge
 
 Run make-change steps 6–9. PR title `LPT-NN: <summary>`; commit subjects
-include the key; the PR test plan is the acceptance criteria. Step 9's
-refresh uses your lock and returns the mini to origin/main. Kill the
-`flutter-iphone-13-mini-$SLUG` tmux session if it is still up.
+include the key; the PR test plan is the acceptance criteria. The functions
+deploy returns in ~2 s with `skipping deploy` when `functions/` is
+unchanged since the last deploy — that is a success, not a skip to report.
+Step 9's refresh uses your lock and returns the mini to origin/main (it
+stops the worktree session itself).
 
 **Rename this Agents chat as soon as the PR exists.** When you have both
 the ticket key and the PR number (right after `gh pr create`, or from
@@ -514,9 +519,23 @@ rename other chats — only this session.
 
 ## 9. Validate on origin/main and close
 
-Walk **Validate before closing** again on origin/main on the mini (log
-`/tmp/flutter-live-poker-trainer.run.log`). Save the closeout screenshots to
-`$PRIMARY/.cursor/tmp/ui-agent/<KEY>-*.png`.
+Step 8's refresh already put origin/main on the mini (log
+`/tmp/flutter-live-poker-trainer.run.log`; Dart-only merges reuse the
+cached `Runner.app`, so it is ~20 s). First check whether origin/main is
+the build you already validated:
+
+```bash
+tools/main_matches_validated.sh "$VALIDATED_SHA"
+```
+
+- **`match`** (exit 0): origin/main's `lib/`, `assets/`, `ios/` and
+  pubspec equal the validated worktree build and the change did not touch
+  `functions/`. Do not re-walk. Go straight to the fixed state, capture
+  `<KEY>-validated.png`, and confirm the criteria visible in that shot.
+- **`differs`** (exit 1): walk **Validate before closing** again on
+  origin/main.
+
+Save the closeout screenshots to `$PRIMARY/.cursor/tmp/ui-agent/<KEY>-*.png`.
 
 **Required validated proof.** Capture at least one
 `<KEY>-validated.png` on this post-merge origin/main build that shows the

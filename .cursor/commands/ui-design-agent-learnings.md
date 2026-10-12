@@ -149,12 +149,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   only via Hint — after Oops Continue, Hint must work again
   (`clearFeedbackForRetry` clears hintUsed; LPT-71).
 - Prefer trusting `refresh-simulator.sh` after hot-restart — it waits for a
-  Dart VM URI and cold-starts if stuck on `Launching…`. If it still fails,
-  start `flutter run` yourself in tmux with `SIM_LOCK_RUN_ID=…` exported.
-  On Xcode "No space left on device", clear
-  `~/Library/Developer/Xcode/DerivedData/Runner-*`
-  (and `/tmp/flutter_tools.*`) then retry once (LPT-61) — do not rewrite
-  refresh or `needs-human` on the first disk-full build.
+  Dart VM URI and cold-starts (cached `Runner.app` when native inputs
+  match) if stuck on `Launching…`. If it still fails, relaunch with
+  `tools/flutter_run_fast.sh` — never a hand-rolled tmux `flutter run`.
+  On Xcode "No space left on device", run `python3 tools/disk_guard.py
+  --min-free-gb 40` (orphan DerivedData, idle worktree builds) then retry
+  once (LPT-61) — do not wipe the primary's DerivedData, rewrite refresh,
+  or `needs-human` on the first disk-full build.
 - Prefer a full process restart (kill `flutter run`, relaunch) after
   patching guest `flutter.onboarding_draft_v1` on disk — hot-restart keeps
   cached SharedPreferences so `dailyGoalMinutes` stays null and Lesson
@@ -194,12 +195,13 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `errSecDuplicateItem` / `auth.refresh.persistFailed` cannot burn the run.
 - Heartbeat during long worktree `flutter run`, validates, and Cloud
   Functions deploy; the stall watchdog kills a silent agent (tmux
-  `deploy-LPT-*` / `refresh-LPT-*` count as alive). After worktree
-  `flutter run` / hot-restart, **must** use
-  `tools/wait_flutter_vm.sh <log> [seconds] --purpose …` (heartbeats for
-  you). Bare `AwaitShell` / `sleep` while Xcode builds burns minutes and
-  risks stall (LPT-72). Write coverage before long compiles when the
-  ticket is already Done in Jira.
+  `deploy-LPT-*` / `refresh-LPT-*` count as alive). Launch builds with
+  `tools/flutter_run_fast.sh` and hot-restart with
+  `tools/flutter_hot_restart.sh` — both block and heartbeat for you, and
+  a Dart-only worktree skips Xcode via the cached `Runner.app`. Bare
+  `AwaitShell` / `sleep` while Xcode builds burns minutes and risks stall
+  (LPT-72). Write coverage before long compiles when the ticket is
+  already Done in Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints
   `KEY<TAB>URL` — take column 1 only for `edit` / `get` / `comment`.
@@ -210,14 +212,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `[A-Za-z0-9_=-]`. One refresh + one retry then `SIM_NOT_READY` (often
   `pub get` Terminated: 15); do not rewrite refresh mid-run. Consecutive
   misses back off ~10 min.
-- `refresh-simulator` must claim with `--pid $$`. Export `SIM_LOCK_RUN_ID`
-  inside tmux `send-keys`. Worktree validate uses
+- `refresh-simulator` must claim with `--pid $$`. Worktree validate uses
   `/tmp/flutter-$SLUG.log`; origin/main uses
   `/tmp/flutter-live-poker-trainer.run.log` (must be a normal file).
   When primary flutter dies during closeout, run `refresh-simulator.sh`
-  (then `wait_flutter_vm` on that log) — do not hand-roll tmux +
-  `AwaitShell`. A stale VM URI above a newer `Launching…` is not ready;
-  `tools/flutter_log_ready.py` / `wait_flutter_vm.sh` ignore it.
+  — do not hand-roll tmux + `AwaitShell`. A stale VM URI above a newer
+  `Launching…` is not ready, and a cached-app launch is not ready until
+  its first `Restarted application` (`<log>.prebuilt` sidecar);
+  `tools/flutter_log_ready.py` / `wait_flutter_vm.sh` handle both.
 - Attach pane only shows start/end; live detail is in
   `~/.live-poker-trainer/ui-agent-logs/run-*.log` and the agent transcript.
 
