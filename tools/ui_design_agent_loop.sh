@@ -877,6 +877,63 @@ def stamp_epoch(stamp: str):
     except ValueError:
         return None
 
+
+def stamp_run_window(row: dict):
+    """Return (start_ep, run_end, end_ep) or (None, None, None)."""
+    stamp = row.get("stamp") or ""
+    start_ep = stamp_epoch(stamp)
+    if start_ep is None:
+        return None, None, None
+    seconds = row.get("seconds")
+    if isinstance(seconds, int):
+        run_end = start_ep + max(seconds, 0)
+        end_ep = run_end + 900
+    else:
+        end_ep = start_ep + 4 * 3600
+        run_end = end_ep
+    return start_ep, run_end, end_ep
+
+
+def best_coverage_for_stamp(row: dict, exclude_tickets=None):
+    """Coverage closest to start+seconds within the padded window."""
+    start_ep, run_end, end_ep = stamp_run_window(row)
+    if start_ep is None or run_end is None or end_ep is None:
+        return None
+    exclude = exclude_tickets or set()
+    best = None
+    best_delta = None
+    for cov in coverage_rows:
+        cov_ticket = cov.get("ticket")
+        if not cov_ticket or cov_ticket in exclude:
+            continue
+        cov_ts = _parse_iso_epoch(cov.get("at"))
+        if cov_ts is None:
+            continue
+        if cov.get("result") in (None, "sim-not-ready", "stalled"):
+            continue
+        if start_ep - 5 <= cov_ts <= end_ep:
+            delta = abs(cov_ts - run_end)
+            if best_delta is None or delta < best_delta:
+                best = cov
+                best_delta = delta
+    return best
+
+
+def apply_coverage_fill(row: dict, cov: dict, was_stalled: bool = False) -> None:
+    ticket = cov.get("ticket")
+    result = cov.get("result")
+    row["ticket"] = ticket
+    row["result"] = result
+    surface = cov.get("surface")
+    parts = [f"coverage:{result}", f"ticket:{ticket}"]
+    if surface:
+        parts.append(f"surface:{surface}")
+    row["tail"] = " ".join(parts)
+    row["tail_repaired"] = True
+    if was_stalled:
+        row["stall_upgraded"] = True
+
+
 def load_jsonl(path: Path) -> list[dict]:
     rows = []
     try:
@@ -933,47 +990,15 @@ for row in rows:
         and result not in ("usage-limit", "sim-not-ready")
         and (not ticket or not result or result == "stalled")
     ):
-        start_ep = stamp_epoch(stamp)
-        seconds = row.get("seconds")
-        run_end = None
-        end_ep = None
-        if start_ep is not None and isinstance(seconds, int):
-            run_end = start_ep + max(seconds, 0)
-            end_ep = run_end + 900
-        elif start_ep is not None:
-            end_ep = start_ep + 4 * 3600
-            run_end = end_ep
-        if start_ep is not None and end_ep is not None:
-            best = None
-            best_delta = None
-            for cov in coverage_rows:
-                cov_ts = _parse_iso_epoch(cov.get("at"))
-                if cov_ts is None or not cov.get("ticket"):
-                    continue
-                if cov.get("result") in (None, "sim-not-ready", "stalled"):
-                    continue
-                if start_ep - 5 <= cov_ts <= end_ep:
-                    delta = abs(cov_ts - run_end)
-                    if best_delta is None or delta < best_delta:
-                        best = cov
-                        best_delta = delta
-            if best is not None:
-                was_stalled = result == "stalled"
-                ticket = best.get("ticket")
-                result = best.get("result")
-                row["ticket"] = ticket
-                row["result"] = result
-                surface = best.get("surface")
-                parts = [f"coverage:{result}", f"ticket:{ticket}"]
-                if surface:
-                    parts.append(f"surface:{surface}")
-                row["tail"] = " ".join(parts)
-                row["tail_repaired"] = True
-                if was_stalled:
-                    row["stall_upgraded"] = True
-                changed += 1
-                tail = row["tail"]
-                prose_ticket = None
+        best = best_coverage_for_stamp(row)
+        if best is not None:
+            was_stalled = result == "stalled"
+            apply_coverage_fill(row, best, was_stalled=was_stalled)
+            ticket = row["ticket"]
+            result = row["result"]
+            changed += 1
+            tail = row["tail"]
+            prose_ticket = None
 
     if not result and USAGE_LIMIT.search(tail):
         row["result"] = "usage-limit"
@@ -1044,6 +1069,55 @@ for row in rows:
             changed += 1
     out.append(row)
 
+# Resolve duplicate durable tickets across real stamps: keep the stamp whose
+# run end is closest to that ticket's coverage time; re-fill the others
+# (LPT-491 twice left LPT-490 as reconciled-only).
+from collections import defaultdict
+
+by_ticket = defaultdict(list)
+for i, row in enumerate(out):
+    t = row.get("ticket")
+    st = row.get("stamp")
+    if (
+        t
+        and st not in (None, "", "reconciled")
+        and row.get("result") not in (None, "stalled", "sim-not-ready")
+    ):
+        by_ticket[t].append(i)
+
+dup_reassigned = 0
+for ticket, idxs in by_ticket.items():
+    if len(idxs) < 2:
+        continue
+    cov = coverage_by_ticket.get(ticket) or {}
+    cov_ts = _parse_iso_epoch(cov.get("at"))
+    if cov_ts is None:
+        continue
+    scored = []
+    for i in idxs:
+        _start, run_end, _end = stamp_run_window(out[i])
+        if run_end is None:
+            continue
+        scored.append((abs(run_end - cov_ts), i))
+    if len(scored) < 2:
+        continue
+    scored.sort()
+    for _delta, i in scored[1:]:
+        row = dict(out[i])
+        was_stalled = row.get("result") == "stalled"
+        best = best_coverage_for_stamp(row, exclude_tickets={ticket})
+        if best is not None:
+            apply_coverage_fill(row, best, was_stalled=was_stalled)
+        else:
+            row["ticket"] = None
+            row["result"] = None
+            row["tail"] = ""
+            row["tail_repaired"] = True
+        row["dup_reattributed"] = True
+        out[i] = row
+        changed += 1
+        dup_reassigned += 1
+
 # Drop stamp=reconciled rows when a real stamp already has the same ticket
 # with a durable result (false-stall upgrade left LPT-240 duplicated).
 held = {
@@ -1076,6 +1150,8 @@ with tmp.open("w", encoding="utf-8") as handle:
         handle.write(json.dumps(row) + "\n")
 tmp.replace(health_path)
 msg = f"repaired {changed} health tail(s)"
+if dup_reassigned:
+    msg += f" (reattributed {dup_reassigned} duplicate stamp ticket(s))"
 if dropped:
     msg += f" (dropped {dropped} duplicate reconciled)"
 print(msg, flush=True)

@@ -906,6 +906,52 @@ grep -q '"ticket": "LPT-490"' "$HEALTH_FILE" \
 grep -q 'LPT-491' "$HEALTH_FILE" \
   && fail "repair must not steal next ticket into earlier stamp: $(cat "$HEALTH_FILE")"
 
+# Already-filled duplicate stamps: keep closest to coverage, re-fill the other.
+python3 - "$COVERAGE_FILE" <<'PY'
+import json, sys
+from pathlib import Path
+rows = [
+    {
+        "at": "2026-10-12T21:22:17+05:30",
+        "sha": "a",
+        "surface": "lesson-runner:meet-the-maniac",
+        "result": "closed",
+        "ticket": "LPT-490",
+        "leads": [],
+        "learnings": "unchanged",
+    },
+    {
+        "at": "2026-10-12T21:38:31+05:30",
+        "sha": "b",
+        "surface": "lesson-runner:meet-the-tag",
+        "result": "closed",
+        "ticket": "LPT-491",
+        "leads": [],
+        "learnings": "unchanged",
+    },
+]
+Path(sys.argv[1]).write_text(
+    "".join(json.dumps(r) + "\n" for r in rows),
+    encoding="utf-8",
+)
+PY
+printf '%s\n' \
+  '{"at":"2026-10-12T21:24:26+05:30","stamp":"20261012-210527","exit":0,"seconds":1139,"ticket":"LPT-491","result":"closed","tail":"coverage:closed ticket:LPT-491 surface:lesson-runner:meet-the-tag"}' \
+  '{"at":"2026-10-12T21:22:17+0530","stamp":"reconciled","exit":0,"seconds":null,"ticket":"LPT-490","result":"closed","tail":"reconciled from coverage surface=lesson-runner:meet-the-maniac","reconciled":true}' \
+  '{"at":"2026-10-12T21:39:08+05:30","stamp":"20261012-212528","exit":0,"seconds":820,"ticket":"LPT-491","result":"closed","tail":"coverage:closed ticket:LPT-491 surface:lesson-runner:meet-the-tag"}' \
+  >"$HEALTH_FILE"
+repair_health_tails
+python3 - "$HEALTH_FILE" <<'PY' || fail "dup reattribution failed"
+import json, sys
+from pathlib import Path
+rows = [json.loads(l) for l in Path(sys.argv[1]).read_text().splitlines() if l.strip()]
+by_stamp = {r.get("stamp"): r for r in rows}
+assert by_stamp["20261012-210527"].get("ticket") == "LPT-490", rows
+assert by_stamp["20261012-212528"].get("ticket") == "LPT-491", rows
+assert not any(r.get("stamp") == "reconciled" and r.get("ticket") == "LPT-490" for r in rows), rows
+print("dup reattribution ok")
+PY
+
 # Prose with an LPT key (and no coverage match) still attributes the stamp.
 : >"$COVERAGE_FILE"
 printf '%s\n' \
