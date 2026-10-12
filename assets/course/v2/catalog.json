@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "e26effe4d4211f008fafa37cd3df4cebdc979c8d71b8f360dcb20717141a0790",
+  "contentChecksum": "3e3b899424c02a1087c6c76bc243c3b13d0d871ba8f69eb8b0d12e3af0c17022",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -4350,7 +4350,21 @@
                       "kind": "hint",
                       "text": "Dominated junk folds."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "trash",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-j3",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-04-01-scaffolded-call",
@@ -4388,7 +4402,21 @@
                       "action": "RAISE",
                       "amountBb": 9
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "connector",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call-87s",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-04-01-unguided-3bet",
@@ -4426,7 +4454,20 @@
                       "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "3bet-kk",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-04-01-checkpoint-aq",
@@ -4466,7 +4507,21 @@
                       "action": "FOLD"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway",
+                      "suitFamily": "suited"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "3bet-aqs",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

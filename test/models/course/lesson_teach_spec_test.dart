@@ -113,6 +113,13 @@ const _lessons = <String, List<String>>{
     'act-02-03-01-unguided-btn',
     'act-02-03-01-checkpoint-hj',
   ],
+  // LPT-125
+  'lesson-02-04-01-facing-raise': [
+    'act-02-04-01-guided-fold',
+    'act-02-04-01-scaffolded-call',
+    'act-02-04-01-unguided-3bet',
+    'act-02-04-01-checkpoint-aq',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -749,6 +756,26 @@ void main() {
         'open-k9s',
       );
       final cp = act('act-02-03-01-checkpoint-hj');
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+    });
+  });
+
+  group('Versus an open (LPT-125)', () {
+    test('random_in_class + SoftPulse dock targets; checkpoint quiet', () {
+      expect(
+        _list(act('act-02-04-01-guided-fold'), 'cues').single['target'],
+        'fold-j3',
+      );
+      expect(
+        act('act-02-04-01-scaffolded-call').teachSpec!['deal']['handFamily'],
+        'connector',
+      );
+      expect(
+        _list(act('act-02-04-01-unguided-3bet'), 'cues').single['target'],
+        '3bet-kk',
+      );
+      final cp = act('act-02-04-01-checkpoint-aq');
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
     });

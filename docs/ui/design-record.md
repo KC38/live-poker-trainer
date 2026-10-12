@@ -545,7 +545,7 @@ ranks (LPT-88), Best five and kickers (LPT-91), Fold, check, call (LPT-94),
 Bet, raise, all-in (LPT-98), Streets and action order (LPT-101), How pots
 are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
 (LPT-110), Position labels (LPT-112), Acting order (LPT-115), Hand families
-(LPT-119), Open or fold baseline (LPT-122).
+(LPT-119), Open or fold baseline (LPT-122), Versus an open (LPT-125).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -707,6 +707,12 @@ Open or fold baseline `teachSpec` (LPT-122): each interactive step deals
 button-open, broadway/offsuit). SoftPulse cues target dock ids `fold`,
 `open-qq`, and `open-k9s`; checkpoint-hj cues `open-ato` with kind `none`
 and has no `pressHints` or Hint media.
+
+Versus an open `teachSpec` (LPT-125): each interactive step deals
+`random_in_class` (trash/offsuit, connector/suited, premium pair,
+broadway/suited). SoftPulse cues target `fold-j3`, `call-87s`, and
+`3bet-kk`; checkpoint-aq cues `3bet-aqs` with kind `none` and has no
+`pressHints` or Hint media.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
