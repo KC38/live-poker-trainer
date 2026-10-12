@@ -801,17 +801,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
       'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
       // SoftPulse owns High part. — don’t gold-tip the tile.
+      // Observe sticky densified asks: selectIdentifyDensifiedCoachLine (LPT-416).
       'act-04-06-01-guided' =>
-        'Seat calls 7 of 9 preflops — participation is rolling high.',
+        selectIdentifyDensifiedCoachLine('act-04-06-01-guided')!,
       // SoftPulse owns Sticky — don’t gold-tip the tile.
       'act-04-06-01-scaffolded' =>
-        'Second pair called three streets twice — folding looks scarce.',
+        selectIdentifyDensifiedCoachLine('act-04-06-01-scaffolded')!,
       // SoftPulse owns Low conf. — don’t gold-tip the tile.
       'act-04-06-01-unguided' =>
-        'One dramatic call — confidence stays thin until samples pile up.',
+        selectIdentifyDensifiedCoachLine('act-04-06-01-unguided')!,
       // SoftPulse owns Bundle — don’t gold-tip the tile.
       'act-04-06-01-checkpoint' =>
-        'Before you label — stack many hands that rarely fold.',
+        selectIdentifyDensifiedCoachLine('act-04-06-01-checkpoint')!,
       // SoftPulse owns Station — don’t gold-tip the tile.
       'act-04-06-02-guided' =>
         'Sticky second pair calls — treat them as a sticky caller for now.',
@@ -2297,17 +2298,18 @@ class _HandCategoryTapActivity extends StatelessWidget {
     // SoftPulse owns SPR 4 — don’t gold-tip the tile.
     'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
     // SoftPulse owns High part. — don’t gold-tip the tile.
+    // Observe sticky densified asks: selectIdentifyDensifiedCoachLine (LPT-416).
     'act-04-06-01-guided' =>
-      'Seat calls 7 of 9 preflops — participation is rolling high.',
+      selectIdentifyDensifiedCoachLine('act-04-06-01-guided')!,
     // SoftPulse owns Sticky — don’t gold-tip the tile.
     'act-04-06-01-scaffolded' =>
-      'Second pair called three streets twice — folding looks scarce.',
+      selectIdentifyDensifiedCoachLine('act-04-06-01-scaffolded')!,
     // SoftPulse owns Low conf. — don’t gold-tip the tile.
     'act-04-06-01-unguided' =>
-      'One dramatic call — confidence stays thin until samples pile up.',
+      selectIdentifyDensifiedCoachLine('act-04-06-01-unguided')!,
     // SoftPulse owns Bundle — don’t gold-tip the tile.
     'act-04-06-01-checkpoint' =>
-      'Before you label — stack many hands that rarely fold.',
+      selectIdentifyDensifiedCoachLine('act-04-06-01-checkpoint')!,
     _ => 'Look at the board and your holes — tap what you made.',
   };
 

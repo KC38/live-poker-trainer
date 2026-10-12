@@ -16008,14 +16008,20 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-416: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Seat calls 7 of 9 preflops — tap High part.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Seat calls 7 of 9 preflops — pick High part.'),
+      findsOneWidget,
+    );
     expect(
       find.text(
         'Seat calls 7 of 9 preflops — participation is rolling high.',
       ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Seat calls 7 of 9 preflops — tap the observation.'),
       findsNothing,
     );
     expect(find.text('High part.'), findsOneWidget);
@@ -16074,19 +16080,23 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-416: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Second pair called three streets twice — tap Sticky.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Second pair called three streets twice — pick Sticky.'),
+      findsOneWidget,
+    );
     expect(
       find.text(
         'Second pair called three streets twice — folding looks scarce.',
       ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Second pair called three streets twice — tap the note.'),
       findsNothing,
     );
     expect(find.text('Sticky'), findsOneWidget);
-    // SoftPulse + Rex own the cue — no Tap footer mid-teach.
-    expect(find.text('Tap Sticky.'), findsNothing);
     await tester.tap(find.text('Sticky'));
     await tester.pump();
     expect(controller.draft.choiceId, 'sticky');
@@ -16138,14 +16148,20 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-416: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'One dramatic call — tap Low conf.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('One dramatic call — pick Low conf.'),
+      findsOneWidget,
+    );
     expect(
       find.text(
         'One dramatic call — confidence stays thin until samples pile up.',
       ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('One dramatic call — tap how confident the label is.'),
       findsNothing,
     );
     expect(find.text('Low conf.'), findsOneWidget);
@@ -16201,17 +16217,22 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-416: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Before you label — tap Bundle.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Before you label — pick Bundle.'),
+      findsOneWidget,
+    );
     expect(
       find.text(
         'Before you label — stack many hands that rarely fold.',
       ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Before you label — tap the evidence bundle.'),
       findsNothing,
     );
-    expect(find.text('Bundle the evidence before labeling'), findsNothing);
     expect(find.text('Observation notes'), findsOneWidget);
     expect(find.text('Bundle'), findsOneWidget);
     await tester.tap(find.text('Bundle'));
