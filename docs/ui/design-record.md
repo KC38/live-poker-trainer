@@ -562,7 +562,8 @@ samples (LPT-213), Same hand, different types (LPT-216), Section 4 jump
 check (LPT-219), Build multiway ranges (LPT-222), Play 150–300bb stacks
 (LPT-225), Implied and reverse odds (LPT-228), Thin value and bluff-catches
 (LPT-231), Street-by-street updates (LPT-237), Advanced flop lines
-(LPT-234), Live table dynamics (LPT-245).
+(LPT-234), Live table dynamics (LPT-245), Keep cash session guardrails
+(LPT-248).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -997,6 +998,11 @@ Live table dynamics `teachSpec` (LPT-245): explain SoftPulse advances STUCK
 unguided fixed JhTd/Kc9s4h2d7c → `reset`; checkpoint `none` → `temp`;
 assessment steps use cue kind `none` (no pressHints).
 
+Keep cash session guardrails `teachSpec` (LPT-248): explain SoftPulse
+advances QUIT → GUARD → FIRST; guided `none` → `stop`; scaffolded `none` →
+`decline`; unguided `none` → `cash`; checkpoint `none` → `edge`; assessment
+steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1404,7 +1410,7 @@ felt.
 | Street-by-street updates | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518) | — |
 | Soft timing evidence | Timing, Sizing, Clues | timing quizzes |
 | Live table dynamics | Stuck, Tilted, Gears | — |
-| Keep cash session guardrails | Quit, Guard, First | discipline quizzes |
+| Keep cash session guardrails | Quit, Guard, First | — |
 | Section 5 checkpoint | — | multiway, tell, and stop checks |
 | Spot range advantage and nut advantage | Range, Nut, Advantage | dry-board, paired-board, and press checks |
 | Realize equity in and out of position | Equity, Cash, Pos | realization quizzes |

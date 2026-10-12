@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "f36963f0beeb5001e0e3a65679b491709143081a54246aaefb558b317b387005",
+  "contentChecksum": "f8d39a149089a3ff011fdbbdd773a5f03c90b6734925bdb0880c65acba2d3f05",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -18398,7 +18398,29 @@
                   ],
                   "objectives": [
                     "Set session stop-losses"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "QUIT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "GUARD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FIRST",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-09-01-guided",
@@ -18436,7 +18458,19 @@
                         "betterChoiceId": "stop"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "stop",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-09-01-scaffolded",
@@ -18474,7 +18508,19 @@
                         "betterChoiceId": "decline"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "decline",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-09-01-unguided",
@@ -18511,7 +18557,19 @@
                         "feedback": "Only if sharp and planned."
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cash",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-05-09-01-checkpoint",
@@ -18550,7 +18608,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "edge",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
