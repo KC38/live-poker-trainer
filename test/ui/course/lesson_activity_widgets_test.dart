@@ -21177,7 +21177,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 defend unguided taps Intuition on felt', (tester) async {
+  testWidgets('s6 defend unguided SoftPulse Intuition — not Exact percents', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-06-07-01-unguided',
       order: 4,
@@ -21209,6 +21211,28 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('MDF numbers — tap Intuition.'),
+      findsNothing,
+    );
+    expect(find.text('Intuition'), findsOneWidget);
+    // LPT-499: guideRegion → one gold SoftPulse (Intuition), not Exact percents.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Intuition'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Exact percents'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('Intuition'));
