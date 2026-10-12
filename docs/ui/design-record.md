@@ -1176,7 +1176,7 @@ felt.
 | Think in ranges | One hand, Range, Update; densified frame asks (LPT-403) | — |
 | Navigate 3-bet pots | 3-bet, Ranges, Squeeze | — |
 | Plan beyond the flop | Flop, Turn, River; densified frame ask (LPT-407) | — |
-| Size with a message | Value, Pressure, Size | — |
+| Size with a message | Value, Pressure, Size; densified frame ask (LPT-410) | — |
 | SPR decides commitment | SPR, Low, High | — |
 | Observe sticky callers | Enters, Calls, Folds | participation note, observation bundle |
 | Meet the Calling Station | Station, High, Low | label quizzes |
