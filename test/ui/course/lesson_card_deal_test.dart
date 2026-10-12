@@ -914,6 +914,131 @@ void main() {
     expect(keys.length, greaterThan(1));
   });
 
+  test('side cards keep kicker order without the coordinated flag', () {
+    const hero = ['Ah', 'Qd'];
+    const board = ['Kh', 'Kd', '7c', '3s', '2d'];
+    const villain = ['As', 'Jd'];
+    final queenRanks = <int>{};
+    for (var seed = 0; seed < 24; seed++) {
+      final groups = isomorphicLessonCardGroups(
+        [hero, board, villain],
+        Random(seed),
+      );
+      final h = [
+        CardModel.fromCode(groups[0][0]),
+        CardModel.fromCode(groups[0][1]),
+      ]..sort((a, b) => b.rank.compareTo(a.rank));
+      final v = [
+        CardModel.fromCode(groups[2][0]),
+        CardModel.fromCode(groups[2][1]),
+      ]..sort((a, b) => b.rank.compareTo(a.rank));
+      expect(h[0].rank, v[0].rank, reason: 'seed $seed shared ace');
+      expect(
+        h[1].rank,
+        greaterThan(v[1].rank),
+        reason: 'seed $seed queen stays ahead of jack',
+      );
+      queenRanks.add(h[1].rank);
+    }
+    expect(queenRanks.length, greaterThan(1));
+  });
+
+  test('structure-preserving remap keeps straights, pairs, and packed gaps', () {
+    for (var seed = 0; seed < 16; seed++) {
+      final mapped = structurePreservingLessonCardGroups(
+        const [
+          ['Ah', 'Kd'],
+          ['5h', '6d', '7c', '8s', '9h'],
+        ],
+        Random(seed),
+      );
+      expect(mapped, isNotNull, reason: 'seed $seed');
+      final boardRanks = [
+        for (final code in mapped![1]) CardModel.fromCode(code).rank,
+      ];
+      for (var i = 1; i < boardRanks.length; i++) {
+        expect(
+          boardRanks[i],
+          boardRanks[i - 1] + 1,
+          reason: 'seed $seed straight $boardRanks',
+        );
+      }
+      final heroRanks = [
+        for (final code in mapped[0]) CardModel.fromCode(code).rank,
+      ];
+      expect(heroRanks[0], heroRanks[1] + 1, reason: 'seed $seed AK run');
+      final heart = CardModel.fromCode(mapped[1][0]).suit;
+      expect(CardModel.fromCode(mapped[1][4]).suit, heart);
+      expect(CardModel.fromCode(mapped[0][0]).suit, heart);
+      expect(CardModel.fromCode(mapped[1][1]).suit, isNot(heart));
+    }
+
+    final paired = structurePreservingLessonCardGroups(
+      const [
+        ['Kh', 'Kd'],
+        ['Ks', '7c', '2d'],
+      ],
+      Random(3),
+    );
+    expect(paired, isNotNull);
+    final pairRank = CardModel.fromCode(paired![0][0]).rank;
+    expect(CardModel.fromCode(paired[0][1]).rank, pairRank);
+    expect(CardModel.fromCode(paired[1][0]).rank, pairRank);
+    final seven = CardModel.fromCode(paired[1][1]).rank;
+    final deuce = CardModel.fromCode(paired[1][2]).rank;
+    expect(deuce, lessThan(seven));
+    expect(seven, lessThan(pairRank));
+
+    for (var seed = 0; seed < 8; seed++) {
+      final packed = structurePreservingLessonCardGroups(
+        const [
+          ['2h', '4d', '6c', '8s', 'Th', 'Qd', 'Ah'],
+        ],
+        Random(seed),
+      );
+      expect(packed, isNotNull, reason: 'seed $seed');
+      expect(
+        [
+          for (final code in packed![0]) CardModel.fromCode(code).rank,
+        ],
+        [2, 4, 6, 8, 10, 12, 14],
+      );
+    }
+  });
+
+  test('structure-preserving remap rejects collisions and impossible runs', () {
+    expect(
+      structurePreservingLessonCardGroups(
+        const [<String>[], <String>[]],
+        Random(1),
+      ),
+      [
+        <String>[],
+        <String>[],
+      ],
+    );
+    expect(
+      structurePreservingLessonCardGroups(
+        const [
+          ['Ah', 'Ah'],
+        ],
+        Random(0),
+      ),
+      isNull,
+    );
+    // Rank 0 distractor plus seven isolated ranks is eight runs; 2–A cannot
+    // hold the mandatory gaps, so the caller falls back to suit-only.
+    expect(
+      structurePreservingLessonCardGroups(
+        const [
+          ['Hs', '2h', '4d', '6c', '8s', 'Th', 'Qd', 'Ah'],
+        ],
+        Random(0),
+      ),
+      isNull,
+    );
+  });
+
   test('toy-hand streets keep the same hole suits as the board grows', () {
     const activityId = 'act-07-10-01-hand';
     final flop = dealtToyHandStepSpot(

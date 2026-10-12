@@ -439,6 +439,89 @@ void main() {
     );
   });
 
+  test('alignLessonTableCopy rewrites the hero phrase before board ranks', () {
+    // Board six→ten would turn "six-five" into "ten-four" if rank words ran
+    // first, and the dealt "eight-four" phrase would never land (LPT-261).
+    const text = 'six-five offsuit. The six is on the board.';
+    expect(
+      alignLessonTableCopy(
+        text: text,
+        templateHero: const ['6h', '5d'],
+        dealtHero: const ['8c', '4s'],
+        templateBoard: const ['6s', '9d', '2c'],
+        dealtBoard: const ['Ts', '9d', '2c'],
+      ),
+      'eight-four offsuit. The ten is on the board.',
+    );
+    expect(
+      alignLessonTableCopy(
+        text: 'Board 6S.',
+        templateHero: const ['6h', '5d'],
+        dealtHero: const ['8c', '4s'],
+        templateBoard: const ['6s', '9d', '2c'],
+        dealtBoard: const ['Ts', '9d', '2c'],
+      ),
+      'Board Ts.',
+    );
+  });
+
+  test('alignLessonTableCopy fixes a/an after rank words move', () {
+    expect(
+      alignLessonTableCopy(
+        text: 'You need a nine. A nine shows up.',
+        templateHero: const ['Kh', 'Qh'],
+        dealtHero: const ['Kh', 'Qh'],
+        templateBoard: const ['9d'],
+        dealtBoard: const ['8d'],
+      ),
+      'You need an eight. An eight shows up.',
+    );
+    expect(
+      alignLessonTableCopy(
+        text: 'You need an eight. An eight shows up.',
+        templateHero: const ['Kh', 'Qh'],
+        dealtHero: const ['Kh', 'Qh'],
+        templateBoard: const ['8d'],
+        dealtBoard: const ['9d'],
+      ),
+      'You need a nine. A nine shows up.',
+    );
+    expect(
+      alignLessonTableCopy(
+        text: 'Draw to hearts, not a heart.',
+        templateHero: const ['Ah', '9h'],
+        dealtHero: const ['As', '9s'],
+        templateBoard: const ['Jh', '8h', '3c'],
+        dealtBoard: const ['Js', '8s', '3c'],
+      ),
+      'Draw to spades, not a spade.',
+    );
+  });
+
+  test(
+    'alignLessonTableCopy leaves stray rank words when the board is absent',
+    () {
+      expect(
+        alignLessonTableCopy(
+          text: '',
+          templateHero: const ['6h', '5d'],
+          dealtHero: const ['8c', '4s'],
+          templateBoard: const ['6s'],
+          dealtBoard: const ['Ts'],
+        ),
+        isEmpty,
+      );
+      expect(
+        alignLessonTableCopy(
+          text: 'six-five offsuit. The six misses.',
+          templateHero: const ['6h', '5d'],
+          dealtHero: const ['8c', '4s'],
+        ),
+        'eight-four offsuit. The six misses.',
+      );
+    },
+  );
+
   test('flop-class guided prompt and Nice follow remapped board+holes', () {
     final activity = CourseActivity(
       id: 'act-03-02-01-guided',
