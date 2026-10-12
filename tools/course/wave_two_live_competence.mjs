@@ -2232,7 +2232,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-08-03-explain", 1,
                 "Versus maniacs: call wider for value, let them hang themselves, no ego.",
-                {objectives: ["Widen value and bluff-catch ranges"], playerTypeRefs: ["maniac"]}),
+                {
+                  objectives: ["Widen value and bluff-catch ranges"], playerTypeRefs: ["maniac"],
+                  // LPT-210
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "WIDER", kind: "soft_pulse"},
+                      {press: 2, target: "HANG", kind: "soft_pulse"},
+                      {press: 3, target: "EGO", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-04-08-03-guided", order: 2, stage: "guided",
                 prompt: "Maniac barrels river. You have top pair weakish kicker. Action?",
@@ -2246,6 +2257,14 @@ export function buildSectionFour() {
                   choice("punish-jam", "Jam to punish ego-to-ego", "clear_mistake",
                     "Avoid ego battles; calling realizes value.", {action: "RAISE", amountBb: 80, betterChoiceId: "call-wider", reversalRead: "Raise for value when you crush; do not tilt-raise."})
                 ],
+                // LPT-210
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "9d"], board: ["As", "7c", "2d", "Th", "3c"]},
+                  },
+                  cues: [{press: 1, target: "call-wider", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-08-03-scaffolded", order: 3, stage: "scaffolded",
@@ -2258,6 +2277,14 @@ export function buildSectionFour() {
                   choice("trap-always", "Check back always to trap", "questionable",
                     "Trapping is okay; betting gets value now.", {action: "CHECK"})
                 ],
+                // LPT-210
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "Kc", "2d", "9h", "3c"]},
+                  },
+                  cues: [{press: 1, target: "val-m", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-08-03-unguided", order: 4, stage: "scaffolded",
@@ -2270,6 +2297,14 @@ export function buildSectionFour() {
                   choice("baseline-call", "Always call strangers' jams", "questionable",
                     "Needs the aggression tendency.", {action: "CALL"})
                 ],
+                // LPT-210
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "9d"], board: ["As", "7c", "2d", "Th", "3c"]},
+                  },
+                  cues: [{press: 1, target: "baseline-fold", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-08-03-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2283,6 +2318,8 @@ export function buildSectionFour() {
                   choice("cite-brave", "To prove bravery", "clear_mistake",
                     "No ego.", {betterChoiceId: "cite-wide"})
                 ],
+                // LPT-210
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cite-wide", kind: "none"}]},
               }),
             ],
           }),

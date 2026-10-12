@@ -557,7 +557,7 @@ Size with a message (LPT-177), SPR decides commitment (LPT-180), Observe
 sticky callers (LPT-184), Meet the Calling Station (LPT-187), Adjust versus
 Calling Station (LPT-190), Observe narrow players (LPT-193), Meet the Nit
 (LPT-196), Adjust versus Nit (LPT-200), Observe wild aggressors (LPT-203),
-Meet the Maniac (LPT-206).
+Meet the Maniac (LPT-206), Adjust versus Maniac (LPT-210).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -908,6 +908,12 @@ assessment steps use cue kind `none` (no pressHints).
 Meet the Maniac `teachSpec` (LPT-206): explain SoftPulse advances MANIAC →
 ENTRY → AGGRO; guided `none` → `pt-maniac`; unguided `none` → `maniac2`;
 checkpoint `none` → `three`; assessment steps use cue kind `none` (no
+pressHints).
+
+Adjust versus Maniac `teachSpec` (LPT-210): explain SoftPulse advances WIDER
+→ HANG → EGO; guided fixed Ah9d/As7c2dTh3c → `call-wider`; scaffolded fixed
+AhKd/AsKc2d9h3c → `val-m`; unguided fixed Ah9d/As7c2dTh3c → `baseline-fold`;
+checkpoint `none` → `cite-wide`; assessment steps use cue kind `none` (no
 pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
