@@ -15644,14 +15644,21 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-407: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('You have a flop plan — map brick vs flush turns.'),
+      lessonFrameSpeech(activity),
+      'You have a flop plan — tap brick→barrel vs flush→abort.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('You have a flop plan — pick brick→barrel vs flush→abort.'),
       findsOneWidget,
     );
     expect(
-      find.text('You have a flop plan — tap the turn branches.'),
+      find.text('You have a flop plan — map brick vs flush turns.'),
       findsNothing,
     );
+    expect(find.text('Good multi-street plans do what?'), findsNothing);
     expect(find.text('Branches'), findsOneWidget);
     expect(find.text('Brick · flush'), findsOneWidget);
     await tester.tap(find.text('Branches'));
