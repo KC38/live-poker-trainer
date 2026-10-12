@@ -598,6 +598,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Observe wild SoftPulse one gold | Observe wild aggressors densified asks (`act-04-08-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`observeExtremeEntry` / `observeWidePressure` / `observeCalmNotes` / `observeManiacBundle`) so SoftPulse paints one gold tile — never both Extreme and Timid, Wide heat and Never bets, Frequencies and Revenge, or Enter+barrel and Never plays (LPT-462). |
 | Meet the Maniac SoftPulse one gold | Meet the Maniac densified asks (`act-04-08-02-guided` / unguided / checkpoint) pass `guideRegion` (`meetManiacLabel` / `meetManiacLabel2` / `meetManiacMixThree`) so SoftPulse paints one gold tile — never both Maniac and Nit, Maniac and Station, or Three types and Unlabeled (LPT-489). |
 | Meet the TAG SoftPulse one gold | Meet the TAG unguided densified ask (`act-06-11-02-unguided`) passes `guideRegion` (`meetTagLabel2`) so SoftPulse-after-Hint paints one gold TAG tile — never both TAG and Maniac (LPT-491). Guided / scaffolded / checkpoint already pass `meetTagLabel` / `meetTagSelectiveDiff` / `meetTagWorkingModel`. |
+| Meet the LAG SoftPulse one gold | Meet the LAG unguided densified ask (`act-06-12-02-unguided`) passes `guideRegion` (`meetLagLabel2`) so SoftPulse-after-Hint paints one gold LAG tile — never both LAG and Nit (LPT-492). Guided / scaffolded / checkpoint already pass `meetLagLabel` / `meetLagPressureDiff` / `meetLagSampleLimits`. |
 | Adjust Nit dock starting-hand labels | Adjust versus Nit unguided (`act-04-07-03-unguided`) — and other `poker_action_sizing` docks — rewrite choice labels / a11y that name a starting hand through `alignLessonActionChoices` onto the remapped holes — never catalog **Always steal K9o** over a dealt J7o while Rex already says J7o (LPT-455). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
@@ -1292,7 +1293,7 @@ felt.
 | Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491) | label quizzes |
 | Adjust versus TAG | Credit, Tighter, No light | respect check |
 | Observe wide sustained pressure | Wide, Pressure, Sample | entry quizzes |
-| Meet the LAG | Wide, Pressure, Model | label quizzes |
+| Meet the LAG | Wide, Pressure, Model; unguided SoftPulse one gold (LPT-492) | label quizzes |
 | Adjust versus LAG | Call, Trap, Fancy less | avoid and cite checks |
 | Same cards, five type models | Cards, seats, and evidence in the stage | label check |
 | Section 6 checkpoint | — | advantage, cap, polar, TAG, and LAG checks |

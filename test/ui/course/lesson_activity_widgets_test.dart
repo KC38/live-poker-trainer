@@ -23408,7 +23408,9 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s6 meet lag unguided taps LAG on felt', (tester) async {
+  testWidgets('s6 meet lag unguided SoftPulse LAG — no gold tip', (
+    tester,
+  ) async {
     final activity = CourseActivity(
       id: 'act-06-12-02-unguided',
       order: 4,
@@ -23440,6 +23442,28 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text('Wide opens, keeps barreling — tap LAG.'),
+      findsNothing,
+    );
+    expect(find.text('LAG'), findsOneWidget);
+    // LPT-492: guideRegion → one gold SoftPulse (LAG), not Nit.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('LAG'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Nit'),
+      ),
       findsNothing,
     );
     await tester.tap(find.text('LAG'));
