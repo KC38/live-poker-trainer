@@ -228,6 +228,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `gradeCourseResponse` / Nice! / `course_bank` sequence-id change — the
   worktree app still hits production until that deploy lands (LPT-74,
   LPT-107).
+- Prefer treating `tools/main_matches_validated.sh` `differs` on
+  `assets/course/v2/catalog.json` (or other concurrent-main files) as a
+  required origin/main re-walk, not a failed fix — LPT-173 squash matched
+  the worktree lib change while catalog moved on main.
 
 ## Ops (simulator, CLI, Jira)
 

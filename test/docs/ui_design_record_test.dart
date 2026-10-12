@@ -215,6 +215,7 @@ void main() {
       'multiturn',
       '-validated.png',
       'current-issue screenshot',
+      'main_matches_validated.sh',
     ]) {
       expect(learnings, contains(needle), reason: needle);
     }
