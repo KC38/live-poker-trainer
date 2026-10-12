@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_starting_hand_copy.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
@@ -104,18 +105,36 @@ String alignLessonActionCopy(
   int generation = 0,
   Random? random,
 }) {
+  if (text.isEmpty) return text;
   final template = resolveLessonActionSpot(activity);
-  if (template == null || text.isEmpty) return text;
-  final dealt = dealtLessonActionSpot(
+  if (template != null) {
+    final dealt = dealtLessonActionSpot(
+      activity,
+      generation: generation,
+      random: random,
+    );
+    if (dealt != null) {
+      return alignStartingHandCopy(
+        text: text,
+        templateHero: template.heroCodes,
+        dealtHero: dealt.heroCodes,
+      );
+    }
+  }
+  // Hand-family densified classify scenes remap hero holes the same way
+  // action spots do — Hint / a11y still named authored 76s / 72o (LPT-134).
+  final scene = resolveLessonTableScene(activity);
+  if (scene == null || scene.heroCodes.length < 2) return text;
+  final dealtScene = dealtLessonTableScene(
     activity,
     generation: generation,
     random: random,
   );
-  if (dealt == null) return text;
+  if (dealtScene == null || dealtScene.heroCodes.length < 2) return text;
   return alignStartingHandCopy(
     text: text,
-    templateHero: template.heroCodes,
-    dealtHero: dealt.heroCodes,
+    templateHero: scene.heroCodes,
+    dealtHero: dealtScene.heroCodes,
   );
 }
 
