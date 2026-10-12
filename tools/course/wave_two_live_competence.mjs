@@ -566,7 +566,19 @@ export function buildSectionThree() {
             activities: [
               dialogue("act-03-06-01-explain", 1,
                 "River is binary: value, bluff, bluff-catch, or fold. No mystery floats.",
-                {objectives: ["Value bet hands that beat calling ranges"]}),
+                {
+                  objectives: ["Value bet hands that beat calling ranges"],
+                  // LPT-155
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "VALUE", kind: "soft_pulse"},
+                      {press: 2, target: "BLUFF", kind: "soft_pulse"},
+                      {press: 3, target: "CATCH", kind: "soft_pulse"},
+                      {press: 4, target: "FOLD", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-03-06-01-guided", order: 2, stage: "guided",
                 prompt: "River bricks. You have top two pair. Villain checked. Action?",
@@ -580,6 +592,14 @@ export function buildSectionThree() {
                   choice("val-fold", "Fold", "clear_mistake",
                     "You are value-betting, not folding.", {action: "FOLD", betterChoiceId: "val-bet"})
                 ],
+                // LPT-155
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "Kc", "7d", "2h", "3c"]},
+                  },
+                  cues: [{press: 1, target: "val-bet", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-06-01-scaffolded", order: 3, stage: "scaffolded",
@@ -594,6 +614,14 @@ export function buildSectionThree() {
                   choice("tiny", "Bet 1 chip as a joke", "clear_mistake",
                     "Live sizing should look like a real hand.", {action: "BET", amountBb: 0.5, betterChoiceId: "bluff"})
                 ],
+                // LPT-155
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["9s", "8s"], board: ["Kh", "7h", "2c", "3d", "Ah"]},
+                  },
+                  cues: [{press: 1, target: "bluff", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-06-01-unguided", order: 4, stage: "scaffolded",
@@ -608,6 +636,14 @@ export function buildSectionThree() {
                   choice("raise-weak", "Re-raise all-in", "clear_mistake",
                     "Do not turn a bluff-catch into a bluff.", {action: "RAISE", amountBb: 50, betterChoiceId: "fold-weak"})
                 ],
+                // LPT-155
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "4d"], board: ["As", "9c", "7d", "2h", "3c"]},
+                  },
+                  cues: [{press: 1, target: "fold-weak", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-03-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -622,6 +658,8 @@ export function buildSectionThree() {
                   choice("role-air", "Pure bluff with one pair", "clear_mistake",
                     "One pair is showdown value, not a bluff.", {betterChoiceId: "role-catch"})
                 ],
+                // LPT-155
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "role-catch", kind: "none"}]},
               }),
             ],
           }),

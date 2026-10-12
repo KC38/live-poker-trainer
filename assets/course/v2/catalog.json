@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "8cb34ceaf03ce18e1daeface6e1c6e5cd1c1c445b1227d0706807c0b2d806c8f",
+  "contentChecksum": "9cff0571cebec177bcd2069e9b9ed9f4b15ed5805b91f8126d6e3a25631873b8",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -7169,7 +7169,34 @@
                   ],
                   "objectives": [
                     "Value bet hands that beat calling ranges"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "VALUE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BLUFF",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CATCH",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-06-01-guided",
@@ -7207,7 +7234,32 @@
                       "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "As",
+                          "Kc",
+                          "7d",
+                          "2h",
+                          "3c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "val-bet",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-06-01-scaffolded",
@@ -7246,7 +7298,32 @@
                       "action": "BET",
                       "amountBb": 0.5
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "9s",
+                          "8s"
+                        ],
+                        "board": [
+                          "Kh",
+                          "7h",
+                          "2c",
+                          "3d",
+                          "Ah"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bluff",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-06-01-unguided",
@@ -7284,7 +7361,32 @@
                       "action": "RAISE",
                       "amountBb": 50
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "4d"
+                        ],
+                        "board": [
+                          "As",
+                          "9c",
+                          "7d",
+                          "2h",
+                          "3c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-weak",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-06-01-checkpoint",
@@ -7319,7 +7421,19 @@
                       "accessibilityText": "Pure bluff with one pair"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "role-catch",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

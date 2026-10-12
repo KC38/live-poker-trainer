@@ -190,6 +190,14 @@ const _lessons = <String, List<String>>{
     'act-03-05-01-unguided',
     'act-03-05-01-checkpoint',
   ],
+  // LPT-155
+  'lesson-03-06-01-river-decisions': [
+    'act-03-06-01-explain',
+    'act-03-06-01-guided',
+    'act-03-06-01-scaffolded',
+    'act-03-06-01-unguided',
+    'act-03-06-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1114,6 +1122,39 @@ void main() {
       expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'give-up');
+    });
+  });
+
+  group('Close the river correctly (LPT-155)', () {
+    test('explain SoftPulse walks VALUE → BLUFF → CATCH → FOLD', () {
+      expect(
+        _list(
+          act('act-03-06-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['VALUE', 'BLUFF', 'CATCH', 'FOLD'],
+      );
+    });
+
+    test('action steps author fixed deals; checkpoint quiet none', () {
+      expect(
+        _list(act('act-03-06-01-guided'), 'cues').single['target'],
+        'val-bet',
+      );
+      expect(
+        _list(act('act-03-06-01-scaffolded'), 'cues').single['target'],
+        'bluff',
+      );
+      expect(
+        _list(act('act-03-06-01-unguided'), 'cues').single['target'],
+        'fold-weak',
+      );
+      final cp = act('act-03-06-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.teachSpec!['deal'], {'mode': 'none'});
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'role-catch');
     });
   });
 }
