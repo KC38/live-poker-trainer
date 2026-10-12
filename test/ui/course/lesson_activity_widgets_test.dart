@@ -8188,20 +8188,21 @@ await tester.tap(find.text('NIT'));
           id: 'act-01-06-02-jump-ranks',
           order: 1,
           stage: ActivityStage.scaffolded,
-      assessmentRole: AssessmentRole.jumpTest,
+          assessmentRole: AssessmentRole.jumpTest,
           renderer: ActivityRenderer.compareRank,
           estimatedSeconds: 40,
           accessibilityText: 'ranks',
           acceptedGrades: const [SoftGrade.recommended],
           sequenceItems: const [
-            CourseChoice(id: 'j-flush', label: 'Flush'),
-            CourseChoice(id: 'j-straight', label: 'Straight'),
-            CourseChoice(id: 'j-two', label: 'Two pair'),
+            CourseChoice(id: 'you', label: 'You'),
+            CourseChoice(id: 'sam', label: 'Sam'),
+            CourseChoice(id: 'jo', label: 'Jo'),
           ],
         ),
       ),
-      isTrue,
+      isFalse,
     );
+    expect(isShowdownOrderSequenceActivity('act-01-06-02-jump-ranks'), isTrue);
     expect(
       isSeatOrderSequenceActivity(
         CourseActivity(
@@ -9199,57 +9200,13 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('jump ranks keeps Rex felt-first and quiets tray/status', (
+  testWidgets('jump ranks orders showdown seats strongest to weakest', (
     tester,
   ) async {
-    final activity = CourseActivity(
-      id: 'act-01-06-02-jump-ranks',
-      order: 1,
-      stage: ActivityStage.scaffolded,
-      assessmentRole: AssessmentRole.jumpTest,
-      renderer: ActivityRenderer.compareRank,
-      estimatedSeconds: 40,
-      accessibilityText: 'Jump test: pick strongest hand first, then weaker.',
-      acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Pick strongest hand first, then weaker.',
-      sequenceItems: const [
-        CourseChoice(id: 'j-flush', label: 'Flush'),
-        CourseChoice(id: 'j-straight', label: 'Straight'),
-        CourseChoice(id: 'j-two', label: 'Two pair'),
-      ],
-    );
-    final controller = LessonActivityController(activity: activity);
-    await tester.pumpWidget(
-      _wrap(
-        OrderSequenceActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
-        ),
-      ),
-    );
-    expect(find.text('Pick strongest hand first, then weaker.'), findsOneWidget);
-    expect(find.text('Tap strongest hand first, then weaker.'), findsNothing);
-    expect(find.textContaining('straight, two pair, flush'), findsNothing);
-    // Numbered destination slots teach order — not an empty tray blob.
-    expect(find.text('1 · Strongest'), findsOneWidget);
-    expect(find.text('3 · Weakest'), findsOneWidget);
-    expect(find.text('Build order here'), findsNothing);
-    expect(find.text('Your order (empty)'), findsNothing);
-    expect(find.text('Pick strongest first'), findsNothing);
-    expect(find.text('Pick strong → weak'), findsNothing);
-    // SoftPulse + Rex own the cue — no Tap to place / Tap LABEL stack.
-    expect(find.text('Tap to place'), findsNothing);
-    expect(find.text('Tap Flush'), findsNothing);
-    expect(find.text('Flush'), findsOneWidget);
-    expect(find.text('Straight'), findsOneWidget);
-    expect(find.text('Two pair'), findsOneWidget);
-    controller.dispose();
-  });
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
 
-  testWidgets('SoftPulse-quiet jump ranks uses pick cue without SoftPulse slots', (
-    tester,
-  ) async {
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-ranks',
       order: 1,
@@ -9257,33 +9214,66 @@ await tester.tap(find.text('NIT'));
       assessmentRole: AssessmentRole.jumpTest,
       renderer: ActivityRenderer.compareRank,
       estimatedSeconds: 40,
-      accessibilityText: 'Jump test: pick strongest hand first, then weaker.',
+      accessibilityText:
+          'Jump test: tap showdown seats strongest to weakest '
+          '(flush, straight, two pair).',
       acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Pick strongest hand first, then weaker.',
+      prompt: 'Tap the hands from strongest to weakest.',
       sequenceItems: const [
-        CourseChoice(id: 'j-flush', label: 'Flush'),
-        CourseChoice(id: 'j-straight', label: 'Straight'),
-        CourseChoice(id: 'j-two', label: 'Two pair'),
+        CourseChoice(id: 'you', label: 'You'),
+        CourseChoice(id: 'sam', label: 'Sam'),
+        CourseChoice(id: 'jo', label: 'Jo'),
       ],
     );
     final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
     await tester.pumpWidget(
-      _wrap(
-        OrderSequenceActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: false,
+      ProviderScope(
+        child: MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: TableFeaturesScope(
+              features: TableFeatures.forLessonId(
+                'lesson-01-06-02-section-one-jump',
+              ),
+              child: LessonFrameScope(
+                onLocalMiss: (_) {},
+                child: CompareRankActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: false,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
-    expect(find.text('Pick strongest hand first, then weaker.'), findsOneWidget);
-    expect(find.text('Tap strongest hand first, then weaker.'), findsNothing);
-    expect(find.text('1 · Strongest'), findsOneWidget);
-    // SoftPulse-quiet: next slot is structural, not SoftPulse-glowing teaching.
-    // Ghost slots still render; SoftPulse pulse is gated off via softPulseNext.
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    expect(find.byType(LessonShowdownOrderTable), findsOneWidget);
+    expect(find.byKey(const ValueKey('hand-order-felt')), findsNothing);
+    expect(find.text('Flush'), findsNothing);
+    expect(find.text('Straight'), findsNothing);
+    expect(find.text('Two pair'), findsNothing);
+    expect(find.text('1 · Strongest'), findsNothing);
     expect(find.text('Tap to place'), findsNothing);
-    expect(find.text('Pick to place'), findsNothing);
-    controller.dispose();
+
+    final table = tester.widget<LessonShowdownOrderTable>(
+      find.byType(LessonShowdownOrderTable),
+    );
+    for (final id in table.spot.correctOrder) {
+      final seat = table.spot.seatIds.indexOf(id);
+      final key = seat == 0
+          ? const ValueKey<String>('lesson-seat-hero')
+          : ValueKey<String>('lesson-seat-$seat');
+      await tester.tap(find.byKey(key));
+      await tester.pump();
+    }
+    expect(controller.draft.orderedIds, ['you', 'sam', 'jo']);
   });
 
   testWidgets('unguided hand compare hides Tap to place under Rex', (

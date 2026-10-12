@@ -547,6 +547,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Hearts | A non-guided miss empties one heart in place. Guided free misses do not — `evaluateLifeAndAcceptance` sets `lifeLost` only when the stage is not `guided` (scaffolded, unguided, checkpoint, jump_test still spend; LPT-59). At zero, empty hearts breathe and the refill sheet opens from the hearts control. Practice / gem refill restores hearts in place (no toast, no rejected out-of-hearts dock). |
 | Identify / naming docks | Action-name quizzes (`identifyUnavailable` on `LessonActionSpot`) keep every dock button looking live until the learner taps — no `CALL (off)` / `RAISE (off)` spoilers. Fold, check, call `checkpoint-legal` and Bet, raise, all-in `checkpoint-names` both set that flag (LPT-78). Live realism `(off)` chrome stays on guided / scaffolded / short-stack spots that are not identify quizzes. |
 | Toy-hand authored pot | Authored multi-step toy-hand spots apply labeled `potLabel` and completed call/open street bets on `LessonTableStage` even when `facingBet` is false — BB-calls-your-open shows Pot 13 with matched raise/call chips; flop c-bet keeps Pot 13 (not blinds-only $3 or the $10 street default) (LPT-97). |
+| Section 1 jump ranks | `act-01-06-02-jump-ranks` orders three face-up showdown seats strongest→weakest (Flush → Straight → Two pair) via `LessonShowdownOrderTable` — not under-felt Flush/Straight/Two pair text chips on `LessonMadeHandTable` (LPT-107). |
 
 Guided Suits and ranks keeps cyan board picks across SoftPulse/Hint
 rebuilds until all four real suits are in; `syncSelection` only mirrors a
@@ -692,6 +693,12 @@ Bet, raise, all-in checkpoint-names (LPT-78) sets
 live-looking on the unanswered dock — same gate as Fold, check, call
 `checkpoint-legal`. The next action-naming quiz copies that flag instead of
 showing `(off)` chrome that spoils which label is legal.
+
+Section 1 jump ranks (LPT-107) is `handRanksShowdownSpot` /
+`dealShowdownOrderCards` for `act-01-06-02-jump-ranks` (Flush → Straight →
+Two pair on You / Sam / Jo), rendered by `LessonShowdownOrderTable` like Hand
+ranks compare — not `LessonMadeHandTable` plus under-felt hand-class chips.
+The next jump-test rank order copies that showdown-seat path.
 
 The per-lesson state is the Lesson ledger at the end of this file.
 
@@ -886,7 +893,7 @@ felt.
 | Streets and action order | Board advances by street; seat order on the table | — |
 | How pots are won | Fold win, Showdown, Side pot | — |
 | Play a full toy hand | Blinds, You act, Ending | — |
-| Section 1 jump check | — | rank and seat order |
+| Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
 | Position labels | Six-max seats labeled on the table | — |
 | Acting order | UTG, HJ, CO, BTN on the table | — |
 | Hand families | Pairs, Broadways, Suited aces, Connectors | — |
