@@ -14182,6 +14182,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-368: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Deep multiway — tap the better speculative hand.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Deep multiway — pick the better speculative hand.'),
       findsOneWidget,
@@ -14252,12 +14258,24 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-368: densified ask (and frame speech) — not catalog + Tap the best answer.
     expect(
-      find.text('Seat enters most pots — weigh what you note.'),
+      lessonFrameSpeech(activity),
+      'Seat enters most pots — tap what you note.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(
+      find.text('Seat enters most pots — pick what you note.'),
       findsOneWidget,
     );
     expect(
-      find.text('Seat enters most pots — tap what you note.'),
+      find.text('Seat enters most pots — weigh what you note.'),
+      findsNothing,
+    );
+    expect(
+      find.text(
+        'One seat has entered eight of the last ten pots with calls. Observation?',
+      ),
       findsNothing,
     );
     expect(find.text('Note it'), findsOneWidget);

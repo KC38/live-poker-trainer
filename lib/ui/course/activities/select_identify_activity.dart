@@ -748,11 +748,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-03-06-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-03-06-01-checkpoint')!,
       // SoftPulse owns the speculative hand — don’t gold-tip the tile.
+      // Play tighter multiway densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-368).
       'act-03-07-01-unguided' =>
-        'Deep multiway — pick the better speculative hand.',
+        selectIdentifyDensifiedCoachLine('act-03-07-01-unguided')!,
       // SoftPulse owns the note — don’t gold-tip the tile.
       'act-03-07-01-checkpoint' =>
-        'Seat enters most pots — weigh what you note.',
+        selectIdentifyDensifiedCoachLine('act-03-07-01-checkpoint')!,
       // SoftPulse owns Note freqs — don’t gold-tip the tile.
       'act-03-08-01-checkpoint' =>
         'Two seats, different frequencies — note how often each seat enters.',
@@ -2236,10 +2238,13 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-03-06-01-checkpoint' =>
       selectIdentifyDensifiedCoachLine('act-03-06-01-checkpoint')!,
     // SoftPulse owns the speculative hand — don’t gold-tip the tile.
+    // Play tighter multiway densified asks: selectIdentifyDensifiedCoachLine
+    // (LPT-368).
     'act-03-07-01-unguided' =>
-      'Deep multiway — pick the better speculative hand.',
+      selectIdentifyDensifiedCoachLine('act-03-07-01-unguided')!,
     // SoftPulse owns the note — don’t gold-tip the tile.
-    'act-03-07-01-checkpoint' => 'Seat enters most pots — weigh what you note.',
+    'act-03-07-01-checkpoint' =>
+      selectIdentifyDensifiedCoachLine('act-03-07-01-checkpoint')!,
     'act-03-08-01-checkpoint' =>
       'Two seats, different frequencies — note how often each seat enters.',
     'act-03-08-02-jump-table' =>
