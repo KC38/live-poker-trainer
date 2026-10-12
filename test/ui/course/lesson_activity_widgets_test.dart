@@ -21789,6 +21789,28 @@ await tester.tap(find.text('NIT'));
       find.text('Calling because you are "due" — tap Ego call.'),
       findsNothing,
     );
+    expect(find.text('Ego call'), findsOneWidget);
+    // LPT-502: guideRegion → one gold SoftPulse (Ego call), not Sound play.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Ego call'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Sound play'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Ego call'));
     await tester.pump();
     expect(controller.draft.choiceId, 'ego');

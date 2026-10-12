@@ -11949,7 +11949,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive due call — tap ego call vs sound play',
       semanticsStatic: 'Hard-fold ego outcomes',
       caption: scene.caption ?? 'Calling because you are "due"?',
-      // No SoftPulse on unguided — still don’t gold-icon Ego call.
+      // SoftPulse + Rex own the cue — one gold Ego call only (LPT-502).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.hardFoldEgoCall,
       phases: [
         (
           region: LessonTableRegion.hardFoldEgoCall,
