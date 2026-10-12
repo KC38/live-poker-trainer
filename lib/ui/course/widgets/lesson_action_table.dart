@@ -1157,9 +1157,11 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Checked turn · capped',
       );
     case 'act-06-04-01-scaffolded':
+      // True second pair for thin merged value: JT on Q T 3 2 7. Qc 9s 3h 2d
+      // 7c left JT with no pair under a “second pair” label (LPT-395).
       return const LessonActionSpot(
         heroCodes: ['Jh', 'Td'],
-        boardCodes: ['Qc', '9s', '3h', '2d', '7c'],
+        boardCodes: ['Qc', 'Ts', '3h', '2d', '7c'],
         potLabel: 'Pot 36',
         villainLine: 'Calling station · checked',
         // Structural — Rex + SoftPulse own merged-size teaching.
