@@ -720,14 +720,27 @@ When the file did change, never open a learnings-only PR for one run:
 - Only when that pending file holds **5+** bullets and this run has no
   ticket PR, ship them in one tiny chore make-change PR before releasing.
 
-Append one line to `~/.live-poker-trainer/ui-agent-coverage.jsonl`.
-`ticket` is the KEY this run closed (or the primary outcome ticket). Put
-other **filed** keys and any unfiled hunches in `leads` (e.g.
-`"filed LPT-64 hint stack"`, `"filed LPT-65 heart chrome"`):
+Append one coverage ledger row with the helper (do **not** hand-write
+JSON or `strftime` timestamps — `%z` emits compact `+0530`, which macOS
+Python 3.9 cannot parse and breaks health attribution):
 
-```json
-{"at": "<ISO time>", "sha": "<SHA walked>", "surface": "<surface>", "result": "closed|needs-human|clean|unreachable|blocked|sim-not-ready|jira-unavailable", "ticket": "LPT-NN", "leads": ["<filed LPT-MM … or other finding, one line each>"], "learnings": "updated|pending|unchanged"}
+```bash
+python3 tools/ui_agent_coverage.py append \
+  --sha <SHA walked> \
+  --surface <surface> \
+  --result closed \
+  --ticket LPT-NN \
+  --learnings unchanged \
+  --lead 'filed LPT-MM … or other finding' \
+  --lead 'LPT-44 needs-human'
 ```
+
+`ticket` is the KEY this run closed (or the primary outcome ticket). Put
+other **filed** keys and any unfiled hunches in `--lead` (repeatable).
+`--result` is one of
+`closed|needs-human|clean|unreachable|blocked|sim-not-ready|jira-unavailable`.
+`--learnings` is `updated|pending|unchanged`. The helper sets `at` via
+`isoformat` (`+05:30`).
 
 Delete `$PRIMARY/.cursor/tmp/ui-agent/`. Make sure no worktree tmux session
 for this ticket is still running. Then:

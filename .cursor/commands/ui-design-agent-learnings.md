@@ -72,6 +72,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   new agent) when this run's filings are only `grokbot` — keep walking
   until you have a `ui-agent` KEY or every remaining surface is clean for
   Mac-mini work.
+- Never hand-write coverage JSONL or `strftime(..., '%z')` timestamps
+  (`+0530` breaks macOS Python 3.9 health repair). Use
+  `python3 tools/ui_agent_coverage.py append …` in step 10.
 - Never edit the primary checkout (make-change worktrees only), invent
   GitHub owner/URLs from a person's name (`gh` only,
   `KC38/live-poker-trainer`), or let LaunchAgent `ensure`/`start`
