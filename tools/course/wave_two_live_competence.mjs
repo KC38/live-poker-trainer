@@ -1562,7 +1562,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-06-01-explain", 1,
                 "Before labels: who enters pots, who calls, who folds. Count samples.",
-                {objectives: ["Tag high participation"]}),
+                {
+                  objectives: ["Tag high participation"],
+                  // LPT-184
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "ENTERS", kind: "soft_pulse"},
+                      {press: 2, target: "CALLS", kind: "soft_pulse"},
+                      {press: 3, target: "FOLDS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-04-06-01-guided", order: 2, stage: "guided",
                 prompt: "Seat calls preflop seven of nine hands. Observation?",
@@ -1576,6 +1587,8 @@ export function buildSectionFour() {
                   choice("label-now", "Label archetype now", "clear_mistake",
                     "Observe first.", {betterChoiceId: "high-part"})
                 ],
+                // LPT-184
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "high-part", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-06-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1588,6 +1601,8 @@ export function buildSectionFour() {
                   choice("folds-alot", "They fold too much", "clear_mistake",
                     "Opposite evidence.", {betterChoiceId: "sticky"})
                 ],
+                // LPT-184
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sticky", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-06-01-unguided", order: 4, stage: "scaffolded",
@@ -1600,6 +1615,8 @@ export function buildSectionFour() {
                   choice("sure", "Certain forever", "clear_mistake",
                     "Samples build confidence.", {betterChoiceId: "low-conf"})
                 ],
+                // LPT-184
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "low-conf", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1612,6 +1629,8 @@ export function buildSectionFour() {
                   choice("insult", "They are a bad person", "clear_mistake",
                     "Behavior, not judgment.", {betterChoiceId: "bundle"})
                 ],
+                // LPT-184
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "bundle", kind: "none"}]},
               }),
             ],
           }),
