@@ -561,7 +561,7 @@ Meet the Maniac (LPT-206), Adjust versus Maniac (LPT-210), Confidence and
 samples (LPT-213), Same hand, different types (LPT-216), Section 4 jump
 check (LPT-219), Build multiway ranges (LPT-222), Play 150–300bb stacks
 (LPT-225), Implied and reverse odds (LPT-228), Thin value and bluff-catches
-(LPT-231).
+(LPT-231), Street-by-street updates (LPT-237).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -980,6 +980,11 @@ scaffolded fixed Jh9d/Kc9s4h2d7c → `call-m`; unguided fixed Jh9d/Kc9s4h2d7c
 → `check-nit`; checkpoint `none` → `read`; assessment steps use cue kind
 `none` (no pressHints).
 
+Street-by-street updates `teachSpec` (LPT-237): explain SoftPulse advances
+ACTION → REWRITE → UPDATE; guided `none` → `capped`; scaffolded fixed
+7h6h/Kh9h2c3d → `repr`; unguided `none` → `update`; checkpoint `none` →
+`uncap`; assessment steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1384,7 +1389,7 @@ felt.
 | Implied and reverse odds | Implied, Reverse, Second; densified SoftPulse one gold (LPT-515) | — |
 | Thin value and bluff-catches | Thin, Catch, Barrels; densified SoftPulse one gold (LPT-516) | — |
 | Advanced flop lines | X/R, Probe, Delay, Donk; densified SoftPulse one gold (LPT-517) | nit, donk, and delay checks |
-| Street-by-street updates | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518) | capped, habit, and shove checks |
+| Street-by-street updates | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518) | — |
 | Soft timing evidence | Timing, Sizing, Clues | timing quizzes |
 | Live table dynamics | Stuck, Tilted, Gears | stuck, gear, and freshness checks |
 | Keep cash session guardrails | Quit, Guard, First | discipline quizzes |

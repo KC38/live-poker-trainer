@@ -509,7 +509,18 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-06-01-explain", 1,
                 "Each action rewrites the range. Keep updating.",
-                {objectives: ["Update ranges after each street"]}),
+                {
+                  objectives: ["Update ranges after each street"],
+                  // LPT-237
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "ACTION", kind: "soft_pulse"},
+                      {press: 2, target: "REWRITE", kind: "soft_pulse"},
+                      {press: 3, target: "UPDATE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-05-06-01-guided", order: 2, stage: "guided",
                 prompt: "Villain bets flop, checks turn. Range now?",
@@ -521,6 +532,8 @@ export function buildSectionFive() {
                   choice("nutted", "Still nuts", "clear_mistake",
                     "Nuts usually keep betting.", {betterChoiceId: "capped"})
                 ],
+                // LPT-237
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "capped", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-05-06-01-scaffolded", order: 3, stage: "scaffolded",
@@ -533,6 +546,14 @@ export function buildSectionFive() {
                   choice("auto", "Call", "clear_mistake",
                     "Sunk cost.", {action: "CALL", betterChoiceId: "repr"})
                 ],
+                // LPT-237
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["7h", "6h"], board: ["Kh", "9h", "2c", "3d"]},
+                  },
+                  cues: [{press: 1, target: "repr", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-06-01-unguided", order: 4, stage: "scaffolded",
@@ -545,6 +566,8 @@ export function buildSectionFive() {
                   choice("freeze", "Lock flop forever", "clear_mistake",
                     "Misses turn/river info.", {betterChoiceId: "update"})
                 ],
+                // LPT-237
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "update", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -557,6 +580,8 @@ export function buildSectionFive() {
                   choice("bluff", "Always bluff", "clear_mistake",
                     "Too absolute.", {betterChoiceId: "uncap"})
                 ],
+                // LPT-237
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "uncap", kind: "none"}]},
               }),
             ],
           }),
