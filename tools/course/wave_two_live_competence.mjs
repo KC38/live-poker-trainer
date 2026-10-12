@@ -1232,7 +1232,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-03-01-explain", 1,
                 "Every flop choice should answer: what do I do on turn and river?",
-                {objectives: ["Build a multi-street plan"]}),
+                {
+                  objectives: ["Build a multi-street plan"],
+                  // LPT-174
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "FLOP", kind: "soft_pulse"},
+                      {press: 2, target: "TURN", kind: "soft_pulse"},
+                      {press: 3, target: "RIVER", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               multiStepAct({
                 id: "act-04-03-01-guided", order: 2, stage: "guided",
                 a11y: "Plan top pair across flop and turn.",
@@ -1263,6 +1274,17 @@ export function buildSectionFour() {
                     ],
                   },
                 ],
+                // LPT-174
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d", "3h"]},
+                  },
+                  cues: [
+                    {press: 1, target: "flop-bet", kind: "soft_pulse"},
+                    {press: 2, target: "turn-bet", kind: "soft_pulse"},
+                  ],
+                },
               }),
               actionAct({
                 id: "act-04-03-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1277,6 +1299,14 @@ export function buildSectionFour() {
                   choice("ignore-board", "Bet as if dry", "clear_mistake",
                     "Board texture is the plan update.", {action: "BET", amountBb: 8, betterChoiceId: "abort"})
                 ],
+                // LPT-174
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Qd", "9c"], board: ["Kh", "7h", "2h", "3h"]},
+                  },
+                  cues: [{press: 1, target: "abort", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-03-01-unguided", order: 4, stage: "scaffolded",
@@ -1290,6 +1320,11 @@ export function buildSectionFour() {
                     "Over-commitment with medium strength.",
                     {action: "ALL_IN", betterChoiceId: "small-pot"})
                 ],
+                // LPT-174
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "9s", "3h"]}},
+                  cues: [{press: 1, target: "small-pot", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1304,6 +1339,8 @@ export function buildSectionFour() {
                   choice("one-street", "Only this street, always", "questionable",
                     "One street is incomplete for live depth.")
                 ],
+                // LPT-174
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "branches", kind: "none"}]},
               }),
             ],
           }),

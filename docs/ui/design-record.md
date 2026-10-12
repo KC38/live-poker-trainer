@@ -552,7 +552,7 @@ hand (LPT-135), Baseline jump check (LPT-137), Read the table first
 (LPT-144), Choose a flop line (LPT-149), Plan the turn card (LPT-152), Close
 the river correctly (LPT-155), Play tighter multiway (LPT-158), Patch the
 common leaks (LPT-161), Section 3 jump check (LPT-165), Think in ranges
-(LPT-167), Navigate 3-bet pots (LPT-170).
+(LPT-167), Navigate 3-bet pots (LPT-170), Plan beyond the flop (LPT-174).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -834,6 +834,13 @@ Navigate 3-bet pots `teachSpec` (LPT-170): explain SoftPulse advances 3-BET
 (trash offsuit), and AhKd (broadway offsuit) with SoftPulse `3bet-qq` /
 `fold-72` / `squeeze`; checkpoint authors fixed KhKd with cue `size-18` kind
 `none` (no pressHints).
+
+Plan beyond the flop `teachSpec` (LPT-174): explain SoftPulse advances FLOP
+→ TURN → RIVER; guided multi-street authors fixed AhKd on As7c2d3h with
+SoftPulse `flop-bet` then `turn-bet`; scaffolded authors fixed Qd9c on the
+LPT-400 four-heart turn Kh7h2h3h with SoftPulse `abort`; unguided authors
+fixed JhTd/Qc9s3h with SoftPulse `small-pot`; checkpoint uses `deal.mode`
+`none` and cue `branches` kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
