@@ -140,7 +140,12 @@ test("wave two sections expose postflop units, types, and jump tests", () => {
     .flatMap((u) => u.lessons)
     .find((l) => l.id === "lesson-04-10-02-section-four-jump-test");
   assert.ok(jump);
-  assert.ok(jump.activities.every((a) => a.stage === "jump_test"));
+  assert.ok(jump.activities.length > 0);
+  assert.ok(
+    jump.activities.every(
+      (a) => a.stage === "scaffolded" && a.assessmentRole === "jump_test",
+    ),
+  );
 });
 
 test("wave three sections expose advanced units, TAG/LAG, and capstones", () => {
