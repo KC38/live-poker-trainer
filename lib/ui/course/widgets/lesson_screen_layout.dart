@@ -705,6 +705,14 @@ String _lessonFrameLine(
       generation: bindGeneration,
     );
   }
+  // Framed multiway action asks: felt-first with pick-verb beats catalog
+  // “You missed entirely… Action?” + dock footer (LPT-367).
+  if (activity.id == 'act-03-07-01-guided') {
+    return 'Second pair four ways — pick Check to pot-control.';
+  }
+  if (activity.id == 'act-03-07-01-scaffolded') {
+    return 'Missed on a wet board with a crowd — pick Check, not a bluff.';
+  }
   // Densified select_identify asks (Baseline jump; Count outs) must beat
   // catalog quiz prompts before resolveLessonCoachPrompt (LPT-221, LPT-279).
   final densifiedSelect = selectIdentifyDensifiedCoachLine(activity.id);

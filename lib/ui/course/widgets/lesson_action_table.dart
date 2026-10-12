@@ -557,8 +557,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Checked to you · 4-way',
       );
     case 'act-03-07-01-scaffolded':
+      // True air on a wet monotone flop — no board-suit hole, no pair —
+      // so “missed entirely” / Check stays honest after isomorphic remap
+      // (Jh Td was already a flush draw and remapped into pocket pairs;
+      // LPT-367).
       return const LessonActionSpot(
-        heroCodes: ['Jh', 'Td'],
+        heroCodes: ['7s', '3d'],
         boardCodes: ['Ah', 'Kh', '9h'],
         potLabel: 'Pot 22',
         villainLine: 'Three callers behind',

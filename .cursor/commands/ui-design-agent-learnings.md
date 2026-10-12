@@ -233,7 +233,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer flush/straight showdown remap templates with **five** suited cards
   in the made flush (board + holes) and rank span < 12 so `_remapSpotCards`
   can vary boards; a four-suited flush template always falls back to one
-  fixed board (LPT-107 deal test).
+  fixed board (LPT-107 deal test). Postflop teach fingerprints must keep a
+  made-pair bit — `HandClassifier` labels underpair+strong-draw as
+  `strongDraw`, so a “missed” air template can otherwise remap to TT/QQ
+  (LPT-367 multiway scaffolded).
 - Prefer merging + Functions deploy before mini-proving a
   `gradeCourseResponse` / Nice! / `course_bank` sequence-id change — the
   worktree app still hits production until that deploy lands (LPT-74,
