@@ -13567,7 +13567,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive stack depth — tap 40bb or 200bb',
       semanticsStatic: 'Stack-depth unguided outcomes',
       caption: scene.caption ?? 'Hero 200bb, villain 40bb — effective?',
-      // No SoftPulse on unguided — still don’t gold-icon 40bb.
+      // SoftPulse + Rex own the cue — don’t gold-tip 40bb.
+      // Null guideRegion SoftPulses every phase (LPT-510).
+      guideRegion: LessonTableRegion.stackDepth40bb,
       phases: [
         (
           region: LessonTableRegion.stackDepth40bb,
