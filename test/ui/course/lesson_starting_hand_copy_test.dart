@@ -60,6 +60,25 @@ void main() {
     );
   });
 
+  test('alignStartingHandCopy rewrites decade-compound Seventy-two trash', () {
+    expect(
+      alignStartingHandCopy(
+        text: 'Seventy-two offsuit is not an open from UTG.',
+        templateHero: const ['7h', '2d'],
+        dealtHero: const ['8c', '5h'],
+      ),
+      'Eight-five offsuit is not an open from UTG.',
+    );
+    expect(
+      alignStartingHandCopy(
+        text: 'seventy-two offsuit folds under the gun.',
+        templateHero: const ['7c', '2d'],
+        dealtHero: const ['9d', '3c'],
+      ),
+      'nine-three offsuit folds under the gun.',
+    );
+  });
+
   test('alignStartingHandCopy rewrites sixes, case, and bare rank tokens', () {
     expect(
       alignStartingHandCopy(
@@ -241,6 +260,52 @@ void main() {
     );
     expect(aligned.feedback, expected);
     expect(aligned.feedback, isNot(contains('queens')));
+  });
+
+  test('graded UTG trash Oops follows remapped holes, not Seventy-two', () {
+    final activity = _activity('act-02-03-01-guided-utg');
+    late int generation;
+    late LessonActionSpot dealt;
+    for (generation = 0; generation < 64; generation++) {
+      final next = dealtLessonActionSpot(activity, generation: generation);
+      expect(next, isNotNull);
+      if (startingHandLabelFromCodes(next!.heroCodes) != '72o') {
+        dealt = next;
+        break;
+      }
+    }
+    expect(generation, lessThan(64));
+    const bank = 'Seventy-two offsuit is not an open from UTG.';
+    final expected = alignStartingHandCopy(
+      text: bank,
+      templateHero: const ['7h', '2d'],
+      dealtHero: dealt.heroCodes,
+    );
+    final aligned = alignLessonActionSubmitResult(
+      activity: activity,
+      generation: generation,
+      result: SubmitCourseStepResult(
+        attemptId: 'attempt',
+        activityId: activity.id,
+        grade: SoftGrade.clearMistake,
+        feedback: bank,
+        accepted: false,
+        lifeLost: false,
+        livesRemaining: 5,
+        xpAwarded: 0,
+        remediationRequired: false,
+        resume: const CourseResumePointer(
+          attemptId: 'attempt',
+          lessonId: 'lesson-02-03-01-open-fold',
+          activityId: 'act-02-03-01-guided-utg',
+          activityIndex: 1,
+        ),
+        duplicate: false,
+      ),
+    );
+    expect(aligned.feedback, expected);
+    expect(aligned.feedback.toLowerCase(), isNot(contains('seventy-two')));
+    expect(aligned.feedback.toLowerCase(), contains('offsuit'));
   });
 
   test('hand-families classify Hint follows remapped hero holes', () {
