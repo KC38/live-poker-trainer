@@ -1094,7 +1094,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Wide opens, keeps barreling — pick the label.',
       // SoftPulse owns Sample limits — don’t gold-tip the tile.
       'act-06-12-02-checkpoint' => 'Beside LAG label — pick what to show.',
-      // Unguided: name the habit; don’t tip Usually avoid.
+      // SoftPulse owns Usually avoid — don’t gold-tip the tile (LPT-503).
       'act-06-12-03-unguided' =>
         'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
       // SoftPulse owns Wide + pressure — don’t gold-tip the tile.
