@@ -67,6 +67,15 @@ class ClosureTest(unittest.TestCase):
             [],
         )
 
+    def test_fresh_profile_is_exactly_prerequisites(self) -> None:
+        """`fresh` writes only the prereq closure — not the lesson itself."""
+        lesson_id = "lesson-01-01-03-blinds-and-button"
+        self.assertEqual(
+            agent_seed.prerequisite_closure(LESSONS, lesson_id),
+            ["lesson-01-01-01-your-two-cards", "lesson-01-01-02-suits-and-ranks"],
+        )
+        self.assertNotIn(lesson_id, agent_seed.prerequisite_closure(LESSONS, lesson_id))
+
     def test_real_catalog_loads(self) -> None:
         lessons = agent_seed.load_lessons()
         self.assertGreater(len(lessons), 50)

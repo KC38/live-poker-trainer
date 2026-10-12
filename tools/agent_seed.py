@@ -8,13 +8,17 @@ with Firestore admin access, then optionally opens the lesson:
 
     python3 tools/agent_seed.py lessons --grep blinds
     python3 tools/agent_seed.py unlock --lesson "Hand ranks" --open
+    python3 tools/agent_seed.py fresh --lesson "Best five" --open
     python3 tools/agent_seed.py unlock --lesson lesson-02-01-01 --hearts 0
     python3 tools/agent_seed.py hearts 1
     python3 tools/agent_seed.py gems 50
 
 `unlock` marks every transitive prerequisite of the lesson complete
 (`users/{uid}/course/main.completedLessonIds`), so the server lets that
-lesson start. Hearts/gems set the wallet for refill/restore checks.
+lesson start. `fresh` sets completedLessonIds to **exactly** those
+prerequisites — clearing the lesson itself and any later progress — so a
+completed lesson is not opened in review mode (SoftPulse/cues hidden).
+Hearts/gems set the wallet for refill/restore checks.
 
 Safety: the uid comes from the running debug app (`whoami`), the profile
 must already exist (finish onboarding first), and signed-in accounts are
@@ -237,6 +241,15 @@ def build_parser() -> argparse.ArgumentParser:
     unlock.add_argument("--gems", type=int, default=None)
     unlock.add_argument("--open", action="store_true", help="openlesson after seeding")
 
+    fresh = sub.add_parser(
+        "fresh",
+        help="Prereqs only — clear lesson (+ later) for a non-review SoftPulse attempt",
+    )
+    fresh.add_argument("--lesson", required=True, help="Lesson id, id prefix, or title")
+    fresh.add_argument("--hearts", type=int, default=None)
+    fresh.add_argument("--gems", type=int, default=None)
+    fresh.add_argument("--open", action="store_true", help="openlesson after seeding")
+
     hearts = sub.add_parser("hearts", help="Set livesRemaining")
     hearts.add_argument("count", type=int)
 
@@ -276,6 +289,16 @@ def main(argv: list[str]) -> int:
         print(
             f"unlock {target['id']} ({target['title']}): "
             f"+{len(merged) - len(done)} prerequisite(s), {len(merged)} complete"
+        )
+    elif args.action == "fresh":
+        target = resolve_lesson(lessons, args.lesson)
+        done = read_string_array(profile.get("completedLessonIds"))
+        needed = prerequisite_closure(lessons, target["id"])
+        fields["completedLessonIds"] = string_array(needed)
+        removed = [lesson_id for lesson_id in done if lesson_id not in needed]
+        print(
+            f"fresh {target['id']} ({target['title']}): "
+            f"{len(needed)} prerequisite(s), cleared {len(removed)} completed id(s)"
         )
     hearts = args.count if args.action == "hearts" else getattr(args, "hearts", None)
     if hearts is not None:
