@@ -195,6 +195,7 @@ void main() {
       'ui-agent-learnings-pending.md',
       'never open a learnings-only PR for one run',
       'python3 tools/agent_tap.py tree',
+      'python3 tools/agent_tap.py wait-gold',
     ]) {
       expect(command, contains(needle), reason: needle);
     }

@@ -107,5 +107,35 @@ class AgentTapTreeTest(unittest.TestCase):
         self.assertIn("'HINT' [disabled key=lesson-hint]", text)
 
 
+class AgentTapWaitGoldTest(unittest.TestCase):
+    """wait-gold polls tree until SoftPulse appears."""
+
+    def test_gold_ready_matches_needle(self) -> None:
+        tree = {"gold": ["BLINDS", "You"]}
+        self.assertTrue(agent_tap.gold_ready(tree))
+        self.assertTrue(agent_tap.gold_ready(tree, "blind"))
+        self.assertFalse(agent_tap.gold_ready(tree, "Fold"))
+        self.assertFalse(agent_tap.gold_ready({"gold": []}))
+
+    def test_wait_gold_returns_when_ready(self) -> None:
+        states = [{"gold": []}, {"gold": ["BTN"]}]
+        tree = agent_tap.wait_gold(
+            timeout=2.0,
+            poll=0.01,
+            tree_fn=lambda: states.pop(0) if states else {"gold": ["BTN"]},
+        )
+        self.assertEqual(tree["gold"], ["BTN"])
+
+    def test_wait_gold_times_out(self) -> None:
+        with self.assertRaises(SystemExit) as ctx:
+            agent_tap.wait_gold(
+                timeout=0.05,
+                poll=0.01,
+                text="Fold",
+                tree_fn=lambda: {"gold": ["BTN"]},
+            )
+        self.assertIn("no gold SoftPulse", str(ctx.exception))
+
+
 if __name__ == "__main__":
     unittest.main()
