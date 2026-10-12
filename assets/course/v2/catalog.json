@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "a63db06c86b84b9ca56523bc78b803fc9ba239932b4d6cca3c59ee03e911da5c",
+  "contentChecksum": "89f94c40c506838de32b0da4577080b7d950a4a083011a86df27f95e8a6f4b52",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -905,7 +905,42 @@
                   ],
                   "objectives": [
                     "Order common hand ranks"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "variants": [
+                        {
+                          "id": "var-pair-seat",
+                          "handFamily": "pair",
+                          "label": "Pair seat"
+                        },
+                        {
+                          "id": "var-flush-seat",
+                          "handFamily": "flush",
+                          "label": "Flush seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-01-guided-ladder",
@@ -936,7 +971,42 @@
                       "id": "jo",
                       "label": "Jo"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "variants": [
+                        {
+                          "id": "var-pair-seat",
+                          "handFamily": "pair",
+                          "label": "Pair seat"
+                        },
+                        {
+                          "id": "var-flush-seat",
+                          "handFamily": "flush",
+                          "label": "Flush seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-01-scaffolded-spot",
@@ -967,7 +1037,42 @@
                       "id": "jo",
                       "label": "Jo"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair",
+                      "variants": [
+                        {
+                          "id": "var-straight-seat",
+                          "handFamily": "straight",
+                          "label": "Straight seat"
+                        },
+                        {
+                          "id": "var-flush-seat",
+                          "handFamily": "flush",
+                          "label": "Flush seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-01-unguided-compare",
@@ -998,7 +1103,42 @@
                       "id": "jo",
                       "label": "Jo"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "full_house",
+                      "variants": [
+                        {
+                          "id": "var-trips-seat",
+                          "handFamily": "trips",
+                          "label": "Trips seat"
+                        },
+                        {
+                          "id": "var-two-pair-seat",
+                          "handFamily": "two_pair",
+                          "label": "Two pair seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-02-01-checkpoint-winner",
@@ -1031,7 +1171,42 @@
                       "label": "Jo"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "flush",
+                      "variants": [
+                        {
+                          "id": "var-straight-seat",
+                          "handFamily": "straight",
+                          "label": "Straight seat"
+                        },
+                        {
+                          "id": "var-high-card-seat",
+                          "handFamily": "high_card",
+                          "label": "High card seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },

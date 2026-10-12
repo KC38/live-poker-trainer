@@ -29,8 +29,9 @@ Authored on activities (`content/course/v2/schemas/teach_spec.schema.json`):
 
 Pilot: `lesson-01-01-01-your-two-cards`. Lessons that follow it on every
 interactive step: `lesson-01-01-02-suits-and-ranks` (LPT-81),
-`lesson-01-01-03-blinds-and-button` (LPT-85). Missing teachSpec on
-interactive steps is a content gap the agent files.
+`lesson-01-01-03-blinds-and-button` (LPT-85), `lesson-01-02-01-hand-ranks`
+(LPT-88). Missing teachSpec on interactive steps is a content gap the agent
+files.
 
 ## Jira routing
 

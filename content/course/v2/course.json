@@ -1066,6 +1066,41 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "High card, then pair, then flush."
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "variants": [
+                        {
+                          "id": "var-pair-seat",
+                          "handFamily": "pair",
+                          "label": "Pair seat"
+                        },
+                        {
+                          "id": "var-flush-seat",
+                          "handFamily": "flush",
+                          "label": "Flush seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -1112,6 +1147,41 @@
                       "grade": "clear_mistake",
                       "feedback": "Flush is strongest of these three."
                     }
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "variants": [
+                        {
+                          "id": "var-pair-seat",
+                          "handFamily": "pair",
+                          "label": "Pair seat"
+                        },
+                        {
+                          "id": "var-flush-seat",
+                          "handFamily": "flush",
+                          "label": "Flush seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -1158,6 +1228,41 @@
                       "grade": "clear_mistake",
                       "feedback": "Flush beats straight; straight beats pair."
                     }
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair",
+                      "variants": [
+                        {
+                          "id": "var-straight-seat",
+                          "handFamily": "straight",
+                          "label": "Straight seat"
+                        },
+                        {
+                          "id": "var-flush-seat",
+                          "handFamily": "flush",
+                          "label": "Flush seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -1204,6 +1309,41 @@
                       "grade": "clear_mistake",
                       "feedback": "Full house tops trips; trips top two pair."
                     }
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "full_house",
+                      "variants": [
+                        {
+                          "id": "var-trips-seat",
+                          "handFamily": "trips",
+                          "label": "Trips seat"
+                        },
+                        {
+                          "id": "var-two-pair-seat",
+                          "handFamily": "two_pair",
+                          "label": "Two pair seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -1252,7 +1392,42 @@
                       "feedback": "Flush is strongest; high card is weakest."
                     }
                   },
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "flush",
+                      "variants": [
+                        {
+                          "id": "var-straight-seat",
+                          "handFamily": "straight",
+                          "label": "Straight seat"
+                        },
+                        {
+                          "id": "var-high-card-seat",
+                          "handFamily": "high_card",
+                          "label": "High card seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "you",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "sam",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 3,
+                        "target": "jo",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },

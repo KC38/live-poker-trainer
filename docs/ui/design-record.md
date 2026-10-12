@@ -540,7 +540,8 @@ fields live in `teachSpec` (see course schemas). Audited by
 `/lesson-content-agent`. Your two cards is the pilot. These lessons author
 `teachSpec` on every interactive step the same way, with deal classes that
 match what `lesson_card_deal.dart` deals (`deal.mode` `none` when the step
-deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85).
+deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85), Hand
+ranks (LPT-88).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -603,6 +604,16 @@ hidden stays in Dart), the timing step `before-deal`, and the checkpoint a
 `none` cue on SB with no `pressHints` or Hint media. Cue targets are the
 puck labels `lessonPuckLabelForHighlight` returns, so there is no second
 cue system.
+
+Hand ranks `teachSpec` (LPT-88): each step deals `random_in_class` with the
+three classes `dealShowdownOrderCards` deals, the first-press class as
+`handFamily` and the other two as seat `variants` (explain and guided: high
+card, pair, flush; scaffolded spot: pair, straight, flush; unguided compare:
+full house, trips, two pair; checkpoint: flush, straight, high card). Cues
+target the role ids `you` → `sam` → `jo` in press order, not physical seats,
+because `_shuffleShowdownSeatRoles` moves each role to a random seat and
+SoftPulse / Hint follow the role (LPT-54). The checkpoint cues are `none`,
+with no `pressHints` or Hint media.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
