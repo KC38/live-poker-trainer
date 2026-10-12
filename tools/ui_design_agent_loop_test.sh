@@ -443,6 +443,42 @@ grep -q 'coverage:closed ticket:LPT-61 surface:lesson-runner:best-five-kickers' 
 grep -q 'Functions deploy' "$HEALTH_FILE" \
   && fail "repaired health must drop agent prose: $(cat "$HEALTH_FILE")"
 
+# write_health_row strips machine SDK stream markers from log tails.
+sdk_log="$LOG_DIR/run-sdk-stream.log"
+printf '%s\n' \
+  'Re-running flutter_run_fast.sh{"t":1791778842861,"type":"thinking"} as blocking' \
+  'command.{"t":1791778843540,"type":"assistant"}' \
+  >"$sdk_log"
+: >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+write_health_row "20261012-093041" "143" "1303" "$sdk_log" "$start_epoch"
+grep -q '"type":"thinking"' "$HEALTH_FILE" \
+  && fail "health tail must strip SDK thinking markers: $(cat "$HEALTH_FILE")"
+grep -q 'flutter_run_fast' "$HEALTH_FILE" \
+  || fail "health tail should keep human text after scrub: $(cat "$HEALTH_FILE")"
+
+# repair_health_tails scrubs SDK pollution when coverage is late/missing.
+printf '%s\n' \
+  '{"at":"2026-10-12T09:52:24+05:30","stamp":"20261012-093041","exit":143,"seconds":1303,"ticket":null,"result":null,"tail":"the process and rerun{\"t\":1791778842861,\"type\":\"thinking\"} flutter_run_fast.sh{\"t\":1791778843540,\"type\":\"assistant\"}"}' \
+  >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+repair_health_tails
+grep -q '"type":"thinking"' "$HEALTH_FILE" \
+  && fail "repair must strip SDK thinking from orphan tails: $(cat "$HEALTH_FILE")"
+grep -q 'flutter_run_fast' "$HEALTH_FILE" \
+  || fail "repair should keep scrubbed prose: $(cat "$HEALTH_FILE")"
+
+# Late coverage after SIGTERM still fills the stamp (pad beyond seconds+120).
+printf '%s\n' \
+  '{"at":"2026-10-12T09:52:24+05:30","stamp":"20261012-093041","exit":143,"seconds":1303,"ticket":null,"result":null,"tail":"rerun{\"t\":1,\"type\":\"thinking\"} flutter"}' \
+  >"$HEALTH_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-12T09:59:56+05:30","sha":"z","surface":"hand-families","result":"closed","ticket":"LPT-134","leads":[],"learnings":"updated"}' \
+  >"$COVERAGE_FILE"
+repair_health_tails
+grep -q 'coverage:closed ticket:LPT-134 surface:hand-families' "$HEALTH_FILE" \
+  || fail "repair should match late coverage after kill: $(cat "$HEALTH_FILE")"
+
 # Usage-limit detection + sleep length from reset date in the run log.
 usage_log="$LOG_DIR/run-usage-limit.log"
 printf '%s\n' \
