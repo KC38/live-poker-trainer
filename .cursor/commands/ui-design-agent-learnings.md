@@ -225,6 +225,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `/tmp/flutter-iphone-13-mini.active.log` at the worktree session. Passing
   the primary `/tmp/flutter-live-poker-trainer.run.log` while the worktree
   owns the mini talks to the wrong VM (LPT-78).
+- Prefer a Dart-side Hint / coach override (or `--no-cache` full rebuild)
+  when a fix changes `assets/course/v2/catalog.json` — cached `Runner.app`
+  via `flutter_run_fast.sh` hot-restarts Dart but can keep a stale asset
+  bundle, so catalog-only Hint copy looks unfixed until Xcode rebuilds
+  (LPT-327).
 - Prefer flush/straight showdown remap templates with **five** suited cards
   in the made flush (board + holes) and rank span < 12 so `_remapSpotCards`
   can vary boards; a four-suited flush template always falls back to one
