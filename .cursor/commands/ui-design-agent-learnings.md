@@ -239,7 +239,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (LPT-367 multiway scaffolded). Prefer verifying gutshot/OESD templates
   with `HandClassifier.drawOuts` (four consecutive-looking ranks like
   A-J-T-9-8 are not a straight) before locking coach “four outs” copy —
-  JT on A72 remapped as air under a gutshot ask (LPT-381).
+  JT on A72 remapped as air under a gutshot ask (LPT-381). Split `HandClass.strongMade` with `isSet` + `distinctBoardPairingHoles` so top-two river templates never remap to a set (LPT-392).
 - Prefer merging + Functions deploy before mini-proving a
   `gradeCourseResponse` / Nice! / `course_bank` sequence-id change — the
   worktree app still hits production until that deploy lands (LPT-74,
@@ -253,11 +253,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   required origin/main re-walk, not a failed fix — LPT-173 squash matched
   the worktree lib change while catalog moved on main.
 - Prefer `villainSeatCount: 0` on conceptual outcome scenes that do not
-  deal holes (effective-stack / depth tiles). Default `1` paints a decoy
-  face-down Them pair — LPT-220.
-- Prefer framed `LessonTableStage` with `lessonNineMaxVillainCount` +
-  `seatNames: Seat N` when coach copy names seat numbers on a nine-handed
-  ask (LPT-240 Read the table scaffolded); densify `blindsSeats`+
+  deal holes (effective-stack / depth tiles; default `1` paints a decoy
+  Them pair — LPT-220). Prefer framed `LessonTableStage` with
+  `lessonNineMaxVillainCount` + `seatNames: Seat N` when coach copy names
+  seat numbers on a nine-handed ask (LPT-240); densify `blindsSeats`+
   `numberSeats` covers the no-frame path.
 - Prefer extending `alignLessonTableCopy` (board+hole card tokens and
   spoken rank/suit words) when densified isomorphic remap leaves catalog
@@ -296,7 +295,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   sessions — run them with `tools/tee_exit.sh /tmp/test-LPT-….log flutter
   test …` (same for `analyze-LPT-*` / `dart analyze`) so `EXIT:N` is the
   command status; bare `cmd | tee; echo EXIT:$?` masks failures as 0
-  (LPT-367). Write coverage before long compiles when the ticket is
+  (LPT-367).
+- Prefer a `/tmp/test-LPT-NN.done` (or `DONE_*:N` log line) marker after named `test-LPT-*` / `analyze-LPT-*` tmux work over grepping the pane for `EXIT:` — the send-keys command text itself contains `EXIT:$?` and can false-trigger an early session kill before tests finish. Write coverage before long compiles when the ticket is
   already Done in Jira.
 - Jira: `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` in that secrets file.
   `jira.py check` failure → `JIRA_UNAVAILABLE`. `create` prints

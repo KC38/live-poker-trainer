@@ -568,6 +568,9 @@ int _drawOutsFor(List<String> hero, List<String> board) {
 /// pocket pair or board pair that [HandClassifier] still labels as a draw
 /// when outs are strong (underpair + flush draw → [HandClass.strongDraw];
 /// LPT-367).
+/// [isSet] and [distinctBoardPairingHoles] keep [HandClass.strongMade]
+/// top-two templates (two distinct holes each pairing the board) from
+/// remapping into a set — both collapse to strongMade (LPT-392).
 ({
   HandClass handClass,
   int drawOuts,
@@ -575,6 +578,8 @@ int _drawOutsFor(List<String> hero, List<String> board) {
   int broadwayCount,
   bool heroSuited,
   bool hasMadePair,
+  bool isSet,
+  int distinctBoardPairingHoles,
 }) _postflopTeachKey(List<String> hero, List<String> board) {
   return (
     handClass: _handClassFor(hero, board),
@@ -583,6 +588,8 @@ int _drawOutsFor(List<String> hero, List<String> board) {
     broadwayCount: _broadwayHoleCount(hero),
     heroSuited: _heroHolesSuited(hero),
     hasMadePair: _heroHasMadePair(hero, board),
+    isSet: _heroHasSet(hero, board),
+    distinctBoardPairingHoles: _distinctBoardPairingHoleCount(hero, board),
   );
 }
 
@@ -596,6 +603,32 @@ bool _heroHasMadePair(List<String> hero, List<String> board) {
     for (final code in board) CardModel.fromCode(code).rank,
   };
   return boardRanks.contains(h0.rank) || boardRanks.contains(h1.rank);
+}
+
+/// Whether [hero] makes a set: pocket pair whose rank appears on the board.
+bool _heroHasSet(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length < 3) return false;
+  final h0 = CardModel.fromCode(hero[0]);
+  final h1 = CardModel.fromCode(hero[1]);
+  if (h0.rank != h1.rank) return false;
+  return board.any((code) => CardModel.fromCode(code).rank == h0.rank);
+}
+
+/// Count of distinct hero hole ranks that also appear on the board.
+///
+/// Top two / two pair from holes is 2 (each hole pairs a different board
+/// rank). A set is 1 (both holes share one board-matching rank).
+int _distinctBoardPairingHoleCount(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length < 3) return 0;
+  final boardRanks = <int>{
+    for (final code in board) CardModel.fromCode(code).rank,
+  };
+  final pairing = <int>{};
+  for (final code in hero) {
+    final rank = CardModel.fromCode(code).rank;
+    if (boardRanks.contains(rank)) pairing.add(rank);
+  }
+  return pairing.length;
 }
 
 /// Ten or higher (T, J, Q, K, A).

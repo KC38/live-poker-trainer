@@ -652,6 +652,79 @@ void main() {
   );
 
   test(
+    'section 3 jump-river top-two template never remaps to a set (LPT-392)',
+    () {
+      final activity = CourseActivity(
+        id: 'act-03-08-02-jump-river',
+        order: 4,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.jumpTest,
+        renderer: ActivityRenderer.pokerActionSizing,
+        estimatedSeconds: 40,
+        accessibilityText: 'Jump: value bet two pair.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Brick river. You have top two. Villain checks. Action?',
+      );
+      final template = resolveLessonActionSpot(activity)!;
+      expect(template.heroCodes, ['Ah', 'Kd']);
+      expect(template.boardCodes, ['As', 'Kc', '7d', '2h', '3c']);
+      // On this brick board the only dual-broadway top-two holes are A+K, so
+      // ranks stay fixed; suits must still vary and never collapse to a set.
+      final suitKeys = <String>{};
+      for (var seed = 0; seed < 64; seed++) {
+        final spot = dealtLessonActionSpot(
+          activity,
+          generation: seed,
+          random: Random(seed),
+        )!;
+        final dealtHero = [
+          for (final c in spot.heroCodes) CardModel.fromCode(c),
+        ];
+        final dealtBoard = [
+          for (final c in spot.boardCodes) CardModel.fromCode(c),
+        ];
+        expect(
+          dealtHero[0].rank == dealtHero[1].rank,
+          isFalse,
+          reason:
+              'seed $seed no pocket pair/set: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        final boardRanks = {for (final c in dealtBoard) c.rank};
+        expect(
+          boardRanks.contains(dealtHero[0].rank),
+          isTrue,
+          reason:
+              'seed $seed hole0 pairs board: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        expect(
+          boardRanks.contains(dealtHero[1].rank),
+          isTrue,
+          reason:
+              'seed $seed hole1 pairs board: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        expect(
+          dealtHero[0].rank != dealtHero[1].rank,
+          isTrue,
+          reason:
+              'seed $seed two distinct pairing ranks: ${spot.heroCodes} on ${spot.boardCodes}',
+        );
+        // Dual broadway on A/K brick → always Ace + King ranks.
+        final ranks = [for (final c in dealtHero) c.rank]..sort();
+        expect(ranks, [13, 14], reason: 'seed $seed top-two A+K ranks');
+        expect(
+          dealtHero[0].suit != dealtHero[1].suit,
+          isTrue,
+          reason: 'seed $seed keeps offsuit: ${spot.heroCodes}',
+        );
+        suitKeys.add(
+          ([for (final c in dealtHero) '${c.rank}${c.suit}']..sort()).join(','),
+        );
+      }
+      expect(suitKeys.length, greaterThan(1));
+    },
+  );
+
+  test(
     'leak-repair scaffolded gutshot template keeps four outs after remap '
     '(LPT-381)',
     () {
