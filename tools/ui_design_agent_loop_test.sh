@@ -532,6 +532,20 @@ grep -q '"stall_upgraded": true' "$HEALTH_FILE" \
 grep -q '"result": "stalled"' "$HEALTH_FILE" \
   && fail "upgraded stall must not keep result=stalled: $(cat "$HEALTH_FILE")"
 
+# Drop stamp=reconciled when a real stamp already holds the same ticket.
+printf '%s\n' \
+  '{"at":"2026-10-12T13:00:15+05:30","stamp":"20261012-123827","exit":13,"seconds":1308,"ticket":"LPT-240","result":"closed","tail":"coverage:closed ticket:LPT-240 surface:lesson-runner:read-the-table-first","stall_upgraded":true}' \
+  '{"at":"2026-10-12T13:05:09+05:30","stamp":"reconciled","exit":0,"seconds":null,"ticket":"LPT-240","result":"closed","tail":"reconciled from coverage surface=lesson-runner:read-the-table-first","reconciled":true}' \
+  >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+repair_health_tails
+grep -q '"stamp": "reconciled"' "$HEALTH_FILE" \
+  && fail "repair should drop duplicate reconciled when stamp holds ticket: $(cat "$HEALTH_FILE")"
+grep -q '"stamp": "20261012-123827"' "$HEALTH_FILE" \
+  || fail "repair must keep the real stamp row: $(cat "$HEALTH_FILE")"
+[[ "$(grep -c LPT-240 "$HEALTH_FILE")" == 1 ]] \
+  || fail "LPT-240 should appear once after dedupe: $(cat "$HEALTH_FILE")"
+
 # Usage-limit detection + sleep length from reset date in the run log.
 usage_log="$LOG_DIR/run-usage-limit.log"
 printf '%s\n' \
