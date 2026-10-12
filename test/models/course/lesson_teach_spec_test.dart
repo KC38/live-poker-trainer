@@ -198,6 +198,14 @@ const _lessons = <String, List<String>>{
     'act-03-06-01-unguided',
     'act-03-06-01-checkpoint',
   ],
+  // LPT-158
+  'lesson-03-07-01-multiway-fundamentals': [
+    'act-03-07-01-explain',
+    'act-03-07-01-guided',
+    'act-03-07-01-scaffolded',
+    'act-03-07-01-unguided',
+    'act-03-07-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -1155,6 +1163,44 @@ void main() {
       expect(cp.teachSpec!['deal'], {'mode': 'none'});
       expect(_list(cp, 'cues').single['kind'], 'none');
       expect(_list(cp, 'cues').single['target'], 'role-catch');
+    });
+  });
+
+  group('Play tighter multiway (LPT-158)', () {
+    test('explain SoftPulse walks STRONGER → FEWER → NUTS', () {
+      expect(
+        _list(
+          act('act-03-07-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['STRONGER', 'FEWER', 'NUTS'],
+      );
+    });
+
+    test('action/select steps author deals; checkpoint quiet none', () {
+      expect(
+        _list(act('act-03-07-01-guided'), 'cues').single['target'],
+        'check-2p',
+      );
+      expect(act('act-03-07-01-guided').teachSpec!['deal']['mode'], 'fixed');
+      expect(
+        _list(act('act-03-07-01-scaffolded'), 'cues').single['target'],
+        'mw-check',
+      );
+      expect(
+        act('act-03-07-01-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['7s', '3d'],
+      );
+      expect(
+        _list(act('act-03-07-01-unguided'), 'cues').single['target'],
+        'sc',
+      );
+      final cp = act('act-03-07-01-checkpoint');
+      expect(cp.assessmentRole, AssessmentRole.checkpoint);
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
+      expect(cp.teachSpec!['deal'], {'mode': 'none'});
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(_list(cp, 'cues').single['target'], 'obs-many');
     });
   });
 }

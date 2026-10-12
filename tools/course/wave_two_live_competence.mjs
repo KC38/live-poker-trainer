@@ -675,7 +675,18 @@ export function buildSectionThree() {
             activities: [
               dialogue("act-03-07-01-explain", 1,
                 "More players: stronger value, fewer bluffs, chase nuts not second-best.",
-                {objectives: ["Demand stronger made hands multiway"]}),
+                {
+                  objectives: ["Demand stronger made hands multiway"],
+                  // LPT-158
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "STRONGER", kind: "soft_pulse"},
+                      {press: 2, target: "FEWER", kind: "soft_pulse"},
+                      {press: 3, target: "NUTS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-03-07-01-guided", order: 2, stage: "guided",
                 prompt: "Four players to the flop. You have second pair. Checked to you. Action?",
@@ -689,6 +700,11 @@ export function buildSectionThree() {
                   choice("jam-2p", "Jam", "clear_mistake",
                     "Overplaying medium strength multiway.", {action: "ALL_IN", betterChoiceId: "check-2p"})
                 ],
+                // LPT-158
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["7h", "9d"], board: ["Kc", "7s", "2d"]}},
+                  cues: [{press: 1, target: "check-2p", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-03-07-01-scaffolded", order: 3, stage: "scaffolded",
@@ -703,6 +719,11 @@ export function buildSectionThree() {
                   choice("mw-min", "Min-bluff", "clear_mistake",
                     "Tiny bluffs get called multiway.", {action: "BET", amountBb: 1, betterChoiceId: "mw-check"})
                 ],
+                // LPT-158
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["7s", "3d"], board: ["Ah", "Kh", "9h"]}},
+                  cues: [{press: 1, target: "mw-check", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-03-07-01-unguided", order: 4, stage: "scaffolded",
@@ -717,6 +738,8 @@ export function buildSectionThree() {
                   choice("q6o", "Q6o any seat", "clear_mistake",
                     "Trash without nut potential.", {betterChoiceId: "sc"})
                 ],
+                // LPT-158
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sc", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-03-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -731,6 +754,8 @@ export function buildSectionThree() {
                   choice("obs-label", "Immediately insult their personality", "clear_mistake",
                     "Observe behavior; do not moralize.", {betterChoiceId: "obs-many"})
                 ],
+                // LPT-158
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "obs-many", kind: "none"}]},
               }),
             ],
           }),

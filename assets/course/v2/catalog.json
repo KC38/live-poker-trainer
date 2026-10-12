@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "9cff0571cebec177bcd2069e9b9ed9f4b15ed5805b91f8126d6e3a25631873b8",
+  "contentChecksum": "d11be506001a72b9fb766d09140c5fe22f816a9910b09b8eee035061b96696a4",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -7485,7 +7485,29 @@
                   ],
                   "objectives": [
                     "Demand stronger made hands multiway"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STRONGER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FEWER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "NUTS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-07-01-guided",
@@ -7523,7 +7545,30 @@
                       "accessibilityText": "Jam",
                       "action": "ALL_IN"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "7h",
+                          "9d"
+                        ],
+                        "board": [
+                          "Kc",
+                          "7s",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "check-2p",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-07-01-scaffolded",
@@ -7562,7 +7607,30 @@
                       "action": "BET",
                       "amountBb": 1
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "7s",
+                          "3d"
+                        ],
+                        "board": [
+                          "Ah",
+                          "Kh",
+                          "9h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "mw-check",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-07-01-unguided",
@@ -7596,7 +7664,19 @@
                       "label": "Q6o any seat",
                       "accessibilityText": "Q6o any seat"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "sc",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-07-01-checkpoint",
@@ -7631,7 +7711,19 @@
                       "accessibilityText": "Immediately insult their personality"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "obs-many",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
