@@ -554,7 +554,8 @@ the river correctly (LPT-155), Play tighter multiway (LPT-158), Patch the
 common leaks (LPT-161), Section 3 jump check (LPT-165), Think in ranges
 (LPT-167), Navigate 3-bet pots (LPT-170), Plan beyond the flop (LPT-174),
 Size with a message (LPT-177), SPR decides commitment (LPT-180), Observe
-sticky callers (LPT-184), Meet the Calling Station (LPT-187).
+sticky callers (LPT-184), Meet the Calling Station (LPT-187), Adjust versus
+Calling Station (LPT-190).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -870,6 +871,12 @@ Meet the Calling Station `teachSpec` (LPT-187): explain SoftPulse advances
 STATION → HIGH → LOW; guided `none` → `pt-station`; scaffolded `none` →
 `model`; unguided `none` → `station2`; checkpoint `none` → `low`; assessment
 steps use cue kind `none` (no pressHints).
+
+Adjust versus Calling Station `teachSpec` (LPT-190): explain SoftPulse
+advances VALUE → BLUFFS → CITE; guided fixed JhTd/QcTs3h2d7c → `thin-val`;
+scaffolded fixed 8h7h/Kh9h2c3d5s → `give-up`; unguided fixed JhTd/QcTs3h2d7c
+→ `baseline-check`; checkpoint `none` → `cite-fold`; assessment steps use
+cue kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
