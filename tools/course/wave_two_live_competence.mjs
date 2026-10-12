@@ -2081,6 +2081,15 @@ export function buildSectionFour() {
                   objectives: ["Tag extreme entry"],
                   // LPT-463: short Nice! why — not accessibilityText / idle ask.
                   okFeedback: "Raise → Barrel → Count.",
+                  // LPT-203
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "RAISE", kind: "soft_pulse"},
+                      {press: 2, target: "BARREL", kind: "soft_pulse"},
+                      {press: 3, target: "COUNT", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               selectAct({
                 id: "act-04-08-01-guided", order: 2, stage: "guided",
@@ -2093,6 +2102,8 @@ export function buildSectionFour() {
                   choice("nit-like", "Narrow and timid", "clear_mistake",
                     "Opposite.", {betterChoiceId: "extreme"})
                 ],
+                // LPT-203
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "extreme", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-08-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2105,6 +2116,8 @@ export function buildSectionFour() {
                   choice("passive-m", "They never bet", "clear_mistake",
                     "They never stop betting.", {betterChoiceId: "pressure"})
                 ],
+                // LPT-203
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pressure", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-08-01-unguided", order: 4, stage: "scaffolded",
@@ -2117,6 +2130,8 @@ export function buildSectionFour() {
                   choice("ego", "Write revenge plans", "clear_mistake",
                     "Ego battles burn stacks.", {betterChoiceId: "calm"})
                 ],
+                // LPT-203
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "calm", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-04-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2129,6 +2144,8 @@ export function buildSectionFour() {
                   choice("bundle-n", "Almost never plays", "clear_mistake",
                     "That is nit evidence.", {betterChoiceId: "bundle-m"})
                 ],
+                // LPT-203
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "bundle-m", kind: "none"}]},
               }),
             ],
           }),

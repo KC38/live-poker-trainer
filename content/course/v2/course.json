@@ -13731,6 +13731,28 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "Raise \u2192 Barrel \u2192 Count."
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BARREL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "COUNT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -13769,7 +13791,19 @@
                         "betterChoiceId": "extreme"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "extreme",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-08-01-scaffolded",
@@ -13807,7 +13841,19 @@
                         "betterChoiceId": "pressure"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pressure",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-08-01-unguided",
@@ -13845,7 +13891,19 @@
                         "betterChoiceId": "calm"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "calm",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-08-01-checkpoint",
@@ -13884,7 +13942,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bundle-m",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
