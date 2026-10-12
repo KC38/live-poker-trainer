@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "9cff35dfc57f1df3a9c680cb28b6fb47f9a33ef9d42187f7f1702d13a51a9d6e",
+  "contentChecksum": "a27414818d96589b018c1f033e80ba29fe76c19de8d3ec130eaf8d2d66888dce",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -2125,7 +2125,34 @@
                       "id": "st-river",
                       "label": "River"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "st-pre",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "st-flop",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "st-turn",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "st-river",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-04-01-scaffolded-order",
@@ -2160,7 +2187,34 @@
                       "id": "seat-btn",
                       "label": "BTN"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "seat-utg",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "seat-hj",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "seat-co",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "seat-btn",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-04-01-unguided-end",
@@ -2194,7 +2248,19 @@
                       "label": "Someone folds",
                       "accessibilityText": "Someone folds"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "matched",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-04-01-checkpoint-postflop",
@@ -2230,7 +2296,19 @@
                       "accessibilityText": "BB"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "sb-first",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
