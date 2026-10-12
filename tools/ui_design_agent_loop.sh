@@ -2100,12 +2100,30 @@ PY
 # A plain `( sleep; ensure ) &` stayed in that process group and died on
 # SIGHUP, leaving the mini down until LaunchAgent or a manual ensure
 # (2026-10-13 soft-stop after LPT-513).
+#
+# Soft-stop-ensure.log must record schedule → wake → ensure stdout → exit.
+# A silent `exec ensure` left only an orphan "bridge: waiting" line when
+# ensure was already-alive (exit 0, no stdout) or died before writing.
 schedule_ensure_after_soft_stop() {
   mkdir -p "$LOG_DIR"
   local ensure_log="$LOG_DIR/soft-stop-ensure.log"
+  local delay="${UI_AGENT_SOFT_STOP_ENSURE_SLEEP:-2}"
+  {
+    echo "$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: scheduled (sleep ${delay}s then ensure)"
+  } >>"$ensure_log"
   # nohup + disown: detach from the dying run-loop / tmux pane.
-  nohup bash -c 'sleep 2; exec bash "$1" ensure' _ "$SCRIPT" \
-    >>"$ensure_log" 2>&1 &
+  nohup bash -c '
+    script="$1"
+    logf="$2"
+    delay="$3"
+    sleep "$delay"
+    echo "$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: waking after soft-stop sleep" >>"$logf"
+    set +e
+    bash "$script" ensure >>"$logf" 2>&1
+    code=$?
+    echo "$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: exit=$code" >>"$logf"
+    exit "$code"
+  ' _ "$SCRIPT" "$ensure_log" "$delay" >/dev/null 2>&1 &
   disown $! 2>/dev/null || true
 }
 
@@ -2294,8 +2312,10 @@ EOF
     ;;
   ensure)
     if loop_is_alive; then
+      echo "ensure: already running (loop pid $(cat "$LOOP_PID_FILE" 2>/dev/null || echo '?'))"
       exit 0
     fi
+    echo "ensure: starting loop"
     bash "$SCRIPT" start
     ;;
   uninstall)
