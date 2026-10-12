@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "035eb3d78c28d35927b02ac493dd3b2c057651922ca33dcb813e559b87e3b3f8",
+  "contentChecksum": "9cff35dfc57f1df3a9c680cb28b6fb47f9a33ef9d42187f7f1702d13a51a9d6e",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1869,7 +1869,20 @@
                       "kind": "hint",
                       "text": "Nobody put in a bet yet — betting is open."
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "top_pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bet-half",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-02-scaffolded-raise",
@@ -1908,7 +1921,20 @@
                       "action": "BET",
                       "amountBb": 2.5
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "top_pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "raise-15",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-02-unguided-allin",
@@ -1945,7 +1971,20 @@
                       "accessibilityText": "Fold",
                       "action": "FOLD"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "top_pair"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "shove-12",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-02-checkpoint-names",
@@ -1986,7 +2025,20 @@
                       "action": "CALL"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "air"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "named-bet",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

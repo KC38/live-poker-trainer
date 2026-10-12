@@ -50,6 +50,13 @@ const _lessons = <String, List<String>>{
     'act-01-03-01-unguided-call',
     'act-01-03-01-checkpoint-legal',
   ],
+  // LPT-98
+  'lesson-01-03-02-bet-raise-allin': [
+    'act-01-03-02-guided-bet',
+    'act-01-03-02-scaffolded-raise',
+    'act-01-03-02-unguided-allin',
+    'act-01-03-02-checkpoint-names',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -344,6 +351,58 @@ void main() {
           final spot = dealtLessonActionSpot(a, random: Random(seed))!;
           expect(snake(classOf(spot)), family, reason: '$id $seed');
           expect(spot.facingBet, template.facingBet, reason: id);
+        }
+      }
+    });
+  });
+
+  group('Bet, raise, all-in (LPT-98)', () {
+    const want = {
+      'act-01-03-02-guided-bet': ('bet-half', 'BET', 'top_pair'),
+      'act-01-03-02-scaffolded-raise': ('raise-15', 'RAISE', 'top_pair'),
+      'act-01-03-02-unguided-allin': ('shove-12', 'ALL_IN', 'top_pair'),
+      'act-01-03-02-checkpoint-names': ('named-bet', 'BET', 'air'),
+    };
+    int enc(String c) => FastEvaluator.encode(CardModel.fromCode(c));
+    String snake(HandClass c) => c.name.replaceAllMapped(
+      RegExp('[A-Z]'),
+      (m) => '_${m[0]!.toLowerCase()}',
+    );
+    HandClass classOf(LessonActionSpot s) => HandClassifier.classify(
+      enc(s.heroCodes[0]),
+      enc(s.heroCodes[1]),
+      [for (final b in s.boardCodes) enc(b)],
+    );
+
+    test('cues target the graded dock choice', () {
+      for (final MapEntry(key: id, value: w) in want.entries) {
+        final a = act(id);
+        final cues = _list(a, 'cues');
+        expect(cues, hasLength(1), reason: id);
+        expect(cues.single['target'], w.$1, reason: id);
+        final choice = a.choices.firstWhere((c) => c.id == w.$1);
+        expect(choice.action, w.$2, reason: id);
+        final deal = a.teachSpec!['deal'] as Map<String, dynamic>;
+        expect(deal['handFamily'], w.$3, reason: id);
+      }
+      expect(
+        _list(act('act-01-03-02-checkpoint-names'), 'cues').single['kind'],
+        'none',
+      );
+    });
+
+    test('postflop deals stay in the authored hand class', () {
+      for (final id in want.keys) {
+        final a = act(id);
+        final family =
+            (a.teachSpec!['deal'] as Map<String, dynamic>)['handFamily'];
+        final template = resolveLessonActionSpot(a)!;
+        expect(snake(classOf(template)), family, reason: id);
+        for (var seed = 0; seed < 16; seed++) {
+          final spot = dealtLessonActionSpot(a, random: Random(seed))!;
+          expect(snake(classOf(spot)), family, reason: '$id $seed');
+          expect(spot.facingBet, template.facingBet, reason: id);
+          expect(spot.openPot, template.openPot, reason: id);
         }
       }
     });

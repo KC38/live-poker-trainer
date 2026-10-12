@@ -541,7 +541,8 @@ fields live in `teachSpec` (see course schemas). Audited by
 `teachSpec` on every interactive step the same way, with deal classes that
 match what `lesson_card_deal.dart` deals (`deal.mode` `none` when the step
 deals no cards): Suits and ranks (LPT-81), Button and blinds (LPT-85), Hand
-ranks (LPT-88), Best five and kickers (LPT-91), Fold, check, call (LPT-94).
+ranks (LPT-88), Best five and kickers (LPT-91), Fold, check, call (LPT-94),
+Bet, raise, all-in (LPT-98).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -637,6 +638,14 @@ unguided call `strong_draw`). Cues name the graded dock choice (`fold-72`,
 `check-illegal` with kind `none` and has no `pressHints` or Hint media.
 `actionAct` in the wave helper now carries `assessmentRole` and
 `teachSpec`.
+
+Bet, raise, all-in `teachSpec` (LPT-98): each `poker_action_sizing` step
+deals `random_in_class` in the class `dealtLessonActionSpot` keeps: guided
+bet, scaffolded raise, and unguided all-in stay `top_pair` (top pair /
+overpair on the flop templates); checkpoint-names stays `air`. Cues name the
+graded dock choice (`bet-half`, `raise-15`, `shove-12`) as `soft_pulse`; the
+checkpoint cues `named-bet` with kind `none` and has no `pressHints` or Hint
+media.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

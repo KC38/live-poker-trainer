@@ -44,8 +44,9 @@ Optional authored deal / hint / cue contract on each activity
 hand/suit families + `variants`), `pressHints`, `cues`. Pilot: Your two
 cards. Lessons that follow it on every interactive step: Suits and ranks
 (LPT-81), Button and blinds (LPT-85), Hand ranks (LPT-88), Best five and
-kickers (LPT-91), Fold, check, call (LPT-94). Content gaps are audited by
-[11 — Lesson content agent](11-lesson-content-agent.md).
+kickers (LPT-91), Fold, check, call (LPT-94), Bet, raise, all-in (LPT-98).
+Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 ### Activity renderers
 
