@@ -181,21 +181,17 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   bubble against the gold Open-previous CTA — Retry-only copy with that
   button is a bug (LPT-51). For board SoftPulse tickets, read the coach
   line first — unguided-mix is "Tap the community cards."; hole SoftPulse
-  on guided/scaffolded is a different cue (LPT-68 closeout). Prefer waiting
-  until street chips / SoftPulse appear after `openlesson` (and until Nice!
-  dock after the last explain tap) before `agent_tap` / validated
-  screenshots — early taps nomatch and a too-soon shot can miss the graded
-  why line (LPT-79).
+  on guided/scaffolded is a different cue (LPT-68 closeout). Prefer
+  `python3 tools/agent_tap.py wait-gold` after `openlesson` / deal settle
+  (and wait for Nice! after the last explain tap) before taps or validated
+  shots — early taps nomatch Home (LPT-79/97).
 - Prefer adopting `sim_lock_run_id` from
   `~/.live-poker-trainer/ui-agent-handoff.json` (then
   `simulator-lock.json`) when `$SIM_LOCK_RUN_ID` is unset in a
-  cloud/machine shell — export it once and continue. The ~40s before the
-  first assistant is SDK boot, not sim connect; loop preflight already
-  claimed + warmed the Dart VM (~1–2s). Do not spend another ~60s grepping
-  the flutter log / re-checking the lock when handoff has
-  `dart_vm_ready` / `skip_sim_verify_at_start` — go to step 2.
-  Clear Hint / SoftPulse before staging an invalid Best five for Undo proof
-  so cyan matches the five taps.
+  cloud/machine shell — export it once and continue. Loop preflight already
+  claimed + warmed the Dart VM; go to step 2 when handoff has
+  `dart_vm_ready`. Clear Hint / SoftPulse before staging an invalid Best
+  five for Undo proof so cyan matches the five taps.
 - Never loop dozens of `tap Continue` to brute-force prerequisite lessons —
   course start rate-limits with "Too many course requests" and blocks the
   mini until Retry/backoff. Use `python3 tools/agent_seed.py unlock

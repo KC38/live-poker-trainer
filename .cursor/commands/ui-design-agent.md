@@ -283,7 +283,10 @@ like `Continue` can hit Home controls.
 `python3 tools/agent_tap.py tree` lists every visible label top-to-bottom
 with its rect, `[enabled]`/`[disabled]` tap state, `gold` (SoftPulse cue)
 or `cyan` (selection) glow, and widget key, plus a `gold SoftPulse:` summary
-line. Use it to navigate, to check Hint disabled/enabled, one gold target,
+line. After `openlesson` / a deal, wait with
+`python3 tools/agent_tap.py wait-gold` (optional `--text` needle,
+`--timeout 45`) instead of bare sleep — early taps nomatch Home. Use
+`tree` to navigate, to check Hint disabled/enabled, one gold target,
 coach copy, and heart counts. Screenshot only the states you judge
 visually (layout, theme, Duolingo beat) and every issue/validated proof:
 
