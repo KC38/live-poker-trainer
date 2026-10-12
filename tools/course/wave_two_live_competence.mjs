@@ -1985,7 +1985,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-07-03-explain", 1,
                 "Versus nits: steal blinds more; give credit when they explode.",
-                {objectives: ["Steal more versus Nits"], playerTypeRefs: ["nit"]}),
+                {
+                  objectives: ["Steal more versus Nits"], playerTypeRefs: ["nit"],
+                  // LPT-200
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "STEAL", kind: "soft_pulse"},
+                      {press: 2, target: "CREDIT", kind: "soft_pulse"},
+                      {press: 3, target: "EXPLODE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-04-07-03-guided", order: 2, stage: "guided",
                 prompt: "Nit in BB. You have K9o on BTN. Action?",
@@ -1997,6 +2008,11 @@ export function buildSectionFour() {
                   choice("fold-k9", "Fold", "questionable",
                     "Baseline fold is okay; versus a nit, stealing is better.", {action: "FOLD"})
                 ],
+                // LPT-200
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "9d"]}},
+                  cues: [{press: 1, target: "steal", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-07-03-scaffolded", order: 3, stage: "scaffolded",
@@ -2009,6 +2025,11 @@ export function buildSectionFour() {
                   choice("hero-call", "Hero-call forever", "clear_mistake",
                     "Tendency: strong when aggressive.", {action: "CALL", betterChoiceId: "fold-mid"})
                 ],
+                // LPT-200
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Qc", "9s", "3h"]}},
+                  cues: [{press: 1, target: "fold-mid", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-04-07-03-unguided", order: 4, stage: "scaffolded",
@@ -2021,6 +2042,11 @@ export function buildSectionFour() {
                   choice("same-always", "Always steal K9o", "questionable",
                     "Read-dependent.", {action: "RAISE", amountBb: 3})
                 ],
+                // LPT-200
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "9d"]}},
+                  cues: [{press: 1, target: "tighter", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-07-03-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2034,6 +2060,8 @@ export function buildSectionFour() {
                   choice("cite-fear", "Nits are scary people", "clear_mistake",
                     "Cite range, not fear.", {betterChoiceId: "cite-strong"})
                 ],
+                // LPT-200
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cite-strong", kind: "none"}]},
               }),
             ],
           }),
