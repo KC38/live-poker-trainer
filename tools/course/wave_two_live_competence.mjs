@@ -2631,6 +2631,8 @@ export function buildSectionFour() {
                   choice("j4-any", "Any two", "clear_mistake",
                     "Too wide.", {betterChoiceId: "j4-range"})
                 ],
+                // LPT-219
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "j4-range", kind: "none"}]},
               }),
               actionAct({
                 id: "act-04-10-02-jump-3bet", order: 2, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2645,6 +2647,11 @@ export function buildSectionFour() {
                   choice("j4-foldkk", "Fold", "clear_mistake",
                     "Never.", {action: "FOLD", betterChoiceId: "j4-3bet"})
                 ],
+                // LPT-219
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Kd"]}},
+                  cues: [{press: 1, target: "j4-3bet", kind: "none"}],
+                },
               }),
               selectAct({
                 id: "act-04-10-02-jump-spr", order: 3, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2659,6 +2666,8 @@ export function buildSectionFour() {
                   choice("spr-8", "8", "clear_mistake",
                     "Divide stack by pot.", {betterChoiceId: "spr-4"})
                 ],
+                // LPT-219
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "spr-4", kind: "none"}]},
               }),
               actionAct({
                 id: "act-04-10-02-jump-size", order: 4, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2673,6 +2682,11 @@ export function buildSectionFour() {
                   choice("j4-1", "Bet 1", "clear_mistake",
                     "Not value language.", {action: "BET", amountBb: 0.5, betterChoiceId: "j4-10"})
                 ],
+                // LPT-219
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]}},
+                  cues: [{press: 1, target: "j4-10", kind: "none"}],
+                },
               }),
               classifyAct({
                 id: "act-04-10-02-jump-station", order: 5, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2686,6 +2700,8 @@ export function buildSectionFour() {
                   choice("j4-cs-wrong", "Calling Station — bluff more", "clear_mistake",
                     "Opposite exploit.", {betterChoiceId: "j4-cs"})
                 ],
+                // LPT-219
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "j4-cs", kind: "none"}]},
               }),
               classifyAct({
                 id: "act-04-10-02-jump-nit", order: 6, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2699,6 +2715,8 @@ export function buildSectionFour() {
                   choice("j4-nit-bluff", "Nit — bluff-catch light always", "clear_mistake",
                     "Wrong direction versus nit heat.", {betterChoiceId: "j4-nit"})
                 ],
+                // LPT-219
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "j4-nit", kind: "none"}]},
               }),
               classifyAct({
                 id: "act-04-10-02-jump-maniac", order: 7, stage: "scaffolded", assessmentRole: "jump_test",
@@ -2712,6 +2730,8 @@ export function buildSectionFour() {
                   choice("j4-man-fold", "Maniac — fold all one-pair forever", "clear_mistake",
                     "You should call wider.", {betterChoiceId: "j4-man"})
                 ],
+                // LPT-219
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "j4-man", kind: "none"}]},
               }),
             ],
           }),

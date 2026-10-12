@@ -61,8 +61,9 @@ message (LPT-177), SPR decides commitment (LPT-180), Observe sticky callers
 (LPT-190), Observe narrow players (LPT-193), Meet the Nit (LPT-196), Adjust
 versus Nit (LPT-200), Observe wild aggressors (LPT-203), Meet the Maniac
 (LPT-206), Adjust versus Maniac (LPT-210), Confidence and samples (LPT-213),
-Same hand, different types (LPT-216). Content gaps are audited by [11 —
-Lesson content agent](11-lesson-content-agent.md).
+Same hand, different types (LPT-216), Section 4 jump check (LPT-219).
+Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 `deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
 `teach_spec.schema.json` enum. Besides showdown ranks and starting-hand
