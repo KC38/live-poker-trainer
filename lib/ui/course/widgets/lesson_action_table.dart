@@ -820,9 +820,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Sticky caller · checked to you',
       );
     case 'act-04-06-03-scaffolded':
+      // Real missed draw: 87hh flopped a flush draw on Kh 9h 2c, then the
+      // turn 3d and river 5s bricked. Kc 2s 2d 9c 3d never gave hero a draw
+      // (LPT-399).
       return const LessonActionSpot(
         heroCodes: ['8h', '7h'],
-        boardCodes: ['Kc', '2s', '2d', '9c', '3d'],
+        boardCodes: ['Kh', '9h', '2c', '3d', '5s'],
         potLabel: 'Pot 24',
         villainLine: 'Same sticky seat · brick river',
         // Structural — don’t tip Give up on the felt.
