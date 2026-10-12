@@ -279,3 +279,32 @@ test("invalid fixtures each fail validation", () => {
   const failures = runInvalidFixtureSuite();
   assert.deepEqual(failures, []);
 });
+
+test("unknown teachSpec handFamily is rejected (LPT-166)", () => {
+  const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  const deals = [];
+  for (const section of course.sections) {
+    for (const unit of section.units) {
+      for (const lesson of unit.lessons) {
+        for (const activity of lesson.activities) {
+          const deal = activity.teachSpec?.deal;
+          if (deal?.mode === "random_in_class" && deal.handFamily) deals.push(deal);
+        }
+      }
+    }
+  }
+  const families = new Set(deals.map((deal) => deal.handFamily));
+  for (const family of ["top_pair", "air", "weak_draw", "strong_draw"]) {
+    assert.ok(families.has(family), `catalog still authors ${family}`);
+  }
+  deals[0].handFamily = "made_up_family";
+  const rejected = validateAndGenerate(course);
+  assert.ok(
+    rejected.errors.some((error) =>
+      error.includes('unknown handFamily "made_up_family"'),
+    ),
+    rejected.errors.join("\n"),
+  );
+  const clean = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  assert.deepEqual(validateAndGenerate(clean).errors, []);
+});

@@ -30,7 +30,11 @@
             "broadway",
             "suited_ace",
             "connector",
-            "trash"
+            "trash",
+            "top_pair",
+            "air",
+            "weak_draw",
+            "strong_draw"
           ]
         },
         "suitFamily": {
@@ -81,8 +85,8 @@
             "required": ["id"],
             "properties": {
               "id": { "$ref": "common.schema.json#/definitions/idString" },
-              "handFamily": { "type": "string" },
-              "suitFamily": { "type": "string" },
+              "handFamily": { "$ref": "#/properties/deal/properties/handFamily" },
+              "suitFamily": { "$ref": "#/properties/deal/properties/suitFamily" },
               "fixedCards": { "$ref": "#/properties/deal/properties/fixedCards" },
               "label": { "$ref": "common.schema.json#/definitions/nonEmptyString" }
             }
