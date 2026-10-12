@@ -29100,6 +29100,27 @@ await tester.tap(find.text('NIT'));
       find.text('Scope reminder — pick the product lane.'),
       findsOneWidget,
     );
+    // LPT-512: guideRegion → one gold SoftPulse (Live cash NLH), not Other games.
+    final unguidedCues =
+        tester
+            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+            .where((g) => g.active && g.kind == GlowKind.cue)
+            .toList(growable: false);
+    expect(unguidedCues, hasLength(1));
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Live cash NLH'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byWidget(unguidedCues.single),
+        matching: find.text('Other games'),
+      ),
+      findsNothing,
+    );
     await tester.tap(find.text('Live cash NLH'));
     await tester.pump();
     expect(controller.draft.choiceId, 'scope');

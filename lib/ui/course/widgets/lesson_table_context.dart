@@ -13900,7 +13900,9 @@ class LessonTableContext extends StatelessWidget {
           'Interactive live warm-up — tap Live cash NLH or Other games',
       semanticsStatic: 'Live warm-up unguided outcomes',
       caption: scene.caption ?? 'Scope reminder?',
-      // No SoftPulse on unguided — still don’t gold-icon Live cash NLH.
+      // SoftPulse + Rex own the cue — don’t gold-tip Live cash NLH.
+      // Null guideRegion SoftPulses every phase (LPT-512).
+      guideRegion: LessonTableRegion.liveWarmupCashScope,
       phases: [
         (
           region: LessonTableRegion.liveWarmupCashScope,
