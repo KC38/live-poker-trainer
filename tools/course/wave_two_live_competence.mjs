@@ -1011,7 +1011,18 @@ export function buildSectionFour() {
             activities: [
               dialogue("act-04-01-01-explain", 1,
                 "You never know one hand. You know a range — then update it.",
-                {objectives: ["Describe a seat as a range"]}),
+                {
+                  objectives: ["Describe a seat as a range"],
+                  // LPT-167
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "ONE HAND", kind: "soft_pulse"},
+                      {press: 2, target: "RANGE", kind: "soft_pulse"},
+                      {press: 3, target: "UPDATE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-04-01-01-guided", order: 2, stage: "guided",
                 prompt: "UTG opens at 1/2. Best description?",
@@ -1025,6 +1036,11 @@ export function buildSectionFour() {
                   choice("exact-ak", "Exactly Ace-King", "clear_mistake",
                     "Do not collapse to one hand.", {betterChoiceId: "strong-narrow"})
                 ],
+                // LPT-167
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "strong-narrow", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-01-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1039,6 +1055,11 @@ export function buildSectionFour() {
                   choice("equal", "Identical ranges", "clear_mistake",
                     "Action asymmetry matters.", {betterChoiceId: "bb-stronger"})
                 ],
+                // LPT-167
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "bb-stronger", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-01-01-unguided", order: 4, stage: "scaffolded",
@@ -1053,6 +1074,14 @@ export function buildSectionFour() {
                   choice("ignore-action", "Ignore betting pattern entirely", "clear_mistake",
                     "Patterns update ranges; they do not print exact hands.", {betterChoiceId: "too-exact"})
                 ],
+                // LPT-167
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d", "Kh"]},
+                  },
+                  cues: [{press: 1, target: "too-exact", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-04-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1067,6 +1096,11 @@ export function buildSectionFour() {
                   choice("random", "Pick randomly for unpredictability", "clear_mistake",
                     "Plans beat randomness.", {betterChoiceId: "read-drives"})
                 ],
+                // LPT-167
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Qh", "Qd"], board: ["Qc", "7s", "2d"]}},
+                  cues: [{press: 1, target: "read-drives", kind: "none"}],
+                },
               }),
             ],
           }),

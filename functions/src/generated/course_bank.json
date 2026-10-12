@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "3a72ef159c7590242cdd9ab15111c8b112acf342195c873c0bddc876f39368eb",
+  "contentChecksum": "7e92e36c078d041f8aaa7afc06701714a03034431652d5faa65a8502df981bfb",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -10207,7 +10207,29 @@
                   ],
                   "objectives": [
                     "Describe a seat as a range"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ONE HAND",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "RANGE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "UPDATE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-01-01-guided",
@@ -10255,7 +10277,19 @@
                         "betterChoiceId": "strong-narrow"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "strong-narrow",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-01-01-scaffolded",
@@ -10303,7 +10337,19 @@
                         "betterChoiceId": "bb-stronger"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bb-stronger",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-01-01-unguided",
@@ -10351,7 +10397,31 @@
                         "betterChoiceId": "too-exact"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "As",
+                          "7c",
+                          "2d",
+                          "Kh"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "too-exact",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-04-01-01-checkpoint",
@@ -10400,7 +10470,30 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Qh",
+                          "Qd"
+                        ],
+                        "board": [
+                          "Qc",
+                          "7s",
+                          "2d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "read-drives",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
