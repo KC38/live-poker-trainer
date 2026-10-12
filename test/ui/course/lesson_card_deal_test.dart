@@ -550,6 +550,51 @@ void main() {
   });
 
   test(
+    'postflop missed-air template never remaps to a made pair (LPT-367)',
+    () {
+      // Multiway scaffolded: true air on a wet monotone flop.
+      const hero = ['7s', '3d'];
+      const board = ['Ah', 'Kh', '9h'];
+      final rankKeys = <String>{};
+      for (var seed = 0; seed < 64; seed++) {
+        final groups = isomorphicLessonCardGroups(
+          [hero, board],
+          Random(seed),
+        );
+        final dealtHero = [
+          for (final c in groups[0]) CardModel.fromCode(c),
+        ];
+        final dealtBoard = [
+          for (final c in groups[1]) CardModel.fromCode(c),
+        ];
+        expect(
+          dealtHero[0].rank == dealtHero[1].rank,
+          isFalse,
+          reason: 'seed $seed no pocket pair: ${groups[0]} on ${groups[1]}',
+        );
+        final boardRanks = {for (final c in dealtBoard) c.rank};
+        expect(
+          boardRanks.contains(dealtHero[0].rank) ||
+              boardRanks.contains(dealtHero[1].rank),
+          isFalse,
+          reason: 'seed $seed no board pair: ${groups[0]} on ${groups[1]}',
+        );
+        // Stay off the board suit so “missed” is not a flush draw.
+        final boardSuit = dealtBoard.first.suit;
+        expect(
+          dealtHero.any((c) => c.suit == boardSuit),
+          isFalse,
+          reason: 'seed $seed no board-suit hole: ${groups[0]} on ${groups[1]}',
+        );
+        rankKeys.add(
+          ([for (final c in dealtHero) c.rank]..sort()).join(','),
+        );
+      }
+      expect(rankKeys.length, greaterThan(1));
+    },
+  );
+
+  test(
     'Plan the turn scaffolded Hint never claims TPTK over a weak-kicker deal '
     '(LPT-327)',
     () {

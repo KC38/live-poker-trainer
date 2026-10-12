@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/hero_profile_model.dart';
@@ -14045,8 +14046,12 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.byType(LessonActionTable), findsOneWidget);
     expect(
-      find.text('Second pair four ways — pot-control with a crowd.'),
+      find.text('Second pair four ways — pick Check to pot-control.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Second pair four ways — pot-control with a crowd.'),
+      findsNothing,
     );
     expect(
       find.text('Second pair four ways — tap Check or Bet.'),
@@ -14096,9 +14101,13 @@ await tester.tap(find.text('NIT'));
     );
     expect(
       find.text(
-        'Missed on a wet board with a crowd — don’t stab into many.',
+        'Missed on a wet board with a crowd — pick Check, not a bluff.',
       ),
       findsOneWidget,
+    );
+    expect(
+      find.text('Missed on a wet board with a crowd — don’t stab into many.'),
+      findsNothing,
     );
     expect(
       find.text('Missed on a wet board with a crowd — tap Check.'),
@@ -14106,6 +14115,21 @@ await tester.tap(find.text('NIT'));
     );
     expect(find.text('Crowd left — no bluff'), findsNothing);
     expect(find.text('Three callers behind'), findsWidgets);
+    // Framed speech is felt-first — never catalog “missed entirely” (LPT-367).
+    expect(
+      lessonFrameSpeech(activity),
+      'Missed on a wet board with a crowd — tap Check, not a bluff.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('missed entirely')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    // Authored air template — never Jh heart-draw / pocket-pair seed.
+    final spot = dealtLessonActionSpot(activity, generation: 0)!;
+    expect(spot.heroCodes[0].toLowerCase()[0], isNot(equals('j')));
+    expect(
+      CardModel.fromCode(spot.heroCodes[0]).rank ==
+          CardModel.fromCode(spot.heroCodes[1]).rank,
+      isFalse,
+    );
     // Authored multi-word CHECK stays short chrome.
     expect(find.text('CHECK'), findsOneWidget);
     await tester.tap(find.text('CHECK'));

@@ -277,7 +277,8 @@ List<String> dealStartingHandFamily(
 ///
 /// Postflop: suit-permute board (and villains), then resample hero holes until
 /// the teach fingerprint matches (HandClass + draw outs + top-kicker tier +
-/// broadway count + hero suitedness; capped retries → suit-only).
+/// broadway count + hero suitedness + made-pair bit; capped retries →
+/// suit-only).
 ///
 /// When [suitOnly] is true (multi-step / toy runouts), only suits change.
 ///
@@ -563,12 +564,17 @@ int _drawOutsFor(List<String> hero, List<String> board) {
 /// an Ace-high board keeps an Ace + broadway-or-better kicker, never A6.
 /// [broadwayCount] keeps dual-broadway air from remapping to Q9o / K8o.
 /// [heroSuited] keeps "offsuit broadway" from flipping to suited.
+/// [hasMadePair] keeps draw-only / missed templates from remapping into a
+/// pocket pair or board pair that [HandClassifier] still labels as a draw
+/// when outs are strong (underpair + flush draw → [HandClass.strongDraw];
+/// LPT-367).
 ({
   HandClass handClass,
   int drawOuts,
   bool topKicker,
   int broadwayCount,
   bool heroSuited,
+  bool hasMadePair,
 }) _postflopTeachKey(List<String> hero, List<String> board) {
   return (
     handClass: _handClassFor(hero, board),
@@ -576,7 +582,20 @@ int _drawOutsFor(List<String> hero, List<String> board) {
     topKicker: _hasTopPairTopKicker(hero, board),
     broadwayCount: _broadwayHoleCount(hero),
     heroSuited: _heroHolesSuited(hero),
+    hasMadePair: _heroHasMadePair(hero, board),
   );
+}
+
+/// Whether [hero] already has a made pair (pocket pair or pairs the board).
+bool _heroHasMadePair(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length < 3) return false;
+  final h0 = CardModel.fromCode(hero[0]);
+  final h1 = CardModel.fromCode(hero[1]);
+  if (h0.rank == h1.rank) return true;
+  final boardRanks = <int>{
+    for (final code in board) CardModel.fromCode(code).rank,
+  };
+  return boardRanks.contains(h0.rank) || boardRanks.contains(h1.rank);
 }
 
 /// Ten or higher (T, J, Q, K, A).

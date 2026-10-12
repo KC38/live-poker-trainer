@@ -584,11 +584,13 @@ String? _feltFirstCoach(CourseActivity activity, LessonActionSpot? _) {
     'act-03-06-01-unguided' =>
       'Weak top pair faces a quiet-line jam — pick Fold or Call.',
     // SoftPulse owns Check — don’t gold-tip the dock.
+    // Pick-verb so framed lessonFrameSpeech does not append the catalog
+    // quiz footer (LPT-367).
     'act-03-07-01-guided' =>
-      'Second pair four ways — pot-control with a crowd.',
+      'Second pair four ways — pick Check to pot-control.',
     // SoftPulse owns Check — don’t gold-tip the dock.
     'act-03-07-01-scaffolded' =>
-      'Missed on a wet board with a crowd — don’t stab into many.',
+      'Missed on a wet board with a crowd — pick Check, not a bluff.',
     // SoftPulse owns Fold — don’t gold-tip the dock.
     'act-03-08-01-guided' =>
       'Weak top pair in a raise-reraise pot — leave without stacking.',
