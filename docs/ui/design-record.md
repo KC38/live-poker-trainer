@@ -547,7 +547,8 @@ are won (LPT-104), Play a full toy hand (LPT-108), Section 1 jump check
 (LPT-110), Position labels (LPT-112), Acting order (LPT-115), Hand families
 (LPT-119), Open or fold baseline (LPT-122), Versus an open (LPT-125),
 Effective stacks (LPT-128), Live table habits (LPT-131), Full-ring baseline
-hand (LPT-135), Baseline jump check (LPT-137).
+hand (LPT-135), Baseline jump check (LPT-137), Read the table first
+(LPT-138).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -739,6 +740,12 @@ cues kind `none` and no `pressHints`. Jump-pos and jump-stack use
 cleared); jump-family deals `suited_ace`/`suited` with pair/trash distractor
 variants; jump-open deals `trash`/`offsuit`; jump-vs authors fixed AA
 (`AhAd`) so coach copy follows the deal.
+
+Read the table first `teachSpec` (LPT-138): explain SoftPulse advances POT →
+STACKS → BUTTON → WHO ACTS; guided/scaffolded/unguided SoftPulse `pot-21` /
+`utg-first` / `bound`; checkpoint cues `eff-55` with kind `none` (no
+pressHints). All steps use `deal.mode` `none` (pot/seat/verbal tiles — not
+hole-card families). Checkpoint objectives retagged to pot/stack tracking.
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from

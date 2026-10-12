@@ -6963,7 +6963,34 @@
                   ],
                   "objectives": [
                     "Track pot size and stack depths"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "POT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STACKS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BUTTON",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "WHO ACTS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-01-01-guided",
@@ -7011,7 +7038,19 @@
                         "betterChoiceId": "pot-21"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pot-21",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-01-01-scaffolded",
@@ -7059,7 +7098,19 @@
                         "betterChoiceId": "utg-first"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "utg-first",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-01-01-unguided",
@@ -7106,7 +7157,19 @@
                         "feedback": "Dealer enforces the rule; the raise already happened."
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bound",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-03-01-01-checkpoint",
@@ -7121,7 +7184,8 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Honor verbal declarations at a live table"
+                    "Track pot size and stack depths",
+                    "Locate the button and action seat"
                   ],
                   "prompt": "Hero 140bb, villain 55bb, pot 18. What matters most next?",
                   "choices": [
@@ -7155,7 +7219,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "eff-55",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
