@@ -12514,7 +12514,9 @@ class LessonTableContext extends StatelessWidget {
       semanticsStatic: 'LAG vs Nit outcomes',
       caption: scene.caption ??
           'Wide opens · 3-bets light · keeps barreling',
-      // No SoftPulse on unguided — still don’t gold-icon LAG.
+      // SoftPulse + Rex own the cue — one gold LAG only (LPT-492).
+      cueLabel: '',
+      guideRegion: LessonTableRegion.meetLagLabel2,
       phases: [
         (
           region: LessonTableRegion.meetLagLabel2,
