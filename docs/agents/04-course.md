@@ -46,8 +46,9 @@ cards. Lessons that follow it on every interactive step: Suits and ranks
 (LPT-81), Button and blinds (LPT-85), Hand ranks (LPT-88), Best five and
 kickers (LPT-91), Fold, check, call (LPT-94), Bet, raise, all-in (LPT-98),
 Streets and action order (LPT-101), How pots are won (LPT-104), Play a full
-toy hand (LPT-108), Section 1 jump check (LPT-110). Content gaps are audited
-by [11 — Lesson content agent](11-lesson-content-agent.md).
+toy hand (LPT-108), Section 1 jump check (LPT-110), Position labels
+(LPT-112). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 ### Activity renderers
 

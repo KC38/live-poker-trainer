@@ -1731,6 +1731,8 @@ export function buildSectionTwo() {
                   choice("pos-ep", "EP", "clear_mistake",
                     "Early position acts first.", {betterChoiceId: "pos-btn"}),
                 ],
+                // LPT-112: guided-btn SoftPulse pos-btn deal none
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pos-btn", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-01-01-scaffolded-blinds", order: 3, stage: "scaffolded",
@@ -1745,6 +1747,8 @@ export function buildSectionTwo() {
                   choice("ep-only", "EP", "clear_mistake",
                     "Early position is voluntary action.", {betterChoiceId: "sb-bb"}),
                 ],
+                // LPT-112: scaffolded-blinds SoftPulse sb-bb deal none
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sb-bb", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-01-01-unguided-co", order: 4, stage: "scaffolded",
@@ -1760,6 +1764,8 @@ export function buildSectionTwo() {
                     "EP is near the blinds, not near the button.",
                     {betterChoiceId: "label-co"}),
                 ],
+                // LPT-112: unguided-co SoftPulse label-co deal none
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "label-co", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-02-01-01-checkpoint-edge", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1774,6 +1780,8 @@ export function buildSectionTwo() {
                   choice("same-always", "Seat never matters", "clear_mistake",
                     "Position changes every decision.", {betterChoiceId: "prefer-btn"}),
                 ],
+                // LPT-112: checkpoint-edge prefer-btn kind none; no pressHints
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "prefer-btn", kind: "none"}]},
               }),
             ],
           }),

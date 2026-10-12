@@ -85,6 +85,13 @@ const _lessons = <String, List<String>>{
     'act-01-06-02-jump-legal',
     'act-01-06-02-jump-hand',
   ],
+  // LPT-112
+  'lesson-02-01-01-position-labels': [
+    'act-02-01-01-guided-btn',
+    'act-02-01-01-scaffolded-blinds',
+    'act-02-01-01-unguided-co',
+    'act-02-01-01-checkpoint-edge',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -604,6 +611,27 @@ void main() {
       final hand = act('act-01-06-02-jump-hand').teachSpec!['deal'] as Map;
       expect(hand['handFamily'], 'suited_ace');
       expect(hand['suitFamily'], 'suited');
+    });
+  });
+
+  group('Position labels (LPT-112)', () {
+    test('seat lesson deal.mode none + SoftPulse targets', () {
+      const want = {
+        'act-02-01-01-guided-btn': 'pos-btn',
+        'act-02-01-01-scaffolded-blinds': 'sb-bb',
+        'act-02-01-01-unguided-co': 'label-co',
+      };
+      for (final MapEntry(key: id, value: target) in want.entries) {
+        final a = act(id);
+        expect(a.teachSpec!['deal'], {'mode': 'none'}, reason: id);
+        expect(_list(a, 'cues').single['target'], target, reason: id);
+        expect(_list(a, 'cues').single['kind'], 'soft_pulse', reason: id);
+      }
+      final cp = act('act-02-01-01-checkpoint-edge');
+      expect(cp.teachSpec!['deal'], {'mode': 'none'});
+      expect(_list(cp, 'cues').single['target'], 'prefer-btn');
+      expect(_list(cp, 'cues').single['kind'], 'none');
+      expect(cp.teachSpec!.containsKey('pressHints'), isFalse);
     });
   });
 }
