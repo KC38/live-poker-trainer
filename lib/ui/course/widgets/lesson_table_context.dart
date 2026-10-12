@@ -11,6 +11,7 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/player_seat_widget.dart';
 
@@ -7269,7 +7270,7 @@ class LessonTableContext extends StatelessWidget {
           'Interactive effective stack — tap the shorter stack',
       semanticsStatic: 'Effective stack 150 vs 60 outcomes',
       caption: scene.caption ?? 'You 150bb · Villain 60bb',
-      // SoftPulse + Rex own the cue — no Tap 60bb footer.
+      // SoftPulse + Rex own the cue — no Tap 60bb footer / permanent gold tip.
       cueLabel: '',
       guideRegion: LessonTableRegion.effectiveStackShort,
       phases: [
@@ -7277,7 +7278,7 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.effectiveStackShort,
           title: '60bb',
           detail: 'Shorter',
-          visual: const _PotChipDot(label: '60', gold: true),
+          visual: const _PotChipDot(label: '60', gold: false),
         ),
         (
           region: LessonTableRegion.effectiveStackHero,
@@ -8739,7 +8740,8 @@ class LessonTableContext extends StatelessWidget {
           region: LessonTableRegion.bbConvertCorrect,
           title: '${correctBb}bb',
           detail: 'Chips ÷ BB',
-          visual: _PotChipDot(label: '$correctBb', gold: true),
+          // SoftPulse owns the cue — never permanently gold-tip the answer.
+          visual: _PotChipDot(label: '$correctBb', gold: false),
         ),
         (
           region: LessonTableRegion.bbConvertLow,
@@ -15079,7 +15081,7 @@ class LessonTableContext extends StatelessWidget {
   }
 }
 
-class _TappableRegion extends StatefulWidget {
+class _TappableRegion extends StatelessWidget {
   const _TappableRegion({
     required this.label,
     required this.child,
@@ -15100,141 +15102,66 @@ class _TappableRegion extends StatefulWidget {
   final VoidCallback? onTap;
 
   @override
-  State<_TappableRegion> createState() => _TappableRegionState();
-}
-
-class _TappableRegionState extends State<_TappableRegion>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _pulse;
-
-  @override
-  void initState() {
-    super.initState();
-    _pulse = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 900),
-    );
-    _syncPulse();
-  }
-
-  @override
-  void didUpdateWidget(covariant _TappableRegion oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.highlighted != widget.highlighted ||
-        oldWidget.selected != widget.selected) {
-      _syncPulse();
-    }
-  }
-
-  void _syncPulse() {
-    final shouldPulse = widget.highlighted && !widget.selected;
-    if (shouldPulse) {
-      if (!_pulse.isAnimating) {
-        _pulse.repeat(reverse: true);
-      }
-    } else {
-      _pulse.stop();
-      _pulse.value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _pulse.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // Keep InkWell's child tree stable across pulse ticks. Glow paints in an
-    // IgnorePointer overlay so the soft pulse never steals / cancels taps.
-    // Densified tiles need a visible fill + forced expand — transparent
-    // InkWell/Material shrink leaves sparse green under SPR / outcome rows.
-    final staticBorder = widget.selected
-        ? AppColors.selectionGlow
-        : widget.highlighted
-        ? AppColors.gold.withValues(alpha: 0.55)
-        : widget.expand
+    // SoftPulse / selection rings use GlowHighlight only (LPT-183) — never a
+    // second local pulse overlay. Densified tiles keep a visible fill so the
+    // Expanded row does not leave sparse green under SPR / outcome rows.
+    final staticBorder = selected
+        ? Colors.transparent
+        : expand
         ? AppColors.cream.withValues(alpha: 0.32)
         : Colors.transparent;
-    final staticFill = widget.selected
-        ? AppColors.selectionGlow.withValues(alpha: 0.22)
-        : widget.highlighted
-        ? AppColors.gold.withValues(alpha: 0.14)
-        : widget.expand
+    final staticFill = selected
+        ? AppColors.selectionGlow.withValues(alpha: 0.14)
+        : expand
         ? AppColors.feltDark.withValues(alpha: 0.58)
         : Colors.transparent;
 
     final tile = AnimatedContainer(
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOut,
-      width: widget.expand ? double.infinity : null,
-      height: widget.expand ? double.infinity : null,
+      width: expand ? double.infinity : null,
+      height: expand ? double.infinity : null,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: staticFill,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: staticBorder,
-          width: widget.selected ? 2.4 : 1.8,
-        ),
+        border: Border.all(color: staticBorder, width: 1.8),
       ),
-      child: widget.child,
+      child: child,
     );
 
-    final framed = Stack(
-      fit: widget.expand ? StackFit.expand : StackFit.loose,
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        if (widget.expand) Positioned.fill(child: tile) else tile,
-        if (widget.highlighted && !widget.selected)
-          Positioned.fill(
-            child: IgnorePointer(
-              child: AnimatedBuilder(
-                animation: _pulse,
-                builder: (context, _) {
-                  final glow = 0.35 + (_pulse.value * 0.45);
-                  return DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: AppColors.gold.withValues(alpha: glow),
-                        width: 1.8,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.gold.withValues(alpha: 0.22 * glow),
-                          blurRadius: 12 + (8 * _pulse.value),
-                          spreadRadius: 0.5,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-      ],
+    // SoftPulse cue and cyan selection share one GlowHighlight (outcome taps
+    // clear SoftPulse before selection sticks). Densified Expanded tiles
+    // reserve layout so SoftPulse does not use the felt-seat scale path.
+    final cueOn = highlighted && !selected;
+    final framed = GlowHighlight(
+      kind: selected ? GlowKind.selection : GlowKind.cue,
+      active: selected || cueOn,
+      animated: cueOn,
+      ignoreSoftPulse: selected,
+      reserveLayout: expand,
+      borderRadius: 12,
+      child: expand ? SizedBox.expand(child: tile) : tile,
     );
 
-    final hitTarget = widget.onTap == null
+    final hitTarget = onTap == null
         ? framed
         : Semantics(
           button: true,
-          selected: widget.selected,
-          label: widget.label,
+          selected: selected,
+          label: label,
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: widget.enabled ? widget.onTap : null,
+              onTap: enabled ? onTap : null,
               borderRadius: BorderRadius.circular(12),
               child: framed,
             ),
           ),
         );
 
-    return widget.expand ? SizedBox.expand(child: hitTarget) : hitTarget;
+    return expand ? SizedBox.expand(child: hitTarget) : hitTarget;
   }
 }
 
