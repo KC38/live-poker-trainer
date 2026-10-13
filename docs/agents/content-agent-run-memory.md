@@ -1339,3 +1339,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented NEED parents on `706cf460`. Deleted stale typeboard draft branch if still remote.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-10-04-capstone-limped` / `lesson-07-12-01-five-type-final` / Low curriculum.
 - act-07-10-03-* / act-07-11-01-*: Capstone policy via LPT-348; warm-up curriculum via LPT-351.
+
+## Fold 2026-10-14o (706cf460 discovery Capstone limped)
+
+- Tip-stable `706cf460` (#2175). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Rescued unfolder draft #2176 (multiway+warmup) onto this chore. Sole open Medium: Capstone **LPT-348** needs-human.
+- Discovery oldest-unfresh `lesson-07-10-04-capstone-limped`: explain SoftPulse NUTS→VALUE→THIN + `explainGrading`; hand `fixed` Ah/Kh · Kd/9c/4h/2s/8d + 2 suit variants match Dart `resolveToyHandStepSpot`; cues `bet`/`barrel`/`value` (3 presses); pressHints empty → **LPT-348** only (synthesis container — no curriculum-split). Structural clean aside from Capstone NO_HINT policy. Done-ack **LPT-345**.
+- Tip-commented NEED Capstone/Done siblings LPT-345/337/338/339/347/349/352/334 on `706cf460`; **LPT-348**/parents/351/216/667 already HAS — no re-spam.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-10-05-capstone-4bet` / `lesson-07-12-01-five-type-final` / Low curriculum.
+- act-07-10-04-*: structural clean on tip — Capstone pressHints policy only via LPT-348; teachSpec companion LPT-345 Done.
+
