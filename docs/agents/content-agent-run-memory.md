@@ -752,3 +752,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog parents LPT-624/625/626/627/635/628 + siblings LPT-659/660/661 + frontier/unchecked Highs LPT-242/312/315/252/255/258/271/275/295/301/334 + fingerprint/honesty LPT-408/409/411/414/417.
 - Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**: all five `act-*` still MISSING teachSpec each. densify ≠ teachSpec. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(128).
+
+## Fold 2026-10-13 tip 2172c3f4 (#2061 learnings after densify 89→101)
+
+- Tip-stable `2172c3f4` after #2061 learnings (#2060 LPT-659/660/661 densify). `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, densify-tap **128**, `softpulseMapArms` **68**, `densifyHelperArms` **101**. Catalog parent bodies already match (LPT-628 densify-tap **128** / helper **101** @ `9f5dd58d`) — no checklist rebuild.
+- Prior coverage on this SHA listed parents+Highs+siblings while `jira.py get` showed **zero** tickets containing `2172c3f4` — tip-commented LPT-624/625/626/627/635/628 + Done-ack LPT-659/660/661 (now **Done**, arms PRESENT) + frontier/unchecked Highs LPT-242/312/315/252/255/258/271/275/295/301/334 + LPT-348 + fingerprint/honesty LPT-408/409/411/414/417.
+- Soft timing densify `act-05-07-01-*` still **ABSENT** from `selectIdentifyDensifiedCoachLine` (LPT-464 Done ≠ PRESENT). Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**: all five / guided still MISSING teachSpec. densify ≠ teachSpec.
+- Honesty still valid (no sim): **LPT-414** Air Nice! feedback still "Gutshot-ish trash multiway…" on `act-03-02-01-unguided` (`5h`/`4h`·`Qc`/`7d`/`2s`); **LPT-417** `250bb` streetLabel / `180bb deep` villain/felt still sans matching `stackLabel`.
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(128).
