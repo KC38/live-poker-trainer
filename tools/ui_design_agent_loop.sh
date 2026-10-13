@@ -467,6 +467,37 @@ ui_queue_has_ticket() {
   python3 "$TOOLS/jira.py" ui-queue 2>/dev/null | grep -qE '^LPT-[0-9]+[[:space:]]'
 }
 
+# Live primary checkout (branch / dirty / behind) so status is not stuck on a
+# stale empty-queue idle stamp while content-agent dirties or leaves main.
+print_primary_checkout_status() {
+  local dir branch head tip behind ahead dirty_n
+  dir="$(primary)"
+  [[ -d "$dir/.git" || -f "$dir/.git" ]] || return 0
+  branch="$(git -C "$dir" rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+  head="$(git -C "$dir" rev-parse HEAD 2>/dev/null || true)"
+  tip="$(git -C "$dir" rev-parse origin/main 2>/dev/null || true)"
+  dirty_n="$(git -C "$dir" status --porcelain 2>/dev/null | wc -l | tr -d ' ')"
+  if [[ "$branch" != "main" ]]; then
+    echo "primary: on ${branch} (not clean main)"
+    return 0
+  fi
+  if [[ "${dirty_n:-0}" != "0" ]]; then
+    echo "primary: main dirty (${dirty_n} path(s))"
+    return 0
+  fi
+  [[ -n "$head" && -n "$tip" ]] || return 0
+  [[ "$head" == "$tip" ]] && return 0
+  behind="$(git -C "$dir" rev-list --count "${head}..${tip}" 2>/dev/null || echo 0)"
+  ahead="$(git -C "$dir" rev-list --count "${tip}..${head}" 2>/dev/null || echo 0)"
+  if [[ "$behind" =~ ^[1-9] ]] && [[ "$ahead" == "0" ]]; then
+    echo "primary: main behind origin/main by ${behind}"
+  elif [[ "$ahead" =~ ^[1-9] ]] && [[ "$behind" == "0" ]]; then
+    echo "primary: main ahead of origin/main by ${ahead}"
+  else
+    echo "primary: main diverged from origin/main (ahead ${ahead}, behind ${behind})"
+  fi
+}
+
 # Actionable vs filtered counts so empty-queue idle is not mistaken for a
 # Jira outage (only needs-human / grokbot remain).
 print_ui_queue_status() {
@@ -3024,6 +3055,7 @@ EOF
       echo "loop: not running"
     fi
     print_idle_status
+    print_primary_checkout_status
     print_pending_learnings_status
     print_ui_queue_status
     print_functions_deploy_status
