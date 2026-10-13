@@ -214,7 +214,10 @@ prompt() {
   fi
   [[ -n "$run_id" ]] || run_id="$handoff_id"
   local pending=""
-  if [[ -s "$STATE_DIR/ui-agent-learnings-pending.md" ]]; then
+  # fold_agent_learnings.sh leaves a non-empty stub header; only real
+  # "- " bullets count (same gate as tools/fold_agent_learnings.sh fold_ui).
+  if [[ -f "$STATE_DIR/ui-agent-learnings-pending.md" ]] \
+    && grep -q '^- ' "$STATE_DIR/ui-agent-learnings-pending.md" 2>/dev/null; then
     pending=" Pending learnings in $STATE_DIR/ui-agent-learnings-pending.md: fold them into this run's ticket PR (step 6)."
   fi
   # Lead with READY facts: agents otherwise spend the first ~60s re-grepping
@@ -376,6 +379,20 @@ elif reason == "sim-busy":
 else:
     extra = f" detail={detail}" if detail else ""
     print(f"idle: {reason} since {at}{extra}")
+PY
+}
+
+# Surface actionable pending learnings (real "- " bullets, not the empty stub).
+print_pending_learnings_status() {
+  local pending="$STATE_DIR/ui-agent-learnings-pending.md"
+  [[ -f "$pending" ]] || return 0
+  python3 - "$pending" <<'PY' 2>/dev/null || true
+from pathlib import Path
+import sys
+text = Path(sys.argv[1]).read_text(encoding="utf-8")
+n = sum(1 for ln in text.splitlines() if ln.startswith("- "))
+if n:
+    print(f"pending learnings: {n} bullet(s) in {sys.argv[1]}")
 PY
 }
 
@@ -2925,6 +2942,7 @@ EOF
       echo "loop: not running"
     fi
     print_idle_status
+    print_pending_learnings_status
     echo "launcher: $LAUNCHER"
     echo "sdk-runtime: $SDK_RUNTIME"
     if [[ "$SDK_RUNTIME" == "machine" ]]; then
