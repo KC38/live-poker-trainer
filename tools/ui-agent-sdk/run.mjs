@@ -130,9 +130,11 @@ async function main() {
 
   mkdirSync(dirname(opts.log), { recursive: true });
   const logStream = createWriteStream(opts.log, { flags: "a" });
+  // Write structured lines only to --log. The loop redirects this process's
+  // stdout into the same file (>> run_log), which duplicated every # line
+  // (20261013-092240). Assistant stream fragments still use stdout.
   const log = (line) => {
     appendLine(logStream, line);
-    process.stdout.write(`${line}\n`);
   };
 
   const repoUrl = resolveRepoUrl(opts.cwd, opts.repo);

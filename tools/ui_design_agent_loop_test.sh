@@ -1223,4 +1223,35 @@ repair_health_tails
 grep -q '"ticket": "LPT-499"' "$HEALTH_FILE" \
   || fail "repair should extract ticket from closeout prose: $(cat "$HEALTH_FILE")"
 
+# run.mjs must not mirror log() lines to stdout (loop redirects into --log).
+grep -q 'Assistant stream fragments still use stdout' "$ROOT/tools/ui-agent-sdk/run.mjs" \
+  || fail "run.mjs must document log()-without-stdout (dedupe against loop redirect)"
+python3 - "$ROOT/tools/ui-agent-sdk/run.mjs" <<'PY' || fail "run.mjs log() still dual-writes stdout"
+from pathlib import Path
+import re, sys
+text = Path(sys.argv[1]).read_text()
+m = re.search(r"const log = \(line\) => \{([\s\S]*?)\n  \};", text)
+assert m, "log() not found"
+assert "process.stdout.write" not in m.group(1), m.group(1)
+print("run.mjs log dedupe ok")
+PY
+
+# Empty ui-queue skips agent start (return 16). Gate is skipped when
+# UI_AGENT_SKIP_SIM_PREFLIGHT=1 (unit tests); exercise with that unset.
+(
+  unset UI_AGENT_SKIP_SIM_PREFLIGHT
+  ui_queue_has_ticket() { return 1; }
+  primary_is_clean_main() { return 0; }
+  logged_in() { return 0; }
+  rm -f "$tmp/agent-started"
+  code=0
+  one_run || code=$?
+  [[ "$code" == 16 ]] || { echo "FAIL: empty queue should return 16, got $code" >&2; exit 1; }
+  [[ ! -f "$tmp/agent-started" ]] || { echo "FAIL: agent must not start on empty queue" >&2; exit 1; }
+  echo "empty ui-queue skip ok"
+)
+export UI_AGENT_SKIP_SIM_PREFLIGHT=1
+grep -q 'EMPTY_QUEUE_SLEEP' "$LOOP" || fail "loop must define EMPTY_QUEUE_SLEEP"
+grep -q 'ui-queue empty; sleeping' "$LOOP" || fail "run_loop must sleep on empty queue"
+
 echo "ui-design-agent loop ok"
