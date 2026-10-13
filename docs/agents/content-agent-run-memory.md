@@ -680,3 +680,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prior coverage for `c03044af` listed many High tip-comments missing on Jira — only LPT-242 + catalog parents had the SHA. Tip-commented 20 unchecked Highs the same tick. Mid-run tip → `b9398420` (#2040 ui-agent soft-stop-hold, non-content): tip-commented parents + LPT-242 on the new SHA without inventing count deltas.
 - Durable rule reinforced: coverage `ticket` lists can over-claim — confirm tip SHA via `jira.py get` before skip (also tip `7d946ea7`). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/349/352 OR catalog LPT-626(151)/627(92)/635/624(54)/625(24).
+
+## Fold 2026-10-13 tip ac29f3e1 (#2041 LPT-656 densify + #2042 learnings lag)
+
+- Tip `ac29f3e1` (#2042 content-agent learnings) already included #2041 LPT-656 Carry a preflop plan densify (`selectIdentifyDensifiedCoachLine` arms for `act-07-01-01-guided` / `scaffolded` / `unguided` / `checkpoint`). Prior coverage on this SHA claimed densifyHelperArms **78** and skipped LPT-628 rebuild — wrong: `--counts` shows **82**.
+- Immediately rebuilt densify-tap **LPT-628** from `selectIdentifyDensifiedCoachLine` + SI/PR fallthrough excluding catalog tap|pick prompts → helper **82** / fallthrough **118**. Relates LPT-656↔LPT-628. Soft timing `act-05-07-01-*` still Priority ABSENT. Leave LPT-656 Done to ui-agent Validated-on-origin/main.
+- `scan_content_gaps --counts` JSON gaps otherwise flat: pressHints **151**, deal-variants **92**, teachSpec **55**, explain-teachSpec **24**, nice-ladder **54**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **82**. Tip-commented LPT-624/625/626/627/635 (no checklist rebuild).
+- Re-verified frontier teachSpecs still all MISSING: Soft timing LPT-242, Map turn LPT-312, Compose river LPT-315, Adjust LAG LPT-301, warm-up LPT-349, Final LPT-352 (+ S6 Highs LPT-258/295/252/255/271/275/334).
+- Honesty re-read (no sim): **LPT-414** Air Nice! still "Gutshot-ish trash…" on `act-03-02-01-unguided`; **LPT-417** 250bb/200bb/180bb depth chrome still sans `stackLabel`; **LPT-401** guided still `Flop · Weak TPTK · Heat`.
+- Prior coverage for `ac29f3e1` over-claimed High tip-comments — `jira.py get` showed zero Highs had the SHA. Tip-commented 21 unchecked Highs/companions the same tick. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- Durable: learnings tips that land after a densify sibling must re-run `--counts densifyHelperArms` before claiming flat / skipping LPT-628 body sync.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/349/352 OR catalog LPT-626(151)/627(92)/635/624(54)/625(24).
