@@ -743,3 +743,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prior tip `9feec4fa` coverage missed tip-comments on LPT-408/409/411 + LPT-659 — tip-commented those, then re-commented parents + frontier Highs LPT-242/312/315 + honesty LPT-414/417 on `c88437f9` after mid-run tip advance.
 - Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**: all five `act-*` still MISSING teachSpec each. densify ≠ teachSpec. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR ui-agent LPT-659 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(140).
+
+## Fold 2026-10-13 tip 9f5dd58d (#2060 LPT-659/660/661 densify)
+
+- Tip advanced `a5081631`/#2059 learnings → `9f5dd58d` via #2060 densify frame speech for pot-type / HU-MW / stacks (`act-07-04-01-*` / `act-07-05-01-*` / `act-07-06-01-*` helper arms PRESENT).
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, densify-tap **140→128**, `softpulseMapArms` **68**, `densifyHelperArms` **89→101**.
+- Rebuilt densify-tap **LPT-628** from `--gap densify-tap --markdown` (body had lagged at densify-tap **140** / helper **89** @ `c88437f9`/`a5081631`). Soft timing `act-05-07-01-*` still Priority ABSENT (LPT-464 Done ≠ PRESENT). Linked Relates LPT-659/660/661↔LPT-628. Leave those ui-agent tickets In Progress for Validated-on-origin/main — content-agent does not Done them.
+- Tip-commented catalog parents LPT-624/625/626/627/635/628 + siblings LPT-659/660/661 + frontier/unchecked Highs LPT-242/312/315/252/255/258/271/275/295/301/334 + fingerprint/honesty LPT-408/409/411/414/417.
+- Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**: all five `act-*` still MISSING teachSpec each. densify ≠ teachSpec. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(128).
