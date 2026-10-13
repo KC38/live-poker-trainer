@@ -69,8 +69,9 @@ table dynamics (LPT-245), Keep cash session guardrails (LPT-248), Section 5
 checkpoint (LPT-251), Choose polarized or merged betting (LPT-262), Use
 overbets and geometric pressure (LPT-265), Use blockers without solver
 theater (LPT-268), Navigate 3-bet and 4-bet pots by depth (LPT-280), Make
-difficult folds; review coolers fairly (LPT-283). Content gaps are audited
-by [11 — Lesson content agent](11-lesson-content-agent.md).
+difficult folds; review coolers fairly (LPT-283), Observe selective
+aggression (LPT-286). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 `deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
 `teach_spec.schema.json` enum. Besides showdown ranks and starting-hand

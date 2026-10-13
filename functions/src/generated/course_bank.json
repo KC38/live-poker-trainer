@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "70057efc0ebec59ce61938e151cadd3718d4ccadb952706ff50c3827dfcae091",
+  "contentChecksum": "4a73338c2d0c196ba8c8da9ea26d4d0572d5c44b251dbd3bbb4fe0df10e1b922",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -21563,7 +21563,29 @@
                   ],
                   "objectives": [
                     "Note selective entry"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TIGHT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BARREL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SAMPLE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-01-guided",
@@ -21611,7 +21633,19 @@
                         "betterChoiceId": "sel"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "sel",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-01-scaffolded",
@@ -21649,7 +21683,19 @@
                         "betterChoiceId": "disc"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "disc",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-01-unguided",
@@ -21687,7 +21733,19 @@
                         "betterChoiceId": "low"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "low",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-01-checkpoint",
@@ -21726,7 +21784,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bundle",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
