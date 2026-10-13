@@ -1227,3 +1227,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum introduce+identify still **LPT-300** needs-human.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-13-01-mix-five-types` / Low curriculum.
 - act-06-12-02-*: structural clean on tip — curriculum split only via LPT-300.
+
+## Fold 2026-10-13du (216437dc discovery mix-five-types)
+
+- Tip mid-run `35c01162` → `216437dc` (#2160 ui-agent non-content). Catalog structural gaps all **0** (flat); softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348**.
+- Discovery oldest-unfresh `lesson-06-13-01-mix-five-types`: teachSpec on all five; explain CARDS→SEATS→EVIDENCE + `explainGrading`; guided/scaffolded/unguided `fixed` + variants + one-per-press; checkpoint cite tiles hintless. Structural clean.
+- Curriculum multi-concept (five types / baseline-without-evidence / cite) still **LPT-306** needs-human (tip-commented on `216437dc`). Still-a-list “label check” STALE — no rebuild.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-13-02-section-six-checkpoint` / Low curriculum.
+- act-06-13-01-*: structural clean on tip — curriculum split only via LPT-306.
