@@ -761,3 +761,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Honesty still valid (no sim): **LPT-414** Air Nice! feedback still "Gutshot-ish trash multiway…" on `act-03-02-01-unguided` (`5h`/`4h`·`Qc`/`7d`/`2s`); **LPT-417** `250bb` streetLabel / `180bb deep` villain/felt still sans matching `stackLabel`.
 - Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(128).
+
+## Fold 2026-10-13 tip 1c037025 (#2062) → b03f35e8 (#2063 LPT-662..665 densify)
+
+- Tip-stable `1c037025` after #2062 learnings: JSON flat pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, densify-tap **128**, `densifyHelperArms` **101**. LPT-628 body already matched — no rebuild. Prior coverage over-claimed tip-comments (`jira.py get` zero SHA hits) — tip-commented 26 parents+Highs+Done-ack densify siblings.
+- Mid-run tip advanced to `b03f35e8` via #2063 densify frame speech for Write-default-book / Live warm-up / same-cards checkpoint / type-board checkpoint (`act-07-09-01-*` / `act-07-11-01-*` / `act-07-07-01-checkpoint` / `act-07-08-01-checkpoint` helper arms PRESENT).
+- `scan_content_gaps --counts`: densify-tap **128→118**, `densifyHelperArms` **101→111**; other JSON gaps flat. Soft timing `act-05-07-01-*` still Priority ABSENT from `selectIdentifyDensifiedCoachLine`.
+- Rebuilt densify-tap **LPT-628** from `--gap densify-tap --markdown`. Linked Relates LPT-662/663/664/665↔LPT-628. Leave those ui-agent tickets In Progress for Validated-on-origin/main — content-agent does not Done them. densify ≠ teachSpec (**LPT-334** strategy book still open High).
+- Tip-commented catalog parents LPT-624/625/626/627/635/628 + siblings LPT-662..665 + frontier Highs LPT-242/312/315/334 on `b03f35e8`.
+- Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**: all five `act-*` still MISSING teachSpec each. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
