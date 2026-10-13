@@ -1488,3 +1488,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - #2207 promotes all five Capstone `act-07-10-0N-hand` to `assessmentRole` `transfer` (cue kind `none`; `NO_HINT_ACTIVITY_IDS` sync; schema/docs). Acceptance met — **Done-ack LPT-348** (was In Progress / sole open Medium).
 - Do not reopen LPT-626/LPT-667 for Capstone. Next discovery: `lesson-04-06-03-adjust-calling-station` / Low curriculum (LPT-189 still To Do for id migration).
 
+## Fold 2026-10-14al (f907e7a1 discovery adjust-calling-station)
+
+- Tip-stable `f907e7a1` (#2210 after #2207 Capstone transfer). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **229**. No open Medium content catalog tickets (**LPT-348** Done).
+- Discovery oldest-coverage `lesson-04-06-03-adjust-calling-station`: explain SoftPulse VALUE→BLUFFS→CITE + `explainGrading` ("Value → Bluffs → Cite."); guided/scaffolded/unguided `poker_action_sizing` `deal.mode` `fixed` + suit-rotated variants match Dart (`Jh`/`Td`·`QcTs3h2d7c` thin-val; `8h`/`7h`·`Kh9h2c3d5s` missed-draw give-up; unguided same second-pair + unknown seat); SoftPulse maps `thin-val`/`give-up`/`baseline-check` PRESENT; scaffolded/unguided one-per-press OK; checkpoint `deal.mode` `none` cue `cite-fold` kind `none` densify PRESENT hintless. Structural clean. Curriculum **LPT-192** tip-commented (+`needs-human`; value/bluff/cite split still valid for id migration).
+- Done-ack **LPT-190** / **191** / **421** / **565** / **399** + parents **LPT-624**/625/626/627/628/635/667 + **LPT-348**/216 on tip (all NEED before comment).
+- next: `lesson-04-06-01-observe-sticky-caller` / `lesson-06-05-01-overbets-geometric` / Low curriculum (**LPT-192**/189 still To Do).
+- act-04-06-03-*: structural clean on tip — teachSpec/pressHints/Nice!/densify/SoftPulse companions Done; curriculum via LPT-192 only.
+
