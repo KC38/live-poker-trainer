@@ -292,6 +292,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-07-11-01-scaffolded' => 'Carry into Live — pick what travels.',
     'act-07-11-01-unguided' => 'Scope reminder — pick the product lane.',
     'act-07-11-01-checkpoint' => 'Warm-up goal — pick the finish line.',
+    // Densified asks still say Tap the best answer (catalog) densified asks (LPT-628) — same path.
     _ => null,
   };
 }
