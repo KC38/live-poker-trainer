@@ -146,6 +146,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14a: Tip `216437dc` (#2160 after #2158). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Discovery `lesson-06-13-01-mix-five-types` structural clean (fixed+variants match Dart Jh/Td·Qc/Ts/3h/2d/7c; one-per-press OK; explainGrading); tip-commented curriculum **LPT-306** + **LPT-348** + Done parents. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-12-03-adjust-lag` / `lesson-06-13-02-section-six-checkpoint` / Low curriculum.
+
 - 2026-10-13ds: Tip-stable `6d9f3068` (#2157). Catalog `--counts` all **0**. Discovery `lesson-06-11-03-adjust-tag` + `lesson-06-12-01-observe-wide-pressure` structural clean; tip-commented **LPT-294** / **LPT-297**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-12-02-meet-lag` / Low curriculum.
 
 - 2026-10-13dr: Tip-stable `6d9f3068` (#2157). Catalog `--counts` all **0**. Discovery oldest-unfresh `lesson-06-10-01-difficult-folds` structural clean; tip-commented curriculum **LPT-285**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-11-03-adjust-tag` / Low curriculum.

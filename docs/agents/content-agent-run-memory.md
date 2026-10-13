@@ -1219,3 +1219,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Discovery `lesson-06-12-01-observe-wide-pressure`: teachSpec on all five; explain SoftPulse + `explainGrading`; all interactive `deal.mode` `none`; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean. Curriculum **LPT-297** tip-commented.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-12-02-meet-lag` / Low curriculum.
 - act-06-11-03-* / act-06-12-01-*: structural clean — curriculum splits only via LPT-294 / LPT-297.
+
+## Fold 2026-10-14a (216437dc discovery mix-five-types)
+
+- Tip `216437dc` (#2160 ui-agent health after #2158 meet-lag learnings). Catalog `--counts` structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; **LPT-667** Done (one-per-press **0**). Sole open Medium: Capstone **LPT-348** needs-human (five NO_HINT hands).
+- Discovery oldest-unfresh `lesson-06-13-01-mix-five-types` (Same cards, five type models): teachSpec on all five; explain SoftPulse CARDS/SEATS/EVIDENCE + activity-level `explainGrading`; guided/scaffolded/unguided `poker_action_sizing` `deal.mode` `fixed` Jh/Td·Qc/Ts/3h/2d/7c match Dart `LessonActionSpot` + suit-rotated `deal.variants`; scaffolded/unguided one-per-press; checkpoint hintless cite (`deal.mode` `none`, cue `tag` via `mixFiveTagRespectOutcomes`). Structural clean — no new grokbot clone.
+- Curriculum multi-concept (Station thin-value / Nit-respect / LAG widen / TAG cite; Maniac never-as-correct; baseline-without-evidence) still **LPT-306** needs-human (tip-commented on `216437dc`). Still-a-list label check STALE — no rebuild.
+- Tip-commented NEED (13): LPT-667/626/624/625/627/635/628/216/304/305/442 + LPT-306 + LPT-348. `jira.py get` **HAS** tip SHA on LPT-348/306/667/626.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-12-03-adjust-lag` / `lesson-06-13-02-section-six-checkpoint` / Low curriculum.
+- act-06-13-01-*: structural clean on tip — curriculum split only via LPT-306.
