@@ -695,3 +695,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Frontier remaining High teachSpecs: Soft timing LPT-242 / Map turn LPT-312 / Compose river LPT-315. densify ≠ teachSpec for LPT-312 (LPT-657 arms PRESENT). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
 
+## Fold 2026-10-13 tip 9a7ca173 (#2051 LPT-401 Weak TPTK → Weak top pair)
+
+- Tip advanced `291569c7` → `9a7ca173` via #2051 LPT-401 honesty (`act-03-08-01-guided` streetLabel `Flop · Weak top pair · Heat`; felt-hand-class test updated).
+- `scan_content_gaps --counts` flat vs prior tip: pressHints **151** / deal-variants **92** / teachSpec **44** / explain-teachSpec **23** / nice-ladder **55** / unguided-softpulse-map **24**; `softpulseMapArms` **68**; `densifyHelperArms` **86**.
+- Catalog parents LPT-624/625/626/627/628/635 tip-commented only (checklists already match `--gap … --markdown` — no body rebuild). Soft timing densify `act-05-07-01-*` still **ABSENT** on LPT-628 (LPT-464 Done ≠ helper PRESENT).
+- Done-ack **LPT-401** (In Progress → Done). Tip-commented frontier High teachSpecs LPT-242 / LPT-312 / LPT-315 — all five `act-*` still MISSING teachSpec each. densify ≠ teachSpec for LPT-312 (LPT-657 arms PRESENT).
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty after fold (0 bullets). `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
