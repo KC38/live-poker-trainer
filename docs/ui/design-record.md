@@ -512,7 +512,10 @@ frames pass `showToolRow: false` so Undo / Redo / Hint stay off until an
 activity binds (LPT-53).
 `LessonCoachBand` maps `LessonMascotExpression` to calm, celebrate, or
 think. `LessonChoiceButton` (`lib/ui/course/widgets/rex_coach_line.dart`)
-is the one framed option button.
+is the one framed option button. `lessonFrameCanHint` is the shared Hint
+content gate for the tools row and sequential SoftPulse reopen — scaffolded
+non-assessment steps (Best five checkpoint-build) stay Hint-enabled until
+gold SoftPulse is on (LPT-643).
 
 ## Lesson tables
 
