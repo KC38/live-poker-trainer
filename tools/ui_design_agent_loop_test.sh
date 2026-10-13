@@ -1275,6 +1275,41 @@ grep -q 'streamed above' "$ROOT/tools/ui-agent-sdk/run.mjs" \
     || { echo "FAIL: IDLE_FILE reason empty-queue: $(cat "$IDLE_FILE")" >&2; exit 1; }
   echo "empty ui-queue skip ok"
 )
+grep -q 'advance_functions_deploy_marker_if_unchanged' "$LOOP" \
+  || fail "empty-queue skip must advance functions deploy marker when unchanged"
+(
+  # Marker behind tip, functions/ identical → advance; functions/ drift → leave.
+  deploy_tmp="$tmp/advance-deploy-marker"
+  mkdir -p "$deploy_tmp/functions"
+  git -C "$deploy_tmp" init -q
+  git -C "$deploy_tmp" config user.email t@t
+  git -C "$deploy_tmp" config user.name t
+  printf 'a\n' >"$deploy_tmp/functions/x.txt"
+  git -C "$deploy_tmp" add functions/x.txt
+  git -C "$deploy_tmp" commit -m a -q
+  old="$(git -C "$deploy_tmp" rev-parse HEAD)"
+  printf 'docs\n' >"$deploy_tmp/readme.txt"
+  git -C "$deploy_tmp" add readme.txt
+  git -C "$deploy_tmp" commit -m b -q
+  tip="$(git -C "$deploy_tmp" rev-parse HEAD)"
+  git -C "$deploy_tmp" update-ref refs/remotes/origin/main "$tip"
+  echo "$old" >"$STATE_DIR/functions-deployed-sha"
+  primary() { echo "$deploy_tmp"; }
+  FUNCTIONS_DEPLOYED_SHA_FILE="$STATE_DIR/functions-deployed-sha"
+  advance_functions_deploy_marker_if_unchanged
+  [[ "$(tr -d '[:space:]' <"$STATE_DIR/functions-deployed-sha")" == "$tip" ]] \
+    || fail "marker should advance to tip when functions unchanged"
+  echo "$old" >"$STATE_DIR/functions-deployed-sha"
+  printf 'c\n' >"$deploy_tmp/functions/x.txt"
+  git -C "$deploy_tmp" add functions/x.txt
+  git -C "$deploy_tmp" commit -m c -q
+  tip2="$(git -C "$deploy_tmp" rev-parse HEAD)"
+  git -C "$deploy_tmp" update-ref refs/remotes/origin/main "$tip2"
+  advance_functions_deploy_marker_if_unchanged
+  [[ "$(tr -d '[:space:]' <"$STATE_DIR/functions-deployed-sha")" == "$old" ]] \
+    || fail "marker must not advance when functions/ drifted"
+  echo "empty-queue advance deploy marker ok"
+)
 (
   unset UI_AGENT_SKIP_SIM_PREFLIGHT
   primary_is_clean_main() { return 1; }

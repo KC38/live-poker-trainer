@@ -495,6 +495,27 @@ print_functions_deploy_status() {
   fi
 }
 
+# Keep functions-deployed-sha at tip across content-only merges during long
+# empty-queue idle (health timers were the only advancer; marker looked stale).
+# No-op when functions/ changed — real deploy still goes through deploy-functions.sh.
+advance_functions_deploy_marker_if_unchanged() {
+  local dir tip last
+  dir="$(primary)"
+  git -C "$dir" fetch -q origin main 2>/dev/null || true
+  tip="$(git -C "$dir" rev-parse origin/main 2>/dev/null || true)"
+  [[ -n "$tip" ]] || return 0
+  last=""
+  [[ -s "$FUNCTIONS_DEPLOYED_SHA_FILE" ]] \
+    && last="$(tr -d '[:space:]' <"$FUNCTIONS_DEPLOYED_SHA_FILE")"
+  [[ -n "$last" ]] || return 0
+  [[ "$last" != "$tip" ]] || return 0
+  git -C "$dir" rev-parse -q --verify "${last}^{commit}" >/dev/null 2>&1 || return 0
+  git -C "$dir" diff --quiet "$last" "$tip" -- functions firebase.json 2>/dev/null || return 0
+  mkdir -p "$(dirname "$FUNCTIONS_DEPLOYED_SHA_FILE")"
+  echo "$tip" >"$FUNCTIONS_DEPLOYED_SHA_FILE"
+  log "functions unchanged since ${last:0:8}; advanced deploy marker to ${tip:0:8}"
+}
+
 sim_lock() {
   python3 "$TOOLS/sim_lock.py" "$@"
 }
@@ -2350,6 +2371,7 @@ one_run() {
   if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! ui_queue_has_ticket; then
     log "ui-queue empty (no actionable ui-agent ticket); skipping this run"
     record_idle_skip empty-queue "" "$EMPTY_QUEUE_SLEEP"
+    advance_functions_deploy_marker_if_unchanged || true
     return 16
   fi
   if ! logged_in; then
