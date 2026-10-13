@@ -25405,6 +25405,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-650: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Opens wide, barrels often — tap the label.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Opens wide, barrels often — pick the label.'),
       findsOneWidget,
@@ -25447,6 +25453,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-650: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'LAG vs Station — tap the difference.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('LAG vs Station — pick the difference.'),
       findsOneWidget,
@@ -25489,6 +25501,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-650: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Wide opens, keeps barreling — tap the label.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Wide opens, keeps barreling — pick the label.'),
       findsOneWidget,
@@ -25554,6 +25572,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-650: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Beside LAG label — tap what to show.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Beside LAG label — pick what to show.'),
       findsOneWidget,

@@ -204,6 +204,14 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-06-12-01-unguided' => 'One wide open — pick the confidence.',
     'act-06-12-01-checkpoint' =>
       'Best pre-label notes — pick the evidence pack.',
+    // Meet the LAG densified asks (LPT-650) — same path as LPT-649.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-12-02-guided' =>
+      'Opens wide, barrels often — pick the label.',
+    'act-06-12-02-scaffolded' => 'LAG vs Station — pick the difference.',
+    'act-06-12-02-unguided' =>
+      'Wide opens, keeps barreling — pick the label.',
+    'act-06-12-02-checkpoint' => 'Beside LAG label — pick what to show.',
     _ => null,
   };
 }
