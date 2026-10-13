@@ -1211,3 +1211,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept (dominated one-pair / coolers / ego call-downs) still **LPT-285** needs-human (tip-commented on `6d9f3068`).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-11-03-adjust-tag` / Low curriculum.
 - act-06-10-01-*: structural clean on tip — curriculum split only via LPT-285.
+
+## Fold 2026-10-13ds (6d9f3068 discovery adjust-tag + observe-wide-pressure)
+
+- Tip-stable `6d9f3068` (#2157). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348** (already HAS tip).
+- Discovery `lesson-06-11-03-adjust-tag`: teachSpec on all five; explain CREDIT→TIGHTER→NO LIGHT + `explainGrading`; guided/scaffolded/unguided `fixed` + variants + one-per-press; checkpoint cite tiles hintless. Structural clean. Curriculum **LPT-294** tip-commented.
+- Discovery `lesson-06-12-01-observe-wide-pressure`: teachSpec on all five; explain SoftPulse + `explainGrading`; all interactive `deal.mode` `none`; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean. Curriculum **LPT-297** tip-commented.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-12-02-meet-lag` / Low curriculum.
+- act-06-11-03-* / act-06-12-01-*: structural clean — curriculum splits only via LPT-294 / LPT-297.

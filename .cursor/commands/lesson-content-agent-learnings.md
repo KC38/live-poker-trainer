@@ -146,6 +146,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13ds: Tip-stable `6d9f3068` (#2157). Catalog `--counts` all **0**. Discovery `lesson-06-11-03-adjust-tag` + `lesson-06-12-01-observe-wide-pressure` structural clean; tip-commented **LPT-294** / **LPT-297**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-12-02-meet-lag` / Low curriculum.
+
 - 2026-10-13dr: Tip-stable `6d9f3068` (#2157). Catalog `--counts` all **0**. Discovery oldest-unfresh `lesson-06-10-01-difficult-folds` structural clean; tip-commented curriculum **LPT-285**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-11-03-adjust-tag` / Low curriculum.
 
 - 2026-10-13dq: Tip-stable `6d9f3068` (#2157). Catalog `--counts` all **0**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Discovery oldest-unfresh `lesson-06-09-01-threebet-fourbet` structural clean; tip-commented curriculum **LPT-282**. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-10-01-difficult-folds` / Low curriculum.
