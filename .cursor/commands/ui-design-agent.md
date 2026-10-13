@@ -750,6 +750,14 @@ other **filed** keys and any unfiled hunches in `--lead` (repeatable).
 `--learnings` is `updated|pending|unchanged`. The helper sets `at` via
 `isoformat` (`+05:30`).
 
+**File solid leads before you report.** If this walk surfaced other distinct
+Mac-mini issues (densify coach copy, Hint/SoftPulse, heart restore, etc.)
+that you did not fix as companions, create `ui-agent` tickets for them in
+step 5/10 **before** releasing the lock. Do not leave those leads only in
+the step-10 report or coverage `--lead` prose (LPT-644 closed a discovery
+fix and listed densify leads with `Other tickets filed: none`, so the
+queue stayed empty). Hunches that are not solid stay as `--lead` text only.
+
 Delete `$PRIMARY/.cursor/tmp/ui-agent/`. Make sure no worktree tmux session
 for this ticket is still running. Then:
 
