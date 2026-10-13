@@ -770,6 +770,15 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-87, LPT-90, LPT-93, LPT-96, LPT-100, LPT-103, LPT-106: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-01-01-03-blinds-and-button` → `lesson-01-01-03-01-dealer-button`, `lesson-01-01-03-02-small-and-big-blind`, `lesson-01-01-03-03-blinds-post-first` (LPT-87)
+- `lesson-01-02-01-hand-ranks` → `lesson-01-02-01-01-order-hand-ranks`, `lesson-01-02-01-02-pairs-straights-flushes`, `lesson-01-02-01-03-compare-finished-hands` (LPT-90)
+- `lesson-01-02-02-best-five-kickers` → `lesson-01-02-02-01-best-five`, `lesson-01-02-02-02-kickers`, `lesson-01-02-02-03-board-plays` (LPT-93)
+- `lesson-01-03-01-fold-check-call` → `lesson-01-03-01-01-fold`, `lesson-01-03-01-02-check`, `lesson-01-03-01-03-call` (LPT-96)
+- `lesson-01-03-02-bet-raise-allin` → `lesson-01-03-02-01-bet`, `lesson-01-03-02-02-raise`, `lesson-01-03-02-03-all-in` (LPT-100)
+- `lesson-01-04-01-streets-and-order` → `lesson-01-04-01-01-four-streets`, `lesson-01-04-01-02-action-order`, `lesson-01-04-01-03-street-ends` (LPT-103)
+- `lesson-01-05-01-winning-pots` → `lesson-01-05-01-01-win-by-fold`, `lesson-01-05-01-02-showdown`, `lesson-01-05-01-03-main-and-side-pots` (LPT-106)
+
 
 Button and blinds `teachSpec` (LPT-85): every step is `deal.mode` `none`
 (seat/puck teaching; the felt shows card backs, no dealt classes). The
@@ -1663,13 +1672,27 @@ felt.
 | Suits | Suit taps on board cards; explain SoftPulse hearts → diamonds → clubs → spades (LPT-353); unit `unit-01-01-02-suits-and-ranks` (LPT-83 split) | — |
 | Ranks | Board ranks low to high; SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
 | Pairs and suited | Suited / pair seats; scaffolded pressHints (LPT-82); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
-| Button and blinds | Dealer button, SB, BB on the seats | — |
-| Hand ranks | Showdown seats weakest to strongest | scaffolded pressHints one-per-press (LPT-667) |
-| Best five and kickers | The five cards that play; You / Them / Board | scaffolded pressHints one-per-press (LPT-667) |
-| Fold, check, call | Fold, Check, Call under a flop; explain SoftPulse cues FOLD → CHECK → CALL (LPT-635) | — |
-| Bet, raise, all-in | Bet, Raise, All-in under a flop; explain SoftPulse cues BET → RAISE → ALL-IN (LPT-635) | — |
-| Streets and action order | Board advances by street; seat order on the table; explain SoftPulse cues PREFLOP → FLOP → TURN → RIVER (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
-| How pots are won | Fold win, Showdown, Side pot; densified SoftPulse one gold via `guideRegion` (LPT-525); explain SoftPulse cues FOLD WIN → SHOWDOWN → SIDE POT (LPT-635) | — |
+| Dealer button | Dealer button, SB, BB on the seats; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
+| Small and big blinds | explain SoftPulse cues SB → BB; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
+| Blinds post first | explain SoftPulse cues BLINDS → DEAL; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
+| Order hand ranks | Showdown seats weakest to strongest; unit `unit-01-02-what-beats-what` (LPT-90 split) | scaffolded pressHints one-per-press (LPT-667) |
+| Pairs, straights, flushes | explain SoftPulse cues PAIR → STRAIGHT → FLUSH; unit `unit-01-02-what-beats-what` (LPT-90 split) | — |
+| Compare finished hands | explain SoftPulse cues FULL HOUSE → TRIPS → TWO PAIR; unit `unit-01-02-what-beats-what` (LPT-90 split) | — |
+| Best five from seven | The five cards that play; You / Them / Board; unit `unit-01-02-what-beats-what` (LPT-93 split) | scaffolded pressHints one-per-press (LPT-667) |
+| Kickers break ties | explain SoftPulse cues SAME PAIR → KICKER; unit `unit-01-02-what-beats-what` (LPT-93 split) | — |
+| When the board plays | explain SoftPulse cues BOARD → CHOP; unit `unit-01-02-what-beats-what` (LPT-93 split) | — |
+| Fold | Fold, Check, Call under a flop; explain SoftPulse cues FOLD → CHECK → CALL (LPT-635); unit `unit-01-03-five-actions` (LPT-96 split) | — |
+| Check | explain SoftPulse cues NO BET → CHECK; unit `unit-01-03-five-actions` (LPT-96 split) | — |
+| Call | explain SoftPulse cues BET → CALL; unit `unit-01-03-five-actions` (LPT-96 split) | — |
+| Bet | Bet, Raise, All-in under a flop; explain SoftPulse cues BET → RAISE → ALL-IN (LPT-635); unit `unit-01-03-five-actions` (LPT-100 split) | — |
+| Raise | explain SoftPulse cues FACING BET → RAISE; unit `unit-01-03-five-actions` (LPT-100 split) | — |
+| All-in | explain SoftPulse cues STACK → ALL-IN; unit `unit-01-03-five-actions` (LPT-100 split) | — |
+| Four streets | Board advances by street; seat order on the table; explain SoftPulse cues PREFLOP → FLOP → TURN → RIVER (LPT-635); unit `unit-01-04-streets` (LPT-103 split) | scaffolded pressHints one-per-press (LPT-667) |
+| Action order | explain SoftPulse cues BIG BLIND → CLOCKWISE → BUTTON; unit `unit-01-04-streets` (LPT-103 split) | — |
+| When a street ends | explain SoftPulse cues BETS MATCHED → NEXT STREET; unit `unit-01-04-streets` (LPT-103 split) | — |
+| Win when everyone folds | Fold win, Showdown, Side pot; densified SoftPulse one gold via `guideRegion` (LPT-525); explain SoftPulse cues FOLD WIN → SHOWDOWN → SIDE POT (LPT-635); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
+| Win at showdown | explain SoftPulse cues RIVER CALL → SHOWDOWN → BEST FIVE; unit `unit-01-05-winning-pots` (LPT-106 split) | — |
+| Main and side pots | explain SoftPulse cues MAIN POT → SIDE POT; unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
 | Position labels | Six-max seats labeled on the table; explain SoftPulse cues D (LPT-635) | — |

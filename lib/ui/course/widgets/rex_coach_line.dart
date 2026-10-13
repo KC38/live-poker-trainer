@@ -308,6 +308,13 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap the suited hole cards — pick Suited.',
     'act-01-01-02-checkpoint-pair' =>
       'Tap the pocket pair — pick Pocket pair.',
+    // LPT-83 split successors (LPT-628 reopen) — same asks as their source steps.
+    'act-01-01-02-01-scaffolded-suits' =>
+      'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
+    'act-01-01-02-01-checkpoint-suits' =>
+      'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
+    'act-01-01-02-03-guided-suited' =>
+      'Tap the suited hole cards — pick Suited.',
     'act-01-01-03-guided-button' =>
       'Tap the dealer button on the table — pick The seat with the D chip.',
     'act-01-01-03-scaffolded-blinds' =>

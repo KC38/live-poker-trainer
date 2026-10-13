@@ -721,8 +721,12 @@ void main() {
   for (final entry in _lessons.entries) {
     group(entry.key, () {
       test('every interactive step authors a valid teachSpec.deal', () {
-        final lesson = catalog.lessonById(entry.key);
-        expect(lesson, isNotNull);
+        // Curriculum splits retire the key; its successors carry the steps.
+        final lesson = catalog.lessonById(entry.key) ??
+            catalog.lessonById(
+              catalog.lessonSplitMap[entry.key]?.first ?? '',
+            );
+        expect(lesson, isNotNull, reason: entry.key);
         for (final id in entry.value) {
           final a = act(id);
           final deal = a.teachSpec?['deal'];

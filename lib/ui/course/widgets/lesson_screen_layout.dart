@@ -22,8 +22,13 @@ import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
+final RegExp _splitSuccessorLessonId = RegExp(r'^lesson-0[1-7]-\d\d-\d\d-\d\d-');
+
 /// Lessons that use [LessonScreenLayout] instead of the app-bar runner.
 bool isLessonScreenFrameLesson(String lessonId) {
+  // Curriculum-split successors (`lesson-SS-UU-LL-0N-slug`, LPT-83+) inherit
+  // the frame from the retired multi-concept lesson they replace.
+  if (_splitSuccessorLessonId.hasMatch(lessonId)) return true;
   return lessonId == 'lesson-01-01-01-your-two-cards' ||
       lessonId == 'lesson-01-01-01' ||
       lessonId == 'lesson-01-01-02-suits-and-ranks' ||

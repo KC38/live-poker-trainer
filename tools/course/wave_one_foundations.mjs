@@ -231,13 +231,13 @@ export function buildSectionOne() {
   const L010102B = "lesson-01-01-02-02-ranks";
   const L010102C = "lesson-01-01-02-03-pairs-and-suited";
   const L010103UNIT = "unit-01-01-03-blinds-and-button";
-  const L010103 = "lesson-01-01-03-blinds-and-button";
-  const L010201 = "lesson-01-02-01-hand-ranks";
-  const L010202 = "lesson-01-02-02-best-five-kickers";
-  const L010301 = "lesson-01-03-01-fold-check-call";
-  const L010302 = "lesson-01-03-02-bet-raise-allin";
-  const L010401 = "lesson-01-04-01-streets-and-order";
-  const L010501 = "lesson-01-05-01-winning-pots";
+  const L010103 = "lesson-01-01-03-blinds-and-button"; // retired LPT-87: split in course.json (lessonSplitMap)
+  const L010201 = "lesson-01-02-01-hand-ranks"; // retired LPT-90: split in course.json (lessonSplitMap)
+  const L010202 = "lesson-01-02-02-best-five-kickers"; // retired LPT-93: split in course.json (lessonSplitMap)
+  const L010301 = "lesson-01-03-01-fold-check-call"; // retired LPT-96: split in course.json (lessonSplitMap)
+  const L010302 = "lesson-01-03-02-bet-raise-allin"; // retired LPT-100: split in course.json (lessonSplitMap)
+  const L010401 = "lesson-01-04-01-streets-and-order"; // retired LPT-103: split in course.json (lessonSplitMap)
+  const L010501 = "lesson-01-05-01-winning-pots"; // retired LPT-106: split in course.json (lessonSplitMap)
   const L010601 = "lesson-01-06-01-guided-complete-hand";
   const L010602 = "lesson-01-06-02-section-one-jump";
 

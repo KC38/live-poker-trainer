@@ -109,8 +109,8 @@ describe("course flags", () => {
 describe("soft grading and life loss", () => {
   const lesson = findLesson("lesson-01-01-01-your-two-cards")!.lesson;
   const openFold = findLesson("lesson-02-03-01-open-fold")!.lesson;
-  const streets = findLesson("lesson-01-04-01-streets-and-order")!.lesson;
-  const pots = findLesson("lesson-01-05-01-winning-pots")!.lesson;
+  const streets = findLesson("lesson-01-04-01-02-action-order")!.lesson; // LPT-103 split
+  const pots = findLesson("lesson-01-05-01-03-main-and-side-pots")!.lesson; // LPT-106 split
 
   it("loses a life on non-guided non-accepted grades; guided is free", () => {
     expect(
@@ -301,7 +301,7 @@ describe("soft grading and life loss", () => {
   });
 
   it("uses authored explain Nice! feedback for Hand ranks ladder (LPT-74)", () => {
-    const handRanks = findLesson("lesson-01-02-01-hand-ranks")!.lesson;
+    const handRanks = findLesson("lesson-01-02-01-01-order-hand-ranks")!.lesson;
     const explain = handRanks.activities.find(
       (activity) => activity.id === "act-01-02-01-explain-ladder",
     )!;
@@ -316,7 +316,7 @@ describe("soft grading and life loss", () => {
   });
 
   it("uses authored explain Nice! feedback for Best five (LPT-76)", () => {
-    const bestFive = findLesson("lesson-01-02-02-best-five-kickers")!.lesson;
+    const bestFive = findLesson("lesson-01-02-02-01-best-five")!.lesson;
     const explain = bestFive.activities.find(
       (activity) => activity.id === "act-01-02-02-explain-five",
     )!;
@@ -331,7 +331,8 @@ describe("soft grading and life loss", () => {
   });
 
   it("uses authored explain Nice! feedback for Streets (LPT-79)", () => {
-    const explain = streets.activities.find(
+    const fourStreets = findLesson("lesson-01-04-01-01-four-streets")!.lesson;
+    const explain = fourStreets.activities.find(
       (activity) => activity.id === "act-01-04-01-explain-streets",
     )!;
     const graded = gradeCourseResponse({activity: explain});
@@ -655,7 +656,8 @@ describe("placement and live unlock helpers", () => {
 });
 
 describe("accepted accuracy", () => {
-  const lesson = findLesson("lesson-01-03-02-bet-raise-allin")!.lesson;
+  // 1 explain + 4 scored (Bet, raise, all-in was split by LPT-100).
+  const lesson = findLesson("lesson-01-01-01-your-two-cards")!.lesson;
 
   it("clamps accepted / scored and treats empty scored as zero", () => {
     expect(acceptedAccuracyRatio(0, 0)).toBe(0);
@@ -687,7 +689,7 @@ describe("accepted accuracy", () => {
   });
 
   it("does not let one explain cancel one mistake on the result screen", () => {
-    // Bet, raise, all-in: 1 explain + 4 scored. One wrong then four accepts
+    // Your two cards: 1 explain + 4 scored. One wrong then four accepts
     // used to report 5/5 = 100% because explain inflated acceptedAnswers.
     expect(lesson.activities.filter((a) => a.renderer === "coach_dialogue")).toHaveLength(
       1,
