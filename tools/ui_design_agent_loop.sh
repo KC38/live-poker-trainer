@@ -77,6 +77,8 @@ HEALTH_FILE="$STATE_DIR/ui-agent-health.jsonl"
 # Last skip reason for `status` (empty-queue / primary-busy / sim-busy).
 # Written on exit 10/16 skips; cleared when a real agent run claims the mini.
 IDLE_FILE="$STATE_DIR/ui-agent-idle.json"
+# Last successful make-change functions deploy (or advanced-on-skip marker).
+FUNCTIONS_DEPLOYED_SHA_FILE="${FUNCTIONS_DEPLOYED_SHA_FILE:-$STATE_DIR/functions-deployed-sha}"
 # When present, ensure no-ops so a health timer can file/ship without the
 # loop waking onto the same ticket (LPT-656 race 2026-10-13).
 HOLD_FILE="$STATE_DIR/ui-agent.hold"
@@ -469,6 +471,28 @@ ui_queue_has_ticket() {
 # Jira outage (only needs-human / grokbot remain).
 print_ui_queue_status() {
   python3 "$TOOLS/jira.py" ui-queue --stats 2>/dev/null || true
+}
+
+# Surface functions deploy marker lag so health timers run deploy-functions.sh
+# (advance-on-skip when unchanged, or a real deploy when functions/ moved).
+print_functions_deploy_status() {
+  local tip deployed
+  tip="$(git -C "$(primary)" rev-parse origin/main 2>/dev/null || true)"
+  [[ -n "$tip" ]] || return 0
+  [[ -s "$FUNCTIONS_DEPLOYED_SHA_FILE" ]] || {
+    echo "functions: deploy marker missing ($FUNCTIONS_DEPLOYED_SHA_FILE)"
+    return 0
+  }
+  deployed="$(tr -d '[:space:]' <"$FUNCTIONS_DEPLOYED_SHA_FILE")"
+  [[ -n "$deployed" ]] || return 0
+  [[ "$deployed" == "$tip" ]] && return 0
+  if git -C "$(primary)" rev-parse -q --verify "${deployed}^{commit}" >/dev/null 2>&1 \
+    && git -C "$(primary)" diff --quiet "$deployed" "$tip" -- functions firebase.json 2>/dev/null
+  then
+    echo "functions: marker behind tip ${tip:0:8} (unchanged since ${deployed:0:8}; run deploy-functions.sh)"
+  else
+    echo "functions: deploy needed (functions/ changed since ${deployed:0:8}; tip ${tip:0:8})"
+  fi
 }
 
 sim_lock() {
@@ -2980,6 +3004,7 @@ EOF
     print_idle_status
     print_pending_learnings_status
     print_ui_queue_status
+    print_functions_deploy_status
     echo "launcher: $LAUNCHER"
     echo "sdk-runtime: $SDK_RUNTIME"
     if [[ "$SDK_RUNTIME" == "machine" ]]; then

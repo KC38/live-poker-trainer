@@ -1357,6 +1357,47 @@ grep -q 'ui-queue --stats' "$LOOP" \
   || fail "print_ui_queue_status must call jira ui-queue --stats"
 echo "status ui-queue stats ok"
 
+grep -q 'print_functions_deploy_status' "$LOOP" \
+  || fail "loop must define print_functions_deploy_status"
+# Tip == marker → silent; lag with unchanged functions → advise deploy script.
+(
+  deploy_tmp="$tmp/functions-deploy-status"
+  mkdir -p "$deploy_tmp"
+  git -C "$deploy_tmp" init -q
+  git -C "$deploy_tmp" config user.email t@t
+  git -C "$deploy_tmp" config user.name t
+  mkdir -p "$deploy_tmp/functions"
+  printf 'a\n' >"$deploy_tmp/functions/x.txt"
+  git -C "$deploy_tmp" add functions/x.txt
+  git -C "$deploy_tmp" commit -m a -q
+  old="$(git -C "$deploy_tmp" rev-parse HEAD)"
+  printf 'b\n' >"$deploy_tmp/readme.txt"
+  git -C "$deploy_tmp" add readme.txt
+  git -C "$deploy_tmp" commit -m b -q
+  tip="$(git -C "$deploy_tmp" rev-parse HEAD)"
+  git -C "$deploy_tmp" update-ref refs/remotes/origin/main "$tip"
+  echo "$tip" >"$STATE_DIR/functions-deployed-sha"
+  primary() { echo "$deploy_tmp"; }
+  FUNCTIONS_DEPLOYED_SHA_FILE="$STATE_DIR/functions-deployed-sha"
+  out="$(print_functions_deploy_status)"
+  [[ -z "$out" ]] || fail "functions status silent at tip, got: $out"
+  echo "$old" >"$STATE_DIR/functions-deployed-sha"
+  out="$(print_functions_deploy_status)"
+  grep -q 'marker behind tip' <<<"$out" \
+    || fail "functions status should note unchanged lag: $out"
+  grep -q 'deploy-functions.sh' <<<"$out" \
+    || fail "functions status should name deploy script: $out"
+  printf 'c\n' >"$deploy_tmp/functions/x.txt"
+  git -C "$deploy_tmp" add functions/x.txt
+  git -C "$deploy_tmp" commit -m c -q
+  tip2="$(git -C "$deploy_tmp" rev-parse HEAD)"
+  git -C "$deploy_tmp" update-ref refs/remotes/origin/main "$tip2"
+  out="$(print_functions_deploy_status)"
+  grep -q 'deploy needed' <<<"$out" \
+    || fail "functions status should note functions/ drift: $out"
+)
+echo "status functions deploy ok"
+
 # status prints current ticket from sim_lock purpose when mini is in use.
 grep -q 'print_current_ticket_status' "$LOOP" || fail "loop must define print_current_ticket_status"
 (
