@@ -120,11 +120,11 @@ class LessonActivityController extends ChangeNotifier {
   /// the wave would leave the next press with neither gold SoftPulse nor
   /// Hint — keep SoftPulse on instead (see [showTargetCue]).
   bool get _canReopenSequentialCueViaHint {
-    if (lessonFrameHintsDisabled(activity, isReview: isReview)) {
-      return false;
-    }
-    if (activity.hintMedia.isNotEmpty) return true;
-    return lessonFrameHintFallback(activity, isReview: isReview) != null;
+    return lessonFrameCanHint(
+      activity,
+      isReview: isReview,
+      bindGeneration: bindGeneration,
+    );
   }
 
   /// Whether the Hint control should accept a tap right now.

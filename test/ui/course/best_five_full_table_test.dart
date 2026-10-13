@@ -1,6 +1,9 @@
 /// Best five teaches on the full poker table, not a mini felt picker.
 library;
 
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -327,6 +330,82 @@ void main() {
     expect(glow.dy, lessThan(you.dy - 8));
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'catalog checkpoint-build keeps Hint enabled until SoftPulse (LPT-643)',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final catalog = CourseCatalog.fromJson(
+        jsonDecode(File('assets/course/v2/catalog.json').readAsStringSync())
+            as Map<String, dynamic>,
+      );
+      final activity = catalog.activityById('act-01-02-02-checkpoint-build');
+      expect(activity, isNotNull);
+      expect(activity!.stage, ActivityStage.scaffolded);
+      expect(activity.assessmentRole, isNull);
+      expect(lessonFrameCanHint(activity), isTrue);
+      expect(lessonFrameHintsDisabled(activity), isFalse);
+
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+      controller.releaseFeltDealIfUntracked();
+      expect(controller.showTargetCue, isFalse);
+      expect(controller.canRequestHint, isTrue);
+
+      final canHint =
+          lessonFrameCanHint(activity) && controller.canRequestHint;
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            theme: buildPokerTheme().copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: LessonScreenLayout(
+              progress: 0.8,
+              livesRemaining: 5,
+              livesMax: 5,
+              onClose: () {},
+              speech: activity.prompt ?? activity.accessibilityText,
+              expression: LessonMascotExpression.thinking,
+              canUndo: false,
+              canRedo: false,
+              canHint: canHint,
+              onUndo: () {},
+              onRedo: () {},
+              onHint: controller.revealHint,
+              stage: LessonSoftPulseScope(
+                allowed: controller.showTargetCue,
+                child: SelectIdentifyActivity(
+                  activity: activity,
+                  controller: controller,
+                  showGuidance: controller.showTargetCue,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(find.text('HINT'), findsOneWidget);
+      final hintInk = tester.widget<InkWell>(
+        find
+            .ancestor(
+              of: find.text('HINT'),
+              matching: find.byType(InkWell),
+            )
+            .first,
+      );
+      expect(hintInk.onTap, isNotNull);
+      expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('guided picker SoftPulse rings one recommended card', (
     tester,
