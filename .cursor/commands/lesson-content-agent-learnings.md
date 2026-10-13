@@ -145,3 +145,4 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13v: Tip-stable `89d9a5ae` honesty re-read: LPT-394 **Done** (`Jh`/`9d`·`Ks`/`Tc`/`2d`/`3s`); edited LPT-312 body off stale “current 9h/8h”; LPT-396 still valid; tip-commented needs-human LPT-348 (keep off LPT-626).
 - 2026-10-13w: Mid-run tip → `a8658386` (#1956 LPT-394 + #1957/#1959 SoftPulse-map scanner): rebuilt **LPT-625** ABSENT **20→24** from `--gap unguided-softpulse-map --markdown` (`softpulseMapArms` 68); tip-commented LPT-624/626/627/635/628/242; JSON gaps still flat 151/81/80/34/nice-44.
 
+- 2026-10-13x: Tip-stable `51f39807` (#1960): scan flat 151/81/80/34/nice-44/map-24 softpulseMapArms 68; parents tip-comment only; Soft timing LPT-242 still all-five MISSING (GrokBot IP); densify helper 47 Soft timing ABSENT; LPT-396 still valid JhTd/Ts9h8c2d top-as-second; LPT-312 still MISSING.
