@@ -2079,7 +2079,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-12-02-explain", 1,
                 "LAG: wide in, pressure on — still a working model.",
-                {objectives: ["Introduce LAG"], playerTypeRefs: ["lag"]}),
+                {
+                  objectives: ["Introduce LAG"], playerTypeRefs: ["lag"],
+                  // LPT-298
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "WIDE", kind: "soft_pulse"},
+                      {press: 2, target: "PRESSURE", kind: "soft_pulse"},
+                      {press: 3, target: "MODEL", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               classifyAct({
                 id: "act-06-12-02-guided", order: 2, stage: "guided",
                 prompt: "Opens wide, barrels often, folds some raises. Label?",
@@ -2092,6 +2103,8 @@ export function buildSectionSix() {
                   choice("tag", "TAG", "clear_mistake",
                     "TAG is selective.", {betterChoiceId: "lag"})
                 ],
+                // LPT-298
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "lag", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-12-02-scaffolded", order: 3, stage: "scaffolded",
@@ -2104,6 +2117,8 @@ export function buildSectionSix() {
                   choice("same", "Same exploit", "clear_mistake",
                     "No.", {betterChoiceId: "diff"})
                 ],
+                // LPT-298
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "diff", kind: "soft_pulse"}]},
               }),
               classifyAct({
                 id: "act-06-12-02-unguided", order: 4, stage: "scaffolded",
@@ -2117,6 +2132,8 @@ export function buildSectionSix() {
                   choice("nit2", "Nit", "clear_mistake",
                     "Opposite.", {betterChoiceId: "lag2"})
                 ],
+                // LPT-298
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "lag2", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-12-02-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2129,6 +2146,8 @@ export function buildSectionSix() {
                   choice("destiny", "Destiny", "clear_mistake",
                     "No.", {betterChoiceId: "limits"})
                 ],
+                // LPT-298
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "limits", kind: "none"}]},
               }),
             ],
           }),

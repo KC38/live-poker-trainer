@@ -494,6 +494,14 @@ const _lessons = <String, List<String>>{
     'act-06-11-03-unguided',
     'act-06-11-03-checkpoint',
   ],
+  // LPT-298
+  'lesson-06-12-02-meet-lag': [
+    'act-06-12-02-explain',
+    'act-06-12-02-guided',
+    'act-06-12-02-scaffolded',
+    'act-06-12-02-unguided',
+    'act-06-12-02-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -3690,6 +3698,57 @@ void main() {
       });
       expect(
         act('act-06-11-03-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Meet the LAG (LPT-298)', () {
+    test('explain SoftPulse walks WIDE → PRESSURE → MODEL', () {
+      expect(
+        _list(
+          act('act-06-12-02-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['WIDE', 'PRESSURE', 'MODEL'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-06-12-02-guided'), 'cues').single['target'], 'lag');
+      expect(act('act-06-12-02-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-12-02-scaffolded'), 'cues').single['target'],
+        'diff',
+      );
+      expect(act('act-06-12-02-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-06-12-02-unguided'), 'cues').single['target'],
+        'lag2',
+      );
+      expect(act('act-06-12-02-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-12-02-checkpoint'), 'cues').single['target'],
+        'limits',
+      );
+      expect(
+        _list(
+          act('act-06-12-02-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-12-02-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-12-02-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-12-02-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });
