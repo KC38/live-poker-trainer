@@ -308,3 +308,20 @@ test("unknown teachSpec handFamily is rejected (LPT-166)", () => {
   const clean = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
   assert.deepEqual(validateAndGenerate(clean).errors, []);
 });
+
+test("wave one pilot lesson authors the same teachSpec as course.json (LPT-558)", async () => {
+  const {buildSectionOne} = await import("./wave_one_foundations.mjs");
+  const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  const want = course.sections[0].units[0].lessons.find(
+    (lesson) => lesson.id === "lesson-01-01-01-your-two-cards",
+  );
+  const got = buildSectionOne().units[0].lessons.find(
+    (lesson) => lesson.id === "lesson-01-01-01-your-two-cards",
+  );
+  assert.ok(want && got);
+  for (const activity of want.activities) {
+    const wave = got.activities.find((a) => a.id === activity.id);
+    assert.ok(wave, activity.id);
+    assert.deepEqual(wave.teachSpec, activity.teachSpec, activity.id);
+  }
+});

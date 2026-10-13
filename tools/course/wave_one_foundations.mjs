@@ -259,7 +259,14 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-01-01-explain-hole-cards", 1,
                 "These two are yours alone. Nobody else sees them.",
-                {objectives: ["Identify your two hole cards"]}),
+                {
+                  objectives: ["Identify your two hole cards"],
+                  // LPT-558
+                  teachSpec: {
+                    deal: {mode: "random_in_class", handFamily: "any", suitFamily: "any"},
+                    cues: [{press: 1, target: "hero_holes", kind: "soft_pulse"}],
+                  },
+                }),
               selectAct({
                 id: "act-01-01-01-guided-find-holes", order: 2, stage: "guided",
                 prompt: "Tap your hole cards on the table.",
@@ -276,6 +283,20 @@ export function buildSectionOne() {
                     "Those belong to someone else. Yours are the two in front of you.",
                     {betterChoiceId: "choice-hero-holes"}),
                 ],
+                // LPT-558
+                teachSpec: {
+                  deal: {
+                    mode: "random_in_class",
+                    handFamily: "any",
+                    suitFamily: "any",
+                    variants: [
+                      {id: "var-broadway", handFamily: "broadway", label: "Broadway holes"},
+                      {id: "var-pair", handFamily: "pair", label: "Pocket pair"},
+                    ],
+                  },
+                  pressHints: [{press: 1, text: "Your two cards sit at your seat — not the board."}],
+                  cues: [{press: 1, target: "hero_holes", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-01-01-scaffolded-private", order: 3, stage: "scaffolded",
@@ -292,6 +313,12 @@ export function buildSectionOne() {
                     "Dealers should not peek. Treat the cards as yours alone.",
                     {reversalRead: "Casino procedures vary; still play as if only you know them."}),
                 ],
+                // LPT-558
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "any", suitFamily: "any"},
+                  pressHints: [{press: 1, text: "Only you can see the two cards at your seat."}],
+                  cues: [{press: 1, target: "hero_holes", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-01-01-unguided-mix", order: 4, stage: "scaffolded",
@@ -308,6 +335,12 @@ export function buildSectionOne() {
                     "Mucked cards are dead, not the board.",
                     {betterChoiceId: "choice-flop"}),
                 ],
+                // LPT-558
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "any", suitFamily: "any"},
+                  pressHints: [{press: 1, text: "Find the shared board cards in the middle."}],
+                  cues: [{press: 1, target: "board", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-01-01-checkpoint-table", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -329,6 +362,11 @@ export function buildSectionOne() {
                   choice("choice-checkpoint-all", "Every face-up card you can see", "questionable",
                     "You can see the board, but those cards are not yours alone."),
                 ],
+                // LPT-558
+                teachSpec: {
+                  deal: {mode: "random_in_class", handFamily: "any", suitFamily: "any"},
+                  cues: [{press: 1, target: "hero_holes", kind: "none"}],
+                },
               }),
             ],
           }),
