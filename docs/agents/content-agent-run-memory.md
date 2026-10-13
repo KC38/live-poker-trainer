@@ -1258,3 +1258,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept still **LPT-314** needs-human (continue cards / give-up cards / bet only with a turn map) — tip-commented on `ec75e4ae`. Done-ack tip-commented LPT-312/657/667/626/624/625/627/628/635/216/446/506 (NEED tip SHA).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-03-01-compose-river` / Low curriculum **LPT-317**.
 - act-07-02-01-*: structural clean on tip — curriculum split only via LPT-314; teachSpec/densify companions LPT-312/657 Done.
+
+## Fold 2026-10-14e (1978fa6a discovery river-composition)
+
+- Tip-stable `1978fa6a` (#2165 learnings after flop-to-turn-map). Catalog `--counts` structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human. High content open: **0**.
+- Discovery oldest-unfresh `lesson-07-03-01-river-composition`: teachSpec on all five; explain SoftPulse VALUE→BLUFF→HOLD + activity-level `explainGrading`; guided `poker_action_sizing` `deal.mode` `fixed` hero `As`/`Ad` board `Ac`/`9s`/`4h`/`2d`/`7c` matches Dart `resolveLessonActionSpot` + two suit-rotated `deal.variants` + cue `val`; scaffolded/unguided/checkpoint outcome tiles `deal.mode` `none` + cues `block` / `check` / `rule` (checkpoint cue kind `none`); scaffolded+unguided one-per-press complete; densify helper arms PRESENT (`act-07-03-01-scaffolded`/`unguided`/`checkpoint` — LPT-658 Done; guided is sizing — skip). Structural clean — no new grokbot clone; design-record Still-a-list “blocker, empty, and rule checks” STALE — no rebuild.
+- Curriculum multi-concept still **LPT-317** needs-human (value candidates / blocker bluffs / check trash under one unlock; checkpoint objective still value-only vs rule-meta) — tip-commented on `1978fa6a`. Tip-commented Capstone **LPT-348** + Done-ack LPT-315/658/447/507/667/626/624/625/627/628/635/216 (all NEED tip SHA).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-04-01-pot-type-plans` / Low curriculum **LPT-320**.
+- act-07-03-01-*: structural clean on tip — curriculum split only via LPT-317; teachSpec/densify companions LPT-315/658 Done.
