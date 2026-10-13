@@ -27679,7 +27679,19 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cs",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-nit",
@@ -27722,7 +27734,19 @@
                   "playerTypeRefs": [
                     "nit"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "nit",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-maniac",
@@ -27765,7 +27789,19 @@
                   "playerTypeRefs": [
                     "maniac"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "man",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-tag",
@@ -27808,7 +27844,19 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tag",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-lag",
@@ -27851,7 +27899,19 @@
                   "playerTypeRefs": [
                     "lag"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "lag",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-uncertain",
@@ -27890,7 +27950,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "low",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-retire",
@@ -27933,7 +28005,19 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "retire",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

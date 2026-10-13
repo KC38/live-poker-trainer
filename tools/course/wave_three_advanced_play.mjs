@@ -3667,6 +3667,8 @@ export function buildSectionSeven() {
                   choice("cs-wrong", "Calling Station — bluff more", "clear_mistake",
                     "Opposite.", {betterChoiceId: "cs"})
                 ],
+                // LPT-352
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cs", kind: "none"}]},
               }),
               classifyAct({
                 id: "act-07-12-01-nit", order: 2, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3680,6 +3682,8 @@ export function buildSectionSeven() {
                   choice("nit-wrong", "Nit — call down light always", "clear_mistake",
                     "Wrong.", {betterChoiceId: "nit"})
                 ],
+                // LPT-352
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "nit", kind: "none"}]},
               }),
               classifyAct({
                 id: "act-07-12-01-maniac", order: 3, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3693,6 +3697,8 @@ export function buildSectionSeven() {
                   choice("man-wrong", "Maniac — fold all one-pair forever", "clear_mistake",
                     "Too tight.", {betterChoiceId: "man"})
                 ],
+                // LPT-352
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "man", kind: "none"}]},
               }),
               classifyAct({
                 id: "act-07-12-01-tag", order: 4, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3706,6 +3712,8 @@ export function buildSectionSeven() {
                   choice("tag-wrong", "TAG — bluff their check-raises light", "clear_mistake",
                     "Bad.", {betterChoiceId: "tag"})
                 ],
+                // LPT-352
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tag", kind: "none"}]},
               }),
               classifyAct({
                 id: "act-07-12-01-lag", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3719,6 +3727,8 @@ export function buildSectionSeven() {
                   choice("lag-wrong", "LAG — bluff into them more", "clear_mistake",
                     "Wrong.", {betterChoiceId: "lag"})
                 ],
+                // LPT-352
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "lag", kind: "none"}]},
               }),
               selectAct({
                 id: "act-07-12-01-uncertain", order: 6, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3731,6 +3741,8 @@ export function buildSectionSeven() {
                   choice("max", "Maximum certainty on a label", "clear_mistake",
                     "Overfit.", {betterChoiceId: "low"})
                 ],
+                // LPT-352
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "low", kind: "none"}]},
               }),
               selectAct({
                 id: "act-07-12-01-retire", order: 7, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3744,6 +3756,8 @@ export function buildSectionSeven() {
                   choice("freeze", "Keep the old label forever", "clear_mistake",
                     "Stale.", {betterChoiceId: "retire"})
                 ],
+                // LPT-352
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "retire", kind: "none"}]},
               }),
             ],
           }),

@@ -582,7 +582,7 @@ the same hand versus each type (LPT-328), Integrate type, board, line, and
 sizing (LPT-331), Capstone: single-raised pot (LPT-337), Capstone: 3-bet pot
 (LPT-339), Capstone: multiway deep (LPT-341), Capstone: limped pot
 (LPT-345), Capstone: 4-bet pot (LPT-347), Prep a coached Live warm-up hand
-(LPT-349).
+(LPT-349), Final: all five player types (LPT-352).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1175,6 +1175,11 @@ advances CHECKLIST → DEFAULTS → ONE HAND; guided `none` → `list`; scaffold
 `none` → `defaults`; unguided `none` → `scope`; checkpoint `none` → `one`;
 assessment steps use cue kind `none` (no pressHints).
 
+Final: all five player types `teachSpec` (LPT-352): cs `none` → `cs`; nit
+`none` → `nit`; maniac `none` → `man`; tag `none` → `tag`; lag `none` →
+`lag`; uncertain `none` → `low`; retire `none` → `retire`; assessment steps
+use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1617,4 +1622,4 @@ felt.
 | Capstone: limped pot | Nuts, Value, Thin | — |
 | Capstone: 4-bet pot | SPR, Commit, No Hero | — |
 | Prep a coached Live warm-up hand | Checklist, Defaults, One hand | — |
-| Final: all five player types | — | station, nit, maniac, TAG, LAG, certainty, and retire checks |
+| Final: all five player types | — | — |
