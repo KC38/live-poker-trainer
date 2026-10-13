@@ -70,9 +70,11 @@ Lesson-specific pattern notes (full history) live in
 
 - Prefer `node tools/course/scan_content_gaps.mjs --counts` then
   `--gap <type> --markdown` every run before any lesson walk; sync open
-  `(catalog)` parents in one edit. If agent Shell hangs with empty
-  output on `--counts`, rerun in a short tmux/foreground session (script
-  itself is ~40ms).
+  `(catalog)` parents in one edit. After #1949, `--counts` includes
+  `nice-ladder` (LPT-624) — use `--gap nice-ladder --markdown`, do not
+  hand-count SoftPulse explains with cues sans `explainGrading`. If
+  agent Shell hangs with empty output on `--counts`, rerun in a short
+  tmux/foreground session (script itself is ~40ms).
 - Prefer one catalog ticket per structural gap type (pressHints,
   deal.variants, Nice! ladder, densify-tap, SoftPulse maps, guideRegion,
   permanent-gold). Append checklists; Done sibling clones (skip In Progress).
@@ -101,7 +103,7 @@ Lesson-specific pattern notes (full history) live in
 
 - Prefer when `content-agent-coverage.jsonl` already has a catalog-parent sync line for this tip SHA: skip re-editing those parents unless a count/body error remains (e.g. LPT-626 raw **156** vs excluded fix **151**); tip-comment honesty/fingerprint Highs that still show zero hits for the SHA.
 - Prefer when tip advances with scanner-only `NO_HINT_ACTIVITY_IDS` / pressHints exclude (#1916): rebuild **LPT-626** from `scan_content_gaps --gap pressHints --markdown` so the checklist count equals `--counts` (**151**) — drop manual 156−5 subtract wording; tip-comment other catalog parents on the new SHA without inventing count deltas.
-- Prefer on a tip-stable catalog-synced SHA (including learnings-only tips like #1931/#1932/#1934/#1935 after LPT-292, and non-content ops tips like #1933 SDK queue-empty skip): skip re-editing catalog parents (and skip re-spamming their tip-comments) when coverage already has a catalog sync for that SHA and counts still match; tip-comment **unchecked** High teachSpecs not in that coverage ticket list — S5 Soft timing LPT-242 / S6 LPT-258·295·301, then S7+ LPT-308 IP / LPT-312+ — rather than re-spamming honesty already commented on that SHA; still append coverage. When re-checking Soft timing densify ABSENT, read arms only from `lib/ui/course/widgets/rex_coach_line.dart` `selectIdentifyDensifiedCoachLine` — inline `'act-05-07-01-*' =>` strings in `select_identify_activity.dart` framed/`_coachFallback` maps are not densify helper arms.
+- Prefer on a tip-stable catalog-synced SHA (including learnings-only tips like #1931/#1932/#1934/#1935 after LPT-292, scanner-only tips like #1949 nice-ladder `--counts`, and non-content ops tips like #1933 SDK queue-empty skip / #1948 soft-stop): tip-comment parents without inventing count deltas when the tip is *new*; skip re-editing/re-spamming parents when coverage already has a catalog sync for *that* SHA and counts still match; tip-comment **unchecked** High teachSpecs not in that coverage ticket list — S5 Soft timing LPT-242 / S6 LPT-258·295·301, then S7+ LPT-308 IP / LPT-312 / LPT-315 Compose river / LPT-318 pot type — rather than re-spamming honesty already commented on that SHA; still append coverage. When re-checking Soft timing densify ABSENT, read arms only from `lib/ui/course/widgets/rex_coach_line.dart` `selectIdentifyDensifiedCoachLine` — inline `'act-05-07-01-*' =>` strings in `select_identify_activity.dart` framed/`_coachFallback` maps are not densify helper arms.
 
 - Prefer after a High interactive teachSpec Done: append SoftPulse explain Nice! onto **LPT-624** when explain now has cues but no `explainGrading`; tip-comment **LPT-626** if scaffolded/unguided already listed; do **not** shrink LPT-635 S1–S2 when scanner full explain-teachSpec drops. If the land authors `deal.mode` `fixed` without `deal.variants` (e.g. LPT-280 #1920, LPT-283 #1923, LPT-292 #1930 `act-06-11-03-guided/scaffolded/unguided`, LPT-304 #1944 `act-06-13-01-guided/scaffolded/unguided`): rebuild **LPT-627** from `--gap deal-variants --markdown` (count may *rise* — 75→78 Adjust TAG; 78→81 Mix five / Same cards). If outcome-tile `deal.mode` `none` (e.g. LPT-286 #1925 `act-06-11-01-*`, LPT-289 #1927 `act-06-11-02-*`, LPT-298 #1939 `act-06-12-02-*`, LPT-307 #1945 `act-06-13-02-cp-*`): deal-variants stays flat — tip-comment **LPT-627** only, still rebuild **LPT-624** Nice! when an explain landed (38→39→40 for TIGHT→BARREL→SAMPLE then TIGHT→AGGRO→MODEL; 40→41 CREDIT→TIGHTER→NO LIGHT; 41→42 WIDE→PRESSURE→MODEL Meet LAG; 42→43 CARDS→SEATS→EVIDENCE Mix five). Checkpoint-only lands (LPT-307) add no Nice! row. Depth chrome honesty (LPT-417) can survive teachSpec — re-check, do not Done. Still-a-list cells marked STALE in the High may survive the land — tip-comment the Done ticket; do not file a rebuild.
 
@@ -131,5 +133,6 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13p: Tip `d42d78b0` (#1937 LPT-644 Mix densify + #1936 learnings): rebuilt LPT-628 44→47 / fallthrough 156→153; Soft timing densify still ABSENT; scan JSON gaps flat 151/78/97/37.
 - 2026-10-13q: Tip `6cea459c` after #1939 LPT-298 Meet LAG teachSpec: Nice! 41→42 (`act-06-12-02-explain`); deal-variants flat 78; teachSpec 97→93 / explain-teachSpec 37→36; Done LPT-298 on tip.
 - 2026-10-13r: Tip `e4ed9c09` after #1944 LPT-304 Mix five / Same cards + #1945 LPT-307 S6 checkpoint: Nice! 42→43 (`act-06-13-01-explain`); deal-variants **78→81**; teachSpec 93→84 / explain-teachSpec 36→35; LPT-635 keeps 12 S1–S2; Soft timing densify still ABSENT (helper 47).
+- 2026-10-13s: Tip `5697b07d` (#1949 scanner `nice-ladder` in `--counts` + prior #1947/#1948): scan flat 151/81/84/35/nice-43; tip-commented parents + Highs LPT-242/295/301/258/308/312/315/318; SoftPulse-map 68; densify helper 47 Soft timing ABSENT.
 - 2026-10-13s: Tip-stable `bba9ad9f` (catalog already synced): scan flat 151/81/84/35 Nice! 43; skipped parent re-spam; tip-commented unchecked S7 Highs LPT-308 (IP, all five `act-07-01-01-*` MISSING) + LPT-312 (To Do, `act-07-02-01-*` MISSING); SoftPulse-map 68 / densify helper 47 Soft timing ABSENT.
 
