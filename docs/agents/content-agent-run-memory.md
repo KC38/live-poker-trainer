@@ -944,3 +944,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog LPT-624/625/626/627/628/635 + frontier LPT-242/312/315/334 + S6 Highs LPT-252/255/258/271/275/295/301 + needs-human LPT-348 + honesty LPT-414 + Medium LPT-370/588 + Done-ack LPT-558 on `7f0b6177` (Python non-f-string body-file). Soft timing densify still ABSENT (helper **111**; Priority on LPT-628). Soft timing teachSpec **LPT-242** + frontier **LPT-312/315/334** still all-five MISSING.
 - Honesty/Medium still valid: **LPT-414** Gutshot-ish on `act-03-02-01-unguided`; **LPT-370** cues null; **LPT-588** Scene flop-only. Meet Nit LPT-624/626. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing arms on LPT-628 (IP) OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR LPT-414 OR Medium LPT-370/588 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## 2026-10-13cn — tip `d21d2020` (#2099 learnings after 7f0b6177)
+
+- Tip advanced → `d21d2020` (#2099 learnings fold of `7f0b6177` tip-comments). `scan_content_gaps --counts` still flat: pressHints **151** / deal-variants **92** / teachSpec **44** / explain-teachSpec **23** / nice-ladder **55** / unguided-softpulse-map **24** (softpulseMapArms **68**) / densify-tap **118** / densifyHelperArms **111**. Catalog parents match — tip-comment only (no rebuild).
+- Tip-commented catalog LPT-624/625/626/627/628/635 + frontier LPT-242/312/315/334 + S6 Highs LPT-252/255/258/271/275/295/301 + needs-human LPT-348 + honesty LPT-414 + Medium LPT-370/588 + Done-ack LPT-558 on `d21d2020`. Soft timing densify still ABSENT (helper **111**; Priority on LPT-628). Soft timing teachSpec **LPT-242** + frontier **LPT-312/315/334** still all-five MISSING.
+- Honesty/Medium still valid: **LPT-414** Gutshot-ish; **LPT-370** cues null; **LPT-588** Scene flop-only. Meet Nit LPT-624/626. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing arms on LPT-628 (IP) OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR LPT-414 OR Medium LPT-370/588 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
