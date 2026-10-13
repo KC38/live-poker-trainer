@@ -129,7 +129,11 @@ Lesson-specific pattern notes (full history) live in
 
 - Prefer when tip advances with ui-agent Hint-enablement **LPT-643** (`lessonFrameCanHint` / scaffolded Hint dock): tip-comment **LPT-626** that Hint enablement does **not** author `pressHints` — keep the pressHints catalog open; do not Done LPT-626 or Meet Nit pressHints clones from LPT-643 alone. Leave LPT-643 Done to ui-agent Validated-on-origin/main.
 
+- Prefer when `--counts` teachSpec is **0**, densify-tap is **0**, and Jira has **zero** open Highest/High `labels = content` tickets: skip High teachSpec rediscovery; tip-comment/rebuild only if a catalog parent body count drifts; otherwise re-verify Medium catalog parents (Nice! LPT-624 / pressHints LPT-626 / deal-variants LPT-627 / SoftPulse-map LPT-625 / explain-teachSpec LPT-635) + Medium one-offs LPT-370/588 + needs-human LPT-348. Home coverage `learnings: updated` without a run-memory SHA fold is still unfolder — ship the chore the same tick (tip `46ead6a5` after #2114/#2117).
+
 ## Recent fold
+
+- 2026-10-13cv: Tip-stable `46ead6a5` (#2114 LPT-666 + #2117 ui-agent). Counts flat 151/99/0/12/nice-66/map-24 densify-tap **0** / helper **229**. Zero open High content tickets; parents+Mediums+Done LPT-628/666/414/558 already **HAS** tip SHA — no rebuild/re-spam. **LPT-370** cues null; **LPT-588** Scene flop-only; **LPT-348** Capstone pressHints still missing. Prior coverage claimed learnings fold without run-memory SHA — shipped this tick.
 
 - 2026-10-13cu: Tip `8922d49c` (#2112 course-contract TAG word match). densify-tap **0** / helper **229**; other flat 151/99/0/12/nice-66/map-24. Done-ack **LPT-666** (`validate_course.test.mjs` 10/0; ADVANTAGE cue kept). **LPT-628** Done. Meet Nit Nice!/pressHints still LPT-624/626; Medium LPT-370/588 still valid.
 
