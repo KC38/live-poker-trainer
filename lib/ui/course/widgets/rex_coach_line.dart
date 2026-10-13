@@ -176,6 +176,16 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Calling because you are "due" — pick the real reason.',
     'act-06-10-01-checkpoint' =>
       'Review after a big loss — pick the honest question.',
+    // Observe selective densified asks (LPT-647) — same path as LPT-646.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-11-01-guided' =>
+      'Folds most, then 3-bets / c-bets — pick the note.',
+    'act-06-11-01-scaffolded' =>
+      'Gives up on turns when called — pick the observation.',
+    'act-06-11-01-unguided' =>
+      'Two hands of tightness — pick the confidence.',
+    'act-06-11-01-checkpoint' =>
+      'Best pre-label note bundle — pick the evidence pack.',
     _ => null,
   };
 }
