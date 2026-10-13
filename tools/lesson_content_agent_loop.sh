@@ -2,6 +2,10 @@
 # Run /lesson-content-agent back to back, unattended, inside tmux.
 # No iPhone simulator — safe to run alongside ui_design_agent_loop.sh.
 #
+# Runs the SDK/CLI agent in PRIMARY/.worktrees/content-agent (detached
+# origin/main), never with --cwd PRIMARY. Learnings chore PRs must be
+# opened from that worktree so ui-agent keeps a clean main tip.
+#
 #   tools/lesson_content_agent_loop.sh setup|verify|start|install|ensure|
 #     status|attach|stop|kill|once
 #
@@ -92,12 +96,13 @@ sdk_model_id() {
 }
 
 prompt() {
-  local primary_dir pending=""
+  local primary_dir worktree_dir pending=""
   primary_dir="$(primary)"
+  worktree_dir="${CONTENT_AGENT_WORKTREE:-$primary_dir/.worktrees/content-agent}"
   if [[ -s "$STATE_DIR/content-agent-learnings-pending.md" ]] && grep -q '^- ' "$STATE_DIR/content-agent-learnings-pending.md" 2>/dev/null; then
     pending=" Pending learnings in $STATE_DIR/content-agent-learnings-pending.md — run tools/fold_agent_learnings.sh content, distill into lesson-content-agent-learnings.md + content-agent-run-memory.md, and ship chore/content-agent-learnings-YYYYMMDD before or after the audit."
   fi
-  printf '%s' "READY: lesson content agent (audit + file only). No simulator — do not claim sim_lock, refresh-simulator, agent_tap, or agent_seed. PRIMARY: ${primary_dir}. Read .cursor/commands/lesson-content-agent.md, lesson-content-agent-learnings.md, and grep docs/agents/content-agent-run-memory.md for the target act-/lesson- id. Every run: node tools/course/scan_content_gaps.mjs --counts then sync open (catalog) parents from --gap … --markdown. Store durable loop learnings in git (learnings + run-memory chore PR) — never leave them only in the home pending file. Prefer catalog-bundled tickets; never implement product fixes. Default Jira labels content,grokbot,lesson; use content,ui-agent,lesson only when Chrome cannot validate. Use python3 tools/jira.py only.${pending} Unattended: do not ask questions."
+  printf '%s' "READY: lesson content agent (audit + file only). No simulator — do not claim sim_lock, refresh-simulator, agent_tap, or agent_seed. WORKTREE: ${worktree_dir} (all git edits + learnings chore PRs here; cwd is already this tree). Never checkout, commit, or edit PRIMARY (${primary_dir}) — reserved for ui-design-agent on clean main. Scratch bodies under ${worktree_dir}/.cursor/tmp/content-agent/. Read .cursor/commands/lesson-content-agent.md, lesson-content-agent-learnings.md, and grep docs/agents/content-agent-run-memory.md for the target act-/lesson- id. Every run: node tools/course/scan_content_gaps.mjs --counts then sync open (catalog) parents from --gap … --markdown. Store durable loop learnings in git (learnings + run-memory chore PR) — never leave them only in the home pending file. Prefer catalog-bundled tickets; never implement product fixes. Default Jira labels content,grokbot,lesson; use content,ui-agent,lesson only when Chrome cannot validate. Use python3 tools/jira.py only.${pending} Unattended: do not ask questions."
 }
 
 ensure_sdk_deps() {
@@ -108,29 +113,73 @@ ensure_sdk_deps() {
   [[ -d "$SDK_DIR/node_modules/@cursor/sdk" ]]
 }
 
-sync_primary() {
+# Keep PRIMARY on clean main for ui-design-agent. Content-agent edits live in
+# prepare_content_run_worktree — never leave chore branches on PRIMARY.
+ensure_primary_clean_main() {
   local dir branch
   dir="$(primary)"
-  git -C "$dir" fetch -q origin main || return 0
-  # Never touch a dirty tree — content-agent may be mid-edit.
-  [[ -z "$(git -C "$dir" status --porcelain)" ]] || return 0
-  branch="$(git -C "$dir" rev-parse --abbrev-ref HEAD)"
-  if [[ "$branch" == "main" ]]; then
-    git -C "$dir" merge -q --ff-only origin/main || true
+  # Soft fetch — offline / no-remote test fixtures still need chore→main.
+  git -C "$dir" fetch -q origin main 2>/dev/null || true
+  # Drop scratch ticket bodies if an old run wrote them on PRIMARY.
+  rm -rf "$dir/.cursor/tmp/content-agent" 2>/dev/null || true
+  # Never destroy unrelated dirty work on PRIMARY.
+  if [[ -n "$(git -C "$dir" status --porcelain 2>/dev/null)" ]]; then
+    log "PRIMARY dirty; not forcing checkout (ui-agent will skip until clean)"
     return 0
   fi
-  # Leftover learnings chore branches leave PRIMARY off tip after the agent
-  # opens a PR from the primary checkout (sync used to no-op then). Return
-  # to main so the next run audits against origin/main. Match every
-  # cursor/chore-content-* name (nice47, lptNNNN-*, learnings-*, …) — product
-  # work must not land on PRIMARY; only learnings chores do.
-  case "$branch" in
-    cursor/chore-content-*|chore/content-agent-learnings-*|chore/content-*)
-      log "sync_primary: $branch → main (leftover learnings chore)"
-      git -C "$dir" checkout -q main || return 0
-      git -C "$dir" merge -q --ff-only origin/main || true
-      ;;
-  esac
+  branch="$(git -C "$dir" rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+  if [[ "$branch" != "main" ]]; then
+    case "$branch" in
+      cursor/chore-content-*|chore/content-agent-learnings-*|chore/content-*|content-agent/*)
+        log "PRIMARY on $branch → main (content-agent uses worktree now)"
+        git -C "$dir" checkout -q main || return 0
+        ;;
+      *)
+        log "PRIMARY on $branch (not main); not forcing checkout"
+        return 0
+        ;;
+    esac
+  fi
+  if git -C "$dir" rev-parse --verify -q origin/main >/dev/null 2>&1; then
+    git -C "$dir" merge -q --ff-only origin/main || true
+  fi
+}
+
+# Detached worktree at origin/main for the agent cwd. Recreated/reset each run
+# so leftover uncommitted audit edits do not accumulate.
+prepare_content_run_worktree() {
+  local primary wt tip
+  primary="$(primary)"
+  wt="${CONTENT_AGENT_WORKTREE:-$primary/.worktrees/content-agent}"
+  mkdir -p "$(dirname "$wt")"
+  git -C "$primary" fetch -q origin main 2>/dev/null || true
+  tip="$(git -C "$primary" rev-parse origin/main 2>/dev/null || true)"
+  [[ -n "$tip" ]] || tip="$(git -C "$primary" rev-parse main 2>/dev/null || true)"
+  [[ -n "$tip" ]] || return 1
+  if [[ ! -e "$wt/.git" ]]; then
+    rm -rf "$wt"
+    git -C "$primary" worktree prune 2>/dev/null || true
+    # stdout must stay clean — callers capture the path via $(...).
+    git -C "$primary" worktree add --detach "$wt" "$tip" >/dev/null 2>&1 \
+      || return 1
+  else
+    if ! git -C "$wt" checkout -q --detach "$tip" 2>/dev/null; then
+      git -C "$primary" worktree remove --force "$wt" 2>/dev/null || rm -rf "$wt"
+      git -C "$primary" worktree prune 2>/dev/null || true
+      git -C "$primary" worktree add --detach "$wt" "$tip" >/dev/null 2>&1 \
+        || return 1
+    else
+      git -C "$wt" reset -q --hard "$tip"
+      git -C "$wt" clean -fdq
+    fi
+  fi
+  mkdir -p "$wt/.cursor/tmp/content-agent"
+  printf '%s\n' "$wt"
+}
+
+# Back-compat name used by older call sites / docs.
+sync_primary() {
+  ensure_primary_clean_main
 }
 
 logged_in() {
@@ -162,7 +211,13 @@ configure_agent_credentials() {
 }
 
 one_run() {
-  sync_primary
+  local worktree_dir
+  ensure_primary_clean_main
+  worktree_dir="$(prepare_content_run_worktree)" || {
+    log "content-agent worktree unavailable"
+    return 11
+  }
+  export CONTENT_AGENT_WORKTREE="$worktree_dir"
   if ! logged_in; then
     log "Cursor CLI has no API key and no login. Run: $SCRIPT setup"
     return 11
@@ -176,11 +231,11 @@ one_run() {
   stamp="$(date '+%Y%m%d-%H%M%S')"
   run_log="$LOG_DIR/run-$stamp.log"
   start="$(date +%s)"
-  sha="$(git -C "$(primary)" rev-parse HEAD 2>/dev/null || echo unknown)"
+  sha="$(git -C "$worktree_dir" rev-parse HEAD 2>/dev/null || echo unknown)"
 
   configure_agent_credentials
   text="$(prompt)"
-  log "run $stamp starting (launcher=$LAUNCHER model=$(resolved_agent_model); log $run_log)"
+  log "run $stamp starting (launcher=$LAUNCHER model=$(resolved_agent_model); worktree=$worktree_dir; log $run_log)"
 
   if [[ "$LAUNCHER" == "sdk" ]]; then
     if ! ensure_sdk_deps; then
@@ -188,10 +243,10 @@ one_run() {
       return 11
     fi
     (
-      cd "$(primary)"
+      cd "$worktree_dir"
       export CURSOR_API_KEY ATLASSIAN_EMAIL ATLASSIAN_API_TOKEN
       exec node "$SDK_RUN" \
-        --cwd "$(primary)" \
+        --cwd "$worktree_dir" \
         --model "$(sdk_model_id)" \
         --runtime "$SDK_RUNTIME" \
         --machine "$MACHINE_NAME" \
@@ -201,9 +256,9 @@ one_run() {
     ) >>"$run_log" 2>&1 &
   else
     (
-      cd "$(primary)"
+      cd "$worktree_dir"
       exec agent -p --force --trust --sandbox disabled --output-format text \
-        --workspace "$(primary)" "$text"
+        --workspace "$worktree_dir" "$text"
     ) >"$run_log" 2>&1 &
   fi
   pid=$!
@@ -399,11 +454,18 @@ EOF
       echo "loop: not running"
     fi
     echo "model: $(resolved_agent_model)"
+    echo "worktree: $(primary)/.worktrees/content-agent"
+    echo "primary: $(primary) (ui-agent only; content-agent must not edit)"
     echo "coverage: $COVERAGE_FILE"
     latest="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
     if [[ -n "$latest" ]]; then
       echo "latest log: $latest"
-      tail -n 8 "$latest"
+      # Skip mid-run NDJSON crumbs (same idea as ui-agent status).
+      if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE" 2>/dev/null)" 2>/dev/null; then
+        echo "(active run — log preview skipped)"
+      else
+        tail -n 8 "$latest"
+      fi
     fi
     ;;
   attach)

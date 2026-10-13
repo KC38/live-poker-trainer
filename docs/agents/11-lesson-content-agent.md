@@ -152,9 +152,10 @@ every pass to refresh `(catalog)` parents. Tests:
 | `docs/agents/content-agent-run-memory.md` | Full lesson/catalog pattern notes — grep by `act-` / `lesson-` |
 | `tools/fold_agent_learnings.sh` | Folds `~/.live-poker-trainer/*-learnings-pending.md` into the repo |
 
-Durable loop notes must ship in a
-`chore/content-agent-learnings-<YYYYMMDD>` PR (or fold via the script +
-monitor). Do not leave them only in the home pending file.
+Durable loop notes must ship in a learnings chore PR from the content-agent
+**worktree** (`$PRIMARY/.worktrees/content-agent`), never from PRIMARY
+(or fold via the script + monitor). Do not leave them only in the home
+pending file. PRIMARY stays on clean `main` for `/ui-design-agent`.
 
 ## Loop ops
 
@@ -164,7 +165,8 @@ tools/lesson_content_agent_loop.sh setup|verify|start|status|stop|once
 
 Shares `~/.live-poker-trainer/secrets.env` with the UI agent. Coverage:
 `~/.live-poker-trainer/content-agent-coverage.jsonl`. Does **not** touch
-`simulator-lock.json`.
+`simulator-lock.json`. Each run resets a detached worktree at
+`origin/main`; the SDK `--cwd` is that worktree, not PRIMARY.
 
 ## Related
 
