@@ -1219,3 +1219,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Discovery `lesson-06-12-01-observe-wide-pressure`: teachSpec on all five; explain SoftPulse + `explainGrading`; all interactive `deal.mode` `none`; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean. Curriculum **LPT-297** tip-commented.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-12-02-meet-lag` / Low curriculum.
 - act-06-11-03-* / act-06-12-01-*: structural clean — curriculum splits only via LPT-294 / LPT-297.
+
+## Fold 2026-10-13dt (35c01162 discovery meet-lag)
+
+- Tip mid-run `6d9f3068` → `35c01162` (#2158 squash of equity…observe-wide folds). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348**.
+- Discovery oldest-unfresh `lesson-06-12-02-meet-lag`: teachSpec on all five; explain SoftPulse WIDE→PRESSURE→MODEL + `explainGrading`; interactive `deal.mode` `none`; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean (audited on `6d9f3068`, tip-commented **LPT-300** there; re-tip-commented on `35c01162`).
+- Curriculum introduce+identify still **LPT-300** needs-human.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-13-01-mix-five-types` / Low curriculum.
+- act-06-12-02-*: structural clean on tip — curriculum split only via LPT-300.
