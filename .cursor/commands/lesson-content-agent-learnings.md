@@ -146,6 +146,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13dq: Tip-stable `6d9f3068` (#2157). Catalog `--counts` all **0**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Discovery oldest-unfresh `lesson-06-09-01-threebet-fourbet` structural clean; tip-commented curriculum **LPT-282**. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-10-01-difficult-folds` / Low curriculum.
+
 - 2026-10-13dp: Tip-stable `6d9f3068` (#2157). Catalog `--counts` all **0**. Discovery oldest-unfresh `lesson-06-07-01-minimum-defense` structural clean; tip-commented curriculum **LPT-273**. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-09-01-threebet-fourbet` / Low curriculum.
 
 - 2026-10-13do: Tip-stable `6d9f3068` (#2157 after #2153 **LPT-667** Done). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip — no re-spam). Discovery oldest-unfresh `lesson-06-02-01-equity-realization` structural clean (`deal.mode` `none` SoftPulse/outcome tiles; one-per-press OK); tip-commented curriculum **LPT-257** (multi-concept + checkpoint Prefer-IP vs initiative). next: LPT-348 OR `lesson-06-07-01-minimum-defense` / Low curriculum.
