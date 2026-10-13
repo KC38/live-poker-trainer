@@ -1181,6 +1181,26 @@ assert not any(r.get("stamp") == "reconciled" and r.get("ticket") == "LPT-490" f
 print("dup reattribution ok")
 PY
 
+# Prefer exit 0 over SIGTERM when both stamps claim the same ticket.
+printf '%s\n' \
+  '{"at":"2026-10-13T08:18:51+05:30","sha":"c","surface":"lesson-runner:open-pot-no-redeal","result":"closed","ticket":"LPT-642","leads":[],"learnings":"pending"}' \
+  >"$COVERAGE_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-13T08:19:00+05:30","stamp":"20261013-080405","exit":0,"seconds":895,"ticket":"LPT-642","result":"closed","tail":"coverage:closed ticket:LPT-642 surface:lesson-runner:open-pot-no-redeal"}' \
+  '{"at":"2026-10-13T08:31:13+05:30","stamp":"20261013-082906","exit":143,"seconds":127,"ticket":"LPT-642","result":"closed","tail":"coverage:closed ticket:LPT-642 surface:lesson-runner:open-pot-no-redeal"}' \
+  >"$HEALTH_FILE"
+repair_health_tails
+python3 - "$HEALTH_FILE" <<'PY' || fail "exit0 should beat SIGTERM for same ticket"
+import json, sys
+from pathlib import Path
+rows = [json.loads(l) for l in Path(sys.argv[1]).read_text().splitlines() if l.strip()]
+by = {r.get("stamp"): r for r in rows}
+assert by["20261013-080405"].get("ticket") == "LPT-642", rows
+assert by["20261013-080405"].get("result") == "closed", rows
+assert by["20261013-082906"].get("ticket") != "LPT-642", rows
+print("exit0 beats sigterm ok")
+PY
+
 # Prose with an LPT key (and no coverage match) still attributes the stamp.
 : >"$COVERAGE_FILE"
 printf '%s\n' \
