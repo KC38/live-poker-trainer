@@ -121,9 +121,11 @@ sync_primary() {
   fi
   # Leftover learnings chore branches leave PRIMARY off tip after the agent
   # opens a PR from the primary checkout (sync used to no-op then). Return
-  # to main so the next run audits against origin/main.
+  # to main so the next run audits against origin/main. Match every
+  # cursor/chore-content-* name (nice47, lptNNNN-*, learnings-*, …) — product
+  # work must not land on PRIMARY; only learnings chores do.
   case "$branch" in
-    cursor/chore-content-agent-learnings-*|chore/content-agent-learnings-*)
+    cursor/chore-content-*|chore/content-agent-learnings-*|chore/content-*)
       log "sync_primary: $branch → main (leftover learnings chore)"
       git -C "$dir" checkout -q main || return 0
       git -C "$dir" merge -q --ff-only origin/main || true
