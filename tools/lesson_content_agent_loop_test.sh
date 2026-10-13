@@ -74,6 +74,27 @@ grep -q "Never checkout, commit, or edit PRIMARY" <<<"$prompt_out" \
 grep -q "PRIMARY: $fake_primary" <<<"$prompt_out" \
   && fail "prompt must not advertise PRIMARY as the edit root"
 
+grep -q 'print_content_run_log_preview' "$LOOP" \
+  || fail "loop must define print_content_run_log_preview"
+# Finished SDK logs must not dump raw NDJSON crumbs on status.
+preview_log="$tmp/sdk-polluted.log"
+cat >"$preview_log" <<'LOG'
+# ui-agent-sdk start runtime=machine
+{"t":1,"type":"assistant"}
+**Tickets:** tip-commented LPT-348.{"t":2,"type":"assistant"}
+{"t":3,"type":"assistant"}
+**Learnings:** updated (PR #2178 merged){"t":4,"type":"assistant"}
+{"t":5,"type":"status"}
+# ui-agent-sdk status=finished resultId=run-abc
+LOG
+preview_out="$(print_content_run_log_preview "$preview_log" 8)"
+grep -q 'status=finished' <<<"$preview_out" \
+  || fail "preview should keep finished status line: $preview_out"
+grep -q 'Tickets:' <<<"$preview_out" \
+  || fail "preview should keep Tickets closeout: $preview_out"
+grep -q '"type":"assistant"' <<<"$preview_out" \
+  && fail "preview must scrub SDK NDJSON crumbs: $preview_out"
+
 grep -q 'sleep_unless_stopped' "$LOOP" \
   || fail "loop must define sleep_unless_stopped for stop-aware gaps"
 grep -q 'sleep_unless_stopped "\$_s"' "$LOOP" \
