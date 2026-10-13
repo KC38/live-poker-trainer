@@ -1479,7 +1479,7 @@ LessonActionSpot? resolveToyHandStepSpot({
           boardCodes: ['Qs', '8h', '3d'],
           potLabel: 'Pot 22',
           villainLine: 'TAG called your 3-bet',
-          streetLabel: 'Flop · Q83tt · AQ',
+          streetLabel: 'Flop · Q83r · AQ',
           facingBet: false,
           openPot: true,
           feltStatusLine: '3-bet flop — value with TPTK',

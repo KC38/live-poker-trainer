@@ -29440,7 +29440,7 @@ await tester.tap(find.text('NIT'));
         CourseHandStep(
           id: 'step-3b-flop',
           street: 'flop',
-          prompt: 'Flop Q83tt. Action?',
+          prompt: 'Flop Q83r. Action?',
           choices: [
             CourseChoice(
               id: 'bet',
@@ -29494,12 +29494,12 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('3-bet pot · Q83tt — strong made hand with the lead.'),
+      find.text('3-bet pot · Q83r — strong made hand with the lead.'),
       findsOneWidget,
     );
-    expect(find.textContaining('Flop · Q83tt · AQ'), findsOneWidget);
+    expect(find.textContaining('Flop · Q83r · AQ'), findsOneWidget);
     expect(find.text('C-BET VALUE'), findsOneWidget);
-    expect(find.text('Flop Q83tt. Action?'), findsNothing);
+    expect(find.text('Flop Q83r. Action?'), findsNothing);
     await tester.tap(find.text('C-BET VALUE'));
     await tester.pump();
     expect(controller.draft.choiceId, 'bet');
@@ -29521,7 +29521,7 @@ await tester.tap(find.text('NIT'));
         CourseHandStep(
           id: 'step-3b-flop',
           street: 'flop',
-          prompt: 'Flop Q83tt. Action?',
+          prompt: 'Flop Q83r. Action?',
           choices: [
             CourseChoice(id: 'bet', label: 'C-bet value', action: 'BET'),
             CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
@@ -29590,7 +29590,7 @@ await tester.tap(find.text('NIT'));
         CourseHandStep(
           id: 'step-3b-flop',
           street: 'flop',
-          prompt: 'Flop Q83tt. Action?',
+          prompt: 'Flop Q83r. Action?',
           choices: [
             CourseChoice(id: 'bet', label: 'C-bet value', action: 'BET'),
             CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),

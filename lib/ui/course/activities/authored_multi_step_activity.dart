@@ -63,7 +63,7 @@ class AuthoredMultiStepActivity extends StatelessWidget {
       ('act-07-10-01-hand', 'step-river') =>
         'Ace-high on 9c — no value left; pot control.',
       ('act-07-10-02-hand', 'step-3b-flop') =>
-        '3-bet pot · Q83tt — strong made hand with the lead.',
+        '3-bet pot · Q83r — strong made hand with the lead.',
       ('act-07-10-02-hand', 'step-3b-turn') =>
         'Called · blank turn — keep charging value.',
       ('act-07-10-02-hand', 'step-3b-river') =>

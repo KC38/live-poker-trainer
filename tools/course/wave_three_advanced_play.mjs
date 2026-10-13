@@ -3265,7 +3265,7 @@ export function buildSectionSeven() {
                 steps: [
                   {
                     id: "step-3b-flop", street: "flop",
-                    prompt: "Flop Q83tt. Action?",
+                    prompt: "Flop Q83r. Action?",
                     accessibilityText: "Value c-bet top pair.",
                     choices: [
                       choice("bet", "C-bet value", "recommended",
