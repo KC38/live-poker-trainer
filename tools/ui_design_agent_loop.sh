@@ -2419,6 +2419,25 @@ EOF
   disown $! 2>/dev/null || true
 }
 
+
+# Sleep up to N seconds but wake every few seconds so soft-stop (STOP_FILE)
+# is honored during long idle sleeps (empty-queue 900s blocked soft-stop
+# reload from 10:06 until 10:10 on 2026-10-13).
+sleep_unless_stopped() {
+  local total="${1:-0}" stepped=0 chunk
+  [[ "$total" =~ ^[0-9]+$ ]] || total=0
+  while (( stepped < total )); do
+    [[ -f "$STOP_FILE" ]] && return 0
+    chunk=5
+    if (( total - stepped < chunk )); then
+      chunk=$(( total - stepped ))
+    fi
+    (( chunk > 0 )) || break
+    sleep "$chunk"
+    stepped=$(( stepped + chunk ))
+  done
+}
+
 run_loop() {
   echo $$ >"$LOOP_PID_FILE"
   # shellcheck disable=SC2064
@@ -2434,32 +2453,32 @@ run_loop() {
       break
     fi
     case "$code" in
-      10) sleep "$BUSY_SLEEP" ;;
+      10) sleep_unless_stopped "$BUSY_SLEEP" ;;
       16)
         log "ui-queue empty; sleeping ${EMPTY_QUEUE_SLEEP}s before retry"
-        sleep "$EMPTY_QUEUE_SLEEP"
+        sleep_unless_stopped "$EMPTY_QUEUE_SLEEP"
         ;;
       11) sleep 600 ;;
       12)
         log "SIM_NOT_READY preflight; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
-        sleep "$SIM_NOT_READY_SLEEP"
+        sleep_unless_stopped "$SIM_NOT_READY_SLEEP"
         ;;
       2)
         log "sdk run status=error (exit 2); sleeping ${GAP}s then starting a fresh run"
-        sleep "$GAP"
+        sleep_unless_stopped "$GAP"
         ;;
       13)
         log "agent stalled; sleeping ${GAP}s then starting a fresh run"
-        sleep "$GAP"
+        sleep_unless_stopped "$GAP"
         ;;
       14)
         _usage_sleep="$(sleep_usage_limit_seconds "$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1)")"
         log "usage limit; sleeping ${_usage_sleep}s (model=$(resolved_agent_model || echo auto))"
-        sleep "$_usage_sleep"
+        sleep_unless_stopped "$_usage_sleep"
         ;;
       15)
         log "sdk gateway timeout (exit 15); sleeping ${GATEWAY_TIMEOUT_SLEEP}s before retry"
-        sleep "$GATEWAY_TIMEOUT_SLEEP"
+        sleep_unless_stopped "$GATEWAY_TIMEOUT_SLEEP"
         ;;
       *)
         if last_run_sim_not_ready; then
