@@ -71,8 +71,9 @@ overbets and geometric pressure (LPT-265), Use blockers without solver
 theater (LPT-268), Navigate 3-bet and 4-bet pots by depth (LPT-280), Make
 difficult folds; review coolers fairly (LPT-283), Observe selective
 aggression (LPT-286), Meet the TAG (LPT-289), Adjust versus TAG (LPT-292),
-Meet the LAG (LPT-298), Same cards, five type models (LPT-304). Content gaps
-are audited by [11 — Lesson content agent](11-lesson-content-agent.md).
+Meet the LAG (LPT-298), Same cards, five type models (LPT-304), Section 6
+checkpoint (LPT-307). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 `deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
 `teach_spec.schema.json` enum. Besides showdown ranks and starting-hand
