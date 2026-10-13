@@ -904,6 +904,31 @@ grep -q 'status=error' "$HEALTH_FILE" \
 grep -q 'case "$code".*2)' "$LOOP" || grep -q 'sdk run status=error' "$LOOP" \
   || fail "run_loop must handle exit 2"
 
+# 504 Gateway Time-out → gateway-timeout (no HTML stuffed into health).
+gw_log="$LOG_DIR/run-gateway-timeout.log"
+printf '%s\n' \
+  '# ui-agent-sdk start runtime=machine' \
+  '# ui-agent-sdk run failed: [unknown] <html>' \
+  '<head><title>504 Gateway Time-out</title></head>' \
+  '<body><center><h1>504 Gateway Time-out</h1></center></body>' \
+  '# ui-agent-sdk retryable=true' \
+  >"$gw_log"
+: >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+write_health_row "20261013-070923" "15" "395" "$gw_log" "$start_epoch"
+grep -q '"result": "gateway-timeout"' "$HEALTH_FILE" \
+  || fail "health should classify gateway-timeout: $(cat "$HEALTH_FILE")"
+grep -q 'coverage:gateway-timeout' "$HEALTH_FILE" \
+  || fail "gateway-timeout tail should be short: $(cat "$HEALTH_FILE")"
+grep -q '<html>' "$HEALTH_FILE" \
+  && fail "health must not keep 504 HTML: $(cat "$HEALTH_FILE")"
+last_run_gateway_timeout \
+  || fail "last_run_gateway_timeout should detect latest health row"
+grep -q 'GATEWAY_TIMEOUT_SLEEP' "$LOOP" \
+  || fail "run_loop must back off on gateway timeout"
+grep -q 'process.exit(15)' "$ROOT/tools/ui-agent-sdk/run.mjs" \
+  || fail "run.mjs must exit 15 on 504"
+
 # Coverage timestamps with trailing Z must attribute on macOS Python 3.9.
 z_log="$LOG_DIR/run-z-coverage.log"
 printf '%s\n' 'LPT-79 closed on origin/main' >"$z_log"

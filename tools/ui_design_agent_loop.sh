@@ -42,6 +42,8 @@
 #   UI_AGENT_SIM_NOT_READY_SLEEP  seconds after programmatic SIM_NOT_READY (default 600)
 #   UI_AGENT_USAGE_LIMIT_SLEEP  seconds after ActionRequiredError usage limit
 #                               (default: until stated reset day, else 3600)
+#   UI_AGENT_GATEWAY_TIMEOUT_SLEEP  seconds after machine-SDK 504 Gateway
+#                               Time-out (default 600)
 #   UI_AGENT_VM_WAIT_SECONDS    seconds to wait for a Dart VM per refresh (default 180)
 #   UI_AGENT_MAX_RUN_SECONDS    hard cap per run (default 14400)
 #   UI_AGENT_STALL_SECONDS      kill agent when lock heartbeat is older
@@ -82,6 +84,7 @@ SIM_NOT_READY_SLEEP="${UI_AGENT_SIM_NOT_READY_SLEEP:-600}"
 # Override for Auto quota exhaustion; when unset, sleep_usage_limit_seconds
 # parses the reset date from the run log (else 3600s).
 USAGE_LIMIT_SLEEP="${UI_AGENT_USAGE_LIMIT_SLEEP:-}"
+GATEWAY_TIMEOUT_SLEEP="${UI_AGENT_GATEWAY_TIMEOUT_SLEEP:-600}"
 VM_WAIT_SECONDS="${UI_AGENT_VM_WAIT_SECONDS:-180}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
 STALL_SECONDS="${UI_AGENT_STALL_SECONDS:-600}"
@@ -395,6 +398,25 @@ PY
     grep -q 'SIM_NOT_READY' <<<"$(tail -n 1 "$HEALTH_FILE")" && return 0
   fi
   return 1
+}
+
+# True when the latest health row is a machine-SDK 504 gateway timeout.
+last_run_gateway_timeout() {
+  [[ -f "$HEALTH_FILE" ]] || return 1
+  python3 - "$HEALTH_FILE" <<'PY'
+import json, sys
+try:
+    lines = [ln for ln in open(sys.argv[1], encoding="utf-8") if ln.strip()]
+except OSError:
+    raise SystemExit(1)
+if not lines:
+    raise SystemExit(1)
+try:
+    obj = json.loads(lines[-1])
+except json.JSONDecodeError:
+    raise SystemExit(1)
+raise SystemExit(0 if obj.get("result") == "gateway-timeout" or obj.get("exit") == 15 else 1)
+PY
 }
 
 # True when the Flutter run log has a Dart VM URI after the latest Launching
@@ -1089,7 +1111,7 @@ for row in rows:
     if (
         stamp
         and stamp != "reconciled"
-        and result not in ("usage-limit", "sim-not-ready")
+        and result not in ("usage-limit", "sim-not-ready", "gateway-timeout", "sdk-error")
         and (not ticket or not result or result == "stalled")
     ):
         best = best_coverage_for_stamp(row)
@@ -1588,9 +1610,15 @@ except OSError:
 if not result and USAGE_LIMIT.search(log_blob):
     result = "usage-limit"
 
+GATEWAY_TIMEOUT = re.compile(r"504\s*Gateway Time-out|Gateway Time-out", re.I)
+code_i = int(code)
+# Machine SDK 504 HTML bodies used to stuff health tails (20261013-063443+).
+if not result and (code_i == 15 or GATEWAY_TIMEOUT.search(log_blob)):
+    result = "gateway-timeout"
+    tail = "coverage:gateway-timeout"
+
 # Machine SDK run.wait() status=error → exit 2 with no coverage (20261013-060558).
 # Attribute so health/status are not empty-null rows.
-code_i = int(code)
 if not result and code_i == 2:
     result = "sdk-error"
     err_m = re.search(
@@ -2295,10 +2323,17 @@ run_loop() {
         log "usage limit; sleeping ${_usage_sleep}s (model=$(resolved_agent_model || echo auto))"
         sleep "$_usage_sleep"
         ;;
+      15)
+        log "sdk gateway timeout (exit 15); sleeping ${GATEWAY_TIMEOUT_SLEEP}s before retry"
+        sleep "$GATEWAY_TIMEOUT_SLEEP"
+        ;;
       *)
         if last_run_sim_not_ready; then
           log "last run was SIM_NOT_READY; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
           sleep "$SIM_NOT_READY_SLEEP"
+        elif last_run_gateway_timeout; then
+          log "last run was gateway-timeout; sleeping ${GATEWAY_TIMEOUT_SLEEP}s before retry"
+          sleep "$GATEWAY_TIMEOUT_SLEEP"
         else
           sleep "$GAP"
         fi
