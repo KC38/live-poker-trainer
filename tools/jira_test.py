@@ -416,15 +416,42 @@ class UiQueueStatsTest(unittest.TestCase):
         with mock.patch.object(jira, "search", return_value=issues):
             stats = jira.ui_queue_stats()
         self.assertEqual(
-            stats, {"actionable": 1, "needs_human": 1, "grokbot": 1}
+            stats,
+            {
+                "actionable": 1,
+                "needs_human": 1,
+                "grokbot": 1,
+                "needs_human_keys": ["LPT-44"],
+                "grokbot_keys": ["LPT-99"],
+            },
         )
         self.assertEqual(
-            jira.format_ui_queue_stats({"actionable": 0, "needs_human": 1, "grokbot": 0}),
-            "ui-queue: empty (filtered needs-human=1)",
+            jira.format_ui_queue_stats(
+                {
+                    "actionable": 0,
+                    "needs_human": 1,
+                    "grokbot": 0,
+                    "needs_human_keys": ["LPT-44"],
+                    "grokbot_keys": [],
+                }
+            ),
+            "ui-queue: empty (filtered needs-human=1: LPT-44)",
         )
         self.assertEqual(
             jira.format_ui_queue_stats(stats),
-            "ui-queue: 1 open (filtered needs-human=1 grokbot=1)",
+            "ui-queue: 1 open (filtered needs-human=1: LPT-44 grokbot=1: LPT-99)",
+        )
+        self.assertEqual(
+            jira.format_ui_queue_stats(
+                {
+                    "actionable": 0,
+                    "needs_human": 4,
+                    "grokbot": 0,
+                    "needs_human_keys": ["LPT-1", "LPT-2", "LPT-3", "LPT-4"],
+                    "grokbot_keys": [],
+                }
+            ),
+            "ui-queue: empty (filtered needs-human=4: LPT-1,LPT-2,LPT-3,+1)",
         )
 
 

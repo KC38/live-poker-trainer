@@ -592,11 +592,12 @@ def ui_queue(limit: int = 50) -> List[Json]:
     return kept
 
 
-def ui_queue_stats(limit: int = 50) -> Dict[str, int]:
+def ui_queue_stats(limit: int = 50) -> Dict[str, object]:
     """Count actionable vs filtered open ``ui-agent`` tickets.
 
     Same fetch as :func:`ui_queue`, but tallies ``needs-human`` / ``grokbot``
-    drops so health ``status`` can show why the queue looks empty.
+    drops (and sample keys) so health ``status`` can show why the queue
+    looks empty — e.g. ``needs-human=1: LPT-44``.
     """
     raw = search(
         f"project = {PROJECT} AND labels = ui-agent AND statusCategory != Done "
@@ -606,27 +607,52 @@ def ui_queue_stats(limit: int = 50) -> Dict[str, int]:
     actionable = 0
     needs_human = 0
     grokbot = 0
+    needs_human_keys: List[str] = []
+    grokbot_keys: List[str] = []
     for issue in raw:
+        key = str(issue.get("key") or "")
         labels = {lab.lower() for lab in (issue.get("fields") or {}).get("labels") or []}
         if "needs-human" in labels:
             needs_human += 1
+            if key:
+                needs_human_keys.append(key)
             continue
         if "grokbot" in labels:
             grokbot += 1
+            if key:
+                grokbot_keys.append(key)
             continue
         actionable += 1
     return {
         "actionable": actionable,
         "needs_human": needs_human,
         "grokbot": grokbot,
+        "needs_human_keys": needs_human_keys,
+        "grokbot_keys": grokbot_keys,
     }
 
 
-def format_ui_queue_stats(stats: Dict[str, int]) -> str:
+def _format_filtered_bucket(label: str, count: int, keys: List[str]) -> str:
+    """``needs-human=1: LPT-44`` or ``grokbot=3: LPT-1,LPT-2,+1``."""
+    if count <= 0:
+        return ""
+    shown = keys[:3]
+    extra = count - len(shown)
+    if shown:
+        key_part = ",".join(shown)
+        if extra > 0:
+            key_part += f",+{extra}"
+        return f"{label}={count}: {key_part}"
+    return f"{label}={count}"
+
+
+def format_ui_queue_stats(stats: Dict[str, object]) -> str:
     """One-line status for ``ui_design_agent_loop.sh status``."""
     open_n = int(stats.get("actionable") or 0)
     nh = int(stats.get("needs_human") or 0)
     gb = int(stats.get("grokbot") or 0)
+    nh_keys = [str(k) for k in (stats.get("needs_human_keys") or [])]
+    gb_keys = [str(k) for k in (stats.get("grokbot_keys") or [])]
     if open_n == 0:
         line = "ui-queue: empty"
     elif open_n == 1:
@@ -634,10 +660,12 @@ def format_ui_queue_stats(stats: Dict[str, int]) -> str:
     else:
         line = f"ui-queue: {open_n} open"
     filtered: List[str] = []
-    if nh:
-        filtered.append(f"needs-human={nh}")
-    if gb:
-        filtered.append(f"grokbot={gb}")
+    nh_part = _format_filtered_bucket("needs-human", nh, nh_keys)
+    if nh_part:
+        filtered.append(nh_part)
+    gb_part = _format_filtered_bucket("grokbot", gb, gb_keys)
+    if gb_part:
+        filtered.append(gb_part)
     if filtered:
         line += f" (filtered {' '.join(filtered)})"
     return line
