@@ -1377,3 +1377,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Done-ack LPT-108/109/358/375/586/558/97 on tip (all NEED before comment).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-01-06-02-section-one-jump` / `lesson-02-02-01-hand-families` (**LPT-121**) / Low curriculum.
 - act-01-06-01-*: structural clean on tip — teachSpec LPT-108 Done; pressHints LPT-109/667 Done; explain LPT-358 Done; variants LPT-375 Done; wave labs LPT-586/558 Done.
+
+## Fold 2026-10-14u (be5bc2c2 discovery facing-raise)
+
+- Tip `be5bc2c2` (#2185 after #2183). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348** (already HAS tip — no re-spam).
+- Discovery oldest-unfresh `lesson-02-04-01-facing-raise` (Versus an open): teachSpec on all five; explain SoftPulse + `explainGrading`; guided SoftPulse; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean.
+- Curriculum multi-concept still **LPT-127** needs-human (tip-commented on `be5bc2c2`). Tip-commented Done parents that NEED tip SHA (incl. **LPT-216**).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-05-03-01-implied-odds` / Low curriculum.
+- act-02-04-01-*: structural clean on tip — curriculum split only via LPT-127.
