@@ -11,7 +11,9 @@
  *   node tools/course/scan_content_gaps.mjs --gap pressHints
  *   node tools/course/scan_content_gaps.mjs --markdown --gap deal-variants
  *   node tools/course/scan_content_gaps.mjs --counts
- *     (also softpulseMapArms + densifyHelperArms from Dart)
+ *     (also softpulseMapArms + densifyHelperArms from Dart;
+ *      densify-tap count = SI / player_read_classify missing helper arms)
+ *   node tools/course/scan_content_gaps.mjs --gap densify-tap --markdown
  *
  * Dart arm counts use brace depth, not a regex that stops at the first `}`.
  * An inner block before the switch arms must not drop those ids (#1964).
@@ -437,6 +439,40 @@ export function gapUnguidedSoftpulseMap(lessonId, lessonTitle, activity) {
   };
 }
 
+const DENSIFY_RENDERERS = new Set([
+  "select_identify",
+  "player_read_classify",
+]);
+
+/**
+ * select_identify / player_read_classify steps missing a
+ * `selectIdentifyDensifiedCoachLine` arm — catalog LPT-628 densify-tap.
+ * poker_action_sizing guided steps are not SI densify candidates.
+ * @param {Record<string, unknown>} activity
+ * @returns {GapRow|null}
+ */
+export function gapDensifyTap(lessonId, lessonTitle, activity) {
+  const renderer = String(activity.renderer || "");
+  if (!DENSIFY_RENDERERS.has(renderer)) {
+    return null;
+  }
+  const activityId = String(activity.id || "");
+  if (!activityId || DENSIFY_HELPER_IDS.has(activityId)) {
+    return null;
+  }
+  return {
+    lessonId,
+    lessonTitle,
+    activityId,
+    stage: String(activity.stage || ""),
+    assessmentRole: activity.assessmentRole
+      ? String(activity.assessmentRole)
+      : null,
+    renderer,
+    note: "densify helper arm missing (selectIdentifyDensifiedCoachLine)",
+  };
+}
+
 const SCANNERS = {
   pressHints: gapPressHints,
   "deal-variants": gapDealVariants,
@@ -444,6 +480,7 @@ const SCANNERS = {
   "explain-teachSpec": gapExplainCues,
   "nice-ladder": gapNiceLadder,
   "unguided-softpulse-map": gapUnguidedSoftpulseMap,
+  "densify-tap": gapDensifyTap,
 };
 
 /** Open `(catalog)` parents — keep in sync when filing/closing parents. */
@@ -455,7 +492,6 @@ const CATALOG_PARENTS = {
   teachSpec: null,
   "nice-ladder": "LPT-624",
   "unguided-softpulse-map": "LPT-625",
-  // Related structural parents (not produced by this scanner’s gaps):
   "densify-tap": "LPT-628",
 };
 

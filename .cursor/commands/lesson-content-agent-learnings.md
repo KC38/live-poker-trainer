@@ -80,11 +80,13 @@ Lesson-specific pattern notes (full history) live in
   `nice-ladder` (LPT-624); after #1957/#1959 also `unguided-softpulse-map`
   (LPT-625) + `softpulseMapArms` — use `--gap unguided-softpulse-map
   --markdown`, do not hand-count `_guidedPulseTargetId` ABSENT. After
-  #1964/#1965, `--counts` also emits `densifyHelperArms` (read from
-  `selectIdentifyDensifiedCoachLine`; Soft timing still ABSENT at **47**
-  arms — stay on LPT-628). If agent Shell hangs with empty output on
-  `--counts`, rerun in a short tmux/foreground session (script itself is
-  ~40ms).
+  #1964/#1965, `--counts` also emits `densifyHelperArms` (PRESENT arms
+  from `selectIdentifyDensifiedCoachLine`); use `--gap densify-tap
+  --markdown` for LPT-628 ABSENT (SI / `player_read_classify` missing
+  helper arms) — do not hand-rebuild fallthrough tables. Soft timing
+  `act-05-07-01-*` stays on LPT-628 until those arms PRESENT. If agent
+  Shell hangs with empty output on `--counts`, rerun in a short
+  tmux/foreground session (script itself is ~40ms).
 - Prefer one catalog ticket per structural gap type (pressHints,
   deal.variants, Nice! ladder, densify-tap, SoftPulse maps, guideRegion,
   permanent-gold). Append checklists; Done sibling clones (skip In Progress).
@@ -196,3 +198,4 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13bk: Tip `9a7ca173` after #2051 LPT-401 Weak TPTK→Weak top pair: JSON flat 151/92/44/23/nice-55/map-24 densifyHelperArms 86; parents tip-comment only; Done-ack LPT-401; Soft timing densify still ABSENT; frontier LPT-242/312/315 still all-five MISSING; pending empty.
 - 2026-10-13bl: Tip-stable `56f22fa8` (#2052 learnings after LPT-401): JSON still flat 151/92/44/23/nice-55/map-24 densifyHelperArms 86; prior coverage over-claimed — LPT-625/627/635 + frontier LPT-242/312/315 lacked tip SHA; tip-commented those + LPT-628/659 (ui-agent pot-type densify sibling, arms ABSENT); Relates LPT-659↔628; Soft timing densify ABSENT; pending empty.
 - 2026-10-13bm: Tip `8e5ae40a` after #2054 LPT-658 Compose river densify (+ #2053 learnings): densifyHelperArms **86→89** / fallthrough **114→111** (`act-07-03-01-scaffolded` / `unguided` / `checkpoint`); rebuilt LPT-628; Soft timing densify still ABSENT; JSON flat 151/92/44/23/nice-55/map-24; prior `e785c399` coverage over-claimed tip-comments (zero tickets had that SHA) — tip-commented parents+Highs on new tip; leave LPT-658 to ui-agent Validated-on-origin/main; densify ≠ teachSpec LPT-315; LPT-659 pot-type arms still ABSENT; pending empty.
+- 2026-10-13af: scanner `--gap densify-tap --markdown` lists SI / `player_read_classify` missing helper arms (LPT-628); `--counts` emits densify-tap ABSENT + densifyHelperArms PRESENT.

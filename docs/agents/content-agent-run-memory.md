@@ -723,3 +723,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315** / Adjust LAG **LPT-301**: all five `act-*` still MISSING teachSpec each. densify ≠ teachSpec for LPT-315 (LPT-658 arms PRESENT) and LPT-312 (LPT-657 arms PRESENT).
 - LPT-659 pot-type `act-07-04-01-*` helper arms still ABSENT. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR ui-agent LPT-659 pot-type densify OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
+
+## Fold 2026-10-13 (monitor) — densify-tap --gap markdown
+
+- Agents were hand-rebuilding LPT-628 after densify siblings because
+  `scan_content_gaps --gap densify-tap` was unknown (parent only in
+  `CATALOG_PARENTS` / `densifyHelperArms` PRESENT count).
+- Added `gapDensifyTap` for `select_identify` + `player_read_classify`
+  missing helper arms; `--counts` now emits `densify-tap` ABSENT.
+- Prefer: rebuild LPT-628 from `--gap densify-tap --markdown` +
+  `densifyHelperArms`; Soft timing `act-05-07-01-*` stays ABSENT until PRESENT.
