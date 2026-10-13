@@ -1026,14 +1026,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-06-06-01-unguided')!,
       'act-06-06-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-06-01-checkpoint')!,
-      // SoftPulse owns Strong catchers — don’t gold-tip the tile.
-      'act-06-07-01-guided' => 'Facing a river bet — pick quality continues.',
-      // Unguided: name the stance; don’t tip Intuition.
+      // Defend enough densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-640). SoftPulse owns Strong catchers / Intuition / Punish —
+      // don’t gold-tip the tile. Unguided: name the stance; don’t tip Intuition.
+      'act-06-07-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-06-07-01-guided')!,
       'act-06-07-01-unguided' =>
-        'MDF numbers — pick how this course uses them.',
-      // SoftPulse owns Punish over-bluffs — don’t gold-tip the tile.
+        selectIdentifyDensifiedCoachLine('act-06-07-01-unguided')!,
       'act-06-07-01-checkpoint' =>
-        'Minimum defense goal — pick what you protect.',
+        selectIdentifyDensifiedCoachLine('act-06-07-01-checkpoint')!,
       // SoftPulse owns Less bluff — don’t gold-tip the tile.
       'act-06-08-01-scaffolded' =>
         'Vs Calling Station — pick the mix adjustment.',

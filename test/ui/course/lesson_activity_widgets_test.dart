@@ -22623,6 +22623,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-640: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Facing a river bet — tap quality continues.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Facing a river bet — pick quality continues.'),
       findsOneWidget,
@@ -22707,6 +22713,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-640: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'MDF numbers — tap how this course uses them.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('MDF numbers — pick how this course uses them.'),
       findsOneWidget,
@@ -22772,6 +22784,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-640: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Minimum defense goal — tap what you protect.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Minimum defense goal — pick what you protect.'),
       findsOneWidget,
