@@ -920,6 +920,66 @@ grep -q 'status=error' "$HEALTH_FILE" \
 grep -q 'case "$code".*2)' "$LOOP" || grep -q 'sdk run status=error' "$LOOP" \
   || fail "run_loop must handle exit 2"
 
+# repair_health_tails fills pre-#1904 exit=2 null rows.
+printf '%s\n' \
+  '{"at":"2026-10-13T06:18:10+05:30","stamp":"20261013-060558","exit":2,"seconds":752,"ticket":null,"result":null,"tail":""}' \
+  >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+repair_health_tails
+grep -q '"result": "sdk-error"' "$HEALTH_FILE" \
+  || fail "repair should classify exit=2 null as sdk-error: $(cat "$HEALTH_FILE")"
+grep -q 'coverage:sdk-error' "$HEALTH_FILE" \
+  || fail "repair should set short sdk-error tail: $(cat "$HEALTH_FILE")"
+
+# SIGTERM (exit 143) with no coverage → interrupted (not opaque null).
+sig_log="$LOG_DIR/run-interrupted.log"
+printf '%s\n' \
+  '# ui-agent-sdk start runtime=machine' \
+  '{"t":1,"type":"status"}' \
+  >"$sig_log"
+: >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+write_health_row "20261013-082906" "143" "127" "$sig_log" "$start_epoch"
+grep -q '"result": "interrupted"' "$HEALTH_FILE" \
+  || fail "health should classify SIGTERM as interrupted: $(cat "$HEALTH_FILE")"
+grep -q 'coverage:interrupted' "$HEALTH_FILE" \
+  || fail "interrupted tail should be short: $(cat "$HEALTH_FILE")"
+# Legacy null exit=143 rows get the same via repair.
+printf '%s\n' \
+  '{"at":"2026-10-13T08:31:13+05:30","stamp":"20261013-082906","exit":143,"seconds":127,"ticket":null,"result":null,"tail":""}' \
+  >"$HEALTH_FILE"
+repair_health_tails
+grep -q '"result": "interrupted"' "$HEALTH_FILE" \
+  || fail "repair should classify exit=143 null as interrupted: $(cat "$HEALTH_FILE")"
+
+# primary_is_clean_main gates off-main PRIMARY (content-agent collision).
+grep -q 'primary_is_clean_main' "$LOOP" \
+  || fail "loop must define primary_is_clean_main"
+grep -q 'not clean main' "$LOOP" \
+  || fail "one_run must skip when primary is not clean main"
+off_main="$tmp/off-main-primary"
+mkdir -p "$off_main"
+git -C "$off_main" init -q
+git -C "$off_main" config user.email "test@example.com"
+git -C "$off_main" config user.name "test"
+git -C "$off_main" checkout -b not-main >/dev/null 2>&1 || true
+git -C "$off_main" commit --allow-empty -m init -q
+(
+  primary() { echo "$off_main"; }
+  primary_is_clean_main && exit 1 || exit 0
+) || fail "primary_is_clean_main must reject feature-branch primary"
+on_main="$tmp/on-main-primary"
+mkdir -p "$on_main"
+git -C "$on_main" init -q
+git -C "$on_main" config user.email "test@example.com"
+git -C "$on_main" config user.name "test"
+git -C "$on_main" checkout -b main >/dev/null 2>&1 || true
+git -C "$on_main" commit --allow-empty -m init -q
+(
+  primary() { echo "$on_main"; }
+  primary_is_clean_main
+) || fail "primary_is_clean_main must accept clean main"
+
 # 504 Gateway Time-out → gateway-timeout (no HTML stuffed into health).
 gw_log="$LOG_DIR/run-gateway-timeout.log"
 printf '%s\n' \
