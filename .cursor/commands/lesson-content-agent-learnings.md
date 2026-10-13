@@ -146,6 +146,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13dn: Tip `4c59e118` (#2156) after `cacc5987` (#2153 **LPT-667** Done). Catalog `--counts` all **0**; one-per-press cleared — do not reopen LPT-667/LPT-626. Discovery `lesson-06-01-01-range-nut-advantage` structural clean; tip-commented curriculum **LPT-254**. Open Medium: Capstone **LPT-348** needs-human only. next: LPT-348 OR `lesson-06-02-01-equity-realization` / Low curriculum.
+
 - 2026-10-13dm: Tip `6d9cbf37` (#2152). Monitor folded missing line-reading discovery notes from conflicted draft #2149 (coverage claimed `learnings: updated` while tip lacked the fold). `lesson-05-06-01-line-reading` structural clean; curriculum **LPT-239**. Catalog gaps still **0**; open Medium **LPT-667** IP + **LPT-348**. next: LPT-667 OR LPT-348 OR `lesson-06-01-01-range-nut-advantage`.
 
 - 2026-10-13dl: Tip-stable `fee963ac` (#2150). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. LPT-667/348 already **HAS** — no re-spam (LPT-667 In Progress leave alone; same 6 one-per-press). Discovery oldest-unfresh `lesson-05-09-02-section-five-checkpoint` structural clean (all five `assessmentRole` checkpoint + teachSpec; cp-multi/tell/stop `deal.mode` `none` cue kind `none`; value/catch fixed Jh9d/Kc9s4h2d7c match Dart + suit variants; hintless). Done-ack **LPT-251**/467. Still-a-list multiway/tell/stop STALE — no rebuild; no needs-human split (assessment container). next: LPT-667 one-per-press OR LPT-348 needs-human OR next oldest (`lesson-06-01-01-range-nut-advantage`).
