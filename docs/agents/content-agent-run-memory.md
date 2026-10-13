@@ -246,3 +246,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 ## Fold 2026-10-13
 
 - ui-agent cyan-selection Dones (e.g. LPT-641 #1908) do **not** clear content Nice! ladders (LPT-624), pressHints (LPT-626), SoftPulse-map (LPT-625), densify-tap (LPT-628), or explain-teachSpec (LPT-635). Tip-comment those parents on the new SHA; keep Hint-enablement companions (LPT-643) open separately.
+
+## Fold 2026-10-13
+
+- Tip `dc3f830f` (#1910 uiagenttest-only): `scan_content_gaps --counts` still pressHints **156** / deal-variants **73** / teachSpec **117** / explain-teachSpec **42**. Rebuilt catalog parents LPT-626/627/635. **LPT-626** fix table must list **151** after subtracting Dart `noHintIds` five capstone `-hand` rows (scanner still emits them; prior tip text wrongly said 156 “after excluding”). SoftPulse-map `_guidedPulseTargetId` still **68** arms (unguided mostly ABSENT; no `scaffolded-qq`). Densify helper still **44**. Honesty Highs still valid: LPT-394 `act-07-02-01-scaffolded` 9h8h/Kh7c2d3s gutshot-brick, LPT-396 `act-07-08-01-guided` JhTd/Ts9h8c2d top-as-second, LPT-401 Weak TPTK, LPT-402 missed-FD air, LPT-405 Q83tt, LPT-414 Gutshot-ish, LPT-417 NNbb sans stackLabel, Scene LPT-588 flop-only, cues LPT-370 ranks. In Progress teachSpec Highs (LPT-242/252/255/271/275/280) still all-five MISSING — tip-comment only, leave In Progress. `CATALOG_PARENTS.teachSpec` stays null.
+
+## Fold 2026-10-13 honesty tip-pass
+
+- Tip `dc3f830f` (#1910): concurrent coverage already tip-synced catalog parents (Nice!/pressHints/SoftPulse-map/densify/explain). This run tip-commented honesty/fingerprint/Scene/cues/wave + In Progress teachSpecs that still had **zero** `dc3f830f` hits: LPT-394/396/401/402/405/414/417, LPT-588, LPT-370, LPT-558, LPT-252/271/275/280, LPT-408/409/411 — all still valid.
+- Corrected **LPT-626** body: scanner raw **156** − five `noHintIds` `-hand` → fix checklist **151** (prior tip text wrongly said 156 after excluding).
+- `scan_content_gaps --counts` unchanged 156/73/117/42; densify helper still 44; SoftPulse-map 18+qq ABSENT; LPT-635 12 S1–S2 MISSING; earliest High teachSpec LPT-242 still all-five MISSING.
