@@ -57,12 +57,18 @@ Lesson-specific pattern notes (full history) live in
   `handFamily` / `suitFamily` against `teach_spec.schema.json` enums.
 - Never leave durable loop learnings only in the home pending file —
   fold into this file + `content-agent-run-memory.md` and ship.
+- Never create a `catalog:teachSpec` parent while
+  `scan_content_gaps.mjs` `CATALOG_PARENTS.teachSpec` is `null` —
+  interactive missing-teachSpec Highs stay per-lesson; only SoftPulse
+  explain catch-up uses `catalog:explain-teachSpec` (LPT-635).
 
 ## Prefer
 
 - Prefer `node tools/course/scan_content_gaps.mjs --counts` then
   `--gap <type> --markdown` every run before any lesson walk; sync open
-  `(catalog)` parents in one edit.
+  `(catalog)` parents in one edit. If agent Shell hangs with empty
+  output on `--counts`, rerun in a short tmux/foreground session (script
+  itself is ~40ms).
 - Prefer one catalog ticket per structural gap type (pressHints,
   deal.variants, Nice! ladder, densify-tap, SoftPulse maps, guideRegion,
   permanent-gold). Append checklists; Done sibling clones (skip In Progress).
@@ -78,7 +84,9 @@ Lesson-specific pattern notes (full history) live in
   SoftPulse / Hint timing / hearts / iOS-only proofs.
 - Prefer densify fallthrough scans that match Dart
   `selectIdentifyDensifiedCoachLine` arms (`'act-…' =>`), not framed-path
-  heuristics alone.
+  heuristics alone. SoftPulse-map re-checks must brace-extract
+  `_guidedPulseTargetId` arms only — substring search in a nearby chunk
+  false-positives `_feltFirstCoach` ids as PRESENT.
 - Prefer Done’ing per-lesson honesty tickets when tip already lands the
   fix mid-run; do not reopen Done teachSpecs from stale timer notes.
 
