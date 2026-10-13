@@ -1351,6 +1351,12 @@ grep -q 'pending learnings: 1 bullet' <<<"$pend_out" \
 rm -f "$STATE_DIR/ui-agent-learnings-pending.md"
 echo "status pending learnings ok"
 
+grep -q 'print_ui_queue_status' "$LOOP" \
+  || fail "loop must define print_ui_queue_status for empty-queue clarity"
+grep -q 'ui-queue --stats' "$LOOP" \
+  || fail "print_ui_queue_status must call jira ui-queue --stats"
+echo "status ui-queue stats ok"
+
 # status prints current ticket from sim_lock purpose when mini is in use.
 grep -q 'print_current_ticket_status' "$LOOP" || fail "loop must define print_current_ticket_status"
 (

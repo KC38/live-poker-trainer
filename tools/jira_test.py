@@ -380,6 +380,54 @@ class SearchTest(unittest.TestCase):
         self.assertEqual(found[0]["key"], "LPT-9")
 
 
+class UiQueueStatsTest(unittest.TestCase):
+    """Health status needs actionable vs filtered needs-human/grokbot counts."""
+
+    def test_counts_and_format(self) -> None:
+        issues = [
+            {
+                "key": "LPT-1",
+                "fields": {
+                    "summary": "a",
+                    "status": {"name": "To Do"},
+                    "priority": {"name": "Medium"},
+                    "labels": ["ui-agent", "lesson"],
+                },
+            },
+            {
+                "key": "LPT-44",
+                "fields": {
+                    "summary": "gems",
+                    "status": {"name": "To Do"},
+                    "priority": {"name": "Medium"},
+                    "labels": ["ui-agent", "needs-human"],
+                },
+            },
+            {
+                "key": "LPT-99",
+                "fields": {
+                    "summary": "chrome",
+                    "status": {"name": "To Do"},
+                    "priority": {"name": "Medium"},
+                    "labels": ["ui-agent", "grokbot"],
+                },
+            },
+        ]
+        with mock.patch.object(jira, "search", return_value=issues):
+            stats = jira.ui_queue_stats()
+        self.assertEqual(
+            stats, {"actionable": 1, "needs_human": 1, "grokbot": 1}
+        )
+        self.assertEqual(
+            jira.format_ui_queue_stats({"actionable": 0, "needs_human": 1, "grokbot": 0}),
+            "ui-queue: empty (filtered needs-human=1)",
+        )
+        self.assertEqual(
+            jira.format_ui_queue_stats(stats),
+            "ui-queue: 1 open (filtered needs-human=1 grokbot=1)",
+        )
+
+
 class RequestFailureTest(unittest.TestCase):
     """HTTP and network failures become JiraError text the agent can read."""
 

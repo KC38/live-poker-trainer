@@ -17,7 +17,7 @@ Commands:
 
     check                           confirm read and write access to LPT
     search JQL [--max N]            one line per issue
-    ui-queue [--max N]              open ui-agent queue (local filter; no labels!=)
+    ui-queue [--max N] [--stats]    open ui-agent queue (local filter; no labels!=)
     get KEY                         summary, fields, description, comments, links
     create --type T --summary S --body-file F [--priority P] [--labels a,b]
            [--attach FILE ...]      prints the new key
@@ -592,6 +592,57 @@ def ui_queue(limit: int = 50) -> List[Json]:
     return kept
 
 
+def ui_queue_stats(limit: int = 50) -> Dict[str, int]:
+    """Count actionable vs filtered open ``ui-agent`` tickets.
+
+    Same fetch as :func:`ui_queue`, but tallies ``needs-human`` / ``grokbot``
+    drops so health ``status`` can show why the queue looks empty.
+    """
+    raw = search(
+        f"project = {PROJECT} AND labels = ui-agent AND statusCategory != Done "
+        "ORDER BY priority DESC, created ASC",
+        limit=max(limit * 3, 50),
+    )
+    actionable = 0
+    needs_human = 0
+    grokbot = 0
+    for issue in raw:
+        labels = {lab.lower() for lab in (issue.get("fields") or {}).get("labels") or []}
+        if "needs-human" in labels:
+            needs_human += 1
+            continue
+        if "grokbot" in labels:
+            grokbot += 1
+            continue
+        actionable += 1
+    return {
+        "actionable": actionable,
+        "needs_human": needs_human,
+        "grokbot": grokbot,
+    }
+
+
+def format_ui_queue_stats(stats: Dict[str, int]) -> str:
+    """One-line status for ``ui_design_agent_loop.sh status``."""
+    open_n = int(stats.get("actionable") or 0)
+    nh = int(stats.get("needs_human") or 0)
+    gb = int(stats.get("grokbot") or 0)
+    if open_n == 0:
+        line = "ui-queue: empty"
+    elif open_n == 1:
+        line = "ui-queue: 1 open"
+    else:
+        line = f"ui-queue: {open_n} open"
+    filtered: List[str] = []
+    if nh:
+        filtered.append(f"needs-human={nh}")
+    if gb:
+        filtered.append(f"grokbot={gb}")
+    if filtered:
+        line += f" (filtered {' '.join(filtered)})"
+    return line
+
+
 # CLI ------------------------------------------------------------------------
 
 def _read_body(path: Optional[str]) -> Optional[str]:
@@ -620,6 +671,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="open ui-agent queue (filters needs-human/grokbot locally; avoid labels!=)",
     )
     p.add_argument("--max", type=int, default=50)
+    p.add_argument(
+        "--stats",
+        action="store_true",
+        help="print actionable vs filtered counts (one line; no ticket rows)",
+    )
 
     p = sub.add_parser("get", help="show one issue")
     p.add_argument("key")
@@ -686,8 +742,11 @@ def main(argv: Optional[List[str]] = None) -> int:
             for issue in search(args.jql, args.max):
                 print(_issue_line(issue))
         elif args.cmd == "ui-queue":
-            for issue in ui_queue(args.max):
-                print(_issue_line(issue))
+            if args.stats:
+                print(format_ui_queue_stats(ui_queue_stats(args.max)))
+            else:
+                for issue in ui_queue(args.max):
+                    print(_issue_line(issue))
         elif args.cmd == "get":
             issue = get(args.key)
             print(json.dumps(issue, indent=2) if args.json else format_issue(issue))
