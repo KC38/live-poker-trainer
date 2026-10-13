@@ -1120,10 +1120,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-06-12-02-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-12-02-checkpoint')!,
       // SoftPulse owns Usually avoid — don’t gold-tip the tile (LPT-503).
+      // Densified frame speech via selectIdentifyDensifiedCoachLine (LPT-651).
       'act-06-12-03-unguided' =>
-        'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
+        selectIdentifyDensifiedCoachLine('act-06-12-03-unguided')!,
       // SoftPulse owns Wide + pressure — don’t gold-tip the tile.
-      'act-06-12-03-checkpoint' => 'LAG exploit cites — pick the cite.',
+      'act-06-12-03-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-06-12-03-checkpoint')!,
       // SoftPulse owns TAG — respect — don’t gold-tip the tile.
       'act-06-13-01-checkpoint' =>
         'Selective entry + disciplined barrels — pick the model + line.',

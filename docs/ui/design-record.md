@@ -641,6 +641,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Meet the TAG densified asks | Meet the TAG densified asks (`act-06-11-02-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-648). |
 | Observe wide densified asks | Observe wide sustained pressure densified asks (`act-06-12-01-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-649). |
 | Meet the LAG densified asks | Meet the LAG densified asks (`act-06-12-02-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-650). |
+| Adjust versus LAG densified asks | Adjust versus LAG densified asks (`act-06-12-03-unguided` / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-651). |
 | Meet Calling Station SoftPulse one gold | Meet Calling Station scaffolded / unguided outcome SoftPulse passes `guideRegion` (`labelWorkingModel` / `playerTypeStationLimp`) so Hint paints one gold tile — never both Working model and Permanent, or Station and Maniac (LPT-424). |
 | Observe narrow SoftPulse one gold | Observe narrow players densified asks (`act-04-07-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`observeNarrowEntry` / `observeStrongAggression` / `observeWaitSamples` / `observeNitBundle`) so SoftPulse paints one gold tile — never both Narrow and Wide, Strong heat and Passive, Wait and Label now, or Few+heat and Calls all (LPT-433). |
 | Meet the Nit SoftPulse one gold | Meet the Nit densified asks (`act-04-07-02-guided` / unguided / checkpoint) pass `guideRegion` (`meetNitLabel` / `meetNitLabel2` / `meetNitWorkingModel`) so SoftPulse paints one gold tile — never both Nit and Station, Nit and Maniac, or Working model and An insult (LPT-440). |
@@ -1579,7 +1580,7 @@ felt.
 | Adjust versus TAG | Credit, Tighter, No light | respect check |
 | Observe wide sustained pressure | Wide, Pressure, Sample; unguided SoftPulse one gold (LPT-493); densified frame asks (LPT-649) | entry quizzes |
 | Meet the LAG | Wide, Pressure, Model; unguided SoftPulse one gold (LPT-492) | label quizzes |
-| Adjust versus LAG | Call, Trap, Fancy less; unguided SoftPulse one gold Usually avoid (LPT-503) | avoid and cite checks |
+| Adjust versus LAG | Call, Trap, Fancy less; unguided SoftPulse one gold Usually avoid (LPT-503); densified frame asks (LPT-651) | avoid and cite checks |
 | Same cards, five type models | Cards, seats, and evidence in the stage | — |
 | Section 6 checkpoint | — | — |
 | Carry a preflop plan onto the flop | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505) | — |
