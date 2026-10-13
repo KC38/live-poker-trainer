@@ -1482,3 +1482,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-04-06-03-adjust-calling-station` / `lesson-06-05-01-overbets-geometric` / Low curriculum.
 - act-04-06-02-*: structural clean on tip — teachSpec/pressHints/Nice!/densify/gold companions Done; curriculum via LPT-189 only.
 
+## Fold 2026-10-14ak (b9a0dcf5 LPT-348 Done after #2207)
+
+- Tip mid-run `d41550f0`→`fd26597e`/#2207→`b9a0dcf5`/#2208. Catalog structural gaps all **0**.
+- #2207 promotes all five Capstone `act-07-10-0N-hand` to `assessmentRole` `transfer` (cue kind `none`; `NO_HINT_ACTIVITY_IDS` sync; schema/docs). Acceptance met — **Done-ack LPT-348** (was In Progress / sole open Medium).
+- Do not reopen LPT-626/LPT-667 for Capstone. Next discovery: `lesson-04-06-03-adjust-calling-station` / Low curriculum (LPT-189 still To Do for id migration).
+
