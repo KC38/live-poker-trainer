@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "5f3c48c5de7d9c3efdb8b61e2534cb11b58ba9ea35565e97c8539a437f46f191",
+  "contentChecksum": "6b71e3969957da0493e471e1d36d7eca79a727fb081d991c9610a435f48f81b0",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -21084,7 +21084,29 @@
                   ],
                   "objectives": [
                     "Recalculate effective stacks each hand"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SHORT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DEEP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "EFFECTIVE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-06-01-guided",
@@ -21113,7 +21135,19 @@
                       "label": "Play as 250bb deep",
                       "accessibilityText": "Play as 250bb deep"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "commit",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-06-01-scaffolded",
@@ -21142,7 +21176,19 @@
                       "label": "Never set-mine deep",
                       "accessibilityText": "Never set-mine deep"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "yes",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-06-01-unguided",
@@ -21171,7 +21217,19 @@
                       "label": "200bb",
                       "accessibilityText": "200bb"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "40",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-06-01-checkpoint",
@@ -21201,7 +21259,19 @@
                       "accessibilityText": "Set once per lifetime"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "every",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
