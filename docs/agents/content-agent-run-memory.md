@@ -1266,3 +1266,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept still **LPT-317** needs-human (value candidates / blocker bluffs / check trash under one unlock; checkpoint objective still value-only vs rule-meta) — tip-commented on `1978fa6a`. Tip-commented Capstone **LPT-348** + Done-ack LPT-315/658/447/507/667/626/624/625/627/628/635/216 (all NEED tip SHA).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-04-01-pot-type-plans` / Low curriculum **LPT-320**.
 - act-07-03-01-*: structural clean on tip — curriculum split only via LPT-317; teachSpec/densify companions LPT-315/658 Done.
+
+## Fold 2026-10-14f (02762f5c discovery pot-type-plans)
+
+- Tip-stable `02762f5c` (#2166 learnings after river-composition). Catalog `--counts` structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human. High content open: **0**.
+- Discovery oldest-unfresh `lesson-07-04-01-pot-type-plans`: teachSpec on all five; explain SoftPulse LIMPED→SRP→3-4BET + activity-level `explainGrading`; guided/scaffolded/unguided/checkpoint outcome tiles `deal.mode` `none` + cues `nuts` / `cb` / `commit` / `both` (checkpoint cue kind `none`); scaffolded+unguided one-per-press complete; densify helper arms PRESENT (`act-07-04-01-guided`/`scaffolded`/`unguided`/`checkpoint` — LPT-659 Done). Structural clean — no new grokbot clone; design-record Still-a-list “pot-type quizzes” STALE — no rebuild; no handFamily gaps on `deal.mode` `none` tiles.
+- Curriculum multi-concept still **LPT-320** needs-human (limped / SRP / 3-4bet under one unlock; checkpoint “Ranges and SPR” vs listed 3-bet/4-bet objective) — tip-commented on `02762f5c`. Tip-commented Capstone **LPT-348** + Done-ack LPT-318/448/659/508/667/626/624/625/627/628/635/216 (all NEED tip SHA).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-05-01-hu-vs-multiway` / Low curriculum.
+- act-07-04-01-*: structural clean on tip — curriculum split only via LPT-320; teachSpec/densify companions LPT-318/659 Done.
