@@ -1188,3 +1188,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-07-01-minimum-defense` / Low curriculum.
 - act-06-02-01-*: structural clean on tip — curriculum split only via LPT-257.
 
+## Fold 2026-10-13dp (6d9f3068 discovery minimum-defense)
+
+- Tip-stable `6d9f3068` (#2157). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** (already HAS tip). Prior fold do covered equity-realization + **LPT-257**.
+- Discovery oldest-unfresh `lesson-06-07-01-minimum-defense`: teachSpec on all five; explain DEFEND→BLUFF→ENOUGH + `explainGrading`; guided/unguided/checkpoint `deal.mode` `none`; scaffolded `fixed` + variants + one-per-press; unguided one-per-press; checkpoint hintless. Structural clean.
+- Curriculum multi-concept / Any-two-% distractor / punish-vs-catchers still **LPT-273** needs-human (tip-commented on `6d9f3068`). Still-a-list continue/intuition/punish STALE — no rebuild.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-09-01-threebet-fourbet` / Low curriculum.
+- act-06-07-01-*: structural clean on tip — curriculum split only via LPT-273.
