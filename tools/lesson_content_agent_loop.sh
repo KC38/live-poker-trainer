@@ -8,6 +8,8 @@
 # Auth: ~/.live-poker-trainer/secrets.env (same as ui-design-agent).
 # Coverage: ~/.live-poker-trainer/content-agent-coverage.jsonl
 # Logs: ~/.live-poker-trainer/content-agent-logs/
+# Env: CONTENT_AGENT_GAP, CONTENT_AGENT_GATEWAY_TIMEOUT_SLEEP (default 600
+#   after machine-SDK exit 15 / 504), CONTENT_AGENT_MAX_RUN_SECONDS, …
 set -euo pipefail
 
 export PATH="$HOME/.local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/Applications/flutter/bin:${PATH:-}"
@@ -27,6 +29,9 @@ SECRETS_FILE="$STATE_DIR/secrets.env"
 GAP="${CONTENT_AGENT_GAP:-60}"
 MAX_RUN="${CONTENT_AGENT_MAX_RUN_SECONDS:-7200}"
 USAGE_LIMIT_SLEEP="${CONTENT_AGENT_USAGE_LIMIT_SLEEP:-}"
+# Seconds after machine-SDK 504 Gateway Time-out (exit 15). Match ui-agent
+# default so content does not thrash 5-min failed starts every GAP second.
+GATEWAY_TIMEOUT_SLEEP="${CONTENT_AGENT_GATEWAY_TIMEOUT_SLEEP:-600}"
 LAUNCHER="${CONTENT_AGENT_LAUNCHER:-sdk}"
 SDK_RUNTIME="${CONTENT_AGENT_SDK_RUNTIME:-machine}"
 MACHINE_NAME="${CONTENT_AGENT_MACHINE_NAME:-cursor-agent-worker-4c8b3dc416}"
@@ -236,6 +241,10 @@ run_loop() {
         _s="$(sleep_usage_limit_seconds)"
         log "usage limit; sleeping ${_s}s"
         sleep "$_s"
+        ;;
+      15)
+        log "sdk gateway timeout (exit 15); sleeping ${GATEWAY_TIMEOUT_SLEEP}s before retry"
+        sleep "$GATEWAY_TIMEOUT_SLEEP"
         ;;
       *) sleep "$GAP" ;;
     esac
