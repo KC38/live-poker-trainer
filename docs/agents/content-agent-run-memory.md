@@ -1067,3 +1067,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: LPT-348 Capstone pressHints needs-human OR discovery walk (honesty/curriculum one-offs scanner cannot see).
 - act-04-07-02-unguided: pressHints PRESENT (#2135) — do not re-file pressHints clones; Capstone LPT-348 stays separate.
 
+## Fold 2026-10-13dd (43a1be2d Capstone LPT-348 bundle)
+
+- Tip-stable `43a1be2d` (#2138 Prefer after #2137/#2135): catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Same-hand teachSpec Done. Parents already **HAS** tip — no catalog rebuild/re-spam.
+- Discovery: five Capstone scaffolded hands still empty pressHints inside `NO_HINT_ACTIVITY_IDS` (`act-07-10-01-hand`…`act-07-10-05-hand`); only 4-bet was listed on **LPT-348**. Expanded **LPT-348** summary+body to needs-human Capstone catalog (all five); tip-commented LPT-348 + Done **LPT-626** (do not reopen). Keep `needs-human` until policy (author pressHints vs assessment/no-Hint contract).
+- Zero open High / IP content catalog tickets. Open Medium content: **LPT-348** only (+ Low curriculum splits). `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
+- next: LPT-348 human policy OR Low curriculum needs-human OR honesty discovery.
+- act-07-10-0*-hand: Capstone NO_HINT bundle on LPT-348 — do not file per-Capstone pressHints clones.
+
