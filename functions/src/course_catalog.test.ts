@@ -26,7 +26,12 @@ describe("course catalog bank", () => {
     expect(courseBank.handLabsById["lab-01-06-01-bb-defend"]).toBeTruthy();
     expect(courseBank.handLabsById["lab-02-07-01-full-ring-btn"]).toBeTruthy();
     expect(courseBank.catalogVersion).toBe("2.0.0");
-    expect(courseBank.sections[0].units).toHaveLength(6);
+    expect(courseBank.sections[0].units).toHaveLength(8); // LPT-83
+    expect(courseBank.lessonSplitMap?.["lesson-01-01-02-suits-and-ranks"]).toEqual([
+      "lesson-01-01-02-01-suits",
+      "lesson-01-01-02-02-ranks",
+      "lesson-01-01-02-03-pairs-and-suited",
+    ]);
     expect(courseBank.sections[1].units).toHaveLength(7);
     expect(courseBank.sections[2].units).toHaveLength(8);
     expect(courseBank.sections[3].units).toHaveLength(10);
