@@ -3334,7 +3334,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-10-03-explain", 1,
                 "Capstone multiway deep. No hints.",
-                {objectives: ["Prefer nut potential multiway"]}),
+                {
+                  objectives: ["Prefer nut potential multiway"],
+                  // LPT-341
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "NUTS", kind: "soft_pulse"},
+                      {press: 2, target: "DEEP", kind: "soft_pulse"},
+                      {press: 3, target: "NO-BLUFF", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               multiStepAct({
                 id: "act-07-10-03-hand", order: 2, stage: "scaffolded",
                 a11y: "Four-way, 200bb, you hold AhQh.",
@@ -3378,6 +3389,18 @@ export function buildSectionSeven() {
                     ],
                   },
                 ],
+                // LPT-341
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Qh"], board: ["Jh", "8h", "2c", "3d", "9c"]},
+                  },
+                  cues: [
+                    {press: 1, target: "call", kind: "soft_pulse"},
+                    {press: 2, target: "bet", kind: "soft_pulse"},
+                    {press: 3, target: "check-r", kind: "soft_pulse"},
+                  ],
+                },
               }),
             ],
           }),

@@ -26684,7 +26684,29 @@
                   ],
                   "objectives": [
                     "Prefer nut potential multiway"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NUTS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DEEP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "NO-BLUFF",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-10-03-hand",
@@ -26803,7 +26825,42 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qh"
+                        ],
+                        "board": [
+                          "Jh",
+                          "8h",
+                          "2c",
+                          "3d",
+                          "9c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "call",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "bet",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "check-r",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 }
               ]
             },

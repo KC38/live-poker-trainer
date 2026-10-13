@@ -573,6 +573,11 @@ const _lessons = <String, List<String>>{
     'act-07-10-02-explain',
     'act-07-10-02-hand',
   ],
+  // LPT-341
+  'lesson-07-10-03-capstone-multiway-deep': [
+    'act-07-10-03-explain',
+    'act-07-10-03-hand',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -4403,6 +4408,36 @@ void main() {
       expect(
         act('act-07-10-02-hand').teachSpec!['deal']['fixedCards']['board'],
         ['Qs', '8h', '3d', '2d', '7c'],
+      );
+    });
+  });
+
+  group('Capstone: multiway deep (LPT-341)', () {
+    test('explain SoftPulse walks NUTS → DEEP → NO-BLUFF', () {
+      expect(
+        _list(
+          act('act-07-10-03-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['NUTS', 'DEEP', 'NO-BLUFF'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(
+          act('act-07-10-03-hand'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['call', 'bet', 'check-r'],
+      );
+      expect(
+        act('act-07-10-03-hand').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Qh'],
+      );
+      expect(
+        act('act-07-10-03-hand').teachSpec!['deal']['fixedCards']['board'],
+        ['Jh', '8h', '2c', '3d', '9c'],
       );
     });
   });
