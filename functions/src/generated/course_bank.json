@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "9a3502bad0dcba6130a1962e98f44e7a8ea47b097c97cb807dbf1d53677adbdb",
+  "contentChecksum": "5e02413801dcec21b014b47b6e6c1a1d15fa4027d1cf2cd7427b5708f892535a",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -26485,7 +26485,7 @@
                     {
                       "id": "step-3b-flop",
                       "street": "flop",
-                      "prompt": "Flop Q83tt. Action?",
+                      "prompt": "Flop Q83r. Action?",
                       "accessibilityText": "Value c-bet top pair.",
                       "choices": [
                         {
