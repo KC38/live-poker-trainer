@@ -62,15 +62,33 @@ const DENSIFY_HELPER_PATH = resolve(
 function loadDensifyHelperIds() {
   try {
     const text = readFileSync(DENSIFY_HELPER_PATH, "utf8");
-    const match = text.match(
-      /selectIdentifyDensifiedCoachLine[\s\S]*?\{([\s\S]*?)
-\}/,
-    );
-    if (!match) {
+    const start = text.indexOf("selectIdentifyDensifiedCoachLine");
+    if (start < 0) {
       return new Set();
     }
+    const brace = text.indexOf("{", start);
+    if (brace < 0) {
+      return new Set();
+    }
+    let depth = 0;
+    let end = -1;
+    for (let i = brace; i < text.length; i++) {
+      const ch = text[i];
+      if (ch === "{") depth++;
+      else if (ch === "}") {
+        depth--;
+        if (depth === 0) {
+          end = i;
+          break;
+        }
+      }
+    }
+    if (end < 0) {
+      return new Set();
+    }
+    const body = text.slice(brace + 1, end);
     return new Set(
-      [...match[1].matchAll(/'(act-[^']+)'\s*=>/g)].map((m) => m[1]),
+      [...body.matchAll(/'(act-[^']+)'\s*=>/g)].map((m) => m[1]),
     );
   } catch {
     return new Set();
