@@ -3006,7 +3006,19 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-08-01-explain", 1,
                 "Type × board × line × size. One answer.",
-                {objectives: ["Produce one coherent action"]}),
+                {
+                  objectives: ["Produce one coherent action"],
+                  // LPT-331
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "TYPE", kind: "soft_pulse"},
+                      {press: 2, target: "BOARD", kind: "soft_pulse"},
+                      {press: 3, target: "LINE", kind: "soft_pulse"},
+                      {press: 4, target: "SIZE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-07-08-01-guided", order: 2, stage: "guided",
                 prompt: "Wet board. Maniac overbets turn. Second pair. Action?",
@@ -3019,6 +3031,14 @@ export function buildSectionSeven() {
                   choice("fold", "Fold", "questionable",
                     "Reasonable vs unknowns; maniac widens calls.", {action: "FOLD"})
                 ],
+                // LPT-331
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Kh", "Ts", "8h", "2d"]},
+                  },
+                  cues: [{press: 1, target: "call", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-07-08-01-scaffolded", order: 3, stage: "scaffolded",
@@ -3032,6 +3052,14 @@ export function buildSectionSeven() {
                   choice("call", "Call air", "clear_mistake",
                     "No showdown.", {action: "CALL", betterChoiceId: "raise"})
                 ],
+                // LPT-331
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["9h", "8d"], board: ["Ac", "7s", "2d", "Kd"]},
+                  },
+                  cues: [{press: 1, target: "raise", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-07-08-01-unguided", order: 4, stage: "scaffolded",
@@ -3045,6 +3073,14 @@ export function buildSectionSeven() {
                   choice("hero", "Hero-call for storytime", "clear_mistake",
                     "Ego.", {action: "CALL", betterChoiceId: "fold"})
                 ],
+                // LPT-331
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3057,6 +3093,8 @@ export function buildSectionSeven() {
                   choice("one", "Only hole card beauty", "clear_mistake",
                     "Incomplete.", {betterChoiceId: "four"})
                 ],
+                // LPT-331
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "four", kind: "none"}]},
               }),
             ],
           }),
