@@ -146,6 +146,9 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13dm: Tip `6d9cbf37` (#2152 after #2150). Catalog `--counts` all **0**. Re-verified Meet Nit Nice!+pressHints cleared / **LPT-216** Done; **LPT-667** IP still 6 one-per-press (leave alone). Discovery `lesson-06-01-01-range-nut-advantage` structural clean; tip-commented curriculum **LPT-254** + parents. Open Medium: **LPT-667** OR **LPT-348**; next oldest `lesson-06-02-01-equity-realization` / Low curriculum.
+
+
 - 2026-10-13dl: Tip-stable `fee963ac` (#2150). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. LPT-667/348 already **HAS** — no re-spam (LPT-667 In Progress leave alone; same 6 one-per-press). Discovery oldest-unfresh `lesson-05-09-02-section-five-checkpoint` structural clean (all five `assessmentRole` checkpoint + teachSpec; cp-multi/tell/stop `deal.mode` `none` cue kind `none`; value/catch fixed Jh9d/Kc9s4h2d7c match Dart + suit variants; hintless). Done-ack **LPT-251**/467. Still-a-list multiway/tell/stop STALE — no rebuild; no needs-human split (assessment container). next: LPT-667 one-per-press OR LPT-348 needs-human OR next oldest (`lesson-06-01-01-range-nut-advantage`).
 
 - 2026-10-13dk: Tip mid-run `196d3505`→`fee963ac` (#2150 sticky worktree). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. **LPT-667** In Progress — same 6 one-per-press rows still valid (tip-comment only; leave IP). Discovery oldest-unfresh `lesson-05-09-01-session-discipline` structural clean (explainGrading QUIT→GUARD→FIRST; `deal.mode` `none` tiles; one-per-press OK; checkpoint hintless); tip-commented curriculum **LPT-250** + Done-ack **LPT-248**/249 + parents + **LPT-348**/667 on `fee963ac`. Prior line-reading coverage on `196d3505` (#2149 draft) — do not re-walk. next: LPT-667 one-per-press OR LPT-348 needs-human OR next oldest (`lesson-05-09-02-section-five-checkpoint`).
