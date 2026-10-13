@@ -92,7 +92,11 @@ Lesson-specific pattern notes (full history) live in
   `selectIdentifyDensifiedCoachLine` arms (`'act-…' =>`), not framed-path
   heuristics alone. SoftPulse-map re-checks must brace-extract
   `_guidedPulseTargetId` arms only — substring search in a nearby chunk
-  false-positives `_feltFirstCoach` ids as PRESENT.
+  false-positives `_feltFirstCoach` ids as PRESENT. SoftPulse-map sibling
+  **Done** ≠ map arms PRESENT (LPT-621/622/623 Adjust Station/Nit/Maniac
+  Done while `act-04-06-03-unguided` / `act-04-07-03-unguided` /
+  `act-04-08-03-unguided` still ABSENT from `_guidedPulseTargetId` — keep
+  **LPT-625** open; tip-comment, do not clear from sibling Dones alone).
 - Prefer Done’ing per-lesson honesty tickets when tip already lands the
   fix mid-run; do not reopen Done teachSpecs from stale timer notes.
 
@@ -136,4 +140,5 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13s: Tip `5697b07d` (#1949 scanner `nice-ladder` in `--counts` + prior #1947/#1948): scan flat 151/81/84/35/nice-43; tip-commented parents + Highs LPT-242/295/301/258/308/312/315/318; SoftPulse-map 68; densify helper 47 Soft timing ABSENT.
 - 2026-10-13s: Tip-stable `bba9ad9f` (catalog already synced): scan flat 151/81/84/35 Nice! 43; skipped parent re-spam; tip-commented unchecked S7 Highs LPT-308 (IP, all five `act-07-01-01-*` MISSING) + LPT-312 (To Do, `act-07-02-01-*` MISSING); SoftPulse-map 68 / densify helper 47 Soft timing ABSENT.
 - 2026-10-13t: Tip `c5851fdd` after #1951 LPT-308 preflop-to-flop teachSpec: Nice! 43→44 (`act-07-01-01-explain`); deal-variants flat 81; teachSpec 84→80 / explain-teachSpec 35→34; Done LPT-308; scaffolded/unguided stay on LPT-626 pressHints.
+- 2026-10-13u: Tip-stable `89d9a5ae` (#1952 learnings): scan flat 151/81/80/34/nice-44; parents already synced — no rebuild. SoftPulse-map sibling Done ≠ `_guidedPulseTargetId` PRESENT (LPT-621/622/623 while Adjust unguided still ABSENT on LPT-625); Soft timing densify still ABSENT (helper 47); honesty LPT-394/396 still valid.
 
