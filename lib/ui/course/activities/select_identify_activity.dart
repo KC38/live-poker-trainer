@@ -3180,7 +3180,7 @@ class _RandomizedHoleHandTableState extends State<_RandomizedHoleHandTable> {
       enabled: widget.enabled,
       showGuidance: widget.showGuidance,
       selectedSeatIndexes: {
-        if (_selectedSeatIndex != null) _selectedSeatIndex!,
+        ?_selectedSeatIndex,
       },
       onSeatChoice: (seat) {
         final choiceId = _deal.choiceIdForSeat(seat) ??

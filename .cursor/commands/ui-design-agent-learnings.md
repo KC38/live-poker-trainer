@@ -373,5 +373,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 ## Recent run notes
 
+- 2026-10-13 LPT-641: loop rewrote `ui-agent-handoff.json` / reclaimed the mini while this agent was mid-implement (`purpose: agent starting`). When `heartbeat`/`guard` print not-the-holder, stop driving the mini until `sim_lock.py claim` succeeds again (LPT-637); do not force-release the loop holder. Keep implementing offline tests in the worktree meanwhile.
+
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
