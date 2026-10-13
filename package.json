@@ -5,7 +5,7 @@
     "course:seed": "node tools/course/build_seed_course.mjs",
     "course:validate": "node tools/course/validate_course.mjs --write",
     "course:check": "node tools/course/validate_course.mjs --check",
-    "course:test": "node --test tools/course/validate_course.test.mjs",
+    "course:test": "node --test tools/course/validate_course.test.mjs tools/course/scan_content_gaps.test.mjs",
     "prebuild": "npm run course:validate"
   }
 }

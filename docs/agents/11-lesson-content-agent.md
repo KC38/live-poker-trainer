@@ -119,8 +119,16 @@ node tools/course/scan_content_gaps.mjs --counts
 node tools/course/scan_content_gaps.mjs --gap pressHints --markdown
 ```
 
-Gaps: `pressHints` | `deal-variants` | `teachSpec` | `explain-teachSpec`.
-The content agent runs this every pass to refresh `(catalog)` parents.
+Gaps: `pressHints` | `deal-variants` | `teachSpec` | `explain-teachSpec` |
+`nice-ladder` | `unguided-softpulse-map`. `--counts` also reports
+`softpulseMapArms` and `densifyHelperArms`. Those two are activity ids on
+`'act-…' =>` arms inside the Dart switch, matched by brace depth. A regex
+that stops at the first `}` drops arms that follow an inner block. A
+truncated regex literal is what made `--counts` fail to parse (#1964).
+`catalogParents.teachSpec` stays null
+(per-lesson Highs, not one catalog parent). The content agent runs this
+every pass to refresh `(catalog)` parents. Tests:
+`tools/course/scan_content_gaps.test.mjs` via `npm run course:test`.
 
 ## Learnings (must land in git)
 
