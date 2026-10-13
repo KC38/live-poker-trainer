@@ -186,6 +186,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Two hands of tightness — pick the confidence.',
     'act-06-11-01-checkpoint' =>
       'Best pre-label note bundle — pick the evidence pack.',
+    // Meet the TAG densified asks (LPT-648) — same path as LPT-647.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-11-02-guided' =>
+      'Folds most, 3-bets strong — pick the label.',
+    'act-06-11-02-scaffolded' => 'TAG versus Maniac — pick the difference.',
+    'act-06-11-02-unguided' =>
+      'Opens tight, selective c-bets — pick the label.',
+    'act-06-11-02-checkpoint' =>
+      'TAG is a label from frequencies — pick how to treat it.',
     _ => null,
   };
 }

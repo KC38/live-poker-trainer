@@ -1078,16 +1078,19 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Tight · plan · give — don’t gold-tip the tile.
       'act-06-11-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-11-01-checkpoint')!,
-      // SoftPulse owns TAG — don’t gold-tip the tile.
-      'act-06-11-02-guided' => 'Folds most, 3-bets strong — pick the label.',
+      // Meet the TAG densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-648). SoftPulse owns TAG — don’t gold-tip the tile.
+      'act-06-11-02-guided' =>
+        selectIdentifyDensifiedCoachLine('act-06-11-02-guided')!,
       // SoftPulse owns Selective vs extreme — don’t gold-tip the tile.
-      'act-06-11-02-scaffolded' => 'TAG versus Maniac — pick the difference.',
-      // Unguided: name the type; don’t tip TAG.
+      'act-06-11-02-scaffolded' =>
+        selectIdentifyDensifiedCoachLine('act-06-11-02-scaffolded')!,
+      // SoftPulse owns TAG — don’t gold-tip the tile (LPT-491).
       'act-06-11-02-unguided' =>
-        'Opens tight, selective c-bets — pick the label.',
+        selectIdentifyDensifiedCoachLine('act-06-11-02-unguided')!,
       // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-06-11-02-checkpoint' =>
-        'TAG is a label from frequencies — pick how to treat it.',
+        selectIdentifyDensifiedCoachLine('act-06-11-02-checkpoint')!,
       // SoftPulse owns Selective + disciplined — don’t gold-tip the tile.
       'act-06-11-03-checkpoint' => 'Versus TAG — pick the cite.',
       // SoftPulse owns Wide + pressure — don’t gold-tip the tile.

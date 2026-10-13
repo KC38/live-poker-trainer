@@ -23800,6 +23800,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-648: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Folds most, 3-bets strong — tap the label.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Folds most, 3-bets strong — pick the label.'),
       findsOneWidget,
@@ -23842,6 +23848,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-648: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'TAG versus Maniac — tap the difference.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('TAG versus Maniac — pick the difference.'),
       findsOneWidget,
@@ -23884,6 +23896,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-648: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Opens tight, selective c-bets — tap the label.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Opens tight, selective c-bets — pick the label.'),
       findsOneWidget,
@@ -23949,6 +23967,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-648: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'TAG is a label from frequencies — tap how to treat it.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('TAG is a label from frequencies — pick how to treat it.'),
       findsOneWidget,
