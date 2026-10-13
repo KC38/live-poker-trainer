@@ -31848,17 +31848,17 @@
                       {
                         "press": 1,
                         "target": "cb",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "barrel",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "check-r",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
                   },
@@ -32117,17 +32117,17 @@
                       {
                         "press": 1,
                         "target": "bet",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "barrel",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "fold",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
                   },
@@ -32378,17 +32378,17 @@
                       {
                         "press": 1,
                         "target": "call",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "bet",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "check-r",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
                   },
@@ -32651,17 +32651,17 @@
                       {
                         "press": 1,
                         "target": "bet",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "barrel",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "value",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
                   },
@@ -32924,17 +32924,17 @@
                       {
                         "press": 1,
                         "target": "bet",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "barrel",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "fold",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
                   },
