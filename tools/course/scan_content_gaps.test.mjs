@@ -21,6 +21,7 @@ import {
   gapNiceLadder,
   gapPressHints,
   gapTeachSpec,
+  gapDensifyTap,
   gapUnguidedSoftpulseMap,
   hasSoftPulseCue,
   scanAll,
@@ -290,6 +291,43 @@ test("explain cues and Nice! ladder follow SoftPulse shape", () => {
   );
 });
 
+test("densify-tap flags SI / player_read_classify missing helper arms", () => {
+  const lesson = ["lesson-x", "X"];
+  assert.equal(
+    gapDensifyTap(...lesson, {
+      id: "act-99-00-00-guided",
+      renderer: "poker_action_sizing",
+      stage: "guided",
+    }),
+    null,
+  );
+  const presentId = [...DENSIFY_HELPER_IDS][0];
+  assert.ok(presentId);
+  assert.equal(
+    gapDensifyTap(...lesson, {
+      id: presentId,
+      renderer: "select_identify",
+      stage: "guided",
+    }),
+    null,
+  );
+  const row = gapDensifyTap(...lesson, {
+    id: "act-05-07-01-guided",
+    renderer: "select_identify",
+    stage: "guided",
+  });
+  assert.equal(row.activityId, "act-05-07-01-guided");
+  assert.match(row.note, /densify helper arm missing/);
+  assert.equal(
+    gapDensifyTap(...lesson, {
+      id: "act-99-00-00-classify",
+      renderer: "player_read_classify",
+      stage: "scaffolded",
+    }).activityId,
+    "act-99-00-00-classify",
+  );
+});
+
 test("unguided SoftPulse map ignores mapped arms and other renderers", () => {
   const lesson = ["lesson-x", "X"];
   assert.equal(
@@ -360,6 +398,10 @@ test("scanAll walks nested lessons and leaves empty courses empty", () => {
   );
   assert.equal(found.pressHints[0].lessonTitle, "lesson-1");
   assert.equal(found["deal-variants"].length, 0);
+  assert.deepEqual(
+    found["densify-tap"].map((row) => row.activityId),
+    ["act-gap-hint"],
+  );
   const md = toMarkdown("pressHints", found.pressHints);
   assert.match(md, /\| lesson-1 \| act-gap-hint \| scaffolded\/— \|/);
 });
@@ -376,6 +418,9 @@ test("--counts reports live arm sizes and rejects an unknown gap", () => {
   assert.equal(body.catalogParents.teachSpec, null);
   assert.equal(typeof body.counts.pressHints, "number");
   assert.equal(typeof body.counts["unguided-softpulse-map"], "number");
+  assert.equal(typeof body.counts["densify-tap"], "number");
+  assert.equal(body.catalogParents["densify-tap"], "LPT-628");
+  assert.ok(body.counts["densify-tap"] > 0);
 
   const one = spawnSync(
     process.execPath,
