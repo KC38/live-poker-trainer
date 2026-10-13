@@ -237,6 +237,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tight entry, planned barrels — pick the label.',
     'act-06-13-02-cp-lag' =>
       'Wide entry, sustained pressure — pick the label.',
+    // Carry a preflop plan densified asks (LPT-656) — same path as LPT-655.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-07-01-01-guided' =>
+      'AQo 3-bet · 872tt — pick the plan update.',
+    'act-07-01-01-scaffolded' =>
+      'BTN steal KTo · KT2r — pick the plan update.',
+    'act-07-01-01-unguided' =>
+      'Best habit — pick what to do before flop act.',
+    'act-07-01-01-checkpoint' => 'Dead plan — pick the response.',
     _ => null,
   };
 }
