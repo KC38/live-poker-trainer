@@ -226,7 +226,11 @@ export function classifyAct({
 /** @returns {object} Section 1 — Never Played */
 export function buildSectionOne() {
   const L010101 = "lesson-01-01-01-your-two-cards";
-  const L010102 = "lesson-01-01-02-suits-and-ranks";
+  const L010102 = "lesson-01-01-02-suits-and-ranks"; // retired; see L010102A/B/C (LPT-83)
+  const L010102A = "lesson-01-01-02-01-suits";
+  const L010102B = "lesson-01-01-02-02-ranks";
+  const L010102C = "lesson-01-01-02-03-pairs-and-suited";
+  const L010103UNIT = "unit-01-01-03-blinds-and-button";
   const L010103 = "lesson-01-01-03-blinds-and-button";
   const L010201 = "lesson-01-02-01-hand-ranks";
   const L010202 = "lesson-01-02-02-best-five-kickers";
@@ -528,7 +532,7 @@ export function buildSectionOne() {
               "Identify the small and big blinds",
               "Know blinds post before cards are dealt",
             ],
-            prereq: L010102, remediation: L010102,
+            prereq: L010102C, remediation: L010102C,
             activities: [
               dialogue("act-01-01-03-explain-button", 1,
                 "Button marks the dealer. Blinds sit left of it.",

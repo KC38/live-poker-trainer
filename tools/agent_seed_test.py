@@ -24,14 +24,14 @@ agent_seed = _load()
 LESSONS = [
     {"id": "lesson-01-01-01-your-two-cards", "title": "Your two cards", "prerequisites": []},
     {
-        "id": "lesson-01-01-02-suits-and-ranks",
+        "id": "lesson-01-01-02-03-pairs-and-suited",
         "title": "Suits and ranks",
         "prerequisites": ["lesson-01-01-01-your-two-cards"],
     },
     {
         "id": "lesson-01-01-03-blinds-and-button",
         "title": "Button and blinds",
-        "prerequisites": ["lesson-01-01-02-suits-and-ranks"],
+        "prerequisites": ["lesson-01-01-02-03-pairs-and-suited"],
     },
 ]
 
@@ -58,7 +58,7 @@ class ClosureTest(unittest.TestCase):
     def test_chain(self) -> None:
         self.assertEqual(
             agent_seed.prerequisite_closure(LESSONS, "lesson-01-01-03-blinds-and-button"),
-            ["lesson-01-01-01-your-two-cards", "lesson-01-01-02-suits-and-ranks"],
+            ["lesson-01-01-01-your-two-cards", "lesson-01-01-02-03-pairs-and-suited"],
         )
 
     def test_first_lesson_needs_nothing(self) -> None:
@@ -72,7 +72,7 @@ class ClosureTest(unittest.TestCase):
         lesson_id = "lesson-01-01-03-blinds-and-button"
         self.assertEqual(
             agent_seed.prerequisite_closure(LESSONS, lesson_id),
-            ["lesson-01-01-01-your-two-cards", "lesson-01-01-02-suits-and-ranks"],
+            ["lesson-01-01-01-your-two-cards", "lesson-01-01-02-03-pairs-and-suited"],
         )
         self.assertNotIn(lesson_id, agent_seed.prerequisite_closure(LESSONS, lesson_id))
 

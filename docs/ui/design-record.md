@@ -762,6 +762,15 @@ suited and offsuit distractor `variants`, a `none` cue, and no
 `pressHints` or Hint media. The next lesson that moves its deal into
 `teachSpec` names the Dart dealer it mirrors the same way.
 
+Curriculum split LPT-83: old `lesson-01-01-02-suits-and-ranks` becomes unit
+`unit-01-01-02-suits-and-ranks` with one lesson per concept (`…-01-suits`,
+`…-02-ranks`, `…-03-pairs-and-suited`). Catalog `lessonSplitMap` expands
+completed progress on the retired lesson id onto all three successors so
+existing learners are not stranded. Button and blinds moves to
+`unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
+unit). Shipped.
+
+
 Button and blinds `teachSpec` (LPT-85): every step is `deal.mode` `none`
 (seat/puck teaching; the felt shows card backs, no dealt classes). The
 explain step authors three `soft_pulse` cues D → SB → BB, the guided button
@@ -1651,7 +1660,9 @@ felt.
 | Lesson | Explain taps | Still a list |
 | --- | --- | --- |
 | Your two cards | Your hole cards on the felt | — |
-| Suits and ranks | Suit taps on board cards, board ranks low to high, suited / pair seats; scaffolded pressHints (LPT-82); scaffolded ranks SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); explain SoftPulse cues hearts → diamonds → clubs → spades (LPT-353) | — |
+| Suits | Suit taps on board cards; explain SoftPulse hearts → diamonds → clubs → spades (LPT-353); unit `unit-01-01-02-suits-and-ranks` (LPT-83 split) | — |
+| Ranks | Board ranks low to high; SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
+| Pairs and suited | Suited / pair seats; scaffolded pressHints (LPT-82); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
 | Button and blinds | Dealer button, SB, BB on the seats | — |
 | Hand ranks | Showdown seats weakest to strongest | scaffolded pressHints one-per-press (LPT-667) |
 | Best five and kickers | The five cards that play; You / Them / Board | scaffolded pressHints one-per-press (LPT-667) |

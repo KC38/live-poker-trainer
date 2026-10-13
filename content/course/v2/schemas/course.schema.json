@@ -4,12 +4,31 @@
   "title": "Live cash NLH course catalog v2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["catalogVersion", "minClientVersion", "scope", "coachId", "playerTypes", "sections"],
+  "required": [
+    "catalogVersion",
+    "minClientVersion",
+    "scope",
+    "coachId",
+    "playerTypes",
+    "sections"
+  ],
   "properties": {
-    "catalogVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
-    "minClientVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
-    "scope": { "type": "string", "const": "live_cash_nlh" },
-    "coachId": { "type": "string", "const": "rex" },
+    "catalogVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "minClientVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "scope": {
+      "type": "string",
+      "const": "live_cash_nlh"
+    },
+    "coachId": {
+      "type": "string",
+      "const": "rex"
+    },
     "playerTypes": {
       "type": "array",
       "minItems": 5,
@@ -17,12 +36,24 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "label", "introducedByLessonId"],
+        "required": [
+          "id",
+          "label",
+          "introducedByLessonId"
+        ],
         "properties": {
-          "id": { "$ref": "common.schema.json#/definitions/playerTypeId" },
-          "label": { "$ref": "common.schema.json#/definitions/nonEmptyString" },
-          "introducedByLessonId": { "$ref": "common.schema.json#/definitions/idString" },
-          "summary": { "$ref": "common.schema.json#/definitions/nonEmptyString" }
+          "id": {
+            "$ref": "common.schema.json#/definitions/playerTypeId"
+          },
+          "label": {
+            "$ref": "common.schema.json#/definitions/nonEmptyString"
+          },
+          "introducedByLessonId": {
+            "$ref": "common.schema.json#/definitions/idString"
+          },
+          "summary": {
+            "$ref": "common.schema.json#/definitions/nonEmptyString"
+          }
         }
       }
     },
@@ -30,7 +61,21 @@
       "type": "array",
       "minItems": 7,
       "maxItems": 7,
-      "items": { "$ref": "section.schema.json#/definitions/section" }
+      "items": {
+        "$ref": "section.schema.json#/definitions/section"
+      }
+    },
+    "lessonSplitMap": {
+      "type": "object",
+      "description": "Retired multi-concept lesson id \u2192 successor lesson ids. Completed progress on the key counts as completed for every value (LPT-83+).",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1
+      }
     }
   }
 }

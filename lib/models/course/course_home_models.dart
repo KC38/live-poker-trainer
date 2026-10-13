@@ -2,6 +2,7 @@
 library;
 
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/models/course/lesson_split_map.dart';
 import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 
@@ -381,7 +382,10 @@ CourseHomeSnapshot buildCourseHomeSnapshot({
     );
   }
 
-  final completed = profile?.completedLessonIds.toSet() ?? <String>{};
+  final completed = expandCompletedLessonIds(
+    profile?.completedLessonIds ?? const <String>[],
+    lessonSplitMap: catalog.lessonSplitMap,
+  );
   final mastery = profile?.masteryByLessonId ?? const <String, double>{};
   final reviews = reviewLessonIds.toSet();
   // Only a live first-run open attempt owns the Home progress pointer.

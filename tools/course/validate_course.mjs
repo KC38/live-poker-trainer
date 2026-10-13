@@ -811,6 +811,33 @@ export function validateAndGenerate(course) {
     }
   }
 
+  // lessonSplitMap: retired multi-concept lesson → successors (progress migration).
+  const rawSplit = course.lessonSplitMap && typeof course.lessonSplitMap === 'object' ?
+    /** @type {Record<string, unknown>} */ (course.lessonSplitMap) :
+    {};
+  /** @type {Record<string, string[]>} */
+  const lessonSplitMap = {};
+  for (const [retired, succ] of Object.entries(rawSplit)) {
+    if (lessons.has(retired)) {
+      errors.push(
+        `lessonSplitMap key "${retired}" must not still be a live lesson id`,
+      );
+    }
+    if (!Array.isArray(succ) || succ.length < 1) {
+      errors.push(`lessonSplitMap["${retired}"] must be a non-empty string array`);
+      continue;
+    }
+    const ids = succ.map(String);
+    for (const id of ids) {
+      if (!lessons.has(id)) {
+        errors.push(
+          `lessonSplitMap["${retired}"]: unknown successor lesson "${id}"`,
+        );
+      }
+    }
+    lessonSplitMap[retired] = ids;
+  }
+
   const checksumSeed = {
     catalogVersion: course.catalogVersion,
     scope: course.scope,
@@ -818,6 +845,7 @@ export function validateAndGenerate(course) {
     sections: clientSections,
     gradingActivityIds: Object.keys(gradingByActivityId).sort(),
     handLabIds: Object.keys(handLabsById).sort(),
+    lessonSplitMap,
   };
   const contentChecksum = hashContent(checksumSeed);
 
@@ -836,6 +864,7 @@ export function validateAndGenerate(course) {
         summary: p.summary,
       };
     }),
+    lessonSplitMap,
     sections: clientSections,
   };
 
@@ -846,6 +875,7 @@ export function validateAndGenerate(course) {
     coachId: course.coachId,
     contentChecksum,
     playerTypes: course.playerTypes,
+    lessonSplitMap,
     sections: serverSections,
     gradingByActivityId,
     handLabsById,

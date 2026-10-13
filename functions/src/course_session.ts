@@ -32,6 +32,7 @@ import {
   type CourseLesson,
   type SoftGrade,
 } from "./course_catalog";
+import {expandCompletedLessonIds} from "./lesson_split_map";
 import {resolveLiveAccessForUser} from "./live_access";
 import {
   adHeartAvailability,
@@ -718,13 +719,25 @@ export async function startCourseLessonForUser(options: {
   const db = options.db ?? getFirestore();
   const input = record(options.raw, "request");
   const clientVersion = nonEmpty(input.clientVersion, "clientVersion");
-  const lessonId = nonEmpty(input.lessonId, "lessonId");
+  const requestedLessonId = nonEmpty(input.lessonId, "lessonId");
   const startRequestId = safeKey(input.startRequestId, "startRequestId");
   const catalogVersion = optionalString(input.catalogVersion) ??
     courseBank.catalogVersion;
   const timezone = sanitizeTimezone(optionalString(input.timezone) ?? "UTC");
   const restoreHeartOnComplete = input.restoreHeartOnComplete === true;
-  const located = findLesson(lessonId);
+  // Curriculum splits retire multi-concept lesson ids; map to first live successor.
+  let lessonId = requestedLessonId;
+  let located = findLesson(lessonId);
+  if (!located && courseBank.lessonSplitMap?.[requestedLessonId]) {
+    for (const successor of courseBank.lessonSplitMap[requestedLessonId]) {
+      const candidate = findLesson(successor);
+      if (candidate) {
+        lessonId = successor;
+        located = candidate;
+        break;
+      }
+    }
+  }
   if (!located) {
     throw new HttpsError("not-found", "Unknown lessonId.");
   }
@@ -855,11 +868,12 @@ export async function startCourseLessonForUser(options: {
     }
 
     // Deep-link lock: new starts require catalog prerequisites completed.
-    const completedForPrereqs = Array.isArray(
-      profileSnap.data()?.completedLessonIds,
-    ) ?
-      profileSnap.data()!.completedLessonIds as string[] :
-      [];
+    const completedForPrereqs = expandCompletedLessonIds(
+      Array.isArray(profileSnap.data()?.completedLessonIds) ?
+        profileSnap.data()!.completedLessonIds as string[] :
+        [],
+      courseBank.lessonSplitMap,
+    );
     const missingPrereq = located.lesson.prerequisites.find(
       (prereqId) => !completedForPrereqs.includes(prereqId),
     );

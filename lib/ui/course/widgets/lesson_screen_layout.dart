@@ -27,6 +27,9 @@ bool isLessonScreenFrameLesson(String lessonId) {
   return lessonId == 'lesson-01-01-01-your-two-cards' ||
       lessonId == 'lesson-01-01-01' ||
       lessonId == 'lesson-01-01-02-suits-and-ranks' ||
+      lessonId == 'lesson-01-01-02-01-suits' ||
+      lessonId == 'lesson-01-01-02-02-ranks' ||
+      lessonId == 'lesson-01-01-02-03-pairs-and-suited' ||
       lessonId == 'lesson-01-01-02' ||
       lessonId == 'lesson-01-01-03-blinds-and-button' ||
       lessonId == 'lesson-01-01-03' ||

@@ -123,6 +123,8 @@ export interface CourseBank {
   coachId: "rex";
   contentChecksum: string;
   playerTypes: readonly CoursePlayerType[];
+  /** Retired multi-concept lesson id → successors (LPT-83+). */
+  lessonSplitMap?: Record<string, readonly string[]>;
   sections: readonly CourseSection[];
   gradingByActivityId: Record<string, unknown>;
   handLabsById: Record<string, unknown>;
