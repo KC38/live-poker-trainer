@@ -443,3 +443,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
   leave PRIMARY on `main`.
 - Closed conflicted supersession #1967; closed duplicate #1976 in favor
   of #1977.
+
+## Fold 2026-10-13 tip 5f6741ab (#1979 LPT-645/646 densify + #1978 sync_primary)
+
+- Tip advanced through `1459c22f` (#1974 learnings) → `39754d09`/`3328c056` (#1975/#1977) → `b866ee11` (#1979 densify) → `5f6741ab` (#1978). Always re-`scan_content_gaps --counts` after ff mid-run.
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **81**, teachSpec **68**, explain-teachSpec **31**, nice-ladder **47**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **47→53**.
+- Immediately rebuilt catalog densify-tap **LPT-628** from `selectIdentifyDensifiedCoachLine` (strip quotes): helper **53**; Priority ABSENT still seat-footer + Soft timing `act-05-07-01-*` (incl. guided); fallthrough **153→147**. Relates LPT-645/646↔LPT-628. Tip-commented LPT-624/625/626/627/635 (JSON flat — no rebuild) + Done ack LPT-645/646 + IP Soft timing LPT-242.
+- Grep `act-07-05-01-*` / `act-07-06-01-*`: teachSpec PRESENT (LPT-321/324 Done). Frontier **LPT-328** `act-07-07-01-*` all five MISSING — tip-commented. Map turn LPT-312 / Compose river LPT-315 / Soft timing LPT-242 still MISSING. Honesty LPT-396 still valid `Jh`/`Td`·`Ts`/`9h`/`8c`/`2d` top-as-second. needs-human LPT-348 keep off LPT-626. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR implement LPT-328 same-cards teachSpec OR densify Soft-timing/seat-footer on LPT-628 OR LPT-625 SoftPulse maps (24) OR catalog LPT-626(151)/627(81)/635/624(47) OR LPT-396 if tip advances.
