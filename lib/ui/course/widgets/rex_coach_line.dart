@@ -276,6 +276,22 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-07-06-01-unguided' =>
       'Hero 200 / Villain 40 — pick effective stack.',
     'act-07-06-01-checkpoint' => 'Stack depth — pick how often to check.',
+    // Replay same hand vs each type densified checkpoint (LPT-664).
+    'act-07-07-01-checkpoint' => 'No type evidence — pick the default.',
+    // Integrate type, board, line, and sizing densified checkpoint (LPT-665).
+    'act-07-08-01-checkpoint' => 'Integrated decision — pick the input set.',
+    // Write your default strategy book densified asks (LPT-662) — same path.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-07-09-01-guided' => 'Best leak note — pick the useful shape.',
+    'act-07-09-01-scaffolded' =>
+      'BTN vs unknown BB — pick the default source.',
+    'act-07-09-01-unguided' => 'Review the book — pick when to do it.',
+    'act-07-09-01-checkpoint' => 'Default book purpose — pick the role.',
+    // Prep a coached Live warm-up hand densified asks (LPT-663) — same path.
+    'act-07-11-01-guided' => 'Warm-up checklist — pick what belongs.',
+    'act-07-11-01-scaffolded' => 'Carry into Live — pick what travels.',
+    'act-07-11-01-unguided' => 'Scope reminder — pick the product lane.',
+    'act-07-11-01-checkpoint' => 'Warm-up goal — pick the finish line.',
     _ => null,
   };
 }

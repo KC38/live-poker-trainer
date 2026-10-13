@@ -1222,26 +1222,35 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-07-06-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-07-06-01-checkpoint')!,
       // SoftPulse owns Baseline — don’t gold-tip the tile.
-      'act-07-07-01-checkpoint' => 'No type evidence — pick the default.',
+      'act-07-07-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-07-01-checkpoint')!,
       // SoftPulse owns All four — don’t gold-tip the tile.
-      'act-07-08-01-checkpoint' => 'Integrated decision — pick the input set.',
+      'act-07-08-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-08-01-checkpoint')!,
       // SoftPulse owns Specific note — don’t gold-tip the tile.
-      'act-07-09-01-guided' => 'Best leak note — pick the useful shape.',
+      'act-07-09-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-07-09-01-guided')!,
       // SoftPulse owns Written range — don’t gold-tip the tile.
       'act-07-09-01-scaffolded' =>
-        'BTN vs unknown BB — pick the default source.',
+        selectIdentifyDensifiedCoachLine('act-07-09-01-scaffolded')!,
       // Unguided: name the habit; don’t tip On a schedule.
-      'act-07-09-01-unguided' => 'Review the book — pick when to do it.',
+      'act-07-09-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-07-09-01-unguided')!,
       // SoftPulse owns Baseline — don’t gold-tip the tile.
-      'act-07-09-01-checkpoint' => 'Default book purpose — pick the role.',
+      'act-07-09-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-09-01-checkpoint')!,
       // SoftPulse owns Full list — don’t gold-tip the tile.
-      'act-07-11-01-guided' => 'Warm-up checklist — pick what belongs.',
+      'act-07-11-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-07-11-01-guided')!,
       // SoftPulse owns Defaults + exploits — don’t gold-tip the tile.
-      'act-07-11-01-scaffolded' => 'Carry into Live — pick what travels.',
+      'act-07-11-01-scaffolded' =>
+        selectIdentifyDensifiedCoachLine('act-07-11-01-scaffolded')!,
       // Unguided: name the habit; don’t tip Live cash NLH.
-      'act-07-11-01-unguided' => 'Scope reminder — pick the product lane.',
+      'act-07-11-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-07-11-01-unguided')!,
       // SoftPulse owns One hand — don’t gold-tip the tile.
-      'act-07-11-01-checkpoint' => 'Warm-up goal — pick the finish line.',
+      'act-07-11-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-11-01-checkpoint')!,
       // SoftPulse owns Station value — don’t gold-tip the tile.
       'act-07-12-01-cs' => 'Sticky calls — pick the label + exploit.',
       // SoftPulse owns Nit respect — don’t gold-tip the tile.
