@@ -71,6 +71,9 @@ PLIST="$HOME/Library/LaunchAgents/$LAUNCH_LABEL.plist"
 STATE_DIR="$HOME/.live-poker-trainer"
 LOG_DIR="$STATE_DIR/ui-agent-logs"
 HEALTH_FILE="$STATE_DIR/ui-agent-health.jsonl"
+# Last skip reason for `status` (empty-queue / primary-busy / sim-busy).
+# Written on exit 10/16 skips; cleared when a real agent run claims the mini.
+IDLE_FILE="$STATE_DIR/ui-agent-idle.json"
 STOP_FILE="$STATE_DIR/ui-agent.stop"
 PID_FILE="$STATE_DIR/ui-agent.pid"
 # Pid of the run-loop bash (not the agent). ensure/status use this so an
@@ -319,6 +322,50 @@ primary_is_clean_main() {
   [[ "$branch" == "main" ]] || return 1
   [[ -z "$(git -C "$dir" status --porcelain 2>/dev/null)" ]] || return 1
   return 0
+}
+
+# Record why the loop skipped so `status` can show idle without tmux attach.
+# reason: empty-queue | primary-busy | sim-busy
+record_idle_skip() {
+  local reason="$1"
+  local detail="${2:-}"
+  local at
+  at="$(date '+%Y-%m-%dT%H:%M:%S%z')"
+  python3 - "$IDLE_FILE" "$reason" "$detail" "$at" <<'PY' || true
+import json, sys
+from pathlib import Path
+path, reason, detail, at = sys.argv[1:5]
+obj = {"reason": reason, "at": at}
+if detail:
+    obj["detail"] = detail
+Path(path).write_text(json.dumps(obj) + "\n", encoding="utf-8")
+PY
+}
+
+clear_idle_skip() {
+  rm -f "$IDLE_FILE"
+}
+
+print_idle_status() {
+  [[ -f "$IDLE_FILE" ]] || return 0
+  python3 - "$IDLE_FILE" <<'PY' 2>/dev/null || true
+import json, sys
+from pathlib import Path
+obj = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+reason = obj.get("reason") or "unknown"
+at = obj.get("at") or "?"
+detail = (obj.get("detail") or "").strip()
+if reason == "empty-queue":
+    print(f"idle: empty-queue since {at}")
+elif reason == "primary-busy":
+    branch = detail or "unknown"
+    print(f"idle: primary-busy branch={branch} since {at}")
+elif reason == "sim-busy":
+    print(f"idle: sim-busy since {at}")
+else:
+    extra = f" detail={detail}" if detail else ""
+    print(f"idle: {reason} since {at}{extra}")
+PY
 }
 
 
@@ -2165,13 +2212,16 @@ one_run() {
   # UI_AGENT_SKIP_SIM_PREFLIGHT=1 and use a disposable PRIMARY.
   if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! primary_is_clean_main; then
     local _branch
-    _branch="$(git -C "$(primary)" rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+    _branch="$(git -C "$(primary)" rev-parse --abbrev-ref HEAD 2>/dev/null | head -1 | tr -d '\r')"
+    [[ -n "$_branch" ]] || _branch="unknown"
     log "primary checkout is on '${_branch}' (not clean main); skipping this run"
+    record_idle_skip primary-busy "$_branch"
     unset _branch
     return 10
   fi
   if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! ui_queue_has_ticket; then
     log "ui-queue empty (no actionable ui-agent ticket); skipping this run"
+    record_idle_skip empty-queue
     return 16
   fi
   if ! logged_in; then
@@ -2181,6 +2231,7 @@ one_run() {
   if ! sim_lock status >/dev/null 2>&1; then
     log "iPhone 13 mini is busy; skipping this run"
     sim_lock status 2>&1 | sed 's/^/    /' || true
+    record_idle_skip sim-busy
     return 10
   fi
 
@@ -2197,8 +2248,11 @@ one_run() {
   run_id="$(sim_lock claim --owner ui-design-agent --purpose "preflight: sim ready" --pid $$ 2>/dev/null)" || {
     log "iPhone 13 mini is busy; skipping this run"
     sim_lock status 2>&1 | sed 's/^/    /' || true
+    record_idle_skip sim-busy
     return 10
   }
+  # A real run is starting — drop the skip stamp so status is not stale.
+  clear_idle_skip
   export SIM_LOCK_RUN_ID="$run_id"
   export SIM_LOCK_PID=$$
 
@@ -2740,6 +2794,7 @@ EOF
     else
       echo "loop: not running"
     fi
+    print_idle_status
     echo "launcher: $LAUNCHER"
     echo "sdk-runtime: $SDK_RUNTIME"
     if [[ "$SDK_RUNTIME" == "machine" ]]; then
