@@ -2742,7 +2742,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-05-01-explain", 1,
                 "More players: fewer bluffs, thicker value.",
-                {objectives: ["Bluff less multiway"]}),
+                {
+                  objectives: ["Bluff less multiway"],
+                  // LPT-321
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "FEWER", kind: "soft_pulse"},
+                      {press: 2, target: "THICKER", kind: "soft_pulse"},
+                      {press: 3, target: "WIDEN", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-07-05-01-guided", order: 2, stage: "guided",
                 prompt: "Four-way river. Naked air bluff?",
@@ -2754,6 +2765,8 @@ export function buildSectionSeven() {
                   choice("yes", "Always yes", "clear_mistake",
                     "Leak.", {betterChoiceId: "no"})
                 ],
+                // LPT-321
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "no", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-05-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2767,6 +2780,8 @@ export function buildSectionSeven() {
                   choice("same", "Identical always", "clear_mistake",
                     "No.", {betterChoiceId: "higher"})
                 ],
+                // LPT-321
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "higher", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-05-01-unguided", order: 4, stage: "scaffolded",
@@ -2779,6 +2794,8 @@ export function buildSectionSeven() {
                   choice("slow", "Ultra-slow every time", "questionable",
                     "Risk free cards.")
                 ],
+                // LPT-321
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "thick", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2791,6 +2808,8 @@ export function buildSectionSeven() {
                   choice("ignore", "Noise", "clear_mistake",
                     "No.", {betterChoiceId: "input"})
                 ],
+                // LPT-321
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "input", kind: "none"}]},
               }),
             ],
           }),

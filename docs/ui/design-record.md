@@ -576,7 +576,8 @@ depth (LPT-280), Make difficult folds; review coolers fairly (LPT-283),
 Observe selective aggression (LPT-286), Meet the TAG (LPT-289), Adjust
 versus TAG (LPT-292), Meet the LAG (LPT-298), Same cards, five type models
 (LPT-304), Section 6 checkpoint (LPT-307), Carry a preflop plan onto the
-flop (LPT-308), Change plans by pot type (LPT-318).
+flop (LPT-308), Change plans by pot type (LPT-318), Switch gears between HU
+and multiway (LPT-321).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1109,6 +1110,11 @@ LIMPED → SRP → 3-4BET; guided `none` → `nuts`; scaffolded `none` → `cb`;
 unguided `none` → `commit`; checkpoint `none` → `both`; assessment steps use
 cue kind `none` (no pressHints).
 
+Switch gears between HU and multiway `teachSpec` (LPT-321): explain
+SoftPulse advances FEWER → THICKER → WIDEN; guided `none` → `no`; scaffolded
+`none` → `higher`; unguided `none` → `thick`; checkpoint `none` → `input`;
+assessment steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1540,7 +1546,7 @@ felt.
 | Map turn barrels before you bet flop | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506) | no-plan and definition checks |
 | Compose river value and bluffs | Value, Bluff, Hold | blocker, empty, and rule checks |
 | Change plans by pot type | Limped, SRP, 3-4bet | — |
-| Switch gears between HU and multiway | Fewer, Thicker, Widen | player-count quizzes |
+| Switch gears between HU and multiway | Fewer, Thicker, Widen | — |
 | Rewrite plans when stacks change | Short, Deep, Effective | depth quizzes |
 | Replay the same hand versus each type | Cards, Models, Cite | no-evidence check |
 | Integrate type, board, line, and sizing | Type, Board, Line, Size | integration check |
