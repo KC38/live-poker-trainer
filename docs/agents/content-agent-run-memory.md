@@ -554,3 +554,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - First tip-comment batch on this SHA used an unquoted `python3 <<PY` heredoc; shell ate backticks and left empty SHA/`teachSpec` placeholders. Posted corrected comments the same tick. Distilled Never into lesson-content-agent-learnings.md.
 - Soft timing densify still ABSENT; frontier LPT-242/312/315; next Capstone LPT-341+. Pending cleared. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(89)/635/624(51)/625(24) OR Capstone LPT-341+.
+
+## Fold 2026-10-13 tip a92e6cfe (#2010 LPT-648 Meet TAG densify)
+
+- Started on tip-stable `8f62f683` (#2009) with catalog already synced — tip-commented unchecked Capstone/High/honesty tickets (LPT-341+ / LPT-258·295 / IP teachSpecs / LPT-401…417 / LPT-348). Mid-run tip advanced to `a92e6cfe` via #2010 LPT-648 Meet the TAG densify.
+- `scan_content_gaps --counts` on tip `a92e6cfe`: pressHints **151**, deal-variants **89**, teachSpec **58**, explain-teachSpec **27**, nice-ladder **51**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **61** (was **57**).
+- Verified Meet TAG arms PRESENT: `act-06-11-02-guided` / scaffolded / unguided / checkpoint in `selectIdentifyDensifiedCoachLine`. Soft timing `act-05-07-01-*` still ABSENT. Capstone multiway `act-07-10-03-explain` + `hand` still MISSING teachSpec (Dart still Ah/Qh · Jh/8h/2c nut FD).
+- Rebuilt catalog densify-tap **LPT-628** helper **57→61** / fallthrough **143→139**; tip-commented LPT-624/625/626/627/635 + LPT-648 ack + frontier LPT-242/312/315/341. JSON gaps flat — parents tip-comment only aside from LPT-628.
+- Distilled Never: nested f-string wiki monospace (`f"{{{{{{sha}}}}}}"` → literal `{{{sha}}}`); use `'{{' + sha + '}}'`. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR Capstone LPT-341 OR catalog LPT-626(151)/627(89)/635/624(51)/625(24).
