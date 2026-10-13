@@ -1362,3 +1362,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-348** Capstone human policy OR oldest Low curriculum discovery (`lesson-01-02-02-best-five-kickers` / `lesson-01-05-01-winning-pots` / … — five-type-final now walked).
 - act-07-12-01-*: structural clean on tip — teachSpec companion LPT-352 Done; densify LPT-443 Done.
 
+## Fold 2026-10-14r (528069f0 discovery best-five-kickers)
+
+- Tip `528069f0` (#2180 after #2179). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348** (already HAS tip — no re-spam). S7 Capstone/final walks complete — oldest Low curriculum resumes.
+- Discovery oldest-unfresh `lesson-01-02-02-best-five-kickers`: teachSpec on all five; explain SoftPulse + `explainGrading` (`random_in_class`); guided SoftPulse; scaffolded/unguided one-per-press; checkpoint-build cues 1–5 with matching pressHints (post-LPT-667). Structural clean — prior memory of checkpoint pressHints=1 is STALE.
+- Curriculum multi-concept still **LPT-93** needs-human (tip-commented on `528069f0`). Tip-commented Done parents that NEED tip SHA.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-01-05-01-winning-pots` / Low curriculum.
+- act-01-02-02-*: structural clean on tip — curriculum split only via LPT-93.
