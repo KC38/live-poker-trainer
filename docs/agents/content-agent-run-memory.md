@@ -969,3 +969,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Rebuilt catalog parents from `--gap … --markdown`: **LPT-624** nice 66, **LPT-627** deal-variants 99, **LPT-635** explain-teachSpec 12, **LPT-628** densify-tap 17 (Meet Nit/Maniac, five-type final, jumps, early SI remain). Tip-commented **LPT-626** pressHints still 151 (Meet Nit unguided) + **LPT-625** + honesty **LPT-414** still Gutshot-ish + **LPT-348**.
 - Meet Nit: teachSpec PRESENT but Nice! **LPT-624** / pressHints **LPT-626** / densify rows on **LPT-628** — no clones. LPT-216 Done. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
 - next: densify remaining 17 on LPT-628 OR Nice! LPT-624 OR pressHints LPT-626 OR LPT-414 OR catalog LPT-627(99)/635(12)/625(24).
+
+## 2026-10-13cq — tip `9a7bfc87` (#2106) + LPT-666 ADVANTAGE⊃TAG
+
+- Tip advanced → `9a7bfc87` (#2106 learnings fold of `03e193e8`/#2105). `scan_content_gaps --counts` still flat vs product tip: pressHints **151** / deal-variants **99** / teachSpec **0** / explain-teachSpec **12** / nice-ladder **66** / unguided-softpulse-map **24** / densify-tap **17** / densifyHelperArms **212**. Catalog parents match — tip-comment only (no rebuild).
+- Prior `03e193e8` coverage omitted Medium **LPT-370**/ **LPT-588** + Done **LPT-558** — tip-commented those on `03e193e8` (quoted heredoc bodies) then tip-commented parents+Highs+Mediums+LPT-558 on `9a7bfc87`. Soft timing densify PRESENT; densify Priority = remaining **17** on LPT-628.
+- Filed High **LPT-666**: `act-06-01-01-explain` SoftPulse cue target **ADVANTAGE** makes `blob.includes("TAG")` true and fails `course-contract` wave-three early-name test on tip (false positive — not player-type TAG). Grep SoftPulse cue targets for TAG/LAG substrings after teachSpec batch lands.
+- Honesty/Medium still valid: **LPT-414** Gutshot-ish; **LPT-370** cues null; **LPT-588** Scene flop-only. Meet Nit LPT-624/626. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
+- next: LPT-666 ADVANTAGE/TAG guard OR densify remaining 17 on LPT-628 OR Nice! LPT-624 OR pressHints LPT-626 OR LPT-414 OR catalog LPT-627(99)/635(12)/625(24).
