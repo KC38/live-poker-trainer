@@ -590,3 +590,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Rebuilt catalog densify-tap **LPT-628** helper **69→71** / fallthrough **131→129**; tip-commented LPT-624/625/626/627/635 (JSON flat) + LPT-651 arms-PRESENT ack (leave Done to ui-agent Validated-on-origin/main) + Capstone/frontier/High/honesty/fingerprint unchecked (LPT-345/242/312/315/252…352/401…417/348/301). Relates LPT-651↔LPT-628.
 - Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-345 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(90)/635/624(52)/625(24).
+
+## Fold 2026-10-13 tip 99f9889b (#2022 LPT-345 Capstone limped)
+
+- Started tip-stable `cff31614` (#2020 learnings after #2019 LPT-651) with catalog already synced — tip-commented parents + frontier LPT-345/242/312/315 + densify≠teachSpec LPT-301. Mid-run tip advanced to `99f9889b` via #2022 LPT-345 Capstone limped teachSpec.
+- `scan_content_gaps --counts` on tip `99f9889b`: pressHints **151**, deal-variants **91**, teachSpec **56**, explain-teachSpec **25**, nice-ladder **53**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **71**.
+- Verified Capstone limped teachSpec PRESENT: `act-07-10-04-explain` (`deal.mode` `none` + SoftPulse NUTS→VALUE→THIN; no `explainGrading`); `act-07-10-04-hand` (`deal.mode` `fixed` Ah/Kh · Kd/9c/4h/2s/8d + cues bet/barrel/value; no `deal.variants`). SoftPulse-quiet hand not on pressHints scanner checklist (still **151**).
+- Rebuilt **LPT-624** Nice! **52→53**; rebuilt **LPT-627** deal-variants **90→91**; tip-commented LPT-626/625/628/635 (pressHints/map/densify flat; explain-teachSpec drop — keep 12 S1–S2); Done-ack **LPT-345**; tip-commented next Capstone **LPT-347** still both MISSING + frontier LPT-242/312/315.
+- Soft timing densify still ABSENT; densify ≠ teachSpec LPT-301. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-347 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
