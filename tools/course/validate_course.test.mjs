@@ -28,7 +28,18 @@ test("seed course validates and shares contentChecksum", () => {
     clientCatalog.sections[0].units[0].lessons[0].id ===
       "lesson-01-01-01-your-two-cards",
   );
-  assert.equal(clientCatalog.sections[0].units.length, 6);
+  assert.equal(clientCatalog.sections[0].units.length, 8); // LPT-83: suits unit + blinds unit
+  assert.deepEqual(
+    clientCatalog.lessonSplitMap["lesson-01-01-02-suits-and-ranks"],
+    [
+      "lesson-01-01-02-01-suits",
+      "lesson-01-01-02-02-ranks",
+      "lesson-01-01-02-03-pairs-and-suited",
+    ],
+  );
+  assert.ok(
+    clientCatalog.sections[0].units.some((u) => u.id === "unit-01-01-02-suits-and-ranks"),
+  );
   assert.equal(clientCatalog.sections[1].units.length, 7);
 });
 
@@ -74,7 +85,7 @@ test("wave one sections expose full unit trees and jump tests", () => {
   const sec2 = clientCatalog.sections[1];
   assert.equal(sec1.id, "sec-01-never-played");
   assert.equal(sec2.id, "sec-02-rules-known");
-  assert.equal(sec1.units.length, 6);
+  assert.equal(sec1.units.length, 8); // LPT-83: suits unit + blinds unit
   assert.equal(sec2.units.length, 7);
   assert.ok(
     sec1.units.some((u) =>

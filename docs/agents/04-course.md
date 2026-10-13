@@ -37,6 +37,9 @@ Hint** (`transfer` = Capstone intentional no-Hint assessment, LPT-348). Home pat
 separate stage). Legacy catalogs map explain→guided; unguided→scaffolded;
 old checkpoint/jump_test stages→scaffolded+role.
 
+Curriculum splits: catalog `lessonSplitMap` maps a retired multi-concept lesson id to successor lesson ids. Completed progress on the retired id counts as completed for every successor (Home unlocks + `startLesson` prereqs). LPT-83+.
+
+
 Every scaffolded non-assessment step authors `pressHints` — one short
 class-language nudge per SoftPulse cue press (LPT-626 empty-array floor;
 LPT-667 one-per-press). No card codes, no hand shorthand, never the

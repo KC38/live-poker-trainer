@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "4b41855c16c9f6f8259737ed1a64f3351245286f1febfca849d1e79e5b1efd95",
+  "contentChecksum": "44bcf22fed7d8fcf2a2a3e1f0e6410bb66c5f2201551c4cf452cabe914ea4837",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -36,6 +36,13 @@
       "summary": "Wide entry with sustained pressure."
     }
   ],
+  "lessonSplitMap": {
+    "lesson-01-01-02-suits-and-ranks": [
+      "lesson-01-01-02-01-suits",
+      "lesson-01-01-02-02-ranks",
+      "lesson-01-01-02-03-pairs-and-suited"
+    ]
+  },
   "sections": [
     {
       "id": "sec-01-never-played",
@@ -396,16 +403,22 @@
                   }
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "id": "unit-01-01-02-suits-and-ranks",
+          "order": 2,
+          "title": "Suits and ranks",
+          "summary": "Name suits, order ranks, and spot pairs or suited cards.",
+          "lessons": [
             {
-              "id": "lesson-01-01-02-suits-and-ranks",
-              "order": 2,
-              "title": "Suits and ranks",
-              "summary": "Name ranks and suits, and spot when cards match.",
+              "id": "lesson-01-01-02-01-suits",
+              "order": 1,
+              "title": "Suits",
+              "summary": "Name the four suits on the board.",
               "objectives": [
-                "Name the four suits",
-                "Order ranks from deuce to ace",
-                "Spot pairs and suited cards"
+                "Name the four suits"
               ],
               "prerequisites": [
                 "lesson-01-01-01-your-two-cards"
@@ -413,7 +426,7 @@
               "remediationLessonIds": [
                 "lesson-01-01-01-your-two-cards"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 4,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -534,6 +547,284 @@
                   }
                 },
                 {
+                  "id": "act-01-01-02-01-scaffolded-suits",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Tap hearts, diamonds, clubs, and spades on the board.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Name the four suits"
+                  ],
+                  "prompt": "Tap one community card of each suit.",
+                  "choices": [
+                    {
+                      "id": "suits-full",
+                      "label": "Hearts, diamonds, clubs, spades",
+                      "accessibilityText": "Hearts, diamonds, clubs, spades",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Those four cover the deck."
+                      }
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-02-guided-suits-hint",
+                      "kind": "hint",
+                      "text": "Four suits — one card of each on the board."
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "suitFamily": "four_suits"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "board_hearts",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "board_diamonds",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "board_clubs",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_spades",
+                        "kind": "soft_pulse"
+                      }
+                    ],
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Find a heart on the board."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Next, find a diamond."
+                      },
+                      {
+                        "press": 3,
+                        "text": "Then a club."
+                      },
+                      {
+                        "press": 4,
+                        "text": "Finish with a spade."
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "act-01-01-02-01-checkpoint-suits",
+                  "order": 4,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Tap hearts, diamonds, clubs, and spades on the board.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Name the four suits"
+                  ],
+                  "prompt": "Tap one community card of each suit.",
+                  "choices": [
+                    {
+                      "id": "suits-full",
+                      "label": "Hearts, diamonds, clubs, spades",
+                      "accessibilityText": "Hearts, diamonds, clubs, spades",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Those four cover the deck."
+                      }
+                    }
+                  ],
+                  "coachMedia": [],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "suitFamily": "four_suits"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "board_hearts",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "board_diamonds",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 3,
+                        "target": "board_clubs",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_spades",
+                        "kind": "none"
+                      }
+                    ]
+                  },
+                  "assessmentRole": "checkpoint"
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-01-02-02-ranks",
+              "order": 2,
+              "title": "Ranks",
+              "summary": "Order ranks from deuce to ace.",
+              "objectives": [
+                "Order ranks from deuce to ace"
+              ],
+              "prerequisites": [
+                "lesson-01-01-02-01-suits"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-01-02-01-suits"
+              ],
+              "estimatedMinutes": 4,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-01-02-02-explain-ranks",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Order ranks from deuce to ace"
+                  ],
+                  "accessibilityText": "Ranks climb from deuce to ace. Lowest first, highest last.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-02-02-explain-ranks-line",
+                      "kind": "dialogue",
+                      "text": "Ranks climb from deuce to ace. Lowest first, highest last."
+                    }
+                  ],
+                  "okFeedback": "Deuce low, ace high.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "DEUCE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MIDDLE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "ACE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Deuce low, then the middle ranks, ace high."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-01-01-02-02-guided-ranks",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Tap the three board ranks from lowest to highest.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Order ranks from deuce to ace"
+                  ],
+                  "prompt": "Tap these ranks from lowest to highest.",
+                  "sequenceItems": [
+                    {
+                      "id": "rank-2",
+                      "label": "2"
+                    },
+                    {
+                      "id": "rank-T",
+                      "label": "T"
+                    },
+                    {
+                      "id": "rank-A",
+                      "label": "A"
+                    }
+                  ],
+                  "correctSequence": [
+                    "rank-2",
+                    "rank-T",
+                    "rank-A"
+                  ],
+                  "sequenceGrading": {
+                    "correct": {
+                      "grade": "recommended",
+                      "feedback": "Lowest first, then the middle rank, highest last."
+                    },
+                    "incorrect": {
+                      "grade": "clear_mistake",
+                      "feedback": "Start with the smallest rank and climb up."
+                    }
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "suitFamily": "rainbow"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "rank-2",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "rank-T",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "rank-A",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                },
+                {
                   "id": "act-01-01-02-scaffolded-ranks",
                   "order": 3,
                   "stage": "scaffolded",
@@ -546,7 +837,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Order ranks from lowest to highest"
+                    "Order ranks from deuce to ace"
                   ],
                   "prompt": "Tap these ranks from lowest to highest.",
                   "sequenceItems": [
@@ -618,8 +909,215 @@
                   }
                 },
                 {
-                  "id": "act-01-01-02-unguided-suited",
+                  "id": "act-01-01-02-02-checkpoint-ranks",
                   "order": 4,
+                  "stage": "scaffolded",
+                  "renderer": "order_sequence",
+                  "estimatedSeconds": 50,
+                  "accessibilityText": "Tap the three board ranks from lowest to highest.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Order ranks from deuce to ace"
+                  ],
+                  "prompt": "Tap these ranks from lowest to highest.",
+                  "sequenceItems": [
+                    {
+                      "id": "rank-2",
+                      "label": "2"
+                    },
+                    {
+                      "id": "rank-T",
+                      "label": "T"
+                    },
+                    {
+                      "id": "rank-A",
+                      "label": "A"
+                    }
+                  ],
+                  "correctSequence": [
+                    "rank-2",
+                    "rank-T",
+                    "rank-A"
+                  ],
+                  "sequenceGrading": {
+                    "correct": {
+                      "grade": "recommended",
+                      "feedback": "Lowest first, then the middle rank, highest last."
+                    },
+                    "incorrect": {
+                      "grade": "clear_mistake",
+                      "feedback": "Start with the smallest rank and climb up."
+                    }
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "high_card",
+                      "suitFamily": "rainbow"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "rank-2",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 2,
+                        "target": "rank-T",
+                        "kind": "none"
+                      },
+                      {
+                        "press": 3,
+                        "target": "rank-A",
+                        "kind": "none"
+                      }
+                    ]
+                  },
+                  "assessmentRole": "checkpoint"
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-01-02-03-pairs-and-suited",
+              "order": 3,
+              "title": "Pairs and suited",
+              "summary": "Spot pocket pairs and suited hole cards.",
+              "objectives": [
+                "Spot pairs and suited cards"
+              ],
+              "prerequisites": [
+                "lesson-01-01-02-02-ranks"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-01-02-02-ranks"
+              ],
+              "estimatedMinutes": 4,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-01-02-03-explain-pairs",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Spot pairs and suited cards"
+                  ],
+                  "accessibilityText": "Pair means same rank. Suited means same suit.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-02-03-explain-pairs-line",
+                      "kind": "dialogue",
+                      "text": "Pair = same rank. Suited = same suit. Spot both."
+                    }
+                  ],
+                  "okFeedback": "Rank match vs suit match.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PAIR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SUITED",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Same rank is a pair. Same suit is suited."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-01-01-02-03-guided-suited",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Tap the seat whose hole cards share a suit.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Spot pairs and suited cards"
+                  ],
+                  "prompt": "Tap the suited hole cards.",
+                  "choices": [
+                    {
+                      "id": "suited-ah-kh",
+                      "label": "Suited",
+                      "accessibilityText": "Suited",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Same suit — that is suited."
+                      }
+                    },
+                    {
+                      "id": "offsuit-ah-kd",
+                      "label": "Offsuit",
+                      "accessibilityText": "Offsuit",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Different suits. That is offsuit.",
+                        "betterChoiceId": "suited-ah-kh"
+                      }
+                    },
+                    {
+                      "id": "pair-77",
+                      "label": "Pocket pair",
+                      "accessibilityText": "Pocket pair",
+                      "grading": {
+                        "grade": "questionable",
+                        "feedback": "That is a pair, not suited. Look for matching suits."
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "suitFamily": "suited",
+                      "variants": [
+                        {
+                          "id": "var-offsuit-seat",
+                          "suitFamily": "offsuit",
+                          "label": "Offsuit distractor seat"
+                        },
+                        {
+                          "id": "var-pair-seat",
+                          "handFamily": "pair",
+                          "label": "Pocket pair distractor seat"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "suited_seat",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "act-01-01-02-unguided-suited",
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -697,7 +1195,7 @@
                 },
                 {
                   "id": "act-01-01-02-checkpoint-pair",
-                  "order": 5,
+                  "order": 4,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -770,7 +1268,15 @@
                   }
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "id": "unit-01-01-03-blinds-and-button",
+          "order": 3,
+          "title": "Button and blinds",
+          "summary": "Dealer button, small blind, and big blind.",
+          "lessons": [
             {
               "id": "lesson-01-01-03-blinds-and-button",
               "order": 3,
@@ -782,10 +1288,10 @@
                 "Know blinds post before cards are dealt"
               ],
               "prerequisites": [
-                "lesson-01-01-02-suits-and-ranks"
+                "lesson-01-01-02-03-pairs-and-suited"
               ],
               "remediationLessonIds": [
-                "lesson-01-01-02-suits-and-ranks"
+                "lesson-01-01-02-03-pairs-and-suited"
               ],
               "estimatedMinutes": 6,
               "difficultyBand": 1,
@@ -1107,7 +1613,7 @@
         },
         {
           "id": "unit-01-02-what-beats-what",
-          "order": 2,
+          "order": 4,
           "title": "What beats what",
           "summary": "Hand ranks, best five of seven, ties and kickers.",
           "lessons": [
@@ -1975,7 +2481,7 @@
         },
         {
           "id": "unit-01-03-five-actions",
-          "order": 3,
+          "order": 5,
           "title": "The five actions",
           "summary": "Fold, check, call, bet, raise — and all-in limits.",
           "lessons": [
@@ -2682,7 +3188,7 @@
         },
         {
           "id": "unit-01-04-streets",
-          "order": 4,
+          "order": 6,
           "title": "Streets of a hand",
           "summary": "Preflop through river, and when a street ends.",
           "lessons": [
@@ -3067,7 +3573,7 @@
         },
         {
           "id": "unit-01-05-winning-pots",
-          "order": 5,
+          "order": 7,
           "title": "Winning and protecting pots",
           "summary": "Folds versus showdown, and side-pot intuition.",
           "lessons": [
@@ -3508,7 +4014,7 @@
         },
         {
           "id": "unit-01-06-first-complete-hand",
-          "order": 6,
+          "order": 8,
           "title": "First complete hand",
           "summary": "Guided hand from blinds through a terminal state.",
           "lessons": [
@@ -33803,6 +34309,76 @@
         }
       }
     },
+    "act-01-01-02-01-scaffolded-suits": {
+      "activityId": "act-01-01-02-01-scaffolded-suits",
+      "stage": "scaffolded",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "choiceGrading": {
+        "suits-full": {
+          "grade": "recommended",
+          "feedback": "Those four cover the deck."
+        }
+      }
+    },
+    "act-01-01-02-01-checkpoint-suits": {
+      "activityId": "act-01-01-02-01-checkpoint-suits",
+      "stage": "scaffolded",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "assessmentRole": "checkpoint",
+      "choiceGrading": {
+        "suits-full": {
+          "grade": "recommended",
+          "feedback": "Those four cover the deck."
+        }
+      }
+    },
+    "act-01-01-02-02-explain-ranks": {
+      "activityId": "act-01-01-02-02-explain-ranks",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Deuce low, then the middle ranks, ace high."
+      }
+    },
+    "act-01-01-02-02-guided-ranks": {
+      "activityId": "act-01-01-02-02-guided-ranks",
+      "stage": "guided",
+      "renderer": "order_sequence",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "correctSequence": [
+        "rank-2",
+        "rank-T",
+        "rank-A"
+      ],
+      "sequenceGrading": {
+        "correct": {
+          "grade": "recommended",
+          "feedback": "Lowest first, then the middle rank, highest last."
+        },
+        "incorrect": {
+          "grade": "clear_mistake",
+          "feedback": "Start with the smallest rank and climb up."
+        }
+      }
+    },
     "act-01-01-02-scaffolded-ranks": {
       "activityId": "act-01-01-02-scaffolded-ranks",
       "stage": "scaffolded",
@@ -33825,6 +34401,69 @@
         "incorrect": {
           "grade": "clear_mistake",
           "feedback": "Start with the smallest rank and climb up."
+        }
+      }
+    },
+    "act-01-01-02-02-checkpoint-ranks": {
+      "activityId": "act-01-01-02-02-checkpoint-ranks",
+      "stage": "scaffolded",
+      "renderer": "order_sequence",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "assessmentRole": "checkpoint",
+      "correctSequence": [
+        "rank-2",
+        "rank-T",
+        "rank-A"
+      ],
+      "sequenceGrading": {
+        "correct": {
+          "grade": "recommended",
+          "feedback": "Lowest first, then the middle rank, highest last."
+        },
+        "incorrect": {
+          "grade": "clear_mistake",
+          "feedback": "Start with the smallest rank and climb up."
+        }
+      }
+    },
+    "act-01-01-02-03-explain-pairs": {
+      "activityId": "act-01-01-02-03-explain-pairs",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Same rank is a pair. Same suit is suited."
+      }
+    },
+    "act-01-01-02-03-guided-suited": {
+      "activityId": "act-01-01-02-03-guided-suited",
+      "stage": "guided",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "choiceGrading": {
+        "suited-ah-kh": {
+          "grade": "recommended",
+          "feedback": "Same suit — that is suited."
+        },
+        "offsuit-ah-kd": {
+          "grade": "clear_mistake",
+          "feedback": "Different suits. That is offsuit.",
+          "betterChoiceId": "suited-ah-kh"
+        },
+        "pair-77": {
+          "grade": "questionable",
+          "feedback": "That is a pair, not suited. Look for matching suits."
         }
       }
     },

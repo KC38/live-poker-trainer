@@ -715,6 +715,7 @@ class CourseCatalog {
     required this.contentChecksum,
     required this.playerTypes,
     required this.sections,
+    this.lessonSplitMap = const <String, List<String>>{},
   });
 
   /// Catalog semver.
@@ -737,6 +738,9 @@ class CourseCatalog {
 
   /// Sections.
   final List<CourseSection> sections;
+
+  /// Retired multi-concept lesson id → successor lesson ids (LPT-83+).
+  final Map<String, List<String>> lessonSplitMap;
 
   /// Depth-first lesson ids in catalog order.
   List<String> get lessonIdsInOrder {
@@ -792,6 +796,19 @@ class CourseCatalog {
         }
       }
     }
+    final splitRaw = json['lessonSplitMap'];
+    final lessonSplitMap = <String, List<String>>{};
+    if (splitRaw is Map) {
+      for (final entry in splitRaw.entries) {
+        final key = entry.key.toString();
+        final value = entry.value;
+        if (value is List) {
+          lessonSplitMap[key] = List<String>.unmodifiable([
+            for (final item in value) item.toString(),
+          ]);
+        }
+      }
+    }
     return CourseCatalog(
       catalogVersion: json['catalogVersion'] as String,
       minClientVersion: json['minClientVersion'] as String,
@@ -800,6 +817,7 @@ class CourseCatalog {
       contentChecksum: json['contentChecksum'] as String,
       playerTypes: List.unmodifiable(playerTypes),
       sections: List.unmodifiable(sections),
+      lessonSplitMap: Map<String, List<String>>.unmodifiable(lessonSplitMap),
     );
   }
 
