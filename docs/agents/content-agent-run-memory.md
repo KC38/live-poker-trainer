@@ -1377,3 +1377,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Done-ack LPT-108/109/358/375/586/558/97 on tip (all NEED before comment).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-01-06-02-section-one-jump` / `lesson-02-02-01-hand-families` (**LPT-121**) / Low curriculum.
 - act-01-06-01-*: structural clean on tip — teachSpec LPT-108 Done; pressHints LPT-109/667 Done; explain LPT-358 Done; variants LPT-375 Done; wave labs LPT-586/558 Done.
+
+## Fold 2026-10-14t (be5bc2c2 discovery implied-odds)
+
+- Tip-stable `be5bc2c2` (#2185). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip — no re-spam). Open facing-raise learnings draft #2186 still on tip (not rescued — tip flat).
+- Discovery oldest-coverage `lesson-05-03-01-implied-odds`: explain SoftPulse IMPLIED→REVERSE→SECOND + activity-level `explainGrading`; guided/scaffolded/unguided `poker_action_sizing` `deal.mode` `fixed` + suit-rotated `deal.variants` match Dart `resolveLessonActionSpot`; SoftPulse cues `call-io` / `rio` / `nonut` (Dart map present); scaffolded/unguided one-per-press OK; checkpoint assessmentRole hintless cue `depth-pay` kind `none` (densify `ioDepthPay` PRESENT). Structural clean. Curriculum **LPT-230** tip-commented (three concepts + checkpoint objective/rhythm still valid). Done companions LPT-228/229/393/458/515/605/606/607 stay Done.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-05-04-01-thin-value-bluffcatch` (**LPT-233**) / Low curriculum.
+- act-05-03-01-*: structural clean on tip — teachSpec/pressHints/variants/Nice!/SoftPulse-map/densify companions Done; curriculum via LPT-230 only.
+
