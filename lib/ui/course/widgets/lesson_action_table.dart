@@ -615,7 +615,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         potLabel: 'Pot 40',
         villainLine: 'Raise · reraise multiway',
         // Structural — don’t tip Fold / weak kicker on the felt.
-        streetLabel: 'Flop · Weak TPTK · Heat',
+        streetLabel: 'Flop · Weak top pair · Heat',
         facingBet: true,
         feltStatusLine: 'Facing raise · multiway',
       );

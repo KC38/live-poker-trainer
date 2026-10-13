@@ -65,7 +65,7 @@ void main() {
       'act-03-05-01-unguided': (HandClass.monster, 'hearts'),
       'act-03-06-01-guided': (HandClass.strongMade, 'brick'),
       'act-03-06-01-unguided': (HandClass.topPair, 'quiet line'),
-      'act-03-08-01-guided': (HandClass.topPair, 'Weak TPTK'),
+      'act-03-08-01-guided': (HandClass.topPair, 'Weak top pair'),
       'act-03-08-01-unguided': (HandClass.air, 'Air'),
       'act-03-08-02-jump-river': (HandClass.strongMade, 'brick'),
     };
