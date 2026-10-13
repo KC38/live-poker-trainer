@@ -1498,6 +1498,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - act-04-06-03-*: structural clean on tip — teachSpec/pressHints/Nice!/densify/SoftPulse companions Done; curriculum via LPT-192 only.
 
 
-## Fold 2026-10-13
+## Fold 2026-10-14ap (11b692c0 overbets discovery + needs-human clarify)
 
-- 2026-10-14ap: Tip-stable `11b692c0` (#2215). densify-tap **3** / helper **229** (open Medium **LPT-628** after #2212); other JSON **0**. Discovery `lesson-06-05-01-overbets-geometric` structural clean (explain OVERBET→POLAR→GEO + `explainGrading`; scaffolded As/Kd·Ah7c2d9s + variants match Dart; SoftPulse `mid`/`polar-ob`/`avoid`/`multi`; densify PRESENT; one-per-press OK); tip-commented curriculum **LPT-267** (human-approved — removed stray `needs-human` re-added after approval); Done-ack LPT-265/266/472/497/638 + parents/348/216/Meet Nit. Never re-add `needs-human` after human removes it / approves id migration (same class as LPT-189/LPT-186). next: LPT-628 densify OR Low curriculum / oldest unfresh.
+- Tip-stable `11b692c0` (#2215). densify-tap **3** / helper **229** (open Medium **LPT-628** after #2212); other JSON **0**.
+- Discovery `lesson-06-05-01-overbets-geometric` structural clean (explain OVERBET→POLAR→GEO + `explainGrading`; scaffolded As/Kd·Ah7c2d9s + variants match Dart; SoftPulse `mid`/`polar-ob`/`avoid`/`multi`; densify PRESENT; one-per-press OK).
+- Tip-commented curriculum **LPT-267** (human-approved — removed stray `needs-human` re-added after approval); Done-ack LPT-265/266/472/497/638 + parents/348/216/Meet Nit.
+- Never re-add `needs-human` after human removes it / approves id migration (LPT-189/186/267/198).
+- next: LPT-628 densify OR `lesson-06-06-01-blockers` / Low curriculum.
