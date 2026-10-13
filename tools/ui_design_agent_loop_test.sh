@@ -1301,4 +1301,14 @@ grep -q 'coverage:closed ticket:LPT-644' <<<"$status_out" \
   || fail "status should still show last run health: $status_out"
 echo "status structured preview skip ok"
 
+
+# ensure rate-limits "already running" spam (LaunchAgent StartInterval).
+grep -q 'ensure-already-running.stamp' "$LOOP" || fail "ensure must rate-limit already-running logs"
+grep -q 'File each remaining solid Mac-mini lead' "$LOOP" \
+  || grep -q 'LPT-644' "$LOOP" \
+  || fail "READY prompt must require filing solid leads (LPT-644)"
+grep -q 'File solid leads before you report' "$ROOT/.cursor/commands/ui-design-agent.md" \
+  || fail "ui-design-agent.md must require filing solid leads before report"
+echo "ensure quiet + file-leads prompt ok"
+
 echo "ui-design-agent loop ok"
