@@ -1067,3 +1067,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: LPT-348 Capstone pressHints needs-human OR discovery walk (honesty/curriculum one-offs scanner cannot see).
 - act-04-07-02-unguided: pressHints PRESENT (#2135) — do not re-file pressHints clones; Capstone LPT-348 stays separate.
 
+## Fold 2026-10-13dg (43a1be2d discovery live-habits)
+
+- Tip-stable `43a1be2d` (#2138). `scan_content_gaps --counts` all structural gaps **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Open Medium: one-per-press **LPT-667** (6 rows) + Capstone needs-human **LPT-348** (five hands).
+- Discovery oldest-unfresh `lesson-02-06-01-live-habits`: teachSpec present; `deal.mode` `none` habit/identify tiles; scaffolded verbal/protect one-per-press complete; explain has `explainGrading`; checkpoint hintless. Structural clean. Curriculum multi-concept still **LPT-133** needs-human (tip-commented).
+- Tip-commented **LPT-667** / **LPT-348** / **LPT-133** / Done **LPT-626** / **LPT-216**. One-per-press checklist unchanged (6). Do not reopen **LPT-626**.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR Low curriculum / next oldest discovery.
+- act-02-06-01-*: structural clean on tip — curriculum split only via LPT-133.
