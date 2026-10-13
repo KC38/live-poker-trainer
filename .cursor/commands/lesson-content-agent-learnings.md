@@ -142,6 +142,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13dj: Tip `3007ac2b` (#2147). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. LPT-667/348 already **HAS** — no re-spam. Discovery oldest-unfresh `lesson-05-05-01-lines-and-probes` structural clean (explainGrading X/R→PROBE→DELAY→DONK; scaffolded fixed 9h8d/Kc9s3h matches Dart + variants + one-per-press; unguided polar one-per-press; checkpoint hintless cue kind `none`); tip-commented curriculum **LPT-236** + Done-ack **LPT-234**/parents/**LPT-216**. next: LPT-667 one-per-press OR LPT-348 needs-human OR next oldest (`lesson-05-06-01-line-reading`).
+
 - 2026-10-13di: Tip `4dbc5b9a` (#2145 Prefer/Capstone notes). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. LPT-667/348 already **HAS** tip — no re-spam. Discovery oldest-unfresh `lesson-04-08-02-meet-maniac` structural clean (explainGrading; unguided one-per-press; checkpoint hintless; `deal.mode` `none`); tip-commented curriculum **LPT-208** + Done-ack **LPT-206**. Acting-order fold from conflicted #2146 folded here (`scaffolded-post` stays on **LPT-667**). next: LPT-667 one-per-press OR LPT-348 needs-human OR next oldest (lines-and-probes).
 
 - 2026-10-13dh: Tip `65d01ce6` (#2142 LPT-667+position-labels). Monitor folded unique Prefer from superseded drafts #2139 (oldest-lesson discovery when gaps **0**) + #2140 (Capstone five-hand `NO_HINT` expand) + #2144 live-habits discovery notes. Catalog gaps still **0**; open Medium **LPT-667** + **LPT-348**. next: LPT-667 one-per-press OR LPT-348 needs-human OR next oldest discovery.

@@ -1137,3 +1137,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR next oldest discovery (`lesson-05-05-01-lines-and-probes`).
 - act-04-08-02-*: structural clean on tip — curriculum split only via LPT-208; not on LPT-667.
 
+## Fold 2026-10-13dj (3007ac2b discovery lines-and-probes)
+
+- Tip `3007ac2b` (#2147). `scan_content_gaps --counts` all structural gaps **0**; softpulseMapArms **92** / densifyHelperArms **229**. Open Medium: **LPT-667** (6 one-per-press) + **LPT-348** Capstone needs-human. LPT-667/348 already **HAS** tip — no rebuild/re-spam. Tip-commented Done parents LPT-624/625/626/627/628/635 + Done-ack LPT-234/LPT-216 on tip.
+- Discovery oldest-unfresh `lesson-05-05-01-lines-and-probes`: teachSpec on all five steps; explain SoftPulse X/R→PROBE→DELAY→DONK + `explainGrading`; guided `deal.mode` `none` cue `strong`; scaffolded `poker_action_sizing` fixed 9h8d/Kc9s3h (+ suit-rotated variants) matches Dart `resolveLessonActionSpot` + one-per-press probe; unguided `none` polar + one-per-press; checkpoint cue kind `none` / no pressHints. Structural clean — not appended to LPT-667.
+- Curriculum multi-concept / probe-vs-delay objective merge still **LPT-236** needs-human (tip-commented). Design-record Still-a-list nit/donk/delay STALE — do not file rebuild.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR next oldest discovery (`lesson-05-06-01-line-reading`).
+- act-05-05-01-*: structural clean on tip — curriculum split only via LPT-236; not on LPT-667.
+
