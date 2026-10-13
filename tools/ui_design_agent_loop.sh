@@ -11,6 +11,8 @@
 #   tools/ui_design_agent_loop.sh stop     soft-stop: finish current run, then ensure restarts
 #   tools/ui_design_agent_loop.sh soft-stop  alias for stop (reload bash / structural fixes)
 #   tools/ui_design_agent_loop.sh soft-stop-wait  soft-stop, then block until loop is idle again
+#   tools/ui_design_agent_loop.sh soft-stop-hold  soft-stop-wait + block ensure until release-hold
+#   tools/ui_design_agent_loop.sh release-hold  allow ensure to start the loop again
 #   tools/ui_design_agent_loop.sh kill     stop now and free a lock this loop holds
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
@@ -75,6 +77,9 @@ HEALTH_FILE="$STATE_DIR/ui-agent-health.jsonl"
 # Last skip reason for `status` (empty-queue / primary-busy / sim-busy).
 # Written on exit 10/16 skips; cleared when a real agent run claims the mini.
 IDLE_FILE="$STATE_DIR/ui-agent-idle.json"
+# When present, ensure no-ops so a health timer can file/ship without the
+# loop waking onto the same ticket (LPT-656 race 2026-10-13).
+HOLD_FILE="$STATE_DIR/ui-agent.hold"
 STOP_FILE="$STATE_DIR/ui-agent.stop"
 PID_FILE="$STATE_DIR/ui-agent.pid"
 # Pid of the run-loop bash (not the agent). ensure/status use this so an
@@ -2575,12 +2580,12 @@ run_pid_is_alive() {
   kill -0 "$pid" 2>/dev/null
 }
 
-# Soft-stop requested → wait until the current run ends, STOP_FILE clears,
-# and ensure has restarted run-loop. Health timers use this before filing
-# ui-agent tickets so they do not race a mid-flight agent (2026-10-13:
-# LPT-647 filed during empty-queue wake → parallel densify work).
+# Soft-stop requested → wait until the current run ends and STOP_FILE clears.
+# Default: also require ensure to have restarted run-loop.
+# With hold=1 (soft-stop-hold): require the loop to stay down under HOLD_FILE.
 wait_soft_stop_idle() {
   local timeout="${1:-$SOFT_STOP_WAIT_SECONDS}"
+  local hold_mode="${2:-0}"
   local start now elapsed
   [[ "$timeout" =~ ^[0-9]+$ ]] || timeout=7200
   start="$(date +%s)"
@@ -2591,11 +2596,16 @@ wait_soft_stop_idle() {
       echo "soft-stop-wait: timed out after ${timeout}s (run still active or loop down)" >&2
       return 1
     fi
-    if ! run_pid_is_alive \
-      && [[ ! -f "$STOP_FILE" ]] \
-      && loop_is_alive; then
-      echo "soft-stop-wait: idle (loop restarted, no active run) after ${elapsed}s"
-      return 0
+    if ! run_pid_is_alive && [[ ! -f "$STOP_FILE" ]]; then
+      if [[ "$hold_mode" == "1" ]]; then
+        if [[ -f "$HOLD_FILE" ]] && ! loop_is_alive; then
+          echo "soft-stop-hold: idle under hold after ${elapsed}s"
+          return 0
+        fi
+      elif loop_is_alive; then
+        echo "soft-stop-wait: idle (loop restarted, no active run) after ${elapsed}s"
+        return 0
+      fi
     fi
     sleep 5
   done
@@ -2751,6 +2761,10 @@ fi
 
 case "${1:-}" in
   start)
+    if [[ -f "$HOLD_FILE" ]]; then
+      echo "start: held (rm $HOLD_FILE or: $SCRIPT release-hold)"
+      exit 0
+    fi
     if loop_is_alive; then
       echo "already running: $SCRIPT attach"
       exit 0
@@ -2800,6 +2814,10 @@ EOF
     echo "installed $PLIST: starts at login, and every 5 minutes when the loop is down"
     ;;
   ensure)
+    if [[ -f "$HOLD_FILE" ]]; then
+      echo "ensure: held (rm $HOLD_FILE or: $SCRIPT release-hold)"
+      exit 0
+    fi
     if loop_is_alive; then
       # LaunchAgent StartInterval calls ensure every few minutes while the
       # loop is healthy (empty-queue sleep). Rate-limit the stdout line so
@@ -2843,6 +2861,29 @@ EOF
     touch "$STOP_FILE"
     echo "soft-stop-wait: requested; waiting up to ${SOFT_STOP_WAIT_SECONDS}s for idle"
     wait_soft_stop_idle "$SOFT_STOP_WAIT_SECONDS"
+    ;;
+  soft-stop-hold)
+    # Soft-stop, keep ensure from restarting until release-hold.
+    # Health timers that will file + ship a ticket themselves should use
+    # this so LaunchAgent / post-soft-stop ensure cannot race (LPT-656).
+    mkdir -p "$STATE_DIR"
+    touch "$HOLD_FILE"
+    touch "$STOP_FILE"
+    echo "soft-stop-hold: hold set; soft-stopping; waiting up to ${SOFT_STOP_WAIT_SECONDS}s"
+    if ! wait_soft_stop_idle "$SOFT_STOP_WAIT_SECONDS" 1; then
+      echo "soft-stop-hold: wait failed; hold remains ($HOLD_FILE)" >&2
+      exit 1
+    fi
+    echo "soft-stop-hold: idle and held (release: $SCRIPT release-hold)"
+    ;;
+  release-hold)
+    if [[ -f "$HOLD_FILE" ]]; then
+      rm -f "$HOLD_FILE"
+      echo "release-hold: cleared; starting ensure"
+    else
+      echo "release-hold: no hold file; starting ensure"
+    fi
+    bash "$SCRIPT" ensure
     ;;
   kill)
     touch "$STOP_FILE"
@@ -2896,6 +2937,9 @@ PY
     if [[ -f "$PLIST" ]]; then echo "login item: installed ($LAUNCH_LABEL)"; else echo "login item: not installed ($SCRIPT install)"; fi
     if [[ -f "$STOP_FILE" ]]; then
       echo "loop: stop requested (exits after current run; next ensure → launcher=$LAUNCHER runtime=$SDK_RUNTIME model=$(resolved_agent_model))"
+    fi
+    if [[ -f "$HOLD_FILE" ]]; then
+      echo "loop: ensure held (release: $SCRIPT release-hold)"
     fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
     sim_lock status || true
