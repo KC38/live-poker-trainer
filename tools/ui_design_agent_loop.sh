@@ -1588,6 +1588,22 @@ except OSError:
 if not result and USAGE_LIMIT.search(log_blob):
     result = "usage-limit"
 
+# Machine SDK run.wait() status=error → exit 2 with no coverage (20261013-060558).
+# Attribute so health/status are not empty-null rows.
+code_i = int(code)
+if not result and code_i == 2:
+    result = "sdk-error"
+    err_m = re.search(
+        r"# ui-agent-sdk status=error[^\n]*|"
+        r"# ui-agent-sdk error[^\n]*|"
+        r"# ui-agent-sdk stream error:[^\n]*",
+        log_blob,
+    )
+    if err_m:
+        tail = scrub_sdk_stream(err_m.group(0))[:400]
+    elif not tail:
+        tail = "coverage:sdk-error"
+
 # Prefer a short coverage summary whenever coverage landed. Agent report
 # prose used to win because it also contained LPT-NN / closed, stuffing
 # markdown into health.jsonl (LPT-61).
@@ -1595,6 +1611,7 @@ structured = (
     tail.startswith("coverage:")
     or tail.startswith("healed from")
     or tail.startswith("reconciled from")
+    or tail.startswith("# ui-agent-sdk")
 )
 if result and not structured:
     parts = [f"coverage:{result}"]
@@ -1608,7 +1625,7 @@ with open(path, "a", encoding="utf-8") as handle:
     handle.write(json.dumps({
         "at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "stamp": stamp,
-        "exit": int(code),
+        "exit": code_i,
         "seconds": int(seconds),
         "ticket": ticket,
         "result": result,
@@ -2264,6 +2281,10 @@ run_loop() {
       12)
         log "SIM_NOT_READY preflight; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
         sleep "$SIM_NOT_READY_SLEEP"
+        ;;
+      2)
+        log "sdk run status=error (exit 2); sleeping ${GAP}s then starting a fresh run"
+        sleep "$GAP"
         ;;
       13)
         log "agent stalled; sleeping ${GAP}s then starting a fresh run"

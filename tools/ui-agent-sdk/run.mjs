@@ -219,8 +219,23 @@ async function main() {
     if (result.result) {
       log(String(result.result).slice(0, 4000));
     }
+    // status=error often has empty result text; dump useful fields for health.
+    if (result.status === "error") {
+      const detail = {
+        status: result.status,
+        id: result.id || null,
+        result: result.result || null,
+        error: result.error || null,
+        message: result.message || null,
+      };
+      try {
+        log(`# ui-agent-sdk error detail: ${JSON.stringify(detail).slice(0, 2000)}`);
+      } catch {
+        log("# ui-agent-sdk error detail: <unserializable>");
+      }
+    }
 
-    const blob = `${result.status || ""} ${result.result || ""}`;
+    const blob = `${result.status || ""} ${result.result || ""} ${result.error || ""} ${result.message || ""}`;
     if (/usage limit|resource_exhausted|ActionRequiredError/i.test(blob)) {
       process.exit(14);
     }

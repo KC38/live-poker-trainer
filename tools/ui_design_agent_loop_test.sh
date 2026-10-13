@@ -887,6 +887,23 @@ write_health_row "20261010-220000" "1" "90" "$usage_log" "$start_epoch"
 grep -q 'coverage:usage-limit' "$HEALTH_FILE" \
   || fail "health should classify usage-limit: $(cat "$HEALTH_FILE")"
 
+# SDK status=error → exit 2 with no coverage must not leave result=null.
+sdk_err_log="$LOG_DIR/run-sdk-error.log"
+printf '%s\n' \
+  '# ui-agent-sdk start runtime=machine' \
+  '{"t":1,"type":"status"}' \
+  '# ui-agent-sdk status=error resultId=run-deadbeef' \
+  >"$sdk_err_log"
+: >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+write_health_row "20261013-060558" "2" "752" "$sdk_err_log" "$start_epoch"
+grep -q '"result": "sdk-error"' "$HEALTH_FILE" \
+  || fail "health should classify sdk-error: $(cat "$HEALTH_FILE")"
+grep -q 'status=error' "$HEALTH_FILE" \
+  || fail "sdk-error tail should keep status=error: $(cat "$HEALTH_FILE")"
+grep -q 'case "$code".*2)' "$LOOP" || grep -q 'sdk run status=error' "$LOOP" \
+  || fail "run_loop must handle exit 2"
+
 # Coverage timestamps with trailing Z must attribute on macOS Python 3.9.
 z_log="$LOG_DIR/run-z-coverage.log"
 printf '%s\n' 'LPT-79 closed on origin/main' >"$z_log"
