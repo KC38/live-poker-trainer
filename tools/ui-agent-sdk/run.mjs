@@ -11,7 +11,8 @@
  *     [--runtime machine|local] [--machine <worker-name>] [--repo <url>] \
  *     -- <prompt>
  *
- * Exit codes: 0 ok, 1 startup/run error, 2 run status error, 14 usage limit.
+ * Exit codes: 0 ok, 1 startup/run error, 2 run status error,
+ * 14 usage limit, 15 gateway timeout (504).
  */
 
 import { createWriteStream } from "node:fs";
@@ -239,6 +240,9 @@ async function main() {
     if (/usage limit|resource_exhausted|ActionRequiredError/i.test(blob)) {
       process.exit(14);
     }
+    if (/504\s*Gateway Time-out|Gateway Time-out/i.test(blob)) {
+      process.exit(15);
+    }
     if (result.status === "error") {
       process.exit(2);
     }
@@ -251,6 +255,9 @@ async function main() {
     }
     if (/usage limit|resource_exhausted|ActionRequiredError/i.test(message)) {
       process.exit(14);
+    }
+    if (/504\s*Gateway Time-out|Gateway Time-out/i.test(message)) {
+      process.exit(15);
     }
     process.exit(1);
   } finally {
