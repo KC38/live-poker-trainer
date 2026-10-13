@@ -1318,6 +1318,41 @@ grep -q 'sleep_unless_stopped' "$LOOP" || fail "loop must define sleep_unless_st
 )
 rm -f "$tmp/stop-interruptible"
 
+# soft-stop-wait blocks until no run pid, STOP_FILE cleared, loop alive.
+grep -q 'wait_soft_stop_idle' "$LOOP" || fail "loop must define wait_soft_stop_idle"
+grep -q 'soft-stop-wait' "$LOOP" || fail "loop must expose soft-stop-wait"
+(
+  STOP_FILE="$tmp/soft-stop-wait.stop"
+  PID_FILE="$tmp/soft-stop-wait.pid"
+  rm -f "$STOP_FILE" "$PID_FILE"
+  : >"$STOP_FILE"
+  echo "$$" >"$PID_FILE" # alive → wait must not succeed yet
+  loop_is_alive() { return 0; }
+  # Clear run pid + STOP after a beat so wait_soft_stop_idle returns.
+  (
+    sleep 0.3
+    rm -f "$PID_FILE" "$STOP_FILE"
+  ) &
+  start=$(date +%s)
+  wait_soft_stop_idle 30
+  elapsed=$(( $(date +%s) - start ))
+  (( elapsed < 15 )) || fail "wait_soft_stop_idle should finish quickly when idle, took ${elapsed}s"
+  echo "wait_soft_stop_idle ok"
+)
+(
+  STOP_FILE="$tmp/soft-stop-wait-timeout.stop"
+  PID_FILE="$tmp/soft-stop-wait-timeout.pid"
+  : >"$STOP_FILE"
+  echo "$$" >"$PID_FILE"
+  loop_is_alive() { return 1; }
+  code=0
+  wait_soft_stop_idle 1 || code=$?
+  [[ "$code" == 1 ]] || fail "wait_soft_stop_idle should time out, got $code"
+  echo "wait_soft_stop_idle timeout ok"
+)
+rm -f "$tmp/soft-stop-wait.stop" "$tmp/soft-stop-wait.pid" \
+  "$tmp/soft-stop-wait-timeout.stop" "$tmp/soft-stop-wait-timeout.pid"
+
 
 # status skips run-log prose when health already has coverage: for that stamp.
 grep -q 'health_has_structured_stamp' "$LOOP" || fail "loop must define health_has_structured_stamp"

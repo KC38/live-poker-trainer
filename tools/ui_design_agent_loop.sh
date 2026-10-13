@@ -10,6 +10,7 @@
 #   tools/ui_design_agent_loop.sh attach   watch the loop
 #   tools/ui_design_agent_loop.sh stop     soft-stop: finish current run, then ensure restarts
 #   tools/ui_design_agent_loop.sh soft-stop  alias for stop (reload bash / structural fixes)
+#   tools/ui_design_agent_loop.sh soft-stop-wait  soft-stop, then block until loop is idle again
 #   tools/ui_design_agent_loop.sh kill     stop now and free a lock this loop holds
 #   tools/ui_design_agent_loop.sh once     one run in the foreground
 #
@@ -91,6 +92,8 @@ SIM_NOT_READY_SLEEP="${UI_AGENT_SIM_NOT_READY_SLEEP:-600}"
 # parses the reset date from the run log (else 3600s).
 USAGE_LIMIT_SLEEP="${UI_AGENT_USAGE_LIMIT_SLEEP:-}"
 GATEWAY_TIMEOUT_SLEEP="${UI_AGENT_GATEWAY_TIMEOUT_SLEEP:-600}"
+# Max seconds soft-stop-wait blocks for the current run + ensure restart.
+SOFT_STOP_WAIT_SECONDS="${UI_AGENT_SOFT_STOP_WAIT_SECONDS:-7200}"
 VM_WAIT_SECONDS="${UI_AGENT_VM_WAIT_SECONDS:-180}"
 MAX_RUN="${UI_AGENT_MAX_RUN_SECONDS:-14400}"
 STALL_SECONDS="${UI_AGENT_STALL_SECONDS:-600}"
@@ -2531,6 +2534,41 @@ sleep_unless_stopped() {
   done
 }
 
+# True when PID_FILE names a live process (active agent/preflight child).
+run_pid_is_alive() {
+  local pid
+  [[ -f "$PID_FILE" ]] || return 1
+  pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+  [[ -n "$pid" ]] || return 1
+  kill -0 "$pid" 2>/dev/null
+}
+
+# Soft-stop requested → wait until the current run ends, STOP_FILE clears,
+# and ensure has restarted run-loop. Health timers use this before filing
+# ui-agent tickets so they do not race a mid-flight agent (2026-10-13:
+# LPT-647 filed during empty-queue wake → parallel densify work).
+wait_soft_stop_idle() {
+  local timeout="${1:-$SOFT_STOP_WAIT_SECONDS}"
+  local start now elapsed
+  [[ "$timeout" =~ ^[0-9]+$ ]] || timeout=7200
+  start="$(date +%s)"
+  while true; do
+    now="$(date +%s)"
+    elapsed=$(( now - start ))
+    if (( elapsed >= timeout )); then
+      echo "soft-stop-wait: timed out after ${timeout}s (run still active or loop down)" >&2
+      return 1
+    fi
+    if ! run_pid_is_alive \
+      && [[ ! -f "$STOP_FILE" ]] \
+      && loop_is_alive; then
+      echo "soft-stop-wait: idle (loop restarted, no active run) after ${elapsed}s"
+      return 0
+    fi
+    sleep 5
+  done
+}
+
 run_loop() {
   echo $$ >"$LOOP_PID_FILE"
   # shellcheck disable=SC2064
@@ -2765,6 +2803,14 @@ EOF
     # leave the loop down.
     touch "$STOP_FILE"
     echo "soft-stop requested: loop finishes the current run, then ensure restarts it"
+    ;;
+  soft-stop-wait)
+    # Soft-stop and block until the loop is idle again. Use before filing
+    # ui-agent tickets from a health timer so ensure does not start a
+    # parallel agent on the same ticket mid-edit.
+    touch "$STOP_FILE"
+    echo "soft-stop-wait: requested; waiting up to ${SOFT_STOP_WAIT_SECONDS}s for idle"
+    wait_soft_stop_idle "$SOFT_STOP_WAIT_SECONDS"
     ;;
   kill)
     touch "$STOP_FILE"
