@@ -40,7 +40,8 @@ class LessonActionSpot {
   final String? villainLine;
   final String? streetLabel;
 
-  /// Short-stack all-in teaching (e.g. "Stack 12").
+  /// Seat stack chrome: short-stack all-in teaching (e.g. "Stack 12") or a
+  /// shared depth for every seat (e.g. "Stacks left 500" = 250bb).
   final String? stackLabel;
   final bool facingBet;
 
@@ -60,6 +61,16 @@ class LessonActionSpot {
     final match = RegExp(r'(\d+)').firstMatch(raw);
     if (match == null) return null;
     return int.tryParse(match.group(1)!);
+  }
+
+  /// Default lesson stacks are 100bb ($200 at $1/$2).
+  static const int defaultStackChips = 200;
+
+  /// Whether [stackLabel] is a short-stack teach (under the default 100bb),
+  /// not a deep-stack depth label such as "Stacks left 500" (LPT-417).
+  bool get isShortStack {
+    final chips = heroStackAmount;
+    return chips != null && chips < defaultStackChips;
   }
 
   /// Whether [stackLabel] names a shared remaining depth for every seat
@@ -949,6 +960,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         potLabel: 'Pot 1.5',
         villainLine: 'Nit in BB · folds often',
         streetLabel: 'Preflop · Button · 200bb',
+        stackLabel: 'Stacks left 400',
         facingBet: false,
         openPot: true,
         feltStatusLine: 'Deep BTN vs nit — steal wider',
@@ -1003,6 +1015,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         potLabel: 'Pot 40',
         villainLine: 'Huge check-raise · wet flop',
         streetLabel: 'Flop · top pair weak · 250bb',
+        stackLabel: 'Stacks left 500',
         facingBet: true,
         feltStatusLine: 'Deep + wet + heat — fold light TP',
       );
@@ -1017,6 +1030,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         villainLine: 'Calling Station bets 6',
         // Structural — SoftPulse + Rex own Call / implied cue.
         streetLabel: 'Flop · gutshot + overs · 200bb',
+        stackLabel: 'Stacks left 400',
         facingBet: true,
         feltStatusLine: 'Facing a bet',
       );
@@ -1216,6 +1230,7 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         potLabel: 'Pot 22',
         villainLine: 'Checked to you · 180bb deep',
         streetLabel: 'Flop · AQo miss after 3-bet',
+        stackLabel: 'Stacks left 360',
         facingBet: false,
         openPot: true,
         // Structural — Rex + SoftPulse own small c-bet cue.
