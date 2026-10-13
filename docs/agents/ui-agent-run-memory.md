@@ -32,3 +32,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 - Prefer `tools/tee_exit.sh` in a short `jira-create-*` tmux + `tools/wait_done.sh` for `jira.py create` with PNG `--attach` (LPT-644: foreground create hung 10+ min with no stdout; tee_exit finished in ~4s). Avoid stacking `text ~` JQL searches in the same shell as mini drives — they can hang like `labels !=`.
 - Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
 - Prefer `rg '<<<<<<<|=======|>>>>>>>'` on conflicted files after a merge resolution **before** `git commit` — an earlier StrReplace can leave markers in HEAD while the working tree looks clean until the next edit (LPT-520).
+
+## Fold 2026-10-13
+
+- Prefer asserting densified frame speech by absence of "Tap the best answer." plus the densified stem (`Best leak note —`) — `withLessonTapInstruction` may rewrite authored `pick` to `tap`, so exact `pick the …` needles false-fail a fixed bubble (LPT-662).
