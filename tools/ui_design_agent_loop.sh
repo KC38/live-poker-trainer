@@ -465,6 +465,12 @@ ui_queue_has_ticket() {
   python3 "$TOOLS/jira.py" ui-queue 2>/dev/null | grep -qE '^LPT-[0-9]+[[:space:]]'
 }
 
+# Actionable vs filtered counts so empty-queue idle is not mistaken for a
+# Jira outage (only needs-human / grokbot remain).
+print_ui_queue_status() {
+  python3 "$TOOLS/jira.py" ui-queue --stats 2>/dev/null || true
+}
+
 sim_lock() {
   python3 "$TOOLS/sim_lock.py" "$@"
 }
@@ -2973,6 +2979,7 @@ EOF
     fi
     print_idle_status
     print_pending_learnings_status
+    print_ui_queue_status
     echo "launcher: $LAUNCHER"
     echo "sdk-runtime: $SDK_RUNTIME"
     if [[ "$SDK_RUNTIME" == "machine" ]]; then
