@@ -259,6 +259,23 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Nut flush blocker — pick why the bluff works.',
     'act-07-03-01-unguided' => 'No story — pick the river action.',
     'act-07-03-01-checkpoint' => 'River rule — pick the composition check.',
+    // Change plans by pot type densified asks (LPT-659) — same path as LPT-658.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-07-04-01-guided' => 'Multiway limped — pick the priority.',
+    'act-07-04-01-scaffolded' => 'HU SRP IP — pick the default weapon.',
+    'act-07-04-01-unguided' => '4-bet 100bb — pick the mindset.',
+    'act-07-04-01-checkpoint' => 'Pot type — pick what changes.',
+    // Switch gears HU vs multiway densified asks (LPT-660) — same path as LPT-659.
+    'act-07-05-01-guided' => 'Four-way river — pick the air-bluff call.',
+    'act-07-05-01-scaffolded' => 'HU vs nit — pick the steal frequency.',
+    'act-07-05-01-unguided' => 'Multiway top set — pick the line lean.',
+    'act-07-05-01-checkpoint' => 'Player count — pick how it ranks.',
+    // Rewrite plans when stacks densified asks (LPT-661) — same path as LPT-660.
+    'act-07-06-01-guided' => '35bb TPTK — pick the commit lean.',
+    'act-07-06-01-scaffolded' => '250bb 55 — pick the set-mine lean.',
+    'act-07-06-01-unguided' =>
+      'Hero 200 / Villain 40 — pick effective stack.',
+    'act-07-06-01-checkpoint' => 'Stack depth — pick how often to check.',
     _ => null,
   };
 }
