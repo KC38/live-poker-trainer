@@ -883,7 +883,10 @@ export function buildSectionOne() {
                 },
               }),
               selectAct({
-                id: "act-01-02-02-checkpoint-build", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
+                // SoftPulse-quiet scaffolded transfer: Hint unlocks one-gold
+                // SoftPulse on the recommended five (not assessmentRole — that
+                // leaves Hint permanently disabled).
+                id: "act-01-02-02-checkpoint-build", order: 5, stage: "scaffolded",
                 prompt: "Tap the five cards for your strongest hand.",
                 a11y: "Tap three of a kind plus a pair for a full house.",
                 objectives: [
@@ -900,12 +903,17 @@ export function buildSectionOne() {
                     "You have trips plus a pair — full house.",
                     {betterChoiceId: "fh-eights"}),
                 ],
-                // LPT-91: checkpoint (_dealTripsOverTwoPairs): pocket pair +
-                // board trips card over two board pairs; no pressHints / Hint
-                // media.
+                // LPT-91: _dealTripsOverTwoPairs pocket + board trips over two
+                // pairs. Guide order matches fh-eights choice set.
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "full_house", suitFamily: "pair"},
-                  cues: [{press: 1, target: "hero_holes", kind: "none"}],
+                  cues: [
+                    {press: 1, target: "hero_trip_1", kind: "soft_pulse"},
+                    {press: 2, target: "hero_trip_2", kind: "soft_pulse"},
+                    {press: 3, target: "board_trip", kind: "soft_pulse"},
+                    {press: 4, target: "board_high_1", kind: "soft_pulse"},
+                    {press: 5, target: "board_high_2", kind: "soft_pulse"},
+                  ],
                 },
               }),
             ],

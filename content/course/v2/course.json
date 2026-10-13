@@ -1830,7 +1830,6 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint",
                   "teachSpec": {
                     "deal": {
                       "mode": "random_in_class",
@@ -1840,8 +1839,28 @@
                     "cues": [
                       {
                         "press": 1,
-                        "target": "hero_holes",
-                        "kind": "none"
+                        "target": "hero_trip_1",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "hero_trip_2",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "board_trip",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_high_1",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 5,
+                        "target": "board_high_2",
+                        "kind": "soft_pulse"
                       }
                     ]
                   }

@@ -666,9 +666,20 @@ void main() {
 
     test('checkpoint deals a pocket pair into a full house', () {
       final a = act('act-01-02-02-checkpoint-build');
+      expect(a.assessmentRole, isNull);
       final deal = a.teachSpec!['deal'] as Map<String, dynamic>;
       expect(deal['handFamily'], 'full_house');
       expect(deal['suitFamily'], 'pair');
+      expect(
+        targets('act-01-02-02-checkpoint-build'),
+        [
+          'hero_trip_1',
+          'hero_trip_2',
+          'board_trip',
+          'board_high_1',
+          'board_high_2',
+        ],
+      );
       for (var seed = 0; seed < 16; seed++) {
         final spot = dealtBestFiveSpot(a, random: Random(seed))!;
         expect(rank(spot.heroCodes[0]), rank(spot.heroCodes[1]));
