@@ -1282,3 +1282,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept still **LPT-323** needs-human (tip-commented on `db21de67`). Tip-commented Capstone **LPT-348** + Done parents / **LPT-320** that NEED tip SHA.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-06-01-stack-depth-plans` / Low curriculum.
 - act-07-05-01-*: structural clean on tip — curriculum split only via LPT-323.
+
+## Fold 2026-10-14h (db21de67 discovery stack-depth-plans)
+
+- Tip-stable `db21de67` (#2168). Catalog `--counts` structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Prior coverage claimed `learnings: updated` for hu-vs-multiway while draft #2169 was still unfolder — rescued that fold onto this chore branch. Sole open Medium: Capstone **LPT-348** needs-human. High content open: **0**.
+- Discovery oldest-unfresh `lesson-07-06-01-stack-depth-plans`: teachSpec on all five; explain SoftPulse SHORT→DEEP→EFFECTIVE + activity-level `explainGrading` (“Short → Deep → Effective.”); guided/scaffolded/unguided/checkpoint outcome tiles `deal.mode` `none` + cues `commit` / `yes` / `40` / `every` (checkpoint cue kind `none`); scaffolded+unguided one-per-press complete; densify helper arms PRESENT (`act-07-06-01-guided`/`scaffolded`/`unguided`/`checkpoint` — LPT-450/LPT-661 Done). Structural clean — no new grokbot clone; design-record Still-a-list “depth quizzes” STALE — no rebuild; no handFamily gaps on `deal.mode` `none` tiles.
+- Curriculum multi-concept still **LPT-326** needs-human (commit-short / implied-deep / recalculate-every-hand under one unlock) — tip-commented on `db21de67`. Done-ack LPT-324/450/510 (NEED tip SHA). Capstone **LPT-348** + **LPT-323** + Done catalog parents already HAS tip — no re-spam.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-07-01-same-cards-types` / Low curriculum.
+- act-07-06-01-*: structural clean on tip — curriculum split only via LPT-326; teachSpec/densify companions LPT-324/450 Done.
