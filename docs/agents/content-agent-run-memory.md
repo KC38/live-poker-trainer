@@ -634,3 +634,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented flat parents LPT-624/625/626/627/635 + Capstone/frontier/honesty. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - Durable rule: tip-comment “rebuilt LPT-628” ≠ body synced — verify description helper count vs `--counts densifyHelperArms` before skip.
 - next: re-verify LPT-347 after GrokBot OR LPT-242/312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
+
+## Fold 2026-10-13 tip 75f67c67 (Capstone re-check after #2029 LPT-628 body fold)
+
+- Tip-stable `75f67c67` (#2029 learnings after LPT-628 description helper **72** / fallthrough **128** landed on tip). Prior densify-tap coverage already synced this SHA — no catalog checklist rebuild.
+- `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **91**, teachSpec **56**, explain-teachSpec **25**, nice-ladder **53**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **72**. Soft timing `act-05-07-01-*` still ABSENT from `selectIdentifyDensifiedCoachLine` (stay on LPT-628). Verified LPT-628 description Already registered (**72**) matches `--counts`.
+- Re-verified Capstone 4-bet **LPT-347** (In Progress; GrokBot branch noted): `act-07-10-05-explain` / `act-07-10-05-hand` still both MISSING teachSpec on tip `course.json`. Dart still SoftPulse SPR/COMMIT/NO HERO (`Capstone4betDemo`) + `resolveToyHandStepSpot` Kh/Kd · Qs/8h/3d/+2d/+Ad SoftPulse-quiet — author `deal.mode` `fixed` + variants; skip `needs-human` lesson-split (synthesis in `unit-07-10-capstones`). Explain row also on catalog LPT-635.
+- Tip-commented catalog parents LPT-624/625/626/627/628/635 (flat) + Capstone LPT-347 + frontier LPT-242/312/315/301 + unchecked High teachSpecs LPT-252/255/258/271/275/295/334/349/352 + honesty/fingerprint LPT-401/402/408/409/411/414 + depth LPT-417 (250bb/180bb sans `stackLabel`; LPT-414 Air Nice! still “Gutshot-ish”). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-347 after GrokBot OR LPT-242/312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
