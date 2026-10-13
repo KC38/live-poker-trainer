@@ -79,8 +79,14 @@ type (LPT-328), Integrate type, board, line, and sizing (LPT-331), Capstone:
 single-raised pot (LPT-337), Capstone: 3-bet pot (LPT-339), Capstone:
 multiway deep (LPT-341), Capstone: limped pot (LPT-345), Capstone: 4-bet pot
 (LPT-347), Prep a coached Live warm-up hand (LPT-349), Final: all five
-player types (LPT-352). Content gaps are audited by [11 — Lesson content
-agent](11-lesson-content-agent.md).
+player types (LPT-352), Soft timing evidence (LPT-242), Spot range advantage
+and nut advantage (LPT-252), Realize equity in and out of position
+(LPT-255), Recognize capped versus uncapped ranges (LPT-258), Defend enough
+without frequency theater (LPT-271), Mix with a reason (LPT-275), Observe
+wide sustained pressure (LPT-295), Adjust versus LAG (LPT-301), Map turn
+barrels before you bet flop (LPT-312), Compose river value and bluffs
+(LPT-315), Write your default strategy book (LPT-334). Content gaps are
+audited by [11 — Lesson content agent](11-lesson-content-agent.md).
 
 `deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
 `teach_spec.schema.json` enum. Besides showdown ranks and starting-hand

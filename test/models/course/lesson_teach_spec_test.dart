@@ -606,6 +606,94 @@ const _lessons = <String, List<String>>{
     'act-07-12-01-uncertain',
     'act-07-12-01-retire',
   ],
+  // LPT-242
+  'lesson-05-07-01-timing-sizing-evidence': [
+    'act-05-07-01-explain',
+    'act-05-07-01-guided',
+    'act-05-07-01-scaffolded',
+    'act-05-07-01-unguided',
+    'act-05-07-01-checkpoint',
+  ],
+  // LPT-252
+  'lesson-06-01-01-range-nut-advantage': [
+    'act-06-01-01-explain',
+    'act-06-01-01-guided',
+    'act-06-01-01-scaffolded',
+    'act-06-01-01-unguided',
+    'act-06-01-01-checkpoint',
+  ],
+  // LPT-255
+  'lesson-06-02-01-equity-realization': [
+    'act-06-02-01-explain',
+    'act-06-02-01-guided',
+    'act-06-02-01-scaffolded',
+    'act-06-02-01-unguided',
+    'act-06-02-01-checkpoint',
+  ],
+  // LPT-258
+  'lesson-06-03-01-capped-uncapped': [
+    'act-06-03-01-explain',
+    'act-06-03-01-guided',
+    'act-06-03-01-scaffolded',
+    'act-06-03-01-unguided',
+    'act-06-03-01-checkpoint',
+  ],
+  // LPT-271
+  'lesson-06-07-01-minimum-defense': [
+    'act-06-07-01-explain',
+    'act-06-07-01-guided',
+    'act-06-07-01-scaffolded',
+    'act-06-07-01-unguided',
+    'act-06-07-01-checkpoint',
+  ],
+  // LPT-275
+  'lesson-06-08-01-mixed-strategy': [
+    'act-06-08-01-explain',
+    'act-06-08-01-guided',
+    'act-06-08-01-scaffolded',
+    'act-06-08-01-unguided',
+    'act-06-08-01-checkpoint',
+  ],
+  // LPT-295
+  'lesson-06-12-01-observe-wide-pressure': [
+    'act-06-12-01-explain',
+    'act-06-12-01-guided',
+    'act-06-12-01-scaffolded',
+    'act-06-12-01-unguided',
+    'act-06-12-01-checkpoint',
+  ],
+  // LPT-301
+  'lesson-06-12-03-adjust-lag': [
+    'act-06-12-03-explain',
+    'act-06-12-03-guided',
+    'act-06-12-03-scaffolded',
+    'act-06-12-03-unguided',
+    'act-06-12-03-checkpoint',
+  ],
+  // LPT-312
+  'lesson-07-02-01-flop-to-turn-map': [
+    'act-07-02-01-explain',
+    'act-07-02-01-guided',
+    'act-07-02-01-scaffolded',
+    'act-07-02-01-unguided',
+    'act-07-02-01-checkpoint',
+  ],
+  // LPT-315
+  'lesson-07-03-01-river-composition': [
+    'act-07-03-01-explain',
+    'act-07-03-01-guided',
+    'act-07-03-01-scaffolded',
+    'act-07-03-01-unguided',
+    'act-07-03-01-checkpoint',
+  ],
+  // LPT-334
+  'lesson-07-09-01-leak-review-book': [
+    'act-07-09-01-explain',
+    'act-07-09-01-guided',
+    'act-07-09-01-scaffolded',
+    'act-07-09-01-unguided',
+    'act-07-09-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -4696,6 +4784,631 @@ void main() {
       expect(act('act-07-12-01-retire').teachSpec!['deal'], {'mode': 'none'});
       expect(
         act('act-07-12-01-retire').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Soft timing evidence (LPT-242)', () {
+    test('explain SoftPulse walks TIMING → SIZING → CLUES', () {
+      expect(
+        _list(
+          act('act-05-07-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['TIMING', 'SIZING', 'CLUES'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-05-07-01-guided'), 'cues').single['target'],
+        'soft',
+      );
+      expect(act('act-05-07-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-05-07-01-scaffolded'), 'cues').single['target'],
+        'weakish',
+      );
+      expect(act('act-05-07-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-05-07-01-unguided'), 'cues').single['target'],
+        'reject',
+      );
+      expect(act('act-05-07-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-05-07-01-checkpoint'), 'cues').single['target'],
+        'tiny',
+      );
+      expect(
+        _list(
+          act('act-05-07-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-05-07-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-05-07-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-05-07-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Spot range advantage and nut advantage (LPT-252)', () {
+    test('explain SoftPulse walks RANGE → NUT → ADVANTAGE', () {
+      expect(
+        _list(
+          act('act-06-01-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['RANGE', 'NUT', 'ADVANTAGE'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-06-01-01-guided'), 'cues').single['target'], 'pfr');
+      expect(act('act-06-01-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-01-01-scaffolded'), 'cues').single['target'],
+        'caller-nuts',
+      );
+      expect(act('act-06-01-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-06-01-01-unguided'), 'cues').single['target'],
+        'cbet',
+      );
+      expect(
+        act('act-06-01-01-unguided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Kd'],
+      );
+      expect(
+        act('act-06-01-01-unguided').teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', '7s', '2d'],
+      );
+      expect(
+        _list(act('act-06-01-01-checkpoint'), 'cues').single['target'],
+        'press',
+      );
+      expect(
+        _list(
+          act('act-06-01-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-01-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-01-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-01-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Realize equity in and out of position (LPT-255)', () {
+    test('explain SoftPulse walks EQUITY → CASH → POS', () {
+      expect(
+        _list(
+          act('act-06-02-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['EQUITY', 'CASH', 'POS'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-06-02-01-guided'), 'cues').single['target'], 'ip');
+      expect(act('act-06-02-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-02-01-scaffolded'), 'cues').single['target'],
+        'discount',
+      );
+      expect(act('act-06-02-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-06-02-01-unguided'), 'cues').single['target'],
+        'realize',
+      );
+      expect(act('act-06-02-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-02-01-checkpoint'), 'cues').single['target'],
+        'pos',
+      );
+      expect(
+        _list(
+          act('act-06-02-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-02-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-02-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-02-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Recognize capped versus uncapped ranges (LPT-258)', () {
+    test('explain SoftPulse walks CAPPED → UNCAPPED → NUTS', () {
+      expect(
+        _list(
+          act('act-06-03-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['CAPPED', 'UNCAPPED', 'NUTS'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-06-03-01-guided'), 'cues').single['target'], 'cap');
+      expect(act('act-06-03-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-03-01-scaffolded'), 'cues').single['target'],
+        'bet',
+      );
+      expect(
+        act('act-06-03-01-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', '9d'],
+      );
+      expect(
+        act('act-06-03-01-scaffolded')
+            .teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', '9s', '4h', '2d', '7c'],
+      );
+      expect(
+        _list(act('act-06-03-01-unguided'), 'cues').single['target'],
+        'uncap',
+      );
+      expect(act('act-06-03-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-03-01-checkpoint'), 'cues').single['target'],
+        'attack',
+      );
+      expect(
+        _list(
+          act('act-06-03-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-03-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-03-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-03-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Defend enough without frequency theater (LPT-271)', () {
+    test('explain SoftPulse walks DEFEND → BLUFF → ENOUGH', () {
+      expect(
+        _list(
+          act('act-06-07-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['DEFEND', 'BLUFF', 'ENOUGH'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-06-07-01-guided'), 'cues').single['target'],
+        'strong',
+      );
+      expect(act('act-06-07-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-07-01-scaffolded'), 'cues').single['target'],
+        'fold',
+      );
+      expect(
+        act('act-06-07-01-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['9h', '7d'],
+      );
+      expect(
+        act('act-06-07-01-scaffolded')
+            .teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', 'Qh', '9d', '4c', '8s'],
+      );
+      expect(
+        _list(act('act-06-07-01-unguided'), 'cues').single['target'],
+        'int',
+      );
+      expect(act('act-06-07-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-07-01-checkpoint'), 'cues').single['target'],
+        'punish',
+      );
+      expect(
+        _list(
+          act('act-06-07-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-07-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-07-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-07-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Mix with a reason (LPT-275)', () {
+    test('explain SoftPulse walks MIX → PURPOSE → STRONG', () {
+      expect(
+        _list(
+          act('act-06-08-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['MIX', 'PURPOSE', 'STRONG'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-06-08-01-guided'), 'cues').single['target'],
+        'protect',
+      );
+      expect(
+        act('act-06-08-01-guided').teachSpec!['deal']['fixedCards']['hero'],
+        ['7h', '7d'],
+      );
+      expect(
+        act('act-06-08-01-guided').teachSpec!['deal']['fixedCards']['board'],
+        ['7c', 'Kd', '2s'],
+      );
+      expect(
+        _list(act('act-06-08-01-scaffolded'), 'cues').single['target'],
+        'less',
+      );
+      expect(act('act-06-08-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-06-08-01-unguided'), 'cues').single['target'],
+        'no',
+      );
+      expect(act('act-06-08-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-08-01-checkpoint'), 'cues').single['target'],
+        'freq',
+      );
+      expect(
+        _list(
+          act('act-06-08-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-08-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-08-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-08-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Observe wide sustained pressure (LPT-295)', () {
+    test('explain SoftPulse walks WIDE → PRESSURE → SAMPLE', () {
+      expect(
+        _list(
+          act('act-06-12-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['WIDE', 'PRESSURE', 'SAMPLE'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-06-12-01-guided'), 'cues').single['target'],
+        'wide',
+      );
+      expect(act('act-06-12-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-12-01-scaffolded'), 'cues').single['target'],
+        'sep',
+      );
+      expect(act('act-06-12-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-06-12-01-unguided'), 'cues').single['target'],
+        'wait',
+      );
+      expect(act('act-06-12-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-12-01-checkpoint'), 'cues').single['target'],
+        'bundle',
+      );
+      expect(
+        _list(
+          act('act-06-12-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-12-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-12-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-12-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Adjust versus LAG (LPT-301)', () {
+    test('explain SoftPulse walks CALL → TRAP → FANCY LESS', () {
+      expect(
+        _list(
+          act('act-06-12-03-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['CALL', 'TRAP', 'FANCY LESS'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-06-12-03-guided'), 'cues').single['target'],
+        'call',
+      );
+      expect(
+        act('act-06-12-03-guided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', '9d'],
+      );
+      expect(
+        act('act-06-12-03-guided').teachSpec!['deal']['fixedCards']['board'],
+        ['Qc', '9s', '3h', '2d', '7c'],
+      );
+      expect(
+        _list(act('act-06-12-03-scaffolded'), 'cues').single['target'],
+        'trap',
+      );
+      expect(
+        act('act-06-12-03-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['As', 'Ad'],
+      );
+      expect(
+        act('act-06-12-03-scaffolded')
+            .teachSpec!['deal']['fixedCards']['board'],
+        ['Ac', '7s', '2h'],
+      );
+      expect(
+        _list(act('act-06-12-03-unguided'), 'cues').single['target'],
+        'avoid',
+      );
+      expect(act('act-06-12-03-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-06-12-03-checkpoint'), 'cues').single['target'],
+        'cite',
+      );
+      expect(
+        _list(
+          act('act-06-12-03-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-12-03-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-12-03-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-12-03-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Map turn barrels before you bet flop (LPT-312)', () {
+    test('explain SoftPulse walks BARREL → GIVE-UP → MAP', () {
+      expect(
+        _list(
+          act('act-07-02-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['BARREL', 'GIVE-UP', 'MAP'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-07-02-01-guided'), 'cues').single['target'], 'ok');
+      expect(act('act-07-02-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-07-02-01-scaffolded'), 'cues').single['target'],
+        'give',
+      );
+      expect(act('act-07-02-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-07-02-01-unguided'), 'cues').single['target'],
+        'avoid',
+      );
+      expect(act('act-07-02-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-07-02-01-checkpoint'), 'cues').single['target'],
+        'list',
+      );
+      expect(
+        _list(
+          act('act-07-02-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-07-02-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-07-02-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-07-02-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Compose river value and bluffs (LPT-315)', () {
+    test('explain SoftPulse walks VALUE → BLUFF → HOLD', () {
+      expect(
+        _list(
+          act('act-07-03-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['VALUE', 'BLUFF', 'HOLD'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-07-03-01-guided'), 'cues').single['target'], 'val');
+      expect(
+        act('act-07-03-01-guided').teachSpec!['deal']['fixedCards']['hero'],
+        ['As', 'Ad'],
+      );
+      expect(
+        act('act-07-03-01-guided').teachSpec!['deal']['fixedCards']['board'],
+        ['Ac', '9s', '4h', '2d', '7c'],
+      );
+      expect(
+        _list(act('act-07-03-01-scaffolded'), 'cues').single['target'],
+        'block',
+      );
+      expect(act('act-07-03-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-07-03-01-unguided'), 'cues').single['target'],
+        'check',
+      );
+      expect(act('act-07-03-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-07-03-01-checkpoint'), 'cues').single['target'],
+        'rule',
+      );
+      expect(
+        _list(
+          act('act-07-03-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-07-03-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-07-03-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-07-03-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Write your default strategy book (LPT-334)', () {
+    test('explain SoftPulse walks LEAK → BOOK → REVIEW', () {
+      expect(
+        _list(
+          act('act-07-09-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['LEAK', 'BOOK', 'REVIEW'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(act('act-07-09-01-guided'), 'cues').single['target'],
+        'spec',
+      );
+      expect(act('act-07-09-01-guided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-07-09-01-scaffolded'), 'cues').single['target'],
+        'book',
+      );
+      expect(act('act-07-09-01-scaffolded').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        _list(act('act-07-09-01-unguided'), 'cues').single['target'],
+        'sched',
+      );
+      expect(act('act-07-09-01-unguided').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        _list(act('act-07-09-01-checkpoint'), 'cues').single['target'],
+        'base',
+      );
+      expect(
+        _list(
+          act('act-07-09-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-07-09-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-07-09-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-07-09-01-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });
