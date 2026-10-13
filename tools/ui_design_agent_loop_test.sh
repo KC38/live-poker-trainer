@@ -1181,6 +1181,19 @@ assert not any(r.get("stamp") == "reconciled" and r.get("ticket") == "LPT-490" f
 print("dup reattribution ok")
 PY
 
+# Short empty SIGTERM must not absorb late coverage in the +900s pad.
+printf '%s\n' \
+  '{"at":"2026-10-13T08:42:40+05:30","sha":"c","surface":"lesson-runner:open-pot-no-redeal","result":"closed","ticket":"LPT-642","leads":[],"learnings":"pending"}' \
+  >"$COVERAGE_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-13T08:31:13+05:30","stamp":"20261013-082906","exit":143,"seconds":127,"ticket":null,"result":null,"tail":""}' \
+  >"$HEALTH_FILE"
+repair_health_tails
+grep -q '"result": "interrupted"' "$HEALTH_FILE" \
+  || fail "short empty SIGTERM should be interrupted: $(cat "$HEALTH_FILE")"
+grep -q 'LPT-642' "$HEALTH_FILE" \
+  && fail "short SIGTERM must not pin late LPT-642 coverage: $(cat "$HEALTH_FILE")"
+
 # Prefer exit 0 over SIGTERM when both stamps claim the same ticket.
 printf '%s\n' \
   '{"at":"2026-10-13T08:18:51+05:30","sha":"c","surface":"lesson-runner:open-pot-no-redeal","result":"closed","ticket":"LPT-642","leads":[],"learnings":"pending"}' \

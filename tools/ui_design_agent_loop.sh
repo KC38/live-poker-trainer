@@ -1122,6 +1122,27 @@ for row in rows:
         if m is not None:
             prose_ticket = m.group(0)
 
+    # Short empty SIGTERM (082906 ~2 min) must not pin late coverage from the
+    # +900s pad (LPT-642 @ 08:42 into a kill at 08:29). Long SIGTERM runs
+    # (LPT-134 ~22 min) still coverage-fill below.
+    secs = row.get("seconds")
+    short_empty_sigterm = (
+        row.get("exit") == 143
+        and not result
+        and not ticket
+        and not prose_ticket
+        and isinstance(secs, int)
+        and secs < 300
+        and not (tail or "").strip()
+    )
+    if short_empty_sigterm:
+        row["result"] = "interrupted"
+        row["tail"] = "coverage:interrupted"
+        row["tail_repaired"] = True
+        changed += 1
+        result = "interrupted"
+        tail = row["tail"]
+
     # Fill empty / false-stall stamp rows from coverage in the run window.
     # Pad the end so a ticket closed after SIGTERM / stall-kill + reconcile
     # still matches (LPT-134 exit 143, LPT-240 exit 13 then closed).
