@@ -1409,3 +1409,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Discovery oldest-unfresh `lesson-03-08-02-section-three-jump-test`: structural clean (see bullet above). Done-ack LPT-381/367/418/419 (NEED on tip); LPT-165/389/425/426/391/554/555 already HAS.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-05-05-01-lines-and-probes` / `lesson-06-11-01-observe-selective` / Low curriculum (`lesson-01-02-01-hand-ranks` **LPT-90**).
 - act-03-08-02-*: structural clean on tip — jump_test assessment container only.
+
+## Fold 2026-10-14y (8bad05d8 discovery observe-selective)
+
+- Tip-stable `8bad05d8` (#2190). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip — no re-spam). Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Rescued unfolder s3jump drafts #2191/#2192 onto this chore (Prefer discovery walk + Recent fold 14x).
+- Discovery oldest-coverage `lesson-06-11-01-observe-selective`: explain SoftPulse TIGHT→BARREL→SAMPLE + `explainGrading`; guided/scaffolded/unguided/checkpoint observation tiles `deal.mode` `none` (no handFamily); SoftPulse cues `sel`/`disc`/`low` + checkpoint `bundle` kind `none`; scaffolded/unguided one-per-press OK; densify LPT-435 + SoftPulse guideRegion LPT-494 Done. Structural clean. Curriculum **LPT-288** tip-commented (three concepts + checkpoint evidence-bundle vs sample-delay still valid).
+- Done-ack **LPT-286** / **287** / **435** / **494** on tip (NEED before comment).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-12-03-adjust-lag` / `lesson-05-05-01-lines-and-probes` / Low curriculum.
+- act-06-11-01-*: structural clean on tip — teachSpec/pressHints/densify/SoftPulse companions Done; curriculum via LPT-288 only.
+
