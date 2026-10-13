@@ -457,6 +457,11 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
   bool _checkpointBbPosted = false;
   Timer? _checkpointBbTimer;
 
+  /// Keeps framed open-pot [FeltTableView] across Nice!/Oops! lock rebuilds
+  /// (LPT-642). ValueKey alone is not enough when the coach Column slot
+  /// swaps widget types and remounts the surrounding Expanded.
+  final GlobalKey _openPotFeltKey = GlobalKey(debugLabel: 'open-pot-felt');
+
   /// Gap between SB and BB pop-ins — matches the StreetBetPill settle feel.
   static const Duration _checkpointBlindStagger = Duration(milliseconds: 380);
 
@@ -1439,20 +1444,29 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (!locked)
-              instruction == null
-                  ? rex
-                  : Semantics(
-                    button: true,
-                    label: coach,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap:
-                          () =>
-                              _submitRegion(LessonTableTapTarget(instruction)),
-                      child: rex,
-                    ),
-                  ),
+            // Keep a coach slot under Nice!/Oops! — dropping Rex shifts the
+            // Column and remounts LessonTableStage (open-pot redeal, LPT-642).
+            // Same pattern as PokerActionSizingActivity. Prefer Offstage so
+            // the slot's Element type stays stable when the frame already
+            // owns the visible Rex bubble.
+            Offstage(
+              offstage: locked,
+              child:
+                  instruction == null
+                      ? rex
+                      : Semantics(
+                        button: true,
+                        label: coach,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap:
+                              () => _submitRegion(
+                                LessonTableTapTarget(instruction),
+                              ),
+                          child: rex,
+                        ),
+                      ),
+            ),
             if (showPrompt) ...[
               const SizedBox(height: 14),
               Text(
@@ -1744,6 +1758,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               else if (LessonFrameScope.maybeOf(context) != null &&
                   widget.activity.id == kOpenPotActivityId)
                 Expanded(
+                  key: const ValueKey<String>('open-pot-felt-slot'),
                   child: Builder(
                     builder: (context) {
                       final deal = dealLessonOpenPot(
@@ -1769,29 +1784,33 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Expanded(
-                            child: LessonTableStage(
-                              key: ValueKey<String>(
-                                'open-pot-${deal.openTo}-'
-                                '${widget.controller.bindGeneration}',
+                            key: const ValueKey<String>('open-pot-table'),
+                            child: KeyedSubtree(
+                              key: _openPotFeltKey,
+                              child: LessonTableStage(
+                                key: ValueKey<String>(
+                                  'open-pot-${deal.openTo}-'
+                                  '${widget.controller.bindGeneration}',
+                                ),
+                                heroCodes: const [],
+                                heroFaceUp: false,
+                                villainCount: lessonBlindsVillainCount,
+                                dealerIndex: lessonBlindsButtonIndex,
+                                sbIndex: lessonBlindsSmallBlindIndex,
+                                bbIndex: lessonBlindsBigBlindIndex,
+                                // Blinds still to act — SB is next.
+                                activeSeatIndex: lessonBlindsSmallBlindIndex,
+                                positionLabels: true,
+                                seatNames: lessonActionOrderSeatNames,
+                                streetBets: streetBets,
+                                potTotal: deal.correctPot.toDouble(),
+                                foldedSeatIndexes: earlyFolds,
+                                seatActionLabels: const {
+                                  lessonBlindsButtonIndex: 'RAISE',
+                                },
+                                features: lessonOpenPotMathTableFeatures,
+                                enabled: !locked,
                               ),
-                              heroCodes: const [],
-                              heroFaceUp: false,
-                              villainCount: lessonBlindsVillainCount,
-                              dealerIndex: lessonBlindsButtonIndex,
-                              sbIndex: lessonBlindsSmallBlindIndex,
-                              bbIndex: lessonBlindsBigBlindIndex,
-                              // Blinds still to act — SB is next.
-                              activeSeatIndex: lessonBlindsSmallBlindIndex,
-                              positionLabels: true,
-                              seatNames: lessonActionOrderSeatNames,
-                              streetBets: streetBets,
-                              potTotal: deal.correctPot.toDouble(),
-                              foldedSeatIndexes: earlyFolds,
-                              seatActionLabels: const {
-                                lessonBlindsButtonIndex: 'RAISE',
-                              },
-                              features: lessonOpenPotMathTableFeatures,
-                              enabled: !locked,
                             ),
                           ),
                           _LessonChoiceStack(

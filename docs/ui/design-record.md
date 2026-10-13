@@ -240,6 +240,10 @@ rounds, then the board one card at a time. Each card lands once, in order,
 with one of the eight `deal_0N.wav` hits. A later-street start deals only
 the arriving street. A tap on a lesson button never redeals the hand. Folds
 before the hero's decision are shown after the deal, not before it.
+Framed open-pot math (`kOpenPotActivityId` / `act-01-05-01-unguided-pot`)
+does not redeal or replay post-deal actions when Nice! / Oops! locks the
+dock (LPT-642 — keep a stable coach Column slot under grade, same as
+`PokerActionSizingActivity`).
 
 When a lesson hand is won, the pot flies to the winner seat and the stacks
 update (`lessonTableStageGame`).
