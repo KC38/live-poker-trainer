@@ -195,6 +195,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Opens tight, selective c-bets — pick the label.',
     'act-06-11-02-checkpoint' =>
       'TAG is a label from frequencies — pick how to treat it.',
+    // Observe wide densified asks (LPT-649) — same path as LPT-648.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-12-01-guided' =>
+      'Wide opens + barrels, some folds — pick the note.',
+    'act-06-12-01-scaffolded' =>
+      'Difference vs maniac — pick the separation.',
+    'act-06-12-01-unguided' => 'One wide open — pick the confidence.',
+    'act-06-12-01-checkpoint' =>
+      'Best pre-label notes — pick the evidence pack.',
     _ => null,
   };
 }
