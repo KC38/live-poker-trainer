@@ -220,6 +220,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Adjust versus TAG densified asks (LPT-652) — same path as LPT-651.
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-06-11-03-checkpoint' => 'Versus TAG — pick the cite.',
+    // Same cards, five type models densified asks (LPT-654) — same path as
+    // LPT-652. Use pick/tap so withLessonTapInstruction does not append the
+    // footer.
+    'act-06-13-01-checkpoint' =>
+      'Selective entry + disciplined barrels — pick the model + line.',
     _ => null,
   };
 }
