@@ -131,6 +131,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13cv: Tip `46ead6a5` (#2114 LPT-666 word-boundary + #2117 ui-agent). densify-tap **0** / helper **229**; other flat 151/99/0/12/nice-66/map-24. Parents+Mediums+LPT-414 already tip-commented on tip; Done-ack **LPT-558** same tick. **LPT-628**/ **LPT-666** Done. Meet Nit Nice!/pressHints still LPT-624/626; Medium LPT-370 cues null / LPT-588 Scene flop-only / LPT-348 Capstone pressHints still open.
+
 - 2026-10-13cu: Tip `8922d49c` (#2112 course-contract TAG word match). densify-tap **0** / helper **229**; other flat 151/99/0/12/nice-66/map-24. Done-ack **LPT-666** (`validate_course.test.mjs` 10/0; ADVANTAGE cue kept). **LPT-628** Done. Meet Nit Nice!/pressHints still LPT-624/626; Medium LPT-370/588 still valid.
 
 - 2026-10-13ct: Tip `8f3f6aa3` (#2110 densify remaining + #2111 learnings). densify-tap **17→0** / densifyHelperArms **212→229**; other JSON flat 151/99/0/12/nice-66/map-24. Done-ack+rebuild **LPT-628** empty checklist; tip-commented parents+LPT-666+LPT-370/588/348. **LPT-666** ADVANTAGE⊃TAG still fails; Meet Nit Nice!/pressHints still LPT-624/626.
