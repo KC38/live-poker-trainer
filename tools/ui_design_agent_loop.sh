@@ -530,26 +530,33 @@ print_ui_queue_status() {
   python3 "$TOOLS/jira.py" ui-queue --stats 2>/dev/null || true
 }
 
-# Surface functions deploy marker lag so health timers run deploy-functions.sh
-# (advance-on-skip when unchanged, or a real deploy when functions/ moved).
+# Surface functions deploy marker lag. Content-only tip advances during long
+# empty-queue idle used to leave the marker stale until the next skip cycle —
+# health timers then spuriously ran deploy-functions.sh. Advance-on-status when
+# functions/ is unchanged; only demand a real deploy when functions/ moved.
 print_functions_deploy_status() {
-  local tip deployed
+  local tip deployed before
   tip="$(git -C "$(primary)" rev-parse origin/main 2>/dev/null || true)"
   [[ -n "$tip" ]] || return 0
   [[ -s "$FUNCTIONS_DEPLOYED_SHA_FILE" ]] || {
     echo "functions: deploy marker missing ($FUNCTIONS_DEPLOYED_SHA_FILE)"
     return 0
   }
+  before="$(tr -d '[:space:]' <"$FUNCTIONS_DEPLOYED_SHA_FILE")"
+  [[ -n "$before" ]] || return 0
+  if [[ "$before" != "$tip" ]]; then
+    # Quiet the advance log line — status prints its own summary.
+    advance_functions_deploy_marker_if_unchanged >/dev/null 2>&1 || true
+  fi
   deployed="$(tr -d '[:space:]' <"$FUNCTIONS_DEPLOYED_SHA_FILE")"
   [[ -n "$deployed" ]] || return 0
-  [[ "$deployed" == "$tip" ]] && return 0
-  if git -C "$(primary)" rev-parse -q --verify "${deployed}^{commit}" >/dev/null 2>&1 \
-    && git -C "$(primary)" diff --quiet "$deployed" "$tip" -- functions firebase.json 2>/dev/null
-  then
-    echo "functions: marker behind tip ${tip:0:8} (unchanged since ${deployed:0:8}; run deploy-functions.sh)"
-  else
-    echo "functions: deploy needed (functions/ changed since ${deployed:0:8}; tip ${tip:0:8})"
+  if [[ "$deployed" == "$tip" ]]; then
+    if [[ "$before" != "$tip" ]]; then
+      echo "functions: marker advanced to tip ${tip:0:8} (functions unchanged since ${before:0:8})"
+    fi
+    return 0
   fi
+  echo "functions: deploy needed (functions/ changed since ${deployed:0:8}; tip ${tip:0:8})"
 }
 
 # Keep functions-deployed-sha at tip across content-only merges during long
