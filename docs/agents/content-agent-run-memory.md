@@ -916,3 +916,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog LPT-624/625/626/627/628/635 + frontier LPT-242/312/315/334 + S6 Highs LPT-252/255/258/271/275/295/301 + needs-human LPT-348 + honesty LPT-414 + Medium LPT-370/588 + Done-ack LPT-558 on `4dd23e49` (Python non-f-string markdown body-files). Soft timing densify still ABSENT (helper **111**; Priority on LPT-628). Soft timing teachSpec **LPT-242** + frontier **LPT-312/315/334** still all-five MISSING.
 - Honesty still valid: **LPT-414** Gutshot-ish on `act-03-02-01-unguided`; **LPT-370** cues null; **LPT-588** Scene flop-only. Meet Nit LPT-624/626. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 (IP) OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR LPT-414 OR Medium LPT-370/588 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## Fold 2026-10-13ce (tip 784e19d9 LPT-628 #2094 Soft timing still ABSENT)
+
+- Tip advanced `7960557c` (#2093) → `784e19d9` (#2094 LPT-628 densify). Diff only adds a comment above `_ => null` in `selectIdentifyDensifiedCoachLine` — **no** new helper arms. `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, densify-tap **118**, `densifyHelperArms` **111**. Soft timing `act-05-07-01-*` still ABSENT (4 densify-tap rows). Do **not** Done-ack LPT-628 from #2094 alone.
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626** — no clones; LPT-216 Done. Frontier Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315** / strategy book **LPT-334** still all-five MISSING teachSpec (densify ≠ teachSpec). Honesty **LPT-414** still Gutshot-ish. Concurrent tip-comments already on tip SHA — no re-spam.
+- Prefer: after LPT-628 densify lands, re-scan Soft timing arms before Done-ack; helper flat **111** means Priority stays.
+- next: Soft-timing densify arms on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR LPT-414 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
