@@ -1474,7 +1474,10 @@ echo "status primary checkout ok"
 
 grep -q 'print_functions_deploy_status' "$LOOP" \
   || fail "loop must define print_functions_deploy_status"
-# Tip == marker → silent; lag with unchanged functions → advise deploy script.
+grep -q 'advance_functions_deploy_marker_if_unchanged' "$LOOP" \
+  || fail "functions status must advance marker when unchanged"
+# Tip == marker → silent; lag with unchanged functions → advance + note;
+# functions/ drift → deploy needed (marker left behind).
 (
   deploy_tmp="$tmp/functions-deploy-status"
   mkdir -p "$deploy_tmp"
@@ -1498,10 +1501,12 @@ grep -q 'print_functions_deploy_status' "$LOOP" \
   [[ -z "$out" ]] || fail "functions status silent at tip, got: $out"
   echo "$old" >"$STATE_DIR/functions-deployed-sha"
   out="$(print_functions_deploy_status)"
-  grep -q 'marker behind tip' <<<"$out" \
-    || fail "functions status should note unchanged lag: $out"
-  grep -q 'deploy-functions.sh' <<<"$out" \
-    || fail "functions status should name deploy script: $out"
+  grep -q 'marker advanced to tip' <<<"$out" \
+    || fail "functions status should advance unchanged lag: $out"
+  [[ "$(tr -d '[:space:]' <"$STATE_DIR/functions-deployed-sha")" == "$tip" ]] \
+    || fail "status must persist advanced marker to tip"
+  # Drift: leave marker at tip (pre-drift), then change functions/ + tip.
+  echo "$tip" >"$STATE_DIR/functions-deployed-sha"
   printf 'c\n' >"$deploy_tmp/functions/x.txt"
   git -C "$deploy_tmp" add functions/x.txt
   git -C "$deploy_tmp" commit -m c -q
@@ -1510,6 +1515,8 @@ grep -q 'print_functions_deploy_status' "$LOOP" \
   out="$(print_functions_deploy_status)"
   grep -q 'deploy needed' <<<"$out" \
     || fail "functions status should note functions/ drift: $out"
+  [[ "$(tr -d '[:space:]' <"$STATE_DIR/functions-deployed-sha")" == "$tip" ]] \
+    || fail "status must not advance marker when functions/ drifted"
 )
 echo "status functions deploy ok"
 
