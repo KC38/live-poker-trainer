@@ -589,10 +589,10 @@ export function buildSectionOne() {
                     "Button deals later; blinds post to the left.",
                     {betterChoiceId: "bb-two"}),
                 ],
-                // LPT-85: authored target stays BB; the seat-ring fallback when
-                // the BB puck is hidden stays in Dart.
+                // the BB puck is hidden stays in Dart., LPT-626
                 teachSpec: {
                   deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "The big blind sits two seats left of the button."}],
                   cues: [{press: 1, target: "BB", kind: "soft_pulse"}],
                 },
               }),
@@ -611,9 +611,10 @@ export function buildSectionOne() {
                     "Blinds are forced bets every hand.",
                     {betterChoiceId: "before-deal"}),
                 ],
-                // LPT-85: phase strip, no cards dealt; Hint golds Before deal.
+                // LPT-85: phase strip, no cards dealt; Hint golds Before deal., LPT-626
                 teachSpec: {
                   deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Blinds go in before any cards are dealt."}],
                   cues: [{press: 1, target: "before-deal", kind: "soft_pulse"}],
                 },
               }),
@@ -726,8 +727,7 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "Pair, then straight, then flush.",
                 missFeedback: "Flush beats straight; straight beats pair.",
-                // LPT-88: dealShowdownOrderCards classes (role ids you/sam/jo = press order);
-                // seat roles shuffle in Dart, cues follow the role ids.
+                // seat roles shuffle in Dart, cues follow the role ids., LPT-626
                 teachSpec: {
                   deal: {
                     mode: "random_in_class",
@@ -737,6 +737,7 @@ export function buildSectionOne() {
                       {id: "var-flush-seat", handFamily: "flush", label: "Flush seat"},
                     ],
                   },
+                  pressHints: [{press: 1, text: "Rank each hand by class: pair, then straight, then flush."}],
                   cues: [
                     {press: 1, target: "you", kind: "soft_pulse"},
                     {press: 2, target: "sam", kind: "soft_pulse"},
@@ -758,8 +759,7 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "Full house, then trips, then two pair.",
                 missFeedback: "Full house tops trips; trips top two pair.",
-                // LPT-88: dealShowdownOrderCards classes (role ids you/sam/jo = press order);
-                // seat roles shuffle in Dart, cues follow the role ids.
+                // seat roles shuffle in Dart, cues follow the role ids., LPT-626
                 teachSpec: {
                   deal: {
                     mode: "random_in_class",
@@ -769,6 +769,7 @@ export function buildSectionOne() {
                       {id: "var-two-pair-seat", handFamily: "two_pair", label: "Two pair seat"},
                     ],
                   },
+                  pressHints: [{press: 1, text: "Rank by class: full house beats trips, trips beat two pair."}],
                   cues: [
                     {press: 1, target: "you", kind: "soft_pulse"},
                     {press: 2, target: "sam", kind: "soft_pulse"},
@@ -881,8 +882,7 @@ export function buildSectionOne() {
                   choice("chop-kicker", "Chop — same pair always ties", "clear_mistake",
                     "Kickers decide when pairs match.", {betterChoiceId: "you-kicker"}),
                 ],
-                // LPT-91: kicker showdown remap: same board pair, hero kicker
-                // beats villain; Hint golds the You seat.
+                // beats villain; Hint golds the You seat., LPT-626
                 teachSpec: {
                   deal: {
                     mode: "random_in_class",
@@ -895,6 +895,7 @@ export function buildSectionOne() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Same pair? Compare the next-highest card — the kicker."}],
                   cues: [{press: 1, target: "hero_holes", kind: "soft_pulse"}],
                 },
               }),
@@ -913,8 +914,7 @@ export function buildSectionOne() {
                     "Hole cards do not improve this board.",
                     {betterChoiceId: "chop-broadway"}),
                 ],
-                // LPT-91: board-plays chop: monotone straight-flush board, small
-                // hero pair; Hint golds the board.
+                // hero pair; Hint golds the board., LPT-626
                 teachSpec: {
                   deal: {
                     mode: "random_in_class",
@@ -928,6 +928,7 @@ export function buildSectionOne() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "If the board is everyone's best five, the pot is split."}],
                   cues: [{press: 1, target: "board", kind: "soft_pulse"}],
                 },
               }),
@@ -952,10 +953,10 @@ export function buildSectionOne() {
                     "You have trips plus a pair — full house.",
                     {betterChoiceId: "fh-eights"}),
                 ],
-                // LPT-91: _dealTripsOverTwoPairs pocket + board trips over two
-                // pairs. Guide order matches fh-eights choice set.
+                // pairs. Guide order matches fh-eights choice set., LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "full_house", suitFamily: "pair"},
+                  pressHints: [{press: 1, text: "Look for three of a kind plus a pair — that's a full house."}],
                   cues: [
                     {press: 1, target: "hero_trip_1", kind: "soft_pulse"},
                     {press: 2, target: "hero_trip_2", kind: "soft_pulse"},
@@ -1032,9 +1033,10 @@ export function buildSectionOne() {
                     "Folding for free throws away equity.",
                     {action: "FOLD", betterChoiceId: "check-free"}),
                 ],
-                // LPT-94
+                // LPT-94, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "weak_draw"},
+                  pressHints: [{press: 1, text: "No bet to match means you can stay in for free."}],
                   cues: [{press: 1, target: "check-free", kind: "soft_pulse"}],
                 },
               }),
@@ -1053,9 +1055,10 @@ export function buildSectionOne() {
                     "Sometimes fold, but here the price is fine if you planned to continue.",
                     {action: "FOLD"}),
                 ],
-                // LPT-94
+                // LPT-94, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "strong_draw"},
+                  pressHints: [{press: 1, text: "Facing a bet, match it to continue."}],
                   cues: [{press: 1, target: "call-5", kind: "soft_pulse"}],
                 },
               }),
@@ -1151,9 +1154,10 @@ export function buildSectionOne() {
                     "Facing a bet you raise or call — you do not 'bet'.",
                     {action: "BET", amountBb: 2.5, betterChoiceId: "raise-15"}),
                 ],
-                // LPT-98: scaffolded raise keeps top_pair SoftPulse on raise-15
+                // LPT-98: scaffolded raise keeps top_pair SoftPulse on raise-15, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "top_pair"},
+                  pressHints: [{press: 1, text: "A strong hand facing a bet can make it bigger."}],
                   cues: [{press: 1, target: "raise-15", kind: "soft_pulse"}],
                 },
               }),
@@ -1172,9 +1176,10 @@ export function buildSectionOne() {
                     "All-in for less is legal and creates a side pot later.",
                     {action: "FOLD", betterChoiceId: "shove-12"}),
                 ],
-                // LPT-98: unguided all-in keeps top_pair SoftPulse on shove-12
+                // LPT-98: unguided all-in keeps top_pair SoftPulse on shove-12, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "top_pair"},
+                  pressHints: [{press: 1, text: "You can never put in more than your stack."}],
                   cues: [{press: 1, target: "shove-12", kind: "soft_pulse"}],
                 },
               }),
@@ -1275,10 +1280,15 @@ export function buildSectionOne() {
                 correct: ["seat-utg", "seat-hj", "seat-co", "seat-btn"],
                 okFeedback: "UTG → HJ → CO → BTN. Button acts last preflop.",
                 missFeedback: "Start under the gun, then HJ, CO, and the button.",
-                // LPT-101: scaffolded order SoftPulse UTG→HJ→CO→BTN; deal none;
-                // CO synced
+                // CO synced, LPT-626
                 teachSpec: {
                   deal: {mode: "none"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Preflop action starts left of the big blind and ends on the button.",
+                    },
+                  ],
                   cues: [
                     {press: 1, target: "seat-utg", kind: "soft_pulse"},
                     {press: 2, target: "seat-hj", kind: "soft_pulse"},
@@ -1302,8 +1312,12 @@ export function buildSectionOne() {
                     "Folding removes a player; others may still act.",
                     {betterChoiceId: "matched"}),
                 ],
-                // LPT-101: unguided-end SoftPulse matched; deal none
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "matched", kind: "soft_pulse"}]},
+                // LPT-101: unguided-end SoftPulse matched; deal none, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "A street ends once every live player has matched the bet."}],
+                  cues: [{press: 1, target: "matched", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-01-04-01-checkpoint-postflop", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1407,7 +1421,7 @@ export function buildSectionOne() {
                   choice("chop-default", "Always chop", "clear_mistake",
                     "Hands still compare.", {betterChoiceId: "showdown"}),
                 ],
-                // LPT-104: scaffolded showdown fixed river SoftPulse showdown, LPT-627
+                // LPT-104: scaffolded showdown fixed river SoftPulse showdown, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -1425,6 +1439,7 @@ export function buildSectionOne() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "When the last bet is called, hands are shown."}],
                   cues: [{press: 1, target: "showdown", kind: "soft_pulse"}],
                 },
               }),
@@ -1443,8 +1458,7 @@ export function buildSectionOne() {
                     "Add both blinds and the open — do not double the raise.",
                     {betterChoiceId: "pot-correct"}),
                 ],
-                // LPT-104: unguided-pot none + open-to variants 5-10 SoftPulse
-                // pot-correct
+                // pot-correct, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "none",
@@ -1457,6 +1471,7 @@ export function buildSectionOne() {
                       {id: "open-10", label: "Open to 10"},
                     ],
                   },
+                  pressHints: [{press: 1, text: "Add both blinds to the open size."}],
                   cues: [{press: 1, target: "pot-correct", kind: "soft_pulse"}],
                 },
               }),
@@ -1593,10 +1608,10 @@ export function buildSectionOne() {
                     ],
                   },
                 ],
-                // LPT-108: scaffolded-multi suited_ace SoftPulse ready-flop then
-                // cbet
+                // cbet, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "suited_ace", suitFamily: "suited"},
+                  pressHints: [{press: 1, text: "Confirm the flop first, then bet when you hit top pair."}],
                   cues: [
                     {press: 1, target: "ready-flop", kind: "soft_pulse"},
                     {press: 2, target: "cbet", kind: "soft_pulse"},
@@ -1653,9 +1668,15 @@ export function buildSectionOne() {
                     ],
                   }],
                 },
-                // LPT-108: unguided-lab high_card offsuit SoftPulse call-bb
+                // LPT-108: unguided-lab high_card offsuit SoftPulse call-bb, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "high_card", suitFamily: "offsuit"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Weak offsuit aces in the big blind need a good price to continue.",
+                    },
+                  ],
                   cues: [{press: 1, target: "call-bb", kind: "soft_pulse"}],
                 },
               }),
@@ -1932,8 +1953,12 @@ export function buildSectionTwo() {
                   choice("ep-only", "EP", "clear_mistake",
                     "Early position is voluntary action.", {betterChoiceId: "sb-bb"}),
                 ],
-                // LPT-112: scaffolded-blinds SoftPulse sb-bb deal none
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sb-bb", kind: "soft_pulse"}]},
+                // LPT-112: scaffolded-blinds SoftPulse sb-bb deal none, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Forced bets come from the two seats left of the button."}],
+                  cues: [{press: 1, target: "sb-bb", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-01-01-unguided-co", order: 4, stage: "scaffolded",
@@ -1949,8 +1974,12 @@ export function buildSectionTwo() {
                     "EP is near the blinds, not near the button.",
                     {betterChoiceId: "label-co"}),
                 ],
-                // LPT-112: unguided-co SoftPulse label-co deal none
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "label-co", kind: "soft_pulse"}]},
+                // LPT-112: unguided-co SoftPulse label-co deal none, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "The cutoff sits one seat right of the button."}],
+                  cues: [{press: 1, target: "label-co", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-01-01-checkpoint-edge", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2033,10 +2062,15 @@ export function buildSectionTwo() {
                 correct: ["post-sb", "post-btn"],
                 okFeedback: "Small blind first; button last.",
                 missFeedback: "Left of the button acts first.",
-                // LPT-115: scaffolded-post SoftPulse after Hint; deal.mode none
-                // on all four
+                // on all four, LPT-626
                 teachSpec: {
                   deal: {mode: "none"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "After the flop, the seat closest left of the button acts first.",
+                    },
+                  ],
                   cues: [
                     {press: 1, target: "post-sb", kind: "soft_pulse"},
                     {press: 2, target: "post-btn", kind: "soft_pulse"},
@@ -2056,8 +2090,12 @@ export function buildSectionTwo() {
                   choice("flash-cards", "Show your cards while waiting", "clear_mistake",
                     "Protect your cards; still wait.", {betterChoiceId: "wait"}),
                 ],
-                // LPT-115: unguided SoftPulse wait; checkpoint no pressHints
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "wait", kind: "soft_pulse"}]},
+                // LPT-115: unguided SoftPulse wait; checkpoint no pressHints, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Earlier seats act before you — wait your turn."}],
+                  cues: [{press: 1, target: "wait", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-01-02-checkpoint-full", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2151,10 +2189,10 @@ export function buildSectionTwo() {
                     "Ace-king is a premium broadway, not trash.",
                     {betterChoiceId: "hf-broadway"}),
                 ],
-                // LPT-119: SoftPulse hf-pair/hf-broadway/hf-sc; checkpoint
-                // hf-trash kind none
+                // hf-trash kind none, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "broadway"},
+                  pressHints: [{press: 1, text: "Both cards ten or higher? That family is broadway."}],
                   cues: [{press: 1, target: "hf-broadway", kind: "soft_pulse"}],
                 },
               }),
@@ -2172,9 +2210,15 @@ export function buildSectionTwo() {
                     "Connected and suited is a real family, not trash.",
                     {betterChoiceId: "hf-sc"}),
                 ],
-                // LPT-119: isomorphic preflop redeals in family
+                // LPT-119: isomorphic preflop redeals in family, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "connector", suitFamily: "suited"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Same suit and next to each other in rank — what family is that?",
+                    },
+                  ],
                   cues: [{press: 1, target: "hf-sc", kind: "soft_pulse"}],
                 },
               }),
@@ -2266,9 +2310,10 @@ export function buildSectionTwo() {
                   choice("fold-qq", "Fold", "clear_mistake",
                     "Never fold queens here.", {action: "FOLD", betterChoiceId: "open-qq"}),
                 ],
-                // LPT-122: SoftPulse cues + deal
+                // LPT-122: SoftPulse cues + deal, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "pair"},
+                  pressHints: [{press: 1, text: "Premium pairs open from any seat — raise to a live size."}],
                   cues: [{press: 1, target: "open-qq", kind: "soft_pulse"}],
                 },
               }),
@@ -2286,9 +2331,15 @@ export function buildSectionTwo() {
                     "Prefer a raise on the button.",
                     {action: "CALL", betterChoiceId: "open-k9s"}),
                 ],
-                // LPT-122: checkpoint quiet
+                // LPT-122: checkpoint quiet, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "high_card", suitFamily: "suited"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "The button can open wider — suited high cards are an easy raise.",
+                    },
+                  ],
                   cues: [{press: 1, target: "open-k9s", kind: "soft_pulse"}],
                 },
               }),
@@ -2382,9 +2433,15 @@ export function buildSectionTwo() {
                     "Sometimes fine later; baseline is call.",
                     {action: "RAISE", amountBb: 9}),
                 ],
-                // LPT-125: SoftPulse cues + deal
+                // LPT-125: SoftPulse cues + deal, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "connector", suitFamily: "suited"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "In position with a suited connector, keep the pot small and see a flop.",
+                    },
+                  ],
                   cues: [{press: 1, target: "call-87s", kind: "soft_pulse"}],
                 },
               }),
@@ -2402,9 +2459,10 @@ export function buildSectionTwo() {
                   choice("fold-kk", "Fold", "clear_mistake",
                     "Never fold kings here.", {action: "FOLD", betterChoiceId: "3bet-kk"}),
                 ],
-                // LPT-125: checkpoint quiet
+                // LPT-125: checkpoint quiet, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "pair"},
+                  pressHints: [{press: 1, text: "Premium pairs facing an open want to build the pot."}],
                   cues: [{press: 1, target: "3bet-kk", kind: "soft_pulse"}],
                 },
               }),
@@ -2494,8 +2552,12 @@ export function buildSectionTwo() {
                     "Effective is the minimum, not the sum.",
                     {betterChoiceId: "eff-60"}),
                 ],
-                // LPT-128: SoftPulse cues + deal
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "eff-60", kind: "soft_pulse"}]},
+                // LPT-128: SoftPulse cues + deal, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Only the shorter stack can be won or lost."}],
+                  cues: [{press: 1, target: "eff-60", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-05-01-unguided-depth", order: 4, stage: "scaffolded",
@@ -2511,8 +2573,12 @@ export function buildSectionTwo() {
                     "Deep — more postflop room, not shove-or-fold.",
                     {betterChoiceId: "depth-50"}),
                 ],
-                // LPT-128: checkpoint quiet
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "depth-50", kind: "soft_pulse"}]},
+                // LPT-128: checkpoint quiet, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Fewer big blinds plays closer to a shove game."}],
+                  cues: [{press: 1, target: "depth-50", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-05-01-checkpoint-200", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2597,8 +2663,12 @@ export function buildSectionTwo() {
                   choice("tap-table", "Tap the table then shove a stack", "clear_mistake",
                     "A tap looks like a check.", {betterChoiceId: "say-raise"}),
                 ],
-                // LPT-131: checkpoint quiet
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "say-raise", kind: "soft_pulse"}]},
+                // LPT-131: checkpoint quiet, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Say your action out loud before you move chips."}],
+                  cues: [{press: 1, target: "say-raise", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-02-06-01-unguided-protect", order: 4, stage: "scaffolded",
@@ -2613,9 +2683,10 @@ export function buildSectionTwo() {
                   choice("leave-loose", "Leave them loose near the dealer", "clear_mistake",
                     "Loose cards get killed.", {betterChoiceId: "chip-on-cards"}),
                 ],
-                // LPT-131: wave synced
+                // LPT-131: wave synced, LPT-626
                 teachSpec: {
                   deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Keep something on your cards so they can't be mucked."}],
                   cues: [{press: 1, target: "chip-on-cards", kind: "soft_pulse"}],
                 },
               }),
@@ -2707,9 +2778,10 @@ export function buildSectionTwo() {
                     "Sometimes as a bluff later — not the baseline yet.",
                     {action: "RAISE", amountBb: 9}),
                 ],
-                // LPT-135: SoftPulse cues + deal
+                // LPT-135: SoftPulse cues + deal, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "pair"},
+                  pressHints: [{press: 1, text: "Small pairs in position can call to try to flop a set."}],
                   cues: [{press: 1, target: "call-22", kind: "soft_pulse"}],
                 },
               }),
@@ -2764,9 +2836,15 @@ export function buildSectionTwo() {
                     ],
                   }],
                 },
-                // LPT-135: checkpoint quiet
+                // LPT-135: checkpoint quiet, LPT-626
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "broadway", suitFamily: "offsuit"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "On the button versus a cutoff open, position lets you play more hands.",
+                    },
+                  ],
                   cues: [{press: 1, target: "lab-3bet", kind: "soft_pulse"}],
                 },
               }),

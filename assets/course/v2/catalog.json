@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "07a1946ba8ec6f8dd05ace7bfef1628861812131f7c74e944b70d62b3b96ad78",
+  "contentChecksum": "adc29b49177d2ce28a96ac012eff5fb989dc6d079884182b1f3eee8abf708ce9",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -816,6 +816,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "The big blind sits two seats left of the button."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -862,6 +868,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Blinds go in before any cards are dealt."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -1119,6 +1131,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Rank each hand by class: pair, then straight, then flush."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -1185,6 +1203,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Rank by class: full house beats trips, trips beat two pair."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -1468,6 +1492,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Same pair? Compare the next-highest card — the kicker."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -1523,6 +1553,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "If the board is everyone's best five, the pot is split."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -1572,6 +1608,12 @@
                       "handFamily": "full_house",
                       "suitFamily": "pair"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Look for three of a kind plus a pair — that's a full house."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -1775,6 +1817,12 @@
                       "mode": "random_in_class",
                       "handFamily": "weak_draw"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "No bet to match means you can stay in for free."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -1825,6 +1873,12 @@
                       "mode": "random_in_class",
                       "handFamily": "strong_draw"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Facing a bet, match it to continue."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -2054,6 +2108,12 @@
                       "mode": "random_in_class",
                       "handFamily": "top_pair"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A strong hand facing a bet can make it bigger."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -2104,6 +2164,12 @@
                       "mode": "random_in_class",
                       "handFamily": "top_pair"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "You can never put in more than your stack."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -2346,6 +2412,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Preflop action starts left of the big blind and ends on the button."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -2407,6 +2479,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A street ends once every live player has matched the bet."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -2705,6 +2783,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "When the last bet is called, hands are shown."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -2777,6 +2861,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Add both blinds to the open size."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -3062,6 +3152,12 @@
                       "handFamily": "suited_ace",
                       "suitFamily": "suited"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Confirm the flop first, then bet when you hit top pair."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -3118,6 +3214,12 @@
                       "handFamily": "high_card",
                       "suitFamily": "offsuit"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Weak offsuit aces in the big blind need a good price to continue."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -3699,6 +3801,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Forced bets come from the two seats left of the button."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -3745,6 +3853,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "The cutoff sits one seat right of the button."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -3955,6 +4069,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "After the flop, the seat closest left of the button acts first."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -4006,6 +4126,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Earlier seats act before you — wait your turn."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -4235,6 +4361,12 @@
                       "mode": "random_in_class",
                       "handFamily": "broadway"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Both cards ten or higher? That family is broadway."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -4283,6 +4415,12 @@
                       "handFamily": "connector",
                       "suitFamily": "suited"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Same suit and next to each other in rank — what family is that?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -4516,6 +4654,12 @@
                       "mode": "random_in_class",
                       "handFamily": "pair"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Premium pairs open from any seat — raise to a live size."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -4568,6 +4712,12 @@
                       "handFamily": "high_card",
                       "suitFamily": "suited"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "The button can open wider — suited high cards are an easy raise."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -4807,6 +4957,12 @@
                       "handFamily": "connector",
                       "suitFamily": "suited"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "In position with a suited connector, keep the pot small and see a flop."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -4858,6 +5014,12 @@
                       "mode": "random_in_class",
                       "handFamily": "pair"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Premium pairs facing an open want to build the pot."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -5078,6 +5240,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Only the shorter stack can be won or lost."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -5124,6 +5292,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Fewer big blinds plays closer to a shove game."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -5350,6 +5524,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Say your action out loud before you move chips."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -5396,6 +5576,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Keep something on your cards so they can't be mucked."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -5628,6 +5814,12 @@
                       "mode": "random_in_class",
                       "handFamily": "pair"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Small pairs in position can call to try to flop a set."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -5681,6 +5873,12 @@
                       "handFamily": "broadway",
                       "suitFamily": "offsuit"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "On the button versus a cutoff open, position lets you play more hands."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -6215,6 +6413,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "First to act preflop sits just left of the big blind."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -6261,6 +6465,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "At a live table, the word you say first binds you."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -6566,6 +6776,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Count your draw and any overcards — not just made pairs."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -6655,6 +6871,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "No pair and almost no draw — what class is that?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -6965,6 +7187,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "The price to call is the size of the bet you face."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -7054,6 +7282,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Compare your outs to the price, then add implied odds when deep."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -7419,6 +7653,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Dry ace-high boards favor the preflop raiser's range."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -7512,6 +7752,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A very strong hand multiway wants to build the pot now."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -7873,6 +8119,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Top pair on a brick turn can keep betting for value."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -7969,6 +8221,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "When your draw gets there, bet for value."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -8340,6 +8598,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "If your line tells a believable story, the river card can carry a bluff."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -8439,6 +8703,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A huge jam after a quiet line is rarely a bluff."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -8747,6 +9017,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "More opponents means someone usually has a hand."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -8793,6 +9069,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Deep and multiway, prefer hands that can make the nuts."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -9104,6 +9386,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A small draw can't pay a price bigger than the pot."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -9197,6 +9485,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "No pair, no draw, several players — don't fight for it."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -9852,6 +10146,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Who showed the most strength preflop?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -9944,6 +10244,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Think in ranges — one exact hand is too precise."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -10266,6 +10572,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Weak hands facing a 3-bet out of position should let go."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -10346,6 +10658,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Strong hands with dead money in the pot can raise big."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -10729,6 +11047,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "When the board turns bad for your story, stop barreling."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -10815,6 +11139,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Medium hands like medium pots."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -11138,6 +11468,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A bluff that tells a strong story uses a big size."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -11184,6 +11520,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Sizes that are close together do the same job."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -11487,6 +11829,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "With little behind and a monster, commit your stack."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -11573,6 +11921,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Lots behind with a medium hand — keep the pot small."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -11828,6 +12182,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Calling down again and again says they rarely fold."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -11869,6 +12229,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A single hand is a tiny sample."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -12068,6 +12434,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A label is a guess you keep updating."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -12112,6 +12484,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Limps, calls, and never folds — which type calls everything?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -12418,6 +12796,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Players who never fold don't respect bluffs."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -12511,6 +12895,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Without a read, go back to your baseline."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -12712,6 +13102,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "When a tight seat finally bets hard, believe it."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -12753,6 +13149,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Two folded hands aren't enough to label anyone."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -12955,6 +13357,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Folds almost every hand, then shows big aggression — which type?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -13226,6 +13634,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Tight players raise with strong hands — respect it."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -13298,6 +13712,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Without a tight-player read, a light steal is thinner."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -13499,6 +13919,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Betting every street with weak hands means they push too wide."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -13540,6 +13966,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Write down what they do often, not how it felt."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -13742,6 +14174,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Light 3-bets and never gives up — which type is that?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -14052,6 +14490,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Wild players call light — bet your strong hands."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -14144,6 +14588,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Without a wild-player read, fold more marginal hands."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -14352,6 +14802,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "More hands raise confidence, but reads can still change."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -14396,6 +14852,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "When behavior changes, the label should change too."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -14708,6 +15170,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Tight-player aggression is strong — let marginal hands go."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -14810,6 +15278,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Wild players bluff more — call down wider."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -15528,6 +16002,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Speculative hands play badly out of position in big fields."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -15624,6 +16104,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Very strong hands on wet boards bet to build and protect."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -15878,6 +16364,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Deep stacks and big raises call for a strong hand."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -15919,6 +16411,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "With a high SPR, plan later streets before committing."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -16216,6 +16714,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Dominated hands lose big pots — fold to heavy heat."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -16302,6 +16806,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A non-nut draw multiway can make a second-best hand."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -16627,6 +17137,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Aggressive players bluff more — bluff-catch wider."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -16730,6 +17246,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Tight players won't call thin value — check behind."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -16989,6 +17511,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "When the raiser checks, a small bet can take it down."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -17030,6 +17558,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A big lead into the raiser is often very strong or a bluff."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -17276,6 +17810,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "When the price changes, re-check your draw's odds."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -17317,6 +17857,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Update your read on every street."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -17520,6 +18066,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Very small bets often mean weakness or a blocking bet."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -17561,6 +18113,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Single physical tells aren't reliable rules."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -17759,6 +18317,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A sudden change in style can be a gear shift — watch more hands."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -17851,6 +18415,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Tilt costs money — protect your bankroll first."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -18049,6 +18619,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Stick to the stakes your bankroll plan allows."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -18090,6 +18666,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Tired players make mistakes — know when to leave."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -18644,6 +19226,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "The wider range holds more of the odd paired-board hands."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -18738,6 +19326,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "With the range and nut edge, the raiser can bet."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -18936,6 +19530,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Weak showdown hands out of position struggle against repeated bets."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -18977,6 +19577,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A semi-bluff wins by folds now or outs later."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -19233,6 +19839,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A capped opponent can't have the best hands — bet thin."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -19274,6 +19886,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Strength on every street means the range is uncapped."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -19534,6 +20152,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Thin value against callers uses a medium size."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -19575,6 +20199,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A tiny bet rarely makes a believable bluff."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -19830,6 +20460,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Geometric sizing grows evenly — size the turn to match the pot."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -19871,6 +20507,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Huge overbets need a polarized hand, not a medium one."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -20074,6 +20716,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Bluff-catch with hands that don't block their bluffs."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -20115,6 +20763,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Blockers fine-tune a choice; they don't make it."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -20364,6 +21018,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Weak bluff-catchers on scary rivers usually let go."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -20405,6 +21065,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "This course keeps defense frequencies as feel, not exact numbers."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -20653,6 +21319,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Players who don't fold make bluffs lose money."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -20694,6 +21366,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Mix only when it has a reason."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -20939,6 +21617,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Deep in a 3-bet pot, a miss doesn't have to stack off."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -20980,6 +21664,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Light 4-bets need blockers and a reason."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -21235,6 +21925,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Did anyone actually make a mistake here?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -21276,6 +21972,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Past results don't change what the cards will do."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -21479,6 +22181,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Giving up when called is discipline, not wildness."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -21520,6 +22228,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Two hands is a tiny sample."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -21719,6 +22433,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Compare how many hands each plays and when they slow down."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -21763,6 +22483,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Tight entry, folds to 3-bets, picks spots — which type?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -22041,6 +22767,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Solid players defend more than very tight ones — steal less."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -22137,6 +22869,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "If they rarely call light, thin value loses."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -22343,6 +23081,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Does this seat ever fold under pressure?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -22384,6 +23128,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "One wide open is not enough to label anyone."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -22583,6 +23333,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "One type raises a lot; the other calls a lot."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -22627,6 +23383,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Wide opens, light 3-bets, keeps betting — which type?"
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -22932,6 +23694,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Against aggressive players, strong hands can let them bluff."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -22976,6 +23744,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Aggressive players don't fold easily — don't invent big bluffs."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -23293,6 +24067,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Tight-player aggression is strong — respect it."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -23388,6 +24168,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Aggressive players bluff more — bluff-catch wider."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -23840,6 +24626,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Did the flop help your plan? Keep going with value."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -23881,6 +24673,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Have a plan before the flop comes."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -24079,6 +24877,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "When the turn misses and they raise big, the plan says stop."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -24120,6 +24924,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Every flop bet needs a turn plan."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -24372,6 +25182,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Holding a key card means they hold it less often."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -24413,6 +25229,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "No value, no blockers, no folds — don't bet."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -24611,6 +25433,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "In position heads-up, a planned c-bet is the main tool."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -24652,6 +25480,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Bigger preflop pots mean more commitment — play tighter."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -24853,6 +25687,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Heads-up against a tight blind, steal more often."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -24894,6 +25734,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Multiway, strong hands lean toward value and protection."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -25092,6 +25938,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Deeper stacks pay off small pairs that hit sets."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -25133,6 +25985,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Effective stack is always the shorter one."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -25434,6 +26292,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Solid players raising late usually have it — slow down."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -25526,6 +26390,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Aggressive players barrel wide — keep calling more."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -25836,6 +26706,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Tight players' small bets fold to pressure more often."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -25931,6 +26807,12 @@
                         }
                       ]
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Solid players' big river bets are strong — let medium hands go."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -26129,6 +27011,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Start from a written default range."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -26170,6 +27058,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Review your book regularly, not only after bad nights."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -27544,6 +28438,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Bring your defaults and your notes on opponents."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
@@ -27585,6 +28485,12 @@
                     "deal": {
                       "mode": "none"
                     },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "This course covers one game only."
+                      }
+                    ],
                     "cues": [
                       {
                         "press": 1,
