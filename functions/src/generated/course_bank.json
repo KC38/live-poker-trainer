@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "9b93ff13e4f3b3edc773daad64925b5dd45b942ce89e5c6519d0e51085278635",
+  "contentChecksum": "9a3502bad0dcba6130a1962e98f44e7a8ea47b097c97cb807dbf1d53677adbdb",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -26213,7 +26213,29 @@
                   ],
                   "objectives": [
                     "Execute a full SRP plan"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PLAN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "UPDATE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FINISH",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-10-01-hand",
@@ -26356,7 +26378,42 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qd"
+                        ],
+                        "board": [
+                          "Kc",
+                          "7s",
+                          "2h",
+                          "2d",
+                          "9c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cb",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "barrel",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "check-r",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 }
               ]
             },

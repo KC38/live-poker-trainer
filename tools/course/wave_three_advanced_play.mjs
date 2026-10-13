@@ -3173,7 +3173,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-10-01-explain", 1,
                 "Capstone SRP. No hints. Trust your map.",
-                {objectives: ["Execute a full SRP plan"]}),
+                {
+                  objectives: ["Execute a full SRP plan"],
+                  // LPT-337
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "PLAN", kind: "soft_pulse"},
+                      {press: 2, target: "UPDATE", kind: "soft_pulse"},
+                      {press: 3, target: "FINISH", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               multiStepAct({
                 id: "act-07-10-01-hand", order: 2, stage: "scaffolded",
                 a11y: "BTN open, BB call. Play three streets.",
@@ -3220,6 +3231,18 @@ export function buildSectionSeven() {
                     ],
                   },
                 ],
+                // LPT-337
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Qd"], board: ["Kc", "7s", "2h", "2d", "9c"]},
+                  },
+                  cues: [
+                    {press: 1, target: "cb", kind: "soft_pulse"},
+                    {press: 2, target: "barrel", kind: "soft_pulse"},
+                    {press: 3, target: "check-r", kind: "soft_pulse"},
+                  ],
+                },
               }),
             ],
           }),
