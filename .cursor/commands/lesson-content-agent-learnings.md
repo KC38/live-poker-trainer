@@ -63,11 +63,12 @@ Lesson-specific pattern notes (full history) live in
   fold into this file + `content-agent-run-memory.md` and ship a
   `chore/content-agent-learnings-*` (or `cursor/chore-content-*`)
   PR the same tick so the next agent reads them from git. Coverage
-  `learnings: pending` means unfolder until that PR is on tip and
-  `~/.live-poker-trainer/content-agent-learnings-pending.md` has zero
-  `- ` bullets — do not treat the coverage field alone as folded.
-  After the PR opens, leave PRIMARY clean on `main` (loop
-  `sync_primary` returns any leftover `cursor/chore-content-*`).
+  `learnings: updated` only when the squash is on `origin/main` (and
+  tip run-memory contains the SHA fold) — an open/draft chore PR or
+  home pending file alone is still unfolder (`pending`). Pending
+  file must have zero `- ` bullets after fold. After the PR opens,
+  leave PRIMARY clean on `main` (loop `sync_primary` returns any
+  leftover `cursor/chore-content-*`).
 - Never create a `catalog:teachSpec` parent while
   `scan_content_gaps.mjs` `CATALOG_PARENTS.teachSpec` is `null` —
   interactive missing-teachSpec Highs stay per-lesson; only SoftPulse
@@ -145,6 +146,12 @@ Lesson-specific pattern notes (full history) live in
 - Prefer when catalog JSON gaps are all **0**, Done parents already **HAS** tip SHA, and coverage already logged that SHA: do a discovery walk on the oldest `lesson:` surface in `content-agent-coverage.jsonl` (honesty / curriculum one-offs) instead of re-spamming LPT-348 / Done catalog parents. Tip-comment the open needs-human curriculum split for that lesson when still valid (e.g. Hand ranks **LPT-90**, position-labels **LPT-114**, live-habits **LPT-133**); keep Capstone **LPT-348** off LPT-626 until a human decides `noHintIds` vs pressHints; still diff one-per-press onto **LPT-667**.
 
 ## Recent fold
+
+- 2026-10-14b: Tip-stable `216437dc` (#2160). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Discovery `lesson-06-13-02-section-six-checkpoint` structural clean (all five `assessmentRole` checkpoint + teachSpec `deal.mode` `none` cues `ra`/`cap`/`polar`/`tag`/`lag` kind `none`; densify arms PRESENT; hintless; no needs-human split). Done-ack **LPT-307**/444. Sole open Medium **LPT-348** (already HAS tip). Rescued unfolder draft folds meet-lag + mix-five onto tip. next: LPT-348 OR `lesson-07-01-01-preflop-to-flop` / Low curriculum.
+
+- 2026-10-14a: Tip `216437dc` (#2160 after #2158). Catalog `--counts` all **0**. Discovery `lesson-06-13-01-mix-five-types` structural clean; tip-commented curriculum **LPT-306**. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-13-02-section-six-checkpoint` / Low curriculum.
+
+- 2026-10-13dt: Tip mid-run `6d9f3068`→`35c01162` (#2158). Catalog `--counts` all **0**. Discovery `lesson-06-12-02-meet-lag` structural clean; tip-commented curriculum **LPT-300**. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-13-01-mix-five-types` / Low curriculum.
 
 - 2026-10-13ds: Tip-stable `6d9f3068` (#2157). Catalog `--counts` all **0**. Discovery `lesson-06-11-03-adjust-tag` + `lesson-06-12-01-observe-wide-pressure` structural clean; tip-commented **LPT-294** / **LPT-297**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; sole open Medium **LPT-348**. next: LPT-348 OR `lesson-06-12-02-meet-lag` / Low curriculum.
 
