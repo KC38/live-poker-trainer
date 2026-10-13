@@ -142,6 +142,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13di: Tip `4dbc5b9a` (#2145 Prefer/Capstone notes). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. LPT-667/348 already **HAS** tip — no re-spam. Discovery oldest-unfresh `lesson-04-08-02-meet-maniac` structural clean (explainGrading; unguided one-per-press; checkpoint hintless; `deal.mode` `none`); tip-commented curriculum **LPT-208** + Done-ack **LPT-206**. Acting-order fold from conflicted #2146 folded here (`scaffolded-post` stays on **LPT-667**). next: LPT-667 one-per-press OR LPT-348 needs-human OR next oldest (lines-and-probes).
+
 - 2026-10-13dh: Tip `65d01ce6` (#2142 LPT-667+position-labels). Monitor folded unique Prefer from superseded drafts #2139 (oldest-lesson discovery when gaps **0**) + #2140 (Capstone five-hand `NO_HINT` expand) + #2144 live-habits discovery notes. Catalog gaps still **0**; open Medium **LPT-667** + **LPT-348**. next: LPT-667 one-per-press OR LPT-348 needs-human OR next oldest discovery.
 
 - 2026-10-13df: Tip-stable `43a1be2d` (#2138). Catalog `--counts` still all **0**. Discovery `lesson-02-01-01-position-labels` structural clean (one-per-press complete; explain has `explainGrading`); tip-commented curriculum **LPT-114** + **LPT-667** (6 rows still valid) + **LPT-348**. Prior #2141 draft fold not on tip — ship this branch. next: LPT-667 OR LPT-348 OR Low curriculum / next oldest discovery.
