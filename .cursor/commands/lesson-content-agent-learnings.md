@@ -56,7 +56,11 @@ Lesson-specific pattern notes (full history) live in
 - Never treat “teachSpec present” as schema-complete — diff
   `handFamily` / `suitFamily` against `teach_spec.schema.json` enums.
 - Never leave durable loop learnings only in the home pending file —
-  fold into this file + `content-agent-run-memory.md` and ship.
+  fold into this file + `content-agent-run-memory.md` and ship a
+  `chore/content-agent-learnings-*` PR the same tick. Coverage
+  `learnings: pending` means unfolder until that PR is on tip and
+  `~/.live-poker-trainer/content-agent-learnings-pending.md` has zero
+  `- ` bullets — do not treat the coverage field alone as folded.
 - Never create a `catalog:teachSpec` parent while
   `scan_content_gaps.mjs` `CATALOG_PARENTS.teachSpec` is `null` —
   interactive missing-teachSpec Highs stay per-lesson; only SoftPulse

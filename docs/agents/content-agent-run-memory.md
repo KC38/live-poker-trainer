@@ -231,3 +231,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 - After a densify sibling reaches **Done** with Validated-on-origin/main (e.g. LPT-640), immediately edit catalog densify-tap **LPT-628** body text that still says “leave In Progress until Validated” — stale waiting language confuses the next pass. Keep arms/fallthrough numbers; only flip the sibling status sentence.
 - ui-agent Hint-disabled tickets (e.g. LPT-643): identify the activity stage before agreeing with “Hint always on.” Guided SoftPulse teach intentionally keeps **Hint off while gold SoftPulse is on** (04-course). Scaffolded non-assessment (e.g. `act-01-02-02-checkpoint-build` after #1900) must allow Hint — pair with catalog pressHints **LPT-626**; do not file a per-lesson pressHints clone. Prefer Relates to LPT-626; keep `ui-agent` for mini proof.
+
+## Fold 2026-10-13
+
+- Loop learnings must land in git every tick: run
+  `tools/fold_agent_learnings.sh`, distill Never/Prefer into
+  `lesson-content-agent-learnings.md`, append full notes here, and ship
+  `chore/content-agent-learnings-YYYYMMDD` (e.g. #1903 / #1905). Coverage
+  JSONL `learnings: pending` is not enough — next agents still miss the
+  rule until tip has the fold and the home pending file has zero `- `
+  bullets. After machine-SDK 504 thrash, ff-pull `origin/main` before
+  Done/tip-comments (loop SHA can lag merges like #1905/#1906).
