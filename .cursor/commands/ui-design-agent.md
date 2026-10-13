@@ -200,8 +200,8 @@ learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 | Search | `python3 tools/jira.py search '<JQL>'` |
 | Open Mac-mini queue | `python3 tools/jira.py ui-queue` (filters `needs-human` / `grokbot` locally — do **not** use Jira `labels !=`) |
 | Read an issue, comments, links | `python3 tools/jira.py get LPT-NN` |
-| Create (Mac mini) | `python3 tools/jira.py create --type Story --summary "…" --priority Medium --labels ui,ui-agent,lesson --body-file body.md --attach <surface>-issue.png` |
-| Create (GrokBot) | `python3 tools/jira.py create --type Bug --summary "…" --priority Medium --labels ui,grokbot,home --body-file body.md --attach <surface>-issue.png` |
+| Create (Mac mini) | `tools/tee_exit.sh /tmp/jira-create-….log python3 tools/jira.py create --type Story --summary "…" --priority Medium --labels ui,ui-agent,lesson --body-file body.md --attach <surface>-issue.png` then `tools/wait_done.sh /tmp/jira-create-….done` (foreground create+PNG can hang 10+ min with no stdout — LPT-644) |
+| Create (GrokBot) | same `tee_exit` / `wait_done` pattern with `--type Bug` and labels `ui,grokbot,…` |
 | Edit fields or labels | `python3 tools/jira.py edit LPT-NN [--body-file body.md] [--add-label needs-human] [--remove-label …]` |
 | Comment with screenshots | `python3 tools/jira.py comment LPT-NN --body-file note.md --attach shot.png` |
 | Verify thumbs resolve | `python3 tools/jira.py verify-embeds LPT-NN` (must exit 0 before Done) |
