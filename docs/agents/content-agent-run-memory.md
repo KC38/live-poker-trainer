@@ -530,3 +530,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog parents LPT-624/626/627/625/628/635 + frontier LPT-242/312/315 + IP teachSpecs LPT-252/255/271/275/301/334 + unchecked To Do Highs LPT-258/295/339/341/345/347/349/352 + needs-human LPT-348 + honesty/fingerprint LPT-401/402/408/409/411/414/417.
 - Soft timing **LPT-242** still all-five MISSING; densify ABSENT (helper **53** — stay on **LPT-628**). Frontiers **LPT-312** / **LPT-315**; next Capstone teachSpec **LPT-339**. Grep `act-07-10-02-*`: no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty (0 bullets). `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-339 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(88)/635/624(50)/625(24).
+
+## Fold 2026-10-13 tip cbb7fb14 (#1999 ui-agent soft-stop after #1997 LPT-405)
+
+- Tip advanced `5be698bd` (#1997 LPT-405 Q83r) → `cbb7fb14` (#1999). `scan_content_gaps --counts` flat: pressHints **151**, deal-variants **88**, teachSpec **59**, explain-teachSpec **28**, nice-ladder **50**, SoftPulse-map **24**, densifyHelperArms **53**. Parents tip-comment only.
+- **LPT-405 Done** on tip (`Flop · Q83r · AQ`). Companion **LPT-339** still teachSpec MISSING (explain + hand). Meet Nit → LPT-624/626; LPT-216 Done — no clones.
+- Soft timing **LPT-242** still all-five MISSING; densify ABSENT (helper 53). Frontiers **LPT-312**/ **LPT-315**. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-339 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(88)/635/624(50)/625(24).
+
