@@ -586,6 +586,8 @@ int _drawOutsFor(List<String> hero, List<String> board) {
 /// [isSet] and [distinctBoardPairingHoles] keep [HandClass.strongMade]
 /// top-two templates (two distinct holes each pairing the board) from
 /// remapping into a set — both collapse to strongMade (LPT-392).
+/// [setDepth] keeps top / middle / bottom set templates on the same depth
+/// (LPT-411).
 /// [pairDepth] keeps second / third pair templates on the same board rank
 /// depth (all collapse to [HandClass.weakPair]; LPT-409).
 /// [nutFlushDraw] keeps nut flush draw templates on the nut draw, and
@@ -604,6 +606,7 @@ int _drawOutsFor(List<String> hero, List<String> board) {
   bool hasMadePair,
   bool isSet,
   int distinctBoardPairingHoles,
+  int setDepth,
   int pairDepth,
   bool nutFlushDraw,
   String earlierStreets,
@@ -618,6 +621,7 @@ int _drawOutsFor(List<String> hero, List<String> board) {
     hasMadePair: _heroHasMadePair(hero, board),
     isSet: _heroHasSet(hero, board),
     distinctBoardPairingHoles: _distinctBoardPairingHoleCount(hero, board),
+    setDepth: _heroSetDepth(hero, board),
     pairDepth: _heroBoardPairDepth(hero, board),
     nutFlushDraw: _heroHasNutFlushDraw(hero, board),
     earlierStreets: _earlierStreetsKey(hero, board),
@@ -733,6 +737,13 @@ int _heroBoardPairDepth(List<String> hero, List<String> board) {
   ].where((d) => d >= 0).toList();
   if (depths.isEmpty) return -1;
   return depths.reduce((a, b) => a < b ? a : b);
+}
+
+/// Board-relative depth of hero's set: 0 = top set, 1 = middle, and so on.
+/// -1 when hero has no set.
+int _heroSetDepth(List<String> hero, List<String> board) {
+  if (!_heroHasSet(hero, board)) return -1;
+  return _boardRankDepth(CardModel.fromCode(hero[0]).rank, board);
 }
 
 /// Ten or higher (T, J, Q, K, A).
