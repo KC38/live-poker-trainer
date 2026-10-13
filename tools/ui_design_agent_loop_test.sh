@@ -140,6 +140,15 @@ grep -q 'ui-agent-handoff.json' <<<"$(prompt)" \
   || fail "prompt should point at the handoff file"
 grep -q 'Pending learnings' <<<"$(prompt)" \
   && fail "prompt should not mention pending learnings when there are none"
+# Empty stub left by fold_agent_learnings.sh is non-empty but has no bullets.
+cat >"$STATE_DIR/ui-agent-learnings-pending.md" <<'EOF'
+# ui-agent learnings pending
+
+(empty — last fold wrote into the repo; see ui-design-agent-learnings.md
+ or docs/agents/ui-agent-run-memory.md)
+EOF
+grep -q 'Pending learnings' <<<"$(prompt)" \
+  && fail "prompt should ignore empty pending stub (no - bullets)"
 echo "- Prefer x" >"$STATE_DIR/ui-agent-learnings-pending.md"
 grep -q 'Pending learnings' <<<"$(prompt)" \
   || fail "prompt should point at pending learnings to fold into the ticket PR"
@@ -1312,6 +1321,24 @@ grep -q 'idle: primary-busy dirty on main since 2026-10-13T17:16:55+0530' \
 clear_idle_skip
 [[ ! -f "$IDLE_FILE" ]] || fail "clear_idle_skip must remove IDLE_FILE"
 echo "status idle stamp ok"
+
+# status surfaces pending learnings only when "- " bullets exist (not stub).
+grep -q 'print_pending_learnings_status' "$LOOP" \
+  || fail "loop must define print_pending_learnings_status"
+cat >"$STATE_DIR/ui-agent-learnings-pending.md" <<'EOF'
+# ui-agent learnings pending
+
+(empty — last fold wrote into the repo)
+EOF
+pend_out="$(print_pending_learnings_status)"
+[[ -z "$pend_out" ]] || fail "pending status silent on stub, got: $pend_out"
+printf '%s\n' '- Prefer asserting densified stems' \
+  >"$STATE_DIR/ui-agent-learnings-pending.md"
+pend_out="$(print_pending_learnings_status)"
+grep -q 'pending learnings: 1 bullet' <<<"$pend_out" \
+  || fail "pending status should count bullets: $pend_out"
+rm -f "$STATE_DIR/ui-agent-learnings-pending.md"
+echo "status pending learnings ok"
 
 # status prints current ticket from sim_lock purpose when mini is in use.
 grep -q 'print_current_ticket_status' "$LOOP" || fail "loop must define print_current_ticket_status"

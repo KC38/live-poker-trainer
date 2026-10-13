@@ -43,7 +43,15 @@ if [[ "${FORCE_FUNCTIONS_DEPLOY:-}" != "1" && -s "$DEPLOYED_SHA_FILE" ]]; then
   if git -C "$PRIMARY" rev-parse -q --verify "$last_sha^{commit}" >/dev/null &&
     git -C "$PRIMARY" diff --quiet "$last_sha" "$TARGET_SHA" -- functions firebase.json
   then
-    echo "Functions unchanged since ${last_sha:0:8}; skipping deploy (FORCE_FUNCTIONS_DEPLOY=1 to force)."
+    # Advance the marker to tip so health timers see tip == deployed even
+    # across non-functions commits (otherwise sha looks indefinitely stale).
+    if [[ "$last_sha" != "$TARGET_SHA" ]]; then
+      mkdir -p "$(dirname "$DEPLOYED_SHA_FILE")"
+      echo "$TARGET_SHA" >"$DEPLOYED_SHA_FILE"
+      echo "Functions unchanged since ${last_sha:0:8}; advanced deploy marker to ${TARGET_SHA:0:8}; skipping deploy (FORCE_FUNCTIONS_DEPLOY=1 to force)."
+    else
+      echo "Functions unchanged since ${last_sha:0:8}; skipping deploy (FORCE_FUNCTIONS_DEPLOY=1 to force)."
+    fi
     exit 0
   fi
 fi
@@ -81,7 +89,13 @@ if [[ "${FORCE_FUNCTIONS_DEPLOY:-}" != "1" && -s "$DEPLOYED_SHA_FILE" ]]; then
   if git -C "$PRIMARY" rev-parse -q --verify "$last_sha^{commit}" >/dev/null &&
     git -C "$PRIMARY" diff --quiet "$last_sha" "$TARGET_SHA" -- functions firebase.json
   then
-    echo "Functions unchanged since ${last_sha:0:8} (after waiting on deploy lock); skipping."
+    if [[ "$last_sha" != "$TARGET_SHA" ]]; then
+      mkdir -p "$(dirname "$DEPLOYED_SHA_FILE")"
+      echo "$TARGET_SHA" >"$DEPLOYED_SHA_FILE"
+      echo "Functions unchanged since ${last_sha:0:8} (after waiting on deploy lock); advanced deploy marker to ${TARGET_SHA:0:8}; skipping."
+    else
+      echo "Functions unchanged since ${last_sha:0:8} (after waiting on deploy lock); skipping."
+    fi
     release_functions_deploy_lock
     exit 0
   fi
