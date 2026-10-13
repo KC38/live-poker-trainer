@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "178bce181bcbd6286d9e5c4bf98c056f2c34f5c42a686894707680197714204c",
+  "contentChecksum": "8e4ceb2df9ef3d65a8205028703dd306e462e74f5602e2907c98dca76835f6ce",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -9122,10 +9122,10 @@
                           "8s"
                         ],
                         "board": [
-                          "Kh",
-                          "7h",
-                          "2c",
-                          "3d",
+                          "Ks",
+                          "7s",
+                          "2h",
+                          "3h",
                           "Ah"
                         ]
                       }

@@ -557,10 +557,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Checked to you',
       );
     case 'act-03-06-01-scaffolded':
-      // Offsuit non-hearts: hero missed the flush; river paints the story.
+      // Real missed draw: 98ss flopped a spade flush draw on Ks 7s 2h, bricked,
+      // and the 3h / Ah runout completes hearts, a flush hero can represent
+      // but does not hold. Kh 7h 2c 3d Ah never gave 98ss a draw (LPT-402).
       return const LessonActionSpot(
         heroCodes: ['9s', '8s'],
-        boardCodes: ['Kh', '7h', '2c', '3d', 'Ah'],
+        boardCodes: ['Ks', '7s', '2h', '3h', 'Ah'],
         potLabel: 'Pot 40',
         villainLine: 'Checked to you',
         // Structural — don’t tip Missed / bluff on the felt.
