@@ -129,7 +129,11 @@ Lesson-specific pattern notes (full history) live in
 
 - Prefer when tip advances with ui-agent Hint-enablement **LPT-643** (`lessonFrameCanHint` / scaffolded Hint dock): tip-comment **LPT-626** that Hint enablement does **not** author `pressHints` — keep the pressHints catalog open; do not Done LPT-626 or Meet Nit pressHints clones from LPT-643 alone. Leave LPT-643 Done to ui-agent Validated-on-origin/main.
 
+- Prefer when catalog JSON gaps are all **0**, Done parents already **HAS** tip SHA, and coverage already logged that SHA: do a discovery walk on the oldest `lesson:` surface in `content-agent-coverage.jsonl` (honesty / curriculum one-offs) instead of re-spamming LPT-348 / Done catalog parents. Tip-comment the open needs-human curriculum split for that lesson when still valid (e.g. Hand ranks **LPT-90**); keep Capstone **LPT-348** off LPT-626 until a human decides `noHintIds` vs pressHints.
+
 ## Recent fold
+
+- 2026-10-13dd: Tip-stable `43a1be2d` (#2138). Catalog JSON gaps all **0**; parents+LPT-348 already **HAS** — no rebuild. Discovery `lesson-01-02-01-hand-ranks` structural clean; tip-commented **LPT-90** (multi-concept still open). Capstone **LPT-348** still needs-human; zero open High / IP content catalog tickets; next LPT-348 or `lesson-01-04-01-streets-and-order`.
 
 - 2026-10-13dc: Tip `cb195dd7` (#2135 LPT-626). Mid-run tip advanced past `6cfa4454`/`35188158`: pressHints **151→0** — Done-ack+empty checklist **LPT-626** → Done. Catalog structural gaps all **0**; softpulseMapArms **92** / helper **229**. Tip-commented parents+LPT-348+LPT-216+Done on `cb195dd7`. Meet Nit Nice!+pressHints cleared; **LPT-348** Capstone needs-human; zero open High / IP content catalog tickets; next LPT-348 needs-human or discovery walk.
 

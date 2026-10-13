@@ -12,7 +12,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 - Audit scripts must match catalog renderer ids as snake_case (`select_identify`, not `selectIdentify`); camelCase filters silently report zero teachSpec gaps.
 - Seat/puck lessons (Button and blinds) author `deal.mode` `none` + SoftPulse puck `cues` (`D`/`SB`/`BB`); do not file handFamily/suitFamily gaps for non-card-class steps. Same-concept quiet guided ids still need authored Hint (`pressHints` or existing coachMedia) because SoftPulse waits for Hint.
-- Hand-ranks / `compare_rank` showdown steps deal multi-seat hand-class triples with physical seat shuffle (`dealShowdownOrderCards`); author teachSpec via class variants / role map — never treat static catalog You/Sam/Jo a11y or Dart `showdownOrderHintSpeech` as a passing authored `pressHints` under the recommended bar.
+- Hand-ranks / `compare_rank` showdown steps (`act-01-02-01-*`, lesson `lesson-01-02-01-hand-ranks`) deal multi-seat hand-class triples with physical seat shuffle (`dealShowdownOrderCards`); author teachSpec via class variants / role map — never treat static catalog You/Sam/Jo a11y or Dart `showdownOrderHintSpeech` as a passing authored `pressHints` under the recommended bar. Tip `43a1be2d` discovery: explain has activity-level `explainGrading` + SoftPulse cues; guided/scaffolded/unguided/checkpoint all author `random_in_class` + handFamily + variants; scaffolded pressHints ≥1; checkpoint cue kind `none` / no pressHints — structural clean; multi-concept split stays on needs-human **LPT-90** (not a new clone).
 - Prefer `content/course/v2/course.json` over `wave_*.mjs` when counting items/sequence; wave helpers can lag (e.g. streets `scaffolded-order` CO). File wave-sync in the teachSpec ticket; never treat wave-only as catalog truth.
 - Pot-math / open-size steps (`act-01-05-01-unguided-pot`) author `deal.mode` `none` + `deal.variants` for open-to sizes (`kLessonOpenToAmounts`); do not file handFamily/suitFamily gaps for chip-total outcome tiles.
 - Synthesis / complete-hand lessons (e.g. Play a full toy hand) with process objectives (follow hand, act, finish) are not multi-concept title splits — skip `needs-human` lesson-split when the unit already is the integration container; still file teachSpec/pressHints gaps.
@@ -1066,4 +1066,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Meet Nit Nice! + pressHints cleared (`act-04-07-02-explain` has `explainGrading`; `act-04-07-02-unguided` has pressHints length 1). Checkpoint stays hintless. Zero open High content tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
 - next: LPT-348 Capstone pressHints needs-human OR discovery walk (honesty/curriculum one-offs scanner cannot see).
 - act-04-07-02-unguided: pressHints PRESENT (#2135) — do not re-file pressHints clones; Capstone LPT-348 stays separate.
+
+## Fold 2026-10-13dd (43a1be2d discovery hand-ranks)
+
+- Tip-stable `43a1be2d` (#2138 Prefer LPT-348 Medium focus after #2135/#2137). `scan_content_gaps --counts` still all catalog JSON gaps **0**; softpulseMapArms **92** / densifyHelperArms **229**. Catalog parents LPT-624/625/626/627/628/635 + LPT-348 + Done Mediums already **HAS** tip SHA — no rebuild/re-spam.
+- Discovery walk oldest coverage surface `lesson:lesson-01-02-01-hand-ranks`: structural clean (teachSpec/cues/explainGrading/pressHints/checkpoint hintless / `random_in_class` families). Tip-commented needs-human curriculum split **LPT-90** (still valid multi-concept). Capstone **LPT-348** still needs-human (`act-07-10-05-hand` pressHints absent + Dart `noHintIds`). Zero open High / IP content catalog tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty (stub). `content,grokbot,lesson`.
+- next: LPT-348 Capstone pressHints needs-human product decision OR next-oldest discovery walk (`lesson-01-04-01-streets-and-order`).
+- act-01-02-01-*: structural clean on tip — do not re-file teachSpec/pressHints/nice-ladder clones; curriculum split stays **LPT-90**.
 
