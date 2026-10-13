@@ -491,3 +491,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Soft timing **LPT-242** still all-five MISSING; densify ABSENT. Frontiers **LPT-312**/ **LPT-315**. Pending empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(87)/635/624(49)/625(24).
 
+## Fold 2026-10-13 tip 34010f3e (#1989 ui-agent status idle-skip)
+
+- Tip advanced `c20d28d9`/`47b1f956` → `34010f3e` (#1989 non-content ops). `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **87**, teachSpec **60**, explain-teachSpec **29**, nice-ladder **49**, SoftPulse-map **24**, densifyHelperArms **53**. Catalog parents already rebuilt after LPT-331 — tip-comment only.
+- Meet Nit: Nice! **LPT-624** (`act-04-07-02-explain` sans explainGrading) / pressHints **LPT-626** (`act-04-07-02-unguided`). **LPT-216** Done — no clones.
+- Soft timing **LPT-242** still all-five MISSING; densify Soft timing ABSENT (helper 53). Frontiers **LPT-312**/ **LPT-315**. Tip-commented unchecked S6/S7/capstone/fingerprint Highs + needs-human LPT-348. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(87)/635/624(49)/625(24).
+
