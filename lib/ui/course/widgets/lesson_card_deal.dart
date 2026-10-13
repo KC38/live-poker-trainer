@@ -586,6 +586,8 @@ int _drawOutsFor(List<String> hero, List<String> board) {
 /// [isSet] and [distinctBoardPairingHoles] keep [HandClass.strongMade]
 /// top-two templates (two distinct holes each pairing the board) from
 /// remapping into a set — both collapse to strongMade (LPT-392).
+/// [pairDepth] keeps second / third pair templates on the same board rank
+/// depth (all collapse to [HandClass.weakPair]; LPT-409).
 /// [nutFlushDraw] keeps nut flush draw templates on the nut draw, and
 /// non-nut draws off it (LPT-408).
 /// [earlierStreets] keeps turn / river templates honest about how hero got
@@ -602,6 +604,7 @@ int _drawOutsFor(List<String> hero, List<String> board) {
   bool hasMadePair,
   bool isSet,
   int distinctBoardPairingHoles,
+  int pairDepth,
   bool nutFlushDraw,
   String earlierStreets,
   int overcardCount,
@@ -615,6 +618,7 @@ int _drawOutsFor(List<String> hero, List<String> board) {
     hasMadePair: _heroHasMadePair(hero, board),
     isSet: _heroHasSet(hero, board),
     distinctBoardPairingHoles: _distinctBoardPairingHoleCount(hero, board),
+    pairDepth: _heroBoardPairDepth(hero, board),
     nutFlushDraw: _heroHasNutFlushDraw(hero, board),
     earlierStreets: _earlierStreetsKey(hero, board),
     overcardCount: _overcardHoleCount(hero, board),
@@ -704,6 +708,31 @@ bool _heroHasNutFlushDraw(List<String> hero, List<String> board) {
     if (inHand.any((c) => c.rank == nut)) return true;
   }
   return false;
+}
+
+/// Index of [rank] among the board's unique ranks sorted high to low
+/// (0 = top), or -1 when the board lacks that rank.
+int _boardRankDepth(int rank, List<String> board) {
+  final ranks = <int>{
+    for (final code in board) CardModel.fromCode(code).rank,
+  }.toList()
+    ..sort((a, b) => b.compareTo(a));
+  return ranks.indexOf(rank);
+}
+
+/// Board-relative depth of hero's non-set board pair: 0 = top pair,
+/// 1 = second pair, and so on (lowest when both holes pair). -1 when hero has
+/// no board pair or holds a pocket pair (sets are tracked separately).
+int _heroBoardPairDepth(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length < 3) return -1;
+  final r0 = CardModel.fromCode(hero[0]).rank;
+  final r1 = CardModel.fromCode(hero[1]).rank;
+  if (r0 == r1) return -1;
+  final depths = [
+    for (final r in [r0, r1]) _boardRankDepth(r, board),
+  ].where((d) => d >= 0).toList();
+  if (depths.isEmpty) return -1;
+  return depths.reduce((a, b) => a < b ? a : b);
 }
 
 /// Ten or higher (T, J, Q, K, A).
