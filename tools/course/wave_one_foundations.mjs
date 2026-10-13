@@ -727,7 +727,7 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "Pair, then straight, then flush.",
                 missFeedback: "Flush beats straight; straight beats pair.",
-                // seat roles shuffle in Dart, cues follow the role ids., LPT-626
+                // LPT-667
                 teachSpec: {
                   deal: {
                     mode: "random_in_class",
@@ -737,7 +737,11 @@ export function buildSectionOne() {
                       {id: "var-flush-seat", handFamily: "flush", label: "Flush seat"},
                     ],
                   },
-                  pressHints: [{press: 1, text: "Rank each hand by class: pair, then straight, then flush."}],
+                  pressHints: [
+                    {press: 1, text: "Start with the weakest hand class."},
+                    {press: 2, text: "Keep climbing the class ladder."},
+                    {press: 3, text: "Finish with the strongest class."},
+                  ],
                   cues: [
                     {press: 1, target: "you", kind: "soft_pulse"},
                     {press: 2, target: "sam", kind: "soft_pulse"},
@@ -759,7 +763,7 @@ export function buildSectionOne() {
                 correct: ["you", "sam", "jo"],
                 okFeedback: "Full house, then trips, then two pair.",
                 missFeedback: "Full house tops trips; trips top two pair.",
-                // seat roles shuffle in Dart, cues follow the role ids., LPT-626
+                // LPT-667
                 teachSpec: {
                   deal: {
                     mode: "random_in_class",
@@ -769,7 +773,11 @@ export function buildSectionOne() {
                       {id: "var-two-pair-seat", handFamily: "two_pair", label: "Two pair seat"},
                     ],
                   },
-                  pressHints: [{press: 1, text: "Rank by class: full house beats trips, trips beat two pair."}],
+                  pressHints: [
+                    {press: 1, text: "Start with the strongest finished hand."},
+                    {press: 2, text: "Next comes the middle class."},
+                    {press: 3, text: "Finish with the weakest of the three."},
+                  ],
                   cues: [
                     {press: 1, target: "you", kind: "soft_pulse"},
                     {press: 2, target: "sam", kind: "soft_pulse"},
@@ -953,10 +961,16 @@ export function buildSectionOne() {
                     "You have trips plus a pair — full house.",
                     {betterChoiceId: "fh-eights"}),
                 ],
-                // pairs. Guide order matches fh-eights choice set., LPT-626
+                // LPT-667
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "full_house", suitFamily: "pair"},
-                  pressHints: [{press: 1, text: "Look for three of a kind plus a pair — that's a full house."}],
+                  pressHints: [
+                    {press: 1, text: "Look for three of a kind — that's the trips half."},
+                    {press: 2, text: "Keep collecting matching trip cards."},
+                    {press: 3, text: "Add the board card that matches your trips."},
+                    {press: 4, text: "Pair the trips with a board pair."},
+                    {press: 5, text: "Finish the five-card full house."},
+                  ],
                   cues: [
                     {press: 1, target: "hero_trip_1", kind: "soft_pulse"},
                     {press: 2, target: "hero_trip_2", kind: "soft_pulse"},
@@ -1280,14 +1294,14 @@ export function buildSectionOne() {
                 correct: ["seat-utg", "seat-hj", "seat-co", "seat-btn"],
                 okFeedback: "UTG → HJ → CO → BTN. Button acts last preflop.",
                 missFeedback: "Start under the gun, then HJ, CO, and the button.",
-                // CO synced, LPT-626
+                // LPT-667
                 teachSpec: {
                   deal: {mode: "none"},
                   pressHints: [
-                    {
-                      press: 1,
-                      text: "Preflop action starts left of the big blind and ends on the button.",
-                    },
+                    {press: 1, text: "Preflop, the first seat left of the big blind starts."},
+                    {press: 2, text: "Then move one seat to the left."},
+                    {press: 3, text: "Keep going left, toward the button."},
+                    {press: 4, text: "The button acts last before the blinds."},
                   ],
                   cues: [
                     {press: 1, target: "seat-utg", kind: "soft_pulse"},
@@ -1608,10 +1622,13 @@ export function buildSectionOne() {
                     ],
                   },
                 ],
-                // cbet, LPT-626
+                // LPT-667
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "suited_ace", suitFamily: "suited"},
-                  pressHints: [{press: 1, text: "Confirm the flop first, then bet when you hit top pair."}],
+                  pressHints: [
+                    {press: 1, text: "The call closes preflop. Move on to the flop first."},
+                    {press: 2, text: "You hit top pair. Bet to get value from worse hands."},
+                  ],
                   cues: [
                     {press: 1, target: "ready-flop", kind: "soft_pulse"},
                     {press: 2, target: "cbet", kind: "soft_pulse"},
@@ -2062,14 +2079,12 @@ export function buildSectionTwo() {
                 correct: ["post-sb", "post-btn"],
                 okFeedback: "Small blind first; button last.",
                 missFeedback: "Left of the button acts first.",
-                // on all four, LPT-626
+                // LPT-667
                 teachSpec: {
                   deal: {mode: "none"},
                   pressHints: [
-                    {
-                      press: 1,
-                      text: "After the flop, the seat closest left of the button acts first.",
-                    },
+                    {press: 1, text: "After the flop, the seat left of the button acts first."},
+                    {press: 2, text: "The button acts last on every street after the flop."},
                   ],
                   cues: [
                     {press: 1, target: "post-sb", kind: "soft_pulse"},

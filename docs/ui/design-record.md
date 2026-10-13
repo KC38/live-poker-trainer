@@ -1646,16 +1646,16 @@ felt.
 | Your two cards | Your hole cards on the felt | — |
 | Suits and ranks | Suit taps on board cards, board ranks low to high, suited / pair seats; scaffolded pressHints (LPT-82); scaffolded ranks SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); explain SoftPulse cues hearts → diamonds → clubs → spades (LPT-353) | — |
 | Button and blinds | Dealer button, SB, BB on the seats | — |
-| Hand ranks | Showdown seats weakest to strongest | — |
-| Best five and kickers | The five cards that play; You / Them / Board | — |
+| Hand ranks | Showdown seats weakest to strongest | scaffolded pressHints one-per-press (LPT-667) |
+| Best five and kickers | The five cards that play; You / Them / Board | scaffolded pressHints one-per-press (LPT-667) |
 | Fold, check, call | Fold, Check, Call under a flop; explain SoftPulse cues FOLD → CHECK → CALL (LPT-635) | — |
 | Bet, raise, all-in | Bet, Raise, All-in under a flop; explain SoftPulse cues BET → RAISE → ALL-IN (LPT-635) | — |
-| Streets and action order | Board advances by street; seat order on the table; explain SoftPulse cues PREFLOP → FLOP → TURN → RIVER (LPT-635) | — |
+| Streets and action order | Board advances by street; seat order on the table; explain SoftPulse cues PREFLOP → FLOP → TURN → RIVER (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | How pots are won | Fold win, Showdown, Side pot; densified SoftPulse one gold via `guideRegion` (LPT-525); explain SoftPulse cues FOLD WIN → SHOWDOWN → SIDE POT (LPT-635) | — |
-| Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING (LPT-635) | — |
+| Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
 | Position labels | Six-max seats labeled on the table; explain SoftPulse cues D (LPT-635) | — |
-| Acting order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635) | — |
+| Acting order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | Hand families | Pairs, Broadways, Suited aces, Connectors; densified SoftPulse one gold via `guideRegion` (LPT-634); explain SoftPulse cues Pairs → Broadways → Suited aces → Connectors (LPT-635) | — |
 | Open or fold baseline | Early, Button, Live 3x; explain SoftPulse cues EARLY → BUTTON → LIVE 3x (LPT-635) | — |
 | Versus an open | Fold, Call, 3-bet; explain SoftPulse cues FOLD → CALL → 3-BET (LPT-635) | — |

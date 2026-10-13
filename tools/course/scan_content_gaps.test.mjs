@@ -160,6 +160,55 @@ test("pressHints skips no-hint, roles, and steps that already have a hint", () =
     }),
     null,
   );
+  // LPT-667: one pressHints entry per SoftPulse cue press
+  assert.equal(
+    gapPressHints(...lesson, {
+      id: "act-one-per-ok",
+      stage: "scaffolded",
+      renderer: "select_identify",
+      teachSpec: {
+        pressHints: [
+          {press: 1, text: "a"},
+          {press: 2, text: "b"},
+        ],
+        cues: [
+          {press: 1, target: "x", kind: "soft_pulse"},
+          {press: 2, target: "y", kind: "soft_pulse"},
+        ],
+      },
+    }),
+    null,
+  );
+  const incomplete = gapPressHints(...lesson, {
+    id: "act-one-per-gap",
+    stage: "scaffolded",
+    renderer: "select_identify",
+    teachSpec: {
+      pressHints: [{press: 1, text: "only first"}],
+      cues: [
+        {press: 1, target: "x", kind: "soft_pulse"},
+        {press: 2, target: "y", kind: "soft_pulse"},
+        {press: 3, target: "z", kind: "soft_pulse"},
+      ],
+    },
+  });
+  assert.equal(
+    incomplete && incomplete.note,
+    "pressHints missing presses for SoftPulse cues: 2,3",
+  );
+  // kind none cues do not require pressHints coverage
+  assert.equal(
+    gapPressHints(...lesson, {
+      id: "act-none-cue",
+      stage: "scaffolded",
+      renderer: "select_identify",
+      teachSpec: {
+        pressHints: [{press: 1, text: "ok"}],
+        cues: [{press: 1, target: "x", kind: "none"}],
+      },
+    }),
+    null,
+  );
 });
 
 test("deal variants flag only a fixed deal with no variant list", () => {
