@@ -1392,6 +1392,47 @@ grep -q 'ui-queue --stats' "$LOOP" \
   || fail "print_ui_queue_status must call jira ui-queue --stats"
 echo "status ui-queue stats ok"
 
+grep -q 'reconcile_idle_with_primary' "$LOOP" \
+  || fail "status must reconcile stale empty-queue idle with primary"
+(
+  # Stale empty-queue stamp + dirty main → rewrite to primary-busy main(dirty).
+  rtmp="$tmp/reconcile-idle-primary"
+  mkdir -p "$rtmp"
+  git -C "$rtmp" init -q
+  git -C "$rtmp" config user.email t@t
+  git -C "$rtmp" config user.name t
+  printf 'a\n' >"$rtmp/a.txt"
+  git -C "$rtmp" add a.txt
+  git -C "$rtmp" commit -m a -q
+  git -C "$rtmp" branch -M main
+  printf '%s\n' \
+    '{"reason":"empty-queue","at":"2026-10-13T22:35:07+0530","sleep_s":900}' \
+    >"$IDLE_FILE"
+  primary() { echo "$rtmp"; }
+  # Clean tip → leave empty-queue alone.
+  reconcile_idle_with_primary
+  grep -qE '"reason": ?"empty-queue"' "$IDLE_FILE" \
+    || fail "reconcile must keep empty-queue on clean main: $(cat "$IDLE_FILE")"
+  printf 'dirt\n' >"$rtmp/dirt.txt"
+  reconcile_idle_with_primary
+  grep -qE '"reason": ?"primary-busy"' "$IDLE_FILE" \
+    || fail "reconcile must rewrite to primary-busy: $(cat "$IDLE_FILE")"
+  grep -q 'main(dirty)' "$IDLE_FILE" \
+    || fail "reconcile dirty detail: $(cat "$IDLE_FILE")"
+  grep -qE '"sleep_s": ?300' "$IDLE_FILE" \
+    || fail "reconcile must use BUSY_SLEEP: $(cat "$IDLE_FILE")"
+  rm -f "$rtmp/dirt.txt"
+  printf '%s\n' \
+    '{"reason":"empty-queue","at":"2026-10-13T22:35:07+0530","sleep_s":900}' \
+    >"$IDLE_FILE"
+  git -C "$rtmp" checkout -b cursor/chore-busy -q
+  reconcile_idle_with_primary
+  grep -q 'cursor/chore-busy' "$IDLE_FILE" \
+    || fail "reconcile wrong-branch detail: $(cat "$IDLE_FILE")"
+  clear_idle_skip
+)
+echo "status reconcile idle primary ok"
+
 grep -q 'print_primary_checkout_status' "$LOOP" \
   || fail "loop must define print_primary_checkout_status"
 (
