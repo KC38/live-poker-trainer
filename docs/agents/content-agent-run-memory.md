@@ -242,3 +242,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
   rule until tip has the fold and the home pending file has zero `- `
   bullets. After machine-SDK 504 thrash, ff-pull `origin/main` before
   Done/tip-comments (loop SHA can lag merges like #1905/#1906).
+
+## Fold 2026-10-13
+
+- ui-agent cyan-selection Dones (e.g. LPT-641 #1908) do **not** clear content Nice! ladders (LPT-624), pressHints (LPT-626), SoftPulse-map (LPT-625), densify-tap (LPT-628), or explain-teachSpec (LPT-635). Tip-comment those parents on the new SHA; keep Hint-enablement companions (LPT-643) open separately.
