@@ -491,3 +491,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Soft timing **LPT-242** still all-five MISSING; densify ABSENT. Frontiers **LPT-312**/ **LPT-315**. Pending empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(87)/635/624(49)/625(24).
 
+## Fold 2026-10-13 tip 34010f3e (#1989 ui-agent status — tip-stable after LPT-331 catalog)
+
+- Tip advanced `c20d28d9`/`47b1f956` (#1987/#1988 LPT-331 Nice! **48→49** / deal-variants **84→87**) → `34010f3e` (#1989 ui-agent status idle-skip reason). Always re-`scan_content_gaps --counts` after ff; non-content ops tip keeps JSON gaps flat.
+- `scan_content_gaps --counts` flat: pressHints **151**, deal-variants **87**, teachSpec **60**, explain-teachSpec **29**, nice-ladder **49**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **53**. Rebuilt **LPT-624**/ **LPT-627** bodies to clear broken `{{{{{sha}}}}}` placeholder (checklist counts already matched). Tip-commented LPT-626/625/628/635 + frontier Highs LPT-242/312/315 + unchecked S6/S7/capstone/fingerprint/needs-human batch.
+- Soft timing **LPT-242** still all five `act-05-07-01-*` MISSING; Soft timing densify still ABSENT from `selectIdentifyDensifiedCoachLine` (helper **53** — stay on **LPT-628**). **LPT-312** Map turn + **LPT-315** Compose river still all five MISSING. LPT-328/331/396 Done. Grep `act-07-02-01-*` / `act-07-03-01-*` / `act-07-08-01-*`: outcome-tile / fixed teachSpec patterns; no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 land OR densify Soft-timing/seat-footer on LPT-628 OR LPT-625 SoftPulse maps (24) OR catalog LPT-626(151)/627(87)/635/624(49) OR fingerprint Highs if tip advances.
+
