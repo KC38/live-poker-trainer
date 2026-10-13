@@ -429,3 +429,25 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Outcome-tile lands (`deal.mode` `none`): rebuilt **LPT-624** Nice! from `--gap nice-ladder --markdown` (FEWER→THICKER→WIDEN; SHORT→DEEP→EFFECTIVE; pot-type LIMPED→SRP→3-4BET already listed). Tip-commented **LPT-626**/ **LPT-627**/ **LPT-625**/ **LPT-628**/ **LPT-635** (keeps **12** S1–S2; pressHints still **151** — tip-comment only, no new rows). Marked **LPT-324** Done (tip already satisfied while still In Progress). Tip-commented Done **LPT-321**.
 - Meet Nit still on **LPT-624**/ **LPT-626** (LPT-216 Done — no clones). Soft timing **LPT-242** still all five MISSING; densify Soft timing ABSENT (helper 47). **LPT-312**/ **LPT-315** still open; **LPT-396** still valid. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: LPT-242 after GrokBot OR LPT-312/315 OR LPT-328 same-cards OR LPT-625 SoftPulse maps (24) OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(81)/635/624(47) OR LPT-396.
+
+## Fold 2026-10-13 (monitor) — sync_primary chore-content-*
+
+- Loop `sync_primary` previously only returned
+  `cursor/chore-content-agent-learnings-*` to `main`. Agents also open
+  `cursor/chore-content-learnings-*`, `cursor/chore-content-nice47-*`,
+  and `cursor/chore-content-lptNNNN-*` learnings chores from PRIMARY,
+  so the next run audited against a stale chore tip and re-struggled
+  (duplicate Nice! drafts #1976/#1977, stuck off `1459c22f`).
+- Widened case to all `cursor/chore-content-*` / `chore/content-*` when
+  the tree is clean. Durable Never: ship learnings to git same tick +
+  leave PRIMARY on `main`.
+- Closed conflicted supersession #1967; closed duplicate #1976 in favor
+  of #1977.
+
+## Fold 2026-10-13 tip 5f6741ab (#1979 LPT-645/646 densify + #1978 sync_primary)
+
+- Tip advanced through `1459c22f` (#1974 learnings) → `39754d09`/`3328c056` (#1975/#1977) → `b866ee11` (#1979 densify) → `5f6741ab` (#1978). Always re-`scan_content_gaps --counts` after ff mid-run.
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **81**, teachSpec **68**, explain-teachSpec **31**, nice-ladder **47**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **47→53**.
+- Immediately rebuilt catalog densify-tap **LPT-628** from `selectIdentifyDensifiedCoachLine` (strip quotes): helper **53**; Priority ABSENT still seat-footer + Soft timing `act-05-07-01-*` (incl. guided); fallthrough **153→147**. Relates LPT-645/646↔LPT-628. Tip-commented LPT-624/625/626/627/635 (JSON flat — no rebuild) + Done ack LPT-645/646 + IP Soft timing LPT-242.
+- Grep `act-07-05-01-*` / `act-07-06-01-*`: teachSpec PRESENT (LPT-321/324 Done). Frontier **LPT-328** `act-07-07-01-*` all five MISSING — tip-commented. Map turn LPT-312 / Compose river LPT-315 / Soft timing LPT-242 still MISSING. Honesty LPT-396 still valid `Jh`/`Td`·`Ts`/`9h`/`8c`/`2d` top-as-second. needs-human LPT-348 keep off LPT-626. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR implement LPT-328 same-cards teachSpec OR densify Soft-timing/seat-footer on LPT-628 OR LPT-625 SoftPulse maps (24) OR catalog LPT-626(151)/627(81)/635/624(47) OR LPT-396 if tip advances.
