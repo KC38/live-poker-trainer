@@ -1035,15 +1035,16 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-06-07-01-unguided')!,
       'act-06-07-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-07-01-checkpoint')!,
+      // Mix densified asks: selectIdentifyDensifiedCoachLine (LPT-644).
       // SoftPulse owns Less bluff — don’t gold-tip the tile.
       'act-06-08-01-scaffolded' =>
-        'Vs Calling Station — pick the mix adjustment.',
+        selectIdentifyDensifiedCoachLine('act-06-08-01-scaffolded')!,
       // Unguided: name the rule; don’t tip Need a reason.
       'act-06-08-01-unguided' =>
-        'Randomness for its own sake — pick when mix is allowed.',
+        selectIdentifyDensifiedCoachLine('act-06-08-01-unguided')!,
       // SoftPulse owns Purpose freq — don’t gold-tip the tile.
       'act-06-08-01-checkpoint' =>
-        'Best mix description — pick the course standard.',
+        selectIdentifyDensifiedCoachLine('act-06-08-01-checkpoint')!,
       // SoftPulse owns High commit — don’t gold-tip the tile.
       'act-06-09-01-guided' =>
         '100bb 4-bet pot · top pair — pick the depth mindset.',

@@ -152,6 +152,14 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'MDF numbers — pick how this course uses them.',
     'act-06-07-01-checkpoint' =>
       'Minimum defense goal — pick what you protect.',
+    // Mix with a reason densified asks (LPT-644) — same path as LPT-640.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-08-01-scaffolded' =>
+      'Vs Calling Station — pick the mix adjustment.',
+    'act-06-08-01-unguided' =>
+      'Randomness for its own sake — pick when mix is allowed.',
+    'act-06-08-01-checkpoint' =>
+      'Best mix description — pick the course standard.',
     _ => null,
   };
 }

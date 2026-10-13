@@ -22988,6 +22988,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-644: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Vs Calling Station — tap the mix adjustment.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Vs Calling Station — pick the mix adjustment.'),
       findsOneWidget,
@@ -23028,6 +23034,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-644: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Randomness for its own sake — tap when mix is allowed.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Randomness for its own sake — pick when mix is allowed.'),
       findsOneWidget,
@@ -23091,6 +23103,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-644: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Best mix description — tap the course standard.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Best mix description — pick the course standard.'),
       findsOneWidget,
