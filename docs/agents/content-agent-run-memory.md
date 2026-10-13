@@ -1027,3 +1027,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Re-verified still open: **LPT-370** cues null (IP); **LPT-588** Scene flop-only (remote `fix/LPT-588-spr-checkpoint-scene-turn` not on tip); **LPT-348** Capstone pressHints. Meet Nit Nice!/pressHints still LPT-624/626. Zero open High content tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
 - next: Nice! LPT-624 OR pressHints LPT-626 OR Medium LPT-370 (IP)/588 OR catalog LPT-627(99)/635(12)/625(24) OR LPT-348 needs-human.
 
+## 2026-10-13cy — tip `db98900e` (#2124 LPT-588 + #2122 LPT-370)
+
+- Tip advanced `cf95eea2` → `d61f9342` (#2122 LPT-370 ranks SoftPulse cues) mid-run → `db98900e` (#2124 LPT-588 SPR Scene turn `9h`). `scan_content_gaps --counts` still flat: pressHints **151** / deal-variants **99** / teachSpec **0** / explain-teachSpec **12** / nice-ladder **66** / unguided-softpulse-map **24** / densify-tap **0** / densifyHelperArms **229**. Catalog parents match markdown — no rebuild.
+- **LPT-370** Done-ack: `act-01-01-02-scaffolded-ranks` has three SoftPulse `teachSpec.cues` `rank-2` → `rank-T` → `rank-A`; wave_one_foundations synced; order_sequence SoftPulse-after-Hint wired. Already **Done** on tip before content-agent comment.
+- **LPT-588** Done-ack: `act-04-05-01-checkpoint` `resolveLessonTableScene` board `Qs`/`7c`/`2d`/`9h` matches teachSpec/ActionSpot (comment cites LPT-588). Already **Done** + tip SHA **HAS** on `db98900e` before content-agent re-check.
+- Tip-commented NEED set on `db98900e` (quoted Python body files): LPT-624/625/626/627/635 + LPT-348 + Done-ack LPT-628/666/414/558/370 (LPT-588 already HAS). Verified `jira.py get` **HAS** on all twelve.
+- Remaining open: catalog Nice! LPT-624 / pressHints LPT-626 / deal-variants LPT-627 / SoftPulse-map LPT-625 / explain-teachSpec LPT-635 (IP) / needs-human LPT-348 Capstone pressHints. Meet Nit still LPT-624/626. Zero open High content tickets. Medium cues/Scene one-offs cleared. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
+- next: Nice! LPT-624 OR pressHints LPT-626 OR catalog LPT-627(99)/635(12)/625(24) OR LPT-348 needs-human.
+- act-01-01-02-scaffolded-ranks / act-04-05-01-checkpoint: SoftPulse cues + Scene turn board landed (#2122/#2124) — do not re-file.
+
