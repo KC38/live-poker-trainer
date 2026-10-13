@@ -299,7 +299,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Close the river checkpoint, LPT-412 SPR guided, LPT-636 Recognize
   capped). Densified lines need a pick/tap verb so
   `withLessonTapInstruction` does not append the generic footer. A local
-  `_coachText` string alone leaves framed speech on catalog.
+  `_coachText` string alone leaves framed speech on catalog. Assert densify
+  by absence of "Tap the best answer." plus the densified stem (e.g.
+  `Best leak note —`) — `withLessonTapInstruction` may rewrite authored
+  `pick` to `tap`, so exact `pick the …` needles false-fail (LPT-662).
 - Prefer densify tile titles (`Call 10`, `Suited conn`, `Call`) over
   shared gold fragments like `chips` / suit-only glyphs when advancing
   SoftPulse asks — a `chips` needle can hit the wrong Call-price column
