@@ -1318,6 +1318,17 @@ printf '%s\n' \
 idle_out="$(print_idle_status)"
 grep -q 'idle: primary-busy dirty on main since 2026-10-13T17:16:55+0530' \
   <<<"$idle_out" || fail "print_idle_status dirty main: $idle_out"
+# sleep_s → wake ETA (~15m when stamp is "now" and sleep_s=900).
+at_now="$(date '+%Y-%m-%dT%H:%M:%S%z')"
+printf '%s\n' \
+  "{\"reason\":\"empty-queue\",\"at\":\"${at_now}\",\"sleep_s\":900}" \
+  >"$IDLE_FILE"
+idle_out="$(print_idle_status)"
+grep -qE 'idle: empty-queue since .+ \(wake ~(14|15)m\)' \
+  <<<"$idle_out" || fail "print_idle_status wake ETA: $idle_out"
+record_idle_skip empty-queue "" 900
+grep -q '"sleep_s": 900' "$IDLE_FILE" \
+  || fail "record_idle_skip must persist sleep_s: $(cat "$IDLE_FILE")"
 clear_idle_skip
 [[ ! -f "$IDLE_FILE" ]] || fail "clear_idle_skip must remove IDLE_FILE"
 echo "status idle stamp ok"
