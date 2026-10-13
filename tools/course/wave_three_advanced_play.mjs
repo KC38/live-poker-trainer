@@ -1835,7 +1835,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-11-02-explain", 1,
                 "TAG: tight in, aggressive after — a working model.",
-                {objectives: ["Introduce TAG"], playerTypeRefs: ["tag"]}),
+                {
+                  objectives: ["Introduce TAG"], playerTypeRefs: ["tag"],
+                  // LPT-289
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "TIGHT", kind: "soft_pulse"},
+                      {press: 2, target: "AGGRO", kind: "soft_pulse"},
+                      {press: 3, target: "MODEL", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               classifyAct({
                 id: "act-06-11-02-guided", order: 2, stage: "guided",
                 prompt: "Folds most, 3-bets strong, barrels with a plan. Label?",
@@ -1848,6 +1859,8 @@ export function buildSectionSix() {
                   choice("station", "Station", "clear_mistake",
                     "Stations call; this seat raises selectively.", {betterChoiceId: "tag"})
                 ],
+                // LPT-289
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tag", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-11-02-scaffolded", order: 3, stage: "scaffolded",
@@ -1860,6 +1873,8 @@ export function buildSectionSix() {
                   choice("same", "Identical", "clear_mistake",
                     "No.", {betterChoiceId: "diff"})
                 ],
+                // LPT-289
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "diff", kind: "soft_pulse"}]},
               }),
               classifyAct({
                 id: "act-06-11-02-unguided", order: 4, stage: "scaffolded",
@@ -1873,6 +1888,8 @@ export function buildSectionSix() {
                   choice("mania2", "Maniac", "clear_mistake",
                     "Maniacs enter and continue far too wide.", {betterChoiceId: "tag2"})
                 ],
+                // LPT-289
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tag2", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-11-02-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1885,6 +1902,8 @@ export function buildSectionSix() {
                   choice("soul", "Insult", "clear_mistake",
                     "No judgments.", {betterChoiceId: "model"})
                 ],
+                // LPT-289
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "model", kind: "none"}]},
               }),
             ],
           }),

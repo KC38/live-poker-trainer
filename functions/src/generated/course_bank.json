@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "4a73338c2d0c196ba8c8da9ea26d4d0572d5c44b251dbd3bbb4fe0df10e1b922",
+  "contentChecksum": "623d16e7a471068f54d6d7323c32ae1fb5f033dd9a937df864bb53ade2b57bc2",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -21846,7 +21846,29 @@
                   ],
                   "playerTypeRefs": [
                     "tag"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TIGHT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "AGGRO",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "MODEL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-02-guided",
@@ -21888,7 +21910,19 @@
                   ],
                   "playerTypeRefs": [
                     "tag"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tag",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-02-scaffolded",
@@ -21926,7 +21960,19 @@
                         "betterChoiceId": "diff"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "diff",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-02-unguided",
@@ -21968,7 +22014,19 @@
                   ],
                   "playerTypeRefs": [
                     "tag"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tag2",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-02-checkpoint",
@@ -22007,7 +22065,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "model",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
