@@ -252,11 +252,65 @@ function gapExplainCues(lessonId, lessonTitle, activity) {
   };
 }
 
+/**
+ * SoftPulse explains that already have cues but lack activity-level
+ * `explainGrading` (Nice! / Oops ladder — catalog LPT-624).
+ * @param {unknown} node
+ * @returns {boolean}
+ */
+function hasSoftPulseCue(node) {
+  if (node == null) {
+    return false;
+  }
+  if (Array.isArray(node)) {
+    return node.some(hasSoftPulseCue);
+  }
+  if (typeof node !== "object") {
+    return false;
+  }
+  const obj = /** @type {Record<string, unknown>} */ (node);
+  if (obj.kind === "soft_pulse") {
+    return true;
+  }
+  return Object.values(obj).some(hasSoftPulseCue);
+}
+
+/**
+ * @param {Record<string, unknown>} activity
+ * @returns {GapRow|null}
+ */
+function gapNiceLadder(lessonId, lessonTitle, activity) {
+  if (String(activity.renderer || "") !== "coach_dialogue") {
+    return null;
+  }
+  const teach = /** @type {Record<string, unknown>|undefined} */ (
+    activity.teachSpec
+  );
+  if (!teach || !hasSoftPulseCue(teach)) {
+    return null;
+  }
+  if (activity.explainGrading) {
+    return null;
+  }
+  return {
+    lessonId,
+    lessonTitle,
+    activityId: String(activity.id || ""),
+    stage: String(activity.stage || ""),
+    assessmentRole: activity.assessmentRole
+      ? String(activity.assessmentRole)
+      : null,
+    renderer: "coach_dialogue",
+    note: "SoftPulse explain missing activity-level explainGrading (Nice! ladder)",
+  };
+}
+
 const SCANNERS = {
   pressHints: gapPressHints,
   "deal-variants": gapDealVariants,
   teachSpec: gapTeachSpec,
   "explain-teachSpec": gapExplainCues,
+  "nice-ladder": gapNiceLadder,
 };
 
 /** Open `(catalog)` parents — keep in sync when filing/closing parents. */
@@ -266,8 +320,8 @@ const CATALOG_PARENTS = {
   "explain-teachSpec": "LPT-635",
   // teachSpec Highs are still per-lesson; no single catalog parent yet
   teachSpec: null,
-  // Related structural parents (not produced by this scanner’s gaps):
   "nice-ladder": "LPT-624",
+  // Related structural parents (not produced by this scanner’s gaps):
   "densify-tap": "LPT-628",
   "unguided-softpulse-map": "LPT-625",
 };
