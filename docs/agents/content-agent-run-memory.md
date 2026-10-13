@@ -1433,3 +1433,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Done-ack **LPT-258** / **259** / **470** / **636** on tip (NEED before comment).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-04-01-polar-merged` / Low curriculum (`lesson-01-02-01-hand-ranks` **LPT-90**).
 - act-06-03-01-*: structural clean on tip — teachSpec/pressHints/densify companions Done; curriculum via LPT-260 only.
+
+## Fold 2026-10-14ab (de176d1b discovery polar-merged)
+
+- Tip-stable `de176d1b` (#2195 after #2194 adjust-lag). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip — no re-spam). Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done.
+- Discovery coverage-lead `lesson-06-04-01-polar-merged`: explain SoftPulse POLAR→MERGED→SIZE + `explainGrading`; guided/unguided/checkpoint outcome tiles `deal.mode` `none`; scaffolded `poker_action_sizing` fixed Jh/Td · Qc/Ts/3h/2d/7c + suit variants match Dart (LPT-395 second-pair); SoftPulse map `mid` PRESENT; scaffolded/unguided one-per-press OK; densify LPT-471/637 PRESENT. Structural clean. Curriculum **LPT-264** tip-commented (three concepts + checkpoint aim rhythm still valid).
+- Done-ack **LPT-262** / **263** / **395** / **471** / **637** on tip (NEED before comment).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-02-05-01-effective-stack` / `lesson-06-05-01-overbets-geometric` / Low curriculum.
+- act-06-04-01-*: structural clean on tip — teachSpec/pressHints/honesty/densify companions Done; curriculum via LPT-264 only.
+
