@@ -225,6 +225,18 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // footer.
     'act-06-13-01-checkpoint' =>
       'Selective entry + disciplined barrels — pick the model + line.',
+    // Section 6 checkpoint densified asks (LPT-655) — same path as LPT-654.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-13-02-cp-adv' =>
+      'PFR on dry A-high — pick what they often have.',
+    'act-06-13-02-cp-cap' =>
+      'Check-back turn — pick how river range shifts.',
+    'act-06-13-02-cp-polar' =>
+      'River overbet shape — pick the range story.',
+    'act-06-13-02-cp-tag' =>
+      'Tight entry, planned barrels — pick the label.',
+    'act-06-13-02-cp-lag' =>
+      'Wide entry, sustained pressure — pick the label.',
     _ => null,
   };
 }

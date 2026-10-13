@@ -1132,16 +1132,21 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-06-13-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-13-01-checkpoint')!,
       // SoftPulse owns Range advantage — don’t gold-tip the tile.
-      'act-06-13-02-cp-adv' => 'PFR on dry A-high — pick what they often have.',
+      // Densified frame speech via selectIdentifyDensifiedCoachLine (LPT-655).
+      'act-06-13-02-cp-adv' =>
+        selectIdentifyDensifiedCoachLine('act-06-13-02-cp-adv')!,
       // SoftPulse owns More capped — don’t gold-tip the tile.
-      'act-06-13-02-cp-cap' => 'Check-back turn — pick how river range shifts.',
+      'act-06-13-02-cp-cap' =>
+        selectIdentifyDensifiedCoachLine('act-06-13-02-cp-cap')!,
       // SoftPulse owns Polarized — don’t gold-tip the tile.
-      'act-06-13-02-cp-polar' => 'River overbet shape — pick the range story.',
+      'act-06-13-02-cp-polar' =>
+        selectIdentifyDensifiedCoachLine('act-06-13-02-cp-polar')!,
       // SoftPulse owns TAG — don’t gold-tip the tile.
-      'act-06-13-02-cp-tag' => 'Tight entry, planned barrels — pick the label.',
+      'act-06-13-02-cp-tag' =>
+        selectIdentifyDensifiedCoachLine('act-06-13-02-cp-tag')!,
       // SoftPulse owns LAG — don’t gold-tip the tile.
       'act-06-13-02-cp-lag' =>
-        'Wide entry, sustained pressure — pick the label.',
+        selectIdentifyDensifiedCoachLine('act-06-13-02-cp-lag')!,
       // SoftPulse owns Plan is sick — don’t gold-tip the tile.
       'act-07-01-01-guided' => 'AQo 3-bet · 872tt — pick the plan update.',
       // SoftPulse owns Value continues — don’t gold-tip the tile.
