@@ -1180,3 +1180,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-02-01-equity-realization` / Low curriculum.
 - act-06-01-01-*: structural clean on tip — curriculum split only via LPT-254; do not re-file ADVANTAGE/TAG course-contract (LPT-666 Done).
 
+## Fold 2026-10-13do (6d9f3068 discovery equity-realization)
+
+- Tip-stable `6d9f3068` (#2157 after #2153 **LPT-667** Done). `scan_content_gaps --counts` all structural gaps **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium content: Capstone **LPT-348** needs-human (five `NO_HINT` hands; already **HAS** tip SHA — no re-spam). High content open: **0**.
+- Discovery oldest-unfresh `lesson-06-02-01-equity-realization` (Realize equity in and out of position): all five teachSpec PRESENT; explain SoftPulse EQUITY→CASH→POS + `explainGrading`; guided/scaffolded/unguided/checkpoint `deal.mode` `none` (cues `ip` / `discount` / `realize` / `pos`); scaffolded+unguided one-per-press complete; checkpoint hintless. Structural clean — not a pressHints/deal-variants/handFamily clone.
+- Curriculum multi-concept + checkpoint Prefer-IP vs position+initiative still **LPT-257** needs-human (tip-commented on `6d9f3068`). Design-record Still-a-list “realization quizzes” STALE — do not file rebuild.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-07-01-minimum-defense` / Low curriculum.
+- act-06-02-01-*: structural clean on tip — curriculum split only via LPT-257.
+
