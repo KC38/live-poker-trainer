@@ -77,8 +77,9 @@ plans by pot type (LPT-318), Switch gears between HU and multiway (LPT-321),
 Rewrite plans when stacks change (LPT-324), Replay the same hand versus each
 type (LPT-328), Integrate type, board, line, and sizing (LPT-331), Capstone:
 single-raised pot (LPT-337), Capstone: 3-bet pot (LPT-339), Capstone:
-multiway deep (LPT-341), Capstone: limped pot (LPT-345). Content gaps are
-audited by [11 — Lesson content agent](11-lesson-content-agent.md).
+multiway deep (LPT-341), Capstone: limped pot (LPT-345), Capstone: 4-bet pot
+(LPT-347). Content gaps are audited by [11 — Lesson content
+agent](11-lesson-content-agent.md).
 
 `deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
 `teach_spec.schema.json` enum. Besides showdown ranks and starting-hand

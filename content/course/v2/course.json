@@ -27136,7 +27136,29 @@
                   ],
                   "objectives": [
                     "Respect short SPR commitment"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SPR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "COMMIT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "NO HERO",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-10-05-hand",
@@ -27267,7 +27289,42 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "Kd"
+                        ],
+                        "board": [
+                          "Qs",
+                          "8h",
+                          "3d",
+                          "2d",
+                          "Ad"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bet",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "barrel",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "fold",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 }
               ]
             }
