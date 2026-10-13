@@ -90,7 +90,7 @@ Lesson-specific pattern notes (full history) live in
 - Prefer Done’ing per-lesson honesty tickets when tip already lands the
   fix mid-run; do not reopen Done teachSpecs from stale timer notes.
 
-- Prefer when rebuilding densify-tap **LPT-628**: after a sibling densify PR clears arms, recompute ABSENT priority from `selectIdentifyDensifiedCoachLine` + course renderers — do not keep stale fallthrough counts from the prior tip.
+- Prefer when rebuilding densify-tap **LPT-628** after a sibling clears arms: recompute ABSENT from `selectIdentifyDensifiedCoachLine` + course renderers, and re-include every still-ABSENT Soft timing SI id including **`act-05-07-01-guided`** (do not list only scaffolded/unguided/checkpoint).
 
 ## Recent fold
 

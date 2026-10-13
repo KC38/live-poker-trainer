@@ -226,3 +226,5 @@ filing deal.mode / Still-a-list / handFamily gaps.
 ## Fold 2026-10-13
 
 - When rebuilding densify-tap **LPT-628** priority ABSENT after a sibling clears (e.g. LPT-640 MDF guided/unguided/checkpoint), re-include every still-ABSENT Soft timing SI id including **`act-05-07-01-guided`** — do not drop guided when listing only scaffolded/unguided/checkpoint. Verify with helper arms + fallthrough scan before editing the parent body.
+
+- Tip `63896aa9` (SDK health only after `d98b1025`): honesty Highs still valid — LPT-394 Scene 98hh/K723, LPT-396 JhTd top-as-second on T98x, LPT-401 Weak TPTK, LPT-402 missed-FD air 98ss, LPT-405 Q83tt rainbow, LPT-414 Gutshot-ish Air, LPT-417 NNbb sans stackLabel, Scene LPT-588 flop-only, cues LPT-370. SoftPulse-map LPT-625 still 18+qq ABSENT (68 `_guidedPulseTargetId` arms). LPT-627 body tip SHA refreshed (still 73). LPT-640 Done — densify parent LPT-628 keeps Soft timing SI incl. `act-05-07-01-guided` + mix + seat footers. Distill Prefer: when rebuilding LPT-628 ABSENT after sibling clear, re-include guided Soft timing. `content,grokbot,lesson`.
