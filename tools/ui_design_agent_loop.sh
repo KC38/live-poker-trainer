@@ -363,6 +363,32 @@ clear_idle_skip() {
   rm -f "$IDLE_FILE"
 }
 
+# Empty-queue idle can outlive a content-agent dirty/off-main checkout that
+# lands mid-sleep. Rewrite the stamp to primary-busy so status wake ETA and
+# reason match the live gate (not a stale empty-queue skip).
+reconcile_idle_with_primary() {
+  [[ -f "$IDLE_FILE" ]] || return 0
+  local reason branch
+  reason="$(python3 - "$IDLE_FILE" <<'PY' 2>/dev/null || true
+import json, sys
+from pathlib import Path
+try:
+    print(json.loads(Path(sys.argv[1]).read_text(encoding="utf-8")).get("reason") or "")
+except Exception:
+    pass
+PY
+)"
+  [[ "$reason" == "empty-queue" ]] || return 0
+  primary_is_clean_main && return 0
+  branch="$(git -C "$(primary)" rev-parse --abbrev-ref HEAD 2>/dev/null | head -1 | tr -d '\r')"
+  [[ -n "$branch" ]] || branch="unknown"
+  if [[ "$branch" == "main" ]]; then
+    record_idle_skip primary-busy "main(dirty)" "$BUSY_SLEEP"
+  else
+    record_idle_skip primary-busy "$branch" "$BUSY_SLEEP"
+  fi
+}
+
 print_idle_status() {
   [[ -f "$IDLE_FILE" ]] || return 0
   python3 - "$IDLE_FILE" <<'PY' 2>/dev/null || true
@@ -3054,6 +3080,7 @@ EOF
     else
       echo "loop: not running"
     fi
+    reconcile_idle_with_primary
     print_idle_status
     print_primary_checkout_status
     print_pending_learnings_status
