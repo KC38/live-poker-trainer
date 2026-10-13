@@ -733,3 +733,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
   missing helper arms; `--counts` now emits `densify-tap` ABSENT.
 - Prefer: rebuild LPT-628 from `--gap densify-tap --markdown` +
   `densifyHelperArms`; Soft timing `act-05-07-01-*` stays ABSENT until PRESENT.
+
+## Fold 2026-10-13 tip c88437f9 (#2056 densify-tap markdown + #2057 LPT-402)
+
+- Tip advanced `9feec4fa`/#2055 → `c88437f9` via #2056 densify-tap `--gap` markdown, #2057 LPT-402 missed-FD honesty, #2058 primary-busy skip.
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, **densify-tap 140** (new), `softpulseMapArms` **68**, `densifyHelperArms` **89** (flat).
+- First catalog rebuild of **LPT-628** from `--gap densify-tap --markdown`: ABSENT **140** (includes early-catalog SI / `player_read_classify`, not only prior hand fallthrough **~111**). Soft timing `act-05-07-01-*` + pot-type LPT-659 `act-07-04-01-*` still ABSENT Priority. Other parents tip-comment only (JSON gaps flat).
+- Done-ack **LPT-402**: tip Dart + `teachSpec.deal.fixedCards` now `9s`/`8s` · `Ks`/`7s`/`2h`/`3h`/`Ah` (real missed spade FD; prompt honest). Transitioned Done.
+- Prior tip `9feec4fa` coverage missed tip-comments on LPT-408/409/411 + LPT-659 — tip-commented those, then re-commented parents + frontier Highs LPT-242/312/315 + honesty LPT-414/417 on `c88437f9` after mid-run tip advance.
+- Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**: all five `act-*` still MISSING teachSpec each. densify ≠ teachSpec. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR ui-agent LPT-659 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(140).
