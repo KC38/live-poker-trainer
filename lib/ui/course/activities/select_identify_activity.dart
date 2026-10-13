@@ -1175,11 +1175,13 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-07-02-01-checkpoint')!,
       // SoftPulse owns Blocks strong calls — don’t gold-tip the tile.
       'act-07-03-01-scaffolded' =>
-        'Nut flush blocker — pick why the bluff works.',
+        selectIdentifyDensifiedCoachLine('act-07-03-01-scaffolded')!,
       // Unguided: name the spot; don’t tip Check.
-      'act-07-03-01-unguided' => 'No story — pick the river action.',
+      'act-07-03-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-07-03-01-unguided')!,
       // SoftPulse owns Value needs calls — don’t gold-tip the tile.
-      'act-07-03-01-checkpoint' => 'River rule — pick the composition check.',
+      'act-07-03-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-03-01-checkpoint')!,
       // SoftPulse owns Nut potential — don’t gold-tip the tile.
       'act-07-04-01-guided' => 'Multiway limped — pick the priority.',
       // SoftPulse owns C-bet maps — don’t gold-tip the tile.
