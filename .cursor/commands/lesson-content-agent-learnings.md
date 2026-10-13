@@ -72,10 +72,12 @@ Lesson-specific pattern notes (full history) live in
   `--gap <type> --markdown` every run before any lesson walk; sync open
   `(catalog)` parents in one edit. After #1949, `--counts` includes
   `nice-ladder` (LPT-624); after #1957/#1959 also `unguided-softpulse-map`
-  (LPT-625) + `softpulseMapArms` — use `--gap unguided-softpulse-map
-  --markdown`, do not hand-count `_guidedPulseTargetId` ABSENT. If
-  agent Shell hangs with empty output on `--counts`, rerun in a short
-  tmux/foreground session (script itself is ~40ms).
+  (LPT-625) + `softpulseMapArms`; after #1964/#1965 also
+  `densifyHelperArms` from `rex_coach_line.dart` (LPT-628 — prefer this
+  over hand brace-count). Use `--gap unguided-softpulse-map --markdown`,
+  do not hand-count `_guidedPulseTargetId` ABSENT. If agent Shell hangs
+  with empty output on `--counts`, rerun in a short tmux/foreground
+  session (script itself is ~40ms).
 - Prefer one catalog ticket per structural gap type (pressHints,
   deal.variants, Nice! ladder, densify-tap, SoftPulse maps, guideRegion,
   permanent-gold). Append checklists; Done sibling clones (skip In Progress).
@@ -146,3 +148,4 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13w: Mid-run tip → `a8658386` (#1956 LPT-394 + #1957/#1959 SoftPulse-map scanner): rebuilt **LPT-625** ABSENT **20→24** from `--gap unguided-softpulse-map --markdown` (`softpulseMapArms` 68); tip-commented LPT-624/626/627/635/628/242; JSON gaps still flat 151/81/80/34/nice-44.
 
 - 2026-10-13x: Tip-stable `51f39807` (#1960): scan flat 151/81/80/34/nice-44/map-24 softpulseMapArms 68; parents tip-comment only; Soft timing LPT-242 still all-five MISSING (GrokBot IP); densify helper 47 Soft timing ABSENT; LPT-396 still valid JhTd/Ts9h8c2d top-as-second; LPT-312 still MISSING.
+- 2026-10-13y: Tip `5b0de9e2` (#1964/#1965 densifyHelperArms in `--counts` + #1966): scan flat 151/81/80/34/nice-44/map-24 softpulseMapArms 68 densifyHelperArms **47**; parents tip-comment only; Soft timing LPT-242 + Map turn LPT-312 still MISSING; LPT-396 still valid; densify Soft timing ABSENT on LPT-628.
