@@ -459,3 +459,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Honesty **LPT-396** still valid: `act-07-08-01-guided` prompt "Second pair" + Dart streetLabel "Turn · second pair · wet" vs hero `Jh`/`Td` · board `Ts`/`9h`/`8c`/`2d` (top pair T). Tip-commented parents LPT-624/625/626/627/628/635 + Highs Soft timing/Map turn/Compose river/same-cards/honesty + S6/S7 IP + fingerprint/needs-human batch. Grep `act-05-07-01-*` / `act-07-07-01-*` / `act-07-08-01-*`: no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315/328 OR densify Soft-timing/seat-footer on LPT-628 OR LPT-625 SoftPulse maps (24) OR catalog LPT-626(151)/627(81)/635/624(47) OR LPT-396 if tip advances.
 
+## Fold 2026-10-13 tip 872a8183 (#1981 LPT-328 same-cards teachSpec)
+
+- Mid-run tip advanced `cbecf233` → `872a8183` (#1981 LPT-328 Replay the same hand versus each type teachSpec Validated-on-origin/main). Always re-`scan_content_gaps --counts` after ff.
+- `scan_content_gaps --counts`: pressHints **151** (flat), deal-variants **81→84**, teachSpec **68→64**, explain-teachSpec **31→30**, nice-ladder **47→48**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **53**.
+- Rebuilt **LPT-624** Nice! from `--gap nice-ladder --markdown` (new `act-07-07-01-explain` CARDS→MODELS→CITE). Rebuilt **LPT-627** from `--gap deal-variants --markdown` (guided/scaffolded/unguided `fixed` sans variants). Tip-commented **LPT-626** (scaffolded/unguided already listed — pressHints still **151**), **LPT-625**/ **LPT-628**/ **LPT-635** (keeps **12** S1–S2; do not shrink). Done-ack **LPT-328** catalog follow-ups (ticket already Done on tip).
+- Soft timing **LPT-242** still all five MISSING; densify Soft timing still ABSENT (helper 53). Next teachSpec frontier **LPT-312** Map turn / **LPT-315** Compose river. Honesty **LPT-396** still valid (`Jh`/`Td`·`Ts`/`9h`/`8c`/`2d` top-as-second). Grep `act-07-07-01-*`: no handFamily gaps; no per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR LPT-625 SoftPulse maps (24) OR catalog LPT-626(151)/627(84)/635/624(48) OR LPT-396 if tip advances.
+
