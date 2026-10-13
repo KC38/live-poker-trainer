@@ -1257,4 +1257,22 @@ export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 grep -q 'EMPTY_QUEUE_SLEEP' "$LOOP" || fail "loop must define EMPTY_QUEUE_SLEEP"
 grep -q 'ui-queue empty; sleeping' "$LOOP" || fail "run_loop must sleep on empty queue"
 
+
+# sleep_unless_stopped honors STOP_FILE mid-sleep (soft-stop during empty-queue).
+grep -q 'sleep_unless_stopped' "$LOOP" || fail "loop must define sleep_unless_stopped"
+(
+  STOP_FILE="$tmp/stop-interruptible"
+  rm -f "$STOP_FILE"
+  (
+    sleep 0.2
+    : >"$STOP_FILE"
+  ) &
+  start=$(date +%s)
+  sleep_unless_stopped 30
+  elapsed=$(( $(date +%s) - start ))
+  (( elapsed < 10 )) || fail "sleep_unless_stopped should wake on STOP_FILE within ~10s, took ${elapsed}s"
+  echo "sleep_unless_stopped ok"
+)
+rm -f "$tmp/stop-interruptible"
+
 echo "ui-design-agent loop ok"
