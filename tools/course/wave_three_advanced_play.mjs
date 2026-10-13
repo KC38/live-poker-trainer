@@ -3413,7 +3413,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-10-04-explain", 1,
                 "Capstone limped pot. Crowded. No hints.",
-                {objectives: ["Prefer nut potential limped multiway"]}),
+                {
+                  objectives: ["Prefer nut potential limped multiway"],
+                  // LPT-345
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "NUTS", kind: "soft_pulse"},
+                      {press: 2, target: "VALUE", kind: "soft_pulse"},
+                      {press: 3, target: "THIN", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               multiStepAct({
                 id: "act-07-10-04-hand", order: 2, stage: "scaffolded",
                 a11y: "Four-way limp, 150bb, you hold AhKh on BTN.",
@@ -3457,6 +3468,18 @@ export function buildSectionSeven() {
                     ],
                   },
                 ],
+                // LPT-345
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kh"], board: ["Kd", "9c", "4h", "2s", "8d"]},
+                  },
+                  cues: [
+                    {press: 1, target: "bet", kind: "soft_pulse"},
+                    {press: 2, target: "barrel", kind: "soft_pulse"},
+                    {press: 3, target: "value", kind: "soft_pulse"},
+                  ],
+                },
               }),
             ],
           }),

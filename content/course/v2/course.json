@@ -26904,7 +26904,29 @@
                   ],
                   "objectives": [
                     "Prefer nut potential limped multiway"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NUTS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "VALUE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "THIN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-10-04-hand",
@@ -27035,7 +27057,42 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kh"
+                        ],
+                        "board": [
+                          "Kd",
+                          "9c",
+                          "4h",
+                          "2s",
+                          "8d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bet",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "barrel",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "value",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 }
               ]
             },

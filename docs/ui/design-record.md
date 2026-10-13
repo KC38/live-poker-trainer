@@ -580,7 +580,8 @@ flop (LPT-308), Change plans by pot type (LPT-318), Switch gears between HU
 and multiway (LPT-321), Rewrite plans when stacks change (LPT-324), Replay
 the same hand versus each type (LPT-328), Integrate type, board, line, and
 sizing (LPT-331), Capstone: single-raised pot (LPT-337), Capstone: 3-bet pot
-(LPT-339), Capstone: multiway deep (LPT-341).
+(LPT-339), Capstone: multiway deep (LPT-341), Capstone: limped pot
+(LPT-345).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1155,6 +1156,10 @@ steps use cue kind `none` (no pressHints).
 Capstone: multiway deep `teachSpec` (LPT-341): explain SoftPulse advances
 NUTS → DEEP → NO-BLUFF; hand fixed AhQh/Jh8h2c3d9c → `call/bet/check-r`;
 assessment steps use cue kind `none` (no pressHints).
+
+Capstone: limped pot `teachSpec` (LPT-345): explain SoftPulse advances NUTS
+→ VALUE → THIN; hand fixed AhKh/Kd9c4h2s8d → `bet/barrel/value`; assessment
+steps use cue kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
