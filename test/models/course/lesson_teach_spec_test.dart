@@ -4619,25 +4619,17 @@ void main() {
   });
 
   group('Capstone hands transfer assessmentRole (LPT-348)', () {
-    CourseLesson lessonOf(String id) => catalog.sections
-        .expand((s) => s.units)
-        .expand((u) => u.lessons)
-        .firstWhere((l) => l.id == id);
-
-    Activity act(String lessonId, String activityId) =>
-        lessonOf(lessonId).activities.firstWhere((a) => a.id == activityId);
-
-    const hands = <(String, String)>[
-      ('lesson-07-10-01-capstone-srp', 'act-07-10-01-hand'),
-      ('lesson-07-10-02-capstone-3bet', 'act-07-10-02-hand'),
-      ('lesson-07-10-03-capstone-multiway-deep', 'act-07-10-03-hand'),
-      ('lesson-07-10-04-capstone-limped', 'act-07-10-04-hand'),
-      ('lesson-07-10-05-capstone-4bet', 'act-07-10-05-hand'),
+    const hands = <String>[
+      'act-07-10-01-hand',
+      'act-07-10-02-hand',
+      'act-07-10-03-hand',
+      'act-07-10-04-hand',
+      'act-07-10-05-hand',
     ];
 
-    for (final (lessonId, activityId) in hands) {
+    for (final activityId in hands) {
       test('$activityId is transfer with no pressHints', () {
-        final a = act(lessonId, activityId);
+        final a = act(activityId);
         expect(a.assessmentRole, AssessmentRole.transfer, reason: activityId);
         expect(a.stage, ActivityStage.scaffolded, reason: activityId);
         final teach = a.teachSpec;
