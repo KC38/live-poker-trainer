@@ -1298,3 +1298,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept still **LPT-330** needs-human (type-cite vs baseline-absent vs practice-all-five under one unlock) — tip-commented on `5d6ce7b0`. Tip-commented Capstone **LPT-348** + Done-ack LPT-328/329/451/664/667/626/624/625/627/628/635/216 (all NEED tip SHA).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-08-01-type-board-line` / Low curriculum.
 - act-07-07-01-*: structural clean on tip — curriculum split only via LPT-330; teachSpec/pressHints/densify companions LPT-328/329/451 Done.
+
+## Fold 2026-10-14j (34a43238 discovery type-board-line)
+
+- Tip `34a43238` (#2171 after #2170). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348** needs-human.
+- Discovery oldest-unfresh `lesson-07-08-01-type-board-line`: teachSpec on all five; explain SoftPulse + `explainGrading`; guided/scaffolded/unguided `fixed` + variants + one-per-press; checkpoint `deal.mode` `none` hintless; densify PRESENT on checkpoint (sizing steps skip SI densify). Structural clean.
+- Curriculum multi-concept still **LPT-333** needs-human (tip-commented on `34a43238`). Tip-commented Capstone **LPT-348** + **LPT-330** + Done parents that NEED tip SHA.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-09-01-leak-review-book` / Low curriculum.
+- act-07-08-01-*: structural clean on tip — curriculum split only via LPT-333.
