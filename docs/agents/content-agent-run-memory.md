@@ -682,3 +682,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/349/352 OR catalog LPT-626(151)/627(92)/635/624(54)/625(24).
 
 - Tip `ac29f3e1` (#2041 LPT-656 Carry preflop plan densify + #2040 soft-stop-hold + #2042 learnings): `scan_content_gaps --counts` JSON flat pressHints **151** / deal-variants **92** / teachSpec **55** / explain-teachSpec **24** / nice-ladder **54** / unguided-softpulse-map **24**; densifyHelperArms **78→82** / fallthrough **122→118** (`act-07-01-01-guided` / `scaffolded` / `unguided` / `checkpoint` PRESENT). Rebuilt catalog densify-tap **LPT-628** (description had lagged at helper **78** @ `0092c2ba` while tip already had LPT-656). Soft timing `act-05-07-01-*` still Priority ABSENT. Meet Nit Nice! still LPT-624 (`act-04-07-02-explain` missing `explainGrading`) / pressHints LPT-626 (`act-04-07-02-unguided`); LPT-216 Done — no clones. Leave LPT-656 Done to ui-agent Validated-on-origin/main. densify ≠ teachSpec (LPT-242). Next: Soft timing LPT-242 / Map turn LPT-312 / Compose river LPT-315 / warm-up LPT-349 / Final LPT-352 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(92)/635/624(54)/625(24).
+
+## Fold 2026-10-13 tip 7abac821 (#2045 LPT-657 Map turn densify)
+
+- Tip advanced `85724074` (#2044 LPT-349 + #2043 LPT-656 learnings) → `7abac821` via #2045 LPT-657 Map turn densify (`selectIdentifyDensifiedCoachLine` arms for `act-07-02-01-guided` / `scaffolded` / `unguided` / `checkpoint`).
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **92**, teachSpec **51**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **82→86**. Soft timing `act-05-07-01-*` still ABSENT (Priority on **LPT-628**).
+- Immediately rebuilt densify-tap **LPT-628** helper **86** / fallthrough **114**. Relates LPT-657↔LPT-628. Leave LPT-657 In Progress until ui-agent Validated-on-origin/main (arms already on tip).
+- LPT-624 Nice! already **55** (warm-up explain from LPT-349); tip-commented LPT-624/625/626/627/635 (no checklist rebuild). Done-ack LPT-349; densify ≠ teachSpec **LPT-312** (all five still MISSING). Soft timing LPT-242 / Compose river LPT-315 / Final LPT-352 still open.
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/352 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
+
