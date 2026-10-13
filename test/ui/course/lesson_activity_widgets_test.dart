@@ -22363,6 +22363,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-639: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Flush-board river bluff — tap the better blocker.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Flush-board river bluff — pick the better blocker.'),
       findsOneWidget,
@@ -22452,6 +22458,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-639: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Bluff-catch flush bomb — tap what you leave live.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Bluff-catch flush bomb — pick what you leave live.'),
       findsOneWidget,
@@ -22494,6 +22506,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-639: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Blockers replace — tap how far they go.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Blockers replace — pick how far they go.'),
       findsOneWidget,
@@ -22559,6 +22577,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-639: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Solver EV quotes — tap the course stance.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Solver EV quotes — pick the course stance.'),
       findsOneWidget,
