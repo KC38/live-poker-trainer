@@ -296,6 +296,69 @@ one_run() {
   return "$code"
 }
 
+# Scrub finished SDK stream logs for `status` — raw `tail` interleaved
+# {"t":…,"type":"assistant"} crumbs with closeout prose (health timers).
+print_content_run_log_preview() {
+  local log="${1:-}" max_lines="${2:-8}"
+  [[ -n "$log" && -s "$log" ]] || return 0
+  python3 - "$log" "$max_lines" <<'PY' || true
+import re, sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+try:
+    max_lines = max(1, int(sys.argv[2]))
+except ValueError:
+    max_lines = 8
+
+SDK_STREAM = re.compile(
+    r'\{\s*"t"\s*:\s*\d+\s*,\s*"type"\s*:\s*'
+    r'"(?:thinking|assistant|tool_call|status)"\s*\}'
+)
+NOISE = re.compile(
+    r"("
+    r"Connection lost, reconnecting|Retry attempt |\^D|"
+    r"Cursor Agent Debug Session|User does not belong to a team|"
+    r"Loaded global commands|telemetry-only|filtered out for missing"
+    r")",
+    re.I,
+)
+
+try:
+    raw = path.read_text(encoding="utf-8", errors="replace")
+except OSError:
+    raise SystemExit(0)
+
+SUMMARY = re.compile(
+    r"("
+    r"^# ui-agent-sdk status=|"
+    r"^\*\*Result:\*\*|"
+    r"^\*\*Tickets:\*\*|"
+    r"^\*\*Leads:\*\*|"
+    r"^\*\*Learnings:\*\*"
+    r")",
+    re.I,
+)
+
+kept: list[str] = []
+summary: list[str] = []
+for ln in raw.splitlines():
+    cleaned = SDK_STREAM.sub(" ", ln)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip()
+    if not cleaned or NOISE.search(cleaned):
+        continue
+    # Drop lone streamed tokens / punctuation crumbs.
+    if len(cleaned) <= 2 and not cleaned.startswith("#"):
+        continue
+    kept.append(cleaned)
+    if SUMMARY.search(cleaned):
+        summary.append(cleaned)
+
+for ln in (summary or kept)[-max_lines:]:
+    print(ln)
+PY
+}
+
 # Sleep up to N seconds but wake every few seconds so stop/soft-stop
 # (STOP_FILE) is honored during long gaps — usage-limit sleeps of 3600s
 # previously blocked kill/stop until the bare sleep finished.
@@ -486,7 +549,7 @@ EOF
       if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE" 2>/dev/null)" 2>/dev/null; then
         echo "(active run — log preview skipped)"
       else
-        tail -n 8 "$latest"
+        print_content_run_log_preview "$latest" 8
       fi
     fi
     ;;
