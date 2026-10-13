@@ -27,15 +27,19 @@ open follow-up PRs that only fix one lesson from that checklist.
 
 **Mac mini (must exclude GrokBot):**
 
+```bash
+python3 tools/jira.py ui-queue
 ```
-project = LPT AND labels = ui-agent AND labels != needs-human AND labels != grokbot AND statusCategory != Done ORDER BY priority DESC, created ASC
-```
+
+(Do not use Jira `labels != …` — those searches can hang.)
 
 **GrokBot:**
 
 ```
-project = LPT AND labels = grokbot AND labels != needs-human AND statusCategory != Done ORDER BY priority DESC, created ASC
+project = LPT AND labels = grokbot AND statusCategory != Done ORDER BY priority DESC, created ASC
 ```
+
+Then skip `needs-human` locally (same hang risk as `labels !=`).
 
 Create GrokBot tickets with:
 

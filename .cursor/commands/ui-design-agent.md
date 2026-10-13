@@ -198,6 +198,7 @@ learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 | Action | Command |
 | --- | --- |
 | Search | `python3 tools/jira.py search '<JQL>'` |
+| Open Mac-mini queue | `python3 tools/jira.py ui-queue` (filters `needs-human` / `grokbot` locally — do **not** use Jira `labels !=`) |
 | Read an issue, comments, links | `python3 tools/jira.py get LPT-NN` |
 | Create (Mac mini) | `python3 tools/jira.py create --type Story --summary "…" --priority Medium --labels ui,ui-agent,lesson --body-file body.md --attach <surface>-issue.png` |
 | Create (GrokBot) | `python3 tools/jira.py create --type Bug --summary "…" --priority Medium --labels ui,grokbot,home --body-file body.md --attach <surface>-issue.png` |
@@ -207,20 +208,21 @@ learnings if useful, then release) and end with `JIRA_UNAVAILABLE`.
 | Move | `python3 tools/jira.py transition LPT-NN --to "In Progress"` (statuses: To Do, In Progress, In Review, Done) |
 | Block | `python3 tools/jira.py link --type Blocks --inward LPT-A --outward LPT-B` (A blocks B) |
 
-**First, unfinished work.** Search:
+**First, unfinished work.** Run:
 
-```
-project = LPT AND labels = ui-agent AND labels != needs-human AND labels != grokbot AND statusCategory != Done ORDER BY priority DESC, created ASC
+```bash
+python3 tools/jira.py ui-queue
 ```
 
-Skip any issue that an open issue **Blocks**. Also skip any issue that
-carries `grokbot` even if it somehow still has `ui-agent` — GrokBot owns
-those. Take the first remaining one as this run's **fix target**, read
-it with `jira.py get` (description, comments, links), and walk its
-**Steps** on this build. If it no longer reproduces, comment that with a
-screenshot and the SHA, transition it to Done, and go back to this step
-for the next open ticket. If it reproduces, keep it as the fix target —
-but while you walk, still file any **other** distinct issues you see
+That lists open `ui-agent` issues with `needs-human` / `grokbot` stripped
+locally. Do **not** search with Jira `labels != …` — those JQLs can hang
+for 10+ minutes with no stdout (2026-10-13). Skip any issue that an open
+issue **Blocks**. Take the first remaining one as this run's **fix
+target**, read it with `jira.py get` (description, comments, links), and
+walk its **Steps** on this build. If it no longer reproduces, comment that
+with a screenshot and the SHA, transition it to Done, and go back to this
+step for the next open ticket. If it reproduces, keep it as the fix target
+— but while you walk, still file any **other** distinct issues you see
 (step 5), then go to step 6 for the fix target only.
 
 **Otherwise, a discovery walk.** Pick one surface from the **Surfaces**
