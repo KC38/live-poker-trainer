@@ -2660,7 +2660,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-04-01-explain", 1,
                 "Pot type sets ranges and SPR. Plan accordingly.",
-                {objectives: ["Plan single-raised pots"]}),
+                {
+                  objectives: ["Plan single-raised pots"],
+                  // LPT-318
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "LIMPED", kind: "soft_pulse"},
+                      {press: 2, target: "SRP", kind: "soft_pulse"},
+                      {press: 3, target: "3-4BET", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-07-04-01-guided", order: 2, stage: "guided",
                 prompt: "Multiway limped pot. Priority?",
@@ -2672,6 +2683,8 @@ export function buildSectionSeven() {
                   choice("air", "Pure air stabs always", "clear_mistake",
                     "Expensive.", {betterChoiceId: "nuts"})
                 ],
+                // LPT-318
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "nuts", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-04-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2684,6 +2697,8 @@ export function buildSectionSeven() {
                   choice("check", "Never bet", "clear_mistake",
                     "Too passive.", {betterChoiceId: "cb"})
                 ],
+                // LPT-318
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cb", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-04-01-unguided", order: 4, stage: "scaffolded",
@@ -2696,6 +2711,8 @@ export function buildSectionSeven() {
                   choice("deep", "Play like 300bb deep", "clear_mistake",
                     "Wrong.", {betterChoiceId: "commit"})
                 ],
+                // LPT-318
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "commit", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2708,6 +2725,8 @@ export function buildSectionSeven() {
                   choice("nothing", "Nothing material", "clear_mistake",
                     "It matters.", {betterChoiceId: "both"})
                 ],
+                // LPT-318
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "both", kind: "none"}]},
               }),
             ],
           }),
