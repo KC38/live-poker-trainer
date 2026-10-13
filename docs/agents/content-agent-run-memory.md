@@ -713,3 +713,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - ui-agent filed densify sibling **LPT-659** (Change plans by pot type `act-07-04-01-guided` / `scaffolded` / `unguided` / `checkpoint` — framed "Tap the best answer"; helper arms ABSENT). Tip-commented LPT-628 + LPT-659; linked Relates. Leave LPT-659 to ui-agent Validated-on-origin/main; rebuild LPT-628 only when helper count moves. Soft timing remains Priority ABSENT on LPT-628.
 - Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR ui-agent LPT-659 pot-type densify OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
+
+## Fold 2026-10-13 tip 8e5ae40a (#2054 LPT-658 Compose river densify)
+
+- Tip advanced `e785c399`/#2053 learnings → `8e5ae40a` via #2054 LPT-658 Compose river densify (`act-07-03-01-scaffolded` / `unguided` / `checkpoint` helper PRESENT; guided is `poker_action_sizing` — skip).
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **86→89**.
+- Rebuilt densify-tap **LPT-628** body: helper **89** / fallthrough **114→111**; Soft timing `act-05-07-01-*` still Priority ABSENT (LPT-464 Done ≠ PRESENT). Linked Relates LPT-658↔LPT-628. Leave LPT-658 In Progress until ui-agent Validated-on-origin/main.
+- Prior coverage on `e785c399` over-claimed tip-comments — `jira.py get` showed **zero** tickets containing that SHA. Tip-commented catalog parents LPT-624/625/626/627/635/628 + LPT-658/659 + frontier/unchecked Highs LPT-242/312/315/301/258/295/252/255/271/275/334 + LPT-348/216/370 + honesty/fingerprint LPT-402/408/409/411/414/417 on tip `8e5ae40a`.
+- Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315** / Adjust LAG **LPT-301**: all five `act-*` still MISSING teachSpec each. densify ≠ teachSpec for LPT-315 (LPT-658 arms PRESENT) and LPT-312 (LPT-657 arms PRESENT).
+- LPT-659 pot-type `act-07-04-01-*` helper arms still ABSENT. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR ui-agent LPT-659 pot-type densify OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
