@@ -8,6 +8,7 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 
@@ -81,6 +82,27 @@ void main() {
     }
   });
 
+  test('scaffolded ranks authors SoftPulse cues low → high (LPT-370)', () {
+    final ranks = act(_ranks);
+    final cues = ranks.teachSpec!['cues'] as List<dynamic>;
+    expect(cues, hasLength(3));
+    expect([for (final c in cues) (c as Map)['press']], [1, 2, 3]);
+    expect(
+      [for (final c in cues) (c as Map)['target']],
+      ['rank-2', 'rank-T', 'rank-A'],
+    );
+    for (final c in cues) {
+      expect((c as Map)['kind'], 'soft_pulse');
+    }
+    expect(
+      [for (final c in cues) (c as Map)['target']],
+      [for (final item in ranks.sequenceItems) item.id],
+    );
+    expect(authoredSoftPulseTargets(ranks), ['rank-2', 'rank-T', 'rank-A']);
+    // Assessment checkpoint keeps its single `none` cue.
+    expect(authoredSoftPulseTargets(act(_pair)), isNull);
+  });
+
   test('checkpoint pair keeps no pressHints and no Hint media', () {
     final checkpoint = act(_pair);
     expect(checkpoint.assessmentRole, isNotNull);
@@ -110,7 +132,8 @@ void main() {
   test('rank-order deal stays three distinct ranks on a rainbow board', () {
     final activity = act(_ranks);
     final authored = [
-      for (final item in activity.sequenceItems) (id: item.id, label: item.label),
+      for (final item in activity.sequenceItems)
+        (id: item.id, label: item.label),
     ];
     final labels = <String>{};
     for (var seed = 0; seed < 24; seed++) {
@@ -121,11 +144,10 @@ void main() {
       );
       expect({for (final c in deal.boardCodes) _rank(c)}, hasLength(3));
       expect({for (final c in deal.boardCodes) _suit(c)}, hasLength(3));
-      expect([for (final i in deal.sequenceItems) i.id], [
-        'rank-2',
-        'rank-T',
-        'rank-A',
-      ]);
+      expect(
+        [for (final i in deal.sequenceItems) i.id],
+        ['rank-2', 'rank-T', 'rank-A'],
+      );
       labels.add([for (final i in deal.sequenceItems) i.label].join());
     }
     expect(labels.length, greaterThan(1));
@@ -158,10 +180,9 @@ void main() {
         expect(offsuit, hasLength(1), reason: '$id $seed $others');
         // The choice ids are a permutation of the authored choices, so the
         // grade follows whichever seat the deal placed the answer on.
-        expect(
-          plan.choiceIdsBySeat.toSet(),
-          {for (final c in activity.choices) c.id},
-        );
+        expect(plan.choiceIdsBySeat.toSet(), {
+          for (final c in activity.choices) c.id,
+        });
         layouts.add('${plan.correctSeatIndex} ${answer.join()}');
       }
       expect(layouts.length, greaterThan(1), reason: '$id randomizes');

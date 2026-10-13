@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "6cbb6d6dcb2efcf051c8ebb14196314f2f823282f5d20ed1237583be525585a7",
+  "contentChecksum": "3a2958a3caa4079cdc980320c582d646235e8549320fd2d7c4cb36741134b7df",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -588,6 +588,23 @@
                       {
                         "press": 3,
                         "text": "The highest rank goes last."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "rank-2",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "rank-T",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "rank-A",
+                        "kind": "soft_pulse"
                       }
                     ]
                   }

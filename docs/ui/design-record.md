@@ -751,7 +751,10 @@ Suits and ranks `teachSpec` (LPT-81, `content/course/v2/course.json`, kept
 in sync with `tools/course/wave_one_foundations.mjs`): guided suits deals
 `random_in_class` / `four_suits` (`dealSuitLessonBoard`) with one
 `soft_pulse` cue per suit press in board order; ranks deals
-`random_in_class` / `high_card` + `rainbow` (`dealRankOrderSpot`);
+`random_in_class` / `high_card` + `rainbow` (`dealRankOrderSpot`) with
+three `soft_pulse` cues `rank-2` → `rank-T` → `rank-A` (LPT-370; after
+Hint, `LessonRankOrderTable` golds the next authored cue target, one at a
+time, via `authoredSoftPulseTargets`);
 unguided suited deals `suited` with offsuit and pocket-pair distractor
 `variants` (`dealHoleHandSeatPlan`); the pair checkpoint deals `pair` with
 suited and offsuit distractor `variants`, a `none` cue, and no
@@ -1618,7 +1621,7 @@ felt.
 | Lesson | Explain taps | Still a list |
 | --- | --- | --- |
 | Your two cards | Your hole cards on the felt | — |
-| Suits and ranks | Suit taps on board cards, board ranks low to high, suited / pair seats; scaffolded pressHints (LPT-82); explain SoftPulse cues hearts → diamonds → clubs → spades (LPT-353) | — |
+| Suits and ranks | Suit taps on board cards, board ranks low to high, suited / pair seats; scaffolded pressHints (LPT-82); scaffolded ranks SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); explain SoftPulse cues hearts → diamonds → clubs → spades (LPT-353) | — |
 | Button and blinds | Dealer button, SB, BB on the seats | — |
 | Hand ranks | Showdown seats weakest to strongest | — |
 | Best five and kickers | The five cards that play; You / Them / Board | — |
