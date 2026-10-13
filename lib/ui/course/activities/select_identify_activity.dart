@@ -1065,18 +1065,19 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Cooler / mistake? — don’t gold-tip the tile.
       'act-06-10-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-10-01-checkpoint')!,
-      // SoftPulse owns Selective + plan — don’t gold-tip the tile.
+      // Observe selective densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-647). SoftPulse owns Selective + plan — don’t gold-tip the tile.
       'act-06-11-01-guided' =>
-        'Folds most, then 3-bets / c-bets — pick the note.',
+        selectIdentifyDensifiedCoachLine('act-06-11-01-guided')!,
       // SoftPulse owns Disciplined — don’t gold-tip the tile.
       'act-06-11-01-scaffolded' =>
-        'Gives up on turns when called — pick the observation.',
-      // Unguided: name the habit; don’t tip Keep sampling.
+        selectIdentifyDensifiedCoachLine('act-06-11-01-scaffolded')!,
+      // SoftPulse owns Keep sampling — don’t gold-tip the tile (LPT-494).
       'act-06-11-01-unguided' =>
-        'Two hands of tightness — pick the confidence.',
+        selectIdentifyDensifiedCoachLine('act-06-11-01-unguided')!,
       // SoftPulse owns Tight · plan · give — don’t gold-tip the tile.
       'act-06-11-01-checkpoint' =>
-        'Best pre-label note bundle — pick the evidence pack.',
+        selectIdentifyDensifiedCoachLine('act-06-11-01-checkpoint')!,
       // SoftPulse owns TAG — don’t gold-tip the tile.
       'act-06-11-02-guided' => 'Folds most, 3-bets strong — pick the label.',
       // SoftPulse owns Selective vs extreme — don’t gold-tip the tile.
