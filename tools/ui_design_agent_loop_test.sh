@@ -1235,6 +1235,9 @@ assert m, "log() not found"
 assert "process.stdout.write" not in m.group(1), m.group(1)
 print("run.mjs log dedupe ok")
 PY
+grep -q 'streamed above' "$ROOT/tools/ui-agent-sdk/run.mjs" \
+  || fail "run.mjs must skip re-logging long result.result (step-10 dedupe)"
+
 
 # Empty ui-queue skips agent start (return 16). Gate is skipped when
 # UI_AGENT_SKIP_SIM_PREFLIGHT=1 (unit tests); exercise with that unset.

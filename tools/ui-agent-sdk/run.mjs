@@ -219,8 +219,16 @@ async function main() {
 
     const result = await run.wait();
     log(`# ui-agent-sdk status=${result.status} resultId=${result.id || ""}`);
+    // Final report text was already written via stream → stdout → run_log
+    // (loop redirects). Logging result.result again duplicated the step-10
+    // block after status=finished (20261013-092240 / LPT-644).
     if (result.result) {
-      log(String(result.result).slice(0, 4000));
+      const text = String(result.result);
+      if (text.length <= 240) {
+        log(text);
+      } else {
+        log(`# ui-agent-sdk result (${text.length} chars; streamed above)`);
+      }
     }
     // status=error often has empty result text; dump useful fields for health.
     if (result.status === "error") {
