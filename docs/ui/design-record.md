@@ -894,6 +894,20 @@ cleared); jump-family deals `suited_ace`/`suited` with pair/trash distractor
 variants; jump-open deals `trash`/`offsuit`; jump-vs authors fixed AA
 (`AhAd`) so coach copy follows the deal.
 
+Section 1–2 explain `teachSpec` (LPT-635): the twelve S1–S2 SoftPulse
+explains that still had no `teachSpec` (Fold, check, call through Full-ring
+baseline) now author `deal.mode` `none` plus one `soft_pulse` cue per demo
+press, in the order the Dart explain table already golds: FOLD → CHECK →
+CALL; BET → RAISE → ALL-IN; PREFLOP → FLOP → TURN → RIVER; FOLD WIN →
+SHOWDOWN → SIDE POT; BLINDS → YOU ACT → ENDING; the `D` puck (Position
+labels); UTG → HJ → CO → BTN; Pairs → Broadways → Suited aces →
+Connectors; EARLY → BUTTON → LIVE 3x; FOLD → CALL → 3-BET; CHIPS→BB →
+SHORTER → DEPTH; NINE → SAME → POSITION. Targets are the demo tile labels
+(`PassiveActionsDemo.actions`, `StreetsTimelineDemo.streets`, …), so the
+catalog and the felt name the same GlowHighlight targets; no second cue
+system. `scan_content_gaps` explain-teachSpec is 0 after this change; the
+Nice! ladder (`explainGrading`) for these explains stays on LPT-624.
+
 Read the table first `teachSpec` (LPT-138): explain SoftPulse advances POT →
 STACKS → BUTTON → WHO ACTS; guided/scaffolded/unguided SoftPulse `pot-21` /
 `utg-first` / `bound`; checkpoint cues `eff-55` with kind `none` (no
@@ -1625,20 +1639,20 @@ felt.
 | Button and blinds | Dealer button, SB, BB on the seats | — |
 | Hand ranks | Showdown seats weakest to strongest | — |
 | Best five and kickers | The five cards that play; You / Them / Board | — |
-| Fold, check, call | Fold, Check, Call under a flop | — |
-| Bet, raise, all-in | Bet, Raise, All-in under a flop | — |
-| Streets and action order | Board advances by street; seat order on the table | — |
-| How pots are won | Fold win, Showdown, Side pot; densified SoftPulse one gold via `guideRegion` (LPT-525) | — |
-| Play a full toy hand | Blinds, You act, Ending | — |
+| Fold, check, call | Fold, Check, Call under a flop; explain SoftPulse cues FOLD → CHECK → CALL (LPT-635) | — |
+| Bet, raise, all-in | Bet, Raise, All-in under a flop; explain SoftPulse cues BET → RAISE → ALL-IN (LPT-635) | — |
+| Streets and action order | Board advances by street; seat order on the table; explain SoftPulse cues PREFLOP → FLOP → TURN → RIVER (LPT-635) | — |
+| How pots are won | Fold win, Showdown, Side pot; densified SoftPulse one gold via `guideRegion` (LPT-525); explain SoftPulse cues FOLD WIN → SHOWDOWN → SIDE POT (LPT-635) | — |
+| Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING (LPT-635) | — |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
-| Position labels | Six-max seats labeled on the table | — |
-| Acting order | UTG, HJ, CO, BTN on the table | — |
-| Hand families | Pairs, Broadways, Suited aces, Connectors; densified SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| Open or fold baseline | Early, Button, Live 3x | — |
-| Versus an open | Fold, Call, 3-bet | — |
-| Effective stacks | Chips→BB, Shorter, Depth | — |
+| Position labels | Six-max seats labeled on the table; explain SoftPulse cues D (LPT-635) | — |
+| Acting order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635) | — |
+| Hand families | Pairs, Broadways, Suited aces, Connectors; densified SoftPulse one gold via `guideRegion` (LPT-634); explain SoftPulse cues Pairs → Broadways → Suited aces → Connectors (LPT-635) | — |
+| Open or fold baseline | Early, Button, Live 3x; explain SoftPulse cues EARLY → BUTTON → LIVE 3x (LPT-635) | — |
+| Versus an open | Fold, Call, 3-bet; explain SoftPulse cues FOLD → CALL → 3-BET (LPT-635) | — |
+| Effective stacks | Chips→BB, Shorter, Depth; explain SoftPulse cues CHIPS→BB → SHORTER → DEPTH (LPT-635) | — |
 | Live table habits | Watch, Say, Cover, Wait | — |
-| Full-ring baseline hand | Nine, Same, Position | — |
+| Full-ring baseline hand | Nine, Same, Position; explain SoftPulse cues NINE → SAME → POSITION (LPT-635) | — |
 | Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221); jump-family SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Read the table first | Pot, Stacks, Button, Who Acts | — |
 | Name your flop class | Made, Draw, SDV, Air; fixed steps author suit-rotated `deal.variants` (LPT-384) | — |

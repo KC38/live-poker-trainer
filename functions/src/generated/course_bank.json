@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "3a2958a3caa4079cdc980320c582d646235e8549320fd2d7c4cb36741134b7df",
+  "contentChecksum": "9b780621d9130302ca39809761fd9b4be09b461a09c86d5e2c243a06601e33ef",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1933,7 +1933,29 @@
                   ],
                   "objectives": [
                     "Fold to give up the hand"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHECK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-01-guided-fold",
@@ -2243,7 +2265,29 @@
                   ],
                   "objectives": [
                     "Bet when the pot is unchecked"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "ALL-IN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-03-02-guided-bet",
@@ -2568,6 +2612,33 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "Preflop → flop → turn → river."
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PREFLOP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FLOP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "TURN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "RIVER",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -2898,7 +2969,29 @@
                   ],
                   "objectives": [
                     "Win the pot when everyone else folds"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FOLD WIN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SHOWDOWN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SIDE POT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-05-01-guided-fold-win",
@@ -3243,7 +3336,29 @@
                   ],
                   "objectives": [
                     "Follow a hand from blinds to a terminal state"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BLINDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "YOU ACT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "ENDING",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-01-06-01-guided-steps",
@@ -4128,7 +4243,19 @@
                   ],
                   "objectives": [
                     "Prefer later seats when choosing hands"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "D",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-01-01-guided-btn",
@@ -4424,6 +4551,33 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "UTG → HJ → CO → BTN."
+                  },
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "UTG",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "HJ",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CO",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "BTN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
                   }
                 },
                 {
@@ -4724,7 +4878,34 @@
                   ],
                   "objectives": [
                     "Recognize pocket pairs"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "Pairs",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "Broadways",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "Suited aces",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "Connectors",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-02-01-guided-pair",
@@ -5030,7 +5211,29 @@
                   ],
                   "objectives": [
                     "Fold trash from early position"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "EARLY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BUTTON",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "LIVE 3x",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-03-01-guided-utg",
@@ -5350,7 +5553,29 @@
                   ],
                   "objectives": [
                     "Fold weak hands to an open"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "3-BET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-04-01-guided-fold",
@@ -5670,7 +5895,29 @@
                   ],
                   "objectives": [
                     "Convert chips to big blinds"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CHIPS→BB",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SHORTER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "DEPTH",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-05-01-guided-convert",
@@ -6293,7 +6540,29 @@
                   ],
                   "objectives": [
                     "Make a baseline open on a full ring"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NINE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SAME",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "POSITION",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-07-01-guided-ep",
