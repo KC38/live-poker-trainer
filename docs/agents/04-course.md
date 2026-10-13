@@ -37,6 +37,13 @@ Hint**. Home path node kinds and jump-test placement use this role (not a
 separate stage). Legacy catalogs map explain→guided; unguided→scaffolded;
 old checkpoint/jump_test stages→scaffolded+role.
 
+Every scaffolded non-assessment step authors at least `pressHints[0]`
+(LPT-626): a short class-language nudge (no card codes, no hand shorthand,
+never the `accessibilityText` answer line), so Hint stops reading the answer
+out. Deal-aware Dart lines (showdown-order seats) still win over the static
+press-1 text. `scan_content_gaps --gap pressHints` is 0; a new scaffolded
+step ships its press hint in the same PR.
+
 ### teachSpec
 
 Optional authored deal / hint / cue contract on each activity

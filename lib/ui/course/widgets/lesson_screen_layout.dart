@@ -281,9 +281,7 @@ const Set<String> _seatAnswerActivityIds = {
 };
 
 /// Questions answered on the choice dock under the full table.
-const Set<String> _dockAnswerActivityIds = {
-  'act-02-01-02-unguided-wait',
-};
+const Set<String> _dockAnswerActivityIds = {'act-02-01-02-unguided-wait'};
 
 String _dockInstruction(List<CourseChoice> choices) {
   final actions = choices.any((choice) => choice.action != null);
@@ -870,6 +868,22 @@ String? lessonFrameHintFallback(
     return null;
   }
 
+  // Hand ranks showdown-order: seat roles shuffle; catalog accessibility
+  // still names authored You/Sam/Jo classes. Build Hint from the deal.
+  // Runs before authored pressHints so the seat-aware line wins over the
+  // class-only catalog hint (LPT-626).
+  final showdownHint = showdownOrderHintSpeech(
+    activity.id,
+    generation: bindGeneration,
+  );
+  if (showdownHint != null) {
+    return alignLessonActionCopy(
+      activity,
+      showdownHint,
+      generation: bindGeneration,
+    );
+  }
+
   // Prefer authored teachSpec press hints when present.
   final teachHints = activity.teachSpec?['pressHints'];
   if (teachHints is List && teachHints.isNotEmpty) {
@@ -893,20 +907,6 @@ String? lessonFrameHintFallback(
     return alignLessonActionCopy(
       activity,
       'Second barrel value with top pair on a brick.',
-      generation: bindGeneration,
-    );
-  }
-
-  // Hand ranks showdown-order: seat roles shuffle; catalog accessibility
-  // still names authored You/Sam/Jo classes. Build Hint from the deal.
-  final showdownHint = showdownOrderHintSpeech(
-    activity.id,
-    generation: bindGeneration,
-  );
-  if (showdownHint != null) {
-    return alignLessonActionCopy(
-      activity,
-      showdownHint,
       generation: bindGeneration,
     );
   }
@@ -1187,7 +1187,8 @@ class _LessonChromeBarState extends State<LessonChromeBar>
         ..value = 0;
       _nudge.value = 0;
     }
-    if (_empty && widget.emptyHeartsNudgeTick != oldWidget.emptyHeartsNudgeTick) {
+    if (_empty &&
+        widget.emptyHeartsNudgeTick != oldWidget.emptyHeartsNudgeTick) {
       _nudge.forward(from: 0);
     }
   }
@@ -1488,24 +1489,23 @@ class LessonAnswerDock extends StatelessWidget {
                   letterSpacing: 0.8,
                 ),
               ),
-              child:
-                  busy
-                      ? const SizedBox(
-                        width: 22,
-                        height: 22,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.4,
-                          color: AppColors.bgDark,
-                        ),
-                      )
-                      : Text(
-                        continueLabel,
-                        style: GoogleFonts.manrope(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
-                          letterSpacing: 0.4,
-                        ),
+              child: busy
+                  ? const SizedBox(
+                      width: 22,
+                      height: 22,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        color: AppColors.bgDark,
                       ),
+                    )
+                  : Text(
+                      continueLabel,
+                      style: GoogleFonts.manrope(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 16,
+                        letterSpacing: 0.4,
+                      ),
+                    ),
             ),
           ],
         ),
@@ -1645,18 +1645,13 @@ class LessonScreenLayout extends StatelessWidget {
                   // parent around the stage redeals hole cards on a wrong
                   // answer that spends the last heart.
                   final stageChild = MediaQuery(
-                    data: mq.copyWith(
-                      size: Size(mq.size.width, mediaHeight),
-                    ),
+                    data: mq.copyWith(size: Size(mq.size.width, mediaHeight)),
                     child: stage,
                   );
                   return Stack(
                     fit: StackFit.expand,
                     children: [
-                      AbsorbPointer(
-                        absorbing: outOfHearts,
-                        child: stageChild,
-                      ),
+                      AbsorbPointer(absorbing: outOfHearts, child: stageChild),
                       if (outOfHearts)
                         GestureDetector(
                           key: const ValueKey<String>(

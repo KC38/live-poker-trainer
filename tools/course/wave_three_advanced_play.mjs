@@ -93,7 +93,7 @@ export function buildSectionFive() {
                   choice("shove-76", "Jam 100bb", "clear_mistake",
                     "Not a shove.", {action: "RAISE", amountBb: 100, betterChoiceId: "fold-76"})
                 ],
-                // LPT-222, LPT-627
+                // LPT-222, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -111,6 +111,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Speculative hands play badly out of position in big fields."}],
                   cues: [{press: 1, target: "fold-76", kind: "soft_pulse"}],
                 },
               }),
@@ -128,7 +129,7 @@ export function buildSectionFive() {
                   choice("tiny", "Bet 1bb", "clear_mistake",
                     "Not value language.", {action: "BET", amountBb: 1, betterChoiceId: "bet-set"})
                 ],
-                // LPT-222, LPT-627
+                // LPT-222, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -146,6 +147,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Very strong hands on wet boards bet to build and protect."}],
                   cues: [{press: 1, target: "bet-set", kind: "soft_pulse"}],
                 },
               }),
@@ -218,7 +220,7 @@ export function buildSectionFive() {
                   choice("jam-tp", "Jam for value", "clear_mistake",
                     "Too thin deep.", {action: "RAISE", amountBb: 200, betterChoiceId: "fold-tp"})
                 ],
-                // LPT-225, LPT-627
+                // LPT-225, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -236,6 +238,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Deep stacks and big raises call for a strong hand."}],
                   cues: [{press: 1, target: "fold-tp", kind: "soft_pulse"}],
                 },
               }),
@@ -250,8 +253,12 @@ export function buildSectionFive() {
                   choice("jamnow", "Jam any pair now", "clear_mistake",
                     "Too early.", {betterChoiceId: "plan"})
                 ],
-                // LPT-225
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "plan", kind: "soft_pulse"}]},
+                // LPT-225, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "With a high SPR, plan later streets before committing."}],
+                  cues: [{press: 1, target: "plan", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -342,7 +349,7 @@ export function buildSectionFive() {
                     "Wrong direction — often second-best.",
                     {action: "CALL", betterChoiceId: "rio"})
                 ],
-                // LPT-228, LPT-627
+                // LPT-228, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -360,6 +367,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Dominated hands lose big pots — fold to heavy heat."}],
                   cues: [{press: 1, target: "rio", kind: "soft_pulse"}],
                 },
               }),
@@ -374,7 +382,7 @@ export function buildSectionFive() {
                   choice("auto", "Call", "clear_mistake",
                     "Ignore domination.", {action: "CALL", betterChoiceId: "nonut"})
                 ],
-                // LPT-228, LPT-627
+                // LPT-228, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -392,6 +400,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "A non-nut draw multiway can make a second-best hand."}],
                   cues: [{press: 1, target: "nonut", kind: "soft_pulse"}],
                 },
               }),
@@ -485,7 +494,7 @@ export function buildSectionFive() {
                   choice("raise-m", "Hero-raise for ego", "clear_mistake",
                     "No ego.", {action: "RAISE", amountBb: 50, betterChoiceId: "call-m"})
                 ],
-                // LPT-231, LPT-627
+                // LPT-231, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -503,6 +512,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Aggressive players bluff more — bluff-catch wider."}],
                   cues: [{press: 1, target: "call-m", kind: "soft_pulse"}],
                 },
               }),
@@ -520,7 +530,7 @@ export function buildSectionFive() {
                   choice("jam-nit", "Overbet", "clear_mistake",
                     "No.", {action: "BET", amountBb: 60, betterChoiceId: "check-nit"})
                 ],
-                // LPT-231, LPT-627
+                // LPT-231, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -538,6 +548,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Tight players won't call thin value — check behind."}],
                   cues: [{press: 1, target: "check-nit", kind: "soft_pulse"}],
                 },
               }),
@@ -610,7 +621,7 @@ export function buildSectionFive() {
                   choice("never", "Check back", "clear_mistake",
                     "Misses value and folds.", {action: "CHECK", betterChoiceId: "probe"})
                 ],
-                // LPT-234, LPT-627
+                // LPT-234, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -628,6 +639,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "When the raiser checks, a small bet can take it down."}],
                   cues: [{press: 1, target: "probe", kind: "soft_pulse"}],
                 },
               }),
@@ -642,8 +654,12 @@ export function buildSectionFive() {
                   choice("merged", "Always medium pairs", "clear_mistake",
                     "Less common for large donks.", {betterChoiceId: "polar"})
                 ],
-                // LPT-234
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "polar", kind: "soft_pulse"}]},
+                // LPT-234, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "A big lead into the raiser is often very strong or a bluff."}],
+                  cues: [{press: 1, target: "polar", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -710,7 +726,7 @@ export function buildSectionFive() {
                   choice("auto", "Call", "clear_mistake",
                     "Sunk cost.", {action: "CALL", betterChoiceId: "repr"})
                 ],
-                // LPT-237, LPT-627
+                // LPT-237, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -728,6 +744,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "When the price changes, re-check your draw's odds."}],
                   cues: [{press: 1, target: "repr", kind: "soft_pulse"}],
                 },
               }),
@@ -742,8 +759,12 @@ export function buildSectionFive() {
                   choice("freeze", "Lock flop forever", "clear_mistake",
                     "Misses turn/river info.", {betterChoiceId: "update"})
                 ],
-                // LPT-237
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "update", kind: "soft_pulse"}]},
+                // LPT-237, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Update your read on every street."}],
+                  cues: [{press: 1, target: "update", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -812,8 +833,12 @@ export function buildSectionFive() {
                   choice("solver", "Solver known", "clear_mistake",
                     "No fabricated EV claims.", {betterChoiceId: "weakish"})
                 ],
-                // LPT-242
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "weakish", kind: "soft_pulse"}]},
+                // LPT-242, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Very small bets often mean weakness or a blocking bet."}],
+                  cues: [{press: 1, target: "weakish", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-07-01-unguided", order: 4, stage: "scaffolded",
@@ -826,8 +851,12 @@ export function buildSectionFive() {
                   choice("trust", "Trust the book", "clear_mistake",
                     "Out of scope.", {betterChoiceId: "reject"})
                 ],
-                // LPT-242
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "reject", kind: "soft_pulse"}]},
+                // LPT-242, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Single physical tells aren't reliable rules."}],
+                  cues: [{press: 1, target: "reject", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -894,8 +923,17 @@ export function buildSectionFive() {
                   choice("same", "Old label", "clear_mistake",
                     "Evidence flipped.", {betterChoiceId: "gear"})
                 ],
-                // LPT-245
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "gear", kind: "soft_pulse"}]},
+                // LPT-245, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "A sudden change in style can be a gear shift — watch more hands.",
+                    },
+                  ],
+                  cues: [{press: 1, target: "gear", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-05-08-01-unguided", order: 4, stage: "scaffolded",
@@ -908,7 +946,7 @@ export function buildSectionFive() {
                   choice("revenge", "All-in", "clear_mistake",
                     "Emotional leak.", {action: "ALL_IN", betterChoiceId: "reset"})
                 ],
-                // LPT-245, LPT-627
+                // LPT-245, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -926,6 +964,7 @@ export function buildSectionFive() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Tilt costs money — protect your bankroll first."}],
                   cues: [{press: 1, target: "reset", kind: "soft_pulse"}],
                 },
               }),
@@ -994,8 +1033,12 @@ export function buildSectionFive() {
                   choice("jump", "Jump up", "clear_mistake",
                     "Risk of ruin.", {betterChoiceId: "decline"})
                 ],
-                // LPT-248
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "decline", kind: "soft_pulse"}]},
+                // LPT-248, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Stick to the stakes your bankroll plan allows."}],
+                  cues: [{press: 1, target: "decline", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-09-01-unguided", order: 4, stage: "scaffolded",
@@ -1008,8 +1051,12 @@ export function buildSectionFive() {
                   choice("punish", "Stay forever", "questionable",
                     "Only if sharp and planned.")
                 ],
-                // LPT-248
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cash", kind: "soft_pulse"}]},
+                // LPT-248, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Tired players make mistakes — know when to leave."}],
+                  cues: [{press: 1, target: "cash", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-05-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1230,9 +1277,10 @@ export function buildSectionSix() {
                   choice("pfr-always", "PFR always", "clear_mistake",
                     "Not on paired boards.", {betterChoiceId: "caller-nuts"})
                 ],
-                // LPT-252
+                // LPT-252, LPT-626
                 teachSpec: {
                   deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "The wider range holds more of the odd paired-board hands."}],
                   cues: [{press: 1, target: "caller-nuts", kind: "soft_pulse"}],
                 },
               }),
@@ -1249,7 +1297,7 @@ export function buildSectionSix() {
                   choice("jam", "Jam", "clear_mistake",
                     "Too much.", {action: "RAISE", amountBb: 200, betterChoiceId: "cbet"})
                 ],
-                // LPT-252, LPT-627
+                // LPT-252, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -1267,6 +1315,7 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "With the range and nut edge, the raiser can bet."}],
                   cues: [{press: 1, target: "cbet", kind: "soft_pulse"}],
                 },
               }),
@@ -1335,8 +1384,17 @@ export function buildSectionSix() {
                   choice("hero", "Hero-call", "clear_mistake",
                     "Over-realize fantasy.", {betterChoiceId: "discount"})
                 ],
-                // LPT-255
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "discount", kind: "soft_pulse"}]},
+                // LPT-255, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Weak showdown hands out of position struggle against repeated bets.",
+                    },
+                  ],
+                  cues: [{press: 1, target: "discount", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-02-01-unguided", order: 4, stage: "scaffolded",
@@ -1349,8 +1407,12 @@ export function buildSectionSix() {
                   choice("fancy", "Fancy play", "clear_mistake",
                     "Need a reason.", {betterChoiceId: "realize"})
                 ],
-                // LPT-255
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "realize", kind: "soft_pulse"}]},
+                // LPT-255, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "A semi-bluff wins by folds now or outs later."}],
+                  cues: [{press: 1, target: "realize", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1419,7 +1481,7 @@ export function buildSectionSix() {
                   choice("fold", "Fold", "clear_mistake",
                     "You are betting.", {action: "FOLD", betterChoiceId: "bet"})
                 ],
-                // LPT-258, LPT-627
+                // LPT-258, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -1437,6 +1499,7 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "A capped opponent can't have the best hands — bet thin."}],
                   cues: [{press: 1, target: "bet", kind: "soft_pulse"}],
                 },
               }),
@@ -1451,8 +1514,12 @@ export function buildSectionSix() {
                   choice("cap2", "Capped air", "clear_mistake",
                     "Wrong.", {betterChoiceId: "uncap"})
                 ],
-                // LPT-258
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "uncap", kind: "soft_pulse"}]},
+                // LPT-258, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Strength on every street means the range is uncapped."}],
+                  cues: [{press: 1, target: "uncap", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1522,7 +1589,7 @@ export function buildSectionSix() {
                   choice("check", "Check", "questionable",
                     "Misses value.", {action: "CHECK"})
                 ],
-                // LPT-262, LPT-627
+                // LPT-262, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -1540,6 +1607,7 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Thin value against callers uses a medium size."}],
                   cues: [{press: 1, target: "mid", kind: "soft_pulse"}],
                 },
               }),
@@ -1554,8 +1622,12 @@ export function buildSectionSix() {
                   choice("ok", "Any size", "clear_mistake",
                     "Sizes communicate.", {betterChoiceId: "mismatch"})
                 ],
-                // LPT-262
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "mismatch", kind: "soft_pulse"}]},
+                // LPT-262, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "A tiny bet rarely makes a believable bluff."}],
+                  cues: [{press: 1, target: "mismatch", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1627,7 +1699,7 @@ export function buildSectionSix() {
                     "Think pot-sized continuation.",
                     {action: "BET", amountBb: 60})
                 ],
-                // LPT-265, LPT-627
+                // LPT-265, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -1645,6 +1717,12 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Geometric sizing grows evenly — size the turn to match the pot.",
+                    },
+                  ],
                   cues: [{press: 1, target: "mid", kind: "soft_pulse"}],
                 },
               }),
@@ -1659,8 +1737,12 @@ export function buildSectionSix() {
                   choice("yolo", "Always fine", "clear_mistake",
                     "Leaks stacks.", {betterChoiceId: "avoid"})
                 ],
-                // LPT-265
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "avoid", kind: "soft_pulse"}]},
+                // LPT-265, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Huge overbets need a polarized hand, not a medium one."}],
+                  cues: [{press: 1, target: "avoid", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1729,8 +1811,12 @@ export function buildSectionSix() {
                   choice("block-nuts", "Block their air", "clear_mistake",
                     "Opposite.", {betterChoiceId: "unblock"})
                 ],
-                // LPT-268
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "unblock", kind: "soft_pulse"}]},
+                // LPT-268, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Bluff-catch with hands that don't block their bluffs."}],
+                  cues: [{press: 1, target: "unblock", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-06-01-unguided", order: 4, stage: "scaffolded",
@@ -1743,8 +1829,12 @@ export function buildSectionSix() {
                   choice("replace", "Replace all reasoning", "clear_mistake",
                     "Too narrow.", {betterChoiceId: "tweak"})
                 ],
-                // LPT-268
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tweak", kind: "soft_pulse"}]},
+                // LPT-268, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Blockers fine-tune a choice; they don't make it."}],
+                  cues: [{press: 1, target: "tweak", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1812,7 +1902,7 @@ export function buildSectionSix() {
                   choice("call-mdf", "Call for MDF", "clear_mistake",
                     "Theater.", {action: "CALL", betterChoiceId: "fold"})
                 ],
-                // LPT-271, LPT-627
+                // LPT-271, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -1830,6 +1920,7 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Weak bluff-catchers on scary rivers usually let go."}],
                   cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
                 },
               }),
@@ -1844,8 +1935,17 @@ export function buildSectionSix() {
                   choice("pct", "Exact percents", "clear_mistake",
                     "Not our method.", {betterChoiceId: "int"})
                 ],
-                // LPT-271
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "int", kind: "soft_pulse"}]},
+                // LPT-271, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "This course keeps defense frequencies as feel, not exact numbers.",
+                    },
+                  ],
+                  cues: [{press: 1, target: "int", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1933,8 +2033,12 @@ export function buildSectionSix() {
                   choice("same", "Same mix", "clear_mistake",
                     "Ignore type.", {betterChoiceId: "less"})
                 ],
-                // LPT-275
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "less", kind: "soft_pulse"}]},
+                // LPT-275, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Players who don't fold make bluffs lose money."}],
+                  cues: [{press: 1, target: "less", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-08-01-unguided", order: 4, stage: "scaffolded",
@@ -1947,8 +2051,12 @@ export function buildSectionSix() {
                   choice("yes", "Always random", "clear_mistake",
                     "Wrong.", {betterChoiceId: "no"})
                 ],
-                // LPT-275
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "no", kind: "soft_pulse"}]},
+                // LPT-275, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Mix only when it has a reason."}],
+                  cues: [{press: 1, target: "no", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2015,7 +2123,7 @@ export function buildSectionSix() {
                   choice("jam", "Jam forever", "clear_mistake",
                     "Too automatic.", {action: "ALL_IN", amountBb: 180, betterChoiceId: "small"})
                 ],
-                // LPT-280, LPT-627
+                // LPT-280, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -2033,6 +2141,7 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Deep in a 3-bet pot, a miss doesn't have to stack off."}],
                   cues: [{press: 1, target: "small", kind: "soft_pulse"}],
                 },
               }),
@@ -2047,8 +2156,12 @@ export function buildSectionSix() {
                   choice("ego", "Ego 4-bet", "clear_mistake",
                     "Leak.", {betterChoiceId: "avoid"})
                 ],
-                // LPT-280
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "avoid", kind: "soft_pulse"}]},
+                // LPT-280, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Light 4-bets need blockers and a reason."}],
+                  cues: [{press: 1, target: "avoid", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2135,8 +2248,12 @@ export function buildSectionSix() {
                   choice("mistake", "Fold KK", "clear_mistake",
                     "Wrong.", {betterChoiceId: "cooler"})
                 ],
-                // LPT-283
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cooler", kind: "soft_pulse"}]},
+                // LPT-283, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Did anyone actually make a mistake here?"}],
+                  cues: [{press: 1, target: "cooler", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-10-01-unguided", order: 4, stage: "scaffolded",
@@ -2149,8 +2266,12 @@ export function buildSectionSix() {
                   choice("ok", "Sound play", "clear_mistake",
                     "No.", {betterChoiceId: "ego"})
                 ],
-                // LPT-283
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "ego", kind: "soft_pulse"}]},
+                // LPT-283, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Past results don't change what the cards will do."}],
+                  cues: [{press: 1, target: "ego", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-10-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2220,8 +2341,12 @@ export function buildSectionSix() {
                   choice("mania", "Same maniac", "clear_mistake",
                     "Maniacs continue too wide.", {betterChoiceId: "disc"})
                 ],
-                // LPT-286
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "disc", kind: "soft_pulse"}]},
+                // LPT-286, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Giving up when called is discipline, not wildness."}],
+                  cues: [{press: 1, target: "disc", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-11-01-unguided", order: 4, stage: "scaffolded",
@@ -2234,8 +2359,12 @@ export function buildSectionSix() {
                   choice("max", "Max certainty", "clear_mistake",
                     "Too soon.", {betterChoiceId: "low"})
                 ],
-                // LPT-286
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "low", kind: "soft_pulse"}]},
+                // LPT-286, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Two hands is a tiny sample."}],
+                  cues: [{press: 1, target: "low", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-11-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2302,8 +2431,12 @@ export function buildSectionSix() {
                   choice("same", "Identical", "clear_mistake",
                     "No.", {betterChoiceId: "diff"})
                 ],
-                // LPT-289
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "diff", kind: "soft_pulse"}]},
+                // LPT-289, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Compare how many hands each plays and when they slow down."}],
+                  cues: [{press: 1, target: "diff", kind: "soft_pulse"}],
+                },
               }),
               classifyAct({
                 id: "act-06-11-02-unguided", order: 4, stage: "scaffolded",
@@ -2317,8 +2450,12 @@ export function buildSectionSix() {
                   choice("mania2", "Maniac", "clear_mistake",
                     "Maniacs enter and continue far too wide.", {betterChoiceId: "tag2"})
                 ],
-                // LPT-289
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tag2", kind: "soft_pulse"}]},
+                // LPT-289, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Tight entry, folds to 3-bets, picks spots — which type?"}],
+                  cues: [{press: 1, target: "tag2", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-11-02-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2403,7 +2540,7 @@ export function buildSectionSix() {
                   choice("open-wide", "Open any two", "clear_mistake",
                     "Too wide.", {action: "RAISE", amountBb: 3, betterChoiceId: "fold-k9"})
                 ],
-                // LPT-292, LPT-627
+                // LPT-292, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -2421,6 +2558,12 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Solid players defend more than very tight ones — steal less.",
+                    },
+                  ],
                   cues: [{press: 1, target: "fold-k9", kind: "soft_pulse"}],
                 },
               }),
@@ -2436,7 +2579,7 @@ export function buildSectionSix() {
                   choice("bet", "Bet thin always", "questionable",
                     "Needs call-down evidence.", {action: "BET", amountBb: 8})
                 ],
-                // LPT-292, LPT-627
+                // LPT-292, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -2454,6 +2597,7 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "If they rarely call light, thin value loses."}],
                   cues: [{press: 1, target: "check", kind: "soft_pulse"}],
                 },
               }),
@@ -2525,8 +2669,12 @@ export function buildSectionSix() {
                   choice("same", "No difference", "clear_mistake",
                     "There is.", {betterChoiceId: "sep"})
                 ],
-                // LPT-295
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sep", kind: "soft_pulse"}]},
+                // LPT-295, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Does this seat ever fold under pressure?"}],
+                  cues: [{press: 1, target: "sep", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-12-01-unguided", order: 4, stage: "scaffolded",
@@ -2539,8 +2687,12 @@ export function buildSectionSix() {
                   choice("now", "Label now", "clear_mistake",
                     "Too soon.", {betterChoiceId: "wait"})
                 ],
-                // LPT-295
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "wait", kind: "soft_pulse"}]},
+                // LPT-295, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "One wide open is not enough to label anyone."}],
+                  cues: [{press: 1, target: "wait", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-12-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2607,8 +2759,12 @@ export function buildSectionSix() {
                   choice("same", "Same exploit", "clear_mistake",
                     "No.", {betterChoiceId: "diff"})
                 ],
-                // LPT-298
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "diff", kind: "soft_pulse"}]},
+                // LPT-298, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "One type raises a lot; the other calls a lot."}],
+                  cues: [{press: 1, target: "diff", kind: "soft_pulse"}],
+                },
               }),
               classifyAct({
                 id: "act-06-12-02-unguided", order: 4, stage: "scaffolded",
@@ -2622,8 +2778,12 @@ export function buildSectionSix() {
                   choice("nit2", "Nit", "clear_mistake",
                     "Opposite.", {betterChoiceId: "lag2"})
                 ],
-                // LPT-298
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "lag2", kind: "soft_pulse"}]},
+                // LPT-298, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Wide opens, light 3-bets, keeps betting — which type?"}],
+                  cues: [{press: 1, target: "lag2", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-12-02-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2710,7 +2870,7 @@ export function buildSectionSix() {
                   choice("repel", "Bet-bet-jam only", "questionable",
                     "Also fine; trapping is available.", {action: "BET", amountBb: 12})
                 ],
-                // LPT-301, LPT-627
+                // LPT-301, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -2728,6 +2888,12 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Against aggressive players, strong hands can let them bluff.",
+                    },
+                  ],
                   cues: [{press: 1, target: "trap", kind: "soft_pulse"}],
                 },
               }),
@@ -2743,8 +2909,17 @@ export function buildSectionSix() {
                   choice("more", "Bluff more", "clear_mistake",
                     "Wrong direction.", {betterChoiceId: "avoid"})
                 ],
-                // LPT-301
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "avoid", kind: "soft_pulse"}]},
+                // LPT-301, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Aggressive players don't fold easily — don't invent big bluffs.",
+                    },
+                  ],
+                  cues: [{press: 1, target: "avoid", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-12-03-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2833,7 +3008,7 @@ export function buildSectionSix() {
                   choice("nit-call", "Call light", "clear_mistake",
                     "Wrong type.", {action: "CALL", betterChoiceId: "nit"})
                 ],
-                // LPT-304, LPT-627
+                // LPT-304, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -2851,6 +3026,7 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Tight-player aggression is strong — respect it."}],
                   cues: [{press: 1, target: "nit", kind: "soft_pulse"}],
                 },
               }),
@@ -2866,7 +3042,7 @@ export function buildSectionSix() {
                   choice("lag-fold", "Auto-fold", "questionable",
                     "Too tight.", {action: "FOLD"})
                 ],
-                // LPT-304, LPT-627
+                // LPT-304, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -2884,6 +3060,7 @@ export function buildSectionSix() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Aggressive players bluff more — bluff-catch wider."}],
                   cues: [{press: 1, target: "lag", kind: "soft_pulse"}],
                 },
               }),
@@ -3069,8 +3246,12 @@ export function buildSectionSeven() {
                   choice("fold", "Auto-fold top two", "clear_mistake",
                     "No.", {betterChoiceId: "value"})
                 ],
-                // LPT-308
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "value", kind: "soft_pulse"}]},
+                // LPT-308, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Did the flop help your plan? Keep going with value."}],
+                  cues: [{press: 1, target: "value", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-01-01-unguided", order: 4, stage: "scaffolded",
@@ -3083,8 +3264,12 @@ export function buildSectionSeven() {
                   choice("vibes", "Wing it every street", "clear_mistake",
                     "No plan.", {betterChoiceId: "thesis"})
                 ],
-                // LPT-308
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "thesis", kind: "soft_pulse"}]},
+                // LPT-308, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Have a plan before the flop comes."}],
+                  cues: [{press: 1, target: "thesis", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3151,8 +3336,17 @@ export function buildSectionSeven() {
                   choice("hero", "Hero-call because flop bet exists", "clear_mistake",
                     "Sunk cost.", {betterChoiceId: "give"})
                 ],
-                // LPT-312
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "give", kind: "soft_pulse"}]},
+                // LPT-312, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "When the turn misses and they raise big, the plan says stop.",
+                    },
+                  ],
+                  cues: [{press: 1, target: "give", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-02-01-unguided", order: 4, stage: "scaffolded",
@@ -3165,8 +3359,12 @@ export function buildSectionSeven() {
                   choice("yolo", "Yolo barrels", "clear_mistake",
                     "No.", {betterChoiceId: "avoid"})
                 ],
-                // LPT-312
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "avoid", kind: "soft_pulse"}]},
+                // LPT-312, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Every flop bet needs a turn plan."}],
+                  cues: [{press: 1, target: "avoid", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3252,8 +3450,12 @@ export function buildSectionSeven() {
                   choice("ev", "Because a fake EV sheet said +0.02", "clear_mistake",
                     "No fabricated EV.", {betterChoiceId: "block"})
                 ],
-                // LPT-315
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "block", kind: "soft_pulse"}]},
+                // LPT-315, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Holding a key card means they hold it less often."}],
+                  cues: [{press: 1, target: "block", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-03-01-unguided", order: 4, stage: "scaffolded",
@@ -3266,8 +3468,12 @@ export function buildSectionSeven() {
                   choice("spew", "Blast off", "clear_mistake",
                     "Leak.", {betterChoiceId: "check"})
                 ],
-                // LPT-315
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "check", kind: "soft_pulse"}]},
+                // LPT-315, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "No value, no blockers, no folds — don't bet."}],
+                  cues: [{press: 1, target: "check", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3334,8 +3540,12 @@ export function buildSectionSeven() {
                   choice("check", "Never bet", "clear_mistake",
                     "Too passive.", {betterChoiceId: "cb"})
                 ],
-                // LPT-318
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cb", kind: "soft_pulse"}]},
+                // LPT-318, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "In position heads-up, a planned c-bet is the main tool."}],
+                  cues: [{press: 1, target: "cb", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-04-01-unguided", order: 4, stage: "scaffolded",
@@ -3348,8 +3558,12 @@ export function buildSectionSeven() {
                   choice("deep", "Play like 300bb deep", "clear_mistake",
                     "Wrong.", {betterChoiceId: "commit"})
                 ],
-                // LPT-318
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "commit", kind: "soft_pulse"}]},
+                // LPT-318, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Bigger preflop pots mean more commitment — play tighter."}],
+                  cues: [{press: 1, target: "commit", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-04-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3417,8 +3631,12 @@ export function buildSectionSeven() {
                   choice("same", "Identical always", "clear_mistake",
                     "No.", {betterChoiceId: "higher"})
                 ],
-                // LPT-321
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "higher", kind: "soft_pulse"}]},
+                // LPT-321, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Heads-up against a tight blind, steal more often."}],
+                  cues: [{press: 1, target: "higher", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-05-01-unguided", order: 4, stage: "scaffolded",
@@ -3431,8 +3649,12 @@ export function buildSectionSeven() {
                   choice("slow", "Ultra-slow every time", "questionable",
                     "Risk free cards.")
                 ],
-                // LPT-321
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "thick", kind: "soft_pulse"}]},
+                // LPT-321, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Multiway, strong hands lean toward value and protection."}],
+                  cues: [{press: 1, target: "thick", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-05-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3499,8 +3721,12 @@ export function buildSectionSeven() {
                   choice("no", "Never set-mine deep", "clear_mistake",
                     "Opposite.", {betterChoiceId: "yes"})
                 ],
-                // LPT-324
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "yes", kind: "soft_pulse"}]},
+                // LPT-324, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Deeper stacks pay off small pairs that hit sets."}],
+                  cues: [{press: 1, target: "yes", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-06-01-unguided", order: 4, stage: "scaffolded",
@@ -3513,8 +3739,12 @@ export function buildSectionSeven() {
                   choice("200", "200bb", "clear_mistake",
                     "Cannot play more than villain has.", {betterChoiceId: "40"})
                 ],
-                // LPT-324
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "40", kind: "soft_pulse"}]},
+                // LPT-324, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Effective stack is always the shorter one."}],
+                  cues: [{press: 1, target: "40", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3602,7 +3832,7 @@ export function buildSectionSeven() {
                   choice("bluff", "Rebluff light", "clear_mistake",
                     "Bad.", {action: "RAISE", amountBb: 25, betterChoiceId: "fold"})
                 ],
-                // LPT-328, LPT-627
+                // LPT-328, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -3620,6 +3850,7 @@ export function buildSectionSeven() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Solid players raising late usually have it — slow down."}],
                   cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
                 },
               }),
@@ -3635,7 +3866,7 @@ export function buildSectionSeven() {
                   choice("fold", "Auto-fold", "questionable",
                     "Too tight.", {action: "FOLD"})
                 ],
-                // LPT-328, LPT-627
+                // LPT-328, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -3653,6 +3884,7 @@ export function buildSectionSeven() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Aggressive players barrel wide — keep calling more."}],
                   cues: [{press: 1, target: "call", kind: "soft_pulse"}],
                 },
               }),
@@ -3743,7 +3975,7 @@ export function buildSectionSeven() {
                   choice("call", "Call air", "clear_mistake",
                     "No showdown.", {action: "CALL", betterChoiceId: "raise"})
                 ],
-                // LPT-331, LPT-627
+                // LPT-331, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -3761,6 +3993,7 @@ export function buildSectionSeven() {
                       },
                     ],
                   },
+                  pressHints: [{press: 1, text: "Tight players' small bets fold to pressure more often."}],
                   cues: [{press: 1, target: "raise", kind: "soft_pulse"}],
                 },
               }),
@@ -3776,7 +4009,7 @@ export function buildSectionSeven() {
                   choice("hero", "Hero-call for storytime", "clear_mistake",
                     "Ego.", {action: "CALL", betterChoiceId: "fold"})
                 ],
-                // LPT-331, LPT-627
+                // LPT-331, LPT-627, LPT-626
                 teachSpec: {
                   deal: {
                     mode: "fixed",
@@ -3794,6 +4027,12 @@ export function buildSectionSeven() {
                       },
                     ],
                   },
+                  pressHints: [
+                    {
+                      press: 1,
+                      text: "Solid players' big river bets are strong — let medium hands go.",
+                    },
+                  ],
                   cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
                 },
               }),
@@ -3862,8 +4101,12 @@ export function buildSectionSeven() {
                   choice("mood", "Whatever mood says", "clear_mistake",
                     "No.", {betterChoiceId: "book"})
                 ],
-                // LPT-334
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "book", kind: "soft_pulse"}]},
+                // LPT-334, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Start from a written default range."}],
+                  cues: [{press: 1, target: "book", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-09-01-unguided", order: 4, stage: "scaffolded",
@@ -3876,8 +4119,12 @@ export function buildSectionSeven() {
                   choice("never", "Never — memory is enough", "clear_mistake",
                     "Leaks return.", {betterChoiceId: "sched"})
                 ],
-                // LPT-334
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sched", kind: "soft_pulse"}]},
+                // LPT-334, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Review your book regularly, not only after bad nights."}],
+                  cues: [{press: 1, target: "sched", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -4405,8 +4652,12 @@ export function buildSectionSeven() {
                   choice("blank", "Forget the course", "clear_mistake",
                     "No.", {betterChoiceId: "defaults"})
                 ],
-                // LPT-349
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "defaults", kind: "soft_pulse"}]},
+                // LPT-349, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "Bring your defaults and your notes on opponents."}],
+                  cues: [{press: 1, target: "defaults", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-11-01-unguided", order: 4, stage: "scaffolded",
@@ -4419,8 +4670,12 @@ export function buildSectionSeven() {
                   choice("tourney", "Study other betting games instead", "clear_mistake",
                     "Out of scope.", {betterChoiceId: "scope"})
                 ],
-                // LPT-349
-                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "scope", kind: "soft_pulse"}]},
+                // LPT-349, LPT-626
+                teachSpec: {
+                  deal: {mode: "none"},
+                  pressHints: [{press: 1, text: "This course covers one game only."}],
+                  cues: [{press: 1, target: "scope", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-11-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
