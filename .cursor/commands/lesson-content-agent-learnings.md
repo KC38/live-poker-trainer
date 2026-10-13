@@ -137,3 +137,4 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13s: Tip-stable `bba9ad9f` (catalog already synced): scan flat 151/81/84/35 Nice! 43; skipped parent re-spam; tip-commented unchecked S7 Highs LPT-308 (IP, all five `act-07-01-01-*` MISSING) + LPT-312 (To Do, `act-07-02-01-*` MISSING); SoftPulse-map 68 / densify helper 47 Soft timing ABSENT.
 - 2026-10-13t: Tip `c5851fdd` after #1951 LPT-308 preflop-to-flop teachSpec: Nice! 43→44 (`act-07-01-01-explain`); deal-variants flat 81; teachSpec 84→80 / explain-teachSpec 35→34; Done LPT-308; scaffolded/unguided stay on LPT-626 pressHints.
 
+- 2026-10-13u: Tip `89d9a5ae` (#1952 learnings after #1951 LPT-308): scan flat 151/81/80/34/nice-44; tip-commented parents + Highs LPT-242/312/315/318/295/301/258 + IP/honesty; Soft timing densify still ABSENT (helper 47); next S7 unchecked LPT-312.
