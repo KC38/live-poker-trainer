@@ -474,3 +474,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Honesty **LPT-396** still valid: `act-07-08-01-guided` catalog prompt “Second pair” + Dart streetLabel “Turn · second pair · wet” vs hero `Jh`/`Td` · board `Ts`/`9h`/`8c`/`2d` (top pair T). Tip-commented unchecked Highs absent from prior `872a8183` coverage ticket list: S6 **LPT-258**/ **LPT-295**/ **LPT-301**; IP **LPT-252**/ **LPT-255**/ **LPT-271**/ **LPT-275**; companion **LPT-331**; capstones **LPT-334**…**352**; needs-human **LPT-348**; fingerprint/honesty **LPT-401**/ **402**/ **405**/ **408**/ **409**/ **411**/ **414**/ **417**. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 land OR densify Soft-timing/seat-footer on LPT-628 OR LPT-625 SoftPulse maps (24) OR catalog LPT-626(151)/627(84)/635/624(48) OR LPT-396 if tip advances.
 
+
+## Fold 2026-10-13
+
+- Prefer after mid-run honesty land (e.g. #1985 LPT-396): re-read `lesson_action_table.dart` ActionSpot before any “still valid” tip-comment; Done-ack + correct stale comments the same tick when tip already matches (JhTd·KhTs8h2d second pair under K — not Ts9h8c2d top pair).
