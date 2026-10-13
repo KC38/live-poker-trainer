@@ -810,6 +810,10 @@ for base, pattern in session_globs:
             st = sess.stat()
         except OSError:
             continue
+        # Unit-test dirs (cursor-agent-logs-uiagenttest-*) must never pollute
+        # live run logs when status/ensure backfills without an override.
+        if not override and "uiagenttest" in str(sess).lower():
+            continue
         name = sess.name
         pid_hit = any(f"-{p}-" in name for p in pids) if pids else False
         # Session created/updated during this run window.
@@ -967,6 +971,10 @@ TELEMETRY = re.compile(
 )
 USAGE_LIMIT = re.compile(
     r"ActionRequiredError|usage limit|error_code=upgrade|resource_exhausted",
+    re.I,
+)
+GATEWAY_TIMEOUT = re.compile(
+    r"504\s*Gateway Time-out|Gateway Time-out",
     re.I,
 )
 SDK_STREAM = re.compile(
@@ -1130,6 +1138,22 @@ for row in rows:
         row["tail_repaired"] = True
         changed += 1
         result = "usage-limit"
+        tail = row["tail"]
+
+    # Pre-#1906 rows stuffed 504 HTML into health tails; scrub in place.
+    gw_hit = bool(GATEWAY_TIMEOUT.search(tail)) or (
+        row.get("exit") == 15 and ("<html>" in tail.lower() or "504" in tail)
+    )
+    if gw_hit and (
+        result != "gateway-timeout"
+        or "<html>" in tail.lower()
+        or not tail.startswith("coverage:gateway-timeout")
+    ):
+        row["result"] = "gateway-timeout"
+        row["tail"] = "coverage:gateway-timeout"
+        row["tail_repaired"] = True
+        changed += 1
+        result = "gateway-timeout"
         tail = row["tail"]
 
     # Rewrite CLI telemetry and long agent-report prose; leave structured tails.
