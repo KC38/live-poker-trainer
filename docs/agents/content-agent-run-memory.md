@@ -321,3 +321,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Run-memory grep `act-05-07-01-*` / `act-06-12-*` / `act-06-03-01-*`: unchanged — Soft timing teachSpec + Observe wide / Meet LAG / Adjust LAG / capped still MISSING; no new per-lesson clones. Meet Nit routing stable (Nice! LPT-624 / pressHints LPT-626). `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR implement catalog LPT-626(151)/627(78)/635/624(41)/625/628 OR densify Soft-timing/mix helper arms on LPT-628 OR honesty if tip advances.
 
+## Fold 2026-10-13 tip d42d78b0 (#1937 LPT-644 + #1936 learnings)
+
+- Tip `d42d78b0` includes #1937 LPT-644 Mix densify (`act-06-08-01-scaffolded` / `unguided` / `checkpoint` helper arms) and #1936 prior tip-pass learnings. `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **78**, teachSpec **97**, explain-teachSpec **37** (densify Dart land ≠ catalog JSON gaps).
+- Immediately rebuilt densify-tap **LPT-628** from `selectIdentifyDensifiedCoachLine`: helper **44→47**; Priority ABSENT dropped the three Mix SI rows (mix guided is `poker_action_sizing` — not SI densify); Soft timing `act-05-07-01-*` still ABSENT priority; fallthrough checklist **156→153**. Relates LPT-644↔LPT-628. Tip-commented LPT-624/625/626/627/635 + IP LPT-275 (densify ≠ teachSpec) + LPT-242.
+- Run-memory grep `act-06-08-01-*` / `act-05-07-01-*`: Mix SI densify PRESENT for three stages; Soft timing teachSpec + densify still open. SoftPulse-map still 68 / 18+qq ABSENT. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR densify Soft-timing/seat-footer on LPT-628 OR implement catalog LPT-626(151)/627(78)/635/624(41)/625 OR honesty if tip advances.
+
