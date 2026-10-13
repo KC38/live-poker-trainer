@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "275090df8ac7372325f568179bbe563827b634cb786a3ad5352c4df671f0a1f8",
+  "contentChecksum": "4ad95d1b0fba24de45d5b81e33540dcc6c2e9c2485036b8f932bbf85d7964718",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -19472,7 +19472,29 @@
                   ],
                   "objectives": [
                     "Adjust across all five types"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CARDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SEATS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "EVIDENCE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-13-01-guided",
@@ -19508,7 +19530,32 @@
                   ],
                   "playerTypeRefs": [
                     "calling_station"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "Td"
+                        ],
+                        "board": [
+                          "Qc",
+                          "Ts",
+                          "3h",
+                          "2d",
+                          "7c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cs",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-13-01-scaffolded",
@@ -19542,7 +19589,32 @@
                   ],
                   "playerTypeRefs": [
                     "nit"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "Td"
+                        ],
+                        "board": [
+                          "Qc",
+                          "Ts",
+                          "3h",
+                          "2d",
+                          "7c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "nit",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-13-01-unguided",
@@ -19576,7 +19648,32 @@
                   ],
                   "playerTypeRefs": [
                     "lag"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "Td"
+                        ],
+                        "board": [
+                          "Qc",
+                          "Ts",
+                          "3h",
+                          "2d",
+                          "7c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "lag",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-13-01-checkpoint",
@@ -19609,7 +19706,19 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tag",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             },
