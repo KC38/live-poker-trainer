@@ -1612,7 +1612,7 @@ felt.
 | Section 6 checkpoint | densified frame asks (LPT-655) | — |
 | Carry a preflop plan onto the flop | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505); densified frame asks (LPT-656) | — |
 | Map turn barrels before you bet flop | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506); densified frame asks (LPT-657) | — |
-| Compose river value and bluffs | Value, Bluff, Hold | blocker, empty, and rule checks |
+| Compose river value and bluffs | Value, Bluff, Hold; densified frame asks (LPT-658) | blocker, empty, and rule checks |
 | Change plans by pot type | Limped, SRP, 3-4bet | — |
 | Switch gears between HU and multiway | Fewer, Thicker, Widen | — |
 | Rewrite plans when stacks change | Short, Deep, Effective | — |
