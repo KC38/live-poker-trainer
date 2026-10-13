@@ -398,6 +398,22 @@ out="$(backfill_run_log_from_session "$telem_run" "$start_epoch" "" 1 2>&1 || tr
 [[ -z "$out" ]] || fail "quiet size-bump must not print: $out"
 unset UI_AGENT_SESSION_LOG_DIR
 
+# Without override, cursor-agent-logs-uiagenttest-* must not pollute live logs.
+pollute_run="$LOG_DIR/run-no-uiagenttest.log"
+: >"$pollute_run"
+pollute_dir="/tmp/cursor-agent-logs-uiagenttest-pollute-$$"
+mkdir -p "$pollute_dir"
+pollute_sess="$pollute_dir/session-2026-10-13T06-00-00-000Z-88888-1.log"
+printf '%s\n' '--- Cursor Agent Debug Session ---' \
+  'LPT-POLLUTE closed Lock released from uiagenttest' >"$pollute_sess"
+# Keep sess_dir cleanup; also remove pollute_dir.
+trap 'rm -rf "$tmp" "$sess_dir" "$pollute_dir"' EXIT
+backfill_run_log_from_session "$pollute_run" "$start_epoch" ""
+grep -q 'LPT-POLLUTE' "$pollute_run" \
+  && fail "backfill must ignore uiagenttest session dirs: $(cat "$pollute_run")"
+grep -q 'no cursor session log found' "$pollute_run" \
+  || fail "empty live log should note missing session (not uiagenttest): $(cat "$pollute_run")"
+
 : >"$HEALTH_FILE"
 printf '%s\n' \
   '{"at":"2026-10-10T15:29:26+05:30","sha":"x","surface":"s","result":"closed","ticket":"LPT-50","leads":[],"learnings":"updated"}' \
@@ -928,6 +944,19 @@ grep -q 'GATEWAY_TIMEOUT_SLEEP' "$LOOP" \
   || fail "run_loop must back off on gateway timeout"
 grep -q 'process.exit(15)' "$ROOT/tools/ui-agent-sdk/run.mjs" \
   || fail "run.mjs must exit 15 on 504"
+
+# repair_health_tails scrubs pre-#1906 504 HTML leftover in health.jsonl.
+printf '%s\n' \
+  '{"at":"2026-10-13T06:40:00+05:30","stamp":"20261013-063443","exit":1,"seconds":400,"ticket":null,"result":null,"tail":"# ui-agent-sdk run failed: [unknown] <html><head><title>504 Gateway Time-out</title></head><body><center><h1>504 Gateway Time-out</h1></center></body></html>"}' \
+  >"$HEALTH_FILE"
+: >"$COVERAGE_FILE"
+repair_health_tails
+grep -q '"result": "gateway-timeout"' "$HEALTH_FILE" \
+  || fail "repair should classify leftover 504 HTML: $(cat "$HEALTH_FILE")"
+grep -q 'coverage:gateway-timeout' "$HEALTH_FILE" \
+  || fail "repair should scrub 504 HTML to short tail: $(cat "$HEALTH_FILE")"
+grep -q '<html>' "$HEALTH_FILE" \
+  && fail "repair must not keep 504 HTML: $(cat "$HEALTH_FILE")"
 
 # Coverage timestamps with trailing Z must attribute on macOS Python 3.9.
 z_log="$LOG_DIR/run-z-coverage.log"
