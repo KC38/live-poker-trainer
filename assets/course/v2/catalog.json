@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "2c0c34688904216bacc71c02e6600d3f496918cd0127b3f816605ff96c40d79e",
+  "contentChecksum": "44bcf22fed7d8fcf2a2a3e1f0e6410bb66c5f2201551c4cf452cabe914ea4837",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -638,7 +638,7 @@
                   "objectives": [
                     "Order ranks from deuce to ace"
                   ],
-                  "accessibilityText": "Ranks run from deuce up to ace.",
+                  "accessibilityText": "Ranks climb from deuce to ace. Lowest first, highest last.",
                   "coachMedia": [
                     {
                       "id": "act-01-01-02-02-explain-ranks-line",
@@ -671,7 +671,8 @@
                   },
                   "acceptedGrades": [
                     "recommended"
-                  ]
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-01-02-02-guided-ranks",
@@ -882,7 +883,7 @@
                   "objectives": [
                     "Spot pairs and suited cards"
                   ],
-                  "accessibilityText": "Pairs share a rank. Suited cards share a suit.",
+                  "accessibilityText": "Pair means same rank. Suited means same suit.",
                   "coachMedia": [
                     {
                       "id": "act-01-01-02-03-explain-pairs-line",
@@ -910,7 +911,8 @@
                   },
                   "acceptedGrades": [
                     "recommended"
-                  ]
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-01-02-03-guided-suited",

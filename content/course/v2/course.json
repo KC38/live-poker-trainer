@@ -706,7 +706,7 @@
                   "objectives": [
                     "Order ranks from deuce to ace"
                   ],
-                  "accessibilityText": "Ranks run from deuce up to ace.",
+                  "accessibilityText": "Ranks climb from deuce to ace. Lowest first, highest last.",
                   "coachMedia": [
                     {
                       "id": "act-01-01-02-02-explain-ranks-line",
@@ -743,7 +743,8 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "Deuce low, then the middle ranks, ace high."
-                  }
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-01-02-02-guided-ranks",
@@ -999,7 +1000,7 @@
                   "objectives": [
                     "Spot pairs and suited cards"
                   ],
-                  "accessibilityText": "Pairs share a rank. Suited cards share a suit.",
+                  "accessibilityText": "Pair means same rank. Suited means same suit.",
                   "coachMedia": [
                     {
                       "id": "act-01-01-02-03-explain-pairs-line",
@@ -1031,7 +1032,8 @@
                   "explainGrading": {
                     "grade": "recommended",
                     "feedback": "Same rank is a pair. Same suit is suited."
-                  }
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-01-02-03-guided-suited",
