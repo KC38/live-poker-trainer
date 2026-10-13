@@ -2750,9 +2750,10 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         caption: 'Stack 60bb · Pot 15bb',
       );
     case 'act-04-05-01-checkpoint':
+      // LPT-588: same turn board as teachSpec.fixedCards / LessonActionSpot.
       return const LessonTableScene(
         heroCodes: ['Ah', 'Kd'],
-        boardCodes: ['Qs', '7c', '2d'],
+        boardCodes: ['Qs', '7c', '2d', '9h'],
         villainSeatCount: 1,
         highlight: LessonTableHighlight.none,
         caption: 'Stacks vs pot — decide before you jam',
