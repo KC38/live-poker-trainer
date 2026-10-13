@@ -95,6 +95,14 @@ families, the enum includes the flop action classes `top_pair`, `air`,
 raise, all-in. These match `HandClassifier` snake-case names.
 `validate_course.mjs` rejects unknown hand or suit families (LPT-166).
 
+Every `deal.mode` `fixed` step authors `deal.variants` (LPT-627). The
+catalog default is two suit-rotated isomorphs of the primary `fixedCards`
+(`var-<step>-suits-1/2`, label "Same spot, suits rotated (N)"): same ranks,
+suitedness, hand class, and draw outs, so cues, choice ids, and grading fit
+every variant. `test/models/course/lpt627_fixed_deal_variants_test.dart`
+fails on a new fixed step without variants or a variant that changes the
+class. Dart does not read `deal.variants` yet; it is catalog contract.
+
 ### Activity renderers
 
 | Renderer | Typical use |

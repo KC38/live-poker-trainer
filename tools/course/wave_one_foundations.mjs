@@ -1373,9 +1373,24 @@ export function buildSectionOne() {
                     "Your cards stay private if uncalled.",
                     {betterChoiceId: "no-show"}),
                 ],
-                // LPT-104: guided fold-win fixed AhKd SoftPulse no-show
+                // LPT-104: guided fold-win fixed AhKd SoftPulse no-show, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"]},
+                    variants: [
+                      {
+                        id: "var-guided-fold-win-suits-1",
+                        fixedCards: {hero: ["As", "Kc"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-fold-win-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "no-show", kind: "soft_pulse"}],
                 },
               }),
@@ -1392,11 +1407,23 @@ export function buildSectionOne() {
                   choice("chop-default", "Always chop", "clear_mistake",
                     "Hands still compare.", {betterChoiceId: "showdown"}),
                 ],
-                // LPT-104: scaffolded showdown fixed river SoftPulse showdown
+                // LPT-104: scaffolded showdown fixed river SoftPulse showdown, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["Qs", "7c", "2d", "9h", "3s"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-showdown-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Qd", "7h", "2c", "9s", "3d"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-showdown-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Qc", "7h", "2s", "9d", "3c"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "showdown", kind: "soft_pulse"}],
                 },
@@ -1762,9 +1789,24 @@ export function buildSectionOne() {
                   choice("j-raise", "Raise", "clear_mistake",
                     "Raise is legal.", {action: "RAISE", betterChoiceId: "j-check"}),
                 ],
-                // LPT-110: jump-legal fixed QhJd/Td8s2c cue j-check kind none
+                // LPT-110: jump-legal fixed QhJd/Td8s2c cue j-check kind none, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Qh", "Jd"], board: ["Td", "8s", "2c"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Qh", "Jd"], board: ["Td", "8s", "2c"]},
+                    variants: [
+                      {
+                        id: "var-jump-legal-suits-1",
+                        fixedCards: {hero: ["Qs", "Jc"], board: ["Tc", "8d", "2h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-jump-legal-suits-2",
+                        fixedCards: {hero: ["Qd", "Js"], board: ["Ts", "8c", "2h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "j-check", kind: "none"}],
                 },
               }),
@@ -2831,9 +2873,24 @@ export function buildSectionTwo() {
                   choice("j2-fold-aa", "Fold", "clear_mistake",
                     "Never.", {action: "FOLD", betterChoiceId: "j2-3bet"}),
                 ],
-                // LPT-137
+                // LPT-137, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Ad"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Ad"]},
+                    variants: [
+                      {
+                        id: "var-jump-vs-suits-1",
+                        fixedCards: {hero: ["As", "Ac"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-jump-vs-suits-2",
+                        fixedCards: {hero: ["Ad", "As"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "j2-3bet", kind: "none"}],
                 },
               }),

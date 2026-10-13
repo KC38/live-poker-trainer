@@ -333,9 +333,24 @@ export function buildSectionThree() {
                   choice("outs-0", "0 — never improve", "clear_mistake",
                     "Clean overs improve you to the best hand often.", {betterChoiceId: "outs-3"})
                 ],
-                // LPT-144
+                // LPT-144, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Qh"], board: ["Kc", "8h", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Qh"], board: ["Kc", "8h", "2d"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["As", "Qs"], board: ["Kh", "8s", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Ad", "Qd"], board: ["Kh", "8d", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [
                     {press: 1, target: "As", kind: "soft_pulse"},
                     {press: 2, target: "Ad", kind: "soft_pulse"},
@@ -373,9 +388,24 @@ export function buildSectionThree() {
                   choice("raise-auto", "Raise every draw", "questionable",
                     "Sometimes; here the assignment is whether the call prices.")
                 ],
-                // LPT-144
+                // LPT-144, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Qh"], board: ["Kc", "8h", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Qh"], board: ["Kc", "8h", "2d"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["As", "Qs"], board: ["Kh", "8s", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Ad", "Qd"], board: ["Kh", "8d", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "call-draw", kind: "soft_pulse"}],
                 },
               }),
@@ -392,9 +422,24 @@ export function buildSectionThree() {
                   choice("fold-nfd", "Fold nut flush draws to any bet", "clear_mistake",
                     "This is a premium continue.", {betterChoiceId: "implied-yes"})
                 ],
-                // LPT-144
+                // LPT-144, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Qh"], board: ["Kh", "7h", "2c"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Qh"], board: ["Kh", "7h", "2c"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["As", "Qs"], board: ["Ks", "7s", "2h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["Ad", "Qd"], board: ["Kd", "7d", "2h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "implied-yes", kind: "none"}],
                 },
               }),
@@ -442,9 +487,24 @@ export function buildSectionThree() {
                   choice("fold-tp", "Fold", "clear_mistake",
                     "Do not fold TPTK unbet into.", {action: "FOLD", betterChoiceId: "bet-tp"})
                 ],
-                // LPT-149
+                // LPT-149, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "7h", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "7h", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "bet-tp", kind: "soft_pulse"}],
                 },
               }),
@@ -461,9 +521,24 @@ export function buildSectionThree() {
                   choice("jam-kq", "Jam all-in", "clear_mistake",
                     "Oversizing with air is a leak.", {action: "ALL_IN", betterChoiceId: "cbet"})
                 ],
-                // LPT-149
+                // LPT-149, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Qd"], board: ["As", "7d", "2c"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Kh", "Qd"], board: ["As", "7d", "2c"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["Ks", "Qc"], board: ["Ad", "7c", "2h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Kd", "Qs"], board: ["Ac", "7s", "2h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "cbet", kind: "soft_pulse"}],
                 },
               }),
@@ -480,9 +555,24 @@ export function buildSectionThree() {
                   choice("fold-set", "Fold", "clear_mistake",
                     "Never fold a set here.", {action: "FOLD", betterChoiceId: "raise-set"})
                 ],
-                // LPT-149
+                // LPT-149, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["7h", "7d"], board: ["7c", "Kd", "2s"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["7h", "7d"], board: ["7c", "Kd", "2s"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["7s", "7c"], board: ["7h", "Kc", "2d"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["7d", "7s"], board: ["7h", "Ks", "2c"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "raise-set", kind: "soft_pulse"}],
                 },
               }),
@@ -499,9 +589,24 @@ export function buildSectionThree() {
                   choice("raise-bp", "Raise", "clear_mistake",
                     "Do not bluff-raise crowds with bottom pair.", {action: "RAISE", amountBb: 15, betterChoiceId: "fold-bp"})
                 ],
-                // LPT-149
+                // LPT-149, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["5h", "2d"], board: ["Ah", "7c", "2s"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["5h", "2d"], board: ["Ah", "7c", "2s"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["5s", "2c"], board: ["As", "7h", "2d"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["5d", "2s"], board: ["Ad", "7h", "2c"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "fold-bp", kind: "none"}],
                 },
               }),
@@ -547,11 +652,23 @@ export function buildSectionThree() {
                   choice("always-change", "Every turn changes everything", "questionable",
                     "Some turns matter more than others.")
                 ],
-                // LPT-152
+                // LPT-152, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7d", "2c", "3h"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "7c", "2h", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "7s", "2h", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "brick", kind: "soft_pulse"}],
                 },
@@ -569,11 +686,23 @@ export function buildSectionThree() {
                   choice("fold-ak", "Fold to a future bet preemptively", "clear_mistake",
                     "You act first — decide to bet or check.", {action: "FOLD", betterChoiceId: "barrel"})
                 ],
-                // LPT-152
+                // LPT-152, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7d", "2c", "3h"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "7c", "2h", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "7s", "2h", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "barrel", kind: "soft_pulse"}],
                 },
@@ -591,11 +720,23 @@ export function buildSectionThree() {
                   choice("delay-fold", "Fold the nuts", "clear_mistake",
                     "You have the flush.", {action: "FOLD", betterChoiceId: "delay-bet"})
                 ],
-                // LPT-152
+                // LPT-152, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "9h"], board: ["Kh", "7h", "2c", "3h"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["As", "9s"], board: ["Ks", "7s", "2h", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Ad", "9d"], board: ["Kd", "7d", "2h", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "delay-bet", kind: "soft_pulse"}],
                 },
@@ -613,11 +754,23 @@ export function buildSectionThree() {
                   choice("ignore", "Treat every turn like a brick", "clear_mistake",
                     "Board texture matters.", {betterChoiceId: "give-up"})
                 ],
-                // LPT-152
+                // LPT-152, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Jh", "9d"], board: ["Kc", "8d", "3s", "Qh"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["Js", "9c"], board: ["Kh", "8c", "3d", "Qs"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["Jd", "9s"], board: ["Kh", "8s", "3c", "Qd"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "give-up", kind: "none"}],
                 },
@@ -664,11 +817,23 @@ export function buildSectionThree() {
                   choice("val-fold", "Fold", "clear_mistake",
                     "You are value-betting, not folding.", {action: "FOLD", betterChoiceId: "val-bet"})
                 ],
-                // LPT-155
+                // LPT-155, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["As", "Kc", "7d", "2h", "3c"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "Kh", "7c", "2s", "3h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "Kh", "7s", "2d", "3h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "val-bet", kind: "soft_pulse"}],
                 },
@@ -686,11 +851,23 @@ export function buildSectionThree() {
                   choice("tiny", "Bet 1 chip as a joke", "clear_mistake",
                     "Live sizing should look like a real hand.", {action: "BET", amountBb: 0.5, betterChoiceId: "bluff"})
                 ],
-                // LPT-155
+                // LPT-155, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["9s", "8s"], board: ["Ks", "7s", "2h", "3h", "Ah"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["9d", "8d"], board: ["Kd", "7d", "2s", "3s", "As"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["9c", "8c"], board: ["Kc", "7c", "2d", "3d", "Ad"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "bluff", kind: "soft_pulse"}],
                 },
@@ -708,11 +885,23 @@ export function buildSectionThree() {
                   choice("raise-weak", "Re-raise all-in", "clear_mistake",
                     "Do not turn a bluff-catch into a bluff.", {action: "RAISE", amountBb: 50, betterChoiceId: "fold-weak"})
                 ],
-                // LPT-155
+                // LPT-155, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "4d"], board: ["As", "9c", "7d", "2h", "3c"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["As", "4c"], board: ["Ad", "9h", "7c", "2s", "3h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Ad", "4s"], board: ["Ac", "9h", "7s", "2d", "3h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "fold-weak", kind: "soft_pulse"}],
                 },
@@ -774,9 +963,24 @@ export function buildSectionThree() {
                   choice("jam-2p", "Jam", "clear_mistake",
                     "Overplaying medium strength multiway.", {action: "ALL_IN", betterChoiceId: "check-2p"})
                 ],
-                // LPT-158
+                // LPT-158, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["7h", "9d"], board: ["Kc", "7s", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["7h", "9d"], board: ["Kc", "7s", "2d"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["7s", "9c"], board: ["Kh", "7d", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["7d", "9s"], board: ["Kh", "7c", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "check-2p", kind: "soft_pulse"}],
                 },
               }),
@@ -793,9 +997,24 @@ export function buildSectionThree() {
                   choice("mw-min", "Min-bluff", "clear_mistake",
                     "Tiny bluffs get called multiway.", {action: "BET", amountBb: 1, betterChoiceId: "mw-check"})
                 ],
-                // LPT-158
+                // LPT-158, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["7s", "3d"], board: ["Ah", "Kh", "9h"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["7s", "3d"], board: ["Ah", "Kh", "9h"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["7d", "3c"], board: ["As", "Ks", "9s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["7c", "3s"], board: ["Ad", "Kd", "9d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "mw-check", kind: "soft_pulse"}],
                 },
               }),
@@ -873,9 +1092,24 @@ export function buildSectionThree() {
                   choice("call-down", "Silent call-down forever", "questionable",
                     "Sometimes; default is not stacking lightly.", {action: "CALL"})
                 ],
-                // LPT-161
+                // LPT-161, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "4d"], board: ["As", "9c", "7d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "4d"], board: ["As", "9c", "7d"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["As", "4c"], board: ["Ad", "9h", "7c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Ad", "4s"], board: ["Ac", "9h", "7s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "careful", kind: "soft_pulse"}],
                 },
               }),
@@ -892,9 +1126,24 @@ export function buildSectionThree() {
                   choice("raise-gut", "Bluff-raise", "questionable",
                     "Rarely; not the leak repair baseline.", {action: "RAISE", amountBb: 40})
                 ],
-                // LPT-161
+                // LPT-161, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Ks", "Tc", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Ks", "Tc", "2d"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["Js", "9c"], board: ["Kd", "Th", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Jd", "9s"], board: ["Kc", "Th", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "fold-gut", kind: "soft_pulse"}],
                 },
               }),
@@ -911,9 +1160,24 @@ export function buildSectionThree() {
                   choice("bluff-crowd", "Raise as a bluff", "clear_mistake",
                     "Crowds call.", {action: "RAISE", amountBb: 20, betterChoiceId: "fold-air"})
                 ],
-                // LPT-161
+                // LPT-161, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["9h", "8d"], board: ["Kc", "7s", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["9h", "8d"], board: ["Kc", "7s", "2d"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["9s", "8c"], board: ["Kh", "7d", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["9d", "8s"], board: ["Kh", "7c", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "fold-air", kind: "soft_pulse"}],
                 },
               }),
@@ -971,9 +1235,24 @@ export function buildSectionThree() {
                   choice("j3-air", "Air", "questionable",
                     "This has strong equity — still a draw.")
                 ],
-                // LPT-165
+                // LPT-165, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Jd", "Td"], board: ["Qd", "9d", "3c"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jd", "Td"], board: ["Qd", "9d", "3c"]},
+                    variants: [
+                      {
+                        id: "var-jump-class-suits-1",
+                        fixedCards: {hero: ["Jc", "Tc"], board: ["Qc", "9c", "3h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-jump-class-suits-2",
+                        fixedCards: {hero: ["Js", "Ts"], board: ["Qs", "9s", "3h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "j3-draw", kind: "none"}],
                 },
               }),
@@ -988,10 +1267,24 @@ export function buildSectionThree() {
                   choice("j3-bluff", "Bluff large", "clear_mistake",
                     "Multiway bluffs fail.", {action: "BET", amountBb: 12, betterChoiceId: "j3-fold"})
                 ],
-                // LPT-165
+                // LPT-165, LPT-627
                 teachSpec: {
-                  // True air, matching the Dart spot (LPT-425 / LPT-391).
-                  deal: {mode: "fixed", fixedCards: {hero: ["7s", "3d"], board: ["Ah", "Kh", "9h"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["7s", "3d"], board: ["Ah", "Kh", "9h"]},
+                    variants: [
+                      {
+                        id: "var-jump-mw-suits-1",
+                        fixedCards: {hero: ["7d", "3c"], board: ["As", "Ks", "9s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-jump-mw-suits-2",
+                        fixedCards: {hero: ["7c", "3s"], board: ["Ad", "Kd", "9d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "j3-fold", kind: "none"}],
                 },
               }),
@@ -1008,11 +1301,23 @@ export function buildSectionThree() {
                   choice("j3-fold2", "Fold", "clear_mistake",
                     "You are ahead.", {action: "FOLD", betterChoiceId: "j3-val"})
                 ],
-                // LPT-165
+                // LPT-165, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["As", "Kc", "7d", "2h", "3c"]},
+                    variants: [
+                      {
+                        id: "var-jump-river-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "Kh", "7c", "2s", "3h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-jump-river-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "Kh", "7s", "2d", "3h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "j3-val", kind: "none"}],
                 },
@@ -1028,9 +1333,24 @@ export function buildSectionThree() {
                   choice("j3-callprice", "Call because any draw is lucky", "clear_mistake",
                     "Math first.", {betterChoiceId: "j3-foldprice"})
                 ],
-                // LPT-165
+                // LPT-165, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Ks", "Tc", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Ks", "Tc", "2d"]},
+                    variants: [
+                      {
+                        id: "var-jump-leak-suits-1",
+                        fixedCards: {hero: ["Js", "9c"], board: ["Kd", "Th", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-jump-leak-suits-2",
+                        fixedCards: {hero: ["Jd", "9s"], board: ["Kc", "Th", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "j3-foldprice", kind: "none"}],
                 },
               }),
@@ -1153,11 +1473,23 @@ export function buildSectionFour() {
                   choice("ignore-action", "Ignore betting pattern entirely", "clear_mistake",
                     "Patterns update ranges; they do not print exact hands.", {betterChoiceId: "too-exact"})
                 ],
-                // LPT-167
+                // LPT-167, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d", "Kh"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "7h", "2c", "Ks"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "7h", "2s", "Kd"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "too-exact", kind: "soft_pulse"}],
                 },
@@ -1175,9 +1507,24 @@ export function buildSectionFour() {
                   choice("random", "Pick randomly for unpredictability", "clear_mistake",
                     "Plans beat randomness.", {betterChoiceId: "read-drives"})
                 ],
-                // LPT-167
+                // LPT-167, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Qh", "Qd"], board: ["Qc", "7s", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Qh", "Qd"], board: ["Qc", "7s", "2d"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["Qs", "Qc"], board: ["Qh", "7d", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["Qd", "Qs"], board: ["Qh", "7c", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "read-drives", kind: "none"}],
                 },
               }),
@@ -1222,9 +1569,24 @@ export function buildSectionFour() {
                   choice("fold-qq", "Fold", "clear_mistake",
                     "Do not fold queens.", {action: "FOLD", betterChoiceId: "3bet-qq"})
                 ],
-                // LPT-170
+                // LPT-170, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Qh", "Qd"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Qh", "Qd"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["Qs", "Qc"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Qd", "Qs"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "3bet-qq", kind: "soft_pulse"}],
                 },
               }),
@@ -1241,13 +1603,25 @@ export function buildSectionFour() {
                   choice("4bet-72", "4-bet bluff", "clear_mistake",
                     "Not with trash offsuit.", {action: "RAISE", amountBb: 50, betterChoiceId: "fold-72"})
                 ],
-                // LPT-170
+                // LPT-170, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     handFamily: "trash",
                     suitFamily: "offsuit",
                     fixedCards: {hero: ["7h", "2d"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["7s", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["7d", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "fold-72", kind: "soft_pulse"}],
                 },
@@ -1267,13 +1641,25 @@ export function buildSectionFour() {
                   choice("fold-ak", "Fold", "clear_mistake",
                     "Too strong.", {action: "FOLD", betterChoiceId: "squeeze"})
                 ],
-                // LPT-170
+                // LPT-170, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     handFamily: "broadway",
                     suitFamily: "offsuit",
                     fixedCards: {hero: ["Ah", "Kd"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["As", "Kc"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "squeeze", kind: "soft_pulse"}],
                 },
@@ -1293,9 +1679,25 @@ export function buildSectionFour() {
                   choice("size-7", "3-bet to 7", "clear_mistake",
                     "That is not a real re-raise.", {action: "RAISE", amountBb: 3.5, betterChoiceId: "size-18"})
                 ],
-                // LPT-170
+                // LPT-170, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", handFamily: "pair", fixedCards: {hero: ["Kh", "Kd"]}},
+                  deal: {
+                    mode: "fixed",
+                    handFamily: "pair",
+                    fixedCards: {hero: ["Kh", "Kd"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["Ks", "Kc"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["Kd", "Ks"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "size-18", kind: "none"}],
                 },
               }),
@@ -1357,11 +1759,23 @@ export function buildSectionFour() {
                     ],
                   },
                 ],
-                // LPT-174
+                // LPT-174, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d", "3h"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "7h", "2c", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "7h", "2s", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [
                     {press: 1, target: "flop-bet", kind: "soft_pulse"},
@@ -1382,11 +1796,23 @@ export function buildSectionFour() {
                   choice("ignore-board", "Bet as if dry", "clear_mistake",
                     "Board texture is the plan update.", {action: "BET", amountBb: 8, betterChoiceId: "abort"})
                 ],
-                // LPT-174
+                // LPT-174, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Qd", "9c"], board: ["Kh", "7h", "2h", "3h"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["Qc", "9h"], board: ["Ks", "7s", "2s", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Qs", "9h"], board: ["Kd", "7d", "2d", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "abort", kind: "soft_pulse"}],
                 },
@@ -1403,9 +1829,24 @@ export function buildSectionFour() {
                     "Over-commitment with medium strength.",
                     {action: "ALL_IN", betterChoiceId: "small-pot"})
                 ],
-                // LPT-174
+                // LPT-174, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "9s", "3h"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "9s", "3h"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["Js", "Tc"], board: ["Qh", "9d", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Jd", "Ts"], board: ["Qh", "9c", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "small-pot", kind: "soft_pulse"}],
                 },
               }),
@@ -1468,9 +1909,24 @@ export function buildSectionFour() {
                   choice("one-chip", "Bet 1", "clear_mistake",
                     "Does not look like value.", {action: "BET", amountBb: 0.5, betterChoiceId: "half"})
                 ],
-                // LPT-177
+                // LPT-177, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "7h", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "7h", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "half", kind: "soft_pulse"}],
                 },
               }),
@@ -1487,11 +1943,23 @@ export function buildSectionFour() {
                   choice("check-bluff", "Check and hope", "questionable",
                     "Giving up is fine; tiny bets are worse.", {action: "CHECK"})
                 ],
-                // LPT-177
+                // LPT-177, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["9h", "8h"], board: ["Kh", "7h", "2c", "3d", "As"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["9s", "8s"], board: ["Ks", "7s", "2h", "3c", "Ad"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["9d", "8d"], board: ["Kd", "7d", "2h", "3s", "Ac"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "big", kind: "soft_pulse"}],
                 },
@@ -1527,9 +1995,24 @@ export function buildSectionFour() {
                     "A real value size, not the worst.",
                     {action: "BET", amountBb: 10, betterChoiceId: "bad-1"})
                 ],
-                // LPT-177
+                // LPT-177, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Ad"], board: ["Kc", "9s", "3h"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Ad"], board: ["Kc", "9s", "3h"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["As", "Ac"], board: ["Kh", "9d", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["Ad", "As"], board: ["Kh", "9c", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "bad-1", kind: "none"}],
                 },
               }),
@@ -1589,9 +2072,24 @@ export function buildSectionFour() {
                     "You are missing value and risking free cards.",
                     {action: "CHECK", betterChoiceId: "commit"})
                 ],
-                // LPT-180
+                // LPT-180, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Kd"], board: ["Kc", "7s", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Kh", "Kd"], board: ["Kc", "7s", "2d"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["Ks", "Kc"], board: ["Kh", "7d", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Kd", "Ks"], board: ["Kh", "7c", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "commit", kind: "soft_pulse"}],
                 },
               }),
@@ -1606,9 +2104,24 @@ export function buildSectionFour() {
                   choice("spr-jam", "Jam day one", "clear_mistake",
                     "Over-commitment.", {action: "ALL_IN", betterChoiceId: "flexible"})
                 ],
-                // LPT-180
+                // LPT-180, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Qc", "9s", "3h"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Qc", "9s", "3h"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["Js", "9c"], board: ["Qh", "9d", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Jd", "9s"], board: ["Qh", "9c", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "flexible", kind: "soft_pulse"}],
                 },
               }),
@@ -1626,11 +2139,23 @@ export function buildSectionFour() {
                   choice("showdown-only", "Wait for showdown", "clear_mistake",
                     "Decide earlier.", {betterChoiceId: "before"})
                 ],
-                // LPT-180
+                // LPT-180, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["Qs", "7c", "2d", "9h"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Qd", "7h", "2c", "9s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Qc", "7h", "2s", "9d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "before", kind: "none"}],
                 },
@@ -1848,11 +2373,23 @@ export function buildSectionFour() {
                   choice("bluff-air", "Bluff-raise later with air", "clear_mistake",
                     "They do not fold.", {action: "RAISE", amountBb: 20, betterChoiceId: "thin-val", reversalRead: "Bluffs need folders; stations are not folders."})
                 ],
-                // LPT-190
+                // LPT-190, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["Js", "Tc"], board: ["Qh", "Td", "3s", "2c", "7h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Jd", "Ts"], board: ["Qh", "Tc", "3d", "2s", "7h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "thin-val", kind: "soft_pulse"}],
                 },
@@ -1868,11 +2405,23 @@ export function buildSectionFour() {
                   choice("bluff-station", "Bluff large anyway", "clear_mistake",
                     "Tendency cited: low folding.", {action: "BET", amountBb: 20, betterChoiceId: "give-up", reversalRead: "Only bluff seats that fold enough."})
                 ],
-                // LPT-190
+                // LPT-190, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["8h", "7h"], board: ["Kh", "9h", "2c", "3d", "5s"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["8s", "7s"], board: ["Ks", "9s", "2h", "3c", "5d"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["8d", "7d"], board: ["Kd", "9d", "2h", "3s", "5c"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "give-up", kind: "soft_pulse"}],
                 },
@@ -1888,11 +2437,23 @@ export function buildSectionFour() {
                   choice("auto-thin", "Always thin-value strangers", "questionable",
                     "Needs the calling tendency.", {action: "BET", amountBb: 8})
                 ],
-                // LPT-190
+                // LPT-190, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["Js", "Tc"], board: ["Qh", "Td", "3s", "2c", "7h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Jd", "Ts"], board: ["Qh", "Tc", "3d", "2s", "7h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "baseline-check", kind: "soft_pulse"}],
                 },
@@ -2107,9 +2668,24 @@ export function buildSectionFour() {
                   choice("fold-k9", "Fold", "questionable",
                     "Baseline fold is okay; versus a nit, stealing is better.", {action: "FOLD"})
                 ],
-                // LPT-200
+                // LPT-200, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "9d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Kh", "9d"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["Ks", "9c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Kd", "9s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "steal", kind: "soft_pulse"}],
                 },
               }),
@@ -2124,9 +2700,24 @@ export function buildSectionFour() {
                   choice("hero-call", "Hero-call forever", "clear_mistake",
                     "Tendency: strong when aggressive.", {action: "CALL", betterChoiceId: "fold-mid"})
                 ],
-                // LPT-200
+                // LPT-200, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Qc", "9s", "3h"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Qc", "9s", "3h"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["Js", "9c"], board: ["Qh", "9d", "3s"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Jd", "9s"], board: ["Qh", "9c", "3d"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "fold-mid", kind: "soft_pulse"}],
                 },
               }),
@@ -2141,9 +2732,24 @@ export function buildSectionFour() {
                   choice("same-always", "Always steal K9o", "questionable",
                     "Read-dependent.", {action: "RAISE", amountBb: 3})
                 ],
-                // LPT-200
+                // LPT-200, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "9d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Kh", "9d"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["Ks", "9c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Kd", "9s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "tighter", kind: "soft_pulse"}],
                 },
               }),
@@ -2358,11 +2964,23 @@ export function buildSectionFour() {
                   choice("punish-jam", "Jam to punish ego-to-ego", "clear_mistake",
                     "Avoid ego battles; calling realizes value.", {action: "RAISE", amountBb: 80, betterChoiceId: "call-wider", reversalRead: "Raise for value when you crush; do not tilt-raise."})
                 ],
-                // LPT-210
+                // LPT-210, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "9d"], board: ["As", "7c", "2d", "Th", "3c"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["As", "9c"], board: ["Ad", "7h", "2c", "Ts", "3h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Ad", "9s"], board: ["Ac", "7h", "2s", "Td", "3h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "call-wider", kind: "soft_pulse"}],
                 },
@@ -2378,11 +2996,23 @@ export function buildSectionFour() {
                   choice("trap-always", "Check back always to trap", "questionable",
                     "Trapping is okay; betting gets value now.", {action: "CHECK"})
                 ],
-                // LPT-210
+                // LPT-210, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "Kd"], board: ["As", "Kc", "2d", "9h", "3c"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "Kh", "2c", "9s", "3h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "Kh", "2s", "9d", "3h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "val-m", kind: "soft_pulse"}],
                 },
@@ -2398,11 +3028,23 @@ export function buildSectionFour() {
                   choice("baseline-call", "Always call strangers' jams", "questionable",
                     "Needs the aggression tendency.", {action: "CALL"})
                 ],
-                // LPT-210
+                // LPT-210, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Ah", "9d"], board: ["As", "7c", "2d", "Th", "3c"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["As", "9c"], board: ["Ad", "7h", "2c", "Ts", "3h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Ad", "9s"], board: ["Ac", "7h", "2s", "Td", "3h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "baseline-fold", kind: "soft_pulse"}],
                 },
@@ -2550,11 +3192,23 @@ export function buildSectionFour() {
                   choice("st-bluff", "Huge bluff", "clear_mistake",
                     "They do not fold.", {action: "BET", amountBb: 30, betterChoiceId: "st-val"})
                 ],
-                // LPT-216
+                // LPT-216, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                    variants: [
+                      {
+                        id: "var-guided-suits-1",
+                        fixedCards: {hero: ["Js", "Tc"], board: ["Qh", "Td", "3s", "2c", "7h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-guided-suits-2",
+                        fixedCards: {hero: ["Jd", "Ts"], board: ["Qh", "Tc", "3d", "2s", "7h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "st-val", kind: "soft_pulse"}],
                 },
@@ -2571,11 +3225,23 @@ export function buildSectionFour() {
                   choice("nit-call", "Call", "clear_mistake",
                     "Different type, different line.", {action: "CALL", betterChoiceId: "nit-fold"})
                 ],
-                // LPT-216
+                // LPT-216, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                    variants: [
+                      {
+                        id: "var-scaffolded-suits-1",
+                        fixedCards: {hero: ["Js", "Tc"], board: ["Qh", "Td", "3s", "2c", "7h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-scaffolded-suits-2",
+                        fixedCards: {hero: ["Jd", "Ts"], board: ["Qh", "Tc", "3d", "2s", "7h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "nit-fold", kind: "soft_pulse"}],
                 },
@@ -2594,11 +3260,23 @@ export function buildSectionFour() {
                   choice("m-ego", "Raise for ego", "clear_mistake",
                     "No ego battles.", {action: "RAISE", amountBb: 60, betterChoiceId: "m-call"})
                 ],
-                // LPT-216
+                // LPT-216, LPT-627
                 teachSpec: {
                   deal: {
                     mode: "fixed",
                     fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                    variants: [
+                      {
+                        id: "var-unguided-suits-1",
+                        fixedCards: {hero: ["Js", "Tc"], board: ["Qh", "Td", "3s", "2c", "7h"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-unguided-suits-2",
+                        fixedCards: {hero: ["Jd", "Ts"], board: ["Qh", "Tc", "3d", "2s", "7h"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
                   },
                   cues: [{press: 1, target: "m-call", kind: "soft_pulse"}],
                 },
@@ -2648,9 +3326,24 @@ export function buildSectionFour() {
                     ],
                   }],
                 },
-                // LPT-216
+                // LPT-216, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Td"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Kh", "Td"]},
+                    variants: [
+                      {
+                        id: "var-checkpoint-suits-1",
+                        fixedCards: {hero: ["Ks", "Tc"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-checkpoint-suits-2",
+                        fixedCards: {hero: ["Kd", "Ts"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "lab-steal", kind: "none"}],
                 },
               }),
@@ -2691,9 +3384,24 @@ export function buildSectionFour() {
                   choice("j4-foldkk", "Fold", "clear_mistake",
                     "Never.", {action: "FOLD", betterChoiceId: "j4-3bet"})
                 ],
-                // LPT-219
+                // LPT-219, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "Kd"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Kh", "Kd"]},
+                    variants: [
+                      {
+                        id: "var-jump-3bet-suits-1",
+                        fixedCards: {hero: ["Ks", "Kc"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-jump-3bet-suits-2",
+                        fixedCards: {hero: ["Kd", "Ks"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "j4-3bet", kind: "none"}],
                 },
               }),
@@ -2726,9 +3434,24 @@ export function buildSectionFour() {
                   choice("j4-1", "Bet 1", "clear_mistake",
                     "Not value language.", {action: "BET", amountBb: 0.5, betterChoiceId: "j4-10"})
                 ],
-                // LPT-219
+                // LPT-219, LPT-627
                 teachSpec: {
-                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]}},
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["As", "7c", "2d"]},
+                    variants: [
+                      {
+                        id: "var-jump-size-suits-1",
+                        fixedCards: {hero: ["As", "Kc"], board: ["Ad", "7h", "2c"]},
+                        label: "Same spot, suits rotated (1)",
+                      },
+                      {
+                        id: "var-jump-size-suits-2",
+                        fixedCards: {hero: ["Ad", "Ks"], board: ["Ac", "7h", "2s"]},
+                        label: "Same spot, suits rotated (2)",
+                      },
+                    ],
+                  },
                   cues: [{press: 1, target: "j4-10", kind: "none"}],
                 },
               }),
