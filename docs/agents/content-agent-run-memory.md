@@ -1164,3 +1164,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR next oldest discovery (`lesson-06-01-01-range-nut-advantage`).
 - act-05-09-02-*: structural clean on tip — not on LPT-667; assessment skips curriculum split clones.
 
+## Fold 2026-10-13dm (196d3505 line-reading — monitor rescue of #2149)
+
+- Tip at fold `6d9cbf37` (#2152); discovery originally on `196d3505` (#2148). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Open Medium: **LPT-667** (6 one-per-press, IP) + Capstone **LPT-348**.
+- Discovery oldest-unfresh `lesson-05-06-01-line-reading` (Street-by-street updates): explain has `explainGrading`; guided SoftPulse; scaffolded fixed 7h6h/Kh9h2c3d + variants + one-per-press; unguided one-per-press; checkpoint hintless. Structural clean. Curriculum multi-concept **LPT-239** needs-human (tip-commented on discovery run).
+- Conflicted draft #2149 never landed; #2152 only referenced “prior coverage” — this fold ships the durable run-memory so next agents do not re-struggle the walk.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR next oldest `lesson-06-01-01-range-nut-advantage`.
+- act-05-06-01-*: structural clean on tip — curriculum split only via LPT-239.
+
