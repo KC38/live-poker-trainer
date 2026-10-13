@@ -539,3 +539,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog parents LPT-624/626/627/625/628/635 + Capstone LPT-339 + frontier LPT-242/312/315 + honesty LPT-401/414/417. Grep `act-07-10-02-*` / `act-05-07-01-*` / `act-07-02-01-*` / `act-07-03-01-*`: no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty (0 bullets). `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-339 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(88)/635/624(50)/625(24).
 
+## Fold 2026-10-13 tip d8070119 (#2005 LPT-339 Capstone 3-bet + #2002 LPT-647 densify)
+
+- Tip advanced through #2002 LPT-647 Observe selective densify (`densifyHelperArms` **53→57** / fallthrough **147→143**; Soft timing `act-05-07-01-*` still ABSENT) then #2005 LPT-339 Capstone 3-bet teachSpec.
+- `scan_content_gaps --counts` on tip `d8070119`: pressHints **151**, deal-variants **89**, teachSpec **58**, explain-teachSpec **27**, nice-ladder **51**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **57**.
+- Verified Capstone 3-bet on tip `course.json`: `act-07-10-02-explain` teachSpec PRESENT (`deal.mode` `none` + SoftPulse SPR→TURN→CLOSE; no `explainGrading`); `act-07-10-02-hand` PRESENT (`deal.mode` `fixed` Ah/Qd + Q83r board + SoftPulse bet→barrel→fold; no `deal.variants`). Done-ack **LPT-339**.
+- Rebuilt catalog parents **LPT-624** Nice! **50→51** (`act-07-10-02-explain`) and **LPT-627** deal-variants **88→89** (`act-07-10-02-hand`) from `--gap … --markdown`; also cleared empty SHA / field placeholders left by a prior broken wiki edit. Tip-commented LPT-626/625/635/628 + densify ack on LPT-647 + frontier Highs LPT-242/312/315 (still all-five MISSING).
+- Soft timing densify still ABSENT — stay on **LPT-628**. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. Next Capstone Highs LPT-341+. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(89)/635/624(51)/625(24) OR Capstone LPT-341+.
