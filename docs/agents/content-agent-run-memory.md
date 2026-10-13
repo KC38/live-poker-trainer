@@ -977,3 +977,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Filed High **LPT-666**: `act-06-01-01-explain` SoftPulse cue target **ADVANTAGE** makes `blob.includes("TAG")` true and fails `course-contract` wave-three early-name test on tip (false positive — not player-type TAG). Grep SoftPulse cue targets for TAG/LAG substrings after teachSpec batch lands.
 - Honesty/Medium still valid: **LPT-414** Gutshot-ish; **LPT-370** cues null; **LPT-588** Scene flop-only. Meet Nit LPT-624/626. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
 - next: LPT-666 ADVANTAGE/TAG guard OR densify remaining 17 on LPT-628 OR Nice! LPT-624 OR pressHints LPT-626 OR LPT-414 OR catalog LPT-627(99)/635(12)/625(24).
+
+## 2026-10-13cr — tip `f9c109a1` (#2107 + #2108 LPT-414 Done)
+
+- Tip `f9c109a1` merges #2107 learnings + #2108 LPT-414 Air feedback. `scan_content_gaps --counts` still flat: pressHints **151** / deal-variants **99** / teachSpec **0** / explain-teachSpec **12** / nice-ladder **66** / map **24** / densify-tap **17** / densifyHelperArms **212**. Parents tip-comment only.
+- Done-ack **LPT-414**: `act-03-02-01-unguided` Air feedback is now five-high / no real draw (no gutshot); transitioned Done. Corrected stale same-SHA tip-comment that still said honesty valid.
+- **LPT-666** still open (ADVANTAGE SoftPulse cue breaks TAG-early course-contract). Medium **LPT-370** cues null / **LPT-588** Scene flop-only still valid. Meet Nit LPT-624/626 + densify 17 on LPT-628. `content,grokbot,lesson`.
+- next: LPT-666 OR densify remaining 17 on LPT-628 OR Nice! LPT-624 OR pressHints LPT-626 OR Medium LPT-370/588 OR catalog LPT-627(99)/635(12)/625(24).
