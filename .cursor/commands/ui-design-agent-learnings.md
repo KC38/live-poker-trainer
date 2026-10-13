@@ -303,14 +303,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer densify tile titles (`Call 10`, `Suited conn`, `Call`) over
   shared gold fragments like `chips` / suit-only glyphs when advancing
   SoftPulse asks — a `chips` needle can hit the wrong Call-price column
-  and burn hearts (LPT-634).
-- Never file SoftPulse-off + Hint-disabled on `assessmentRole`
-  checkpoint / jump_test densify asks as a SoftPulse paint bug when
-  `teachSpec.cues` use `kind: none` — assessments never SoftPulse and
-  `lessonFrameHintsDisabled` hides Hint on purpose (SoftPulse would spoil
-  the answer). Close as intentional / no-repro (LPT-653 Adjust versus TAG
-  cite). Real SoftPulse bugs are multi-gold (`guideRegion` null) or
-  SoftPulse-off with Hint still enabled on non-assessment steps.
+  and burn hearts (LPT-634). Never file SoftPulse-off + Hint-disabled on
+  `assessmentRole` checkpoint / jump_test densify asks as a SoftPulse paint
+  bug when `teachSpec.cues` use `kind: none` — assessments never SoftPulse
+  and Hint stays off on purpose (SoftPulse would spoil the answer); close
+  as intentional (LPT-653).
 
 - Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
 - Prefer `rg '<<<<<<<|=======|>>>>>>>'` on conflicted files after a merge resolution **before** `git commit` — an earlier StrReplace can leave markers in HEAD while the working tree looks clean until the next edit (LPT-520).
