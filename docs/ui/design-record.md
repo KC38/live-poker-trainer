@@ -638,6 +638,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Navigate 3-bet densified asks | Navigate 3-bet and 4-bet pots by depth densified asks (`act-06-09-01-guided` / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-645). |
 | Make difficult folds densified asks | Make difficult folds densified asks (`act-06-10-01-scaffolded` / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-646). |
 | Observe selective densified asks | Observe selective aggression densified asks (`act-06-11-01-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-647). |
+| Meet the TAG densified asks | Meet the TAG densified asks (`act-06-11-02-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-648). |
 | Meet Calling Station SoftPulse one gold | Meet Calling Station scaffolded / unguided outcome SoftPulse passes `guideRegion` (`labelWorkingModel` / `playerTypeStationLimp`) so Hint paints one gold tile — never both Working model and Permanent, or Station and Maniac (LPT-424). |
 | Observe narrow SoftPulse one gold | Observe narrow players densified asks (`act-04-07-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`observeNarrowEntry` / `observeStrongAggression` / `observeWaitSamples` / `observeNitBundle`) so SoftPulse paints one gold tile — never both Narrow and Wide, Strong heat and Passive, Wait and Label now, or Few+heat and Calls all (LPT-433). |
 | Meet the Nit SoftPulse one gold | Meet the Nit densified asks (`act-04-07-02-guided` / unguided / checkpoint) pass `guideRegion` (`meetNitLabel` / `meetNitLabel2` / `meetNitWorkingModel`) so SoftPulse paints one gold tile — never both Nit and Station, Nit and Maniac, or Working model and An insult (LPT-440). |
@@ -1568,7 +1569,7 @@ felt.
 | Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501) | — |
 | Make difficult folds; review coolers fairly | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502) | — |
 | Observe selective aggression | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494) | entry quizzes |
-| Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491) | label quizzes |
+| Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491); densified frame asks (LPT-648) | label quizzes |
 | Adjust versus TAG | Credit, Tighter, No light | respect check |
 | Observe wide sustained pressure | Wide, Pressure, Sample; unguided SoftPulse one gold (LPT-493) | entry quizzes |
 | Meet the LAG | Wide, Pressure, Model; unguided SoftPulse one gold (LPT-492) | label quizzes |
