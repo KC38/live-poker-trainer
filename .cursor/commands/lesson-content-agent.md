@@ -24,9 +24,12 @@ Hard rules:
   `agent_tap.py`, or `agent_seed.py`. Leave the mini for `/ui-design-agent`.
 - Unattended: never ask the user a question. Product ambiguity → file with
   `needs-human` and continue auditing.
-- Never edit the primary checkout for product code **except** learnings
-  files (see §6). Ticket bodies go under
-  `$PRIMARY/.cursor/tmp/content-agent/`.
+- Never edit **PRIMARY** (`tools/primary_checkout.sh`) — that tip is
+  reserved for `/ui-design-agent` on clean `main`. The loop gives you a
+  detached **WORKTREE** at `$PRIMARY/.worktrees/content-agent` (already
+  your cwd). All learnings edits + chore PRs happen there. Ticket bodies
+  go under `$WORKTREE/.cursor/tmp/content-agent/` (or
+  `.cursor/tmp/content-agent/` relative to cwd).
 - Read [lesson-content-agent-learnings.md](lesson-content-agent-learnings.md)
   and grep [content-agent-run-memory.md](../../docs/agents/content-agent-run-memory.md)
   for the target `act-` / `lesson-` id every run.
@@ -35,7 +38,7 @@ Hard rules:
 
 ```
 Run progress:
-- [ ] 0. Primary synced; Jira available
+- [ ] 0. Worktree at origin/main; Jira available (never touch PRIMARY)
 - [ ] 1. Contract + learnings read
 - [ ] 2. Fast catalog gap scan (scan_content_gaps.mjs)
 - [ ] 3. Audit target chosen (catalog parent sync, High re-check, or lesson walk)
@@ -45,18 +48,20 @@ Run progress:
 
 ## 0. Sync and Jira
 
+The loop already prepared a detached WORKTREE at `origin/main` and set
+cwd there. Do **not** `cd` to PRIMARY or `git checkout` on PRIMARY.
+
 ```bash
-PRIMARY="$(tools/primary_checkout.sh)"
-cd "$PRIMARY"
+# cwd is already $PRIMARY/.worktrees/content-agent (detached origin/main)
 git fetch origin main
-git merge --ff-only origin/main 2>/dev/null || true
+git status -sb   # expect detached HEAD at origin/main
 python3 tools/jira.py check
 ```
 
 If `jira.py check` fails → end with `JIRA_UNAVAILABLE`. Do not wait.
 
 Use `python3 tools/jira.py` only (no Atlassian MCP). Bodies live under
-`$PRIMARY/.cursor/tmp/content-agent/`.
+`.cursor/tmp/content-agent/` in the worktree.
 
 | Action | Command |
 | --- | --- |
@@ -337,16 +342,18 @@ Update learnings per
    `.cursor/commands/lesson-content-agent-learnings.md` (cap 40).
 2. Append the full note to
    `docs/agents/content-agent-run-memory.md` (no cap).
-3. **Ship a learnings-only chore PR**
-   (`chore/content-agent-learnings-<YYYYMMDD>`) in the same turn when
-   either file changed. This is the only product-repo write this agent
-   may open a PR for.
+3. **Ship a learnings-only chore PR from this WORKTREE**
+   (`cursor/chore-content-agent-learnings-<slug>` or
+   `chore/content-agent-learnings-<YYYYMMDD>`) in the same turn when
+   either file changed. Branch/PR from the worktree only — never from
+   PRIMARY. This is the only product-repo write this agent may open a
+   PR for.
 4. Only if git/PR is unavailable: append to
    `~/.live-poker-trainer/content-agent-learnings-pending.md` and set
    coverage `learnings: pending`. The next run (or monitor) must run
    `tools/fold_agent_learnings.sh content` and ship.
 
-Delete `$PRIMARY/.cursor/tmp/content-agent/` scratch bodies if desired.
+Delete `.cursor/tmp/content-agent/` scratch bodies if desired.
 
 Reply short: SHA, surface, tickets filed, leads, learnings status
 (`updated` = shipped to git; `pending` = home file only).
