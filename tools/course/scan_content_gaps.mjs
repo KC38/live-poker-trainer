@@ -236,10 +236,7 @@ export function gapPressHints(lessonId, lessonTitle, activity) {
   );
   const hints = teach && teach.pressHints;
   const len = Array.isArray(hints) ? hints.length : 0;
-  if (len >= 1) {
-    return null;
-  }
-  return {
+  const base = {
     lessonId,
     lessonTitle,
     activityId: String(activity.id || ""),
@@ -248,7 +245,42 @@ export function gapPressHints(lessonId, lessonTitle, activity) {
       ? String(activity.assessmentRole)
       : null,
     renderer: String(activity.renderer || ""),
-    note: "pressHints missing or empty",
+  };
+  if (len < 1) {
+    return {...base, note: "pressHints missing or empty"};
+  }
+  // LPT-667: SoftPulse cue press set must be covered by pressHints presses
+  // (one authored Hint line per press — not merely a non-empty array).
+  const cues = /** @type {Array<Record<string, unknown>>|undefined} */ (
+    teach && teach.cues
+  );
+  const soft = Array.isArray(cues)
+    ? cues.filter((c) => c && String(c.kind || "") === "soft_pulse")
+    : [];
+  if (soft.length === 0) {
+    return null;
+  }
+  const hintPresses = new Set();
+  for (const h of /** @type {Array<Record<string, unknown>>} */ (hints)) {
+    if (h && typeof h === "object" && Number.isFinite(Number(h.press))) {
+      hintPresses.add(Number(h.press));
+    }
+  }
+  const missing = [];
+  for (const c of soft) {
+    const p = Number(c.press);
+    if (Number.isFinite(p) && !hintPresses.has(p)) {
+      missing.push(p);
+    }
+  }
+  if (missing.length === 0) {
+    return null;
+  }
+  return {
+    ...base,
+    note:
+      "pressHints missing presses for SoftPulse cues: " +
+      missing.sort((a, b) => a - b).join(","),
   };
 }
 
@@ -485,7 +517,7 @@ const SCANNERS = {
 
 /** Open `(catalog)` parents — keep in sync when filing/closing parents. */
 const CATALOG_PARENTS = {
-  pressHints: "LPT-626",
+  pressHints: "LPT-667",
   "deal-variants": "LPT-627",
   "explain-teachSpec": "LPT-635",
   // teachSpec Highs are still per-lesson; no single catalog parent yet

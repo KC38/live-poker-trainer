@@ -1337,7 +1337,15 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Rank each hand by class: pair, then straight, then flush."
+                        "text": "Start with the weakest hand class."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Keep climbing the class ladder."
+                      },
+                      {
+                        "press": 3,
+                        "text": "Finish with the strongest class."
                       }
                     ],
                     "cues": [
@@ -1424,7 +1432,15 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Rank by class: full house beats trips, trips beat two pair."
+                        "text": "Start with the strongest finished hand."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Next comes the middle class."
+                      },
+                      {
+                        "press": 3,
+                        "text": "Finish with the weakest of the three."
                       }
                     ],
                     "cues": [
@@ -1904,7 +1920,23 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Look for three of a kind plus a pair \u2014 that's a full house."
+                        "text": "Look for three of a kind \u2014 that's the trips half."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Keep collecting matching trip cards."
+                      },
+                      {
+                        "press": 3,
+                        "text": "Add the board card that matches your trips."
+                      },
+                      {
+                        "press": 4,
+                        "text": "Pair the trips with a board pair."
+                      },
+                      {
+                        "press": 5,
+                        "text": "Finish the five-card full house."
                       }
                     ],
                     "cues": [
@@ -2861,7 +2893,19 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Preflop action starts left of the big blind and ends on the button."
+                        "text": "Preflop, the first seat left of the big blind starts."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Then move one seat to the left."
+                      },
+                      {
+                        "press": 3,
+                        "text": "Keep going left, toward the button."
+                      },
+                      {
+                        "press": 4,
+                        "text": "The button acts last before the blinds."
                       }
                     ],
                     "cues": [
@@ -3741,7 +3785,11 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "Confirm the flop first, then bet when you hit top pair."
+                        "text": "The call closes preflop. Move on to the flop first."
+                      },
+                      {
+                        "press": 2,
+                        "text": "You hit top pair. Bet to get value from worse hands."
                       }
                     ],
                     "cues": [
@@ -4930,7 +4978,11 @@
                     "pressHints": [
                       {
                         "press": 1,
-                        "text": "After the flop, the seat closest left of the button acts first."
+                        "text": "After the flop, the seat left of the button acts first."
+                      },
+                      {
+                        "press": 2,
+                        "text": "The button acts last on every street after the flop."
                       }
                     ],
                     "cues": [
