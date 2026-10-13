@@ -771,3 +771,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog parents LPT-624/625/626/627/635/628 + siblings LPT-662..665 + frontier Highs LPT-242/312/315/334 on `b03f35e8`.
 - Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**: all five `act-*` still MISSING teachSpec each. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## Fold 2026-10-13bs (tip 7f22b9e7 densify Done-ack)
+
+- Tip-stable `7f22b9e7` (#2064 learnings after #2063 densifyHelperArms 101→111 / densify-tap 128→118): JSON still flat 151/92/44/23/nice-55/map-24 densify-tap **118** densifyHelperArms **111**.
+- Prior coverage already tip-commented parents+Highs on this SHA (`jira.py get --json` confirmed hits). Soft timing `act-05-07-01-*` densify still ABSENT from `selectIdentifyDensifiedCoachLine`.
+- LPT-662/663/664/665 reached **Done** (Validated-on-origin/main) while LPT-628 body still said leave In Progress — rebuilt LPT-628 from `--gap densify-tap --markdown` with Done-ack wording; tip-commented Done-ack on siblings + Soft timing Priority ABSENT.
+- Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315** / strategy book **LPT-334**: all five `act-*` still MISSING teachSpec each (densify ≠ teachSpec for 312/315/334). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
