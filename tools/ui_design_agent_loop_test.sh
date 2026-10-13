@@ -1392,6 +1392,45 @@ grep -q 'ui-queue --stats' "$LOOP" \
   || fail "print_ui_queue_status must call jira ui-queue --stats"
 echo "status ui-queue stats ok"
 
+grep -q 'print_primary_checkout_status' "$LOOP" \
+  || fail "loop must define print_primary_checkout_status"
+(
+  ptmp="$tmp/primary-checkout-status"
+  mkdir -p "$ptmp"
+  git -C "$ptmp" init -q
+  git -C "$ptmp" config user.email t@t
+  git -C "$ptmp" config user.name t
+  printf 'a\n' >"$ptmp/a.txt"
+  git -C "$ptmp" add a.txt
+  git -C "$ptmp" commit -m a -q
+  git -C "$ptmp" branch -M main
+  tip="$(git -C "$ptmp" rev-parse HEAD)"
+  git -C "$ptmp" update-ref refs/remotes/origin/main "$tip"
+  primary() { echo "$ptmp"; }
+  out="$(print_primary_checkout_status)"
+  [[ -z "$out" ]] || fail "primary status silent on clean tip, got: $out"
+  printf 'dirt\n' >"$ptmp/dirt.txt"
+  out="$(print_primary_checkout_status)"
+  grep -q 'primary: main dirty (1 path' <<<"$out" \
+    || fail "primary status dirty: $out"
+  rm -f "$ptmp/dirt.txt"
+  git -C "$ptmp" checkout -b cursor/chore-busy -q
+  out="$(print_primary_checkout_status)"
+  grep -q 'primary: on cursor/chore-busy (not clean main)' <<<"$out" \
+    || fail "primary status wrong-branch: $out"
+  git -C "$ptmp" checkout main -q
+  printf 'b\n' >"$ptmp/b.txt"
+  git -C "$ptmp" add b.txt
+  git -C "$ptmp" commit -m b -q
+  new="$(git -C "$ptmp" rev-parse HEAD)"
+  git -C "$ptmp" update-ref refs/remotes/origin/main "$new"
+  git -C "$ptmp" reset --hard HEAD~1 -q
+  out="$(print_primary_checkout_status)"
+  grep -q 'primary: main behind origin/main by 1' <<<"$out" \
+    || fail "primary status behind: $out"
+)
+echo "status primary checkout ok"
+
 grep -q 'print_functions_deploy_status' "$LOOP" \
   || fail "loop must define print_functions_deploy_status"
 # Tip == marker → silent; lag with unchanged functions → advise deploy script.
