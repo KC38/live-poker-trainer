@@ -38,6 +38,7 @@ separate stage). Legacy catalogs map explain→guided; unguided→scaffolded;
 old checkpoint/jump_test stages→scaffolded+role.
 
 Curriculum splits: catalog `lessonSplitMap` maps a retired multi-concept lesson id to successor lesson ids. Completed progress on the retired id counts as completed for every successor (Home unlocks + `startLesson` prereqs). LPT-83+.
+Splits keep the retired lesson's unit as the container (successors `lesson-SS-UU-LL-0N-slug` sit in its place) and reuse its activity ids; `isLessonScreenFrameLesson` and `TableFeatures.forLessonId` resolve successors by their `SS-UU-LL` prefix. LPT-87+.
 
 
 Every scaffolded non-assessment step authors `pressHints` — one short

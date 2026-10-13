@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "44bcf22fed7d8fcf2a2a3e1f0e6410bb66c5f2201551c4cf452cabe914ea4837",
+  "contentChecksum": "df5e3933691db64168cfb383fb3e568bf68b91f8b8114e9be4e054971055b090",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -41,6 +41,41 @@
       "lesson-01-01-02-01-suits",
       "lesson-01-01-02-02-ranks",
       "lesson-01-01-02-03-pairs-and-suited"
+    ],
+    "lesson-01-01-03-blinds-and-button": [
+      "lesson-01-01-03-01-dealer-button",
+      "lesson-01-01-03-02-small-and-big-blind",
+      "lesson-01-01-03-03-blinds-post-first"
+    ],
+    "lesson-01-02-01-hand-ranks": [
+      "lesson-01-02-01-01-order-hand-ranks",
+      "lesson-01-02-01-02-pairs-straights-flushes",
+      "lesson-01-02-01-03-compare-finished-hands"
+    ],
+    "lesson-01-02-02-best-five-kickers": [
+      "lesson-01-02-02-01-best-five",
+      "lesson-01-02-02-02-kickers",
+      "lesson-01-02-02-03-board-plays"
+    ],
+    "lesson-01-03-01-fold-check-call": [
+      "lesson-01-03-01-01-fold",
+      "lesson-01-03-01-02-check",
+      "lesson-01-03-01-03-call"
+    ],
+    "lesson-01-03-02-bet-raise-allin": [
+      "lesson-01-03-02-01-bet",
+      "lesson-01-03-02-02-raise",
+      "lesson-01-03-02-03-all-in"
+    ],
+    "lesson-01-04-01-streets-and-order": [
+      "lesson-01-04-01-01-four-streets",
+      "lesson-01-04-01-02-action-order",
+      "lesson-01-04-01-03-street-ends"
+    ],
+    "lesson-01-05-01-winning-pots": [
+      "lesson-01-05-01-01-win-by-fold",
+      "lesson-01-05-01-02-showdown",
+      "lesson-01-05-01-03-main-and-side-pots"
     ]
   },
   "sections": [
@@ -1278,14 +1313,12 @@
           "summary": "Dealer button, small blind, and big blind.",
           "lessons": [
             {
-              "id": "lesson-01-01-03-blinds-and-button",
-              "order": 3,
-              "title": "Button and blinds",
-              "summary": "Find the dealer button, small blind, and big blind.",
+              "id": "lesson-01-01-03-01-dealer-button",
+              "order": 1,
+              "title": "Dealer button",
+              "summary": "Find the seat with the dealer button.",
               "objectives": [
-                "Locate the dealer button",
-                "Identify the small and big blinds",
-                "Know blinds post before cards are dealt"
+                "Locate the dealer button"
               ],
               "prerequisites": [
                 "lesson-01-01-02-03-pairs-and-suited"
@@ -1293,7 +1326,7 @@
               "remediationLessonIds": [
                 "lesson-01-01-02-03-pairs-and-suited"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 2,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -1316,8 +1349,7 @@
                     }
                   ],
                   "objectives": [
-                    "Locate the dealer button",
-                    "Identify the small and big blinds"
+                    "Locate the dealer button"
                   ],
                   "explainGrading": {
                     "grade": "recommended",
@@ -1412,10 +1444,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-01-03-02-small-and-big-blind",
+              "order": 2,
+              "title": "Small and big blinds",
+              "summary": "Find the small blind and big blind left of the button.",
+              "objectives": [
+                "Identify the small and big blinds"
+              ],
+              "prerequisites": [
+                "lesson-01-01-03-01-dealer-button"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-01-03-01-dealer-button"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-01-03-02-explain-blinds",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Identify the small and big blinds"
+                  ],
+                  "accessibilityText": "Left of the button sits the small blind. The next seat left posts the big blind.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-03-02-explain-blinds-line",
+                      "kind": "dialogue",
+                      "text": "Left of the button sits the small blind. The next seat left posts the big blind."
+                    }
+                  ],
+                  "okFeedback": "Small blind, then big blind.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SB",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BB",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Button → small blind → big blind."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-01-03-scaffolded-blinds",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -1480,8 +1576,133 @@
                   }
                 },
                 {
+                  "id": "act-01-01-03-checkpoint-layout",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "On a six-handed table, tap the small blind seat.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Identify the small and big blinds"
+                  ],
+                  "prompt": "Button is seat 5. Tap the small blind.",
+                  "choices": [
+                    {
+                      "id": "sb-seat0",
+                      "label": "Seat 0 (first left of button)",
+                      "accessibilityText": "Seat 0 (first left of button)",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Clockwise: button, then small blind, then big blind."
+                      }
+                    },
+                    {
+                      "id": "sb-seat4",
+                      "label": "Seat 4 (right of button)",
+                      "accessibilityText": "Seat 4 (right of button)",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Action moves left of the button, not right.",
+                        "betterChoiceId": "sb-seat0"
+                      }
+                    },
+                    {
+                      "id": "sb-seat1",
+                      "label": "Seat 1 (big blind seat)",
+                      "accessibilityText": "Seat 1 (big blind seat)",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Seat 1 would be big blind when seat 0 is small blind.",
+                        "betterChoiceId": "sb-seat0"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SB",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-01-03-03-blinds-post-first",
+              "order": 3,
+              "title": "Blinds post first",
+              "summary": "Blinds go in before any cards are dealt.",
+              "objectives": [
+                "Know blinds post before cards are dealt"
+              ],
+              "prerequisites": [
+                "lesson-01-01-03-02-small-and-big-blind"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-01-03-02-small-and-big-blind"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-01-03-03-explain-when",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Know blinds post before cards are dealt"
+                  ],
+                  "accessibilityText": "Blinds go in before a single card is dealt. Those forced chips start every pot.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-01-03-03-explain-when-line",
+                      "kind": "dialogue",
+                      "text": "Blinds go in before a single card is dealt. Those forced chips start every pot."
+                    }
+                  ],
+                  "okFeedback": "Blinds first, then cards.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BLINDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DEAL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Blinds post → cards are dealt."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-01-01-03-unguided-when",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -1544,68 +1765,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-01-01-03-checkpoint-layout",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "On a six-handed table, tap the small blind seat.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Locate the dealer button",
-                    "Identify the small and big blinds"
-                  ],
-                  "prompt": "Button is seat 5. Tap the small blind.",
-                  "choices": [
-                    {
-                      "id": "sb-seat0",
-                      "label": "Seat 0 (first left of button)",
-                      "accessibilityText": "Seat 0 (first left of button)",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Clockwise: button, then small blind, then big blind."
-                      }
-                    },
-                    {
-                      "id": "sb-seat4",
-                      "label": "Seat 4 (right of button)",
-                      "accessibilityText": "Seat 4 (right of button)",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Action moves left of the button, not right.",
-                        "betterChoiceId": "sb-seat0"
-                      }
-                    },
-                    {
-                      "id": "sb-seat1",
-                      "label": "Seat 1 (big blind seat)",
-                      "accessibilityText": "Seat 1 (big blind seat)",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Seat 1 would be big blind when seat 0 is small blind.",
-                        "betterChoiceId": "sb-seat0"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "SB",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -1618,22 +1777,20 @@
           "summary": "Hand ranks, best five of seven, ties and kickers.",
           "lessons": [
             {
-              "id": "lesson-01-02-01-hand-ranks",
+              "id": "lesson-01-02-01-01-order-hand-ranks",
               "order": 1,
-              "title": "Hand ranks",
-              "summary": "Rank made hands from high card up through straight flush.",
+              "title": "Order hand ranks",
+              "summary": "Line up hands from high card to flush.",
               "objectives": [
-                "Order common hand ranks",
-                "Recognize pairs, straights, and flushes",
-                "Compare two finished hands"
+                "Order common hand ranks"
               ],
               "prerequisites": [
-                "lesson-01-01-03-blinds-and-button"
+                "lesson-01-01-03-03-blinds-post-first"
               ],
               "remediationLessonIds": [
-                "lesson-01-01-03-blinds-and-button"
+                "lesson-01-01-03-03-blinds-post-first"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -1778,10 +1935,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-02-01-02-pairs-straights-flushes",
+              "order": 2,
+              "title": "Pairs, straights, flushes",
+              "summary": "Recognize a pair, a straight, and a flush.",
+              "objectives": [
+                "Recognize pairs, straights, and flushes"
+              ],
+              "prerequisites": [
+                "lesson-01-02-01-01-order-hand-ranks"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-02-01-01-order-hand-ranks"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-02-01-02-explain-spot",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Recognize pairs, straights, and flushes"
+                  ],
+                  "accessibilityText": "A pair is two cards of one rank. A straight is five ranks in a row. A flush is five cards of one suit.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-02-01-02-explain-spot-line",
+                      "kind": "dialogue",
+                      "text": "A pair is two cards of one rank. A straight is five ranks in a row. A flush is five cards of one suit."
+                    }
+                  ],
+                  "okFeedback": "Pair, straight, flush.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PAIR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STRAIGHT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FLUSH",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Pair → straight → flush."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-02-01-scaffolded-spot",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
@@ -1873,10 +2099,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-02-01-03-compare-finished-hands",
+              "order": 3,
+              "title": "Compare finished hands",
+              "summary": "Decide which finished hand wins at showdown.",
+              "objectives": [
+                "Compare two finished hands"
+              ],
+              "prerequisites": [
+                "lesson-01-02-01-02-pairs-straights-flushes"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-02-01-02-pairs-straights-flushes"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-02-01-03-explain-compare",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Compare two finished hands"
+                  ],
+                  "accessibilityText": "At showdown the higher hand rank wins. A full house beats trips, and trips beat two pair.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-02-01-03-explain-compare-line",
+                      "kind": "dialogue",
+                      "text": "At showdown the higher hand rank wins. A full house beats trips, and trips beat two pair."
+                    }
+                  ],
+                  "okFeedback": "Higher rank takes the pot.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FULL HOUSE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "TRIPS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "TWO PAIR",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Full house → trips → two pair."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-02-01-unguided-compare",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
@@ -1971,7 +2266,7 @@
                 },
                 {
                   "id": "act-01-02-01-checkpoint-winner",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "compare_rank",
                   "estimatedSeconds": 50,
@@ -1982,8 +2277,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Compare two finished hands",
-                    "Order common hand ranks"
+                    "Compare two finished hands"
                   ],
                   "prompt": "Tap highest to lowest.",
                   "sequenceItems": [
@@ -2055,22 +2349,20 @@
               ]
             },
             {
-              "id": "lesson-01-02-02-best-five-kickers",
-              "order": 2,
-              "title": "Best five and kickers",
-              "summary": "Use exactly five cards; kickers break ties.",
+              "id": "lesson-01-02-02-01-best-five",
+              "order": 4,
+              "title": "Best five from seven",
+              "summary": "Use exactly five of your seven cards.",
               "objectives": [
-                "Build the best five-card hand from seven",
-                "Use kickers when categories tie",
-                "Spot board-tied pots"
+                "Build the best five-card hand from seven"
               ],
               "prerequisites": [
-                "lesson-01-02-01-hand-ranks"
+                "lesson-01-02-01-03-compare-finished-hands"
               ],
               "remediationLessonIds": [
-                "lesson-01-02-01-hand-ranks"
+                "lesson-01-02-01-03-compare-finished-hands"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 3,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -2222,157 +2514,8 @@
                   }
                 },
                 {
-                  "id": "act-01-02-02-scaffolded-kicker",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Tap who wins when kickers break a tied pair.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Use kickers when categories tie"
-                  ],
-                  "prompt": "Same pair — tap who wins on kickers.",
-                  "choices": [
-                    {
-                      "id": "you-kicker",
-                      "label": "You win — better kicker",
-                      "accessibilityText": "You win — better kicker",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Same pair; higher kicker wins."
-                      }
-                    },
-                    {
-                      "id": "they-kicker",
-                      "label": "They win — their kicker",
-                      "accessibilityText": "They win — their kicker",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Higher kicker takes it — look again.",
-                        "betterChoiceId": "you-kicker"
-                      }
-                    },
-                    {
-                      "id": "chop-kicker",
-                      "label": "Chop — same pair always ties",
-                      "accessibilityText": "Chop — same pair always ties",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Kickers decide when pairs match.",
-                        "betterChoiceId": "you-kicker"
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "random_in_class",
-                      "handFamily": "pair",
-                      "variants": [
-                        {
-                          "id": "var-villain-weaker-kicker",
-                          "handFamily": "pair",
-                          "label": "Villain plays the same board pair with a weaker kicker"
-                        }
-                      ]
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Same pair? Compare the next-highest card — the kicker."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "hero_holes",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "act-01-02-02-unguided-board",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Tap chop when the board plays for everyone.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Spot board-tied pots"
-                  ],
-                  "prompt": "Both checked down — tap who takes the pot.",
-                  "choices": [
-                    {
-                      "id": "chop-broadway",
-                      "label": "Chop — both play the board",
-                      "accessibilityText": "Chop — both play the board",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Neither hole card beats this straight flush board."
-                      }
-                    },
-                    {
-                      "id": "button-wins",
-                      "label": "Button wins automatically",
-                      "accessibilityText": "Button wins automatically",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Showdown compares five-card hands, not seats.",
-                        "betterChoiceId": "chop-broadway"
-                      }
-                    },
-                    {
-                      "id": "high-card-wins",
-                      "label": "Higher hole card wins",
-                      "accessibilityText": "Higher hole card wins",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Hole cards do not improve this board.",
-                        "betterChoiceId": "chop-broadway"
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "random_in_class",
-                      "handFamily": "straight_flush",
-                      "suitFamily": "monotone",
-                      "variants": [
-                        {
-                          "id": "var-hero-small-pair",
-                          "handFamily": "pair",
-                          "label": "Hero small pocket pair under the board"
-                        }
-                      ]
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "If the board is everyone's best five, the pot is split."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "board",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-01-02-02-checkpoint-build",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -2383,8 +2526,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Build the best five-card hand from seven",
-                    "Use kickers when categories tie"
+                    "Build the best five-card hand from seven"
                   ],
                   "prompt": "Tap the five cards for your strongest hand.",
                   "choices": [
@@ -2476,6 +2618,283 @@
                   }
                 }
               ]
+            },
+            {
+              "id": "lesson-01-02-02-02-kickers",
+              "order": 5,
+              "title": "Kickers break ties",
+              "summary": "Same hand rank? The best kicker wins.",
+              "objectives": [
+                "Use kickers when categories tie"
+              ],
+              "prerequisites": [
+                "lesson-01-02-02-01-best-five"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-02-02-01-best-five"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-02-02-02-explain-kicker",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Use kickers when categories tie"
+                  ],
+                  "accessibilityText": "Same pair as your opponent? Compare the next-highest card. The bigger kicker wins.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-02-02-02-explain-kicker-line",
+                      "kind": "dialogue",
+                      "text": "Same pair as your opponent? Compare the next-highest card. The bigger kicker wins."
+                    }
+                  ],
+                  "okFeedback": "Kicker decides it.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SAME PAIR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "KICKER",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Same pair → bigger kicker wins."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-01-02-02-scaffolded-kicker",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Tap who wins when kickers break a tied pair.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Use kickers when categories tie"
+                  ],
+                  "prompt": "Same pair — tap who wins on kickers.",
+                  "choices": [
+                    {
+                      "id": "you-kicker",
+                      "label": "You win — better kicker",
+                      "accessibilityText": "You win — better kicker",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Same pair; higher kicker wins."
+                      }
+                    },
+                    {
+                      "id": "they-kicker",
+                      "label": "They win — their kicker",
+                      "accessibilityText": "They win — their kicker",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Higher kicker takes it — look again.",
+                        "betterChoiceId": "you-kicker"
+                      }
+                    },
+                    {
+                      "id": "chop-kicker",
+                      "label": "Chop — same pair always ties",
+                      "accessibilityText": "Chop — same pair always ties",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Kickers decide when pairs match.",
+                        "betterChoiceId": "you-kicker"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "pair",
+                      "variants": [
+                        {
+                          "id": "var-villain-weaker-kicker",
+                          "handFamily": "pair",
+                          "label": "Villain plays the same board pair with a weaker kicker"
+                        }
+                      ]
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Same pair? Compare the next-highest card — the kicker."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "hero_holes",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-02-02-03-board-plays",
+              "order": 6,
+              "title": "When the board plays",
+              "summary": "Spot a chop when the board is everyone's best five.",
+              "objectives": [
+                "Spot board-tied pots"
+              ],
+              "prerequisites": [
+                "lesson-01-02-02-02-kickers"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-02-02-02-kickers"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-02-02-03-explain-board",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Spot board-tied pots"
+                  ],
+                  "accessibilityText": "When the five board cards beat what anyone holds, everyone plays the board. The pot is split.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-02-02-03-explain-board-line",
+                      "kind": "dialogue",
+                      "text": "When the five board cards beat what anyone holds, everyone plays the board. The pot is split."
+                    }
+                  ],
+                  "okFeedback": "Board plays — split pot.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BOARD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHOP",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Board plays → chop."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-01-02-02-unguided-board",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Tap chop when the board plays for everyone.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Spot board-tied pots"
+                  ],
+                  "prompt": "Both checked down — tap who takes the pot.",
+                  "choices": [
+                    {
+                      "id": "chop-broadway",
+                      "label": "Chop — both play the board",
+                      "accessibilityText": "Chop — both play the board",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Neither hole card beats this straight flush board."
+                      }
+                    },
+                    {
+                      "id": "button-wins",
+                      "label": "Button wins automatically",
+                      "accessibilityText": "Button wins automatically",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Showdown compares five-card hands, not seats.",
+                        "betterChoiceId": "chop-broadway"
+                      }
+                    },
+                    {
+                      "id": "high-card-wins",
+                      "label": "Higher hole card wins",
+                      "accessibilityText": "Higher hole card wins",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Hole cards do not improve this board.",
+                        "betterChoiceId": "chop-broadway"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "straight_flush",
+                      "suitFamily": "monotone",
+                      "variants": [
+                        {
+                          "id": "var-hero-small-pair",
+                          "handFamily": "pair",
+                          "label": "Hero small pocket pair under the board"
+                        }
+                      ]
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "If the board is everyone's best five, the pot is split."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "board",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
             }
           ]
         },
@@ -2486,22 +2905,20 @@
           "summary": "Fold, check, call, bet, raise — and all-in limits.",
           "lessons": [
             {
-              "id": "lesson-01-03-01-fold-check-call",
+              "id": "lesson-01-03-01-01-fold",
               "order": 1,
-              "title": "Fold, check, call",
-              "summary": "Passive choices when facing a bet or a free option.",
+              "title": "Fold",
+              "summary": "Give up the hand and keep your chips.",
               "objectives": [
-                "Fold to give up the hand",
-                "Check when no bet faces you",
-                "Call to match the current bet"
+                "Fold to give up the hand"
               ],
               "prerequisites": [
-                "lesson-01-02-02-best-five-kickers"
+                "lesson-01-02-02-03-board-plays"
               ],
               "remediationLessonIds": [
-                "lesson-01-02-02-best-five-kickers"
+                "lesson-01-02-02-03-board-plays"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 2,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -2625,10 +3042,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-03-01-02-check",
+              "order": 2,
+              "title": "Check",
+              "summary": "No bet faces you — pass the action for free.",
+              "objectives": [
+                "Check when no bet faces you"
+              ],
+              "prerequisites": [
+                "lesson-01-03-01-01-fold"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-03-01-01-fold"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-03-01-02-explain-check",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Check when no bet faces you"
+                  ],
+                  "accessibilityText": "No bet in front of you? Check passes the action and costs nothing.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-03-01-02-explain-check-line",
+                      "kind": "dialogue",
+                      "text": "No bet in front of you? Check passes the action and costs nothing."
+                    }
+                  ],
+                  "okFeedback": "Free action — check.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NO BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHECK",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "No bet → check."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-03-01-scaffolded-check",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -2695,10 +3176,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-03-01-03-call",
+              "order": 3,
+              "title": "Call",
+              "summary": "Match the bet in front of you to stay in.",
+              "objectives": [
+                "Call to match the current bet"
+              ],
+              "prerequisites": [
+                "lesson-01-03-01-02-check"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-03-01-02-check"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-03-01-03-explain-call",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Call to match the current bet"
+                  ],
+                  "accessibilityText": "Facing a bet, call puts in the same amount to stay in the hand. You cannot check a bet.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-03-01-03-explain-call-line",
+                      "kind": "dialogue",
+                      "text": "Facing a bet, call puts in the same amount to stay in the hand. You cannot check a bet."
+                    }
+                  ],
+                  "okFeedback": "Match it — call.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Bet faces you → call to match."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-03-01-unguided-call",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -2767,7 +3312,7 @@
                 },
                 {
                   "id": "act-01-03-01-checkpoint-legal",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -2778,7 +3323,6 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Check when no bet faces you",
                     "Call to match the current bet"
                   ],
                   "prompt": "A bet faces you. Tap the action you cannot take.",
@@ -2834,22 +3378,20 @@
               ]
             },
             {
-              "id": "lesson-01-03-02-bet-raise-allin",
-              "order": 2,
-              "title": "Bet, raise, all-in",
-              "summary": "Add chips; all-in is capped by your stack.",
+              "id": "lesson-01-03-02-01-bet",
+              "order": 4,
+              "title": "Bet",
+              "summary": "Put the first chips into an unchecked pot.",
               "objectives": [
-                "Bet when the pot is unchecked",
-                "Raise to increase a facing bet",
-                "Treat all-in as a sized bet or raise"
+                "Bet when the pot is unchecked"
               ],
               "prerequisites": [
-                "lesson-01-03-01-fold-check-call"
+                "lesson-01-03-01-03-call"
               ],
               "remediationLessonIds": [
-                "lesson-01-03-01-fold-check-call"
+                "lesson-01-03-01-03-call"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 3,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -2974,8 +3516,139 @@
                   }
                 },
                 {
-                  "id": "act-01-03-02-scaffolded-raise",
+                  "id": "act-01-03-02-checkpoint-names",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Tap Bet — first chips into an unchecked pot.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Bet when the pot is unchecked"
+                  ],
+                  "prompt": "Pot is unchecked. Tap the first chips into the pot.",
+                  "choices": [
+                    {
+                      "id": "named-bet",
+                      "label": "Bet 4",
+                      "accessibilityText": "Bet 4",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "First chips into an unchecked pot are a bet."
+                      },
+                      "action": "BET",
+                      "amountBb": 2
+                    },
+                    {
+                      "id": "named-raise",
+                      "label": "Raise",
+                      "accessibilityText": "Raise",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Raise needs a bet to raise.",
+                        "betterChoiceId": "named-bet"
+                      },
+                      "action": "RAISE",
+                      "amountBb": 4
+                    },
+                    {
+                      "id": "named-call",
+                      "label": "Call",
+                      "accessibilityText": "Call",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Call matches; it does not open.",
+                        "betterChoiceId": "named-bet"
+                      },
+                      "action": "CALL"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "air"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "named-bet",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-03-02-02-raise",
+              "order": 5,
+              "title": "Raise",
+              "summary": "Make a facing bet bigger.",
+              "objectives": [
+                "Raise to increase a facing bet"
+              ],
+              "prerequisites": [
+                "lesson-01-03-02-01-bet"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-03-02-01-bet"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-03-02-02-explain-raise",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Raise to increase a facing bet"
+                  ],
+                  "accessibilityText": "Someone bet before you? A raise makes the price bigger for everyone who wants to continue.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-03-02-02-explain-raise-line",
+                      "kind": "dialogue",
+                      "text": "Someone bet before you? A raise makes the price bigger for everyone who wants to continue."
+                    }
+                  ],
+                  "okFeedback": "Bigger than their bet — raise.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FACING BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "RAISE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Facing a bet → raise to increase it."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-01-03-02-scaffolded-raise",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -3043,10 +3716,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-03-02-03-all-in",
+              "order": 6,
+              "title": "All-in",
+              "summary": "All-in is a bet or raise capped by your stack.",
+              "objectives": [
+                "Treat all-in as a sized bet or raise"
+              ],
+              "prerequisites": [
+                "lesson-01-03-02-02-raise"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-03-02-02-raise"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-03-02-03-explain-allin",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Treat all-in as a sized bet or raise"
+                  ],
+                  "accessibilityText": "All-in pushes every chip you have left. It works like a bet or raise, capped by your stack.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-03-02-03-explain-allin-line",
+                      "kind": "dialogue",
+                      "text": "All-in pushes every chip you have left. It works like a bet or raise, capped by your stack."
+                    }
+                  ],
+                  "okFeedback": "Your whole stack — all-in.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STACK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "ALL-IN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Stack size caps the all-in."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-03-02-unguided-allin",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -3113,74 +3850,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-01-03-02-checkpoint-names",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "poker_action_sizing",
-                  "estimatedSeconds": 55,
-                  "accessibilityText": "Tap Bet — first chips into an unchecked pot.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Bet when the pot is unchecked",
-                    "Raise to increase a facing bet"
-                  ],
-                  "prompt": "Pot is unchecked. Tap the first chips into the pot.",
-                  "choices": [
-                    {
-                      "id": "named-bet",
-                      "label": "Bet 4",
-                      "accessibilityText": "Bet 4",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "First chips into an unchecked pot are a bet."
-                      },
-                      "action": "BET",
-                      "amountBb": 2
-                    },
-                    {
-                      "id": "named-raise",
-                      "label": "Raise",
-                      "accessibilityText": "Raise",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Raise needs a bet to raise.",
-                        "betterChoiceId": "named-bet"
-                      },
-                      "action": "RAISE",
-                      "amountBb": 4
-                    },
-                    {
-                      "id": "named-call",
-                      "label": "Call",
-                      "accessibilityText": "Call",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Call matches; it does not open.",
-                        "betterChoiceId": "named-bet"
-                      },
-                      "action": "CALL"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "random_in_class",
-                      "handFamily": "air"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "named-bet",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -3193,22 +3862,20 @@
           "summary": "Preflop through river, and when a street ends.",
           "lessons": [
             {
-              "id": "lesson-01-04-01-streets-and-order",
+              "id": "lesson-01-04-01-01-four-streets",
               "order": 1,
-              "title": "Streets and action order",
-              "summary": "Name each street and know who acts when.",
+              "title": "Four streets",
+              "summary": "Name preflop, flop, turn, and river in order.",
               "objectives": [
-                "Name preflop, flop, turn, and river",
-                "Know preflop order starts left of the big blind",
-                "Know a street ends when bets are matched"
+                "Name preflop, flop, turn, and river"
               ],
               "prerequisites": [
-                "lesson-01-03-02-bet-raise-allin"
+                "lesson-01-03-02-03-all-in"
               ],
               "remediationLessonIds": [
-                "lesson-01-03-02-bet-raise-allin"
+                "lesson-01-03-02-03-all-in"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 3,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -3342,10 +4009,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-04-01-02-action-order",
+              "order": 2,
+              "title": "Action order",
+              "summary": "Know who acts first before and after the flop.",
+              "objectives": [
+                "Know preflop order starts left of the big blind"
+              ],
+              "prerequisites": [
+                "lesson-01-04-01-01-four-streets"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-04-01-01-four-streets"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-04-01-02-explain-order",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Know preflop order starts left of the big blind"
+                  ],
+                  "accessibilityText": "Preflop, action starts left of the big blind and moves clockwise. After the flop, the first live seat left of the button acts first.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-04-01-02-explain-order-line",
+                      "kind": "dialogue",
+                      "text": "Preflop, action starts left of the big blind and moves clockwise. After the flop, the first live seat left of the button acts first."
+                    }
+                  ],
+                  "okFeedback": "Clockwise from the blinds.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BIG BLIND",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CLOCKWISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BUTTON",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Left of the big blind → clockwise."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-04-01-scaffolded-order",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
@@ -3440,8 +4176,133 @@
                   }
                 },
                 {
+                  "id": "act-01-04-01-checkpoint-postflop",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Tap the seat left of the button — first to act postflop.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Know preflop order starts left of the big blind"
+                  ],
+                  "prompt": "Postflop multiway. Tap who acts first.",
+                  "choices": [
+                    {
+                      "id": "sb-first",
+                      "label": "SB",
+                      "accessibilityText": "SB",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Postflop starts left of the button — usually the small blind if live."
+                      }
+                    },
+                    {
+                      "id": "btn-first",
+                      "label": "BTN",
+                      "accessibilityText": "BTN",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Button acts last postflop.",
+                        "betterChoiceId": "sb-first"
+                      }
+                    },
+                    {
+                      "id": "bb-first-always",
+                      "label": "BB",
+                      "accessibilityText": "BB",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Big blind acts last preflop only.",
+                        "betterChoiceId": "sb-first"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "sb-first",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-04-01-03-street-ends",
+              "order": 3,
+              "title": "When a street ends",
+              "summary": "A street ends once every bet is matched.",
+              "objectives": [
+                "Know a street ends when bets are matched"
+              ],
+              "prerequisites": [
+                "lesson-01-04-01-02-action-order"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-04-01-02-action-order"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-04-01-03-explain-end",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Know a street ends when bets are matched"
+                  ],
+                  "accessibilityText": "A street ends when every live player has matched the bet. Then the next card comes.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-04-01-03-explain-end-line",
+                      "kind": "dialogue",
+                      "text": "A street ends when every live player has matched the bet. Then the next card comes."
+                    }
+                  ],
+                  "okFeedback": "Matched — next street.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BETS MATCHED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "NEXT STREET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Bets matched → street ends."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-01-04-01-unguided-end",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -3504,68 +4365,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-01-04-01-checkpoint-postflop",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Tap the seat left of the button — first to act postflop.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Know preflop order starts left of the big blind",
-                    "Name preflop, flop, turn, and river"
-                  ],
-                  "prompt": "Postflop multiway. Tap who acts first.",
-                  "choices": [
-                    {
-                      "id": "sb-first",
-                      "label": "SB",
-                      "accessibilityText": "SB",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Postflop starts left of the button — usually the small blind if live."
-                      }
-                    },
-                    {
-                      "id": "btn-first",
-                      "label": "BTN",
-                      "accessibilityText": "BTN",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Button acts last postflop.",
-                        "betterChoiceId": "sb-first"
-                      }
-                    },
-                    {
-                      "id": "bb-first-always",
-                      "label": "BB",
-                      "accessibilityText": "BB",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Big blind acts last preflop only.",
-                        "betterChoiceId": "sb-first"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "sb-first",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -3578,22 +4377,20 @@
           "summary": "Folds versus showdown, and side-pot intuition.",
           "lessons": [
             {
-              "id": "lesson-01-05-01-winning-pots",
+              "id": "lesson-01-05-01-01-win-by-fold",
               "order": 1,
-              "title": "How pots are won",
-              "summary": "Win when everyone folds, or at showdown; sense side pots.",
+              "title": "Win when everyone folds",
+              "summary": "Take the pot when every other player folds.",
               "objectives": [
-                "Win the pot when everyone else folds",
-                "Win at showdown with the best five",
-                "Sense main pot versus side pot without deep math"
+                "Win the pot when everyone else folds"
               ],
               "prerequisites": [
-                "lesson-01-04-01-streets-and-order"
+                "lesson-01-04-01-03-street-ends"
               ],
               "remediationLessonIds": [
-                "lesson-01-04-01-streets-and-order"
+                "lesson-01-04-01-03-street-ends"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 2,
               "difficultyBand": 1,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -3739,10 +4536,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-05-01-02-showdown",
+              "order": 2,
+              "title": "Win at showdown",
+              "summary": "Called on the river? Best five cards win.",
+              "objectives": [
+                "Win at showdown with the best five"
+              ],
+              "prerequisites": [
+                "lesson-01-05-01-01-win-by-fold"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-05-01-01-win-by-fold"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-05-01-02-explain-showdown",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Win at showdown with the best five"
+                  ],
+                  "accessibilityText": "When the river bet is called, hands are turned up. The best five cards take the pot.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-05-01-02-explain-showdown-line",
+                      "kind": "dialogue",
+                      "text": "When the river bet is called, hands are turned up. The best five cards take the pot."
+                    }
+                  ],
+                  "okFeedback": "Best five wins.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RIVER CALL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SHOWDOWN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BEST FIVE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "River called → showdown → best five wins."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-05-01-scaffolded-showdown",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -3854,10 +4720,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-01-05-01-03-main-and-side-pots",
+              "order": 3,
+              "title": "Main and side pots",
+              "summary": "Count the pot and sense when a side pot forms.",
+              "objectives": [
+                "Sense main pot versus side pot without deep math"
+              ],
+              "prerequisites": [
+                "lesson-01-05-01-02-showdown"
+              ],
+              "remediationLessonIds": [
+                "lesson-01-05-01-02-showdown"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 1,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-01-05-01-03-explain-pots",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Sense main pot versus side pot without deep math"
+                  ],
+                  "accessibilityText": "Every chip bet goes in the pot. A short all-in can only win chips it matched; the extra goes to a side pot.",
+                  "coachMedia": [
+                    {
+                      "id": "act-01-05-01-03-explain-pots-line",
+                      "kind": "dialogue",
+                      "text": "Every chip bet goes in the pot. A short all-in can only win chips it matched; the extra goes to a side pot."
+                    }
+                  ],
+                  "okFeedback": "Main pot first, side pot after.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MAIN POT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SIDE POT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Matched chips → main pot; extra → side pot."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-01-05-01-unguided-pot",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -3949,7 +4879,7 @@
                 },
                 {
                   "id": "act-01-05-01-checkpoint-side",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -4029,10 +4959,10 @@
                 "Finish without freezing on basic decisions"
               ],
               "prerequisites": [
-                "lesson-01-05-01-winning-pots"
+                "lesson-01-05-01-03-main-and-side-pots"
               ],
               "remediationLessonIds": [
-                "lesson-01-05-01-winning-pots"
+                "lesson-01-05-01-03-main-and-side-pots"
               ],
               "estimatedMinutes": 10,
               "difficultyBand": 1,
@@ -4588,7 +5518,7 @@
                 "lesson-01-06-01-guided-complete-hand"
               ],
               "remediationLessonIds": [
-                "lesson-01-02-01-hand-ranks"
+                "lesson-01-02-01-03-compare-finished-hands"
               ],
               "estimatedMinutes": 8,
               "difficultyBand": 2,
@@ -34557,6 +35487,18 @@
         }
       }
     },
+    "act-01-01-03-02-explain-blinds": {
+      "activityId": "act-01-01-03-02-explain-blinds",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Button → small blind → big blind."
+      }
+    },
     "act-01-01-03-scaffolded-blinds": {
       "activityId": "act-01-01-03-scaffolded-blinds",
       "stage": "scaffolded",
@@ -34580,32 +35522,6 @@
           "grade": "clear_mistake",
           "feedback": "Button deals later; blinds post to the left.",
           "betterChoiceId": "bb-two"
-        }
-      }
-    },
-    "act-01-01-03-unguided-when": {
-      "activityId": "act-01-01-03-unguided-when",
-      "stage": "scaffolded",
-      "renderer": "select_identify",
-      "acceptedGrades": [
-        "recommended",
-        "strong",
-        "reasonable"
-      ],
-      "choiceGrading": {
-        "before-deal": {
-          "grade": "recommended",
-          "feedback": "Blinds first, then cards."
-        },
-        "after-flop": {
-          "grade": "clear_mistake",
-          "feedback": "Blinds start the pot before the deal.",
-          "betterChoiceId": "before-deal"
-        },
-        "only-showdown": {
-          "grade": "clear_mistake",
-          "feedback": "Blinds are forced bets every hand.",
-          "betterChoiceId": "before-deal"
         }
       }
     },
@@ -34633,6 +35549,44 @@
           "grade": "clear_mistake",
           "feedback": "Seat 1 would be big blind when seat 0 is small blind.",
           "betterChoiceId": "sb-seat0"
+        }
+      }
+    },
+    "act-01-01-03-03-explain-when": {
+      "activityId": "act-01-01-03-03-explain-when",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Blinds post → cards are dealt."
+      }
+    },
+    "act-01-01-03-unguided-when": {
+      "activityId": "act-01-01-03-unguided-when",
+      "stage": "scaffolded",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "choiceGrading": {
+        "before-deal": {
+          "grade": "recommended",
+          "feedback": "Blinds first, then cards."
+        },
+        "after-flop": {
+          "grade": "clear_mistake",
+          "feedback": "Blinds start the pot before the deal.",
+          "betterChoiceId": "before-deal"
+        },
+        "only-showdown": {
+          "grade": "clear_mistake",
+          "feedback": "Blinds are forced bets every hand.",
+          "betterChoiceId": "before-deal"
         }
       }
     },
@@ -34673,6 +35627,18 @@
         }
       }
     },
+    "act-01-02-01-02-explain-spot": {
+      "activityId": "act-01-02-01-02-explain-spot",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Pair → straight → flush."
+      }
+    },
     "act-01-02-01-scaffolded-spot": {
       "activityId": "act-01-02-01-scaffolded-spot",
       "stage": "scaffolded",
@@ -34696,6 +35662,18 @@
           "grade": "clear_mistake",
           "feedback": "Flush beats straight; straight beats pair."
         }
+      }
+    },
+    "act-01-02-01-03-explain-compare": {
+      "activityId": "act-01-02-01-03-explain-compare",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Full house → trips → two pair."
       }
     },
     "act-01-02-01-unguided-compare": {
@@ -34787,6 +35765,44 @@
         }
       }
     },
+    "act-01-02-02-checkpoint-build": {
+      "activityId": "act-01-02-02-checkpoint-build",
+      "stage": "scaffolded",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "choiceGrading": {
+        "fh-eights": {
+          "grade": "recommended",
+          "feedback": "Trips plus the stronger pair."
+        },
+        "fh-deuces": {
+          "grade": "clear_mistake",
+          "feedback": "Use the higher pair under your trips.",
+          "betterChoiceId": "fh-eights"
+        },
+        "two-pair-only": {
+          "grade": "clear_mistake",
+          "feedback": "You have trips plus a pair — full house.",
+          "betterChoiceId": "fh-eights"
+        }
+      }
+    },
+    "act-01-02-02-02-explain-kicker": {
+      "activityId": "act-01-02-02-02-explain-kicker",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Same pair → bigger kicker wins."
+      }
+    },
     "act-01-02-02-scaffolded-kicker": {
       "activityId": "act-01-02-02-scaffolded-kicker",
       "stage": "scaffolded",
@@ -34813,6 +35829,18 @@
         }
       }
     },
+    "act-01-02-02-03-explain-board": {
+      "activityId": "act-01-02-02-03-explain-board",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Board plays → chop."
+      }
+    },
     "act-01-02-02-unguided-board": {
       "activityId": "act-01-02-02-unguided-board",
       "stage": "scaffolded",
@@ -34836,32 +35864,6 @@
           "grade": "clear_mistake",
           "feedback": "Hole cards do not improve this board.",
           "betterChoiceId": "chop-broadway"
-        }
-      }
-    },
-    "act-01-02-02-checkpoint-build": {
-      "activityId": "act-01-02-02-checkpoint-build",
-      "stage": "scaffolded",
-      "renderer": "select_identify",
-      "acceptedGrades": [
-        "recommended",
-        "strong",
-        "reasonable"
-      ],
-      "choiceGrading": {
-        "fh-eights": {
-          "grade": "recommended",
-          "feedback": "Trips plus the stronger pair."
-        },
-        "fh-deuces": {
-          "grade": "clear_mistake",
-          "feedback": "Use the higher pair under your trips.",
-          "betterChoiceId": "fh-eights"
-        },
-        "two-pair-only": {
-          "grade": "clear_mistake",
-          "feedback": "You have trips plus a pair — full house.",
-          "betterChoiceId": "fh-eights"
         }
       }
     },
@@ -34903,6 +35905,18 @@
         }
       }
     },
+    "act-01-03-01-02-explain-check": {
+      "activityId": "act-01-03-01-02-explain-check",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "No bet → check."
+      }
+    },
     "act-01-03-01-scaffolded-check": {
       "activityId": "act-01-03-01-scaffolded-check",
       "stage": "scaffolded",
@@ -34927,6 +35941,18 @@
           "feedback": "Folding for free throws away equity.",
           "betterChoiceId": "check-free"
         }
+      }
+    },
+    "act-01-03-01-03-explain-call": {
+      "activityId": "act-01-03-01-03-explain-call",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Bet faces you → call to match."
       }
     },
     "act-01-03-01-unguided-call": {
@@ -35018,6 +36044,45 @@
         }
       }
     },
+    "act-01-03-02-checkpoint-names": {
+      "activityId": "act-01-03-02-checkpoint-names",
+      "stage": "scaffolded",
+      "renderer": "poker_action_sizing",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "assessmentRole": "checkpoint",
+      "choiceGrading": {
+        "named-bet": {
+          "grade": "recommended",
+          "feedback": "First chips into an unchecked pot are a bet."
+        },
+        "named-raise": {
+          "grade": "clear_mistake",
+          "feedback": "Raise needs a bet to raise.",
+          "betterChoiceId": "named-bet"
+        },
+        "named-call": {
+          "grade": "clear_mistake",
+          "feedback": "Call matches; it does not open.",
+          "betterChoiceId": "named-bet"
+        }
+      }
+    },
+    "act-01-03-02-02-explain-raise": {
+      "activityId": "act-01-03-02-02-explain-raise",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Facing a bet → raise to increase it."
+      }
+    },
     "act-01-03-02-scaffolded-raise": {
       "activityId": "act-01-03-02-scaffolded-raise",
       "stage": "scaffolded",
@@ -35043,6 +36108,18 @@
         }
       }
     },
+    "act-01-03-02-03-explain-allin": {
+      "activityId": "act-01-03-02-03-explain-allin",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Stack size caps the all-in."
+      }
+    },
     "act-01-03-02-unguided-allin": {
       "activityId": "act-01-03-02-unguided-allin",
       "stage": "scaffolded",
@@ -35066,33 +36143,6 @@
           "grade": "clear_mistake",
           "feedback": "All-in for less is legal and creates a side pot later.",
           "betterChoiceId": "shove-12"
-        }
-      }
-    },
-    "act-01-03-02-checkpoint-names": {
-      "activityId": "act-01-03-02-checkpoint-names",
-      "stage": "scaffolded",
-      "renderer": "poker_action_sizing",
-      "acceptedGrades": [
-        "recommended",
-        "strong",
-        "reasonable"
-      ],
-      "assessmentRole": "checkpoint",
-      "choiceGrading": {
-        "named-bet": {
-          "grade": "recommended",
-          "feedback": "First chips into an unchecked pot are a bet."
-        },
-        "named-raise": {
-          "grade": "clear_mistake",
-          "feedback": "Raise needs a bet to raise.",
-          "betterChoiceId": "named-bet"
-        },
-        "named-call": {
-          "grade": "clear_mistake",
-          "feedback": "Call matches; it does not open.",
-          "betterChoiceId": "named-bet"
         }
       }
     },
@@ -35134,6 +36184,18 @@
         }
       }
     },
+    "act-01-04-01-02-explain-order": {
+      "activityId": "act-01-04-01-02-explain-order",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Left of the big blind → clockwise."
+      }
+    },
     "act-01-04-01-scaffolded-order": {
       "activityId": "act-01-04-01-scaffolded-order",
       "stage": "scaffolded",
@@ -35157,32 +36219,6 @@
         "incorrect": {
           "grade": "clear_mistake",
           "feedback": "Start under the gun, then HJ, CO, and the button."
-        }
-      }
-    },
-    "act-01-04-01-unguided-end": {
-      "activityId": "act-01-04-01-unguided-end",
-      "stage": "scaffolded",
-      "renderer": "select_identify",
-      "acceptedGrades": [
-        "recommended",
-        "strong",
-        "reasonable"
-      ],
-      "choiceGrading": {
-        "matched": {
-          "grade": "recommended",
-          "feedback": "Equalized action closes the street."
-        },
-        "three-cards": {
-          "grade": "clear_mistake",
-          "feedback": "The flop deal starts the street; betting still happens.",
-          "betterChoiceId": "matched"
-        },
-        "someone-folds": {
-          "grade": "clear_mistake",
-          "feedback": "Folding removes a player; others may still act.",
-          "betterChoiceId": "matched"
         }
       }
     },
@@ -35210,6 +36246,44 @@
           "grade": "clear_mistake",
           "feedback": "Big blind acts last preflop only.",
           "betterChoiceId": "sb-first"
+        }
+      }
+    },
+    "act-01-04-01-03-explain-end": {
+      "activityId": "act-01-04-01-03-explain-end",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Bets matched → street ends."
+      }
+    },
+    "act-01-04-01-unguided-end": {
+      "activityId": "act-01-04-01-unguided-end",
+      "stage": "scaffolded",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "choiceGrading": {
+        "matched": {
+          "grade": "recommended",
+          "feedback": "Equalized action closes the street."
+        },
+        "three-cards": {
+          "grade": "clear_mistake",
+          "feedback": "The flop deal starts the street; betting still happens.",
+          "betterChoiceId": "matched"
+        },
+        "someone-folds": {
+          "grade": "clear_mistake",
+          "feedback": "Folding removes a player; others may still act.",
+          "betterChoiceId": "matched"
         }
       }
     },
@@ -35251,6 +36325,18 @@
         }
       }
     },
+    "act-01-05-01-02-explain-showdown": {
+      "activityId": "act-01-05-01-02-explain-showdown",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "River called → showdown → best five wins."
+      }
+    },
     "act-01-05-01-scaffolded-showdown": {
       "activityId": "act-01-05-01-scaffolded-showdown",
       "stage": "scaffolded",
@@ -35275,6 +36361,18 @@
           "feedback": "Hands still compare.",
           "betterChoiceId": "showdown"
         }
+      }
+    },
+    "act-01-05-01-03-explain-pots": {
+      "activityId": "act-01-05-01-03-explain-pots",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Matched chips → main pot; extra → side pot."
       }
     },
     "act-01-05-01-unguided-pot": {
