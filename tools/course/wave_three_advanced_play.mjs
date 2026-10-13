@@ -2908,7 +2908,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-07-01-explain", 1,
                 "Same cards. Five models. Cite the tendency.",
-                {objectives: ["Change lines by type with citations"]}),
+                {
+                  objectives: ["Change lines by type with citations"],
+                  // LPT-328
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CARDS", kind: "soft_pulse"},
+                      {press: 2, target: "MODELS", kind: "soft_pulse"},
+                      {press: 3, target: "CITE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-07-07-01-guided", order: 2, stage: "guided",
                 prompt: "Flop top pair. Station check. Action?",
@@ -2921,6 +2932,11 @@ export function buildSectionSeven() {
                   choice("check", "Check always", "questionable",
                     "Misses value.")
                 ],
+                // LPT-328
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["Kc", "8s", "3h"]}},
+                  cues: [{press: 1, target: "bet", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-07-07-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2934,6 +2950,11 @@ export function buildSectionSeven() {
                   choice("bluff", "Rebluff light", "clear_mistake",
                     "Bad.", {action: "RAISE", amountBb: 25, betterChoiceId: "fold"})
                 ],
+                // LPT-328
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["Kc", "8s", "3h"]}},
+                  cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-07-07-01-unguided", order: 4, stage: "scaffolded",
@@ -2947,6 +2968,14 @@ export function buildSectionSeven() {
                   choice("fold", "Auto-fold", "questionable",
                     "Too tight.", {action: "FOLD"})
                 ],
+                // LPT-328
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Kd"], board: ["Kc", "8s", "3h", "2d"]},
+                  },
+                  cues: [{press: 1, target: "call", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2959,6 +2988,8 @@ export function buildSectionSeven() {
                   choice("guess", "Guess a type and overfit", "clear_mistake",
                     "No.", {betterChoiceId: "base"})
                 ],
+                // LPT-328
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "base", kind: "none"}]},
               }),
             ],
           }),

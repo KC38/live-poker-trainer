@@ -550,6 +550,14 @@ const _lessons = <String, List<String>>{
     'act-07-06-01-unguided',
     'act-07-06-01-checkpoint',
   ],
+  // LPT-328
+  'lesson-07-07-01-same-cards-types': [
+    'act-07-07-01-explain',
+    'act-07-07-01-guided',
+    'act-07-07-01-scaffolded',
+    'act-07-07-01-unguided',
+    'act-07-07-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -4174,6 +4182,77 @@ void main() {
       });
       expect(
         act('act-07-06-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Replay the same hand versus each type (LPT-328)', () {
+    test('explain SoftPulse walks CARDS → MODELS → CITE', () {
+      expect(
+        _list(
+          act('act-07-07-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['CARDS', 'MODELS', 'CITE'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-07-07-01-guided'), 'cues').single['target'], 'bet');
+      expect(
+        act('act-07-07-01-guided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Kd'],
+      );
+      expect(
+        act('act-07-07-01-guided').teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', '8s', '3h'],
+      );
+      expect(
+        _list(act('act-07-07-01-scaffolded'), 'cues').single['target'],
+        'fold',
+      );
+      expect(
+        act('act-07-07-01-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Kd'],
+      );
+      expect(
+        act('act-07-07-01-scaffolded')
+            .teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', '8s', '3h'],
+      );
+      expect(
+        _list(act('act-07-07-01-unguided'), 'cues').single['target'],
+        'call',
+      );
+      expect(
+        act('act-07-07-01-unguided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Kd'],
+      );
+      expect(
+        act('act-07-07-01-unguided').teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', '8s', '3h', '2d'],
+      );
+      expect(
+        _list(act('act-07-07-01-checkpoint'), 'cues').single['target'],
+        'base',
+      );
+      expect(
+        _list(
+          act('act-07-07-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-07-07-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-07-07-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-07-07-01-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });

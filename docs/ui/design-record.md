@@ -577,7 +577,8 @@ Observe selective aggression (LPT-286), Meet the TAG (LPT-289), Adjust
 versus TAG (LPT-292), Meet the LAG (LPT-298), Same cards, five type models
 (LPT-304), Section 6 checkpoint (LPT-307), Carry a preflop plan onto the
 flop (LPT-308), Change plans by pot type (LPT-318), Switch gears between HU
-and multiway (LPT-321), Rewrite plans when stacks change (LPT-324).
+and multiway (LPT-321), Rewrite plans when stacks change (LPT-324), Replay
+the same hand versus each type (LPT-328).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1122,6 +1123,12 @@ advances SHORT → DEEP → EFFECTIVE; guided `none` → `commit`; scaffolded
 `none` → `yes`; unguided `none` → `40`; checkpoint `none` → `every`;
 assessment steps use cue kind `none` (no pressHints).
 
+Replay the same hand versus each type `teachSpec` (LPT-328): explain
+SoftPulse advances CARDS → MODELS → CITE; guided fixed AhKd/Kc8s3h → `bet`;
+scaffolded fixed AhKd/Kc8s3h → `fold`; unguided fixed AhKd/Kc8s3h2d →
+`call`; checkpoint `none` → `base`; assessment steps use cue kind `none` (no
+pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1555,7 +1562,7 @@ felt.
 | Change plans by pot type | Limped, SRP, 3-4bet | — |
 | Switch gears between HU and multiway | Fewer, Thicker, Widen | — |
 | Rewrite plans when stacks change | Short, Deep, Effective | — |
-| Replay the same hand versus each type | Cards, Models, Cite | no-evidence check |
+| Replay the same hand versus each type | Cards, Models, Cite | — |
 | Integrate type, board, line, and sizing | Type, Board, Line, Size | integration check |
 | Write your default strategy book | Leak, Book, Review | book quizzes |
 | Capstone: single-raised pot | Plan, Update, Finish | — |
