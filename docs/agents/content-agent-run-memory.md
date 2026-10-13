@@ -475,6 +475,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 land OR densify Soft-timing/seat-footer on LPT-628 OR LPT-625 SoftPulse maps (24) OR catalog LPT-626(151)/627(84)/635/624(48) OR LPT-396 if tip advances.
 
 
-## Fold 2026-10-13
+## Fold 2026-10-13 tip a55b968e (#1983 learnings + #1985 LPT-396)
 
-- Prefer after mid-run honesty land (e.g. #1985 LPT-396): re-read `lesson_action_table.dart` ActionSpot before any “still valid” tip-comment; Done-ack + correct stale comments the same tick when tip already matches (JhTd·KhTs8h2d second pair under K — not Ts9h8c2d top pair).
+- Tip advanced `872a8183` (#1981 LPT-328) → `fa4fb660` (#1985 LPT-396 second-pair board) → `a55b968e` (#1983 learnings). Always re-`scan_content_gaps --counts` + re-read ActionSpot after honesty lands mid-run.
+- `scan_content_gaps --counts` flat: pressHints **151**, deal-variants **84**, teachSpec **64**, explain-teachSpec **30**, nice-ladder **48**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **53**. Parents tip-comment only.
+- **LPT-396 Done**: `act-07-08-01-guided` now `Jh`/`Td` · `Kh`/`Ts`/`8h`/`2d` (true second pair under K). Corrected stale “still valid Ts9h8c2d” tip-comment. Edited companion **LPT-331** body guided codes to tip atmosphere.
+- Soft timing **LPT-242** still all-five MISSING; densify Soft timing ABSENT (helper 53). Frontiers **LPT-312**/ **LPT-315**. Prefer: re-read ActionSpot before honesty “still valid”. Pending cleared. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(84)/635/624(48)/625(24).
