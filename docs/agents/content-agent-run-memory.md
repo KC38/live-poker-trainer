@@ -1330,3 +1330,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prior coverage on `6a883805` listed LPT-348/parents+Capstone Dones while `jira.py get` still showed only `f95fbbb0` — tip-commented **LPT-348** + Done-ack **LPT-339** + Capstone Done LPT-337/338/341/345/347/349 + parents LPT-667/626/624/625/627/628/635 + LPT-216/334 the same tick (verified HAS).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-10-03-capstone-multiway-deep` / `lesson-07-11-01-live-warmup-prep` (curriculum **LPT-351**) / Low curriculum.
 - act-07-10-02-*: structural clean on tip — Capstone pressHints policy only via LPT-348; teachSpec companion LPT-339 Done.
+
+## Fold 2026-10-14n (706cf460 discovery Capstone multiway + live-warmup)
+
+- Tip `706cf460` (#2175 after #2174). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348** needs-human.
+- Discovery oldest-unfresh `lesson-07-10-03-capstone-multiway-deep`: teachSpec on explain+hand; explain SoftPulse + `explainGrading`; hand `fixed` AhQh/Jh8h2c3d9c + variants; cues 3 presses; pressHints empty → **LPT-348** only (no curriculum-split). Structural clean aside from Capstone NO_HINT policy. Done-ack **LPT-341**.
+- Discovery `lesson-07-11-01-live-warmup-prep`: teachSpec on all five; explain SoftPulse + `explainGrading`; interactive `deal.mode` `none`; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean. Curriculum **LPT-351** tip-commented.
+- Tip-commented NEED parents on `706cf460`. Deleted stale typeboard draft branch if still remote.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-10-04-capstone-limped` / `lesson-07-12-01-five-type-final` / Low curriculum.
+- act-07-10-03-* / act-07-11-01-*: Capstone policy via LPT-348; warm-up curriculum via LPT-351.
