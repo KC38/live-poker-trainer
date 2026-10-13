@@ -582,7 +582,13 @@ the same hand versus each type (LPT-328), Integrate type, board, line, and
 sizing (LPT-331), Capstone: single-raised pot (LPT-337), Capstone: 3-bet pot
 (LPT-339), Capstone: multiway deep (LPT-341), Capstone: limped pot
 (LPT-345), Capstone: 4-bet pot (LPT-347), Prep a coached Live warm-up hand
-(LPT-349), Final: all five player types (LPT-352).
+(LPT-349), Final: all five player types (LPT-352), Soft timing evidence
+(LPT-242), Spot range advantage and nut advantage (LPT-252), Realize equity
+in and out of position (LPT-255), Recognize capped versus uncapped ranges
+(LPT-258), Defend enough without frequency theater (LPT-271), Mix with a
+reason (LPT-275), Observe wide sustained pressure (LPT-295), Adjust versus
+LAG (LPT-301), Map turn barrels before you bet flop (LPT-312), Compose river
+value and bluffs (LPT-315), Write your default strategy book (LPT-334).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1197,6 +1203,64 @@ Final: all five player types `teachSpec` (LPT-352): cs `none` → `cs`; nit
 `lag`; uncertain `none` → `low`; retire `none` → `retire`; assessment steps
 use cue kind `none` (no pressHints).
 
+Soft timing evidence `teachSpec` (LPT-242): explain SoftPulse advances
+TIMING → SIZING → CLUES; guided `none` → `soft`; scaffolded `none` →
+`weakish`; unguided `none` → `reject`; checkpoint `none` → `tiny`;
+assessment steps use cue kind `none` (no pressHints).
+
+Spot range advantage and nut advantage `teachSpec` (LPT-252): explain
+SoftPulse advances RANGE → NUT → ADVANTAGE; guided `none` → `pfr`;
+scaffolded `none` → `caller-nuts`; unguided fixed AhKd/Kc7s2d → `cbet`;
+checkpoint `none` → `press`; assessment steps use cue kind `none` (no
+pressHints).
+
+Realize equity in and out of position `teachSpec` (LPT-255): explain
+SoftPulse advances EQUITY → CASH → POS; guided `none` → `ip`; scaffolded
+`none` → `discount`; unguided `none` → `realize`; checkpoint `none` → `pos`;
+assessment steps use cue kind `none` (no pressHints).
+
+Recognize capped versus uncapped ranges `teachSpec` (LPT-258): explain
+SoftPulse advances CAPPED → UNCAPPED → NUTS; guided `none` → `cap`;
+scaffolded fixed Jh9d/Kc9s4h2d7c → `bet`; unguided `none` → `uncap`;
+checkpoint `none` → `attack`; assessment steps use cue kind `none` (no
+pressHints).
+
+Defend enough without frequency theater `teachSpec` (LPT-271): explain
+SoftPulse advances DEFEND → BLUFF → ENOUGH; guided `none` → `strong`;
+scaffolded fixed 9h7d/KcQh9d4c8s → `fold`; unguided `none` → `int`;
+checkpoint `none` → `punish`; assessment steps use cue kind `none` (no
+pressHints).
+
+Mix with a reason `teachSpec` (LPT-275): explain SoftPulse advances MIX →
+PURPOSE → STRONG; guided fixed 7h7d/7cKd2s → `protect`; scaffolded `none` →
+`less`; unguided `none` → `no`; checkpoint `none` → `freq`; assessment steps
+use cue kind `none` (no pressHints).
+
+Observe wide sustained pressure `teachSpec` (LPT-295): explain SoftPulse
+advances WIDE → PRESSURE → SAMPLE; guided `none` → `wide`; scaffolded `none`
+→ `sep`; unguided `none` → `wait`; checkpoint `none` → `bundle`; assessment
+steps use cue kind `none` (no pressHints).
+
+Adjust versus LAG `teachSpec` (LPT-301): explain SoftPulse advances CALL →
+TRAP → FANCY LESS; guided fixed Jh9d/Qc9s3h2d7c → `call`; scaffolded fixed
+AsAd/Ac7s2h → `trap`; unguided `none` → `avoid`; checkpoint `none` → `cite`;
+assessment steps use cue kind `none` (no pressHints).
+
+Map turn barrels before you bet flop `teachSpec` (LPT-312): explain
+SoftPulse advances BARREL → GIVE-UP → MAP; guided `none` → `ok`; scaffolded
+`none` → `give`; unguided `none` → `avoid`; checkpoint `none` → `list`;
+assessment steps use cue kind `none` (no pressHints).
+
+Compose river value and bluffs `teachSpec` (LPT-315): explain SoftPulse
+advances VALUE → BLUFF → HOLD; guided fixed AsAd/Ac9s4h2d7c → `val`;
+scaffolded `none` → `block`; unguided `none` → `check`; checkpoint `none` →
+`rule`; assessment steps use cue kind `none` (no pressHints).
+
+Write your default strategy book `teachSpec` (LPT-334): explain SoftPulse
+advances LEAK → BOOK → REVIEW; guided `none` → `spec`; scaffolded `none` →
+`book`; unguided `none` → `sched`; checkpoint `none` → `base`; assessment
+steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1602,18 +1666,18 @@ felt.
 | Thin value and bluff-catches | Thin, Catch, Barrels; densified SoftPulse one gold (LPT-516) | — |
 | Advanced flop lines | X/R, Probe, Delay, Donk; densified SoftPulse one gold (LPT-517) | — |
 | Street-by-street updates | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518) | — |
-| Soft timing evidence | Timing, Sizing, Clues | timing quizzes |
+| Soft timing evidence | Timing, Sizing, Clues | — |
 | Live table dynamics | Stuck, Tilted, Gears; densified SoftPulse one gold (LPT-520) | — |
 | Keep cash session guardrails | Quit, Guard, First; densified SoftPulse one gold (LPT-521) | — |
 | Section 5 checkpoint | — | — |
-| Spot range advantage and nut advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523) | dry-board, paired-board, and press checks |
-| Realize equity in and out of position | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524) | realization quizzes |
-| Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts; densified frame asks (LPT-636) | check-turn, bomb, and attack checks |
+| Spot range advantage and nut advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523) | — |
+| Realize equity in and out of position | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524) | — |
+| Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts; densified frame asks (LPT-636) | — |
 | Choose polarized or merged betting | Polar, Merged, Size; densified frame asks (LPT-637) | — |
 | Use overbets and geometric pressure | Overbet, Polar, Geo; densified frame asks (LPT-638); unguided SoftPulse one gold (LPT-497) | — |
 | Use blockers without solver theater | Block, Use, No EV; densified frame asks (LPT-639); unguided SoftPulse one gold (LPT-498) | — |
 | Defend enough without frequency theater | Defend, Bluff, Enough; densified frame asks (LPT-640); unguided SoftPulse one gold (LPT-499) | — |
-| Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644) | station, reason, and purpose checks |
+| Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644) | — |
 | Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501) | — |
 | Make difficult folds; review coolers fairly | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502) | — |
 | Observe selective aggression | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494) | entry quizzes |
@@ -1626,13 +1690,13 @@ felt.
 | Section 6 checkpoint | densified frame asks (LPT-655) | — |
 | Carry a preflop plan onto the flop | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505); densified frame asks (LPT-656) | — |
 | Map turn barrels before you bet flop | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506); densified frame asks (LPT-657) | — |
-| Compose river value and bluffs | Value, Bluff, Hold; densified frame asks (LPT-658) | blocker, empty, and rule checks |
+| Compose river value and bluffs | Value, Bluff, Hold; densified frame asks (LPT-658) | — |
 | Change plans by pot type | Limped, SRP, 3-4bet | — |
 | Switch gears between HU and multiway | Fewer, Thicker, Widen | — |
 | Rewrite plans when stacks change | Short, Deep, Effective | — |
 | Replay the same hand versus each type | Cards, Models, Cite | — |
 | Integrate type, board, line, and sizing | Type, Board, Line, Size | — |
-| Write your default strategy book | Leak, Book, Review | book quizzes |
+| Write your default strategy book | Leak, Book, Review | — |
 | Capstone: single-raised pot | Plan, Update, Finish | — |
 | Capstone: 3-bet pot | SPR, Turn, Close | — |
 | Capstone: multiway deep | Nuts, Deep, No-bluff | — |

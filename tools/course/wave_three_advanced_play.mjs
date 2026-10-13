@@ -620,7 +620,18 @@ export function buildSectionFive() {
             activities: [
               dialogue("act-05-07-01-explain", 1,
                 "Timing and sizing are clues, not mind-reading. Small updates only.",
-                {objectives: ["Treat timing as soft evidence only"]}),
+                {
+                  objectives: ["Treat timing as soft evidence only"],
+                  // LPT-242
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "TIMING", kind: "soft_pulse"},
+                      {press: 2, target: "SIZING", kind: "soft_pulse"},
+                      {press: 3, target: "CLUES", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-05-07-01-guided", order: 2, stage: "guided",
                 prompt: "Instant river shove after you bet. Correct framing?",
@@ -634,6 +645,8 @@ export function buildSectionFive() {
                   choice("air", "Proven bluff", "clear_mistake",
                     "Also overclaim.", {betterChoiceId: "soft"})
                 ],
+                // LPT-242
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "soft", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-07-01-scaffolded", order: 3, stage: "scaffolded",
@@ -646,6 +659,8 @@ export function buildSectionFive() {
                   choice("solver", "Solver known", "clear_mistake",
                     "No fabricated EV claims.", {betterChoiceId: "weakish"})
                 ],
+                // LPT-242
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "weakish", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-07-01-unguided", order: 4, stage: "scaffolded",
@@ -658,6 +673,8 @@ export function buildSectionFive() {
                   choice("trust", "Trust the book", "clear_mistake",
                     "Out of scope.", {betterChoiceId: "reject"})
                 ],
+                // LPT-242
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "reject", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-05-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -670,6 +687,8 @@ export function buildSectionFive() {
                   choice("only", "Only evidence", "clear_mistake",
                     "Too weak alone.", {betterChoiceId: "tiny"})
                 ],
+                // LPT-242
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tiny", kind: "none"}]},
               }),
             ],
           }),
@@ -985,7 +1004,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-01-01-explain", 1,
                 "Range advantage: more strong hands overall. Nut advantage: more of the nuts.",
-                {objectives: ["Identify range advantage"]}),
+                {
+                  objectives: ["Identify range advantage"],
+                  // LPT-252
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "RANGE", kind: "soft_pulse"},
+                      {press: 2, target: "NUT", kind: "soft_pulse"},
+                      {press: 3, target: "ADVANTAGE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-01-01-guided", order: 2, stage: "guided",
                 prompt: "PFR on A-high dry flop. Who often has range advantage?",
@@ -997,6 +1027,8 @@ export function buildSectionSix() {
                   choice("caller", "Flatting BB", "clear_mistake",
                     "Usually not.", {betterChoiceId: "pfr"})
                 ],
+                // LPT-252
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pfr", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-01-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1009,6 +1041,11 @@ export function buildSectionSix() {
                   choice("pfr-always", "PFR always", "clear_mistake",
                     "Not on paired boards.", {betterChoiceId: "caller-nuts"})
                 ],
+                // LPT-252
+                teachSpec: {
+                  deal: {mode: "none"},
+                  cues: [{press: 1, target: "caller-nuts", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-06-01-01-unguided", order: 4, stage: "scaffolded",
@@ -1023,6 +1060,11 @@ export function buildSectionSix() {
                   choice("jam", "Jam", "clear_mistake",
                     "Too much.", {action: "RAISE", amountBb: 200, betterChoiceId: "cbet"})
                 ],
+                // LPT-252
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Kd"], board: ["Kc", "7s", "2d"]}},
+                  cues: [{press: 1, target: "cbet", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1035,6 +1077,8 @@ export function buildSectionSix() {
                   choice("random", "Bet any two", "clear_mistake",
                     "Still need a plan.", {betterChoiceId: "press"})
                 ],
+                // LPT-252
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "press", kind: "none"}]},
               }),
             ],
           }),
@@ -1050,7 +1094,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-02-01-explain", 1,
                 "Equity on a chart is not cash. Position decides realization.",
-                {objectives: ["Prefer IP for marginal equity"]}),
+                {
+                  objectives: ["Prefer IP for marginal equity"],
+                  // LPT-255
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "EQUITY", kind: "soft_pulse"},
+                      {press: 2, target: "CASH", kind: "soft_pulse"},
+                      {press: 3, target: "POS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-02-01-guided", order: 2, stage: "guided",
                 prompt: "Same draw OOP vs IP. Where does it realize better?",
@@ -1062,6 +1117,8 @@ export function buildSectionSix() {
                   choice("oop", "Out of position", "clear_mistake",
                     "OOP realizes worse.", {betterChoiceId: "ip"})
                 ],
+                // LPT-255
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "ip", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-02-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1074,6 +1131,8 @@ export function buildSectionSix() {
                   choice("hero", "Hero-call", "clear_mistake",
                     "Over-realize fantasy.", {betterChoiceId: "discount"})
                 ],
+                // LPT-255
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "discount", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-02-01-unguided", order: 4, stage: "scaffolded",
@@ -1086,6 +1145,8 @@ export function buildSectionSix() {
                   choice("fancy", "Fancy play", "clear_mistake",
                     "Need a reason.", {betterChoiceId: "realize"})
                 ],
+                // LPT-255
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "realize", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1098,6 +1159,8 @@ export function buildSectionSix() {
                   choice("hope", "Hope alone", "clear_mistake",
                     "Not a plan.", {betterChoiceId: "pos"})
                 ],
+                // LPT-255
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "pos", kind: "none"}]},
               }),
             ],
           }),
@@ -1113,7 +1176,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-03-01-explain", 1,
                 "Capped = nuts unlikely. Uncapped = nuts still live.",
-                {objectives: ["Spot capped ranges from passive lines"]}),
+                {
+                  objectives: ["Spot capped ranges from passive lines"],
+                  // LPT-258
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CAPPED", kind: "soft_pulse"},
+                      {press: 2, target: "UNCAPPED", kind: "soft_pulse"},
+                      {press: 3, target: "NUTS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-03-01-guided", order: 2, stage: "guided",
                 prompt: "Villain checks turn after betting flop. Often?",
@@ -1125,6 +1199,8 @@ export function buildSectionSix() {
                   choice("uncap", "Uncapped", "clear_mistake",
                     "Less likely.", {betterChoiceId: "cap"})
                 ],
+                // LPT-258
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cap", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-06-03-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1139,6 +1215,14 @@ export function buildSectionSix() {
                   choice("fold", "Fold", "clear_mistake",
                     "You are betting.", {action: "FOLD", betterChoiceId: "bet"})
                 ],
+                // LPT-258
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Kc", "9s", "4h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "bet", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-03-01-unguided", order: 4, stage: "scaffolded",
@@ -1151,6 +1235,8 @@ export function buildSectionSix() {
                   choice("cap2", "Capped air", "clear_mistake",
                     "Wrong.", {betterChoiceId: "uncap"})
                 ],
+                // LPT-258
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "uncap", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1163,6 +1249,8 @@ export function buildSectionSix() {
                   choice("fear", "Auto-fold", "clear_mistake",
                     "Opposite.", {betterChoiceId: "attack"})
                 ],
+                // LPT-258
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "attack", kind: "none"}]},
               }),
             ],
           }),
@@ -1446,7 +1534,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-07-01-explain", 1,
                 "Defend enough that over-bluffing fails. No fake percentages.",
-                {objectives: ["Continue with stronger catchers"]}),
+                {
+                  objectives: ["Continue with stronger catchers"],
+                  // LPT-271
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "DEFEND", kind: "soft_pulse"},
+                      {press: 2, target: "BLUFF", kind: "soft_pulse"},
+                      {press: 3, target: "ENOUGH", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-07-01-guided", order: 2, stage: "guided",
                 prompt: "Facing a river bet. Best continue?",
@@ -1458,6 +1557,8 @@ export function buildSectionSix() {
                   choice("any", "Any two for %", "clear_mistake",
                     "No frequency theater.", {betterChoiceId: "strong"})
                 ],
+                // LPT-271
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "strong", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-06-07-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1471,6 +1572,14 @@ export function buildSectionSix() {
                   choice("call-mdf", "Call for MDF", "clear_mistake",
                     "Theater.", {action: "CALL", betterChoiceId: "fold"})
                 ],
+                // LPT-271
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["9h", "7d"], board: ["Kc", "Qh", "9d", "4c", "8s"]},
+                  },
+                  cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-07-01-unguided", order: 4, stage: "scaffolded",
@@ -1483,6 +1592,8 @@ export function buildSectionSix() {
                   choice("pct", "Exact percents", "clear_mistake",
                     "Not our method.", {betterChoiceId: "int"})
                 ],
+                // LPT-271
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "int", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-07-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1495,6 +1606,8 @@ export function buildSectionSix() {
                   choice("call-all", "Never fold", "clear_mistake",
                     "Too wide.", {betterChoiceId: "punish"})
                 ],
+                // LPT-271
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "punish", kind: "none"}]},
               }),
             ],
           }),
@@ -1511,7 +1624,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-08-01-explain", 1,
                 "Mixing is frequency with a purpose — not coin-flip theater.",
-                {objectives: ["Mix strong hands sometimes"]}),
+                {
+                  objectives: ["Mix strong hands sometimes"],
+                  // LPT-275
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "MIX", kind: "soft_pulse"},
+                      {press: 2, target: "PURPOSE", kind: "soft_pulse"},
+                      {press: 3, target: "STRONG", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-06-08-01-guided", order: 2, stage: "guided",
                 prompt: "You flop a set. Sometimes?",
@@ -1524,6 +1648,11 @@ export function buildSectionSix() {
                   choice("coin", "Always bet", "clear_mistake",
                     "Need a reason.", {action: "BET", betterChoiceId: "protect"})
                 ],
+                // LPT-275
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["7h", "7d"], board: ["7c", "Kd", "2s"]}},
+                  cues: [{press: 1, target: "protect", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-08-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1537,6 +1666,8 @@ export function buildSectionSix() {
                   choice("same", "Same mix", "clear_mistake",
                     "Ignore type.", {betterChoiceId: "less"})
                 ],
+                // LPT-275
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "less", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-08-01-unguided", order: 4, stage: "scaffolded",
@@ -1549,6 +1680,8 @@ export function buildSectionSix() {
                   choice("yes", "Always random", "clear_mistake",
                     "Wrong.", {betterChoiceId: "no"})
                 ],
+                // LPT-275
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "no", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-08-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1561,6 +1694,8 @@ export function buildSectionSix() {
                   choice("chaos", "Chaos", "clear_mistake",
                     "No.", {betterChoiceId: "freq"})
                 ],
+                // LPT-275
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "freq", kind: "none"}]},
               }),
             ],
           }),
@@ -2015,7 +2150,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-12-01-explain", 1,
                 "Before labels: wide entry plus pressure that still has a plan. Count samples.",
-                {objectives: ["Note wide entry"]}),
+                {
+                  objectives: ["Note wide entry"],
+                  // LPT-295
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "WIDE", kind: "soft_pulse"},
+                      {press: 2, target: "PRESSURE", kind: "soft_pulse"},
+                      {press: 3, target: "SAMPLE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-12-01-guided", order: 2, stage: "guided",
                 prompt: "Seat opens many hands and barrels often but folds some turn raises. Note?",
@@ -2029,6 +2175,8 @@ export function buildSectionSix() {
                   choice("label", "Label now", "clear_mistake",
                     "Observe first — need samples.", {betterChoiceId: "wide"})
                 ],
+                // LPT-295
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "wide", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-12-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2041,6 +2189,8 @@ export function buildSectionSix() {
                   choice("same", "No difference", "clear_mistake",
                     "There is.", {betterChoiceId: "sep"})
                 ],
+                // LPT-295
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sep", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-12-01-unguided", order: 4, stage: "scaffolded",
@@ -2053,6 +2203,8 @@ export function buildSectionSix() {
                   choice("now", "Label now", "clear_mistake",
                     "Too soon.", {betterChoiceId: "wait"})
                 ],
+                // LPT-295
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "wait", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-12-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2065,6 +2217,8 @@ export function buildSectionSix() {
                   choice("soul", "Seem loud", "clear_mistake",
                     "Not enough.", {betterChoiceId: "bundle"})
                 ],
+                // LPT-295
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "bundle", kind: "none"}]},
               }),
             ],
           }),
@@ -2161,7 +2315,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-12-03-explain", 1,
                 "Versus LAG: trap more, call wider, fancy less.",
-                {objectives: ["Widen bluff-catches versus LAG"], playerTypeRefs: ["lag"]}),
+                {
+                  objectives: ["Widen bluff-catches versus LAG"], playerTypeRefs: ["lag"],
+                  // LPT-301
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CALL", kind: "soft_pulse"},
+                      {press: 2, target: "TRAP", kind: "soft_pulse"},
+                      {press: 3, target: "FANCY LESS", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-06-12-03-guided", order: 2, stage: "guided",
                 prompt: "LAG barrels river. You have second pair good kicker. Action?",
@@ -2176,6 +2341,14 @@ export function buildSectionSix() {
                   choice("raise", "Bluff-raise light", "clear_mistake",
                     "Fancy less.", {action: "RAISE", amountBb: 45, betterChoiceId: "call"})
                 ],
+                // LPT-301
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "9d"], board: ["Qc", "9s", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "call", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-06-12-03-scaffolded", order: 3, stage: "scaffolded",
@@ -2189,6 +2362,11 @@ export function buildSectionSix() {
                   choice("repel", "Bet-bet-jam only", "questionable",
                     "Also fine; trapping is available.", {action: "BET", amountBb: 12})
                 ],
+                // LPT-301
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["As", "Ad"], board: ["Ac", "7s", "2h"]}},
+                  cues: [{press: 1, target: "trap", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-12-03-unguided", order: 4, stage: "scaffolded",
@@ -2202,6 +2380,8 @@ export function buildSectionSix() {
                   choice("more", "Bluff more", "clear_mistake",
                     "Wrong direction.", {betterChoiceId: "avoid"})
                 ],
+                // LPT-301
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "avoid", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-12-03-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2215,6 +2395,8 @@ export function buildSectionSix() {
                   choice("mood", "Vibes", "clear_mistake",
                     "Cite evidence.", {betterChoiceId: "cite"})
                 ],
+                // LPT-301
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cite", kind: "none"}]},
               }),
             ],
           }),
@@ -2533,7 +2715,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-02-01-explain", 1,
                 "Flop bet needs a turn map. Continue or kill.",
-                {objectives: ["List turn continue cards"]}),
+                {
+                  objectives: ["List turn continue cards"],
+                  // LPT-312
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "BARREL", kind: "soft_pulse"},
+                      {press: 2, target: "GIVE-UP", kind: "soft_pulse"},
+                      {press: 3, target: "MAP", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-07-02-01-guided", order: 2, stage: "guided",
                 prompt: "C-betting AK on Q72r. Good turn continue?",
@@ -2545,6 +2738,8 @@ export function buildSectionSeven() {
                   choice("any", "Any card including four-to-flush always", "questionable",
                     "Some scare cards need give-ups.")
                 ],
+                // LPT-312
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "ok", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-02-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2557,6 +2752,8 @@ export function buildSectionSeven() {
                   choice("hero", "Hero-call because flop bet exists", "clear_mistake",
                     "Sunk cost.", {betterChoiceId: "give"})
                 ],
+                // LPT-312
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "give", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-02-01-unguided", order: 4, stage: "scaffolded",
@@ -2569,6 +2766,8 @@ export function buildSectionSeven() {
                   choice("yolo", "Yolo barrels", "clear_mistake",
                     "No.", {betterChoiceId: "avoid"})
                 ],
+                // LPT-312
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "avoid", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-02-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2581,6 +2780,8 @@ export function buildSectionSeven() {
                   choice("later", "Something you invent after you are stuck", "clear_mistake",
                     "Too late.", {betterChoiceId: "list"})
                 ],
+                // LPT-312
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "list", kind: "none"}]},
               }),
             ],
           }),
@@ -2596,7 +2797,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-03-01-explain", 1,
                 "River: value if they call worse; bluff if they fold better.",
-                {objectives: ["Choose river value candidates"]}),
+                {
+                  objectives: ["Choose river value candidates"],
+                  // LPT-315
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "VALUE", kind: "soft_pulse"},
+                      {press: 2, target: "BLUFF", kind: "soft_pulse"},
+                      {press: 3, target: "HOLD", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-07-03-01-guided", order: 2, stage: "guided",
                 prompt: "Thick value vs station. Size?",
@@ -2609,6 +2821,14 @@ export function buildSectionSeven() {
                   choice("check", "Check to be fancy", "questionable",
                     "Misses value.")
                 ],
+                // LPT-315
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["As", "Ad"], board: ["Ac", "9s", "4h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "val", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-07-03-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2621,6 +2841,8 @@ export function buildSectionSeven() {
                   choice("ev", "Because a fake EV sheet said +0.02", "clear_mistake",
                     "No fabricated EV.", {betterChoiceId: "block"})
                 ],
+                // LPT-315
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "block", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-03-01-unguided", order: 4, stage: "scaffolded",
@@ -2633,6 +2855,8 @@ export function buildSectionSeven() {
                   choice("spew", "Blast off", "clear_mistake",
                     "Leak.", {betterChoiceId: "check"})
                 ],
+                // LPT-315
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "check", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-03-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2645,6 +2869,8 @@ export function buildSectionSeven() {
                   choice("random", "Bet every river for style", "clear_mistake",
                     "No.", {betterChoiceId: "rule"})
                 ],
+                // LPT-315
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "rule", kind: "none"}]},
               }),
             ],
           }),
@@ -3110,7 +3336,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-09-01-explain", 1,
                 "Defaults beat vibes. Write the book; review leaks.",
-                {objectives: ["Write default lines for common spots"]}),
+                {
+                  objectives: ["Write default lines for common spots"],
+                  // LPT-334
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "LEAK", kind: "soft_pulse"},
+                      {press: 2, target: "BOOK", kind: "soft_pulse"},
+                      {press: 3, target: "REVIEW", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-07-09-01-guided", order: 2, stage: "guided",
                 prompt: "Best leak note?",
@@ -3122,6 +3359,8 @@ export function buildSectionSeven() {
                   choice("vague", "I am bad", "clear_mistake",
                     "Not useful.", {betterChoiceId: "spec"})
                 ],
+                // LPT-334
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "spec", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-09-01-scaffolded", order: 3, stage: "scaffolded",
@@ -3134,6 +3373,8 @@ export function buildSectionSeven() {
                   choice("mood", "Whatever mood says", "clear_mistake",
                     "No.", {betterChoiceId: "book"})
                 ],
+                // LPT-334
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "book", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-09-01-unguided", order: 4, stage: "scaffolded",
@@ -3146,6 +3387,8 @@ export function buildSectionSeven() {
                   choice("never", "Never — memory is enough", "clear_mistake",
                     "Leaks return.", {betterChoiceId: "sched"})
                 ],
+                // LPT-334
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sched", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3158,6 +3401,8 @@ export function buildSectionSeven() {
                   choice("replace", "Replace all thinking forever", "clear_mistake",
                     "Still update.", {betterChoiceId: "base"})
                 ],
+                // LPT-334
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "base", kind: "none"}]},
               }),
             ],
           }),
