@@ -616,45 +616,45 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
     final densified = selectIdentifyDensifiedCoachLine(widget.activity.id);
     if (densified != null) return densified;
     return switch (widget.activity.id) {
-      'act-01-01-01-guided-find-holes' => 'Tap your two cards.',
-      'act-01-01-01-scaffolded-private' => 'Tap the cards only you can see.',
+      'act-01-01-01-guided-find-holes' => selectIdentifyDensifiedCoachLine('act-01-01-01-guided-find-holes')!,
+      'act-01-01-01-scaffolded-private' => selectIdentifyDensifiedCoachLine('act-01-01-01-scaffolded-private')!,
       'act-01-01-01-unguided-mix' =>
-        'Tap the cards in the middle. The muck is folded cards, and it is not the answer.',
-      'act-01-01-01-checkpoint-table' => 'Tap the cards that are only yours.',
-      'act-01-01-03-guided-button' => 'Find the dealer button on the felt.',
+        selectIdentifyDensifiedCoachLine('act-01-01-01-unguided-mix')!,
+      'act-01-01-01-checkpoint-table' => selectIdentifyDensifiedCoachLine('act-01-01-01-checkpoint-table')!,
+      'act-01-01-03-guided-button' => selectIdentifyDensifiedCoachLine('act-01-01-03-guided-button')!,
       // SoftPulse owns BB — don’t gold-tip the seat.
       'act-01-01-03-scaffolded-blinds' =>
-        'Blinds sit left of the button — the bigger forced bet posts two.',
-      'act-01-01-03-unguided-when' => 'When do those forced bets go in?',
+        selectIdentifyDensifiedCoachLine('act-01-01-03-scaffolded-blinds')!,
+      'act-01-01-03-unguided-when' => selectIdentifyDensifiedCoachLine('act-01-01-03-unguided-when')!,
       // SoftPulse owns SB — don’t gold-tip the seat.
       'act-01-01-03-checkpoint-layout' =>
         'Button is marked — first blind sits immediately left.',
       'act-02-01-01-guided-btn' =>
-        'Postflop — last to act gets the information edge.',
+        selectIdentifyDensifiedCoachLine('act-02-01-01-guided-btn')!,
       'act-02-01-01-scaffolded-blinds' =>
-        'Forced bets every hand sit left of the button.',
+        selectIdentifyDensifiedCoachLine('act-02-01-01-scaffolded-blinds')!,
       // SoftPulse-quiet: ask on the map — don't name Cutoff as the answer.
       'act-02-01-01-unguided-co' =>
-        'Seat just before the button — pick it on the map.',
+        selectIdentifyDensifiedCoachLine('act-02-01-01-unguided-co')!,
       'act-02-01-01-checkpoint-edge' =>
-        'Same cards — later seats play stronger.',
+        selectIdentifyDensifiedCoachLine('act-02-01-01-checkpoint-edge')!,
       'act-02-01-02-unguided-wait' =>
-        'Action is on UTG — you are on the button. Stay quiet until it reaches you.',
+        selectIdentifyDensifiedCoachLine('act-02-01-02-unguided-wait')!,
       // SoftPulse-quiet: ask who closes — don't tip “last seat” = BTN.
       'act-02-01-02-checkpoint-full' =>
-        'Six-max flop, everyone in — pick who acts last.',
+        selectIdentifyDensifiedCoachLine('act-02-01-02-checkpoint-full')!,
       // Unguided densify — pick when the street ends; SoftPulse stays quiet.
       'act-01-04-01-unguided-end' =>
-        'Betting is live — pick when this street ends.',
+        selectIdentifyDensifiedCoachLine('act-01-04-01-unguided-end')!,
       // Checkpoint densify — no SoftPulse seat spoiler.
       'act-01-04-01-checkpoint-postflop' =>
-        'Postflop — first action sits left of the button.',
+        selectIdentifyDensifiedCoachLine('act-01-04-01-checkpoint-postflop')!,
       // SoftPulse owns Take pot — don’t gold-tip the tile.
       'act-01-05-01-guided-fold-win' =>
-        'Everyone folded — you don’t need to show cards.',
+        selectIdentifyDensifiedCoachLine('act-01-05-01-guided-fold-win')!,
       // SoftPulse owns Showdown — don’t gold-tip the tile.
       'act-01-05-01-scaffolded-showdown' =>
-        'River is called — best five decide the pot.',
+        selectIdentifyDensifiedCoachLine('act-01-05-01-scaffolded-showdown')!,
       // Unguided densify — SoftPulse stays quiet.
       'act-01-05-01-unguided-pot' =>
         dealLessonOpenPot(
@@ -663,28 +663,28 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         ).coachLine,
       // Checkpoint densify — don’t gold-tip Side pot.
       'act-01-05-01-checkpoint-side' =>
-        'You are short all-in while others keep betting.',
+        selectIdentifyDensifiedCoachLine('act-01-05-01-checkpoint-side')!,
       // SoftPulse owns the board — don’t gold-tip Chop.
       'act-01-02-02-unguided-board' =>
         'Both checked down — broadway board plays for everyone.',
       // SoftPulse owns Cover + wait — don’t gold-tip the tile.
       'act-02-07-01-checkpoint-habit' =>
-        'Cards uncovered and action left — cover up and wait your turn.',
+        selectIdentifyDensifiedCoachLine('act-02-07-01-checkpoint-habit')!,
       // SoftPulse owns Watch first — don’t gold-tip the tile.
       'act-02-06-01-guided-follow' =>
-        'Two seats act before you — watch them finish before you decide.',
+        selectIdentifyDensifiedCoachLine('act-02-06-01-guided-follow')!,
       // SoftPulse owns verbal raise — don’t gold-tip the tile.
       'act-02-06-01-scaffolded-verbal' =>
-        'You want to raise — say the amount clearly so the table hears it.',
+        selectIdentifyDensifiedCoachLine('act-02-06-01-scaffolded-verbal')!,
       // SoftPulse owns Chip on cards — don’t gold-tip the tile.
       'act-02-06-01-unguided-protect' =>
-        'Cards near the muck — keep something on them so they stay yours.',
+        selectIdentifyDensifiedCoachLine('act-02-06-01-unguided-protect')!,
       // SoftPulse owns Out of turn — don’t gold-tip the tile.
       'act-02-06-01-checkpoint-oot' =>
-        'You raised early — action was still two seats left.',
+        selectIdentifyDensifiedCoachLine('act-02-06-01-checkpoint-oot')!,
       // SoftPulse-quiet jump: ask on the map — don't name Cutoff as the answer.
       'act-02-07-02-jump-pos' =>
-        'Seat just before the button — pick it on the map.',
+        selectIdentifyDensifiedCoachLine('act-02-07-02-jump-pos')!,
       // SoftPulse owns Flush — don’t gold-tip the tile.
       'act-01-02-01-scaffolded-spot' =>
         'Board and holes show five clubs — name the category.',
@@ -696,53 +696,53 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Same pair on the board — tap your cards, their cards, or Chop.',
       // jump-family / jump-stack densified asks: selectIdentifyDensifiedCoachLine
       'act-02-02-01-guided-pair' =>
-        'Matching ranks in the hole — both cards share a rank.',
+        selectIdentifyDensifiedCoachLine('act-02-02-01-guided-pair')!,
       'act-02-02-01-scaffolded-broadway' =>
-        'Both cards ten-or-better — high-card broadway strength shows up.',
+        selectIdentifyDensifiedCoachLine('act-02-02-01-scaffolded-broadway')!,
       'act-02-02-01-unguided-sc' =>
-        'Look at your holes — pick the family that fits.',
+        selectIdentifyDensifiedCoachLine('act-02-02-01-unguided-sc')!,
       // SoftPulse-quiet: list families — don't tip trash as the answer.
       'act-02-02-01-checkpoint-trash' =>
-        'Early seat with junk — pick the family that fits.',
+        selectIdentifyDensifiedCoachLine('act-02-02-01-checkpoint-trash')!,
       'act-02-05-01-guided-convert' =>
-        '200 chips at 1/2 — divide chips by the big blind.',
+        selectIdentifyDensifiedCoachLine('act-02-05-01-guided-convert')!,
       'act-02-05-01-checkpoint-200' =>
-        '1000 chips at 2/5 — buy-in counted in big blinds.',
+        selectIdentifyDensifiedCoachLine('act-02-05-01-checkpoint-200')!,
       'act-02-05-01-scaffolded-eff' =>
-        'You 150bb, villain 60bb — the shorter stack caps the matchup.',
+        selectIdentifyDensifiedCoachLine('act-02-05-01-scaffolded-eff')!,
       'act-02-05-01-unguided-depth' =>
-        'Pick the depth that plays closest to a shove game.',
+        selectIdentifyDensifiedCoachLine('act-02-05-01-unguided-depth')!,
       // SoftPulse owns 21 chips — don’t gold-tip the tile.
       'act-03-01-01-guided' =>
-        'Blinds plus three 6s — add every contribution into the pot.',
+        selectIdentifyDensifiedCoachLine('act-03-01-01-guided')!,
       // SoftPulse owns UTG — don’t gold-tip the seat.
       'act-03-01-01-scaffolded' =>
-        'Preflop — first to act sits left of the big blind.',
+        selectIdentifyDensifiedCoachLine('act-03-01-01-scaffolded')!,
       // SoftPulse owns Raise stands — don’t gold-tip the tile.
       'act-03-01-01-unguided' =>
-        'You said raise — pick what counts at a live table.',
+        selectIdentifyDensifiedCoachLine('act-03-01-01-unguided')!,
       // SoftPulse owns 55bb + pot — don’t gold-tip the tile.
       'act-03-01-01-checkpoint' =>
-        'Shorter stack caps the matchup — track effective stack with the pot.',
+        selectIdentifyDensifiedCoachLine('act-03-01-01-checkpoint')!,
       // SoftPulse owns Made — don’t gold-tip the tile.
       'act-03-02-01-guided' =>
-        'Board pairs your king — your hole king connects for immediate value.',
+        selectIdentifyDensifiedCoachLine('act-03-02-01-guided')!,
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-scaffolded' =>
-        'Two hearts on board with the nut heart — you need runout more than showdown now.',
+        selectIdentifyDensifiedCoachLine('act-03-02-01-scaffolded')!,
       // SoftPulse owns Air — don’t gold-tip the tile.
       'act-03-02-01-unguided' =>
-        'No pair, almost no draw multiway — equity is thin here.',
+        selectIdentifyDensifiedCoachLine('act-03-02-01-unguided')!,
       // SoftPulse owns Draw — don’t gold-tip the tile.
       'act-03-02-01-checkpoint' =>
-        'Eight or queen completes — your hand needs the right runout.',
+        selectIdentifyDensifiedCoachLine('act-03-02-01-checkpoint')!,
       // Count outs densified asks: selectIdentifyDensifiedCoachLine (LPT-279).
       // SoftPulse owns Brick — don’t gold-tip the tile.
       'act-03-05-01-guided' =>
-        'Dry ace flop, blank three — rarely helps a missed caller.',
+        selectIdentifyDensifiedCoachLine('act-03-05-01-guided')!,
       // SoftPulse owns give-up — don’t gold-tip the tile.
       'act-03-05-01-checkpoint' =>
-        'Air bluff meets a draw-completing queen — weigh shutting down.',
+        selectIdentifyDensifiedCoachLine('act-03-05-01-checkpoint')!,
       // SoftPulse owns the river job — don’t gold-tip the tile.
       // Close the river densified ask: selectIdentifyDensifiedCoachLine (LPT-343).
       'act-03-06-01-checkpoint' =>
@@ -799,7 +799,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-04-05-01-guided' =>
         selectIdentifyDensifiedCoachLine('act-04-05-01-guided')!,
       // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-      'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
+      'act-04-10-02-jump-spr' => selectIdentifyDensifiedCoachLine('act-04-10-02-jump-spr')!,
       // SoftPulse owns High part. — don’t gold-tip the tile.
       // Observe sticky densified asks: selectIdentifyDensifiedCoachLine (LPT-416).
       'act-04-06-01-guided' =>
@@ -827,18 +827,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-04-06-02-checkpoint')!,
       // SoftPulse owns Rarely folds — don’t gold-tip the tile.
       'act-04-06-03-checkpoint' =>
-        'Why cut bluffs vs a station — they almost never leave.',
+        selectIdentifyDensifiedCoachLine('act-04-06-03-checkpoint')!,
       // SoftPulse owns Narrow — don’t gold-tip the tile.
-      'act-04-07-01-guided' => 'Folded 20 of 22 — entry looks very selective.',
+      'act-04-07-01-guided' => selectIdentifyDensifiedCoachLine('act-04-07-01-guided')!,
       // SoftPulse owns Strong heat — don’t gold-tip the tile.
       'act-04-07-01-scaffolded' =>
-        'Raises then barrels — when they enter, heat often follows.',
+        selectIdentifyDensifiedCoachLine('act-04-07-01-scaffolded')!,
       // SoftPulse owns Wait — don’t gold-tip the tile.
       'act-04-07-01-unguided' =>
-        'Only two folds — sample is still too thin to lock a label.',
+        selectIdentifyDensifiedCoachLine('act-04-07-01-unguided')!,
       // SoftPulse owns Few + heat — don’t gold-tip the tile.
       'act-04-07-01-checkpoint' =>
-        'Before you label — few hands with heavy action when involved.',
+        selectIdentifyDensifiedCoachLine('act-04-07-01-checkpoint')!,
       // SoftPulse owns Nit — don’t gold-tip the tile.
       'act-04-07-02-guided' =>
         'Rare entry, large 3-bets — a narrow, strong-when-involved label fits.',
@@ -847,22 +847,22 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Folds forever, then explodes — narrow heat fits better than wild aggression.',
       // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-04-07-02-checkpoint' =>
-        'Treat Nit as evidence with sample limits — temporary, not an insult.',
+        selectIdentifyDensifiedCoachLine('act-04-07-02-checkpoint')!,
       // SoftPulse owns Strong range — don’t gold-tip the tile.
       'act-04-07-03-checkpoint' =>
-        'Nit check-raises — their raise range is usually strong.',
+        selectIdentifyDensifiedCoachLine('act-04-07-03-checkpoint')!,
       // SoftPulse owns Extreme — don’t gold-tip the tile.
       'act-04-08-01-guided' =>
-        'Raises 12 of 15 — entry and aggression are both extreme.',
+        selectIdentifyDensifiedCoachLine('act-04-08-01-guided')!,
       // SoftPulse owns Wide heat — don’t gold-tip the tile.
       'act-04-08-01-scaffolded' =>
-        'Barrels three streets light — pressure stays too wide.',
+        selectIdentifyDensifiedCoachLine('act-04-08-01-scaffolded')!,
       // SoftPulse owns Frequencies — don’t gold-tip the tile.
       'act-04-08-01-unguided' =>
-        'Wild aggression — track frequencies and shows, not revenge stories.',
+        selectIdentifyDensifiedCoachLine('act-04-08-01-unguided')!,
       // SoftPulse owns Enter + barrel — don’t gold-tip the tile.
       'act-04-08-01-checkpoint' =>
-        'Before you label — constant entry with merciless barrels.',
+        selectIdentifyDensifiedCoachLine('act-04-08-01-checkpoint')!,
       // SoftPulse owns Maniac — don’t gold-tip the tile.
       'act-04-08-02-guided' =>
         'Opens 60%, barrels light — a wide, relentless aggressor label fits.',
@@ -871,25 +871,25 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Light 3-bets, never gives up — wild pressure fits better than sticky calling.',
       // SoftPulse owns Three types — don’t gold-tip the tile.
       'act-04-08-02-checkpoint' =>
-        'Legal mix now — Station, Nit, and Maniac are on the board.',
+        selectIdentifyDensifiedCoachLine('act-04-08-02-checkpoint')!,
       // SoftPulse owns Wide bets — don’t gold-tip the tile.
       'act-04-08-03-checkpoint' =>
-        'Maniac barrels — their betting range is simply too wide.',
+        selectIdentifyDensifiedCoachLine('act-04-08-03-checkpoint')!,
       // SoftPulse owns One note — don’t gold-tip the tile.
       'act-04-09-01-guided' =>
-        'One huge bluff — a single sample stays low certainty.',
+        selectIdentifyDensifiedCoachLine('act-04-09-01-guided')!,
       // SoftPulse owns Rise — don’t gold-tip the tile.
       'act-04-09-01-scaffolded' =>
-        '30 sticky hands — confidence rises, but stays revisable.',
+        selectIdentifyDensifiedCoachLine('act-04-09-01-scaffolded')!,
       // SoftPulse owns Update — don’t gold-tip the tile.
       'act-04-09-01-unguided' =>
         'Station starts folding — update or retire the old model.',
       // SoftPulse owns Limits — don’t gold-tip the tile.
       'act-04-09-01-checkpoint' =>
-        'Beside a type label — show sample and confidence limits.',
+        selectIdentifyDensifiedCoachLine('act-04-09-01-checkpoint')!,
       // SoftPulse owns Strong narrow — don’t gold-tip the tile.
       'act-04-10-02-jump-range' =>
-        'UTG open — early seats usually play tighter.',
+        selectIdentifyDensifiedCoachLine('act-04-10-02-jump-range')!,
       // SoftPulse owns Value more — don’t gold-tip the tile.
       'act-04-10-02-jump-station' => 'Sticky three streets — pick the exploit.',
       // SoftPulse owns Respect — don’t gold-tip the tile.
@@ -898,98 +898,98 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-04-10-02-jump-maniac' =>
         'Barrels forever, top pair — pick the line.',
       // SoftPulse owns Nut FD — don’t gold-tip the tile.
-      'act-05-01-01-guided' => 'Four-way flop — prefer nutted equity over air.',
+      'act-05-01-01-guided' => selectIdentifyDensifiedCoachLine('act-05-01-01-guided')!,
       // SoftPulse owns Nut potential — don’t gold-tip the tile.
       'act-05-01-01-checkpoint' =>
-        'Multiway construction — nutted equity over domination traps.',
+        selectIdentifyDensifiedCoachLine('act-05-01-01-checkpoint')!,
       // SoftPulse owns Implied — don’t gold-tip the tile.
-      'act-05-02-01-guided' => '200bb with 55 — depth pays if they stack sets.',
+      'act-05-02-01-guided' => selectIdentifyDensifiedCoachLine('act-05-02-01-guided')!,
       // SoftPulse owns Map plans — don’t gold-tip the tile.
       'act-05-02-01-unguided' =>
-        'SPR ~12 — map turn and river before you commit.',
+        selectIdentifyDensifiedCoachLine('act-05-02-01-unguided')!,
       // SoftPulse owns Position / implied — don’t gold-tip the tile.
       'act-05-02-01-checkpoint' =>
-        'Deep cash — position, implied odds, disciplined folds.',
+        selectIdentifyDensifiedCoachLine('act-05-02-01-checkpoint')!,
       // SoftPulse owns Depth + pay — don’t gold-tip the tile.
       'act-05-03-01-checkpoint' =>
-        'Future money grows when stacks behind meet sticky callers.',
+        selectIdentifyDensifiedCoachLine('act-05-03-01-checkpoint')!,
       // SoftPulse owns The line — don’t gold-tip the tile.
       'act-05-04-01-checkpoint' =>
-        'Same cards, different seats — let the read drive the plan.',
+        selectIdentifyDensifiedCoachLine('act-05-04-01-checkpoint')!,
       // SoftPulse owns Value-heavy — don’t gold-tip the tile.
-      'act-05-05-01-guided' => 'Nit check-raises — respect their narrow heat.',
+      'act-05-05-01-guided' => selectIdentifyDensifiedCoachLine('act-05-05-01-guided')!,
       // SoftPulse owns Polarized — don’t gold-tip the tile.
       'act-05-05-01-unguided' =>
-        'Large BB donk on dry ace — usually extremes, not medium.',
+        selectIdentifyDensifiedCoachLine('act-05-05-01-unguided')!,
       // SoftPulse owns After weakness — don’t gold-tip the tile.
       'act-05-05-01-checkpoint' =>
-        'Delayed c-bet shines after they show flop weakness.',
+        selectIdentifyDensifiedCoachLine('act-05-05-01-checkpoint')!,
       // SoftPulse owns Fewer nuts / Capped — don’t gold-tip the tile.
       'act-05-06-01-guided' =>
-        'Bet flop, check turn — a check-back usually means the story got weaker.',
+        selectIdentifyDensifiedCoachLine('act-05-06-01-guided')!,
       // SoftPulse owns Rebuild — don’t gold-tip the tile.
       'act-05-06-01-unguided' =>
-        'Best habit — rebuild the story after every action.',
+        selectIdentifyDensifiedCoachLine('act-05-06-01-unguided')!,
       // SoftPulse owns Uncapped — don’t gold-tip the tile.
       'act-05-06-01-checkpoint' =>
-        'XR then bet then shove — pressure stays uncapped.',
+        selectIdentifyDensifiedCoachLine('act-05-06-01-checkpoint')!,
       // SoftPulse owns Soft evidence — don’t gold-tip the tile.
       'act-05-07-01-guided' =>
-        'Instant shove — a clue, not proof of nuts or air.',
+        selectIdentifyDensifiedCoachLine('act-05-07-01-guided')!,
       // SoftPulse owns Weaker / blocking — don’t gold-tip the tile.
       'act-05-07-01-scaffolded' =>
-        'Tiny flop bet into a huge pot — often weak or blocking.',
+        selectIdentifyDensifiedCoachLine('act-05-07-01-scaffolded')!,
       // SoftPulse owns Reject — don’t gold-tip the tile.
       'act-05-07-01-unguided' =>
-        'Look-left magic tell — don’t treat folklore as proof.',
+        selectIdentifyDensifiedCoachLine('act-05-07-01-unguided')!,
       // SoftPulse owns Tiny update — don’t gold-tip the tile.
       'act-05-07-01-checkpoint' =>
-        'Live timing — nudge confidence beside stronger reads.',
+        selectIdentifyDensifiedCoachLine('act-05-07-01-checkpoint')!,
       // SoftPulse owns Stuck / tilted — don’t gold-tip the tile.
       'act-05-08-01-guided' =>
-        'Lost two buy-ins — widen value and choose spots carefully.',
+        selectIdentifyDensifiedCoachLine('act-05-08-01-guided')!,
       // SoftPulse owns Gear change — don’t gold-tip the tile.
       'act-05-08-01-scaffolded' =>
-        'Flats junk and donks rivers — resample before trusting the old label.',
+        selectIdentifyDensifiedCoachLine('act-05-08-01-scaffolded')!,
       // SoftPulse owns Fresh samples — don’t gold-tip the tile.
       'act-05-08-01-checkpoint' =>
-        'Dynamic reads stay temporary — keep sampling the seat.',
+        selectIdentifyDensifiedCoachLine('act-05-08-01-checkpoint')!,
       // SoftPulse owns Stop / move down — don’t gold-tip the tile.
       'act-05-09-01-guided' =>
-        'Hit a planned stop-loss — leave or move down, don’t chase.',
+        selectIdentifyDensifiedCoachLine('act-05-09-01-guided')!,
       // SoftPulse owns Decline — don’t gold-tip the tile.
       'act-05-09-01-scaffolded' =>
-        '2/5 opens with a 1/2 bankroll — stay inside the plan.',
+        selectIdentifyDensifiedCoachLine('act-05-09-01-scaffolded')!,
       // SoftPulse owns Cash out — don’t gold-tip the tile.
       'act-05-09-01-unguided' =>
-        'Tired and up small while the table gets wild — bank the win.',
+        selectIdentifyDensifiedCoachLine('act-05-09-01-unguided')!,
       // SoftPulse owns Your edge — don’t gold-tip the tile.
       'act-05-09-01-checkpoint' =>
-        'Session discipline is part of how you keep an edge.',
-      'act-05-09-02-cp-multi' => 'Four-way pot — pick the multiway priority.',
-      'act-05-09-02-cp-tell' => 'Instant shove — weigh what timing proves.',
-      'act-05-09-02-cp-stop' => 'Hit stop-loss — honor the session guardrail.',
+        selectIdentifyDensifiedCoachLine('act-05-09-01-checkpoint')!,
+      'act-05-09-02-cp-multi' => selectIdentifyDensifiedCoachLine('act-05-09-02-cp-multi')!,
+      'act-05-09-02-cp-tell' => selectIdentifyDensifiedCoachLine('act-05-09-02-cp-tell')!,
+      'act-05-09-02-cp-stop' => selectIdentifyDensifiedCoachLine('act-05-09-02-cp-stop')!,
       // SoftPulse owns Preflop raiser — don’t gold-tip the tile.
       'act-06-01-01-guided' =>
-        'A-high dry flop — the preflop raiser’s range usually leads.',
+        selectIdentifyDensifiedCoachLine('act-06-01-01-guided')!,
       // SoftPulse owns Wide caller — don’t gold-tip the tile.
       'act-06-01-01-scaffolded' =>
-        'Paired board — the wider defender often owns more of the nuts.',
+        selectIdentifyDensifiedCoachLine('act-06-01-01-scaffolded')!,
       // SoftPulse owns Apply pressure — don’t gold-tip the tile.
       'act-06-01-01-checkpoint' =>
-        'When you own more value — apply selective pressure.',
+        selectIdentifyDensifiedCoachLine('act-06-01-01-checkpoint')!,
       // SoftPulse owns In position — don’t gold-tip the tile.
       'act-06-02-01-guided' =>
-        'Same draw — equity realizes better when you act last.',
+        selectIdentifyDensifiedCoachLine('act-06-02-01-guided')!,
       // SoftPulse owns Discount / fold — don’t gold-tip the tile.
       'act-06-02-01-scaffolded' =>
-        'Weak showdown value OOP vs dual barrels — tighten continues.',
+        selectIdentifyDensifiedCoachLine('act-06-02-01-scaffolded')!,
       // SoftPulse owns Fold equity — don’t gold-tip the tile.
       'act-06-02-01-unguided' =>
-        'Nut draw check-raise — pressure folds plus your outs.',
+        selectIdentifyDensifiedCoachLine('act-06-02-01-unguided')!,
       // SoftPulse owns Position + initiative — don’t gold-tip the tile.
       'act-06-02-01-checkpoint' =>
-        'Equity realization climbs with position and initiative.',
+        selectIdentifyDensifiedCoachLine('act-06-02-01-checkpoint')!,
       // Recognize capped densified asks: selectIdentifyDensifiedCoachLine
       // (LPT-636).
       'act-06-03-01-guided' =>
@@ -1262,9 +1262,9 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns LAG trap — don’t gold-tip the tile.
       'act-07-12-01-lag' => 'Wide pressure — pick the label + line.',
       // SoftPulse owns Low certainty — don’t gold-tip the tile.
-      'act-07-12-01-uncertain' => 'Three mixed samples — pick the confidence.',
+      'act-07-12-01-uncertain' => selectIdentifyDensifiedCoachLine('act-07-12-01-uncertain')!,
       // SoftPulse owns Retire model — don’t gold-tip the tile.
-      'act-07-12-01-retire' => 'Label flipped — pick the model update.',
+      'act-07-12-01-retire' => selectIdentifyDensifiedCoachLine('act-07-12-01-retire')!,
       _ => 'Tap the answer on the table.',
     };
   }
@@ -2344,22 +2344,22 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-02-07-02-jump-family' =>
       'Look at your holes — pick the family they belong to.',
     'act-02-02-01-guided-pair' =>
-      'Matching ranks in the hole — both cards share a rank.',
+      selectIdentifyDensifiedCoachLine('act-02-02-01-guided-pair')!,
     'act-02-02-01-scaffolded-broadway' =>
-      'Both cards ten-or-better — high-card broadway strength shows up.',
+      selectIdentifyDensifiedCoachLine('act-02-02-01-scaffolded-broadway')!,
     'act-02-02-01-unguided-sc' =>
-      'Look at your holes — pick the family that fits.',
+      selectIdentifyDensifiedCoachLine('act-02-02-01-unguided-sc')!,
     // SoftPulse-quiet: pick the family — don't tip trash as the answer.
     'act-02-02-01-checkpoint-trash' =>
-      'Early seat with junk — pick the family that fits.',
+      selectIdentifyDensifiedCoachLine('act-02-02-01-checkpoint-trash')!,
     'act-03-02-01-guided' =>
-      'Board pairs your king — your hole king connects for immediate value.',
+      selectIdentifyDensifiedCoachLine('act-03-02-01-guided')!,
     'act-03-02-01-scaffolded' =>
-      'Two hearts on board with the nut heart — you need runout more than showdown now.',
+      selectIdentifyDensifiedCoachLine('act-03-02-01-scaffolded')!,
     'act-03-02-01-unguided' =>
-      'No pair, almost no draw multiway — equity is thin here.',
+      selectIdentifyDensifiedCoachLine('act-03-02-01-unguided')!,
     'act-03-02-01-checkpoint' =>
-      'Eight or queen completes — your hand needs the right runout.',
+      selectIdentifyDensifiedCoachLine('act-03-02-01-checkpoint')!,
     // Count outs densified asks: selectIdentifyDensifiedCoachLine (LPT-279).
     'act-03-03-01-guided' =>
       selectIdentifyDensifiedCoachLine('act-03-03-01-guided')!,
@@ -2369,10 +2369,10 @@ class _HandCategoryTapActivity extends StatelessWidget {
       selectIdentifyDensifiedCoachLine('act-03-03-01-checkpoint')!,
     // SoftPulse owns Brick — don’t gold-tip the tile.
     'act-03-05-01-guided' =>
-      'Dry ace flop, blank three — rarely helps a missed caller.',
+      selectIdentifyDensifiedCoachLine('act-03-05-01-guided')!,
     // SoftPulse owns give-up — don’t gold-tip the tile.
     'act-03-05-01-checkpoint' =>
-      'Air bluff meets a draw-completing queen — weigh shutting down.',
+      selectIdentifyDensifiedCoachLine('act-03-05-01-checkpoint')!,
     // SoftPulse owns the river job — don’t gold-tip the tile.
     // Close the river densified ask: selectIdentifyDensifiedCoachLine (LPT-343).
     'act-03-06-01-checkpoint' =>
@@ -2424,7 +2424,7 @@ class _HandCategoryTapActivity extends StatelessWidget {
     'act-04-05-01-guided' =>
       selectIdentifyDensifiedCoachLine('act-04-05-01-guided')!,
     // SoftPulse owns SPR 4 — don’t gold-tip the tile.
-    'act-04-10-02-jump-spr' => 'Stack 60 into pot 15 — stack ÷ pot.',
+    'act-04-10-02-jump-spr' => selectIdentifyDensifiedCoachLine('act-04-10-02-jump-spr')!,
     // SoftPulse owns High part. — don’t gold-tip the tile.
     // Observe sticky densified asks: selectIdentifyDensifiedCoachLine (LPT-416).
     'act-04-06-01-guided' =>
