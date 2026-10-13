@@ -2451,7 +2451,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-01-01-explain", 1,
                 "Enter with a reason. Flop confirms or cancels.",
-                {objectives: ["State a preflop thesis"]}),
+                {
+                  objectives: ["State a preflop thesis"],
+                  // LPT-308
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "REASON", kind: "soft_pulse"},
+                      {press: 2, target: "CONFIRM", kind: "soft_pulse"},
+                      {press: 3, target: "CANCEL", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-07-01-01-guided", order: 2, stage: "guided",
                 prompt: "You 3-bet AQo for value. Flop 872tt. Update?",
@@ -2463,6 +2474,8 @@ export function buildSectionSeven() {
                   choice("jam", "Still jam every street", "clear_mistake",
                     "Ego.", {betterChoiceId: "dead"})
                 ],
+                // LPT-308
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "dead", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-01-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2475,6 +2488,8 @@ export function buildSectionSeven() {
                   choice("fold", "Auto-fold top two", "clear_mistake",
                     "No.", {betterChoiceId: "value"})
                 ],
+                // LPT-308
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "value", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-01-01-unguided", order: 4, stage: "scaffolded",
@@ -2487,6 +2502,8 @@ export function buildSectionSeven() {
                   choice("vibes", "Wing it every street", "clear_mistake",
                     "No plan.", {betterChoiceId: "thesis"})
                 ],
+                // LPT-308
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "thesis", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-01-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2499,6 +2516,8 @@ export function buildSectionSeven() {
                   choice("force", "Force the old line", "clear_mistake",
                     "Leak.", {betterChoiceId: "abandon"})
                 ],
+                // LPT-308
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "abandon", kind: "none"}]},
               }),
             ],
           }),

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "f46f2dc49007ed7c699b52feed14e63d0d5c8b1852da96064668f96133454f1f",
+  "contentChecksum": "228148c28c27fb2320cf3b147f84c5a0139401963b1764e1d6177ae3cd0cdd45",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -20021,7 +20021,29 @@
                   ],
                   "objectives": [
                     "State a preflop thesis"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "REASON",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CONFIRM",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CANCEL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-01-01-guided",
@@ -20050,7 +20072,19 @@
                       "label": "Still jam every street",
                       "accessibilityText": "Still jam every street"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "dead",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-01-01-scaffolded",
@@ -20079,7 +20113,19 @@
                       "label": "Auto-fold top two",
                       "accessibilityText": "Auto-fold top two"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "value",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-01-01-unguided",
@@ -20108,7 +20154,19 @@
                       "label": "Wing it every street",
                       "accessibilityText": "Wing it every street"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "thesis",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-01-01-checkpoint",
@@ -20138,7 +20196,19 @@
                       "accessibilityText": "Force the old line"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "abandon",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
