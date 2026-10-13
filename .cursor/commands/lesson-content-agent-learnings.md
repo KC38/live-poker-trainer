@@ -90,6 +90,8 @@ Lesson-specific pattern notes (full history) live in
 - Prefer Done’ing per-lesson honesty tickets when tip already lands the
   fix mid-run; do not reopen Done teachSpecs from stale timer notes.
 
+- Prefer when rebuilding densify-tap **LPT-628**: after a sibling densify PR clears arms, recompute ABSENT priority from `selectIdentifyDensifiedCoachLine` + course renderers — do not keep stale fallthrough counts from the prior tip.
+
 ## Recent fold
 
 - 2026-10-13: Folded 211 pending bullets into
