@@ -160,6 +160,22 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Randomness for its own sake — pick when mix is allowed.',
     'act-06-08-01-checkpoint' =>
       'Best mix description — pick the course standard.',
+    // Navigate 3-bet densified asks (LPT-645) — same path as LPT-644.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-09-01-guided' =>
+      '100bb 4-bet pot · top pair — pick the depth mindset.',
+    'act-06-09-01-unguided' =>
+      'Light 4-bet for ego — pick the discipline.',
+    'act-06-09-01-checkpoint' =>
+      'Depth change in 3-bet pots — pick what shifts.',
+    // Difficult folds densified asks (LPT-646) — same path as LPT-645.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-10-01-scaffolded' =>
+      'KK loses to AA all-in — pick the review label.',
+    'act-06-10-01-unguided' =>
+      'Calling because you are "due" — pick the real reason.',
+    'act-06-10-01-checkpoint' =>
+      'Review after a big loss — pick the honest question.',
     _ => null,
   };
 }
