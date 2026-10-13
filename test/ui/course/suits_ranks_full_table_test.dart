@@ -19,7 +19,9 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
+import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
+import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 
 Widget _frame(
@@ -729,5 +731,195 @@ void main() {
       expect(values, values.toList()..sort());
     }
     expect(labels.length, greaterThan(1));
+  });
+
+  testWidgets(
+    'hole-hand seat keeps cyan GlowKind.selection under a graded result',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      addTearDown(() => debugLessonCardDealRandom = null);
+      debugLessonCardDealRandom = Random(3);
+
+      final activity = CourseActivity(
+        id: 'act-01-01-02-checkpoint-pair',
+        order: 5,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Tap the pocket pair.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap the pocket pair.',
+        choices: const [
+          CourseChoice(id: 'pocket-pair', label: 'Pocket pair'),
+          CourseChoice(id: 'suited-nine', label: 'Suited'),
+          CourseChoice(id: 'two-high', label: 'Offsuit'),
+        ],
+      );
+      final expected = dealHoleHandSeatPlan(
+        activity,
+        random: Random(3),
+      )!;
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(
+        _frame(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: false,
+          ),
+          activityController: controller,
+        ),
+      );
+      await tester.pump();
+
+      const seatNames = ['You', 'Sam', 'Jo'];
+      await tester.tap(find.text(seatNames[expected.correctSeatIndex]));
+      await tester.pump();
+      controller.finishSubmit(
+        SubmitCourseStepResult(
+          attemptId: 'a1',
+          activityId: activity.id,
+          grade: SoftGrade.recommended,
+          feedback: 'Matching ranks — that is a pocket pair.',
+          accepted: true,
+          lifeLost: false,
+          livesRemaining: 5,
+          xpAwarded: 10,
+          remediationRequired: false,
+          resume: CourseResumePointer(
+            attemptId: 'a1',
+            lessonId: 'lesson-01-01-02-suits-and-ranks',
+            activityId: activity.id,
+            activityIndex: 4,
+          ),
+          duplicate: false,
+        ),
+      );
+      await tester.pump();
+
+      final cyan = tester
+          .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+          .where((g) => g.active && g.kind == GlowKind.selection);
+      expect(cyan, isNotEmpty);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+
+  testWidgets(
+    'framed hero region keeps cyan under a graded result',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      final activity = CourseActivity(
+        id: 'act-01-01-01-guided-find-holes',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Tap your hole cards',
+        acceptedGrades: const [SoftGrade.recommended],
+        choices: const [
+          CourseChoice(id: 'choice-hero-holes', label: 'Ah Kd in front of you'),
+          CourseChoice(id: 'choice-board', label: 'The flop cards in the middle'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            theme: buildPokerTheme().copyWith(
+              splashFactory: NoSplash.splashFactory,
+              highlightColor: Colors.transparent,
+            ),
+            home: Scaffold(
+              body: TableFeaturesScope(
+                features: TableFeatures.forLessonId(
+                  'lesson-01-01-01-your-two-cards',
+                ),
+                child: LessonFrameScope(
+                  onLocalMiss: (_) {},
+                  activityController: controller,
+                  child: SizedBox(
+                    height: 520,
+                    child: SelectIdentifyActivity(
+                      activity: activity,
+                      controller: controller,
+                      showGuidance: true,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(
+        find.byKey(const ValueKey<String>('lesson-table-stage')),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('You'));
+      await tester.pump();
+      controller.finishSubmit(
+        SubmitCourseStepResult(
+          attemptId: 'a1',
+          activityId: activity.id,
+          grade: SoftGrade.recommended,
+          feedback: 'Those are yours.',
+          accepted: true,
+          lifeLost: false,
+          livesRemaining: 5,
+          xpAwarded: 10,
+          remediationRequired: false,
+          resume: CourseResumePointer(
+            attemptId: 'a1',
+            lessonId: 'lesson-01-01-01-your-two-cards',
+            activityId: activity.id,
+            activityIndex: 1,
+          ),
+          duplicate: false,
+        ),
+      );
+      await tester.pump();
+
+      final cyan = tester
+          .widgetList<GlowHighlight>(find.byType(GlowHighlight))
+          .where((g) => g.active && g.kind == GlowKind.selection);
+      expect(cyan, isNotEmpty);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  test('lessonTableStageSelectionForRegion maps hero/board/villain', () {
+    final hero = lessonTableStageSelectionForRegion(
+      region: LessonTableRegion.hero,
+      heroHoleCount: 2,
+    );
+    expect(hero.selectedSeatIndexes, {0});
+    expect(hero.selectedHeroIndexes, {0, 1});
+    expect(hero.selectedBoardIndexes, isEmpty);
+
+    final board = lessonTableStageSelectionForRegion(
+      region: LessonTableRegion.board,
+      boardLength: 5,
+    );
+    expect(board.selectedBoardIndexes, {0, 1, 2, 3, 4});
+    expect(board.selectedSeatIndexes, isEmpty);
+
+    final villain = lessonTableStageSelectionForRegion(
+      region: LessonTableRegion.villain,
+      seatIndex: 1,
+    );
+    expect(villain.selectedSeatIndexes, {1});
   });
 }

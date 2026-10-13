@@ -1473,37 +1473,51 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: LessonTableStage(
-                          heroCodes: scene.heroCodes,
-                          boardCodes: scene.boardCodes,
-                          villainCodes: scene.villainCodes,
-                          villainCount: 1,
-                          heroFaceUp: true,
-                          // Region ask: one gold seat SoftPulse (LPT-75), not
-                          // LessonTableCue.hero which rings both hole cards.
-                          cue: LessonTableCue.none,
-                          cueSeatIndex:
-                              widget.showGuidance ||
-                                      widget.controller.hintVisible
-                                  ? 0
-                                  : null,
-                          enabled: !locked,
-                          onHeroTap:
-                              locked
-                                  ? null
-                                  : () => _submitRegion(
-                                    const LessonTableTapTarget(
-                                      LessonTableRegion.hero,
-                                    ),
-                                  ),
-                          onVillainTap:
-                              locked
-                                  ? null
-                                  : (_) => _submitRegion(
-                                    const LessonTableTapTarget(
-                                      LessonTableRegion.villain,
-                                    ),
-                                  ),
+                        child: Builder(
+                          builder: (context) {
+                            final cyan = lessonTableStageSelectionForRegion(
+                              region: _selectedRegion,
+                              seatIndex: _selectedSeatIndex,
+                              boardLength: scene.boardCodes.length,
+                              heroHoleCount: scene.heroCodes.length,
+                            );
+                            return LessonTableStage(
+                              heroCodes: scene.heroCodes,
+                              boardCodes: scene.boardCodes,
+                              villainCodes: scene.villainCodes,
+                              villainCount: 1,
+                              heroFaceUp: true,
+                              // Region ask: one gold seat SoftPulse (LPT-75), not
+                              // LessonTableCue.hero which rings both hole cards.
+                              cue: LessonTableCue.none,
+                              cueSeatIndex:
+                                  widget.showGuidance ||
+                                          widget.controller.hintVisible
+                                      ? 0
+                                      : null,
+                              selectedSeatIndexes: cyan.selectedSeatIndexes,
+                              selectedHeroIndexes: cyan.selectedHeroIndexes,
+                              selectedBoardIndexes: cyan.selectedBoardIndexes,
+                              enabled: !locked,
+                              onHeroTap:
+                                  locked
+                                      ? null
+                                      : () => _submitRegion(
+                                        const LessonTableTapTarget(
+                                          LessonTableRegion.hero,
+                                        ),
+                                      ),
+                              onVillainTap:
+                                  locked
+                                      ? null
+                                      : (seat) => _submitRegion(
+                                        LessonTableTapTarget(
+                                          LessonTableRegion.villain,
+                                          seatIndex: seat,
+                                        ),
+                                      ),
+                            );
+                          },
                         ),
                       ),
                       if (!locked) ...[
@@ -1545,38 +1559,60 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               else if (LessonFrameScope.maybeOf(context) != null &&
                   widget.activity.id == 'act-01-02-02-unguided-board')
                 Expanded(
-                  child: LessonTableStage(
-                    heroCodes:
-                        scene.heroCodes.isEmpty
-                            ? const ['2h', '2d']
-                            : scene.heroCodes,
-                    boardCodes: scene.boardCodes,
-                    villainCount: scene.villainSeatCount < 1 ? 1 : scene.villainSeatCount,
-                    heroFaceUp: true,
-                    cue: LessonTableCue.board,
-                    enabled: !locked,
-                    onHeroTap:
-                        locked
-                            ? null
-                            : () => _submitRegion(
-                              const LessonTableTapTarget(LessonTableRegion.hero),
-                            ),
-                    onVillainTap:
-                        locked
-                            ? null
-                            : (_) => _submitRegion(
-                              const LessonTableTapTarget(
-                                LessonTableRegion.villain,
-                              ),
-                            ),
-                    onBoardTap:
-                        locked
-                            ? null
-                            : () => _submitRegion(
-                              const LessonTableTapTarget(
-                                LessonTableRegion.board,
-                              ),
-                            ),
+                  child: Builder(
+                    builder: (context) {
+                      final cyan = lessonTableStageSelectionForRegion(
+                        region: _selectedRegion,
+                        seatIndex: _selectedSeatIndex,
+                        boardLength: scene.boardCodes.length,
+                        heroHoleCount:
+                            scene.heroCodes.isEmpty
+                                ? 2
+                                : scene.heroCodes.length,
+                      );
+                      return LessonTableStage(
+                        heroCodes:
+                            scene.heroCodes.isEmpty
+                                ? const ['2h', '2d']
+                                : scene.heroCodes,
+                        boardCodes: scene.boardCodes,
+                        villainCount:
+                            scene.villainSeatCount < 1
+                                ? 1
+                                : scene.villainSeatCount,
+                        heroFaceUp: true,
+                        cue: LessonTableCue.board,
+                        selectedSeatIndexes: cyan.selectedSeatIndexes,
+                        selectedHeroIndexes: cyan.selectedHeroIndexes,
+                        selectedBoardIndexes: cyan.selectedBoardIndexes,
+                        enabled: !locked,
+                        onHeroTap:
+                            locked
+                                ? null
+                                : () => _submitRegion(
+                                  const LessonTableTapTarget(
+                                    LessonTableRegion.hero,
+                                  ),
+                                ),
+                        onVillainTap:
+                            locked
+                                ? null
+                                : (seat) => _submitRegion(
+                                  LessonTableTapTarget(
+                                    LessonTableRegion.villain,
+                                    seatIndex: seat,
+                                  ),
+                                ),
+                        onBoardTap:
+                            locked
+                                ? null
+                                : () => _submitRegion(
+                                  const LessonTableTapTarget(
+                                    LessonTableRegion.board,
+                                  ),
+                                ),
+                      );
+                    },
                   ),
                 )
               else if (LessonFrameScope.maybeOf(context) != null &&
@@ -2070,51 +2106,68 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               else if (LessonFrameScope.maybeOf(context) != null &&
                   widget.activity.id.startsWith('act-01-01-01-'))
                 Expanded(
-                  child: LessonTableStage(
-                    heroCodes:
-                        scene.heroCodes.isEmpty
-                            ? const ['Ah', 'Kd']
-                            : scene.heroCodes,
-                    boardCodes: scene.boardCodes,
-                    // Three-card flop teach steps are not five-card board
-                    // lessons — hide undelt turn/river outlines (LPT-66).
-                    features: TableFeaturesScope.of(
-                      context,
-                    ).copyWith(boardSlots: false),
-                    villainCount:
-                        scene.villainSeatCount < 3 ? 3 : scene.villainSeatCount,
-                    heroFaceUp: true,
-                    cue: _holeCardsFrameCue(
-                      activity: widget.activity,
-                      scene: scene,
-                      showGuidance: widget.showGuidance,
-                      hintVisible: widget.controller.hintVisible,
-                    ),
-                    enabled: !locked,
-                    onHeroTap:
-                        locked
-                            ? null
-                            : () => _submitRegion(
-                              const LessonTableTapTarget(
-                                LessonTableRegion.hero,
-                              ),
-                            ),
-                    onVillainTap:
-                        locked
-                            ? null
-                            : (_) => _submitRegion(
-                              const LessonTableTapTarget(
-                                LessonTableRegion.villain,
-                              ),
-                            ),
-                    onBoardTap:
-                        locked
-                            ? null
-                            : () => _submitRegion(
-                              const LessonTableTapTarget(
-                                LessonTableRegion.board,
-                              ),
-                            ),
+                  child: Builder(
+                    builder: (context) {
+                      final heroCodes =
+                          scene.heroCodes.isEmpty
+                              ? const ['Ah', 'Kd']
+                              : scene.heroCodes;
+                      final cyan = lessonTableStageSelectionForRegion(
+                        region: _selectedRegion,
+                        seatIndex: _selectedSeatIndex,
+                        boardLength: scene.boardCodes.length,
+                        heroHoleCount: heroCodes.length,
+                      );
+                      return LessonTableStage(
+                        heroCodes: heroCodes,
+                        boardCodes: scene.boardCodes,
+                        // Three-card flop teach steps are not five-card board
+                        // lessons — hide undelt turn/river outlines (LPT-66).
+                        features: TableFeaturesScope.of(
+                          context,
+                        ).copyWith(boardSlots: false),
+                        villainCount:
+                            scene.villainSeatCount < 3
+                                ? 3
+                                : scene.villainSeatCount,
+                        heroFaceUp: true,
+                        cue: _holeCardsFrameCue(
+                          activity: widget.activity,
+                          scene: scene,
+                          showGuidance: widget.showGuidance,
+                          hintVisible: widget.controller.hintVisible,
+                        ),
+                        selectedSeatIndexes: cyan.selectedSeatIndexes,
+                        selectedHeroIndexes: cyan.selectedHeroIndexes,
+                        selectedBoardIndexes: cyan.selectedBoardIndexes,
+                        enabled: !locked,
+                        onHeroTap:
+                            locked
+                                ? null
+                                : () => _submitRegion(
+                                  const LessonTableTapTarget(
+                                    LessonTableRegion.hero,
+                                  ),
+                                ),
+                        onVillainTap:
+                            locked
+                                ? null
+                                : (seat) => _submitRegion(
+                                  LessonTableTapTarget(
+                                    LessonTableRegion.villain,
+                                    seatIndex: seat,
+                                  ),
+                                ),
+                        onBoardTap:
+                            locked
+                                ? null
+                                : () => _submitRegion(
+                                  const LessonTableTapTarget(
+                                    LessonTableRegion.board,
+                                  ),
+                                ),
+                      );
+                    },
                   ),
                 )
               else
@@ -2636,6 +2689,7 @@ class _ShowdownTapActivity extends StatefulWidget {
 
 class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
   LessonTableRegion? _selectedRegion;
+  int? _selectedSeatIndex;
 
   String get _coachFallback {
     if (widget.activity.id == 'act-01-02-02-scaffolded-kicker') {
@@ -2666,6 +2720,7 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
       oldWidget.controller.removeListener(_onController);
       widget.controller.addListener(_onController);
       _selectedRegion = null;
+      _selectedSeatIndex = null;
     }
   }
 
@@ -2676,17 +2731,22 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
   }
 
   void _onController() {
-    if (widget.controller.draft.choiceId == null && _selectedRegion != null) {
-      setState(() => _selectedRegion = null);
+    if (widget.controller.draft.choiceId == null &&
+        (_selectedRegion != null || _selectedSeatIndex != null)) {
+      setState(() {
+        _selectedRegion = null;
+        _selectedSeatIndex = null;
+      });
     }
   }
 
-  void _chooseRegion(LessonTableRegion region) {
+  void _chooseRegion(LessonTableRegion region, {int? seatIndex}) {
     final scene = dealtLessonTableScene(widget.activity, generation: widget.controller.bindGeneration);
-    final target = LessonTableTapTarget(region);
+    final target = LessonTableTapTarget(region, seatIndex: seatIndex);
     final mapped = mapTableRegionToChoiceId(
       activityId: widget.activity.id,
       region: region,
+      seatIndex: seatIndex,
       choices: widget.activity.choices,
     );
     if (mapped == null) return;
@@ -2699,7 +2759,10 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
           villainCodes: scene?.villainCodes,
         ) ??
         mapped;
-    setState(() => _selectedRegion = region);
+    setState(() {
+      _selectedRegion = region;
+      _selectedSeatIndex = seatIndex;
+    });
     widget.controller.selectChoice(
       bankChoiceId,
       autoSubmit: true,
@@ -2750,27 +2813,43 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
             ],
             if (framedShowdown && scene != null)
               Expanded(
-                child: LessonTableStage(
-                  heroCodes: scene.heroCodes,
-                  boardCodes: scene.boardCodes,
-                  villainCodes: scene.villainCodes,
-                  villainCount: 1,
-                  heroFaceUp: true,
-                  // Kicker region ask: one seat SoftPulse (LPT-75).
-                  cue: LessonTableCue.none,
-                  cueSeatIndex:
-                      widget.showGuidance && selected == null && !locked
-                          ? 0
-                          : null,
-                  enabled: !locked,
-                  onHeroTap:
-                      locked
-                          ? null
-                          : () => _chooseRegion(LessonTableRegion.hero),
-                  onVillainTap:
-                      locked
-                          ? null
-                          : (_) => _chooseRegion(LessonTableRegion.villain),
+                child: Builder(
+                  builder: (context) {
+                    final cyan = lessonTableStageSelectionForRegion(
+                      region: _selectedRegion,
+                      seatIndex: _selectedSeatIndex,
+                      boardLength: scene.boardCodes.length,
+                      heroHoleCount: scene.heroCodes.length,
+                    );
+                    return LessonTableStage(
+                      heroCodes: scene.heroCodes,
+                      boardCodes: scene.boardCodes,
+                      villainCodes: scene.villainCodes,
+                      villainCount: 1,
+                      heroFaceUp: true,
+                      // Kicker region ask: one seat SoftPulse (LPT-75).
+                      cue: LessonTableCue.none,
+                      cueSeatIndex:
+                          widget.showGuidance && selected == null && !locked
+                              ? 0
+                              : null,
+                      selectedSeatIndexes: cyan.selectedSeatIndexes,
+                      selectedHeroIndexes: cyan.selectedHeroIndexes,
+                      selectedBoardIndexes: cyan.selectedBoardIndexes,
+                      enabled: !locked,
+                      onHeroTap:
+                          locked
+                              ? null
+                              : () => _chooseRegion(LessonTableRegion.hero),
+                      onVillainTap:
+                          locked
+                              ? null
+                              : (seat) => _chooseRegion(
+                                LessonTableRegion.villain,
+                                seatIndex: seat,
+                              ),
+                    );
+                  },
                 ),
               )
             else if (scene != null) ...[
@@ -3060,11 +3139,36 @@ class _RandomizedHoleHandTable extends StatefulWidget {
 
 class _RandomizedHoleHandTableState extends State<_RandomizedHoleHandTable> {
   late final HoleHandSeatDeal _deal;
+  int? _selectedSeatIndex;
 
   @override
   void initState() {
     super.initState();
     _deal = dealHoleHandSeatPlan(widget.activity)!;
+    widget.controller.addListener(_onController);
+  }
+
+  @override
+  void didUpdateWidget(covariant _RandomizedHoleHandTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_onController);
+      widget.controller.addListener(_onController);
+      _selectedSeatIndex = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_onController);
+    super.dispose();
+  }
+
+  void _onController() {
+    if (widget.controller.draft.choiceId == null &&
+        _selectedSeatIndex != null) {
+      setState(() => _selectedSeatIndex = null);
+    }
   }
 
   @override
@@ -3075,6 +3179,9 @@ class _RandomizedHoleHandTableState extends State<_RandomizedHoleHandTable> {
       correctSeatIndex: _deal.correctSeatIndex,
       enabled: widget.enabled,
       showGuidance: widget.showGuidance,
+      selectedSeatIndexes: {
+        ?_selectedSeatIndex,
+      },
       onSeatChoice: (seat) {
         final choiceId = _deal.choiceIdForSeat(seat) ??
             wrongSeatFallbackChoiceId(
@@ -3082,6 +3189,7 @@ class _RandomizedHoleHandTableState extends State<_RandomizedHoleHandTable> {
               choices: widget.activity.choices,
             );
         if (choiceId == null) return;
+        setState(() => _selectedSeatIndex = seat);
         widget.controller.selectChoice(choiceId, autoSubmit: true);
       },
     );

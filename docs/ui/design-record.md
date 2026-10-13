@@ -433,7 +433,7 @@ ring — never a second cue language for hints.
 | Ring | Meaning |
 | --- | --- |
 | Gold (`GlowKind.cue`) | SoftPulse: the coach's **one** current target. Breathes |
-| Cyan (`GlowKind.selection`) | What the learner tapped. Stays on under Nice! and the miss dock |
+| Cyan (`GlowKind.selection`) | What the learner tapped. Stays on under Nice! and the miss dock — every graded felt or tile answer, including `LessonHoleHandTable` seat taps and framed hero/villain/board region taps on `LessonTableStage` (same contract as `selectedSeatIndexes` / densified `LessonTableContext` selection; LPT-641) |
 
 SoftPulse rules:
 
@@ -674,6 +674,12 @@ when Nice! / Continue shrinks it. `LessonScreenLayout` rewrites MediaQuery
 height for every stage child, and `_feltShell` clamps again.
 
 ### Shipped
+
+Graded felt answers keep cyan under Nice! / Oops via
+`lessonTableStageSelectionForRegion` and `LessonHoleHandTable.selectedSeatIndexes`
+(`lesson_table_context.dart` / `lesson_table_stage.dart`, LPT-641). The next
+framed hero/villain/board or hole-hand seat ask copies those props — never a
+grade dock with a bare unmarked felt.
 
 Button and blinds (LPT-36) stacks the flop cards and the showdown card backs vertically in `_buildBlindsTiming` (`lib/ui/course/widgets/lesson_table_context.dart`). The next phase column copies that vertical stack.
 
