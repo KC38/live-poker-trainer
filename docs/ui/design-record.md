@@ -569,7 +569,7 @@ check (LPT-219), Build multiway ranges (LPT-222), Play 150–300bb stacks
 (LPT-248), Section 5 checkpoint (LPT-251), Choose polarized or merged
 betting (LPT-262), Use overbets and geometric pressure (LPT-265), Use
 blockers without solver theater (LPT-268), Navigate 3-bet and 4-bet pots by
-depth (LPT-280).
+depth (LPT-280), Make difficult folds; review coolers fairly (LPT-283).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1055,6 +1055,11 @@ scaffolded fixed AhQd/8c3h2s → `small`; unguided `none` → `avoid`;
 checkpoint `none` → `spr`; assessment steps use cue kind `none` (no
 pressHints).
 
+Make difficult folds; review coolers fairly `teachSpec` (LPT-283): explain
+SoftPulse advances HARD → COOLER → EGO; guided fixed Ah9d/As7c2hKd3c →
+`fold`; scaffolded `none` → `cooler`; unguided `none` → `ego`; checkpoint
+`none` → `ask`; assessment steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1473,7 +1478,7 @@ felt.
 | Defend enough without frequency theater | Defend, Bluff, Enough; densified frame asks (LPT-640); unguided SoftPulse one gold (LPT-499) | — |
 | Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500) | station, reason, and purpose checks |
 | Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501) | — |
-| Make difficult folds; review coolers fairly | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502) | cooler, ego, and review checks |
+| Make difficult folds; review coolers fairly | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502) | — |
 | Observe selective aggression | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494) | entry quizzes |
 | Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491) | label quizzes |
 | Adjust versus TAG | Credit, Tighter, No light | respect check |

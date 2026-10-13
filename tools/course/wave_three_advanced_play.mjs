@@ -1661,7 +1661,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-10-01-explain", 1,
                 "Hard folds save buy-ins. Coolers happen; ego call-downs are mistakes.",
-                {objectives: ["Fold dominated one-pair in heat"]}),
+                {
+                  objectives: ["Fold dominated one-pair in heat"],
+                  // LPT-283
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "HARD", kind: "soft_pulse"},
+                      {press: 2, target: "COOLER", kind: "soft_pulse"},
+                      {press: 3, target: "EGO", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-06-10-01-guided", order: 2, stage: "guided",
                 prompt: "Top pair weak kicker faces triple barrels from a solid unknown. Action?",
@@ -1675,6 +1686,14 @@ export function buildSectionSix() {
                   choice("raise", "Hero raise", "clear_mistake",
                     "Ego.", {action: "RAISE", amountBb: 40, betterChoiceId: "fold"})
                 ],
+                // LPT-283
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "9d"], board: ["As", "7c", "2h", "Kd", "3c"]},
+                  },
+                  cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-10-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1687,6 +1706,8 @@ export function buildSectionSix() {
                   choice("mistake", "Fold KK", "clear_mistake",
                     "Wrong.", {betterChoiceId: "cooler"})
                 ],
+                // LPT-283
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cooler", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-10-01-unguided", order: 4, stage: "scaffolded",
@@ -1699,6 +1720,8 @@ export function buildSectionSix() {
                   choice("ok", "Sound play", "clear_mistake",
                     "No.", {betterChoiceId: "ego"})
                 ],
+                // LPT-283
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "ego", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-10-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1711,6 +1734,8 @@ export function buildSectionSix() {
                   choice("rtilt", "Tilt harder", "clear_mistake",
                     "No.", {betterChoiceId: "ask"})
                 ],
+                // LPT-283
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "ask", kind: "none"}]},
               }),
             ],
           }),
