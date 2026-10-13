@@ -1015,16 +1015,17 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-06-05-01-unguided')!,
       'act-06-05-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-05-01-checkpoint')!,
-      // SoftPulse owns Ace blocker — don’t gold-tip the tile.
+      // Use blockers densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-639). SoftPulse owns Ace blocker / Unblock bluffs / No fake EV —
+      // don’t gold-tip the tile. Unguided: name the role; don’t tip Tweak.
       'act-06-06-01-guided' =>
-        'Flush-board river bluff — pick the better blocker.',
-      // SoftPulse owns Unblock bluffs — don’t gold-tip the tile.
+        selectIdentifyDensifiedCoachLine('act-06-06-01-guided')!,
       'act-06-06-01-scaffolded' =>
-        'Bluff-catch flush bomb — pick what you leave live.',
-      // Unguided: name the role; don’t tip Tweak evidence.
-      'act-06-06-01-unguided' => 'Blockers replace — pick how far they go.',
-      // SoftPulse owns No fake EV — don’t gold-tip the tile.
-      'act-06-06-01-checkpoint' => 'Solver EV quotes — pick the course stance.',
+        selectIdentifyDensifiedCoachLine('act-06-06-01-scaffolded')!,
+      'act-06-06-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-06-06-01-unguided')!,
+      'act-06-06-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-06-06-01-checkpoint')!,
       // SoftPulse owns Strong catchers — don’t gold-tip the tile.
       'act-06-07-01-guided' => 'Facing a river bet — pick quality continues.',
       // Unguided: name the stance; don’t tip Intuition.

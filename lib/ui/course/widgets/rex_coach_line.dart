@@ -134,6 +134,16 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Random 3x pot medium — pick the disciplined line.',
     'act-06-05-01-checkpoint' =>
       'Geometric sizing helps — pick what it links.',
+    // Use blockers densified asks (LPT-639) — same path as LPT-638.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-06-01-guided' =>
+      'Flush-board river bluff — pick the better blocker.',
+    'act-06-06-01-scaffolded' =>
+      'Bluff-catch flush bomb — pick what you leave live.',
+    'act-06-06-01-unguided' =>
+      'Blockers replace — pick how far they go.',
+    'act-06-06-01-checkpoint' =>
+      'Solver EV quotes — pick the course stance.',
     _ => null,
   };
 }
