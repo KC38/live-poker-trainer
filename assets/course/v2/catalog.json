@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "455048f225fbbc2089d718860174fc78209c9a952a9d28e560d0af3076bcda43",
+  "contentChecksum": "70057efc0ebec59ce61938e151cadd3718d4ccadb952706ff50c3827dfcae091",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -17825,7 +17825,29 @@
                   ],
                   "objectives": [
                     "Fold dominated one-pair in heat"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "HARD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "COOLER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "EGO",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-10-01-guided",
@@ -17862,7 +17884,32 @@
                       "action": "RAISE",
                       "amountBb": 40
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "9d"
+                        ],
+                        "board": [
+                          "As",
+                          "7c",
+                          "2h",
+                          "Kd",
+                          "3c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-10-01-scaffolded",
@@ -17891,7 +17938,19 @@
                       "label": "Fold KK",
                       "accessibilityText": "Fold KK"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cooler",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-10-01-unguided",
@@ -17920,7 +17979,19 @@
                       "label": "Sound play",
                       "accessibilityText": "Sound play"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ego",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-10-01-checkpoint",
@@ -17950,7 +18021,19 @@
                       "accessibilityText": "Tilt harder"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ask",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
