@@ -1250,3 +1250,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept still **LPT-310** needs-human (thesis / flop-update / abandon under one unlock) — tip-commented on `2a23197a`. Tip-commented Capstone **LPT-348** + Done-ack LPT-308/445/656/667/626/624/625/627/628/635/216 (prior tip SHA missing on new tip).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-02-01-flop-to-turn-map` / Low curriculum.
 - act-07-01-01-*: structural clean on tip — curriculum split only via LPT-310; teachSpec/densify companions LPT-308/656 Done.
+
+## Fold 2026-10-14d (ec75e4ae discovery flop-to-turn-map)
+
+- Tip `ec75e4ae` (#2163 after #2162). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348** (already HAS tip — no re-spam).
+- Discovery oldest-unfresh `lesson-07-02-01-flop-to-turn-map`: teachSpec on all five; explain SoftPulse BARREL→GIVE-UP→MAP + `explainGrading`; guided/scaffolded/unguided/checkpoint `deal.mode` `none` outcome tiles (cues `ok`/`give`/`avoid`/`list`); scaffolded/unguided one-per-press; densify PRESENT. Structural clean — older “fixed poker_action_sizing” memory STALE for this lesson.
+- Curriculum multi-concept still **LPT-314** needs-human (tip-commented on `ec75e4ae`). Tip-commented Done parents missing the tip SHA.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-03-01-river-composition` / Low curriculum.
+- act-07-02-01-*: structural clean on tip — curriculum split only via LPT-314.

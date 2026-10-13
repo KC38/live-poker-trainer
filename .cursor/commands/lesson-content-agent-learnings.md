@@ -147,6 +147,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14d: Tip `ec75e4ae` (#2163). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Discovery `lesson-07-02-01-flop-to-turn-map` structural clean (outcome tiles `deal.mode` `none`; one-per-press OK; densify PRESENT); tip-commented curriculum **LPT-314**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; sole open Medium **LPT-348**. next: LPT-348 OR `lesson-07-03-01-river-composition` / Low curriculum.
+
 - 2026-10-14c: Tip `2a23197a` (#2162). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Discovery `lesson-07-01-01-preflop-to-flop` structural clean (explain REASON→CONFIRM→CANCEL + `explainGrading`; interactive `deal.mode` `none` cues `dead`/`value`/`thesis`/`abandon`; one-per-press OK; checkpoint hintless; densify PRESENT). Tip-commented curriculum **LPT-310** + Capstone **LPT-348** + Done-ack parents/siblings. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-07-02-01-flop-to-turn-map` / Low curriculum.
 
 - 2026-10-14b: Tip-stable `216437dc` (#2160). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Discovery `lesson-06-13-02-section-six-checkpoint` structural clean (all five `assessmentRole` checkpoint + teachSpec `deal.mode` `none` cues `ra`/`cap`/`polar`/`tag`/`lag` kind `none`; densify arms PRESENT; hintless; no needs-human split). Done-ack **LPT-307**/444. Sole open Medium **LPT-348** (already HAS tip). Rescued unfolder draft folds meet-lag + mix-five onto tip. next: LPT-348 OR `lesson-07-01-01-preflop-to-flop` / Low curriculum.
