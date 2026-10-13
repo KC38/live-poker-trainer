@@ -803,9 +803,9 @@ class CourseCatalog {
         final key = entry.key.toString();
         final value = entry.value;
         if (value is List) {
-          lessonSplitMap[key] = [
+          lessonSplitMap[key] = List<String>.unmodifiable([
             for (final item in value) item.toString(),
-          ];
+          ]);
         }
       }
     }
@@ -817,11 +817,7 @@ class CourseCatalog {
       contentChecksum: json['contentChecksum'] as String,
       playerTypes: List.unmodifiable(playerTypes),
       sections: List.unmodifiable(sections),
-      lessonSplitMap: Map.unmodifiable(
-        lessonSplitMap.map(
-          (key, value) => MapEntry(key, List.unmodifiable(value)),
-        ),
-      ),
+      lessonSplitMap: Map<String, List<String>>.unmodifiable(lessonSplitMap),
     );
   }
 
