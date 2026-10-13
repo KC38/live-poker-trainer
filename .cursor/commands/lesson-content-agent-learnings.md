@@ -131,6 +131,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13cs: Tip-stable `a3dc6374` (#2109). Counts flat 151/99/0/12/nice-66/map-24 densify-tap **17** / helper **212**. Parents+Mediums+LPT-666 already **HAS** tip SHA — no rebuild. Prior coverage over-claimed Done High tip-comments — `jira.py get` NEED on LPT-242/312/315/334/252/255/258/271/275/295/301/414/348/558; tip-commented those same tick. **LPT-666** ADVANTAGE⊃TAG still fails course-contract; **LPT-370** cues null; **LPT-588** Scene flop-only; **LPT-348** Capstone 4-bet pressHints still missing (keep off LPT-626).
+
 - 2026-10-13cr: Tip `f9c109a1` (#2107 learnings + #2108 LPT-414). Counts flat 151/99/0/12/nice-66/map-24 densify-tap **17** / helper **212**. Done-ack **LPT-414** (Air feedback honest five-high / no gutshot). **LPT-666** ADVANTAGE⊃TAG still fails course-contract. Medium LPT-370/588 still valid. Meet Nit LPT-624/626 + densify LPT-628.
 
 - 2026-10-13cq: Tip `9a7bfc87` (#2106 learnings after #2105). Counts flat vs `03e193e8`: 151/99/0/12/nice-66/map-24 densify-tap **17** / helper **212**. Prior coverage omitted Medium LPT-370/588 + Done LPT-558 — tip-commented on `03e193e8` then again on `9a7bfc87`. Filed **LPT-666** (ADVANTAGE⊃TAG course-contract). Parents tip-comment only. Meet Nit LPT-624/626 + densify LPT-628; honesty LPT-414 still Gutshot-ish (cleared next tip by #2108).
