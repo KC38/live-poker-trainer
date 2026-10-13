@@ -217,6 +217,9 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-06-12-03-unguided' =>
       'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
     'act-06-12-03-checkpoint' => 'LAG exploit cites — pick the cite.',
+    // Adjust versus TAG densified asks (LPT-652) — same path as LPT-651.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-11-03-checkpoint' => 'Versus TAG — pick the cite.',
     _ => null,
   };
 }

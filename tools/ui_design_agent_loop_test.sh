@@ -1396,6 +1396,25 @@ grep -q 'coverage:closed ticket:LPT-644' <<<"$status_out" \
   || fail "status should still show last run health: $status_out"
 echo "status structured preview skip ok"
 
+# Active run (PID_FILE alive for latest stamp) must not dump mid-flight NDJSON.
+stamp_active="20261013-154347"
+active_log="$LOG_DIR/run-$stamp_active.log"
+printf '%s\n' \
+  'ClosingL PT-652, then filing{"t":1,"type":"assistant"}' \
+  'the Soft Pulse ticket{"t":1,"type":"assistant"}' \
+  >"$active_log"
+echo "$$" >"$PID_FILE"
+# Newest log is the active one; no structured health for this stamp yet.
+status_active="$(UI_AGENT_LOOP_SOURCE_ONLY= bash "$LOOP" status 2>&1 || true)"
+grep -q "latest log: $active_log" <<<"$status_active" \
+  || fail "status should name active log: $status_active"
+grep -q 'ClosingL PT-652' <<<"$status_active" \
+  && fail "status must not preview mid-flight crumbs while run active: $status_active"
+grep -q 'Soft Pulse ticket' <<<"$status_active" \
+  && fail "status must not preview mid-flight crumbs while run active: $status_active"
+rm -f "$PID_FILE"
+echo "status active-run preview skip ok"
+
 
 # ensure rate-limits "already running" spam (LaunchAgent StartInterval).
 grep -q 'ensure-already-running.stamp' "$LOOP" || fail "ensure must rate-limit already-running logs"

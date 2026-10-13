@@ -590,3 +590,55 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Rebuilt catalog densify-tap **LPT-628** helper **69→71** / fallthrough **131→129**; tip-commented LPT-624/625/626/627/635 (JSON flat) + LPT-651 arms-PRESENT ack (leave Done to ui-agent Validated-on-origin/main) + Capstone/frontier/High/honesty/fingerprint unchecked (LPT-345/242/312/315/252…352/401…417/348/301). Relates LPT-651↔LPT-628.
 - Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-345 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(90)/635/624(52)/625(24).
+
+## Fold 2026-10-13 tip 99f9889b (#2022 LPT-345 Capstone limped)
+
+- Started tip-stable `cff31614` (#2020 learnings after #2019 LPT-651) with catalog already synced — tip-commented parents + frontier LPT-345/242/312/315 + densify≠teachSpec LPT-301. Mid-run tip advanced to `99f9889b` via #2022 LPT-345 Capstone limped teachSpec.
+- `scan_content_gaps --counts` on tip `99f9889b`: pressHints **151**, deal-variants **91**, teachSpec **56**, explain-teachSpec **25**, nice-ladder **53**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **71**.
+- Verified Capstone limped teachSpec PRESENT: `act-07-10-04-explain` (`deal.mode` `none` + SoftPulse NUTS→VALUE→THIN; no `explainGrading`); `act-07-10-04-hand` (`deal.mode` `fixed` Ah/Kh · Kd/9c/4h/2s/8d + cues bet/barrel/value; no `deal.variants`). SoftPulse-quiet hand not on pressHints scanner checklist (still **151**).
+- Rebuilt **LPT-624** Nice! **52→53**; rebuilt **LPT-627** deal-variants **90→91**; tip-commented LPT-626/625/628/635 (pressHints/map/densify flat; explain-teachSpec drop — keep 12 S1–S2); Done-ack **LPT-345**; tip-commented next Capstone **LPT-347** still both MISSING + frontier LPT-242/312/315.
+- Soft timing densify still ABSENT; densify ≠ teachSpec LPT-301. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-347 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
+
+## Fold 2026-10-13 tip f6d22a26 (#2024 LPT-652 Adjust TAG densify)
+
+- Tip advanced `99f9889b`/#2023 learnings → `f6d22a26` via #2024 LPT-652 Adjust versus TAG densified frame speech. Pending empty.
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **91**, teachSpec **56**, explain-teachSpec **25**, nice-ladder **53**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **72** (was **71**).
+- Verified `act-06-11-03-checkpoint` PRESENT in `selectIdentifyDensifiedCoachLine`. Soft timing `act-05-07-01-*` still ABSENT. Capstone 4-bet LPT-347 still both MISSING.
+- Tip-commented **LPT-628** helper **71→72** / fallthrough **129→128** + flat parents LPT-624/625/626/627/635 + LPT-652 arms-PRESENT ack (leave Done to ui-agent Validated-on-origin/main) + frontier LPT-242/312/315/347.
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-347 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
+
+## Fold 2026-10-13 tip 2f755e89 (#2025 learnings after LPT-652)
+
+- Tip-stable learnings tip after #2024 LPT-652 densify / #2025 fold. Prior coverage already had a densify-tap sync line for this SHA; JSON gaps still flat — no catalog parent body rebuild.
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **91**, teachSpec **56**, explain-teachSpec **25**, nice-ladder **53**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **72**. Soft timing `act-05-07-01-*` still ABSENT from `selectIdentifyDensifiedCoachLine`.
+- Re-verified Capstone 4-bet **LPT-347**: `act-07-10-05-explain` / `act-07-10-05-hand` still both MISSING teachSpec (SPR/COMMIT/NO HERO explain; Kh/Kd · Q83r/+2d/+Ad hand SoftPulse-quiet — author `deal.mode` `fixed` + variants; skip `needs-human` lesson-split). Frontier Soft timing LPT-242 / Map turn LPT-312 / Compose river LPT-315 still MISSING.
+- Tip-commented catalog parents LPT-624/625/626/627/628/635 (flat) + Capstone/frontier + unchecked High teachSpecs LPT-301/258/295/252/255/271/275/334/349/352 + needs-human LPT-348 (`noHintIds` stay off LPT-626) + honesty/fingerprint LPT-417 (250bb/180bb still in `lesson_action_table.dart`) / LPT-401/402/408/409/411/414.
+- Densify ≠ teachSpec (LPT-301). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-347 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
+
+## Fold 2026-10-13 tip cb3f2076 (#2026 learnings + #2027 ui-agent status)
+
+- Tip advanced `2f755e89`/#2026 learnings → `cb3f2076` via #2027 ui-agent status log-preview skip (non-content ops). Coverage already had catalog sync lines for this SHA; JSON gaps still flat — parents tip-comment only, no rebuild.
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **91**, teachSpec **56**, explain-teachSpec **25**, nice-ladder **53**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **72**. Soft timing `act-05-07-01-*` still ABSENT from `selectIdentifyDensifiedCoachLine` (helper 72; stay on LPT-628).
+- Re-verified Capstone 4-bet **LPT-347**: `act-07-10-05-explain` / `act-07-10-05-hand` still both MISSING teachSpec. Dart still SoftPulse SPR/COMMIT/NO HERO (`Capstone4betDemo`) + `resolveToyHandStepSpot` Kh/Kd · Qs/8h/3d/+2d/+Ad SoftPulse-quiet — author `deal.mode` `fixed` + variants; skip `needs-human` lesson-split. Frontier Soft timing LPT-242 / Map turn LPT-312 / Compose river LPT-315 / Adjust LAG LPT-301 still all-five MISSING. Honesty LPT-417 still valid (250bb / 180bb deep chrome sans `stackLabel`).
+- Tip-commented catalog parents LPT-624/625/626/627/628/635 + Capstone LPT-347 + frontier LPT-242/312/315/301 + honesty LPT-417. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-347 after GrokBot OR LPT-242/312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
+
+## Fold 2026-10-13 tip 1c0553ff (LPT-628 body lag after LPT-652 tip-comments)
+
+- Tip-stable `1c0553ff` (#2028 learnings after #2027). JSON gaps flat: pressHints **151**, deal-variants **91**, teachSpec **56**, explain-teachSpec **25**, nice-ladder **53**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **72**. Soft timing `act-05-07-01-*` still ABSENT.
+- Coverage/tip-comments claimed densify-tap **LPT-628** rebuilt on LPT-652 (`71→72`), but description still said helper **71** / fallthrough **~129** / SHA audited `4a199707` and omitted `act-06-11-03-checkpoint` from Already registered. Rebuilt body from `selectIdentifyDensifiedCoachLine` + SI/PR fallthrough excluding catalog tap|pick prompts → helper **72** / fallthrough **128**; Soft timing still Priority ABSENT. Relates LPT-652↔LPT-628.
+- Re-verified Capstone 4-bet **LPT-347**: `act-07-10-05-explain` / `act-07-10-05-hand` still both MISSING (`Capstone4betDemo` SPR/COMMIT/NO HERO; `resolveToyHandStepSpot` Kh/Kd · Qs/8h/3d/+2d/+Ad SoftPulse-quiet). Frontier Soft timing LPT-242 / Map turn LPT-312 / Compose river LPT-315 / Adjust LAG LPT-301 still MISSING. Honesty LPT-417 still valid (250bb/180bb).
+- Tip-commented flat parents LPT-624/625/626/627/635 + Capstone/frontier/honesty. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- Durable rule: tip-comment “rebuilt LPT-628” ≠ body synced — verify description helper count vs `--counts densifyHelperArms` before skip.
+- next: re-verify LPT-347 after GrokBot OR LPT-242/312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
+
+## Fold 2026-10-13 tip 75f67c67 (Capstone re-check after #2029 LPT-628 body fold)
+
+- Tip-stable `75f67c67` (#2029 learnings after LPT-628 description helper **72** / fallthrough **128** landed on tip). Prior densify-tap coverage already synced this SHA — no catalog checklist rebuild.
+- `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **91**, teachSpec **56**, explain-teachSpec **25**, nice-ladder **53**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **72**. Soft timing `act-05-07-01-*` still ABSENT from `selectIdentifyDensifiedCoachLine` (stay on LPT-628). Verified LPT-628 description Already registered (**72**) matches `--counts`.
+- Re-verified Capstone 4-bet **LPT-347** (In Progress; GrokBot branch noted): `act-07-10-05-explain` / `act-07-10-05-hand` still both MISSING teachSpec on tip `course.json`. Dart still SoftPulse SPR/COMMIT/NO HERO (`Capstone4betDemo`) + `resolveToyHandStepSpot` Kh/Kd · Qs/8h/3d/+2d/+Ad SoftPulse-quiet — author `deal.mode` `fixed` + variants; skip `needs-human` lesson-split (synthesis in `unit-07-10-capstones`). Explain row also on catalog LPT-635.
+- Tip-commented catalog parents LPT-624/625/626/627/628/635 (flat) + Capstone LPT-347 + frontier LPT-242/312/315/301 + unchecked High teachSpecs LPT-252/255/258/271/275/295/334/349/352 + honesty/fingerprint LPT-401/402/408/409/411/414 + depth LPT-417 (250bb/180bb sans `stackLabel`; LPT-414 Air Nice! still “Gutshot-ish”). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-347 after GrokBot OR LPT-242/312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(91)/635/624(53)/625(24).
