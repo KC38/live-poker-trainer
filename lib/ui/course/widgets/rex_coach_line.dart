@@ -144,6 +144,14 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Blockers replace — pick how far they go.',
     'act-06-06-01-checkpoint' =>
       'Solver EV quotes — pick the course stance.',
+    // Defend enough densified asks (LPT-640) — same path as LPT-639.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-06-07-01-guided' =>
+      'Facing a river bet — pick quality continues.',
+    'act-06-07-01-unguided' =>
+      'MDF numbers — pick how this course uses them.',
+    'act-06-07-01-checkpoint' =>
+      'Minimum defense goal — pick what you protect.',
     _ => null,
   };
 }
