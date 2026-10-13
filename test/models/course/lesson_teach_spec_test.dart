@@ -566,6 +566,8 @@ const _lessons = <String, List<String>>{
     'act-07-08-01-unguided',
     'act-07-08-01-checkpoint',
   ],
+  // LPT-337
+  'lesson-07-10-01-capstone-srp': ['act-07-10-01-explain', 'act-07-10-01-hand'],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -4336,6 +4338,36 @@ void main() {
       expect(
         act('act-07-08-01-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Capstone: single-raised pot (LPT-337)', () {
+    test('explain SoftPulse walks PLAN → UPDATE → FINISH', () {
+      expect(
+        _list(
+          act('act-07-10-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['PLAN', 'UPDATE', 'FINISH'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(
+          act('act-07-10-01-hand'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['cb', 'barrel', 'check-r'],
+      );
+      expect(
+        act('act-07-10-01-hand').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Qd'],
+      );
+      expect(
+        act('act-07-10-01-hand').teachSpec!['deal']['fixedCards']['board'],
+        ['Kc', '7s', '2h', '2d', '9c'],
       );
     });
   });
