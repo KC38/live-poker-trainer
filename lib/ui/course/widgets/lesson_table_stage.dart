@@ -1382,6 +1382,7 @@ class LessonHoleHandTable extends StatelessWidget {
     this.enabled = true,
     this.showGuidance = false,
     this.correctSeatIndex = 0,
+    this.selectedSeatIndexes = const {},
   });
 
   /// Hero holes (seat 0).
@@ -1397,6 +1398,9 @@ class LessonHoleHandTable extends StatelessWidget {
   final bool showGuidance;
   final int correctSeatIndex;
 
+  /// Cyan learner selection — kept under Nice! / Oops (LPT-641).
+  final Set<int> selectedSeatIndexes;
+
   @override
   Widget build(BuildContext context) {
     return LessonTableStage(
@@ -1411,6 +1415,7 @@ class LessonHoleHandTable extends StatelessWidget {
           : LessonTableCue.none,
       cueSeatIndex:
           showGuidance && correctSeatIndex > 0 ? correctSeatIndex : null,
+      selectedSeatIndexes: selectedSeatIndexes,
       onSeatIndexTap: enabled ? onSeatChoice : null,
     );
   }

@@ -5675,6 +5675,64 @@ class LessonTableTapTarget {
   final int? seatIndex;
 }
 
+/// Cyan ([GlowKind.selection]) props for a graded felt region on
+/// [LessonTableStage] — stays under Nice! / Oops (LPT-641).
+({
+  Set<int> selectedSeatIndexes,
+  Set<int> selectedHeroIndexes,
+  Set<int> selectedBoardIndexes,
+}) lessonTableStageSelectionForRegion({
+  required LessonTableRegion? region,
+  int? seatIndex,
+  int boardLength = 0,
+  int heroHoleCount = 2,
+}) {
+  if (region == null) {
+    return (
+      selectedSeatIndexes: const <int>{},
+      selectedHeroIndexes: const <int>{},
+      selectedBoardIndexes: const <int>{},
+    );
+  }
+  switch (region) {
+    case LessonTableRegion.hero:
+      return (
+        selectedSeatIndexes: const {0},
+        selectedHeroIndexes: {
+          for (var i = 0; i < heroHoleCount; i++) i,
+        },
+        selectedBoardIndexes: const <int>{},
+      );
+    case LessonTableRegion.villain:
+      return (
+        selectedSeatIndexes: {seatIndex ?? 1},
+        selectedHeroIndexes: const <int>{},
+        selectedBoardIndexes: const <int>{},
+      );
+    case LessonTableRegion.board:
+      return (
+        selectedSeatIndexes: const <int>{},
+        selectedHeroIndexes: const <int>{},
+        selectedBoardIndexes: {
+          for (var i = 0; i < boardLength; i++) i,
+        },
+      );
+    default:
+      if (seatIndex != null) {
+        return (
+          selectedSeatIndexes: {seatIndex},
+          selectedHeroIndexes: const <int>{},
+          selectedBoardIndexes: const <int>{},
+        );
+      }
+      return (
+        selectedSeatIndexes: const <int>{},
+        selectedHeroIndexes: const <int>{},
+        selectedBoardIndexes: const <int>{},
+      );
+  }
+}
+
 /// Felt strip with hero holes, optional board, and face-down seats.
 class LessonTableContext extends StatelessWidget {
   /// Creates the table context chrome.
