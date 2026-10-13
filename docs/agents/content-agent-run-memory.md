@@ -482,3 +482,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - **LPT-396 Done**: `act-07-08-01-guided` now `Jh`/`Td` · `Kh`/`Ts`/`8h`/`2d` (true second pair under K). Corrected stale “still valid Ts9h8c2d” tip-comment. Edited companion **LPT-331** body guided codes to tip atmosphere.
 - Soft timing **LPT-242** still all-five MISSING; densify Soft timing ABSENT (helper 53). Frontiers **LPT-312**/ **LPT-315**. Prefer: re-read ActionSpot before honesty “still valid”. Pending cleared. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(84)/635/624(48)/625(24).
+
+## Fold 2026-10-13 tip c20d28d9 (#1987 LPT-331 type×board teachSpec)
+
+- Tip advanced `a55b968e` → `582dea5d` (#1987 LPT-331) → `c20d28d9` (#1986 learnings). Always re-scan after ff — first tip-comment pass wrongly claimed flat 48/84 before noticing #1987.
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **84→87**, teachSpec **64→60**, explain-teachSpec **30→29**, nice-ladder **48→49**, SoftPulse-map **24**, densifyHelperArms **53**.
+- Rebuilt **LPT-624** (new `act-07-08-01-explain`) + **LPT-627** (guided/scaffolded/unguided fixed sans variants; guided `Jh`/`Td`·`Kh`/`Ts`/`8h`/`2d`). Tip-commented LPT-626 (scaffolded/unguided still listed) / LPT-625 (unguided SoftPulse-map still ABSENT) / LPT-628 / LPT-635 (keeps 12 S1–S2). Done-ack **LPT-331**.
+- Soft timing **LPT-242** still all-five MISSING; densify ABSENT. Frontiers **LPT-312**/ **LPT-315**. Pending empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(87)/635/624(49)/625(24).
+
