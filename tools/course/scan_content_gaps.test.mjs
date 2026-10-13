@@ -312,11 +312,11 @@ test("densify-tap flags SI / player_read_classify missing helper arms", () => {
     null,
   );
   const row = gapDensifyTap(...lesson, {
-    id: "act-05-07-01-guided",
+    id: "act-99-00-00-si-guided",
     renderer: "select_identify",
     stage: "guided",
   });
-  assert.equal(row.activityId, "act-05-07-01-guided");
+  assert.equal(row.activityId, "act-99-00-00-si-guided");
   assert.match(row.note, /densify helper arm missing/);
   assert.equal(
     gapDensifyTap(...lesson, {
@@ -420,7 +420,9 @@ test("--counts reports live arm sizes and rejects an unknown gap", () => {
   assert.equal(typeof body.counts["unguided-softpulse-map"], "number");
   assert.equal(typeof body.counts["densify-tap"], "number");
   assert.equal(body.catalogParents["densify-tap"], "LPT-628");
-  assert.ok(body.counts["densify-tap"] > 0);
+  // LPT-628 registered every arm, so 0 is a valid live count.
+  assert.ok(Number.isInteger(body.counts["densify-tap"]));
+  assert.ok(body.counts["densify-tap"] >= 0);
 
   const one = spawnSync(
     process.execPath,
