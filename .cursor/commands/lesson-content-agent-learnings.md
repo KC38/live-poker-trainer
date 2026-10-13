@@ -69,6 +69,8 @@ Lesson-specific pattern notes (full history) live in
   interactive missing-teachSpec Highs stay per-lesson; only SoftPulse
   explain catch-up uses `catalog:explain-teachSpec` (LPT-635).
 
+- Never write Jira tip-comment markdown via unquoted shell heredocs (`python3 <<PY`) — backticks expand empty and leave blank SHA/`teachSpec` placeholders; always use a quoted heredoc (`python3 <<'PY'`) or write the body file from Python before `jira.py comment`.
+
 ## Prefer
 
 - Prefer `node tools/course/scan_content_gaps.mjs --counts` then
@@ -171,3 +173,4 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13ao: Tip `5be698bd` (#1997 LPT-405 Q83r): scan flat 151/88/59/28/nice-50/map-24 densifyHelperArms 53; Done-ack LPT-405; edited LPT-339 off stale Q83tt; parents tip-comment only; Soft timing densify ABSENT; frontier LPT-242/312/315 / Capstone teachSpec LPT-339; pending empty.
 - 2026-10-13ap: Tip `cbb7fb14` (#1999 soft-stop after #1997 LPT-405): scan flat 151/88/59/28/nice-50/map-24 densifyHelperArms 53; parents tip-comment only; Capstone LPT-339 still both MISSING (Q83r Done); Soft timing densify ABSENT; honesty LPT-401/414/417 still valid; frontier LPT-242/312/315 / Capstone LPT-339; pending empty.
 - 2026-10-13aq: Tip `d8070119` after #2005 LPT-339 Capstone 3-bet (+ #2002 LPT-647 densifyHelperArms **53→57**): Nice! **50→51** (`act-07-10-02-explain`); deal-variants **88→89** (`act-07-10-02-hand` fixed sans variants); teachSpec 59→58 / explain-teachSpec 28→27; rebuilt LPT-624/627 (also cleared empty SHA placeholders); Done-ack LPT-339; Soft timing densify ABSENT; frontier LPT-242/312/315; next Capstone LPT-341+; pending empty.
+- 2026-10-13ar: Never unquoted heredocs for Jira tip bodies (shell backtick wipe → empty SHA placeholders); corrected tip-comments on `0de0a739` after #2007.
