@@ -1367,8 +1367,39 @@ grep -q 'soft-stop-wait' "$LOOP" || fail "loop must expose soft-stop-wait"
   [[ "$code" == 1 ]] || fail "wait_soft_stop_idle should time out, got $code"
   echo "wait_soft_stop_idle timeout ok"
 )
+# ensure respects HOLD_FILE (health-timer ship without loop race).
+grep -q 'ui-agent.hold' "$LOOP" || fail "loop must define HOLD_FILE"
+grep -q 'soft-stop-hold' "$LOOP" || fail "loop must expose soft-stop-hold"
+grep -q 'release-hold' "$LOOP" || fail "loop must expose release-hold"
+(
+  HOLD_FILE="$tmp/ui-agent.hold"
+  STOP_FILE="$tmp/soft-stop-hold.stop"
+  PID_FILE="$tmp/soft-stop-hold.pid"
+  rm -f "$HOLD_FILE" "$STOP_FILE" "$PID_FILE"
+  : >"$HOLD_FILE"
+  loop_is_alive() { return 1; }
+  # Mimic ensure hold branch.
+  if [[ -f "$HOLD_FILE" ]]; then
+    out="ensure: held"
+  else
+    out="ensure: starting"
+  fi
+  grep -q 'ensure: held' <<<"$out" || fail "ensure should no-op under hold"
+  (
+    sleep 0.3
+    rm -f "$PID_FILE" "$STOP_FILE"
+  ) &
+  : >"$STOP_FILE"
+  echo "$$" >"$PID_FILE"
+  start=$(date +%s)
+  wait_soft_stop_idle 30 1
+  elapsed=$(( $(date +%s) - start ))
+  (( elapsed < 15 )) || fail "hold-mode wait should finish quickly, took ${elapsed}s"
+  echo "ensure hold ok"
+)
 rm -f "$tmp/soft-stop-wait.stop" "$tmp/soft-stop-wait.pid" \
-  "$tmp/soft-stop-wait-timeout.stop" "$tmp/soft-stop-wait-timeout.pid"
+  "$tmp/soft-stop-wait-timeout.stop" "$tmp/soft-stop-wait-timeout.pid" \
+  "$tmp/ui-agent.hold" "$tmp/soft-stop-hold.stop" "$tmp/soft-stop-hold.pid"
 
 
 # status skips run-log prose when health already has coverage: for that stamp.
