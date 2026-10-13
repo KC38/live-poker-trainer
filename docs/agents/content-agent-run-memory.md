@@ -391,3 +391,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Soft timing **LPT-242** still all five `act-05-07-01-*` MISSING `teachSpec` (GrokBot In Progress; tip not landed). Densify helper still **47**; Soft timing still ABSENT from `selectIdentifyDensifiedCoachLine` (LPT-464 Done ≠ arms — stay on **LPT-628**).
 - Honesty **LPT-396** still valid: `act-07-08-01-guided` prompt “Second pair” + Dart streetLabel “second pair” vs `Jh`/`Td`·`Ts`/`9h`/`8c`/`2d` (top pair T). Tip-commented **LPT-331** companion. **LPT-312** still all five `act-07-02-01-*` MISSING (atmosphere stays LPT-394 Done codes). Pending home file empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR implement LPT-625 SoftPulse maps (24) OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(81)/635/624(44) OR LPT-396 if tip advances.
+
+## Fold 2026-10-13 tip 5b0de9e2 (#1964/#1965 densifyHelperArms + tip-stable unchecked Highs)
+
+- Tip `5b0de9e2` after #1964/#1965 (`densifyHelperArms` in `scan_content_gaps --counts`) + #1966 ops. Prior coverage line claimed `learnings: updated` for this SHA but run-memory/learnings had **no** fold — treat coverage alone as unfolder; ship chore this tick.
+- `scan_content_gaps --counts` flat: pressHints **151**, deal-variants **81**, teachSpec **80**, explain-teachSpec **34**, nice-ladder **44**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, **`densifyHelperArms` 47**. Catalog parents already tip-commented this SHA — skipped rebuild/re-spam.
+- Soft timing **LPT-242** still all five `act-05-07-01-*` MISSING; Soft timing still ABSENT from densify helper (47). **LPT-312** still all five MISSING. **LPT-396** still valid (`Jh`/`Td`·`Ts`/`9h`/`8c`/`2d` top-as-second under “second pair”). SoftPulse-map ABSENT still **24**.
+- Tip-commented unchecked Highs absent from prior `5b0de9e2` coverage ticket list: fingerprint/honesty LPT-401/402/405/408/409/411/414/417; IP LPT-252/255/271/275; capstone/S7 LPT-321..352 (selected) + needs-human LPT-348. Grep `act-07-08-01-*` / `act-05-07-01-*` / `act-07-02-01-*`: no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR implement LPT-625 SoftPulse maps (24) OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(81)/635/624(44) OR LPT-396 if tip advances.
