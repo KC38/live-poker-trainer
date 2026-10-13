@@ -328,3 +328,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Run-memory grep `act-06-08-01-*` / `act-05-07-01-*`: Mix SI densify PRESENT for three stages; Soft timing teachSpec + densify still open. SoftPulse-map still 68 / 18+qq ABSENT. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR densify Soft-timing/seat-footer on LPT-628 OR implement catalog LPT-626(151)/627(78)/635/624(41)/625 OR honesty if tip advances.
 
+
+## Fold 2026-10-13 tip 6cea459c (#1939 LPT-298 Meet LAG)
+
+- Tip `6cea459c` after #1939 LPT-298 Done (Meet the LAG teachSpec on all five `act-06-12-02-*`); also includes #1938/#1940–#1942 ops/learnings. `scan_content_gaps --counts`: pressHints **151**, deal-variants **78** (unchanged — outcome-tile / player_read_classify `deal.mode` `none`), teachSpec **97→93**, explain-teachSpec **37→36**.
+- Rebuilt catalog **LPT-624** Nice! **41→42** (appended `act-06-12-02-explain` WIDE→PRESSURE→MODEL). Tip-commented **LPT-626** (scaffolded/unguided still on 151), **LPT-627** (flat 78), **LPT-635** (keep 12 S1–S2), **LPT-625** / **LPT-628**. Transitioned **LPT-298** Done on tip. Tip-commented To Do High **LPT-301** Adjust LAG still all-five MISSING.
+- Run-memory grep `act-06-12-02-*`: explain SoftPulse WIDE/PRESSURE/MODEL (`deal.mode` `none`); guided/unguided `player_read_classify`; scaffolded/checkpoint outcome tiles — no handFamily gaps; follow-ups on catalog parents only (no per-lesson Nice!/pressHints clones). `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- next: re-verify LPT-242 Soft timing OR LPT-301 Adjust LAG / LPT-295 Observe wide OR densify Soft-timing/seat-footer on LPT-628 OR implement catalog LPT-626(151)/627(78)/635/624(42)/625 OR honesty if tip advances.
