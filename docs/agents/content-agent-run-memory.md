@@ -1322,3 +1322,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented Done-ack LPT-337/338/339/341/345/347/349 (NEED tip SHA). **LPT-348**/parents/LPT-334/335/453/511/216/667 already HAS — no re-spam.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-10-02-capstone-3bet` / `lesson-07-11-01-live-warmup-prep` (curriculum **LPT-351**) / Low curriculum.
 - act-07-10-01-*: structural clean on tip — Capstone pressHints policy only via LPT-348; teachSpec companion LPT-337 Done.
+
+## Fold 2026-10-14m (6a883805 discovery capstone-3bet)
+
+- Tip-stable `6a883805` (#2174 Capstone SRP learnings). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human.
+- Discovery oldest-unfresh `lesson-07-10-02-capstone-3bet`: teachSpec on both activities; explain SoftPulse SPR→TURN→CLOSE + activity-level `explainGrading` (`deal.mode` `none`); hand scaffolded `authored_multi_step_hand` `deal.mode` `fixed` Ah/Qd · Qs8h3d/+2d/+7c (Q83r) (+2 suit-rotated `deal.variants`) matching Dart `resolveToyHandStepSpot`; cues `bet`/`barrel`/`fold`; pressHints empty — Capstone SoftPulse-quiet / `NO_HINT_ACTIVITY_IDS` (needs-human **LPT-348** only; do not reopen LPT-626/667). Synthesis container — no curriculum-split ticket. Design-record Still-a-list empty / SPR·Turn·Close on felt — no rebuild. Structural clean aside from Capstone NO_HINT policy.
+- Prior coverage on `6a883805` listed LPT-348/parents+Capstone Dones while `jira.py get` still showed only `f95fbbb0` — tip-commented **LPT-348** + Done-ack **LPT-339** + Capstone Done LPT-337/338/341/345/347/349 + parents LPT-667/626/624/625/627/628/635 + LPT-216/334 the same tick (verified HAS).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-10-03-capstone-multiway-deep` / `lesson-07-11-01-live-warmup-prep` (curriculum **LPT-351**) / Low curriculum.
+- act-07-10-02-*: structural clean on tip — Capstone pressHints policy only via LPT-348; teachSpec companion LPT-339 Done.
