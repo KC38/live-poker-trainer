@@ -88,6 +88,10 @@
                   "objectives": [
                     "Identify your two hole cards"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Your hole cards \u2014 private to you."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "random_in_class",
@@ -433,6 +437,10 @@
                   "objectives": [
                     "Name the four suits"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Hearts \u2192 Diamonds \u2192 Clubs \u2192 Spades."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -804,6 +812,10 @@
                     "Locate the dealer button",
                     "Identify the small and big blinds"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Button \u2192 small blind \u2192 big blind."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -1933,6 +1945,10 @@
                   "objectives": [
                     "Fold to give up the hand"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Fold \u2192 Check \u2192 Call."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -2265,6 +2281,10 @@
                   "objectives": [
                     "Bet when the pot is unchecked"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Bet \u2192 Raise \u2192 All-in."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -2969,6 +2989,10 @@
                   "objectives": [
                     "Win the pot when everyone else folds"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Fold win \u2192 Showdown \u2192 Side pot."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -3336,6 +3360,10 @@
                   "objectives": [
                     "Follow a hand from blinds to a terminal state"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Blinds \u2192 You act \u2192 Ending."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -4243,6 +4271,10 @@
                   "objectives": [
                     "Prefer later seats when choosing hands"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "The button acts last after the flop."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -4878,6 +4910,10 @@
                   "objectives": [
                     "Recognize pocket pairs"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Pairs \u2192 Broadways \u2192 Suited aces \u2192 Connectors."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -5211,6 +5247,10 @@
                   "objectives": [
                     "Fold trash from early position"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Early \u2192 Button \u2192 Live 3x."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -5553,6 +5593,10 @@
                   "objectives": [
                     "Fold weak hands to an open"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Fold \u2192 Call \u2192 3-bet."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -5895,6 +5939,10 @@
                   "objectives": [
                     "Convert chips to big blinds"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Chips to BB \u2192 Shorter \u2192 Depth."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -6540,6 +6588,10 @@
                   "objectives": [
                     "Make a baseline open on a full ring"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nine \u2192 Same \u2192 Position."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -7316,6 +7368,10 @@
                   "objectives": [
                     "Track pot size and stack depths"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Pot \u2192 Stacks \u2192 Button \u2192 Who acts."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -7636,6 +7692,10 @@
                   "objectives": [
                     "Identify made hands on the flop"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Made \u2192 Draw \u2192 SDV \u2192 Air."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -8127,6 +8187,10 @@
                   "objectives": [
                     "Count clean versus dirty outs"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Clean \u2192 Dirty \u2192 Price."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -8483,6 +8547,10 @@
                   "objectives": [
                     "Value bet strong made hands"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value \u2192 C-bet \u2192 Check \u2192 Call \u2192 Fold \u2192 Raise."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -8870,6 +8938,10 @@
                   "objectives": [
                     "Recognize brick versus changing turns"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Brick \u2192 Change \u2192 Barrel \u2192 Delay."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -9243,6 +9315,10 @@
                   "objectives": [
                     "Value bet hands that beat calling ranges"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value \u2192 Bluff \u2192 Catch \u2192 Fold."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -9612,6 +9688,10 @@
                   "objectives": [
                     "Demand stronger made hands multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Stronger \u2192 Fewer \u2192 Nuts."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -9957,6 +10037,10 @@
                   "objectives": [
                     "Stop overplaying weak top pair"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Top pair \u2192 Prices \u2192 Passive \u2192 Crowds."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -10687,6 +10771,10 @@
                   "objectives": [
                     "Describe a seat as a range"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "One hand \u2192 Range \u2192 Update."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -11025,6 +11113,10 @@
                   "objectives": [
                     "Value 3-bet strong hands"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "3-bet \u2192 Ranges \u2192 Squeeze."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -11396,6 +11488,10 @@
                   "objectives": [
                     "Build a multi-street plan"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Flop \u2192 Turn \u2192 River."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -11775,6 +11871,10 @@
                   "objectives": [
                     "Match size to value versus polar pressure"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value \u2192 Pressure \u2192 Size."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -12151,6 +12251,10 @@
                   "objectives": [
                     "Estimate stack-to-pot ratio"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "SPR \u2192 Low \u2192 High."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -12486,6 +12590,10 @@
                   "objectives": [
                     "Tag high participation"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Enters \u2192 Calls \u2192 Folds."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -12769,6 +12877,10 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Station \u2192 High \u2192 Low."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -13051,6 +13163,10 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value \u2192 Bluffs \u2192 Cite."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -13393,6 +13509,10 @@
                   "objectives": [
                     "Tag narrow entry"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Rare \u2192 Enter \u2192 Mean it."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -13666,6 +13786,10 @@
                   "playerTypeRefs": [
                     "nit"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nit \u2192 Narrow \u2192 Respect."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -13897,6 +14021,10 @@
                   "playerTypeRefs": [
                     "nit"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Steal \u2192 Credit \u2192 Explode."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -14724,6 +14852,10 @@
                   "playerTypeRefs": [
                     "maniac"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Wider \u2192 Hang \u2192 Ego."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -15066,6 +15198,10 @@
                   "objectives": [
                     "Separate observation from certainty"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Observe \u2192 Samples \u2192 Showdowns."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -15352,6 +15488,10 @@
                   "objectives": [
                     "Change lines by type with justification"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Cards \u2192 Seats \u2192 Evidence."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -16266,6 +16406,10 @@
                   "objectives": [
                     "Prefer nut potential multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nutted \u2192 Air \u2192 Domination."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -16596,6 +16740,10 @@
                   "objectives": [
                     "Use depth for speculative implied odds"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Deep \u2192 Realize \u2192 Stack."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -16908,6 +17056,10 @@
                   "objectives": [
                     "Estimate implied odds from depth and tendencies"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Implied \u2192 Reverse \u2192 Second."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -17233,6 +17385,10 @@
                   "objectives": [
                     "Choose thin value versus sticky callers"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Thin \u2192 Catch \u2192 Barrels."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -17600,6 +17756,10 @@
                   "objectives": [
                     "Interpret check-raises by strength and type"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Check-raise \u2192 Probe \u2192 Delay \u2192 Donk."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -17909,6 +18069,10 @@
                   "objectives": [
                     "Update ranges after each street"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Action \u2192 Rewrite \u2192 Update."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -18198,6 +18362,10 @@
                   "objectives": [
                     "Treat timing as soft evidence only"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Timing \u2192 Sizing \u2192 Clues."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -18483,6 +18651,10 @@
                   "objectives": [
                     "Identify tilted or stuck opponents"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Stuck \u2192 Tilted \u2192 Gears."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -18773,6 +18945,10 @@
                   "objectives": [
                     "Set session stop-losses"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Quit \u2192 Guard \u2192 First."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -19377,6 +19553,10 @@
                   "objectives": [
                     "Identify range advantage"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Range \u2192 Nut \u2192 Advantage."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -19677,6 +19857,10 @@
                   "objectives": [
                     "Prefer IP for marginal equity"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Equity \u2192 Cash \u2192 Position."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -19952,6 +20136,10 @@
                   "objectives": [
                     "Spot capped ranges from passive lines"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Capped \u2192 Uncapped \u2192 Nuts."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -20253,6 +20441,10 @@
                   "objectives": [
                     "Recognize polarized sizing"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Polar \u2192 Merged \u2192 Size."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -20557,6 +20749,10 @@
                   "objectives": [
                     "Select overbets for polar spots"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Overbet \u2192 Polar \u2192 Geometry."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -20858,6 +21054,10 @@
                   "objectives": [
                     "Choose bluffs that block call-downs"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Block \u2192 Use \u2192 No EV."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -21142,6 +21342,10 @@
                   "objectives": [
                     "Continue with stronger catchers"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Defend \u2192 Bluff \u2192 Enough."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -21434,6 +21638,10 @@
                   "objectives": [
                     "Mix strong hands sometimes"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Mix \u2192 Purpose \u2192 Strong."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -21726,6 +21934,10 @@
                   "objectives": [
                     "Plan 3-bet pots by SPR"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "3-bet \u2192 4-bet \u2192 Depth."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -22016,6 +22228,10 @@
                   "objectives": [
                     "Fold dominated one-pair in heat"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Hard \u2192 Cooler \u2192 Ego."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -22317,6 +22533,10 @@
                   "objectives": [
                     "Note selective entry"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Tight \u2192 Barrel \u2192 Sample."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -22600,6 +22820,10 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Tight \u2192 Aggro \u2192 Model."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -22880,6 +23104,10 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Credit \u2192 Tighter \u2192 No light."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -23208,6 +23436,10 @@
                   "objectives": [
                     "Note wide entry"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Wide \u2192 Pressure \u2192 Sample."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -23491,6 +23723,10 @@
                   "playerTypeRefs": [
                     "lag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Wide \u2192 Pressure \u2192 Model."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -23771,6 +24007,10 @@
                   "playerTypeRefs": [
                     "lag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Call \u2192 Trap \u2192 Fancy less."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -24105,6 +24345,10 @@
                   "objectives": [
                     "Adjust across all five types"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Cards \u2192 Seats \u2192 Evidence."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -24740,6 +24984,10 @@
                   "objectives": [
                     "State a preflop thesis"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Reason \u2192 Confirm \u2192 Cancel."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -25015,6 +25263,10 @@
                   "objectives": [
                     "List turn continue cards"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Barrel \u2192 Give-up \u2192 Map."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -25289,6 +25541,10 @@
                   "objectives": [
                     "Choose river value candidates"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value \u2192 Bluff \u2192 Hold."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -25581,6 +25837,10 @@
                   "objectives": [
                     "Plan single-raised pots"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Limped \u2192 SRP \u2192 3-bet/4-bet."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -25856,6 +26116,10 @@
                   "objectives": [
                     "Bluff less multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Fewer \u2192 Thicker \u2192 Widen."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -26133,6 +26397,10 @@
                   "objectives": [
                     "Recalculate effective stacks each hand"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Short \u2192 Deep \u2192 Effective."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -26414,6 +26682,10 @@
                   "objectives": [
                     "Change lines by type with citations"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Cards \u2192 Models \u2192 Cite."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -26744,6 +27016,10 @@
                   "objectives": [
                     "Produce one coherent action"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Type \u2192 Board \u2192 Line \u2192 Size."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -27079,6 +27355,10 @@
                   "objectives": [
                     "Write default lines for common spots"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Leak \u2192 Book \u2192 Review."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -27354,6 +27634,10 @@
                   "objectives": [
                     "Execute a full SRP plan"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Plan \u2192 Update \u2192 Finish."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -27603,6 +27887,10 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "SPR \u2192 Turn \u2192 Close."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -27826,6 +28114,10 @@
                   "objectives": [
                     "Prefer nut potential multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nuts \u2192 Deep \u2192 No-bluff."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -28046,6 +28338,10 @@
                   "objectives": [
                     "Prefer nut potential limped multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nuts \u2192 Value \u2192 Thin."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -28278,6 +28574,10 @@
                   "objectives": [
                     "Respect short SPR commitment"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "SPR \u2192 Commit \u2192 No hero."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -28518,6 +28818,10 @@
                   "objectives": [
                     "List warm-up checklist items"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Checklist \u2192 Defaults \u2192 One hand."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"

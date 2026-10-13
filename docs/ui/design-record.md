@@ -907,7 +907,7 @@ SHORTER → DEPTH; NINE → SAME → POSITION. Targets are the demo tile labels
 (`PassiveActionsDemo.actions`, `StreetsTimelineDemo.streets`, …), so the
 catalog and the felt name the same GlowHighlight targets; no second cue
 system. `scan_content_gaps` explain-teachSpec is 0 after this change; the
-Nice! ladder (`explainGrading`) for these explains stays on LPT-624.
+Nice! ladder (`explainGrading`) for these explains landed in LPT-624.
 
 Read the table first `teachSpec` (LPT-138): explain SoftPulse advances POT →
 STACKS → BUTTON → WHO ACTS; guided/scaffolded/unguided SoftPulse `pot-21` /
@@ -1389,6 +1389,14 @@ explain (LPT-147) uses "UTG → HJ → CO → BTN." Live table habits
 explain (LPT-199) uses "Watch → Say → Cover → Wait." The next
 `coach_dialogue` explain whose ask ends in a tap prompt copies that
 authored why line instead of reusing the ask as Nice! copy.
+
+Every SoftPulse `coach_dialogue` explain now authors that Nice! line
+(LPT-624): the remaining 76 explains (S1–S7) got `okFeedback` →
+`explainGrading` built from their cue chips in press order (for example
+"Fold → Check → Call.", "SPR → Low → High."), written as a short why, never
+the idle ask, a Tap prompt, or `accessibilityText`. `scan_content_gaps
+--gap nice-ladder` is 0, and `lpt624_explain_nice_ladder_test.dart` locks
+the list. A new SoftPulse explain ships its `okFeedback` in the same PR.
 
 Best five kicker showdown SoftPulse (LPT-75) is the framed
 `LessonTableStage` for `act-01-02-02-scaffolded-kicker`: `cueSeatIndex: 0`

@@ -50,6 +50,8 @@ export function buildSectionThree() {
                 "Before cards, read pot, stacks, button, and who acts. Words count live.",
                 {
                   objectives: ["Track pot size and stack depths"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Pot → Stacks → Button → Who acts.",
                   // LPT-138
                   teachSpec: {
                     deal: {mode: "none"},
@@ -141,6 +143,8 @@ export function buildSectionThree() {
                 "Flop first: made, draw, showdown value, or air. Label before you bet.",
                 {
                   objectives: ["Identify made hands on the flop"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Made → Draw → SDV → Air.",
                   // LPT-141
                   teachSpec: {
                     deal: {mode: "none"},
@@ -304,6 +308,8 @@ export function buildSectionThree() {
                 "Clean outs help. Dirty outs improve you into second-best. Price the call.",
                 {
                   objectives: ["Count clean versus dirty outs"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Clean → Dirty → Price.",
                   // LPT-144
                   teachSpec: {
                     deal: {mode: "none"},
@@ -408,6 +414,8 @@ export function buildSectionThree() {
                 "Flop lines: value, c-bet, check back, call, fold, raise. One plan.",
                 {
                   objectives: ["Value bet strong made hands"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Value → C-bet → Check → Call → Fold → Raise.",
                   // LPT-149
                   teachSpec: {
                     deal: {mode: "none"},
@@ -513,6 +521,8 @@ export function buildSectionThree() {
                 "Turn cards either brick or change the story. Barrel or delay with intent.",
                 {
                   objectives: ["Recognize brick versus changing turns"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Brick → Change → Barrel → Delay.",
                   // LPT-152
                   teachSpec: {
                     deal: {mode: "none"},
@@ -628,6 +638,8 @@ export function buildSectionThree() {
                 "River is binary: value, bluff, bluff-catch, or fold. No mystery floats.",
                 {
                   objectives: ["Value bet hands that beat calling ranges"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Value → Bluff → Catch → Fold.",
                   // LPT-155
                   teachSpec: {
                     deal: {mode: "none"},
@@ -737,6 +749,8 @@ export function buildSectionThree() {
                 "More players: stronger value, fewer bluffs, chase nuts not second-best.",
                 {
                   objectives: ["Demand stronger made hands multiway"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Stronger → Fewer → Nuts.",
                   // LPT-158
                   teachSpec: {
                     deal: {mode: "none"},
@@ -833,6 +847,8 @@ export function buildSectionThree() {
                 "Common leaks: worship top pair, chase bad prices, call too passive, bluff crowds.",
                 {
                   objectives: ["Stop overplaying weak top pair"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Top pair → Prices → Passive → Crowds.",
                   // LPT-161
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1074,6 +1090,8 @@ export function buildSectionFour() {
                 "You never know one hand. You know a range — then update it.",
                 {
                   objectives: ["Describe a seat as a range"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "One hand → Range → Update.",
                   // LPT-167
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1179,6 +1197,8 @@ export function buildSectionFour() {
                 "3-bets define ranges. Squeezes punish multiway limps and flatting.",
                 {
                   objectives: ["Value 3-bet strong hands"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "3-bet → Ranges → Squeeze.",
                   // LPT-170
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1295,6 +1315,8 @@ export function buildSectionFour() {
                 "Every flop choice should answer: what do I do on turn and river?",
                 {
                   objectives: ["Build a multi-street plan"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Flop → Turn → River.",
                   // LPT-174
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1419,6 +1441,8 @@ export function buildSectionFour() {
                 "Size is language. Value looks like value; pressure looks like pressure.",
                 {
                   objectives: ["Match size to value versus polar pressure"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Value → Pressure → Size.",
                   // LPT-177
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1525,6 +1549,8 @@ export function buildSectionFour() {
                 "SPR = effective stack / pot. Low SPR: commit. High SPR: maneuver.",
                 {
                   objectives: ["Estimate stack-to-pot ratio"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "SPR → Low → High.",
                   // LPT-180
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1625,6 +1651,8 @@ export function buildSectionFour() {
                 "Before labels: who enters pots, who calls, who folds. Count samples.",
                 {
                   objectives: ["Tag high participation"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Enters → Calls → Folds.",
                   // LPT-184
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1708,6 +1736,8 @@ export function buildSectionFour() {
                 "Calling Station is a working model: high participation, low folding.",
                 {
                   objectives: ["Introduce Calling Station"], playerTypeRefs: ["calling_station"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Station → High → Low.",
                   // LPT-187
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1793,6 +1823,8 @@ export function buildSectionFour() {
                 "Versus stations: thicker value, fewer pure bluffs. Cite their calling.",
                 {
                   objectives: ["Value wider versus Calling Station"], playerTypeRefs: ["calling_station"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Value → Bluffs → Cite.",
                   // LPT-190
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1896,6 +1928,8 @@ export function buildSectionFour() {
                 "Some seats almost never enter. When they do, they mean it. Note both.",
                 {
                   objectives: ["Tag narrow entry"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Rare → Enter → Mean it.",
                   // LPT-193
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1980,6 +2014,8 @@ export function buildSectionFour() {
                 "Nit means narrow entry and respect for their heavy action.",
                 {
                   objectives: ["Introduce Nit"], playerTypeRefs: ["nit"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Nit → Narrow → Respect.",
                   // LPT-196
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2048,6 +2084,8 @@ export function buildSectionFour() {
                 "Versus nits: steal blinds more; give credit when they explode.",
                 {
                   objectives: ["Steal more versus Nits"], playerTypeRefs: ["nit"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Steal → Credit → Explode.",
                   // LPT-200
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2295,6 +2333,8 @@ export function buildSectionFour() {
                 "Versus maniacs: call wider for value, let them hang themselves, no ego.",
                 {
                   objectives: ["Widen value and bluff-catch ranges"], playerTypeRefs: ["maniac"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Wider → Hang → Ego.",
                   // LPT-210
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2399,6 +2439,8 @@ export function buildSectionFour() {
                 "Observation ≠ certainty. Confidence grows with samples and showdowns.",
                 {
                   objectives: ["Separate observation from certainty"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Observe → Samples → Showdowns.",
                   // LPT-213
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2484,6 +2526,8 @@ export function buildSectionFour() {
                 "Same cards. Different seats. Exploits change only with evidence.",
                 {
                   objectives: ["Change lines by type with justification"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Cards → Seats → Evidence.",
                   // LPT-216
                   teachSpec: {
                     deal: {mode: "none"},
