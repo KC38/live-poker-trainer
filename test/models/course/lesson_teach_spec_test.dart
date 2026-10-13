@@ -510,6 +510,14 @@ const _lessons = <String, List<String>>{
     'act-06-13-01-unguided',
     'act-06-13-01-checkpoint',
   ],
+  // LPT-307
+  'lesson-06-13-02-section-six-checkpoint': [
+    'act-06-13-02-cp-adv',
+    'act-06-13-02-cp-cap',
+    'act-06-13-02-cp-polar',
+    'act-06-13-02-cp-tag',
+    'act-06-13-02-cp-lag',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -3828,6 +3836,99 @@ void main() {
       });
       expect(
         act('act-06-13-01-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Section 6 checkpoint (LPT-307)', () {
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-06-13-02-cp-adv'), 'cues').single['target'], 'ra');
+      expect(
+        _list(
+          act('act-06-13-02-cp-adv'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-13-02-cp-adv').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-13-02-cp-adv').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-06-13-02-cp-adv').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+      expect(_list(act('act-06-13-02-cp-cap'), 'cues').single['target'], 'cap');
+      expect(
+        _list(
+          act('act-06-13-02-cp-cap'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-13-02-cp-cap').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-13-02-cp-cap').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-06-13-02-cp-cap').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+      expect(
+        _list(act('act-06-13-02-cp-polar'), 'cues').single['target'],
+        'polar',
+      );
+      expect(
+        _list(
+          act('act-06-13-02-cp-polar'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-13-02-cp-polar').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-13-02-cp-polar').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-06-13-02-cp-polar').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+      expect(_list(act('act-06-13-02-cp-tag'), 'cues').single['target'], 'tag');
+      expect(
+        _list(
+          act('act-06-13-02-cp-tag'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-13-02-cp-tag').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-13-02-cp-tag').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-06-13-02-cp-tag').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+      expect(_list(act('act-06-13-02-cp-lag'), 'cues').single['target'], 'lag');
+      expect(
+        _list(
+          act('act-06-13-02-cp-lag'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-13-02-cp-lag').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-13-02-cp-lag').teachSpec!['deal'], {'mode': 'none'});
+      expect(
+        act('act-06-13-02-cp-lag').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });

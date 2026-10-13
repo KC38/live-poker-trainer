@@ -2342,6 +2342,8 @@ export function buildSectionSix() {
                   choice("none", "No concept applies", "clear_mistake",
                     "It does.", {betterChoiceId: "ra"})
                 ],
+                // LPT-307
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "ra", kind: "none"}]},
               }),
               selectAct({
                 id: "act-06-13-02-cp-cap", order: 2, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2354,6 +2356,8 @@ export function buildSectionSix() {
                   choice("uncap", "More uncapped nuts", "clear_mistake",
                     "No.", {betterChoiceId: "cap"})
                 ],
+                // LPT-307
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cap", kind: "none"}]},
               }),
               selectAct({
                 id: "act-06-13-02-cp-polar", order: 3, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2366,6 +2370,8 @@ export function buildSectionSix() {
                   choice("merged", "Always merged thin value", "clear_mistake",
                     "Wrong size story.", {betterChoiceId: "polar"})
                 ],
+                // LPT-307
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "polar", kind: "none"}]},
               }),
               classifyAct({
                 id: "act-06-13-02-cp-tag", order: 4, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2379,6 +2385,8 @@ export function buildSectionSix() {
                   choice("lag", "LAG", "clear_mistake",
                     "Entry too tight.", {betterChoiceId: "tag"})
                 ],
+                // LPT-307
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tag", kind: "none"}]},
               }),
               classifyAct({
                 id: "act-06-13-02-cp-lag", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2392,6 +2400,8 @@ export function buildSectionSix() {
                   choice("nit", "Nit", "clear_mistake",
                     "Opposite.", {betterChoiceId: "lag"})
                 ],
+                // LPT-307
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "lag", kind: "none"}]},
               }),
             ],
           }),

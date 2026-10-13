@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "4ad95d1b0fba24de45d5b81e33540dcc6c2e9c2485036b8f932bbf85d7964718",
+  "contentChecksum": "f46f2dc49007ed7c699b52feed14e63d0d5c8b1852da96064668f96133454f1f",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -19774,7 +19774,19 @@
                       "accessibilityText": "No concept applies"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ra",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-13-02-cp-cap",
@@ -19804,7 +19816,19 @@
                       "accessibilityText": "More uncapped nuts"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cap",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-13-02-cp-polar",
@@ -19834,7 +19858,19 @@
                       "accessibilityText": "Always merged thin value"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "polar",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-13-02-cp-tag",
@@ -19867,7 +19903,19 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tag",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-13-02-cp-lag",
@@ -19900,7 +19948,19 @@
                   "playerTypeRefs": [
                     "lag"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "lag",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

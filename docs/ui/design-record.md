@@ -575,7 +575,7 @@ blockers without solver theater (LPT-268), Navigate 3-bet and 4-bet pots by
 depth (LPT-280), Make difficult folds; review coolers fairly (LPT-283),
 Observe selective aggression (LPT-286), Meet the TAG (LPT-289), Adjust
 versus TAG (LPT-292), Meet the LAG (LPT-298), Same cards, five type models
-(LPT-304).
+(LPT-304), Section 6 checkpoint (LPT-307).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1093,6 +1093,10 @@ scaffolded fixed JhTd/QcTs3h2d7c → `nit`; unguided fixed JhTd/QcTs3h2d7c →
 `lag`; checkpoint `none` → `tag`; assessment steps use cue kind `none` (no
 pressHints).
 
+Section 6 checkpoint `teachSpec` (LPT-307): cp-adv `none` → `ra`; cp-cap
+`none` → `cap`; cp-polar `none` → `polar`; cp-tag `none` → `tag`; cp-lag
+`none` → `lag`; assessment steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1519,7 +1523,7 @@ felt.
 | Meet the LAG | Wide, Pressure, Model; unguided SoftPulse one gold (LPT-492) | label quizzes |
 | Adjust versus LAG | Call, Trap, Fancy less; unguided SoftPulse one gold Usually avoid (LPT-503) | avoid and cite checks |
 | Same cards, five type models | Cards, seats, and evidence in the stage | — |
-| Section 6 checkpoint | — | advantage, cap, polar, TAG, and LAG checks |
+| Section 6 checkpoint | — | — |
 | Carry a preflop plan onto the flop | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505) | plan quizzes |
 | Map turn barrels before you bet flop | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506) | no-plan and definition checks |
 | Compose river value and bluffs | Value, Bluff, Hold | blocker, empty, and rule checks |
