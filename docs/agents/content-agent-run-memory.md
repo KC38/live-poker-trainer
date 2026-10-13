@@ -1145,3 +1145,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR next oldest discovery (`lesson-05-06-01-line-reading`).
 - act-05-05-01-*: structural clean on tip — curriculum split only via LPT-236; not on LPT-667.
 
+## Fold 2026-10-13dk (196d3505 #2148 + line-reading)
+
+- Tip `196d3505` (#2148 lines-and-probes discovery learnings). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Open Medium: **LPT-667** (6 one-per-press) + Capstone **LPT-348**.
+- Parents+LPT-667/348 already **HAS** tip; tip-commented curriculum **LPT-239** (+ LPT-667/348 discovery notes).
+- Discovery oldest-unfresh `lesson-05-06-01-line-reading` (Street-by-street updates): explain has `explainGrading`; guided SoftPulse; scaffolded fixed 7h6h/Kh9h2c3d + variants + one-per-press; unguided one-per-press; checkpoint hintless. Structural clean. Curriculum multi-concept **LPT-239** needs-human.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR next oldest `lesson-05-09-01-session-discipline` / Low curriculum.
+- act-05-06-01-*: structural clean on tip — curriculum split only via LPT-239.
