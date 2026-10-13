@@ -256,3 +256,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip `dc3f830f` (#1910): concurrent coverage already tip-synced catalog parents (Nice!/pressHints/SoftPulse-map/densify/explain). This run tip-commented honesty/fingerprint/Scene/cues/wave + In Progress teachSpecs that still had **zero** `dc3f830f` hits: LPT-394/396/401/402/405/414/417, LPT-588, LPT-370, LPT-558, LPT-252/271/275/280, LPT-408/409/411 — all still valid.
 - Corrected **LPT-626** body: scanner raw **156** − five `noHintIds` `-hand` → fix checklist **151** (prior tip text wrongly said 156 after excluding).
 - `scan_content_gaps --counts` unchanged 156/73/117/42; densify helper still 44; SoftPulse-map 18+qq ABSENT; LPT-635 12 S1–S2 MISSING; earliest High teachSpec LPT-242 still all-five MISSING.
+
+## Fold 2026-10-13 tip b8e09524 (#1912)
+
+- Tip `b8e09524` after #1912 LPT-642 Done (ui-agent open-pot felt redeal under Nice!/Oops on `act-01-05-01-unguided-pot`). That fix does **not** clear content catalog gaps — same class as LPT-641 cyan ≠ catalog-clear.
+- `scan_content_gaps --counts` still pressHints **156** / deal-variants **73** / teachSpec **117** / explain-teachSpec **42**. Rebuilt catalog parents: LPT-626 (fix **151** after `noHintIds`), LPT-627 (**73**), LPT-635 (12 S1–S2), LPT-625 SoftPulse-map (**68** arms / **18+qq ABSENT**), LPT-628 densify (**44** arms / **156** fallthrough; priority seat-footer + Soft timing `act-05-07-01-*` incl. guided + mix SI).
+- Tip-commented LPT-624 Nice! + LPT-643 Hint companion + earliest High LPT-242 (all five `act-05-07-01-*` still MISSING teachSpec) + honesty/fingerprint LPT-394/396/401/402/405/414/417/370/588/408/409/411.
+- In Progress teachSpec Highs LPT-252/255/271/275/280 still all-five MISSING (not re-spammed this tip beyond LPT-242). `CATALOG_PARENTS.teachSpec` stays null.
+- SoftPulse-map re-check: brace-extract `String? _guidedPulseTargetId` definition only (call-site substring false-positives `_feltFirstCoach`).
