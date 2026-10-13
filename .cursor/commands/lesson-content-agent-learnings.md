@@ -57,10 +57,13 @@ Lesson-specific pattern notes (full history) live in
   `handFamily` / `suitFamily` against `teach_spec.schema.json` enums.
 - Never leave durable loop learnings only in the home pending file —
   fold into this file + `content-agent-run-memory.md` and ship a
-  `chore/content-agent-learnings-*` PR the same tick. Coverage
+  `chore/content-agent-learnings-*` (or `cursor/chore-content-*`)
+  PR the same tick so the next agent reads them from git. Coverage
   `learnings: pending` means unfolder until that PR is on tip and
   `~/.live-poker-trainer/content-agent-learnings-pending.md` has zero
   `- ` bullets — do not treat the coverage field alone as folded.
+  After the PR opens, leave PRIMARY clean on `main` (loop
+  `sync_primary` returns any leftover `cursor/chore-content-*`).
 - Never create a `catalog:teachSpec` parent while
   `scan_content_gaps.mjs` `CATALOG_PARENTS.teachSpec` is `null` —
   interactive missing-teachSpec Highs stay per-lesson; only SoftPulse
@@ -154,3 +157,4 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13aa: Tip `8bcf69a8` (#1970 learnings): scan flat 151/81/80/34/nice-44/map-24 softpulseMapArms 68 densifyHelperArms 47; parents tip-commented no rebuild; tip-commented Soft timing LPT-242 + Map turn LPT-312 + IP LPT-252/255/271/275 + honesty LPT-396 + fingerprint LPT-401/402/405/408/409/411/414/417; Soft timing densify ABSENT; pending empty.
 - 2026-10-13ab: Tip `da985d39` after #1972 LPT-318 pot-type teachSpec: Nice! **44→45** (`act-07-04-01-explain` LIMPED→SRP→3-4BET); deal-variants flat **81**; teachSpec **80→76** / explain-teachSpec **34→33**; LPT-635 keeps 12 S1–S2; scaffolded/unguided stay on LPT-626; Soft timing densify ABSENT (helper 47); LPT-396 still valid JhTd/Ts9h8c2d top-as-second.
 - 2026-10-13ac: Tip `39754d09` after #1973 LPT-321 Switch gears + #1975 LPT-324 stack-depth: Nice! **45→47** (`act-07-05-01-explain` FEWER→THICKER→WIDEN, `act-07-06-01-explain` SHORT→DEEP→EFFECTIVE); deal-variants flat **81**; teachSpec **76→68** / explain-teachSpec **33→31**; LPT-635 keeps 12 S1–S2; Done LPT-324 on tip (IP→Done); Soft timing densify ABSENT (helper 47); LPT-396 still valid; next teachSpec frontier LPT-328.
+- 2026-10-13ad: `sync_primary` returns every leftover `cursor/chore-content-*` (not only `*-agent-learnings-*`) to `main` when clean — stops next run auditing a stuck Nice!/learnings chore tip; Never: ship learnings to git same tick.
