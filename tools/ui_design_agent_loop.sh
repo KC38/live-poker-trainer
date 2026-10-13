@@ -39,6 +39,7 @@
 #                               SDK or `agent --model`.
 #   UI_AGENT_GAP                seconds between runs (default 60)
 #   UI_AGENT_BUSY_SLEEP         seconds to sleep when the mini is busy (default 300)
+#   UI_AGENT_EMPTY_QUEUE_SLEEP  seconds to sleep when ui-queue is empty (default 900)
 #   UI_AGENT_SIM_NOT_READY_SLEEP  seconds after programmatic SIM_NOT_READY (default 600)
 #   UI_AGENT_USAGE_LIMIT_SLEEP  seconds after ActionRequiredError usage limit
 #                               (default: until stated reset day, else 3600)
@@ -78,6 +79,8 @@ LOOP_PID_FILE="$STATE_DIR/ui-agent-loop.pid"
 SECRETS_FILE="$STATE_DIR/secrets.env"
 GAP="${UI_AGENT_GAP:-60}"
 BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
+# Seconds to sleep when jira ui-queue has no actionable ticket (default 900).
+EMPTY_QUEUE_SLEEP="${UI_AGENT_EMPTY_QUEUE_SLEEP:-900}"
 # After back-to-back SIM_NOT_READY (usually Flutter cache lock / pub get
 # killed), back off so other agents can finish and the mini can boot.
 SIM_NOT_READY_SLEEP="${UI_AGENT_SIM_NOT_READY_SLEEP:-600}"
@@ -316,6 +319,13 @@ primary_is_clean_main() {
   [[ "$branch" == "main" ]] || return 1
   [[ -z "$(git -C "$dir" status --porcelain 2>/dev/null)" ]] || return 1
   return 0
+}
+
+
+# True when jira ui-queue lists at least one actionable LPT ticket.
+# needs-human / grokbot are already filtered by tools/jira.py ui-queue.
+ui_queue_has_ticket() {
+  python3 "$TOOLS/jira.py" ui-queue 2>/dev/null | grep -qE '^LPT-[0-9]+[[:space:]]'
 }
 
 sim_lock() {
@@ -2106,9 +2116,10 @@ PY
   write_health_row "$stamp" "12" "$seconds" "$run_log" 0
 }
 
-# One run. Returns 0 after an agent run, 10 when the mini was busy, 11 when
-# not logged in, 12 when the Dart VM never came up (agent not started),
-# 13 when the agent was killed for a stalled lock heartbeat.
+# One run. Returns 0 after an agent run, 10 when the mini was busy / primary
+# off clean main, 11 when not logged in, 12 when the Dart VM never came up
+# (agent not started), 13 when the agent was killed for a stalled lock
+# heartbeat, 16 when ui-queue has no actionable ticket.
 one_run() {
   sync_primary
   # Skip when another agent left PRIMARY off clean main. Unit tests set
@@ -2119,6 +2130,10 @@ one_run() {
     log "primary checkout is on '${_branch}' (not clean main); skipping this run"
     unset _branch
     return 10
+  fi
+  if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! ui_queue_has_ticket; then
+    log "ui-queue empty (no actionable ui-agent ticket); skipping this run"
+    return 16
   fi
   if ! logged_in; then
     log "Cursor CLI has no API key and no login. Run: $SCRIPT setup"
@@ -2420,6 +2435,10 @@ run_loop() {
     fi
     case "$code" in
       10) sleep "$BUSY_SLEEP" ;;
+      16)
+        log "ui-queue empty; sleeping ${EMPTY_QUEUE_SLEEP}s before retry"
+        sleep "$EMPTY_QUEUE_SLEEP"
+        ;;
       11) sleep 600 ;;
       12)
         log "SIM_NOT_READY preflight; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
