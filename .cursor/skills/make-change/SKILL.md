@@ -161,10 +161,13 @@ cd "$PRIMARY"
 # Force-remove worktree directory before deleting refs
 git worktree remove --force ".worktrees/$SLUG"
 
-# Verify primary is on main and sync latest commits
+# Verify primary is on main and sync latest commits.
+# Prefer fetch + merge --ff-only over `git pull --ff-only origin main`:
+# with global pull.rebase=true that pull can fail with
+# "Cannot rebase onto multiple branches".
 git checkout main
 git fetch origin main
-git pull --ff-only origin main
+git merge --ff-only origin/main
 
 # Delete remote and local branches safely after exiting the worktree
 git push origin --delete "$BRANCH" 2>/dev/null || true
@@ -206,7 +209,7 @@ If none of those are set, skip the local script and report that production depen
 
 ### 9. Refresh the iPhone 13 mini (successful primary pull only)
 
-Only after step 7's `git pull --ff-only origin main` succeeded:
+Only after step 7's `git merge --ff-only origin/main` succeeded:
 
 ```bash
 .cursor/skills/simulator-refresh/scripts/refresh-simulator.sh

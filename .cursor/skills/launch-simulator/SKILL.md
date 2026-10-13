@@ -56,8 +56,9 @@ PRIMARY="$(tools/primary_checkout.sh)"
 cd "$PRIMARY"
 git fetch origin main
 git checkout main
-git pull --ff-only origin main
+git merge --ff-only origin/main
 ```
+
 
 If that checkout is dirty, on another branch, or will not fast-forward, stop
 and report. Do not reset, stash, or add a worktree.

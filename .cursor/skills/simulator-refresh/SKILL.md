@@ -25,7 +25,7 @@ hardcode it.
 | Pid file | `/tmp/flutter-live-poker-trainer.pid` |
 
 [make-change](../make-change/SKILL.md) calls this in step 9 after a
-successful primary `git pull --ff-only`. Skip when that pull failed.
+successful primary `git merge --ff-only origin/main`. Skip when that sync failed.
 [/ui-design-agent](../../commands/ui-design-agent.md) and
 [launch-simulator](../launch-simulator/SKILL.md) also call this when the
 mini should show `origin/main`.
