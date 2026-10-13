@@ -73,9 +73,9 @@ difficult folds; review coolers fairly (LPT-283), Observe selective
 aggression (LPT-286), Meet the TAG (LPT-289), Adjust versus TAG (LPT-292),
 Meet the LAG (LPT-298), Same cards, five type models (LPT-304), Section 6
 checkpoint (LPT-307), Carry a preflop plan onto the flop (LPT-308), Change
-plans by pot type (LPT-318), Switch gears between HU and multiway (LPT-321).
-Content gaps are audited by [11 — Lesson content
-agent](11-lesson-content-agent.md).
+plans by pot type (LPT-318), Switch gears between HU and multiway (LPT-321),
+Rewrite plans when stacks change (LPT-324). Content gaps are audited by [11
+— Lesson content agent](11-lesson-content-agent.md).
 
 `deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
 `teach_spec.schema.json` enum. Besides showdown ranks and starting-hand

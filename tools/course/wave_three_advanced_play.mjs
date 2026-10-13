@@ -2825,7 +2825,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-06-01-explain", 1,
                 "Effective stack rewrites the plan every hand.",
-                {objectives: ["Recalculate effective stacks each hand"]}),
+                {
+                  objectives: ["Recalculate effective stacks each hand"],
+                  // LPT-324
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "SHORT", kind: "soft_pulse"},
+                      {press: 2, target: "DEEP", kind: "soft_pulse"},
+                      {press: 3, target: "EFFECTIVE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-07-06-01-guided", order: 2, stage: "guided",
                 prompt: "35bb effective. Top pair strong kicker vs raise. Lean?",
@@ -2837,6 +2848,8 @@ export function buildSectionSeven() {
                   choice("deep", "Play as 250bb deep", "clear_mistake",
                     "Wrong.", {betterChoiceId: "commit"})
                 ],
+                // LPT-324
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "commit", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-06-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2849,6 +2862,8 @@ export function buildSectionSeven() {
                   choice("no", "Never set-mine deep", "clear_mistake",
                     "Opposite.", {betterChoiceId: "yes"})
                 ],
+                // LPT-324
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "yes", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-06-01-unguided", order: 4, stage: "scaffolded",
@@ -2861,6 +2876,8 @@ export function buildSectionSeven() {
                   choice("200", "200bb", "clear_mistake",
                     "Cannot play more than villain has.", {betterChoiceId: "40"})
                 ],
+                // LPT-324
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "40", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-06-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2873,6 +2890,8 @@ export function buildSectionSeven() {
                   choice("once", "Set once per lifetime", "clear_mistake",
                     "No.", {betterChoiceId: "every"})
                 ],
+                // LPT-324
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "every", kind: "none"}]},
               }),
             ],
           }),
