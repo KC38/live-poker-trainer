@@ -3054,7 +3054,29 @@
                           "Ah",
                           "Kd"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-fold-win-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-fold-win-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -3127,7 +3149,43 @@
                           "9h",
                           "3s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-showdown-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Qd",
+                              "7h",
+                              "2c",
+                              "9s",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-showdown-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Qc",
+                              "7h",
+                              "2s",
+                              "9d",
+                              "3c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -4077,7 +4135,39 @@
                           "8s",
                           "2c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-jump-legal-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Qs",
+                              "Jc"
+                            ],
+                            "board": [
+                              "Tc",
+                              "8d",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-jump-legal-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Qd",
+                              "Js"
+                            ],
+                            "board": [
+                              "Ts",
+                              "8c",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -7184,7 +7274,29 @@
                           "Ah",
                           "Ad"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-jump-vs-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Ac"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-jump-vs-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "As"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -8209,7 +8321,39 @@
                           "8h",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8s",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Qd"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8d",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -8349,7 +8493,39 @@
                           "8h",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8s",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Qd"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8d",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -8421,7 +8597,39 @@
                           "7h",
                           "2c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Ks",
+                              "7s",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Qd"
+                            ],
+                            "board": [
+                              "Kd",
+                              "7d",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -8584,7 +8792,39 @@
                           "7c",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7h",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -8658,7 +8898,39 @@
                           "7d",
                           "2c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Qc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7c",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7s",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -8732,7 +9004,39 @@
                           "Kd",
                           "2s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7s",
+                              "7c"
+                            ],
+                            "board": [
+                              "7h",
+                              "Kc",
+                              "2d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "7s"
+                            ],
+                            "board": [
+                              "7h",
+                              "Ks",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -8808,7 +9112,39 @@
                           "7c",
                           "2s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "5s",
+                              "2c"
+                            ],
+                            "board": [
+                              "As",
+                              "7h",
+                              "2d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "5d",
+                              "2s"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -8958,7 +9294,41 @@
                           "2c",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7c",
+                              "2h",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7s",
+                              "2h",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -9033,7 +9403,41 @@
                           "2c",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7c",
+                              "2h",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7s",
+                              "2h",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -9108,7 +9512,41 @@
                           "2c",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "9s"
+                            ],
+                            "board": [
+                              "Ks",
+                              "7s",
+                              "2h",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "9d"
+                            ],
+                            "board": [
+                              "Kd",
+                              "7d",
+                              "2h",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -9181,7 +9619,41 @@
                           "3s",
                           "Qh"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8c",
+                              "3d",
+                              "Qs"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8s",
+                              "3c",
+                              "Qd"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -9336,7 +9808,43 @@
                           "2h",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "Kh",
+                              "7c",
+                              "2s",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "Kh",
+                              "7s",
+                              "2d",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -9413,7 +9921,43 @@
                           "3h",
                           "Ah"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "9d",
+                              "8d"
+                            ],
+                            "board": [
+                              "Kd",
+                              "7d",
+                              "2s",
+                              "3s",
+                              "As"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "9c",
+                              "8c"
+                            ],
+                            "board": [
+                              "Kc",
+                              "7c",
+                              "2d",
+                              "3d",
+                              "Ad"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -9489,7 +10033,43 @@
                           "2h",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "4c"
+                            ],
+                            "board": [
+                              "Ad",
+                              "9h",
+                              "7c",
+                              "2s",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "4s"
+                            ],
+                            "board": [
+                              "Ac",
+                              "9h",
+                              "7s",
+                              "2d",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -9698,7 +10278,39 @@
                           "7s",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7s",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7d",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7c",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -9774,7 +10386,39 @@
                           "Kh",
                           "9h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "3c"
+                            ],
+                            "board": [
+                              "As",
+                              "Ks",
+                              "9s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7c",
+                              "3s"
+                            ],
+                            "board": [
+                              "Ad",
+                              "Kd",
+                              "9d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10047,7 +10691,39 @@
                           "9c",
                           "7d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "4c"
+                            ],
+                            "board": [
+                              "Ad",
+                              "9h",
+                              "7c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "4s"
+                            ],
+                            "board": [
+                              "Ac",
+                              "9h",
+                              "7s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10121,7 +10797,39 @@
                           "Tc",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kd",
+                              "Th",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kc",
+                              "Th",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10196,7 +10904,39 @@
                           "7s",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "9s",
+                              "8c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7d",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "9d",
+                              "8s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7c",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10412,7 +11152,39 @@
                           "9d",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-jump-class-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Jc",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qc",
+                              "9c",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-jump-class-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qs",
+                              "9s",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10477,7 +11249,39 @@
                           "Kh",
                           "9h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-jump-mw-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "3c"
+                            ],
+                            "board": [
+                              "As",
+                              "Ks",
+                              "9s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-jump-mw-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7c",
+                              "3s"
+                            ],
+                            "board": [
+                              "Ad",
+                              "Kd",
+                              "9d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10554,7 +11358,43 @@
                           "2h",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-jump-river-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "Kh",
+                              "7c",
+                              "2s",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-jump-river-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "Kh",
+                              "7s",
+                              "2d",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10616,7 +11456,39 @@
                           "Tc",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-jump-leak-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kd",
+                              "Th",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-jump-leak-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kc",
+                              "Th",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10891,7 +11763,41 @@
                           "2d",
                           "Kh"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2c",
+                              "Ks"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7h",
+                              "2s",
+                              "Kd"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -10963,7 +11869,39 @@
                           "7s",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Qs",
+                              "Qc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "7d",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Qd",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Qh",
+                              "7c",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11106,7 +12044,29 @@
                           "Qh",
                           "Qd"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Qs",
+                              "Qc"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Qd",
+                              "Qs"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11178,7 +12138,29 @@
                           "7h",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7s",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11250,7 +12232,29 @@
                           "Ah",
                           "Kd"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11334,7 +12338,29 @@
                           "Kh",
                           "Kd"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Kc"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Ks"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11508,7 +12534,41 @@
                           "2d",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2c",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7h",
+                              "2s",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11590,7 +12650,41 @@
                           "2h",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Qc",
+                              "9h"
+                            ],
+                            "board": [
+                              "Ks",
+                              "7s",
+                              "2s",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Qs",
+                              "9h"
+                            ],
+                            "board": [
+                              "Kd",
+                              "7d",
+                              "2d",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11653,7 +12747,39 @@
                           "9s",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11874,7 +13000,39 @@
                           "7c",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7h",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -11951,7 +13109,43 @@
                           "3d",
                           "As"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "9s",
+                              "8s"
+                            ],
+                            "board": [
+                              "Ks",
+                              "7s",
+                              "2h",
+                              "3c",
+                              "Ad"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "9d",
+                              "8d"
+                            ],
+                            "board": [
+                              "Kd",
+                              "7d",
+                              "2h",
+                              "3s",
+                              "Ac"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -12089,7 +13283,39 @@
                           "9s",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Ac"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "As"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -12287,7 +13513,39 @@
                           "7s",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7d",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7c",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -12350,7 +13608,39 @@
                           "9s",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -12424,7 +13714,41 @@
                           "2d",
                           "9h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Qd",
+                              "7h",
+                              "2c",
+                              "9s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Qc",
+                              "7h",
+                              "2s",
+                              "9d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -13142,7 +14466,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -13210,7 +14570,43 @@
                           "3d",
                           "5s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "8s",
+                              "7s"
+                            ],
+                            "board": [
+                              "Ks",
+                              "9s",
+                              "2h",
+                              "3c",
+                              "5d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "8d",
+                              "7d"
+                            ],
+                            "board": [
+                              "Kd",
+                              "9d",
+                              "2h",
+                              "3s",
+                              "5c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -13276,7 +14672,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -13968,7 +15400,29 @@
                           "Kh",
                           "9d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "9c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "9s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -14032,7 +15486,39 @@
                           "9s",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -14091,7 +15577,29 @@
                           "Kh",
                           "9d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "9c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "9s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -14814,7 +16322,43 @@
                           "Th",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "9c"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2c",
+                              "Ts",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "9s"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7h",
+                              "2s",
+                              "Td",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -14880,7 +16424,43 @@
                           "9h",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "Kh",
+                              "2c",
+                              "9s",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "Kh",
+                              "2s",
+                              "9d",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -14945,7 +16525,43 @@
                           "Th",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "9c"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2c",
+                              "Ts",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "9s"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7h",
+                              "2s",
+                              "Td",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -15435,7 +17051,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -15504,7 +17156,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -15584,7 +17272,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -15741,7 +17465,29 @@
                           "Kh",
                           "Td"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Tc"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Ts"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -15890,7 +17636,29 @@
                           "Kh",
                           "Kd"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-jump-3bet-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Kc"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-jump-3bet-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Ks"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -16028,7 +17796,39 @@
                           "7c",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-jump-size-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-jump-size-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7h",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -16405,7 +18205,29 @@
                           "7h",
                           "6h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7s",
+                              "6s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "6d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -16483,7 +18305,39 @@
                           "8c",
                           "7h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "9s",
+                              "9c"
+                            ],
+                            "board": [
+                              "9d",
+                              "8h",
+                              "7s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "9d",
+                              "9s"
+                            ],
+                            "board": [
+                              "9c",
+                              "8h",
+                              "7d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -16742,7 +18596,39 @@
                           "Th",
                           "7h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ac",
+                              "9h"
+                            ],
+                            "board": [
+                              "Ad",
+                              "Ts",
+                              "7s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "9h"
+                            ],
+                            "board": [
+                              "Ac",
+                              "Td",
+                              "7d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -16987,7 +18873,39 @@
                           "7c",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "8d",
+                              "7h",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "8c",
+                              "7h",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -17053,7 +18971,39 @@
                           "Th",
                           "8h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Jc"
+                            ],
+                            "board": [
+                              "Ad",
+                              "Ts",
+                              "8s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Js"
+                            ],
+                            "board": [
+                              "Ac",
+                              "Td",
+                              "8d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -17116,7 +19066,39 @@
                           "9h",
                           "2c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7s",
+                              "6s"
+                            ],
+                            "board": [
+                              "Ks",
+                              "9s",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "6d"
+                            ],
+                            "board": [
+                              "Kd",
+                              "9d",
+                              "2h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -17326,7 +19308,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "4s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "4d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -17406,7 +19424,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "4s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "4d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -17487,7 +19541,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "4s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "4d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -17746,7 +19836,39 @@
                           "9s",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "9s",
+                              "8c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "9d",
+                              "8s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -18035,7 +20157,41 @@
                           "2c",
                           "3d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7s",
+                              "6s"
+                            ],
+                            "board": [
+                              "Ks",
+                              "9s",
+                              "2h",
+                              "3c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "6d"
+                            ],
+                            "board": [
+                              "Kd",
+                              "9d",
+                              "2h",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -18660,7 +20816,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "4s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "4d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -19135,7 +21327,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-cp-value-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "4s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-cp-value-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "4d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -19204,7 +21432,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-cp-catch-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "4s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-cp-catch-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "4d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -19564,7 +21828,39 @@
                           "7s",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7d",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7c",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -20090,7 +22386,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9d",
+                              "4s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "9c",
+                              "4d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -20394,7 +22726,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -20695,7 +23063,41 @@
                           "2d",
                           "9s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Kc"
+                            ],
+                            "board": [
+                              "As",
+                              "7h",
+                              "2c",
+                              "9d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ac",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2s",
+                              "9c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -21269,7 +23671,43 @@
                           "4c",
                           "8s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "9s",
+                              "7c"
+                            ],
+                            "board": [
+                              "Kh",
+                              "Qs",
+                              "9c",
+                              "4h",
+                              "8d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "9d",
+                              "7s"
+                            ],
+                            "board": [
+                              "Kh",
+                              "Qd",
+                              "9s",
+                              "4h",
+                              "8c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -21509,7 +23947,39 @@
                           "Kd",
                           "2s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "7s",
+                              "7c"
+                            ],
+                            "board": [
+                              "7h",
+                              "Kc",
+                              "2d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "7d",
+                              "7s"
+                            ],
+                            "board": [
+                              "7h",
+                              "Ks",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -21853,7 +24323,39 @@
                           "3h",
                           "2s"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Qc"
+                            ],
+                            "board": [
+                              "8h",
+                              "3s",
+                              "2d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Qs"
+                            ],
+                            "board": [
+                              "8h",
+                              "3d",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -22104,7 +24606,43 @@
                           "Kd",
                           "3c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "9c"
+                            ],
+                            "board": [
+                              "Ad",
+                              "7h",
+                              "2s",
+                              "Kc",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "9s"
+                            ],
+                            "board": [
+                              "Ac",
+                              "7h",
+                              "2d",
+                              "Ks",
+                              "3h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -22960,7 +25498,39 @@
                           "9s",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -23023,7 +25593,29 @@
                           "Kh",
                           "9d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "9c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "9s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -23092,7 +25684,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -23863,7 +26491,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9d",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9c",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -23930,7 +26594,39 @@
                           "7s",
                           "2h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ac"
+                            ],
+                            "board": [
+                              "Ah",
+                              "7d",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ac",
+                              "As"
+                            ],
+                            "board": [
+                              "Ah",
+                              "7c",
+                              "2d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -24188,7 +26884,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -24257,7 +26989,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -24325,7 +27093,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -25368,7 +28172,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ac"
+                            ],
+                            "board": [
+                              "Ah",
+                              "9d",
+                              "4s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ac",
+                              "As"
+                            ],
+                            "board": [
+                              "Ah",
+                              "9c",
+                              "4d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -26492,7 +29332,39 @@
                           "8s",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -26560,7 +29432,39 @@
                           "8s",
                           "3h"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -26627,7 +29531,41 @@
                           "3h",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8d",
+                              "3s",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Kh",
+                              "8c",
+                              "3d",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -26828,7 +29766,41 @@
                           "8h",
                           "2d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-guided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Ks",
+                              "Td",
+                              "8s",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-guided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Kd",
+                              "Tc",
+                              "8d",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -26897,7 +29869,41 @@
                           "2d",
                           "Kd"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "9s",
+                              "8c"
+                            ],
+                            "board": [
+                              "Ah",
+                              "7d",
+                              "2c",
+                              "Kc"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "9d",
+                              "8s"
+                            ],
+                            "board": [
+                              "Ah",
+                              "7c",
+                              "2s",
+                              "Ks"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -26966,7 +29972,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "Tc"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Td",
+                              "3s",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "Ts"
+                            ],
+                            "board": [
+                              "Qh",
+                              "Tc",
+                              "3d",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -27534,7 +30576,43 @@
                           "2d",
                           "9c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-hand-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Qc"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7d",
+                              "2s",
+                              "2c",
+                              "9h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-hand-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7c",
+                              "2d",
+                              "2s",
+                              "9h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -27762,7 +30840,43 @@
                           "2d",
                           "7c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-hand-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Qc"
+                            ],
+                            "board": [
+                              "Qd",
+                              "8s",
+                              "3c",
+                              "2c",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-hand-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Qc",
+                              "8d",
+                              "3s",
+                              "2s",
+                              "7h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -27982,7 +31096,43 @@
                           "3d",
                           "9c"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-hand-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Qs"
+                            ],
+                            "board": [
+                              "Js",
+                              "8s",
+                              "2h",
+                              "3c",
+                              "9h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-hand-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Qd"
+                            ],
+                            "board": [
+                              "Jd",
+                              "8d",
+                              "2h",
+                              "3s",
+                              "9h"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -28214,7 +31364,43 @@
                           "2s",
                           "8d"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-hand-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Kc",
+                              "9h",
+                              "4s",
+                              "2d",
+                              "8c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-hand-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Kd"
+                            ],
+                            "board": [
+                              "Ks",
+                              "9h",
+                              "4d",
+                              "2c",
+                              "8s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
@@ -28446,7 +31632,43 @@
                           "2d",
                           "Ad"
                         ]
-                      }
+                      },
+                      "variants": [
+                        {
+                          "id": "var-hand-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Qd",
+                              "8s",
+                              "3c",
+                              "2c",
+                              "Ac"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-hand-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Qc",
+                              "8d",
+                              "3s",
+                              "2s",
+                              "As"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
                     },
                     "cues": [
                       {
