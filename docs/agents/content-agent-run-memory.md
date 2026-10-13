@@ -998,3 +998,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - **LPT-628** already Done on tip — rebuilt description to empty densify-tap checklist (ABSENT **0**) + tip-commented Done-ack. Tip-commented catalog parents LPT-624/625/626/627/635 (flat) + High **LPT-666** + Medium **LPT-370**/ **LPT-588** + needs-human **LPT-348**. Densify clear ≠ Nice!/pressHints/SoftPulse-map/explain-teachSpec clear.
 - Re-verified: **LPT-666** `act-06-01-01-explain` SoftPulse **ADVANTAGE** still fails `course-contract` TAG-early; **LPT-370** cues null; **LPT-588** Scene flop-only; **LPT-348** Capstone 4-bet `pressHints` still null (off LPT-626). Meet Nit Nice!/pressHints still LPT-624/626. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
 - next: LPT-666 OR Nice! LPT-624 OR pressHints LPT-626 OR Medium LPT-370/588 OR catalog LPT-627(99)/635(12)/625(24).
+
+## 2026-10-13cu — tip `8922d49c` (#2112) Done-ack LPT-666
+
+- Tip advanced `8f3f6aa3` → `8922d49c` via #2112 CI course-contract TAG word-boundary / densify fixture fix. `scan_content_gaps --counts` still densify-tap **0** / densifyHelperArms **229**; other flat pressHints **151** / deal-variants **99** / teachSpec **0** / explain-teachSpec **12** / nice-ladder **66** / map **24**.
+- Done-ack **LPT-666**: `node --test tools/course/validate_course.test.mjs` wave-three TAG/LAG early **passes** (10/0). SoftPulse cue **ADVANTAGE** remains on `act-06-01-01-explain` (ticket option 2 — tighten guard, keep honest label). Transitioned Done.
+- Prior densify-clear learnings PR #2113 closed unmerged — re-shipped ct fold + this cu fold. Tip-commented parents LPT-624/626/628 on `8922d49c`. Medium **LPT-370** cues null / **LPT-588** Scene flop-only / **LPT-348** Capstone pressHints still open. Meet Nit Nice!/pressHints still LPT-624/626. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
+- next: Nice! LPT-624 OR pressHints LPT-626 OR Medium LPT-370/588 OR catalog LPT-627(99)/635(12)/625(24) OR LPT-348 needs-human.
