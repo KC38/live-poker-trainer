@@ -1360,9 +1360,12 @@ LessonActionSpot? resolveLessonActionSpot(CourseActivity activity) {
         feltStatusLine: 'Same cards — LAG pressure is wide',
       );
     case 'act-07-08-01-guided':
+      // True second pair on a wet turn: JT pairs the T under the K on
+      // K T 8 2 with two hearts (flush and QJ / J9 / 97 draws live), no draw
+      // for hero. Ts 9h 8c 2d made JT top pair plus an open-ender (LPT-396).
       return const LessonActionSpot(
         heroCodes: ['Jh', 'Td'],
-        boardCodes: ['Ts', '9h', '8c', '2d'],
+        boardCodes: ['Kh', 'Ts', '8h', '2d'],
         potLabel: 'Pot 48',
         villainLine: 'Maniac overbets turn',
         streetLabel: 'Turn · second pair · wet',
