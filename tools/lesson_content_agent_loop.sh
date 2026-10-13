@@ -296,6 +296,24 @@ one_run() {
   return "$code"
 }
 
+# Sleep up to N seconds but wake every few seconds so stop/soft-stop
+# (STOP_FILE) is honored during long gaps — usage-limit sleeps of 3600s
+# previously blocked kill/stop until the bare sleep finished.
+sleep_unless_stopped() {
+  local total="${1:-0}" stepped=0 chunk
+  [[ "$total" =~ ^[0-9]+$ ]] || total=0
+  while (( stepped < total )); do
+    [[ -f "$STOP_FILE" ]] && return 0
+    chunk=5
+    if (( total - stepped < chunk )); then
+      chunk=$(( total - stepped ))
+    fi
+    (( chunk > 0 )) || break
+    sleep "$chunk"
+    stepped=$(( stepped + chunk ))
+  done
+}
+
 run_loop() {
   echo $$ >"$LOOP_PID_FILE"
   trap 'rm -f "$LOOP_PID_FILE"' EXIT
@@ -306,19 +324,23 @@ run_loop() {
     one_run || code=$?
     [[ -f "$STOP_FILE" ]] && break
     case "$code" in
-      11) sleep 600 ;;
-      12) sleep 300 ;;
+      11) sleep_unless_stopped 600 ;;
+      12) sleep_unless_stopped 300 ;;
       14)
         _s="$(sleep_usage_limit_seconds)"
         log "usage limit; sleeping ${_s}s"
-        sleep "$_s"
+        sleep_unless_stopped "$_s"
         ;;
       15)
         log "sdk gateway timeout (exit 15); sleeping ${GATEWAY_TIMEOUT_SLEEP}s before retry"
-        sleep "$GATEWAY_TIMEOUT_SLEEP"
+        sleep_unless_stopped "$GATEWAY_TIMEOUT_SLEEP"
         ;;
-      *) sleep "$GAP" ;;
+      *) sleep_unless_stopped "$GAP" ;;
     esac
+    # STOP_FILE during gap sleep exits the while without a second one_run.
+    if [[ -f "$STOP_FILE" ]]; then
+      break
+    fi
   done
   rm -f "$STOP_FILE" "$LOOP_PID_FILE"
   log "lesson-content-agent loop stopped"
