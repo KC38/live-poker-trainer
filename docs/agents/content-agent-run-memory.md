@@ -1037,3 +1037,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: Nice! LPT-624 OR pressHints LPT-626 OR catalog LPT-627(99)/635(12)/625(24) OR LPT-348 needs-human.
 - act-01-01-02-scaffolded-ranks / act-04-05-01-checkpoint: SoftPulse cues + Scene turn board landed (#2122/#2124) — do not re-file.
 
+## Fold 2026-10-13cz (fcba193c → 7a867c85)
+
+- Tip `fcba193c` (#2125 LPT-635 S1–S2 SoftPulse explain teachSpec cues): explain-teachSpec **12→0**; nice-ladder **66→76** (+10 S1–S2 explains now have teachSpec/cues but lack activity-level `explainGrading`: `act-01-03-01-explain-passive`, `act-01-03-02-explain-aggro`, `act-01-05-01-explain-win`, `act-01-06-01-explain-run`, `act-02-01-01-explain-pos`, `act-02-02-01-explain-families`, `act-02-03-01-explain-open`, `act-02-04-01-explain-vs`, `act-02-05-01-explain-bb`, `act-02-07-01-explain-full`). Streets / acting-order already had ladders. Rebuilt **LPT-624**; Done-ack+empty checklist **LPT-635** → Done. Other flat 151/99/0/map-24 densify-tap 0 helper 229.
+- Mid-run tip → `7a867c85` (#2128 LPT-625 SoftPulse-map): unguided-softpulse-map **24→0**; softpulseMapArms **68→92**. Done-ack+empty checklist **LPT-625** → Done. SoftPulse-map ≠ Nice!/pressHints/deal-variants clear — **LPT-624** still 76 / **LPT-626** still 151 / **LPT-627** still 99. Tip-commented parents+LPT-348+Done tickets on `7a867c85`.
+- Meet Nit Nice! `act-04-07-02-explain` / pressHints `act-04-07-02-unguided` still LPT-624/626 — no clones. Capstone pressHints **LPT-348** needs-human. Zero open High content tickets. next: Nice! LPT-624 OR pressHints LPT-626 OR deal-variants LPT-627(99) OR LPT-348 needs-human.
+
