@@ -1161,13 +1161,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-07-01-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-07-01-01-checkpoint')!,
       // SoftPulse owns Aces & blanks — don’t gold-tip the tile.
-      'act-07-02-01-guided' => 'AK c-bet · Q72r — pick the continue cards.',
+      // Densified frame speech via selectIdentifyDensifiedCoachLine (LPT-657).
+      'act-07-02-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-07-02-01-guided')!,
       // SoftPulse owns Give up — don’t gold-tip the tile.
-      'act-07-02-01-scaffolded' => 'Gutshot · brick raise — pick the map call.',
+      'act-07-02-01-scaffolded' =>
+        selectIdentifyDensifiedCoachLine('act-07-02-01-scaffolded')!,
       // Unguided: name the habit; don’t tip Map first.
-      'act-07-02-01-unguided' => 'No turn idea — pick what to do first.',
+      'act-07-02-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-07-02-01-unguided')!,
       // SoftPulse owns Continue/kill list — don’t gold-tip the tile.
-      'act-07-02-01-checkpoint' => 'Turn map — pick the definition.',
+      'act-07-02-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-02-01-checkpoint')!,
       // SoftPulse owns Blocks strong calls — don’t gold-tip the tile.
       'act-07-03-01-scaffolded' =>
         'Nut flush blocker — pick why the bluff works.',
