@@ -786,3 +786,28 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prior coverage on `fa1490fd` listed densify parents+frontier+Done-ack siblings; `jira.py get` confirmed those had the SHA, but S6/honesty/fingerprint Highs **LPT-252/255/258/271/275/295/301/348/408/409/411/414/417** lacked it — tip-commented those + LPT-628 Soft timing Priority the same tick.
 - Soft timing `act-05-07-01-*` densify still ABSENT from `selectIdentifyDensifiedCoachLine` (rex_coach_line zero hits). Frontier **LPT-242/312/315/334** still all-five MISSING teachSpec (densify ≠ teachSpec). Honesty LPT-414/417 still valid. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## Fold 2026-10-13bu (tip 0b226db6 LPT-408 Done-ack)
+
+- Tip advanced mid-run `fa1490fd` → `0b226db6` (#2069 LPT-408 nut-FD remap + #2067/#2068 learnings). JSON gaps still flat 151/92/44/23/nice-55/map-24 densify-tap **118** densifyHelperArms **111**.
+- Done-ack **LPT-408** (`nutFlushDraw` in `_postflopTeachKey` + remap test). First tip-comments used an unquoted shell heredoc → empty SHA placeholders — corrected with Python-written bodies (`0b226db6`) on parents + frontier + LPT-409/411/414/417 the same tick.
+- Soft timing densify still ABSENT; frontier LPT-242/312/315/334 still MISSING teachSpec; sibling fingerprints LPT-409/411 + honesty LPT-414/417 still open. Meet Nit LPT-624/626. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## Fold 2026-10-13bv (tip ea9654be tip-stable catalog sync)
+
+- Tip-stable `ea9654be` (#2071 ui-agent empty-pending stub ignore). `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, densify-tap **118**, `softpulseMapArms` **68**, `densifyHelperArms` **111**. LPT-628 body already matches — tip-comment only (no rebuild).
+- Soft timing `act-05-07-01-*` densify still **ABSENT** from `selectIdentifyDensifiedCoachLine` (rex_coach_line zero hits; LPT-464 Done ≠ PRESENT). Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315** / strategy book **LPT-334**: all five `act-*` still MISSING teachSpec each (densify ≠ teachSpec).
+- Honesty still valid (no sim): **LPT-414** Air Nice! feedback still "Gutshot-ish trash multiway…" on `act-03-02-01-unguided`; **LPT-417** ActionSpot `streetLabel`/`villainLine`/`feltStatusLine` claim 250bb / 180bb deep with **no** `stackLabel` on the spot.
+- Tip-commented catalog parents LPT-624/625/626/627/635/628 + frontier/unchecked Highs LPT-242/312/315/334/252/255/258/271/275/295/301/348 + fingerprint/honesty LPT-409/411/414/417 + LPT-370/216/408 on `ea9654be` (prior tip SHA absent on all).
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. Home pending empty (stub only). `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## Fold 2026-10-13bw (tip fe717e39 tip-stable High tip-comments)
+
+- Tip-stable `fe717e39` (#2072 learnings after ea9654be/#2071). `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, densify-tap **118**, `softpulseMapArms` **68**, `densifyHelperArms` **111**. Catalog parent bodies match — no rebuild; parents + frontier LPT-242/312/315/334 already had tip SHA.
+- Soft timing `act-05-07-01-*` densify still **ABSENT** from `selectIdentifyDensifiedCoachLine` (helper **111**; LPT-464 Done ≠ PRESENT). Frontier Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315** / strategy book **LPT-334** still all-five MISSING teachSpec (densify ≠ teachSpec).
+- Honesty / fingerprint still valid (no sim): **LPT-414** Gutshot-ish Air Nice! on `act-03-02-01-unguided`; **LPT-417** 250bb / 180bb deep chrome sans `stackLabel`; **LPT-409** pair-depth / **LPT-411** set-depth still missing from `_postflopTeachKey`.
+- Prior coverage on `fe717e39` listed only densify parents + frontier — `jira.py get` showed S6/honesty Highs lacked the SHA. Tip-commented **12**: LPT-252/255/258/271/275/295/301/348 + LPT-409/411/414/417 (Python body files; all five teachSpec still MISSING on each S6 High).
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. Home pending empty (stub only). `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
