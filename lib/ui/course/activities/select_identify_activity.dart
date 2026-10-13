@@ -1148,15 +1148,18 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-06-13-02-cp-lag' =>
         selectIdentifyDensifiedCoachLine('act-06-13-02-cp-lag')!,
       // SoftPulse owns Plan is sick — don’t gold-tip the tile.
-      'act-07-01-01-guided' => 'AQo 3-bet · 872tt — pick the plan update.',
+      // Densified frame speech via selectIdentifyDensifiedCoachLine (LPT-656).
+      'act-07-01-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-07-01-01-guided')!,
       // SoftPulse owns Value continues — don’t gold-tip the tile.
       'act-07-01-01-scaffolded' =>
-        'BTN steal KTo · KT2r — pick the plan update.',
+        selectIdentifyDensifiedCoachLine('act-07-01-01-scaffolded')!,
       // Unguided: name the habit; don’t tip Name the thesis.
       'act-07-01-01-unguided' =>
-        'Best habit — pick what to do before flop act.',
+        selectIdentifyDensifiedCoachLine('act-07-01-01-unguided')!,
       // SoftPulse owns Abandon quickly — don’t gold-tip the tile.
-      'act-07-01-01-checkpoint' => 'Dead plan — pick the response.',
+      'act-07-01-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-01-01-checkpoint')!,
       // SoftPulse owns Aces & blanks — don’t gold-tip the tile.
       'act-07-02-01-guided' => 'AK c-bet · Q72r — pick the continue cards.',
       // SoftPulse owns Give up — don’t gold-tip the tile.
