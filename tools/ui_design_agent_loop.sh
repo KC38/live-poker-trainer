@@ -306,6 +306,18 @@ sync_primary() {
   fi
 }
 
+# True when primary is on a clean main tip. Content-agent (and similar) may
+# leave PRIMARY on a feature branch; refresh then aborts but Dart VM can
+# still look ready — do not start ui-agent against that tree (20261013-082906).
+primary_is_clean_main() {
+  local dir branch
+  dir="$(primary)"
+  branch="$(git -C "$dir" rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+  [[ "$branch" == "main" ]] || return 1
+  [[ -z "$(git -C "$dir" status --porcelain 2>/dev/null)" ]] || return 1
+  return 0
+}
+
 sim_lock() {
   python3 "$TOOLS/sim_lock.py" "$@"
 }
@@ -1119,7 +1131,13 @@ for row in rows:
     if (
         stamp
         and stamp != "reconciled"
-        and result not in ("usage-limit", "sim-not-ready", "gateway-timeout", "sdk-error")
+        and result not in (
+            "usage-limit",
+            "sim-not-ready",
+            "gateway-timeout",
+            "sdk-error",
+            "interrupted",
+        )
         and (not ticket or not result or result == "stalled")
     ):
         best = best_coverage_for_stamp(row)
@@ -1154,6 +1172,29 @@ for row in rows:
         row["tail_repaired"] = True
         changed += 1
         result = "gateway-timeout"
+        tail = row["tail"]
+
+    # Pre-#1904 exit=2 rows still store result=null with empty tails.
+    if not result and row.get("exit") == 2:
+        row["result"] = "sdk-error"
+        row["tail"] = "coverage:sdk-error" if not (tail or "").strip() else tail
+        row["tail_repaired"] = True
+        changed += 1
+        result = "sdk-error"
+        tail = row["tail"]
+
+    # SIGTERM (128+15) with no coverage — soft-stop / external kill (082906).
+    # Keep scrubbed human prose when present; only empty kills get a short tag.
+    if not result and row.get("exit") == 143:
+        cleaned = scrub_sdk_stream(tail) if tail else ""
+        row["result"] = "interrupted"
+        if not cleaned:
+            row["tail"] = "coverage:interrupted"
+        elif cleaned != tail:
+            row["tail"] = cleaned[:400]
+        row["tail_repaired"] = True
+        changed += 1
+        result = "interrupted"
         tail = row["tail"]
 
     # Rewrite CLI telemetry and long agent-report prose; leave structured tails.
@@ -1656,6 +1697,13 @@ if not result and code_i == 2:
     elif not tail:
         tail = "coverage:sdk-error"
 
+# SIGTERM (exit 143) with no ticket/coverage — soft-stop or external kill.
+# Keep scrubbed human prose from mid-run kills; empty → short tag.
+if not result and code_i == 143:
+    result = "interrupted"
+    if not tail:
+        tail = "coverage:interrupted"
+
 # Prefer a short coverage summary whenever coverage landed. Agent report
 # prose used to win because it also contained LPT-NN / closed, stuffing
 # markdown into health.jsonl (LPT-61).
@@ -1666,12 +1714,16 @@ structured = (
     or tail.startswith("# ui-agent-sdk")
 )
 if result and not structured:
-    parts = [f"coverage:{result}"]
-    if ticket:
-        parts.append(f"ticket:{ticket}")
-    if surface:
-        parts.append(f"surface:{surface}")
-    tail = " ".join(parts)
+    # Interrupted SIGTERM rows may keep scrubbed kill-site prose (no ticket).
+    if result == "interrupted" and not ticket:
+        pass
+    else:
+        parts = [f"coverage:{result}"]
+        if ticket:
+            parts.append(f"ticket:{ticket}")
+        if surface:
+            parts.append(f"surface:{surface}")
+        tail = " ".join(parts)
 
 with open(path, "a", encoding="utf-8") as handle:
     handle.write(json.dumps({
@@ -2029,6 +2081,15 @@ PY
 # 13 when the agent was killed for a stalled lock heartbeat.
 one_run() {
   sync_primary
+  # Skip when another agent left PRIMARY off clean main. Unit tests set
+  # UI_AGENT_SKIP_SIM_PREFLIGHT=1 and use a disposable PRIMARY.
+  if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! primary_is_clean_main; then
+    local _branch
+    _branch="$(git -C "$(primary)" rev-parse --abbrev-ref HEAD 2>/dev/null || echo unknown)"
+    log "primary checkout is on '${_branch}' (not clean main); skipping this run"
+    unset _branch
+    return 10
+  fi
   if ! logged_in; then
     log "Cursor CLI has no API key and no login. Run: $SCRIPT setup"
     return 11
