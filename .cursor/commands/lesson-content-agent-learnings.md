@@ -100,6 +100,8 @@ Lesson-specific pattern notes (full history) live in
 - Prefer after ui-agent Nice!/Oops Dones (cyan-selection LPT-641, open-pot felt redeal LPT-642, etc.): tip-comment open content catalog parents (LPT-624/625/626/628/635) on the new SHA — ui under Nice!/Oops does **not** clear those gaps; keep Hint-enablement companions (LPT-643) open separately.
 
 - Prefer when `content-agent-coverage.jsonl` already has a catalog-parent sync line for this tip SHA: skip re-editing those parents unless a count/body error remains (e.g. LPT-626 raw **156** vs excluded fix **151**); tip-comment honesty/fingerprint Highs that still show zero hits for the SHA.
+- Prefer when tip advances with scanner-only `NO_HINT_ACTIVITY_IDS` / pressHints exclude (#1916): rebuild **LPT-626** from `scan_content_gaps --gap pressHints --markdown` so the checklist count equals `--counts` (**151**) — drop manual 156−5 subtract wording; tip-comment other catalog parents on the new SHA without inventing count deltas.
+- Prefer on a tip-stable catalog-synced SHA: tip-comment unchecked **To Do** High teachSpecs (e.g. LPT-258 capped / LPT-283 hard-folds) rather than re-spamming In Progress / honesty already commented on that SHA.
 
 ## Recent fold
 
@@ -110,3 +112,6 @@ Lesson-specific pattern notes (full history) live in
   loop backs off 600s on SDK exit 15 (504), matching ui-agent.
 - 2026-10-13f: Generalized Nice!/Oops ui Dones ≠ catalog-clear to cover
   LPT-642 open-pot felt redeal (#1912) alongside LPT-641 cyan.
+- 2026-10-13g: Tip `2604f13e` (#1916) scanner pressHints **156→151**;
+  rebuild LPT-626 from markdown; tip-comment To Do High teachSpecs
+  (LPT-258/283) when catalog parents already synced on the prior tip.

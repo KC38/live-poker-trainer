@@ -264,3 +264,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-624 Nice! + LPT-643 Hint companion + earliest High LPT-242 (all five `act-05-07-01-*` still MISSING teachSpec) + honesty/fingerprint LPT-394/396/401/402/405/414/417/370/588/408/409/411.
 - In Progress teachSpec Highs LPT-252/255/271/275/280 still all-five MISSING (not re-spammed this tip beyond LPT-242). `CATALOG_PARENTS.teachSpec` stays null.
 - SoftPulse-map re-check: brace-extract `String? _guidedPulseTargetId` definition only (call-site substring false-positives `_feltFirstCoach`).
+
+## Fold 2026-10-13 tip 2604f13e (#1916)
+
+- Tip `2604f13e` after #1916: scanner `NO_HINT_ACTIVITY_IDS` excludes Dart `lessonFrameHintsDisabled` capstone `-hand`/`-explain` ids — `scan_content_gaps --counts` pressHints **156→151** (matches prior manual LPT-626 fix table). deal-variants **73** / teachSpec **117** / explain-teachSpec **42** unchanged.
+- Rebuilt catalog parents from markdown: **LPT-626** (151), **LPT-627** (73), **LPT-635** (12 S1–S2). Tip-commented LPT-624/625/628 + earliest In Progress High **LPT-242** (all five `act-05-07-01-*` still MISSING) + To Do High **LPT-258** (all five `act-06-03-01-*` still MISSING; densify capped ≠ teachSpec) + **LPT-283** (`act-06-10-01-*` still MISSING) + cues **LPT-370** (`act-01-01-02-scaffolded-ranks` cues still null).
+- Densify helper still **44** / priority ABSENT Soft timing SI + mix SI + seat footers. SoftPulse-map still **68** arms / `scaffolded-qq` ABSENT. `CATALOG_PARENTS.teachSpec` stays null.
+- `act-` / `lesson-` greps: Soft timing `act-05-07-01-*`, capped `act-06-03-01-*`, hard-folds `act-06-10-01-*`, ranks cues `act-01-01-02-scaffolded-ranks` — all still open as prior tickets; no new per-lesson clones.
