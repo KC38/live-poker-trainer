@@ -1752,7 +1752,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-11-01-explain", 1,
                 "Before labels: who enters tight, then barrels with a plan? Count samples.",
-                {objectives: ["Note selective entry"]}),
+                {
+                  objectives: ["Note selective entry"],
+                  // LPT-286
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "TIGHT", kind: "soft_pulse"},
+                      {press: 2, target: "BARREL", kind: "soft_pulse"},
+                      {press: 3, target: "SAMPLE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-11-01-guided", order: 2, stage: "guided",
                 prompt: "Seat folds most hands, then 3-bets and c-bets strong boards. Note?",
@@ -1766,6 +1777,8 @@ export function buildSectionSix() {
                   choice("label", "Label now", "clear_mistake",
                     "Observe first — need samples.", {betterChoiceId: "sel"})
                 ],
+                // LPT-286
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "sel", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-11-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1778,6 +1791,8 @@ export function buildSectionSix() {
                   choice("mania", "Same maniac", "clear_mistake",
                     "Maniacs continue too wide.", {betterChoiceId: "disc"})
                 ],
+                // LPT-286
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "disc", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-11-01-unguided", order: 4, stage: "scaffolded",
@@ -1790,6 +1805,8 @@ export function buildSectionSix() {
                   choice("max", "Max certainty", "clear_mistake",
                     "Too soon.", {betterChoiceId: "low"})
                 ],
+                // LPT-286
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "low", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-11-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1802,6 +1819,8 @@ export function buildSectionSix() {
                   choice("vibe", "Good haircut", "clear_mistake",
                     "Not evidence.", {betterChoiceId: "bundle"})
                 ],
+                // LPT-286
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "bundle", kind: "none"}]},
               }),
             ],
           }),
