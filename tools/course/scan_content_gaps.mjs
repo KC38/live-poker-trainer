@@ -12,6 +12,9 @@
  *   node tools/course/scan_content_gaps.mjs --markdown --gap deal-variants
  *   node tools/course/scan_content_gaps.mjs --counts
  *     (also softpulseMapArms + densifyHelperArms from Dart)
+ *
+ * Dart arm counts use brace depth, not a regex that stops at the first `}`.
+ * An inner block before the switch arms must not drop those ids (#1964).
  */
 
 import {readFileSync} from "node:fs";
@@ -27,27 +30,75 @@ const SOFTPULSE_MAP_PATH = resolve(
 );
 
 /**
+ * Body of the first `{...}` that opens after `marker`, counting nested braces.
+ *
+ * A non-greedy match up to the first `}` drops switch arms that follow an
+ * inner block. #1964 left a truncated regex that stopped `--counts` from
+ * parsing; brace depth is what replaced it.
+ * Braces inside strings are not skipped; the Dart maps this reads do not
+ * put `{` in arm text.
+ *
+ * @param {string} text
+ * @param {string} marker
+ * @returns {string|null}
+ */
+export function braceMatchedBody(text, marker) {
+  const start = text.indexOf(marker);
+  if (start < 0) {
+    return null;
+  }
+  const brace = text.indexOf("{", start);
+  if (brace < 0) {
+    return null;
+  }
+  let depth = 0;
+  for (let i = brace; i < text.length; i++) {
+    const ch = text[i];
+    if (ch === "{") {
+      depth++;
+    } else if (ch === "}") {
+      depth--;
+      if (depth === 0) {
+        return text.slice(brace + 1, i);
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Activity ids on `'act-…' =>` arms inside the brace-matched body of `marker`.
+ * Arms after the matching close are ignored. A missing or unclosed body is empty.
+ *
+ * @param {string} text
+ * @param {string} marker
+ * @returns {Set<string>}
+ */
+export function switchArmActivityIds(text, marker) {
+  const body = braceMatchedBody(text, marker);
+  if (body == null) {
+    return new Set();
+  }
+  return new Set([...body.matchAll(/'(act-[^']+)'\s*=>/g)].map((m) => m[1]));
+}
+
+/**
  * Activity ids with SoftPulse docks in `_guidedPulseTargetId`.
  * @returns {Set<string>}
  */
 function loadGuidedPulseTargetIds() {
   try {
     const text = readFileSync(SOFTPULSE_MAP_PATH, "utf8");
-    const match = text.match(
-      /String\?\s+_guidedPulseTargetId\(CourseActivity activity\)\s*\{([\s\S]*?)\n\}/,
-    );
-    if (!match) {
-      return new Set();
-    }
-    return new Set(
-      [...match[1].matchAll(/'(act-[^']+)'\s*=>/g)].map((m) => m[1]),
+    return switchArmActivityIds(
+      text,
+      "String? _guidedPulseTargetId(CourseActivity activity)",
     );
   } catch {
     return new Set();
   }
 }
 
-const GUIDED_PULSE_TARGET_IDS = loadGuidedPulseTargetIds();
+export const GUIDED_PULSE_TARGET_IDS = loadGuidedPulseTargetIds();
 
 const DENSIFY_HELPER_PATH = resolve(
   REPO_ROOT,
@@ -62,40 +113,13 @@ const DENSIFY_HELPER_PATH = resolve(
 function loadDensifyHelperIds() {
   try {
     const text = readFileSync(DENSIFY_HELPER_PATH, "utf8");
-    const start = text.indexOf("selectIdentifyDensifiedCoachLine");
-    if (start < 0) {
-      return new Set();
-    }
-    const brace = text.indexOf("{", start);
-    if (brace < 0) {
-      return new Set();
-    }
-    let depth = 0;
-    let end = -1;
-    for (let i = brace; i < text.length; i++) {
-      const ch = text[i];
-      if (ch === "{") depth++;
-      else if (ch === "}") {
-        depth--;
-        if (depth === 0) {
-          end = i;
-          break;
-        }
-      }
-    }
-    if (end < 0) {
-      return new Set();
-    }
-    const body = text.slice(brace + 1, end);
-    return new Set(
-      [...body.matchAll(/'(act-[^']+)'\s*=>/g)].map((m) => m[1]),
-    );
+    return switchArmActivityIds(text, "selectIdentifyDensifiedCoachLine");
   } catch {
     return new Set();
   }
 }
 
-const DENSIFY_HELPER_IDS = loadDensifyHelperIds();
+export const DENSIFY_HELPER_IDS = loadDensifyHelperIds();
 
 const INTERACTIVE_RENDERERS = new Set([
   "select_identify",
@@ -113,7 +137,7 @@ const INTERACTIVE_RENDERERS = new Set([
  * no-hint (`lib/ui/course/widgets/lesson_screen_layout.dart`). Keep in sync
  * when that set changes — they must not inflate pressHints catalog counts.
  */
-const NO_HINT_ACTIVITY_IDS = new Set([
+export const NO_HINT_ACTIVITY_IDS = new Set([
   "act-07-10-01-explain",
   "act-07-10-02-explain",
   "act-07-10-03-explain",
@@ -192,7 +216,7 @@ function isInteractive(activity) {
  * @param {Record<string, unknown>} activity
  * @returns {GapRow|null}
  */
-function gapPressHints(lessonId, lessonTitle, activity) {
+export function gapPressHints(lessonId, lessonTitle, activity) {
   if (String(activity.stage || "") !== "scaffolded") {
     return null;
   }
@@ -230,7 +254,7 @@ function gapPressHints(lessonId, lessonTitle, activity) {
  * @param {Record<string, unknown>} activity
  * @returns {GapRow|null}
  */
-function gapDealVariants(lessonId, lessonTitle, activity) {
+export function gapDealVariants(lessonId, lessonTitle, activity) {
   if (!isInteractive(activity)) {
     return null;
   }
@@ -266,7 +290,7 @@ function gapDealVariants(lessonId, lessonTitle, activity) {
  * @param {Record<string, unknown>} activity
  * @returns {GapRow|null}
  */
-function gapTeachSpec(lessonId, lessonTitle, activity) {
+export function gapTeachSpec(lessonId, lessonTitle, activity) {
   if (!isInteractive(activity)) {
     return null;
   }
@@ -291,7 +315,7 @@ function gapTeachSpec(lessonId, lessonTitle, activity) {
  * @param {Record<string, unknown>} activity
  * @returns {GapRow|null}
  */
-function gapExplainCues(lessonId, lessonTitle, activity) {
+export function gapExplainCues(lessonId, lessonTitle, activity) {
   if (String(activity.renderer || "") !== "coach_dialogue") {
     return null;
   }
@@ -334,7 +358,7 @@ function gapExplainCues(lessonId, lessonTitle, activity) {
  * @param {unknown} node
  * @returns {boolean}
  */
-function hasSoftPulseCue(node) {
+export function hasSoftPulseCue(node) {
   if (node == null) {
     return false;
   }
@@ -355,7 +379,7 @@ function hasSoftPulseCue(node) {
  * @param {Record<string, unknown>} activity
  * @returns {GapRow|null}
  */
-function gapNiceLadder(lessonId, lessonTitle, activity) {
+export function gapNiceLadder(lessonId, lessonTitle, activity) {
   if (String(activity.renderer || "") !== "coach_dialogue") {
     return null;
   }
@@ -387,7 +411,7 @@ function gapNiceLadder(lessonId, lessonTitle, activity) {
  * @param {Record<string, unknown>} activity
  * @returns {GapRow|null}
  */
-function gapUnguidedSoftpulseMap(lessonId, lessonTitle, activity) {
+export function gapUnguidedSoftpulseMap(lessonId, lessonTitle, activity) {
   if (String(activity.renderer || "") !== "poker_action_sizing") {
     return null;
   }
@@ -439,7 +463,7 @@ const CATALOG_PARENTS = {
  * @param {unknown} course
  * @returns {Record<string, GapRow[]>}
  */
-function scanAll(course) {
+export function scanAll(course) {
   /** @type {Record<string, GapRow[]>} */
   const out = {};
   for (const key of Object.keys(SCANNERS)) {
@@ -461,7 +485,7 @@ function scanAll(course) {
  * @param {GapRow[]} rows
  * @returns {string}
  */
-function toMarkdown(gap, rows) {
+export function toMarkdown(gap, rows) {
   const lines = [
     `## ${gap} (${rows.length})`,
     "",
@@ -533,4 +557,8 @@ function main() {
   process.stdout.write(`${JSON.stringify(selected, null, 2)}\n`);
 }
 
-main();
+const isMain =
+  process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (isMain) {
+  main();
+}
