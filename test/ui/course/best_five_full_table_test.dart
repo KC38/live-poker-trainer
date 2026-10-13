@@ -12,6 +12,8 @@ import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_best_five.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/table_card.dart';
@@ -241,6 +243,89 @@ void main() {
       tester.getCenter(find.byKey(const ValueKey<String>('glow-highlight'))).dx,
       closeTo(kd.dx, 8),
     );
+  });
+
+  testWidgets('full-house build Hint SoftPulse rings one recommended card', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    final activity = CourseActivity(
+      id: 'act-01-02-02-checkpoint-build',
+      order: 5,
+      stage: ActivityStage.scaffolded,
+      renderer: ActivityRenderer.selectIdentify,
+      estimatedSeconds: 45,
+      accessibilityText: 'Tap three of a kind plus a pair for a full house.',
+      acceptedGrades: const [SoftGrade.recommended],
+      prompt: 'Tap the five cards for your strongest hand.',
+      choices: const [
+        CourseChoice(id: 'fh-eights', label: 'High FH'),
+        CourseChoice(id: 'fh-deuces', label: 'Low FH'),
+        CourseChoice(id: 'two-pair-only', label: 'Two pair'),
+      ],
+    );
+    expect(lessonFrameHintsDisabled(activity), isFalse);
+    expect(
+      lessonFrameHintFallback(activity),
+      'Tap three of a kind plus a pair for a full house.',
+    );
+
+    final controller = LessonActivityController(activity: activity);
+    addTearDown(controller.dispose);
+    controller.releaseFeltDealIfUntracked();
+
+    await tester.pumpWidget(
+      _frame(
+        LessonSoftPulseScope(
+          allowed: controller.showTargetCue,
+          child: SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: controller.showTargetCue,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    // SoftPulse-quiet until Hint.
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
+    expect(controller.canRequestHint, isTrue);
+
+    controller.revealHint();
+    await tester.pumpWidget(
+      _frame(
+        LessonSoftPulseScope(
+          allowed: controller.showTargetCue,
+          child: SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: controller.showTargetCue,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(controller.showTargetCue, isTrue);
+    expect(find.byKey(const ValueKey<String>('glow-highlight')), findsOneWidget);
+    final first = tester.getCenter(
+      find.byKey(const ValueKey<String>('lesson-hero-card-0')),
+    );
+    final you = tester.getCenter(
+      find.byKey(const ValueKey<String>('seat-box-0')),
+    );
+    final glow = tester.getCenter(
+      find.byKey(const ValueKey<String>('glow-highlight')),
+    );
+    expect(glow.dx, closeTo(first.dx, 8));
+    expect(glow.dy, lessThan(you.dy - 8));
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('guided picker SoftPulse rings one recommended card', (

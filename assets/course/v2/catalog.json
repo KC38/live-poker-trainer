@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "271dc015c62a387708c23aa1b11d15e27c403cd7c429c514d625206c22a224a1",
+  "contentChecksum": "81cff0d54a88d9831b77cde7a1eab34a59528cf8561159f8ccdab42668f69443",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1549,7 +1549,6 @@
                       "accessibilityText": "Two pair only"
                     }
                   ],
-                  "assessmentRole": "checkpoint",
                   "teachSpec": {
                     "deal": {
                       "mode": "random_in_class",
@@ -1559,8 +1558,28 @@
                     "cues": [
                       {
                         "press": 1,
-                        "target": "hero_holes",
-                        "kind": "none"
+                        "target": "hero_trip_1",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "hero_trip_2",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "board_trip",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "board_high_1",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 5,
+                        "target": "board_high_2",
+                        "kind": "soft_pulse"
                       }
                     ]
                   }

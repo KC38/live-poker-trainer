@@ -2939,6 +2939,10 @@ class _BestFiveCardTapActivity extends StatelessWidget {
       builder: (context, _) {
         final locked = controller.submitting || controller.lastResult != null;
         final framed = LessonFrameScope.maybeOf(context) != null;
+        // Prefer controller.showTargetCue: Hint flips SoftPulse as soon as
+        // revealHint notifies, while the parent [showGuidance] prop can lag
+        // one frame (same pattern as LPT-84 / blinds seat SoftPulse).
+        final softPulse = controller.showTargetCue || showGuidance;
         if (framed) {
           return LessonBestFivePickerTable(
             key: ValueKey<String>(
@@ -2948,7 +2952,7 @@ class _BestFiveCardTapActivity extends StatelessWidget {
             controller: controller,
             spot: spot,
             locked: locked,
-            showGuidance: showGuidance,
+            showGuidance: softPulse,
           );
         }
         return Column(
