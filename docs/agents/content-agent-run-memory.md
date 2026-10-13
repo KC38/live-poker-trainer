@@ -847,3 +847,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Honesty still valid (no sim): **LPT-414** Air Nice! feedback still "Gutshot-ish trash multiway…" on `act-03-02-01-unguided` (`5h 4h` / `Qc 7d 2s`). LPT-417 already Done (stackLabels PRESENT) — Done-ack only.
 - Grep `act-05-07-01-*` / `act-03-02-01-unguided`: Soft timing outcome tiles + LPT-414 honesty; no new per-lesson clones. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done. Home pending empty (stub only). `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## 2026-10-13cb — tip `2aac4238` (#2081 ui-agent idle wake ETA)
+
+- Tip advanced `c6f50a24` → `2aac4238` (#2081 ui-agent status idle-wake ETA — non-content). `scan_content_gaps --counts` still flat: pressHints **151** / deal-variants **92** / teachSpec **44** / explain-teachSpec **23** / nice-ladder **55** / unguided-softpulse-map **24** (softpulseMapArms **68**) / densify-tap **118** / densifyHelperArms **111**. Catalog parents tip-comment only (LPT-628 body densify-tap **118** / helper **111** match — no rebuild).
+- Soft timing densify still ABSENT from `selectIdentifyDensifiedCoachLine` (`act-05-07-01-*` Priority on **LPT-628**). Soft timing teachSpec **LPT-242** still all five MISSING; frontier **LPT-312/315/334** still MISSING. densify ≠ teachSpec.
+- Honesty still valid (no sim): **LPT-414** Air Nice! feedback still "Gutshot-ish trash multiway…" on `act-03-02-01-unguided` (`5h`/`4h`·`Qc`/`7d`/`2s`, zero straight outs; SoftPulse `air` correct).
+- Tip-commented parents LPT-624/625/626/627/628/635 + frontier LPT-242/312/315/334 + S6 Highs LPT-252/255/258/271/275/295/301 + needs-human LPT-348 + honesty LPT-414 + Done-ack LPT-417/401/402/408/409/411 (`pairDepth`/`setDepth`/`nutFlushDraw` PRESENT in `_postflopTeachKey`). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR LPT-414 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
