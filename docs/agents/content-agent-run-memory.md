@@ -1045,9 +1045,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 ## Fold 2026-10-13da (237f924e #2129 LPT-627)
 
-- Tip advanced mid-run `0e519673` (#2130 learnings) → `237f924e` (#2129 LPT-627 suit-rotated `deal.variants` on fixed teachSpec deals): deal-variants **99→0**. Rebuilt **LPT-627** empty checklist + transitioned **Done**. Other flat pressHints **151** / nice-ladder **76** / teachSpec **0** / explain-teachSpec **0** / SoftPulse-map **0** / densify-tap **0**; softpulseMapArms **92** / densifyHelperArms **229**.
+- Tip advanced mid-run `0e519673` (#2130 learnings) → `237f924e` (#2129 LPT-627 suit-rotated `deal.variants` on fixed teachSpec deals): `scan_content_gaps --counts` deal-variants **99→0**. Rebuilt **LPT-627** empty checklist + transitioned **Done**. Other flat pressHints **151** / nice-ladder **76** / teachSpec **0** / explain-teachSpec **0** / SoftPulse-map **0** / densify-tap **0**; softpulseMapArms **92** / densifyHelperArms **229**.
 - Tip-commented NEED (12) on `237f924e`: LPT-624/625/626/627/635/628 + LPT-348 + Done-ack LPT-666/414/558/370/588. Verified `jira.py get` **HAS** all twelve. Open IP catalog: Nice! **LPT-624** (76) / pressHints **LPT-626** (151). Done parents LPT-625/627/628/635 stay Done.
-- Meet Nit Nice! `act-04-07-02-explain` (cues 3, no `explainGrading`) / pressHints `act-04-07-02-unguided` (empty) still LPT-624/626 — no clones. Capstone pressHints **LPT-348** needs-human. Zero open High content tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
-- next: Nice! LPT-624 OR pressHints LPT-626 OR LPT-348 needs-human.
+- Meet Nit Nice! `act-04-07-02-explain` (cues 3, no `explainGrading`) / pressHints `act-04-07-02-unguided` (empty) still LPT-624/626 — no clones. Capstone pressHints **LPT-348** needs-human. Zero open High content tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty (stub only). `content,grokbot,lesson`.
+- next: Nice! LPT-624 (IP, 76) OR pressHints LPT-626 (IP, 151) OR LPT-348 needs-human.
 - act-*: deal.variants catalog clear (#2129) — do not re-file deal-variants clones; Nice!/pressHints remain separate.
 
