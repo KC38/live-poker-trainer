@@ -1246,13 +1246,56 @@ grep -q 'streamed above' "$ROOT/tools/ui-agent-sdk/run.mjs" \
   ui_queue_has_ticket() { return 1; }
   primary_is_clean_main() { return 0; }
   logged_in() { return 0; }
-  rm -f "$tmp/agent-started"
+  rm -f "$tmp/agent-started" "$IDLE_FILE"
   code=0
   one_run || code=$?
   [[ "$code" == 16 ]] || { echo "FAIL: empty queue should return 16, got $code" >&2; exit 1; }
   [[ ! -f "$tmp/agent-started" ]] || { echo "FAIL: agent must not start on empty queue" >&2; exit 1; }
+  [[ -f "$IDLE_FILE" ]] || { echo "FAIL: empty queue must write IDLE_FILE" >&2; exit 1; }
+  grep -q '"reason": "empty-queue"' "$IDLE_FILE" \
+    || { echo "FAIL: IDLE_FILE reason empty-queue: $(cat "$IDLE_FILE")" >&2; exit 1; }
   echo "empty ui-queue skip ok"
 )
+(
+  unset UI_AGENT_SKIP_SIM_PREFLIGHT
+  primary_is_clean_main() { return 1; }
+  # Branch detail comes from git rev-parse on primary(); stub both so the
+  # stamp is deterministic (no real git repo required).
+  primary() { printf '%s\n' "$tmp/fake-primary"; }
+  mkdir -p "$tmp/fake-primary"
+  git() {
+    if [[ "${1:-}" == "-C" && "${3:-}" == "rev-parse" ]]; then
+      echo "cursor/chore-busy"
+      return 0
+    fi
+    command git "$@"
+  }
+  rm -f "$IDLE_FILE"
+  code=0
+  one_run || code=$?
+  [[ "$code" == 10 ]] || fail "primary-busy should return 10, got $code"
+  grep -q '"reason": "primary-busy"' "$IDLE_FILE" \
+    || fail "IDLE_FILE reason primary-busy: $(cat "$IDLE_FILE")"
+  grep -q 'cursor/chore-busy' "$IDLE_FILE" \
+    || fail "IDLE_FILE should name branch: $(cat "$IDLE_FILE")"
+  echo "primary-busy idle stamp ok"
+)
+# status prints idle line from IDLE_FILE (no tmux attach needed).
+grep -q 'print_idle_status' "$LOOP" || fail "loop must define print_idle_status"
+printf '%s\n' \
+  '{"reason":"empty-queue","at":"2026-10-13T13:39:26+0530"}' >"$IDLE_FILE"
+idle_out="$(print_idle_status)"
+grep -q 'idle: empty-queue since 2026-10-13T13:39:26+0530' <<<"$idle_out" \
+  || fail "print_idle_status empty-queue: $idle_out"
+printf '%s\n' \
+  '{"reason":"primary-busy","at":"2026-10-13T13:34:16+0530","detail":"cursor/chore-busy"}' \
+  >"$IDLE_FILE"
+idle_out="$(print_idle_status)"
+grep -q 'idle: primary-busy branch=cursor/chore-busy since 2026-10-13T13:34:16+0530' \
+  <<<"$idle_out" || fail "print_idle_status primary-busy: $idle_out"
+clear_idle_skip
+[[ ! -f "$IDLE_FILE" ]] || fail "clear_idle_skip must remove IDLE_FILE"
+echo "status idle stamp ok"
 export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 grep -q 'EMPTY_QUEUE_SLEEP' "$LOOP" || fail "loop must define EMPTY_QUEUE_SLEEP"
 grep -q 'ui-queue empty; sleeping' "$LOOP" || fail "run_loop must sleep on empty queue"
