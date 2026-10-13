@@ -1782,6 +1782,45 @@ PY
 # Strips interleaved NDJSON stream markers so health checks are readable.
 # Machine SDK often emits one token per line; those are coalesced into prose.
 # Args: log_path [max_lines=10]
+# True when health already has a short coverage: summary for this run stamp
+# (status should not dump the step-10 markdown report from the run log).
+health_has_structured_stamp() {
+  local stamp="$1"
+  [[ -n "$stamp" && -f "$HEALTH_FILE" ]] || return 1
+  python3 - "$HEALTH_FILE" "$stamp" <<'HS'
+import json, sys
+from pathlib import Path
+path, stamp = Path(sys.argv[1]), sys.argv[2]
+try:
+    lines = path.read_text(encoding="utf-8").splitlines()
+except OSError:
+    raise SystemExit(1)
+for ln in reversed(lines):
+    if not ln.strip():
+        continue
+    try:
+        row = json.loads(ln)
+    except json.JSONDecodeError:
+        continue
+    if row.get("stamp") != stamp:
+        continue
+    tail = row.get("tail") or ""
+    result = row.get("result")
+    if (
+        result
+        and result not in (None, "stalled", "sim-not-ready")
+        and (
+            tail.startswith("coverage:")
+            or tail.startswith("healed from")
+            or tail.startswith("reconciled from")
+        )
+    ):
+        raise SystemExit(0)
+    raise SystemExit(1)
+raise SystemExit(1)
+HS
+}
+
 print_run_log_preview() {
   local log="${1:-}" max_lines="${2:-10}"
   if [[ -z "$log" || ! -s "$log" ]]; then
@@ -2726,8 +2765,15 @@ PY
       backfill_run_log_from_session "$latest" "$start_guess" "$root_guess"
       echo "latest log: $latest"
       if [[ -s "$latest" ]]; then
-        # Machine SDK logs interleave NDJSON markers; scrub before preview.
-        print_run_log_preview "$latest" 10
+        # Health already has coverage:closed (etc.) for this stamp — skip the
+        # prose preview so status does not re-print the step-10 report
+        # (LPT-644 / 20261013-092240 dumped ~20 markdown lines every status).
+        if health_has_structured_stamp "$stamp_guess"; then
+          :
+        else
+          # Machine SDK logs interleave NDJSON markers; scrub before preview.
+          print_run_log_preview "$latest" 10
+        fi
       else
         echo "(run log empty — Cursor CLI often writes to /tmp/cursor-agent-logs-*/)"
         sess="$(ls -t /tmp/cursor-agent-logs-*/session-*.log 2>/dev/null | head -1 || true)"

@@ -1275,4 +1275,30 @@ grep -q 'sleep_unless_stopped' "$LOOP" || fail "loop must define sleep_unless_st
 )
 rm -f "$tmp/stop-interruptible"
 
+
+# status skips run-log prose when health already has coverage: for that stamp.
+grep -q 'health_has_structured_stamp' "$LOOP" || fail "loop must define health_has_structured_stamp"
+stamp_preview="20261013-092240"
+printf '%s\n' \
+  "{\"at\":\"2026-10-13T09:54:58+05:30\",\"stamp\":\"$stamp_preview\",\"exit\":0,\"seconds\":1937,\"ticket\":\"LPT-644\",\"result\":\"closed\",\"tail\":\"coverage:closed ticket:LPT-644 surface:lesson-runner:mix-with-a-reason\"}" \
+  >"$HEALTH_FILE"
+health_has_structured_stamp "$stamp_preview" \
+  || fail "health_has_structured_stamp should match coverage:closed stamp"
+health_has_structured_stamp "19990101-000000" \
+  && fail "health_has_structured_stamp must miss other stamps"
+prose_log="$LOG_DIR/run-$stamp_preview.log"
+printf '%s\n' \
+  '# ui-agent-sdk status=finished' \
+  '**Ticket:** LPT-644 closed' \
+  '**Lock:** released' \
+  >"$prose_log"
+# Child must not inherit SOURCE_ONLY or status exits before the case arm.
+status_out="$(UI_AGENT_LOOP_SOURCE_ONLY= bash "$LOOP" status 2>&1 || true)"
+grep -q 'latest log:' <<<"$status_out" || fail "status should still name latest log"
+grep -q '\*\*Ticket:\*\*' <<<"$status_out" \
+  && fail "status must not dump step-10 Ticket prose when health is structured: $status_out"
+grep -q 'coverage:closed ticket:LPT-644' <<<"$status_out" \
+  || fail "status should still show last run health: $status_out"
+echo "status structured preview skip ok"
+
 echo "ui-design-agent loop ok"
