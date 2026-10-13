@@ -1449,3 +1449,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Done-ack **LPT-128** / **129** / **364** / **482** on tip (NEED before comment).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-02-07-01-baseline-full-hand` / `lesson-06-05-01-overbets-geometric` / Low curriculum.
 - act-02-05-01-*: structural clean on tip — teachSpec/pressHints/explain/densify companions Done; curriculum via LPT-130 only.
+
+## Fold 2026-10-14ad (d0c4ff18 discovery baseline-full-hand)
+
+- Tip-stable `d0c4ff18` (#2198 polar-merged rescue + effective-stack). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip — no re-spam). Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Open polar draft #2196 superseded by #2198 (already on tip).
+- Discovery oldest-coverage `lesson-02-07-01-baseline-full-hand`: explain SoftPulse NINE→SAME→POSITION + `explainGrading`; guided/scaffolded/unguided `random_in_class` schema enums (broadway/suited, pair, broadway/offsuit); SoftPulse maps `open-ajs`/`call-22`/`lab-3bet` PRESENT; scaffolded/unguided one-per-press OK; checkpoint habit densify PRESENT. Structural clean. Curriculum **LPT-668** tip-commented (three concepts still valid). `random_in_class` without distractor variants stays closed with **LPT-627**.
+- Done-ack **LPT-135** / **136** / **209** / **365** / **383** / **487** / **586** on tip (NEED before comment).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-11-02-meet-tag` / `lesson-06-05-01-overbets-geometric` / Low curriculum.
+- act-02-07-01-*: structural clean on tip — teachSpec/pressHints/variants/densify/wave companions Done; curriculum via LPT-668 only.
+
