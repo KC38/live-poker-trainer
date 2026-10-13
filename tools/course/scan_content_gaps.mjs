@@ -20,6 +20,33 @@ import {fileURLToPath} from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, "../..");
 const SOURCE_PATH = resolve(REPO_ROOT, "content/course/v2/course.json");
+const SOFTPULSE_MAP_PATH = resolve(
+  REPO_ROOT,
+  "lib/ui/course/activities/poker_action_sizing_activity.dart",
+);
+
+/**
+ * Activity ids with SoftPulse docks in `_guidedPulseTargetId`.
+ * @returns {Set<string>}
+ */
+function loadGuidedPulseTargetIds() {
+  try {
+    const text = readFileSync(SOFTPULSE_MAP_PATH, "utf8");
+    const match = text.match(
+      /String\?\s+_guidedPulseTargetId\(CourseActivity activity\)\s*\{([\s\S]*?)\n\}/,
+    );
+    if (!match) {
+      return new Set();
+    }
+    return new Set(
+      [...match[1].matchAll(/'(act-[^']+)'\s*=>/g)].map((m) => m[1]),
+    );
+  } catch {
+    return new Set();
+  }
+}
+
+const GUIDED_PULSE_TARGET_IDS = loadGuidedPulseTargetIds();
 
 const INTERACTIVE_RENDERERS = new Set([
   "select_identify",
