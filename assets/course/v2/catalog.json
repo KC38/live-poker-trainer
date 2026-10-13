@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "228148c28c27fb2320cf3b147f84c5a0139401963b1764e1d6177ae3cd0cdd45",
+  "contentChecksum": "c42b33f63b834ac9f797f678086d024aa7ca6d6f04d44061e2a7840b5eb4c189",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -20603,7 +20603,29 @@
                   ],
                   "objectives": [
                     "Plan single-raised pots"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "LIMPED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SRP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "3-4BET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-04-01-guided",
@@ -20632,7 +20654,19 @@
                       "label": "Pure air stabs always",
                       "accessibilityText": "Pure air stabs always"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "nuts",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-04-01-scaffolded",
@@ -20661,7 +20695,19 @@
                       "label": "Never bet",
                       "accessibilityText": "Never bet"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cb",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-04-01-unguided",
@@ -20690,7 +20736,19 @@
                       "label": "Play like 300bb deep",
                       "accessibilityText": "Play like 300bb deep"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "commit",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-04-01-checkpoint",
@@ -20720,7 +20778,19 @@
                       "accessibilityText": "Nothing material"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "both",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
