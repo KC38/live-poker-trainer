@@ -628,7 +628,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-01-01-03-unguided-when' => selectIdentifyDensifiedCoachLine('act-01-01-03-unguided-when')!,
       // SoftPulse owns SB — don’t gold-tip the seat.
       'act-01-01-03-checkpoint-layout' =>
-        'Button is marked — first blind sits immediately left.',
+        selectIdentifyDensifiedCoachLine('act-01-01-03-checkpoint-layout')!,
       'act-02-01-01-guided-btn' =>
         selectIdentifyDensifiedCoachLine('act-02-01-01-guided-btn')!,
       'act-02-01-01-scaffolded-blinds' =>
@@ -666,7 +666,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-01-05-01-checkpoint-side')!,
       // SoftPulse owns the board — don’t gold-tip Chop.
       'act-01-02-02-unguided-board' =>
-        'Both checked down — broadway board plays for everyone.',
+        selectIdentifyDensifiedCoachLine('act-01-02-02-unguided-board')!,
       // SoftPulse owns Cover + wait — don’t gold-tip the tile.
       'act-02-07-01-checkpoint-habit' =>
         selectIdentifyDensifiedCoachLine('act-02-07-01-checkpoint-habit')!,
@@ -693,7 +693,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         'Flush vs straight on the river — stronger category takes it.',
       // SoftPulse owns the You seat once — don’t gold-tip the kicker winner.
       'act-01-02-02-scaffolded-kicker' =>
-        'Same pair on the board — tap your cards, their cards, or Chop.',
+        selectIdentifyDensifiedCoachLine('act-01-02-02-scaffolded-kicker')!,
       // jump-family / jump-stack densified asks: selectIdentifyDensifiedCoachLine
       'act-02-02-01-guided-pair' =>
         selectIdentifyDensifiedCoachLine('act-02-02-01-guided-pair')!,
@@ -841,10 +841,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-04-07-01-checkpoint')!,
       // SoftPulse owns Nit — don’t gold-tip the tile.
       'act-04-07-02-guided' =>
-        'Rare entry, large 3-bets — a narrow, strong-when-involved label fits.',
+        selectIdentifyDensifiedCoachLine('act-04-07-02-guided')!,
       // SoftPulse owns Nit — don’t gold-tip the tile.
       'act-04-07-02-unguided' =>
-        'Folds forever, then explodes — narrow heat fits better than wild aggression.',
+        selectIdentifyDensifiedCoachLine('act-04-07-02-unguided')!,
       // SoftPulse owns Working model — don’t gold-tip the tile.
       'act-04-07-02-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-04-07-02-checkpoint')!,
@@ -865,10 +865,10 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-04-08-01-checkpoint')!,
       // SoftPulse owns Maniac — don’t gold-tip the tile.
       'act-04-08-02-guided' =>
-        'Opens 60%, barrels light — a wide, relentless aggressor label fits.',
+        selectIdentifyDensifiedCoachLine('act-04-08-02-guided')!,
       // SoftPulse owns Maniac — don’t gold-tip the tile.
       'act-04-08-02-unguided' =>
-        'Light 3-bets, never gives up — wild pressure fits better than sticky calling.',
+        selectIdentifyDensifiedCoachLine('act-04-08-02-unguided')!,
       // SoftPulse owns Three types — don’t gold-tip the tile.
       'act-04-08-02-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-04-08-02-checkpoint')!,
@@ -883,7 +883,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
         selectIdentifyDensifiedCoachLine('act-04-09-01-scaffolded')!,
       // SoftPulse owns Update — don’t gold-tip the tile.
       'act-04-09-01-unguided' =>
-        'Station starts folding — update or retire the old model.',
+        selectIdentifyDensifiedCoachLine('act-04-09-01-unguided')!,
       // SoftPulse owns Limits — don’t gold-tip the tile.
       'act-04-09-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-04-09-01-checkpoint')!,
@@ -891,12 +891,12 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-04-10-02-jump-range' =>
         selectIdentifyDensifiedCoachLine('act-04-10-02-jump-range')!,
       // SoftPulse owns Value more — don’t gold-tip the tile.
-      'act-04-10-02-jump-station' => 'Sticky three streets — pick the exploit.',
+      'act-04-10-02-jump-station' => selectIdentifyDensifiedCoachLine('act-04-10-02-jump-station')!,
       // SoftPulse owns Respect — don’t gold-tip the tile.
-      'act-04-10-02-jump-nit' => 'Tiny range, huge raise — pick the line.',
+      'act-04-10-02-jump-nit' => selectIdentifyDensifiedCoachLine('act-04-10-02-jump-nit')!,
       // SoftPulse owns Call wider — don’t gold-tip the tile.
       'act-04-10-02-jump-maniac' =>
-        'Barrels forever, top pair — pick the line.',
+        selectIdentifyDensifiedCoachLine('act-04-10-02-jump-maniac')!,
       // SoftPulse owns Nut FD — don’t gold-tip the tile.
       'act-05-01-01-guided' => selectIdentifyDensifiedCoachLine('act-05-01-01-guided')!,
       // SoftPulse owns Nut potential — don’t gold-tip the tile.
@@ -1252,15 +1252,15 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-07-11-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-07-11-01-checkpoint')!,
       // SoftPulse owns Station value — don’t gold-tip the tile.
-      'act-07-12-01-cs' => 'Sticky calls — pick the label + exploit.',
+      'act-07-12-01-cs' => selectIdentifyDensifiedCoachLine('act-07-12-01-cs')!,
       // SoftPulse owns Nit respect — don’t gold-tip the tile.
-      'act-07-12-01-nit' => 'Tiny range heat — pick the label + line.',
+      'act-07-12-01-nit' => selectIdentifyDensifiedCoachLine('act-07-12-01-nit')!,
       // SoftPulse owns Maniac catch — don’t gold-tip the tile.
-      'act-07-12-01-maniac' => 'Endless barrels — pick the label + line.',
+      'act-07-12-01-maniac' => selectIdentifyDensifiedCoachLine('act-07-12-01-maniac')!,
       // SoftPulse owns TAG respect — don’t gold-tip the tile.
-      'act-07-12-01-tag' => 'Selective barrels — pick the label + line.',
+      'act-07-12-01-tag' => selectIdentifyDensifiedCoachLine('act-07-12-01-tag')!,
       // SoftPulse owns LAG trap — don’t gold-tip the tile.
-      'act-07-12-01-lag' => 'Wide pressure — pick the label + line.',
+      'act-07-12-01-lag' => selectIdentifyDensifiedCoachLine('act-07-12-01-lag')!,
       // SoftPulse owns Low certainty — don’t gold-tip the tile.
       'act-07-12-01-uncertain' => selectIdentifyDensifiedCoachLine('act-07-12-01-uncertain')!,
       // SoftPulse owns Retire model — don’t gold-tip the tile.
