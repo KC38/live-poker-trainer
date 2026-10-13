@@ -522,3 +522,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog parents LPT-624/626/627/625/628/635 + frontier Highs LPT-242/312/315 (all five still MISSING) + unchecked S6/S7/IP teachSpecs LPT-252/255/258/271/275/295/301/334 + capstones LPT-339/341/345/347 + warm-up/final LPT-349/352 + needs-human LPT-348 + honesty/fingerprint LPT-401/402/405/408/409/411/414/417 (LPT-417 still sees 180/250bb depth chrome).
 - Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. Next teachSpec frontier after LPT-337: Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**; next Capstone Highs LPT-339…. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty (0 bullets). `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(88)/635/624(50)/625(24) OR Capstone 3-bet LPT-339.
+
+## Fold 2026-10-13 tip 5be698bd (#1997 LPT-405 Q83r honesty)
+
+- Tip advanced `43d19bd8` (#1996 learnings) → `5be698bd` (#1997 LPT-405). Honesty-only land — `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **88**, teachSpec **59**, explain-teachSpec **28**, nice-ladder **50**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **53**. Catalog parents tip-comment only (no rebuild).
+- Done-ack **LPT-405**: `act-07-10-02-hand` step-3b-flop streetLabel / catalog prompt / authored coach all **Q83r** on rainbow `Qs`/`8h`/`3d` (matches sibling 4-bet). No remaining `Q83tt` in source. Edited open High teachSpec **LPT-339** body/comment off stale Q83tt — teachSpec still MISSING on explain + hand.
+- Tip-commented catalog parents LPT-624/626/627/625/628/635 + frontier LPT-242/312/315 + IP teachSpecs LPT-252/255/271/275/301/334 + unchecked To Do Highs LPT-258/295/339/341/345/347/349/352 + needs-human LPT-348 + honesty/fingerprint LPT-401/402/408/409/411/414/417.
+- Soft timing **LPT-242** still all-five MISSING; densify ABSENT (helper **53** — stay on **LPT-628**). Frontiers **LPT-312** / **LPT-315**; next Capstone teachSpec **LPT-339**. Grep `act-07-10-02-*`: no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty (0 bullets). `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-339 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(88)/635/624(50)/625(24).
+
+## Fold 2026-10-13 tip cbb7fb14 (#1999 soft-stop — Capstone LPT-339 re-verify)
+
+- Tip advanced `5be698bd` (#1997 LPT-405) → `cbb7fb14` (#1999 ui-agent soft-stop). Non-content ops tip — `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **88**, teachSpec **59**, explain-teachSpec **28**, nice-ladder **50**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **53**. Catalog parents tip-comment only (no rebuild). Prior #1998 learnings fold was open off `5be698bd` — folded here onto tip so next run reads from git.
+- Capstone 3-bet **LPT-339** deep re-verify: `act-07-10-02-explain` + `act-07-10-02-hand` still **MISSING** teachSpec; catalog/Dart already **Q83r** (LPT-405 Done). Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315** still all-five MISSING. Soft timing densify still ABSENT from `selectIdentifyDensifiedCoachLine` (helper **53** — stay on **LPT-628**).
+- Honesty still valid on tip: **LPT-401** Weak TPTK streetLabel; **LPT-414** Gutshot-ish Air feedback in `course.json`; **LPT-417** `180bb deep` / `250bb` depth chrome without stackLabel.
+- Tip-commented catalog parents LPT-624/626/627/625/628/635 + Capstone LPT-339 + frontier LPT-242/312/315 + honesty LPT-401/414/417. Grep `act-07-10-02-*` / `act-05-07-01-*` / `act-07-02-01-*` / `act-07-03-01-*`: no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty (0 bullets). `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-339 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(88)/635/624(50)/625(24).
+
