@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "ddb7ea3af0252607407b6feacd919db2719ad0e8d8e4693cd14cffddf62276ba",
+  "contentChecksum": "4b41855c16c9f6f8259737ed1a64f3351245286f1febfca849d1e79e5b1efd95",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -31849,20 +31849,21 @@
                       {
                         "press": 1,
                         "target": "cb",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "barrel",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "check-r",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             },
@@ -32117,20 +32118,21 @@
                       {
                         "press": 1,
                         "target": "bet",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "barrel",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "fold",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             },
@@ -32377,20 +32379,21 @@
                       {
                         "press": 1,
                         "target": "call",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "bet",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "check-r",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             },
@@ -32649,20 +32652,21 @@
                       {
                         "press": 1,
                         "target": "bet",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "barrel",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "value",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             },
@@ -32921,20 +32925,21 @@
                       {
                         "press": 1,
                         "target": "bet",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 2,
                         "target": "barrel",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       },
                       {
                         "press": 3,
                         "target": "fold",
-                        "kind": "soft_pulse"
+                        "kind": "none"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             }
@@ -42632,6 +42637,7 @@
         "strong",
         "reasonable"
       ],
+      "assessmentRole": "transfer",
       "handSteps": [
         {
           "id": "step-flop",
@@ -42710,6 +42716,7 @@
         "strong",
         "reasonable"
       ],
+      "assessmentRole": "transfer",
       "handSteps": [
         {
           "id": "step-3b-flop",
@@ -42779,6 +42786,7 @@
         "strong",
         "reasonable"
       ],
+      "assessmentRole": "transfer",
       "handSteps": [
         {
           "id": "step-mw-flop",
@@ -42848,6 +42856,7 @@
         "strong",
         "reasonable"
       ],
+      "assessmentRole": "transfer",
       "handSteps": [
         {
           "id": "step-limp-flop",
@@ -42921,6 +42930,7 @@
         "strong",
         "reasonable"
       ],
+      "assessmentRole": "transfer",
       "handSteps": [
         {
           "id": "step-4b-flop",

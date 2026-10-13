@@ -4618,6 +4618,32 @@ void main() {
     });
   });
 
+  group('Capstone hands transfer assessmentRole (LPT-348)', () {
+    const hands = <String>[
+      'act-07-10-01-hand',
+      'act-07-10-02-hand',
+      'act-07-10-03-hand',
+      'act-07-10-04-hand',
+      'act-07-10-05-hand',
+    ];
+
+    for (final activityId in hands) {
+      test('$activityId is transfer with no pressHints', () {
+        final a = act(activityId);
+        expect(a.assessmentRole, AssessmentRole.transfer, reason: activityId);
+        expect(a.stage, ActivityStage.scaffolded, reason: activityId);
+        final teach = a.teachSpec;
+        final hints = teach == null ? null : teach['pressHints'];
+        expect(
+          hints == null || (hints is List && hints.isEmpty),
+          isTrue,
+          reason: '$activityId must not author pressHints',
+        );
+      });
+    }
+  });
+
+
   group('Prep a coached Live warm-up hand (LPT-349)', () {
     test('explain SoftPulse walks CHECKLIST → DEFAULTS → ONE HAND', () {
       expect(

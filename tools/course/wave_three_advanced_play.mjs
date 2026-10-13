@@ -4239,7 +4239,7 @@ export function buildSectionSeven() {
                   },
                 }),
               multiStepAct({
-                id: "act-07-10-01-hand", order: 2, stage: "scaffolded",
+                id: "act-07-10-01-hand", order: 2, stage: "scaffolded", assessmentRole: "transfer",
                 a11y: "BTN open, BB call. Play three streets.",
                 objectives: ["Execute a full SRP plan", "Update streets without hints", "Finish river coherently"],
                 steps: [
@@ -4303,9 +4303,9 @@ export function buildSectionSeven() {
                     ],
                   },
                   cues: [
-                    {press: 1, target: "cb", kind: "soft_pulse"},
-                    {press: 2, target: "barrel", kind: "soft_pulse"},
-                    {press: 3, target: "check-r", kind: "soft_pulse"},
+                    {press: 1, target: "cb", kind: "none"},
+                    {press: 2, target: "barrel", kind: "none"},
+                    {press: 3, target: "check-r", kind: "none"},
                   ],
                 },
               }),
@@ -4336,7 +4336,7 @@ export function buildSectionSeven() {
                   },
                 }),
               multiStepAct({
-                id: "act-07-10-02-hand", order: 2, stage: "scaffolded",
+                id: "act-07-10-02-hand", order: 2, stage: "scaffolded", assessmentRole: "transfer",
                 a11y: "You 3-bet TAG open with AQ; 120bb deep.",
                 objectives: ["Plan a 3-bet pot by SPR", "Continue or kill on turn", "Close river without ego"],
                 playerTypeRefs: ["tag"],
@@ -4396,9 +4396,9 @@ export function buildSectionSeven() {
                     ],
                   },
                   cues: [
-                    {press: 1, target: "bet", kind: "soft_pulse"},
-                    {press: 2, target: "barrel", kind: "soft_pulse"},
-                    {press: 3, target: "fold", kind: "soft_pulse"},
+                    {press: 1, target: "bet", kind: "none"},
+                    {press: 2, target: "barrel", kind: "none"},
+                    {press: 3, target: "fold", kind: "none"},
                   ],
                 },
               }),
@@ -4428,7 +4428,7 @@ export function buildSectionSeven() {
                   },
                 }),
               multiStepAct({
-                id: "act-07-10-03-hand", order: 2, stage: "scaffolded",
+                id: "act-07-10-03-hand", order: 2, stage: "scaffolded", assessmentRole: "transfer",
                 a11y: "Four-way, 200bb, you hold AhQh.",
                 objectives: ["Prefer nut potential multiway", "Use deep implied odds correctly", "Avoid bluffing crowds"],
                 steps: [
@@ -4489,9 +4489,9 @@ export function buildSectionSeven() {
                     ],
                   },
                   cues: [
-                    {press: 1, target: "call", kind: "soft_pulse"},
-                    {press: 2, target: "bet", kind: "soft_pulse"},
-                    {press: 3, target: "check-r", kind: "soft_pulse"},
+                    {press: 1, target: "call", kind: "none"},
+                    {press: 2, target: "bet", kind: "none"},
+                    {press: 3, target: "check-r", kind: "none"},
                   ],
                 },
               }),
@@ -4521,7 +4521,7 @@ export function buildSectionSeven() {
                   },
                 }),
               multiStepAct({
-                id: "act-07-10-04-hand", order: 2, stage: "scaffolded",
+                id: "act-07-10-04-hand", order: 2, stage: "scaffolded", assessmentRole: "transfer",
                 a11y: "Four-way limp, 150bb, you hold AhKh on BTN.",
                 objectives: ["Prefer nut potential limped multiway", "Avoid light multiway bluffs", "Use depth for draws carefully"],
                 steps: [
@@ -4582,9 +4582,9 @@ export function buildSectionSeven() {
                     ],
                   },
                   cues: [
-                    {press: 1, target: "bet", kind: "soft_pulse"},
-                    {press: 2, target: "barrel", kind: "soft_pulse"},
-                    {press: 3, target: "value", kind: "soft_pulse"},
+                    {press: 1, target: "bet", kind: "none"},
+                    {press: 2, target: "barrel", kind: "none"},
+                    {press: 3, target: "value", kind: "none"},
                   ],
                 },
               }),
@@ -4614,7 +4614,7 @@ export function buildSectionSeven() {
                   },
                 }),
               multiStepAct({
-                id: "act-07-10-05-hand", order: 2, stage: "scaffolded",
+                id: "act-07-10-05-hand", order: 2, stage: "scaffolded", assessmentRole: "transfer",
                 a11y: "100bb 4-bet pot; you hold a premium pair after 4-betting.",
                 objectives: ["Respect short SPR commitment", "Avoid ego bluffs in 4-bet pots", "Close river without hero calls"],
                 steps: [
@@ -4675,9 +4675,9 @@ export function buildSectionSeven() {
                     ],
                   },
                   cues: [
-                    {press: 1, target: "bet", kind: "soft_pulse"},
-                    {press: 2, target: "barrel", kind: "soft_pulse"},
-                    {press: 3, target: "fold", kind: "soft_pulse"},
+                    {press: 1, target: "bet", kind: "none"},
+                    {press: 2, target: "barrel", kind: "none"},
+                    {press: 3, target: "fold", kind: "none"},
                   ],
                 },
               }),
