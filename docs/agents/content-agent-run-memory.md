@@ -1054,8 +1054,8 @@ filing deal.mode / Still-a-list / handFamily gaps.
 ## Fold 2026-10-13db (6cfa4454 #2132 LPT-624)
 
 - Tip `6cfa4454` (#2132 LPT-624 SoftPulse explains author `explainGrading` Nice! ladder): `scan_content_gaps --counts` nice-ladder **76→0**. Rebuilt **LPT-624** empty checklist + transitioned **Done**. Other flat pressHints **151** / deal-variants **0** / teachSpec **0** / explain-teachSpec **0** / SoftPulse-map **0** / densify-tap **0**; softpulseMapArms **92** / densifyHelperArms **229**.
-- Tip-commented NEED set on `6cfa4454`: open **LPT-626** + needs-human **LPT-348** + Done-ack LPT-624/625/627/635/628/666/414/558/370/588. Verified `jira.py get` **HAS** all twelve. Open IP catalog: pressHints **LPT-626** (151) only. Done parents LPT-624/625/627/628/635 stay Done.
+- Tip-commented NEED set on `6cfa4454`: open **LPT-626** + needs-human **LPT-348** + Done-ack LPT-624/625/627/635/628/666/414/558/370/588. Later Done-ack **LPT-216** (Same-hand `lesson-04-10-01-exploit-checkpoints` teachSpec PRESENT on all five activities). Verified `jira.py get` **HAS**. Open IP catalog: pressHints **LPT-626** (151) only. Done parents LPT-624/625/627/628/635 stay Done.
 - Meet Nit Nice! `act-04-07-02-explain` cleared with catalog **LPT-624**; pressHints `act-04-07-02-unguided` still **LPT-626** — no clones. Capstone pressHints **LPT-348** needs-human. Zero open High content tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty (stub only). `content,grokbot,lesson`.
 - next: pressHints LPT-626 (IP, 151) OR LPT-348 needs-human.
-- act-*: SoftPulse explain Nice! ladder catalog clear (#2132) — do not re-file nice-ladder clones; pressHints remain separate.
+- act-*: SoftPulse explain Nice! ladder catalog clear (#2132) — do not re-file nice-ladder clones; pressHints remain separate. LPT-216 Same-hand teachSpec stays Done.
 
