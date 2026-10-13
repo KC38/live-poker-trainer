@@ -89,6 +89,10 @@
                   "objectives": [
                     "Identify your two hole cards"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Your hole cards — private to you."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "random_in_class",
@@ -434,6 +438,10 @@
                   "objectives": [
                     "Name the four suits"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Hearts → Diamonds → Clubs → Spades."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -805,6 +813,10 @@
                     "Locate the dealer button",
                     "Identify the small and big blinds"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Button → small blind → big blind."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -1934,6 +1946,10 @@
                   "objectives": [
                     "Fold to give up the hand"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Fold → Check → Call."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -2266,6 +2282,10 @@
                   "objectives": [
                     "Bet when the pot is unchecked"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Bet → Raise → All-in."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -2970,6 +2990,10 @@
                   "objectives": [
                     "Win the pot when everyone else folds"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Fold win → Showdown → Side pot."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -3395,6 +3419,10 @@
                   "objectives": [
                     "Follow a hand from blinds to a terminal state"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Blinds → You act → Ending."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -4334,6 +4362,10 @@
                   "objectives": [
                     "Prefer later seats when choosing hands"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "The button acts last after the flop."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -4969,6 +5001,10 @@
                   "objectives": [
                     "Recognize pocket pairs"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Pairs → Broadways → Suited aces → Connectors."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -5302,6 +5338,10 @@
                   "objectives": [
                     "Fold trash from early position"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Early → Button → Live 3x."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -5644,6 +5684,10 @@
                   "objectives": [
                     "Fold weak hands to an open"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Fold → Call → 3-bet."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -5986,6 +6030,10 @@
                   "objectives": [
                     "Convert chips to big blinds"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Chips to BB → Shorter → Depth."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -6631,6 +6679,10 @@
                   "objectives": [
                     "Make a baseline open on a full ring"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nine → Same → Position."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -7429,6 +7481,10 @@
                   "objectives": [
                     "Track pot size and stack depths"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Pot → Stacks → Button → Who acts."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -7749,6 +7805,10 @@
                   "objectives": [
                     "Identify made hands on the flop"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Made → Draw → SDV → Air."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -8240,6 +8300,10 @@
                   "objectives": [
                     "Count clean versus dirty outs"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Clean → Dirty → Price."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -8692,6 +8756,10 @@
                   "objectives": [
                     "Value bet strong made hands"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value → C-bet → Check → Call → Fold → Raise."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -9207,6 +9275,10 @@
                   "objectives": [
                     "Recognize brick versus changing turns"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Brick → Change → Barrel → Delay."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -9716,6 +9788,10 @@
                   "objectives": [
                     "Value bet hands that beat calling ranges"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value → Bluff → Catch → Fold."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -10193,6 +10269,10 @@
                   "objectives": [
                     "Demand stronger made hands multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Stronger → Fewer → Nuts."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -10602,6 +10682,10 @@
                   "objectives": [
                     "Stop overplaying weak top pair"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Top pair → Prices → Passive → Crowds."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -11560,6 +11644,10 @@
                   "objectives": [
                     "Describe a seat as a range"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "One hand → Range → Update."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -11964,6 +12052,10 @@
                   "objectives": [
                     "Value 3-bet strong hands"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "3-bet → Ranges → Squeeze."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -12423,6 +12515,10 @@
                   "objectives": [
                     "Build a multi-street plan"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Flop → Turn → River."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -12902,6 +12998,10 @@
                   "objectives": [
                     "Match size to value versus polar pressure"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value → Pressure → Size."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -13378,6 +13478,10 @@
                   "objectives": [
                     "Estimate stack-to-pot ratio"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "SPR → Low → High."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -13811,6 +13915,10 @@
                   "objectives": [
                     "Tag high participation"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Enters → Calls → Folds."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -14094,6 +14202,10 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Station → High → Low."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -14376,6 +14488,10 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value → Bluffs → Cite."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -14826,6 +14942,10 @@
                   "objectives": [
                     "Tag narrow entry"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Rare → Enter → Mean it."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -15099,6 +15219,10 @@
                   "playerTypeRefs": [
                     "nit"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nit → Narrow → Respect."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -15330,6 +15454,10 @@
                   "playerTypeRefs": [
                     "nit"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Steal → Credit → Explode."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -16233,6 +16361,10 @@
                   "playerTypeRefs": [
                     "maniac"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Wider → Hang → Ego."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -16683,6 +16815,10 @@
                   "objectives": [
                     "Separate observation from certainty"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Observe → Samples → Showdowns."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -16969,6 +17105,10 @@
                   "objectives": [
                     "Change lines by type with justification"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Cards → Seats → Evidence."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -18067,6 +18207,10 @@
                   "objectives": [
                     "Prefer nut potential multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nutted → Air → Domination."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -18451,6 +18595,10 @@
                   "objectives": [
                     "Use depth for speculative implied odds"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Deep → Realize → Stack."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -18795,6 +18943,10 @@
                   "objectives": [
                     "Estimate implied odds from depth and tendencies"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Implied → Reverse → Second."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -19216,6 +19368,10 @@
                   "objectives": [
                     "Choose thin value versus sticky callers"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Thin → Catch → Barrels."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -19691,6 +19847,10 @@
                   "objectives": [
                     "Interpret check-raises by strength and type"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Check-raise → Probe → Delay → Donk."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -20032,6 +20192,10 @@
                   "objectives": [
                     "Update ranges after each street"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Action → Rewrite → Update."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -20355,6 +20519,10 @@
                   "objectives": [
                     "Treat timing as soft evidence only"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Timing → Sizing → Clues."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -20640,6 +20808,10 @@
                   "objectives": [
                     "Identify tilted or stuck opponents"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Stuck → Tilted → Gears."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -20966,6 +21138,10 @@
                   "objectives": [
                     "Set session stop-losses"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Quit → Guard → First."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -21642,6 +21818,10 @@
                   "objectives": [
                     "Identify range advantage"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Range → Nut → Advantage."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -21974,6 +22154,10 @@
                   "objectives": [
                     "Prefer IP for marginal equity"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Equity → Cash → Position."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -22249,6 +22433,10 @@
                   "objectives": [
                     "Spot capped ranges from passive lines"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Capped → Uncapped → Nuts."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -22586,6 +22774,10 @@
                   "objectives": [
                     "Recognize polarized sizing"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Polar → Merged → Size."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -22926,6 +23118,10 @@
                   "objectives": [
                     "Select overbets for polar spots"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Overbet → Polar → Geometry."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -23261,6 +23457,10 @@
                   "objectives": [
                     "Choose bluffs that block call-downs"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Block → Use → No EV."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -23545,6 +23745,10 @@
                   "objectives": [
                     "Continue with stronger catchers"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Defend → Bluff → Enough."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -23873,6 +24077,10 @@
                   "objectives": [
                     "Mix strong hands sometimes"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Mix → Purpose → Strong."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -24197,6 +24405,10 @@
                   "objectives": [
                     "Plan 3-bet pots by SPR"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "3-bet → 4-bet → Depth."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -24519,6 +24731,10 @@
                   "objectives": [
                     "Fold dominated one-pair in heat"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Hard → Cooler → Ego."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -24856,6 +25072,10 @@
                   "objectives": [
                     "Note selective entry"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Tight → Barrel → Sample."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -25139,6 +25359,10 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Tight → Aggro → Model."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -25419,6 +25643,10 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Credit → Tighter → No light."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -25837,6 +26065,10 @@
                   "objectives": [
                     "Note wide entry"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Wide → Pressure → Sample."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -26120,6 +26352,10 @@
                   "playerTypeRefs": [
                     "lag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Wide → Pressure → Model."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -26400,6 +26636,10 @@
                   "playerTypeRefs": [
                     "lag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Call → Trap → Fancy less."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -26802,6 +27042,10 @@
                   "objectives": [
                     "Adjust across all five types"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Cards → Seats → Evidence."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -27545,6 +27789,10 @@
                   "objectives": [
                     "State a preflop thesis"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Reason → Confirm → Cancel."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -27820,6 +28068,10 @@
                   "objectives": [
                     "List turn continue cards"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Barrel → Give-up → Map."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -28094,6 +28346,10 @@
                   "objectives": [
                     "Choose river value candidates"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Value → Bluff → Hold."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -28422,6 +28678,10 @@
                   "objectives": [
                     "Plan single-raised pots"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Limped → SRP → 3-bet/4-bet."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -28697,6 +28957,10 @@
                   "objectives": [
                     "Bluff less multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Fewer → Thicker → Widen."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -28974,6 +29238,10 @@
                   "objectives": [
                     "Recalculate effective stacks each hand"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Short → Deep → Effective."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -29255,6 +29523,10 @@
                   "objectives": [
                     "Change lines by type with citations"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Cards → Models → Cite."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -29683,6 +29955,10 @@
                   "objectives": [
                     "Produce one coherent action"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Type → Board → Line → Size."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -30122,6 +30398,10 @@
                   "objectives": [
                     "Write default lines for common spots"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Leak → Book → Review."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -30397,6 +30677,10 @@
                   "objectives": [
                     "Execute a full SRP plan"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Plan → Update → Finish."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -30682,6 +30966,10 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "SPR → Turn → Close."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -30941,6 +31229,10 @@
                   "objectives": [
                     "Prefer nut potential multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nuts → Deep → No-bluff."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -31197,6 +31489,10 @@
                   "objectives": [
                     "Prefer nut potential limped multiway"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nuts → Value → Thin."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -31465,6 +31761,10 @@
                   "objectives": [
                     "Respect short SPR commitment"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "SPR → Commit → No hero."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -31741,6 +32041,10 @@
                   "objectives": [
                     "List warm-up checklist items"
                   ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Checklist → Defaults → One hand."
+                  },
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -32397,7 +32701,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Your hole cards — private to you."
+      }
     },
     "act-01-01-01-guided-find-holes": {
       "activityId": "act-01-01-01-guided-find-holes",
@@ -32510,7 +32818,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Hearts → Diamonds → Clubs → Spades."
+      }
     },
     "act-01-01-02-guided-suits": {
       "activityId": "act-01-01-02-guided-suits",
@@ -32611,7 +32923,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Button → small blind → big blind."
+      }
     },
     "act-01-01-03-guided-button": {
       "activityId": "act-01-01-03-guided-button",
@@ -32953,7 +33269,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Fold → Check → Call."
+      }
     },
     "act-01-03-01-guided-fold": {
       "activityId": "act-01-03-01-guided-fold",
@@ -33065,7 +33385,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Bet → Raise → All-in."
+      }
     },
     "act-01-03-02-guided-bet": {
       "activityId": "act-01-03-02-guided-bet",
@@ -33293,7 +33617,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Fold win → Showdown → Side pot."
+      }
     },
     "act-01-05-01-guided-fold-win": {
       "activityId": "act-01-05-01-guided-fold-win",
@@ -33406,7 +33734,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Blinds → You act → Ending."
+      }
     },
     "act-01-06-01-guided-steps": {
       "activityId": "act-01-06-01-guided-steps",
@@ -33698,7 +34030,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "The button acts last after the flop."
+      }
     },
     "act-02-01-01-guided-btn": {
       "activityId": "act-02-01-01-guided-btn",
@@ -33925,7 +34261,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Pairs → Broadways → Suited aces → Connectors."
+      }
     },
     "act-02-02-01-guided-pair": {
       "activityId": "act-02-02-01-guided-pair",
@@ -34037,7 +34377,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Early → Button → Live 3x."
+      }
     },
     "act-02-03-01-guided-utg": {
       "activityId": "act-02-03-01-guided-utg",
@@ -34146,7 +34490,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Fold → Call → 3-bet."
+      }
     },
     "act-02-04-01-guided-fold": {
       "activityId": "act-02-04-01-guided-fold",
@@ -34255,7 +34603,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Chips to BB → Shorter → Depth."
+      }
     },
     "act-02-05-01-guided-convert": {
       "activityId": "act-02-05-01-guided-convert",
@@ -34482,7 +34834,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Nine → Same → Position."
+      }
     },
     "act-02-07-01-guided-ep": {
       "activityId": "act-02-07-01-guided-ep",
@@ -34721,7 +35077,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Pot → Stacks → Button → Who acts."
+      }
     },
     "act-03-01-01-guided": {
       "activityId": "act-03-01-01-guided",
@@ -34833,7 +35193,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Made → Draw → SDV → Air."
+      }
     },
     "act-03-02-01-guided": {
       "activityId": "act-03-02-01-guided",
@@ -34944,7 +35308,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Clean → Dirty → Price."
+      }
     },
     "act-03-03-01-guided": {
       "activityId": "act-03-03-01-guided",
@@ -35055,7 +35423,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Value → C-bet → Check → Call → Fold → Raise."
+      }
     },
     "act-03-04-01-guided": {
       "activityId": "act-03-04-01-guided",
@@ -35165,7 +35537,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Brick → Change → Barrel → Delay."
+      }
     },
     "act-03-05-01-guided": {
       "activityId": "act-03-05-01-guided",
@@ -35275,7 +35651,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Value → Bluff → Catch → Fold."
+      }
     },
     "act-03-06-01-guided": {
       "activityId": "act-03-06-01-guided",
@@ -35385,7 +35765,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Stronger → Fewer → Nuts."
+      }
     },
     "act-03-07-01-guided": {
       "activityId": "act-03-07-01-guided",
@@ -35497,7 +35881,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Top pair → Prices → Passive → Crowds."
+      }
     },
     "act-03-08-01-guided": {
       "activityId": "act-03-08-01-guided",
@@ -35731,7 +36119,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "One hand → Range → Update."
+      }
     },
     "act-04-01-01-guided": {
       "activityId": "act-04-01-01-guided",
@@ -35844,7 +36236,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "3-bet → Ranges → Squeeze."
+      }
     },
     "act-04-02-01-guided": {
       "activityId": "act-04-02-01-guided",
@@ -35959,7 +36355,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Flop → Turn → River."
+      }
     },
     "act-04-03-01-guided": {
       "activityId": "act-04-03-01-guided",
@@ -36078,7 +36478,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Value → Pressure → Size."
+      }
     },
     "act-04-04-01-guided": {
       "activityId": "act-04-04-01-guided",
@@ -36193,7 +36597,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "SPR → Low → High."
+      }
     },
     "act-04-05-01-guided": {
       "activityId": "act-04-05-01-guided",
@@ -36296,7 +36704,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Enters → Calls → Folds."
+      }
     },
     "act-04-06-01-guided": {
       "activityId": "act-04-06-01-guided",
@@ -36394,7 +36806,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Station → High → Low."
+      }
     },
     "act-04-06-02-guided": {
       "activityId": "act-04-06-02-guided",
@@ -36491,7 +36907,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Value → Bluffs → Cite."
+      }
     },
     "act-04-06-03-guided": {
       "activityId": "act-04-06-03-guided",
@@ -36593,7 +37013,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Rare → Enter → Mean it."
+      }
     },
     "act-04-07-01-guided": {
       "activityId": "act-04-07-01-guided",
@@ -36686,7 +37110,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Nit → Narrow → Respect."
+      }
     },
     "act-04-07-02-guided": {
       "activityId": "act-04-07-02-guided",
@@ -36761,7 +37189,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Steal → Credit → Explode."
+      }
     },
     "act-04-07-03-guided": {
       "activityId": "act-04-07-03-guided",
@@ -37031,7 +37463,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Wider → Hang → Ego."
+      }
     },
     "act-04-08-03-guided": {
       "activityId": "act-04-08-03-guided",
@@ -37131,7 +37567,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Observe → Samples → Showdowns."
+      }
     },
     "act-04-09-01-guided": {
       "activityId": "act-04-09-01-guided",
@@ -37225,7 +37665,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Cards → Seats → Evidence."
+      }
     },
     "act-04-10-01-guided": {
       "activityId": "act-04-10-01-guided",
@@ -37501,7 +37945,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Nutted → Air → Domination."
+      }
     },
     "act-05-01-01-guided": {
       "activityId": "act-05-01-01-guided",
@@ -37607,7 +38055,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Deep → Realize → Stack."
+      }
     },
     "act-05-02-01-guided": {
       "activityId": "act-05-02-01-guided",
@@ -37710,7 +38162,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Implied → Reverse → Second."
+      }
     },
     "act-05-03-01-guided": {
       "activityId": "act-05-03-01-guided",
@@ -37804,7 +38260,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Thin → Catch → Barrels."
+      }
     },
     "act-05-04-01-guided": {
       "activityId": "act-05-04-01-guided",
@@ -37912,7 +38372,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Check-raise → Probe → Delay → Donk."
+      }
     },
     "act-05-05-01-guided": {
       "activityId": "act-05-05-01-guided",
@@ -38010,7 +38474,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Action → Rewrite → Update."
+      }
     },
     "act-05-06-01-guided": {
       "activityId": "act-05-06-01-guided",
@@ -38103,7 +38571,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Timing → Sizing → Clues."
+      }
     },
     "act-05-07-01-guided": {
       "activityId": "act-05-07-01-guided",
@@ -38201,7 +38673,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Stuck → Tilted → Gears."
+      }
     },
     "act-05-08-01-guided": {
       "activityId": "act-05-08-01-guided",
@@ -38294,7 +38770,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Quit → Guard → First."
+      }
     },
     "act-05-09-01-guided": {
       "activityId": "act-05-09-01-guided",
@@ -38497,7 +38977,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Range → Nut → Advantage."
+      }
     },
     "act-06-01-01-guided": {
       "activityId": "act-06-01-01-guided",
@@ -38594,7 +39078,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Equity → Cash → Position."
+      }
     },
     "act-06-02-01-guided": {
       "activityId": "act-06-02-01-guided",
@@ -38687,7 +39175,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Capped → Uncapped → Nuts."
+      }
     },
     "act-06-03-01-guided": {
       "activityId": "act-06-03-01-guided",
@@ -38784,7 +39276,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Polar → Merged → Size."
+      }
     },
     "act-06-04-01-guided": {
       "activityId": "act-06-04-01-guided",
@@ -38880,7 +39376,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Overbet → Polar → Geometry."
+      }
     },
     "act-06-05-01-guided": {
       "activityId": "act-06-05-01-guided",
@@ -38976,7 +39476,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Block → Use → No EV."
+      }
     },
     "act-06-06-01-guided": {
       "activityId": "act-06-06-01-guided",
@@ -39073,7 +39577,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Defend → Bluff → Enough."
+      }
     },
     "act-06-07-01-guided": {
       "activityId": "act-06-07-01-guided",
@@ -39166,7 +39674,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Mix → Purpose → Strong."
+      }
     },
     "act-06-08-01-guided": {
       "activityId": "act-06-08-01-guided",
@@ -39260,7 +39772,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "3-bet → 4-bet → Depth."
+      }
     },
     "act-06-09-01-guided": {
       "activityId": "act-06-09-01-guided",
@@ -39353,7 +39869,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Hard → Cooler → Ego."
+      }
     },
     "act-06-10-01-guided": {
       "activityId": "act-06-10-01-guided",
@@ -39451,7 +39971,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Tight → Barrel → Sample."
+      }
     },
     "act-06-11-01-guided": {
       "activityId": "act-06-11-01-guided",
@@ -39549,7 +40073,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Tight → Aggro → Model."
+      }
     },
     "act-06-11-02-guided": {
       "activityId": "act-06-11-02-guided",
@@ -39644,7 +40172,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Credit → Tighter → No light."
+      }
     },
     "act-06-11-03-guided": {
       "activityId": "act-06-11-03-guided",
@@ -39739,7 +40271,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Wide → Pressure → Sample."
+      }
     },
     "act-06-12-01-guided": {
       "activityId": "act-06-12-01-guided",
@@ -39837,7 +40373,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Wide → Pressure → Model."
+      }
     },
     "act-06-12-02-guided": {
       "activityId": "act-06-12-02-guided",
@@ -39932,7 +40472,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Call → Trap → Fancy less."
+      }
     },
     "act-06-12-03-guided": {
       "activityId": "act-06-12-03-guided",
@@ -40030,7 +40574,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Cards → Seats → Evidence."
+      }
     },
     "act-06-13-01-guided": {
       "activityId": "act-06-13-01-guided",
@@ -40238,7 +40786,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Reason → Confirm → Cancel."
+      }
     },
     "act-07-01-01-guided": {
       "activityId": "act-07-01-01-guided",
@@ -40331,7 +40883,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Barrel → Give-up → Map."
+      }
     },
     "act-07-02-01-guided": {
       "activityId": "act-07-02-01-guided",
@@ -40423,7 +40979,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Value → Bluff → Hold."
+      }
     },
     "act-07-03-01-guided": {
       "activityId": "act-07-03-01-guided",
@@ -40515,7 +41075,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Limped → SRP → 3-bet/4-bet."
+      }
     },
     "act-07-04-01-guided": {
       "activityId": "act-07-04-01-guided",
@@ -40608,7 +41172,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Fewer → Thicker → Widen."
+      }
     },
     "act-07-05-01-guided": {
       "activityId": "act-07-05-01-guided",
@@ -40700,7 +41268,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Short → Deep → Effective."
+      }
     },
     "act-07-06-01-guided": {
       "activityId": "act-07-06-01-guided",
@@ -40793,7 +41365,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Cards → Models → Cite."
+      }
     },
     "act-07-07-01-guided": {
       "activityId": "act-07-07-01-guided",
@@ -40887,7 +41463,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Type → Board → Line → Size."
+      }
     },
     "act-07-08-01-guided": {
       "activityId": "act-07-08-01-guided",
@@ -40982,7 +41562,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Leak → Book → Review."
+      }
     },
     "act-07-09-01-guided": {
       "activityId": "act-07-09-01-guided",
@@ -41075,7 +41659,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Plan → Update → Finish."
+      }
     },
     "act-07-10-01-hand": {
       "activityId": "act-07-10-01-hand",
@@ -41149,7 +41737,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "SPR → Turn → Close."
+      }
     },
     "act-07-10-02-hand": {
       "activityId": "act-07-10-02-hand",
@@ -41214,7 +41806,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Nuts → Deep → No-bluff."
+      }
     },
     "act-07-10-03-hand": {
       "activityId": "act-07-10-03-hand",
@@ -41279,7 +41875,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Nuts → Value → Thin."
+      }
     },
     "act-07-10-04-hand": {
       "activityId": "act-07-10-04-hand",
@@ -41348,7 +41948,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "SPR → Commit → No hero."
+      }
     },
     "act-07-10-05-hand": {
       "activityId": "act-07-10-05-hand",
@@ -41418,7 +42022,11 @@
       "renderer": "coach_dialogue",
       "acceptedGrades": [
         "recommended"
-      ]
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Checklist → Defaults → One hand."
+      }
     },
     "act-07-11-01-guided": {
       "activityId": "act-07-11-01-guided",

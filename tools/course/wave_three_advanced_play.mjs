@@ -54,6 +54,8 @@ export function buildSectionFive() {
                 "Multiway: nutted hands up, air down. Domination hurts more.",
                 {
                   objectives: ["Prefer nut potential multiway"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Nutted → Air → Domination.",
                   // LPT-222
                   teachSpec: {
                     deal: {mode: "none"},
@@ -179,6 +181,8 @@ export function buildSectionFive() {
                 "Deep: more room to realize. Also more room to lose a stack.",
                 {
                   objectives: ["Use depth for speculative implied odds"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Deep → Realize → Stack.",
                   // LPT-225
                   teachSpec: {
                     deal: {mode: "none"},
@@ -284,6 +288,8 @@ export function buildSectionFive() {
                 "Implied odds: future money. Reverse implied: future losses when second-best.",
                 {
                   objectives: ["Estimate implied odds from depth and tendencies"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Implied → Reverse → Second.",
                   // LPT-228
                   teachSpec: {
                     deal: {mode: "none"},
@@ -426,6 +432,8 @@ export function buildSectionFive() {
                 "Thin value needs calls. Bluff-catches need wide barrels.",
                 {
                   objectives: ["Choose thin value versus sticky callers"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Thin → Catch → Barrels.",
                   // LPT-231
                   teachSpec: {
                     deal: {mode: "none"},
@@ -571,6 +579,8 @@ export function buildSectionFive() {
                 "Lines mean ranges. Check-raise, probe, delay, donk — each updates the story.",
                 {
                   objectives: ["Interpret check-raises by strength and type"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Check-raise → Probe → Delay → Donk.",
                   // LPT-234
                   teachSpec: {
                     deal: {mode: "none"},
@@ -675,6 +685,8 @@ export function buildSectionFive() {
                 "Each action rewrites the range. Keep updating.",
                 {
                   objectives: ["Update ranges after each street"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Action → Rewrite → Update.",
                   // LPT-237
                   teachSpec: {
                     deal: {mode: "none"},
@@ -775,6 +787,8 @@ export function buildSectionFive() {
                 "Timing and sizing are clues, not mind-reading. Small updates only.",
                 {
                   objectives: ["Treat timing as soft evidence only"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Timing → Sizing → Clues.",
                   // LPT-242
                   teachSpec: {
                     deal: {mode: "none"},
@@ -859,6 +873,8 @@ export function buildSectionFive() {
                 "Tables change. Stuck, tilted, tired, or shifting gears — update.",
                 {
                   objectives: ["Identify tilted or stuck opponents"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Stuck → Tilted → Gears.",
                   // LPT-245
                   teachSpec: {
                     deal: {mode: "none"},
@@ -959,6 +975,8 @@ export function buildSectionFive() {
                 "Winning 1/2 includes knowing when to quit. Guardrails first.",
                 {
                   objectives: ["Set session stop-losses"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Quit → Guard → First.",
                   // LPT-248
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1195,6 +1213,8 @@ export function buildSectionSix() {
                 "Range advantage: more strong hands overall. Nut advantage: more of the nuts.",
                 {
                   objectives: ["Identify range advantage"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Range → Nut → Advantage.",
                   // LPT-252
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1300,6 +1320,8 @@ export function buildSectionSix() {
                 "Equity on a chart is not cash. Position decides realization.",
                 {
                   objectives: ["Prefer IP for marginal equity"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Equity → Cash → Position.",
                   // LPT-255
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1382,6 +1404,8 @@ export function buildSectionSix() {
                 "Capped = nuts unlikely. Uncapped = nuts still live.",
                 {
                   objectives: ["Spot capped ranges from passive lines"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Capped → Uncapped → Nuts.",
                   // LPT-258
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1484,6 +1508,8 @@ export function buildSectionSix() {
                 "Polar: nuts or air. Merged: many medium-strong hands. Size accordingly.",
                 {
                   objectives: ["Recognize polarized sizing"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Polar → Merged → Size.",
                   // LPT-262
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1587,6 +1613,8 @@ export function buildSectionSix() {
                 "Overbets need a polar story. Geometry links flop-turn-river sizes.",
                 {
                   objectives: ["Select overbets for polar spots"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Overbet → Polar → Geometry.",
                   // LPT-265
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1692,6 +1720,8 @@ export function buildSectionSix() {
                 "Blockers remove hands. Use them; do not invent EV decimals.",
                 {
                   objectives: ["Choose bluffs that block call-downs"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Block → Use → No EV.",
                   // LPT-268
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1776,6 +1806,8 @@ export function buildSectionSix() {
                 "Defend enough that over-bluffing fails. No fake percentages.",
                 {
                   objectives: ["Continue with stronger catchers"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Defend → Bluff → Enough.",
                   // LPT-271
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1878,6 +1910,8 @@ export function buildSectionSix() {
                 "Mixing is frequency with a purpose — not coin-flip theater.",
                 {
                   objectives: ["Mix strong hands sometimes"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Mix → Purpose → Strong.",
                   // LPT-275
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1980,6 +2014,8 @@ export function buildSectionSix() {
                 "3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment.",
                 {
                   objectives: ["Plan 3-bet pots by SPR"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "3-bet → 4-bet → Depth.",
                   // LPT-280
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2080,6 +2116,8 @@ export function buildSectionSix() {
                 "Hard folds save buy-ins. Coolers happen; ego call-downs are mistakes.",
                 {
                   objectives: ["Fold dominated one-pair in heat"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Hard → Cooler → Ego.",
                   // LPT-283
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2183,6 +2221,8 @@ export function buildSectionSix() {
                 "Before labels: who enters tight, then barrels with a plan? Count samples.",
                 {
                   objectives: ["Note selective entry"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Tight → Barrel → Sample.",
                   // LPT-286
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2266,6 +2306,8 @@ export function buildSectionSix() {
                 "TAG: tight in, aggressive after — a working model.",
                 {
                   objectives: ["Introduce TAG"], playerTypeRefs: ["tag"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Tight → Aggro → Model.",
                   // LPT-289
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2348,6 +2390,8 @@ export function buildSectionSix() {
                 "Versus TAG: respect raises; do not invent light bluff-raises.",
                 {
                   objectives: ["Respect TAG aggression"], playerTypeRefs: ["tag"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Credit → Tighter → No light.",
                   // LPT-292
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2488,6 +2532,8 @@ export function buildSectionSix() {
                 "Before labels: wide entry plus pressure that still has a plan. Count samples.",
                 {
                   objectives: ["Note wide entry"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Wide → Pressure → Sample.",
                   // LPT-295
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2571,6 +2617,8 @@ export function buildSectionSix() {
                 "LAG: wide in, pressure on — still a working model.",
                 {
                   objectives: ["Introduce LAG"], playerTypeRefs: ["lag"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Wide → Pressure → Model.",
                   // LPT-298
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2653,6 +2701,8 @@ export function buildSectionSix() {
                 "Versus LAG: trap more, call wider, fancy less.",
                 {
                   objectives: ["Widen bluff-catches versus LAG"], playerTypeRefs: ["lag"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Call → Trap → Fancy less.",
                   // LPT-301
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2778,6 +2828,8 @@ export function buildSectionSix() {
                 "Five models. Same cards. Change only with evidence.",
                 {
                   objectives: ["Adjust across all five types"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Cards → Seats → Evidence.",
                   // LPT-304
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3034,6 +3086,8 @@ export function buildSectionSeven() {
                 "Enter with a reason. Flop confirms or cancels.",
                 {
                   objectives: ["State a preflop thesis"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Reason → Confirm → Cancel.",
                   // LPT-308
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3116,6 +3170,8 @@ export function buildSectionSeven() {
                 "Flop bet needs a turn map. Continue or kill.",
                 {
                   objectives: ["List turn continue cards"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Barrel → Give-up → Map.",
                   // LPT-312
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3198,6 +3254,8 @@ export function buildSectionSeven() {
                 "River: value if they call worse; bluff if they fold better.",
                 {
                   objectives: ["Choose river value candidates"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Value → Bluff → Hold.",
                   // LPT-315
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3299,6 +3357,8 @@ export function buildSectionSeven() {
                 "Pot type sets ranges and SPR. Plan accordingly.",
                 {
                   objectives: ["Plan single-raised pots"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Limped → SRP → 3-bet/4-bet.",
                   // LPT-318
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3381,6 +3441,8 @@ export function buildSectionSeven() {
                 "More players: fewer bluffs, thicker value.",
                 {
                   objectives: ["Bluff less multiway"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Fewer → Thicker → Widen.",
                   // LPT-321
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3464,6 +3526,8 @@ export function buildSectionSeven() {
                 "Effective stack rewrites the plan every hand.",
                 {
                   objectives: ["Recalculate effective stacks each hand"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Short → Deep → Effective.",
                   // LPT-324
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3547,6 +3611,8 @@ export function buildSectionSeven() {
                 "Same cards. Five models. Cite the tendency.",
                 {
                   objectives: ["Change lines by type with citations"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Cards → Models → Cite.",
                   // LPT-328
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3687,6 +3753,8 @@ export function buildSectionSeven() {
                 "Type × board × line × size. One answer.",
                 {
                   objectives: ["Produce one coherent action"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Type → Board → Line → Size.",
                   // LPT-331
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3827,6 +3895,8 @@ export function buildSectionSeven() {
                 "Defaults beat vibes. Write the book; review leaks.",
                 {
                   objectives: ["Write default lines for common spots"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Leak → Book → Review.",
                   // LPT-334
                   teachSpec: {
                     deal: {mode: "none"},
@@ -3909,6 +3979,8 @@ export function buildSectionSeven() {
                 "Capstone SRP. No hints. Trust your map.",
                 {
                   objectives: ["Execute a full SRP plan"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Plan → Update → Finish.",
                   // LPT-337
                   teachSpec: {
                     deal: {mode: "none"},
@@ -4004,6 +4076,8 @@ export function buildSectionSeven() {
                 "Capstone 3-bet. Short prompts. No hints.",
                 {
                   objectives: ["Plan a 3-bet pot by SPR"], playerTypeRefs: ["tag"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "SPR → Turn → Close.",
                   // LPT-339
                   teachSpec: {
                     deal: {mode: "none"},
@@ -4094,6 +4168,8 @@ export function buildSectionSeven() {
                 "Capstone multiway deep. No hints.",
                 {
                   objectives: ["Prefer nut potential multiway"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Nuts → Deep → No-bluff.",
                   // LPT-341
                   teachSpec: {
                     deal: {mode: "none"},
@@ -4185,6 +4261,8 @@ export function buildSectionSeven() {
                 "Capstone limped pot. Crowded. No hints.",
                 {
                   objectives: ["Prefer nut potential limped multiway"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Nuts → Value → Thin.",
                   // LPT-345
                   teachSpec: {
                     deal: {mode: "none"},
@@ -4276,6 +4354,8 @@ export function buildSectionSeven() {
                 "Capstone 4-bet. Short SPR. No hints.",
                 {
                   objectives: ["Respect short SPR commitment"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "SPR → Commit → No hero.",
                   // LPT-347
                   teachSpec: {
                     deal: {mode: "none"},
@@ -4370,6 +4450,8 @@ export function buildSectionSeven() {
                 "Live warm-up: short checklist, then play. Plan 10 wires the bridge.",
                 {
                   objectives: ["List warm-up checklist items"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Checklist → Defaults → One hand.",
                   // LPT-349
                   teachSpec: {
                     deal: {mode: "none"},

@@ -261,6 +261,8 @@ export function buildSectionOne() {
                 "These two are yours alone. Nobody else sees them.",
                 {
                   objectives: ["Identify your two hole cards"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Your hole cards — private to you.",
                   // LPT-558
                   teachSpec: {
                     deal: {mode: "random_in_class", handFamily: "any", suitFamily: "any"},
@@ -387,6 +389,8 @@ export function buildSectionOne() {
                   objectives: ["Name the four suits"],
                   accessibilityText:
                     "You found all four suits. Ace is still the high card.",
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Hearts → Diamonds → Clubs → Spades.",
                   // LPT-353
                   teachSpec: {
                     deal: {mode: "none"},
@@ -535,6 +539,8 @@ export function buildSectionOne() {
                   ],
                   accessibilityText:
                     "Clockwise from the button: small blind, then big blind.",
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Button → small blind → big blind.",
                   // LPT-85: seat/puck lesson, no cards dealt. SoftPulse walks
                   // the pucks D -> SB -> BB (lessonPuckLabelForHighlight).
                   teachSpec: {
@@ -979,6 +985,8 @@ export function buildSectionOne() {
                 "Three quiet buttons — each has a different job.",
                 {
                   objectives: ["Fold to give up the hand"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Fold → Check → Call.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1094,6 +1102,8 @@ export function buildSectionOne() {
                 "Three chip-pushing buttons — each has a different job.",
                 {
                   objectives: ["Bet when the pot is unchecked"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Bet → Raise → All-in.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1335,6 +1345,8 @@ export function buildSectionOne() {
                 "Folds win pots early. Showdown compares hands. Short stacks make side pots.",
                 {
                   objectives: ["Win the pot when everyone else folds"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Fold win → Showdown → Side pot.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1488,6 +1500,8 @@ export function buildSectionOne() {
                 "One short hand. Blinds post, you act, we reach an ending.",
                 {
                   objectives: ["Follow a hand from blinds to a terminal state"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Blinds → You act → Ending.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
@@ -1882,6 +1896,8 @@ export function buildSectionTwo() {
                 "Later seats see more. That is the whole edge.",
                 {
                   objectives: ["Prefer later seats when choosing hands"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "The button acts last after the flop.",
                   // LPT-635
                   teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "D", kind: "soft_pulse"}]},
                 }),
@@ -2082,6 +2098,8 @@ export function buildSectionTwo() {
                 "Pairs, broadways, suited aces, connectors — trash is everything else.",
                 {
                   objectives: ["Recognize pocket pairs"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Pairs → Broadways → Suited aces → Connectors.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2201,6 +2219,8 @@ export function buildSectionTwo() {
                 "Who opens — and how wide. Position shapes the first action.",
                 {
                   objectives: ["Fold trash from early position"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Early → Button → Live 3x.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2315,6 +2335,8 @@ export function buildSectionTwo() {
                 "Weak hands fold. Playable hands call. Strong hands make it more.",
                 {
                   objectives: ["Fold weak hands to an open"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Fold → Call → 3-bet.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2429,6 +2451,8 @@ export function buildSectionTwo() {
                 "Count stacks in big blinds. The shorter stack sets the ceiling.",
                 {
                   objectives: ["Convert chips to big blinds"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Chips to BB → Shorter → Depth.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
@@ -2635,6 +2659,8 @@ export function buildSectionTwo() {
                 "Nine seats. Same rules. Position still runs the show.",
                 {
                   objectives: ["Make a baseline open on a full ring"],
+                  // LPT-624: short Nice! why — not accessibilityText / idle ask.
+                  okFeedback: "Nine → Same → Position.",
                   // LPT-635
                   teachSpec: {
                     deal: {mode: "none"},
