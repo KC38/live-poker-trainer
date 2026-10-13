@@ -246,6 +246,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-07-01-01-unguided' =>
       'Best habit — pick what to do before flop act.',
     'act-07-01-01-checkpoint' => 'Dead plan — pick the response.',
+    // Map turn barrels densified asks (LPT-657) — same path as LPT-656.
+    // Use pick/tap so withLessonTapInstruction does not append the footer.
+    'act-07-02-01-guided' => 'AK c-bet · Q72r — pick the continue cards.',
+    'act-07-02-01-scaffolded' => 'Gutshot · brick raise — pick the map call.',
+    'act-07-02-01-unguided' => 'No turn idea — pick what to do first.',
+    'act-07-02-01-checkpoint' => 'Turn map — pick the definition.',
     _ => null,
   };
 }
