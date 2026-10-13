@@ -1411,9 +1411,13 @@ for row in rows:
     # Prefer coverage closest to the recorded run end (start+seconds), not
     # the latest row in the padded window — overlapping pads used to pin
     # the next ticket onto the previous stamp (LPT-490/491).
+    # Skip stamps a prior dup pass already cleared — re-filling the same
+    # overlapping coverage recreates the duplicate every `status` call
+    # (fill → reattribute → clear → repair noise forever).
     if (
         stamp
         and stamp != "reconciled"
+        and not (row.get("dup_reattributed") and not ticket)
         and result not in (
             "usage-limit",
             "sim-not-ready",

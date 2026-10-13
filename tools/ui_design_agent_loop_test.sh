@@ -1233,6 +1233,31 @@ assert by["20261013-082906"].get("ticket") != "LPT-642", rows
 print("exit0 beats sigterm ok")
 PY
 
+# Cleared dup_reattributed stamps must not re-fill from overlapping coverage
+# on every status (fill → reattribute → clear oscillation).
+printf '%s\n' \
+  '{"at":"2026-10-13T05:47:33+05:30","sha":"d","surface":"lesson-runner:x","result":"closed","ticket":"LPT-637","leads":[],"learnings":"unchanged"}' \
+  >"$COVERAGE_FILE"
+printf '%s\n' \
+  '{"at":"2026-10-13T05:47:00+05:30","stamp":"20261013-043431","exit":0,"seconds":780,"ticket":"LPT-637","result":"closed","tail":"coverage:closed ticket:LPT-637 surface:lesson-runner:x"}' \
+  '{"at":"2026-10-13T05:47:20+05:30","stamp":"20261013-053420","exit":13,"seconds":793,"ticket":null,"result":null,"tail":"","dup_reattributed":true,"tail_repaired":true}' \
+  >"$HEALTH_FILE"
+out1="$(repair_health_tails)"
+[[ -z "$out1" ]] || fail "cleared dup stamp should be idempotent, got: $out1"
+python3 - "$HEALTH_FILE" <<'PY' || fail "cleared dup stamp re-filled"
+import json, sys
+from pathlib import Path
+rows = [json.loads(l) for l in Path(sys.argv[1]).read_text().splitlines() if l.strip()]
+by = {r.get("stamp"): r for r in rows}
+assert "20261013-053420" in by, rows
+assert by["20261013-053420"].get("ticket") is None, rows
+assert by["20261013-053420"].get("dup_reattributed") is True, rows
+assert by["20261013-043431"].get("ticket") == "LPT-637", rows
+print("cleared dup_reattributed idempotent ok")
+PY
+out2="$(repair_health_tails)"
+[[ -z "$out2" ]] || fail "second repair must stay silent, got: $out2"
+
 # Prose with an LPT key (and no coverage match) still attributes the stamp.
 : >"$COVERAGE_FILE"
 printf '%s\n' \
