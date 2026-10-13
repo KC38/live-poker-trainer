@@ -1282,16 +1282,25 @@ for ticket, idxs in by_ticket.items():
     cov_ts = _parse_iso_epoch(cov.get("at"))
     if cov_ts is None:
         continue
+    def _exit_rank(code):
+        # Prefer clean closes over SIGTERM/stall/SDK noise when two stamps
+        # claim the same ticket (080405 exit 0 vs 082906 exit 143 for LPT-642).
+        if code == 0:
+            return 0
+        if code in (143, 13, 15, 2):
+            return 2
+        return 1
+
     scored = []
     for i in idxs:
         _start, run_end, _end = stamp_run_window(out[i])
         if run_end is None:
             continue
-        scored.append((abs(run_end - cov_ts), i))
+        scored.append((_exit_rank(out[i].get("exit")), abs(run_end - cov_ts), i))
     if len(scored) < 2:
         continue
     scored.sort()
-    for _delta, i in scored[1:]:
+    for _rank, _delta, i in scored[1:]:
         row = dict(out[i])
         was_stalled = row.get("result") == "stalled"
         best = best_coverage_for_stamp(row, exclude_tickets={ticket})
