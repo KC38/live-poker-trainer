@@ -366,8 +366,11 @@ detail = (obj.get("detail") or "").strip()
 if reason == "empty-queue":
     print(f"idle: empty-queue since {at}")
 elif reason == "primary-busy":
-    branch = detail or "unknown"
-    print(f"idle: primary-busy branch={branch} since {at}")
+    if detail == "main(dirty)":
+        print(f"idle: primary-busy dirty on main since {at}")
+    else:
+        branch = detail or "unknown"
+        print(f"idle: primary-busy branch={branch} since {at}")
 elif reason == "sim-busy":
     print(f"idle: sim-busy since {at}")
 else:
@@ -2251,12 +2254,20 @@ one_run() {
   # Skip when another agent left PRIMARY off clean main. Unit tests set
   # UI_AGENT_SKIP_SIM_PREFLIGHT=1 and use a disposable PRIMARY.
   if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! primary_is_clean_main; then
-    local _branch
+    local _branch _detail
     _branch="$(git -C "$(primary)" rev-parse --abbrev-ref HEAD 2>/dev/null | head -1 | tr -d '\r')"
     [[ -n "$_branch" ]] || _branch="unknown"
-    log "primary checkout is on '${_branch}' (not clean main); skipping this run"
-    record_idle_skip primary-busy "$_branch"
-    unset _branch
+    # Distinguishes wrong-branch vs dirty-on-main (2026-10-13 17:16 log said
+    # "on 'main' (not clean main)" which read like a branch bug).
+    if [[ "$_branch" == "main" ]]; then
+      log "primary checkout is dirty on main; skipping this run"
+      _detail="main(dirty)"
+    else
+      log "primary checkout is on '${_branch}' (not clean main); skipping this run"
+      _detail="$_branch"
+    fi
+    record_idle_skip primary-busy "$_detail"
+    unset _branch _detail
     return 10
   fi
   if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! ui_queue_has_ticket; then

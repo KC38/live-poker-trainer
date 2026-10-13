@@ -957,6 +957,8 @@ grep -q 'primary_is_clean_main' "$LOOP" \
   || fail "loop must define primary_is_clean_main"
 grep -q 'not clean main' "$LOOP" \
   || fail "one_run must skip when primary is not clean main"
+grep -q 'dirty on main' "$LOOP" \
+  || fail "one_run must log dirty-on-main distinctly from wrong-branch"
 off_main="$tmp/off-main-primary"
 mkdir -p "$off_main"
 git -C "$off_main" init -q
@@ -979,6 +981,14 @@ git -C "$on_main" commit --allow-empty -m init -q
   primary() { echo "$on_main"; }
   primary_is_clean_main
 ) || fail "primary_is_clean_main must accept clean main"
+# Dirty main tip is also not clean main (content-agent / local edits).
+printf 'dirty\n' >"$on_main/scratch.txt"
+(
+  primary() { echo "$on_main"; }
+  primary_is_clean_main && exit 1 || exit 0
+) || fail "primary_is_clean_main must reject dirty main"
+rm -f "$on_main/scratch.txt"
+echo "primary dirty-on-main gate ok"
 
 # 504 Gateway Time-out → gateway-timeout (no HTML stuffed into health).
 gw_log="$LOG_DIR/run-gateway-timeout.log"
@@ -1293,6 +1303,12 @@ printf '%s\n' \
 idle_out="$(print_idle_status)"
 grep -q 'idle: primary-busy branch=cursor/chore-busy since 2026-10-13T13:34:16+0530' \
   <<<"$idle_out" || fail "print_idle_status primary-busy: $idle_out"
+printf '%s\n' \
+  '{"reason":"primary-busy","at":"2026-10-13T17:16:55+0530","detail":"main(dirty)"}' \
+  >"$IDLE_FILE"
+idle_out="$(print_idle_status)"
+grep -q 'idle: primary-busy dirty on main since 2026-10-13T17:16:55+0530' \
+  <<<"$idle_out" || fail "print_idle_status dirty main: $idle_out"
 clear_idle_skip
 [[ ! -f "$IDLE_FILE" ]] || fail "clear_idle_skip must remove IDLE_FILE"
 echo "status idle stamp ok"
