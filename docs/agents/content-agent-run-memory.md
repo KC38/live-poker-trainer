@@ -1306,3 +1306,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept still **LPT-333** needs-human (tip-commented on `34a43238`). Tip-commented Capstone **LPT-348** + **LPT-330** + Done parents that NEED tip SHA.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-09-01-leak-review-book` / Low curriculum.
 - act-07-08-01-*: structural clean on tip — curriculum split only via LPT-333.
+
+## Fold 2026-10-14k (34a43238 discovery leak-review-book; rescue #2172)
+
+- Tip-stable `34a43238` (#2171). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Rescued unfolder draft #2172 type-board-line fold onto this chore. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip — no re-spam).
+- Discovery oldest-unfresh `lesson-07-09-01-leak-review-book`: teachSpec on all five; explain SoftPulse LEAK→BOOK→REVIEW + activity-level `explainGrading`; interactive `deal.mode` `none` SoftPulse/outcome tiles cues `spec`/`book`/`sched`/`base` (no handFamily); scaffolded+unguided one-per-press complete; checkpoint `assessmentRole` hintless; densify helper arms PRESENT (`act-07-09-01-*` — LPT-453/LPT-662 Done). Structural clean — no new grokbot clone; design-record Still-a-list “book quizzes” STALE — no rebuild.
+- Curriculum multi-concept still **LPT-336** needs-human (name-leaks / write-defaults / schedule-review + checkpoint book-purpose vs schedule) — tip-commented on `34a43238`. Done-ack LPT-334/335/453/662/511 (NEED tip SHA). **LPT-348**/333/parents already HAS — no re-spam.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-10-01-capstone-srp` / `lesson-07-11-01-live-warmup` / Low curriculum.
+- act-07-09-01-*: structural clean on tip — curriculum split only via LPT-336; teachSpec/pressHints/densify companions LPT-334/335/453 Done.
