@@ -578,6 +578,11 @@ const _lessons = <String, List<String>>{
     'act-07-10-03-explain',
     'act-07-10-03-hand',
   ],
+  // LPT-345
+  'lesson-07-10-04-capstone-limped': [
+    'act-07-10-04-explain',
+    'act-07-10-04-hand',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -4438,6 +4443,36 @@ void main() {
       expect(
         act('act-07-10-03-hand').teachSpec!['deal']['fixedCards']['board'],
         ['Jh', '8h', '2c', '3d', '9c'],
+      );
+    });
+  });
+
+  group('Capstone: limped pot (LPT-345)', () {
+    test('explain SoftPulse walks NUTS → VALUE → THIN', () {
+      expect(
+        _list(
+          act('act-07-10-04-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['NUTS', 'VALUE', 'THIN'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(
+          act('act-07-10-04-hand'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['bet', 'barrel', 'value'],
+      );
+      expect(
+        act('act-07-10-04-hand').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Kh'],
+      );
+      expect(
+        act('act-07-10-04-hand').teachSpec!['deal']['fixedCards']['board'],
+        ['Kd', '9c', '4h', '2s', '8d'],
       );
     });
   });
