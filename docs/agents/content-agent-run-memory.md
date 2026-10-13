@@ -1067,11 +1067,3 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: LPT-348 Capstone pressHints needs-human OR discovery walk (honesty/curriculum one-offs scanner cannot see).
 - act-04-07-02-unguided: pressHints PRESENT (#2135) — do not re-file pressHints clones; Capstone LPT-348 stays separate.
 
-## Fold 2026-10-13dc (cb195dd7 #2135 LPT-626)
-
-- Tip advanced mid-run after #2136 learnings fold: `6cfa4454` → `cb195dd7` (#2135 LPT-626 scaffolded class-language `pressHints`): `scan_content_gaps --counts` pressHints **151→0**. Rebuilt **LPT-626** empty checklist + transitioned **Done**. All scanner JSON gaps now **0** (nice-ladder / deal-variants / teachSpec / explain-teachSpec / SoftPulse-map / densify-tap also 0); softpulseMapArms **92** / densifyHelperArms **229**.
-- Tip-commented on `cb195dd7`: needs-human **LPT-348** + Done-ack LPT-624/625/626/627/635/628/666/414/558/370/588. Capstone `act-07-10-05-hand` still has teachSpec cues + `deal.variants` but **no** `pressHints` (stays in `NO_HINT_ACTIVITY_IDS`) — keep **LPT-348** open; do not Done from catalog clear alone.
-- Meet Nit Nice! `act-04-07-02-explain` / pressHints `act-04-07-02-unguided` cleared with LPT-624/626 — no clones. Zero open High content tickets; zero open catalog JSON parents. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty (stub only). `content,grokbot,lesson`.
-- next: LPT-348 needs-human Capstone pressHints OR Low curriculum splits / honesty discovery walk the scanner cannot see.
-- act-*: pressHints catalog clear (#2135) — do not re-file pressHints clones; Capstone multi-step stays LPT-348.
-
