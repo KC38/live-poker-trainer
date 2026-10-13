@@ -76,8 +76,8 @@ checkpoint (LPT-307), Carry a preflop plan onto the flop (LPT-308), Change
 plans by pot type (LPT-318), Switch gears between HU and multiway (LPT-321),
 Rewrite plans when stacks change (LPT-324), Replay the same hand versus each
 type (LPT-328), Integrate type, board, line, and sizing (LPT-331), Capstone:
-single-raised pot (LPT-337). Content gaps are audited by [11 — Lesson
-content agent](11-lesson-content-agent.md).
+single-raised pot (LPT-337), Capstone: 3-bet pot (LPT-339). Content gaps are
+audited by [11 — Lesson content agent](11-lesson-content-agent.md).
 
 `deal.handFamily` (and `deal.variants[].handFamily`) must be a value in the
 `teach_spec.schema.json` enum. Besides showdown ranks and starting-hand

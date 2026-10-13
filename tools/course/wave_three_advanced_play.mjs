@@ -3256,7 +3256,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-10-02-explain", 1,
                 "Capstone 3-bet. Short prompts. No hints.",
-                {objectives: ["Plan a 3-bet pot by SPR"], playerTypeRefs: ["tag"]}),
+                {
+                  objectives: ["Plan a 3-bet pot by SPR"], playerTypeRefs: ["tag"],
+                  // LPT-339
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "SPR", kind: "soft_pulse"},
+                      {press: 2, target: "TURN", kind: "soft_pulse"},
+                      {press: 3, target: "CLOSE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               multiStepAct({
                 id: "act-07-10-02-hand", order: 2, stage: "scaffolded",
                 a11y: "You 3-bet TAG open with AQ; 120bb deep.",
@@ -3299,6 +3310,18 @@ export function buildSectionSeven() {
                     ],
                   },
                 ],
+                // LPT-339
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Ah", "Qd"], board: ["Qs", "8h", "3d", "2d", "7c"]},
+                  },
+                  cues: [
+                    {press: 1, target: "bet", kind: "soft_pulse"},
+                    {press: 2, target: "barrel", kind: "soft_pulse"},
+                    {press: 3, target: "fold", kind: "soft_pulse"},
+                  ],
+                },
               }),
             ],
           }),

@@ -568,6 +568,11 @@ const _lessons = <String, List<String>>{
   ],
   // LPT-337
   'lesson-07-10-01-capstone-srp': ['act-07-10-01-explain', 'act-07-10-01-hand'],
+  // LPT-339
+  'lesson-07-10-02-capstone-3bet': [
+    'act-07-10-02-explain',
+    'act-07-10-02-hand',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -4368,6 +4373,36 @@ void main() {
       expect(
         act('act-07-10-01-hand').teachSpec!['deal']['fixedCards']['board'],
         ['Kc', '7s', '2h', '2d', '9c'],
+      );
+    });
+  });
+
+  group('Capstone: 3-bet pot (LPT-339)', () {
+    test('explain SoftPulse walks SPR → TURN → CLOSE', () {
+      expect(
+        _list(
+          act('act-07-10-02-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['SPR', 'TURN', 'CLOSE'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(
+        _list(
+          act('act-07-10-02-hand'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['bet', 'barrel', 'fold'],
+      );
+      expect(
+        act('act-07-10-02-hand').teachSpec!['deal']['fixedCards']['hero'],
+        ['Ah', 'Qd'],
+      );
+      expect(
+        act('act-07-10-02-hand').teachSpec!['deal']['fixedCards']['board'],
+        ['Qs', '8h', '3d', '2d', '7c'],
       );
     });
   });
