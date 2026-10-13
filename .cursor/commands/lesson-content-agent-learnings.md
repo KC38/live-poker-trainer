@@ -72,7 +72,10 @@ Lesson-specific pattern notes (full history) live in
   `--gap <type> --markdown` every run before any lesson walk; sync open
   `(catalog)` parents in one edit. If agent Shell hangs with empty
   output on `--counts`, rerun in a short tmux/foreground session (script
-  itself is ~40ms).
+  itself is ~40ms). When rebuilding pressHints **LPT-626**, subtract
+  Dart `noHintIds` capstone `-hand`/`-explain` rows from scanner raw
+  before writing “after excluding” (tip `dc3f830f`: raw 156 → fix **151**);
+  do not paste raw 156 as the excluded count.
 - Prefer one catalog ticket per structural gap type (pressHints,
   deal.variants, Nice! ladder, densify-tap, SoftPulse maps, guideRegion,
   permanent-gold). Append checklists; Done sibling clones (skip In Progress).
