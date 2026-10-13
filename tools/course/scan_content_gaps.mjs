@@ -332,12 +332,45 @@ function gapNiceLadder(lessonId, lessonTitle, activity) {
   };
 }
 
+/**
+ * Unguided (and scaffolded-qq) poker_action_sizing steps missing a
+ * `_guidedPulseTargetId` SoftPulse map arm — catalog LPT-625.
+ * @param {Record<string, unknown>} activity
+ * @returns {GapRow|null}
+ */
+function gapUnguidedSoftpulseMap(lessonId, lessonTitle, activity) {
+  if (String(activity.renderer || "") !== "poker_action_sizing") {
+    return null;
+  }
+  const activityId = String(activity.id || "");
+  const wantsMap =
+    activityId.includes("unguided") || activityId.includes("scaffolded-qq");
+  if (!wantsMap) {
+    return null;
+  }
+  if (GUIDED_PULSE_TARGET_IDS.has(activityId)) {
+    return null;
+  }
+  return {
+    lessonId,
+    lessonTitle,
+    activityId,
+    stage: String(activity.stage || ""),
+    assessmentRole: activity.assessmentRole
+      ? String(activity.assessmentRole)
+      : null,
+    renderer: "poker_action_sizing",
+    note: "SoftPulse map arm missing (_guidedPulseTargetId)",
+  };
+}
+
 const SCANNERS = {
   pressHints: gapPressHints,
   "deal-variants": gapDealVariants,
   teachSpec: gapTeachSpec,
   "explain-teachSpec": gapExplainCues,
   "nice-ladder": gapNiceLadder,
+  "unguided-softpulse-map": gapUnguidedSoftpulseMap,
 };
 
 /** Open `(catalog)` parents — keep in sync when filing/closing parents. */
@@ -348,9 +381,9 @@ const CATALOG_PARENTS = {
   // teachSpec Highs are still per-lesson; no single catalog parent yet
   teachSpec: null,
   "nice-ladder": "LPT-624",
+  "unguided-softpulse-map": "LPT-625",
   // Related structural parents (not produced by this scanner’s gaps):
   "densify-tap": "LPT-628",
-  "unguided-softpulse-map": "LPT-625",
 };
 
 /**
@@ -422,7 +455,15 @@ function main() {
       Object.entries(selected).map(([k, rows]) => [k, rows.length]),
     );
     process.stdout.write(
-      `${JSON.stringify({counts, catalogParents: CATALOG_PARENTS}, null, 2)}\n`,
+      `${JSON.stringify(
+        {
+          counts,
+          catalogParents: CATALOG_PARENTS,
+          softpulseMapArms: GUIDED_PULSE_TARGET_IDS.size,
+        },
+        null,
+        2,
+      )}\n`,
     );
     return;
   }
