@@ -2913,7 +2913,10 @@ PY
         # Health already has coverage:closed (etc.) for this stamp — skip the
         # prose preview so status does not re-print the step-10 report
         # (LPT-644 / 20261013-092240 dumped ~20 markdown lines every status).
-        if health_has_structured_stamp "$stamp_guess"; then
+        # Also skip while this stamp is the live agent run: mid-flight SDK
+        # logs are token/NDJSON crumbs (LPT-652 status noise on 2026-10-13).
+        if health_has_structured_stamp "$stamp_guess" \
+          || [[ -n "$active_stamp" && "$active_stamp" == "$stamp_guess" ]]; then
           :
         else
           # Machine SDK logs interleave NDJSON markers; scrub before preview.
@@ -2921,10 +2924,16 @@ PY
         fi
       else
         echo "(run log empty — Cursor CLI often writes to /tmp/cursor-agent-logs-*/)"
-        sess="$(ls -t /tmp/cursor-agent-logs-*/session-*.log 2>/dev/null | head -1 || true)"
-        if [[ -n "$sess" ]]; then
-          echo "cursor session log: $sess"
-          print_run_log_preview "$sess" 10
+        # Empty active run log: do not fall through to an unrelated cursor
+        # session preview while the agent is still going.
+        if [[ -n "$active_stamp" && "$active_stamp" == "$stamp_guess" ]]; then
+          :
+        else
+          sess="$(ls -t /tmp/cursor-agent-logs-*/session-*.log 2>/dev/null | head -1 || true)"
+          if [[ -n "$sess" ]]; then
+            echo "cursor session log: $sess"
+            print_run_log_preview "$sess" 10
+          fi
         fi
       fi
     else
