@@ -588,6 +588,23 @@
                         "press": 3,
                         "text": "The highest rank goes last."
                       }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "rank-2",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "rank-T",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "rank-A",
+                        "kind": "soft_pulse"
+                      }
                     ]
                   }
                 },

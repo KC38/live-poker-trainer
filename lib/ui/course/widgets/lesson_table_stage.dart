@@ -1268,12 +1268,18 @@ class LessonRankOrderTable extends StatefulWidget {
     this.showGuidance = true,
     this.distractorCode,
     this.generation = 0,
+    this.softPulseOrder,
   });
 
   final String activityId;
   final List<({String id, String label})> sequenceItems;
   final List<String> orderedIds;
   final ValueChanged<String> onPick;
+
+  /// Authored `teachSpec.cues` SoftPulse targets in press order (LPT-370).
+  /// When set, guidance golds `softPulseOrder[orderedIds.length]`; otherwise
+  /// it falls back to the authored `sequenceItems` order.
+  final List<String>? softPulseOrder;
 
   /// Tapped a distractor or non-rank board card.
   final VoidCallback? onMiss;
@@ -1348,7 +1354,11 @@ class _LessonRankOrderTableState extends State<LessonRankOrderTable> {
     if (widget.showGuidance &&
         widget.enabled &&
         widget.orderedIds.length < _deal.sequenceItems.length) {
-      final nextId = _deal.sequenceItems[widget.orderedIds.length].id;
+      final cueOrder = widget.softPulseOrder;
+      final nextId =
+          cueOrder != null && widget.orderedIds.length < cueOrder.length
+          ? cueOrder[widget.orderedIds.length]
+          : _deal.sequenceItems[widget.orderedIds.length].id;
       for (var i = 0; i < _board.length; i++) {
         if (_idForBoardIndex(i) == nextId) {
           nextIndex = i;

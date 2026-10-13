@@ -434,13 +434,18 @@ export function buildSectionOne() {
                 correct: ["rank-2", "rank-T", "rank-A"],
                 okFeedback: "Lowest first, then the middle rank, highest last.",
                 missFeedback: "Start with the smallest rank and climb up.",
-                // LPT-82
+                // LPT-82, LPT-370
                 teachSpec: {
                   deal: {mode: "random_in_class", handFamily: "high_card", suitFamily: "rainbow"},
                   pressHints: [
                     {press: 1, text: "Start with the lowest rank."},
                     {press: 2, text: "Next comes the middle rank."},
                     {press: 3, text: "The highest rank goes last."},
+                  ],
+                  cues: [
+                    {press: 1, target: "rank-2", kind: "soft_pulse"},
+                    {press: 2, target: "rank-T", kind: "soft_pulse"},
+                    {press: 3, target: "rank-A", kind: "soft_pulse"},
                   ],
                 },
               }),

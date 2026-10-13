@@ -166,6 +166,25 @@ String orderSequenceStatusLine({
   return 'Pick next';
 }
 
+/// Authored `teachSpec.cues` SoftPulse targets sorted by press (LPT-370).
+///
+/// Returns null when the step authors no `soft_pulse` cues, so callers keep
+/// their Dart-derived order. GlowHighlight-only: `none` cues are ignored.
+List<String>? authoredSoftPulseTargets(CourseActivity activity) {
+  final raw = activity.teachSpec?['cues'];
+  if (raw is! List) return null;
+  final cues = <({int press, String target})>[
+    for (final c in raw)
+      if (c is Map &&
+          c['kind'] == 'soft_pulse' &&
+          c['press'] is int &&
+          c['target'] is String)
+        (press: c['press'] as int, target: c['target'] as String),
+  ]..sort((a, b) => a.press.compareTo(b.press));
+  if (cues.isEmpty) return null;
+  return List<String>.unmodifiable([for (final c in cues) c.target]);
+}
+
 /// Appends [id] to the order draft and auto-submits when the sequence is full.
 void appendOrderedId({
   required LessonActivityController controller,
@@ -229,6 +248,7 @@ class OrderSequenceActivity extends StatelessWidget {
             showGuidance: showGuidance,
             distractorCode:
                 useDistractor ? lessonRankOrderDistractorCode : null,
+            softPulseOrder: authoredSoftPulseTargets(activity),
             onMiss: useDistractor
                 ? () {
                     LessonFrameScope.maybeOf(context)?.onLocalMiss(
