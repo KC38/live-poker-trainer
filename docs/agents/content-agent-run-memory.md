@@ -1250,3 +1250,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept still **LPT-310** needs-human (thesis / flop-update / abandon under one unlock) — tip-commented on `2a23197a`. Tip-commented Capstone **LPT-348** + Done-ack LPT-308/445/656/667/626/624/625/627/628/635/216 (prior tip SHA missing on new tip).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-07-02-01-flop-to-turn-map` / Low curriculum.
 - act-07-01-01-*: structural clean on tip — curriculum split only via LPT-310; teachSpec/densify companions LPT-308/656 Done.
+
+## Fold 2026-10-14d (ec75e4ae discovery flop-to-turn-map)
+
+- Tip-stable `ec75e4ae` (#2163 learnings after preflop-to-flop). Catalog `--counts` structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip from merge-window — no re-spam). High content open: **0**. Prior curriculum **LPT-310** also HAS tip.
+- Discovery oldest-unfresh `lesson-07-02-01-flop-to-turn-map`: teachSpec on all five; explain SoftPulse BARREL→GIVE-UP→MAP + activity-level `explainGrading`; guided/scaffolded/unguided/checkpoint outcome tiles `deal.mode` `none` + cues `ok` / `give` / `avoid` / `list` (checkpoint cue kind for definition); scaffolded+unguided one-per-press complete; densify helper arms PRESENT (`act-07-02-01-guided`/`scaffolded`/`unguided`/`checkpoint` — LPT-657 Done); scaffolded table atmosphere stays LPT-394 Done `Jh`/`9d`·`Ks`/`Tc`/`2d`/`3s`. Structural clean — no new grokbot clone; design-record Still-a-list “no-plan and definition checks” STALE — no rebuild.
+- Curriculum multi-concept still **LPT-314** needs-human (continue cards / give-up cards / bet only with a turn map) — tip-commented on `ec75e4ae`. Done-ack tip-commented LPT-312/657/667/626/624/625/627/628/635/216/446/506 (NEED tip SHA).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-03-01-compose-river` / Low curriculum **LPT-317**.
+- act-07-02-01-*: structural clean on tip — curriculum split only via LPT-314; teachSpec/densify companions LPT-312/657 Done.
