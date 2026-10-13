@@ -581,7 +581,8 @@ and multiway (LPT-321), Rewrite plans when stacks change (LPT-324), Replay
 the same hand versus each type (LPT-328), Integrate type, board, line, and
 sizing (LPT-331), Capstone: single-raised pot (LPT-337), Capstone: 3-bet pot
 (LPT-339), Capstone: multiway deep (LPT-341), Capstone: limped pot
-(LPT-345), Capstone: 4-bet pot (LPT-347).
+(LPT-345), Capstone: 4-bet pot (LPT-347), Prep a coached Live warm-up hand
+(LPT-349).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1169,6 +1170,11 @@ Capstone: 4-bet pot `teachSpec` (LPT-347): explain SoftPulse advances SPR →
 COMMIT → NO HERO; hand fixed KhKd/Qs8h3d2dAd → `bet/barrel/fold`; assessment
 steps use cue kind `none` (no pressHints).
 
+Prep a coached Live warm-up hand `teachSpec` (LPT-349): explain SoftPulse
+advances CHECKLIST → DEFAULTS → ONE HAND; guided `none` → `list`; scaffolded
+`none` → `defaults`; unguided `none` → `scope`; checkpoint `none` → `one`;
+assessment steps use cue kind `none` (no pressHints).
+
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
 `LessonRunnerScreen` while the stage shows the spinner or Retry (LPT-48,
@@ -1610,5 +1616,5 @@ felt.
 | Capstone: multiway deep | Nuts, Deep, No-bluff | — |
 | Capstone: limped pot | Nuts, Value, Thin | — |
 | Capstone: 4-bet pot | SPR, Commit, No Hero | — |
-| Prep a coached Live warm-up hand | Checklist, Defaults, One hand | warm-up quizzes |
+| Prep a coached Live warm-up hand | Checklist, Defaults, One hand | — |
 | Final: all five player types | — | station, nit, maniac, TAG, LAG, certainty, and retire checks |

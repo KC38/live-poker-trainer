@@ -27376,7 +27376,29 @@
                   ],
                   "objectives": [
                     "List warm-up checklist items"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CHECKLIST",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DEFAULTS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "ONE HAND",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-11-01-guided",
@@ -27414,7 +27436,19 @@
                         "betterChoiceId": "list"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "list",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-11-01-scaffolded",
@@ -27452,7 +27486,19 @@
                         "betterChoiceId": "defaults"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "defaults",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-11-01-unguided",
@@ -27490,7 +27536,19 @@
                         "betterChoiceId": "scope"
                       }
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "scope",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-11-01-checkpoint",
@@ -27529,7 +27587,19 @@
                       }
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "one",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

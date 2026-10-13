@@ -3574,7 +3574,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-11-01-explain", 1,
                 "Live warm-up: short checklist, then play. Plan 10 wires the bridge.",
-                {objectives: ["List warm-up checklist items"]}),
+                {
+                  objectives: ["List warm-up checklist items"],
+                  // LPT-349
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CHECKLIST", kind: "soft_pulse"},
+                      {press: 2, target: "DEFAULTS", kind: "soft_pulse"},
+                      {press: 3, target: "ONE HAND", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-07-11-01-guided", order: 2, stage: "guided",
                 prompt: "Warm-up checklist must include?",
@@ -3586,6 +3597,8 @@ export function buildSectionSeven() {
                   choice("hud", "Ignore stacks and invent a random plan", "clear_mistake",
                     "Warm-up needs the checklist.", {betterChoiceId: "list"})
                 ],
+                // LPT-349
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "list", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-11-01-scaffolded", order: 3, stage: "scaffolded",
@@ -3598,6 +3611,8 @@ export function buildSectionSeven() {
                   choice("blank", "Forget the course", "clear_mistake",
                     "No.", {betterChoiceId: "defaults"})
                 ],
+                // LPT-349
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "defaults", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-11-01-unguided", order: 4, stage: "scaffolded",
@@ -3610,6 +3625,8 @@ export function buildSectionSeven() {
                   choice("tourney", "Study other betting games instead", "clear_mistake",
                     "Out of scope.", {betterChoiceId: "scope"})
                 ],
+                // LPT-349
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "scope", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-07-11-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -3622,6 +3639,8 @@ export function buildSectionSeven() {
                   choice("grind", "Ignore checklist and mash buttons", "clear_mistake",
                     "No.", {betterChoiceId: "one"})
                 ],
+                // LPT-349
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "one", kind: "none"}]},
               }),
             ],
           }),

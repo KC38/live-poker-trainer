@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "7de718e1406505e79e639e15ef9ac07d5c61ef15a0589a2afbf77fa1edc0d6b7",
+  "contentChecksum": "4576531f26e4570648356c7c8806829cfe61179e09f945a06212478fcf45bd7b",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -23084,7 +23084,29 @@
                   ],
                   "objectives": [
                     "List warm-up checklist items"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CHECKLIST",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DEFAULTS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "ONE HAND",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-11-01-guided",
@@ -23113,7 +23135,19 @@
                       "label": "Ignore stacks and invent a random plan",
                       "accessibilityText": "Ignore stacks and invent a random plan"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "list",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-11-01-scaffolded",
@@ -23142,7 +23176,19 @@
                       "label": "Forget the course",
                       "accessibilityText": "Forget the course"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "defaults",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-11-01-unguided",
@@ -23171,7 +23217,19 @@
                       "label": "Study other betting games instead",
                       "accessibilityText": "Study other betting games instead"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "scope",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-11-01-checkpoint",
@@ -23201,7 +23259,19 @@
                       "accessibilityText": "Ignore checklist and mash buttons"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "one",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
