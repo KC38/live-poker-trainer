@@ -1380,7 +1380,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 ## Fold 2026-10-14t (118e4148 discovery section-one-jump + hand-families)
 
-- Tip-stable `118e4148` (#2182). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348** (already HAS tip). Prior same-tip fold: guided-complete-hand (2026-10-14s).
+- Tip mid-run `118e4148`→`b89286fc` (#2183 guided-complete learnings). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348**. Prior fold: guided-complete-hand (2026-10-14s) now on tip.
 - Discovery `lesson-01-06-02-section-one-jump`: all four `jump_test` assessment steps with teachSpec; hintless; no curriculum-split (assessment container). Structural clean.
 - Discovery `lesson-02-02-01-hand-families`: teachSpec on all five; explain SoftPulse + `explainGrading`; guided SoftPulse; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean. Curriculum multi-concept still **LPT-121** needs-human (tip-commented on `118e4148`).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-02-07-02-section-two-jump` / `lesson-02-04-01-facing-raise` / Low curriculum.
