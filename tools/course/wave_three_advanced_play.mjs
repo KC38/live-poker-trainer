@@ -1917,7 +1917,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-11-03-explain", 1,
                 "Versus TAG: respect raises; do not invent light bluff-raises.",
-                {objectives: ["Respect TAG aggression"], playerTypeRefs: ["tag"]}),
+                {
+                  objectives: ["Respect TAG aggression"], playerTypeRefs: ["tag"],
+                  // LPT-292
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CREDIT", kind: "soft_pulse"},
+                      {press: 2, target: "TIGHTER", kind: "soft_pulse"},
+                      {press: 3, target: "NO LIGHT", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-06-11-03-guided", order: 2, stage: "guided",
                 prompt: "TAG check-raises flop. You have second pair. Action?",
@@ -1930,6 +1941,11 @@ export function buildSectionSix() {
                   choice("raise", "Rebluff light", "clear_mistake",
                     "Bad versus TAG.", {action: "RAISE", amountBb: 30, betterChoiceId: "fold"})
                 ],
+                // LPT-292
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Jh", "9d"], board: ["Qc", "9s", "3h"]}},
+                  cues: [{press: 1, target: "fold", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-06-11-03-scaffolded", order: 3, stage: "scaffolded",
@@ -1943,6 +1959,11 @@ export function buildSectionSix() {
                   choice("open-wide", "Open any two", "clear_mistake",
                     "Too wide.", {action: "RAISE", amountBb: 3, betterChoiceId: "fold-k9"})
                 ],
+                // LPT-292
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Kh", "9d"]}},
+                  cues: [{press: 1, target: "fold-k9", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-06-11-03-unguided", order: 4, stage: "scaffolded",
@@ -1956,6 +1977,14 @@ export function buildSectionSix() {
                   choice("bet", "Bet thin always", "questionable",
                     "Needs call-down evidence.", {action: "BET", amountBb: 8})
                 ],
+                // LPT-292
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "check", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-11-03-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1969,6 +1998,8 @@ export function buildSectionSix() {
                   choice("vague", "Vibes", "clear_mistake",
                     "Cite evidence.", {betterChoiceId: "cite"})
                 ],
+                // LPT-292
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "cite", kind: "none"}]},
               }),
             ],
           }),
