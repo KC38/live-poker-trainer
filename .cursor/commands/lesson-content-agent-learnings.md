@@ -140,6 +140,9 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13dh: Tip `65d01ce6` (#2142 LPT-667 Prefer + position-labels on tip). Catalog `--counts` all **0**. Re-verified Meet Nit Nice!+pressHints cleared / **LPT-216** Done; **LPT-667** still 6 one-per-press rows. Discovery `lesson-02-01-02-acting-order`: only `scaffolded-post` incomplete (already on LPT-667); tip-commented **LPT-117** curriculum + Done parents on tip. Open Medium: **LPT-667** OR **LPT-348**; next oldest discovery / Low curriculum.
+
+
 - 2026-10-13df: Tip-stable `43a1be2d` (#2138). Catalog `--counts` still all **0**. Discovery `lesson-02-01-01-position-labels` structural clean (one-per-press complete; explain has `explainGrading`); tip-commented curriculum **LPT-114** + **LPT-667** (6 rows still valid) + **LPT-348**. Prior #2141 draft fold not on tip — ship this branch. next: LPT-667 OR LPT-348 OR Low curriculum / next oldest discovery.
 
 - 2026-10-13de: Tip-stable `43a1be2d` (#2138). Catalog `--counts` still all **0**; discovery `lesson-01-04-01-streets-and-order` found incomplete one-per-press (`act-01-04-01-scaffolded-order` cues 4 / pressHints 1) plus five siblings — filed catalog **LPT-667** (Relates LPT-102/116/626/348). Tip-commented LPT-103/348/626. Do not reopen LPT-626; Capstone stays LPT-348. next: LPT-667 one-per-press OR LPT-348 needs-human OR Low curriculum.

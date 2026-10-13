@@ -1095,3 +1095,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-667** one-per-press implement OR **LPT-348** Capstone needs-human OR Low curriculum (e.g. acting-order **LPT-117** / next oldest discovery).
 - act-02-01-01-*: structural teachSpec/pressHints/one-per-press clean on tip — curriculum split only via LPT-114.
 
+## Fold 2026-10-13dh (65d01ce6 #2142 + acting-order)
+
+- Tip `65d01ce6` (#2142 position-labels / LPT-667 Prefer learnings on main after #2143). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done.
+- **LPT-667** / **LPT-348** already **HAS** tip; tip-commented Done parents LPT-624/625/626/627/628/635 + **LPT-216** + curriculum **LPT-117** on `65d01ce6`.
+- Discovery oldest-unfresh `lesson-02-01-02-acting-order`: explain has `explainGrading`; guided SoftPulse; unguided-wait one-per-press complete; checkpoint hintless; only `act-02-01-02-scaffolded-post` cues 1–2 / pressHints 1 — already on **LPT-667** (no checklist delta). Curriculum multi-concept **LPT-117** needs-human.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR Low curriculum / next oldest discovery (e.g. meet-maniac).
+- act-02-01-02-scaffolded-post: keep on LPT-667 — do not file acting-order pressHints clone.
