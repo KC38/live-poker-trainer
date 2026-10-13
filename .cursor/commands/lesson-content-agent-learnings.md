@@ -147,6 +147,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14v: Tip `d4097dd7` (#2188 after #2186). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Monitor rescued conflicted #2187: discovery `lesson-05-03-01-implied-odds` structural clean; tip-commented curriculum **LPT-230**. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-05-04-01-thin-value-bluffcatch` (**LPT-233**) / Low curriculum.
+
 - 2026-10-14u: Tip `be5bc2c2` (#2185). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Discovery `lesson-02-04-01-facing-raise` structural clean (one-per-press OK; `explainGrading`); tip-commented curriculum **LPT-127**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; sole open Medium **LPT-348**. next: LPT-348 OR `lesson-05-03-01-implied-odds` / Low curriculum.
 
 - 2026-10-14t: Tip-stable `b89286fc` (#2183). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **229**. Discovery `lesson-02-07-02-section-two-jump` structural clean (all five `scaffolded`+`jump_test` hintless cue kind `none`; jump-pos/stack `deal.mode` `none`; jump-family `random_in_class` suited_ace/suited; jump-open trash/offsuit; jump-vs fixed Ah/Ad + suit variants; densify PRESENT; assessment container — no curriculum-split). Done-ack LPT-137/377/488/221 (NEED on tip); **LPT-348**/parents already HAS — no re-spam. Sole open Medium **LPT-348**. next: LPT-348 OR `lesson-02-04-01-facing-raise` / `lesson-05-03-01-implied-odds` / Low curriculum.

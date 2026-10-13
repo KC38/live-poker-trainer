@@ -1385,3 +1385,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept still **LPT-127** needs-human (tip-commented on `be5bc2c2`). Tip-commented Done parents that NEED tip SHA (incl. **LPT-216**).
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-05-03-01-implied-odds` / Low curriculum.
 - act-02-04-01-*: structural clean on tip — curriculum split only via LPT-127.
+
+## Fold 2026-10-14v (d4097dd7 implied-odds — monitor rescue of #2187)
+
+- Tip `d4097dd7` (#2188) after facing-raise fold `0a029619` (#2186). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip — no re-spam). Conflicted #2187 closed after this rescue.
+- Discovery oldest-coverage `lesson-05-03-01-implied-odds`: explain SoftPulse IMPLIED→REVERSE→SECOND + activity-level `explainGrading`; guided/scaffolded/unguided `poker_action_sizing` `deal.mode` `fixed` + suit-rotated `deal.variants` match Dart `resolveLessonActionSpot`; SoftPulse cues `call-io` / `rio` / `nonut` (Dart map present); scaffolded/unguided one-per-press OK; checkpoint assessmentRole hintless cue `depth-pay` kind `none` (densify `ioDepthPay` PRESENT). Structural clean. Curriculum **LPT-230** tip-commented (three concepts + checkpoint objective/rhythm still valid). Done companions LPT-228/229/393/458/515/605/606/607 stay Done.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-05-04-01-thin-value-bluffcatch` (**LPT-233**) / Low curriculum.
+- act-05-03-01-*: structural clean on tip — teachSpec/pressHints/variants/Nice!/SoftPulse-map/densify companions Done; curriculum via LPT-230 only.
