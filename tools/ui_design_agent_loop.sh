@@ -337,18 +337,22 @@ primary_is_clean_main() {
 
 # Record why the loop skipped so `status` can show idle without tmux attach.
 # reason: empty-queue | primary-busy | sim-busy
+# Optional sleep_s: seconds until the next one_run (health timers show wake ETA).
 record_idle_skip() {
   local reason="$1"
   local detail="${2:-}"
+  local sleep_s="${3:-}"
   local at
   at="$(date '+%Y-%m-%dT%H:%M:%S%z')"
-  python3 - "$IDLE_FILE" "$reason" "$detail" "$at" <<'PY' || true
+  python3 - "$IDLE_FILE" "$reason" "$detail" "$at" "$sleep_s" <<'PY' || true
 import json, sys
 from pathlib import Path
-path, reason, detail, at = sys.argv[1:5]
+path, reason, detail, at, sleep_s = sys.argv[1:6]
 obj = {"reason": reason, "at": at}
 if detail:
     obj["detail"] = detail
+if sleep_s.isdigit() and int(sleep_s) > 0:
+    obj["sleep_s"] = int(sleep_s)
 Path(path).write_text(json.dumps(obj) + "\n", encoding="utf-8")
 PY
 }
@@ -361,24 +365,50 @@ print_idle_status() {
   [[ -f "$IDLE_FILE" ]] || return 0
   python3 - "$IDLE_FILE" <<'PY' 2>/dev/null || true
 import json, sys
+from datetime import datetime, timezone
 from pathlib import Path
+
 obj = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
 reason = obj.get("reason") or "unknown"
 at = obj.get("at") or "?"
 detail = (obj.get("detail") or "").strip()
+sleep_s = obj.get("sleep_s")
+
+def wake_suffix() -> str:
+    if not isinstance(sleep_s, int) or sleep_s <= 0 or at == "?":
+        return ""
+    try:
+        raw = at
+        if len(raw) >= 5 and (raw[-5] in "+-" and raw[-3] != ":"):
+            # +0530 → +05:30 for fromisoformat
+            raw = raw[:-2] + ":" + raw[-2:]
+        start = datetime.fromisoformat(raw)
+        if start.tzinfo is None:
+            start = start.replace(tzinfo=timezone.utc)
+        elapsed = (datetime.now(start.tzinfo) - start).total_seconds()
+        left = int(sleep_s - elapsed)
+        if left <= 0:
+            return " (wake overdue)"
+        if left >= 120:
+            return f" (wake ~{left // 60}m)"
+        return f" (wake ~{left}s)"
+    except Exception:
+        return f" (sleep {sleep_s}s)"
+
+wake = wake_suffix()
 if reason == "empty-queue":
-    print(f"idle: empty-queue since {at}")
+    print(f"idle: empty-queue since {at}{wake}")
 elif reason == "primary-busy":
     if detail == "main(dirty)":
-        print(f"idle: primary-busy dirty on main since {at}")
+        print(f"idle: primary-busy dirty on main since {at}{wake}")
     else:
         branch = detail or "unknown"
-        print(f"idle: primary-busy branch={branch} since {at}")
+        print(f"idle: primary-busy branch={branch} since {at}{wake}")
 elif reason == "sim-busy":
-    print(f"idle: sim-busy since {at}")
+    print(f"idle: sim-busy since {at}{wake}")
 else:
     extra = f" detail={detail}" if detail else ""
-    print(f"idle: {reason} since {at}{extra}")
+    print(f"idle: {reason} since {at}{extra}{wake}")
 PY
 }
 
@@ -2283,13 +2313,13 @@ one_run() {
       log "primary checkout is on '${_branch}' (not clean main); skipping this run"
       _detail="$_branch"
     fi
-    record_idle_skip primary-busy "$_detail"
+    record_idle_skip primary-busy "$_detail" "$BUSY_SLEEP"
     unset _branch _detail
     return 10
   fi
   if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! ui_queue_has_ticket; then
     log "ui-queue empty (no actionable ui-agent ticket); skipping this run"
-    record_idle_skip empty-queue
+    record_idle_skip empty-queue "" "$EMPTY_QUEUE_SLEEP"
     return 16
   fi
   if ! logged_in; then
@@ -2299,7 +2329,7 @@ one_run() {
   if ! sim_lock status >/dev/null 2>&1; then
     log "iPhone 13 mini is busy; skipping this run"
     sim_lock status 2>&1 | sed 's/^/    /' || true
-    record_idle_skip sim-busy
+    record_idle_skip sim-busy "" "$BUSY_SLEEP"
     return 10
   fi
 
@@ -2316,7 +2346,7 @@ one_run() {
   run_id="$(sim_lock claim --owner ui-design-agent --purpose "preflight: sim ready" --pid $$ 2>/dev/null)" || {
     log "iPhone 13 mini is busy; skipping this run"
     sim_lock status 2>&1 | sed 's/^/    /' || true
-    record_idle_skip sim-busy
+    record_idle_skip sim-busy "" "$BUSY_SLEEP"
     return 10
   }
   # A real run is starting — drop the skip stamp so status is not stale.
