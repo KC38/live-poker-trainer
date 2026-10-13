@@ -1183,30 +1183,44 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       'act-07-03-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-07-03-01-checkpoint')!,
       // SoftPulse owns Nut potential — don’t gold-tip the tile.
-      'act-07-04-01-guided' => 'Multiway limped — pick the priority.',
+      // Densified frame speech via selectIdentifyDensifiedCoachLine (LPT-659).
+      'act-07-04-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-07-04-01-guided')!,
       // SoftPulse owns C-bet maps — don’t gold-tip the tile.
-      'act-07-04-01-scaffolded' => 'HU SRP IP — pick the default weapon.',
+      'act-07-04-01-scaffolded' =>
+        selectIdentifyDensifiedCoachLine('act-07-04-01-scaffolded')!,
       // Unguided: name the spot; don’t tip Higher commitment.
-      'act-07-04-01-unguided' => '4-bet 100bb — pick the mindset.',
+      'act-07-04-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-07-04-01-unguided')!,
       // SoftPulse owns Ranges and SPR — don’t gold-tip the tile.
-      'act-07-04-01-checkpoint' => 'Pot type — pick what changes.',
+      'act-07-04-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-04-01-checkpoint')!,
       // SoftPulse owns Usually no — don’t gold-tip the tile.
-      'act-07-05-01-guided' => 'Four-way river — pick the air-bluff call.',
+      // Densified frame speech via selectIdentifyDensifiedCoachLine (LPT-660).
+      'act-07-05-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-07-05-01-guided')!,
       // SoftPulse owns Higher HU — don’t gold-tip the tile.
-      'act-07-05-01-scaffolded' => 'HU vs nit — pick the steal frequency.',
+      'act-07-05-01-scaffolded' =>
+        selectIdentifyDensifiedCoachLine('act-07-05-01-scaffolded')!,
       // Unguided: name the spot; don’t tip Thicker value.
-      'act-07-05-01-unguided' => 'Multiway top set — pick the line lean.',
+      'act-07-05-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-07-05-01-unguided')!,
       // SoftPulse owns First-class input — don’t gold-tip the tile.
-      'act-07-05-01-checkpoint' => 'Player count — pick how it ranks.',
+      'act-07-05-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-05-01-checkpoint')!,
       // SoftPulse owns Closer to stacking — don’t gold-tip the tile / SPR detail.
-      'act-07-06-01-guided' => '35bb TPTK — pick the commit lean.',
+      // Densified frame speech via selectIdentifyDensifiedCoachLine (LPT-661).
+      'act-07-06-01-guided' =>
+        selectIdentifyDensifiedCoachLine('act-07-06-01-guided')!,
       // SoftPulse owns More attractive — don’t gold-tip the tile.
-      'act-07-06-01-scaffolded' => '250bb 55 — pick the set-mine lean.',
+      'act-07-06-01-scaffolded' =>
+        selectIdentifyDensifiedCoachLine('act-07-06-01-scaffolded')!,
       // Unguided: name the spot; don’t tip 40bb.
       'act-07-06-01-unguided' =>
-        'Hero 200 / Villain 40 — pick effective stack.',
+        selectIdentifyDensifiedCoachLine('act-07-06-01-unguided')!,
       // SoftPulse owns Every hand — don’t gold-tip the tile.
-      'act-07-06-01-checkpoint' => 'Stack depth — pick how often to check.',
+      'act-07-06-01-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-07-06-01-checkpoint')!,
       // SoftPulse owns Baseline — don’t gold-tip the tile.
       'act-07-07-01-checkpoint' => 'No type evidence — pick the default.',
       // SoftPulse owns All four — don’t gold-tip the tile.
