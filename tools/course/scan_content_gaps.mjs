@@ -238,6 +238,19 @@ const SCANNERS = {
   "explain-teachSpec": gapExplainCues,
 };
 
+/** Open `(catalog)` parents — keep in sync when filing/closing parents. */
+const CATALOG_PARENTS = {
+  pressHints: "LPT-626",
+  "deal-variants": "LPT-627",
+  "explain-teachSpec": "LPT-635",
+  // teachSpec Highs are still per-lesson; no single catalog parent yet
+  teachSpec: null,
+  // Related structural parents (not produced by this scanner’s gaps):
+  "nice-ladder": "LPT-624",
+  "densify-tap": "LPT-628",
+  "unguided-softpulse-map": "LPT-625",
+};
+
 /**
  * @param {unknown} course
  * @returns {Record<string, GapRow[]>}
@@ -306,12 +319,18 @@ function main() {
     const counts = Object.fromEntries(
       Object.entries(selected).map(([k, rows]) => [k, rows.length]),
     );
-    process.stdout.write(`${JSON.stringify(counts, null, 2)}\n`);
+    process.stdout.write(
+      `${JSON.stringify({counts, catalogParents: CATALOG_PARENTS}, null, 2)}\n`,
+    );
     return;
   }
 
   if (markdown) {
     for (const [gap, rows] of Object.entries(selected)) {
+      const parent = CATALOG_PARENTS[gap];
+      if (parent) {
+        process.stdout.write(`<!-- catalog parent: ${parent} — edit this ticket -->\n`);
+      }
       process.stdout.write(toMarkdown(gap, rows));
       process.stdout.write("\n");
     }

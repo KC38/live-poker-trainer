@@ -100,14 +100,16 @@ Before choosing a lesson walk, run:
 
 ```bash
 node tools/course/scan_content_gaps.mjs --counts
+# → { counts, catalogParents: { pressHints: "LPT-626", … } }
 # Then for the gap you will sync:
 node tools/course/scan_content_gaps.mjs --gap pressHints --markdown
 # gaps: pressHints | deal-variants | teachSpec | explain-teachSpec
 ```
 
-Use the markdown table to **edit the matching open `(catalog)` parent**
-(LPT pressHints / deal-variants / explain-teachSpec / teachSpec) in one
-shot. Do not re-walk 90 lessons to rediscover the same structural gaps.
+Use `catalogParents` + the markdown table to **edit that LPT in one shot**
+(no Jira search rediscovery). Keep `CATALOG_PARENTS` in
+`scan_content_gaps.mjs` in sync when filing/closing parents. Do not re-walk
+90 lessons to rediscover the same structural gaps.
 
 Time-box: ≤10 minutes on scan → parent sync unless a High honesty ticket
 needs a tip re-check.
