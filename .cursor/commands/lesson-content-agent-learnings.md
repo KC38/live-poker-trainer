@@ -66,12 +66,22 @@ Lesson-specific pattern notes (full history) live in
 
 - Prefer `node tools/course/scan_content_gaps.mjs --counts` then
   `--gap <type> --markdown` every run before any lesson walk; sync open
-  `(catalog)` parents in one edit. If agent Shell hangs with empty
-  output on `--counts`, rerun in a short tmux/foreground session (script
-  itself is ~40ms).
+  `(catalog)` parents in one edit via returned `catalogParents` keys
+  (pressHints→LPT-626, deal-variants→LPT-627, explain-teachSpec→LPT-635,
+  nice-ladder→LPT-624, densify-tap→LPT-628, unguided-softpulse-map→LPT-625)
+  — do not re-search Jira for those stems unless a parent is Done/missing.
+  If agent Shell hangs with empty output on `--counts`, rerun in a short
+  tmux/foreground session (script itself is ~40ms).
 - Prefer one catalog ticket per structural gap type (pressHints,
   deal.variants, Nice! ladder, densify-tap, SoftPulse maps, guideRegion,
   permanent-gold). Append checklists; Done sibling clones (skip In Progress).
+- Prefer Done’ing a ui-agent densify sibling (e.g. LPT-639/LPT-640) only
+  when tip `selectIdentifyDensifiedCoachLine` registers every listed
+  `act-…` **and** a Validated-on-origin/main comment exists — then rebuild
+  catalog densify-tap LPT-628 (arms/fallthrough + strip cleared priority
+  ABSENT). Do not leave the sibling In Progress waiting for a second mini
+  pass once both conditions hold; without Validated, tip-comment + rebuild
+  parent only.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -92,6 +102,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
-- 2026-10-13: Folded 211 pending bullets into
-  `docs/agents/content-agent-run-memory.md`; distilled Never/Prefer above.
-  Added `tools/fold_agent_learnings.sh` so pending cannot stall again.
+- 2026-10-13: Folded pending densify-Validated + catalogParents bullets into
+  `docs/agents/content-agent-run-memory.md`; distilled Prefer rules for
+  `catalogParents` direct edit and ui-agent densify Done-after-Validated.
+  Tip `d98b1025` catalog sync: LPT-628 arms 44 / LPT-626 pressHints 156.
