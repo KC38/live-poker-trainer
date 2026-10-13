@@ -838,3 +838,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog parents LPT-624/625/626/627/628/635 + frontier LPT-242/312/315/334 + S6 Highs LPT-252/255/258/271/275/295/301 + LPT-414/348 + LPT-417 Done-ack on `25681d70` (Python body files; prior tip `38c2a91e` SHA only).
 - Grep `act-05-07-01-*` / `act-03-02-01-unguided` / deep-stack / stackLabel: Soft timing densify ABSENT; LPT-414 still open; no new per-lesson clones. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done. Home pending empty (stub only). `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## Fold 2026-10-13ca (tip a4c9db38 tip-stable after #2079)
+
+- Tip-stable `a4c9db38` (#2079 learnings after #2078 LPT-417 Done-ack). `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, densify-tap **118**, `softpulseMapArms` **68**, `densifyHelperArms` **111**. Catalog parent bodies match (LPT-628 densify-tap **118** / helper **111**) — tip-comment only (no rebuild). Parents + frontier LPT-242/312/315/334 + honesty LPT-414 already had tip SHA.
+- Prior coverage on `a4c9db38` listed parents+frontier+LPT-414/417 while S6 Highs lacked the SHA — tip-commented LPT-252/255/258/271/275/295/301/348 + Done-ack LPT-417 (Python body files; `jira.py get` verified).
+- Soft timing `act-05-07-01-*` densify still ABSENT from `selectIdentifyDensifiedCoachLine` (helper **111**; Priority on LPT-628). Frontier Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315** / strategy book **LPT-334** still all-five MISSING teachSpec (densify ≠ teachSpec).
+- Honesty still valid (no sim): **LPT-414** Air Nice! feedback still "Gutshot-ish trash multiway…" on `act-03-02-01-unguided` (`5h 4h` / `Qc 7d 2s`). LPT-417 already Done (stackLabels PRESENT) — Done-ack only.
+- Grep `act-05-07-01-*` / `act-03-02-01-unguided`: Soft timing outcome tiles + LPT-414 honesty; no new per-lesson clones. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done. Home pending empty (stub only). `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
