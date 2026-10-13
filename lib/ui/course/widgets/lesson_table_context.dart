@@ -2170,7 +2170,10 @@ class LessonTableScene {
 
 /// Table scenes whose teaching depends on exact draw outs (gutshot vs
 /// open-ender), so remaps must keep the teach fingerprint (LPT-389).
-const _drawOutsLessonTableScenes = {'act-03-08-02-jump-leak'};
+const _drawOutsLessonTableScenes = {
+  'act-03-08-02-jump-leak',
+  'act-07-02-01-scaffolded',
+};
 
 /// Authored scene with hand-class isomorphic cards for this attempt.
 LessonTableScene? dealtLessonTableScene(
@@ -3383,10 +3386,13 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
         caption: 'Flop · c-bet · map continues',
       );
     case 'act-07-02-01-scaffolded':
+      // True gutshot that bricked: J9 on KT2 (four outs to Q, as LPT-381),
+      // turn 3s blank. 98hh on K723 had zero straight outs under a
+      // “gutshot · brick” caption (LPT-394).
       return const LessonTableScene(
         layout: LessonTableLayout.turnMapScaffoldedOutcomes,
-        heroCodes: ['9h', '8h'],
-        boardCodes: ['Kh', '7c', '2d', '3s'],
+        heroCodes: ['Jh', '9d'],
+        boardCodes: ['Ks', 'Tc', '2d', '3s'],
         caption: 'Gutshot · brick · raise',
       );
     case 'act-07-02-01-unguided':
