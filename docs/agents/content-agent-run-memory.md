@@ -307,3 +307,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Run-memory grep `act-06-12-*` / `act-05-07-01-*`: unchanged vs abd48de8 fold — observation tiles / Soft timing teachSpec gaps; no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. Prefer: non-content ops tips (#1933) get the same tip-comment-only treatment as learnings-only tips. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR implement catalog LPT-626(151)/627(78)/635/624(41)/625/628 OR densify Soft-timing/mix helper arms on LPT-628 OR honesty if tip advances.
 
+## Fold 2026-10-13 tip 7f869c29 (#1934 learnings-only)
+
+- Tip `7f869c29` after #1934 (prior content-agent tip-pass learnings on `bbad143c`). No `course.json` / densify / SoftPulse-map land. `scan_content_gaps --counts` flat: pressHints **151**, deal-variants **78**, teachSpec **97**, explain-teachSpec **37**. Catalog parent bodies already synced on `7bb2676f` (Nice! **41** / variants **78** / pressHints **151** / LPT-635 12 S1–S2); tip-commented LPT-624/625/626/627/628/635 on `7f869c29` without inventing count deltas.
+- Re-verified In Progress High **LPT-242** Soft timing: all five `act-05-07-01-*` still MISSING teachSpec. Densify helper in `rex_coach_line.dart` still **44** arms with zero `act-05-07-01-*` (framed-path inline strings in `select_identify_activity.dart` ~L937 must not count as PRESENT). Tip-commented To Do Highs **LPT-258** / **LPT-295** / **LPT-298** / **LPT-301** and IP teachSpecs LPT-252/255/271/275; honesty/fingerprint Highs LPT-394/396/401/402/405/414/417/408/409/411 + Scene LPT-588 + cues LPT-370 still valid.
+- Run-memory grep `act-05-07-01-*` / `act-06-12-*` / `act-06-03-01-*`: unchanged — Soft timing teachSpec + Observe wide / Meet LAG / Adjust LAG / capped still MISSING; no new per-lesson clones. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR implement catalog LPT-626(151)/627(78)/635/624(41)/625/628 OR densify Soft-timing/mix helper arms on LPT-628 OR honesty if tip advances.
+
