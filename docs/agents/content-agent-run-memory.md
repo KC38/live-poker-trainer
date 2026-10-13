@@ -547,3 +547,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Rebuilt catalog parents **LPT-624** Nice! **50→51** (`act-07-10-02-explain`) and **LPT-627** deal-variants **88→89** (`act-07-10-02-hand`) from `--gap … --markdown`; also cleared empty SHA / field placeholders left by a prior broken wiki edit. Tip-commented LPT-626/625/635/628 + densify ack on LPT-647 + frontier Highs LPT-242/312/315 (still all-five MISSING).
 - Soft timing densify still ABSENT — stay on **LPT-628**. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. Next Capstone Highs LPT-341+. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(89)/635/624(51)/625(24) OR Capstone LPT-341+.
+
+## Fold 2026-10-13 tip 0de0a739 (#2007 learnings — Never unquoted Jira heredocs)
+
+- Tip-stable learnings tip after LPT-339 catalog sync. Flat counts 151/89/58/27/nice-51/map-24 densifyHelperArms 57 — parents tip-comment only.
+- First tip-comment batch on this SHA used an unquoted `python3 <<PY` heredoc; shell ate backticks and left empty SHA/`teachSpec` placeholders. Posted corrected comments the same tick. Distilled Never into lesson-content-agent-learnings.md.
+- Soft timing densify still ABSENT; frontier LPT-242/312/315; next Capstone LPT-341+. Pending cleared. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(89)/635/624(51)/625(24) OR Capstone LPT-341+.
