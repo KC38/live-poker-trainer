@@ -33,6 +33,24 @@ const INTERACTIVE_RENDERERS = new Set([
 ]);
 
 /**
+ * Capstone hand/explain ids that Dart `lessonFrameHintsDisabled` marks as
+ * no-hint (`lib/ui/course/widgets/lesson_screen_layout.dart`). Keep in sync
+ * when that set changes — they must not inflate pressHints catalog counts.
+ */
+const NO_HINT_ACTIVITY_IDS = new Set([
+  "act-07-10-01-explain",
+  "act-07-10-02-explain",
+  "act-07-10-03-explain",
+  "act-07-10-04-explain",
+  "act-07-10-05-explain",
+  "act-07-10-01-hand",
+  "act-07-10-02-hand",
+  "act-07-10-03-hand",
+  "act-07-10-04-hand",
+  "act-07-10-05-hand",
+]);
+
+/**
  * @typedef {{
  *   lessonId: string,
  *   lessonTitle: string,
@@ -103,6 +121,9 @@ function gapPressHints(lessonId, lessonTitle, activity) {
     return null;
   }
   if (activity.assessmentRole) {
+    return null;
+  }
+  if (NO_HINT_ACTIVITY_IDS.has(String(activity.id || ""))) {
     return null;
   }
   if (!isInteractive(activity)) {
