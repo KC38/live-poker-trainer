@@ -409,6 +409,11 @@ String? _hintPulseTargetId(
   return null;
 }
 
+/// [_guidedPulseTargetId] for tests that lock map arms to authored cues.
+@visibleForTesting
+String? guidedPulseTargetIdForTest(CourseActivity activity) =>
+    _guidedPulseTargetId(activity);
+
 /// Authored SoftPulse dock target by activity id (any stage).
 String? _guidedPulseTargetId(CourseActivity activity) {
   return switch (activity.id) {
@@ -509,6 +514,33 @@ String? _guidedPulseTargetId(CourseActivity activity) {
     // S4 jump docks — SoftPulse owns the answer.
     'act-04-10-02-jump-3bet' => 'j4-3bet',
     'act-04-10-02-jump-size' => 'j4-10',
+    // Unguided / scaffolded-qq SoftPulse-after-Hint: the authored
+    // teachSpec soft_pulse cue target, never the first-choice fallback
+    // (LPT-625).
+    'act-01-03-01-unguided-call' => 'call-5',
+    'act-01-03-02-unguided-allin' => 'shove-12',
+    'act-02-03-01-scaffolded-qq' => 'open-qq',
+    'act-02-03-01-unguided-btn' => 'open-k9s',
+    'act-02-04-01-unguided-3bet' => '3bet-kk',
+    'act-03-04-01-unguided' => 'raise-set',
+    'act-03-05-01-unguided' => 'delay-bet',
+    'act-03-06-01-unguided' => 'fold-weak',
+    'act-03-08-01-unguided' => 'fold-air',
+    'act-04-02-01-unguided' => 'squeeze',
+    'act-04-03-01-unguided' => 'small-pot',
+    'act-04-05-01-unguided' => 'flexible',
+    'act-04-06-03-unguided' => 'baseline-check',
+    'act-04-07-03-unguided' => 'tighter',
+    'act-04-08-03-unguided' => 'baseline-fold',
+    'act-05-01-01-unguided' => 'bet-set',
+    'act-05-03-01-unguided' => 'nonut',
+    'act-05-04-01-unguided' => 'check-nit',
+    'act-05-08-01-unguided' => 'reset',
+    'act-06-01-01-unguided' => 'cbet',
+    'act-06-11-03-unguided' => 'check',
+    'act-06-13-01-unguided' => 'lag',
+    'act-07-07-01-unguided' => 'call',
+    'act-07-08-01-unguided' => 'fold',
     _ => null,
   };
 }

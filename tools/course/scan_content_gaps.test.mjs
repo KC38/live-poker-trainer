@@ -79,9 +79,14 @@ test("live Dart maps include deep arms and stop at the function close", () => {
   assert.ok(DENSIFY_HELPER_IDS.has("act-06-10-01-checkpoint"));
   assert.ok(GUIDED_PULSE_TARGET_IDS.has("act-01-03-01-guided-fold"));
   assert.equal(GUIDED_PULSE_TARGET_IDS.has("act-04-10-01-unguided"), true);
+  // LPT-625 mapped every unguided / scaffolded-qq dock.
+  assert.equal(GUIDED_PULSE_TARGET_IDS.has("act-01-03-01-unguided-call"), true);
   // Next function in the same file. A match that runs past the close
   // would count this felt-first coach arm as a SoftPulse map arm.
-  assert.equal(GUIDED_PULSE_TARGET_IDS.has("act-01-03-01-unguided-call"), false);
+  assert.equal(
+    GUIDED_PULSE_TARGET_IDS.has("act-01-03-01-checkpoint-legal"),
+    false,
+  );
   assert.ok(DENSIFY_HELPER_IDS.size > 0);
   assert.ok(GUIDED_PULSE_TARGET_IDS.size > 0);
 });
