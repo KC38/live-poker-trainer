@@ -1219,3 +1219,26 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Discovery `lesson-06-12-01-observe-wide-pressure`: teachSpec on all five; explain SoftPulse + `explainGrading`; all interactive `deal.mode` `none`; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean. Curriculum **LPT-297** tip-commented.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-12-02-meet-lag` / Low curriculum.
 - act-06-11-03-* / act-06-12-01-*: structural clean — curriculum splits only via LPT-294 / LPT-297.
+
+## Fold 2026-10-13dt (35c01162 discovery meet-lag — rescue unfolder #2159)
+
+- Tip mid-run `6d9f3068` → `35c01162` (#2158). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348**.
+- Discovery oldest-unfresh `lesson-06-12-02-meet-lag`: teachSpec on all five; explain SoftPulse WIDE→PRESSURE→MODEL + `explainGrading`; interactive `deal.mode` `none`; scaffolded/unguided one-per-press; checkpoint hintless. Structural clean. Curriculum **LPT-300** needs-human (tip-commented).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-13-01-mix-five-types` / Low curriculum.
+- act-06-12-02-*: structural clean on tip — curriculum split only via LPT-300.
+
+## Fold 2026-10-14a (216437dc discovery mix-five-types — rescue unfolder #2161)
+
+- Tip `216437dc` (#2160 ui-agent non-content after #2158). Catalog `--counts` structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done; **LPT-667** Done (one-per-press **0**). Sole open Medium: Capstone **LPT-348** needs-human (five NO_HINT hands; already **HAS** tip — no re-spam).
+- Discovery oldest-unfresh `lesson-06-13-01-mix-five-types`: teachSpec on all five; explain SoftPulse CARDS/SEATS/EVIDENCE + `explainGrading`; guided/scaffolded/unguided `poker_action_sizing` `deal.mode` `fixed` Jh/Td·Qc/Ts/3h/2d/7c match Dart + suit-rotated `deal.variants`; scaffolded/unguided one-per-press; checkpoint hintless cite (`deal.mode` `none`, cue `tag`). Structural clean — no new grokbot clone.
+- Curriculum multi-concept still **LPT-306** needs-human (tip-commented on `216437dc`). Still-a-list label check STALE — no rebuild.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-13-02-section-six-checkpoint` / Low curriculum.
+- act-06-13-01-*: structural clean on tip — curriculum split only via LPT-306.
+
+## Fold 2026-10-14b (216437dc discovery section-six-checkpoint)
+
+- Tip-stable `216437dc` (#2160). Catalog `--counts` structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** (already HAS tip). High content open: **0**.
+- Discovery oldest-unfresh `lesson-06-13-02-section-six-checkpoint`: all five `assessmentRole` checkpoint + teachSpec PRESENT; `deal.mode` `none` + SoftPulse cues `ra` / `cap` / `polar` / `tag` / `lag` (cue kind `none`); pressHints empty (correct for assessment); densify helper arms PRESENT for all five `act-06-13-02-cp-*`. Structural clean — no new grokbot clone; no needs-human multi-objective split (assessment container).
+- Done-ack tip-commented **LPT-307** (teachSpec) + **LPT-444** (densify) on `216437dc`. Design-record Still-a-list “advantage, cap, polar, TAG, and LAG checks” STALE — do not file rebuild.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-07-01-01-preflop-to-flop` / Low curriculum **LPT-310**.
+- act-06-13-02-cp-*: structural clean on tip — companions LPT-307/444 Done.
