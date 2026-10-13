@@ -678,7 +678,7 @@ export function buildSectionThree() {
                 teachSpec: {
                   deal: {
                     mode: "fixed",
-                    fixedCards: {hero: ["9s", "8s"], board: ["Kh", "7h", "2c", "3d", "Ah"]},
+                    fixedCards: {hero: ["9s", "8s"], board: ["Ks", "7s", "2h", "3h", "Ah"]},
                   },
                   cues: [{press: 1, target: "bluff", kind: "soft_pulse"}],
                 },

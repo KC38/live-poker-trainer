@@ -608,6 +608,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Play tighter multiway missed air | `act-03-07-01-scaffolded` templates `7s 3d` on `Ah Kh 9h` (true air) and postflop remap rejects made pairs under draw-class HandClass so the missed ask matches the felt; guided/scaffolded frame speech is felt-first with a pick verb (LPT-367). |
 | Play tighter multiway densified ask | Play tighter multiway unguided / checkpoint (`act-03-07-01-unguided`, `act-03-07-01-checkpoint`) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-368). |
 | Patch the common leaks gutshot | `act-03-08-01-scaffolded` templates `Jh 9d` on `Ks Tc 2d` (true four-out gutshot to Q) and isomorphic remap keeps `drawOuts` / weak-draw teach bits so Rex’s gutshot / four-outs ask never sits over air (LPT-381; JT on A72 was zero outs). |
+| Close the river missed flush | `act-03-06-01-scaffolded` templates `9s 8s` on `Ks 7s 2h 3h Ah`: a flopped spade flush draw that bricks while the `3h` / `Ah` runout completes hearts, so “You missed a flush draw… River completes the flush” and the `bluff` (represent the flush) match the felt; LPT-155 `fixedCards` move with it (LPT-402; `Kh 7h 2c 3d Ah` never gave 98ss a draw). |
 | Patch the common leaks weak top pair | `act-03-08-01-guided` (`Ah 4d` on `As 9c 7d`) reads “Flop · Weak top pair · Heat”: the 4 kicker loses to the unpaired 9 and 7, so this is TPWK, matching the catalog prompt, not “Weak TPTK” (LPT-401). |
 | Capstone 3-bet flop texture | `act-07-10-02-hand` step-3b-flop deals `Ah Qd` on `Qs 8h 3d`, three suits, so streetLabel, catalog prompt, wave helper, and Rex line all say **Q83r** (rainbow), matching the capstone 4-bet `Q83r` flop; per-attempt suit permutation keeps it rainbow (LPT-405; was labelled Q83tt). |
 | Type board line second pair | `act-07-08-01-guided` templates `Jh Td` on `Kh Ts 8h 2d`: true second pair (the T sits under the K) on a wet two-tone turn with no hero draw, so “Turn · second pair · wet” and the `call` bluff-catch versus the Maniac overbet match the felt; remaps keep `weakPair`, and pair depth is LPT-409 (LPT-396; `Ts 9h 8c 2d` was top pair plus an open-ender). |
@@ -901,7 +902,7 @@ SoftPulse `brick` / `barrel`; unguided fixed Ah9h/Kh7h2c3h SoftPulse
 
 Close the river correctly `teachSpec` (LPT-155): explain SoftPulse advances
 VALUE → BLUFF → CATCH → FOLD; guided/scaffolded/unguided author fixed
-AhKd/AsKc7d2h3c, 9s8s/Kh7h2c3dAh, and Ah4d/As9c7d2h3c with SoftPulse
+AhKd/AsKc7d2h3c, 9s8s/Ks7s2h3hAh, and Ah4d/As9c7d2h3c with SoftPulse
 `val-bet` / `bluff` / `fold-weak`; checkpoint uses `deal.mode` `none` and
 cues `role-catch` with kind `none` (no pressHints).
 
