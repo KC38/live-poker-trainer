@@ -43,7 +43,7 @@ Lesson-specific pattern notes (full history) live in
 - Never require Hint on `assessmentRole` checkpoint / jump_test steps;
   jump_test / section checkpoints skip needs-human multi-objective splits.
 - Never file a lesson-split without `needs-human` — and never re-add
-  `needs-human` after product approved the split (LPT-267/179/186/…).
+  `needs-human` after product approved / removed it (LPT-267/179/186/189/198…).
 - Never run `build_seed_course.mjs` to patch one activity — prefer
   `course.json` + `validate_course.mjs`. Prefer `course.json` over
   `wave_*.mjs` as truth; file wave-sync when helpers lag.
@@ -79,10 +79,6 @@ Lesson-specific pattern notes (full history) live in
   numbers — `--counts` pressHints **0** only means non-empty arrays
   (LPT-626 Done); incomplete one-per-press stays on catalog **LPT-667**.
   Capstone `NO_HINT` hands stay on **LPT-348** only.
-- Never re-add `needs-human` after a human removes it / approves id
-  migration (LPT-189 Meet Station, LPT-186 sticky, LPT-267 overbets,
-  LPT-198 Meet Nit). Keep curriculum To Do for the split; tip-comment
-  human-approved — do not restore the label from stale filing copy.
 
 - Never write Jira tip-comment markdown via unquoted shell heredocs (`python3 <<PY`) — backticks expand empty and leave blank SHA/`teachSpec` placeholders; always use a quoted heredoc (`python3 <<'PY'`) or write the body file from Python before `jira.py comment`.
 - Never build Atlassian wiki bodies with Python f-strings — `f"{{act-…}}"` collapses to `{act-…}` and `f"{{{{{{sha}}}}}}"` yields `{{{sha}}}`; write non-f-string templates with `'{{' + sha + '}}'` (or an equivalent helper) before `jira.py comment`/`edit`.
