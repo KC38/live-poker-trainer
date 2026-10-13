@@ -703,3 +703,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Done-ack **LPT-401** (In Progress → Done). Tip-commented frontier High teachSpecs LPT-242 / LPT-312 / LPT-315 — all five `act-*` still MISSING teachSpec each. densify ≠ teachSpec for LPT-312 (LPT-657 arms PRESENT).
 - Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty after fold (0 bullets). `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
+
+## Fold 2026-10-13 tip 56f22fa8 (tip-stable after #2052 + LPT-659 densify sibling)
+
+- Tip-stable `56f22fa8` (#2052 learnings after #2051 LPT-401). Pending empty (zero `- ` bullets).
+- `scan_content_gaps --counts` flat: pressHints **151**, deal-variants **92**, teachSpec **44**, explain-teachSpec **23**, nice-ladder **55**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **86**. No catalog checklist rebuild (counts match prior tip).
+- Prior coverage for this SHA listed LPT-624/626/628 but `jira.py get` showed LPT-625/627/635 + frontier Highs LPT-242/312/315 lacked `56f22fa8` — tip-commented those the same tick (coverage over-claim includes catalog parents, not only Highs).
+- Re-verified Soft timing **LPT-242** / Map turn **LPT-312** / Compose river **LPT-315**: all five `act-*` still MISSING teachSpec each. Soft timing densify helper arms still ABSENT (LPT-464 Done ≠ PRESENT). densify ≠ teachSpec for LPT-312 (LPT-657 arms PRESENT).
+- ui-agent filed densify sibling **LPT-659** (Change plans by pot type `act-07-04-01-guided` / `scaffolded` / `unguided` / `checkpoint` — framed "Tap the best answer"; helper arms ABSENT). Tip-commented LPT-628 + LPT-659; linked Relates. Leave LPT-659 to ui-agent Validated-on-origin/main; rebuild LPT-628 only when helper count moves. Soft timing remains Priority ABSENT on LPT-628.
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR ui-agent LPT-659 pot-type densify OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
