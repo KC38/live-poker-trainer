@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "4576531f26e4570648356c7c8806829cfe61179e09f945a06212478fcf45bd7b",
+  "contentChecksum": "178bce181bcbd6286d9e5c4bf98c056f2c34f5c42a686894707680197714204c",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -23341,7 +23341,19 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cs",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-nit",
@@ -23374,7 +23386,19 @@
                   "playerTypeRefs": [
                     "nit"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "nit",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-maniac",
@@ -23407,7 +23431,19 @@
                   "playerTypeRefs": [
                     "maniac"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "man",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-tag",
@@ -23440,7 +23476,19 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tag",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-lag",
@@ -23473,7 +23521,19 @@
                   "playerTypeRefs": [
                     "lag"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "lag",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-uncertain",
@@ -23503,7 +23563,19 @@
                       "accessibilityText": "Maximum certainty on a label"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "low",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-12-01-retire",
@@ -23536,7 +23608,19 @@
                   "playerTypeRefs": [
                     "calling_station"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "retire",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
