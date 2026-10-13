@@ -26,3 +26,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 - Prefer checking `jira.py ui-queue` + open PRs for the same KEY before `gh pr create` when another ui-design-agent is RUNNING — concurrent LPT-642 runs produced #1912 (merged) and #1913 (closed as duplicate); the loser should stop that KEY and not fight the lock (2026-10-13).
 - Prefer treating a lock with `pid: none` that still heartbeats as live (do not `--force` release); wait for `NO_PID_STALE_SECONDS` (10 min) only when heartbeats also stop (LPT-642 race).
 - Prefer `tools/flutter_run_fast.sh --no-cache` (or a fresh Xcode `Runner.app`) before filing Hint-disabled on SoftPulse-off scaffolded steps — a cached binary can disagree with tip `catalog.json` / `assessmentRole` and look like LPT-643 while source already enables Hint (`lessonFrameCanHint`).
+
+## Fold 2026-10-13
+
+- Prefer `tools/tee_exit.sh` in a short `jira-create-*` tmux + `tools/wait_done.sh` for `jira.py create` with PNG `--attach` (LPT-644: foreground create hung 10+ min with no stdout; tee_exit finished in ~4s). Avoid stacking `text ~` JQL searches in the same shell as mini drives — they can hang like `labels !=`.
