@@ -227,7 +227,7 @@ export function buildSectionThree() {
                 objectives: ["Recognize air that needs equity or fold equity"],
                 choices: [
                   choice("air", "Air — little equity, no pair", "recommended",
-                    "Gutshot-ish trash multiway is give-up territory."),
+                    "Five-high with no pair and no real draw is give-up territory multiway."),
                   choice("sdv-54", "Playable showdown value", "clear_mistake",
                     "Five-high does not showdown multiway.", {betterChoiceId: "air"}),
                   choice("made-54", "Made hand", "clear_mistake",

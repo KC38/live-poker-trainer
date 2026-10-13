@@ -7607,7 +7607,7 @@
                       "accessibilityText": "Air — little equity, no pair",
                       "grading": {
                         "grade": "recommended",
-                        "feedback": "Gutshot-ish trash multiway is give-up territory."
+                        "feedback": "Five-high with no pair and no real draw is give-up territory multiway."
                       }
                     },
                     {
@@ -31390,7 +31390,7 @@
       "choiceGrading": {
         "air": {
           "grade": "recommended",
-          "feedback": "Gutshot-ish trash multiway is give-up territory."
+          "feedback": "Five-high with no pair and no real draw is give-up territory multiway."
         },
         "sdv-54": {
           "grade": "clear_mistake",
