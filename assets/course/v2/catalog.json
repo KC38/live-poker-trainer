@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "ddb7ea3af0252607407b6feacd919db2719ad0e8d8e4693cd14cffddf62276ba",
+  "contentChecksum": "a63198304a6225ca801206622de8475efd98ad9845050226919065337b5cc57c",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -27414,7 +27414,8 @@
                         "kind": "soft_pulse"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             },
@@ -27648,7 +27649,8 @@
                         "kind": "soft_pulse"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             },
@@ -27874,7 +27876,8 @@
                         "kind": "soft_pulse"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             },
@@ -28108,7 +28111,8 @@
                         "kind": "soft_pulse"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             },
@@ -28341,7 +28345,8 @@
                         "kind": "soft_pulse"
                       }
                     ]
-                  }
+                  },
+                  "assessmentRole": "transfer"
                 }
               ]
             }

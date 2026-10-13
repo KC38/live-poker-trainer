@@ -19,7 +19,7 @@ export type SoftGrade =
 export type ActivityStage = "guided" | "scaffolded";
 
 /** Path/assessment role on a scaffolded step (Hint disabled). */
-export type AssessmentRole = "checkpoint" | "jump_test";
+export type AssessmentRole = "checkpoint" | "jump_test" | "transfer";
 
 export type ActivityRenderer =
   | "coach_dialogue"

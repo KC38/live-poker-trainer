@@ -23,7 +23,7 @@
     },
     "assessmentRole": {
       "type": "string",
-      "enum": ["checkpoint", "jump_test"],
+      "enum": ["checkpoint", "jump_test", "transfer"],
       "description": "Optional path/assessment role on a scaffolded step. Disables Hint entirely."
     },
     "activityRenderer": {

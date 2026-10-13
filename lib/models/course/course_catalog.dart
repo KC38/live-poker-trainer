@@ -48,6 +48,8 @@ enum ActivityStage {
 enum AssessmentRole {
   checkpoint,
   jumpTest,
+  /// Capstone / intentional no-Hint transfer assessment (LPT-348).
+  transfer,
 }
 
 /// Maps wire-format stage strings (including legacy six-stage catalogs).
@@ -77,6 +79,8 @@ AssessmentRole? assessmentRoleFromWire({
       return AssessmentRole.checkpoint;
     case 'jump_test':
       return AssessmentRole.jumpTest;
+    case 'transfer':
+      return AssessmentRole.transfer;
     default:
       return null;
   }

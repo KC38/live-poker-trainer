@@ -43,7 +43,7 @@ const SOFT_GRADES = new Set([
   "clear_mistake",
 ]);
 const STAGES = new Set(["guided", "scaffolded"]);
-const ASSESSMENT_ROLES = new Set(["checkpoint", "jump_test"]);
+const ASSESSMENT_ROLES = new Set(["checkpoint", "jump_test", "transfer"]);
 const DEAL_MODES = new Set(["none", "fixed", "random_in_class"]);
 // Legal teachSpec deal families come from teach_spec.schema.json so the
 // schema enum and the validator never drift apart (LPT-166).

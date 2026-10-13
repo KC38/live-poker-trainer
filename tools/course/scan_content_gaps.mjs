@@ -136,8 +136,11 @@ const INTERACTIVE_RENDERERS = new Set([
 
 /**
  * Capstone hand/explain ids that Dart `lessonFrameHintsDisabled` marks as
- * no-hint (`lib/ui/course/widgets/lesson_screen_layout.dart`). Keep in sync
- * when that set changes — they must not inflate pressHints catalog counts.
+ * no-hint (`lib/ui/course/widgets/lesson_screen_layout.dart`). Capstone
+ * *-hand* activities also carry `assessmentRole: "transfer"` (LPT-348
+ * intentional no-Hint transfer); keep this set in sync with that Dart
+ * list and the five hand roles — they must not inflate pressHints catalog
+ * counts. Do not reopen LPT-626/LPT-667 for Capstone-only excludes.
  */
 export const NO_HINT_ACTIVITY_IDS = new Set([
   "act-07-10-01-explain",

@@ -136,6 +136,10 @@ void main() {
         AssessmentRole.checkpoint,
       );
       expect(
+        assessmentRoleFromWire(assessmentRole: 'transfer'),
+        AssessmentRole.transfer,
+      );
+      expect(
         activityRendererFromWire('full_table_hand_lab'),
         ActivityRenderer.fullTableHandLab,
       );

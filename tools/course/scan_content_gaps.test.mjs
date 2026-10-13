@@ -112,6 +112,15 @@ test("pressHints skips no-hint, roles, and steps that already have a hint", () =
   );
   assert.equal(
     gapPressHints(...lesson, {
+      id: "act-transfer-role",
+      stage: "scaffolded",
+      renderer: "authored_multi_step_hand",
+      assessmentRole: "transfer",
+    }),
+    null,
+  );
+  assert.equal(
+    gapPressHints(...lesson, {
       id: "act-07-10-01-hand",
       stage: "scaffolded",
       renderer: "full_table_hand_lab",

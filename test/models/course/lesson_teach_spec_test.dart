@@ -4618,6 +4618,40 @@ void main() {
     });
   });
 
+  group('Capstone hands transfer assessmentRole (LPT-348)', () {
+    CourseLesson lessonOf(String id) => catalog.sections
+        .expand((s) => s.units)
+        .expand((u) => u.lessons)
+        .firstWhere((l) => l.id == id);
+
+    Activity act(String lessonId, String activityId) =>
+        lessonOf(lessonId).activities.firstWhere((a) => a.id == activityId);
+
+    const hands = <(String, String)>[
+      ('lesson-07-10-01-capstone-srp', 'act-07-10-01-hand'),
+      ('lesson-07-10-02-capstone-3bet', 'act-07-10-02-hand'),
+      ('lesson-07-10-03-capstone-multiway-deep', 'act-07-10-03-hand'),
+      ('lesson-07-10-04-capstone-limped', 'act-07-10-04-hand'),
+      ('lesson-07-10-05-capstone-4bet', 'act-07-10-05-hand'),
+    ];
+
+    for (final (lessonId, activityId) in hands) {
+      test('$activityId is transfer with no pressHints', () {
+        final a = act(lessonId, activityId);
+        expect(a.assessmentRole, AssessmentRole.transfer, reason: activityId);
+        expect(a.stage, ActivityStage.scaffolded, reason: activityId);
+        final teach = a.teachSpec;
+        final hints = teach == null ? null : teach['pressHints'];
+        expect(
+          hints == null || (hints is List && hints.isEmpty),
+          isTrue,
+          reason: '$activityId must not author pressHints',
+        );
+      });
+    }
+  });
+
+
   group('Prep a coached Live warm-up hand (LPT-349)', () {
     test('explain SoftPulse walks CHECKLIST → DEFAULTS → ONE HAND', () {
       expect(

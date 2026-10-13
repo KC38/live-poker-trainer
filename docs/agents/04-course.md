@@ -32,8 +32,8 @@ First production lesson id: `lesson-01-01-01-your-two-cards`
 | `guided` | Walks presses | Off while gold SoftPulse on | Free |
 | `scaffolded` | After Hint | Authored `teachSpec.pressHints` (one/press) | Heart |
 
-Optional `assessmentRole`: `checkpoint` | `jump_test` on scaffolded → **no
-Hint**. Home path node kinds and jump-test placement use this role (not a
+Optional `assessmentRole`: `checkpoint` | `jump_test` | `transfer` on scaffolded → **no
+Hint** (`transfer` = Capstone intentional no-Hint assessment, LPT-348). Home path node kinds and jump-test placement use this role (not a
 separate stage). Legacy catalogs map explain→guided; unguided→scaffolded;
 old checkpoint/jump_test stages→scaffolded+role.
 
