@@ -99,6 +99,8 @@ Lesson-specific pattern notes (full history) live in
 - Prefer after a densify sibling reaches **Done** with Validated-on-origin/main: immediately rebuild catalog densify-tap **LPT-628** ABSENT list from the new tip (helper arms + fallthrough) — do not wait for the next catalog walk.
 - Prefer after ui-agent cyan-selection Dones (e.g. LPT-641): tip-comment open content catalog parents (LPT-624/625/626/628/635) on the new SHA — cyan under Nice!/Oops does **not** clear those gaps; keep Hint-enablement companions (LPT-643) open separately.
 
+- Prefer when `content-agent-coverage.jsonl` already has a catalog-parent sync line for this tip SHA: skip re-editing those parents unless a count/body error remains (e.g. LPT-626 raw **156** vs excluded fix **151**); tip-comment honesty/fingerprint Highs that still show zero hits for the SHA.
+
 ## Recent fold
 
 - 2026-10-13: Folded 211 pending bullets into
