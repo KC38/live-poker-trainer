@@ -103,6 +103,8 @@ Lesson-specific pattern notes (full history) live in
 - Prefer when tip advances with scanner-only `NO_HINT_ACTIVITY_IDS` / pressHints exclude (#1916): rebuild **LPT-626** from `scan_content_gaps --gap pressHints --markdown` so the checklist count equals `--counts` (**151**) — drop manual 156−5 subtract wording; tip-comment other catalog parents on the new SHA without inventing count deltas.
 - Prefer on a tip-stable catalog-synced SHA: tip-comment unchecked **To Do** High teachSpecs (e.g. LPT-258 capped / LPT-283 hard-folds) rather than re-spamming In Progress / honesty already commented on that SHA.
 
+- Prefer after a High interactive teachSpec Done that authors `deal.mode` `fixed` without `deal.variants` (e.g. LPT-280 #1920 `act-06-09-01-scaffolded`): immediately rebuild catalog **LPT-627** from `scan_content_gaps --gap deal-variants --markdown` (count may *rise*); append SoftPulse explain Nice! onto **LPT-624** when explain now has cues but no `explainGrading`; tip-comment **LPT-626** if scaffolded/unguided already listed; do **not** shrink LPT-635 S1–S2 checklist when scanner full explain-teachSpec drops. Depth chrome honesty (LPT-417 180bb sans `stackLabel`) can survive the teachSpec land — re-check, do not Done.
+
 ## Recent fold
 
 - 2026-10-13: Folded 211 pending bullets into
@@ -115,3 +117,4 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13g: Tip `2604f13e` (#1916) scanner pressHints **156→151**;
   rebuild LPT-626 from markdown; tip-comment To Do High teachSpecs
   (LPT-258/283) when catalog parents already synced on the prior tip.
+- 2026-10-13h: After LPT-280 teachSpec (#1920) deal-variants 73→74 + Nice! 36→37 (`act-06-09-01-explain`); LPT-417 survives teachSpec when stackLabel still missing.
