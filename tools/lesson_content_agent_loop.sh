@@ -120,6 +120,9 @@ ensure_primary_clean_main() {
   dir="$(primary)"
   # Soft fetch — offline / no-remote test fixtures still need chore→main.
   git -C "$dir" fetch -q origin main 2>/dev/null || true
+  # Drop merged chore branches left as ": gone]" after squash-merge.
+  # Best-effort — never fail the run if prune hits a locked worktree.
+  bash "$TOOLS/prune_gone_branches.sh" "$dir" >/dev/null 2>&1 || true
   # Drop scratch ticket bodies if an old run wrote them on PRIMARY.
   rm -rf "$dir/.cursor/tmp/content-agent" 2>/dev/null || true
   # Never destroy unrelated dirty work on PRIMARY.
