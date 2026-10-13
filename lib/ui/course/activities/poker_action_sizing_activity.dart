@@ -63,7 +63,7 @@ class PokerActionSizingActivity extends StatelessWidget {
                 ? 'Big blind vs a button open — pick Fold, Call, or Jam.'
                 : spot?.identifyUnavailable == true
                 ? 'A bet is out — pick the action you cannot take.'
-                : spot?.stackLabel != null
+                : spot?.isShortStack == true
                 ? 'Short stack — pick what you can put in.'
                 : spot?.openPot == true
                 ? 'The pot is open — pick the first chips.'
@@ -128,7 +128,7 @@ class PokerActionSizingActivity extends StatelessWidget {
                   // "tap Bet" line under the dock.
                   return spot.identifyUnavailable
                       ? 'Pick the illegal action.'
-                      : spot.stackLabel != null
+                      : spot.isShortStack
                       ? 'Pick All-in, Call, or Fold on the dock.'
                       : 'Pick your action on the dock.';
                 }
