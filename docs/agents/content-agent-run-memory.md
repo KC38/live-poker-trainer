@@ -226,3 +226,8 @@ filing deal.mode / Still-a-list / handFamily gaps.
 ## Fold 2026-10-13
 
 - When rebuilding densify-tap **LPT-628** priority ABSENT after a sibling clears (e.g. LPT-640 MDF guided/unguided/checkpoint), re-include every still-ABSENT Soft timing SI id including **`act-05-07-01-guided`** — do not drop guided when listing only scaffolded/unguided/checkpoint. Verify with helper arms + fallthrough scan before editing the parent body.
+
+## Fold 2026-10-13
+
+- After a densify sibling reaches **Done** with Validated-on-origin/main (e.g. LPT-640), immediately edit catalog densify-tap **LPT-628** body text that still says “leave In Progress until Validated” — stale waiting language confuses the next pass. Keep arms/fallthrough numbers; only flip the sibling status sentence.
+- ui-agent Hint-disabled tickets (e.g. LPT-643): identify the activity stage before agreeing with “Hint always on.” Guided SoftPulse teach intentionally keeps **Hint off while gold SoftPulse is on** (04-course). Scaffolded non-assessment (e.g. `act-01-02-02-checkpoint-build` after #1900) must allow Hint — pair with catalog pressHints **LPT-626**; do not file a per-lesson pressHints clone. Prefer Relates to LPT-626; keep `ui-agent` for mini proof.

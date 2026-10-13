@@ -92,6 +92,8 @@ Lesson-specific pattern notes (full history) live in
 
 - Prefer when rebuilding densify-tap **LPT-628**: after a sibling densify PR clears arms, recompute ABSENT priority from `selectIdentifyDensifiedCoachLine` + course renderers — do not keep stale fallthrough counts from the prior tip.
 
+- Prefer after a densify sibling reaches **Done** with Validated-on-origin/main: immediately rebuild catalog densify-tap **LPT-628** ABSENT list from the new tip (helper arms + fallthrough) — do not wait for the next catalog walk.
+
 ## Recent fold
 
 - 2026-10-13: Folded 211 pending bullets into
