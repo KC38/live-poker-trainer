@@ -11,6 +11,7 @@
  *   node tools/course/scan_content_gaps.mjs --gap pressHints
  *   node tools/course/scan_content_gaps.mjs --markdown --gap deal-variants
  *   node tools/course/scan_content_gaps.mjs --counts
+ *     (also softpulseMapArms + densifyHelperArms from Dart)
  */
 
 import {readFileSync} from "node:fs";
@@ -47,6 +48,36 @@ function loadGuidedPulseTargetIds() {
 }
 
 const GUIDED_PULSE_TARGET_IDS = loadGuidedPulseTargetIds();
+
+const DENSIFY_HELPER_PATH = resolve(
+  REPO_ROOT,
+  "lib/ui/course/widgets/rex_coach_line.dart",
+);
+
+/**
+ * Activity ids with densified coach lines in
+ * `selectIdentifyDensifiedCoachLine` (catalog LPT-628 helper arms).
+ * @returns {Set<string>}
+ */
+function loadDensifyHelperIds() {
+  try {
+    const text = readFileSync(DENSIFY_HELPER_PATH, "utf8");
+    const match = text.match(
+      /selectIdentifyDensifiedCoachLine[\s\S]*?\{([\s\S]*?)
+\}/,
+    );
+    if (!match) {
+      return new Set();
+    }
+    return new Set(
+      [...match[1].matchAll(/'(act-[^']+)'\s*=>/g)].map((m) => m[1]),
+    );
+  } catch {
+    return new Set();
+  }
+}
+
+const DENSIFY_HELPER_IDS = loadDensifyHelperIds();
 
 const INTERACTIVE_RENDERERS = new Set([
   "select_identify",
@@ -460,6 +491,7 @@ function main() {
           counts,
           catalogParents: CATALOG_PARENTS,
           softpulseMapArms: GUIDED_PULSE_TARGET_IDS.size,
+          densifyHelperArms: DENSIFY_HELPER_IDS.size,
         },
         null,
         2,
