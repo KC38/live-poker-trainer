@@ -24,8 +24,16 @@ void main() {
     expect(catalog.contentChecksum, isNotEmpty);
     expect(catalog.sections, hasLength(7));
     expect(catalog.playerTypes, hasLength(5));
-    expect(catalog.sections[0].units, hasLength(6));
+    expect(catalog.sections[0].units, hasLength(8)); // LPT-83 suits+blinds units
     expect(catalog.sections[1].units, hasLength(7));
+    expect(
+      catalog.lessonSplitMap['lesson-01-01-02-suits-and-ranks'],
+      [
+        'lesson-01-01-02-01-suits',
+        'lesson-01-01-02-02-ranks',
+        'lesson-01-01-02-03-pairs-and-suited',
+      ],
+    );
   });
 
   test('lesson and activity ids are unique and ordered', () {
