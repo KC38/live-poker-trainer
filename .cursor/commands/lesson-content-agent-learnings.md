@@ -96,7 +96,7 @@ Lesson-specific pattern notes (full history) live in
 
 - Prefer when rebuilding densify-tap **LPT-628**: after a sibling densify PR clears arms, recompute ABSENT priority from `selectIdentifyDensifiedCoachLine` + course renderers — do not keep stale fallthrough counts from the prior tip.
 
-- Prefer after a densify sibling reaches **Done** with Validated-on-origin/main: immediately rebuild catalog densify-tap **LPT-628** ABSENT list from the new tip (helper arms + fallthrough) — do not wait for the next catalog walk. Sibling **Done** ≠ helper arms PRESENT — re-scan `selectIdentifyDensifiedCoachLine` (LPT-464 Soft timing Done while `act-05-07-01-*` still ABSENT on tip `abd48de8`).
+- Prefer after a densify sibling reaches **Done** with Validated-on-origin/main: immediately rebuild catalog densify-tap **LPT-628** ABSENT list from the new tip (helper arms + fallthrough) — do not wait for the next catalog walk. Sibling **Done** ≠ helper arms PRESENT — re-scan `selectIdentifyDensifiedCoachLine` (LPT-464 Soft timing Done while `act-05-07-01-*` still ABSENT; LPT-644 Mix Done #1937 → helper **44→47** / fallthrough **156→153**, Soft timing still ABSENT). Mix guided is `poker_action_sizing` — do not keep it on SI densify ABSENT after scaffolded/unguided/checkpoint land.
 - Prefer after ui-agent Nice!/Oops Dones (cyan-selection LPT-641, open-pot felt redeal LPT-642, etc.): tip-comment open content catalog parents (LPT-624/625/626/628/635) on the new SHA — ui under Nice!/Oops does **not** clear those gaps; keep Hint-enablement companions (LPT-643) open separately.
 
 - Prefer when `content-agent-coverage.jsonl` already has a catalog-parent sync line for this tip SHA: skip re-editing those parents unless a count/body error remains (e.g. LPT-626 raw **156** vs excluded fix **151**); tip-comment honesty/fingerprint Highs that still show zero hits for the SHA.
@@ -128,4 +128,5 @@ Lesson-specific pattern notes (full history) live in
 - 2026-10-13m: Tip `bbad143c` (#1933 SDK queue-empty + #1932 learnings): scan still flat 151/78/97/37; tip-comment parents + To Do Highs / honesty on new SHA; Soft timing densify arms still ABSENT.
 - 2026-10-13n: Tip `7f869c29` (#1934 learnings-only): scan still flat 151/78/97/37; tip-comment parents + To Do Highs / IP teachSpecs / honesty; Soft timing densify still ABSENT in `rex_coach_line.dart` (helper 44) despite framed-path `act-05-07-01-*` strings in `select_identify_activity.dart`.
 - 2026-10-13o: Tip `c7ee5e78` (#1935 learnings-only): scan still flat 151/78/97/37; tip-comment parents + To Do Highs / IP teachSpecs / honesty; SoftPulse-map still 68 arms / 18+qq ABSENT; Soft timing densify still ABSENT (helper 44).
+- 2026-10-13p: Tip `d42d78b0` (#1937 LPT-644 Mix densify + #1936 learnings): rebuilt LPT-628 44→47 / fallthrough 156→153; Soft timing densify still ABSENT; scan JSON gaps flat 151/78/97/37.
 
