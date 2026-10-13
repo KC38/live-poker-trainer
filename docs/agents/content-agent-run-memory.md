@@ -513,3 +513,4 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Soft timing **LPT-242** still all-five MISSING; densify ABSENT. Frontiers **LPT-312**/ **LPT-315**. Meet Nit still LPT-624/626. Pending empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(88)/635/624(50)/625(24).
 
+- Tip-stable High tip-comment pass on same SHA: catalog parents LPT-626/625/628/635 tip-commented (flat vs rebuilt 624/627); tip-commented unchecked S6/S7/capstone Highs LPT-252/255/258/271/275/295/301/334/339/341/345/347/349/352 + honesty/fingerprint LPT-401/402/405/408/409/411/414/417 + needs-human LPT-348 + frontier LPT-242/312/315 with corrected 151/88/59/28/nice-50 counts. Soft timing densify still ABSENT (helper **53**). Pending empty.
