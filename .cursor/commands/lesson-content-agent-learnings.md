@@ -105,6 +105,8 @@ Lesson-specific pattern notes (full history) live in
 
 - Prefer after a High interactive teachSpec Done that authors `deal.mode` `fixed` without `deal.variants` (e.g. LPT-280 #1920 `act-06-09-01-scaffolded`, LPT-283 #1923 `act-06-10-01-guided`): immediately rebuild catalog **LPT-627** from `scan_content_gaps --gap deal-variants --markdown` (count may *rise*); append SoftPulse explain Nice! onto **LPT-624** when explain now has cues but no `explainGrading`; tip-comment **LPT-626** if scaffolded/unguided already listed (outcome-tile `deal.mode` `none` steps do not add deal-variants rows); do **not** shrink LPT-635 S1–S2 checklist when scanner full explain-teachSpec drops. Depth chrome honesty (LPT-417 180bb sans `stackLabel`) can survive the teachSpec land — re-check, do not Done.
 
+- Prefer when tip advances with ui-agent Hint-enablement **LPT-643** (`lessonFrameCanHint` / scaffolded Hint dock): tip-comment **LPT-626** that Hint enablement does **not** author `pressHints` — keep the pressHints catalog open; do not Done LPT-626 or Meet Nit pressHints clones from LPT-643 alone. Leave LPT-643 Done to ui-agent Validated-on-origin/main.
+
 ## Recent fold
 
 - 2026-10-13: Folded 211 pending bullets into
@@ -119,3 +121,5 @@ Lesson-specific pattern notes (full history) live in
   (LPT-258/283) when catalog parents already synced on the prior tip.
 - 2026-10-13h: After LPT-280 teachSpec (#1920) deal-variants 73→74 + Nice! 36→37 (`act-06-09-01-explain`); LPT-417 survives teachSpec when stackLabel still missing.
 - 2026-10-13i: After LPT-283 teachSpec (#1923) deal-variants 74→75 + Nice! 37→38 (`act-06-10-01-explain` HARD→COOLER→EGO); scaffolded/unguided stay on LPT-626 only.
+- 2026-10-13i: Tip `561e3e4f` (#1926 LPT-643 Hint enablement on tip, still In Progress): LPT-643 ≠ authored pressHints / LPT-626 clear; Meet Nit routing unchanged (Nice! 39 / pressHints 151).
+
