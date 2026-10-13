@@ -3492,7 +3492,18 @@ export function buildSectionSeven() {
             activities: [
               dialogue("act-07-10-05-explain", 1,
                 "Capstone 4-bet. Short SPR. No hints.",
-                {objectives: ["Respect short SPR commitment"]}),
+                {
+                  objectives: ["Respect short SPR commitment"],
+                  // LPT-347
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "SPR", kind: "soft_pulse"},
+                      {press: 2, target: "COMMIT", kind: "soft_pulse"},
+                      {press: 3, target: "NO HERO", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               multiStepAct({
                 id: "act-07-10-05-hand", order: 2, stage: "scaffolded",
                 a11y: "100bb 4-bet pot; you hold a premium pair after 4-betting.",
@@ -3536,6 +3547,18 @@ export function buildSectionSeven() {
                     ],
                   },
                 ],
+                // LPT-347
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Kh", "Kd"], board: ["Qs", "8h", "3d", "2d", "Ad"]},
+                  },
+                  cues: [
+                    {press: 1, target: "bet", kind: "soft_pulse"},
+                    {press: 2, target: "barrel", kind: "soft_pulse"},
+                    {press: 3, target: "fold", kind: "soft_pulse"},
+                  ],
+                },
               }),
             ],
           }),

@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "42e6785fa8d98e698e7fa777a03557a33b8aaf6f9f523d8c74eeb84dcf6e3d10",
+  "contentChecksum": "7de718e1406505e79e639e15ef9ac07d5c61ef15a0589a2afbf77fa1edc0d6b7",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -27137,7 +27137,29 @@
                   ],
                   "objectives": [
                     "Respect short SPR commitment"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SPR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "COMMIT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "NO HERO",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-07-10-05-hand",
@@ -27268,7 +27290,42 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "Kd"
+                        ],
+                        "board": [
+                          "Qs",
+                          "8h",
+                          "3d",
+                          "2d",
+                          "Ad"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bet",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "barrel",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "fold",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 }
               ]
             }
