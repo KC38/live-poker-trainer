@@ -109,12 +109,26 @@ ensure_sdk_deps() {
 }
 
 sync_primary() {
-  local dir
+  local dir branch
   dir="$(primary)"
   git -C "$dir" fetch -q origin main || return 0
-  if [[ "$(git -C "$dir" rev-parse --abbrev-ref HEAD)" == "main" && -z "$(git -C "$dir" status --porcelain)" ]]; then
+  # Never touch a dirty tree — content-agent may be mid-edit.
+  [[ -z "$(git -C "$dir" status --porcelain)" ]] || return 0
+  branch="$(git -C "$dir" rev-parse --abbrev-ref HEAD)"
+  if [[ "$branch" == "main" ]]; then
     git -C "$dir" merge -q --ff-only origin/main || true
+    return 0
   fi
+  # Leftover learnings chore branches leave PRIMARY off tip after the agent
+  # opens a PR from the primary checkout (sync used to no-op then). Return
+  # to main so the next run audits against origin/main.
+  case "$branch" in
+    cursor/chore-content-agent-learnings-*|chore/content-agent-learnings-*)
+      log "sync_primary: $branch → main (leftover learnings chore)"
+      git -C "$dir" checkout -q main || return 0
+      git -C "$dir" merge -q --ff-only origin/main || true
+      ;;
+  esac
 }
 
 logged_in() {
