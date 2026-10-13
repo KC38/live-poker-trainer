@@ -1436,23 +1436,29 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             prompt.toLowerCase() != coach.trim().toLowerCase();
         final instruction = _instructionRegion;
         final rex = RexCoachLine(text: coach);
+        // Keep a coach slot even under Nice!/Oops! — dropping Rex (or a
+        // framed shrink) shifts the Column and remounts LessonTableStage /
+        // DealtCardReveal (open-pot redeal, LPT-642). Same pattern as
+        // PokerActionSizingActivity.
+        final coachSlot = locked
+            ? const SizedBox.shrink()
+            : instruction == null
+                ? rex
+                : Semantics(
+                  button: true,
+                  label: coach,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap:
+                        () =>
+                            _submitRegion(LessonTableTapTarget(instruction)),
+                    child: rex,
+                  ),
+                );
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (!locked)
-              instruction == null
-                  ? rex
-                  : Semantics(
-                    button: true,
-                    label: coach,
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap:
-                          () =>
-                              _submitRegion(LessonTableTapTarget(instruction)),
-                      child: rex,
-                    ),
-                  ),
+            coachSlot,
             if (showPrompt) ...[
               const SizedBox(height: 14),
               Text(
@@ -1744,6 +1750,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
               else if (LessonFrameScope.maybeOf(context) != null &&
                   widget.activity.id == kOpenPotActivityId)
                 Expanded(
+                  key: const ValueKey<String>('open-pot-felt-slot'),
                   child: Builder(
                     builder: (context) {
                       final deal = dealLessonOpenPot(
@@ -1769,6 +1776,7 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Expanded(
+                            key: const ValueKey<String>('open-pot-table'),
                             child: LessonTableStage(
                               key: ValueKey<String>(
                                 'open-pot-${deal.openTo}-'

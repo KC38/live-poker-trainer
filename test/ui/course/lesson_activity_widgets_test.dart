@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/core/deal/card_deal_pace.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
@@ -10326,6 +10327,124 @@ await tester.tap(find.text('NIT'));
     expect(controller.draft.choiceId, 'pot-correct');
     controller.dispose();
   });
+
+  testWidgets(
+    'framed open-pot keeps DealtCardReveal identity after Nice! and Oops!',
+    (tester) async {
+      // LPT-642: grade lock must not remount the felt (redeal).
+      CardDealPace.debugInstant = true;
+      addTearDown(() {
+        CardDealPace.debugInstant = null;
+        CardDealPace.testScale = 1;
+      });
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      Future<void> assertNoRedeal({required bool accepted}) async {
+        final deal = dealLessonOpenPot(
+          activityId: kOpenPotActivityId,
+          generation: 0,
+        );
+        final activity = CourseActivity(
+          id: 'act-01-05-01-unguided-pot',
+          order: 4,
+          stage: ActivityStage.scaffolded,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: 'pot size',
+          acceptedGrades: const [SoftGrade.recommended],
+          prompt: 'Blinds 1/2. BTN opens. Tap the pot before blinds act.',
+          choices: const [
+            CourseChoice(id: 'pot-correct', label: 'Correct pot'),
+            CourseChoice(id: 'pot-miss-blind', label: 'Miss a blind'),
+            CourseChoice(id: 'pot-too-big', label: 'Too big'),
+          ],
+        );
+        final controller = LessonActivityController(activity: activity);
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+            ],
+            child: MaterialApp(
+              theme: buildPokerTheme().copyWith(
+                splashFactory: NoSplash.splashFactory,
+                highlightColor: Colors.transparent,
+              ),
+              home: Scaffold(
+                body: TableFeaturesScope(
+                  features: TableFeatures.forLessonId(
+                    'lesson-01-05-01-winning-pots',
+                  ),
+                  child: LessonFrameScope(
+                    onLocalMiss: (_) {},
+                    child: SizedBox(
+                      width: 375,
+                      height: 700,
+                      child: SelectIdentifyActivity(
+                        activity: activity,
+                        controller: controller,
+                        showGuidance: true,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        // Open-pot keeps face-down holes on BTN/SB/BB (seats 3–5); early
+        // folds (0–2) do not paint dealt-back widgets.
+        final hole = find.byKey(const ValueKey<String>('dealt-back-3-0'));
+        expect(hole, findsOneWidget);
+        final before = tester.element(hole);
+
+        controller.selectChoice(
+          accepted ? 'pot-correct' : 'pot-miss-blind',
+          autoSubmit: false,
+        );
+        controller.finishSubmit(
+          SubmitCourseStepResult(
+            attemptId: 'attempt',
+            activityId: activity.id,
+            grade: accepted ? SoftGrade.recommended : SoftGrade.questionable,
+            feedback: accepted
+                ? 'Add both blinds and the open.'
+                : 'Count both blinds plus the open.',
+            accepted: accepted,
+            lifeLost: !accepted,
+            livesRemaining: accepted ? 5 : 4,
+            xpAwarded: accepted ? 10 : 0,
+            remediationRequired: false,
+            resume: CourseResumePointer(
+              attemptId: 'attempt',
+              lessonId: 'lesson-01-05-01-winning-pots',
+              activityId: activity.id,
+              activityIndex: 3,
+            ),
+            duplicate: false,
+          ),
+        );
+        await tester.pump();
+
+        expect(hole, findsOneWidget);
+        expect(
+          identical(before, tester.element(hole)),
+          isTrue,
+          reason: accepted
+              ? 'Nice! remounted open-pot DealtCardReveal (redeal)'
+              : 'Oops! remounted open-pot DealtCardReveal (redeal)',
+        );
+        expect(deal.correctPot, greaterThan(0));
+        controller.dispose();
+      }
+
+      await assertNoRedeal(accepted: true);
+      await assertNoRedeal(accepted: false);
+    },
+  );
 
   testWidgets('open-pot SoftPulse after Hint on correct chips choice', (
     tester,
