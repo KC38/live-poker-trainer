@@ -131,6 +131,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-13cx: Tip `024e3b56` (#2121 learnings after 7542b85f). Counts flat 151/99/0/12/nice-66/map-24 densify-tap **0** / helper **229**. Tip-commented parents+Mediums+Done on post-merge tip; no rebuild. **LPT-370** cues null (IP); **LPT-588** Scene flop-only; **LPT-348** Capstone pressHints; Meet Nit LPT-624/626.
+
 - 2026-10-13cw: Tip `7542b85f` (#2120 learnings after 46ead6a5 over-claim fold). Counts flat 151/99/0/12/nice-66/map-24 densify-tap **0** / helper **229**; parents match markdown. Open parents+Mediums already **HAS** tip SHA — no rebuild/re-spam. Prior coverage omitted Done-ack + claimed `learnings: updated` while run-memory lacked `7542b85f` — Done-ack LPT-628/666/414/558 + ship fold. **LPT-370** cues null (IP); **LPT-588** Scene flop-only; **LPT-348** Capstone pressHints; Meet Nit LPT-624/626.
 
 - 2026-10-13cv: Tip-stable `46ead6a5` (#2114 LPT-666 + #2117 ui-agent). Counts flat 151/99/0/12/nice-66/map-24 densify-tap **0** / helper **229**. Prior coverage over-claimed tip SHA + learnings fold — `jira.py get` **zero** hits; run-memory lacked `46ead6a5`. Tip-commented parents+Mediums+Done-ack LPT-628/666/414/558. **LPT-370** cues null (In Progress); **LPT-588** Scene flop-only; **LPT-348** Capstone pressHints; Meet Nit LPT-624/626.

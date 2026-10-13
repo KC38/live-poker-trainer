@@ -1019,3 +1019,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prior home coverage on `7542b85f` listed open parents+Mediums tip-commented, but `jira.py get` showed Done LPT-628/666/414/558 **NEED** the tip SHA; this file also lacked any `7542b85f` fold despite coverage `learnings: updated`. Done-ack those four same tick (quoted Python body file). Open parents LPT-624/625/626/627/635 + Medium LPT-370/588 + LPT-348 already **HAS** — no re-spam.
 - Re-verified: **LPT-370** `act-01-01-02-scaffolded-ranks` cues still null (In Progress; pressHints length 3); **LPT-588** `act-04-05-01-checkpoint` `lesson_table_context` Scene still flop-only `Qs`/`7c`/`2d` while teachSpec/ActionSpot author turn `9h`; **LPT-348** `act-07-10-05-hand` pressHints still null (keep needs-human off LPT-626). Meet Nit `act-04-07-02-explain` still lacks `explainGrading` (LPT-624) / unguided pressHints length 0 (LPT-626). Zero open High content tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty (stub only). `content,grokbot,lesson`.
 - next: Nice! LPT-624 OR pressHints LPT-626 OR Medium LPT-370 (IP)/588 OR catalog LPT-627(99)/635(12)/625(24) OR LPT-348 needs-human.
+
+## 2026-10-13cx — tip `024e3b56` (#2121) post-merge tip-comment
+
+- Tip advanced `7542b85f` → `024e3b56` via #2121 learnings (cw Done-ack fold). `scan_content_gaps --counts` still flat: pressHints **151** / deal-variants **99** / teachSpec **0** / explain-teachSpec **12** / nice-ladder **66** / unguided-softpulse-map **24** / densify-tap **0** / densifyHelperArms **229**. Catalog parents match — no rebuild.
+- Tip-commented open parents LPT-624/625/626/627/635 + Medium LPT-370/588 + needs-human LPT-348 + Done-ack LPT-628/666/414/558 on the post-merge tip (quoted Python body file). No new tickets.
+- Re-verified still open: **LPT-370** cues null (IP); **LPT-588** Scene flop-only (remote `fix/LPT-588-spr-checkpoint-scene-turn` not on tip); **LPT-348** Capstone pressHints. Meet Nit Nice!/pressHints still LPT-624/626. Zero open High content tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
+- next: Nice! LPT-624 OR pressHints LPT-626 OR Medium LPT-370 (IP)/588 OR catalog LPT-627(99)/635(12)/625(24) OR LPT-348 needs-human.
+
