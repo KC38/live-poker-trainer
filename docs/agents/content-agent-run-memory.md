@@ -1067,3 +1067,31 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: LPT-348 Capstone pressHints needs-human OR discovery walk (honesty/curriculum one-offs scanner cannot see).
 - act-04-07-02-unguided: pressHints PRESENT (#2135) — do not re-file pressHints clones; Capstone LPT-348 stays separate.
 
+## 2026-10-13de — tip 43a1be2d discovery streets + LPT-667 one-per-press
+
+- Tip-stable `43a1be2d` (#2138). `scan_content_gaps.mjs --counts` still all **0** (pressHints/deal-variants/teachSpec/explain/nice/map/densify-tap); softpulseMapArms **92** / densifyHelperArms **229**. Open catalog JSON parents already **HAS** tip SHA — no rebuild.
+- Discovery oldest `lesson:lesson-01-04-01-streets-and-order` (`act-01-04-01-*`): teachSpec present; `deal.mode` `none` appropriate (street/seat/identify — no handFamily); checkpoint-postflop hintless; curriculum multi-concept still **LPT-103** needs-human.
+- Incomplete one-per-press (SoftPulse cues press set ⊈ pressHints press set) on tip — scanner empty-array clear ≠ contract:
+  - `act-01-04-01-scaffolded-order` cues 1–4 / pressHints length 1 (LPT-102 Done incompletely)
+  - `act-01-02-01-scaffolded-spot` / `act-01-02-01-unguided-compare` cues 1–3 / pressHints 1 (prior hand-ranks walk wrongly `clean`)
+  - `act-01-02-02-checkpoint-build` cues 1–5 / pressHints 1 (scaffolded, no assessmentRole — Hint-enabled)
+  - `act-01-06-01-scaffolded-multi` cues 1–2 / pressHints 1
+  - `act-02-01-02-scaffolded-post` cues 1–2 / pressHints 1 (LPT-116 Done incompletely)
+- Filed catalog **LPT-667** (`content,grokbot,lesson`) — Scaffolded multi-press steps missing one pressHints entry per press. Relates LPT-102/116/626/348. Capstone `act-07-10-01-hand`…`act-07-10-05-hand` stay **LPT-348** only — do not reopen **LPT-626**.
+- Tip-commented LPT-103 / LPT-348 / LPT-626 / LPT-102 / LPT-116 on `43a1be2d`.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone needs-human OR Low curriculum splits.
+
+## 2026-10-13df — tip 43a1be2d discovery position-labels
+
+- Tip-stable `43a1be2d` (#2138). `scan_content_gaps.mjs --counts` still all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Open JSON catalog parents already **HAS** tip SHA — no rebuild. Prior draft learnings PR #2141 (LPT-667 fold) was not on tip — this fold supersedes onto `cursor/chore-content-learnings-pos-00bd`.
+- Discovery oldest `lesson:lesson-02-01-01-position-labels` (`act-02-01-01-*`):
+  - `act-02-01-01-explain-pos`: guided SoftPulse cues + activity-level `explainGrading`; `deal.mode` `none`
+  - `act-02-01-01-guided-btn`: guided SoftPulse `pos-btn`; Hint off while gold on — no pressHints required
+  - `act-02-01-01-scaffolded-blinds` / `act-02-01-01-unguided-co`: pressHints length 1 = cue presses (complete one-per-press — **not** on **LPT-667**)
+  - `act-02-01-01-checkpoint-edge`: `assessmentRole` checkpoint, hintless — correct
+  - Seat/puck outcome tiles — do not file handFamily/suitFamily gaps
+  - Design-record SoftPulse puck path (LPT-118) already landed; Still-a-list not a rebuild ask
+- Structural catalog clean. Multi-concept curriculum still **LPT-114** needs-human (tip-commented). Tip-commented **LPT-667** (6-row checklist unchanged) + **LPT-348**.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone needs-human OR Low curriculum (e.g. acting-order **LPT-117** / next oldest discovery).
+- act-02-01-01-*: structural teachSpec/pressHints/one-per-press clean on tip — curriculum split only via LPT-114.
+
