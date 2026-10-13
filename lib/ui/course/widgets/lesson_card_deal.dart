@@ -586,6 +586,8 @@ int _drawOutsFor(List<String> hero, List<String> board) {
 /// [isSet] and [distinctBoardPairingHoles] keep [HandClass.strongMade]
 /// top-two templates (two distinct holes each pairing the board) from
 /// remapping into a set — both collapse to strongMade (LPT-392).
+/// [nutFlushDraw] keeps nut flush draw templates on the nut draw, and
+/// non-nut draws off it (LPT-408).
 /// [earlierStreets] keeps turn / river templates honest about how hero got
 /// there: the flop (and turn) class + draw outs must match, so a river
 /// "missed draw" really flopped a draw instead of any air (LPT-398).
@@ -600,6 +602,7 @@ int _drawOutsFor(List<String> hero, List<String> board) {
   bool hasMadePair,
   bool isSet,
   int distinctBoardPairingHoles,
+  bool nutFlushDraw,
   String earlierStreets,
   int overcardCount,
 }) _postflopTeachKey(List<String> hero, List<String> board) {
@@ -612,6 +615,7 @@ int _drawOutsFor(List<String> hero, List<String> board) {
     hasMadePair: _heroHasMadePair(hero, board),
     isSet: _heroHasSet(hero, board),
     distinctBoardPairingHoles: _distinctBoardPairingHoleCount(hero, board),
+    nutFlushDraw: _heroHasNutFlushDraw(hero, board),
     earlierStreets: _earlierStreetsKey(hero, board),
     overcardCount: _overcardHoleCount(hero, board),
   );
@@ -679,6 +683,27 @@ int _distinctBoardPairingHoleCount(List<String> hero, List<String> board) {
     if (boardRanks.contains(rank)) pairing.add(rank);
   }
   return pairing.length;
+}
+
+/// Whether hero has a flush draw (four of a suit across holes + board, at
+/// least one in hand, before the river) and holds the best missing card of
+/// that suit — the nut flush draw (Ace-high unless the Ace is on board).
+bool _heroHasNutFlushDraw(List<String> hero, List<String> board) {
+  if (hero.length < 2 || board.length < 3 || board.length >= 5) return false;
+  final heroCards = [for (final c in hero) CardModel.fromCode(c)];
+  final boardCards = [for (final c in board) CardModel.fromCode(c)];
+  for (final suit in {for (final c in heroCards) c.suit}) {
+    final inHand = heroCards.where((c) => c.suit == suit).toList();
+    final onBoard = boardCards.where((c) => c.suit == suit).toList();
+    if (inHand.length + onBoard.length != 4) continue;
+    final boardRanks = {for (final c in onBoard) c.rank};
+    var nut = 14;
+    while (boardRanks.contains(nut)) {
+      nut--;
+    }
+    if (inHand.any((c) => c.rank == nut)) return true;
+  }
+  return false;
 }
 
 /// Ten or higher (T, J, Q, K, A).
