@@ -686,3 +686,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip `85724074` (#2044 LPT-349 warm-up teachSpec + #2043 LPT-656 densify learnings): `scan_content_gaps --counts` pressHints **151** / deal-variants **92** (flat) / teachSpec **55→51** / explain-teachSpec **24→23** / nice-ladder **54→55** / unguided-softpulse-map **24**; densifyHelperArms **82**. Rebuilt catalog Nice! **LPT-624** (appended `act-07-11-01-explain` CHECKLIST→DEFAULTS→ONE HAND). Done-ack LPT-349 (all five `act-07-11-01-*` PRESENT `deal.mode` `none` + cues). Scaffolded/unguided pressHints stay on **LPT-626**. Meet Nit still LPT-624/626; LPT-216 Done — no clones. Soft timing densify ABSENT; next High Final LPT-352 / Soft timing LPT-242 / Map turn LPT-312 / Compose river LPT-315.
 
 - Tip `7abac821` (#2045 LPT-657 Map turn densify): densifyHelperArms **82→86** / fallthrough **118→114** (`act-07-02-01-guided` / `scaffolded` / `unguided` / `checkpoint` PRESENT). Rebuilt **LPT-628**. Soft timing still ABSENT. densify ≠ teachSpec (LPT-312 Map turn teachSpec still open). Same tip window as LPT-349 Nice! **54→55** rebuild on LPT-624.
+
+## Fold 2026-10-13 tip 2c24d461 (#2048 LPT-352 Final teachSpec)
+
+- Tip advanced `04de5ac5`/#2047 learnings → `2c24d461` via #2048 LPT-352 Final five-type teachSpec (all seven `act-07-12-01-*`).
+- `scan_content_gaps --counts`: pressHints **151**, deal-variants **92**, teachSpec **51→44**, explain-teachSpec **23**, nice-ladder **55** (flat — no SoftPulse explain step on final), unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **86**.
+- Done-ack **LPT-352** (was In Progress; catalog already matched). Tip-commented LPT-624/625/626/627/628/635 (no checklist rebuild — densify already **86**/114 on `7abac821`). Soft timing densify still ABSENT.
+- Frontier remaining High teachSpecs: Soft timing LPT-242 / Map turn LPT-312 / Compose river LPT-315. densify ≠ teachSpec for LPT-312 (LPT-657 arms PRESENT). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24).
+
