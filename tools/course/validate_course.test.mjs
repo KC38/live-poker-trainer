@@ -154,6 +154,11 @@ function namesType(text, label) {
   return new RegExp(`(?<![A-Za-z])${label}(?:s|'s)?(?![A-Za-z])`).test(text);
 }
 
+function mentionsPlayerTypeToken(blob, token) {
+  // Word-boundary so SoftPulse labels like ADVANTAGE do not false-positive as TAG (LPT-666).
+  return new RegExp(`\\b${token}\\b`).test(blob);
+}
+
 test("wave three sections expose advanced units, TAG/LAG, and capstones", () => {
   const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
   const {errors, clientCatalog} = validateAndGenerate(course);
