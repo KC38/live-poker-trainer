@@ -22125,7 +22125,29 @@
                   ],
                   "playerTypeRefs": [
                     "tag"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CREDIT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "TIGHTER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "NO LIGHT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-03-guided",
@@ -22170,7 +22192,30 @@
                   ],
                   "playerTypeRefs": [
                     "tag"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Qc",
+                          "9s",
+                          "3h"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-03-scaffolded",
@@ -22215,7 +22260,25 @@
                   ],
                   "playerTypeRefs": [
                     "tag"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "9d"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-k9",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-03-unguided",
@@ -22259,7 +22322,32 @@
                   ],
                   "playerTypeRefs": [
                     "tag"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "Td"
+                        ],
+                        "board": [
+                          "Qc",
+                          "Ts",
+                          "3h",
+                          "2d",
+                          "7c"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "check",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-11-03-checkpoint",
@@ -22301,7 +22389,19 @@
                   "playerTypeRefs": [
                     "tag"
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cite",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }

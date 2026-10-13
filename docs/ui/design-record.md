@@ -573,7 +573,8 @@ check (LPT-219), Build multiway ranges (LPT-222), Play 150–300bb stacks
 betting (LPT-262), Use overbets and geometric pressure (LPT-265), Use
 blockers without solver theater (LPT-268), Navigate 3-bet and 4-bet pots by
 depth (LPT-280), Make difficult folds; review coolers fairly (LPT-283),
-Observe selective aggression (LPT-286), Meet the TAG (LPT-289).
+Observe selective aggression (LPT-286), Meet the TAG (LPT-289), Adjust
+versus TAG (LPT-292).
 
 Lesson steps teach with the cards and coach on screen, not with static
 demo text. `/ui-design-agent` checks these on every lesson walk:
@@ -1073,6 +1074,11 @@ Meet the TAG `teachSpec` (LPT-289): explain SoftPulse advances TIGHT → AGGRO
 → MODEL; guided `none` → `tag`; scaffolded `none` → `diff`; unguided `none`
 → `tag2`; checkpoint `none` → `model`; assessment steps use cue kind `none`
 (no pressHints).
+
+Adjust versus TAG `teachSpec` (LPT-292): explain SoftPulse advances CREDIT →
+TIGHTER → NO LIGHT; guided fixed Jh9d/Qc9s3h → `fold`; scaffolded fixed Kh9d
+→ `fold-k9`; unguided fixed JhTd/QcTs3h2d7c → `check`; checkpoint `none` →
+`cite`; assessment steps use cue kind `none` (no pressHints).
 
 Bootstrap / start-error coach copy is `kLessonBootstrapSpeech` /
 `lessonStartErrorSpeech` (`lesson_screen_layout.dart`), passed from
