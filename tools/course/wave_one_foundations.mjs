@@ -977,7 +977,18 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-03-01-explain-passive", 1,
                 "Three quiet buttons — each has a different job.",
-                {objectives: ["Fold to give up the hand"]}),
+                {
+                  objectives: ["Fold to give up the hand"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "FOLD", kind: "soft_pulse"},
+                      {press: 2, target: "CHECK", kind: "soft_pulse"},
+                      {press: 3, target: "CALL", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-01-03-01-guided-fold", order: 2, stage: "guided",
                 prompt: "Worst hand vs a raise — pick how you leave.",
@@ -1081,7 +1092,18 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-03-02-explain-aggro", 1,
                 "Three chip-pushing buttons — each has a different job.",
-                {objectives: ["Bet when the pot is unchecked"]}),
+                {
+                  objectives: ["Bet when the pot is unchecked"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "BET", kind: "soft_pulse"},
+                      {press: 2, target: "RAISE", kind: "soft_pulse"},
+                      {press: 3, target: "ALL-IN", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-01-03-02-guided-bet", order: 2, stage: "guided",
                 prompt: "Checked to you on the flop with top pair. Tap a value size.",
@@ -1193,6 +1215,16 @@ export function buildSectionOne() {
                 {
                   objectives: ["Name preflop, flop, turn, and river"],
                   okFeedback: "Preflop → flop → turn → river.",
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "PREFLOP", kind: "soft_pulse"},
+                      {press: 2, target: "FLOP", kind: "soft_pulse"},
+                      {press: 3, target: "TURN", kind: "soft_pulse"},
+                      {press: 4, target: "RIVER", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               sequenceAct({
                 id: "act-01-04-01-guided-streets", order: 2, stage: "guided",
@@ -1301,7 +1333,18 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-05-01-explain-win", 1,
                 "Folds win pots early. Showdown compares hands. Short stacks make side pots.",
-                {objectives: ["Win the pot when everyone else folds"]}),
+                {
+                  objectives: ["Win the pot when everyone else folds"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "FOLD WIN", kind: "soft_pulse"},
+                      {press: 2, target: "SHOWDOWN", kind: "soft_pulse"},
+                      {press: 3, target: "SIDE POT", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-01-05-01-guided-fold-win", order: 2, stage: "guided",
                 prompt: "You bet. Everyone folds. Tap how you take the pot.",
@@ -1416,7 +1459,18 @@ export function buildSectionOne() {
             activities: [
               dialogue("act-01-06-01-explain-run", 1,
                 "One short hand. Blinds post, you act, we reach an ending.",
-                {objectives: ["Follow a hand from blinds to a terminal state"]}),
+                {
+                  objectives: ["Follow a hand from blinds to a terminal state"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "BLINDS", kind: "soft_pulse"},
+                      {press: 2, target: "YOU ACT", kind: "soft_pulse"},
+                      {press: 3, target: "ENDING", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               multiStepAct({
                 id: "act-01-06-01-guided-steps", order: 2, stage: "guided",
                 a11y: "Button with a suited ace — open to 6, then take the pot when blinds fold.",
@@ -1784,7 +1838,11 @@ export function buildSectionTwo() {
             activities: [
               dialogue("act-02-01-01-explain-pos", 1,
                 "Later seats see more. That is the whole edge.",
-                {objectives: ["Prefer later seats when choosing hands"]}),
+                {
+                  objectives: ["Prefer later seats when choosing hands"],
+                  // LPT-635
+                  teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "D", kind: "soft_pulse"}]},
+                }),
               selectAct({
                 id: "act-02-01-01-guided-btn", order: 2, stage: "guided",
                 prompt: "Tap who acts last postflop.",
@@ -1870,6 +1928,16 @@ export function buildSectionTwo() {
                 {
                   objectives: ["Order preflop action after the blinds"],
                   okFeedback: "UTG → HJ → CO → BTN.",
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "UTG", kind: "soft_pulse"},
+                      {press: 2, target: "HJ", kind: "soft_pulse"},
+                      {press: 3, target: "CO", kind: "soft_pulse"},
+                      {press: 4, target: "BTN", kind: "soft_pulse"},
+                    ],
+                  },
                 }),
               sequenceAct({
                 id: "act-02-01-02-guided-pre", order: 2, stage: "guided",
@@ -1970,7 +2038,19 @@ export function buildSectionTwo() {
             activities: [
               dialogue("act-02-02-01-explain-families", 1,
                 "Pairs, broadways, suited aces, connectors — trash is everything else.",
-                {objectives: ["Recognize pocket pairs"]}),
+                {
+                  objectives: ["Recognize pocket pairs"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "Pairs", kind: "soft_pulse"},
+                      {press: 2, target: "Broadways", kind: "soft_pulse"},
+                      {press: 3, target: "Suited aces", kind: "soft_pulse"},
+                      {press: 4, target: "Connectors", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               // Teach-by-doing: see holes on felt → tap the family name
               // (same direction as the S2 jump family check).
               selectAct({
@@ -2077,7 +2157,18 @@ export function buildSectionTwo() {
             activities: [
               dialogue("act-02-03-01-explain-open", 1,
                 "Who opens — and how wide. Position shapes the first action.",
-                {objectives: ["Fold trash from early position"]}),
+                {
+                  objectives: ["Fold trash from early position"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "EARLY", kind: "soft_pulse"},
+                      {press: 2, target: "BUTTON", kind: "soft_pulse"},
+                      {press: 3, target: "LIVE 3x", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-02-03-01-guided-utg", order: 2, stage: "guided",
                 prompt: "You are UTG with trash offsuit at 1/2. What do you do?",
@@ -2180,7 +2271,18 @@ export function buildSectionTwo() {
             activities: [
               dialogue("act-02-04-01-explain-vs", 1,
                 "Weak hands fold. Playable hands call. Strong hands make it more.",
-                {objectives: ["Fold weak hands to an open"]}),
+                {
+                  objectives: ["Fold weak hands to an open"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "FOLD", kind: "soft_pulse"},
+                      {press: 2, target: "CALL", kind: "soft_pulse"},
+                      {press: 3, target: "3-BET", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-02-04-01-guided-fold", order: 2, stage: "guided",
                 prompt: "UTG opens to 6. You have junk offsuit in the big blind. Action?",
@@ -2283,7 +2385,18 @@ export function buildSectionTwo() {
             activities: [
               dialogue("act-02-05-01-explain-bb", 1,
                 "Count stacks in big blinds. The shorter stack sets the ceiling.",
-                {objectives: ["Convert chips to big blinds"]}),
+                {
+                  objectives: ["Convert chips to big blinds"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CHIPS→BB", kind: "soft_pulse"},
+                      {press: 2, target: "SHORTER", kind: "soft_pulse"},
+                      {press: 3, target: "DEPTH", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-02-05-01-guided-convert", order: 2, stage: "guided",
                 prompt: "Blinds 1/2. You have 200 chips. How many big blinds?",
@@ -2478,7 +2591,18 @@ export function buildSectionTwo() {
             activities: [
               dialogue("act-02-07-01-explain-full", 1,
                 "Nine seats. Same rules. Position still runs the show.",
-                {objectives: ["Make a baseline open on a full ring"]}),
+                {
+                  objectives: ["Make a baseline open on a full ring"],
+                  // LPT-635
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "NINE", kind: "soft_pulse"},
+                      {press: 2, target: "SAME", kind: "soft_pulse"},
+                      {press: 3, target: "POSITION", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-02-07-01-guided-ep", order: 2, stage: "guided",
                 prompt: "Nine-handed. UTG with suited broadway. Action?",
