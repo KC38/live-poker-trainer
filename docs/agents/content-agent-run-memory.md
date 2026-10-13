@@ -563,3 +563,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Rebuilt catalog densify-tap **LPT-628** helper **57→61** / fallthrough **143→139**; tip-commented LPT-624/625/626/627/635 + LPT-648 ack + frontier LPT-242/312/315/341. JSON gaps flat — parents tip-comment only aside from LPT-628.
 - Distilled Never: nested f-string wiki monospace (`f"{{{{{{sha}}}}}}"` → literal `{{{sha}}}`); use `'{{' + sha + '}}'`. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**. `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR densify Soft-timing on LPT-628 OR Capstone LPT-341 OR catalog LPT-626(151)/627(89)/635/624(51)/625(24).
+
+## Fold 2026-10-13 tip 8c473b7a (#2014 LPT-341 Capstone multiway + #2012 LPT-649 densify)
+
+- Tip advanced `e5569e82` (#2011 learnings / #2010 LPT-648) → `8c473b7a` via #2012 LPT-649 Observe wide densify then #2014 LPT-341 Capstone multiway deep teachSpec.
+- `scan_content_gaps --counts` on tip `8c473b7a`: pressHints **151**, deal-variants **90**, teachSpec **57**, explain-teachSpec **26**, nice-ladder **52**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **65** (was **61**).
+- Verified Capstone multiway on tip `course.json`: `act-07-10-03-explain` teachSpec PRESENT (`deal.mode` `none` + SoftPulse NUTS→DEEP→NO-BLUFF; no `explainGrading`); `act-07-10-03-hand` PRESENT (`deal.mode` `fixed` Ah/Qh + Jh/8h/2c/3d/9c + SoftPulse call/bet/check-r; no `deal.variants`; no `pressHints`). Done-ack **LPT-341** (already Done on tip).
+- Rebuilt catalog parents **LPT-624** Nice! **51→52** (`act-07-10-03-explain`) and **LPT-627** deal-variants **89→90** (`act-07-10-03-hand`) from `--gap … --markdown`; rebuilt **LPT-628** densify helper **61→65** / fallthrough **139→135** (Observe wide `act-06-12-01-*` PRESENT; Soft timing still ABSENT Priority). Tip-commented LPT-626/625/635 + Done-ack LPT-341/649 + frontier LPT-242/312/315/345 + unchecked S6/S7/capstone/honesty Highs + LPT-348.
+- Soft timing densify still ABSENT — stay on **LPT-628**. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. Next Capstone High **LPT-345** limped (`act-07-10-04-explain` + `hand` still MISSING). `CATALOG_PARENTS.teachSpec` stays null. Pending home file empty. `content,grokbot,lesson`.
+- next: re-verify LPT-242 after GrokBot OR LPT-312/315 OR Capstone LPT-345 OR densify Soft-timing on LPT-628 OR catalog LPT-626(151)/627(90)/635/624(52)/625(24).
