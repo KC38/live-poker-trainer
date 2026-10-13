@@ -1172,3 +1172,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR next oldest `lesson-06-01-01-range-nut-advantage`.
 - act-05-06-01-*: structural clean on tip — curriculum split only via LPT-239.
 
+## Fold 2026-10-13dn (4c59e118 range-nut — monitor rescue of #2154)
+
+- Tip `4c59e118` (#2156) after product tip `cacc5987` (#2153): **LPT-667** Done — one-per-press remaining **0**; catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Do not reopen LPT-667 or empty-array parent LPT-626. Capstone `NO_HINT` stays **LPT-348** needs-human.
+- Discovery (originally on `6d9cbf37` / conflicted #2154): oldest-unfresh `lesson-06-01-01-range-nut-advantage` — explain has `explainGrading` (ADVANTAGE cues); guided SoftPulse; scaffolded/unguided one-per-press; unguided fixed `Ah`/`Kd`·`Kc`/`7s`/`2d` + variants; checkpoint hintless. Structural clean. Curriculum multi-concept **LPT-254** needs-human (tip-commented).
+- Open Medium content: **LPT-348** only (+ Low curriculum). High content open: **0**.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-02-01-equity-realization` / Low curriculum.
+- act-06-01-01-*: structural clean on tip — curriculum split only via LPT-254; do not re-file ADVANTAGE/TAG course-contract (LPT-666 Done).
+
