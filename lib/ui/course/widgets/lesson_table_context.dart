@@ -2169,10 +2169,12 @@ class LessonTableScene {
 }
 
 /// Table scenes whose teaching depends on exact draw outs (gutshot vs
-/// open-ender), so remaps must keep the teach fingerprint (LPT-389).
+/// open-ender, nut vs non-nut flush draw), so remaps must keep the teach
+/// fingerprint (LPT-389, LPT-408).
 const _drawOutsLessonTableScenes = {
   'act-03-08-02-jump-leak',
   'act-07-02-01-scaffolded',
+  'act-03-02-01-scaffolded',
 };
 
 /// Authored scene with hand-class isomorphic cards for this attempt.
