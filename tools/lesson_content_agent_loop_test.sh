@@ -76,6 +76,8 @@ grep -q "PRIMARY: $fake_primary" <<<"$prompt_out" \
 
 grep -q 'print_content_run_log_preview' "$LOOP" \
   || fail "loop must define print_content_run_log_preview"
+grep -q 'print_content_run_log_preview "\$run_log"' "$LOOP" \
+  || fail "one_run exit summary must use scrubbed preview, not raw tail"
 # Finished SDK logs must not dump raw NDJSON crumbs on status.
 preview_log="$tmp/sdk-polluted.log"
 cat >"$preview_log" <<'LOG'

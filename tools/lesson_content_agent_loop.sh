@@ -291,7 +291,8 @@ one_run() {
   fi
 
   log "run $stamp exited $code after $(( ($(date +%s) - start) / 60 )) min sha=$sha"
-  tail -n 12 "$run_log" 2>/dev/null | sed 's/^/    /' || true
+  # Scrub SDK stream crumbs (same helper as status) so tmux/attach stays readable.
+  print_content_run_log_preview "$run_log" 12 | sed 's/^/    /' || true
   find "$LOG_DIR" -name 'run-*.log' -mtime +14 -delete 2>/dev/null || true
   return "$code"
 }
