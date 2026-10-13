@@ -1067,7 +1067,6 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: LPT-348 Capstone pressHints needs-human OR discovery walk (honesty/curriculum one-offs scanner cannot see).
 - act-04-07-02-unguided: pressHints PRESENT (#2135) — do not re-file pressHints clones; Capstone LPT-348 stays separate.
 
-
 ## 2026-10-13de — tip 43a1be2d discovery streets + LPT-667 one-per-press
 
 - Tip-stable `43a1be2d` (#2138). `scan_content_gaps.mjs --counts` still all **0** (pressHints/deal-variants/teachSpec/explain/nice/map/densify-tap); softpulseMapArms **92** / densifyHelperArms **229**. Open catalog JSON parents already **HAS** tip SHA — no rebuild.
