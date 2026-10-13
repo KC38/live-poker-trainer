@@ -764,6 +764,27 @@ bool lessonFrameHintsDisabled(
   return noHintIds.contains(activity.id);
 }
 
+/// Whether the Hint tool may accept a tap for [activity] (content gate).
+///
+/// Combines [lessonFrameHintsDisabled] with authored hint media or
+/// [lessonFrameHintFallback]. SoftPulse-already-on gating stays in
+/// [LessonActivityController.canRequestHint] (LPT-643). Scaffolded steps
+/// without `assessmentRole` keep this true so Hint can unlock SoftPulse.
+bool lessonFrameCanHint(
+  CourseActivity activity, {
+  bool isReview = false,
+  int bindGeneration = 0,
+}) {
+  if (lessonFrameHintsDisabled(activity, isReview: isReview)) return false;
+  if (activity.hintMedia.isNotEmpty) return true;
+  return lessonFrameHintFallback(
+        activity,
+        isReview: isReview,
+        bindGeneration: bindGeneration,
+      ) !=
+      null;
+}
+
 /// Guided steps that replay an interactive explain SoftPulse task.
 ///
 /// The first node already taught the same tap concept with SoftPulse on.

@@ -1012,9 +1012,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
 
   bool _frameCanHint(CourseActivity activity) {
     final isReview = _activityController?.isReview ?? widget.isReview;
-    if (lessonFrameHintsDisabled(activity, isReview: isReview)) return false;
-    if (activity.hintMedia.isNotEmpty) return true;
-    return lessonFrameHintFallback(activity, isReview: isReview) != null;
+    final generation = _activityController?.bindGeneration ?? 0;
+    return lessonFrameCanHint(
+      activity,
+      isReview: isReview,
+      bindGeneration: generation,
+    );
   }
 
   void _closeLesson() {
