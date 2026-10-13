@@ -670,3 +670,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prior coverage for this SHA listed many High tip-comments that were missing on Jira — verified with `jira.py get` for `7d946ea7`, then tip-commented LPT-625/627/635 + LPT-242/312/315/352/301 + honesty LPT-401/402/408/409/411/414/417. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
 - Durable rule: coverage `ticket` lists can over-claim tip-comments — confirm tip SHA on each claimed issue before skip.
 - next: re-verify LPT-242 after GrokBot OR densify Soft-timing on LPT-628 OR LPT-312/315/349/352 OR catalog LPT-626(151)/627(92)/635/624(54)/625(24).
+
+## Fold 2026-10-13 tip c03044af → b9398420 (coverage over-claim + #2040 ops)
+
+- Started on tip-stable `c03044af` (#2039 Soft timing tip-comment-verify learnings). Pending empty (zero `- ` bullets).
+- `scan_content_gaps --counts` flat: pressHints **151**, deal-variants **92**, teachSpec **55**, explain-teachSpec **24**, nice-ladder **54**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **78**. Catalog parents already rebuilt on `0092c2ba` — no checklist rebuild. Soft timing `act-05-07-01-*` still ABSENT from `selectIdentifyDensifiedCoachLine`.
+- Re-verified frontier teachSpecs still all MISSING: Soft timing LPT-242 (`act-05-07-01-*`), Map turn LPT-312 (`act-07-02-01-*`), Compose river LPT-315 (`act-07-03-01-*`), Adjust LAG LPT-301 (`act-06-12-03-*`), warm-up LPT-349 (`act-07-11-01-*`), Final LPT-352 (`act-07-12-01-*`), plus S6 Highs LPT-258 (`act-06-03-01-*`) / LPT-295 / LPT-252 / LPT-255 / LPT-271 / LPT-275 / LPT-334.
+- Honesty re-read (no sim): **LPT-414** Air Nice! still "Gutshot-ish trash…" on `act-03-02-01-unguided`; **LPT-417** depth chrome still sans `stackLabel` on 250bb/200bb/180bb spots; **LPT-401** guided still `Flop · Weak TPTK · Heat`.
+- Prior coverage for `c03044af` listed many High tip-comments missing on Jira — only LPT-242 + catalog parents had the SHA. Tip-commented 20 unchecked Highs the same tick. Mid-run tip → `b9398420` (#2040 ui-agent soft-stop-hold, non-content): tip-commented parents + LPT-242 on the new SHA without inventing count deltas.
+- Durable rule reinforced: coverage `ticket` lists can over-claim — confirm tip SHA via `jira.py get` before skip (also tip `7d946ea7`). Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/349/352 OR catalog LPT-626(151)/627(92)/635/624(54)/625(24).
