@@ -12,7 +12,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 - Audit scripts must match catalog renderer ids as snake_case (`select_identify`, not `selectIdentify`); camelCase filters silently report zero teachSpec gaps.
 - Seat/puck lessons (Button and blinds) author `deal.mode` `none` + SoftPulse puck `cues` (`D`/`SB`/`BB`); do not file handFamily/suitFamily gaps for non-card-class steps. Same-concept quiet guided ids still need authored Hint (`pressHints` or existing coachMedia) because SoftPulse waits for Hint.
-- Hand-ranks / `compare_rank` showdown steps deal multi-seat hand-class triples with physical seat shuffle (`dealShowdownOrderCards`); author teachSpec via class variants / role map — never treat static catalog You/Sam/Jo a11y or Dart `showdownOrderHintSpeech` as a passing authored `pressHints` under the recommended bar.
+- Hand-ranks / `compare_rank` showdown steps (`act-01-02-01-*`, lesson `lesson-01-02-01-hand-ranks`) deal multi-seat hand-class triples with physical seat shuffle (`dealShowdownOrderCards`); author teachSpec via class variants / role map — never treat static catalog You/Sam/Jo a11y or Dart `showdownOrderHintSpeech` as a passing authored `pressHints` under the recommended bar. Tip `43a1be2d` discovery: explain has activity-level `explainGrading` + SoftPulse cues; guided/scaffolded/unguided/checkpoint all author `random_in_class` + handFamily + variants; scaffolded/unguided one-per-press incomplete → **LPT-667** (not a structural `clean`); checkpoint cue kind `none` / no pressHints — multi-concept split stays on needs-human **LPT-90** (not a new clone).
 - Prefer `content/course/v2/course.json` over `wave_*.mjs` when counting items/sequence; wave helpers can lag (e.g. streets `scaffolded-order` CO). File wave-sync in the teachSpec ticket; never treat wave-only as catalog truth.
 - Pot-math / open-size steps (`act-01-05-01-unguided-pot`) author `deal.mode` `none` + `deal.variants` for open-to sizes (`kLessonOpenToAmounts`); do not file handFamily/suitFamily gaps for chip-total outcome tiles.
 - Synthesis / complete-hand lessons (e.g. Play a full toy hand) with process objectives (follow hand, act, finish) are not multi-concept title splits — skip `needs-human` lesson-split when the unit already is the integration container; still file teachSpec/pressHints gaps.
@@ -1094,4 +1094,32 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Structural catalog clean. Multi-concept curriculum still **LPT-114** needs-human (tip-commented). Tip-commented **LPT-667** (6-row checklist unchanged) + **LPT-348**.
 - next: **LPT-667** one-per-press implement OR **LPT-348** Capstone needs-human OR Low curriculum (e.g. acting-order **LPT-117** / next oldest discovery).
 - act-02-01-01-*: structural teachSpec/pressHints/one-per-press clean on tip — curriculum split only via LPT-114.
+
+## Fold 2026-10-13dd (43a1be2d discovery hand-ranks)
+
+- Tip-stable `43a1be2d` (#2138 Prefer LPT-348 Medium focus after #2135/#2137). `scan_content_gaps --counts` still all catalog JSON gaps **0**; softpulseMapArms **92** / densifyHelperArms **229**. Catalog parents LPT-624/625/626/627/628/635 + LPT-348 + Done Mediums already **HAS** tip SHA — no rebuild/re-spam.
+- Discovery walk oldest coverage surface `lesson:lesson-01-02-01-hand-ranks`: teachSpec/cues/explainGrading/`random_in_class` families OK; scaffolded/unguided one-per-press incomplete (later folded into **LPT-667**). Tip-commented needs-human curriculum split **LPT-90**. Capstone **LPT-348** still needs-human. Zero open High / IP content catalog tickets. Home pending empty. `content,grokbot,lesson`.
+- next: **LPT-667** one-per-press OR **LPT-348** Capstone needs-human OR next-oldest discovery.
+- act-01-02-01-*: do not re-file teachSpec/nice-ladder clones; curriculum split stays **LPT-90**; one-per-press on **LPT-667**.
+
+## Fold 2026-10-13dd (43a1be2d Capstone LPT-348 bundle)
+
+- Tip-stable `43a1be2d` (#2138 Prefer after #2137/#2135): catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Same-hand teachSpec Done. Parents already **HAS** tip — no catalog rebuild/re-spam.
+- Discovery: five Capstone scaffolded hands still empty pressHints inside `NO_HINT_ACTIVITY_IDS` (`act-07-10-01-hand`…`act-07-10-05-hand`); only 4-bet was listed on **LPT-348**. Expanded **LPT-348** summary+body to needs-human Capstone catalog (all five); tip-commented LPT-348 + Done **LPT-626** (do not reopen). Keep `needs-human` until policy (author pressHints vs assessment/no-Hint contract).
+- Zero open High / IP content catalog tickets. Open Medium content: **LPT-667** + **LPT-348** (+ Low curriculum splits). `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
+- next: LPT-667 one-per-press OR LPT-348 human policy OR Low curriculum / honesty discovery.
+- act-07-10-0*-hand: Capstone NO_HINT bundle on LPT-348 — do not file per-Capstone pressHints clones.
+
+## Fold 2026-10-13dg (43a1be2d discovery live-habits)
+
+- Tip-stable `43a1be2d` (#2138). `scan_content_gaps --counts` all structural gaps **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Open Medium: one-per-press **LPT-667** (6 rows) + Capstone needs-human **LPT-348** (five hands).
+- Discovery oldest-unfresh `lesson-02-06-01-live-habits`: teachSpec present; `deal.mode` `none` habit/identify tiles; scaffolded verbal/protect one-per-press complete; explain has `explainGrading`; checkpoint hintless. Structural clean. Curriculum multi-concept still **LPT-133** needs-human (tip-commented).
+- Tip-commented **LPT-667** / **LPT-348** / **LPT-133** / Done **LPT-626** / **LPT-216**. One-per-press checklist unchanged (6). Do not reopen **LPT-626**.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR Low curriculum / next oldest discovery.
+- act-02-06-01-*: structural clean on tip — curriculum split only via LPT-133.
+
+## Fold 2026-10-13dh (monitor: fold superseded draft Prefer + live-habits)
+
+- Tip `65d01ce6` (#2142) already on main with LPT-667 Never/Prefer + streets/position-labels folds. Monitor closed conflicted drafts #2139/#2140/#2144 after folding their unique Prefer/run-memory into tip (this section + learnings Prefer bullets).
+- Catalog `--counts` still all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Open Medium: **LPT-667** + **LPT-348**. High content open: **0**.
 
