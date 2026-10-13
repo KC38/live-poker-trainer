@@ -1027,3 +1027,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Re-verified still open: **LPT-370** cues null (IP); **LPT-588** Scene flop-only (remote `fix/LPT-588-spr-checkpoint-scene-turn` not on tip); **LPT-348** Capstone pressHints. Meet Nit Nice!/pressHints still LPT-624/626. Zero open High content tickets. `CATALOG_PARENTS.teachSpec` stays null. Home pending empty. `content,grokbot,lesson`.
 - next: Nice! LPT-624 OR pressHints LPT-626 OR Medium LPT-370 (IP)/588 OR catalog LPT-627(99)/635(12)/625(24) OR LPT-348 needs-human.
 
+## Fold 2026-10-13cg (tip db98900e LPT-370 + LPT-588 Done-ack)
+
+- Tip advanced `cf95eea2` → `d61f9342` (#2122 LPT-370) → `db98900e` (#2124 LPT-588). `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **99**, teachSpec **0**, explain-teachSpec **12**, nice-ladder **66**, unguided-softpulse-map **24**, densify-tap **0**, `densifyHelperArms` **229**. Catalog parents tip-comment only (no rebuild).
+- Done-ack **LPT-370**: `act-01-01-02-scaffolded-ranks` cues rank-2 → rank-T → rank-A PRESENT. Done-ack **LPT-588**: Scene board for `act-04-05-01-checkpoint` now includes turn **9h** matching teachSpec/ActionSpot.
+- Meet Nit: Nice! **LPT-624** / pressHints **LPT-626** — no clones. Tip-commented parents+Done tickets on `db98900e`. LPT-216 Done. Zero open High content tickets. `content,grokbot,lesson`.
+- next: Nice! LPT-624 OR pressHints LPT-626 OR catalog LPT-627(99)/635(12)/625(24) OR LPT-348 needs-human.
