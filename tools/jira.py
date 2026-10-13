@@ -17,6 +17,7 @@ Commands:
 
     check                           confirm read and write access to LPT
     search JQL [--max N]            one line per issue
+    ui-queue [--max N]              open ui-agent queue (local filter; no labels!=)
     get KEY                         summary, fields, description, comments, links
     create --type T --summary S --body-file F [--priority P] [--labels a,b]
            [--attach FILE ...]      prints the new key
@@ -569,6 +570,28 @@ def check() -> str:
     return key
 
 
+def ui_queue(limit: int = 50) -> List[Json]:
+    """Open Mac-mini queue without Jira ``labels !=`` (can hang 10+ min).
+
+    Fetches ``labels = ui-agent AND statusCategory != Done`` (already ordered),
+    then drops ``needs-human`` / ``grokbot`` locally.
+    """
+    raw = search(
+        f"project = {PROJECT} AND labels = ui-agent AND statusCategory != Done "
+        "ORDER BY priority DESC, created ASC",
+        limit=max(limit * 3, 50),
+    )
+    kept: List[Json] = []
+    for issue in raw:
+        labels = {lab.lower() for lab in (issue.get("fields") or {}).get("labels") or []}
+        if "needs-human" in labels or "grokbot" in labels:
+            continue
+        kept.append(issue)
+        if len(kept) >= limit:
+            break
+    return kept
+
+
 # CLI ------------------------------------------------------------------------
 
 def _read_body(path: Optional[str]) -> Optional[str]:
@@ -590,6 +613,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("search", help="search with JQL")
     p.add_argument("jql")
+    p.add_argument("--max", type=int, default=50)
+
+    p = sub.add_parser(
+        "ui-queue",
+        help="open ui-agent queue (filters needs-human/grokbot locally; avoid labels!=)",
+    )
     p.add_argument("--max", type=int, default=50)
 
     p = sub.add_parser("get", help="show one issue")
@@ -655,6 +684,9 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(f"jira: ok (read and edit {check()})")
         elif args.cmd == "search":
             for issue in search(args.jql, args.max):
+                print(_issue_line(issue))
+        elif args.cmd == "ui-queue":
+            for issue in ui_queue(args.max):
                 print(_issue_line(issue))
         elif args.cmd == "get":
             issue = get(args.key)

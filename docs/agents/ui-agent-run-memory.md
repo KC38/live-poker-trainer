@@ -5,4 +5,4 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 
 ## Fold 2026-10-12
 
-- Prefer a simpler open-queue JQL (`project = LPT AND labels = ui-agent AND statusCategory != Done`) then filter out `needs-human` / `grokbot` locally — Jira `labels != X` searches can hang for 10+ minutes with no stdout (2026-10-13).
+- Open queue: `python3 tools/jira.py ui-queue` (local filter). Jira `labels != X` searches can hang for 10+ minutes with no stdout (2026-10-13).

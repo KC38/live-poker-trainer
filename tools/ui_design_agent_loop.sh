@@ -202,7 +202,7 @@ prompt() {
   fi
   # Lead with READY facts: agents otherwise spend the first ~60s re-grepping
   # the Dart VM / reconciling the lock even though preflight already did that.
-  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Launch worktree builds with tools/flutter_run_fast.sh (cached Runner.app, ~20 s for Dart-only) and hot-restart with tools/flutter_hot_restart.sh — both block; never bare AwaitShell/sleep. Long flutter test/analyze: tools/tee_exit.sh in test-LPT-*/analyze-LPT-* tmux, then tools/wait_done.sh on the sibling .done. Jump to later lessons / heart states with tools/agent_seed.py and read screens with agent_tap.py tree; after openlesson use agent_tap.py wait-gold before taps; screenshot for judgment and proof only. Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Never claim or fix tickets labeled grokbot (GrokBot / Chrome layout on Linux); queue JQL must include labels != grokbot. Filing only grokbot tickets is not a finished run — keep walking until you have a ui-agent KEY (do not end early so the loop starts another agent). Open PRs with gh pr create (not ManagePullRequest draft); gh pr ready before gh pr merge --squash. Step 10 coverage: python3 tools/ui_agent_coverage.py append … (never hand-write JSONL or strftime %z +0530). Learnings ride the ticket PR (write them before the merge; after it, append to the pending file).${pending} When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
+  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Launch worktree builds with tools/flutter_run_fast.sh (cached Runner.app, ~20 s for Dart-only) and hot-restart with tools/flutter_hot_restart.sh — both block; never bare AwaitShell/sleep. Long flutter test/analyze: tools/tee_exit.sh in test-LPT-*/analyze-LPT-* tmux, then tools/wait_done.sh on the sibling .done. Jump to later lessons / heart states with tools/agent_seed.py and read screens with agent_tap.py tree; after openlesson use agent_tap.py wait-gold before taps; screenshot for judgment and proof only. Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Never claim or fix tickets labeled grokbot (GrokBot / Chrome layout on Linux); pick the open queue with python3 tools/jira.py ui-queue (never Jira labels!= — it can hang). Filing only grokbot tickets is not a finished run — keep walking until you have a ui-agent KEY (do not end early so the loop starts another agent). Open PRs with gh pr create (not ManagePullRequest draft); gh pr ready before gh pr merge --squash. Step 10 coverage: python3 tools/ui_agent_coverage.py append … (never hand-write JSONL or strftime %z +0530). Learnings ride the ticket PR (write them before the merge; after it, append to the pending file).${pending} When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
 }
 
 # Long-lived run-loop bash keeps function bodies from process start. Re-eval
@@ -2210,22 +2210,37 @@ schedule_ensure_after_soft_stop() {
   mkdir -p "$LOG_DIR"
   local ensure_log="$LOG_DIR/soft-stop-ensure.log"
   local delay="${UI_AGENT_SOFT_STOP_ENSURE_SLEEP:-2}"
+  local worker="$LOG_DIR/soft-stop-ensure-worker.sh"
   {
     echo "$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: scheduled (sleep ${delay}s then ensure)"
   } >>"$ensure_log"
-  # nohup + disown: detach from the dying run-loop / tmux pane.
-  nohup bash -c '
-    script="$1"
-    logf="$2"
-    delay="$3"
-    sleep "$delay"
-    echo "$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: waking after soft-stop sleep" >>"$logf"
-    set +e
-    bash "$script" ensure >>"$logf" 2>&1
-    code=$?
-    echo "$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: exit=$code" >>"$logf"
-    exit "$code"
-  ' _ "$SCRIPT" "$ensure_log" "$delay" >/dev/null 2>&1 &
+  # Worker file keeps quoting simple; run it outside the dying ui-agent pane.
+  cat >"$worker" <<EOF
+#!/usr/bin/env bash
+sleep $(printf '%q' "$delay")
+echo "\$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: waking after soft-stop sleep" >>$(printf '%q' "$ensure_log")
+set +e
+bash $(printf '%q' "$SCRIPT") ensure >>$(printf '%q' "$ensure_log") 2>&1
+code=\$?
+echo "\$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: exit=\$code" >>$(printf '%q' "$ensure_log")
+exit "\$code"
+EOF
+  chmod +x "$worker"
+  # Prefer a one-shot on the *default* tmux server. nohup/disown inside the
+  # dying `tmux -L ui-agent` pane still lost the child after soft-stop
+  # (2026-10-13: schedule line only; LaunchAgent recovered minutes later).
+  local sess="ui-soft-ensure-$(date +%Y%m%d-%H%M%S)-$$"
+  if [[ "${UI_AGENT_SOFT_STOP_ENSURE_NO_TMUX:-}" != "1" ]] \
+    && command -v tmux >/dev/null 2>&1 \
+    && tmux new-session -d -s "$sess" \
+      "bash $(printf '%q' "$worker"); tmux kill-session -t $(printf '%q' "$sess") 2>/dev/null || true"; then
+    {
+      echo "$(date "+%Y-%m-%dT%H:%M:%S%z") ensure: detached tmux session $sess"
+    } >>"$ensure_log"
+    return 0
+  fi
+  # Fallback: nohup + disown (unit tests / hosts without tmux).
+  nohup bash "$worker" >/dev/null 2>&1 &
   disown $! 2>/dev/null || true
 }
 

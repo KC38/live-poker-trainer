@@ -66,13 +66,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   screenshots; only the chosen KEY gets make-change → close. Later runs
   pick up the rest from the open queue.
 - Never claim, implement, companion-fold, or close a `grokbot` ticket on
-  this Mac mini. Queue JQL must keep `labels != grokbot`. File
-  browser-validatable layout-only findings as `ui,grokbot,<area>` (no
-  `ui-agent`); SoftPulse / Hint / hearts / randomization / deal timing /
-  iOS-only stay on `ui-agent`. Never end a run (or let the loop spawn a
-  new agent) when this run's filings are only `grokbot` — keep walking
-  until you have a `ui-agent` KEY or every remaining surface is clean for
-  Mac-mini work.
+  this Mac mini. Pick the open queue with `python3 tools/jira.py ui-queue`
+  (never Jira `labels != grokbot` / `labels != needs-human` — those
+  searches can hang 10+ minutes). File browser-validatable layout-only
+  findings as `ui,grokbot,<area>` (no `ui-agent`); SoftPulse / Hint /
+  hearts / randomization / deal timing / iOS-only stay on `ui-agent`.
+  Never end a run (or let the loop spawn a new agent) when this run's
+  filings are only `grokbot` — keep walking until you have a `ui-agent`
+  KEY or every remaining surface is clean for Mac-mini work.
 - Never hand-write coverage JSONL or `strftime(..., '%z')` timestamps
   (`+0530` breaks macOS Python 3.9 health repair). Use
   `python3 tools/ui_agent_coverage.py append …` in step 10.
@@ -86,7 +87,8 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   kill-session a live run-loop when the pid file is stale — recover the
   pid from the tmux session instead. Soft-stop clears STOP on the next
   `start`/`ensure`, runs `prepare_launcher` (SDK `npm ci`) before claiming
-  the mini, and schedules `ensure` via `nohup`/`disown` after the
+  the mini, and schedules `ensure` via a default-server tmux one-shot (not
+  the dying `tmux -L ui-agent` pane; nohup fallback) after the
   soft-stopped loop exits (a plain background `&` died with the tmux
   pane on SIGHUP — 2026-10-13) so the next ticket does not wait on
   LaunchAgent `StartInterval` (use `kill`/`uninstall` to leave the loop

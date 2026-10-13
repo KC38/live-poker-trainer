@@ -781,11 +781,15 @@ UI_AGENT_LOOP_SOURCE_ONLY= bash "$SCRIPT" soft-stop >/dev/null \
 [[ -f "$STOP_FILE" ]] || fail "soft-stop should touch STOP_FILE"
 rm -f "$STOP_FILE"
 unset -f schedule_ensure_after_soft_stop
-# Delayed ensure must outlive the tmux pane that runs `run-loop; exit`.
-grep -q 'nohup bash -c' "$LOOP" \
-  || fail "schedule_ensure_after_soft_stop must nohup ensure (SIGHUP)"
+# Delayed ensure must outlive the dying `tmux -L ui-agent` pane.
+grep -q 'tmux new-session -d' "$LOOP" \
+  || fail "schedule_ensure_after_soft_stop must detach via default tmux"
+grep -q 'soft-stop-ensure-worker.sh' "$LOOP" \
+  || fail "schedule_ensure_after_soft_stop must write a worker script"
+grep -q 'nohup bash' "$LOOP" \
+  || fail "schedule_ensure_after_soft_stop must keep nohup fallback"
 grep -q 'disown' "$LOOP" \
-  || fail "schedule_ensure_after_soft_stop must disown ensure"
+  || fail "schedule_ensure_after_soft_stop must disown ensure fallback"
 grep -q 'ensure: scheduled' "$LOOP" \
   || fail "schedule_ensure_after_soft_stop must log schedule"
 grep -q 'ensure: waking' "$LOOP" \
@@ -810,23 +814,25 @@ SCRIPT="$_fake_ensure"
 LOG_DIR="$tmp/soft-logs"
 mkdir -p "$LOG_DIR"
 UI_AGENT_SOFT_STOP_ENSURE_SLEEP=0
+# Unit-test HOME/tmux isolation: exercise the nohup worker path directly.
+UI_AGENT_SOFT_STOP_ENSURE_NO_TMUX=1
 schedule_ensure_after_soft_stop
 # Wait for background nohup child.
-for _ in 1 2 3 4 5 6 7 8 9 10; do
+for _ in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
   grep -q 'ensure: exit=' "$LOG_DIR/soft-stop-ensure.log" 2>/dev/null && break
   sleep 0.1
 done
 grep -q 'ensure: scheduled' "$LOG_DIR/soft-stop-ensure.log" \
   || fail "soft-stop-ensure.log missing schedule: $(cat "$LOG_DIR/soft-stop-ensure.log" 2>/dev/null)"
 grep -q 'ensure: waking' "$LOG_DIR/soft-stop-ensure.log" \
-  || fail "soft-stop-ensure.log missing wake"
+  || fail "soft-stop-ensure.log missing wake: $(cat "$LOG_DIR/soft-stop-ensure.log" 2>/dev/null)"
 grep -q 'ensure: fake ok' "$LOG_DIR/soft-stop-ensure.log" \
   || fail "soft-stop-ensure.log missing ensure stdout"
 grep -q 'ensure: exit=0' "$LOG_DIR/soft-stop-ensure.log" \
   || fail "soft-stop-ensure.log missing exit=0: $(cat "$LOG_DIR/soft-stop-ensure.log")"
 SCRIPT="$_prev_script"
 LOG_DIR="$_prev_log_dir"
-unset UI_AGENT_SOFT_STOP_ENSURE_SLEEP
+unset UI_AGENT_SOFT_STOP_ENSURE_SLEEP UI_AGENT_SOFT_STOP_ENSURE_NO_TMUX
 UI_AGENT_USAGE_LIMIT_SLEEP=1234
 USAGE_LIMIT_SLEEP=1234
 [[ "$(sleep_usage_limit_seconds "$usage_log")" == 1234 ]] \

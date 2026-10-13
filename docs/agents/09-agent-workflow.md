@@ -47,8 +47,8 @@ Command: `.cursor/commands/ui-design-agent.md`. Loop:
 
 Browser-validatable layout tickets go to **GrokBot** (`grokbot` label) on
 Linux / Chrome — see [10-grokbot.md](10-grokbot.md). The Mac mini agent
-must keep `labels != grokbot` in its unfinished-work JQL and never
-implement those issues.
+must use `python3 tools/jira.py ui-queue` (never Jira `labels !=`) and
+never implement GrokBot-owned issues.
 
 ## Tmp files
 
