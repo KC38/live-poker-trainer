@@ -1123,3 +1123,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip `65d01ce6` (#2142) already on main with LPT-667 Never/Prefer + streets/position-labels folds. Monitor closed conflicted drafts #2139/#2140/#2144 after folding their unique Prefer/run-memory into tip (this section + learnings Prefer bullets).
 - Catalog `--counts` still all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Open Medium: **LPT-667** + **LPT-348**. High content open: **0**.
 
+## Fold 2026-10-13di (65d01ce6 acting-order — folded from conflicted #2146)
+
+- Tip `65d01ce6` (#2142) then tip advanced to `4dbc5b9a` (#2145) before #2146 could merge (CONFLICTING). Catalog structural gaps all **0**.
+- Discovery oldest-unfresh `lesson-02-01-02-acting-order`: explain has `explainGrading`; guided SoftPulse; unguided-wait one-per-press complete; checkpoint hintless; only `act-02-01-02-scaffolded-post` cues 1–2 / pressHints 1 — already on **LPT-667** (no checklist delta). Curriculum multi-concept **LPT-117** needs-human (tip-commented on `65d01ce6`).
+- act-02-01-02-scaffolded-post: keep on LPT-667 — do not file acting-order pressHints clone.
+
+## Fold 2026-10-13di (4dbc5b9a discovery meet-maniac)
+
+- Tip `4dbc5b9a` (#2145). `scan_content_gaps --counts` all structural gaps **0**; softpulseMapArms **92** / densifyHelperArms **229**. Open Medium: **LPT-667** (6 one-per-press) + **LPT-348** Capstone needs-human. LPT-667/348 already **HAS** tip — no rebuild/re-spam.
+- Discovery oldest-unfresh `lesson-04-08-02-meet-maniac`: teachSpec on all four steps; `deal.mode` `none` player-type tiles (no handFamily/suitFamily); explain has `explainGrading` (MANIAC/ENTRY/AGGRO SoftPulse); unguided one-per-press complete; checkpoint hintless. Structural clean. Curriculum multi-concept / checkpoint mix-vs-introduce still **LPT-208** needs-human (tip-commented). Done-ack **LPT-206** teachSpec.
+- Design-record Still-a-list label quizzes already STALE (`tableRegionTap` / `meetManiac*Outcomes`) — do not file rebuild.
+- next: **LPT-667** one-per-press implement OR **LPT-348** Capstone human policy OR next oldest discovery (`lesson-05-05-01-lines-and-probes`).
+- act-04-08-02-*: structural clean on tip — curriculum split only via LPT-208; not on LPT-667.
+
