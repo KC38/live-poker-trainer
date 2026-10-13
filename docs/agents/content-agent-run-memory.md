@@ -660,3 +660,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - JSON catalog gaps otherwise flat — tip-commented LPT-624/625/626/627/635 only (no checklist rebuild). Tip-commented frontier Soft timing LPT-242 (all five + explain MISSING) / Map turn LPT-312 / Compose river LPT-315 / Adjust LAG LPT-301 / warm-up LPT-349 / Final LPT-352 + honesty/fingerprint LPT-401/402/408/409/411/414/417.
 - Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. Densify ≠ teachSpec. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: re-verify LPT-242 after GrokBot OR densify Soft-timing on LPT-628 OR LPT-312/315 OR LPT-349/352 OR catalog LPT-626(151)/627(92)/635/624(54)/625(24).
+
+## Fold 2026-10-13 tip 7d946ea7 (Soft timing re-check + tip-comment verify)
+
+- Tip-stable `7d946ea7` (#2038 learnings after #2036 LPT-655 densify + LPT-628 rebuild on `0092c2ba`). Pending empty.
+- `scan_content_gaps --counts` still flat: pressHints **151**, deal-variants **92**, teachSpec **55**, explain-teachSpec **24**, nice-ladder **54**, unguided-softpulse-map **24**, `softpulseMapArms` **68**, `densifyHelperArms` **78**. Catalog parents already synced — no checklist rebuild. Soft timing `act-05-07-01-*` still ABSENT from `selectIdentifyDensifiedCoachLine` (Priority on **LPT-628**).
+- Re-verified Soft timing **LPT-242**: all five `act-05-07-01-{explain,guided,scaffolded,unguided,checkpoint}` still MISSING teachSpec (`deal.mode` `none` + SoftPulse cues; outcome tiles — no handFamily). Frontier Map turn LPT-312 / Compose river LPT-315 / Adjust LAG LPT-301 / warm-up LPT-349 / Final LPT-352 still all MISSING.
+- Honesty re-read (no sim): **LPT-414** Air Nice! feedback still "Gutshot-ish trash multiway…" on `act-03-02-01-unguided`; **LPT-417** `act-05-02-01-scaffolded` streetLabel *250bb* + `act-06-09-01-scaffolded` villain/felt *180bb deep* still sans `stackLabel`; **LPT-401** guided Ah4d/As9c7d still "Weak TPTK".
+- Prior coverage for this SHA listed many High tip-comments that were missing on Jira — verified with `jira.py get` for `7d946ea7`, then tip-commented LPT-625/627/635 + LPT-242/312/315/352/301 + honesty LPT-401/402/408/409/411/414/417. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done — no clones. `CATALOG_PARENTS.teachSpec` stays null. `content,grokbot,lesson`.
+- Durable rule: coverage `ticket` lists can over-claim tip-comments — confirm tip SHA on each claimed issue before skip.
+- next: re-verify LPT-242 after GrokBot OR densify Soft-timing on LPT-628 OR LPT-312/315/349/352 OR catalog LPT-626(151)/627(92)/635/624(54)/625(24).
