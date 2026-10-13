@@ -1045,23 +1045,26 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Purpose freq — don’t gold-tip the tile.
       'act-06-08-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-08-01-checkpoint')!,
-      // SoftPulse owns High commit — don’t gold-tip the tile.
+      // Navigate 3-bet densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-645). SoftPulse owns High commit — don’t gold-tip the tile.
       'act-06-09-01-guided' =>
-        '100bb 4-bet pot · top pair — pick the depth mindset.',
+        selectIdentifyDensifiedCoachLine('act-06-09-01-guided')!,
       // SoftPulse owns Avoid ego — don’t gold-tip the tile (LPT-501).
-      'act-06-09-01-unguided' => 'Light 4-bet for ego — pick the discipline.',
+      'act-06-09-01-unguided' =>
+        selectIdentifyDensifiedCoachLine('act-06-09-01-unguided')!,
       // SoftPulse owns SPR / commit — don’t gold-tip the tile.
       'act-06-09-01-checkpoint' =>
-        'Depth change in 3-bet pots — pick what shifts.',
-      // SoftPulse owns Cooler — don’t gold-tip the tile.
+        selectIdentifyDensifiedCoachLine('act-06-09-01-checkpoint')!,
+      // Difficult folds densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-646). SoftPulse owns Cooler — don’t gold-tip the tile.
       'act-06-10-01-scaffolded' =>
-        'KK loses to AA all-in — pick the review label.',
+        selectIdentifyDensifiedCoachLine('act-06-10-01-scaffolded')!,
       // SoftPulse owns Ego call — don’t gold-tip the tile (LPT-502).
       'act-06-10-01-unguided' =>
-        'Calling because you are "due" — pick the real reason.',
+        selectIdentifyDensifiedCoachLine('act-06-10-01-unguided')!,
       // SoftPulse owns Cooler / mistake? — don’t gold-tip the tile.
       'act-06-10-01-checkpoint' =>
-        'Review after a big loss — pick the honest question.',
+        selectIdentifyDensifiedCoachLine('act-06-10-01-checkpoint')!,
       // SoftPulse owns Selective + plan — don’t gold-tip the tile.
       'act-06-11-01-guided' =>
         'Folds most, then 3-bets / c-bets — pick the note.',

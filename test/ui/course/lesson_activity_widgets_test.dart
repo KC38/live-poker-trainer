@@ -23149,6 +23149,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-645: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      '100bb 4-bet pot · top pair — tap the depth mindset.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('100bb 4-bet pot · top pair — pick the depth mindset.'),
       findsOneWidget,
@@ -23241,6 +23247,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-645: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Light 4-bet for ego — tap the discipline.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Light 4-bet for ego — pick the discipline.'),
       findsOneWidget,
@@ -23306,6 +23318,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-645: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Depth change in 3-bet pots — tap what shifts.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Depth change in 3-bet pots — pick what shifts.'),
       findsOneWidget,
@@ -23398,6 +23416,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-646: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'KK loses to AA all-in — tap the review label.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('KK loses to AA all-in — pick the review label.'),
       findsOneWidget,
@@ -23438,6 +23462,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-646: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Calling because you are "due" — tap the real reason.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Calling because you are "due" — pick the real reason.'),
       findsOneWidget,
@@ -23503,6 +23533,12 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-646: densified ask (and frame speech) — not catalog + Tap the best answer.
+    expect(
+      lessonFrameSpeech(activity),
+      'Review after a big loss — tap the honest question.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
       find.text('Review after a big loss — pick the honest question.'),
       findsOneWidget,
