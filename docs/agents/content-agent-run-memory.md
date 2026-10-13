@@ -1402,3 +1402,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Discovery oldest-unfresh `lesson-05-04-01-thin-value-bluffcatch`: explain SoftPulse THIN→CATCH→BARRELS + `explainGrading`; guided/scaffolded/unguided fixed Jh9d·Kc9s4h2d7c + suit variants match Dart; SoftPulse maps `tv`/`call-m`/`check-nit` PRESENT; one-per-press OK; checkpoint hintless densify PRESENT. Structural clean. Curriculum **LPT-233** tip-commented.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-03-08-02-section-three-jump-test` / `lesson-05-05-01-lines-and-probes` / Low curriculum.
 - act-05-04-01-*: structural clean on tip — teachSpec LPT-231 Done; pressHints LPT-232 Done; variants LPT-609 Done; SoftPulse-map LPT-614 Done; densify LPT-459/516 Done; curriculum via LPT-233 only.
+
+## Fold 2026-10-14x (8bad05d8 discovery section-three-jump)
+
+- Tip-stable `8bad05d8` (#2190 thin-value + rescued implied-odds). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Sole open Medium: Capstone **LPT-348** needs-human (already HAS tip — no re-spam). Re-verified Meet Nit Nice!+pressHints cleared; **LPT-216** Done.
+- Discovery oldest-coverage `lesson-03-08-02-section-three-jump-test`: all five `assessmentRole` `jump_test` hintless; jump-table `deal.mode` `none` cue `j3-track`; jump-class/mw/river/leak `fixed` + suit-rotated `deal.variants`; fixedCards match Dart honesty (mw air `7s3d`/`AhKh9h`; leak gutshot `Jh9d`/`KsTc2d`; river top-two `AhKd`). Densify arms PRESENT. Jump_test — no curriculum-split. Structural clean.
+- Done-ack **LPT-165** / **425** / **389** / **426** / **390** / **391** / **392** / **554** / **555** on tip (NEED before comment). Parents/348/216 already HAS.
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-11-01-observe-selective` / `lesson-05-05-01-lines-and-probes` / Low curriculum.
+- act-03-08-02-*: structural clean on tip — teachSpec/honesty/variants/densify companions Done; no open curriculum ticket.
+
