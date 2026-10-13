@@ -1576,7 +1576,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-09-01-explain", 1,
                 "3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment.",
-                {objectives: ["Plan 3-bet pots by SPR"]}),
+                {
+                  objectives: ["Plan 3-bet pots by SPR"],
+                  // LPT-280
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "3BET", kind: "soft_pulse"},
+                      {press: 2, target: "4BET", kind: "soft_pulse"},
+                      {press: 3, target: "DEPTH", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               selectAct({
                 id: "act-06-09-01-guided", order: 2, stage: "guided",
                 prompt: "100bb 4-bet pot. Flop top pair. Default mindset?",
@@ -1588,6 +1599,8 @@ export function buildSectionSix() {
                   choice("deep", "300bb deep", "clear_mistake",
                     "Wrong depth.", {betterChoiceId: "careful"})
                 ],
+                // LPT-280
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "careful", kind: "soft_pulse"}]},
               }),
               actionAct({
                 id: "act-06-09-01-scaffolded", order: 3, stage: "scaffolded",
@@ -1600,6 +1613,11 @@ export function buildSectionSix() {
                   choice("jam", "Jam forever", "clear_mistake",
                     "Too automatic.", {action: "ALL_IN", amountBb: 180, betterChoiceId: "small"})
                 ],
+                // LPT-280
+                teachSpec: {
+                  deal: {mode: "fixed", fixedCards: {hero: ["Ah", "Qd"], board: ["8c", "3h", "2s"]}},
+                  cues: [{press: 1, target: "small", kind: "soft_pulse"}],
+                },
               }),
               selectAct({
                 id: "act-06-09-01-unguided", order: 4, stage: "scaffolded",
@@ -1612,6 +1630,8 @@ export function buildSectionSix() {
                   choice("ego", "Ego 4-bet", "clear_mistake",
                     "Leak.", {betterChoiceId: "avoid"})
                 ],
+                // LPT-280
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "avoid", kind: "soft_pulse"}]},
               }),
               selectAct({
                 id: "act-06-09-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -1624,6 +1644,8 @@ export function buildSectionSix() {
                   choice("suits", "Felt suits", "clear_mistake",
                     "Irrelevant.", {betterChoiceId: "spr"})
                 ],
+                // LPT-280
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "spr", kind: "none"}]},
               }),
             ],
           }),

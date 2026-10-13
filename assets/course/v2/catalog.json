@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "81cff0d54a88d9831b77cde7a1eab34a59528cf8561159f8ccdab42668f69443",
+  "contentChecksum": "455048f225fbbc2089d718860174fc78209c9a952a9d28e560d0af3076bcda43",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -17571,7 +17571,29 @@
                   ],
                   "objectives": [
                     "Plan 3-bet pots by SPR"
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "3BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "4BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "DEPTH",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-09-01-guided",
@@ -17600,7 +17622,19 @@
                       "label": "300bb deep",
                       "accessibilityText": "300bb deep"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "careful",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-09-01-scaffolded",
@@ -17633,7 +17667,30 @@
                       "action": "ALL_IN",
                       "amountBb": 180
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Qd"
+                        ],
+                        "board": [
+                          "8c",
+                          "3h",
+                          "2s"
+                        ]
+                      }
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "small",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-09-01-unguided",
@@ -17662,7 +17719,19 @@
                       "label": "Ego 4-bet",
                       "accessibilityText": "Ego 4-bet"
                     }
-                  ]
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "avoid",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-06-09-01-checkpoint",
@@ -17692,7 +17761,19 @@
                       "accessibilityText": "Felt suits"
                     }
                   ],
-                  "assessmentRole": "checkpoint"
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "spr",
+                        "kind": "none"
+                      }
+                    ]
+                  }
                 }
               ]
             }
