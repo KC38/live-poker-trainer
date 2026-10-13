@@ -2231,7 +2231,18 @@ export function buildSectionSix() {
             activities: [
               dialogue("act-06-13-01-explain", 1,
                 "Five models. Same cards. Change only with evidence.",
-                {objectives: ["Adjust across all five types"]}),
+                {
+                  objectives: ["Adjust across all five types"],
+                  // LPT-304
+                  teachSpec: {
+                    deal: {mode: "none"},
+                    cues: [
+                      {press: 1, target: "CARDS", kind: "soft_pulse"},
+                      {press: 2, target: "SEATS", kind: "soft_pulse"},
+                      {press: 3, target: "EVIDENCE", kind: "soft_pulse"},
+                    ],
+                  },
+                }),
               actionAct({
                 id: "act-06-13-01-guided", order: 2, stage: "guided",
                 prompt: "River second pair. Versus Calling Station?",
@@ -2244,6 +2255,14 @@ export function buildSectionSix() {
                   choice("cs-bluff", "Huge bluff", "clear_mistake",
                     "They call.", {action: "BET", amountBb: 40, betterChoiceId: "cs"})
                 ],
+                // LPT-304
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "cs", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-06-13-01-scaffolded", order: 3, stage: "scaffolded",
@@ -2257,6 +2276,14 @@ export function buildSectionSix() {
                   choice("nit-call", "Call light", "clear_mistake",
                     "Wrong type.", {action: "CALL", betterChoiceId: "nit"})
                 ],
+                // LPT-304
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "nit", kind: "soft_pulse"}],
+                },
               }),
               actionAct({
                 id: "act-06-13-01-unguided", order: 4, stage: "scaffolded",
@@ -2270,6 +2297,14 @@ export function buildSectionSix() {
                   choice("lag-fold", "Auto-fold", "questionable",
                     "Too tight.", {action: "FOLD"})
                 ],
+                // LPT-304
+                teachSpec: {
+                  deal: {
+                    mode: "fixed",
+                    fixedCards: {hero: ["Jh", "Td"], board: ["Qc", "Ts", "3h", "2d", "7c"]},
+                  },
+                  cues: [{press: 1, target: "lag", kind: "soft_pulse"}],
+                },
               }),
               classifyAct({
                 id: "act-06-13-01-checkpoint", order: 5, stage: "scaffolded", assessmentRole: "checkpoint",
@@ -2283,6 +2318,8 @@ export function buildSectionSix() {
                   choice("wrong", "Calling Station — bluff more", "clear_mistake",
                     "Wrong model.", {betterChoiceId: "tag"})
                 ],
+                // LPT-304
+                teachSpec: {deal: {mode: "none"}, cues: [{press: 1, target: "tag", kind: "none"}]},
               }),
             ],
           }),

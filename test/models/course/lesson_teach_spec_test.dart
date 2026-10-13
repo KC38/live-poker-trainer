@@ -502,6 +502,14 @@ const _lessons = <String, List<String>>{
     'act-06-12-02-unguided',
     'act-06-12-02-checkpoint',
   ],
+  // LPT-304
+  'lesson-06-13-01-mix-five-types': [
+    'act-06-13-01-explain',
+    'act-06-13-01-guided',
+    'act-06-13-01-scaffolded',
+    'act-06-13-01-unguided',
+    'act-06-13-01-checkpoint',
+  ],
 };
 
 const _modes = {'none', 'fixed', 'random_in_class'};
@@ -3749,6 +3757,77 @@ void main() {
       });
       expect(
         act('act-06-12-02-checkpoint').assessmentRole,
+        AssessmentRole.checkpoint,
+      );
+    });
+  });
+
+  group('Same cards, five type models (LPT-304)', () {
+    test('explain SoftPulse walks CARDS → SEATS → EVIDENCE', () {
+      expect(
+        _list(
+          act('act-06-13-01-explain'),
+          'cues',
+        ).map((c) => c['target']).toList(),
+        ['CARDS', 'SEATS', 'EVIDENCE'],
+      );
+    });
+
+    test('steps author deal + cues; assessment steps quiet', () {
+      expect(_list(act('act-06-13-01-guided'), 'cues').single['target'], 'cs');
+      expect(
+        act('act-06-13-01-guided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', 'Td'],
+      );
+      expect(
+        act('act-06-13-01-guided').teachSpec!['deal']['fixedCards']['board'],
+        ['Qc', 'Ts', '3h', '2d', '7c'],
+      );
+      expect(
+        _list(act('act-06-13-01-scaffolded'), 'cues').single['target'],
+        'nit',
+      );
+      expect(
+        act('act-06-13-01-scaffolded').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', 'Td'],
+      );
+      expect(
+        act('act-06-13-01-scaffolded')
+            .teachSpec!['deal']['fixedCards']['board'],
+        ['Qc', 'Ts', '3h', '2d', '7c'],
+      );
+      expect(
+        _list(act('act-06-13-01-unguided'), 'cues').single['target'],
+        'lag',
+      );
+      expect(
+        act('act-06-13-01-unguided').teachSpec!['deal']['fixedCards']['hero'],
+        ['Jh', 'Td'],
+      );
+      expect(
+        act('act-06-13-01-unguided').teachSpec!['deal']['fixedCards']['board'],
+        ['Qc', 'Ts', '3h', '2d', '7c'],
+      );
+      expect(
+        _list(act('act-06-13-01-checkpoint'), 'cues').single['target'],
+        'tag',
+      );
+      expect(
+        _list(
+          act('act-06-13-01-checkpoint'),
+          'cues',
+        ).every((c) => c['kind'] == 'none'),
+        isTrue,
+      );
+      expect(
+        act('act-06-13-01-checkpoint').teachSpec!.containsKey('pressHints'),
+        isFalse,
+      );
+      expect(act('act-06-13-01-checkpoint').teachSpec!['deal'], {
+        'mode': 'none',
+      });
+      expect(
+        act('act-06-13-01-checkpoint').assessmentRole,
         AssessmentRole.checkpoint,
       );
     });
