@@ -1296,6 +1296,23 @@ grep -q 'idle: primary-busy branch=cursor/chore-busy since 2026-10-13T13:34:16+0
 clear_idle_skip
 [[ ! -f "$IDLE_FILE" ]] || fail "clear_idle_skip must remove IDLE_FILE"
 echo "status idle stamp ok"
+
+# status prints current ticket from sim_lock purpose when mini is in use.
+grep -q 'print_current_ticket_status' "$LOOP" || fail "loop must define print_current_ticket_status"
+(
+  export SIM_LOCK_DIR="$tmp/sim-lock-current-ticket"
+  mkdir -p "$SIM_LOCK_DIR"
+  python3 "$ROOT/tools/sim_lock.py" claim --owner ui-design-agent \
+    --purpose "LPT-649: implement" --pid $$ >/dev/null
+  out="$(print_current_ticket_status)"
+  grep -qxF 'current ticket: LPT-649 (implement)' <<<"$out" \
+    || fail "print_current_ticket_status expected LPT-649 implement, got: $out"
+  python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null
+  out="$(print_current_ticket_status)"
+  [[ -z "$out" ]] || fail "print_current_ticket_status silent when free, got: $out"
+  echo "status current ticket ok"
+)
+
 export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 grep -q 'EMPTY_QUEUE_SLEEP' "$LOOP" || fail "loop must define EMPTY_QUEUE_SLEEP"
 grep -q 'ui-queue empty; sleeping' "$LOOP" || fail "run_loop must sleep on empty queue"

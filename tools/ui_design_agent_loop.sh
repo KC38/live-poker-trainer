@@ -371,6 +371,38 @@ else:
 PY
 }
 
+# Surface the active ui-agent ticket from the mini lock purpose so health
+# timers see mid-run work without scraping the run log (LPT-649 purpose).
+print_current_ticket_status() {
+  python3 - "$(primary)/tools/sim_lock.py" <<'PY' 2>/dev/null || true
+import json, re, subprocess, sys
+script = sys.argv[1]
+proc = subprocess.run(
+    [sys.executable, script, "status", "--json"],
+    capture_output=True,
+    text=True,
+)
+if proc.returncode not in (0, 3):
+    raise SystemExit(0)
+try:
+    obj = json.loads(proc.stdout or "{}")
+except json.JSONDecodeError:
+    raise SystemExit(0)
+if (obj.get("state") or "") != "in_use":
+    raise SystemExit(0)
+purpose = (obj.get("purpose") or "").strip()
+m = re.search(r"(LPT-\d+)", purpose)
+if not m:
+    raise SystemExit(0)
+key = m.group(1)
+rest = purpose[m.end() :].lstrip(" :#-")
+if rest:
+    print(f"current ticket: {key} ({rest})")
+else:
+    print(f"current ticket: {key}")
+PY
+}
+
 
 # True when jira ui-queue lists at least one actionable LPT ticket.
 # needs-human / grokbot are already filtered by tools/jira.py ui-queue.
@@ -2867,6 +2899,7 @@ PY
     fi
     if [[ -f "$PID_FILE" ]]; then echo "current run pid: $(cat "$PID_FILE")"; fi
     sim_lock status || true
+    print_current_ticket_status
     latest="$(ls -t "$LOG_DIR"/run-*.log 2>/dev/null | head -1 || true)"
     if [[ -n "$latest" ]]; then
       # Always attempt backfill; helper no-ops when the session has not grown.
