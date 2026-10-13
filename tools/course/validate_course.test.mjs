@@ -148,6 +148,12 @@ test("wave two sections expose postflop units, types, and jump tests", () => {
   );
 });
 
+// Whole-word player-type label match (allows plural/possessive), so words
+// like "ADVANTAGE" or "FLAG" do not count as naming TAG/LAG.
+function namesType(text, label) {
+  return new RegExp(`(?<![A-Za-z])${label}(?:s|'s)?(?![A-Za-z])`).test(text);
+}
+
 test("wave three sections expose advanced units, TAG/LAG, and capstones", () => {
   const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
   const {errors, clientCatalog} = validateAndGenerate(course);
@@ -163,7 +169,7 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   assert.equal(sec7.units.length, 12);
   const sec5Blob = JSON.stringify(sec5);
   for (const label of ["TAG", "LAG"]) {
-    assert.equal(sec5Blob.includes(label), false, `sec5 leaked ${label}`);
+    assert.equal(namesType(sec5Blob, label), false, `sec5 leaked ${label}`);
   }
   for (const id of [
     "lesson-06-11-02-meet-tag",
@@ -205,8 +211,8 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   );
   for (const lesson of lessonsBeforeTag) {
     const blob = JSON.stringify(lesson);
-    assert.equal(blob.includes("TAG"), false, `${lesson.id} mentions TAG early`);
-    assert.equal(blob.includes("LAG"), false, `${lesson.id} mentions LAG early`);
+    assert.equal(namesType(blob, "TAG"), false, `${lesson.id} mentions TAG early`);
+    assert.equal(namesType(blob, "LAG"), false, `${lesson.id} mentions LAG early`);
   }
   // Observe lessons must not name TAG/LAG before meet introductions.
   const sec6Lessons = course.sections[5].units.flatMap((u) => u.lessons);
@@ -217,8 +223,8 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
     const observe = sec6Lessons.find((l) => l.id === observeId);
     assert.ok(observe, observeId);
     const blob = JSON.stringify(observe);
-    assert.equal(blob.includes("TAG"), false, `${observeId} leaked TAG`);
-    assert.equal(blob.includes("LAG"), false, `${observeId} leaked LAG`);
+    assert.equal(namesType(blob, "TAG"), false, `${observeId} leaked TAG`);
+    assert.equal(namesType(blob, "LAG"), false, `${observeId} leaked LAG`);
   }
   // Within Section 6, TAG/LAG labels must not appear in lesson bodies
   // before their meet introductions (unit chrome may still name the type).
@@ -229,7 +235,7 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   for (let i = 0; i < tagIntroIdx; i++) {
     const lesson = sec6Lessons[i];
     assert.equal(
-      JSON.stringify(lesson).includes("TAG"),
+      namesType(JSON.stringify(lesson), "TAG"),
       false,
       `${lesson.id} mentions TAG before ${tag.introducedByLessonId}`,
     );
@@ -237,7 +243,7 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   for (let i = 0; i < lagIntroIdx; i++) {
     const lesson = sec6Lessons[i];
     assert.equal(
-      JSON.stringify(lesson).includes("LAG"),
+      namesType(JSON.stringify(lesson), "LAG"),
       false,
       `${lesson.id} mentions LAG before ${lag.introducedByLessonId}`,
     );
