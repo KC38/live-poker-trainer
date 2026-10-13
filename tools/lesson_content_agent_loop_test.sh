@@ -74,4 +74,21 @@ grep -q "Never checkout, commit, or edit PRIMARY" <<<"$prompt_out" \
 grep -q "PRIMARY: $fake_primary" <<<"$prompt_out" \
   && fail "prompt must not advertise PRIMARY as the edit root"
 
+grep -q 'sleep_unless_stopped' "$LOOP" \
+  || fail "loop must define sleep_unless_stopped for stop-aware gaps"
+grep -q 'sleep_unless_stopped "\$_s"' "$LOOP" \
+  || fail "usage-limit sleep must use sleep_unless_stopped"
+# STOP_FILE mid-sleep must return promptly (not wait out the full window).
+STOP_FILE="$STATE_DIR/content-agent.stop"
+rm -f "$STOP_FILE"
+(
+  sleep 1
+  touch "$STOP_FILE"
+) &
+start="$(date +%s)"
+sleep_unless_stopped 30
+elapsed=$(( $(date +%s) - start ))
+rm -f "$STOP_FILE"
+(( elapsed < 10 )) || fail "sleep_unless_stopped should wake on STOP_FILE, took ${elapsed}s"
+
 echo "lesson-content-agent worktree isolation ok"
