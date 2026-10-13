@@ -252,6 +252,13 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-07-02-01-scaffolded' => 'Gutshot · brick raise — pick the map call.',
     'act-07-02-01-unguided' => 'No turn idea — pick what to do first.',
     'act-07-02-01-checkpoint' => 'Turn map — pick the definition.',
+    // Compose river densified asks (LPT-658) — same path as LPT-657.
+    // Guided is poker_action_sizing (not select_identify). Use pick/tap so
+    // withLessonTapInstruction does not append the footer.
+    'act-07-03-01-scaffolded' =>
+      'Nut flush blocker — pick why the bluff works.',
+    'act-07-03-01-unguided' => 'No story — pick the river action.',
+    'act-07-03-01-checkpoint' => 'River rule — pick the composition check.',
     _ => null,
   };
 }

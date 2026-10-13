@@ -650,6 +650,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Section 6 checkpoint densified asks | Section 6 checkpoint densified asks (`act-06-13-02-cp-adv` / `cp-cap` / `cp-polar` / `cp-tag` / `cp-lag`) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-655). |
 | Carry a preflop plan densified asks | Carry a preflop plan onto the flop densified asks (`act-07-01-01-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-656). |
 | Map turn barrels densified asks | Map turn barrels before you bet flop densified asks (`act-07-02-01-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-657). |
+| Compose river densified asks | Compose river value and bluffs densified asks (`act-07-03-01-scaffolded` / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-658). Guided is `poker_action_sizing`. |
 | Meet Calling Station SoftPulse one gold | Meet Calling Station scaffolded / unguided outcome SoftPulse passes `guideRegion` (`labelWorkingModel` / `playerTypeStationLimp`) so Hint paints one gold tile — never both Working model and Permanent, or Station and Maniac (LPT-424). |
 | Observe narrow SoftPulse one gold | Observe narrow players densified asks (`act-04-07-01-guided` / scaffolded / unguided / checkpoint) pass `guideRegion` (`observeNarrowEntry` / `observeStrongAggression` / `observeWaitSamples` / `observeNitBundle`) so SoftPulse paints one gold tile — never both Narrow and Wide, Strong heat and Passive, Wait and Label now, or Few+heat and Calls all (LPT-433). |
 | Meet the Nit SoftPulse one gold | Meet the Nit densified asks (`act-04-07-02-guided` / unguided / checkpoint) pass `guideRegion` (`meetNitLabel` / `meetNitLabel2` / `meetNitWorkingModel`) so SoftPulse paints one gold tile — never both Nit and Station, Nit and Maniac, or Working model and An insult (LPT-440). |
@@ -1611,7 +1612,7 @@ felt.
 | Section 6 checkpoint | densified frame asks (LPT-655) | — |
 | Carry a preflop plan onto the flop | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505); densified frame asks (LPT-656) | — |
 | Map turn barrels before you bet flop | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506); densified frame asks (LPT-657) | — |
-| Compose river value and bluffs | Value, Bluff, Hold | blocker, empty, and rule checks |
+| Compose river value and bluffs | Value, Bluff, Hold; densified frame asks (LPT-658) | blocker, empty, and rule checks |
 | Change plans by pot type | Limped, SRP, 3-4bet | — |
 | Switch gears between HU and multiway | Fewer, Thicker, Widen | — |
 | Rewrite plans when stacks change | Short, Deep, Effective | — |
