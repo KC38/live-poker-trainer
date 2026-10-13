@@ -1106,15 +1106,19 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
       // SoftPulse owns Wide · barrels · folds — don’t gold-tip the tile.
       'act-06-12-01-checkpoint' =>
         selectIdentifyDensifiedCoachLine('act-06-12-01-checkpoint')!,
-      // SoftPulse owns LAG — don’t gold-tip the tile.
-      'act-06-12-02-guided' => 'Opens wide, barrels often — pick the label.',
+      // Meet the LAG densified asks: selectIdentifyDensifiedCoachLine
+      // (LPT-650). SoftPulse owns LAG — don’t gold-tip the tile.
+      'act-06-12-02-guided' =>
+        selectIdentifyDensifiedCoachLine('act-06-12-02-guided')!,
       // SoftPulse owns Pressure vs passive — don’t gold-tip the tile.
-      'act-06-12-02-scaffolded' => 'LAG vs Station — pick the difference.',
-      // Unguided: name the type; don’t tip LAG.
+      'act-06-12-02-scaffolded' =>
+        selectIdentifyDensifiedCoachLine('act-06-12-02-scaffolded')!,
+      // SoftPulse owns LAG — don’t gold-tip the tile (LPT-492).
       'act-06-12-02-unguided' =>
-        'Wide opens, keeps barreling — pick the label.',
+        selectIdentifyDensifiedCoachLine('act-06-12-02-unguided')!,
       // SoftPulse owns Sample limits — don’t gold-tip the tile.
-      'act-06-12-02-checkpoint' => 'Beside LAG label — pick what to show.',
+      'act-06-12-02-checkpoint' =>
+        selectIdentifyDensifiedCoachLine('act-06-12-02-checkpoint')!,
       // SoftPulse owns Usually avoid — don’t gold-tip the tile (LPT-503).
       'act-06-12-03-unguided' =>
         'Inventing triple-barrel bluffs into a LAG — pick the discipline.',
