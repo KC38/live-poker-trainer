@@ -786,3 +786,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prior coverage on `fa1490fd` listed densify parents+frontier+Done-ack siblings; `jira.py get` confirmed those had the SHA, but S6/honesty/fingerprint Highs **LPT-252/255/258/271/275/295/301/348/408/409/411/414/417** lacked it — tip-commented those + LPT-628 Soft timing Priority the same tick.
 - Soft timing `act-05-07-01-*` densify still ABSENT from `selectIdentifyDensifiedCoachLine` (rex_coach_line zero hits). Frontier **LPT-242/312/315/334** still all-five MISSING teachSpec (densify ≠ teachSpec). Honesty LPT-414/417 still valid. Meet Nit: Nice! **LPT-624** / pressHints **LPT-626**; LPT-216 Done. `CATALOG_PARENTS.teachSpec` stays null. Pending empty. `content,grokbot,lesson`.
 - next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
+
+## Fold 2026-10-13bu (tip 0b226db6 LPT-408 Done-ack)
+
+- Tip advanced mid-run `fa1490fd` → `0b226db6` (#2069 LPT-408 nut-FD remap + #2067/#2068 learnings). JSON gaps still flat 151/92/44/23/nice-55/map-24 densify-tap **118** densifyHelperArms **111**.
+- Done-ack **LPT-408** (`nutFlushDraw` in `_postflopTeachKey` + remap test). First tip-comments used an unquoted shell heredoc → empty SHA placeholders — corrected with Python-written bodies (`0b226db6`) on parents + frontier + LPT-409/411/414/417 the same tick.
+- Soft timing densify still ABSENT; frontier LPT-242/312/315/334 still MISSING teachSpec; sibling fingerprints LPT-409/411 + honesty LPT-414/417 still open. Meet Nit LPT-624/626. Pending empty. `content,grokbot,lesson`.
+- next: densify Soft-timing on LPT-628 OR re-verify LPT-242 after GrokBot OR LPT-312/315/334 OR catalog LPT-626(151)/627(92)/635/624(55)/625(24)/628(118).
