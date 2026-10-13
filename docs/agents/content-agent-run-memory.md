@@ -1203,3 +1203,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum multi-concept (tighten 4-bet / SPR plan / ego 4-bets) still **LPT-282** needs-human (tip-commented on `6d9f3068`). Still-a-list commit/ego/SPR STALE — no rebuild.
 - next: **LPT-348** Capstone human policy OR next oldest `lesson-06-10-01-difficult-folds` / Low curriculum.
 - act-06-09-01-*: structural clean on tip — curriculum split only via LPT-282.
+
+## Fold 2026-10-13dr (6d9f3068 discovery difficult-folds)
+
+- Tip-stable `6d9f3068` (#2157). Catalog structural gaps all **0**; softpulseMapArms **92** / densifyHelperArms **229**. Meet Nit Nice!+pressHints cleared; **LPT-216** Done. Sole open Medium: Capstone **LPT-348** (already HAS tip).
+- Discovery oldest-unfresh `lesson-06-10-01-difficult-folds`: teachSpec on all five; explain SoftPulse + `explainGrading`; guided `fixed` + variants; scaffolded/unguided `deal.mode` `none` one-per-press; checkpoint hintless. Structural clean.
+- Curriculum multi-concept (dominated one-pair / coolers / ego call-downs) still **LPT-285** needs-human (tip-commented on `6d9f3068`).
+- next: **LPT-348** Capstone human policy OR next oldest `lesson-06-11-03-adjust-tag` / Low curriculum.
+- act-06-10-01-*: structural clean on tip — curriculum split only via LPT-285.
