@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "df5e3933691db64168cfb383fb3e568bf68b91f8b8114e9be4e054971055b090",
+  "contentChecksum": "5b2cf644cf8ff26b684e7f05dd8dcec0cc66de84fd93b8189e5228c105c4b0cc",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -76,6 +76,46 @@
       "lesson-01-05-01-01-win-by-fold",
       "lesson-01-05-01-02-showdown",
       "lesson-01-05-01-03-main-and-side-pots"
+    ],
+    "lesson-02-01-01-position-labels": [
+      "lesson-02-01-01-01-seat-labels",
+      "lesson-02-01-01-02-blind-labels",
+      "lesson-02-01-01-03-later-seats"
+    ],
+    "lesson-02-01-02-acting-order": [
+      "lesson-02-01-02-01-preflop-order",
+      "lesson-02-01-02-02-postflop-order",
+      "lesson-02-01-02-03-wait-your-turn"
+    ],
+    "lesson-02-02-01-hand-families": [
+      "lesson-02-02-01-01-pocket-pairs",
+      "lesson-02-02-01-02-broadways-suited-aces",
+      "lesson-02-02-01-03-connectors-vs-trash"
+    ],
+    "lesson-02-03-01-open-fold": [
+      "lesson-02-03-01-01-fold-early-trash",
+      "lesson-02-03-01-02-open-strong",
+      "lesson-02-03-01-03-widen-button"
+    ],
+    "lesson-02-04-01-facing-raise": [
+      "lesson-02-04-01-01-fold-to-open",
+      "lesson-02-04-01-02-call-in-position",
+      "lesson-02-04-01-03-value-3bet"
+    ],
+    "lesson-02-05-01-effective-stack": [
+      "lesson-02-05-01-01-chips-to-bb",
+      "lesson-02-05-01-02-shorter-stack",
+      "lesson-02-05-01-03-stack-depth"
+    ],
+    "lesson-02-06-01-live-habits": [
+      "lesson-02-06-01-01-follow-action",
+      "lesson-02-06-01-02-say-your-action",
+      "lesson-02-06-01-03-protect-and-wait"
+    ],
+    "lesson-03-01-01-reading-live-table": [
+      "lesson-03-01-01-01-pot-and-stacks",
+      "lesson-03-01-01-02-button-and-action",
+      "lesson-03-01-01-03-verbal-binds"
     ]
   },
   "sections": [
@@ -5027,14 +5067,12 @@
           "summary": "EP through blinds, and who acts when.",
           "lessons": [
             {
-              "id": "lesson-02-01-01-position-labels",
+              "id": "lesson-02-01-01-01-seat-labels",
               "order": 1,
-              "title": "Position labels",
-              "summary": "Name EP, HJ, CO, BTN, SB, and BB.",
+              "title": "Seat labels",
+              "summary": "Name early position, hijack, cutoff, and button.",
               "objectives": [
-                "Label EP, HJ, CO, and BTN",
-                "Label SB and BB",
-                "Prefer later seats when choosing hands"
+                "Label EP, HJ, CO, and BTN"
               ],
               "prerequisites": [
                 "lesson-01-06-02-section-one-jump"
@@ -5042,31 +5080,28 @@
               "remediationLessonIds": [
                 "lesson-01-06-02-section-one-jump"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 3,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
               "activities": [
                 {
-                  "id": "act-02-01-01-explain-pos",
+                  "id": "act-02-01-01-01-explain-seats",
                   "order": 1,
                   "stage": "guided",
                   "renderer": "coach_dialogue",
-                  "estimatedSeconds": 30,
-                  "accessibilityText": "Later seats see more. That is the whole edge.",
-                  "acceptedGrades": [
-                    "recommended"
+                  "objectives": [
+                    "Label EP, HJ, CO, and BTN"
                   ],
+                  "accessibilityText": "Every seat has a name. Early position acts first, then the hijack and cutoff. The button acts last.",
                   "coachMedia": [
                     {
-                      "id": "act-02-01-01-explain-pos-media",
+                      "id": "act-02-01-01-01-explain-seats-line",
                       "kind": "dialogue",
-                      "text": "Later seats see more. That is the whole edge."
+                      "text": "Every seat has a name. Early position acts first, then the hijack and cutoff. The button acts last."
                     }
                   ],
-                  "objectives": [
-                    "Prefer later seats when choosing hands"
-                  ],
+                  "okFeedback": "Early, hijack, cutoff, button.",
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -5074,11 +5109,30 @@
                     "cues": [
                       {
                         "press": 1,
-                        "target": "D",
+                        "target": "EP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "HJ",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CO",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 4,
+                        "target": "BTN",
                         "kind": "soft_pulse"
                       }
                     ]
-                  }
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-01-01-guided-btn",
@@ -5134,60 +5188,8 @@
                   }
                 },
                 {
-                  "id": "act-02-01-01-scaffolded-blinds",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the small blind or big blind seat.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Label SB and BB"
-                  ],
-                  "prompt": "Tap a seat that posts a forced bet every hand.",
-                  "choices": [
-                    {
-                      "id": "sb-bb",
-                      "label": "SB or BB",
-                      "accessibilityText": "SB or BB"
-                    },
-                    {
-                      "id": "btn-bb",
-                      "label": "BTN",
-                      "accessibilityText": "BTN"
-                    },
-                    {
-                      "id": "ep-only",
-                      "label": "EP",
-                      "accessibilityText": "EP"
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Forced bets come from the two seats left of the button."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "sb-bb",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-02-01-01-unguided-co",
-                  "order": 4,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -5236,10 +5238,176 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-01-01-02-blind-labels",
+              "order": 2,
+              "title": "Blind labels",
+              "summary": "Name the small blind and big blind seats.",
+              "objectives": [
+                "Label SB and BB"
+              ],
+              "prerequisites": [
+                "lesson-02-01-01-01-seat-labels"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-01-01-01-seat-labels"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-01-01-02-explain-blinds",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Label SB and BB"
+                  ],
+                  "accessibilityText": "Two seats post a forced bet every hand: the small blind, then the big blind, just left of the button.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-01-01-02-explain-blinds-line",
+                      "kind": "dialogue",
+                      "text": "Two seats post a forced bet every hand: the small blind, then the big blind, just left of the button."
+                    }
+                  ],
+                  "okFeedback": "Small blind, big blind.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SB",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BB",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-02-01-01-scaffolded-blinds",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Tap the small blind or big blind seat.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Label SB and BB"
+                  ],
+                  "prompt": "Tap a seat that posts a forced bet every hand.",
+                  "choices": [
+                    {
+                      "id": "sb-bb",
+                      "label": "SB or BB",
+                      "accessibilityText": "SB or BB"
+                    },
+                    {
+                      "id": "btn-bb",
+                      "label": "BTN",
+                      "accessibilityText": "BTN"
+                    },
+                    {
+                      "id": "ep-only",
+                      "label": "EP",
+                      "accessibilityText": "EP"
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Forced bets come from the two seats left of the button."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "sb-bb",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-01-01-03-later-seats",
+              "order": 3,
+              "title": "Later seats play better",
+              "summary": "The same hand is easier to play from a later seat.",
+              "objectives": [
+                "Prefer later seats when choosing hands"
+              ],
+              "prerequisites": [
+                "lesson-02-01-01-02-blind-labels"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-01-01-02-blind-labels"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-01-01-explain-pos",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "estimatedSeconds": 30,
+                  "accessibilityText": "Later seats see more. That is the whole edge.",
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-02-01-01-explain-pos-media",
+                      "kind": "dialogue",
+                      "text": "Later seats see more. That is the whole edge."
+                    }
+                  ],
+                  "objectives": [
+                    "Prefer later seats when choosing hands"
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "D",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 },
                 {
                   "id": "act-02-01-01-checkpoint-edge",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -5287,22 +5455,20 @@
               ]
             },
             {
-              "id": "lesson-02-01-02-acting-order",
-              "order": 2,
-              "title": "Acting order",
-              "summary": "Track who acts preflop and postflop.",
+              "id": "lesson-02-01-02-01-preflop-order",
+              "order": 4,
+              "title": "Preflop order",
+              "summary": "Action starts left of the big blind before the flop.",
               "objectives": [
-                "Order preflop action after the blinds",
-                "Order postflop action from the button",
-                "Wait for your turn before acting"
+                "Order preflop action after the blinds"
               ],
               "prerequisites": [
-                "lesson-02-01-01-position-labels"
+                "lesson-02-01-01-03-later-seats"
               ],
               "remediationLessonIds": [
-                "lesson-02-01-01-position-labels"
+                "lesson-02-01-01-03-later-seats"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 2,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -5407,10 +5573,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-01-02-02-postflop-order",
+              "order": 5,
+              "title": "Postflop order",
+              "summary": "After the flop, the button acts last.",
+              "objectives": [
+                "Order postflop action from the button"
+              ],
+              "prerequisites": [
+                "lesson-02-01-02-01-preflop-order"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-01-02-01-preflop-order"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-01-02-02-explain-post",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Order postflop action from the button"
+                  ],
+                  "accessibilityText": "After the flop, the first live seat left of the button acts first. The button acts last.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-01-02-02-explain-post-line",
+                      "kind": "dialogue",
+                      "text": "After the flop, the first live seat left of the button acts first. The button acts last."
+                    }
+                  ],
+                  "okFeedback": "Button last after the flop.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SB",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BTN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-01-02-scaffolded-post",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "order_sequence",
                   "estimatedSeconds": 50,
@@ -5463,8 +5689,115 @@
                   }
                 },
                 {
+                  "id": "act-02-01-02-checkpoint-full",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Confirm button acts last postflop multiway.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Order postflop action from the button"
+                  ],
+                  "prompt": "Six-max flop, everyone in. Who acts last?",
+                  "choices": [
+                    {
+                      "id": "last-btn",
+                      "label": "BTN",
+                      "accessibilityText": "BTN"
+                    },
+                    {
+                      "id": "last-bb",
+                      "label": "BB",
+                      "accessibilityText": "BB"
+                    },
+                    {
+                      "id": "last-utg",
+                      "label": "UTG",
+                      "accessibilityText": "UTG"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "last-btn",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-01-02-03-wait-your-turn",
+              "order": 6,
+              "title": "Wait your turn",
+              "summary": "Act only when the action reaches you.",
+              "objectives": [
+                "Wait for your turn before acting"
+              ],
+              "prerequisites": [
+                "lesson-02-01-02-02-postflop-order"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-01-02-02-postflop-order"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-01-02-03-explain-wait",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Wait for your turn before acting"
+                  ],
+                  "accessibilityText": "Earlier seats act first. Wait until the action reaches you before you decide.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-01-02-03-explain-wait-line",
+                      "kind": "dialogue",
+                      "text": "Earlier seats act first. Wait until the action reaches you before you decide."
+                    }
+                  ],
+                  "okFeedback": "Wait for your turn.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "EARLIER SEATS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "YOUR TURN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-02-01-02-unguided-wait",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -5513,54 +5846,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-02-01-02-checkpoint-full",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Confirm button acts last postflop multiway.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Order postflop action from the button",
-                    "Wait for your turn before acting"
-                  ],
-                  "prompt": "Six-max flop, everyone in. Who acts last?",
-                  "choices": [
-                    {
-                      "id": "last-btn",
-                      "label": "BTN",
-                      "accessibilityText": "BTN"
-                    },
-                    {
-                      "id": "last-bb",
-                      "label": "BB",
-                      "accessibilityText": "BB"
-                    },
-                    {
-                      "id": "last-utg",
-                      "label": "UTG",
-                      "accessibilityText": "UTG"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "last-btn",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -5573,22 +5858,20 @@
           "summary": "Pairs, broadways, suited aces, suited connectors, trash.",
           "lessons": [
             {
-              "id": "lesson-02-02-01-hand-families",
+              "id": "lesson-02-02-01-01-pocket-pairs",
               "order": 1,
-              "title": "Hand families",
-              "summary": "Sort starting hands into useful families.",
+              "title": "Pocket pairs",
+              "summary": "Two hole cards of the same rank.",
               "objectives": [
-                "Recognize pocket pairs",
-                "Recognize broadways and suited aces",
-                "Recognize suited connectors versus offsuit trash"
+                "Recognize pocket pairs"
               ],
               "prerequisites": [
-                "lesson-02-01-02-acting-order"
+                "lesson-02-01-02-03-wait-your-turn"
               ],
               "remediationLessonIds": [
-                "lesson-02-01-02-acting-order"
+                "lesson-02-01-02-03-wait-your-turn"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 2,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -5695,10 +5978,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-02-01-02-broadways-suited-aces",
+              "order": 2,
+              "title": "Broadways and suited aces",
+              "summary": "Two big cards, or an ace with a same-suit card.",
+              "objectives": [
+                "Recognize broadways and suited aces"
+              ],
+              "prerequisites": [
+                "lesson-02-02-01-01-pocket-pairs"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-02-01-01-pocket-pairs"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-02-01-02-explain-broadway",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Recognize broadways and suited aces"
+                  ],
+                  "accessibilityText": "Two big cards, ten or higher, are broadways. An ace with a card of the same suit is a suited ace.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-02-01-02-explain-broadway-line",
+                      "kind": "dialogue",
+                      "text": "Two big cards, ten or higher, are broadways. An ace with a card of the same suit is a suited ace."
+                    }
+                  ],
+                  "okFeedback": "Broadway or suited ace.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BROADWAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SUITED ACE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-02-01-scaffolded-broadway",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -5748,10 +6091,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-02-01-03-connectors-vs-trash",
+              "order": 3,
+              "title": "Connectors versus trash",
+              "summary": "Tell suited connectors from offsuit trash.",
+              "objectives": [
+                "Recognize suited connectors versus offsuit trash"
+              ],
+              "prerequisites": [
+                "lesson-02-02-01-02-broadways-suited-aces"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-02-01-02-broadways-suited-aces"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-02-01-03-explain-connectors",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Recognize suited connectors versus offsuit trash"
+                  ],
+                  "accessibilityText": "Same-suit cards next to each other in rank are suited connectors. Low, unconnected offsuit cards are trash.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-02-01-03-explain-connectors-line",
+                      "kind": "dialogue",
+                      "text": "Same-suit cards next to each other in rank are suited connectors. Low, unconnected offsuit cards are trash."
+                    }
+                  ],
+                  "okFeedback": "Connectors play; trash folds.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CONNECTORS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "TRASH",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-02-01-unguided-sc",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -5805,7 +6208,7 @@
                 },
                 {
                   "id": "act-02-02-01-checkpoint-trash",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -5863,22 +6266,20 @@
           "summary": "Position-dependent baseline opens and live sizes.",
           "lessons": [
             {
-              "id": "lesson-02-03-01-open-fold",
+              "id": "lesson-02-03-01-01-fold-early-trash",
               "order": 1,
-              "title": "Open or fold baseline",
-              "summary": "Tighten early; open wider on the button at live sizes.",
+              "title": "Fold trash early",
+              "summary": "Weak hands fold from early position.",
               "objectives": [
-                "Fold trash from early position",
-                "Open strong hands for a live size",
-                "Widen opens on the button"
+                "Fold trash from early position"
               ],
               "prerequisites": [
-                "lesson-02-02-01-hand-families"
+                "lesson-02-02-01-03-connectors-vs-trash"
               ],
               "remediationLessonIds": [
-                "lesson-02-02-01-hand-families"
+                "lesson-02-02-01-03-connectors-vs-trash"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 2,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -5984,10 +6385,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-03-01-02-open-strong",
+              "order": 2,
+              "title": "Open strong hands",
+              "summary": "Raise strong hands to a live size.",
+              "objectives": [
+                "Open strong hands for a live size"
+              ],
+              "prerequisites": [
+                "lesson-02-03-01-01-fold-early-trash"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-03-01-01-fold-early-trash"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-03-01-02-explain-strong",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Open strong hands for a live size"
+                  ],
+                  "accessibilityText": "Strong hands open with a raise. At live tables, open bigger than a min-raise.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-03-01-02-explain-strong-line",
+                      "kind": "dialogue",
+                      "text": "Strong hands open with a raise. At live tables, open bigger than a min-raise."
+                    }
+                  ],
+                  "okFeedback": "Strong hand — open for a live size.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STRONG",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "LIVE SIZE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-03-01-scaffolded-qq",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -6043,8 +6504,121 @@
                   }
                 },
                 {
+                  "id": "act-02-03-01-checkpoint-hj",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Open ace-ten offsuit from the hijack.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Open strong hands for a live size"
+                  ],
+                  "prompt": "HJ with ATo. Folds to you. Action?",
+                  "choices": [
+                    {
+                      "id": "open-ato",
+                      "label": "Open to 6",
+                      "accessibilityText": "Open to 6",
+                      "action": "RAISE",
+                      "amountBb": 3
+                    },
+                    {
+                      "id": "fold-ato",
+                      "label": "Fold",
+                      "accessibilityText": "Fold",
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "jam-ato",
+                      "label": "Jam 100bb",
+                      "accessibilityText": "Jam 100bb",
+                      "action": "ALL_IN"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "random_in_class",
+                      "handFamily": "broadway",
+                      "suitFamily": "offsuit"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "open-ato",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-03-01-03-widen-button",
+              "order": 3,
+              "title": "Widen on the button",
+              "summary": "Open more hands when only the blinds are left.",
+              "objectives": [
+                "Widen opens on the button"
+              ],
+              "prerequisites": [
+                "lesson-02-03-01-02-open-strong"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-03-01-02-open-strong"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-03-01-03-explain-button",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Widen opens on the button"
+                  ],
+                  "accessibilityText": "On the button only the blinds are left to act, and you act last after the flop. Open more hands there.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-03-01-03-explain-button-line",
+                      "kind": "dialogue",
+                      "text": "On the button only the blinds are left to act, and you act last after the flop. Open more hands there."
+                    }
+                  ],
+                  "okFeedback": "Button — open wider.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BUTTON",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "WIDER",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-02-03-01-unguided-btn",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -6099,60 +6673,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-02-03-01-checkpoint-hj",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "poker_action_sizing",
-                  "estimatedSeconds": 55,
-                  "accessibilityText": "Open ace-ten offsuit from the hijack.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Open strong hands for a live size",
-                    "Widen opens on the button"
-                  ],
-                  "prompt": "HJ with ATo. Folds to you. Action?",
-                  "choices": [
-                    {
-                      "id": "open-ato",
-                      "label": "Open to 6",
-                      "accessibilityText": "Open to 6",
-                      "action": "RAISE",
-                      "amountBb": 3
-                    },
-                    {
-                      "id": "fold-ato",
-                      "label": "Fold",
-                      "accessibilityText": "Fold",
-                      "action": "FOLD"
-                    },
-                    {
-                      "id": "jam-ato",
-                      "label": "Jam 100bb",
-                      "accessibilityText": "Jam 100bb",
-                      "action": "ALL_IN"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "random_in_class",
-                      "handFamily": "broadway",
-                      "suitFamily": "offsuit"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "open-ato",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -6165,22 +6685,20 @@
           "summary": "Fold, call, or value 3-bet with a plan.",
           "lessons": [
             {
-              "id": "lesson-02-04-01-facing-raise",
+              "id": "lesson-02-04-01-01-fold-to-open",
               "order": 1,
-              "title": "Versus an open",
-              "summary": "Respond to a raise without guessing.",
+              "title": "Fold weak hands",
+              "summary": "Weak hands fold to a raise.",
               "objectives": [
-                "Fold weak hands to an open",
-                "Call with playable hands in position",
-                "Value 3-bet strong hands"
+                "Fold weak hands to an open"
               ],
               "prerequisites": [
-                "lesson-02-03-01-open-fold"
+                "lesson-02-03-01-03-widen-button"
               ],
               "remediationLessonIds": [
-                "lesson-02-03-01-open-fold"
+                "lesson-02-03-01-03-widen-button"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 2,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -6286,10 +6804,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-04-01-02-call-in-position",
+              "order": 2,
+              "title": "Call in position",
+              "summary": "Playable hands can call when you act after the raiser.",
+              "objectives": [
+                "Call with playable hands in position"
+              ],
+              "prerequisites": [
+                "lesson-02-04-01-01-fold-to-open"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-04-01-01-fold-to-open"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-04-01-02-explain-call",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Call with playable hands in position"
+                  ],
+                  "accessibilityText": "Playable hands like suited connectors can call an open when you will act after the raiser.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-04-01-02-explain-call-line",
+                      "kind": "dialogue",
+                      "text": "Playable hands like suited connectors can call an open when you will act after the raiser."
+                    }
+                  ],
+                  "okFeedback": "Playable and in position — call.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PLAYABLE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "IN POSITION",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-04-01-scaffolded-call",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -6344,10 +6927,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-04-01-03-value-3bet",
+              "order": 3,
+              "title": "Value 3-bet",
+              "summary": "Re-raise strong hands for value.",
+              "objectives": [
+                "Value 3-bet strong hands"
+              ],
+              "prerequisites": [
+                "lesson-02-04-01-02-call-in-position"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-04-01-02-call-in-position"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-04-01-03-explain-threebet",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Value 3-bet strong hands"
+                  ],
+                  "accessibilityText": "Strong hands re-raise for value. That re-raise over an open is a 3-bet.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-04-01-03-explain-threebet-line",
+                      "kind": "dialogue",
+                      "text": "Strong hands re-raise for value. That re-raise over an open is a 3-bet."
+                    }
+                  ],
+                  "okFeedback": "Strong — 3-bet for value.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STRONG",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "3-BET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-04-01-unguided-3bet",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -6404,7 +7047,7 @@
                 },
                 {
                   "id": "act-02-04-01-checkpoint-aq",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -6415,7 +7058,6 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Call with playable hands in position",
                     "Value 3-bet strong hands"
                   ],
                   "prompt": "HJ opens to 6. You have AQs on the CO. Action?",
@@ -6467,22 +7109,20 @@
           "summary": "Effective stack and 50/100/200 BB intuition.",
           "lessons": [
             {
-              "id": "lesson-02-05-01-effective-stack",
+              "id": "lesson-02-05-01-01-chips-to-bb",
               "order": 1,
-              "title": "Effective stacks",
-              "summary": "Measure stacks in big blinds and use the shorter one.",
+              "title": "Chips to big blinds",
+              "summary": "Count your stack in big blinds.",
               "objectives": [
-                "Convert chips to big blinds",
-                "Use the shorter stack as effective",
-                "Sense 50bb vs 100bb vs 200bb depth"
+                "Convert chips to big blinds"
               ],
               "prerequisites": [
-                "lesson-02-04-01-facing-raise"
+                "lesson-02-04-01-03-value-3bet"
               ],
               "remediationLessonIds": [
-                "lesson-02-04-01-facing-raise"
+                "lesson-02-04-01-03-value-3bet"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 3,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -6577,8 +7217,115 @@
                   }
                 },
                 {
-                  "id": "act-02-05-01-scaffolded-eff",
+                  "id": "act-02-05-01-checkpoint-200",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Convert a 1000 chip buy-in at 2/5 to big blinds.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Convert chips to big blinds"
+                  ],
+                  "prompt": "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
+                  "choices": [
+                    {
+                      "id": "bb-200",
+                      "label": "200bb",
+                      "accessibilityText": "200bb"
+                    },
+                    {
+                      "id": "bb-100",
+                      "label": "100bb",
+                      "accessibilityText": "100bb"
+                    },
+                    {
+                      "id": "bb-500",
+                      "label": "500bb",
+                      "accessibilityText": "500bb"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bb-200",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-05-01-02-shorter-stack",
+              "order": 2,
+              "title": "Shorter stack is effective",
+              "summary": "The smaller stack sets what can be won or lost.",
+              "objectives": [
+                "Use the shorter stack as effective"
+              ],
+              "prerequisites": [
+                "lesson-02-05-01-01-chips-to-bb"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-05-01-01-chips-to-bb"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-05-01-02-explain-eff",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Use the shorter stack as effective"
+                  ],
+                  "accessibilityText": "Only the smaller stack can be won or lost between two players. That shorter stack is the effective stack.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-05-01-02-explain-eff-line",
+                      "kind": "dialogue",
+                      "text": "Only the smaller stack can be won or lost between two players. That shorter stack is the effective stack."
+                    }
+                  ],
+                  "okFeedback": "Shorter stack is effective.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SHORTER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "EFFECTIVE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-02-05-01-scaffolded-eff",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -6627,10 +7374,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-05-01-03-stack-depth",
+              "order": 3,
+              "title": "Stack depth",
+              "summary": "Feel the difference between 50, 100, and 200 big blinds.",
+              "objectives": [
+                "Sense 50bb vs 100bb vs 200bb depth"
+              ],
+              "prerequisites": [
+                "lesson-02-05-01-02-shorter-stack"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-05-01-02-shorter-stack"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-05-01-03-explain-depth",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Sense 50bb vs 100bb vs 200bb depth"
+                  ],
+                  "accessibilityText": "Fifty big blinds plays short and simple. One hundred is standard. Two hundred is deep, with more room to maneuver.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-05-01-03-explain-depth-line",
+                      "kind": "dialogue",
+                      "text": "Fifty big blinds plays short and simple. One hundred is standard. Two hundred is deep, with more room to maneuver."
+                    }
+                  ],
+                  "okFeedback": "Short, standard, deep.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "50BB",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "100BB",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "200BB",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-05-01-unguided-depth",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -6679,54 +7491,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-02-05-01-checkpoint-200",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Convert a 1000 chip buy-in at 2/5 to big blinds.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Convert chips to big blinds",
-                    "Sense 50bb vs 100bb vs 200bb depth"
-                  ],
-                  "prompt": "Blinds 2/5. You buy in for 1000 chips. Stack in big blinds?",
-                  "choices": [
-                    {
-                      "id": "bb-200",
-                      "label": "200bb",
-                      "accessibilityText": "200bb"
-                    },
-                    {
-                      "id": "bb-100",
-                      "label": "100bb",
-                      "accessibilityText": "100bb"
-                    },
-                    {
-                      "id": "bb-500",
-                      "label": "500bb",
-                      "accessibilityText": "500bb"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "bb-200",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -6739,22 +7503,20 @@
           "summary": "Follow action, speak clearly, protect cards, act in turn.",
           "lessons": [
             {
-              "id": "lesson-02-06-01-live-habits",
+              "id": "lesson-02-06-01-01-follow-action",
               "order": 1,
-              "title": "Live table habits",
-              "summary": "Basic live room discipline for every hand.",
+              "title": "Follow the action",
+              "summary": "Watch what earlier seats do before deciding.",
               "objectives": [
-                "Follow the action before deciding",
-                "Verbalize actions clearly",
-                "Protect cards and avoid acting out of turn"
+                "Follow the action before deciding"
               ],
               "prerequisites": [
-                "lesson-02-05-01-effective-stack"
+                "lesson-02-05-01-03-stack-depth"
               ],
               "remediationLessonIds": [
-                "lesson-02-05-01-effective-stack"
+                "lesson-02-05-01-03-stack-depth"
               ],
-              "estimatedMinutes": 6,
+              "estimatedMinutes": 2,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -6859,10 +7621,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-06-01-02-say-your-action",
+              "order": 2,
+              "title": "Say your action",
+              "summary": "Speak your action clearly before chips move.",
+              "objectives": [
+                "Verbalize actions clearly"
+              ],
+              "prerequisites": [
+                "lesson-02-06-01-01-follow-action"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-06-01-01-follow-action"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-06-01-02-explain-say",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Verbalize actions clearly"
+                  ],
+                  "accessibilityText": "Say your action out loud before chips move. Clear words protect you from mix-ups.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-06-01-02-explain-say-line",
+                      "kind": "dialogue",
+                      "text": "Say your action out loud before chips move. Clear words protect you from mix-ups."
+                    }
+                  ],
+                  "okFeedback": "Say it, then move chips.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHIPS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-06-01-scaffolded-verbal",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -6911,10 +7733,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-06-01-03-protect-and-wait",
+              "order": 3,
+              "title": "Protect cards, wait your turn",
+              "summary": "Cover your cards and act only in turn.",
+              "objectives": [
+                "Protect cards and avoid acting out of turn"
+              ],
+              "prerequisites": [
+                "lesson-02-06-01-02-say-your-action"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-06-01-02-say-your-action"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-06-01-03-explain-protect",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Protect cards and avoid acting out of turn"
+                  ],
+                  "accessibilityText": "Keep a chip on your cards so they are not mucked. Act only when it is your turn.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-06-01-03-explain-protect-line",
+                      "kind": "dialogue",
+                      "text": "Keep a chip on your cards so they are not mucked. Act only when it is your turn."
+                    }
+                  ],
+                  "okFeedback": "Cover cards, wait your turn.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "COVER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "WAIT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-06-01-unguided-protect",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -6966,7 +7848,7 @@
                 },
                 {
                   "id": "act-02-06-01-checkpoint-oot",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -6977,8 +7859,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Protect cards and avoid acting out of turn",
-                    "Follow the action before deciding"
+                    "Protect cards and avoid acting out of turn"
                   ],
                   "prompt": "Action is two seats left. You toss in a raise early. Problem?",
                   "choices": [
@@ -7033,10 +7914,10 @@
                 "Keep live habits while deciding"
               ],
               "prerequisites": [
-                "lesson-02-06-01-live-habits"
+                "lesson-02-06-01-03-protect-and-wait"
               ],
               "remediationLessonIds": [
-                "lesson-02-03-01-open-fold"
+                "lesson-02-03-01-03-widen-button"
               ],
               "estimatedMinutes": 10,
               "difficultyBand": 2,
@@ -7327,7 +8208,7 @@
                 "lesson-02-07-01-baseline-full-hand"
               ],
               "remediationLessonIds": [
-                "lesson-02-01-01-position-labels"
+                "lesson-02-01-01-03-later-seats"
               ],
               "estimatedMinutes": 8,
               "difficultyBand": 2,
@@ -7635,14 +8516,12 @@
           "summary": "Pot, stacks, commitments, button, action, and verbal declarations.",
           "lessons": [
             {
-              "id": "lesson-03-01-01-reading-live-table",
+              "id": "lesson-03-01-01-01-pot-and-stacks",
               "order": 1,
-              "title": "Read the table first",
-              "summary": "Track pot, stacks, button, and who must act before deciding.",
+              "title": "Pot and stacks",
+              "summary": "Track the pot and effective stacks before deciding.",
               "objectives": [
-                "Track pot size and stack depths",
-                "Locate the button and action seat",
-                "Honor verbal declarations at a live table"
+                "Track pot size and stack depths"
               ],
               "prerequisites": [
                 "lesson-02-07-02-section-two-jump"
@@ -7650,7 +8529,7 @@
               "remediationLessonIds": [
                 "lesson-02-07-02-section-two-jump"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 4,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -7750,8 +8629,115 @@
                   }
                 },
                 {
-                  "id": "act-03-01-01-scaffolded",
+                  "id": "act-03-01-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Effective stack is the shorter committed stack.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Track pot size and stack depths"
+                  ],
+                  "prompt": "Hero 140bb, villain 55bb, pot 18. What matters most next?",
+                  "choices": [
+                    {
+                      "id": "eff-55",
+                      "label": "Effective 55bb and the 18 pot",
+                      "accessibilityText": "Effective 55bb and the 18 pot"
+                    },
+                    {
+                      "id": "hero-140",
+                      "label": "Only hero's 140bb",
+                      "accessibilityText": "Only hero's 140bb"
+                    },
+                    {
+                      "id": "ignore-pot",
+                      "label": "Ignore pot until the river",
+                      "accessibilityText": "Ignore pot until the river"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "eff-55",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-01-01-02-button-and-action",
+              "order": 2,
+              "title": "Button and action seat",
+              "summary": "Find the button, then who must act.",
+              "objectives": [
+                "Locate the button and action seat"
+              ],
+              "prerequisites": [
+                "lesson-03-01-01-01-pot-and-stacks"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-01-01-01-pot-and-stacks"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-01-01-02-explain-seat",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Locate the button and action seat"
+                  ],
+                  "accessibilityText": "Find the dealer button first. Then find the seat that must act right now.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-01-01-02-explain-seat-line",
+                      "kind": "dialogue",
+                      "text": "Find the dealer button first. Then find the seat that must act right now."
+                    }
+                  ],
+                  "okFeedback": "Button, then who acts.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BUTTON",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "WHO ACTS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-03-01-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -7800,10 +8786,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-01-01-03-verbal-binds",
+              "order": 3,
+              "title": "Words are binding",
+              "summary": "What you say at a live table counts.",
+              "objectives": [
+                "Honor verbal declarations at a live table"
+              ],
+              "prerequisites": [
+                "lesson-03-01-01-02-button-and-action"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-01-01-02-button-and-action"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-01-01-03-explain-verbal",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Honor verbal declarations at a live table"
+                  ],
+                  "accessibilityText": "At a live table, what you say counts. Say raise and you must raise.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-01-01-03-explain-verbal-line",
+                      "kind": "dialogue",
+                      "text": "At a live table, what you say counts. Say raise and you must raise."
+                    }
+                  ],
+                  "okFeedback": "Your words bind you.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BINDING",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-01-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -7852,54 +8898,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-03-01-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Effective stack is the shorter committed stack.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Track pot size and stack depths",
-                    "Locate the button and action seat"
-                  ],
-                  "prompt": "Hero 140bb, villain 55bb, pot 18. What matters most next?",
-                  "choices": [
-                    {
-                      "id": "eff-55",
-                      "label": "Effective 55bb and the 18 pot",
-                      "accessibilityText": "Effective 55bb and the 18 pot"
-                    },
-                    {
-                      "id": "hero-140",
-                      "label": "Only hero's 140bb",
-                      "accessibilityText": "Only hero's 140bb"
-                    },
-                    {
-                      "id": "ignore-pot",
-                      "label": "Ignore pot until the river",
-                      "accessibilityText": "Ignore pot until the river"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "eff-55",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -7922,10 +8920,10 @@
                 "Recognize air that needs equity or fold equity"
               ],
               "prerequisites": [
-                "lesson-03-01-01-reading-live-table"
+                "lesson-03-01-01-03-verbal-binds"
               ],
               "remediationLessonIds": [
-                "lesson-03-01-01-reading-live-table"
+                "lesson-03-01-01-03-verbal-binds"
               ],
               "estimatedMinutes": 8,
               "difficultyBand": 3,
@@ -10936,7 +11934,7 @@
                 "lesson-03-08-01-leak-repair"
               ],
               "remediationLessonIds": [
-                "lesson-03-01-01-reading-live-table"
+                "lesson-03-01-01-03-verbal-binds"
               ],
               "estimatedMinutes": 10,
               "difficultyBand": 3,

@@ -20,7 +20,7 @@ import {
 /** @returns {object} Section 3 — First Casino Sessions */
 export function buildSectionThree() {
   const prev = SECTION_TWO_EXIT_LESSON;
-  const L030101 = "lesson-03-01-01-reading-live-table";
+  const L030101 = "lesson-03-01-01-reading-live-table"; // retired LPT-140: split in course.json (lessonSplitMap)
   const L030201 = "lesson-03-02-01-flop-hand-classes";
   const L030301 = "lesson-03-03-01-outs-and-price";
   const L030401 = "lesson-03-04-01-flop-decisions";

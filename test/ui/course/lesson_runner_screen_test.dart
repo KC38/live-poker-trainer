@@ -748,7 +748,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-01-03-blinds-and-button',
+          lessonId: 'lesson-01-01-03-01-dealer-button', // split from lesson-01-01-03-blinds-and-button
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_blinds_frame',
@@ -794,7 +794,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-02-01-hand-ranks',
+          lessonId: 'lesson-01-02-01-01-order-hand-ranks', // split from lesson-01-02-01-hand-ranks
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_ranks_frame',
@@ -835,7 +835,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-02-02-best-five-kickers',
+          lessonId: 'lesson-01-02-02-01-best-five', // split from lesson-01-02-02-best-five-kickers
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_best_five_frame',
@@ -876,7 +876,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-03-01-fold-check-call',
+          lessonId: 'lesson-01-03-01-01-fold', // split from lesson-01-03-01-fold-check-call
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_passive_frame',
@@ -918,7 +918,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-03-02-bet-raise-allin',
+          lessonId: 'lesson-01-03-02-01-bet', // split from lesson-01-03-02-bet-raise-allin
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_aggro_frame',
@@ -963,7 +963,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-04-01-streets-and-order',
+          lessonId: 'lesson-01-04-01-01-four-streets', // split from lesson-01-04-01-streets-and-order
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_streets_frame',
@@ -1004,7 +1004,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-05-01-winning-pots',
+          lessonId: 'lesson-01-05-01-01-win-by-fold', // split from lesson-01-05-01-winning-pots
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_pots_frame',
@@ -1127,7 +1127,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-02-01-01-position-labels',
+          lessonId: 'lesson-02-01-01-03-later-seats', // split from lesson-02-01-01-position-labels
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_position_frame',
@@ -1215,7 +1215,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-02-02-01-hand-families',
+          lessonId: 'lesson-02-02-01-01-pocket-pairs', // split from lesson-02-02-01-hand-families
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_families_frame',
@@ -1257,7 +1257,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-02-03-01-open-fold',
+          lessonId: 'lesson-02-03-01-01-fold-early-trash', // split from lesson-02-03-01-open-fold
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_open_fold_frame',
@@ -1299,7 +1299,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-02-04-01-facing-raise',
+          lessonId: 'lesson-02-04-01-01-fold-to-open', // split from lesson-02-04-01-facing-raise
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_facing_raise_frame',
@@ -1341,7 +1341,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-02-05-01-effective-stack',
+          lessonId: 'lesson-02-05-01-01-chips-to-bb', // split from lesson-02-05-01-effective-stack
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_effective_stack_frame',
@@ -1383,7 +1383,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-02-06-01-live-habits',
+          lessonId: 'lesson-02-06-01-01-follow-action', // split from lesson-02-06-01-live-habits
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_live_habits_frame',
@@ -1512,7 +1512,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-03-01-01-reading-live-table',
+          lessonId: 'lesson-03-01-01-01-pot-and-stacks', // split from lesson-03-01-01-reading-live-table
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_read_table_frame',
@@ -4518,10 +4518,7 @@ void main() {
     await tester.tap(find.text('Technical details'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
-    expect(
-      find.textContaining('waiting on startCourseLesson'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('waiting on startCourseLesson'), findsOneWidget);
   });
 
   testWidgets('hung initializeProfile names that step in details', (
@@ -4607,68 +4604,67 @@ void main() {
     expect(errored.livesMax, 5);
   });
 
-  testWidgets(
-    'bootstrap coach bubble stays non-empty at mini size (LPT-48)',
-    (tester) async {
-      tester.view.physicalSize = const Size(375, 812);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.reset);
+  testWidgets('bootstrap coach bubble stays non-empty at mini size (LPT-48)', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 812);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
 
-      const home = CourseHomeSnapshot(
-        status: CourseHomeLoadStatus.ready,
-        nodes: [],
-        sections: [],
-        hearts: 5,
-        livesMax: 5,
-      );
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            soundServiceProvider.overrideWithValue(SoundService.silent()),
-            courseCatalogProvider.overrideWith((ref) async => catalog),
-            courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
-            analyticsServiceProvider.overrideWithValue(
-              AnalyticsService(enabled: false),
-            ),
-            onboardingControllerProvider.overrideWith(
-              (ref) => OnboardingController(null),
-            ),
-            heroIdentityProvider.overrideWithValue(const HeroIdentity()),
-          ],
-          child: MaterialApp(
-            theme: buildPokerTheme(),
-            home: LessonRunnerScreen(
-              lessonId: kFirstCourseLessonId,
-              courseService: _HungStartCourseService(catalog),
-              startRequestId: 'start_empty_bubble_boot',
-              bootstrapTimeout: const Duration(milliseconds: 80),
-            ),
+    const home = CourseHomeSnapshot(
+      status: CourseHomeLoadStatus.ready,
+      nodes: [],
+      sections: [],
+      hearts: 5,
+      livesMax: 5,
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          soundServiceProvider.overrideWithValue(SoundService.silent()),
+          courseCatalogProvider.overrideWith((ref) async => catalog),
+          courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+          analyticsServiceProvider.overrideWithValue(
+            AnalyticsService(enabled: false),
+          ),
+          onboardingControllerProvider.overrideWith(
+            (ref) => OnboardingController(null),
+          ),
+          heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+        ],
+        child: MaterialApp(
+          theme: buildPokerTheme(),
+          home: LessonRunnerScreen(
+            lessonId: kFirstCourseLessonId,
+            courseService: _HungStartCourseService(catalog),
+            startRequestId: 'start_empty_bubble_boot',
+            bootstrapTimeout: const Duration(milliseconds: 80),
           ),
         ),
-      );
-      await tester.pump();
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      final loading = tester.widget<LessonScreenLayout>(
-        find.byType(LessonScreenLayout),
-      );
-      expect(loading.speech, kLessonBootstrapSpeech);
-      expect(find.text(kLessonBootstrapSpeech), findsOneWidget);
-      expect(loading.showToolRow, isFalse);
-      expect(find.byType(LessonToolRow), findsNothing);
-      expect(tester.takeException(), isNull);
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    final loading = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(loading.speech, kLessonBootstrapSpeech);
+    expect(find.text(kLessonBootstrapSpeech), findsOneWidget);
+    expect(loading.showToolRow, isFalse);
+    expect(find.byType(LessonToolRow), findsNothing);
+    expect(tester.takeException(), isNull);
 
-      await tester.pump(const Duration(milliseconds: 100));
-      await tester.pump();
-      final errored = tester.widget<LessonScreenLayout>(
-        find.byType(LessonScreenLayout),
-      );
-      expect(errored.speech, kLessonStartErrorSpeech);
-      expect(find.text(kLessonStartErrorSpeech), findsOneWidget);
-      expect(errored.showToolRow, isFalse);
-      expect(find.byType(LessonToolRow), findsNothing);
-      expect(tester.takeException(), isNull);
-    },
-  );
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pump();
+    final errored = tester.widget<LessonScreenLayout>(
+      find.byType(LessonScreenLayout),
+    );
+    expect(errored.speech, kLessonStartErrorSpeech);
+    expect(find.text(kLessonStartErrorSpeech), findsOneWidget);
+    expect(errored.showToolRow, isFalse);
+    expect(find.byType(LessonToolRow), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('zero hearts blocks the stage and pulses chrome hearts', (
     tester,
@@ -5215,7 +5211,7 @@ void main() {
           id: 'act-one',
           order: 1,
           stage: ActivityStage.scaffolded,
-      assessmentRole: AssessmentRole.checkpoint,
+          assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 20,
           accessibilityText: 'Pick',
@@ -5303,7 +5299,7 @@ void main() {
           id: 'act-one',
           order: 1,
           stage: ActivityStage.scaffolded,
-      assessmentRole: AssessmentRole.checkpoint,
+          assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 20,
           accessibilityText: 'Pick',
@@ -5386,7 +5382,7 @@ void main() {
           id: 'act-one',
           order: 1,
           stage: ActivityStage.scaffolded,
-      assessmentRole: AssessmentRole.checkpoint,
+          assessmentRole: AssessmentRole.checkpoint,
           renderer: ActivityRenderer.selectIdentify,
           estimatedSeconds: 20,
           accessibilityText: 'Pick',

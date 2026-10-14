@@ -770,6 +770,16 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-114, LPT-117, LPT-121, LPT-124, LPT-127, LPT-130, LPT-133, LPT-140: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-02-01-01-position-labels` → `lesson-02-01-01-01-seat-labels`, `lesson-02-01-01-02-blind-labels`, `lesson-02-01-01-03-later-seats` (LPT-114)
+- `lesson-02-01-02-acting-order` → `lesson-02-01-02-01-preflop-order`, `lesson-02-01-02-02-postflop-order`, `lesson-02-01-02-03-wait-your-turn` (LPT-117)
+- `lesson-02-02-01-hand-families` → `lesson-02-02-01-01-pocket-pairs`, `lesson-02-02-01-02-broadways-suited-aces`, `lesson-02-02-01-03-connectors-vs-trash` (LPT-121)
+- `lesson-02-03-01-open-fold` → `lesson-02-03-01-01-fold-early-trash`, `lesson-02-03-01-02-open-strong`, `lesson-02-03-01-03-widen-button` (LPT-124)
+- `lesson-02-04-01-facing-raise` → `lesson-02-04-01-01-fold-to-open`, `lesson-02-04-01-02-call-in-position`, `lesson-02-04-01-03-value-3bet` (LPT-127)
+- `lesson-02-05-01-effective-stack` → `lesson-02-05-01-01-chips-to-bb`, `lesson-02-05-01-02-shorter-stack`, `lesson-02-05-01-03-stack-depth` (LPT-130)
+- `lesson-02-06-01-live-habits` → `lesson-02-06-01-01-follow-action`, `lesson-02-06-01-02-say-your-action`, `lesson-02-06-01-03-protect-and-wait` (LPT-133)
+- `lesson-03-01-01-reading-live-table` → `lesson-03-01-01-01-pot-and-stacks`, `lesson-03-01-01-02-button-and-action`, `lesson-03-01-01-03-verbal-binds` (LPT-140)
+
 Curriculum splits LPT-87, LPT-90, LPT-93, LPT-96, LPT-100, LPT-103, LPT-106: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-01-01-03-blinds-and-button` → `lesson-01-01-03-01-dealer-button`, `lesson-01-01-03-02-small-and-big-blind`, `lesson-01-01-03-03-blinds-post-first` (LPT-87)
 - `lesson-01-02-01-hand-ranks` → `lesson-01-02-01-01-order-hand-ranks`, `lesson-01-02-01-02-pairs-straights-flushes`, `lesson-01-02-01-03-compare-finished-hands` (LPT-90)
@@ -1695,16 +1705,32 @@ felt.
 | Main and side pots | explain SoftPulse cues MAIN POT → SIDE POT; unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
-| Position labels | Six-max seats labeled on the table; explain SoftPulse cues D (LPT-635) | — |
-| Acting order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
-| Hand families | Pairs, Broadways, Suited aces, Connectors; densified SoftPulse one gold via `guideRegion` (LPT-634); explain SoftPulse cues Pairs → Broadways → Suited aces → Connectors (LPT-635) | — |
-| Open or fold baseline | Early, Button, Live 3x; explain SoftPulse cues EARLY → BUTTON → LIVE 3x (LPT-635) | — |
-| Versus an open | Fold, Call, 3-bet; explain SoftPulse cues FOLD → CALL → 3-BET (LPT-635) | — |
-| Effective stacks | Chips→BB, Shorter, Depth; explain SoftPulse cues CHIPS→BB → SHORTER → DEPTH (LPT-635) | — |
-| Live table habits | Watch, Say, Cover, Wait | — |
+| Seat labels | Six-max seats labeled on the table; explain SoftPulse cues D (LPT-635); unit `unit-02-01-position-power` (LPT-114 split) | — |
+| Blind labels | explain SoftPulse cues SB → BB; unit `unit-02-01-position-power` (LPT-114 split) | — |
+| Later seats play better | explain SoftPulse cues D; unit `unit-02-01-position-power` (LPT-114 split) | — |
+| Preflop order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635); unit `unit-02-01-position-power` (LPT-117 split) | scaffolded pressHints one-per-press (LPT-667) |
+| Postflop order | explain SoftPulse cues SB → BTN; unit `unit-02-01-position-power` (LPT-117 split) | — |
+| Wait your turn | explain SoftPulse cues EARLIER SEATS → YOUR TURN; unit `unit-02-01-position-power` (LPT-117 split) | — |
+| Pocket pairs | Pairs, Broadways, Suited aces, Connectors; densified SoftPulse one gold via `guideRegion` (LPT-634); explain SoftPulse cues Pairs → Broadways → Suited aces → Connectors (LPT-635); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
+| Broadways and suited aces | explain SoftPulse cues BROADWAY → SUITED ACE; unit `unit-02-02-starting-hands` (LPT-121 split) | — |
+| Connectors versus trash | explain SoftPulse cues CONNECTORS → TRASH; unit `unit-02-02-starting-hands` (LPT-121 split) | — |
+| Fold trash early | Early, Button, Live 3x; explain SoftPulse cues EARLY → BUTTON → LIVE 3x (LPT-635); unit `unit-02-03-open-fold` (LPT-124 split) | — |
+| Open strong hands | explain SoftPulse cues STRONG → LIVE SIZE; unit `unit-02-03-open-fold` (LPT-124 split) | — |
+| Widen on the button | explain SoftPulse cues BUTTON → WIDER; unit `unit-02-03-open-fold` (LPT-124 split) | — |
+| Fold weak hands | Fold, Call, 3-bet; explain SoftPulse cues FOLD → CALL → 3-BET (LPT-635); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
+| Call in position | explain SoftPulse cues PLAYABLE → IN POSITION → CALL; unit `unit-02-04-facing-raise` (LPT-127 split) | — |
+| Value 3-bet | explain SoftPulse cues STRONG → 3-BET; unit `unit-02-04-facing-raise` (LPT-127 split) | — |
+| Chips to big blinds | Chips→BB, Shorter, Depth; explain SoftPulse cues CHIPS→BB → SHORTER → DEPTH (LPT-635); unit `unit-02-05-stacks` (LPT-130 split) | — |
+| Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE; unit `unit-02-05-stacks` (LPT-130 split) | — |
+| Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unit `unit-02-05-stacks` (LPT-130 split) | — |
+| Follow the action | Watch, Say, Cover, Wait; unit `unit-02-06-table-habits` (LPT-133 split) | — |
+| Say your action | explain SoftPulse cues SAY → CHIPS; unit `unit-02-06-table-habits` (LPT-133 split) | — |
+| Protect cards, wait your turn | explain SoftPulse cues COVER → WAIT; unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Full-ring baseline hand | Nine, Same, Position; explain SoftPulse cues NINE → SAME → POSITION (LPT-635) | — |
 | Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221); jump-family SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| Read the table first | Pot, Stacks, Button, Who Acts | — |
+| Pot and stacks | Pot, Stacks, Button, Who Acts; unit `unit-03-01-reading-table` (LPT-140 split) | — |
+| Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS; unit `unit-03-01-reading-table` (LPT-140 split) | — |
+| Words are binding | explain SoftPulse cues SAY → BINDING; unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Name your flop class | Made, Draw, SDV, Air; fixed steps author suit-rotated `deal.variants` (LPT-384) | — |
 | Count outs, pay the right price | Clean, Dirty, Price; densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Choose a flop line | Value, C-bet, Check, Call, Fold, Raise; postflop TPTK/broadway remap fingerprint (LPT-311) | — |

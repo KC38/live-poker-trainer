@@ -280,7 +280,7 @@ describe("course session integration", () => {
         uid: "gate-user",
         raw: {
           clientVersion: "2.0.0",
-          lessonId: "lesson-02-01-01-position-labels",
+          lessonId: "lesson-02-01-01-01-seat-labels",
           startRequestId: "start_gate_02",
         },
         db,
@@ -322,7 +322,7 @@ describe("course session integration", () => {
       uid: "iso-user",
       raw: {
         clientVersion: "2.0.0",
-        lessonId: "lesson-02-01-01-position-labels",
+        lessonId: "lesson-02-01-01-01-seat-labels",
         startRequestId: "start_iso_01",
       },
       db,
@@ -332,7 +332,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-02-01-01-explain-pos",
+        activityId: "act-02-01-01-01-explain-seats",
         idempotencyKey: "iso_step_01",
       },
       db,
@@ -359,7 +359,7 @@ describe("course session integration", () => {
       db,
     });
     expect(state.profile?.completedLessonIds).toContain(
-      "lesson-02-01-01-position-labels",
+      "lesson-02-01-01-01-seat-labels",
     );
     expect(state.profile?.lifetimeXp).toBeGreaterThan(0);
   });
@@ -422,7 +422,7 @@ describe("course session integration", () => {
       uid: "complete-user",
       raw: {
         clientVersion: "2.0.0",
-        lessonId: "lesson-02-01-01-position-labels",
+        lessonId: "lesson-02-01-01-01-seat-labels",
         startRequestId: "start_complete_01",
       },
       db,
@@ -432,7 +432,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: started.attempt.attemptId,
-        activityId: "act-02-01-01-explain-pos",
+        activityId: "act-02-01-01-01-explain-seats",
         idempotencyKey: "complete_step_01",
       },
       db,
@@ -529,7 +529,7 @@ describe("course session integration", () => {
       raw: {clientVersion: "2.0.0"},
       db,
     });
-    const lessonId = "lesson-02-01-01-position-labels";
+    const lessonId = "lesson-02-01-01-01-seat-labels";
     await db.doc("users/heart-practice-user/course/main").set({
       completedLessonIds: [
         "lesson-01-06-02-section-one-jump",
@@ -555,7 +555,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: review.attempt.attemptId,
-        activityId: "act-02-01-01-explain-pos",
+        activityId: "act-02-01-01-01-explain-seats",
         idempotencyKey: "vol_review_step_01",
       },
       db,
@@ -588,7 +588,7 @@ describe("course session integration", () => {
       raw: {
         clientVersion: "2.0.0",
         attemptId: practice.attempt.attemptId,
-        activityId: "act-02-01-01-explain-pos",
+        activityId: "act-02-01-01-01-explain-seats",
         idempotencyKey: "practice_heart_step_01",
       },
       db,
@@ -832,7 +832,7 @@ describe("course session integration", () => {
       raw: {clientVersion: "2.0.0"},
       db,
     });
-    const frontierLessonId = "lesson-02-01-01-position-labels";
+    const frontierLessonId = "lesson-02-01-01-01-seat-labels";
     const reviewLessonId = "lesson-01-01-01-your-two-cards";
     await db.doc("users/review-pointer-user/course/main").set({
       completedLessonIds: [
@@ -843,7 +843,7 @@ describe("course session integration", () => {
       resume: {
         attemptId: "frontier-att",
         lessonId: frontierLessonId,
-        activityId: "act-02-01-01-explain-pos",
+        activityId: "act-02-01-01-01-explain-seats",
         activityIndex: 0,
       },
     }, {merge: true});
@@ -854,7 +854,7 @@ describe("course session integration", () => {
       catalogVersion: "2.0.0",
       status: "in_progress",
       activityIndex: 0,
-      currentActivityId: "act-02-01-01-explain-pos",
+      currentActivityId: "act-02-01-01-01-explain-seats",
       livesRemaining: 5,
       livesMax: 5,
       startRequestId: "start_frontier_seed",
