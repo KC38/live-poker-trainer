@@ -2462,3 +2462,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-186** Done — do not clone / do not re-add needs-human. Tip-commented LPT-761/186/677 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…761.
 - Prefer next: NEVER `lesson-04-06-02-*` Meet Station / Low residuals LPT-676…761.
 - act-04-06-01-*: interactive structural clean on tip except SoftPulse residual LPT-761; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` observation tiles — do not file handFamily.
+
+## Fold 2026-10-14ed (49e27b42 discovery Meet Station working-model residual)
+
+- Tip-stable `49e27b42` (#2355 observe-sticky SoftPulse residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-04-06-02-01/02/03` under Meet Calling Station unit:
+  - first-child `act-04-06-02-explain` SoftPulse STATION→HIGH→LOW + `explainGrading` under Introduce **concept-aligned** (not SoftPulse residual).
+  - scaffolded SoftPulse `model` working-model meta under Introduce → **LPT-767** (needs-human; Relates LPT-189; sibling TAG working-model **LPT-708**).
+  - successors `act-04-06-02-02-explain-spot` (STICKY CALLS→RARE FOLDS) + `act-04-06-02-03-explain-sample` (SAMPLE→CONFIDENCE) content-driven; guided SoftPulse `pt-station` + unguided SoftPulse `station2` densify PRESENT + checkpoint SoftPulse `low` kind `none` densify PRESENT.
+- Curriculum **LPT-189** Done — do not clone / do not re-add needs-human. Race SoftPulse clone **LPT-762** Done Duplicate of **LPT-761**. Tip-commented LPT-767/189/761/708 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…767 (leave ui-agent In Progress LPT-763…766 alone).
+- Prefer next: NEVER `lesson-04-07-01-*` observe-narrow / Low residuals LPT-676…767.
+- act-04-06-02-*: interactive structural clean on tip except working-model residual LPT-767; SoftPulse explain concept-aligned / successors content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` observation tiles — do not file handFamily.

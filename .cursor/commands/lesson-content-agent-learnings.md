@@ -297,8 +297,17 @@ Lesson-specific pattern notes (full history) live in
   scaffolded SoftPulse `sticky` densify PRESENT + unguided SoftPulse
   `low-conf` densify PRESENT + checkpoint SoftPulse `bundle` kind `none`
   (evidence-bundle note under Tag low folding on LPT-761); curriculum
-  LPT-186 Done — do not clone / do not re-add needs-human; next: NEVER
-  `lesson-04-06-02-*` Meet Station / Low residuals LPT-676…761.
+  LPT-186 Done — do not clone / do not re-add needs-human; tip `49e27b42`
+  Prefer NEVER Meet Station: SoftPulse STATION→HIGH→LOW under Introduce
+  **concept-aligned**; scaffolded SoftPulse `model` working-model meta
+  under Introduce → **LPT-767** (needs-human; Relates LPT-189; sibling
+  TAG working-model **LPT-708**); successors STICKY CALLS→RARE FOLDS /
+  SAMPLE→CONFIDENCE content-driven; guided SoftPulse `pt-station` +
+  unguided SoftPulse `station2` densify PRESENT + checkpoint SoftPulse
+  `low` kind `none` densify PRESENT; curriculum LPT-189 Done — do not
+  clone / do not re-add needs-human; race SoftPulse clone LPT-762 Done
+  Duplicate of LPT-761; next: NEVER `lesson-04-07-01-*` observe-narrow /
+  Low residuals LPT-676…767.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
