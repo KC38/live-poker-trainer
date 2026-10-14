@@ -2758,3 +2758,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-708/291/706/709/710/198/216/705; leave open LPT-676…779; leave ui-agent alone.
 - Prefer next: NEVER `lesson-06-11-03-*` Adjust TAG / Low residuals LPT-676…779 (LPT-680…710).
 - act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily.
+
+## Fold 2026-10-14fi (ba2a9867 Prefer NEVER Adjust TAG SoftPulse re-check)
+
+- Tip-stable `ba2a9867` (#2398 Meet TAG SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-06-11-03-01/02/03` under Adjust TAG unit:
+  - first-child `act-06-11-03-explain` SoftPulse CREDIT→TIGHTER→NO LIGHT + `explainGrading` "Credit → Tighter → No light." + Dart `VsTagsDemo` / `LessonVsTagsExplainTable` still pre-split under Respect-TAG-aggression-only → residual **LPT-709** still To Do (needs-human; Relates LPT-294).
+  - checkpoint SoftPulse `cite` kind `none` densify PRESENT (`tagRespectCiteOutcomes` / guideRegion) still under Respect-only → residual **LPT-710** still To Do (needs-human; Relates LPT-294).
+  - successors `act-06-11-03-02-explain-checkraise` (CHECK-RAISE→FOLD) + `act-06-11-03-03-explain-thin` (RARELY CALLS→CHECK) content-driven; guided SoftPulse `fold` PRESENT (`Jh`/`9d`·`Qc`/`9s`/`3h` +2 suit variants match Dart); scaffolded SoftPulse `fold-k9` one-per-press PRESENT (`Kh`/`9d` +2 suit variants); unguided SoftPulse `check` one-per-press PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants).
+- Curriculum **LPT-294** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-709/710/294/708/706/198/216; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-12-01-*` observe-wide / Low residuals LPT-676…779 (LPT-680…715).
+- act-06-11-03-*: interactive structural clean on tip except LPT-709 SoftPulse + LPT-710 cite residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive sizing acts are `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily.
