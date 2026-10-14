@@ -770,6 +770,15 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-169, LPT-172, LPT-176, LPT-179, LPT-182, LPT-215, LPT-218: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-04-01-01-ranges-not-hands` → `lesson-04-01-01-01-seat-as-range`, `lesson-04-01-01-02-ranges-move`, `lesson-04-01-01-03-no-exact-hand` (LPT-169)
+- `lesson-04-02-01-threebet-squeeze` → `lesson-04-02-01-01-value-3bet`, `lesson-04-02-01-02-facing-3bet`, `lesson-04-02-01-03-squeeze` (LPT-172)
+- `lesson-04-03-01-continuation-plans` → `lesson-04-03-01-01-multi-street-plan`, `lesson-04-03-01-02-abort-plan`, `lesson-04-03-01-03-pot-size-control` (LPT-176)
+- `lesson-04-04-01-sizing-communicates` → `lesson-04-04-01-01-value-vs-pressure`, `lesson-04-04-01-02-nearby-sizes`, `lesson-04-04-01-03-no-tiny-sizes` (LPT-179)
+- `lesson-04-05-01-spr-commitment` → `lesson-04-05-01-01-estimate-spr`, `lesson-04-05-01-02-commit-low-spr`, `lesson-04-05-01-03-flexible-high-spr` (LPT-182)
+- `lesson-04-09-01-type-identification` → `lesson-04-09-01-01-observation-not-certainty`, `lesson-04-09-01-02-confidence-with-samples`, `lesson-04-09-01-03-retire-labels` (LPT-215)
+- `lesson-04-10-01-exploit-checkpoints` → `lesson-04-10-01-01-same-hand-types`, `lesson-04-10-01-02-combine-factors` (LPT-218)
+
 Curriculum splits LPT-143, LPT-146, LPT-151, LPT-154, LPT-157, LPT-160, LPT-163: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-03-02-01-flop-hand-classes` → `lesson-03-02-01-01-made-hands`, `lesson-03-02-01-02-draws-vs-showdown`, `lesson-03-02-01-03-air` (LPT-143)
 - `lesson-03-03-01-outs-and-price` → `lesson-03-03-01-01-clean-outs`, `lesson-03-03-01-02-pot-odds`, `lesson-03-03-01-03-implied-odds` (LPT-146)
@@ -1767,11 +1776,21 @@ felt.
 | Fold bad prices | explain SoftPulse cues BAD PRICE → FOLD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Passive calls and crowd bluffs | explain SoftPulse cues PASSIVE → CROWD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Section 3 jump check | densified frame asks (LPT-390) | — |
-| Think in ranges | One hand, Range, Update; densified frame asks (LPT-403); unguided/checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| Navigate 3-bet pots | 3-bet, Ranges, Squeeze | — |
-| Plan beyond the flop | Flop, Turn, River; densified frame ask (LPT-407); checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| Size with a message | Value, Pressure, Size; densified frame ask (LPT-410); unguided SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| SPR decides commitment | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413) | — |
+| A seat is a range | One hand, Range, Update; densified frame asks (LPT-403); unguided/checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-01-ranges` (LPT-169 split) | — |
+| Action moves ranges | explain SoftPulse cues RAISE → NARROWER → CALL; unit `unit-04-01-ranges` (LPT-169 split) | — |
+| No exact hand too early | explain SoftPulse cues ONE HAND → RANGE; unit `unit-04-01-ranges` (LPT-169 split) | — |
+| Value 3-bet | 3-bet, Ranges, Squeeze; unit `unit-04-02-threebet` (LPT-172 split) | — |
+| Facing a 3-bet | explain SoftPulse cues 3-BET → FOLD → CONTINUE; unit `unit-04-02-threebet` (LPT-172 split) | — |
+| Squeeze spots | explain SoftPulse cues OPEN → CALLERS → SQUEEZE; unit `unit-04-02-threebet` (LPT-172 split) | — |
+| Build a multi-street plan | Flop, Turn, River; densified frame ask (LPT-407); checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-03-continuation` (LPT-176 split) | — |
+| Abort when the board changes | explain SoftPulse cues BOARD CHANGES → STOP; unit `unit-04-03-continuation` (LPT-176 split) | — |
+| Match pot size to strength | explain SoftPulse cues MEDIUM → SMALL POT; unit `unit-04-03-continuation` (LPT-176 split) | — |
+| Value or pressure size | Value, Pressure, Size; densified frame ask (LPT-410); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-04-sizing` (LPT-179 split) | — |
+| Nearby live sizes | explain SoftPulse cues NEARBY → STORY; unit `unit-04-04-sizing` (LPT-179 split) | — |
+| Avoid tiny sizes | explain SoftPulse cues TINY → VALUE; unit `unit-04-04-sizing` (LPT-179 split) | — |
+| Estimate SPR | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413); unit `unit-04-05-spr` (LPT-182 split) | — |
+| Commit at low SPR | explain SoftPulse cues LOW SPR → COMMIT; unit `unit-04-05-spr` (LPT-182 split) | — |
+| Stay flexible at high SPR | explain SoftPulse cues HIGH SPR → FLEXIBLE; unit `unit-04-05-spr` (LPT-182 split) | — |
 | Observe sticky callers | Enters, Calls, Folds; densified frame asks (LPT-416) | participation note, observation bundle |
 | Meet the Calling Station | Station, High, Low; scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420) | label quizzes |
 | Adjust versus Calling Station | Value, Bluffs, Cite; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | bluff-less reason |
@@ -1781,8 +1800,11 @@ felt.
 | Observe wild aggressors | Raise, Barrel, Count; densified SoftPulse one gold (LPT-462) | entry quizzes |
 | Meet the Maniac | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490) | label quizzes |
 | Adjust versus Maniac | Wider, Hang, Ego; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | call-wider reason |
-| Confidence and samples | Observe, Samples, Showdowns; densified SoftPulse one gold (LPT-495) | confidence quizzes |
-| Same hand, different types | Cards, Seats, Evidence | — |
+| Observation is not certainty | Observe, Samples, Showdowns; densified SoftPulse one gold (LPT-495); unit `unit-04-09-type-id` (LPT-215 split) | confidence quizzes |
+| Confidence grows with samples | explain SoftPulse cues SAMPLES → SHOWDOWNS; unit `unit-04-09-type-id` (LPT-215 split) | — |
+| Retire labels when evidence flips | explain SoftPulse cues NEW EVIDENCE → RETIRE; unit `unit-04-09-type-id` (LPT-215 split) | — |
+| Same hand, different types | Cards, Seats, Evidence; unit `unit-04-10-exploits` (LPT-218 split) | — |
+| Combine type, position, and stack | explain SoftPulse cues TYPE → POSITION → STACK; unit `unit-04-10-exploits` (LPT-218 split) | — |
 | Section 4 jump check | jump-range SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Build multiway ranges with nut potential | Nutted, Air, Domination | — |
 | Play 150–300bb stacks with a plan | Deep, Realize, Stack | — |

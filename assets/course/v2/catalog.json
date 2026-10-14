@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "90b72a302ce070e3a92216961b7227c207a3dca7bf320a5f5a0cc8d390dae493",
+  "contentChecksum": "32f38a26fcdf8b6b48b751eaf586f49a6b2a9bd7f91f9efd933b932a6e702e40",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -151,6 +151,40 @@
       "lesson-03-08-01-01-weak-top-pair",
       "lesson-03-08-01-02-bad-prices",
       "lesson-03-08-01-03-passive-and-crowds"
+    ],
+    "lesson-04-01-01-ranges-not-hands": [
+      "lesson-04-01-01-01-seat-as-range",
+      "lesson-04-01-01-02-ranges-move",
+      "lesson-04-01-01-03-no-exact-hand"
+    ],
+    "lesson-04-02-01-threebet-squeeze": [
+      "lesson-04-02-01-01-value-3bet",
+      "lesson-04-02-01-02-facing-3bet",
+      "lesson-04-02-01-03-squeeze"
+    ],
+    "lesson-04-03-01-continuation-plans": [
+      "lesson-04-03-01-01-multi-street-plan",
+      "lesson-04-03-01-02-abort-plan",
+      "lesson-04-03-01-03-pot-size-control"
+    ],
+    "lesson-04-04-01-sizing-communicates": [
+      "lesson-04-04-01-01-value-vs-pressure",
+      "lesson-04-04-01-02-nearby-sizes",
+      "lesson-04-04-01-03-no-tiny-sizes"
+    ],
+    "lesson-04-05-01-spr-commitment": [
+      "lesson-04-05-01-01-estimate-spr",
+      "lesson-04-05-01-02-commit-low-spr",
+      "lesson-04-05-01-03-flexible-high-spr"
+    ],
+    "lesson-04-09-01-type-identification": [
+      "lesson-04-09-01-01-observation-not-certainty",
+      "lesson-04-09-01-02-confidence-with-samples",
+      "lesson-04-09-01-03-retire-labels"
+    ],
+    "lesson-04-10-01-exploit-checkpoints": [
+      "lesson-04-10-01-01-same-hand-types",
+      "lesson-04-10-01-02-combine-factors"
     ]
   },
   "sections": [
@@ -13241,14 +13275,12 @@
           "summary": "Think in sets of hands instead of a single holding.",
           "lessons": [
             {
-              "id": "lesson-04-01-01-ranges-not-hands",
+              "id": "lesson-04-01-01-01-seat-as-range",
               "order": 1,
-              "title": "Think in ranges",
-              "summary": "Replace exact-hand mind-reading with range construction.",
+              "title": "A seat is a range",
+              "summary": "Describe what a seat can hold as a range.",
               "objectives": [
-                "Describe a seat as a range",
-                "Widen or narrow ranges with action",
-                "Avoid assigning one exact hand too early"
+                "Describe a seat as a range"
               ],
               "prerequisites": [
                 "lesson-03-08-02-section-three-jump-test"
@@ -13256,7 +13288,7 @@
               "remediationLessonIds": [
                 "lesson-03-08-02-section-three-jump-test"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -13349,10 +13381,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-01-01-02-ranges-move",
+              "order": 2,
+              "title": "Action moves ranges",
+              "summary": "Raises narrow a range; calls keep it wider.",
+              "objectives": [
+                "Widen or narrow ranges with action"
+              ],
+              "prerequisites": [
+                "lesson-04-01-01-01-seat-as-range"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-01-01-01-seat-as-range"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-01-01-02-explain-move",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Widen or narrow ranges with action"
+                  ],
+                  "accessibilityText": "Action changes ranges. A raise narrows toward strong hands; a call keeps more hands in.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-01-01-02-explain-move-line",
+                      "kind": "dialogue",
+                      "text": "Action changes ranges. A raise narrows toward strong hands; a call keeps more hands in."
+                    }
+                  ],
+                  "okFeedback": "Raise narrows, call keeps.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "NARROWER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-01-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -13401,10 +13498,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-01-01-03-no-exact-hand",
+              "order": 3,
+              "title": "No exact hand too early",
+              "summary": "Keep a range instead of naming one hand.",
+              "objectives": [
+                "Avoid assigning one exact hand too early"
+              ],
+              "prerequisites": [
+                "lesson-04-01-01-02-ranges-move"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-01-01-02-ranges-move"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-01-01-03-explain-exact",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid assigning one exact hand too early"
+                  ],
+                  "accessibilityText": "Do not lock a seat onto one exact hand. Keep a range and update it every street.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-01-01-03-explain-exact-line",
+                      "kind": "dialogue",
+                      "text": "Do not lock a seat onto one exact hand. Keep a range and update it every street."
+                    }
+                  ],
+                  "okFeedback": "Keep the range.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ONE HAND",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "RANGE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-01-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -13502,7 +13659,7 @@
                 },
                 {
                   "id": "act-04-01-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -13601,22 +13758,20 @@
           "summary": "Play raised and re-raised pots with clear roles.",
           "lessons": [
             {
-              "id": "lesson-04-02-01-threebet-squeeze",
+              "id": "lesson-04-02-01-01-value-3bet",
               "order": 1,
-              "title": "Navigate 3-bet pots",
-              "summary": "Value 3-bet, defend or fold, and understand squeezes.",
+              "title": "Value 3-bet",
+              "summary": "Re-raise strong hands over an open.",
               "objectives": [
-                "Value 3-bet strong hands",
-                "Fold or continue correctly versus 3-bets",
-                "Recognize squeeze spots multiway"
+                "Value 3-bet strong hands"
               ],
               "prerequisites": [
-                "lesson-04-01-01-ranges-not-hands"
+                "lesson-04-01-01-03-no-exact-hand"
               ],
               "remediationLessonIds": [
-                "lesson-04-01-01-ranges-not-hands"
+                "lesson-04-01-01-03-no-exact-hand"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -13741,10 +13896,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-02-01-02-facing-3bet",
+              "order": 2,
+              "title": "Facing a 3-bet",
+              "summary": "Fold weak hands and continue strong ones when re-raised.",
+              "objectives": [
+                "Fold or continue correctly versus 3-bets"
+              ],
+              "prerequisites": [
+                "lesson-04-02-01-01-value-3bet"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-02-01-01-value-3bet"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-02-01-02-explain-facing",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Fold or continue correctly versus 3-bets"
+                  ],
+                  "accessibilityText": "When your open gets 3-bet, weak hands fold and strong hands continue.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-02-01-02-explain-facing-line",
+                      "kind": "dialogue",
+                      "text": "When your open gets 3-bet, weak hands fold and strong hands continue."
+                    }
+                  ],
+                  "okFeedback": "Weak folds, strong continues.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "3-BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CONTINUE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-02-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -13827,10 +14047,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-02-01-03-squeeze",
+              "order": 3,
+              "title": "Squeeze spots",
+              "summary": "An open plus callers invites a big re-raise.",
+              "objectives": [
+                "Recognize squeeze spots multiway"
+              ],
+              "prerequisites": [
+                "lesson-04-02-01-02-facing-3bet"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-02-01-02-facing-3bet"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-02-01-03-explain-squeeze",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Recognize squeeze spots multiway"
+                  ],
+                  "accessibilityText": "An open plus one or more callers is a squeeze spot. Strong hands re-raise big to take the lead.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-02-01-03-explain-squeeze-line",
+                      "kind": "dialogue",
+                      "text": "An open plus one or more callers is a squeeze spot. Strong hands re-raise big to take the lead."
+                    }
+                  ],
+                  "okFeedback": "Open plus callers — squeeze.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "OPEN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CALLERS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SQUEEZE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-02-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -13916,7 +14201,7 @@
                 },
                 {
                   "id": "act-04-02-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -14014,22 +14299,20 @@
           "summary": "Choose lines that still make sense on later streets.",
           "lessons": [
             {
-              "id": "lesson-04-03-01-continuation-plans",
+              "id": "lesson-04-03-01-01-multi-street-plan",
               "order": 1,
-              "title": "Plan beyond the flop",
-              "summary": "Pick flop actions that leave turn and river options.",
+              "title": "Build a multi-street plan",
+              "summary": "Decide flop, turn, and river intent together.",
               "objectives": [
-                "Build a multi-street plan",
-                "Abort plans when the board changes",
-                "Keep pot size matched to hand strength"
+                "Build a multi-street plan"
               ],
               "prerequisites": [
-                "lesson-04-02-01-threebet-squeeze"
+                "lesson-04-02-01-03-squeeze"
               ],
               "remediationLessonIds": [
-                "lesson-04-02-01-threebet-squeeze"
+                "lesson-04-02-01-03-squeeze"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 4,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -14201,8 +14484,115 @@
                   }
                 },
                 {
-                  "id": "act-04-03-01-scaffolded",
+                  "id": "act-04-03-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Plans state flop intent and turn/river branches.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Build a multi-street plan"
+                  ],
+                  "prompt": "Good multi-street plans do what?",
+                  "choices": [
+                    {
+                      "id": "branches",
+                      "label": "Brick → barrel · flush → abort",
+                      "accessibilityText": "Brick → barrel · flush → abort"
+                    },
+                    {
+                      "id": "vibes",
+                      "label": "Wait for vibes each street",
+                      "accessibilityText": "Wait for vibes each street"
+                    },
+                    {
+                      "id": "one-street",
+                      "label": "Only this street, always",
+                      "accessibilityText": "Only this street, always"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "branches",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-03-01-02-abort-plan",
+              "order": 2,
+              "title": "Abort when the board changes",
+              "summary": "Stop barreling when the turn breaks your story.",
+              "objectives": [
+                "Abort plans when the board changes"
+              ],
+              "prerequisites": [
+                "lesson-04-03-01-01-multi-street-plan"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-03-01-01-multi-street-plan"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-03-01-02-explain-abort",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Abort plans when the board changes"
+                  ],
+                  "accessibilityText": "When the turn changes the board against your story, stop barreling and give up the bluff.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-03-01-02-explain-abort-line",
+                      "kind": "dialogue",
+                      "text": "When the turn changes the board against your story, stop barreling and give up the bluff."
+                    }
+                  ],
+                  "okFeedback": "Board changed — abort.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BOARD CHANGES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STOP",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-04-03-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -14302,10 +14692,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-03-01-03-pot-size-control",
+              "order": 3,
+              "title": "Match pot size to strength",
+              "summary": "Medium hands keep pots small.",
+              "objectives": [
+                "Keep pot size matched to hand strength"
+              ],
+              "prerequisites": [
+                "lesson-04-03-01-02-abort-plan"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-03-01-02-abort-plan"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-03-01-03-explain-pot",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Keep pot size matched to hand strength"
+                  ],
+                  "accessibilityText": "Medium hands want smaller pots. Big hands build big ones.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-03-01-03-explain-pot-line",
+                      "kind": "dialogue",
+                      "text": "Medium hands want smaller pots. Big hands build big ones."
+                    }
+                  ],
+                  "okFeedback": "Medium hand — small pot.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MEDIUM",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SMALL POT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-03-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -14394,53 +14844,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-03-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Plans state flop intent and turn/river branches.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Build a multi-street plan"
-                  ],
-                  "prompt": "Good multi-street plans do what?",
-                  "choices": [
-                    {
-                      "id": "branches",
-                      "label": "Brick → barrel · flush → abort",
-                      "accessibilityText": "Brick → barrel · flush → abort"
-                    },
-                    {
-                      "id": "vibes",
-                      "label": "Wait for vibes each street",
-                      "accessibilityText": "Wait for vibes each street"
-                    },
-                    {
-                      "id": "one-street",
-                      "label": "Only this street, always",
-                      "accessibilityText": "Only this street, always"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "branches",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -14453,22 +14856,20 @@
           "summary": "Choose sizes that match the story you want to tell.",
           "lessons": [
             {
-              "id": "lesson-04-04-01-sizing-communicates",
+              "id": "lesson-04-04-01-01-value-vs-pressure",
               "order": 1,
-              "title": "Size with a message",
-              "summary": "Live sizing should look like value or pressure on purpose.",
+              "title": "Value or pressure size",
+              "summary": "Match the bet size to value or polar pressure.",
               "objectives": [
-                "Match size to value versus polar pressure",
-                "Accept nearby reasonable live sizes",
-                "Avoid tiny or nonsensical sizes"
+                "Match size to value versus polar pressure"
               ],
               "prerequisites": [
-                "lesson-04-03-01-continuation-plans"
+                "lesson-04-03-01-03-pot-size-control"
               ],
               "remediationLessonIds": [
-                "lesson-04-03-01-continuation-plans"
+                "lesson-04-03-01-03-pot-size-control"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -14617,10 +15018,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-04-01-02-nearby-sizes",
+              "order": 2,
+              "title": "Nearby live sizes",
+              "summary": "Several nearby sizes can all be reasonable.",
+              "objectives": [
+                "Accept nearby reasonable live sizes"
+              ],
+              "prerequisites": [
+                "lesson-04-04-01-01-value-vs-pressure"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-04-01-01-value-vs-pressure"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-04-01-02-explain-nearby",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Accept nearby reasonable live sizes"
+                  ],
+                  "accessibilityText": "Several nearby sizes can all be fine. Pick one that tells the story you want.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-04-01-02-explain-nearby-line",
+                      "kind": "dialogue",
+                      "text": "Several nearby sizes can all be fine. Pick one that tells the story you want."
+                    }
+                  ],
+                  "okFeedback": "Nearby sizes are fine.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NEARBY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STORY",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-04-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -14726,7 +15187,7 @@
                 },
                 {
                   "id": "act-04-04-01-unguided",
-                  "order": 4,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -14737,7 +15198,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Avoid tiny or nonsensical sizes"
+                    "Accept nearby reasonable live sizes"
                   ],
                   "prompt": "Two value sizes both get worse hands to call. Grading idea?",
                   "choices": [
@@ -14775,10 +15236,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-04-01-03-no-tiny-sizes",
+              "order": 3,
+              "title": "Avoid tiny sizes",
+              "summary": "Tiny value bets win almost nothing.",
+              "objectives": [
+                "Avoid tiny or nonsensical sizes"
+              ],
+              "prerequisites": [
+                "lesson-04-04-01-02-nearby-sizes"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-04-01-02-nearby-sizes"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-04-01-03-explain-tiny",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid tiny or nonsensical sizes"
+                  ],
+                  "accessibilityText": "Tiny bets with strong hands win almost nothing. Size so worse hands still pay you.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-04-01-03-explain-tiny-line",
+                      "kind": "dialogue",
+                      "text": "Tiny bets with strong hands win almost nothing. Size so worse hands still pay you."
+                    }
+                  ],
+                  "okFeedback": "No tiny value bets.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TINY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "VALUE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-04-01-checkpoint",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -14883,22 +15404,20 @@
           "summary": "Use stack-to-pot ratio to know when you are committed.",
           "lessons": [
             {
-              "id": "lesson-04-05-01-spr-commitment",
+              "id": "lesson-04-05-01-01-estimate-spr",
               "order": 1,
-              "title": "SPR decides commitment",
-              "summary": "Low SPR means commit with strong hands; high SPR means caution.",
+              "title": "Estimate SPR",
+              "summary": "Divide the effective stack by the pot.",
               "objectives": [
-                "Estimate stack-to-pot ratio",
-                "Commit correctly at low SPR",
-                "Keep flexibility at high SPR"
+                "Estimate stack-to-pot ratio"
               ],
               "prerequisites": [
-                "lesson-04-04-01-sizing-communicates"
+                "lesson-04-04-01-03-no-tiny-sizes"
               ],
               "remediationLessonIds": [
-                "lesson-04-04-01-sizing-communicates"
+                "lesson-04-04-01-03-no-tiny-sizes"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -14993,193 +15512,8 @@
                   }
                 },
                 {
-                  "id": "act-04-05-01-scaffolded",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "poker_action_sizing",
-                  "estimatedSeconds": 55,
-                  "accessibilityText": "Get it in with top set at low SPR.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Commit correctly at low SPR"
-                  ],
-                  "prompt": "SPR ~1 after a 3-bet. You flop top set. Action?",
-                  "choices": [
-                    {
-                      "id": "commit",
-                      "label": "Commit for stacks",
-                      "accessibilityText": "Commit for stacks",
-                      "action": "RAISE",
-                      "amountBb": 20
-                    },
-                    {
-                      "id": "tiny",
-                      "label": "Check forever",
-                      "accessibilityText": "Check forever",
-                      "action": "CHECK"
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "fixed",
-                      "fixedCards": {
-                        "hero": [
-                          "Kh",
-                          "Kd"
-                        ],
-                        "board": [
-                          "Kc",
-                          "7s",
-                          "2d"
-                        ]
-                      },
-                      "variants": [
-                        {
-                          "id": "var-scaffolded-suits-1",
-                          "fixedCards": {
-                            "hero": [
-                              "Ks",
-                              "Kc"
-                            ],
-                            "board": [
-                              "Kh",
-                              "7d",
-                              "2c"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (1)"
-                        },
-                        {
-                          "id": "var-scaffolded-suits-2",
-                          "fixedCards": {
-                            "hero": [
-                              "Kd",
-                              "Ks"
-                            ],
-                            "board": [
-                              "Kh",
-                              "7c",
-                              "2s"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (2)"
-                        }
-                      ]
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "With little behind and a monster, commit your stack."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "commit",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "act-04-05-01-unguided",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "poker_action_sizing",
-                  "estimatedSeconds": 55,
-                  "accessibilityText": "High SPR medium hands keep pots smaller.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Keep flexibility at high SPR"
-                  ],
-                  "prompt": "SPR 20, multiway, second pair. Prefer?",
-                  "choices": [
-                    {
-                      "id": "flexible",
-                      "label": "Keep pot small",
-                      "accessibilityText": "Keep pot small",
-                      "action": "CHECK"
-                    },
-                    {
-                      "id": "spr-jam",
-                      "label": "Jam day one",
-                      "accessibilityText": "Jam day one",
-                      "action": "ALL_IN"
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "fixed",
-                      "fixedCards": {
-                        "hero": [
-                          "Jh",
-                          "9d"
-                        ],
-                        "board": [
-                          "Qc",
-                          "9s",
-                          "3h"
-                        ]
-                      },
-                      "variants": [
-                        {
-                          "id": "var-unguided-suits-1",
-                          "fixedCards": {
-                            "hero": [
-                              "Js",
-                              "9c"
-                            ],
-                            "board": [
-                              "Qh",
-                              "9d",
-                              "3s"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (1)"
-                        },
-                        {
-                          "id": "var-unguided-suits-2",
-                          "fixedCards": {
-                            "hero": [
-                              "Jd",
-                              "9s"
-                            ],
-                            "board": [
-                              "Qh",
-                              "9c",
-                              "3d"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (2)"
-                        }
-                      ]
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Lots behind with a medium hand — keep the pot small."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "flexible",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-04-05-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -15272,6 +15606,311 @@
                   }
                 }
               ]
+            },
+            {
+              "id": "lesson-04-05-01-02-commit-low-spr",
+              "order": 2,
+              "title": "Commit at low SPR",
+              "summary": "Strong hands commit when the pot is big versus stacks.",
+              "objectives": [
+                "Commit correctly at low SPR"
+              ],
+              "prerequisites": [
+                "lesson-04-05-01-01-estimate-spr"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-05-01-01-estimate-spr"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-05-01-02-explain-low",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Commit correctly at low SPR"
+                  ],
+                  "accessibilityText": "Low SPR means the pot is big compared with the stacks. Strong hands get it in.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-05-01-02-explain-low-line",
+                      "kind": "dialogue",
+                      "text": "Low SPR means the pot is big compared with the stacks. Strong hands get it in."
+                    }
+                  ],
+                  "okFeedback": "Low SPR — commit.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "LOW SPR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "COMMIT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-04-05-01-scaffolded",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Get it in with top set at low SPR.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Commit correctly at low SPR"
+                  ],
+                  "prompt": "SPR ~1 after a 3-bet. You flop top set. Action?",
+                  "choices": [
+                    {
+                      "id": "commit",
+                      "label": "Commit for stacks",
+                      "accessibilityText": "Commit for stacks",
+                      "action": "RAISE",
+                      "amountBb": 20
+                    },
+                    {
+                      "id": "tiny",
+                      "label": "Check forever",
+                      "accessibilityText": "Check forever",
+                      "action": "CHECK"
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "Kd"
+                        ],
+                        "board": [
+                          "Kc",
+                          "7s",
+                          "2d"
+                        ]
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7d",
+                              "2c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Kh",
+                              "7c",
+                              "2s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "With little behind and a monster, commit your stack."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "commit",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-05-01-03-flexible-high-spr",
+              "order": 3,
+              "title": "Stay flexible at high SPR",
+              "summary": "Medium hands keep the pot small when stacks are deep.",
+              "objectives": [
+                "Keep flexibility at high SPR"
+              ],
+              "prerequisites": [
+                "lesson-04-05-01-02-commit-low-spr"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-05-01-02-commit-low-spr"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-05-01-03-explain-high",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Keep flexibility at high SPR"
+                  ],
+                  "accessibilityText": "High SPR leaves room to maneuver. Medium hands keep the pot small.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-05-01-03-explain-high-line",
+                      "kind": "dialogue",
+                      "text": "High SPR leaves room to maneuver. Medium hands keep the pot small."
+                    }
+                  ],
+                  "okFeedback": "High SPR — stay flexible.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "HIGH SPR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FLEXIBLE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-04-05-01-unguided",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "High SPR medium hands keep pots smaller.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Keep flexibility at high SPR"
+                  ],
+                  "prompt": "SPR 20, multiway, second pair. Prefer?",
+                  "choices": [
+                    {
+                      "id": "flexible",
+                      "label": "Keep pot small",
+                      "accessibilityText": "Keep pot small",
+                      "action": "CHECK"
+                    },
+                    {
+                      "id": "spr-jam",
+                      "label": "Jam day one",
+                      "accessibilityText": "Jam day one",
+                      "action": "ALL_IN"
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Jh",
+                          "9d"
+                        ],
+                        "board": [
+                          "Qc",
+                          "9s",
+                          "3h"
+                        ]
+                      },
+                      "variants": [
+                        {
+                          "id": "var-unguided-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Js",
+                              "9c"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9d",
+                              "3s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-unguided-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "9s"
+                            ],
+                            "board": [
+                              "Qh",
+                              "9c",
+                              "3d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Lots behind with a medium hand — keep the pot small."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "flexible",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
             }
           ]
         },
@@ -15292,10 +15931,10 @@
                 "Separate observation from certainty"
               ],
               "prerequisites": [
-                "lesson-04-05-01-spr-commitment"
+                "lesson-04-05-01-03-flexible-high-spr"
               ],
               "remediationLessonIds": [
-                "lesson-04-05-01-spr-commitment"
+                "lesson-04-05-01-03-flexible-high-spr"
               ],
               "estimatedMinutes": 7,
               "difficultyBand": 3,
@@ -17900,14 +18539,12 @@
           "summary": "Separate observation from certainty; grow confidence with samples.",
           "lessons": [
             {
-              "id": "lesson-04-09-01-type-identification",
+              "id": "lesson-04-09-01-01-observation-not-certainty",
               "order": 1,
-              "title": "Confidence and samples",
-              "summary": "Treat labels as models with explicit sample limits.",
+              "title": "Observation is not certainty",
+              "summary": "One hand is an observation, not a verdict.",
               "objectives": [
-                "Separate observation from certainty",
-                "Raise confidence only with samples",
-                "Retire labels when evidence flips"
+                "Separate observation from certainty"
               ],
               "prerequisites": [
                 "lesson-04-08-03-adjust-maniac"
@@ -17915,7 +18552,7 @@
               "remediationLessonIds": [
                 "lesson-04-06-02-meet-calling-station"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [
                 "calling_station",
@@ -18007,10 +18644,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-09-01-02-confidence-with-samples",
+              "order": 2,
+              "title": "Confidence grows with samples",
+              "summary": "Raise confidence only as hands and showdowns pile up.",
+              "objectives": [
+                "Raise confidence only with samples"
+              ],
+              "prerequisites": [
+                "lesson-04-09-01-01-observation-not-certainty"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-09-01-01-observation-not-certainty"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-09-01-02-explain-samples",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Raise confidence only with samples"
+                  ],
+                  "accessibilityText": "Confidence in a label rises with more hands and showdowns, but it stays open to change.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-09-01-02-explain-samples-line",
+                      "kind": "dialogue",
+                      "text": "Confidence in a label rises with more hands and showdowns, but it stays open to change."
+                    }
+                  ],
+                  "okFeedback": "More samples, more confidence.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SAMPLES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SHOWDOWNS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-09-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -18059,8 +18760,114 @@
                   }
                 },
                 {
+                  "id": "act-04-09-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Sample/confidence limits.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Raise confidence only with samples"
+                  ],
+                  "prompt": "Course should show what beside a type label?",
+                  "choices": [
+                    {
+                      "id": "limits",
+                      "label": "Sample and confidence limits",
+                      "accessibilityText": "Sample and confidence limits"
+                    },
+                    {
+                      "id": "destiny",
+                      "label": "Destiny and aura",
+                      "accessibilityText": "Destiny and aura"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "limits",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-09-01-03-retire-labels",
+              "order": 3,
+              "title": "Retire labels when evidence flips",
+              "summary": "Update or drop a label when play changes.",
+              "objectives": [
+                "Retire labels when evidence flips"
+              ],
+              "prerequisites": [
+                "lesson-04-09-01-02-confidence-with-samples"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-09-01-02-confidence-with-samples"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-09-01-03-explain-retire",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Retire labels when evidence flips"
+                  ],
+                  "accessibilityText": "When a seat starts playing differently, update or retire the old label.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-09-01-03-explain-retire-line",
+                      "kind": "dialogue",
+                      "text": "When a seat starts playing differently, update or retire the old label."
+                    }
+                  ],
+                  "okFeedback": "Evidence flipped — update.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NEW EVIDENCE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "RETIRE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-04-09-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
@@ -18107,48 +18914,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-09-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Sample/confidence limits.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Retire labels when evidence flips"
-                  ],
-                  "prompt": "Course should show what beside a type label?",
-                  "choices": [
-                    {
-                      "id": "limits",
-                      "label": "Sample and confidence limits",
-                      "accessibilityText": "Sample and confidence limits"
-                    },
-                    {
-                      "id": "destiny",
-                      "label": "Destiny and aura",
-                      "accessibilityText": "Destiny and aura"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "limits",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -18161,22 +18926,21 @@
           "summary": "Same hand, different types — then the section jump.",
           "lessons": [
             {
-              "id": "lesson-04-10-01-exploit-checkpoints",
+              "id": "lesson-04-10-01-01-same-hand-types",
               "order": 1,
               "title": "Same hand, different types",
-              "summary": "Change only when the authored read justifies it.",
+              "summary": "Change the line only when the read justifies it.",
               "objectives": [
                 "Change lines by type with justification",
-                "Combine type × position × stack × board",
                 "Keep baseline when evidence is missing"
               ],
               "prerequisites": [
-                "lesson-04-09-01-type-identification"
+                "lesson-04-09-01-03-retire-labels"
               ],
               "remediationLessonIds": [
                 "lesson-04-06-03-adjust-calling-station"
               ],
-              "estimatedMinutes": 10,
+              "estimatedMinutes": 6,
               "difficultyBand": 4,
               "playerTypeRefs": [
                 "calling_station",
@@ -18533,10 +19297,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-10-01-02-combine-factors",
+              "order": 2,
+              "title": "Combine type, position, and stack",
+              "summary": "Type, seat, and stack depth decide the line together.",
+              "objectives": [
+                "Combine type × position × stack × board"
+              ],
+              "prerequisites": [
+                "lesson-04-10-01-01-same-hand-types"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-10-01-01-same-hand-types"
+              ],
+              "estimatedMinutes": 4,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-10-01-02-explain-combine",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Combine type × position × stack × board"
+                  ],
+                  "accessibilityText": "Type is one input. Position and stack depth change the best line too. Combine them before you act.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-10-01-02-explain-combine-line",
+                      "kind": "dialogue",
+                      "text": "Type is one input. Position and stack depth change the best line too. Combine them before you act."
+                    }
+                  ],
+                  "okFeedback": "Combine every factor.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TYPE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "POSITION",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "STACK",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-10-01-checkpoint",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "full_table_hand_lab",
                   "estimatedSeconds": 90,
@@ -18621,7 +19454,7 @@
             },
             {
               "id": "lesson-04-10-02-section-four-jump-test",
-              "order": 2,
+              "order": 3,
               "title": "Section 4 jump check",
               "summary": "Placement check: ranges, plans, sizing, SPR, and player types.",
               "objectives": [
@@ -18630,10 +19463,10 @@
                 "Confirm Calling Station, Nit, and Maniac adjustments"
               ],
               "prerequisites": [
-                "lesson-04-10-01-exploit-checkpoints"
+                "lesson-04-10-01-02-combine-factors"
               ],
               "remediationLessonIds": [
-                "lesson-04-01-01-ranges-not-hands"
+                "lesson-04-01-01-03-no-exact-hand"
               ],
               "estimatedMinutes": 12,
               "difficultyBand": 4,
