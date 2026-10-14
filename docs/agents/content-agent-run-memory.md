@@ -2736,3 +2736,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-06-11-01-*` observe-selective / Low residuals LPT-676…779 (LPT-680…706).
 - act-06-10-01-*: interactive structural clean on tip except LPT-705 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14fg (d3d5c0bb Prefer NEVER observe-selective SoftPulse re-check)
+
+- Tip-stable `d3d5c0bb` (#2394 threebet SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-06-11-01-01/02/03` under observe-selective unit:
+  - first-child `act-06-11-01-explain` SoftPulse TIGHT→BARREL→SAMPLE + `explainGrading` "Tight → Barrel → Sample." + Dart `SelectiveAggressionDemo` / `LessonSelectiveAggressionExplainTable` still pre-split under selective-entry-only → residual **LPT-706** still To Do (needs-human).
+  - successors `act-06-11-01-02-explain-discipline` (CALLED→GIVES UP) + `act-06-11-01-03-explain-wait` (TWO HANDS→NOTE BUNDLE) content-driven; guided SoftPulse `sel` densify PRESENT (`deal.mode` `none`; guideRegion `selectivePlanOk`); scaffolded SoftPulse `disc` one-per-press densify PRESENT (guideRegion `selectiveDisciplined`); unguided SoftPulse `low` one-per-press densify PRESENT (guideRegion `selectiveKeepSampling`); checkpoint SoftPulse `bundle` kind `none` densify PRESENT under wait-for-samples matches — no companion residual.
+- Curriculum **LPT-288** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-706/288/705/704/703/198/216/708; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-11-02-*` Meet TAG / Low residuals LPT-676…779 (LPT-680…708).
+- act-06-11-01-*: interactive structural clean on tip except LPT-706 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
