@@ -1682,6 +1682,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - act-02-03-01-*: interactive poker_action_sizing clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-124 Done.
 - Open-fold / S3 SoftPulse explain: `act-02-03-01-02-explain-strong`, `act-02-03-01-03-explain-button`, `act-03-02-01-02-explain-draws`, `act-03-02-01-03-explain-air`, `act-03-03-01-02-explain-price`, `act-03-03-01-03-explain-implied`, `act-03-04-01-02-explain-cbet`, `act-03-04-01-03-explain-plan`, `act-03-05-01-02-explain-barrel`, `act-03-05-01-03-explain-delay`, `act-03-06-01-02-explain-bluff`, `act-03-06-01-03-explain-catch`, `act-03-07-01-02-explain-crowd`, `act-03-07-01-03-explain-nuts`, `act-03-08-01-02-explain-price`, `act-03-08-01-03-explain-passive` → catalog **LPT-669**.
 
+
+## Fold 2026-10-15i tip 9fa61f02 (#2522 Selective Prefer → Meet-TAG working-model LPT-708 Prefer)
+
+- Tip-stable `9fa61f02` after #2522 SoftPulse residual Prefer LPT-706 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Meet-TAG working-model residual re-check `lesson-06-11-02-01/02/03` / `act-06-11-02-*`: SoftPulse TIGHT→AGGRO→MODEL + `explainGrading` + Dart `TagModelDemo.points` TIGHT/AGGRO/MODEL (captions Tight in / Aggressive after / Working model) **concept-aligned** under Introduce TAG / The TAG model (not SoftPulse residual); checkpoint SoftPulse `model` kind `none` densify PRESENT (prompt "TAG is?" / Working model vs Insult) still grades working-model-vs-insult under Introduce TAG-only → residual **LPT-708** still To Do (needs-human; Relates LPT-291 — do not re-add needs-human on curriculum); successors SoftPulse FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE content-driven (do not reopen LPT-669); guided SoftPulse `tag` densify PRESENT; scaffolded SoftPulse `diff` one-per-press densify PRESENT; unguided SoftPulse `tag2` one-per-press densify PRESENT.
+- Curriculum **LPT-291** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-708/291/706/709/710/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Adjust-TAG SoftPulse residual **LPT-709** (+ cite **LPT-710**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
 ## Fold 2026-10-14
 
 ## Fold 2026-10-14bg (d0901a24 discovery versus-open split children)
@@ -3634,3 +3644,6 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-706/288/708/705/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Meet-TAG working-model residual **LPT-708** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-11-01-*: interactive structural clean on tip except LPT-706 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-14
+
