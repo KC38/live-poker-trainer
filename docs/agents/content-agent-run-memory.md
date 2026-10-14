@@ -2770,3 +2770,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-709/710/294/708/706/198/216; leave open LPT-676…779; leave ui-agent alone.
 - Prefer next: NEVER `lesson-06-12-01-*` observe-wide / Low residuals LPT-676…779 (LPT-680…715).
 - act-06-11-03-*: interactive structural clean on tip except LPT-709 SoftPulse + LPT-710 cite residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive sizing acts are `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily.
+
+## Fold 2026-10-14fj (3b72a004 Prefer NEVER Observe wide SoftPulse re-check)
+
+- Tip-stable `3b72a004` (#2399 Adjust TAG SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-06-12-01-01/02/03` under Observe wide unit:
+  - first-child `act-06-12-01-explain` SoftPulse WIDE→PRESSURE→SAMPLE + `explainGrading` "Wide → Pressure → Sample." + Dart WidePressure / `LessonWidePressureExplainTable` still pre-split under Note-wide-entry-only → residual **LPT-713** still To Do (needs-human; Relates LPT-297).
+  - unguided SoftPulse `wait` Keep sampling under Note sustained pressure → residual **LPT-714** still To Do (needs-human; Relates LPT-297).
+  - checkpoint SoftPulse `bundle` kind `none` densify PRESENT under Planned-not-maniac → residual **LPT-715** still To Do (needs-human; Relates LPT-297).
+  - successors `act-06-12-01-02-explain-pressure` (BARRELS→MANY HANDS) + `act-06-12-01-03-explain-plan` (FOLDS SOMETIMES→PLAN) content-driven; guided SoftPulse `wide` densify PRESENT; scaffolded SoftPulse `sep` one-per-press densify PRESENT.
+- Curriculum **LPT-297** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-713/714/715/297/198/216/709/710; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-12-02-*` meet-lag / Low residuals LPT-676…779 (LPT-680…715).
+- act-06-12-01-*: interactive structural clean on tip except LPT-713 SoftPulse + LPT-714 unguided + LPT-715 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
