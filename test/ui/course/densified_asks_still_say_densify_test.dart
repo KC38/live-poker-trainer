@@ -138,8 +138,9 @@ const _lines = <String, String>{
       'Tiny flop bet into a huge pot often says — pick Weaker / blocking.',
   'act-05-07-01-unguided':
       'Coach says "look left means bluff." Response — pick Reject magic tells.',
+  // LPT-744: SoftPulse-off densify — no correct-tile spoil.
   'act-05-07-01-checkpoint':
-      'Best use of live timing — pick Tiny update beside stronger reads.',
+      'Best use of live timing — tap the matching habit.',
   'act-05-08-01-guided': 'Villain lost two buy-ins, now open-raises every hand. Note — pick Stuck / tilted.',
   'act-05-08-01-scaffolded': 'Solid selective player suddenly flats junk and donks rivers. Best read — pick Gear change.',
   'act-05-08-01-checkpoint': 'Dynamic reads should be — pick Fresh samples.',

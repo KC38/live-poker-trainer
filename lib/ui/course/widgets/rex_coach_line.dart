@@ -485,8 +485,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tiny flop bet into a huge pot often says — pick Weaker / blocking.',
     'act-05-07-01-unguided' =>
       'Coach says "look left means bluff." Response — pick Reject magic tells.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Tiny update / stronger reads in the idle bubble (LPT-744; same
+    // class as LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 / LPT-717 /
+    // LPT-672 / LPT-653).
     'act-05-07-01-checkpoint' =>
-      'Best use of live timing — pick Tiny update beside stronger reads.',
+      'Best use of live timing — tap the matching habit.',
     'act-05-08-01-guided' =>
       'Villain lost two buy-ins, now open-raises every hand. Note — pick Stuck / tilted.',
     'act-05-08-01-scaffolded' =>
