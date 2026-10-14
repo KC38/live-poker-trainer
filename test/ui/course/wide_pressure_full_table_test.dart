@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-06-12-01-observe-wide-pressure',
+            'lesson-06-12-01-01-wide-entry',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

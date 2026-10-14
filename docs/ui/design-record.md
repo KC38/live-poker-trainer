@@ -774,6 +774,15 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-288, LPT-291, LPT-294, LPT-297, LPT-300, LPT-303, LPT-306: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-06-11-01-observe-selective` → `lesson-06-11-01-01-selective-entry`, `lesson-06-11-01-02-disciplined-aggression`, `lesson-06-11-01-03-wait-for-samples` (LPT-288)
+- `lesson-06-11-02-meet-tag` → `lesson-06-11-02-01-tag-model`, `lesson-06-11-02-02-spot-tag`, `lesson-06-11-02-03-tag-vs-maniac` (LPT-291)
+- `lesson-06-11-03-adjust-tag` → `lesson-06-11-03-01-respect-aggression`, `lesson-06-11-03-02-no-light-reraise`, `lesson-06-11-03-03-thin-value-callers` (LPT-294)
+- `lesson-06-12-01-observe-wide-pressure` → `lesson-06-12-01-01-wide-entry`, `lesson-06-12-01-02-sustained-pressure`, `lesson-06-12-01-03-planned-not-maniac` (LPT-297)
+- `lesson-06-12-02-meet-lag` → `lesson-06-12-02-01-lag-model`, `lesson-06-12-02-02-spot-lag`, `lesson-06-12-02-03-lag-vs-station` (LPT-300)
+- `lesson-06-12-03-adjust-lag` → `lesson-06-12-03-01-call-wider`, `lesson-06-12-03-02-trap-more`, `lesson-06-12-03-03-fewer-fancy-bluffs` (LPT-303)
+- `lesson-06-13-01-mix-five-types` → `lesson-06-13-01-01-station-thin-value`, `lesson-06-13-01-02-nit-fold`, `lesson-06-13-01-03-lag-call`, `lesson-06-13-01-04-cite-tendency` (LPT-306)
+
 Curriculum splits LPT-254, LPT-257, LPT-260, LPT-264, LPT-267, LPT-270, LPT-273, LPT-277, LPT-282, LPT-285: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-06-01-01-range-nut-advantage` → `lesson-06-01-01-01-range-advantage`, `lesson-06-01-01-02-nut-advantage`, `lesson-06-01-01-03-press-both` (LPT-254)
 - `lesson-06-02-01-equity-realization` → `lesson-06-02-01-01-prefer-ip`, `lesson-06-02-01-02-discount-oop`, `lesson-06-02-01-03-aggression-realizes` (LPT-257)
@@ -1923,13 +1932,28 @@ felt.
 | Make hard folds | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502); unit `unit-06-10-folds` (LPT-285 split) | — |
 | Cooler or mistake? | explain SoftPulse cues COOLER → MISTAKE → REVIEW; unit `unit-06-10-folds` (LPT-285 split) | — |
 | No ego call-downs | explain SoftPulse cues DUE → EGO → FOLD; unit `unit-06-10-folds` (LPT-285 split) | — |
-| Observe selective aggression | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494) | entry quizzes |
-| Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491); densified frame asks (LPT-648) | label quizzes |
-| Adjust versus TAG | Credit, Tighter, No light | respect check |
-| Observe wide sustained pressure | Wide, Pressure, Sample; unguided SoftPulse one gold (LPT-493); densified frame asks (LPT-649) | entry quizzes |
-| Meet the LAG | Wide, Pressure, Model; unguided SoftPulse one gold (LPT-492) | label quizzes |
-| Adjust versus LAG | Call, Trap, Fancy less; unguided SoftPulse one gold Usually avoid (LPT-503); densified frame asks (LPT-651) | avoid and cite checks |
-| Same cards, five type models | Cards, seats, and evidence in the stage | — |
+| Note selective entry | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494); unit `unit-06-11-tag` (LPT-288 split) | entry quizzes |
+| Note disciplined aggression | explain SoftPulse cues CALLED → GIVES UP; unit `unit-06-11-tag` (LPT-288 split) | — |
+| Wait for samples | explain SoftPulse cues TWO HANDS → NOTE BUNDLE; unit `unit-06-11-tag` (LPT-288 split) | — |
+| The TAG model | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491); densified frame asks (LPT-648); unit `unit-06-11-tag` (LPT-291 split) | label quizzes |
+| Spot a TAG | explain SoftPulse cues FOLDS MOST → PLANNED BARRELS; unit `unit-06-11-tag` (LPT-291 split) | — |
+| TAG or Maniac? | explain SoftPulse cues ENTRY WIDTH → DISCIPLINE; unit `unit-06-11-tag` (LPT-291 split) | — |
+| Respect TAG aggression | Credit, Tighter, No light; unit `unit-06-11-tag` (LPT-294 split) | respect check |
+| No light bluffs into a TAG check-raise | explain SoftPulse cues CHECK-RAISE → FOLD; unit `unit-06-11-tag` (LPT-294 split) | — |
+| Bet thin only into callers | explain SoftPulse cues RARELY CALLS → CHECK; unit `unit-06-11-tag` (LPT-294 split) | — |
+| Note wide entry | Wide, Pressure, Sample; unguided SoftPulse one gold (LPT-493); densified frame asks (LPT-649); unit `unit-06-12-lag` (LPT-297 split) | entry quizzes |
+| Note sustained pressure | explain SoftPulse cues BARRELS → MANY HANDS; unit `unit-06-12-lag` (LPT-297 split) | — |
+| Planned pressure, not a Maniac | explain SoftPulse cues FOLDS SOMETIMES → PLAN; unit `unit-06-12-lag` (LPT-297 split) | — |
+| The LAG model | Wide, Pressure, Model; unguided SoftPulse one gold (LPT-492); unit `unit-06-12-lag` (LPT-300 split) | label quizzes |
+| Spot a LAG | explain SoftPulse cues WIDE OPENS → BARRELS; unit `unit-06-12-lag` (LPT-300 split) | — |
+| LAG or Calling Station? | explain SoftPulse cues RAISES → CALLS; unit `unit-06-12-lag` (LPT-300 split) | — |
+| Call down wider versus a LAG | Call, Trap, Fancy less; unguided SoftPulse one gold Usually avoid (LPT-503); densified frame asks (LPT-651); unit `unit-06-12-lag` (LPT-303 split) | avoid and cite checks |
+| Trap strong hands more | explain SoftPulse cues STRONG HAND → LET THEM BET; unit `unit-06-12-lag` (LPT-303 split) | — |
+| Fewer fancy bluffs | explain SoftPulse cues NO BIG BLUFF → LET THEM; unit `unit-06-12-lag` (LPT-303 split) | — |
+| Same cards: thin value versus a Station | Cards, seats, and evidence in the stage; unit `unit-06-13-mix` (LPT-306 split) | — |
+| Same cards: fold to Nit heat | explain SoftPulse cues NIT CHECK-RAISE → FOLD; unit `unit-06-13-mix` (LPT-306 split) | — |
+| Same cards: call a LAG barrel | explain SoftPulse cues LAG BARREL → CALL; unit `unit-06-13-mix` (LPT-306 split) | — |
+| Cite the tendency | explain SoftPulse cues TENDENCY → LINE; unit `unit-06-13-mix` (LPT-306 split) | — |
 | Section 6 checkpoint | densified frame asks (LPT-655) | — |
 | Carry a preflop plan onto the flop | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505); densified frame asks (LPT-656) | — |
 | Map turn barrels before you bet flop | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506); densified frame asks (LPT-657) | — |

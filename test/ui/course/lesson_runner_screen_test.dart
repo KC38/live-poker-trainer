@@ -3480,7 +3480,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-11-01-observe-selective',
+          lessonId: 'lesson-06-11-01-01-selective-entry', // split from lesson-06-11-01-observe-selective
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_observe_selective_frame',
@@ -3525,7 +3525,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-11-02-meet-tag',
+          lessonId: 'lesson-06-11-02-01-tag-model', // split from lesson-06-11-02-meet-tag
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_meet_tag_frame',
@@ -3567,7 +3567,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-11-03-adjust-tag',
+          lessonId: 'lesson-06-11-03-01-respect-aggression', // split from lesson-06-11-03-adjust-tag
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_adjust_tag_frame',
@@ -3609,7 +3609,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-12-01-observe-wide-pressure',
+          lessonId: 'lesson-06-12-01-01-wide-entry', // split from lesson-06-12-01-observe-wide-pressure
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_wide_pressure_frame',
@@ -3651,7 +3651,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-12-02-meet-lag',
+          lessonId: 'lesson-06-12-02-01-lag-model', // split from lesson-06-12-02-meet-lag
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_meet_lag_frame',
@@ -3693,7 +3693,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-12-03-adjust-lag',
+          lessonId: 'lesson-06-12-03-01-call-wider', // split from lesson-06-12-03-adjust-lag
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_adjust_lag_frame',
@@ -3735,7 +3735,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-13-01-mix-five-types',
+          lessonId: 'lesson-06-13-01-01-station-thin-value', // split from lesson-06-13-01-mix-five-types
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_same_cards_types_frame',

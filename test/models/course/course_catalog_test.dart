@@ -90,6 +90,14 @@ void main() {
       'lesson-06-08-01-mixed-strategy',
       'lesson-06-09-01-threebet-fourbet',
       'lesson-06-10-01-difficult-folds',
+      // LPT-batch-split-s6b-types
+      'lesson-06-11-01-observe-selective',
+      'lesson-06-11-02-meet-tag',
+      'lesson-06-11-03-adjust-tag',
+      'lesson-06-12-01-observe-wide-pressure',
+      'lesson-06-12-02-meet-lag',
+      'lesson-06-12-03-adjust-lag',
+      'lesson-06-13-01-mix-five-types',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];
@@ -187,14 +195,17 @@ void main() {
       expect(first, isNotNull);
       expect(first!.id, 'lesson-01-01-01-your-two-cards');
 
-      final selective = catalog.lessonById('lesson-06-11-01');
-      expect(selective, isNotNull);
-      expect(selective!.id, 'lesson-06-11-01-observe-selective');
+      // post-split: lesson-06-11-01-* is ambiguous; use a still-unique SS-UU-LL.
+      final warmup = catalog.lessonById('lesson-07-11-01');
+      expect(warmup, isNotNull);
+      expect(warmup!.id, 'lesson-07-11-01-live-warmup-prep');
     });
 
     test('ambiguous prefix returns null', () {
       expect(catalog.lessonById('lesson-01-01'), isNull);
       expect(catalog.lessonById('lesson-01'), isNull);
+      // curriculum split turned observe-selective into three successors
+      expect(catalog.lessonById('lesson-06-11-01'), isNull);
     });
 
     test('empty and unknown ids return null', () {

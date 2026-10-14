@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-06-11-01-observe-selective',
+            'lesson-06-11-01-01-selective-entry',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

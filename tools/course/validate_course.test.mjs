@@ -188,8 +188,8 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
     assert.equal(namesType(sec5Blob, label), false, `sec5 leaked ${label}`);
   }
   for (const id of [
-    "lesson-06-11-02-meet-tag",
-    "lesson-06-12-02-meet-lag",
+    "lesson-06-11-02-01-tag-model",
+    "lesson-06-12-02-01-lag-model",
     "lesson-07-10-01-capstone-srp",
     "lesson-07-10-02-capstone-3bet",
     "lesson-07-10-03-capstone-multiway-deep",
@@ -206,8 +206,8 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   }
   const tag = course.playerTypes.find((p) => p.id === "tag");
   const lag = course.playerTypes.find((p) => p.id === "lag");
-  assert.equal(tag?.introducedByLessonId, "lesson-06-11-02-meet-tag");
-  assert.equal(lag?.introducedByLessonId, "lesson-06-12-02-meet-lag");
+  assert.equal(tag?.introducedByLessonId, "lesson-06-11-02-01-tag-model");
+  assert.equal(lag?.introducedByLessonId, "lesson-06-12-02-01-lag-model");
   // Lesson bodies before the TAG intro must not name TAG/LAG.
   // Unit chrome (for example "Player type: TAG") is not part of a lesson.
   const lessonsBeforeTag = [];
@@ -233,8 +233,8 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
   // Observe lessons must not name TAG/LAG before meet introductions.
   const sec6Lessons = course.sections[5].units.flatMap((u) => u.lessons);
   for (const observeId of [
-    "lesson-06-11-01-observe-selective",
-    "lesson-06-12-01-observe-wide-pressure",
+    "lesson-06-11-01-01-selective-entry",
+    "lesson-06-12-01-01-wide-entry",
   ]) {
     const observe = sec6Lessons.find((l) => l.id === observeId);
     assert.ok(observe, observeId);

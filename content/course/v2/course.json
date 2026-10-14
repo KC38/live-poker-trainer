@@ -25,13 +25,13 @@
     {
       "id": "tag",
       "label": "TAG",
-      "introducedByLessonId": "lesson-06-11-02-meet-tag",
+      "introducedByLessonId": "lesson-06-11-02-01-tag-model",
       "summary": "Selective entry with disciplined aggression."
     },
     {
       "id": "lag",
       "label": "LAG",
-      "introducedByLessonId": "lesson-06-12-02-meet-lag",
+      "introducedByLessonId": "lesson-06-12-02-01-lag-model",
       "summary": "Wide entry with sustained pressure."
     }
   ],
@@ -33368,14 +33368,12 @@
           "summary": "Observe selective aggression, then label and adjust.",
           "lessons": [
             {
-              "id": "lesson-06-11-01-observe-selective",
+              "id": "lesson-06-11-01-01-selective-entry",
               "order": 1,
-              "title": "Observe selective aggression",
-              "summary": "Note tight entry with disciplined barrels before any label.",
+              "title": "Note selective entry",
+              "summary": "Spot the seat that folds most hands, then plays them hard.",
               "objectives": [
-                "Note selective entry",
-                "Note disciplined aggression",
-                "Delay the label until samples exist"
+                "Note selective entry"
               ],
               "prerequisites": [
                 "lesson-06-10-01-03-no-ego-calls"
@@ -33383,7 +33381,7 @@
               "remediationLessonIds": [
                 "lesson-06-10-01-03-no-ego-calls"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -33494,10 +33492,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-11-01-02-disciplined-aggression",
+              "order": 2,
+              "title": "Note disciplined aggression",
+              "summary": "Planned barrels give up when called; that is discipline.",
+              "objectives": [
+                "Note disciplined aggression"
+              ],
+              "prerequisites": [
+                "lesson-06-11-01-01-selective-entry"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-11-01-01-selective-entry"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-11-01-02-explain-discipline",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Note disciplined aggression"
+                  ],
+                  "accessibilityText": "Watch what happens when this seat gets called. Planned aggression gives up on bad turns. That give-up is discipline, not wildness.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-11-01-02-explain-discipline-line",
+                      "kind": "dialogue",
+                      "text": "Watch what happens when this seat gets called. Planned aggression gives up on bad turns. That give-up is discipline, not wildness."
+                    }
+                  ],
+                  "okFeedback": "Gives up when called — disciplined.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CALLED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "GIVES UP",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Called → Gives up → Disciplined."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-11-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -33550,10 +33612,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-11-01-03-wait-for-samples",
+              "order": 3,
+              "title": "Wait for samples",
+              "summary": "Two hands is not a read; bundle notes before any label.",
+              "objectives": [
+                "Delay the label until samples exist"
+              ],
+              "prerequisites": [
+                "lesson-06-11-01-02-disciplined-aggression"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-11-01-02-disciplined-aggression"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-11-01-03-explain-wait",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Delay the label until samples exist"
+                  ],
+                  "accessibilityText": "Two tight hands tell you very little. Keep a note bundle (entry, aggression, give-ups) and wait for more hands before any label.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-11-01-03-explain-wait-line",
+                      "kind": "dialogue",
+                      "text": "Two tight hands tell you very little. Keep a note bundle (entry, aggression, give-ups) and wait for more hands before any label."
+                    }
+                  ],
+                  "okFeedback": "Low sample — keep noting.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TWO HANDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "NOTE BUNDLE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Two hands → Notes → Wait."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-11-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -33609,7 +33735,7 @@
                 },
                 {
                   "id": "act-06-11-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -33661,21 +33787,20 @@
               ]
             },
             {
-              "id": "lesson-06-11-02-meet-tag",
-              "order": 2,
-              "title": "Meet the TAG",
-              "summary": "Attach TAG to selective entry with disciplined aggression.",
+              "id": "lesson-06-11-02-01-tag-model",
+              "order": 4,
+              "title": "The TAG model",
+              "summary": "TAG is a working model for tight entry with disciplined aggression.",
               "objectives": [
-                "Introduce TAG",
-                "Identify TAG from evidence"
+                "Introduce TAG"
               ],
               "prerequisites": [
-                "lesson-06-11-01-observe-selective"
+                "lesson-06-11-01-03-wait-for-samples"
               ],
               "remediationLessonIds": [
-                "lesson-06-11-01-observe-selective"
+                "lesson-06-11-01-03-wait-for-samples"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 5,
               "playerTypeRefs": [
                 "tag"
@@ -33735,6 +33860,123 @@
                   }
                 },
                 {
+                  "id": "act-06-11-02-checkpoint",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Working model.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Introduce TAG"
+                  ],
+                  "prompt": "TAG is?",
+                  "choices": [
+                    {
+                      "id": "model",
+                      "label": "Working model",
+                      "accessibilityText": "Working model",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Update with evidence."
+                      }
+                    },
+                    {
+                      "id": "soul",
+                      "label": "Insult",
+                      "accessibilityText": "Insult",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "No judgments.",
+                        "betterChoiceId": "model"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "model",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-11-02-02-spot-tag",
+              "order": 5,
+              "title": "Spot a TAG",
+              "summary": "Attach the label to selective-entry evidence.",
+              "objectives": [
+                "Identify TAG from evidence"
+              ],
+              "prerequisites": [
+                "lesson-06-11-02-01-tag-model"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-11-02-01-tag-model"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "tag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-11-02-02-explain-spot",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Identify TAG from evidence"
+                  ],
+                  "accessibilityText": "Folds most hands, then raises and barrels with a plan. That evidence points to a TAG.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-11-02-02-explain-spot-line",
+                      "kind": "dialogue",
+                      "text": "Folds most hands, then raises and barrels with a plan. That evidence points to a TAG."
+                    }
+                  ],
+                  "okFeedback": "Evidence fits — TAG.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FOLDS MOST",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PLANNED BARRELS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Folds most + planned barrels → TAG."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-06-11-02-guided",
                   "order": 2,
                   "stage": "guided",
@@ -33789,64 +34031,8 @@
                   }
                 },
                 {
-                  "id": "act-06-11-02-scaffolded",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Entry width and discipline.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Introduce TAG"
-                  ],
-                  "prompt": "TAG versus Maniac difference?",
-                  "choices": [
-                    {
-                      "id": "diff",
-                      "label": "Selective vs extreme",
-                      "accessibilityText": "Selective vs extreme",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Discipline matters."
-                      }
-                    },
-                    {
-                      "id": "same",
-                      "label": "Identical",
-                      "accessibilityText": "Identical",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No.",
-                        "betterChoiceId": "diff"
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Compare how many hands each plays and when they slow down."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "diff",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-06-11-02-unguided",
-                  "order": 4,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
@@ -33903,45 +34089,47 @@
                       }
                     ]
                   }
-                },
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-11-02-03-tag-vs-maniac",
+              "order": 6,
+              "title": "TAG or Maniac?",
+              "summary": "Entry width and discipline separate the two.",
+              "objectives": [
+                "Tell TAG from Maniac"
+              ],
+              "prerequisites": [
+                "lesson-06-11-02-02-spot-tag"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-11-02-02-spot-tag"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "tag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
                 {
-                  "id": "act-06-11-02-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Working model.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
+                  "id": "act-06-11-02-03-explain-maniac",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
                   "objectives": [
-                    "Introduce TAG"
+                    "Tell TAG from Maniac"
                   ],
-                  "prompt": "TAG is?",
-                  "choices": [
+                  "accessibilityText": "A TAG enters narrow and gives up when called. A Maniac enters wide and almost never stops. Check entry width and discipline.",
+                  "coachMedia": [
                     {
-                      "id": "model",
-                      "label": "Working model",
-                      "accessibilityText": "Working model",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Update with evidence."
-                      }
-                    },
-                    {
-                      "id": "soul",
-                      "label": "Insult",
-                      "accessibilityText": "Insult",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No judgments.",
-                        "betterChoiceId": "model"
-                      }
+                      "id": "act-06-11-02-03-explain-maniac-line",
+                      "kind": "dialogue",
+                      "text": "A TAG enters narrow and gives up when called. A Maniac enters wide and almost never stops. Check entry width and discipline."
                     }
                   ],
-                  "assessmentRole": "checkpoint",
+                  "okFeedback": "Width and discipline decide it.",
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -33949,8 +34137,77 @@
                     "cues": [
                       {
                         "press": 1,
-                        "target": "model",
-                        "kind": "none"
+                        "target": "ENTRY WIDTH",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DISCIPLINE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Entry width + discipline → TAG, not Maniac."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-06-11-02-scaffolded",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Entry width and discipline.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Tell TAG from Maniac"
+                  ],
+                  "prompt": "TAG versus Maniac difference?",
+                  "choices": [
+                    {
+                      "id": "diff",
+                      "label": "Selective vs extreme",
+                      "accessibilityText": "Selective vs extreme",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Discipline matters."
+                      }
+                    },
+                    {
+                      "id": "same",
+                      "label": "Identical",
+                      "accessibilityText": "Identical",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "No.",
+                        "betterChoiceId": "diff"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Compare how many hands each plays and when they slow down."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "diff",
+                        "kind": "soft_pulse"
                       }
                     ]
                   }
@@ -33958,22 +34215,20 @@
               ]
             },
             {
-              "id": "lesson-06-11-03-adjust-tag",
-              "order": 3,
-              "title": "Adjust versus TAG",
-              "summary": "Respect TAG heat; steal less than versus nits; avoid light bluff-raises.",
+              "id": "lesson-06-11-03-01-respect-aggression",
+              "order": 7,
+              "title": "Respect TAG aggression",
+              "summary": "Give TAG raises credit and steal tighter than versus a Nit.",
               "objectives": [
-                "Respect TAG aggression",
-                "Value thin only when they call",
-                "Avoid bluffing TAG check-raises light"
+                "Respect TAG aggression"
               ],
               "prerequisites": [
-                "lesson-06-11-02-meet-tag"
+                "lesson-06-11-02-03-tag-vs-maniac"
               ],
               "remediationLessonIds": [
-                "lesson-06-11-02-meet-tag"
+                "lesson-06-11-02-03-tag-vs-maniac"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [
                 "tag"
@@ -34029,6 +34284,217 @@
                       }
                     ]
                   }
+                },
+                {
+                  "id": "act-06-11-03-scaffolded",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Tighter than vs nit.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Respect TAG aggression"
+                  ],
+                  "prompt": "Steal BTN vs TAG BB with K9o. Action?",
+                  "choices": [
+                    {
+                      "id": "fold-k9",
+                      "label": "Tighter fold",
+                      "accessibilityText": "Tighter fold",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "TAG defends better than nits.",
+                        "reversalRead": "Versus nit BB: steal wider."
+                      },
+                      "action": "FOLD"
+                    },
+                    {
+                      "id": "open-wide",
+                      "label": "Open any two",
+                      "accessibilityText": "Open any two",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Too wide.",
+                        "betterChoiceId": "fold-k9"
+                      },
+                      "action": "RAISE",
+                      "amountBb": 3
+                    }
+                  ],
+                  "playerTypeRefs": [
+                    "tag"
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Kh",
+                          "9d"
+                        ]
+                      },
+                      "variants": [
+                        {
+                          "id": "var-scaffolded-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Ks",
+                              "9c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-scaffolded-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Kd",
+                              "9s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Solid players defend more than very tight ones — steal less."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "fold-k9",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "act-06-11-03-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Selective aggression / tighter call-downs.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Respect TAG aggression"
+                  ],
+                  "prompt": "Versus TAG, cite which tendency?",
+                  "choices": [
+                    {
+                      "id": "cite",
+                      "label": "Selective + disciplined",
+                      "accessibilityText": "Selective + disciplined",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Advice must cite the tendency."
+                      }
+                    },
+                    {
+                      "id": "vague",
+                      "label": "Vibes",
+                      "accessibilityText": "Vibes",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Cite evidence.",
+                        "betterChoiceId": "cite"
+                      }
+                    }
+                  ],
+                  "playerTypeRefs": [
+                    "tag"
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cite",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-11-03-02-no-light-reraise",
+              "order": 8,
+              "title": "No light bluffs into a TAG check-raise",
+              "summary": "A TAG check-raise is real; medium hands fold.",
+              "objectives": [
+                "Avoid bluffing TAG check-raises light"
+              ],
+              "prerequisites": [
+                "lesson-06-11-03-01-respect-aggression"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-11-03-01-respect-aggression"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "tag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-11-03-02-explain-checkraise",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid bluffing TAG check-raises light"
+                  ],
+                  "accessibilityText": "When a TAG check-raises, believe it. Second pair folds, and you do not re-raise light.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-11-03-02-explain-checkraise-line",
+                      "kind": "dialogue",
+                      "text": "When a TAG check-raises, believe it. Second pair folds, and you do not re-raise light."
+                    }
+                  ],
+                  "okFeedback": "Believe the check-raise.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CHECK-RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "TAG check-raise → Fold medium hands."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-11-03-guided",
@@ -34129,101 +34595,76 @@
                       }
                     ]
                   }
-                },
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-11-03-03-thin-value-callers",
+              "order": 9,
+              "title": "Bet thin only into callers",
+              "summary": "A TAG rarely calls light, so check thin value more.",
+              "objectives": [
+                "Value thin only when they call"
+              ],
+              "prerequisites": [
+                "lesson-06-11-03-02-no-light-reraise"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-11-03-02-no-light-reraise"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "tag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
                 {
-                  "id": "act-06-11-03-scaffolded",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "poker_action_sizing",
-                  "estimatedSeconds": 55,
-                  "accessibilityText": "Tighter than vs nit.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
+                  "id": "act-06-11-03-03-explain-thin",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
                   "objectives": [
-                    "Respect TAG aggression"
+                    "Value thin only when they call"
                   ],
-                  "prompt": "Steal BTN vs TAG BB with K9o. Action?",
-                  "choices": [
+                  "accessibilityText": "A TAG rarely calls the river light. Bet thin value only when they call; otherwise check.",
+                  "coachMedia": [
                     {
-                      "id": "fold-k9",
-                      "label": "Tighter fold",
-                      "accessibilityText": "Tighter fold",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "TAG defends better than nits.",
-                        "reversalRead": "Versus nit BB: steal wider."
-                      },
-                      "action": "FOLD"
-                    },
-                    {
-                      "id": "open-wide",
-                      "label": "Open any two",
-                      "accessibilityText": "Open any two",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Too wide.",
-                        "betterChoiceId": "fold-k9"
-                      },
-                      "action": "RAISE",
-                      "amountBb": 3
+                      "id": "act-06-11-03-03-explain-thin-line",
+                      "kind": "dialogue",
+                      "text": "A TAG rarely calls the river light. Bet thin value only when they call; otherwise check."
                     }
                   ],
-                  "playerTypeRefs": [
-                    "tag"
-                  ],
+                  "okFeedback": "No light calls — check thin.",
                   "teachSpec": {
                     "deal": {
-                      "mode": "fixed",
-                      "fixedCards": {
-                        "hero": [
-                          "Kh",
-                          "9d"
-                        ]
-                      },
-                      "variants": [
-                        {
-                          "id": "var-scaffolded-suits-1",
-                          "fixedCards": {
-                            "hero": [
-                              "Ks",
-                              "9c"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (1)"
-                        },
-                        {
-                          "id": "var-scaffolded-suits-2",
-                          "fixedCards": {
-                            "hero": [
-                              "Kd",
-                              "9s"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (2)"
-                        }
-                      ]
+                      "mode": "none"
                     },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Solid players defend more than very tight ones — steal less."
-                      }
-                    ],
                     "cues": [
                       {
                         "press": 1,
-                        "target": "fold-k9",
+                        "target": "RARELY CALLS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHECK",
                         "kind": "soft_pulse"
                       }
                     ]
-                  }
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Rarely calls → Check thin value."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-11-03-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -34331,60 +34772,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-11-03-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Selective aggression / tighter call-downs.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Respect TAG aggression"
-                  ],
-                  "prompt": "Versus TAG, cite which tendency?",
-                  "choices": [
-                    {
-                      "id": "cite",
-                      "label": "Selective + disciplined",
-                      "accessibilityText": "Selective + disciplined",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Advice must cite the tendency."
-                      }
-                    },
-                    {
-                      "id": "vague",
-                      "label": "Vibes",
-                      "accessibilityText": "Vibes",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Cite evidence.",
-                        "betterChoiceId": "cite"
-                      }
-                    }
-                  ],
-                  "playerTypeRefs": [
-                    "tag"
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "cite",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -34397,22 +34784,20 @@
           "summary": "Observe wide pressure, then label and adjust.",
           "lessons": [
             {
-              "id": "lesson-06-12-01-observe-wide-pressure",
+              "id": "lesson-06-12-01-01-wide-entry",
               "order": 1,
-              "title": "Observe wide sustained pressure",
-              "summary": "Note wide entry with ongoing barrels before any label.",
+              "title": "Note wide entry",
+              "summary": "Spot the seat that opens many hands.",
               "objectives": [
-                "Note wide entry",
-                "Note sustained pressure",
-                "Separate planned pressure from maniac samples"
+                "Note wide entry"
               ],
               "prerequisites": [
-                "lesson-06-11-03-adjust-tag"
+                "lesson-06-11-03-03-thin-value-callers"
               ],
               "remediationLessonIds": [
-                "lesson-06-11-03-adjust-tag"
+                "lesson-06-11-03-03-thin-value-callers"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -34523,10 +34908,194 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-12-01-02-sustained-pressure",
+              "order": 2,
+              "title": "Note sustained pressure",
+              "summary": "One wide open is not a read; watch the barrels keep coming.",
+              "objectives": [
+                "Note sustained pressure"
+              ],
+              "prerequisites": [
+                "lesson-06-12-01-01-wide-entry"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-12-01-01-wide-entry"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-12-01-02-explain-pressure",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Note sustained pressure"
+                  ],
+                  "accessibilityText": "Wide entry is only half the read. Note whether the barrels keep coming across many hands before any label.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-12-01-02-explain-pressure-line",
+                      "kind": "dialogue",
+                      "text": "Wide entry is only half the read. Note whether the barrels keep coming across many hands before any label."
+                    }
+                  ],
+                  "okFeedback": "One open is not enough.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BARRELS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MANY HANDS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Barrels + many hands → then label."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-06-12-01-unguided",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "No.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Note sustained pressure"
+                  ],
+                  "prompt": "Label after one wide open?",
+                  "choices": [
+                    {
+                      "id": "wait",
+                      "label": "Keep sampling",
+                      "accessibilityText": "Keep sampling",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "One hand is a note."
+                      }
+                    },
+                    {
+                      "id": "now",
+                      "label": "Label now",
+                      "accessibilityText": "Label now",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Too soon.",
+                        "betterChoiceId": "wait"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "One wide open is not enough to label anyone."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "wait",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-12-01-03-planned-not-maniac",
+              "order": 3,
+              "title": "Planned pressure, not a Maniac",
+              "summary": "This seat still folds sometimes; a Maniac rarely does.",
+              "objectives": [
+                "Separate planned pressure from maniac samples"
+              ],
+              "prerequisites": [
+                "lesson-06-12-01-02-sustained-pressure"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-12-01-02-sustained-pressure"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-12-01-03-explain-plan",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Separate planned pressure from maniac samples"
+                  ],
+                  "accessibilityText": "This seat still folds to some raises. A Maniac almost never folds. That fold shows the pressure has a plan.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-12-01-03-explain-plan-line",
+                      "kind": "dialogue",
+                      "text": "This seat still folds to some raises. A Maniac almost never folds. That fold shows the pressure has a plan."
+                    }
+                  ],
+                  "okFeedback": "Some folds — planned pressure.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FOLDS SOMETIMES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PLAN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Folds sometimes → Planned, not Maniac."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-12-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -34581,64 +35150,8 @@
                   }
                 },
                 {
-                  "id": "act-06-12-01-unguided",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "No.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Note sustained pressure"
-                  ],
-                  "prompt": "Label after one wide open?",
-                  "choices": [
-                    {
-                      "id": "wait",
-                      "label": "Keep sampling",
-                      "accessibilityText": "Keep sampling",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "One hand is a note."
-                      }
-                    },
-                    {
-                      "id": "now",
-                      "label": "Label now",
-                      "accessibilityText": "Label now",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Too soon.",
-                        "betterChoiceId": "wait"
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "One wide open is not enough to label anyone."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "wait",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-06-12-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -34690,21 +35203,20 @@
               ]
             },
             {
-              "id": "lesson-06-12-02-meet-lag",
-              "order": 2,
-              "title": "Meet the LAG",
-              "summary": "Attach LAG to wide entry with sustained pressure.",
+              "id": "lesson-06-12-02-01-lag-model",
+              "order": 4,
+              "title": "The LAG model",
+              "summary": "LAG is a working model for wide entry with sustained pressure.",
               "objectives": [
-                "Introduce LAG",
-                "Identify LAG from evidence"
+                "Introduce LAG"
               ],
               "prerequisites": [
-                "lesson-06-12-01-observe-wide-pressure"
+                "lesson-06-12-01-03-planned-not-maniac"
               ],
               "remediationLessonIds": [
-                "lesson-06-12-01-observe-wide-pressure"
+                "lesson-06-12-01-03-planned-not-maniac"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 5,
               "playerTypeRefs": [
                 "lag"
@@ -34764,6 +35276,123 @@
                   }
                 },
                 {
+                  "id": "act-06-12-02-checkpoint",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Sample/confidence limits.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Introduce LAG"
+                  ],
+                  "prompt": "Show beside LAG label?",
+                  "choices": [
+                    {
+                      "id": "limits",
+                      "label": "Sample limits",
+                      "accessibilityText": "Sample limits",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Always."
+                      }
+                    },
+                    {
+                      "id": "destiny",
+                      "label": "Destiny",
+                      "accessibilityText": "Destiny",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "No.",
+                        "betterChoiceId": "limits"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "limits",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-12-02-02-spot-lag",
+              "order": 5,
+              "title": "Spot a LAG",
+              "summary": "Attach the label to wide-pressure evidence.",
+              "objectives": [
+                "Identify LAG from evidence"
+              ],
+              "prerequisites": [
+                "lesson-06-12-02-01-lag-model"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-12-02-01-lag-model"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-12-02-02-explain-spot",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Identify LAG from evidence"
+                  ],
+                  "accessibilityText": "Wide opens, light 3-bets, and barrels that keep coming. That evidence points to a LAG.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-12-02-02-explain-spot-line",
+                      "kind": "dialogue",
+                      "text": "Wide opens, light 3-bets, and barrels that keep coming. That evidence points to a LAG."
+                    }
+                  ],
+                  "okFeedback": "Evidence fits — LAG.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "WIDE OPENS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BARRELS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Wide opens + barrels → LAG."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-06-12-02-guided",
                   "order": 2,
                   "stage": "guided",
@@ -34818,64 +35447,8 @@
                   }
                 },
                 {
-                  "id": "act-06-12-02-scaffolded",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "LAG raises; station calls.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Introduce LAG"
-                  ],
-                  "prompt": "LAG vs Calling Station?",
-                  "choices": [
-                    {
-                      "id": "diff",
-                      "label": "Pressure vs passive",
-                      "accessibilityText": "Pressure vs passive",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Different exploits."
-                      }
-                    },
-                    {
-                      "id": "same",
-                      "label": "Same exploit",
-                      "accessibilityText": "Same exploit",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No.",
-                        "betterChoiceId": "diff"
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "One type raises a lot; the other calls a lot."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "diff",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-06-12-02-unguided",
-                  "order": 4,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
@@ -34932,45 +35505,47 @@
                       }
                     ]
                   }
-                },
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-12-02-03-lag-vs-station",
+              "order": 6,
+              "title": "LAG or Calling Station?",
+              "summary": "A LAG raises; a Calling Station calls.",
+              "objectives": [
+                "Tell LAG from Calling Station"
+              ],
+              "prerequisites": [
+                "lesson-06-12-02-02-spot-lag"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-12-02-02-spot-lag"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
                 {
-                  "id": "act-06-12-02-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Sample/confidence limits.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
+                  "id": "act-06-12-02-03-explain-station",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
                   "objectives": [
-                    "Introduce LAG"
+                    "Tell LAG from Calling Station"
                   ],
-                  "prompt": "Show beside LAG label?",
-                  "choices": [
+                  "accessibilityText": "Both play many hands. A LAG raises and barrels. A Calling Station just calls. Pressure versus passive.",
+                  "coachMedia": [
                     {
-                      "id": "limits",
-                      "label": "Sample limits",
-                      "accessibilityText": "Sample limits",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Always."
-                      }
-                    },
-                    {
-                      "id": "destiny",
-                      "label": "Destiny",
-                      "accessibilityText": "Destiny",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No.",
-                        "betterChoiceId": "limits"
-                      }
+                      "id": "act-06-12-02-03-explain-station-line",
+                      "kind": "dialogue",
+                      "text": "Both play many hands. A LAG raises and barrels. A Calling Station just calls. Pressure versus passive."
                     }
                   ],
-                  "assessmentRole": "checkpoint",
+                  "okFeedback": "Raises versus calls.",
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
@@ -34978,8 +35553,77 @@
                     "cues": [
                       {
                         "press": 1,
-                        "target": "limits",
-                        "kind": "none"
+                        "target": "RAISES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CALLS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Raises → LAG; calls → Station."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-06-12-02-scaffolded",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "LAG raises; station calls.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Tell LAG from Calling Station"
+                  ],
+                  "prompt": "LAG vs Calling Station?",
+                  "choices": [
+                    {
+                      "id": "diff",
+                      "label": "Pressure vs passive",
+                      "accessibilityText": "Pressure vs passive",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Different exploits."
+                      }
+                    },
+                    {
+                      "id": "same",
+                      "label": "Same exploit",
+                      "accessibilityText": "Same exploit",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "No.",
+                        "betterChoiceId": "diff"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "One type raises a lot; the other calls a lot."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "diff",
+                        "kind": "soft_pulse"
                       }
                     ]
                   }
@@ -34987,22 +35631,20 @@
               ]
             },
             {
-              "id": "lesson-06-12-03-adjust-lag",
-              "order": 3,
-              "title": "Adjust versus LAG",
-              "summary": "Trap more, call down wider, invent fewer fancy bluffs.",
+              "id": "lesson-06-12-03-01-call-wider",
+              "order": 7,
+              "title": "Call down wider versus a LAG",
+              "summary": "Their barrels are wide, so bluff-catch more.",
               "objectives": [
-                "Widen bluff-catches versus LAG",
-                "Trap strong hands more",
-                "Avoid fancy bluffs into pressure"
+                "Widen bluff-catches versus LAG"
               ],
               "prerequisites": [
-                "lesson-06-12-02-meet-lag"
+                "lesson-06-12-02-03-lag-vs-station"
               ],
               "remediationLessonIds": [
-                "lesson-06-12-02-meet-lag"
+                "lesson-06-12-02-03-lag-vs-station"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [
                 "lag"
@@ -35176,8 +35818,128 @@
                   }
                 },
                 {
-                  "id": "act-06-12-03-scaffolded",
+                  "id": "act-06-12-03-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Wide entry and sustained pressure.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Widen bluff-catches versus LAG"
+                  ],
+                  "prompt": "LAG exploit cites?",
+                  "choices": [
+                    {
+                      "id": "cite",
+                      "label": "Wide + pressure",
+                      "accessibilityText": "Wide + pressure",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Cite the tendency."
+                      }
+                    },
+                    {
+                      "id": "mood",
+                      "label": "Vibes",
+                      "accessibilityText": "Vibes",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Cite evidence.",
+                        "betterChoiceId": "cite"
+                      }
+                    }
+                  ],
+                  "playerTypeRefs": [
+                    "lag"
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cite",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-12-03-02-trap-more",
+              "order": 8,
+              "title": "Trap strong hands more",
+              "summary": "Let a LAG keep betting into your strong hands.",
+              "objectives": [
+                "Trap strong hands more"
+              ],
+              "prerequisites": [
+                "lesson-06-12-03-01-call-wider"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-12-03-01-call-wider"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-12-03-02-explain-trap",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Trap strong hands more"
+                  ],
+                  "accessibilityText": "Versus a LAG, strong hands can check or call and let them keep betting. They bluff for you.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-12-03-02-explain-trap-line",
+                      "kind": "dialogue",
+                      "text": "Versus a LAG, strong hands can check or call and let them keep betting. They bluff for you."
+                    }
+                  ],
+                  "okFeedback": "Trap — they bet for you.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STRONG HAND",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "LET THEM BET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Strong hand → Let them bet."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-06-12-03-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -35279,10 +36041,76 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-12-03-03-fewer-fancy-bluffs",
+              "order": 9,
+              "title": "Fewer fancy bluffs",
+              "summary": "Do not invent big bluffs into constant pressure.",
+              "objectives": [
+                "Avoid fancy bluffs into pressure"
+              ],
+              "prerequisites": [
+                "lesson-06-12-03-02-trap-more"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-12-03-02-trap-more"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-12-03-03-explain-fancy",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid fancy bluffs into pressure"
+                  ],
+                  "accessibilityText": "Do not invent triple-barrel bluffs into a LAG. They keep pressing; let them make the mistakes.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-12-03-03-explain-fancy-line",
+                      "kind": "dialogue",
+                      "text": "Do not invent triple-barrel bluffs into a LAG. They keep pressing; let them make the mistakes."
+                    }
+                  ],
+                  "okFeedback": "Skip the fancy bluff.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NO BIG BLUFF",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "LET THEM",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "No big bluff → Let them press."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-12-03-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -35338,60 +36166,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-12-03-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Wide entry and sustained pressure.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Widen bluff-catches versus LAG"
-                  ],
-                  "prompt": "LAG exploit cites?",
-                  "choices": [
-                    {
-                      "id": "cite",
-                      "label": "Wide + pressure",
-                      "accessibilityText": "Wide + pressure",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Cite the tendency."
-                      }
-                    },
-                    {
-                      "id": "mood",
-                      "label": "Vibes",
-                      "accessibilityText": "Vibes",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Cite evidence.",
-                        "betterChoiceId": "cite"
-                      }
-                    }
-                  ],
-                  "playerTypeRefs": [
-                    "lag"
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "cite",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -35404,22 +36178,20 @@
           "summary": "Same spot, five models — then section checkpoint.",
           "lessons": [
             {
-              "id": "lesson-06-13-01-mix-five-types",
+              "id": "lesson-06-13-01-01-station-thin-value",
               "order": 1,
-              "title": "Same cards, five type models",
-              "summary": "Change lines only when the authored type tendency justifies it.",
+              "title": "Same cards: thin value versus a Station",
+              "summary": "Second pair bets thin when a Calling Station checks.",
               "objectives": [
-                "Adjust across all five types",
-                "Keep baseline without evidence",
-                "Cite the tendency that changes the line"
+                "Value thin versus a Calling Station"
               ],
               "prerequisites": [
-                "lesson-06-12-03-adjust-lag"
+                "lesson-06-12-03-03-fewer-fancy-bluffs"
               ],
               "remediationLessonIds": [
-                "lesson-06-11-03-adjust-tag"
+                "lesson-06-11-03-03-thin-value-callers"
               ],
-              "estimatedMinutes": 10,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [
                 "calling_station",
@@ -35448,7 +36220,7 @@
                     }
                   ],
                   "objectives": [
-                    "Adjust across all five types"
+                    "Value thin versus a Calling Station"
                   ],
                   "explainGrading": {
                     "grade": "recommended",
@@ -35490,7 +36262,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Adjust across all five types"
+                    "Value thin versus a Calling Station"
                   ],
                   "prompt": "River second pair. Versus Calling Station?",
                   "choices": [
@@ -35583,10 +36355,80 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-13-01-02-nit-fold",
+              "order": 2,
+              "title": "Same cards: fold to Nit heat",
+              "summary": "A Nit check-raise is value-heavy; second pair folds.",
+              "objectives": [
+                "Respect Nit aggression on the same cards"
+              ],
+              "prerequisites": [
+                "lesson-06-13-01-01-station-thin-value"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-13-01-01-station-thin-value"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac",
+                "tag",
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-13-01-02-explain-nit",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Respect Nit aggression on the same cards"
+                  ],
+                  "accessibilityText": "Same cards, new seat. A Nit check-raise is value-heavy, so second pair folds.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-13-01-02-explain-nit-line",
+                      "kind": "dialogue",
+                      "text": "Same cards, new seat. A Nit check-raise is value-heavy, so second pair folds."
+                    }
+                  ],
+                  "okFeedback": "Nit heat — fold.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NIT CHECK-RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nit check-raise → Fold."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-13-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -35597,7 +36439,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Adjust across all five types"
+                    "Respect Nit aggression on the same cards"
                   ],
                   "prompt": "Same hand. Versus Nit who check-raised. Action?",
                   "choices": [
@@ -35694,10 +36536,80 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-13-01-03-lag-call",
+              "order": 3,
+              "title": "Same cards: call a LAG barrel",
+              "summary": "A LAG barrels wide, so second pair calls.",
+              "objectives": [
+                "Widen defense versus LAG barrels"
+              ],
+              "prerequisites": [
+                "lesson-06-13-01-02-nit-fold"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-13-01-02-nit-fold"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac",
+                "tag",
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-13-01-03-explain-lag",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Widen defense versus LAG barrels"
+                  ],
+                  "accessibilityText": "Same cards versus a LAG barrel. Their range is wide, so second pair calls.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-13-01-03-explain-lag-line",
+                      "kind": "dialogue",
+                      "text": "Same cards versus a LAG barrel. Their range is wide, so second pair calls."
+                    }
+                  ],
+                  "okFeedback": "Wide range — call.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "LAG BARREL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "LAG barrel → Call."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-13-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -35708,7 +36620,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Adjust across all five types"
+                    "Widen defense versus LAG barrels"
                   ],
                   "prompt": "Same hand. LAG barrels. Action?",
                   "choices": [
@@ -35804,10 +36716,80 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-13-01-04-cite-tendency",
+              "order": 4,
+              "title": "Cite the tendency",
+              "summary": "Name the tendency before you change the line.",
+              "objectives": [
+                "Cite the tendency that changes the line"
+              ],
+              "prerequisites": [
+                "lesson-06-13-01-03-lag-call"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-13-01-03-lag-call"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac",
+                "tag",
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-13-01-04-explain-cite",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Cite the tendency that changes the line"
+                  ],
+                  "accessibilityText": "Name the tendency before you change the line. No evidence, no change.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-13-01-04-explain-cite-line",
+                      "kind": "dialogue",
+                      "text": "Name the tendency before you change the line. No evidence, no change."
+                    }
+                  ],
+                  "okFeedback": "Evidence first, then the line.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TENDENCY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "LINE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Tendency → Line."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-13-01-checkpoint",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
@@ -35864,7 +36846,7 @@
             },
             {
               "id": "lesson-06-13-02-section-six-checkpoint",
-              "order": 2,
+              "order": 5,
               "title": "Section 6 checkpoint",
               "summary": "Confirm advanced concepts plus TAG/LAG identification.",
               "objectives": [
@@ -35873,7 +36855,7 @@
                 "Confirm TAG and LAG"
               ],
               "prerequisites": [
-                "lesson-06-13-01-mix-five-types"
+                "lesson-06-13-01-04-cite-tendency"
               ],
               "remediationLessonIds": [
                 "lesson-06-01-01-03-press-both"
@@ -37982,7 +38964,7 @@
                 "lesson-07-06-01-stack-depth-plans"
               ],
               "remediationLessonIds": [
-                "lesson-06-13-01-mix-five-types"
+                "lesson-06-13-01-04-cite-tendency"
               ],
               "estimatedMinutes": 10,
               "difficultyBand": 5,
@@ -40838,7 +41820,7 @@
                 "lesson-07-11-01-live-warmup-prep"
               ],
               "remediationLessonIds": [
-                "lesson-06-13-01-mix-five-types"
+                "lesson-06-13-01-04-cite-tendency"
               ],
               "estimatedMinutes": 14,
               "difficultyBand": 5,
@@ -41520,6 +42502,42 @@
       "lesson-06-10-01-01-hard-folds",
       "lesson-06-10-01-02-cooler-or-mistake",
       "lesson-06-10-01-03-no-ego-calls"
+    ],
+    "lesson-06-11-01-observe-selective": [
+      "lesson-06-11-01-01-selective-entry",
+      "lesson-06-11-01-02-disciplined-aggression",
+      "lesson-06-11-01-03-wait-for-samples"
+    ],
+    "lesson-06-11-02-meet-tag": [
+      "lesson-06-11-02-01-tag-model",
+      "lesson-06-11-02-02-spot-tag",
+      "lesson-06-11-02-03-tag-vs-maniac"
+    ],
+    "lesson-06-11-03-adjust-tag": [
+      "lesson-06-11-03-01-respect-aggression",
+      "lesson-06-11-03-02-no-light-reraise",
+      "lesson-06-11-03-03-thin-value-callers"
+    ],
+    "lesson-06-12-01-observe-wide-pressure": [
+      "lesson-06-12-01-01-wide-entry",
+      "lesson-06-12-01-02-sustained-pressure",
+      "lesson-06-12-01-03-planned-not-maniac"
+    ],
+    "lesson-06-12-02-meet-lag": [
+      "lesson-06-12-02-01-lag-model",
+      "lesson-06-12-02-02-spot-lag",
+      "lesson-06-12-02-03-lag-vs-station"
+    ],
+    "lesson-06-12-03-adjust-lag": [
+      "lesson-06-12-03-01-call-wider",
+      "lesson-06-12-03-02-trap-more",
+      "lesson-06-12-03-03-fewer-fancy-bluffs"
+    ],
+    "lesson-06-13-01-mix-five-types": [
+      "lesson-06-13-01-01-station-thin-value",
+      "lesson-06-13-01-02-nit-fold",
+      "lesson-06-13-01-03-lag-call",
+      "lesson-06-13-01-04-cite-tendency"
     ]
   }
 }
