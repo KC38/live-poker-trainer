@@ -1492,25 +1492,26 @@ class _TableRegionTapActivityState extends State<_TableRegionTapActivity> {
             prompt.toLowerCase() != coach.trim().toLowerCase();
         final instruction = _instructionRegion;
         final rex = RexCoachLine(text: coach);
-        // Keep a coach slot even under Nice!/Oops! — dropping Rex (or a
-        // framed shrink) shifts the Column and remounts LessonTableStage /
-        // DealtCardReveal (open-pot redeal, LPT-642). Same pattern as
-        // PokerActionSizingActivity.
-        final coachSlot = locked
-            ? const SizedBox.shrink()
-            : instruction == null
-                ? rex
-                : Semantics(
-                  button: true,
-                  label: coach,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap:
-                        () =>
-                            _submitRegion(LessonTableTapTarget(instruction)),
-                    child: rex,
-                  ),
-                );
+        // Keep a coach slot even under Nice!/Oops! — dropping Rex shifts
+        // the Column and remounts LessonTableStage / DealtCardReveal
+        // (open-pot redeal, LPT-642). Opacity 0 preserves height; framed
+        // lessons already shrink Rex via LessonFrameScope.
+        final Widget coachSlot;
+        if (locked) {
+          coachSlot = Opacity(opacity: 0, child: IgnorePointer(child: rex));
+        } else if (instruction == null) {
+          coachSlot = rex;
+        } else {
+          coachSlot = Semantics(
+            button: true,
+            label: coach,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () => _submitRegion(LessonTableTapTarget(instruction)),
+              child: rex,
+            ),
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -2862,7 +2863,15 @@ class _ShowdownTapActivityState extends State<_ShowdownTapActivity> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (!locked) RexCoachLine(text: resolved.coach),
+            // Preserve coach height under Nice!/Oops! (redeal if Column collapses).
+            if (resolved.coach.trim().isNotEmpty)
+              Opacity(
+                opacity: locked ? 0 : 1,
+                child: IgnorePointer(
+                  ignoring: locked,
+                  child: RexCoachLine(text: resolved.coach),
+                ),
+              ),
             if (scene == null && resolved.showPrompt) ...[
               const SizedBox(height: 14),
               Text(
@@ -3163,7 +3172,14 @@ class _OutsCleanAcesTapActivity extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (!locked) RexCoachLine(text: _coach),
+            if (_coach.trim().isNotEmpty)
+              Opacity(
+                opacity: locked ? 0 : 1,
+                child: IgnorePointer(
+                  ignoring: locked,
+                  child: RexCoachLine(text: _coach),
+                ),
+              ),
             const SizedBox(height: 14),
             OutsCleanAcesPicker(
               key: ValueKey<String>(

@@ -240,6 +240,9 @@ rounds, then the board one card at a time. Each card lands once, in order,
 with one of the eight `deal_0N.wav` hits. A later-street start deals only
 the arriving street. A tap on a lesson button never redeals the hand. Folds
 before the hero's decision are shown after the deal, not before it.
+Street bets (including blinds) stay off the felt until hole cards have
+landed; then blinds post, and each raise/call/fold lands in act order —
+never while the deal is still running (Live Training + lesson felts).
 Framed open-pot math (`kOpenPotActivityId` / `act-01-05-01-unguided-pot`)
 does not redeal or replay post-deal actions when Nice! / Oops! locks the
 dock (LPT-642).
