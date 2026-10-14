@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
+import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
 import 'package:live_poker_trainer/providers/onboarding_provider.dart';
+import 'package:live_poker_trainer/ui/screens/section_complete_screen.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
 /// Shown after [completeCourseLesson] succeeds.
@@ -20,6 +22,7 @@ class LessonResultScreen extends ConsumerStatefulWidget {
     required this.result,
     this.dailyGoalMinutes,
     this.standalone = true,
+    this.completedSection,
   });
 
   final String lessonTitle;
@@ -32,6 +35,10 @@ class LessonResultScreen extends ConsumerStatefulWidget {
   /// When false, CONTINUE pops the embedded runner (Home / openlesson).
   /// When true, CONTINUE pops to the first route (onboarding push).
   final bool standalone;
+
+  /// When set, CONTINUE opens the section-end ceremony instead of Home
+  /// (LPT-793).
+  final CourseSection? completedSection;
 
   @override
   ConsumerState<LessonResultScreen> createState() => _LessonResultScreenState();
@@ -73,6 +80,35 @@ class _LessonResultScreenState extends ConsumerState<LessonResultScreen>
   Future<void> _onContinue() async {
     if (_continuing) return;
     final nav = Navigator.of(context);
+    final section = widget.completedSection;
+    if (section != null) {
+      _continuing = true;
+      // Same guest→shell promote as the direct-pop path so ceremony CONTINUE
+      // does not land on Welcome after an embedded first-section finish.
+      if (!widget.standalone) {
+        final isAnonymous = ref.read(authServiceProvider).isAnonymous;
+        final onboarding = ref.read(onboardingControllerProvider);
+        if (isAnonymous &&
+            onboarding.step != OnboardingStep.done &&
+            !onboarding.firstLessonCompleted) {
+          await ref
+              .read(onboardingControllerProvider.notifier)
+              .continueLearningAsGuest();
+          if (!mounted) return;
+        }
+      }
+      if (!mounted) return;
+      await nav.pushReplacement(
+        MaterialPageRoute<void>(
+          builder: (_) => SectionCompleteScreen(
+            sectionOrder: section.order,
+            sectionTitle: section.title,
+            standalone: widget.standalone,
+          ),
+        ),
+      );
+      return;
+    }
     if (!widget.standalone) {
       // openlesson / Home push with embeddedInShell keeps Welcome (or another
       // pre-shell draft) as the first route. Completing skips the celebration

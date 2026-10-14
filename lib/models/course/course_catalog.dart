@@ -647,6 +647,17 @@ class CourseSection {
   /// Units.
   final List<CourseUnit> units;
 
+  /// Depth-first lesson ids in this section.
+  List<String> get lessonIds {
+    final ids = <String>[];
+    for (final unit in units) {
+      for (final lesson in unit.lessons) {
+        ids.add(lesson.id);
+      }
+    }
+    return List.unmodifiable(ids);
+  }
+
   /// Parses JSON.
   factory CourseSection.fromJson(Map<String, dynamic> json) {
     final units = <CourseUnit>[];
@@ -831,6 +842,25 @@ class CourseCatalog {
       }
     }
     return null;
+  }
+
+  /// Whether finishing [lessonId] newly completes its section.
+  ///
+  /// True when [lessonId] was not in [completedBefore], and every lesson in
+  /// that section is present in [completedBefore] ∪ {lessonId}. Reviews of an
+  /// already-finished section return false.
+  CourseSection? sectionNewlyCompletedByLesson({
+    required String lessonId,
+    required Set<String> completedBefore,
+  }) {
+    if (lessonId.isEmpty || completedBefore.contains(lessonId)) return null;
+    final section = sectionForLesson(lessonId);
+    if (section == null) return null;
+    final ids = section.lessonIds;
+    if (ids.isEmpty || !ids.contains(lessonId)) return null;
+    final after = <String>{...completedBefore, lessonId};
+    if (!ids.every(after.contains)) return null;
+    return section;
   }
 
   /// Unit that contains [lessonId], if the catalog publishes it.

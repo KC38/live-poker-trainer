@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
+import 'package:live_poker_trainer/models/course/lesson_split_map.dart';
 import 'package:live_poker_trainer/models/course/onboarding_models.dart';
 import 'package:live_poker_trainer/providers/analytics_provider.dart';
 import 'package:live_poker_trainer/providers/auth_provider.dart';
@@ -845,14 +846,20 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     if (attempt == null || _completing) return;
     setState(() => _completing = true);
     try {
-      final complete = await () async {
-        final catalog = await ref.read(courseCatalogProvider.future);
-        return _service.completeLesson(
-          attemptId: attempt.attemptId,
-          idempotencyKey: CourseService.newRequestKey('complete'),
-          catalogVersion: catalog.catalogVersion,
-        );
-      }().timeout(const Duration(seconds: 45));
+      final catalog = await ref.read(courseCatalogProvider.future);
+      // Snapshot completed ids before complete so we can detect a first-time
+      // section finish (LPT-793). Prefer getCourseState (openlesson / seed
+      // can leave Home nodes stale); fall back to Home nodes, then empty.
+      var completedBefore = await _completedLessonIdsBefore(
+        catalog: catalog,
+      );
+      final complete = await _service
+          .completeLesson(
+            attemptId: attempt.attemptId,
+            idempotencyKey: CourseService.newRequestKey('complete'),
+            catalogVersion: catalog.catalogVersion,
+          )
+          .timeout(const Duration(seconds: 45));
       if (!mounted) return;
       final shown = CompleteCourseLessonResult(
         attemptId: complete.attemptId,
@@ -872,6 +879,13 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         gemsAwarded: complete.gemsAwarded,
         gems: complete.gems,
       );
+      final completedSection =
+          complete.duplicate
+              ? null
+              : catalog.sectionNewlyCompletedByLesson(
+                lessonId: complete.lessonId,
+                completedBefore: completedBefore,
+              );
       unawaited(ref.read(soundServiceProvider).win());
       unawaited(
         ref
@@ -926,6 +940,7 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
             dailyGoalMinutes:
                 ref.read(onboardingControllerProvider).dailyGoalMinutes,
             standalone: !widget.embeddedInShell,
+            completedSection: completedSection,
           ),
         ),
       );
@@ -935,6 +950,45 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('$error')));
     }
+  }
+
+  /// Completed lesson ids before this attempt finishes (for section-end
+  /// ceremony). Server state first; Home nodes as fallback.
+  Future<Set<String>> _completedLessonIdsBefore({
+    required CourseCatalog catalog,
+  }) async {
+    try {
+      final state = await _service.getCourseState(
+        catalogVersion: catalog.catalogVersion,
+      );
+      final profile = state['profile'];
+      if (profile is Map) {
+        final raw = profile['completedLessonIds'];
+        final ids = <String>[];
+        if (raw is List) {
+          for (final item in raw) {
+            ids.add(item.toString());
+          }
+        }
+        return expandCompletedLessonIds(
+          ids,
+          lessonSplitMap: catalog.lessonSplitMap,
+        );
+      }
+    } on Object {
+      // Fall through to Home nodes.
+    }
+    final home =
+        ref.exists(courseHomeProvider)
+            ? ref.read(courseHomeProvider).asData?.value
+            : null;
+    return expandCompletedLessonIds(
+      [
+        for (final node in home?.nodes ?? const <CourseMapNode>[])
+          if (node.hasCompleted) node.lessonId,
+      ],
+      lessonSplitMap: catalog.lessonSplitMap,
+    );
   }
 
   bool get _usesLessonFrame =>
