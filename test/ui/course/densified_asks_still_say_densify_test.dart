@@ -50,8 +50,9 @@ const _lines = <String, String>{
   'act-01-05-01-checkpoint-side':
       'You are all-in for less; two big stacks keep betting — tap the matching pot fact.',
   'act-02-01-01-guided-btn': 'Tap who acts last postflop — pick BTN.',
+  // LPT-833: SoftPulse-quiet densify — no SB or BB spoil.
   'act-02-01-01-scaffolded-blinds':
-      'Tap a seat that posts a forced bet every hand — pick SB or BB.',
+      'Tap a seat that posts a forced bet every hand.',
   'act-02-01-01-unguided-co':
       'Tap the seat right before the button — pick Cutoff (CO).',
   // LPT-783: SoftPulse-off densify — no correct-tile spoil.
@@ -245,7 +246,7 @@ void main() {
 
   test(
     'Blinds SoftPulse-quiet / SoftPulse-off densify stems do not spoil '
-    'choices (LPT-830/831/832)',
+    'choices (LPT-830/831/832/833)',
     () {
       const spoils = <String, List<String>>{
         'act-01-01-03-scaffolded-blinds': [
@@ -262,6 +263,11 @@ void main() {
           'one seat to its left',
           'seat 0',
           'seat 4',
+        ],
+        'act-02-01-01-scaffolded-blinds': [
+          'sb or bb',
+          'pick sb',
+          'pick bb',
         ],
       };
       for (final MapEntry(key: id, value: phrases) in spoils.entries) {

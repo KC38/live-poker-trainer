@@ -399,8 +399,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'You are all-in for less; two big stacks keep betting — tap the matching pot fact.',
     'act-02-01-01-guided-btn' =>
       'Tap who acts last postflop — pick BTN.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // SB or BB in the idle bubble (LPT-833; SoftPulse LPT-653; same class
+    // as LPT-830 / LPT-823 / LPT-808).
     'act-02-01-01-scaffolded-blinds' =>
-      'Tap a seat that posts a forced bet every hand — pick SB or BB.',
+      'Tap a seat that posts a forced bet every hand.',
     'act-02-01-01-unguided-co' =>
       'Tap the seat right before the button — pick Cutoff (CO).',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
