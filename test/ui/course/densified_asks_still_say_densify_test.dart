@@ -125,7 +125,9 @@ const _lines = <String, String>{
   'act-05-05-01-guided':
       'Nit check-raises flop. Default read — pick Value-heavy — respect.',
   'act-05-05-01-unguided': 'BB donks large on A-high dry flop into PFR. Meaning — pick Often polarized — strong or bluff.',
-  'act-05-05-01-checkpoint': 'Delayed c-bet is best when — pick After flop check takes away their range strength.',
+  // LPT-742: SoftPulse-off densify — no correct-tile spoil.
+  'act-05-05-01-checkpoint':
+      'Delayed c-bet is best when — tap the matching timing.',
   'act-05-06-01-guided':
       'Villain bets flop, checks turn. Range now — pick Capped — fewer nuts.',
   'act-05-06-01-unguided':

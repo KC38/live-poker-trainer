@@ -467,8 +467,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Nit check-raises flop. Default read — pick Value-heavy — respect.',
     'act-05-05-01-unguided' =>
       'BB donks large on A-high dry flop into PFR. Meaning — pick Often polarized — strong or bluff.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name After flop check / range strength / After weakness in the idle
+    // bubble (LPT-742; same class as LPT-736 / LPT-734 / LPT-735 / LPT-723 /
+    // LPT-717 / LPT-672 / LPT-653).
     'act-05-05-01-checkpoint' =>
-      'Delayed c-bet is best when — pick After flop check takes away their range strength.',
+      'Delayed c-bet is best when — tap the matching timing.',
     'act-05-06-01-guided' =>
       'Villain bets flop, checks turn. Range now — pick Capped — fewer nuts.',
     'act-05-06-01-unguided' =>
