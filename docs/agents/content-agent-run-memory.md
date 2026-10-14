@@ -3756,3 +3756,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-725/330/802/726/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15v tip 17803faf (#2537 Same-cards Prefer → Type-board SoftPulse LPT-726 Prefer)
+
+- Tip-stable `17803faf` after #2537 SoftPulse residual Prefer LPT-725 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-07-08-01-01/02/03` / `act-07-08-01-*`: first-child SoftPulse TYPE→BOARD→LINE→SIZE + `explainGrading` "Type → Board → Line → Size." + Dart `TypeBoardLineDemo.points` / `LessonTypeBoardLineExplainTable` still pre-split under type-and-board-only → residual **LPT-726** still To Do (Relates LPT-333 — do not re-add needs-human on curriculum; Duplicate LPT-729 — do not reopen); successors SoftPulse LINE→SIZE / FOUR INPUTS→ONE ACTION content-driven (do not reopen LPT-669); guided SoftPulse `call` SoftPulse map PRESENT; scaffolded SoftPulse `raise` SoftPulse map PRESENT; unguided SoftPulse `fold` SoftPulse map PRESENT; checkpoint SoftPulse `four` under one-coherent-action — no companion residual.
+- Curriculum **LPT-333** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-726/333/725/727/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Leak SoftPulse residual **LPT-727** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); SoftPulse map PRESENT — do not reopen LPT-628.
