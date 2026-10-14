@@ -1283,27 +1283,36 @@ grep -q 'streamed above' "$ROOT/tools/ui-agent-sdk/run.mjs" \
   || fail "run.mjs must skip re-logging long result.result (step-10 dedupe)"
 
 
-# Empty ui-queue skips agent start (return 16). Gate is skipped when
-# UI_AGENT_SKIP_SIM_PREFLIGHT=1 (unit tests); exercise with that unset.
+# Empty ui-queue starts a discovery walk (agent files tickets). Gate is
+# skipped when UI_AGENT_SKIP_SIM_PREFLIGHT=1; exercise with that unset.
 (
   unset UI_AGENT_SKIP_SIM_PREFLIGHT
   ui_queue_has_ticket() { return 1; }
   primary_is_clean_main() { return 0; }
   logged_in() { return 0; }
-  rm -f "$tmp/agent-started" "$IDLE_FILE"
+  ensure_sim_ready() { return 0; }
+  advance_functions_deploy_marker_if_unchanged() { :; }
+  deploy_functions_if_needed() { echo deploy-called >>"$tmp/empty-q-deploy"; }
+  python3 "$ROOT/tools/sim_lock.py" release --force >/dev/null 2>&1 || true
+  rm -f "$tmp/agent-started" "$IDLE_FILE" "$tmp/empty-q-deploy"
   code=0
   one_run || code=$?
-  [[ "$code" == 16 ]] || { echo "FAIL: empty queue should return 16, got $code" >&2; exit 1; }
-  [[ ! -f "$tmp/agent-started" ]] || { echo "FAIL: agent must not start on empty queue" >&2; exit 1; }
-  [[ -f "$IDLE_FILE" ]] || { echo "FAIL: empty queue must write IDLE_FILE" >&2; exit 1; }
-  grep -q '"reason": "empty-queue"' "$IDLE_FILE" \
-    || { echo "FAIL: IDLE_FILE reason empty-queue: $(cat "$IDLE_FILE")" >&2; exit 1; }
-  echo "empty ui-queue skip ok"
+  [[ "$code" == 0 ]] || fail "empty queue discovery should run agent, got $code"
+  [[ -f "$tmp/agent-started" ]] || fail "empty queue must start agent for discovery"
+  [[ -f "$tmp/empty-q-deploy" ]] \
+    || fail "empty queue discovery must call deploy_functions_if_needed"
+  [[ ! -f "$IDLE_FILE" ]] \
+    || fail "discovery run must not write empty-queue idle skip: $(cat "$IDLE_FILE" 2>/dev/null)"
+  echo "empty ui-queue discovery ok"
 )
+grep -q 'starting discovery walk' "$LOOP" \
+  || fail "one_run must log discovery walk when ui-queue is empty"
 grep -q 'advance_functions_deploy_marker_if_unchanged' "$LOOP" \
-  || fail "empty-queue skip must advance functions deploy marker when unchanged"
+  || fail "empty-queue discovery must advance functions deploy marker when unchanged"
 grep -q 'deploy_functions_if_needed' "$LOOP" \
-  || fail "empty-queue skip must call deploy_functions_if_needed when functions drifted"
+  || fail "empty-queue discovery must call deploy_functions_if_needed when functions drifted"
+grep -q 'this agent owns filing' <<<"$(prompt)" \
+  || fail "prompt must tell the agent to file tickets when ui-queue is empty"
 (
   # Marker behind tip, functions/ identical → advance; functions/ drift → leave.
   deploy_tmp="$tmp/advance-deploy-marker"
@@ -1595,7 +1604,8 @@ grep -q 'print_current_ticket_status' "$LOOP" || fail "loop must define print_cu
 
 export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 grep -q 'EMPTY_QUEUE_SLEEP' "$LOOP" || fail "loop must define EMPTY_QUEUE_SLEEP"
-grep -q 'ui-queue empty; sleeping' "$LOOP" || fail "run_loop must sleep on empty queue"
+grep -q 'ui-queue still empty after run; sleeping' "$LOOP" \
+  || fail "run_loop must sleep between discovery walks when queue still empty"
 
 
 # sleep_unless_stopped honors STOP_FILE mid-sleep (soft-stop during empty-queue).
