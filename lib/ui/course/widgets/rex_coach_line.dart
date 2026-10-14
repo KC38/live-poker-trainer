@@ -103,8 +103,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Observe sticky callers densified asks (LPT-416) — same path.
     'act-04-06-01-guided' =>
       'Seat calls 7 of 9 preflops — pick High part.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Sticky (LPT-824; SoftPulse
+    // LPT-653; same class as LPT-822 / LPT-821 / LPT-818).
     'act-04-06-01-scaffolded' =>
-      'Second pair called three streets twice — pick Sticky.',
+      'Second pair called three streets twice — tap the matching note.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; never name Low conf / Low confidence
     // (LPT-822; SoftPulse LPT-653; same class as LPT-821 / LPT-818 /
@@ -518,8 +521,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Why call wider versus a Maniac — tap the matching reason.',
     'act-04-09-01-guided' =>
       'You saw one huge bluff. What do you know — pick One note — low certainty.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Rise / Stay zero (LPT-823;
+    // SoftPulse LPT-653; same class as LPT-822 / LPT-821 / LPT-818).
     'act-04-09-01-scaffolded' =>
-      'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
+      'After 30 hands of sticky calls — tap how confidence should move.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Sample and confidence limits in the idle bubble (LPT-777; same
     // class as LPT-778 / LPT-765 / LPT-770 / LPT-771 / LPT-653).
@@ -591,8 +597,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Best use of live timing — tap the matching habit.',
     'act-05-08-01-guided' =>
       'Villain lost two buy-ins, now open-raises every hand. Note — pick Stuck / tilted.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Gear change / Old label
+    // (LPT-825; SoftPulse LPT-653; same class as LPT-823 / LPT-824 / LPT-822).
     'act-05-08-01-scaffolded' =>
-      'Solid selective player suddenly flats junk and donks rivers. Best read — pick Gear change.',
+      'Solid selective player suddenly flats junk and donks rivers — tap the matching read.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Fresh samples in the idle bubble (LPT-746; same class as LPT-745 /
     // LPT-744 / LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 / LPT-717 /

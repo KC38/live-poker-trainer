@@ -16651,14 +16651,26 @@ await tester.tap(find.text('NIT'));
       ),
     );
     // LPT-416: densified ask (and frame speech) — not catalog + Tap the best answer.
+    // LPT-824: SoftPulse-quiet densify stem must not spoil Sticky.
     expect(
       lessonFrameSpeech(activity),
-      'Second pair called three streets twice — tap Sticky.',
+      'Second pair called three streets twice — tap the matching note.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Sticky')));
+    expect(
+      find.text(
+        'Second pair called three streets twice — tap the matching note.',
+      ),
+      findsOneWidget,
+    );
     expect(
       find.text('Second pair called three streets twice — pick Sticky.'),
-      findsOneWidget,
+      findsNothing,
+    );
+    expect(
+      find.text('Second pair called three streets twice — tap Sticky.'),
+      findsNothing,
     );
     expect(
       find.text(
@@ -18285,14 +18297,30 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-823: SoftPulse-quiet densify stem must not spoil Rise / Stay zero.
+    expect(
+      lessonFrameSpeech(activity),
+      'After 30 hands of sticky calls — tap how confidence should move.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Rise')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Stay zero')));
     expect(
       find.text(
-        '30 sticky hands — confidence rises, but stays revisable.',
+        'After 30 hands of sticky calls — tap how confidence should move.',
       ),
       findsOneWidget,
     );
     expect(
-      find.text('30 sticky hands — tap how confidence moves.'),
+      find.text(
+        'After 30 hands of sticky calls, confidence should — tap Rise — still revisable.',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text(
+        '30 sticky hands — confidence rises, but stays revisable.',
+      ),
       findsNothing,
     );
     expect(find.text('Rise'), findsOneWidget);
@@ -20610,14 +20638,30 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-825: SoftPulse-quiet densify stem must not spoil Gear change.
+    expect(
+      lessonFrameSpeech(activity),
+      'Solid selective player suddenly flats junk and donks rivers — tap the matching read.',
+    );
+    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Gear change')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Old label')));
     expect(
       find.text(
-        'Flats junk and donks rivers — resample before trusting the old label.',
+        'Solid selective player suddenly flats junk and donks rivers — tap the matching read.',
       ),
       findsOneWidget,
     );
     expect(
-      find.text('Flats junk / donks — tap Gear change.'),
+      find.text(
+        'Solid selective player suddenly flats junk and donks rivers. Best read — pick Gear change.',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text(
+        'Flats junk and donks rivers — resample before trusting the old label.',
+      ),
       findsNothing,
     );
     // LPT-520: guideRegion → one gold SoftPulse (Gear change), not Old label.
