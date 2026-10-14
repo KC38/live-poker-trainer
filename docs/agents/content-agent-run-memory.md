@@ -3159,3 +3159,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Pot SoftPulse residual **LPT-798** (+ ranges/SPR **LPT-799**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-03-01-*: interactive structural clean on tip except LPT-795 SoftPulse + LPT-796 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint `deal.mode` `none` — do not file handFamily; guided fixed+variants — do not reopen LPT-627.
 
+## Fold 2026-10-14gy (ac925bfc Prefer NEVER Pot SoftPulse residual LPT-798 re-check)
+
+- Tip-stable `ac925bfc` (#2450 Compose SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Pot SoftPulse residual re-check `lesson-07-04-01-01/02/03`: first-child SoftPulse LIMPED→SRP→3-4BET + `explainGrading` "Limped → SRP → 3-bet/4-bet." + Dart `PotTypePlansDemo` still pre-split under Plan-limped-pots-only → residual **LPT-798** still To Do (needs-human; Relates LPT-320 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `both` kind `none` densify PRESENT ("Ranges and SPR" / prompt "Pot type changes?") under Plan 3-bet/4-bet-only → **LPT-799** still To Do; successors HEADS-UP→C-BET / LOW SPR→COMMIT content-driven; guided SoftPulse `nuts` densify PRESENT; scaffolded SoftPulse `cb` one-per-press densify PRESENT; unguided SoftPulse `commit` one-per-press densify PRESENT; curriculum **LPT-320** Done.
+- Tip-commented LPT-798/799/320/795/351/800; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER HU SoftPulse residual **LPT-800** (+ player-count **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-04-01-*: interactive structural clean on tip except LPT-798 SoftPulse + LPT-799 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
+
