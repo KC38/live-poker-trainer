@@ -2349,3 +2349,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - successors `act-03-02-01-02-explain-draws` (DRAW→SHOWDOWN VALUE) + `act-03-02-01-03-explain-air` (AIR→FOLD EQUITY) content-driven; guided SoftPulse `made-tp` + scaffolded SoftPulse `nfd` + unguided SoftPulse `air` + checkpoint SoftPulse `oesd` kind `none` PRESENT; SDV still not a recommended correct answer (LPT-143 AC residual).
 - Curriculum **LPT-143** Done — do not clone / do not re-add needs-human. Tip-commented LPT-143/751 + Meet Nit LPT-198 / LPT-216; leave open LPT-751/750/749….
 - Prefer next: NEVER `lesson-03-03-01-*` outs-price / Low residuals LPT-676…751.
+
+## Fold 2026-10-14dr (a79e937f discovery outs-price SoftPulse residual)
+
+- Tip-stable `a79e937f` (#2337). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-03-03-01-01/02/03` under outs-price unit:
+  - first-child `act-03-03-01-explain` SoftPulse CLEAN→DIRTY→PRICE + `explainGrading` under Clean-outs-only → filed **LPT-752** (needs-human; Relates LPT-146).
+  - successors `act-03-03-01-02-explain-price` (PRICE→POT→EQUITY) + `act-03-03-01-03-explain-implied` (DEEP→IMPLIED ODDS) content-driven; guided SoftPulse As→Ad→Ac + scaffolded SoftPulse `call-10` + unguided SoftPulse `call-draw` + checkpoint SoftPulse `implied-yes` kind `none` PRESENT.
+- Curriculum **LPT-146** Done — do not clone / do not re-add needs-human. Tip-commented LPT-146/752 + Meet Nit LPT-198 / LPT-216; leave open LPT-752/751/750….
+- Prefer next: NEVER `lesson-03-04-01-*` flop-decisions / Low residuals LPT-676…752.
