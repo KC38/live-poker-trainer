@@ -3830,3 +3830,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-684/236/685/682/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Timing SoftPulse residual **LPT-685** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-05-01-*: interactive structural clean on tip except LPT-684 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15ad tip 0ed4c6ce (#2548/#2550 Lines Prefer → Timing SoftPulse LPT-685 Prefer)
+
+- Tip-stable `0ed4c6ce` after #2548/#2550 Lines SoftPulse Prefer LPT-684 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Timing SoftPulse residual re-check `lesson-05-07-01-01/02/03` / `act-05-07-01-*`: first-child SoftPulse TIMING→SIZING→CLUES + `explainGrading` "Timing → Sizing → Clues." + Dart `TimingCluesDemo.points` TIMING/SIZING/CLUES (captions How fast they act / How much they bet / Nudge the model) / `LessonTimingCluesExplainTable` + coachMedia "Timing and sizing are clues, not mind-reading. Small updates only." still pre-split under timing-soft-only → residual **LPT-685** still To Do (needs-human; Relates LPT-244 — do not re-add needs-human on curriculum); successors SoftPulse TINY→BIG→RANGE / TELL→MYTH→REJECT content-driven (do not reopen LPT-669); guided SoftPulse `soft` densify PRESENT; scaffolded SoftPulse `weakish` one-per-press densify PRESENT; unguided SoftPulse `reject` one-per-press densify PRESENT; checkpoint SoftPulse `tiny` kind `none` densify PRESENT under timing-soft — no companion residual.
+- Curriculum **LPT-244** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-685/244/686/684/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Dynamics SoftPulse residual **LPT-686** (+ **LPT-687**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-07-01-*: interactive structural clean on tip except LPT-685 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; outcome-tile `deal.mode` `none` — do not file handFamily.
+
