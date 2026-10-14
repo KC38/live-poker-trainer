@@ -2175,3 +2175,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - successors `act-01-01-03-02-explain-blinds` (SB→BB) + `act-01-01-03-03-explain-when` (BLINDS→DEAL) content-driven; guided SoftPulse `D` + scaffolded SoftPulse `BB` + unguided SoftPulse `before-deal` + checkpoint SoftPulse `SB` kind `none` hintless PRESENT.
 - Curriculum **LPT-87** Done — do not clone / do not re-add needs-human. Done-ack LPT-85/86.
 - Prefer next: oldest unfresh split children / Low residuals LPT-676…724 / To Do **LPT-192**.
+
+## Fold 2026-10-14cz (c121da25 S7 integrate + baseline NEVER)
+
+- Tip-stable `c121da25` (#2309). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER post-split children after LPT-668/330/333/336 Done:
+  - baseline `lesson-02-07-01-*`: SoftPulse NINE→SAME→POSITION under full-ring-open **concept-aligned**; successors OPEN→PLAN / COVER→WAIT content-driven; checkpoint under habits matches — no SoftPulse residual.
+  - same-cards `lesson-07-07-01-*`: SoftPulse CARDS→MODELS→CITE under Station-value → filed **LPT-725** (needs-human; Relates LPT-330).
+  - type-board `lesson-07-08-01-*`: SoftPulse TYPE→BOARD→LINE→SIZE under type-and-board → filed **LPT-726** (needs-human; Relates LPT-333).
+  - leak-review `lesson-07-09-01-*`: SoftPulse LEAK→BOOK→REVIEW under name-leaks → filed **LPT-727** (needs-human; Relates LPT-336); prior checkpoint book-vs-schedule mismatch resolved by split home.
+- Curriculum LPT-668/330/333/336 Done — do not clone / do not re-add needs-human.
+- Prefer next: oldest unfresh split children / Low residuals LPT-676…727 / To Do **LPT-192**.
