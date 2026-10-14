@@ -646,6 +646,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Plan beyond the flop densified ask | Plan beyond the flop checkpoint densified ask (`act-04-03-01-checkpoint`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-407). |
 | Size with a message densified ask | Size with a message unguided densified ask (`act-04-04-01-unguided`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-410). |
 | SPR decides commitment densified ask | SPR decides commitment guided densified ask (`act-04-05-01-guided`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-412). |
+| Estimate SPR checkpoint densified ask | Estimate SPR checkpoint densified ask (`act-04-05-01-checkpoint`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — SoftPulse-off densify stem with a tap verb, never the poker-action dock footer "below the table" and never naming Weigh SPR first (LPT-812; SoftPulse LPT-653). |
 | SPR decides commitment scaffolded stacks | SPR decides commitment scaffolded (`act-04-05-01-scaffolded`) framed stage posts remaining stacks that match Rex’s SPR ~1 ask (`Stacks left 60` into pot ~60; same shared-stack contract as checkpoint `Stacks left 55` for SPR ~1.4) (LPT-413). |
 | SPR decides commitment unguided stacks | SPR decides commitment unguided (`act-04-05-01-unguided`) framed stage posts `Stacks left 240` into pot 12 so the felt matches Rex’s SPR 20 ask — never the default $200 stacks (SPR ~17) (LPT-415). |
 | Observe sticky callers densified asks | Observe sticky callers densified asks (`act-04-06-01-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-416). |
@@ -1932,7 +1933,7 @@ felt.
 | Value or pressure size | Value, Pressure, Size; densified frame ask (LPT-410); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-04-sizing` (LPT-179 split) | — |
 | Nearby live sizes | explain SoftPulse cues NEARBY → STORY; unit `unit-04-04-sizing` (LPT-179 split) | — |
 | Avoid tiny sizes | explain SoftPulse cues TINY → VALUE; unit `unit-04-04-sizing` (LPT-179 split) | — |
-| Estimate SPR | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413); unit `unit-04-05-spr` (LPT-182 split) | — |
+| Estimate SPR | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413); checkpoint SoftPulse-off densify stem non-spoiling (LPT-812); unit `unit-04-05-spr` (LPT-182 split) | — |
 | Commit at low SPR | explain SoftPulse cues LOW SPR → COMMIT; unit `unit-04-05-spr` (LPT-182 split) | — |
 | Stay flexible at high SPR | explain SoftPulse cues HIGH SPR → FLEXIBLE; unit `unit-04-05-spr` (LPT-182 split) | — |
 | Tag high participation | Enters, Calls, Folds; densified frame asks (LPT-416); unit `unit-04-06-calling-station` (LPT-186 split) | participation note, observation bundle |
