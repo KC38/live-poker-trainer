@@ -10605,7 +10605,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Cards uncovered and action left — cover up and wait your turn.'),
+      find.text('Full ring · action two seats left'),
       findsOneWidget,
     );
     expect(
@@ -10613,6 +10613,15 @@ await tester.tap(find.text('NIT'));
         'Full ring. Action two seats left. Your cards are uncovered. Fix?',
       ),
       findsNothing,
+    );
+    // LPT-788: SoftPulse-off densify stem must not spoil the correct tile.
+    expect(
+      lessonFrameSpeech(activity),
+      'Full ring. Action two seats left. Your cards are uncovered — tap the matching fix.',
+    );
+    expect(
+      lessonFrameSpeech(activity),
+      isNot(contains('Cover your cards and wait your turn')),
     );
     expect(
       find.text('Cover your cards and wait your turn'),
