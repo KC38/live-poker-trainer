@@ -395,7 +395,7 @@ export function buildSectionOne() {
                     "You found all four suits. Ace is still the high card.",
                   // LPT-624: short Nice! why — not accessibilityText / idle ask.
                   okFeedback: "Hearts → Diamonds → Clubs → Spades.",
-                  // LPT-353
+                  // LPT-353 SoftPulse; LPT-813 pressHints (never completion a11y)
                   teachSpec: {
                     deal: {mode: "none"},
                     cues: [
@@ -403,6 +403,12 @@ export function buildSectionOne() {
                       {press: 2, target: "diamonds", kind: "soft_pulse"},
                       {press: 3, target: "clubs", kind: "soft_pulse"},
                       {press: 4, target: "spades", kind: "soft_pulse"},
+                    ],
+                    pressHints: [
+                      {press: 1, text: "Find a heart on the board."},
+                      {press: 2, text: "Next, find a diamond."},
+                      {press: 3, text: "Then a club."},
+                      {press: 4, text: "Finish with a spade."},
                     ],
                   },
                 }),

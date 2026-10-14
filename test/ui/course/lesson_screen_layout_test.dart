@@ -25,6 +25,8 @@ CourseActivity _hintActivity({
   required String accessibilityText,
   String? prompt,
   ActivityRenderer renderer = ActivityRenderer.selectIdentify,
+  AssessmentRole? assessmentRole,
+  Map<String, dynamic>? teachSpec,
 }) {
   return CourseActivity(
     id: id,
@@ -35,6 +37,8 @@ CourseActivity _hintActivity({
     accessibilityText: accessibilityText,
     acceptedGrades: const [SoftGrade.recommended],
     prompt: prompt,
+    assessmentRole: assessmentRole,
+    teachSpec: teachSpec,
   );
 }
 
@@ -91,7 +95,7 @@ void main() {
     expect(lessonFrameHintsDisabled(scaffolded), isFalse);
   });
 
-  test('scaffolded SoftPulse leaves Hint disabled when cues are already on', () {
+  test('scaffolded SoftPulse waits for Hint (cues unlock after Hint)', () {
     final seatOrder = _hintActivity(
       id: 'act-01-04-01-scaffolded-order',
       stage: ActivityStage.scaffolded,
@@ -99,9 +103,14 @@ void main() {
       accessibilityText: 'Put UTG, HJ, CO, and BTN in preflop action order.',
       prompt: 'Tap seats in the order they act preflop after blinds.',
     );
-    expect(lessonFrameHintShownByDefault(seatOrder), isTrue);
-    expect(lessonFrameHintsDisabled(seatOrder), isTrue);
-    expect(lessonFrameHintFallback(seatOrder), isNull);
+    // Scaffolded SoftPulse stays off until Hint (guided SoftPulse is the
+    // SoftPulse-on-by-default path).
+    expect(lessonFrameHintShownByDefault(seatOrder), isFalse);
+    expect(lessonFrameHintsDisabled(seatOrder), isFalse);
+    expect(
+      lessonFrameHintFallback(seatOrder),
+      'Put UTG, HJ, CO, and BTN in preflop action order.',
+    );
 
     final sizing = _hintActivity(
       id: 'act-01-03-01-scaffolded-check',
@@ -110,8 +119,8 @@ void main() {
       accessibilityText: 'Check when the pot is free.',
       prompt: 'Nobody has bet. Pick the cheap action.',
     );
-    expect(lessonFrameHintShownByDefault(sizing), isTrue);
-    expect(lessonFrameHintsDisabled(sizing), isTrue);
+    expect(lessonFrameHintShownByDefault(sizing), isFalse);
+    expect(lessonFrameHintsDisabled(sizing), isFalse);
 
     expect(
       lessonFrameHintShownByDefault(seatOrder, isReview: true),
@@ -162,14 +171,45 @@ void main() {
       id: 'act-01-01-02-explain-suits',
       stage: ActivityStage.guided,
       accessibilityText: 'You found all four suits. Ace is still the high card.',
+      renderer: ActivityRenderer.coachDialogue,
     );
     expect(
       lessonFrameSoftPulseQuietByDefault(explain, isReview: true),
       isTrue,
     );
+    // LPT-813: per-press tip — never completion accessibility as Hint.
     expect(
       lessonFrameHintFallback(explain, isReview: true),
-      'You found all four suits. Ace is still the high card.',
+      'Find a heart on the board.',
+    );
+  });
+
+  test('Suits explain Hint is a per-press tip, not completion a11y (LPT-813)', () {
+    final explain = CourseActivity(
+      id: 'act-01-01-02-explain-suits',
+      order: 1,
+      stage: ActivityStage.guided,
+      renderer: ActivityRenderer.coachDialogue,
+      estimatedSeconds: 30,
+      accessibilityText:
+          'You found all four suits. Ace is still the high card.',
+      acceptedGrades: const [SoftGrade.recommended],
+      teachSpec: const {
+        'deal': {'mode': 'none'},
+        'pressHints': [
+          {'press': 1, 'text': 'Find a heart on the board.'},
+          {'press': 2, 'text': 'Next, find a diamond.'},
+        ],
+      },
+    );
+    expect(
+      lessonFrameHintFallback(explain, isReview: true),
+      'Find a heart on the board.',
+    );
+    expect(
+      lessonFrameHintFallback(explain, isReview: true)!
+          .contains('You found all four suits'),
+      isFalse,
     );
   });
 
@@ -178,8 +218,12 @@ void main() {
       id: 'act-01-01-02-explain-suits',
       stage: ActivityStage.guided,
       accessibilityText: 'You found all four suits. Ace is still the high card.',
+      renderer: ActivityRenderer.coachDialogue,
     );
-    expect(lessonFrameHintFallback(explain), isNull);
+    // Guided SoftPulse (non-review): SoftPulse already on → Hint dock off, but
+    // fallback still returns the per-press tip (never completion a11y) (LPT-813).
+    expect(lessonFrameHintsDisabled(explain), isTrue);
+    expect(lessonFrameHintFallback(explain), 'Find a heart on the board.');
 
     final jump = _hintActivity(
       id: 'act-01-06-02-jump-legal',

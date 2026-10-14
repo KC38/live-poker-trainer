@@ -472,6 +472,24 @@
                         "target": "spades",
                         "kind": "soft_pulse"
                       }
+                    ],
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Find a heart on the board."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Next, find a diamond."
+                      },
+                      {
+                        "press": 3,
+                        "text": "Then a club."
+                      },
+                      {
+                        "press": 4,
+                        "text": "Finish with a spade."
+                      }
                     ]
                   }
                 },
