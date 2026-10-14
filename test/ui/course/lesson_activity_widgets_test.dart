@@ -18691,7 +18691,11 @@ await tester.tap(find.text('NIT'));
       SelectIdentifyPresentation.tableRegionTap,
     );
     expect(isTableRegionTapActivity(activity), isTrue);
+    // LPT-722: conceptual continue panel — no decoy face-down Them.
+    expect(resolveLessonTableScene(activity)?.villainSeatCount, 0);
     final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       _wrap(
         SelectIdentifyActivity(
@@ -18701,15 +18705,13 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(
-      find.text('Four-way flop — prefer nutted equity over air.'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Four-way flop — tap the best continue.'),
-      findsNothing,
-    );
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    // Densified ask (pick may rewrite to tap) — never catalog footer.
+    expect(find.textContaining('Best continue with'), findsOneWidget);
+    expect(find.textContaining('Tap the best answer.'), findsNothing);
     expect(find.text('Nut FD'), findsOneWidget);
+    expect(find.text('Them'), findsNothing);
     // LPT-513: guideRegion → one gold SoftPulse (Nut FD), not Weak FD / Air stab.
     final guidedCues =
         tester
@@ -18744,6 +18746,53 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
+  testWidgets('s5 conceptual densify omits decoy Them holes (LPT-722)', (
+    tester,
+  ) async {
+    for (final id in const [
+      'act-05-01-01-guided',
+      'act-05-01-01-checkpoint',
+      'act-05-02-01-guided',
+      'act-05-02-01-unguided',
+      'act-05-02-01-checkpoint',
+      'act-05-03-01-checkpoint',
+      'act-05-04-01-checkpoint',
+      'act-05-05-01-guided',
+      'act-05-05-01-unguided',
+      'act-05-05-01-checkpoint',
+      'act-05-06-01-guided',
+      'act-05-06-01-unguided',
+      'act-05-06-01-checkpoint',
+      'act-05-07-01-guided',
+      'act-05-07-01-scaffolded',
+      'act-05-07-01-unguided',
+      'act-05-07-01-checkpoint',
+      'act-05-08-01-guided',
+      'act-05-08-01-scaffolded',
+      'act-05-08-01-checkpoint',
+      'act-05-09-01-guided',
+      'act-05-09-01-scaffolded',
+      'act-05-09-01-unguided',
+      'act-05-09-01-checkpoint',
+      'act-05-09-02-cp-multi',
+      'act-05-09-02-cp-tell',
+      'act-05-09-02-cp-stop',
+    ]) {
+      final scene = resolveLessonTableScene(
+        CourseActivity(
+          id: id,
+          order: 1,
+          stage: ActivityStage.guided,
+          renderer: ActivityRenderer.selectIdentify,
+          estimatedSeconds: 40,
+          accessibilityText: id,
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      );
+      expect(scene?.villainSeatCount, 0, reason: id);
+    }
+  });
+
   testWidgets('s5 multiway checkpoint SoftPulse Nut potential — one gold', (
     tester,
   ) async {
@@ -18767,7 +18816,11 @@ await tester.tap(find.text('NIT'));
       SelectIdentifyPresentation.tableRegionTap,
     );
     expect(isTableRegionTapActivity(activity), isTrue);
+    // LPT-722: conceptual priority panel — no decoy face-down Them.
+    expect(resolveLessonTableScene(activity)?.villainSeatCount, 0);
     final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       _wrap(
         SelectIdentifyActivity(
@@ -18777,7 +18830,10 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    await tester.pump();
+    expect(tester.takeException(), isNull);
     expect(find.text('Nut potential'), findsOneWidget);
+    expect(find.text('Them'), findsNothing);
     // LPT-513: guideRegion → one gold SoftPulse (Nut potential), not Any two.
     final checkpointCues =
         tester

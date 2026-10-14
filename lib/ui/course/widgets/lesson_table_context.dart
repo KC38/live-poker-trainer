@@ -2938,136 +2938,164 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-05-01-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.multiwayContinueOutcomes,
+        // Conceptual continue tiles — no decoy Them holes (LPT-722).
+        villainSeatCount: 0,
         caption: 'Four-way flop — best continue',
       );
     case 'act-05-01-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.multiwayPriorityOutcomes,
+        villainSeatCount: 0,
         caption: 'Multiway construction priority',
       );
     case 'act-05-02-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.deepImpliedOutcomes,
+        villainSeatCount: 0,
         caption: '200bb · why call a raise with 55?',
       );
     case 'act-05-02-01-unguided':
       return const LessonTableScene(
         layout: LessonTableLayout.deepPlanOutcomes,
+        villainSeatCount: 0,
         caption: 'SPR ~12 on the flop',
       );
     case 'act-05-02-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.deepRewardsOutcomes,
+        villainSeatCount: 0,
         caption: '150–300bb cash play rewards?',
       );
     case 'act-05-03-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.impliedOddsRiseOutcomes,
+        villainSeatCount: 0,
         caption: 'When do implied odds rise most?',
       );
     case 'act-05-04-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.thinValueReadOutcomes,
+        villainSeatCount: 0,
         caption: 'Same hand, different types — what changes?',
       );
     case 'act-05-05-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.linesNitXrOutcomes,
+        villainSeatCount: 0,
         caption: 'Nit check-raises flop — default read?',
       );
     case 'act-05-05-01-unguided':
       return const LessonTableScene(
         layout: LessonTableLayout.linesDonkPolarOutcomes,
+        villainSeatCount: 0,
         caption: 'Large BB donk on dry ace — meaning?',
       );
     case 'act-05-05-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.linesDelayOutcomes,
+        villainSeatCount: 0,
         caption: 'Delayed c-bet is best when?',
       );
     case 'act-05-06-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.lineReadCappedOutcomes,
+        villainSeatCount: 0,
         caption: 'Bet flop, check turn — range now?',
       );
     case 'act-05-06-01-unguided':
       return const LessonTableScene(
         layout: LessonTableLayout.lineReadRebuildOutcomes,
+        villainSeatCount: 0,
         caption: 'Best line-reading habit?',
       );
     case 'act-05-06-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.lineReadUncappedOutcomes,
+        villainSeatCount: 0,
         caption: 'XR / bet / shove usually means?',
       );
     case 'act-05-07-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.timingSoftEvidenceOutcomes,
+        villainSeatCount: 0,
         caption: 'Instant river shove — framing?',
       );
     case 'act-05-07-01-scaffolded':
       return const LessonTableScene(
         layout: LessonTableLayout.timingSizingWeakOutcomes,
+        villainSeatCount: 0,
         caption: 'Tiny flop bet into huge pot?',
       );
     case 'act-05-07-01-unguided':
       return const LessonTableScene(
         layout: LessonTableLayout.timingRejectMagicOutcomes,
+        villainSeatCount: 0,
         caption: 'Look-left means bluff?',
       );
     case 'act-05-07-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.timingTinyUpdateOutcomes,
+        villainSeatCount: 0,
         caption: 'Best use of live timing?',
       );
     case 'act-05-08-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.dynamicsStuckOutcomes,
+        villainSeatCount: 0,
         caption: 'Lost two buy-ins — note?',
       );
     case 'act-05-08-01-scaffolded':
       return const LessonTableScene(
         layout: LessonTableLayout.dynamicsGearOutcomes,
+        villainSeatCount: 0,
         caption: 'Solid player flats junk / donks?',
       );
     case 'act-05-08-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.dynamicsFreshOutcomes,
+        villainSeatCount: 0,
         caption: 'Dynamic reads should be?',
       );
     case 'act-05-09-01-guided':
       return const LessonTableScene(
         layout: LessonTableLayout.disciplineStopOutcomes,
+        villainSeatCount: 0,
         caption: 'Hit planned stop-loss — next?',
       );
     case 'act-05-09-01-scaffolded':
       return const LessonTableScene(
         layout: LessonTableLayout.disciplineStakesOutcomes,
+        villainSeatCount: 0,
         caption: '40 BI for 1/2 — 2/5 opens?',
       );
     case 'act-05-09-01-unguided':
       return const LessonTableScene(
         layout: LessonTableLayout.disciplineCashOutOutcomes,
+        villainSeatCount: 0,
         caption: 'Tired, up small, table wild?',
       );
     case 'act-05-09-01-checkpoint':
       return const LessonTableScene(
         layout: LessonTableLayout.disciplineEdgeOutcomes,
+        villainSeatCount: 0,
         caption: 'Session discipline is part of?',
       );
     case 'act-05-09-02-cp-multi':
       return const LessonTableScene(
         layout: LessonTableLayout.s5CpMultiOutcomes,
+        villainSeatCount: 0,
         caption: 'Four-way pot priority?',
       );
     case 'act-05-09-02-cp-tell':
       return const LessonTableScene(
         layout: LessonTableLayout.s5CpTellOutcomes,
+        villainSeatCount: 0,
         caption: 'Instant shove proves?',
       );
     case 'act-05-09-02-cp-stop':
       return const LessonTableScene(
         layout: LessonTableLayout.s5CpStopOutcomes,
+        villainSeatCount: 0,
         caption: 'Hit stop-loss — do?',
       );
     case 'act-06-01-01-guided':
