@@ -325,8 +325,10 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // bubble (LPT-814; SoftPulse LPT-653; same class as LPT-808 / LPT-672).
     'act-01-01-02-guided-suits' =>
       'Tap one community card of each suit.',
+    // Seat-deal densify (LPT-815 / LPT-816) — situation + tap verb only;
+    // never name Suited / Offsuit / Pocket pair (same class as LPT-804).
     'act-01-01-02-unguided-suited' =>
-      'Tap the suited hole cards — pick Suited.',
+      'Tap the seat whose hole cards share a suit.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Pocket pair in the idle bubble (LPT-804; SoftPulse LPT-653;
     // same class as LPT-803 / LPT-788 / LPT-672).
@@ -339,7 +341,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-01-01-02-01-checkpoint-suits' =>
       'Tap one community card of each suit.',
     'act-01-01-02-03-guided-suited' =>
-      'Tap the suited hole cards — pick Suited.',
+      'Tap the seat whose hole cards share a suit.',
     'act-01-01-03-guided-button' =>
       'Tap the dealer button on the table — pick The seat with the D chip.',
     'act-01-01-03-scaffolded-blinds' =>
