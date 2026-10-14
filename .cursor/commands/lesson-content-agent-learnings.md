@@ -393,7 +393,7 @@ Lesson-specific pattern notes (full history) live in
   unguided SoftPulse `plan` densify PRESENT; checkpoint SoftPulse `pos` kind
   `none` hintless densify PRESENT; curriculum LPT-227 Done — do not clone /
   do not re-add needs-human; residual rewards-synthesis under Plan-high-SPR
-  → **LPT-680** still To Do (needs-human); tip `4ff7eb4e` Prefer NEVER
+  → **LPT-680** still To Do (needs-human);   tip `4ff7eb4e` Prefer NEVER
   implied-odds children: first-child SoftPulse IMPLIED→REVERSE→SECOND under
   Estimate still residual **LPT-681** (needs-human); successors
   REVERSE→DOMINATED→FOLD / NON-NUT→MULTIWAY→SKIP content-driven; guided
@@ -401,8 +401,17 @@ Lesson-specific pattern notes (full history) live in
   stackLabel 400); scaffolded SoftPulse `rio` + unguided SoftPulse `nonut`
   one-per-press PRESENT; checkpoint SoftPulse `depth-pay` kind `none`
   hintless densify PRESENT; curriculum LPT-230 Done — do not clone / do not
-  re-add needs-human; next: NEVER `lesson-05-04-01-*` thin-value / Low
-  residuals LPT-676…779 (LPT-680 + LPT-681).
+  re-add needs-human; tip `ecac848b` Prefer NEVER thin-value children:
+  first-child SoftPulse THIN→CATCH→BARRELS + Dart `ThinValueDemo` still
+  pre-split under thin-value-only → residual **LPT-682** (needs-human);
+  checkpoint SoftPulse `read` meta-read densify PRESENT under Thin → residual
+  **LPT-683** (needs-human); successors MANIAC→BARREL→CALL /
+  NIT→FOLDS→CHECK content-driven; guided SoftPulse `tv` PRESENT
+  (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants; maps PRESENT);
+  scaffolded SoftPulse `call-m` + unguided SoftPulse `check-nit`
+  one-per-press PRESENT; curriculum LPT-233 Done — do not clone / do not
+  re-add needs-human; next: NEVER `lesson-05-05-01-*` lines-and-probes /
+  Low residuals LPT-676…779 (LPT-680 + LPT-681 + LPT-682 + LPT-683).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -445,6 +454,10 @@ Lesson-specific pattern notes (full history) live in
 - Prefer when catalog JSON gaps are all **0** (incl. densify-tap after #2217 **LPT-628** Done): do a discovery walk on the oldest unfresh / fold-next `lesson:` surface instead of re-spamming Done parents. Tip-comment the open curriculum split for that lesson when still valid (e.g. Hand ranks **LPT-90**, best-five **LPT-93**, winning-pots **LPT-106**, facing-raise **LPT-127**, implied-odds **LPT-230**, thin-value **LPT-233**, position-labels **LPT-114**, live-habits **LPT-133**, effective-stacks **LPT-130**, Full-ring baseline **LPT-668**, Observe sticky **LPT-186**, Observe wild **LPT-205**, Meet Nit **LPT-198**, Observe narrow **LPT-195**, Meet Calling Station **LPT-189**, Adjust Station **LPT-192** (human-approved — do **not** re-add `needs-human`), Confidence **LPT-215**, Meet TAG **LPT-291**, overbets **LPT-267** / blockers **LPT-270** / min-defense **LPT-273** / mix **LPT-277** / 3-bet-4-bet **LPT-282** / difficult-folds **LPT-285** (human-approved — do **not** re-add `needs-human`), preflop-to-flop **LPT-310**…); Capstone unit lessons **and** Final five-type `lesson-07-12-01-five-type-final` have **no** curriculum-split ticket (synthesis / assessment containers) — Capstone **LPT-348** Done (#2207 `transfer`); Final is assessment hintless (LPT-352 Done); jump_test / section checkpoints also skip curriculum-split — but Full-ring baseline `lesson-02-07-01-baseline-full-hand` is **not** an assessment container (open / vs-raise / habit objectives) → **LPT-668**; Capstone **LPT-348** Done (#2207) — do not reopen; after #2153 **LPT-667** Done (one-per-press **0**) — do not reopen; tip-comment Done tickets only when SHA missing. After `lesson-06-10-01-difficult-folds` on tip `463fbbb3`, next includes `lesson-06-11-01-observe-selective` / oldest unfresh / Low curriculum. After a learnings-only tip lands, Capstone **LPT-348** / prior curriculum may already **HAS** the new tip SHA — skip re-spam; still tip-comment *this* lesson’s curriculum (if any) + Done siblings that **NEED**. Re-`get` before skip when coverage over-claims. When coverage claims `learnings: updated` for a tip but only a draft chore PR exists — or a sibling walk left `learnings: pending` while another fold merged — rescue that fold onto the next chore branch before walking the next lesson (tip `11b692c0` overbets/blockers/min-defense #2216/#2218 rescued earlier; tip `d41550f0` type-identification was `pending` until earlier fold). Versus-open `random_in_class` without distractor variants stays closed with catalog **LPT-627** (fixed-only) — do not reopen **LPT-380**.
 
 ## Recent fold
+
+- 2026-10-14eq: Tip-stable `ecac848b` (#2372 implied-odds SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER thin-value children `lesson-05-04-01-01/02/03`: first-child SoftPulse THIN→CATCH→BARRELS + Dart `ThinValueDemo` still pre-split under thin-value-only → residual **LPT-682** still To Do (needs-human); checkpoint SoftPulse `read` meta-read densify PRESENT under Thin → residual **LPT-683** still To Do (needs-human); successors MANIAC→BARREL→CALL / NIT→FOLDS→CHECK content-driven (do not reopen LPT-669); guided SoftPulse `tv` PRESENT (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants; maps PRESENT); scaffolded SoftPulse `call-m` + unguided SoftPulse `check-nit` one-per-press PRESENT. Curriculum **LPT-233** Done — do not clone / do not re-add needs-human. Tip-commented LPT-682/683/233/680/681/779/198/216; leave open LPT-676…779. next: NEVER `lesson-05-05-01-*` lines-and-probes / Low residuals LPT-676…779 (LPT-680 + LPT-681 + LPT-682 + LPT-683).
+
+- 2026-10-14ep: Tip-stable `4ff7eb4e` (#2371 deep-stack SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER implied-odds children `lesson-05-03-01-01/02/03`: first-child SoftPulse IMPLIED→REVERSE→SECOND under Estimate still residual **LPT-681** (needs-human); successors REVERSE→DOMINATED→FOLD / NON-NUT→MULTIWAY→SKIP content-driven; guided SoftPulse `call-io` PRESENT; scaffolded SoftPulse `rio` + unguided SoftPulse `nonut` one-per-press PRESENT; checkpoint SoftPulse `depth-pay` densify PRESENT. Curriculum **LPT-230** Done — do not clone. Tip-commented LPT-681/230/680/779/198/216/228; leave open LPT-676…779. next: NEVER `lesson-05-04-01-*` thin-value / Low residuals LPT-676…779 (LPT-680 + LPT-681).
 
 - 2026-10-14eo: Tip-stable `31134c82` (#2370 multiway SoftPulse residual clean Prefer NEVER → deep-stack). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER deep-stack children `lesson-05-02-01-01/02/03`: SoftPulse DEEP→REALIZE→STACK under Use-depth-for-speculative-implied-odds **concept-aligned** (no SoftPulse residual); successors DEEP→ONE PAIR→FOLD / SPR→TURN→RIVER content-driven (do not reopen LPT-669); guided SoftPulse `impl` densify PRESENT (`deal.mode` `none`); scaffolded SoftPulse `fold-tp` one-per-press PRESENT (`Ad`/`9c`·`As`/`Th`/`7h` +2 suit variants; Dart `stackLabel` Stacks left 500); unguided SoftPulse `plan` densify PRESENT; checkpoint SoftPulse `pos` kind `none` hintless densify PRESENT. Curriculum **LPT-227** Done — do not clone / do not re-add needs-human; residual rewards-synthesis checkpoint still under Plan-high-SPR → **LPT-680** still To Do (needs-human). Tip-commented LPT-680/227/779/198/216/681/224; leave open LPT-676…779. next: NEVER `lesson-05-03-01-*` implied-odds / Low residuals LPT-676…779 (LPT-680 + LPT-681).
 
