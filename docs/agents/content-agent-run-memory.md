@@ -3303,3 +3303,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
 
+
+## Fold 2026-10-14hs tip 50c98ec0 (#2474 Defend Prefer → Mix LPT-703 Prefer)
+
+- Tip-stable `50c98ec0` after #2474 Defend SoftPulse Prefer LPT-701. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Mix SoftPulse residual re-check `lesson-06-08-01-01/02/03` / `act-06-08-01-*`: first-child SoftPulse MIX→PURPOSE→STRONG + `explainGrading` "Mix → Purpose → Strong." + Dart `MixedStrategyDemo.points` MIX/PURPOSE/STRONG (captions With a reason / Not coin-flip / Mix sometimes) + layout "Tap Mix, then Purpose, then Strong." still pre-split under mix-strong-only → residual **LPT-703** still To Do (needs-human; Relates LPT-277); successors TYPE→STATION→LESS / RANDOM→PURPOSE content-driven (do not reopen LPT-669); guided SoftPulse `protect` one-per-press PRESENT (`7h`/`7d`·`7c`/`Kd`/`2s` +2 suit variants match Dart); scaffolded SoftPulse `less` densify PRESENT; unguided SoftPulse `no` densify PRESENT; checkpoint SoftPulse `freq` kind `none` densify PRESENT under no-pure-random — no companion residual.
+- Curriculum **LPT-277** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-703/277/704/701/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Plan-3bet SoftPulse residual **LPT-704** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-08-01-*: interactive structural clean on tip except LPT-703 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; guided stays fixed+variants set-of-sevens honesty.
