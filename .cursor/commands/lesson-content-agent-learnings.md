@@ -577,7 +577,7 @@ Lesson-specific pattern notes (full history) live in
   WIDE OPENS→BARRELS / RAISES→CALLS content-driven; guided SoftPulse `lag`
   densify PRESENT; unguided SoftPulse `lag2` densify PRESENT; scaffolded
   SoftPulse `diff` one-per-press densify PRESENT; curriculum LPT-300 Done —
-  do not clone / do not re-add needs-human; tip `8538413e` Prefer NEVER Adjust LAG children: first-child SoftPulse
+  do not clone / do not re-add needs-human; tip `b13f674e` Prefer NEVER Adjust LAG children: first-child SoftPulse
   CALL→TRAP→FANCY LESS + Dart `VsLagsDemo` still pre-split under Call-wider-only →
   residual **LPT-718** still To Do (needs-human); checkpoint SoftPulse `cite`
   kind `none` densify PRESENT under Call-wider-only → residual **LPT-719** still
