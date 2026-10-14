@@ -2991,3 +2991,27 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-685/244/198/216/684; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Dynamics SoftPulse residual **LPT-686** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gd (b36d5d16 Prefer NEVER Dynamics SoftPulse residual LPT-686 re-check)
+
+- Tip-stable `b36d5d16` (#2424 Timing SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Dynamics SoftPulse residual re-check `lesson-05-08-01-01/02/03` (learnings recovery after tip-comments left unfolder):
+  - first-child SoftPulse STUCK→TILTED→GEARS + Dart `TablesChangeDemo` still pre-split under tilted/stuck-only → residual **LPT-686** still To Do (needs-human; Relates LPT-247).
+  - companion checkpoint SoftPulse `temp` fresh-samples densify PRESENT under Gear changes → residual **LPT-687** still To Do (needs-human).
+  - successors GEAR→CHANGE→SAMPLE / COOLER→CHASE→RESET content-driven (do not reopen LPT-669); guided SoftPulse `stuck` densify PRESENT; scaffolded SoftPulse `gear` one-per-press PRESENT; unguided SoftPulse `reset` map PRESENT.
+- Curriculum **LPT-247** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-686/687/247/198/216/685/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Session SoftPulse residual **LPT-690** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-08-01-*: interactive structural clean on tip except LPT-686 SoftPulse + LPT-687 checkpoint residuals.
+
+## Fold 2026-10-14ge (b36d5d16 Prefer NEVER Session SoftPulse residual LPT-690 re-check)
+
+- Tip-stable `b36d5d16` (#2424). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Session SoftPulse residual re-check `lesson-05-09-01-01/02/03`:
+  - first-child SoftPulse QUIT→GUARD→FIRST + Dart `GuardrailsDemo` / layout "Tap Quit, then Guard, then First." still pre-split under stop-loss-only → residual **LPT-690** still To Do (needs-human; Relates LPT-250).
+  - companion checkpoint SoftPulse `edge` densify PRESENT under End sessions → residual **LPT-691** still To Do (needs-human).
+  - successors BANKROLL→STAKES→DECLINE / TIRED→WILD→CASH OUT content-driven (do not reopen LPT-669); guided SoftPulse `stop` densify PRESENT; scaffolded SoftPulse `decline` one-per-press PRESENT; unguided SoftPulse `cash` one-per-press PRESENT.
+- Curriculum **LPT-250** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-690/691/250/198/216/686/687/685/247/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-09-01-*: interactive structural clean on tip except LPT-690 SoftPulse + LPT-691 checkpoint residuals; outcome tiles are `deal.mode` `none` — do not file handFamily.
+
