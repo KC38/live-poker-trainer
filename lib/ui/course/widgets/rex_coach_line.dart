@@ -366,8 +366,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap one community card of each suit.',
     'act-01-01-02-03-guided-suited' =>
       'Tap the seat whose hole cards share a suit.',
+    // SoftPulse-quiet until Hint (same-concept after explain) — situation +
+    // tap verb only; never name The seat with the D chip in the idle bubble
+    // (LPT-836; SoftPulse LPT-653; same class as LPT-835 / LPT-833 / LPT-834).
     'act-01-01-03-guided-button' =>
-      'Tap the dealer button on the table — pick The seat with the D chip.',
+      'Tap the dealer button on the table.',
     // SoftPulse-quiet until Hint (LPT-73) — situation + tap verb only; never
     // name the BB choice in the idle bubble (LPT-830; SoftPulse LPT-653;
     // same class as LPT-823 / LPT-808).
