@@ -1905,7 +1905,7 @@ felt.
 | Raise, call, or fold with a plan | explain SoftPulse cues RAISE → CALL → FOLD; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
 | Brick or changing turn | Brick, Change, Barrel, Delay; unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | Second barrel | explain SoftPulse cues BRICK → BARREL; unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
-| Delayed aggression | explain SoftPulse cues CHECKED BACK → BET TURN; unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
+| Delayed aggression | explain SoftPulse cues CHECKED BACK → BET TURN; checkpoint SoftPulse-off densify stem non-spoiling (no Often give up / template cards) (LPT-807); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | River value | Value, Bluff, Catch, Fold; densified frame ask (LPT-343); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Credible bluffs | explain SoftPulse cues STORY → BLUFF; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Bluff-catch or fold | explain SoftPulse cues BLUFF-CATCH → FOLD; unit `unit-03-06-river-decisions` (LPT-157 split) | — |

@@ -14289,14 +14289,15 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-807: SoftPulse-off densify stem (activity + frame) must not spoil
+    // the correct tile or hardcode template flop/turn codes.
+    const densifyStem =
+        'Bluffed the flop; turn completes front-door draws — tap the matching plan.';
+    expect(find.text(densifyStem), findsOneWidget);
     expect(
       find.text(
         'Air bluff meets a draw-completing queen — weigh shutting down.',
       ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Air bluff meets a draw-completing queen — tap the plan.'),
       findsNothing,
     );
     expect(
@@ -14305,6 +14306,10 @@ await tester.tap(find.text('NIT'));
       ),
       findsNothing,
     );
+    expect(lessonFrameSpeech(activity), densifyStem);
+    expect(lessonFrameSpeech(activity), isNot(contains('Often give up')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Kc 8d 3s')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Qh')));
     expect(find.text('Give up — card hurts air'), findsNothing);
     expect(find.text('Give up'), findsOneWidget);
     expect(find.text('Card hurts air'), findsOneWidget);
