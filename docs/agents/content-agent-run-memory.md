@@ -3709,3 +3709,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-794/314/790/795/796/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ rule **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; outcome-tile `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-15q tip cc736101 (#2532 Map Prefer → Compose SoftPulse LPT-795 Prefer)
+
+- Tip-stable `cc736101` after #2532 SoftPulse residual Prefer LPT-794 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Compose SoftPulse residual re-check `lesson-07-03-01-01/02/03` / `act-07-03-01-*`: first-child SoftPulse VALUE→BLUFF→HOLD + `explainGrading` "Value → Bluff → Hold." + Dart `RiverCompositionDemo.points` VALUE/BLUFF/HOLD (captions Needs calls / Needs folds / Check trash) / `LessonRiverCompositionExplainTable` still pre-split under Choose-river-value-only → residual **LPT-795** still To Do (needs-human; Relates LPT-317 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `rule` kind `none` densify PRESENT under value-only → residual **LPT-796** still To Do; successors SoftPulse BLOCKER→FEWER CALLS / NO STORY→CHECK content-driven (do not reopen LPT-669); guided SoftPulse `val` PRESENT (`As`/`Ad`·`Ac`/`9s`/`4h`/`2d`/`7c` +2 suit variants; poker_action_sizing densify N/A); scaffolded SoftPulse `block` one-per-press densify PRESENT; unguided SoftPulse `check` one-per-press densify PRESENT.
+- Curriculum **LPT-317** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-795/796/317/794/798/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Pot SoftPulse residual **LPT-798** (+ ranges/SPR **LPT-799**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-03-01-*: interactive structural clean on tip except LPT-795 SoftPulse + LPT-796 rule residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided sizing `fixed`+variants — do not reopen LPT-627; scaffolded/unguided/checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-14
+
