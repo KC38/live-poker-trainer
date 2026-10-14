@@ -2109,7 +2109,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-06-01-observe-sticky-caller',
+          lessonId: 'lesson-04-06-01-01-high-participation', // split from lesson-04-06-01-observe-sticky-caller
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_sticky_callers_frame',
@@ -2151,7 +2151,7 @@ void main() {
       await tester.pumpWidget(
         _app(
           LessonRunnerScreen(
-            lessonId: 'lesson-04-06-02-meet-calling-station',
+            lessonId: 'lesson-04-06-02-01-calling-station-model', // split from lesson-04-06-02-meet-calling-station
             courseService: _PrerequisiteLockedCourseService(catalog)
               ..previousComplete = true,
             startRequestId: 'start_meet_calling_station_frame',
@@ -2240,7 +2240,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-07-01-observe-narrow-player',
+          lessonId: 'lesson-04-07-01-01-narrow-entry', // split from lesson-04-07-01-observe-narrow-player
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_narrow_players_frame',
@@ -2282,7 +2282,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-07-02-meet-nit',
+          lessonId: 'lesson-04-07-02-01-nit-model', // split from lesson-04-07-02-meet-nit
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_meet_nit_frame',
@@ -2324,7 +2324,7 @@ void main() {
       await tester.pumpWidget(
         _app(
           LessonRunnerScreen(
-            lessonId: 'lesson-04-07-03-adjust-nit',
+            lessonId: 'lesson-04-07-03-01-steal-more', // split from lesson-04-07-03-adjust-nit
             courseService: _PrerequisiteLockedCourseService(catalog)
               ..previousComplete = true,
             startRequestId: 'start_adjust_nit_frame',
@@ -2367,7 +2367,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-08-01-observe-wild-aggressor',
+          lessonId: 'lesson-04-08-01-01-extreme-entry', // split from lesson-04-08-01-observe-wild-aggressor
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_wild_aggressors_frame',
@@ -2409,7 +2409,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-08-02-meet-maniac',
+          lessonId: 'lesson-04-08-02-01-maniac-model', // split from lesson-04-08-02-meet-maniac
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_meet_maniac_frame',
@@ -2451,7 +2451,7 @@ void main() {
       await tester.pumpWidget(
         _app(
           LessonRunnerScreen(
-            lessonId: 'lesson-04-08-03-adjust-maniac',
+            lessonId: 'lesson-04-08-03-01-widen-value-catch', // split from lesson-04-08-03-adjust-maniac
             courseService: _PrerequisiteLockedCourseService(catalog)
               ..previousComplete = true,
             startRequestId: 'start_adjust_maniac_frame',

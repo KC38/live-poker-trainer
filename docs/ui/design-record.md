@@ -772,6 +772,16 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-186, LPT-189, LPT-195, LPT-198, LPT-202, LPT-205, LPT-208, LPT-212: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-04-06-01-observe-sticky-caller` → `lesson-04-06-01-01-high-participation`, `lesson-04-06-01-02-low-folding`, `lesson-04-06-01-03-observation-vs-certainty` (LPT-186)
+- `lesson-04-06-02-meet-calling-station` → `lesson-04-06-02-01-calling-station-model`, `lesson-04-06-02-02-spot-calling-station`, `lesson-04-06-02-03-station-confidence` (LPT-189)
+- `lesson-04-07-01-observe-narrow-player` → `lesson-04-07-01-01-narrow-entry`, `lesson-04-07-01-02-strong-aggression`, `lesson-04-07-01-03-wait-for-samples` (LPT-195)
+- `lesson-04-07-02-meet-nit` → `lesson-04-07-02-01-nit-model`, `lesson-04-07-02-02-spot-nit` (LPT-198)
+- `lesson-04-07-03-adjust-nit` → `lesson-04-07-03-01-steal-more`, `lesson-04-07-03-02-respect-heavy-action`, `lesson-04-07-03-03-cite-narrow-entry` (LPT-202)
+- `lesson-04-08-01-observe-wild-aggressor` → `lesson-04-08-01-01-extreme-entry`, `lesson-04-08-01-02-constant-aggression`, `lesson-04-08-01-03-no-ego-notes` (LPT-205)
+- `lesson-04-08-02-meet-maniac` → `lesson-04-08-02-01-maniac-model`, `lesson-04-08-02-02-spot-maniac` (LPT-208)
+- `lesson-04-08-03-adjust-maniac` → `lesson-04-08-03-01-widen-value-catch`, `lesson-04-08-03-02-cite-aggression` (LPT-212)
+
 Curriculum splits LPT-169, LPT-172, LPT-176, LPT-179, LPT-182, LPT-215, LPT-218: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-04-01-01-ranges-not-hands` → `lesson-04-01-01-01-seat-as-range`, `lesson-04-01-01-02-ranges-move`, `lesson-04-01-01-03-no-exact-hand` (LPT-169)
 - `lesson-04-02-01-threebet-squeeze` → `lesson-04-02-01-01-value-3bet`, `lesson-04-02-01-02-facing-3bet`, `lesson-04-02-01-03-squeeze` (LPT-172)
@@ -1793,15 +1803,28 @@ felt.
 | Estimate SPR | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413); unit `unit-04-05-spr` (LPT-182 split) | — |
 | Commit at low SPR | explain SoftPulse cues LOW SPR → COMMIT; unit `unit-04-05-spr` (LPT-182 split) | — |
 | Stay flexible at high SPR | explain SoftPulse cues HIGH SPR → FLEXIBLE; unit `unit-04-05-spr` (LPT-182 split) | — |
-| Observe sticky callers | Enters, Calls, Folds; densified frame asks (LPT-416) | participation note, observation bundle |
-| Meet the Calling Station | Station, High, Low; scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420) | label quizzes |
+| Tag high participation | Enters, Calls, Folds; densified frame asks (LPT-416); unit `unit-04-06-calling-station` (LPT-186 split) | participation note, observation bundle |
+| Tag low folding | explain SoftPulse cues FOLDS TO BETS → STICKY; unit `unit-04-06-calling-station` (LPT-186 split) | — |
+| Observation versus certainty | explain SoftPulse cues OBSERVATION → SAMPLES; unit `unit-04-06-calling-station` (LPT-186 split) | — |
+| The Calling Station model | Station, High, Low; scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420); unit `unit-04-06-calling-station` (LPT-189 split) | label quizzes |
+| Spot a Calling Station | explain SoftPulse cues STICKY CALLS → RARE FOLDS; unit `unit-04-06-calling-station` (LPT-189 split) | — |
+| Small samples, low confidence | explain SoftPulse cues SAMPLE → CONFIDENCE; unit `unit-04-06-calling-station` (LPT-189 split) | — |
 | Adjust versus Calling Station | Value, Bluffs, Cite; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | bluff-less reason |
-| Observe narrow players | Rare, Enter, Mean It | entry quizzes |
-| Meet the Nit | Nit, Narrow, Respect; densified SoftPulse one gold (LPT-440) | label quizzes |
-| Adjust versus Nit | Steal, Credit, Explode; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | respect reason |
-| Observe wild aggressors | Raise, Barrel, Count; densified SoftPulse one gold (LPT-462) | entry quizzes |
-| Meet the Maniac | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490) | label quizzes |
-| Adjust versus Maniac | Wider, Hang, Ego; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | call-wider reason |
+| Tag narrow entry | Rare, Enter, Mean It; unit `unit-04-07-nit` (LPT-195 split) | entry quizzes |
+| Tag strong aggression | explain SoftPulse cues RARE ENTRY → BIG AGGRESSION; unit `unit-04-07-nit` (LPT-195 split) | — |
+| Wait for samples | explain SoftPulse cues TWO FOLDS → MORE HANDS; unit `unit-04-07-nit` (LPT-195 split) | — |
+| The Nit model | Nit, Narrow, Respect; densified SoftPulse one gold (LPT-440); unit `unit-04-07-nit` (LPT-198 split) | label quizzes |
+| Spot a Nit | explain SoftPulse cues FEW HANDS → BIG RAISES; unit `unit-04-07-nit` (LPT-198 split) | — |
+| Steal more versus Nits | Steal, Credit, Explode; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-07-nit` (LPT-202 split) | respect reason |
+| Respect their heavy action | explain SoftPulse cues NIT RAISES → CREDIT; unit `unit-04-07-nit` (LPT-202 split) | — |
+| Cite the narrow-entry read | explain SoftPulse cues EVIDENCE → UNKNOWN; unit `unit-04-07-nit` (LPT-202 split) | — |
+| Tag extreme entry | Raise, Barrel, Count; densified SoftPulse one gold (LPT-462); unit `unit-04-08-maniac` (LPT-205 split) | entry quizzes |
+| Tag constant aggression | explain SoftPulse cues EVERY STREET → WEAK SHOWDOWNS; unit `unit-04-08-maniac` (LPT-205 split) | — |
+| Notes without ego | explain SoftPulse cues FREQUENCIES → NO EGO; unit `unit-04-08-maniac` (LPT-205 split) | — |
+| The Maniac model | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490); unit `unit-04-08-maniac` (LPT-208 split) | label quizzes |
+| Spot a Maniac | explain SoftPulse cues CONSTANT RAISES → NEVER GIVES UP; unit `unit-04-08-maniac` (LPT-208 split) | — |
+| Widen value and bluff-catches | Wider, Hang, Ego; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-08-maniac` (LPT-212 split) | call-wider reason |
+| Cite the aggression read | explain SoftPulse cues EVIDENCE → UNKNOWN; unit `unit-04-08-maniac` (LPT-212 split) | — |
 | Observation is not certainty | Observe, Samples, Showdowns; densified SoftPulse one gold (LPT-495); unit `unit-04-09-type-id` (LPT-215 split) | confidence quizzes |
 | Confidence grows with samples | explain SoftPulse cues SAMPLES → SHOWDOWNS; unit `unit-04-09-type-id` (LPT-215 split) | — |
 | Retire labels when evidence flips | explain SoftPulse cues NEW EVIDENCE → RETIRE; unit `unit-04-09-type-id` (LPT-215 split) | — |

@@ -19,8 +19,9 @@ final _catalog = CourseCatalog.fromJson(
       as Map<String, dynamic>,
 );
 
-CourseActivity _activity(String lessonId, String activityId) =>
-    _catalog.activitiesForLesson(lessonId).firstWhere((a) => a.id == activityId);
+CourseActivity _activity(String lessonId, String activityId) => _catalog
+    .activitiesForLesson(lessonId)
+    .firstWhere((a) => a.id == activityId);
 
 Future<void> _pump(
   WidgetTester tester,
@@ -60,7 +61,7 @@ const _typeWords = ['STATION', 'NIT', 'MANIAC', 'TAG', 'LAG'];
 
 void main() {
   testWidgets('a Nit spot seats a Nit', (tester) async {
-    await _pump(tester, 'lesson-04-07-03-adjust-nit', 'act-04-07-03-guided');
+    await _pump(tester, 'lesson-04-07-03-01-steal-more', 'act-04-07-03-guided');
     expect(find.text('NIT'), findsOneWidget);
     expect(find.text('13/10'), findsOneWidget);
   });
@@ -80,7 +81,11 @@ void main() {
   });
 
   testWidgets('an unknown opponent stays a plain seat', (tester) async {
-    await _pump(tester, 'lesson-04-07-03-adjust-nit', 'act-04-07-03-unguided');
+    await _pump(
+      tester,
+      'lesson-04-07-03-03-cite-narrow-entry',
+      'act-04-07-03-unguided',
+    );
     for (final word in _typeWords) {
       expect(find.text(word), findsNothing, reason: word);
     }

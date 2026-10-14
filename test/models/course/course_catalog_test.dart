@@ -60,6 +60,15 @@ void main() {
       'lesson-04-05-01-spr-commitment',
       'lesson-04-09-01-type-identification',
       'lesson-04-10-01-exploit-checkpoints',
+      // s4b (LPT-186/189/195/198/202/205/208/212)
+      'lesson-04-06-01-observe-sticky-caller',
+      'lesson-04-06-02-meet-calling-station',
+      'lesson-04-07-01-observe-narrow-player',
+      'lesson-04-07-02-meet-nit',
+      'lesson-04-07-03-adjust-nit',
+      'lesson-04-08-01-observe-wild-aggressor',
+      'lesson-04-08-02-meet-maniac',
+      'lesson-04-08-03-adjust-maniac',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];
