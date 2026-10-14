@@ -16795,15 +16795,15 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    // LPT-416: densified ask (and frame speech) — not catalog + Tap the best answer.
-    expect(
-      lessonFrameSpeech(activity),
-      'Before you label — tap Bundle.',
-    );
+    // LPT-810: SoftPulse-off densify stem must not spoil Bundle.
+    const densifyStem = 'Before you label — tap what evidence to gather.';
+    expect(lessonFrameSpeech(activity), densifyStem);
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Bundle')));
+    expect(find.text(densifyStem), findsOneWidget);
     expect(
       find.text('Before you label — pick Bundle.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       find.text(
@@ -17036,14 +17036,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-811: SoftPulse-off densify stem must not spoil Low conf.
+    const densifyStem = 'Only two hands so far — tap how confident you are.';
+    expect(find.text(densifyStem), findsOneWidget);
+    expect(lessonFrameSpeech(activity), densifyStem);
+    expect(lessonFrameSpeech(activity), isNot(contains('Low conf')));
+    expect(
+      find.text('Only two hands so far — pick Low conf.'),
+      findsNothing,
+    );
     expect(
       find.text(
         'Only two hands so far — keep sampling before you lock a label.',
       ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Only two hands so far — tap your confidence.'),
       findsNothing,
     );
     expect(find.text('Low'), findsOneWidget);
@@ -22220,13 +22225,13 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    // LPT-636: densified ask (and frame speech) — not catalog + Tap the best answer.
-    expect(
-      lessonFrameSpeech(activity),
-      'Caps are for — tap Attack.',
-    );
+    // LPT-809: SoftPulse-off densify stem must not spoil Attack.
+    const densifyStem = 'Caps are for — tap the matching plan.';
+    expect(lessonFrameSpeech(activity), densifyStem);
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
-    expect(find.text('Caps are for — pick Attack.'), findsOneWidget);
+    expect(lessonFrameSpeech(activity), isNot(contains('Attack')));
+    expect(find.text(densifyStem), findsOneWidget);
+    expect(find.text('Caps are for — pick Attack.'), findsNothing);
     expect(
       find.text('Caps are for — choose how you use them.'),
       findsNothing,

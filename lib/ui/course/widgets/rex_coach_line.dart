@@ -102,8 +102,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Second pair called three streets twice — pick Sticky.',
     'act-04-06-01-unguided' =>
       'One dramatic call — pick Low conf.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Bundle in the idle bubble (LPT-810; SoftPulse LPT-653; same class
+    // as LPT-809 / LPT-808 / LPT-807).
     'act-04-06-01-checkpoint' =>
-      'Before you label — pick Bundle.',
+      'Before you label — tap what evidence to gather.',
     // Meet the Calling Station densified asks (LPT-420) — same path.
     'act-04-06-02-guided' =>
       'Sticky second pair called three streets — pick Station.',
@@ -111,15 +114,22 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'A player-type label is temporary evidence — pick Working model.',
     'act-04-06-02-unguided' =>
       'Limps, calls, never folds turns — pick Station.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Low conf in the idle bubble (LPT-811; SoftPulse LPT-653; same
+    // class as LPT-810 / LPT-809 / LPT-808).
     'act-04-06-02-checkpoint' =>
-      'Only two hands so far — pick Low conf.',
+      'Only two hands so far — tap how confident you are.',
     // Recognize capped densified asks (LPT-636) — same path as LPT-416.
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-06-03-01-guided' =>
       'Checks turn after flop bet — pick Capped.',
     'act-06-03-01-unguided' =>
       'XR flop / bet turn / bomb — pick Uncapped.',
-    'act-06-03-01-checkpoint' => 'Caps are for — pick Attack.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Attack in the idle bubble (LPT-809; SoftPulse LPT-653; same class
+    // as LPT-810 / LPT-811 / LPT-808).
+    'act-06-03-01-checkpoint' =>
+      'Caps are for — tap the matching plan.',
     // Choose polarized densified asks (LPT-637) — same path as LPT-636.
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-06-04-01-guided' =>
