@@ -2101,3 +2101,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-297** Done — do not clone / do not re-add needs-human. Done-ack LPT-295/296/438/493.
 - Prefer next NEVER: `lesson-06-12-02-*` meet-lag / remaining S6 NEVER / Low curriculum.
 
+
+## Fold 2026-10-14cr (126220f0 Meet LAG NEVER)
+
+- Tip-stable `126220f0` (#2299). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-06-12-02-*` Meet LAG children under `unit-06-12-lag`:
+  - first-child `act-06-12-02-explain` SoftPulse WIDE→PRESSURE→MODEL + Dart `LagModelDemo` / `LessonLagModelExplainTable` matches Introduce LAG / The LAG model — **concept-aligned** (not SoftPulse residual; same class as Meet TAG / careful-4bet).
+  - checkpoint SoftPulse `limits` kind `none` densify PRESENT grades sample-limits vs destiny under Introduce LAG-only → filed **LPT-716** (needs-human; Relates LPT-300).
+  - successors `act-06-12-02-02-explain-spot` (WIDE OPENS→BARRELS) + `act-06-12-02-03-explain-station` (RAISES→CALLS) content-driven (do not reopen LPT-669); guided SoftPulse `lag` + unguided SoftPulse `lag2` + scaffolded SoftPulse `diff` one-per-press densify PRESENT.
+  - scaffolded pressure-vs-passive now under `lesson-06-12-02-03-lag-vs-station` — LPT-300 mismatch **resolved** by split.
+- Curriculum **LPT-300** Done — do not clone / do not re-add needs-human. Done-ack LPT-298/439/492.
+- Prefer next NEVER: `lesson-06-12-03-*` adjust-lag / remaining S6 NEVER / Low curriculum.

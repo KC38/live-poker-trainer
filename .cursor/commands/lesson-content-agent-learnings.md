@@ -150,13 +150,15 @@ Lesson-specific pattern notes (full history) live in
   (cite checkpoint under Respect TAG aggression) + **LPT-713** (Observe-wide
   SoftPulse still walks PRESSURE/SAMPLE) + **LPT-714** (Keep-sampling unguided
   under Note sustained pressure) + **LPT-715** (evidence-bundle checkpoint under
-  Planned-not-maniac); multiway-ranges + line-reading
+  Planned-not-maniac) + **LPT-716** (sample-limits checkpoint under Introduce
+  LAG); multiway-ranges + line-reading
   structural clean (first-child ACTION→REWRITE→UPDATE matches
   update-each-street — no residual); Prefer-IP SoftPulse EQUITY→CASH→POS is
   POS-led framing (not a NUT-style successor leak); careful-4bet SoftPulse
-  4BET→STRONG→CAREFUL + Meet TAG SoftPulse TIGHT→AGGRO→MODEL are
-  concept-aligned (not SoftPulse residuals); next NEVER walk:
-  `lesson-06-12-02-*` meet-lag / remaining S6 NEVER / Low curriculum.
+  4BET→STRONG→CAREFUL + Meet TAG SoftPulse TIGHT→AGGRO→MODEL + Meet LAG
+  SoftPulse WIDE→PRESSURE→MODEL are concept-aligned (not SoftPulse residuals);
+  next NEVER walk: `lesson-06-12-03-*` adjust-lag / remaining S6 NEVER / Low
+  curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -200,6 +202,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14cr: Tip-stable `126220f0` (#2299 Observe wide learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Meet LAG children: first-child `act-06-12-02-explain` SoftPulse WIDE→PRESSURE→MODEL + Dart `LagModelDemo` **concept-aligned** under Introduce LAG / The LAG model — no SoftPulse residual; checkpoint SoftPulse `limits` sample-limits under Introduce LAG-only → **LPT-716**; successors WIDE OPENS→BARRELS / RAISES→CALLS content-driven (do not reopen LPT-669); guided SoftPulse `lag` + unguided SoftPulse `lag2` + scaffolded SoftPulse `diff` one-per-press densify PRESENT (scaffolded pressure-vs-passive mismatch from LPT-300 resolved by split home). Curriculum **LPT-300** Done — do not clone / do not re-add needs-human. Tip-commented LPT-300/716 + Done-ack LPT-298/439/492 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-06-12-03-*` adjust-lag / S6 NEVER / Low curriculum.
 - 2026-10-14cq: Tip-stable `9886d4bb` (#2298 Adjust TAG learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Observe wide children: first-child `act-06-12-01-explain` SoftPulse WIDE→PRESSURE→SAMPLE + Dart `WidePressureDemo` still pre-split ladder under Note wide entry → **LPT-713**; unguided SoftPulse `wait` Keep sampling under Note sustained pressure → **LPT-714**; checkpoint SoftPulse `bundle` under Planned-not-maniac → **LPT-715**; guided SoftPulse `wide` + scaffolded SoftPulse `sep` one-per-press densify PRESENT; successors BARRELS→MANY HANDS / FOLDS SOMETIMES→PLAN content-driven (do not reopen LPT-669). Curriculum **LPT-297** Done — do not clone / do not re-add needs-human. Tip-commented LPT-297/713/714/715 + Done-ack LPT-295/296/438/493. next: NEVER `lesson-06-12-02-*` meet-lag / S6 NEVER / Low curriculum.
 - 2026-10-14cp: Tip-stable `76127e14` (#2297 Meet TAG learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Adjust TAG children: first-child `act-06-11-03-explain` SoftPulse CREDIT→TIGHTER→NO LIGHT + Dart `VsTagsDemo` still pre-split ladder under respect-aggression-only → **LPT-709**; checkpoint SoftPulse `cite` under Respect TAG aggression → **LPT-710**; guided SoftPulse `fold` + scaffolded SoftPulse `fold-k9` + unguided SoftPulse `check` one-per-press PRESENT (sizing deals match Dart); successors CHECK-RAISE→FOLD / RARELY CALLS→CHECK content-driven (do not reopen LPT-669). Curriculum **LPT-294** Done — do not clone / do not re-add needs-human. Race clones LPT-711/712 Done. Tip-commented LPT-294/709/710 + Done-ack companions + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-06-12-01-*` observe-wide / S6 NEVER / Low curriculum.
 - 2026-10-14co: Tip-stable `daf7ef0a` (#2296 LPT-707 showdown). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Meet TAG children: first-child `act-06-11-02-explain` SoftPulse TIGHT→AGGRO→MODEL + Dart `TagModelDemo` **concept-aligned** under Introduce TAG / The TAG model — no SoftPulse residual; checkpoint SoftPulse `model` working-model-vs-insult under Introduce TAG-only → **LPT-708**; successors `act-06-11-02-02-explain-spot` (FOLDS MOST→PLANNED BARRELS) + `act-06-11-02-03-explain-maniac` (ENTRY WIDTH→DISCIPLINE) content-driven (do not reopen LPT-669); guided SoftPulse `tag` + unguided SoftPulse `tag2` + scaffolded SoftPulse `diff` one-per-press densify PRESENT. Curriculum **LPT-291** Done — do not clone / do not re-add needs-human. Tip-commented LPT-291/708 + Done-ack LPT-289/290/436/491/648 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…706 + parents. next: NEVER `lesson-06-11-03-*` adjust-tag / S6 NEVER / Low curriculum.
