@@ -108,8 +108,10 @@ Lesson-specific pattern notes (full history) live in
   `lessonSplitMap` successors, also verify SoftPulse explain ids in
   `isTableRegionTapActivity` + `resolveCoachDialogueVisual` — first-child
   reuses the wired explain id; `*-02-*`/`*-03-*` often author cues only
-  (Continue, not SoftPulse walk) → **LPT-669**. Append checklists; Done
-  sibling clones (skip In Progress).
+  (Continue, not SoftPulse walk) → **LPT-669** (Hand-ranks `02/03`
+  explains re-confirmed tip `01eacc7c`). Append checklists; Done sibling
+  clones (skip In Progress). Next NEVER walk: `lesson-01-02-02-*`
+  kickers split children (still unwired explains on LPT-669).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
