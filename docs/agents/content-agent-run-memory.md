@@ -3215,3 +3215,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer NEVER live-warmup: SoftPulse CHECKLIST→DEFAULTS→ONE HAND matches packed objectives (residual N/A until **LPT-351**); densify PRESENT; LPT-349 Done; **LPT-351** still To Do needs-human.
 - Prefer NEVER Final: seven checkpoint cues kind `none` densify PRESENT — clean (LPT-352 Done).
 - S7 Prefer NEVER SoftPulse residual re-check path complete through Capstone + warm-up + Final. next: oldest open SoftPulse residual re-check (LPT-676…802) / Low curriculum LPT-351.
+
+## Fold 2026-10-14hf tip 055747ce (#2459 Capstone Prefer → Sizing LPT-676 Prefer)
+
+- Tip-stable `055747ce` after #2459 Capstone/warmup/Final SoftPulse Prefer. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Prefer NEVER Sizing placement residual **LPT-676** re-check: SoftPulse VALUE→PRESSURE→SIZE under Value concept-aligned; polar scaffolded SoftPulse `big` still under Nearby — still To Do needs-human (Relates LPT-179). Successors content-driven; densify PRESENT; curriculum LPT-179 Done — do not clone.
+- next: NEVER Estimate SoftPulse residual **LPT-681** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
