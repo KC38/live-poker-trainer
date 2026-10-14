@@ -2783,3 +2783,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-713/714/715/297/198/216/709/710; leave open LPT-676…779; leave ui-agent alone.
 - Prefer next: NEVER `lesson-06-12-02-*` meet-lag / Low residuals LPT-676…779 (LPT-680…715).
 - act-06-12-01-*: interactive structural clean on tip except LPT-713 SoftPulse + LPT-714 unguided + LPT-715 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
+
+## Fold 2026-10-14fk (5f051e18 Prefer NEVER Meet LAG SoftPulse re-check)
+
+- Tip-stable `5f051e18` (#2400 Observe wide SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-06-12-02-01/02/03` under Meet LAG unit:
+  - first-child `act-06-12-02-explain` SoftPulse WIDE→PRESSURE→MODEL + `explainGrading` "Wide → Pressure → Model." + Dart LagModel / `LessonVsLagsExplainTable` matches Introduce LAG / The LAG model — **concept-aligned** (not SoftPulse residual; same class as Meet TAG).
+  - checkpoint SoftPulse `limits` kind `none` densify PRESENT grades sample-limits under Introduce LAG-only → residual **LPT-716** still To Do (needs-human; Relates LPT-300).
+  - successors `act-06-12-02-02-explain-spot` (WIDE OPENS→BARRELS) + `act-06-12-02-03-explain-station` (RAISES→CALLS) content-driven; guided SoftPulse `lag` densify PRESENT; unguided SoftPulse `lag2` densify PRESENT; scaffolded SoftPulse `diff` one-per-press densify PRESENT.
+- Curriculum **LPT-300** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-716/300/198/216/713/714/715; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-12-03-*` adjust-lag / Low residuals LPT-676…779 (LPT-680…719).
+- act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits residual; SoftPulse explain concept-aligned + successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily.
