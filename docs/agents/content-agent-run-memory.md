@@ -4038,3 +4038,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-790/310/794/721/351/198/216.
 - Prefer next: NEVER Map SoftPulse residual **LPT-794** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-01-01-*: interactive structural clean on tip except LPT-790 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily.
+
+## Fold 2026-10-15ax tip 07bd03fc (#2579 → Map SoftPulse LPT-794 Prefer)
+
+- Tip-stable `07bd03fc` (#2579 felt street-bets on tip after #2578 preflop-to-flop SoftPulse Prefer fold). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Map SoftPulse residual **LPT-794** re-check (`lesson-07-02-01-01/02/03` / `act-07-02-01-*`):
+  - first-child SoftPulse BARREL→GIVE-UP→MAP + `explainGrading` "Barrel → Give-up → Map." + Dart `TurnMapDemo.points` BARREL/GIVE-UP/MAP (captions Cards to continue / Cards to kill / Before flop bet) / `LessonTurnMapExplainTable` / layout "Tap Barrel, then Give-up, then Map." still pre-split under List-turn-continue-cards-only → **LPT-794** still To Do (needs-human; Relates LPT-314 — do not re-add needs-human on curriculum).
+  - successors SoftPulse BRICK→GIVE UP / CONTINUE→GIVE-UP→MAP content-driven (do not reopen LPT-669); guided SoftPulse `ok` densify PRESENT; scaffolded SoftPulse `give` one-per-press densify PRESENT; unguided SoftPulse `avoid` one-per-press densify PRESENT; checkpoint SoftPulse `list` kind `none` densify PRESENT under map-definition matches — no companion residual.
+- Curriculum **LPT-314** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-794/314/795/790/351/198/216; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ rule **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts are `deal.mode` `none` map tiles — do not file handFamily.
