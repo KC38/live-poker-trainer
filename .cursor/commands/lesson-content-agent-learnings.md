@@ -112,9 +112,9 @@ Lesson-specific pattern notes (full history) live in
   allowlist; do **not** reopen LPT-669 or re-file Dart map clones when
   cues + `explainGrading` are present. Pre-Done checklist history (S1
   16 → S2 32 → S3 46 → S4 72) is closed. S3 leak-repair + S4 ranges +
-  3-bet-squeeze NEVER children walked (tips `39155796`/`a08d105d`/
-  `8cb997f9`) — next NEVER walk: `lesson-04-03-01-*` continuation /
-  remaining S4 NEVER / Low curriculum.
+  3-bet-squeeze + continuation NEVER children walked (tips `39155796`/
+  `a08d105d`/`8cb997f9`/`3b13dcb5`) — next NEVER walk:
+  `lesson-04-04-01-*` sizing / remaining S4 NEVER / Low curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -158,6 +158,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14br: Tip mid-run `63e19df3`→`3b13dcb5` (#2265 S6 player-type splits). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER continuation children: first-child `act-04-03-01-explain` SoftPulse FLOP→TURN→RIVER content-driven; successors `act-04-03-01-02-explain-abort` / `03-explain-pot` content-driven (do not reopen LPT-669); guided/scaffolded/unguided fixed+variants SoftPulse PRESENT one-per-press OK; checkpoint densify PRESENT hintless. Curriculum **LPT-176** Done — do not clone. Tip-commented LPT-176/174/175/496/570/602/669/625/627/628/635/667. next: NEVER `lesson-04-04-01-*` sizing / Low curriculum.
 - 2026-10-14bq: Tip-stable `8cb997f9` (#2262 after #2260 S6). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium catalog parent **none**. Rescued unfolder leak-repair + ranges Prefer/run-memory (coverage had claimed `learnings: updated` without git fold). Discovery NEVER 3-bet-squeeze children: first-child `act-04-02-01-explain` SoftPulse 3-BET→RANGES→SQUEEZE **wired**; successors `act-04-02-01-02-explain-facing` / `03-explain-squeeze` content-driven (do not reopen LPT-669); interactive fixed+variants SoftPulse PRESENT one-per-press OK; checkpoint hintless. Curriculum **LPT-172** Done — do not clone. Tip-commented LPT-172/170/171/434/572/601/625/627/628/635. next: NEVER `lesson-04-03-01-*` continuation / Low curriculum.
 - 2026-10-14bp: Tip-stable `8cb997f9` (rescued). Discovery NEVER Ranges children: SoftPulse explain successors content-driven (LPT-669 Done); interactive SI densify structural clean; curriculum **LPT-169** Done — do not clone.
 - 2026-10-14bo: Tip `39155796`/`a08d105d` (rescued). Discovery NEVER Leak-repair children: SoftPulse explain successors content-driven (LPT-669 Done); interactive fixed+variants SoftPulse PRESENT one-per-press OK; curriculum **LPT-163** Done — do not clone.
