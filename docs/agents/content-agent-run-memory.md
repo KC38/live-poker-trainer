@@ -3058,3 +3058,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-703/277/198/216/701; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Plan-3bet SoftPulse residual **LPT-704** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gm (684d8b10 Prefer NEVER Plan-3bet SoftPulse residual LPT-704 re-check)
+
+- Tip-stable `684d8b10` (#2436 Mix SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Plan-3bet SoftPulse residual re-check `lesson-06-09-01-01/02/03`: careful-4bet SoftPulse 4BET→STRONG→CAREFUL content-driven + guided SoftPulse `careful` densify PRESENT; **middle-child** `act-06-09-01-explain` SoftPulse 3BET→4BET→DEPTH + Dart `ThreeBetFourBetSprDemo.points` 3BET/4BET/DEPTH still pre-split under plan-3bet-spr → residual **LPT-704** still To Do (needs-human; Relates LPT-282); scaffolded SoftPulse `small` one-per-press PRESENT (`Ah`/`Qd`·`8c`/`3h`/`2s` +2 suit variants; Dart `stackLabel` Stacks left 360 match); checkpoint SoftPulse `spr` kind `none` densify PRESENT under plan-3bet-spr — no companion residual; ego SoftPulse 4BET→EGO→AVOID content-driven + unguided SoftPulse `avoid` one-per-press densify PRESENT (do not reopen LPT-669); curriculum **LPT-282** Done.
+- Tip-commented LPT-704/282/198/216/703/705/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Hard-folds SoftPulse residual **LPT-705** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-09-01-*: interactive structural clean on tip except LPT-704 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants AQo-miss honesty.
+
