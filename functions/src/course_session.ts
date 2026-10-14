@@ -33,7 +33,7 @@ import {
   type SoftGrade,
 } from "./course_catalog";
 import {
-  expandCompletedLessonIds,
+  hasCompletedLessonId,
   resolveLiveLessonId,
 } from "./lesson_split_map";
 import {resolveLiveAccessForUser} from "./live_access";
@@ -865,14 +865,22 @@ export async function startCourseLessonForUser(options: {
     }
 
     // Deep-link lock: new starts require catalog prerequisites completed.
-    const completedForPrereqs = expandCompletedLessonIds(
-      Array.isArray(profileSnap.data()?.completedLessonIds) ?
-        profileSnap.data()!.completedLessonIds as string[] :
-        [],
+    const completedForPrereqs = Array.isArray(
+      profileSnap.data()?.completedLessonIds,
+    ) ?
+      profileSnap.data()!.completedLessonIds as string[] :
+      [];
+    const lessonAlreadyCompleted = hasCompletedLessonId(
+      completedForPrereqs,
+      lessonId,
       courseBank.lessonSplitMap,
     );
     const missingPrereq = located.lesson.prerequisites.find(
-      (prereqId) => !completedForPrereqs.includes(prereqId),
+      (prereqId) => !hasCompletedLessonId(
+        completedForPrereqs,
+        prereqId,
+        courseBank.lessonSplitMap,
+      ),
     );
     if (missingPrereq) {
       throw new HttpsError(
@@ -893,7 +901,7 @@ export async function startCourseLessonForUser(options: {
       heartStateFromData(profileSnap.exists ? profileSnap.data() : undefined),
       nowMs,
     );
-    const isPracticeReplay = completedForPrereqs.includes(lessonId);
+    const isPracticeReplay = lessonAlreadyCompleted;
     if (passive.livesRemaining <= 0 && !allowsZeroHeartPlay({
       lessonCompleted: isPracticeReplay,
       practiceLesson: isPracticeLesson(located.lesson),
@@ -1054,8 +1062,14 @@ export async function submitCourseStepForUser(options: {
     ) ?
       profileSnap.data()!.completedLessonIds as string[] :
       [];
+    // Expand retired parents. A stored suits-and-ranks completion does not
+    // list the successor id; raw includes() would block a zero-heart review.
     const isPracticeOrReplaySubmit = allowsZeroHeartPlay({
-      lessonCompleted: priorCompletedForHearts.includes(attempt.lessonId),
+      lessonCompleted: hasCompletedLessonId(
+        priorCompletedForHearts,
+        attempt.lessonId,
+        courseBank.lessonSplitMap,
+      ),
       practiceLesson: isPracticeLesson(located.lesson),
       restoreHeartOnComplete: attempt.restoreHeartOnComplete === true,
     });
@@ -1157,7 +1171,13 @@ export async function submitCourseStepForUser(options: {
     const priorCompleted = Array.isArray(profileSnap.data()?.completedLessonIds) ?
       profileSnap.data()!.completedLessonIds as string[] :
       [];
-    const isReview = priorCompleted.includes(attempt.lessonId);
+    // Same expansion as startLesson. Otherwise reviewing a split successor
+    // looks like a first run and overwrites the frontier resume.
+    const isReview = hasCompletedLessonId(
+      priorCompleted,
+      attempt.lessonId,
+      courseBank.lessonSplitMap,
+    );
     const fullStepXp = outcome.accepted ? XP_PER_ACCEPTED_STEP : 0;
     const xpAwarded = isReview ? 0 : fullStepXp;
     const timezone = String(profileSnap.data()?.timezone ?? "UTC");
@@ -1413,7 +1433,11 @@ export async function completeCourseLessonForUser(options: {
     const priorCompleted = Array.isArray(profileSnap.data()?.completedLessonIds) ?
       profileSnap.data()!.completedLessonIds as string[] :
       [];
-    const isReview = priorCompleted.includes(attempt.lessonId);
+    const isReview = hasCompletedLessonId(
+      priorCompleted,
+      attempt.lessonId,
+      courseBank.lessonSplitMap,
+    );
 
     const mastery = masteryRatio(attempt);
     const fullLessonXp = lessonXpTotal(attempt.xpEarned);
@@ -1675,7 +1699,11 @@ export async function getCourseStateForUser(options: {
     if (snap.exists) {
       const attempt = attemptFromData(snap.data()!);
       const completedIds = profile.completedLessonIds;
-      const isPracticeReplay = completedIds.includes(attempt.lessonId);
+      const isPracticeReplay = hasCompletedLessonId(
+        completedIds,
+        attempt.lessonId,
+        courseBank.lessonSplitMap,
+      );
       // Do not surface review/practice attempts as the Home resume pointer.
       if (
         !isPracticeReplay &&

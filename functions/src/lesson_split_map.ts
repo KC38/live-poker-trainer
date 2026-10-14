@@ -2,9 +2,13 @@
  * Retired multi-concept lesson ids (LPT-83+).
  *
  * Completing a retired id counts as completing each listed successor, so
- * Home and startLesson prerequisites do not strand learners after a split.
+ * Home, startLesson prerequisites, review XP, zero-heart replay, and resume
+ * protection do not strand learners after a split. Successors are not written
+ * back onto the profile. Callers that decide "already finished" must use
+ * `hasCompletedLessonId`, not a raw includes() on the stored array.
+ *
  * A start request for a retired id opens the first successor still in the
- * catalog.
+ * catalog (`resolveLiveLessonId`).
  *
  * Expansion is one Object.entries pass. A successor is expanded further only
  * when that id is already in the set at the moment its key is visited, so
@@ -24,6 +28,23 @@ export function expandCompletedLessonIds(
     }
   }
   return [...out];
+}
+
+/**
+ * True when `lessonId` is stored as completed, or a retired parent in
+ * `completed` lists it as a successor.
+ *
+ * Home and startLesson already expand. Submit, complete, and getCourseState
+ * must use this too: a raw includes() treats the successor as a first run,
+ * overwrites the frontier resume, grants full XP, and blocks zero-heart
+ * replay.
+ */
+export function hasCompletedLessonId(
+  completed: readonly string[],
+  lessonId: string,
+  lessonSplitMap: Record<string, readonly string[]> | undefined | null,
+): boolean {
+  return expandCompletedLessonIds(completed, lessonSplitMap).includes(lessonId);
 }
 
 /**

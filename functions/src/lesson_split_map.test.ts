@@ -1,11 +1,13 @@
 /**
- * Unit tests for retired-lesson progress: prereq expansion and start remap.
+ * Unit tests for retired-lesson progress: prereq expansion, already-finished
+ * checks, and start remap.
  */
 
 import {describe, expect, it} from "vitest";
 
 import {
   expandCompletedLessonIds,
+  hasCompletedLessonId,
   resolveLiveLessonId,
 } from "./lesson_split_map";
 
@@ -74,6 +76,43 @@ describe("expandCompletedLessonIds", () => {
       "lesson-retired",
       "1",
     ]);
+  });
+});
+
+describe("hasCompletedLessonId", () => {
+  it("counts successors of a retired lesson as completed", () => {
+    const completed = ["lesson-01-01-02-suits-and-ranks"];
+    expect(hasCompletedLessonId(
+      completed,
+      "lesson-01-01-02-01-suits",
+      suitsSplit,
+    )).toBe(true);
+    expect(hasCompletedLessonId(
+      completed,
+      "lesson-01-01-02-suits-and-ranks",
+      suitsSplit,
+    )).toBe(true);
+  });
+
+  it("does not treat an unfinished successor as completed", () => {
+    expect(hasCompletedLessonId(
+      ["lesson-01-01-01-your-two-cards"],
+      "lesson-01-01-02-01-suits",
+      suitsSplit,
+    )).toBe(false);
+  });
+
+  it("keeps a directly stored successor id completed", () => {
+    expect(hasCompletedLessonId(
+      ["lesson-01-01-02-02-ranks"],
+      "lesson-01-01-02-02-ranks",
+      suitsSplit,
+    )).toBe(true);
+    expect(hasCompletedLessonId(
+      ["lesson-01-01-02-02-ranks"],
+      "lesson-01-01-02-01-suits",
+      suitsSplit,
+    )).toBe(false);
   });
 });
 
