@@ -3346,3 +3346,8 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Adjust-TAG SoftPulse residual **LPT-709** (+ cite **LPT-710**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily.
 
+## Fold 2026-10-14hx tip 1367e19d (#2481 Meet-TAG Prefer → Adjust-TAG LPT-709 Prefer)
+
+- Tip-stable `1367e19d` after #2479 S1–S2 SoftPulse residual product land + #2481 Meet-TAG Prefer. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Prefer NEVER Adjust-TAG SoftPulse residual **LPT-709** re-check: CREDIT→TIGHTER→NO LIGHT still under Respect-only — still To Do (Relates LPT-294). Companion cite checkpoint **LPT-710** still To Do. Successors content-driven; densify PRESENT; curriculum LPT-294 Done — do not clone.
+- Leave In Progress S1–S2 SoftPulse residuals LPT-724…749 alone (#2479). next: NEVER Observe-wide SoftPulse residual **LPT-713**.
