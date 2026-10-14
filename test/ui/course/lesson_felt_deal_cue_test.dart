@@ -33,28 +33,56 @@ void main() {
     );
     var notices = 0;
     controller.addListener(() => notices++);
+    // No-felt unit steps release the gate the same way the runner does.
+    controller.releaseFeltDealIfUntracked();
+    await Future<void>.delayed(Duration.zero);
     expect(controller.feltDealReady, isTrue);
     expect(controller.showTargetCue, isTrue);
+    final noticesAfterRelease = notices;
 
     controller.notifyFeltDealReady(false);
     expect(controller.feltDealReady, isFalse);
     expect(controller.showTargetCue, isFalse);
-    expect(notices, 0);
+    expect(notices, noticesAfterRelease);
     await Future<void>.delayed(Duration.zero);
-    expect(notices, 1);
+    expect(notices, noticesAfterRelease + 1);
 
     controller.notifyFeltDealReady(false);
     await Future<void>.delayed(Duration.zero);
-    expect(notices, 1);
+    expect(notices, noticesAfterRelease + 1);
 
     controller.revealHint();
     expect(controller.hintVisible, isTrue);
     expect(controller.showTargetCue, isFalse);
+    // Hint must stay tappable until SoftPulse can paint (LPT-678).
+    expect(controller.canRequestHint, isTrue);
 
     controller.notifyFeltDealReady(true);
     await Future<void>.delayed(Duration.zero);
     expect(controller.feltDealReady, isTrue);
     expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
+    controller.dispose();
+  });
+
+  test('scaffolded Hint keeps Hint enabled while the deal is unsettled', () {
+    final controller = LessonActivityController(
+      activity: activity(
+        id: 'act-02-03-01-scaffolded-qq',
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.pokerActionSizing,
+      ),
+    );
+    controller.notifyFeltDealReady(false);
+    expect(controller.showTargetCue, isFalse);
+    expect(controller.canRequestHint, isTrue);
+    controller.revealHint();
+    expect(controller.hintVisible, isTrue);
+    expect(controller.showTargetCue, isFalse);
+    expect(controller.canRequestHint, isTrue);
+    controller.notifyFeltDealReady(true);
+    expect(controller.showTargetCue, isTrue);
+    expect(controller.canRequestHint, isFalse);
     controller.dispose();
   });
 
@@ -86,18 +114,21 @@ void main() {
     expect(controller.showTargetCue, isFalse);
 
     controller.bindActivity(guided);
+    // Rebind resets the deal gate; no-felt unit steps release it.
+    controller.releaseFeltDealIfUntracked();
     expect(controller.feltDealReady, isTrue);
     expect(controller.showTargetCue, isTrue);
 
     controller.notifyFeltDealReady(false);
     controller.advanceToNextHandStep();
+    controller.releaseFeltDealIfUntracked();
     expect(controller.feltDealReady, isTrue);
     expect(controller.showTargetCue, isTrue);
     expect(controller.draft.handStepIndex, 1);
     controller.dispose();
   });
 
-  test('scaffolded teaching cues return after the deal, not during it', () {
+  test('scaffolded SoftPulse returns after Hint once the deal lands', () {
     final controller = LessonActivityController(
       activity: activity(
         id: 'act-01-04-01-scaffolded-order',
@@ -105,12 +136,19 @@ void main() {
         renderer: ActivityRenderer.orderSequence,
       ),
     );
+    controller.releaseFeltDealIfUntracked();
+    // Scaffolded SoftPulse stays off until Hint.
+    expect(controller.showTargetCue, isFalse);
+    controller.revealHint();
     expect(controller.showTargetCue, isTrue);
     controller.notifySequentialPressProgress(remainingPressCount: 4);
     controller.consumeSequentialSoftPulse();
-    expect(controller.showTargetCue, isTrue);
+    // Wave closed with Hint able to reopen — SoftPulse off until next Hint.
+    expect(controller.showTargetCue, isFalse);
 
     controller.notifyFeltDealReady(false);
+    expect(controller.showTargetCue, isFalse);
+    controller.revealHint();
     expect(controller.showTargetCue, isFalse);
     controller.notifyFeltDealReady(true);
     expect(controller.showTargetCue, isTrue);

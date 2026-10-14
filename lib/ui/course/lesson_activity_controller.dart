@@ -134,9 +134,16 @@ class LessonActivityController extends ChangeNotifier {
   /// waves (LPT-63). After the learner takes that press (wave closes), Hint
   /// can reopen SoftPulse for the next press when presses remain. When Hint
   /// cannot reopen (no hint text), SoftPulse stays on and Hint stays off.
+  ///
+  /// While the felt is still dealing ([feltDealReady] false), Hint stays
+  /// enabled even after a Hint tap — SoftPulse cannot paint yet, so locking
+  /// Hint would leave a dead dock (Open strong scaffolded LPT-678).
   bool get canRequestHint {
     // SoftPulse already on — do not let Hint stack a second help beat.
     if (showTargetCue) return false;
+    // SoftPulse gated on deal settle — keep Hint available until gold can
+    // paint (hintVisible stays true; SoftPulse turns on when cards land).
+    if (!_feltDealReady) return true;
     if (!hintUsed) return true;
     return sequentialPressesRemaining && !_sequentialSoftPulseWaveOpen;
   }

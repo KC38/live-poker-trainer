@@ -339,17 +339,30 @@ class _FeltTableViewState extends State<FeltTableView> {
     );
   }
 
-  /// Cards + opening folds are in the controller; reveal animation may still
-  /// be playing on the last card.
-  bool get _dealControllerReady =>
-      widget.game.isHandOver ||
-      (_deal.isComplete && _actions.openingBatchComplete);
+  /// SoftPulse / Hint rings wait on the **teaching** cards only.
+  ///
+  /// Hero holes + board — not every villain hole-back in a six-max deal.
+  /// Waiting for all seats left Open strong SoftPulse dead for seconds after
+  /// Hint while Hint was already locked (LPT-678 / LPT-679).
+  bool get _softPulseCardsReady {
+    if (widget.game.isHandOver) return true;
+    final players = widget.game.players;
+    final dealHoles =
+        widget.showHoleCardBacks ||
+        players.any((player) => player.holeCards.isNotEmpty);
+    if (dealHoles) {
+      final heroIndex = players.indexWhere((player) => player.isHero);
+      final seat = heroIndex >= 0 ? heroIndex : 0;
+      if (_deal.holeVisibleAt(seat) < 2) return false;
+    }
+    return _deal.boardVisible >= widget.game.community.length;
+  }
 
   /// SoftPulse / hint rings — only after the last card's reveal settles.
   bool get _cuesReady => _cuesSettled;
 
   void _onDealProgress() {
-    if (!_dealControllerReady) {
+    if (!_softPulseCardsReady) {
       _cueSettleTimer?.cancel();
       _cueSettleTimer = null;
       if (_cuesSettled) {
@@ -375,7 +388,7 @@ class _FeltTableViewState extends State<FeltTableView> {
     }
     _cueSettleTimer?.cancel();
     _cueSettleTimer = Timer(CardDealPace.revealSettle, () {
-      if (!mounted || !_dealControllerReady) return;
+      if (!mounted || !_softPulseCardsReady) return;
       _markCuesSettled();
     });
   }
