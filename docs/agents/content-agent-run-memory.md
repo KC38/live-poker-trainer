@@ -1734,3 +1734,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer bullet tightened (cap 40): next NEVER → `lesson-03-02-01-*` flop-class children.
 - next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-03-02-01-01/02/03` / Low curriculum.
 
+
+## Fold 2026-10-14bl (cd522c93 discovery flop-class split children)
+
+- Tip-stable `cd522c93` (#2248). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only (checklist still **72** — no rebuild).
+- Discovery NEVER Flop-class children:
+  - `lesson-03-02-01-01-made-hands`: `act-03-02-01-explain` SoftPulse MADE→DRAW→SDV→AIR + `explainGrading` **wired**; guided SoftPulse `made-tp` densify PRESENT (`Kh/Qh`·`Ks9d2c` + variants).
+  - `lesson-03-02-01-02-draws-vs-showdown`: scaffolded SoftPulse `nfd` one-per-press densify PRESENT; checkpoint SoftPulse `oesd` hintless densify PRESENT — but `act-03-02-01-02-explain-draws` SoftPulse DRAW→SHOWDOWN VALUE already on **LPT-669** (still ABSENT).
+  - `lesson-03-02-01-03-air`: unguided SoftPulse `air` one-per-press densify PRESENT (Air feedback five-high / no Gutshot-ish) — but `act-03-02-01-03-explain-air` SoftPulse AIR→FOLD EQUITY already on **LPT-669** (still ABSENT).
+- Tip-commented catalog **LPT-669** (no checklist rebuild); Done-ack **LPT-479**/577/414/384/143.
+- Prefer bullet tightened (cap 40): next NEVER → `lesson-03-03-01-*` outs-price children.
+- next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-03-03-01-01/02/03` / Low curriculum.
