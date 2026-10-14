@@ -392,6 +392,35 @@ void main() {
     expect(expected, isNot(contains('seven-two')));
   });
 
+  test(
+    'alignLessonTableCopy keeps Your two cards count when board deuce remaps',
+    () {
+      // LPT-791: template 2c → dealt 3c must not rewrite the count word in
+      // "Your two cards sit at your seat — not the board."
+      const hint = 'Your two cards sit at your seat — not the board.';
+      expect(
+        alignLessonTableCopy(
+          text: hint,
+          templateHero: const ['Ah', 'Kd'],
+          dealtHero: const ['Js', 'Td'],
+          templateBoard: const ['Qs', 'Jh', '2c'],
+          dealtBoard: const ['9h', '8s', '3c'],
+        ),
+        hint,
+      );
+      expect(
+        alignLessonTableCopy(
+          text: 'Tap your hole cards — pick the two in front of you.',
+          templateHero: const ['Ah', 'Kd'],
+          dealtHero: const ['Js', 'Td'],
+          templateBoard: const ['Qs', 'Jh', '2c'],
+          dealtBoard: const ['9h', '8s', '3c'],
+        ),
+        'Tap your hole cards — pick the two in front of you.',
+      );
+    },
+  );
+
   test('alignLessonTableCopy rewrites board codes and spoken ranks/suits', () {
     const prompt = 'Board Ks 9d 2c. You hold Kh Qh. Class?';
     const feedback = 'Pair of kings is already showdown-ready.';
