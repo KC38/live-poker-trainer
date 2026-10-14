@@ -2901,3 +2901,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-07-07-01-*` same-cards-types / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-06-01-*: interactive structural clean on tip except LPT-802 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14fu (71095593 Prefer NEVER same-cards SoftPulse residual LPT-725 re-check)
+
+- Tip-stable `71095593` (#2412 stack SoftPulse Prefer residual LPT-802 on tip after #2411). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-07-07-01-01/02/03/04` under Same-hand / Replay-by-type unit:
+  - first-child `act-07-07-01-explain` SoftPulse CARDS→MODELS→CITE + `explainGrading` "Cards → Models → Cite." still pre-split under station-value (objective still unit string) → residual **LPT-725** still To Do (needs-human; Relates LPT-330; do not clone Duplicate LPT-728).
+  - checkpoint `act-07-07-01-checkpoint` SoftPulse `base` kind `none` under baseline-without-evidence matches — *no companion residual*.
+  - successors TAG CHECK-RAISE→CAREFUL / LAG BARREL→CALL / NO EVIDENCE→BASELINE content-driven; guided SoftPulse `bet` fixed+variants; scaffolded SoftPulse `fold`; unguided SoftPulse `call`.
+- Curriculum **LPT-330** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-725/330/198/216/802; leave open LPT-676…802; leave ui-agent **LPT-797** alone.
+- Prefer next: NEVER `lesson-07-08-01-*` type-board / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669).
+
