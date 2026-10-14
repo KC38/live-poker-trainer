@@ -1730,6 +1730,11 @@ The lesson result uses `RexMascot` for the ceremony. It does not draw a
 letter R. It shows this lesson’s XP and the daily goal before Home. Review
 lessons award 25% of the XP earned.
 
+Finishing the last incomplete lesson of a catalog section shows the
+section-end ceremony after Lesson Complete: `RexMascot` celebrating, the
+section order and title, and one CONTINUE into Home on the next section.
+Reviews of an already-finished section skip it.
+
 The locked Live Training hub names the Home lesson that unlocks it for
 signed-in learners. It does not say Section 2. Anonymous guests see
 **Create an account before Live Training.** (not Baseline jump check) with
@@ -1750,6 +1755,12 @@ goal (LPT-39). When goal minutes are unknown, the second card shows
 accepted accuracy. Embedded CONTINUE (`standalone: false`) calls
 `continueLearningAsGuest` when the anonymous draft is still pre-shell so
 AppRoot remounts Home instead of Welcome (LPT-70).
+
+`SectionCompleteScreen` (`lib/ui/screens/section_complete_screen.dart`) is
+the section-end ceremony (LPT-793). `LessonResultScreen` CONTINUE
+push-replaces it when `completedSection` is set; the runner fills that from
+`CourseCatalog.sectionNewlyCompletedByLesson`. The next section-payoff
+screen copies Rex celebrate + one elevated CONTINUE.
 
 The locked Live Training hub copy for signed-in course-locked learners is
 `liveTrainingLockedMessage` (`lib/models/live_access.dart`), which names
@@ -1802,8 +1813,6 @@ past this list.
   teach-by-doing gap when the answer can live on the felt.
 - **Older lesson layouts.** Steps still on `LessonActionSpot` or
   `LessonTableScene` instead of `LessonTableStage`.
-- **Section end ceremony.** Finishing a section has no character, title,
-  one-button ceremony (frame `128.png`).
 - **Gems do nothing on tap.** The status strip shows the balance, but there
   is no shop or explanation. The plan is the gem economy rollout (wallet,
   more ways to earn, a Gem Shop, Streak Freeze).
