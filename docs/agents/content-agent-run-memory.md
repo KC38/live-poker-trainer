@@ -1830,3 +1830,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: NEVER `lesson-05-01-01-01/02/03` / S5–S6 NEVER / Low curriculum.
 - act-04-05-01-*: interactive structural clean on tip except curriculum residual LPT-677; SoftPulse explain successors via LPT-669 content-driven; guided is `deal.mode` `none` outcome tiles — do not file handFamily.
 
+
+## Fold 2026-10-14bu (f25ed146 discovery multiway-ranges split children)
+
+- Tip-stable `f25ed146` (#2268 SPR learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat; densify-tap still **0** — no LPT-628 reopen. Open Medium catalog parent **none**.
+- Discovery NEVER multiway-ranges children:
+  - `lesson-05-01-01-01-nut-potential`: first-child `act-05-01-01-explain` SoftPulse NUTTED→AIR→DOMINATION content-driven + `explainGrading`; guided SoftPulse `nfd` densify PRESENT (`deal.mode` `none` — outcome tiles, no handFamily); checkpoint SoftPulse `nuts` hintless cue kind `none` densify PRESENT.
+  - `lesson-05-01-01-02-tighten-speculative`: `act-05-01-01-02-explain-speculative` SoftPulse MULTIWAY→OOP→FOLD content-driven; scaffolded SoftPulse `fold-76` one-per-press PRESENT (`7h/6h` +2 suit variants matching Dart).
+  - `lesson-05-01-01-03-thick-value`: `act-05-01-01-03-explain-value` SoftPulse CALLERS→SET→BET content-driven; unguided SoftPulse `bet-set` one-per-press PRESENT (`9h/9d`·`9s/8c/7h` +2 variants).
+- Do **not** reopen LPT-669. Curriculum **LPT-224** Done — do not clone; no residual (checkpoint nuts-priority matches Prefer nut potential).
+- Tip-commented LPT-224 + Done-ack LPT-222/223/456/595/600/593/513/625/627/628/635/667/669.
+- Prefer bullet tightened: next NEVER → `lesson-05-02-01-*` deep-stack children.
+- next: NEVER `lesson-05-02-01-01/02/03` / S5–S6 NEVER / Low curriculum.
+- act-05-01-01-*: interactive structural clean on tip; SoftPulse explain successors via LPT-669 content-driven; guided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
