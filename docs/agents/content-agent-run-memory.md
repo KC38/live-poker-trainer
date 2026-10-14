@@ -1692,3 +1692,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog **LPT-669** (no checklist rebuild); Done-ack **LPT-127**/125/126/671 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid; left **LPT-672** In Progress.
 - Prefer bullet tightened (cap 40): next NEVER → `lesson-02-05-01-*` stack children.
 - next: **LPT-669** SoftPulse explain Dart maps OR next NEVER `lesson-02-05-01-01/02/03` / Low curriculum.
+
+## Fold 2026-10-14bh (2e42d603 discovery effective-stacks split children)
+
+- Tip-stable `2e42d603` (#2245). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only (checklist still **46** — no rebuild); **LPT-672** Done.
+- Discovery NEVER Effective-stacks children:
+  - `lesson-02-05-01-01-chips-to-bb`: `act-02-05-01-explain-bb` SoftPulse CHIPS→BB→SHORTER→DEPTH + `explainGrading` **wired** (`bbStackDepth`); guided-convert SoftPulse `bb-100` densify PRESENT; checkpoint-200 hintless densify PRESENT.
+  - `lesson-02-05-01-02-shorter-stack`: scaffolded-eff one-per-press SoftPulse `eff-60` densify PRESENT — but `act-02-05-01-02-explain-eff` SoftPulse SHORTER→EFFECTIVE already on **LPT-669** (still ABSENT).
+  - `lesson-02-05-01-03-stack-depth`: unguided-depth one-per-press SoftPulse `depth-50` densify PRESENT — but `act-02-05-01-03-explain-depth` SoftPulse 50BB→100BB→200BB already on **LPT-669** (still ABSENT).
+- Tip-commented catalog **LPT-669** (no checklist rebuild); Done-ack **LPT-130**/128/672 + parents/348/216/667.
+- Prefer bullet tightened (cap 40): next NEVER → `lesson-02-06-01-*` live-habits children.
+- next: **LPT-669** SoftPulse explain Dart maps OR next NEVER `lesson-02-06-01-01/02/03` / Low curriculum.
