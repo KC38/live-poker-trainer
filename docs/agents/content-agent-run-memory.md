@@ -3006,3 +3006,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-690/691/250/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone. Rescued after conflicting draft #2426.
 - Prefer next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gf (c5f73f71 Prefer NEVER Range SoftPulse residual LPT-692 re-check)
+
+- Tip-stable `c5f73f71` (#2427 Session SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Range SoftPulse residual re-check `lesson-06-01-01-01/02/03`: first-child SoftPulse RANGE→NUT→ADVANTAGE + Dart `RangeAdvantageDemo` / layout "Tap Range, Nut, and Advantage." still pre-split under range-advantage-only → residual **LPT-692** still To Do (needs-human; Relates LPT-254); successors NUTS→PAIRED→CALLER / RANGE→NUTS→BET content-driven (do not reopen LPT-669); guided SoftPulse `pfr` densify PRESENT; scaffolded SoftPulse `caller-nuts` one-per-press PRESENT; unguided SoftPulse `cbet` map PRESENT (fixed AhKd/Kc7s2d + 2 suit variants); checkpoint SoftPulse `press` kind `none` densify PRESENT (matches press-both — no companion residual).
+- Curriculum **LPT-254** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-692/254/198/216/694/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-01-01-*: interactive structural clean on tip except LPT-692 SoftPulse residual; SoftPulse explain successors content-driven; guided/scaffolded/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
