@@ -109,11 +109,10 @@ Lesson-specific pattern notes (full history) live in
   `isTableRegionTapActivity` + `resolveCoachDialogueVisual` — first-child
   reuses the wired explain id; `*-02-*`/`*-03-*` often author cues only
   (Continue, not SoftPulse walk) → **LPT-669** (Hand-ranks `02/03`
-  tip `01eacc7c`; Kickers `02/03` + Fold/check/call `02/03` tip
-  `bd4a6f0b`; Bet/raise/all-in `02/03` tip `05892395`). Append
-  checklists; Done sibling clones (skip In Progress).
-  Next NEVER walk: `lesson-01-04-01-*` streets/order children (still
-  unwired explains on LPT-669).
+  tip `01eacc7c`; Kickers/FCC/BRA `02/03` + Streets `02/03` tip
+  `05892395`/`2bcc97fe`). Append checklists; Done sibling clones
+  (skip In Progress). Next NEVER walk: `lesson-01-05-01-*` winning-pots
+  children (still unwired explains on LPT-669).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -157,6 +156,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14ba: Tip-stable `2bcc97fe` (#2229). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only. Discovery NEVER Streets/acting-order children: first-child `act-01-04-01-explain-streets` SoftPulse PREFLOP→FLOP→TURN→RIVER **wired**; successors `act-01-04-01-02-explain-order` (BIG BLIND→CLOCKWISE→BUTTON) + `act-01-04-01-03-explain-end` (BETS MATCHED→NEXT STREET) cues+`explainGrading` but Dart table-tap/visual ABSENT → **LPT-669**; guided-streets SoftPulse four presses; scaffolded-order one-per-press 1–4; unguided-end one-per-press; checkpoint-postflop hintless densify PRESENT. Tip-commented **LPT-669**; Done-ack LPT-103/101/102 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-01-05-01-*` winning-pots / Low curriculum.
 - 2026-10-14az: Tip-stable `05892395` (#2228). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only. Discovery NEVER Bet/raise/all-in children: first-child `act-01-03-02-explain-aggro` SoftPulse BET→RAISE→ALL-IN **wired**; successors `act-01-03-02-02-explain-raise` (FACING BET→RAISE) + `act-01-03-02-03-explain-allin` (STACK→ALL-IN) cues+`explainGrading` but Dart table-tap/visual ABSENT → **LPT-669**; guided-bet top_pair SoftPulse `bet-half` PRESENT; scaffolded-raise/unguided-allin one-per-press OK; checkpoint-names hintless cue kind `none`. Tip-commented **LPT-669**; Done-ack LPT-100/98/99/591. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-01-04-01-*` streets/order / Low curriculum.
 - 2026-10-14ay: Tip-stable `bd4a6f0b` (#2226). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only. Discovery NEVER Fold/check/call children: first-child `act-01-03-01-explain-passive` SoftPulse FOLD→CHECK→CALL **wired**; successors `act-01-03-01-02-explain-check` (NO BET→CHECK) + `act-01-03-01-03-explain-call` (BET→CALL) cues+`explainGrading` but Dart table-tap/visual ABSENT → **LPT-669**; guided-fold trash/offsuit SoftPulse `fold-72` PRESENT; scaffolded-check/unguided-call one-per-press OK; checkpoint-legal hintless cue kind `none`. Tip-commented **LPT-669**; Done-ack LPT-96/94/95. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-01-03-02-*` bet/raise/all-in / Low curriculum.
 - 2026-10-14ax: Tip-stable `bd4a6f0b` (#2226). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only (SHA audited cleaned off broken `{{{{14d32fb9}}}}`). Discovery NEVER Kickers children: first-child `act-01-02-02-explain-five` SoftPulse **wired**; successors `act-01-02-02-02-explain-kicker` (SAME PAIR→KICKER) + `act-01-02-02-03-explain-board` (BOARD→CHOP) cues+`explainGrading` but Dart table-tap/visual ABSENT → **LPT-669**; guided-seven/checkpoint-build/scaffolded-kicker/unguided-board structural OK (one-per-press + densify/pulse-map where SI). Tip-commented **LPT-669**; Done-ack LPT-93/91/92 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid (no `needs-human` re-add). next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-01-03-01-*` fold/check/call / Low curriculum.
