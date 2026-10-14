@@ -110,7 +110,7 @@ Lesson-specific pattern notes (full history) live in
   `isTableRegionTapActivity` uses `authoredSoftPulseTargets` (authored
   `soft_pulse` cues) so successors stay walks without a per-id
   allowlist; do **not** reopen LPT-669 or re-file Dart map clones when
-  cues + `explainGrading` are present.   Pre-Done checklist history (S1
+  cues + `explainGrading` are present. Pre-Done checklist history (S1
   16 → S2 32 → S3 46 → S4 72) is closed. Next NEVER walk:
   `lesson-04-01-01-*` ranges children / remaining S4–S5 NEVER /
   Low curriculum.
