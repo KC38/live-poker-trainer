@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "424cc4e357978e1f68a969762e91b6874409327440b37f6a34ed377cac935c96",
+  "contentChecksum": "4690175cb5dcc26f45bee23f211d879173bb7433ed2ce0d8234c5fcc241207f0",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -847,6 +847,24 @@
                         "press": 4,
                         "target": "spades",
                         "kind": "soft_pulse"
+                      }
+                    ],
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Find a heart on the board."
+                      },
+                      {
+                        "press": 2,
+                        "text": "Next, find a diamond."
+                      },
+                      {
+                        "press": 3,
+                        "text": "Then a club."
+                      },
+                      {
+                        "press": 4,
+                        "text": "Finish with a spade."
                       }
                     ]
                   }

@@ -859,17 +859,21 @@ String? lessonFrameHintFallback(
   bool isReview = false,
   int bindGeneration = 0,
 }) {
-  if (lessonFrameHintsDisabled(activity, isReview: isReview)) return null;
-
+  // Authored Dart tips run before [lessonFrameHintsDisabled] so SoftPulse-on
+  // explains still have a stable line for review / speech — canHint stays
+  // gated by hintsDisabled separately.
   if (activity.id == 'act-01-01-01-explain-hole-cards') {
     return 'Your two cards are at your seat, along the bottom of the table.';
   }
 
-  // Coach-dialogue guided steps already speak the teach line in the bubble.
-  // Reviews still need a fallback so Hint can unlock quiet SoftPulse.
-  if (activity.renderer == ActivityRenderer.coachDialogue && !isReview) {
-    return null;
+  // Suits explain: catalog accessibilityText is the completion line
+  // ("You found all four suits…"). Never use that as Hint — SoftPulse-quiet
+  // review / Hint-reopen must show a per-press suit tip (LPT-813).
+  if (activity.id == 'act-01-01-02-explain-suits') {
+    return 'Find a heart on the board.';
   }
+
+  if (lessonFrameHintsDisabled(activity, isReview: isReview)) return null;
 
   // Hand ranks showdown-order: seat roles shuffle; catalog accessibility
   // still names authored You/Sam/Jo classes. Build Hint from the deal.
@@ -887,7 +891,9 @@ String? lessonFrameHintFallback(
     );
   }
 
-  // Prefer authored teachSpec press hints when present.
+  // Prefer authored teachSpec press hints when present (including
+  // coach_dialogue review SoftPulse unlock — checked before the early
+  // null return below).
   final teachHints = activity.teachSpec?['pressHints'];
   if (teachHints is List && teachHints.isNotEmpty) {
     final first = teachHints.first;
@@ -901,6 +907,12 @@ String? lessonFrameHintFallback(
         );
       }
     }
+  }
+
+  // Coach-dialogue guided steps already speak the teach line in the bubble.
+  // Reviews still need a fallback so Hint can unlock quiet SoftPulse.
+  if (activity.renderer == ActivityRenderer.coachDialogue && !isReview) {
+    return null;
   }
 
   // Plan the turn scaffolded: isomorphic remap can deal AT/AJ under the AK
