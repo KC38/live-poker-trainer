@@ -580,6 +580,36 @@ advance_functions_deploy_marker_if_unchanged() {
   log "functions unchanged since ${last:0:8}; advanced deploy marker to ${tip:0:8}"
 }
 
+# True when marker is behind tip and functions/ or firebase.json drifted.
+functions_deploy_needed() {
+  local dir tip last
+  dir="$(primary)"
+  tip="$(git -C "$dir" rev-parse origin/main 2>/dev/null || true)"
+  [[ -n "$tip" ]] || return 1
+  [[ -s "$FUNCTIONS_DEPLOYED_SHA_FILE" ]] || return 1
+  last="$(tr -d '[:space:]' <"$FUNCTIONS_DEPLOYED_SHA_FILE")"
+  [[ -n "$last" && "$last" != "$tip" ]] || return 1
+  git -C "$dir" rev-parse -q --verify "${last}^{commit}" >/dev/null 2>&1 || return 1
+  ! git -C "$dir" diff --quiet "$last" "$tip" -- functions firebase.json 2>/dev/null
+}
+
+# During empty-queue idle, ticket merges (e.g. LPT-348 course_bank) can leave
+# production functions stale until a human/health timer notices. Deploy from
+# the make-change script (detached worktree; does not dirty PRIMARY).
+deploy_functions_if_needed() {
+  local script
+  script="$(cd "$TOOLS/.." && pwd)/.cursor/skills/make-change/scripts/deploy-functions.sh"
+  [[ -x "$script" ]] || return 0
+  functions_deploy_needed || return 0
+  log "functions/ changed since deploy marker; deploying during empty-queue idle"
+  if bash "$script"; then
+    log "functions deploy finished during empty-queue idle"
+    return 0
+  fi
+  log "functions deploy failed during empty-queue idle (will retry next cycle)"
+  return 1
+}
+
 sim_lock() {
   python3 "$TOOLS/sim_lock.py" "$@"
 }
@@ -2440,6 +2470,9 @@ one_run() {
     log "ui-queue empty (no actionable ui-agent ticket); skipping this run"
     record_idle_skip empty-queue "" "$EMPTY_QUEUE_SLEEP"
     advance_functions_deploy_marker_if_unchanged || true
+    # Ticket merges during idle can drift functions/ while marker advance
+    # only covers the unchanged case — deploy so production stays current.
+    deploy_functions_if_needed || true
     return 16
   fi
   if ! logged_in; then

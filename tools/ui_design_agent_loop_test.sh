@@ -1302,6 +1302,8 @@ grep -q 'streamed above' "$ROOT/tools/ui-agent-sdk/run.mjs" \
 )
 grep -q 'advance_functions_deploy_marker_if_unchanged' "$LOOP" \
   || fail "empty-queue skip must advance functions deploy marker when unchanged"
+grep -q 'deploy_functions_if_needed' "$LOOP" \
+  || fail "empty-queue skip must call deploy_functions_if_needed when functions drifted"
 (
   # Marker behind tip, functions/ identical → advance; functions/ drift → leave.
   deploy_tmp="$tmp/advance-deploy-marker"
@@ -1333,6 +1335,36 @@ grep -q 'advance_functions_deploy_marker_if_unchanged' "$LOOP" \
   advance_functions_deploy_marker_if_unchanged
   [[ "$(tr -d '[:space:]' <"$STATE_DIR/functions-deployed-sha")" == "$old" ]] \
     || fail "marker must not advance when functions/ drifted"
+  # functions_deploy_needed reflects drift; deploy_functions_if_needed invokes
+  # the make-change script only when needed (stub the script path via TOOLS).
+  functions_deploy_needed || fail "functions_deploy_needed should be true after drift"
+  echo "$tip2" >"$STATE_DIR/functions-deployed-sha"
+  functions_deploy_needed && fail "functions_deploy_needed should be false at tip"
+  echo "$old" >"$STATE_DIR/functions-deployed-sha"
+  mkdir -p "$tmp/fake-make-change/scripts"
+  cat >"$tmp/fake-make-change/scripts/deploy-functions.sh" <<'EOS'
+#!/usr/bin/env bash
+echo "stub-deploy" >>"${DEPLOY_STUB_LOG:?}"
+exit 0
+EOS
+  chmod +x "$tmp/fake-make-change/scripts/deploy-functions.sh"
+  # deploy_functions_if_needed resolves script from TOOLS/../.cursor/skills/make-change
+  mkdir -p "$tmp/fake-repo/.cursor/skills/make-change/scripts"
+  cp "$tmp/fake-make-change/scripts/deploy-functions.sh" \
+    "$tmp/fake-repo/.cursor/skills/make-change/scripts/deploy-functions.sh"
+  TOOLS="$tmp/fake-repo/tools"
+  mkdir -p "$TOOLS"
+  DEPLOY_STUB_LOG="$tmp/deploy-stub.log"
+  export DEPLOY_STUB_LOG
+  rm -f "$DEPLOY_STUB_LOG"
+  deploy_functions_if_needed || fail "deploy_functions_if_needed should succeed with stub"
+  grep -q stub-deploy "$DEPLOY_STUB_LOG" \
+    || fail "deploy_functions_if_needed must invoke deploy script on drift"
+  echo "$tip2" >"$STATE_DIR/functions-deployed-sha"
+  rm -f "$DEPLOY_STUB_LOG"
+  deploy_functions_if_needed || fail "deploy_functions_if_needed no-op at tip"
+  [[ ! -f "$DEPLOY_STUB_LOG" ]] \
+    || fail "deploy_functions_if_needed must not invoke script when marker current"
   echo "empty-queue advance deploy marker ok"
 )
 (
