@@ -119,7 +119,9 @@ const _lines = <String, String>{
   // LPT-734: SoftPulse-off densify — no correct-tile spoil.
   'act-05-03-01-checkpoint':
       'Implied odds rise most when — tap the matching condition.',
-  'act-05-04-01-checkpoint': 'Same hand, different types — pick The line — only when the authored read justifies it.',
+  // LPT-736: SoftPulse-off densify — no correct-tile spoil.
+  'act-05-04-01-checkpoint':
+      'Same hand, different types — tap the matching change.',
   'act-05-05-01-guided':
       'Nit check-raises flop. Default read — pick Value-heavy — respect.',
   'act-05-05-01-unguided': 'BB donks large on A-high dry flop into PFR. Meaning — pick Often polarized — strong or bluff.',

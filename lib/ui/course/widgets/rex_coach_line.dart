@@ -458,8 +458,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // (LPT-734; same class as LPT-735 / LPT-723 / LPT-717 / LPT-672 / LPT-653).
     'act-05-03-01-checkpoint' =>
       'Implied odds rise most when — tap the matching condition.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name The line / authored read in the idle bubble (LPT-736; same class
+    // as LPT-734 / LPT-735 / LPT-723 / LPT-717 / LPT-672 / LPT-653).
     'act-05-04-01-checkpoint' =>
-      'Same hand, different types — pick The line — only when the authored read justifies it.',
+      'Same hand, different types — tap the matching change.',
     'act-05-05-01-guided' =>
       'Nit check-raises flop. Default read — pick Value-heavy — respect.',
     'act-05-05-01-unguided' =>
