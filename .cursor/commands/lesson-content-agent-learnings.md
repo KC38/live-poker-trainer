@@ -297,8 +297,26 @@ Lesson-specific pattern notes (full history) live in
   scaffolded SoftPulse `sticky` densify PRESENT + unguided SoftPulse
   `low-conf` densify PRESENT + checkpoint SoftPulse `bundle` kind `none`
   (evidence-bundle note under Tag low folding on LPT-761); curriculum
-  LPT-186 Done — do not clone / do not re-add needs-human; next: NEVER
-  `lesson-04-06-02-*` Meet Station / Low residuals LPT-676…761.
+  LPT-186 Done — do not clone / do not re-add needs-human; tip `49e27b42`
+  Prefer NEVER Meet Station: SoftPulse STATION→HIGH→LOW under Introduce
+  **concept-aligned**; scaffolded SoftPulse `model` working-model meta
+  under Introduce → **LPT-767** (needs-human; Relates LPT-189; sibling
+  TAG working-model **LPT-708**); successors STICKY CALLS→RARE FOLDS /
+  SAMPLE→CONFIDENCE content-driven; guided SoftPulse `pt-station` +
+  unguided SoftPulse `station2` densify PRESENT + checkpoint SoftPulse
+  `low` kind `none` densify PRESENT; curriculum LPT-189 Done — do not
+  clone / do not re-add needs-human; race SoftPulse clone LPT-762 Done
+  Duplicate of LPT-761; tip `49e27b42` Prefer NEVER observe-narrow:
+  SoftPulse RARE→ENTER→MEAN IT under Tag narrow entry → **LPT-768**
+  (needs-human; Relates LPT-195; sibling Sticky SoftPulse **LPT-761**);
+  successors RARE ENTRY→BIG AGGRESSION / TWO FOLDS→MORE HANDS
+  content-driven; guided SoftPulse `narrow` + scaffolded SoftPulse
+  `strong-aggr` densify PRESENT + unguided SoftPulse `wait` densify
+  PRESENT + checkpoint SoftPulse `bundle-nit` kind `none` (evidence-bundle
+  note under Tag strong aggression on LPT-768); curriculum LPT-195 Done —
+  do not clone / do not re-add needs-human; distinct from Station
+  working-model LPT-767 / Selective SoftPulse LPT-706; next: NEVER
+  `lesson-04-07-02-*` Meet Nit / Low residuals LPT-676…768.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -342,6 +360,8 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14ee: Tip-stable `49e27b42` (#2355 tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER observe-narrow children `lesson-04-07-01-01/02/03`: SoftPulse RARE→ENTER→MEAN IT + Dart `TightSeatsDemo` under Tag narrow entry → **LPT-768** (needs-human; Relates LPT-195; sibling Sticky **LPT-761**); successors RARE ENTRY→BIG AGGRESSION / TWO FOLDS→MORE HANDS content-driven; guided SoftPulse `narrow` + scaffolded SoftPulse `strong-aggr` densify PRESENT + unguided SoftPulse `wait` densify PRESENT + checkpoint SoftPulse `bundle-nit` kind `none` (evidence-bundle note under Tag strong aggression on LPT-768). Curriculum **LPT-195** Done — do not clone / do not re-add needs-human; distinct from Station working-model **LPT-767** / Selective SoftPulse **LPT-706**. Tip-commented LPT-768/195/767 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…768. next: NEVER `lesson-04-07-02-*` Meet Nit / Low residuals LPT-676…768.
+- 2026-10-14ed: Tip-stable `49e27b42` (#2355 observe-sticky SoftPulse residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Meet Station children `lesson-04-06-02-01/02/03`: SoftPulse STATION→HIGH→LOW under Introduce **concept-aligned** (no SoftPulse residual); scaffolded SoftPulse `model` working-model meta under Introduce → **LPT-767** (needs-human; Relates LPT-189; sibling TAG **LPT-708**); successors STICKY CALLS→RARE FOLDS / SAMPLE→CONFIDENCE content-driven; guided SoftPulse `pt-station` + unguided SoftPulse `station2` densify PRESENT + checkpoint SoftPulse `low` kind `none` densify PRESENT. Curriculum **LPT-189** Done — do not clone / do not re-add needs-human; race SoftPulse clone **LPT-762** Done Duplicate of **LPT-761**. Tip-commented LPT-767/189/761/708 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…767 (leave ui-agent In Progress LPT-763…766 alone). next: NEVER `lesson-04-07-01-*` observe-narrow / Low residuals LPT-676…767.
 - 2026-10-14ec: Tip-stable `ddb7c781` (#2354 SPR SoftPulse residual re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER observe-sticky children `lesson-04-06-01-01/02/03`: SoftPulse ENTERS→CALLS→FOLDS under Tag-high-participation-only → **LPT-761** (needs-human; Relates LPT-186); successors FOLDS TO BETS→STICKY / OBSERVATION→SAMPLES content-driven; guided SoftPulse `high-part` densify PRESENT (`deal.mode` `none`) + scaffolded SoftPulse `sticky` densify PRESENT + unguided SoftPulse `low-conf` densify PRESENT + checkpoint SoftPulse `bundle` kind `none` hintless (evidence-bundle note under Tag low folding). Curriculum **LPT-186** Done — do not clone / do not re-add needs-human; distinct from Observe-wide **LPT-713** / Adjust Station **LPT-732**. Tip-commented LPT-761/186/677 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…761. next: NEVER `lesson-04-06-02-*` Meet Station / Low residuals LPT-676…761.
 - 2026-10-14eb: Tip-stable `43daea2a` (#2353 sizing SoftPulse residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER SPR children `lesson-04-05-01-01/02/03`: SoftPulse SPR→LOW→HIGH packs depth labels under Estimate (expected); successors LOW SPR→COMMIT / HIGH SPR→FLEXIBLE content-driven; guided SoftPulse `spr-4` densify PRESENT (`deal.mode` `none`) + scaffolded SoftPulse `commit` one-per-press + unguided SoftPulse `flexible` one-per-press + checkpoint SoftPulse `before` kind `none` hintless — residual weigh-SPR habit under Estimate stays **LPT-677** (needs-human; Relates LPT-182). Curriculum **LPT-182** Done — do not clone / do not re-add needs-human; no new SoftPulse residual. Tip-commented LPT-677/182/676 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…760. next: NEVER `lesson-04-06-01-*` observe-sticky / Low residuals LPT-676…760.
 - 2026-10-14ea: Tip-stable `a0032775` (continuation SoftPulse concept-aligned learnings on tip #2352). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER sizing children `lesson-04-04-01-01/02/03`: SoftPulse VALUE→PRESSURE→SIZE under still-merged Value objective (packs both — expected); successors NEARBY→STORY / TINY→VALUE content-driven; guided SoftPulse `half` fixed+2 variants + scaffolded SoftPulse `big` one-per-press + unguided SoftPulse `soft` densify PRESENT + checkpoint SoftPulse `bad-1` kind `none` hintless — residual polar scaffolded under Nearby stays **LPT-676** (needs-human; Relates LPT-179). Curriculum **LPT-179** Done — do not clone / do not re-add needs-human; no new SoftPulse residual. Tip-commented LPT-676/179/760 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…760. next: NEVER `lesson-04-05-01-*` SPR / Low residuals LPT-676…760.
