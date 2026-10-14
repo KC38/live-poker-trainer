@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Shared usage lock for the one agent simulator (iPhone 13 mini).
 
-Every agent that boots, runs, restarts, installs, taps, types into, or
-screenshots the mini holds this lock first. The lock is a JSON file outside
-the git tree so every checkout and worktree sees the same one:
+Every agent that boots, runs, restarts, installs, taps, types into,
+screenshots, or records video of the mini holds this lock first. The lock
+is a JSON file outside the git tree so every checkout and worktree sees
+the same one:
 
     ~/.live-poker-trainer/simulator-lock.json   (current holder, or free)
     ~/.live-poker-trainer/simulator-lock.log    (claim / release history)
