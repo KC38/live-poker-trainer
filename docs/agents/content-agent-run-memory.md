@@ -3227,3 +3227,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-stable `005a144a` after #2460 Sizing placement Prefer LPT-676. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
 - Prefer NEVER Estimate SoftPulse residual **LPT-681** re-check: IMPLIED→REVERSE→SECOND still under estimate-only — still To Do needs-human (Relates LPT-230). Successors content-driven; densify PRESENT; curriculum LPT-230 Done — do not clone.
 - next: NEVER Thin SoftPulse residual **LPT-682** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
+## Fold 2026-10-14hh tip 5c40b53d (#2461 Estimate Prefer → Thin LPT-682 Prefer)
+
+- Tip-stable `5c40b53d` after #2461 Estimate SoftPulse Prefer LPT-681. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Prefer NEVER Thin SoftPulse residual **LPT-682** re-check: THIN→CATCH→BARRELS still under thin-value-only — still To Do needs-human (Relates LPT-233). Successors content-driven; densify PRESENT; curriculum LPT-233 Done — do not clone.
+- next: NEVER Lines SoftPulse residual **LPT-684** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
