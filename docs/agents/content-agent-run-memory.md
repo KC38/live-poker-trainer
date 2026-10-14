@@ -1663,3 +1663,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer bullet tightened (cap 40): next NEVER → `lesson-02-03-01-*` open-fold children; LPT-669 checklist **32**.
 - next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-02-03-01-01/02/03` / Low curriculum.
 - act-02-02-01-*: interactive SI clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-121 Done.
+
+
+## Fold 2026-10-14bf (c83ff628 discovery open-fold split + LPT-669 S3 rebuild)
+
+- Tip mid-run `219cf150`→`c83ff628` (#2239 S3 postflop `lessonSplitMap` batch LPT-143/146/151/154/157/160/163). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** rebuilt **32→46** (+14 S3 SoftPulse explain successors: flop-class / outs-price / flop-line / turn / river / multiway / leaks) + ui-agent densify-spoil **LPT-672**.
+- Discovery NEVER Open/fold children:
+  - `lesson-02-03-01-01-fold-early-trash`: first-child `act-02-03-01-explain-open` SoftPulse EARLY→BUTTON→LIVE 3x **wired** (table-tap + visual `openRange`); guided-utg `random_in_class` trash/offsuit SoftPulse `fold` PRESENT.
+  - `lesson-02-03-01-02-open-strong`: `act-02-03-01-02-explain-strong` SoftPulse STRONG→LIVE SIZE + `explainGrading` **not** in Dart → **LPT-669**; scaffolded-qq pair one-per-press SoftPulse `open-qq` PRESENT; checkpoint-hj broadway/offsuit hintless cue kind `none` (`open-ato`).
+  - `lesson-02-03-01-03-widen-button`: `act-02-03-01-03-explain-button` SoftPulse BUTTON→WIDER **not** in Dart → **LPT-669**; unguided-btn high_card/suited one-per-press SoftPulse `open-k9s` PRESENT.
+- Densify N/A (`poker_action_sizing`). Primary-family `random_in_class` without distractor variants matches LPT-627 — do not reopen. Curriculum split **LPT-124** Done — do not clone.
+- Tip-commented + rebuilt catalog **LPT-669**; Done-ack **LPT-124**/122/123/362/379/557/592 + S3 splits LPT-143/146/151/154/157/160/163 + parents/348/216; Meet Nit **LPT-198** re-verify still valid (do not re-add `needs-human`).
+- Prefer bullet tightened (cap 40): next NEVER → `lesson-02-04-01-*` vs-open children; LPT-669 checklist **46**.
+- next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-02-04-01-01/02/03` / Low curriculum.
+- act-02-03-01-*: interactive poker_action_sizing clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-124 Done.
+- Open-fold / S3 SoftPulse explain: `act-02-03-01-02-explain-strong`, `act-02-03-01-03-explain-button`, `act-03-02-01-02-explain-draws`, `act-03-02-01-03-explain-air`, `act-03-03-01-02-explain-price`, `act-03-03-01-03-explain-implied`, `act-03-04-01-02-explain-cbet`, `act-03-04-01-03-explain-plan`, `act-03-05-01-02-explain-barrel`, `act-03-05-01-03-explain-delay`, `act-03-06-01-02-explain-bluff`, `act-03-06-01-03-explain-catch`, `act-03-07-01-02-explain-crowd`, `act-03-07-01-03-explain-nuts`, `act-03-08-01-02-explain-price`, `act-03-08-01-03-explain-passive` → catalog **LPT-669**.
