@@ -4118,6 +4118,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; explain/checkpoint `deal.mode` `none` — do not file handFamily.
 
+## Fold 2026-10-15bh tip 870c93bf (#2593 → weigh-SPR SoftPulse residual LPT-677 Prefer)
+
+- Tip-stable `870c93bf` (#2593 Capstone Prefer + SoftPulse residual LPT-676 on tip after #2591). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync.
+- Prefer NEVER weigh-SPR SoftPulse residual **LPT-677** re-check (`lesson-04-05-01-01/02/03` / `act-04-05-01-*`):
+  - first-child SoftPulse SPR→LOW→HIGH concept-aligned; guided SoftPulse `spr-4` densify PRESENT.
+  - checkpoint SoftPulse `before` kind `none` densify PRESENT (choice "Weigh SPR first") still under Estimate objective → **LPT-677** still To Do (needs-human; Relates LPT-182 — do not re-add needs-human on curriculum).
+  - successors SoftPulse LOW SPR→COMMIT / HIGH SPR→FLEXIBLE content-driven; scaffolded SoftPulse `commit` one-per-press PRESENT; unguided SoftPulse `flexible` one-per-press PRESENT.
+- Curriculum **LPT-182** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-677/182/681/676/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Estimate SoftPulse residual **LPT-681** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-04-05-01-*: interactive structural clean on tip except LPT-677 nesting residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
 ## Fold 2026-10-15bg tip 43d6fa43 (#2591 → Capstone + SoftPulse residual LPT-676 Prefer)
 
 - Tip-stable `43d6fa43` (#2591 Leak SoftPulse Prefer LPT-727 on tip after #2590). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
