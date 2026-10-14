@@ -3151,3 +3151,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ rule **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactives `deal.mode` `none` — do not file handFamily.
 
+## Fold 2026-10-14gx (6fbd04c9 Prefer NEVER Compose SoftPulse residual LPT-795 re-check)
+
+- Tip-stable `6fbd04c9` (#2449 Map SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Compose SoftPulse residual re-check `lesson-07-03-01-01/02/03`: first-child SoftPulse VALUE→BLUFF→HOLD + `explainGrading` "Value → Bluff → Hold." + Dart `RiverCompositionDemo` still pre-split under Choose-river-value-only → residual **LPT-795** still To Do (needs-human; Relates LPT-317 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `rule` kind `none` densify PRESENT under value-only → **LPT-796** still To Do; successors BLOCKER→FEWER CALLS / NO STORY→CHECK content-driven; guided SoftPulse `val` PRESENT (poker_action_sizing densify N/A); scaffolded SoftPulse `block` one-per-press densify PRESENT; unguided SoftPulse `check` one-per-press densify PRESENT; curriculum **LPT-317** Done.
+- Tip-commented LPT-795/796/317/198/216/794/798/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Pot SoftPulse residual **LPT-798** (+ ranges/SPR **LPT-799**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-03-01-*: interactive structural clean on tip except LPT-795 SoftPulse + LPT-796 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint `deal.mode` `none` — do not file handFamily; guided fixed+variants — do not reopen LPT-627.
+
