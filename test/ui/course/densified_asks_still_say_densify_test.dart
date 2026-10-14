@@ -132,7 +132,9 @@ const _lines = <String, String>{
       'Villain bets flop, checks turn. Range now — pick Capped — fewer nuts.',
   'act-05-06-01-unguided':
       'Best line-reading habit — pick Rebuild after every action.',
-  'act-05-06-01-checkpoint': 'Check-raise flop, bet turn, shove river usually means — pick Uncapped — respect unless type says otherwise.',
+  // LPT-745: SoftPulse-off densify — no correct-tile spoil.
+  'act-05-06-01-checkpoint':
+      'Check-raise flop, bet turn, shove river usually means — tap the matching range.',
   'act-05-07-01-guided': 'Instant river shove after you bet. Correct framing — pick Soft evidence.',
   'act-05-07-01-scaffolded':
       'Tiny flop bet into a huge pot often says — pick Weaker / blocking.',

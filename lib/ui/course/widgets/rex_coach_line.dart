@@ -477,8 +477,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Villain bets flop, checks turn. Range now — pick Capped — fewer nuts.',
     'act-05-06-01-unguided' =>
       'Best line-reading habit — pick Rebuild after every action.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Uncapped / respect unless type in the idle bubble (LPT-745; same
+    // class as LPT-744 / LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 /
+    // LPT-717 / LPT-672 / LPT-653).
     'act-05-06-01-checkpoint' =>
-      'Check-raise flop, bet turn, shove river usually means — pick Uncapped — respect unless type says otherwise.',
+      'Check-raise flop, bet turn, shove river usually means — tap the matching range.',
     'act-05-07-01-guided' =>
       'Instant river shove after you bet. Correct framing — pick Soft evidence.',
     'act-05-07-01-scaffolded' =>
