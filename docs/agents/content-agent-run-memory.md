@@ -3691,3 +3691,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-721/306/718/719/790/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER preflop-to-flop SoftPulse residual **LPT-790** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-13-01-*: interactive structural clean on tip except LPT-721 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-15o tip 87ff0c49 (#2530 Mix-five Prefer → preflop-to-flop SoftPulse LPT-790 Prefer)
+
+- Tip-stable `87ff0c49` after #2530 SoftPulse residual Prefer LPT-721 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-07-01-01-01/02/03` / `act-07-01-01-*`: first-child SoftPulse REASON→CONFIRM→CANCEL + `explainGrading` "Reason → Confirm → Cancel." + Dart `PreflopFlopPlanDemo.points` / `LessonPreflopFlopPlanExplainTable` still pre-split under thesis-only → residual **LPT-790** still To Do (Relates LPT-310 — do not re-add needs-human on curriculum); successors SoftPulse TEXTURE→CONFIRM OR CANCEL / DEAD PLAN→LET GO content-driven (do not reopen LPT-669); guided SoftPulse `dead` densify PRESENT; scaffolded SoftPulse `value` densify PRESENT; unguided SoftPulse `thesis` densify PRESENT; checkpoint SoftPulse `abandon` under abandon-dead-plans — no companion residual.
+- Curriculum **LPT-310** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-790/310/721/794/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Map SoftPulse residual **LPT-794** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-01-01-*: interactive structural clean on tip except LPT-790 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
