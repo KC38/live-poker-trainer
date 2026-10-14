@@ -2964,3 +2964,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-681/230/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Thin SoftPulse residual **LPT-682** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14ga (d34c81b3 Prefer NEVER Thin SoftPulse residual LPT-682 re-check)
+
+- Tip-stable `d34c81b3` (#2420 Estimate SoftPulse Prefer re-check LPT-681 on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Thin SoftPulse residual re-check `lesson-05-04-01-01/02/03`:
+  - first-child SoftPulse THIN→CATCH→BARRELS + Dart `ThinValueDemo` / `CoachDialogueVisualKind.thinValue` still pre-split under thin-value-only → residual **LPT-682** still To Do (needs-human; Relates LPT-233).
+  - companion checkpoint SoftPulse `read` meta-read densify PRESENT under Thin → residual **LPT-683** still To Do (needs-human).
+  - successors MANIAC→BARREL→CALL / NIT→FOLDS→CHECK content-driven (do not reopen LPT-669).
+  - guided SoftPulse `tv` PRESENT (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants; maps PRESENT); scaffolded SoftPulse `call-m` + unguided SoftPulse `check-nit` one-per-press PRESENT.
+- Curriculum **LPT-233** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-682/683/233/198/216/681/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Lines SoftPulse residual **LPT-684** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse + LPT-683 checkpoint residuals.
+
