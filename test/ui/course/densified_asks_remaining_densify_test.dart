@@ -33,6 +33,12 @@ const _lines = <String, String>{
   // LPT-825: SoftPulse-quiet scaffolded densify — no Gear change spoil.
   'act-05-08-01-scaffolded':
       'Solid selective player suddenly flats junk and donks rivers — tap the matching read.',
+  // LPT-827: SoftPulse-quiet scaffolded densify — no Strong aggression spoil.
+  'act-04-07-01-scaffolded':
+      'That seat finally raises and then barrels — tap the matching note.',
+  // LPT-826: SoftPulse-quiet unguided densify — no No — sample too small spoil.
+  'act-04-07-01-unguided':
+      'They folded two hands — tap whether a type label is ready.',
   // LPT-675: Section 2 jump densify — no Cutoff spoil.
   'act-02-07-02-jump-pos':
       'Seat right before the button — pick it on the map.',
@@ -118,13 +124,24 @@ const _sectionFiveCheckpointSpoilers = <String, List<String>>{
   'act-05-09-02-cp-stop': ['honor stop', 'pick honor'],
 };
 
-/// SoftPulse-quiet Spot Nit / Maniac / Retire / Observation-certainty and
-/// scaffolded Confidence / Sticky / Gear densify must not name the tile
-/// (LPT-819 / LPT-820 / LPT-821 / LPT-822 / LPT-823 / LPT-824 / LPT-825; same
-/// class as LPT-818).
+/// SoftPulse-quiet Spot Nit / Maniac / Retire / Observation-certainty,
+/// Wait-for-samples / Strong-aggression, and scaffolded Confidence / Sticky /
+/// Gear densify must not name the tile (LPT-819 / LPT-820 / LPT-821 / LPT-822 /
+/// LPT-823 / LPT-824 / LPT-825 / LPT-826 / LPT-827; same class as LPT-818).
 const _spotTypeUnguidedSpoilers = <String, List<String>>{
   'act-04-06-01-unguided': ['low conf', 'low confidence', 'certain forever'],
   'act-04-06-01-scaffolded': ['tap sticky', 'pick sticky', '— sticky'],
+  'act-04-07-01-scaffolded': [
+    'strong aggression',
+    'strong heat',
+    'when they enter',
+  ],
+  'act-04-07-01-unguided': [
+    'sample too small',
+    'no —',
+    'tap wait',
+    'pick wait',
+  ],
   'act-04-07-02-unguided': ['nit', 'maniac'],
   'act-04-08-02-unguided': ['maniac', 'station'],
   'act-04-09-01-unguided': [
@@ -145,8 +162,9 @@ void main() {
   }
 
   test(
-    'Spot Nit/Maniac/Retire/Observation-certainty + scaffolded densify stems '
-    'do not spoil tiles (LPT-819/820/821/822/823/824/825)',
+    'Spot Nit/Maniac/Retire/Observation-certainty + Wait-samples/Strong-aggr '
+    '+ scaffolded densify stems do not spoil tiles '
+    '(LPT-819/820/821/822/823/824/825/826/827)',
     () {
       for (final MapEntry(key: id, value: spoils)
           in _spotTypeUnguidedSpoilers.entries) {
