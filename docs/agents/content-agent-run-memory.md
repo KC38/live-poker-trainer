@@ -2069,3 +2069,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: NEVER `lesson-06-11-02-*` / S6 NEVER / Low curriculum.
 - act-06-11-01-*: interactive structural clean on tip aside from LPT-706; SoftPulse explain successors via LPT-669 content-driven; all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
 
+## Fold 2026-10-14co (daf7ef0a Meet TAG NEVER)
+
+- Tip-stable `daf7ef0a` (#2296). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-06-11-02-*` Meet TAG children under `unit-06-11-tag`:
+  - first-child `act-06-11-02-explain` SoftPulse TIGHT→AGGRO→MODEL + Dart `TagModelDemo` matches Introduce TAG / The TAG model — **concept-aligned** (not SoftPulse residual; same class as careful-4bet).
+  - checkpoint SoftPulse `model` kind `none` densify PRESENT grades working-model-vs-insult under Introduce TAG-only → filed **LPT-708** (needs-human; Relates LPT-291).
+  - successors FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE content-driven (do not reopen LPT-669); guided/unguided/scaffolded one-per-press densify PRESENT.
+- Curriculum **LPT-291** Done — do not clone / do not re-add needs-human. Done-ack LPT-289/290/436/491/648.
+- Meet Nit LPT-198 / LPT-216 tip-commented on tip SHA.
+- Prefer next NEVER: `lesson-06-11-03-*` adjust-tag / remaining S6 NEVER / Low curriculum.
+
