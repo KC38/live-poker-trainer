@@ -4026,3 +4026,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER preflop-to-flop SoftPulse residual **LPT-790** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-13-01-*: interactive structural clean on tip except LPT-721 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
 
+
+## Fold 2026-10-15aw tip 509dea34 (#2575 Mix-five Prefer → preflop-to-flop SoftPulse LPT-790 Prefer)
+
+- Tip-stable `509dea34` (#2575 Mix-five SoftPulse Prefer on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Catalog parents Done — no open-parent sync.
+- Prefer NEVER preflop-to-flop SoftPulse residual **LPT-790** re-check (`lesson-07-01-01-01/02/03`):
+  - first-child SoftPulse REASON→CONFIRM→CANCEL + `explainGrading` "Reason → Confirm → Cancel." + Dart `PreflopFlopPlanDemo.points` REASON/CONFIRM/CANCEL (captions Enter with why / Flop agrees / Flop kills it) / `LessonPreflopFlopPlanExplainTable` / layout "Tap Reason, then Confirm, then Cancel." + coachMedia "Enter with a reason. Flop confirms or cancels." still pre-split under State-a-preflop-thesis-only → **LPT-790** still To Do (needs-human; Relates LPT-310).
+  - successors SoftPulse TEXTURE→CONFIRM OR CANCEL / DEAD PLAN→LET GO content-driven (do not reopen LPT-669); guided SoftPulse `dead` densify PRESENT; scaffolded SoftPulse `value` one-per-press densify PRESENT; unguided SoftPulse `thesis` one-per-press densify PRESENT; checkpoint SoftPulse `abandon` kind `none` densify PRESENT under Abandon — matches (no companion residual).
+- Curriculum **LPT-310** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-790/310/794/721/351/198/216.
+- Prefer next: NEVER Map SoftPulse residual **LPT-794** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-01-01-*: interactive structural clean on tip except LPT-790 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily.
