@@ -105,8 +105,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Seat calls 7 of 9 preflops — pick High part.',
     'act-04-06-01-scaffolded' =>
       'Second pair called three streets twice — pick Sticky.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Low conf / Low confidence
+    // (LPT-822; SoftPulse LPT-653; same class as LPT-821 / LPT-818 /
+    // LPT-811).
     'act-04-06-01-unguided' =>
-      'One dramatic call — pick Low conf.',
+      'One dramatic call — tap how confident a type label is.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Bundle in the idle bubble (LPT-810; SoftPulse LPT-653; same class
     // as LPT-809 / LPT-808 / LPT-807).

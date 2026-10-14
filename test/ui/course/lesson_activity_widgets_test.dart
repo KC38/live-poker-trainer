@@ -16727,14 +16727,25 @@ await tester.tap(find.text('NIT'));
       ),
     );
     // LPT-416: densified ask (and frame speech) — not catalog + Tap the best answer.
+    // LPT-822: SoftPulse-quiet densify stem must not spoil Low conf.
     expect(
       lessonFrameSpeech(activity),
-      'One dramatic call — tap Low conf.',
+      'One dramatic call — tap how confident a type label is.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Low conf')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Low confidence')));
+    expect(
+      find.text('One dramatic call — tap how confident a type label is.'),
+      findsOneWidget,
+    );
     expect(
       find.text('One dramatic call — pick Low conf.'),
-      findsOneWidget,
+      findsNothing,
+    );
+    expect(
+      find.text('One dramatic call — tap Low conf.'),
+      findsNothing,
     );
     expect(
       find.text(
@@ -16742,6 +16753,7 @@ await tester.tap(find.text('NIT'));
       ),
       findsNothing,
     );
+    // Outcome tile short title stays "Low conf." — SoftPulse / Hint reveal it.
     expect(find.text('Low conf.'), findsOneWidget);
     await tester.tap(find.text('Low conf.'));
     await tester.pump();
