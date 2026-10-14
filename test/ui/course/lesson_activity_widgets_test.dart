@@ -10668,9 +10668,27 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-675 densify + non-spoil (SoftPulse off) — not Cutoff tip.
+    // Frame speech rewrites pick→tap; unframed activity keeps pick.
     expect(
-      find.text('Seat just before the button — pick it on the map.'),
+      lessonFrameSpeech(activity),
+      'Seat right before the button — tap it on the map.',
+    );
+    expect(
+      lessonFrameSpeech(activity).toLowerCase(),
+      isNot(contains('cutoff')),
+    );
+    expect(
+      find.text('Seat right before the button — pick it on the map.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Seat right before the button — pick Cutoff.'),
+      findsNothing,
+    );
+    expect(
+      find.text('Seat right before the button — tap Cutoff.'),
+      findsNothing,
     );
     expect(
       find.text('The seat just before the button is the cutoff.'),

@@ -17,6 +17,9 @@ const _lines = <String, String>{
   'act-04-08-02-unguided':
       'Seat 3-bets light and never gives up rivers. Label — tap Maniac.',
   'act-04-09-01-unguided': 'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
+  // LPT-675: Section 2 jump densify — no Cutoff spoil.
+  'act-02-07-02-jump-pos':
+      'Seat right before the button — pick it on the map.',
   // LPT-674: Section 3 jump densify — no correct tile spoil.
   'act-03-08-02-jump-table':
       'Pot 16, shorter 40bb — tap what you track first.',
@@ -55,6 +58,11 @@ const _finalFiveTypeSpoilers = <String, List<String>>{
   'act-07-12-01-lag': ['lag', 'trap more', 'call wider'],
   'act-07-12-01-uncertain': ['low', 'lean baseline'],
   'act-07-12-01-retire': ['retire or update'],
+};
+
+/// Phrases that would spoil Section 2 jump densify answers (LPT-675).
+const _sectionTwoJumpSpoilers = <String, List<String>>{
+  'act-02-07-02-jump-pos': ['cutoff', 'cut-off', 'pick co', 'tap co'],
 };
 
 /// Phrases that would spoil Section 3 jump densify answers (LPT-674).
@@ -111,6 +119,25 @@ void main() {
       final lower = (resolved ?? '').toLowerCase();
       for (final spoil in _finalFiveTypeSpoilers[id]!) {
         expect(lower, isNot(contains(spoil)), reason: '$id must not contain "$spoil"');
+      }
+    }
+  });
+
+  test('Section 2 jump densify stems do not spoil Cutoff (LPT-675)', () {
+    const expected = <String, String>{
+      'act-02-07-02-jump-pos':
+          'Seat right before the button — pick it on the map.',
+    };
+    for (final MapEntry(key: id, value: line) in expected.entries) {
+      final resolved = selectIdentifyDensifiedCoachLine(id);
+      expect(resolved, line, reason: id);
+      final lower = (resolved ?? '').toLowerCase();
+      for (final spoil in _sectionTwoJumpSpoilers[id]!) {
+        expect(
+          lower,
+          isNot(contains(spoil)),
+          reason: '$id must not contain "$spoil"',
+        );
       }
     }
   });

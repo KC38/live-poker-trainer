@@ -375,8 +375,10 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Action is two seats left. You toss in a raise early. Problem — pick You acted out of turn.',
     'act-02-07-01-checkpoint-habit' =>
       'Full ring. Action two seats left. Your cards are uncovered. Fix — pick Cover your cards and wait your turn.',
+    // SoftPulse off (kind: none); stem must not spoil Cutoff (LPT-675;
+    // SoftPulse LPT-653; same class as LPT-672 / LPT-673 / LPT-674).
     'act-02-07-02-jump-pos' =>
-      'Seat right before the button — pick Cutoff.',
+      'Seat right before the button — pick it on the map.',
     'act-03-01-01-guided' =>
       'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
     'act-03-01-01-scaffolded' =>
