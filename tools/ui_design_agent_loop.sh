@@ -317,9 +317,39 @@ prepare_launcher() {
   ensure_sdk_deps
 }
 
+# Move untracked agent probe scratch (_probe_*.dart) off PRIMARY into
+# ~/.live-poker-trainer/agent-probes/. Discovery runs have left these on
+# main (LPT-697), which dirties porcelain and blocks every later one_run.
+quarantine_primary_probe_dirt() {
+  local dir dest line rel path stamp base
+  dir="$(primary)"
+  [[ -d "$dir/.git" || -f "$dir/.git" ]] || return 0
+  dest="${STATE_DIR}/agent-probes"
+  stamp="$(date '+%Y%m%d-%H%M%S')"
+  mkdir -p "$dest"
+  while IFS= read -r line; do
+    [[ "$line" == \?\?* ]] || continue
+    rel="${line#?? }"
+    # git quotes paths with spaces / special chars
+    if [[ "$rel" == \"*\" ]]; then
+      rel="${rel:1:${#rel}-2}"
+    fi
+    base="$(basename "$rel")"
+    [[ "$base" == _probe_*.dart ]] || continue
+    path="$dir/$rel"
+    [[ -f "$path" ]] || continue
+    if mv -f "$path" "$dest/${base}.${stamp}" 2>/dev/null; then
+      log "quarantined untracked probe ${rel} → ${dest}/${base}.${stamp}"
+    fi
+  # -uall: list each untracked file (default collapses a new dir to "?? test/").
+  done < <(git -C "$dir" status --porcelain --untracked-files=all 2>/dev/null || true)
+}
+
 sync_primary() {
   local dir
   dir="$(primary)"
+  # Clear leftover probe dirt before the clean check so ff-only can run.
+  quarantine_primary_probe_dirt || true
   git -C "$dir" fetch -q origin main || return 0
   if [[ "$(git -C "$dir" rev-parse --abbrev-ref HEAD)" == "main" && -z "$(git -C "$dir" status --porcelain)" ]]; then
     git -C "$dir" merge -q --ff-only origin/main || true

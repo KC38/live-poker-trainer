@@ -999,6 +999,38 @@ printf 'dirty\n' >"$on_main/scratch.txt"
 rm -f "$on_main/scratch.txt"
 echo "primary dirty-on-main gate ok"
 
+# Untracked _probe_*.dart must be quarantined off PRIMARY (LPT-697 wedge).
+grep -q 'quarantine_primary_probe_dirt' "$LOOP" \
+  || fail "loop must define quarantine_primary_probe_dirt"
+grep -q 'quarantine_primary_probe_dirt' <<<"$(sed -n '/^sync_primary()/,/^}/p' "$LOOP")" \
+  || fail "sync_primary must quarantine probe dirt before ff-only"
+probe_primary="$tmp/probe-primary"
+mkdir -p "$probe_primary/test/ui/course"
+git -C "$probe_primary" init -q
+git -C "$probe_primary" config user.email "test@example.com"
+git -C "$probe_primary" config user.name "test"
+git -C "$probe_primary" checkout -b main >/dev/null 2>&1 || true
+printf 'keep\n' >"$probe_primary/test/ui/course/real_test.dart"
+git -C "$probe_primary" add test/ui/course/real_test.dart
+git -C "$probe_primary" commit -m init -q
+# Untracked probe under an otherwise-tracked tree (and -uall covers new dirs).
+printf '// probe\n' >"$probe_primary/test/ui/course/_probe_capstone_region_tap_test.dart"
+(
+  primary() { echo "$probe_primary"; }
+  STATE_DIR="$tmp/probe-state"
+  mkdir -p "$STATE_DIR"
+  quarantine_primary_probe_dirt
+  [[ ! -f "$probe_primary/test/ui/course/_probe_capstone_region_tap_test.dart" ]] \
+    || fail "quarantine must move untracked _probe_*.dart off primary"
+  [[ -f "$probe_primary/test/ui/course/real_test.dart" ]] \
+    || fail "quarantine must not touch non-probe files"
+  ls "$STATE_DIR/agent-probes"/_probe_capstone_region_tap_test.dart.* >/dev/null 2>&1 \
+    || fail "quarantine must land probe under STATE_DIR/agent-probes"
+  primary_is_clean_main \
+    || fail "primary must be clean after probe quarantine"
+)
+echo "primary probe quarantine ok"
+
 # 504 Gateway Time-out → gateway-timeout (no HTML stuffed into health).
 gw_log="$LOG_DIR/run-gateway-timeout.log"
 printf '%s\n' \
