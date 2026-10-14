@@ -2244,3 +2244,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-103** Done — do not clone / do not re-add needs-human. Tip-commented LPT-103/737 + Meet Nit LPT-198 / LPT-216 + LPT-733.
 - Prefer next: NEVER `lesson-01-05-01-*` winning-pots / Low residuals LPT-676…737.
 
+## Fold 2026-10-14dg (ffec8f7d winning-pots SoftPulse residual)
+
+- Tip-stable `ffec8f7d` (#2319). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-01-05-01-01/02/03` under `unit-01-05-winning-pots`:
+  - first-child `act-01-05-01-explain-win` SoftPulse FOLD WIN→SHOWDOWN→SIDE POT + `explainGrading` "Fold win → Showdown → Side pot." under Win-by-fold-only → filed **LPT-738** (needs-human; Relates LPT-106).
+  - successors `act-01-05-01-02-explain-showdown` (RIVER CALL→SHOWDOWN→BEST FIVE) + `act-01-05-01-03-explain-pots` (MAIN POT→SIDE POT) content-driven; guided SoftPulse `no-show` + scaffolded SoftPulse `showdown` + unguided SoftPulse `pot-correct` + checkpoint SoftPulse `side-exists` kind `none` hintless PRESENT.
+- Curriculum **LPT-106** Done — do not clone / do not re-add needs-human. Tip-commented LPT-106/738 + Meet Nit LPT-198 / LPT-216; streets residual **LPT-737** still open.
+- Prefer next: NEVER `lesson-02-01-01-*` position-labels / Low residuals LPT-676…738.
+
