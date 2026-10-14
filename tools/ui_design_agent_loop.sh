@@ -42,7 +42,8 @@
 #                               SDK or `agent --model`.
 #   UI_AGENT_GAP                seconds between runs (default 60)
 #   UI_AGENT_BUSY_SLEEP         seconds to sleep when the mini is busy (default 300)
-#   UI_AGENT_EMPTY_QUEUE_SLEEP  seconds to sleep when ui-queue is empty (default 900)
+#   UI_AGENT_EMPTY_QUEUE_SLEEP  seconds between discovery walks when ui-queue
+#                               is still empty after a run (default 900)
 #   UI_AGENT_SIM_NOT_READY_SLEEP  seconds after programmatic SIM_NOT_READY (default 600)
 #   UI_AGENT_USAGE_LIMIT_SLEEP  seconds after ActionRequiredError usage limit
 #                               (default: until stated reset day, else 3600)
@@ -74,8 +75,8 @@ PLIST="$HOME/Library/LaunchAgents/$LAUNCH_LABEL.plist"
 STATE_DIR="$HOME/.live-poker-trainer"
 LOG_DIR="$STATE_DIR/ui-agent-logs"
 HEALTH_FILE="$STATE_DIR/ui-agent-health.jsonl"
-# Last skip reason for `status` (empty-queue / primary-busy / sim-busy).
-# Written on exit 10/16 skips; cleared when a real agent run claims the mini.
+# Last skip reason for `status` (primary-busy / sim-busy; legacy empty-queue).
+# Written on exit 10 skips; cleared when a real agent run claims the mini.
 IDLE_FILE="$STATE_DIR/ui-agent-idle.json"
 # Last successful make-change functions deploy (or advanced-on-skip marker).
 FUNCTIONS_DEPLOYED_SHA_FILE="${FUNCTIONS_DEPLOYED_SHA_FILE:-$STATE_DIR/functions-deployed-sha}"
@@ -90,7 +91,7 @@ LOOP_PID_FILE="$STATE_DIR/ui-agent-loop.pid"
 SECRETS_FILE="$STATE_DIR/secrets.env"
 GAP="${UI_AGENT_GAP:-60}"
 BUSY_SLEEP="${UI_AGENT_BUSY_SLEEP:-300}"
-# Seconds to sleep when jira ui-queue has no actionable ticket (default 900).
+# Seconds between discovery walks when ui-queue is still empty after a run.
 EMPTY_QUEUE_SLEEP="${UI_AGENT_EMPTY_QUEUE_SLEEP:-900}"
 # After back-to-back SIM_NOT_READY (usually Flutter cache lock / pub get
 # killed), back off so other agents can finish and the mini can boot.
@@ -224,7 +225,7 @@ prompt() {
   fi
   # Lead with READY facts: agents otherwise spend the first ~60s re-grepping
   # the Dart VM / reconciling the lock even though preflight already did that.
-  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Launch worktree builds with tools/flutter_run_fast.sh (cached Runner.app, ~20 s for Dart-only) and hot-restart with tools/flutter_hot_restart.sh — both block; never bare AwaitShell/sleep. Long flutter test/analyze: tools/tee_exit.sh in test-LPT-*/analyze-LPT-* tmux, then tools/wait_done.sh on the sibling .done. Jump to later lessons / heart states with tools/agent_seed.py and read screens with agent_tap.py tree; after openlesson use agent_tap.py wait-gold before taps; screenshot for judgment and proof only. Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Never claim or fix tickets labeled grokbot (GrokBot / Chrome layout on Linux); pick the open queue with python3 tools/jira.py ui-queue (never Jira labels!= — it can hang). Filing only grokbot tickets is not a finished run — keep walking until you have a ui-agent KEY (do not end early so the loop starts another agent). Before step 10, file each remaining solid Mac-mini lead from this walk as its own ui-agent ticket (do not leave densify/Hint/SoftPulse leads only in the report — LPT-644). Open PRs with gh pr create (not ManagePullRequest draft); gh pr ready before gh pr merge --squash. Step 10 coverage: python3 tools/ui_agent_coverage.py append … (never hand-write JSONL or strftime %z +0530). Learnings ride the ticket PR (write them before the merge; after it, append to the pending file).${pending} When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
+  printf '%s' "READY (loop preflight done): iPhone 13 mini claimed, Dart VM up on origin/main, handoff at ${HANDOFF_FILE} has dart_vm_ready=true. Skip steps 0–1 sim work — do not claim, do not refresh-simulator.sh, do not grep/wait the flutter log at start. One shell only: export SIM_LOCK_RUN_ID='${run_id}' (cloud shells often lack it; also in that handoff), then go straight to step 2 (read design-record + learnings + pick ticket or discovery walk). Flutter log (only after a later build switch): ${FLUTTER_RUN_LOG}. PRIMARY: ${primary_dir}. Launch worktree builds with tools/flutter_run_fast.sh (cached Runner.app, ~20 s for Dart-only) and hot-restart with tools/flutter_hot_restart.sh — both block; never bare AwaitShell/sleep. Long flutter test/analyze: tools/tee_exit.sh in test-LPT-*/analyze-LPT-* tmux, then tools/wait_done.sh on the sibling .done. Jump to later lessons / heart states with tools/agent_seed.py and read screens with agent_tap.py tree; after openlesson use agent_tap.py wait-gold before taps; screenshot for judgment and proof only. Read .cursor/commands/ui-design-agent.md and .cursor/commands/ui-design-agent-learnings.md and follow them exactly. Never claim or fix tickets labeled grokbot (GrokBot / Chrome layout on Linux); pick the open queue with python3 tools/jira.py ui-queue (never Jira labels!= — it can hang). If ui-queue is empty, do step 3 discovery walk and file every solid ui-agent finding — this agent owns filing, not only fixing. Filing only grokbot tickets is not a finished run — keep walking until you have a ui-agent KEY (do not end early so the loop starts another agent). Before step 10, file each remaining solid Mac-mini lead from this walk as its own ui-agent ticket (do not leave densify/Hint/SoftPulse leads only in the report — LPT-644). Open PRs with gh pr create (not ManagePullRequest draft); gh pr ready before gh pr merge --squash. Step 10 coverage: python3 tools/ui_agent_coverage.py append … (never hand-write JSONL or strftime %z +0530). Learnings ride the ticket PR (write them before the merge; after it, append to the pending file).${pending} When this run has both a ticket key and a PR number, rename this Agents chat via cloud MCP rename-chat to 'LPT-NN PR-<number>' (step 8; step 10 fallback). This is an unattended run. Do not ask questions or wait for input."
 }
 
 # Long-lived run-loop bash keeps function bodies from process start. Re-eval
@@ -2444,7 +2445,8 @@ PY
 # One run. Returns 0 after an agent run, 10 when the mini was busy / primary
 # off clean main, 11 when not logged in, 12 when the Dart VM never came up
 # (agent not started), 13 when the agent was killed for a stalled lock
-# heartbeat, 16 when ui-queue has no actionable ticket.
+# heartbeat. Empty ui-queue is not a skip — the agent discovery-walks and
+# files tickets (ui-design-agent.md step 3).
 one_run() {
   sync_primary
   # Skip when another agent left PRIMARY off clean main. Unit tests set
@@ -2466,14 +2468,12 @@ one_run() {
     unset _branch _detail
     return 10
   fi
+  # Empty queue → discovery walk (file tickets). Still refresh functions
+  # deploy marker / deploy drift before claiming the mini.
   if [[ "${UI_AGENT_SKIP_SIM_PREFLIGHT:-}" != "1" ]] && ! ui_queue_has_ticket; then
-    log "ui-queue empty (no actionable ui-agent ticket); skipping this run"
-    record_idle_skip empty-queue "" "$EMPTY_QUEUE_SLEEP"
+    log "ui-queue empty; starting discovery walk (agent files ui-agent tickets)"
     advance_functions_deploy_marker_if_unchanged || true
-    # Ticket merges during idle can drift functions/ while marker advance
-    # only covers the unchanged case — deploy so production stays current.
     deploy_functions_if_needed || true
-    return 16
   fi
   if ! logged_in; then
     log "Cursor CLI has no API key and no login. Run: $SCRIPT setup"
@@ -2838,10 +2838,6 @@ run_loop() {
     fi
     case "$code" in
       10) sleep_unless_stopped "$BUSY_SLEEP" ;;
-      16)
-        log "ui-queue empty; sleeping ${EMPTY_QUEUE_SLEEP}s before retry"
-        sleep_unless_stopped "$EMPTY_QUEUE_SLEEP"
-        ;;
       11) sleep 600 ;;
       12)
         log "SIM_NOT_READY preflight; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
@@ -2867,12 +2863,17 @@ run_loop() {
       *)
         if last_run_sim_not_ready; then
           log "last run was SIM_NOT_READY; sleeping ${SIM_NOT_READY_SLEEP}s before retry"
-          sleep "$SIM_NOT_READY_SLEEP"
+          sleep_unless_stopped "$SIM_NOT_READY_SLEEP"
         elif last_run_gateway_timeout; then
           log "last run was gateway-timeout; sleeping ${GATEWAY_TIMEOUT_SLEEP}s before retry"
-          sleep "$GATEWAY_TIMEOUT_SLEEP"
+          sleep_unless_stopped "$GATEWAY_TIMEOUT_SLEEP"
+        elif [[ "$code" -eq 0 ]] && ! ui_queue_has_ticket; then
+          # Discovery (or clean fix) left the queue empty — back off before
+          # the next walk so we do not burn runs every GAP second.
+          log "ui-queue still empty after run; sleeping ${EMPTY_QUEUE_SLEEP}s before next discovery walk"
+          sleep_unless_stopped "$EMPTY_QUEUE_SLEEP"
         else
-          sleep "$GAP"
+          sleep_unless_stopped "$GAP"
         fi
         ;;
     esac
