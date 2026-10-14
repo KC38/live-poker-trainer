@@ -1017,10 +1017,12 @@ Lesson-specific pattern notes (full history) live in
   HEADS-UP→STEAL MORE content-driven; guided SoftPulse `no` densify PRESENT;
   unguided SoftPulse `thick` one-per-press densify PRESENT; scaffolded SoftPulse
   `higher` one-per-press densify PRESENT; curriculum LPT-323 Done — do not clone /
-  do not re-add needs-human; tip `5908fbcd` Prefer NEVER Stack SoftPulse residual
-  **LPT-802** still To Do (SHORT→DEEP→EFFECTIVE under commit-short-only; Relates
-  LPT-326 — do not re-add needs-human on curriculum); successors DEEP→IMPLIED ODDS /
-  SHORTER STACK→PLAN content-driven; guided SoftPulse `commit` densify PRESENT;
+  do not re-add needs-human; tip `a1388cbb` Prefer NEVER Stack SoftPulse residual
+  **LPT-802** still To Do (SHORT→DEEP→EFFECTIVE + Dart `StackDepthPlansDemo.points`
+  / `LessonStackDepthPlansExplainTable` / layout "Tap Short, then Deep, then Effective."
+  + coachMedia "Effective stack rewrites the plan every hand." under commit-short-only;
+  Relates LPT-326 — do not re-add needs-human on curriculum); successors DEEP→IMPLIED
+  ODDS / SHORTER STACK→PLAN content-driven; guided SoftPulse `commit` densify PRESENT;
   scaffolded SoftPulse `yes` densify PRESENT; unguided SoftPulse `40` densify
   PRESENT; checkpoint SoftPulse `every` under recalc matches — no companion residual;
   distinct from S2 **LPT-748**; curriculum LPT-326 Done — do not clone / do not
@@ -1477,8 +1479,16 @@ Lesson-specific pattern notes (full history) live in
   `input` densify PRESENT under Bluff-less-multiway → **LPT-801** still To Do; successors MULTIWAY→THICK VALUE /
   HEADS-UP→STEAL MORE content-driven; guided SoftPulse `no` densify PRESENT; scaffolded SoftPulse `higher`
   one-per-press densify PRESENT; unguided SoftPulse `thick` one-per-press densify PRESENT; curriculum LPT-323 Done —
-  do not clone / do not re-add needs-human; next: NEVER
-  Stack SoftPulse residual **LPT-802** re-check /
+  do not clone / do not re-add needs-human; tip `a1388cbb` Prefer NEVER SoftPulse residual **LPT-802**
+  still To Do (SHORT→DEEP→EFFECTIVE + Dart `StackDepthPlansDemo.points` SHORT/DEEP/EFFECTIVE /
+  `LessonStackDepthPlansExplainTable` / layout "Tap Short, then Deep, then Effective." + coachMedia
+  "Effective stack rewrites the plan every hand." under Commit-earlier-short-only; Relates LPT-326 —
+  do not re-add needs-human on curriculum); checkpoint SoftPulse `every` densify PRESENT under
+  recalc-effective matches — no companion residual; successors DEEP→IMPLIED ODDS / SHORTER STACK→PLAN
+  content-driven; guided SoftPulse `commit` densify PRESENT; scaffolded SoftPulse `yes` one-per-press
+  densify PRESENT; unguided SoftPulse `40` one-per-press densify PRESENT; distinct from S2 **LPT-748**;
+  curriculum LPT-326 Done — do not clone / do not re-add needs-human; next: NEVER
+  Same-cards SoftPulse residual **LPT-725** re-check /
   Low residuals LPT-676…802 / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
@@ -1523,6 +1533,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-15bc: Tip-stable `a1388cbb` (#2586 HU SoftPulse Prefer LPT-800 on tip after #2585). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync. Prefer NEVER Stack SoftPulse residual re-check: first-child SoftPulse SHORT→DEEP→EFFECTIVE + `explainGrading` "Short → Deep → Effective." + Dart `StackDepthPlansDemo.points` SHORT/DEEP/EFFECTIVE (captions Commit earlier / Implied odds / Recalc each hand) / `LessonStackDepthPlansExplainTable` / layout "Tap Short, then Deep, then Effective." + coachMedia "Effective stack rewrites the plan every hand." still pre-split under Commit-earlier-short-only → **LPT-802** still To Do (needs-human; Relates LPT-326 — do not re-add needs-human on curriculum); checkpoint SoftPulse `every` kind `none` densify PRESENT (prompt "Stack depth is?") under recalc-effective matches — no companion residual; successors SoftPulse DEEP→IMPLIED ODDS / SHORTER STACK→PLAN content-driven (do not reopen LPT-669); guided SoftPulse `commit` densify PRESENT; scaffolded SoftPulse `yes` one-per-press densify PRESENT; unguided SoftPulse `40` one-per-press densify PRESENT; distinct from S2 **LPT-748**. Curriculum **LPT-326** Done — do not clone. Tip-commented LPT-802/326/800/801/829/351/748/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Same-cards SoftPulse residual **LPT-725** re-check / Low residuals LPT-676…802 / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - 2026-10-15bb: Tip-stable `552b5151` (#2585 densify stem on tip after #2583 Pot SoftPulse Prefer). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync. Prefer NEVER HU SoftPulse residual re-check: first-child SoftPulse FEWER→THICKER→WIDEN + `explainGrading` "Fewer → Thicker → Widen." + Dart `HuVsMultiwayDemo.points` FEWER/THICKER/WIDEN (captions Bluff less MW / Value up MW / HU selected bluffs) / `LessonHuVsMultiwayExplainTable` / layout "Tap Fewer, then Thicker, then Widen." + coachMedia "More players: fewer bluffs, thicker value." still pre-split under Bluff-less-multiway-only → **LPT-800** still To Do (needs-human; Relates LPT-323 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `input` kind `none` densify PRESENT (prompt "Player count is?"; helper "Player count — pick how it ranks.") under Bluff-less-multiway → **LPT-801** still To Do; successors SoftPulse MULTIWAY→THICK VALUE / HEADS-UP→STEAL MORE content-driven (do not reopen LPT-669); guided SoftPulse `no` densify PRESENT; scaffolded SoftPulse `higher` one-per-press densify PRESENT; unguided SoftPulse `thick` one-per-press densify PRESENT. Curriculum **LPT-323** Done — do not clone. Tip-commented LPT-800/801/323/802/798/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Stack SoftPulse residual **LPT-802** re-check / Low residuals LPT-676…802 / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - 2026-10-15az: Filed catalog **LPT-829** + scanner arm `short-ladder` (lessons with fewer than 5 activities; Capstone explain+hand exempt). `--counts` short-ladder **224**; sync parent via `--gap short-ladder --markdown`. Other JSON gaps still **0**.
 - 2026-10-15ba: Tip-stable `11a7d2a9` (#2576 short-ladder LPT-829 on tip after #2584). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** short-ladder tip-synced (checklist flat **224**); other parents Done. Prefer NEVER Pot SoftPulse residual re-check: first-child SoftPulse LIMPED→SRP→3-4BET + `explainGrading` "Limped → SRP → 3-bet/4-bet." + Dart `PotTypePlansDemo.points` LIMPED/SRP/3-4BET (captions Nut potential / C-bet maps / High commit) / `LessonPotTypePlansExplainTable` / layout "Tap Limped, then SRP, then 3-4bet." + coachMedia "Pot type sets ranges and SPR. Plan accordingly." still pre-split under Plan-limped-pots-only → **LPT-798** still To Do (needs-human; Relates LPT-320 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `both` kind `none` densify PRESENT (prompt "Pot type changes?"; tile "Ranges and SPR") under Plan 3-bet/4-bet-only → **LPT-799** still To Do; successors SoftPulse HEADS-UP→C-BET / LOW SPR→COMMIT content-driven (do not reopen LPT-669); guided SoftPulse `nuts` densify PRESENT; scaffolded SoftPulse `cb` one-per-press densify PRESENT; unguided SoftPulse `commit` one-per-press densify PRESENT (`deal.mode` `none` outcome tiles — no handFamily). Curriculum **LPT-320** Done — do not clone. Tip-commented LPT-798/799/320/795/351/800/829; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER HU SoftPulse residual **LPT-800** (+ player-count **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum **LPT-351** / open catalog **LPT-829**.
