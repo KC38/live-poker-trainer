@@ -3,8 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _lines = <String, String>{
+  // LPT-831: SoftPulse-off densify — no SB seat-geometry spoil.
   'act-01-01-03-checkpoint-layout':
-      'The button has the D chip. Tap the small blind, one seat to its left.',
+      'The button has the D chip. Tap the small blind.',
   'act-01-02-02-scaffolded-kicker': 'Same pair on the board. Tap your cards if your kicker wins, their cards if theirs wins, or Chop if you tie.',
   'act-01-02-02-unguided-board': 'Both checked down. Tap the board if both play it, or a player\'s cards if you think their holes win.',
   'act-01-05-01-unguided-pot': 'BTN opens — tap the pot before blinds act.',

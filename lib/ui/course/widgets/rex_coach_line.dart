@@ -368,10 +368,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap the seat whose hole cards share a suit.',
     'act-01-01-03-guided-button' =>
       'Tap the dealer button on the table — pick The seat with the D chip.',
+    // SoftPulse-quiet until Hint (LPT-73) — situation + tap verb only; never
+    // name the BB choice in the idle bubble (LPT-830; SoftPulse LPT-653;
+    // same class as LPT-823 / LPT-808).
     'act-01-01-03-scaffolded-blinds' =>
-      'Blinds are 1/2. Tap who posts the big blind — pick The seat two left of the button, posting 2.',
+      'Blinds are 1/2. Tap who posts the big blind.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Before any hole cards are dealt (LPT-832; SoftPulse LPT-653).
     'act-01-01-03-unguided-when' =>
-      'Tap when the blinds go in — pick Before any hole cards are dealt.',
+      'Tap when the blinds go in.',
     'act-01-02-02-guided-seven' =>
       'Tap the five cards that make your best hand — pick Top pair with best kicker.',
     'act-01-02-02-checkpoint-build' =>
@@ -672,9 +677,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Three mixed samples only. Confidence — tap the matching level.',
     'act-07-12-01-retire' =>
       'Old Calling Station now folds rivers and 3-bets light. Do — tap the matching next step.',
-    // Densified asks still say Tap the best answer (catalog) remaining densified asks (LPT-628) — same path.
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name SB seat geometry in the idle bubble (LPT-831; SoftPulse LPT-653;
+    // same class as LPT-808 / LPT-823).
     'act-01-01-03-checkpoint-layout' =>
-      'The button has the D chip. Tap the small blind, one seat to its left.',
+      'The button has the D chip. Tap the small blind.',
     'act-01-02-02-scaffolded-kicker' =>
       'Same pair on the board. Tap your cards if your kicker wins, their cards if theirs wins, or Chop if you tie.',
     'act-01-02-02-unguided-board' =>
