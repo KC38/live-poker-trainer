@@ -66,7 +66,9 @@ const _lines = <String, String>{
   'act-02-06-01-unguided-protect': 'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
   'act-02-06-01-checkpoint-oot': 'Action is two seats left. You toss in a raise early. Problem — pick You acted out of turn.',
   'act-02-07-01-checkpoint-habit': 'Full ring. Action two seats left. Your cards are uncovered. Fix — pick Cover your cards and wait your turn.',
-  'act-02-07-02-jump-pos': 'Seat right before the button — pick Cutoff.',
+  // LPT-675: SoftPulse-off jump — stem must not name Cutoff.
+  'act-02-07-02-jump-pos':
+      'Seat right before the button — pick it on the map.',
   'act-03-01-01-guided':
       'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
   'act-03-01-01-scaffolded': 'Nine-handed. Dealer button is on seat 7. Who acts first preflop — pick Seat left of the big blind (UTG).',
