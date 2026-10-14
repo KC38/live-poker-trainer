@@ -3617,3 +3617,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Hard-folds SoftPulse residual **LPT-705** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-09-01-*: interactive structural clean on tip except LPT-704 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants AQo-miss honesty.
 
+## Fold 2026-10-15g tip 438b1746 (Plan-3bet Prefer → Hard-folds SoftPulse LPT-705 Prefer)
+
+- Tip-stable `438b1746` after #2520 SoftPulse-quiet densify / #2519 Plan-3bet Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Hard-folds SoftPulse residual re-check `lesson-06-10-01-01/02/03` / `act-06-10-01-*`: first-child SoftPulse HARD→COOLER→EGO + `explainGrading` "Hard → Cooler → Ego." + coachMedia + Dart `HardFoldCoolerDemo.points` HARD/COOLER/EGO (captions Save buy-ins / Not a leak / Call mistake) / `LessonHardFoldCoolerExplainTable` still pre-split under hard-folds-only → residual **LPT-705** still To Do (Relates LPT-285 — do not re-add needs-human on curriculum); successors SoftPulse COOLER→MISTAKE→REVIEW / DUE→EGO→FOLD content-driven (do not reopen LPT-669); guided SoftPulse `fold` PRESENT (`Ah`/`9d`·`As`/`7c`/`2h`/`Kd`/`3c` +2 suit variants match Dart); scaffolded SoftPulse `cooler` densify PRESENT; unguided SoftPulse `ego` densify PRESENT; checkpoint SoftPulse `ask` kind `none` densify PRESENT under cooler-or-mistake — no companion residual.
+- Curriculum **LPT-285** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-705/285/706/704/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Selective SoftPulse residual **LPT-706** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-10-01-*: interactive structural clean on tip except LPT-705 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; guided stays fixed+variants hard-fold honesty.
+
