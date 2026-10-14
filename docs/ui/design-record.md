@@ -1467,6 +1467,15 @@ the idle ask, a Tap prompt, or `accessibilityText`. `scan_content_gaps
 --gap nice-ladder` is 0, and `lpt624_explain_nice_ladder_test.dart` locks
 the list. A new SoftPulse explain ships its `okFeedback` in the same PR.
 
+Curriculum-split SoftPulse explain successors (LPT-669): every
+`coach_dialogue` SoftPulse explain with authored `teachSpec.cues` is a
+table-tap SoftPulse walk (`isTableRegionTapActivity` reads those cues;
+`resolveCoachDialogueVisual` keeps dedicated parent visuals and falls
+through to `authoredCues` cue-tile SoftPulse for successors whose labels
+do not match the parent demo). Do not leave a split SoftPulse explain on
+Continue-only. `lpt669_split_softpulse_explain_maps_test.dart` locks the
+catalog rule so later `lessonSplitMap` batches cannot reintroduce the gap.
+
 Best five kicker showdown SoftPulse (LPT-75) is the framed
 `LessonTableStage` for `act-01-02-02-scaffolded-kicker`: `cueSeatIndex: 0`
 with `LessonTableCue.none`, so one gold ring on the You seat pod — not
