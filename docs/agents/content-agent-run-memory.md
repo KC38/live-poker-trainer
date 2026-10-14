@@ -1816,3 +1816,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Rescued unfolder leak-repair + ranges Prefer/run-memory folds from prior coverage over-claim.
 - next: NEVER `lesson-04-03-01-01/02/03` / Low curriculum.
 - act-04-02-01-*: interactive structural clean on tip; SoftPulse explain successors via LPT-669 content-driven; curriculum via LPT-172 Done.
+
+## Fold 2026-10-14bt (0b9f93f7 discovery SPR split children)
+
+- Tip-stable `0b9f93f7` (#2267 sizing learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat; densify-tap still **0** — no LPT-628 reopen. Open Medium catalog parent **none**.
+- Discovery NEVER SPR children:
+  - `lesson-04-05-01-01-estimate-spr`: first-child `act-04-05-01-explain` SoftPulse SPR→LOW→HIGH **wired** (`sprDepth`) + `explainGrading`; guided SoftPulse `spr-4` densify PRESENT (`deal.mode` `none` — chip÷pot math, no handFamily); checkpoint SoftPulse `before` hintless cue kind `none` densify PRESENT (`Ah/Kd`·`Qs/7c/2d/9h` +2 variants; Scene board matches ActionSpot) — **weigh-SPR habit under Estimate objective** → **LPT-677**.
+  - `lesson-04-05-01-02-commit-low-spr`: `act-04-05-01-02-explain-low` SoftPulse LOW SPR→COMMIT content-driven; scaffolded SoftPulse `commit` one-per-press PRESENT (`Kh/Kd`·`Kc/7s/2d` +2 variants; Stacks left 60 / SPR ~1).
+  - `lesson-04-05-01-03-flexible-high-spr`: `act-04-05-01-03-explain-high` SoftPulse HIGH SPR→FLEXIBLE content-driven; unguided SoftPulse `flexible` one-per-press PRESENT (`Jh/9d`·`Qc/9s/3h` +2 variants; Stacks left 240 / SPR 20).
+- Do **not** reopen LPT-669. Curriculum **LPT-182** Done — do not clone; residual honesty on **LPT-677** (needs-human).
+- Tip-commented LPT-182/677 + Done-ack LPT-180/181/535/620/568/625/627/628/635/667/669.
+- Prefer bullet tightened: next NEVER → `lesson-05-01-01-*` multiway ranges children.
+- next: NEVER `lesson-05-01-01-01/02/03` / S5–S6 NEVER / Low curriculum.
+- act-04-05-01-*: interactive structural clean on tip except curriculum residual LPT-677; SoftPulse explain successors via LPT-669 content-driven; guided is `deal.mode` `none` outcome tiles — do not file handFamily.
+
