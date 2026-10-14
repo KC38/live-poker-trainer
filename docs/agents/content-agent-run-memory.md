@@ -3508,3 +3508,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-682/233/684/681/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
 - Prefer next: NEVER Lines SoftPulse residual **LPT-684** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-14ip tip 4ca0ccbb (#2504 Thin Prefer → Lines SoftPulse LPT-684 Prefer)
+
+- Tip-stable `4ca0ccbb` after #2504 SoftPulse residual Prefer LPT-682 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-05-05-01-01/02/03` / `act-05-05-01-*`: first-child SoftPulse X/R→PROBE→DELAY→DONK + `explainGrading` "Check-raise → Probe → Delay → Donk." still pre-split under check-raises-only → residual **LPT-684** still To Do (Relates LPT-236 — do not re-add needs-human on curriculum); successors SoftPulse PROBE→DELAY→PLAN / DONK→STRONG→AIR content-driven (do not reopen LPT-669); guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `probe` densify PRESENT; unguided SoftPulse `polar` densify PRESENT; checkpoint SoftPulse `delay` kind `none` under probes-and-delays — no companion residual.
+- Curriculum **LPT-236** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-684/236/685/682/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER Timing SoftPulse residual **LPT-685** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-05-01-*: interactive structural clean on tip except LPT-684 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
