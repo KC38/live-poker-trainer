@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "ee6cb4ae163adaa9b769af68298773e2a8ce4333570f62a2a514b48ca2b3451e",
+  "contentChecksum": "4df3a5f1dab0249890d4477e702d23220690a27973ff0229d278bfb19e2c5903",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -383,6 +383,27 @@
       "lesson-07-06-01-01-commit-short",
       "lesson-07-06-01-02-implied-odds-deep",
       "lesson-07-06-01-03-recalc-effective"
+    ],
+    "lesson-07-07-01-same-cards-types": [
+      "lesson-07-07-01-01-station-value",
+      "lesson-07-07-01-02-tag-checkraise",
+      "lesson-07-07-01-03-lag-barrel",
+      "lesson-07-07-01-04-baseline-without-evidence"
+    ],
+    "lesson-07-08-01-type-board-line": [
+      "lesson-07-08-01-01-type-and-board",
+      "lesson-07-08-01-02-line-and-sizing",
+      "lesson-07-08-01-03-one-coherent-action"
+    ],
+    "lesson-07-09-01-leak-review-book": [
+      "lesson-07-09-01-01-name-leaks",
+      "lesson-07-09-01-02-default-lines",
+      "lesson-07-09-01-03-review-habits"
+    ],
+    "lesson-02-07-01-baseline-full-hand": [
+      "lesson-02-07-01-01-full-ring-open",
+      "lesson-02-07-01-02-vs-raise-plan",
+      "lesson-02-07-01-03-habits-while-deciding"
     ]
   },
   "sections": [
@@ -9517,14 +9538,12 @@
           "summary": "Full-ring baseline decisions and section jump.",
           "lessons": [
             {
-              "id": "lesson-02-07-01-baseline-full-hand",
+              "id": "lesson-02-07-01-01-full-ring-open",
               "order": 1,
-              "title": "Full-ring baseline hand",
-              "summary": "Apply open/fold and facing-raise skills on a full ring.",
+              "title": "Open on a full ring",
+              "summary": "Nine seats, same rules: open from position.",
               "objectives": [
-                "Make a baseline open on a full ring",
-                "Respond to a raise with a planned action",
-                "Keep live habits while deciding"
+                "Make a baseline open on a full ring"
               ],
               "prerequisites": [
                 "lesson-02-06-01-03-protect-and-wait"
@@ -9532,7 +9551,7 @@
               "remediationLessonIds": [
                 "lesson-02-03-01-03-widen-button"
               ],
-              "estimatedMinutes": 10,
+              "estimatedMinutes": 3,
               "difficultyBand": 2,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -9655,10 +9674,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-07-01-02-vs-raise-plan",
+              "order": 2,
+              "title": "Face a raise with a plan",
+              "summary": "Respond to a full-ring open with a planned action.",
+              "objectives": [
+                "Respond to a raise with a planned action"
+              ],
+              "prerequisites": [
+                "lesson-02-07-01-01-full-ring-open"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-07-01-01-full-ring-open"
+              ],
+              "estimatedMinutes": 4,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-07-01-02-explain-vsraise",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Respond to a raise with a planned action"
+                  ],
+                  "accessibilityText": "Someone opened. Decide from your seat and your hand: fold, call, or 3-bet with a reason.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-07-01-02-explain-vsraise-line",
+                      "kind": "dialogue",
+                      "text": "Someone opened. Decide from your seat and your hand: fold, call, or 3-bet with a reason."
+                    }
+                  ],
+                  "okFeedback": "Plan before you act.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "OPEN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PLAN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Open → Plan → Act."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-07-01-scaffolded-vs",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -9727,7 +9810,7 @@
                 },
                 {
                   "id": "act-02-07-01-unguided-lab",
-                  "order": 4,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "full_table_hand_lab",
                   "estimatedSeconds": 90,
@@ -9738,8 +9821,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Respond to a raise with a planned action",
-                    "Keep live habits while deciding"
+                    "Respond to a raise with a planned action"
                   ],
                   "prompt": "Full ring. Decide versus a cutoff open.",
                   "choices": [
@@ -9879,10 +9961,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-02-07-01-03-habits-while-deciding",
+              "order": 3,
+              "title": "Keep live habits while deciding",
+              "summary": "Cover your cards and wait for your turn.",
+              "objectives": [
+                "Keep live habits while deciding"
+              ],
+              "prerequisites": [
+                "lesson-02-07-01-02-vs-raise-plan"
+              ],
+              "remediationLessonIds": [
+                "lesson-02-07-01-02-vs-raise-plan"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 2,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-02-07-01-03-explain-habits",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Keep live habits while deciding"
+                  ],
+                  "accessibilityText": "While you think, keep your cards covered and wait for the action to reach you.",
+                  "coachMedia": [
+                    {
+                      "id": "act-02-07-01-03-explain-habits-line",
+                      "kind": "dialogue",
+                      "text": "While you think, keep your cards covered and wait for the action to reach you."
+                    }
+                  ],
+                  "okFeedback": "Cover and wait.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "COVER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "WAIT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Cover → Wait."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-02-07-01-checkpoint-habit",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -9945,7 +10091,7 @@
             },
             {
               "id": "lesson-02-07-02-section-two-jump",
-              "order": 2,
+              "order": 4,
               "title": "Baseline jump check",
               "summary": "Placement-style check on baseline skills.",
               "objectives": [
@@ -9956,7 +10102,7 @@
                 "Confirm effective stack"
               ],
               "prerequisites": [
-                "lesson-02-07-01-baseline-full-hand"
+                "lesson-02-07-01-03-habits-while-deciding"
               ],
               "remediationLessonIds": [
                 "lesson-02-01-01-03-later-seats"
@@ -40062,14 +40208,12 @@
           "summary": "Full transfer across the five models.",
           "lessons": [
             {
-              "id": "lesson-07-07-01-same-cards-types",
+              "id": "lesson-07-07-01-01-station-value",
               "order": 1,
-              "title": "Replay the same hand versus each type",
-              "summary": "Recommendations diverge only when the authored tendency justifies it.",
+              "title": "Same hand: bet value versus a Station",
+              "summary": "Top pair bets when a Calling Station checks.",
               "objectives": [
-                "Change lines by type with citations",
-                "Keep identical lines when evidence is absent",
-                "Practice all five types"
+                "Change lines by type with citations"
               ],
               "prerequisites": [
                 "lesson-07-06-01-03-recalc-effective"
@@ -40077,7 +40221,7 @@
               "remediationLessonIds": [
                 "lesson-06-13-01-04-cite-tendency"
               ],
-              "estimatedMinutes": 10,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [
                 "calling_station",
@@ -40148,7 +40292,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Practice all five types"
+                    "Change lines by type with citations"
                   ],
                   "prompt": "Flop top pair. Station check. Action?",
                   "choices": [
@@ -40232,10 +40376,80 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-07-01-02-tag-checkraise",
+              "order": 2,
+              "title": "Same hand: respect a TAG check-raise",
+              "summary": "A TAG check-raise is strong; play top pair carefully.",
+              "objectives": [
+                "Respect a TAG check-raise"
+              ],
+              "prerequisites": [
+                "lesson-07-07-01-01-station-value"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-07-01-01-station-value"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac",
+                "tag",
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-07-01-02-explain-tag",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Respect a TAG check-raise"
+                  ],
+                  "accessibilityText": "Same top pair, new seat. A TAG check-raise is strong, so slow down or fold.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-07-01-02-explain-tag-line",
+                      "kind": "dialogue",
+                      "text": "Same top pair, new seat. A TAG check-raise is strong, so slow down or fold."
+                    }
+                  ],
+                  "okFeedback": "Respect the TAG.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TAG CHECK-RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CAREFUL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "TAG check-raise → Careful."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-07-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -40246,7 +40460,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Practice all five types"
+                    "Respect a TAG check-raise"
                   ],
                   "prompt": "Same top pair. TAG check-raises. Action?",
                   "choices": [
@@ -40338,10 +40552,80 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-07-01-03-lag-barrel",
+              "order": 3,
+              "title": "Same hand: call a LAG barrel",
+              "summary": "A LAG barrels wide, so top pair calls.",
+              "objectives": [
+                "Call down wider versus a LAG"
+              ],
+              "prerequisites": [
+                "lesson-07-07-01-02-tag-checkraise"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-07-01-02-tag-checkraise"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac",
+                "tag",
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-07-01-03-explain-lag",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Call down wider versus a LAG"
+                  ],
+                  "accessibilityText": "Same top pair versus a LAG turn barrel. Their range is wide, so you call.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-07-01-03-explain-lag-line",
+                      "kind": "dialogue",
+                      "text": "Same top pair versus a LAG turn barrel. Their range is wide, so you call."
+                    }
+                  ],
+                  "okFeedback": "Wide barrel — call.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "LAG BARREL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "LAG barrel → Call."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-07-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -40352,7 +40636,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Practice all five types"
+                    "Call down wider versus a LAG"
                   ],
                   "prompt": "Same top pair. LAG barrels turn. Action?",
                   "choices": [
@@ -40445,10 +40729,80 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-07-01-04-baseline-without-evidence",
+              "order": 4,
+              "title": "No evidence, baseline line",
+              "summary": "Without type evidence, play your default.",
+              "objectives": [
+                "Keep identical lines when evidence is absent"
+              ],
+              "prerequisites": [
+                "lesson-07-07-01-03-lag-barrel"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-07-01-03-lag-barrel"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit",
+                "maniac",
+                "tag",
+                "lag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-07-01-04-explain-baseline",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Keep identical lines when evidence is absent"
+                  ],
+                  "accessibilityText": "No type evidence yet? Play your baseline. Change the line only when a tendency justifies it.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-07-01-04-explain-baseline-line",
+                      "kind": "dialogue",
+                      "text": "No type evidence yet? Play your baseline. Change the line only when a tendency justifies it."
+                    }
+                  ],
+                  "okFeedback": "Baseline until evidence.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NO EVIDENCE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BASELINE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "No evidence → Baseline."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-07-01-checkpoint",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -40508,22 +40862,20 @@
           "summary": "Integrated checkpoints.",
           "lessons": [
             {
-              "id": "lesson-07-08-01-type-board-line",
+              "id": "lesson-07-08-01-01-type-and-board",
               "order": 1,
-              "title": "Integrate type, board, line, and sizing",
-              "summary": "One decision uses all four inputs together.",
+              "title": "Combine type with board",
+              "summary": "The same bet means different things on different boards.",
               "objectives": [
-                "Combine type with board texture",
-                "Combine line history with sizing",
-                "Produce one coherent action"
+                "Combine type with board texture"
               ],
               "prerequisites": [
-                "lesson-07-07-01-same-cards-types"
+                "lesson-07-07-01-04-baseline-without-evidence"
               ],
               "remediationLessonIds": [
-                "lesson-07-07-01-same-cards-types"
+                "lesson-07-07-01-04-baseline-without-evidence"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [
                 "maniac",
@@ -40550,7 +40902,7 @@
                     }
                   ],
                   "objectives": [
-                    "Produce one coherent action"
+                    "Combine type with board texture"
                   ],
                   "explainGrading": {
                     "grade": "recommended",
@@ -40684,10 +41036,78 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-08-01-02-line-and-sizing",
+              "order": 2,
+              "title": "Combine line with sizing",
+              "summary": "Read the size of the bet along with the line.",
+              "objectives": [
+                "Combine line history with sizing"
+              ],
+              "prerequisites": [
+                "lesson-07-08-01-01-type-and-board"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-08-01-01-type-and-board"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "maniac",
+                "nit",
+                "tag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-08-01-02-explain-sizing",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Combine line history with sizing"
+                  ],
+                  "accessibilityText": "Read the line and the size together. A tiny turn bet from a Nit on a dry board is weak, not strong.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-08-01-02-explain-sizing-line",
+                      "kind": "dialogue",
+                      "text": "Read the line and the size together. A tiny turn bet from a Nit on a dry board is weak, not strong."
+                    }
+                  ],
+                  "okFeedback": "Line plus size.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "LINE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SIZE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Line + Size → Read."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-08-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -40793,10 +41213,78 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-08-01-03-one-coherent-action",
+              "order": 3,
+              "title": "Produce one coherent action",
+              "summary": "Use all four inputs to make one decision.",
+              "objectives": [
+                "Produce one coherent action"
+              ],
+              "prerequisites": [
+                "lesson-07-08-01-02-line-and-sizing"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-08-01-02-line-and-sizing"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "maniac",
+                "nit",
+                "tag"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-08-01-03-explain-one",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Produce one coherent action"
+                  ],
+                  "accessibilityText": "Type, board, line, and size all point somewhere. Put them together and make one clear decision.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-08-01-03-explain-one-line",
+                      "kind": "dialogue",
+                      "text": "Type, board, line, and size all point somewhere. Put them together and make one clear decision."
+                    }
+                  ],
+                  "okFeedback": "Four inputs, one action.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FOUR INPUTS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "ONE ACTION",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Four inputs → One action."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-08-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -40907,7 +41395,7 @@
                 },
                 {
                   "id": "act-07-08-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -40967,22 +41455,20 @@
           "summary": "Build your default strategy book.",
           "lessons": [
             {
-              "id": "lesson-07-09-01-leak-review-book",
+              "id": "lesson-07-09-01-01-name-leaks",
               "order": 1,
-              "title": "Write your default strategy book",
-              "summary": "List personal leaks and default lines for common live spots.",
+              "title": "Name your leaks",
+              "summary": "Write leak notes that are specific and actionable.",
               "objectives": [
-                "Name personal leaks",
-                "Write default lines for common spots",
-                "Schedule review habits"
+                "Name personal leaks"
               ],
               "prerequisites": [
-                "lesson-07-08-01-type-board-line"
+                "lesson-07-08-01-03-one-coherent-action"
               ],
               "remediationLessonIds": [
-                "lesson-07-08-01-type-board-line"
+                "lesson-07-08-01-03-one-coherent-action"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -41005,7 +41491,7 @@
                     }
                   ],
                   "objectives": [
-                    "Write default lines for common spots"
+                    "Name personal leaks"
                   ],
                   "explainGrading": {
                     "grade": "recommended",
@@ -41083,10 +41569,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-09-01-02-default-lines",
+              "order": 2,
+              "title": "Write default lines",
+              "summary": "Your book holds a written default for common spots.",
+              "objectives": [
+                "Write default lines for common spots"
+              ],
+              "prerequisites": [
+                "lesson-07-09-01-01-name-leaks"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-09-01-01-name-leaks"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-09-01-02-explain-defaults",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Write default lines for common spots"
+                  ],
+                  "accessibilityText": "For common spots, write a default line before the session. The baseline comes first; exploits change it.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-09-01-02-explain-defaults-line",
+                      "kind": "dialogue",
+                      "text": "For common spots, write a default line before the session. The baseline comes first; exploits change it."
+                    }
+                  ],
+                  "okFeedback": "Write the default.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "COMMON SPOT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DEFAULT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Common spot → Default line."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-09-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -41141,8 +41691,123 @@
                   }
                 },
                 {
+                  "id": "act-07-09-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Baseline before exploits.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Write default lines for common spots"
+                  ],
+                  "prompt": "Default book purpose?",
+                  "choices": [
+                    {
+                      "id": "base",
+                      "label": "Baseline before exploits",
+                      "accessibilityText": "Baseline before exploits",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Yes."
+                      }
+                    },
+                    {
+                      "id": "replace",
+                      "label": "Replace all thinking forever",
+                      "accessibilityText": "Replace all thinking forever",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Still update.",
+                        "betterChoiceId": "base"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "base",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-09-01-03-review-habits",
+              "order": 3,
+              "title": "Schedule your review",
+              "summary": "Review the book after sessions, on a schedule.",
+              "objectives": [
+                "Schedule review habits"
+              ],
+              "prerequisites": [
+                "lesson-07-09-01-02-default-lines"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-09-01-02-default-lines"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-09-01-03-explain-review",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Schedule review habits"
+                  ],
+                  "accessibilityText": "A book only helps if you reread it. Review leaks and defaults after each session, on a schedule.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-09-01-03-explain-review-line",
+                      "kind": "dialogue",
+                      "text": "A book only helps if you reread it. Review leaks and defaults after each session, on a schedule."
+                    }
+                  ],
+                  "okFeedback": "Review on a schedule.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "AFTER SESSION",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "REVIEW",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "After session → Review."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-07-09-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -41195,57 +41860,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-07-09-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Baseline before exploits.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Write default lines for common spots"
-                  ],
-                  "prompt": "Default book purpose?",
-                  "choices": [
-                    {
-                      "id": "base",
-                      "label": "Baseline before exploits",
-                      "accessibilityText": "Baseline before exploits",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Yes."
-                      }
-                    },
-                    {
-                      "id": "replace",
-                      "label": "Replace all thinking forever",
-                      "accessibilityText": "Replace all thinking forever",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Still update.",
-                        "betterChoiceId": "base"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "base",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -41268,7 +41882,7 @@
                 "Finish river coherently"
               ],
               "prerequisites": [
-                "lesson-07-09-01-leak-review-book"
+                "lesson-07-09-01-03-review-habits"
               ],
               "remediationLessonIds": [
                 "lesson-07-04-01-03-threebet-fourbet-pots"
@@ -42640,7 +43254,7 @@
                 "lesson-07-10-05-capstone-4bet"
               ],
               "remediationLessonIds": [
-                "lesson-07-09-01-leak-review-book"
+                "lesson-07-09-01-03-review-habits"
               ],
               "estimatedMinutes": 8,
               "difficultyBand": 5,
@@ -45972,6 +46586,18 @@
         }
       }
     },
+    "act-02-07-01-02-explain-vsraise": {
+      "activityId": "act-02-07-01-02-explain-vsraise",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Open → Plan → Act."
+      }
+    },
     "act-02-07-01-scaffolded-vs": {
       "activityId": "act-02-07-01-scaffolded-vs",
       "stage": "scaffolded",
@@ -46021,6 +46647,18 @@
         }
       },
       "handLabSpecId": "lab-02-07-01-full-ring-btn"
+    },
+    "act-02-07-01-03-explain-habits": {
+      "activityId": "act-02-07-01-03-explain-habits",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Cover → Wait."
+      }
     },
     "act-02-07-01-checkpoint-habit": {
       "activityId": "act-02-07-01-checkpoint-habit",
@@ -53783,6 +54421,18 @@
         }
       }
     },
+    "act-07-07-01-02-explain-tag": {
+      "activityId": "act-07-07-01-02-explain-tag",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "TAG check-raise → Careful."
+      }
+    },
     "act-07-07-01-scaffolded": {
       "activityId": "act-07-07-01-scaffolded",
       "stage": "scaffolded",
@@ -53805,6 +54455,18 @@
         }
       }
     },
+    "act-07-07-01-03-explain-lag": {
+      "activityId": "act-07-07-01-03-explain-lag",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "LAG barrel → Call."
+      }
+    },
     "act-07-07-01-unguided": {
       "activityId": "act-07-07-01-unguided",
       "stage": "scaffolded",
@@ -53824,6 +54486,18 @@
           "grade": "questionable",
           "feedback": "Too tight."
         }
+      }
+    },
+    "act-07-07-01-04-explain-baseline": {
+      "activityId": "act-07-07-01-04-explain-baseline",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "No evidence → Baseline."
       }
     },
     "act-07-07-01-checkpoint": {
@@ -53881,6 +54555,18 @@
         }
       }
     },
+    "act-07-08-01-02-explain-sizing": {
+      "activityId": "act-07-08-01-02-explain-sizing",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Line + Size → Read."
+      }
+    },
     "act-07-08-01-scaffolded": {
       "activityId": "act-07-08-01-scaffolded",
       "stage": "scaffolded",
@@ -53901,6 +54587,18 @@
           "feedback": "No showdown.",
           "betterChoiceId": "raise"
         }
+      }
+    },
+    "act-07-08-01-03-explain-one": {
+      "activityId": "act-07-08-01-03-explain-one",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Four inputs → One action."
       }
     },
     "act-07-08-01-unguided": {
@@ -53980,6 +54678,18 @@
         }
       }
     },
+    "act-07-09-01-02-explain-defaults": {
+      "activityId": "act-07-09-01-02-explain-defaults",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Common spot → Default line."
+      }
+    },
     "act-07-09-01-scaffolded": {
       "activityId": "act-07-09-01-scaffolded",
       "stage": "scaffolded",
@@ -53998,27 +54708,6 @@
           "grade": "clear_mistake",
           "feedback": "No.",
           "betterChoiceId": "book"
-        }
-      }
-    },
-    "act-07-09-01-unguided": {
-      "activityId": "act-07-09-01-unguided",
-      "stage": "scaffolded",
-      "renderer": "select_identify",
-      "acceptedGrades": [
-        "recommended",
-        "strong",
-        "reasonable"
-      ],
-      "choiceGrading": {
-        "sched": {
-          "grade": "recommended",
-          "feedback": "Habit."
-        },
-        "never": {
-          "grade": "clear_mistake",
-          "feedback": "Leaks return.",
-          "betterChoiceId": "sched"
         }
       }
     },
@@ -54041,6 +54730,39 @@
           "grade": "clear_mistake",
           "feedback": "Still update.",
           "betterChoiceId": "base"
+        }
+      }
+    },
+    "act-07-09-01-03-explain-review": {
+      "activityId": "act-07-09-01-03-explain-review",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "After session → Review."
+      }
+    },
+    "act-07-09-01-unguided": {
+      "activityId": "act-07-09-01-unguided",
+      "stage": "scaffolded",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "choiceGrading": {
+        "sched": {
+          "grade": "recommended",
+          "feedback": "Habit."
+        },
+        "never": {
+          "grade": "clear_mistake",
+          "feedback": "Leaks return.",
+          "betterChoiceId": "sched"
         }
       }
     },

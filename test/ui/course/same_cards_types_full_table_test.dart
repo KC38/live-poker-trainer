@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-07-07-01-same-cards-types',
+            'lesson-07-07-01-01-station-value',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

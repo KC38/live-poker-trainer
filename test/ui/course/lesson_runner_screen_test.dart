@@ -1426,7 +1426,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-02-07-01-baseline-full-hand',
+          lessonId: 'lesson-02-07-01-01-full-ring-open', // split from lesson-02-07-01-baseline-full-hand
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_full_ring_frame',
@@ -4073,7 +4073,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-07-01-same-cards-types',
+          lessonId: 'lesson-07-07-01-01-station-value', // split from lesson-07-07-01-same-cards-types
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_replay_types_frame',
@@ -4118,7 +4118,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-08-01-type-board-line',
+          lessonId: 'lesson-07-08-01-01-type-and-board', // split from lesson-07-08-01-type-board-line
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_type_board_line_frame',
@@ -4161,7 +4161,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-09-01-leak-review-book',
+          lessonId: 'lesson-07-09-01-01-name-leaks', // split from lesson-07-09-01-leak-review-book
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_leak_review_book_frame',

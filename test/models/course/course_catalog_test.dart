@@ -105,6 +105,11 @@ void main() {
       'lesson-07-04-01-pot-type-plans',
       'lesson-07-05-01-hu-vs-multiway',
       'lesson-07-06-01-stack-depth-plans',
+      // LPT-batch-split-s7b-integrate
+      'lesson-07-07-01-same-cards-types',
+      'lesson-07-08-01-type-board-line',
+      'lesson-07-09-01-leak-review-book',
+      'lesson-02-07-01-baseline-full-hand',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];

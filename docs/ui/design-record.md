@@ -777,6 +777,12 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-330, LPT-333, LPT-336, LPT-668: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-07-07-01-same-cards-types` → `lesson-07-07-01-01-station-value`, `lesson-07-07-01-02-tag-checkraise`, `lesson-07-07-01-03-lag-barrel`, `lesson-07-07-01-04-baseline-without-evidence` (LPT-330)
+- `lesson-07-08-01-type-board-line` → `lesson-07-08-01-01-type-and-board`, `lesson-07-08-01-02-line-and-sizing`, `lesson-07-08-01-03-one-coherent-action` (LPT-333)
+- `lesson-07-09-01-leak-review-book` → `lesson-07-09-01-01-name-leaks`, `lesson-07-09-01-02-default-lines`, `lesson-07-09-01-03-review-habits` (LPT-336)
+- `lesson-02-07-01-baseline-full-hand` → `lesson-02-07-01-01-full-ring-open`, `lesson-02-07-01-02-vs-raise-plan`, `lesson-02-07-01-03-habits-while-deciding` (LPT-668)
+
 Curriculum splits LPT-310, LPT-314, LPT-317, LPT-320, LPT-323, LPT-326: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-07-01-01-preflop-to-flop` → `lesson-07-01-01-01-preflop-thesis`, `lesson-07-01-01-02-flop-update`, `lesson-07-01-01-03-abandon-dead-plans` (LPT-310)
 - `lesson-07-02-01-flop-to-turn-map` → `lesson-07-02-01-01-continue-cards`, `lesson-07-02-01-02-give-up-cards`, `lesson-07-02-01-03-bet-with-a-map` (LPT-314)
@@ -1827,7 +1833,9 @@ felt.
 | Follow the action | Watch, Say, Cover, Wait; unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Say your action | explain SoftPulse cues SAY → CHIPS; unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Protect cards, wait your turn | explain SoftPulse cues COVER → WAIT; unit `unit-02-06-table-habits` (LPT-133 split) | — |
-| Full-ring baseline hand | Nine, Same, Position; explain SoftPulse cues NINE → SAME → POSITION (LPT-635) | — |
+| Open on a full ring | Nine, Same, Position; explain SoftPulse cues NINE → SAME → POSITION (LPT-635); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
+| Face a raise with a plan | explain SoftPulse cues OPEN → PLAN; unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
+| Keep live habits while deciding | explain SoftPulse cues COVER → WAIT; unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
 | Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221); jump-family SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Pot and stacks | Pot, Stacks, Button, Who Acts; unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS; unit `unit-03-01-reading-table` (LPT-140 split) | — |
@@ -1996,9 +2004,16 @@ felt.
 | Commit earlier when short | Short, Deep, Effective; unit `unit-07-06-stacks` (LPT-326 split) | — |
 | Use implied odds deep | explain SoftPulse cues DEEP → IMPLIED ODDS; unit `unit-07-06-stacks` (LPT-326 split) | — |
 | Recalculate effective stacks | explain SoftPulse cues SHORTER STACK → PLAN; unit `unit-07-06-stacks` (LPT-326 split) | — |
-| Replay the same hand versus each type | Cards, Models, Cite | — |
-| Integrate type, board, line, and sizing | Type, Board, Line, Size | — |
-| Write your default strategy book | Leak, Book, Review | — |
+| Same hand: bet value versus a Station | Cards, Models, Cite; unit `unit-07-07-same-cards` (LPT-330 split) | — |
+| Same hand: respect a TAG check-raise | explain SoftPulse cues TAG CHECK-RAISE → CAREFUL; unit `unit-07-07-same-cards` (LPT-330 split) | — |
+| Same hand: call a LAG barrel | explain SoftPulse cues LAG BARREL → CALL; unit `unit-07-07-same-cards` (LPT-330 split) | — |
+| No evidence, baseline line | explain SoftPulse cues NO EVIDENCE → BASELINE; unit `unit-07-07-same-cards` (LPT-330 split) | — |
+| Combine type with board | Type, Board, Line, Size; unit `unit-07-08-checkpoints` (LPT-333 split) | — |
+| Combine line with sizing | explain SoftPulse cues LINE → SIZE; unit `unit-07-08-checkpoints` (LPT-333 split) | — |
+| Produce one coherent action | explain SoftPulse cues FOUR INPUTS → ONE ACTION; unit `unit-07-08-checkpoints` (LPT-333 split) | — |
+| Name your leaks | Leak, Book, Review; unit `unit-07-09-leaks` (LPT-336 split) | — |
+| Write default lines | explain SoftPulse cues COMMON SPOT → DEFAULT; unit `unit-07-09-leaks` (LPT-336 split) | — |
+| Schedule your review | explain SoftPulse cues AFTER SESSION → REVIEW; unit `unit-07-09-leaks` (LPT-336 split) | — |
 | Capstone: single-raised pot | Plan, Update, Finish | — |
 | Capstone: 3-bet pot | SPR, Turn, Close | — |
 | Capstone: multiway deep | Nuts, Deep, No-bluff | — |
