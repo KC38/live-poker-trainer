@@ -2358,3 +2358,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - successors `act-03-03-01-02-explain-price` (PRICE→POT→EQUITY) + `act-03-03-01-03-explain-implied` (DEEP→IMPLIED ODDS) content-driven; guided SoftPulse As→Ad→Ac + scaffolded SoftPulse `call-10` + unguided SoftPulse `call-draw` + checkpoint SoftPulse `implied-yes` kind `none` PRESENT.
 - Curriculum **LPT-146** Done — do not clone / do not re-add needs-human. Tip-commented LPT-146/752 + Meet Nit LPT-198 / LPT-216; leave open LPT-752/751/750….
 - Prefer next: NEVER `lesson-03-04-01-*` flop-decisions / Low residuals LPT-676…752.
+
+## Fold 2026-10-14ds (2f2a4a94 discovery flop-decisions SoftPulse residual)
+
+- Tip-stable `2f2a4a94` (#2340 after #2339). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-03-04-01-01/02/03` under flop-decisions unit:
+  - first-child `act-03-04-01-explain` SoftPulse VALUE→C-BET→CHECK→CALL→FOLD→RAISE + `explainGrading` under Value-bet-only → filed **LPT-753** (needs-human; Relates LPT-151).
+  - successors `act-03-04-01-02-explain-cbet` (PREFLOP RAISER→C-BET) + `act-03-04-01-03-explain-plan` (RAISE→CALL→FOLD) content-driven; guided SoftPulse `bet-tp` + scaffolded SoftPulse `cbet` + unguided SoftPulse `raise-set` + checkpoint SoftPulse `fold-bp` kind `none` PRESENT.
+- Curriculum **LPT-151** Done — do not clone / do not re-add needs-human; distinct from Advanced lines **LPT-684**. Tip-commented LPT-151/753 + Meet Nit LPT-198 / LPT-216; leave open LPT-753/752/751….
+- Prefer next: NEVER `lesson-03-05-01-*` turn-decisions / Low residuals LPT-676…753.
+
