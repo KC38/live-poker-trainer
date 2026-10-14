@@ -165,7 +165,9 @@ Lesson-specific pattern notes (full history) live in
   BLUFFS/CITE under Value-wider) + **LPT-733** (Bet SoftPulse still walks
   RAISE/ALL-IN under Bet-only) + **LPT-737** (postflop-first checkpoint
   under Action order) + **LPT-738** (Win SoftPulse still walks
-  SHOWDOWN/SIDE POT under Win-by-fold); multiway-ranges +
+  SHOWDOWN/SIDE POT under Win-by-fold) + **LPT-739** (postflop last-actor
+  guided-btn under Seat labels) + **LPT-740** (Hand SoftPulse still walks
+  Broadways/Connectors under Pocket-pairs); multiway-ranges +
   line-reading structural clean (first-child ACTION→REWRITE→UPDATE matches
   update-each-street — no residual); Prefer-IP SoftPulse EQUITY→CASH→POS is
   POS-led framing (not a NUT-style successor leak); careful-4bet SoftPulse
@@ -207,10 +209,14 @@ Lesson-specific pattern notes (full history) live in
   postflop last-actor guided-btn under Seat labels → **LPT-739**; tip
   `b8d4de07` Prefer NEVER acting-order: SoftPulse UTG→HJ→CO→BTN /
   SB→BTN / EARLIER SEATS→YOUR TURN **concept-aligned** or content-driven
-  (no SoftPulse residual; LPT-669 Done — do not reopen); curriculum
-  LPT-668/330/333/336/192/100/103/106/114/117 Done — do not re-add
-  needs-human; next: NEVER `lesson-02-02-01-*` hand-families / Low
-  residuals LPT-676…739.
+  (no SoftPulse residual; LPT-669 Done — do not reopen); tip `77752ef0`
+  Prefer NEVER hand-families: SoftPulse Pairs→Broadways→Suited aces→
+  Connectors under Pocket-pairs → **LPT-740**; successors
+  BROADWAY→SUITED ACE / CONNECTORS→TRASH content-driven (LPT-121 Done —
+  do not re-add needs-human); curriculum
+  LPT-668/330/333/336/192/100/103/106/114/117/121 Done — do not re-add
+  needs-human; next: NEVER `lesson-02-03-01-*` open-early /
+  Low residuals LPT-676…740.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -254,6 +260,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14dj: Tip-stable `77752ef0` (#2323). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER hand-families children: SoftPulse Pairs→Broadways→Suited aces→Connectors under Pocket-pairs → **LPT-740**; successors BROADWAY→SUITED ACE / CONNECTORS→TRASH content-driven; guided/scaffolded/unguided/checkpoint structural OK. Curriculum **LPT-121** Done — do not clone / do not re-add needs-human. Tip-commented LPT-121/740 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-02-03-01-*` open-early / Low residuals LPT-676…740.
 - 2026-10-14di: Tip-stable `b8d4de07` (#2320 SPR densify on tip; after #2321 winning SoftPulse learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER acting-order children: SoftPulse UTG→HJ→CO→BTN under Preflop **concept-aligned**; SoftPulse SB→BTN / EARLIER SEATS→YOUR TURN content-driven under Postflop / Wait (LPT-669 Done — do not reopen); guided-pre SoftPulse CO→BTN→SB; scaffolded-post one-per-press OK; unguided-wait + checkpoint-full densify PRESENT; seat/wait `deal.mode` `none`. Curriculum **LPT-117** Done — do not clone / do not re-add needs-human. No SoftPulse / activity↔objective residual. Tip-commented LPT-117/739 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-02-02-01-*` hand-families / Low residuals LPT-676…739.
 - 2026-10-14dh: Tip-stable `121c5995` (#2321). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0**). Discovery NEVER position-labels children: SoftPulse EP→HJ→CO→BTN / SB→BB **concept-aligned**; postflop last-actor guided-btn under Seat labels → **LPT-739**; successors / Later seats content-driven or OK. Curriculum **LPT-114** Done — do not clone / do not re-add needs-human. Tip-commented LPT-739/114. next: NEVER `lesson-02-01-02-*` acting-order / Low residuals LPT-676…739.
 - 2026-10-14dg: Tip-stable `ffec8f7d` (#2319). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER winning-pots children: SoftPulse FOLD WIN→SHOWDOWN→SIDE POT under Win-by-fold → **LPT-738**; successors RIVER CALL→SHOWDOWN→BEST FIVE / MAIN POT→SIDE POT content-driven; guided/scaffolded/unguided/checkpoint structural OK. Curriculum **LPT-106** Done — do not clone / do not re-add needs-human. Tip-commented LPT-106/738 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-02-01-01-*` position-labels / Low residuals LPT-676…738.
