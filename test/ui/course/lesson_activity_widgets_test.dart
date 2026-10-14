@@ -2402,7 +2402,7 @@ void main() {
       ),
     );
     expect(
-      find.text('Early seat with junk — pick the family that fits.'),
+      find.text('Low unconnected offsuit holes — tap the matching family.'),
       findsOneWidget,
     );
     expect(find.text('Offsuit trash'), findsOneWidget);
@@ -11001,7 +11001,7 @@ await tester.tap(find.text('NIT'));
       ),
     );
     expect(
-      find.text('Early seat with junk — pick the family that fits.'),
+      find.text('Low unconnected offsuit holes — tap the matching family.'),
       findsOneWidget,
     );
     expect(
