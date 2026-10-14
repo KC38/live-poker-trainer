@@ -119,7 +119,8 @@ Lesson-specific pattern notes (full history) live in
   overbets-geometric NEVER children walked (tips `39155796`/`a08d105d`/
   `8cb997f9`/`3b13dcb5`/`63ae3ddc`/`0b9f93f7`/`f25ed146`/`5a721bbf`/
   `a8361500`/`ea625203`/`92c86645`/`29559dd8`/`34ab9999`/`e36af944`/
-  `3ce8732e`/`41d1f091`/`7d928fa9`/`05df1191`/`d7c46bd5`/`b5ebcd9a`) —
+  `3ce8732e`/`41d1f091`/`7d928fa9`/`05df1191`/`d7c46bd5`/`b5ebcd9a`) + blockers NEVER children walked (tip
+  `1e5f1189`) —
   residuals **LPT-676** (polar-under-Nearby) + **LPT-677** (weigh-SPR habit
   under Estimate) + **LPT-680** (rewards checkpoint under Plan-high-SPR) +
   **LPT-681** (Estimate SoftPulse still walks REVERSE/SECOND) + **LPT-682**
@@ -134,10 +135,11 @@ Lesson-specific pattern notes (full history) live in
   **LPT-693** (Prefer-IP checkpoint still grades Position + initiative) +
   **LPT-694** (Spot-caps SoftPulse still walks UNCAPPED/NUTS) + **LPT-696**
   (Polar SoftPulse still walks MERGED/SIZE) + **LPT-699** (Overbet SoftPulse
-  still walks POLAR/GEO); multiway-ranges + line-reading structural clean
+  still walks POLAR/GEO) + **LPT-700** (Blockers SoftPulse still walks USE/NO EV);
+  multiway-ranges + line-reading structural clean
   (first-child ACTION→REWRITE→UPDATE matches update-each-street — no
   residual); Prefer-IP SoftPulse EQUITY→CASH→POS is POS-led framing (not a
-  NUT-style successor leak); next NEVER walk: `lesson-06-06-01-*` blockers /
+  NUT-style successor leak); next NEVER walk: `lesson-06-07-01-*` min-defense /
   remaining S6 NEVER / Low curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
@@ -182,6 +184,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14ci: Tip-stable `1e5f1189` (#2285 overbets-geometric learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER blockers children: first-child `act-06-06-01-explain` SoftPulse BLOCK→USE→NO EV + Dart `BlockersDemo` still pre-split ladder under bluff-blockers-only → **LPT-700**; guided SoftPulse `as` densify PRESENT; successors `act-06-06-01-02-explain-unblock` (CATCH→UNBLOCK→BLUFFS) + `act-06-06-01-03-explain-ev` (TWEAK→NO EV) content-driven (do not reopen LPT-669); scaffolded SoftPulse `unblock` + unguided SoftPulse `tweak` one-per-press PRESENT; checkpoint SoftPulse `no` under no-fake-ev matches — no companion residual. Curriculum **LPT-270** Done — do not clone / do not re-add needs-human. Tip-commented LPT-270/700 + Done-ack LPT-268/269/473/498/639 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…699 + parents. next: NEVER `lesson-06-07-01-*` min-defense / S6 NEVER / Low curriculum.
 - 2026-10-14ch: Tip-stable `b5ebcd9a` (#2283 polar-merged learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER overbets-geometric children: first-child `act-06-05-01-explain` SoftPulse OVERBET→POLAR→GEO + Dart `OverbetGeometryDemo` still pre-split ladder under polar-overbets-only → **LPT-699**; guided SoftPulse `polar-ob` densify PRESENT; successors `act-06-05-01-02-explain-geometry` (FLOP→TURN→RIVER) + `act-06-05-01-03-explain-random` (HUGE→MEDIUM→AVOID) content-driven (do not reopen LPT-669); scaffolded SoftPulse `mid` one-per-press PRESENT (As/Kd·Ah/7c/2d/9s match Dart); unguided SoftPulse `avoid` densify PRESENT; checkpoint SoftPulse `multi` under geometric-sizes matches — no companion residual. Curriculum **LPT-267** Done — do not clone. Tip-commented LPT-267/699 + Done-ack LPT-265/266/472/497/638 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…696 + parents. next: NEVER `lesson-06-06-01-*` blockers / S6 NEVER / Low curriculum.
 - 2026-10-14cg: Tip-stable `d7c46bd5` (#2282 capped-uncapped learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER polar-merged children: first-child `act-06-04-01-explain` SoftPulse POLAR→MERGED→SIZE + Dart `PolarMergedDemo` still pre-split ladder under polarized-sizing-only → **LPT-696**; guided SoftPulse `polar` densify PRESENT; successors `act-06-04-01-02-explain-merged` (MERGED→MEDIUM→VALUE) + `act-06-04-01-03-explain-mismatch` (SIZE→SHAPE→MATCH) content-driven (do not reopen LPT-669); scaffolded SoftPulse `mid` one-per-press PRESENT (Jh/Td·Qc/Ts… match Dart LPT-395); unguided SoftPulse `mismatch` densify PRESENT; checkpoint SoftPulse `thin` under merged-thin-value matches — no companion residual. Curriculum **LPT-264** Done — do not clone. Tip-commented LPT-264/696 + Done-ack LPT-262/263/395/471/637 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…694 + parents. next: NEVER `lesson-06-05-01-*` overbets-geometric / S6 NEVER / Low curriculum.
 - 2026-10-14cf: Tip-stable `05df1191` (#2281 equity-realization learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER capped-uncapped children: first-child `act-06-03-01-explain` SoftPulse CAPPED→UNCAPPED→NUTS + Dart `CappedUncappedDemo` still pre-split ladder under spot-caps-only → **LPT-694** (race clone LPT-695 Done); guided SoftPulse `cap` densify PRESENT; successors `act-06-03-01-02-explain-uncapped` (RAISE→BET→RESPECT) + `act-06-03-01-03-explain-attack` (CAPPED→THIN→BLUFF) content-driven (do not reopen LPT-669); unguided SoftPulse `uncap` + scaffolded SoftPulse `bet` one-per-press OK; checkpoint SoftPulse `attack` under attack-caps matches — no companion residual. Curriculum **LPT-260** Done — do not clone. Tip-commented LPT-260/694 + Done-ack LPT-258/259 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…693 + parents. next: NEVER `lesson-06-04-01-*` polar-merged / S6 NEVER / Low curriculum.
