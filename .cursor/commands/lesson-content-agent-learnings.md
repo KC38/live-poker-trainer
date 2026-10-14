@@ -898,7 +898,7 @@ Lesson-specific pattern notes (full history) live in
   guided SoftPulse `soft` densify PRESENT; scaffolded SoftPulse `weakish`
   densify PRESENT; unguided SoftPulse `reject` densify PRESENT; checkpoint
   SoftPulse `tiny` under timing-soft — no companion residual; curriculum
-  LPT-244 Done — do not clone / do not re-add needs-human; tip `c01b437a`
+  LPT-244 Done — do not clone / do not re-add needs-human; tip `b9f5a676`
   Prefer NEVER SoftPulse residual **LPT-686** still To Do (STUCK→TILTED→GEARS
   under tilted/stuck-only; Relates LPT-247 — do not re-add needs-human on
   curriculum) + companion checkpoint SoftPulse `temp` under Gear changes
