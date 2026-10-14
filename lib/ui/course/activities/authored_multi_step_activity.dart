@@ -222,8 +222,12 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: fill ? MainAxisSize.max : MainAxisSize.min,
                 children: [
-                  // Nice! owns the line — hide stale Rex; felt already shows cards.
-                  if (!locked) RexCoachLine(text: coachText),
+                  // Keep coach height under Nice!/Oops! — dropping Rex remounts
+                  // the felt below (redeal). Opacity 0; Nice! owns the line.
+                  gradeLockCoachSlot(
+                    locked: locked,
+                    child: RexCoachLine(text: coachText),
+                  ),
                   const SizedBox(height: 10),
                   Text(
                     'Street ${index + 1} of ${steps.length}',

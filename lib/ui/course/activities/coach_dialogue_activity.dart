@@ -734,8 +734,12 @@ class CoachDialogueActivity extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Nice! owns the teaching line — hide stale Rex above feedback.
-            if (!locked) RexCoachLine.fromActivity(activity),
+            // Keep coach height under Nice!/Oops! — dropping Rex remounts
+            // hole-card / blinds felts in [_CoachDialogueVisualPane] (redeal).
+            gradeLockCoachSlot(
+              locked: locked,
+              child: RexCoachLine.fromActivity(activity),
+            ),
             if (visual.kind != CoachDialogueVisualKind.none) ...[
               const SizedBox(height: 12),
               _CoachDialogueVisualPane(

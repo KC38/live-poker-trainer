@@ -8,6 +8,17 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/rex_mascot.dart';
 
+/// Keeps [child] laid out under Nice!/Oops! so later Column siblings (felts)
+/// do not remount and redeal (`DealtCardReveal` initState / LPT-642).
+///
+/// Prefer this over `if (!locked) RexCoachLine(...)` whenever a
+/// [LessonTableStage] / [FeltTableView] sits below the coach in the same
+/// Column. Framed lessons already shrink Rex via [LessonFrameScope].
+Widget gradeLockCoachSlot({required bool locked, required Widget child}) {
+  if (!locked) return child;
+  return Opacity(opacity: 0, child: IgnorePointer(child: child));
+}
+
 /// Resolves a single Rex instruction vs a duplicate prompt under the bubble.
 ///
 /// Teach-by-doing: prefer one spoken line. Authored dialogue/demo wins; otherwise
