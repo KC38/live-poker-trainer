@@ -3013,3 +3013,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-692/254/198/216/690; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gg (cf3ba3ee Prefer NEVER Spot-caps SoftPulse residual LPT-694 re-check)
+
+- Tip-stable `cf3ba3ee` (#2428 Range SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Spot-caps SoftPulse residual re-check `lesson-06-03-01-01/02/03`: first-child SoftPulse CAPPED→UNCAPPED→NUTS + Dart `CappedUncappedDemo` / layout "Tap Capped, Uncapped, and Nuts." still pre-split under spot-caps-only → residual **LPT-694** still To Do (needs-human; Relates LPT-260; race clone LPT-695 Done — do not reopen); successors RAISE→BET→RESPECT / CAPPED→THIN→BLUFF content-driven (do not reopen LPT-669); guided SoftPulse `cap` densify PRESENT; unguided SoftPulse `uncap` one-per-press PRESENT; scaffolded SoftPulse `bet` one-per-press PRESENT (Jh9d/Kc9s4h2d7c + 2 suit variants); checkpoint SoftPulse `attack` kind `none` densify PRESENT (matches attack-caps — no companion residual).
+- Curriculum **LPT-260** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-694/260/198/216/696/351/692; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Polar SoftPulse residual **LPT-696** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-03-01-*: interactive structural clean on tip except LPT-694 SoftPulse residual; SoftPulse explain successors content-driven; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
