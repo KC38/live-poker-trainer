@@ -137,7 +137,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   Verify with Hint+`tree` before implementing: framed `_LessonChoiceStack`
   + `_framedDockPulseChoiceId` (e.g. Size with a message unguided) already
   SoftPulses only the first choice — close as no-repro (LPT-504); densify
-  builders still need `guideRegion`. When fixing multi SoftPulse, update
+  builders still need `guideRegion`. Prefer
+  `python3 tools/agent_tap.py tree --contains "Hint copy"` over
+  `tree | head | grep` — truncated trees false-fail VALIDATE (LPT-822).
+  When fixing multi SoftPulse, update
   tests that assert `findsNWidgets(N>1)` on `glow-highlight` for that
   surface — they may have locked the bug (LPT-55).
   Ids in `lessonFrameSameConceptQuietIds` (e.g. guided-seven) stay SoftPulse
