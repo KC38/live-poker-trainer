@@ -1265,7 +1265,7 @@ Lesson-specific pattern notes (full history) live in
   guided SoftPulse `bet` PRESENT (fixed+variants); scaffolded SoftPulse `fold`
   one-per-press PRESENT; unguided SoftPulse `call` one-per-press PRESENT;
   checkpoint SoftPulse `base` under baseline — no companion residual; curriculum
-  LPT-330 Done — do not clone / do not re-add needs-human;   tip `17803faf` Prefer NEVER SoftPulse
+  LPT-330 Done — do not clone / do not re-add needs-human; tip `17803faf` Prefer NEVER SoftPulse
   residual **LPT-726** still To Do (TYPE→BOARD→LINE→SIZE + Dart `TypeBoardLineDemo` /
   `LessonTypeBoardLineExplainTable` under type-and-board-only; Relates LPT-333 — do not
   re-add needs-human on curriculum; Duplicate LPT-729 — do not reopen); successors
