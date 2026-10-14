@@ -2819,3 +2819,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-721/306/718/719/716/198/216; leave open LPT-676…779; leave ui-agent alone.
 - Prefer next: NEVER `lesson-06-13-02-*` S6 checkpoint / Low curriculum LPT-192 / Low residuals LPT-676…779 (LPT-680…721).
 - act-06-13-01-*: interactive structural clean on tip except LPT-721 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily.
+
+## Fold 2026-10-14fn (58a3067f Prefer NEVER S6 checkpoint clean)
+
+- Tip-stable `58a3067f` (#2403 Mix five SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-06-13-02-section-six-checkpoint`:
+  - all five `act-06-13-02-cp-adv/cap/polar/tag/lag` scaffolded + `assessmentRole` checkpoint; teachSpec `deal.mode` `none` + SoftPulse cues `ra`/`cap`/`polar`/`tag`/`lag` kind `none`; densify PRESENT in `selectIdentifyDensifiedCoachLine`; hintless.
+  - structural **clean** — assessment container (skip curriculum-split / no SoftPulse residual / no needs-human multi-objective split).
+- Tip-commented Done LPT-307/444 + Meet Nit LPT-198 / LPT-216 + adjacent LPT-721 + Done LPT-192; leave open LPT-676…779; leave ui-agent alone.
+- LPT-192 Adjust Station Done — Prefer next no longer routes through unsplit Adjust Station.
+- S6 Prefer NEVER SoftPulse path complete through Mix five residual **LPT-721**.
+- Prefer next: NEVER `lesson-07-01-01-*` preflop-to-flop / Low residuals LPT-676…779 (LPT-680…721) / Low curriculum LPT-351.
