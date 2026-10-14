@@ -3958,3 +3958,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-706/288/708/705/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Meet-TAG working-model residual **LPT-708** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-11-01-*: interactive structural clean on tip except LPT-706 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
+
+## Fold 2026-10-15aq tip 916ef421 (#2566 Selective Prefer → Meet-TAG working-model LPT-708 Prefer)
+
+- Tip-stable `916ef421` after #2566 SoftPulse residual Prefer LPT-706 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Meet-TAG residual re-check `lesson-06-11-02-01/02/03` / `act-06-11-02-*`: first-child SoftPulse TIGHT→AGGRO→MODEL + `explainGrading` "Tight → Aggro → Model." + Dart `TagModelDemo.points` (TIGHT/AGGRO/MODEL) under Introduce TAG — **concept-aligned** (not a SoftPulse residual); companion checkpoint SoftPulse `model` kind `none` densify PRESENT (prompt "TAG is?" / Working model vs Insult) still under Introduce TAG-only → residual **LPT-708** still To Do (Relates LPT-291 — do not re-add needs-human on curriculum); successors SoftPulse FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE content-driven (do not reopen LPT-669); guided SoftPulse `tag` densify PRESENT; scaffolded SoftPulse `diff` densify PRESENT; unguided SoftPulse `tag2` densify PRESENT.
+- Curriculum **LPT-291** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-708/291/706/709/710/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Adjust-TAG SoftPulse residual **LPT-709** (+ **LPT-710**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model checkpoint residual; SoftPulse explain concept-aligned / successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; outcome-tile `deal.mode` `none` — do not file handFamily.
