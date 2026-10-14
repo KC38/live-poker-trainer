@@ -65,11 +65,15 @@ const _lines = <String, String>{
       'You have 150bb. Villain has 60bb. Effective stack — pick 60bb.',
   'act-02-05-01-unguided-depth':
       'Which depth plays closest to a short-stack shove game — pick 50bb.',
-  'act-02-05-01-checkpoint-200': 'Blinds 2/5. You buy in for 1000 chips. Stack in big blinds — pick 200bb.',
+  // LPT-785: SoftPulse-off densify — no correct-tile spoil.
+  'act-02-05-01-checkpoint-200':
+      'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
   'act-02-06-01-guided-follow': 'Two seats act before you. What first — pick Watch what they do, then decide.',
   'act-02-06-01-scaffolded-verbal': 'You want to raise. Clearest live choice — pick Say "raise" and put out the chips.',
   'act-02-06-01-unguided-protect': 'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
-  'act-02-06-01-checkpoint-oot': 'Action is two seats left. You toss in a raise early. Problem — pick You acted out of turn.',
+  // LPT-786: SoftPulse-off densify — no correct-tile spoil.
+  'act-02-06-01-checkpoint-oot':
+      'Action is two seats left. You toss in a raise early — tap the matching problem.',
   'act-02-07-01-checkpoint-habit': 'Full ring. Action two seats left. Your cards are uncovered. Fix — pick Cover your cards and wait your turn.',
   // LPT-675: SoftPulse-off jump — stem must not name Cutoff.
   'act-02-07-02-jump-pos':
@@ -78,7 +82,9 @@ const _lines = <String, String>{
       'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
   'act-03-01-01-scaffolded': 'Nine-handed. Dealer button is on seat 7. Who acts first preflop — pick Seat left of the big blind (UTG).',
   'act-03-01-01-unguided': 'You say "raise" then try to take it back to a call. Result — pick The raise stands — verbal is binding.',
-  'act-03-01-01-checkpoint': 'Hero 140bb, villain 55bb, pot 18. What matters most next — pick Effective 55bb and the 18 pot.',
+  // LPT-787: SoftPulse-off densify — no correct-tile spoil.
+  'act-03-01-01-checkpoint':
+      'Hero 140bb, villain 55bb, pot 18 — tap what matters most next.',
   'act-03-02-01-guided':
       'Board Ks 9d 2c. You hold Kh Qh. Class — pick Made hand — top pair.',
   'act-03-02-01-scaffolded': 'Board Jh 8h 3c. You hold Ah 9h. Class — pick Strong draw — nut flush draw.',
