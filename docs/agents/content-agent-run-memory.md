@@ -2582,3 +2582,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-681/230/680/779/198/216/228; leave open LPT-676…779.
 - Prefer next: NEVER `lesson-05-04-01-*` thin-value / Low residuals LPT-676…779 (LPT-680 + LPT-681).
 - act-05-03-01-*: interactive structural clean on tip except LPT-681 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); checkpoint is `deal.mode` `none` rise tiles — do not file handFamily.
+
+## Fold 2026-10-14eq (ecac848b Prefer NEVER thin-value SoftPulse re-check)
+
+- Tip-stable `ecac848b` (#2372 implied-odds SoftPulse Prefer re-check learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-05-04-01-01/02/03` under thin-value unit:
+  - first-child `act-05-04-01-explain` SoftPulse THIN→CATCH→BARRELS + Dart `ThinValueDemo` still pre-split ladder under thin-value-only → residual **LPT-682** still To Do (needs-human); coachMedia still "Thin value needs calls. Bluff-catches need wide barrels."
+  - guided SoftPulse `tv` PRESENT (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants; SoftPulse maps PRESENT in `poker_action_sizing_activity.dart`); checkpoint SoftPulse `read` kind `none` hintless densify PRESENT — meta-read under Thin sticky callers → residual **LPT-683** still To Do (needs-human).
+  - successors `act-05-04-01-02-explain-catch` (MANIAC→BARREL→CALL) + `act-05-04-01-03-explain-overfold` (NIT→FOLDS→CHECK) content-driven; scaffolded SoftPulse `call-m` + unguided SoftPulse `check-nit` one-per-press PRESENT.
+- Curriculum **LPT-233** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-682/683/233/680/681/779/198/216; leave open LPT-676…779.
+- Prefer next: NEVER `lesson-05-05-01-*` lines-and-probes / Low residuals LPT-676…779 (LPT-680 + LPT-681 + LPT-682 + LPT-683).
+- act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse + LPT-683 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); checkpoint is `deal.mode` `none` read tiles — do not file handFamily; poker_action_sizing densify N/A.
