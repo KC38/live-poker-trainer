@@ -331,6 +331,57 @@ test("unknown teachSpec handFamily is rejected (LPT-166)", () => {
   assert.deepEqual(validateAndGenerate(clean).errors, []);
 });
 
+test("lessonSplitMap rejects live keys, empty successors, and unknown ids", () => {
+  const liveKey = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  liveKey.lessonSplitMap["lesson-01-01-01-your-two-cards"] = [
+    "lesson-01-01-02-01-suits",
+  ];
+  const liveErrors = validateAndGenerate(liveKey).errors;
+  assert.ok(
+    liveErrors.some((error) =>
+      error.includes(
+        'lessonSplitMap key "lesson-01-01-01-your-two-cards" must not still be a live lesson id',
+      ),
+    ),
+    liveErrors.join("\n"),
+  );
+
+  const empty = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  empty.lessonSplitMap["retired-empty"] = [];
+  const emptyErrors = validateAndGenerate(empty).errors;
+  assert.ok(
+    emptyErrors.some((error) =>
+      error.includes('lessonSplitMap["retired-empty"] must be a non-empty string array'),
+    ),
+    emptyErrors.join("\n"),
+  );
+
+  const notArray = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  notArray.lessonSplitMap["retired-string"] = "lesson-01-01-02-01-suits";
+  const notArrayErrors = validateAndGenerate(notArray).errors;
+  assert.ok(
+    notArrayErrors.some((error) =>
+      error.includes('lessonSplitMap["retired-string"] must be a non-empty string array'),
+    ),
+    notArrayErrors.join("\n"),
+  );
+
+  const unknown = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  unknown.lessonSplitMap["retired-missing"] = ["lesson-does-not-exist"];
+  const unknownErrors = validateAndGenerate(unknown).errors;
+  assert.ok(
+    unknownErrors.some((error) =>
+      error.includes(
+        'lessonSplitMap["retired-missing"]: unknown successor lesson "lesson-does-not-exist"',
+      ),
+    ),
+    unknownErrors.join("\n"),
+  );
+
+  const clean = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));
+  assert.deepEqual(validateAndGenerate(clean).errors, []);
+});
+
 test("wave one pilot lesson authors the same teachSpec as course.json (LPT-558)", async () => {
   const {buildSectionOne} = await import("./wave_one_foundations.mjs");
   const course = loadCourseJson(resolve(ROOT, "content/course/v2/course.json"));

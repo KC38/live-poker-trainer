@@ -43,6 +43,7 @@ v2 `fetchSituation` / `recordProgress` / old pool exports are **gone**.
 | `course_session.ts` | Lesson attempts, grading against private bank |
 | `course_hearts.ts` | Hearts economy |
 | `course_catalog.ts` | Server catalog / bank views |
+| `lesson_split_map.ts` | Retired lesson ids: expansion, start remap, already-finished |
 | `live_access.ts` | Unlock rules |
 
 ## Firestore privacy sketch

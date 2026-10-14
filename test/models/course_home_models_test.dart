@@ -7,7 +7,9 @@ import 'package:live_poker_trainer/models/course/course_flags.dart';
 import 'package:live_poker_trainer/models/course/course_home_models.dart';
 import 'package:live_poker_trainer/models/course/course_session_models.dart';
 
-CourseCatalog _miniCatalog() {
+CourseCatalog _miniCatalog({
+  Map<String, dynamic> lessonSplitMap = const {},
+}) {
   return CourseCatalog.fromJson({
     'catalogVersion': '2.0.0',
     'minClientVersion': '2.0.0',
@@ -116,6 +118,7 @@ CourseCatalog _miniCatalog() {
         ],
       },
     ],
+    'lessonSplitMap': lessonSplitMap,
   });
 }
 
@@ -787,4 +790,58 @@ void main() {
     expect(notAMap.completedLessonIds, isEmpty);
     expect(notAMap.masteryByLessonId, isEmpty);
   });
+
+  test('a finished retired lesson completes its successors and unlocks the next prereq', () {
+    final split = _miniCatalog(lessonSplitMap: {
+      'retired-ab': ['lesson-a', 'lesson-b'],
+      'retired-a': ['lesson-a'],
+    });
+    final both = buildCourseHomeSnapshot(
+      catalog: split,
+      flags: _enabledFlags(),
+      available: true,
+      profile: _profileWith(['retired-ab']),
+    );
+    expect(both.nodes[0].hasCompleted, isTrue);
+    expect(both.nodes[0].state, CourseNodeState.completed);
+    expect(both.nodes[1].hasCompleted, isTrue);
+    expect(both.nodes[2].state, CourseNodeState.available);
+    expect(both.nodes[2].isNext, isTrue);
+    expect(both.nextLessonId, 'lesson-c');
+
+    final onlyA = buildCourseHomeSnapshot(
+      catalog: split,
+      flags: _enabledFlags(),
+      available: true,
+      profile: _profileWith(['retired-a']),
+    );
+    expect(onlyA.nodes[0].hasCompleted, isTrue);
+    expect(onlyA.nodes[1].hasCompleted, isFalse);
+    expect(onlyA.nodes[1].state, CourseNodeState.available);
+    expect(onlyA.nodes[1].isNext, isTrue);
+    expect(onlyA.nodes[2].state, CourseNodeState.locked);
+
+    final unrelated = buildCourseHomeSnapshot(
+      catalog: split,
+      flags: _enabledFlags(),
+      available: true,
+      profile: _profileWith(['some-other-id']),
+    );
+    expect(unrelated.nodes[0].hasCompleted, isFalse);
+    expect(unrelated.nodes[0].isNext, isTrue);
+    expect(unrelated.nodes[1].state, CourseNodeState.locked);
+    expect(unrelated.nextLessonId, 'lesson-a');
+  });
+}
+
+CourseProfileView _profileWith(List<String> completed) {
+  return CourseProfileView(
+    lifetimeXp: 0,
+    gems: 0,
+    currentStreak: 0,
+    acceptedAccuracy: 0,
+    completedLessonIds: completed,
+    masteryByLessonId: const {},
+    catalogVersion: '2.0.0',
+  );
 }
