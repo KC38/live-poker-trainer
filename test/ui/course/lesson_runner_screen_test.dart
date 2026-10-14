@@ -3048,7 +3048,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-01-01-range-nut-advantage',
+          lessonId: 'lesson-06-01-01-01-range-advantage', // split from lesson-06-01-01-range-nut-advantage
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_range_advantage_frame',
@@ -3090,7 +3090,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-02-01-equity-realization',
+          lessonId: 'lesson-06-02-01-01-prefer-ip', // split from lesson-06-02-01-equity-realization
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_equity_realize_frame',
@@ -3132,7 +3132,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-03-01-capped-uncapped',
+          lessonId: 'lesson-06-03-01-01-spot-caps', // split from lesson-06-03-01-capped-uncapped
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_capped_uncapped_frame',
@@ -3174,7 +3174,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-04-01-polar-merged',
+          lessonId: 'lesson-06-04-01-01-polarized-sizing', // split from lesson-06-04-01-polar-merged
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_polar_merged_frame',
@@ -3216,7 +3216,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-05-01-overbets-geometric',
+          lessonId: 'lesson-06-05-01-01-polar-overbets', // split from lesson-06-05-01-overbets-geometric
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_overbet_geometry_frame',
@@ -3261,7 +3261,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-06-01-blockers',
+          lessonId: 'lesson-06-06-01-01-bluff-blockers', // split from lesson-06-06-01-blockers
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_blockers_frame',
@@ -3303,7 +3303,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-07-01-minimum-defense',
+          lessonId: 'lesson-06-07-01-01-continue-catchers', // split from lesson-06-07-01-minimum-defense
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_defend_enough_frame',
@@ -3345,7 +3345,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-08-01-mixed-strategy',
+          lessonId: 'lesson-06-08-01-01-mix-strong', // split from lesson-06-08-01-mixed-strategy
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_mix_reason_frame',
@@ -3387,7 +3387,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-09-01-threebet-fourbet',
+          lessonId: 'lesson-06-09-01-02-plan-3bet-spr', // split from lesson-06-09-01-threebet-fourbet
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_threebet_depth_frame',
@@ -3432,7 +3432,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-06-10-01-difficult-folds',
+          lessonId: 'lesson-06-10-01-01-hard-folds', // split from lesson-06-10-01-difficult-folds
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_difficult_folds_frame',

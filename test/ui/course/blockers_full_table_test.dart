@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-06-06-01-blockers',
+            'lesson-06-06-01-01-bluff-blockers',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-06-05-01-overbets-geometric',
+            'lesson-06-05-01-01-polar-overbets',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

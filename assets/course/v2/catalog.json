@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "2357dfcdf731c19d50b826cb83415ad7930596ea29acec0d1911405120314928",
+  "contentChecksum": "e3b691dce7e120e8756a3ba3a9fbe3b93a1319a45c6637b05bad8788cc7e98d6",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -267,6 +267,56 @@
       "lesson-05-09-01-01-stop-loss",
       "lesson-05-09-01-02-bankroll-stakes",
       "lesson-05-09-01-03-end-sessions"
+    ],
+    "lesson-06-01-01-range-nut-advantage": [
+      "lesson-06-01-01-01-range-advantage",
+      "lesson-06-01-01-02-nut-advantage",
+      "lesson-06-01-01-03-press-both"
+    ],
+    "lesson-06-02-01-equity-realization": [
+      "lesson-06-02-01-01-prefer-ip",
+      "lesson-06-02-01-02-discount-oop",
+      "lesson-06-02-01-03-aggression-realizes"
+    ],
+    "lesson-06-03-01-capped-uncapped": [
+      "lesson-06-03-01-01-spot-caps",
+      "lesson-06-03-01-02-respect-uncapped",
+      "lesson-06-03-01-03-attack-caps"
+    ],
+    "lesson-06-04-01-polar-merged": [
+      "lesson-06-04-01-01-polarized-sizing",
+      "lesson-06-04-01-02-merged-thin-value",
+      "lesson-06-04-01-03-matched-shapes"
+    ],
+    "lesson-06-05-01-overbets-geometric": [
+      "lesson-06-05-01-01-polar-overbets",
+      "lesson-06-05-01-02-geometric-sizes",
+      "lesson-06-05-01-03-no-random-huge"
+    ],
+    "lesson-06-06-01-blockers": [
+      "lesson-06-06-01-01-bluff-blockers",
+      "lesson-06-06-01-02-unblock-bluffs",
+      "lesson-06-06-01-03-no-fake-ev"
+    ],
+    "lesson-06-07-01-minimum-defense": [
+      "lesson-06-07-01-01-continue-catchers",
+      "lesson-06-07-01-02-fold-trash",
+      "lesson-06-07-01-03-no-fake-mdf"
+    ],
+    "lesson-06-08-01-mixed-strategy": [
+      "lesson-06-08-01-01-mix-strong",
+      "lesson-06-08-01-02-types-reduce-mixing",
+      "lesson-06-08-01-03-no-pure-random"
+    ],
+    "lesson-06-09-01-threebet-fourbet": [
+      "lesson-06-09-01-01-careful-4bet-pots",
+      "lesson-06-09-01-02-plan-3bet-spr",
+      "lesson-06-09-01-03-no-ego-4bets"
+    ],
+    "lesson-06-10-01-difficult-folds": [
+      "lesson-06-10-01-01-hard-folds",
+      "lesson-06-10-01-02-cooler-or-mistake",
+      "lesson-06-10-01-03-no-ego-calls"
     ]
   },
   "sections": [
@@ -25198,14 +25248,12 @@
           "summary": "Who owns the range and the nuts.",
           "lessons": [
             {
-              "id": "lesson-06-01-01-range-nut-advantage",
+              "id": "lesson-06-01-01-01-range-advantage",
               "order": 1,
-              "title": "Spot range advantage and nut advantage",
-              "summary": "Bet more when you own the range or the nuts; check more when you do not.",
+              "title": "Spot range advantage",
+              "summary": "Find who holds more strong hands overall on this board.",
               "objectives": [
-                "Identify range advantage",
-                "Identify nut advantage",
-                "Choose pressure when you own both"
+                "Identify range advantage"
               ],
               "prerequisites": [
                 "lesson-05-09-02-section-five-checkpoint"
@@ -25213,7 +25261,7 @@
               "remediationLessonIds": [
                 "lesson-05-09-02-section-five-checkpoint"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -25301,10 +25349,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-01-01-02-nut-advantage",
+              "order": 2,
+              "title": "Spot nut advantage",
+              "summary": "Find who holds more of the very best hands.",
+              "objectives": [
+                "Identify nut advantage"
+              ],
+              "prerequisites": [
+                "lesson-06-01-01-01-range-advantage"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-01-01-01-range-advantage"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-01-01-02-explain-nuts",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Identify nut advantage"
+                  ],
+                  "accessibilityText": "Nut advantage means more of the very best hands. On paired boards, the wider caller often holds more trips and full houses.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-01-01-02-explain-nuts-line",
+                      "kind": "dialogue",
+                      "text": "Nut advantage means more of the very best hands. On paired boards, the wider caller often holds more trips and full houses."
+                    }
+                  ],
+                  "okFeedback": "Who has more of the nuts?",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NUTS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PAIRED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CALLER",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-01-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -25348,10 +25461,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-01-01-03-press-both",
+              "order": 3,
+              "title": "Pressure when you own both",
+              "summary": "Bet more when you hold the range and the nut edge.",
+              "objectives": [
+                "Choose pressure when you own both"
+              ],
+              "prerequisites": [
+                "lesson-06-01-01-02-nut-advantage"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-01-01-02-nut-advantage"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-01-01-03-explain-press",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Choose pressure when you own both"
+                  ],
+                  "accessibilityText": "When you own the range and the nuts, apply pressure — c-bet more. When you own neither, check more.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-01-01-03-explain-press-line",
+                      "kind": "dialogue",
+                      "text": "When you own the range and the nuts, apply pressure — c-bet more. When you own neither, check more."
+                    }
+                  ],
+                  "okFeedback": "Own both — bet.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RANGE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "NUTS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-01-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -25451,7 +25629,7 @@
                 },
                 {
                   "id": "act-06-01-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -25502,22 +25680,20 @@
           "summary": "Realize equity in and out of position.",
           "lessons": [
             {
-              "id": "lesson-06-02-01-equity-realization",
+              "id": "lesson-06-02-01-01-prefer-ip",
               "order": 1,
-              "title": "Realize equity in and out of position",
-              "summary": "Position and initiative change how much equity you actually cash.",
+              "title": "Position realizes equity",
+              "summary": "Marginal equity cashes better in position.",
               "objectives": [
-                "Prefer IP for marginal equity",
-                "Discount OOP equity",
-                "Use aggression to realize when appropriate"
+                "Prefer IP for marginal equity"
               ],
               "prerequisites": [
-                "lesson-06-01-01-range-nut-advantage"
+                "lesson-06-01-01-03-press-both"
               ],
               "remediationLessonIds": [
-                "lesson-06-01-01-range-nut-advantage"
+                "lesson-06-01-01-03-press-both"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -25607,8 +25783,115 @@
                   }
                 },
                 {
-                  "id": "act-06-02-01-scaffolded",
+                  "id": "act-06-02-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Position and initiative.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Prefer IP for marginal equity"
+                  ],
+                  "prompt": "Equity realization rises with?",
+                  "choices": [
+                    {
+                      "id": "pos",
+                      "label": "Position + initiative",
+                      "accessibilityText": "Position + initiative"
+                    },
+                    {
+                      "id": "hope",
+                      "label": "Hope alone",
+                      "accessibilityText": "Hope alone"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pos",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-02-01-02-discount-oop",
+              "order": 2,
+              "title": "Discount equity out of position",
+              "summary": "Weak hands out of position realize less — fold more.",
+              "objectives": [
+                "Discount OOP equity"
+              ],
+              "prerequisites": [
+                "lesson-06-02-01-01-prefer-ip"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-02-01-01-prefer-ip"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-02-01-02-explain-oop",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Discount OOP equity"
+                  ],
+                  "accessibilityText": "Out of position you see fewer free cards and face more barrels. Discount weak equity and fold more.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-02-01-02-explain-oop-line",
+                      "kind": "dialogue",
+                      "text": "Out of position you see fewer free cards and face more barrels. Discount weak equity and fold more."
+                    }
+                  ],
+                  "okFeedback": "Out of position — discount.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "OOP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BARRELS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "DISCOUNT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-06-02-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -25652,10 +25935,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-02-01-03-aggression-realizes",
+              "order": 3,
+              "title": "Aggression realizes equity",
+              "summary": "Semi-bluffs cash equity through folds plus outs.",
+              "objectives": [
+                "Use aggression to realize when appropriate"
+              ],
+              "prerequisites": [
+                "lesson-06-02-01-02-discount-oop"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-02-01-02-discount-oop"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-02-01-03-explain-aggro",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Use aggression to realize when appropriate"
+                  ],
+                  "accessibilityText": "A semi-bluff wins two ways: they fold now, or you hit your outs. Aggression can realize equity you would lose by calling.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-02-01-03-explain-aggro-line",
+                      "kind": "dialogue",
+                      "text": "A semi-bluff wins two ways: they fold now, or you hit your outs. Aggression can realize equity you would lose by calling."
+                    }
+                  ],
+                  "okFeedback": "Folds plus outs.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SEMI-BLUFF",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FOLDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "OUTS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-02-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -25699,48 +26047,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-02-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Position and initiative.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Prefer IP for marginal equity"
-                  ],
-                  "prompt": "Equity realization rises with?",
-                  "choices": [
-                    {
-                      "id": "pos",
-                      "label": "Position + initiative",
-                      "accessibilityText": "Position + initiative"
-                    },
-                    {
-                      "id": "hope",
-                      "label": "Hope alone",
-                      "accessibilityText": "Hope alone"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "pos",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -25753,22 +26059,20 @@
           "summary": "Know when the nuts are still possible.",
           "lessons": [
             {
-              "id": "lesson-06-03-01-capped-uncapped",
+              "id": "lesson-06-03-01-01-spot-caps",
               "order": 1,
-              "title": "Recognize capped versus uncapped ranges",
-              "summary": "Lines remove or keep the nuts; attack caps, respect uncapped heat.",
+              "title": "Spot capped ranges",
+              "summary": "Passive lines usually remove the nuts.",
               "objectives": [
-                "Spot capped ranges from passive lines",
-                "Respect uncapped aggression",
-                "Attack caps with thin value and bluffs"
+                "Spot capped ranges from passive lines"
               ],
               "prerequisites": [
-                "lesson-06-02-01-equity-realization"
+                "lesson-06-02-01-03-aggression-realizes"
               ],
               "remediationLessonIds": [
-                "lesson-06-02-01-equity-realization"
+                "lesson-06-02-01-03-aggression-realizes"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -25856,10 +26160,187 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-03-01-02-respect-uncapped",
+              "order": 2,
+              "title": "Respect uncapped aggression",
+              "summary": "Pressure on every street keeps the nuts in range.",
+              "objectives": [
+                "Respect uncapped aggression"
+              ],
+              "prerequisites": [
+                "lesson-06-03-01-01-spot-caps"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-03-01-01-spot-caps"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-03-01-02-explain-uncapped",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Respect uncapped aggression"
+                  ],
+                  "accessibilityText": "Check-raise flop, bet turn, bomb river — that line still holds the nuts. Respect uncapped heat without a read.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-03-01-02-explain-uncapped-line",
+                      "kind": "dialogue",
+                      "text": "Check-raise flop, bet turn, bomb river — that line still holds the nuts. Respect uncapped heat without a read."
+                    }
+                  ],
+                  "okFeedback": "Uncapped — respect.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "RESPECT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-06-03-01-unguided",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Uncapped — respect.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Respect uncapped aggression"
+                  ],
+                  "prompt": "Check-raise flop, bet turn, bomb river. Treat as?",
+                  "choices": [
+                    {
+                      "id": "uncap",
+                      "label": "Uncapped",
+                      "accessibilityText": "Uncapped"
+                    },
+                    {
+                      "id": "cap2",
+                      "label": "Capped air",
+                      "accessibilityText": "Capped air"
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Strength on every street means the range is uncapped."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "uncap",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-03-01-03-attack-caps",
+              "order": 3,
+              "title": "Attack capped ranges",
+              "summary": "Bet thin value and bluffs into capped players.",
+              "objectives": [
+                "Attack caps with thin value and bluffs"
+              ],
+              "prerequisites": [
+                "lesson-06-03-01-02-respect-uncapped"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-03-01-02-respect-uncapped"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-03-01-03-explain-attack",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Attack caps with thin value and bluffs"
+                  ],
+                  "accessibilityText": "A capped player rarely has the nuts. Attack with thin value bets and well-chosen bluffs.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-03-01-03-explain-attack-line",
+                      "kind": "dialogue",
+                      "text": "A capped player rarely has the nuts. Attack with thin value bets and well-chosen bluffs."
+                    }
+                  ],
+                  "okFeedback": "Capped — attack.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CAPPED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "THIN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BLUFF",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-03-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -25963,55 +26444,8 @@
                   }
                 },
                 {
-                  "id": "act-06-03-01-unguided",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Uncapped — respect.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Respect uncapped aggression"
-                  ],
-                  "prompt": "Check-raise flop, bet turn, bomb river. Treat as?",
-                  "choices": [
-                    {
-                      "id": "uncap",
-                      "label": "Uncapped",
-                      "accessibilityText": "Uncapped"
-                    },
-                    {
-                      "id": "cap2",
-                      "label": "Capped air",
-                      "accessibilityText": "Capped air"
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Strength on every street means the range is uncapped."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "uncap",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-06-03-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -26062,22 +26496,20 @@
           "summary": "Match sizing and range shape.",
           "lessons": [
             {
-              "id": "lesson-06-04-01-polar-merged",
+              "id": "lesson-06-04-01-01-polarized-sizing",
               "order": 1,
-              "title": "Choose polarized or merged betting",
-              "summary": "Big sizes skew polar; medium sizes support merged value.",
+              "title": "Recognize polarized sizing",
+              "summary": "Big sizes usually mean nuts or air.",
               "objectives": [
-                "Recognize polarized sizing",
-                "Use merged sizes for thin value",
-                "Avoid mismatched shapes"
+                "Recognize polarized sizing"
               ],
               "prerequisites": [
-                "lesson-06-03-01-capped-uncapped"
+                "lesson-06-03-01-03-attack-caps"
               ],
               "remediationLessonIds": [
-                "lesson-06-03-01-capped-uncapped"
+                "lesson-06-03-01-03-attack-caps"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -26165,10 +26597,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-04-01-02-merged-thin-value",
+              "order": 2,
+              "title": "Merged sizes for thin value",
+              "summary": "Medium sizes get called by worse hands.",
+              "objectives": [
+                "Use merged sizes for thin value"
+              ],
+              "prerequisites": [
+                "lesson-06-04-01-01-polarized-sizing"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-04-01-01-polarized-sizing"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-04-01-02-explain-merged",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Use merged sizes for thin value"
+                  ],
+                  "accessibilityText": "Merged betting uses medium sizes with many medium-strong hands. Versus a Calling Station, size medium for thin value.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-04-01-02-explain-merged-line",
+                      "kind": "dialogue",
+                      "text": "Merged betting uses medium sizes with many medium-strong hands. Versus a Calling Station, size medium for thin value."
+                    }
+                  ],
+                  "okFeedback": "Medium size, thin value.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MERGED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MEDIUM",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "VALUE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-04-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -26276,8 +26773,115 @@
                   }
                 },
                 {
+                  "id": "act-06-04-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Get called by worse / fold out some better sometimes.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Use merged sizes for thin value"
+                  ],
+                  "prompt": "Merged betting aims to?",
+                  "choices": [
+                    {
+                      "id": "thin",
+                      "label": "Thin value",
+                      "accessibilityText": "Thin value"
+                    },
+                    {
+                      "id": "only-nuts",
+                      "label": "Only nuts",
+                      "accessibilityText": "Only nuts"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "thin",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-04-01-03-matched-shapes",
+              "order": 3,
+              "title": "Match size to shape",
+              "summary": "Avoid sizes that tell the wrong story.",
+              "objectives": [
+                "Avoid mismatched shapes"
+              ],
+              "prerequisites": [
+                "lesson-06-04-01-02-merged-thin-value"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-04-01-02-merged-thin-value"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-04-01-03-explain-mismatch",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid mismatched shapes"
+                  ],
+                  "accessibilityText": "Size should match the range shape. A tiny bet as a pure bluff tells no story — avoid mismatched shapes.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-04-01-03-explain-mismatch-line",
+                      "kind": "dialogue",
+                      "text": "Size should match the range shape. A tiny bet as a pure bluff tells no story — avoid mismatched shapes."
+                    }
+                  ],
+                  "okFeedback": "Size matches shape.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SIZE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SHAPE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "MATCH",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-06-04-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26321,48 +26925,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-04-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Get called by worse / fold out some better sometimes.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Use merged sizes for thin value"
-                  ],
-                  "prompt": "Merged betting aims to?",
-                  "choices": [
-                    {
-                      "id": "thin",
-                      "label": "Thin value",
-                      "accessibilityText": "Thin value"
-                    },
-                    {
-                      "id": "only-nuts",
-                      "label": "Only nuts",
-                      "accessibilityText": "Only nuts"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "thin",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -26375,22 +26937,20 @@
           "summary": "Pressure stacks with coherent street sizes.",
           "lessons": [
             {
-              "id": "lesson-06-05-01-overbets-geometric",
+              "id": "lesson-06-05-01-01-polar-overbets",
               "order": 1,
-              "title": "Use overbets and geometric pressure",
-              "summary": "Choose overbets when polar; plan geometric sizes across streets.",
+              "title": "Overbet polar spots",
+              "summary": "Use overbets with the nuts or strong blocker bluffs.",
               "objectives": [
-                "Select overbets for polar spots",
-                "Plan geometric street sizes",
-                "Avoid random huge bets"
+                "Select overbets for polar spots"
               ],
               "prerequisites": [
-                "lesson-06-04-01-polar-merged"
+                "lesson-06-04-01-03-matched-shapes"
               ],
               "remediationLessonIds": [
-                "lesson-06-04-01-polar-merged"
+                "lesson-06-04-01-03-matched-shapes"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -26478,10 +27038,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-05-01-02-geometric-sizes",
+              "order": 2,
+              "title": "Plan geometric sizes",
+              "summary": "Size each street so the stack goes in by the river.",
+              "objectives": [
+                "Plan geometric street sizes"
+              ],
+              "prerequisites": [
+                "lesson-06-05-01-01-polar-overbets"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-05-01-01-polar-overbets"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-05-01-02-explain-geometry",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Plan geometric street sizes"
+                  ],
+                  "accessibilityText": "Geometric sizing grows the pot evenly each street so the stack is in by the river. Plan flop, turn, and river together.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-05-01-02-explain-geometry-line",
+                      "kind": "dialogue",
+                      "text": "Geometric sizing grows the pot evenly each street so the stack is in by the river. Plan flop, turn, and river together."
+                    }
+                  ],
+                  "okFeedback": "Plan all three streets.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FLOP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "TURN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "RIVER",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-05-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -26584,8 +27209,115 @@
                   }
                 },
                 {
+                  "id": "act-06-05-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Multi-street stack pressure.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Plan geometric street sizes"
+                  ],
+                  "prompt": "Geometric sizing primarily helps?",
+                  "choices": [
+                    {
+                      "id": "multi",
+                      "label": "Multi-street plan",
+                      "accessibilityText": "Multi-street plan"
+                    },
+                    {
+                      "id": "style",
+                      "label": "Look flashy",
+                      "accessibilityText": "Look flashy"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "multi",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-05-01-03-no-random-huge",
+              "order": 3,
+              "title": "No random huge bets",
+              "summary": "Skip giant bets with medium hands.",
+              "objectives": [
+                "Avoid random huge bets"
+              ],
+              "prerequisites": [
+                "lesson-06-05-01-02-geometric-sizes"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-05-01-02-geometric-sizes"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-05-01-03-explain-random",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid random huge bets"
+                  ],
+                  "accessibilityText": "A 3x pot bet with a medium hand folds out worse and gets called by better. Avoid random huge bets.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-05-01-03-explain-random-line",
+                      "kind": "dialogue",
+                      "text": "A 3x pot bet with a medium hand folds out worse and gets called by better. Avoid random huge bets."
+                    }
+                  ],
+                  "okFeedback": "Medium hand — no huge bet.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "HUGE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MEDIUM",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "AVOID",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-06-05-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26629,48 +27361,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-05-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Multi-street stack pressure.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Plan geometric street sizes"
-                  ],
-                  "prompt": "Geometric sizing primarily helps?",
-                  "choices": [
-                    {
-                      "id": "multi",
-                      "label": "Multi-street plan",
-                      "accessibilityText": "Multi-street plan"
-                    },
-                    {
-                      "id": "style",
-                      "label": "Look flashy",
-                      "accessibilityText": "Look flashy"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "multi",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -26683,22 +27373,20 @@
           "summary": "Card removal for bluffs and calls.",
           "lessons": [
             {
-              "id": "lesson-06-06-01-blockers",
+              "id": "lesson-06-06-01-01-bluff-blockers",
               "order": 1,
-              "title": "Use blockers without solver theater",
-              "summary": "Blocker cards remove villain nuts or value; unblockers keep their folds.",
+              "title": "Bluff with the right blockers",
+              "summary": "Pick bluffs that remove villain's calling hands.",
               "objectives": [
-                "Choose bluffs that block call-downs",
-                "Prefer call-downs that unblock bluffs",
-                "Avoid fabricated EV claims"
+                "Choose bluffs that block call-downs"
               ],
               "prerequisites": [
-                "lesson-06-05-01-overbets-geometric"
+                "lesson-06-05-01-03-no-random-huge"
               ],
               "remediationLessonIds": [
-                "lesson-06-05-01-overbets-geometric"
+                "lesson-06-05-01-03-no-random-huge"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -26791,10 +27479,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-06-01-02-unblock-bluffs",
+              "order": 2,
+              "title": "Catch with unblockers",
+              "summary": "Bluff-catch with hands that leave villain's bluffs in.",
+              "objectives": [
+                "Prefer call-downs that unblock bluffs"
+              ],
+              "prerequisites": [
+                "lesson-06-06-01-01-bluff-blockers"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-06-01-01-bluff-blockers"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-06-01-02-explain-unblock",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Prefer call-downs that unblock bluffs"
+                  ],
+                  "accessibilityText": "When you bluff-catch, prefer hands that do not block villain's bluffs. Holding no flush cards keeps the missed draws in their range.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-06-01-02-explain-unblock-line",
+                      "kind": "dialogue",
+                      "text": "When you bluff-catch, prefer hands that do not block villain's bluffs. Holding no flush cards keeps the missed draws in their range."
+                    }
+                  ],
+                  "okFeedback": "Leave their bluffs in.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CATCH",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "UNBLOCK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BLUFFS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-06-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26838,10 +27591,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-06-01-03-no-fake-ev",
+              "order": 3,
+              "title": "Blockers without fake EV",
+              "summary": "Blockers tweak choices; they do not replace reads.",
+              "objectives": [
+                "Avoid fabricated EV claims"
+              ],
+              "prerequisites": [
+                "lesson-06-06-01-02-unblock-bluffs"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-06-01-02-unblock-bluffs"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-06-01-03-explain-ev",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid fabricated EV claims"
+                  ],
+                  "accessibilityText": "Blockers only tweak a close choice. Never invent EV decimals to justify them.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-06-01-03-explain-ev-line",
+                      "kind": "dialogue",
+                      "text": "Blockers only tweak a close choice. Never invent EV decimals to justify them."
+                    }
+                  ],
+                  "okFeedback": "Tweak, don't invent.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TWEAK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "NO EV",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-06-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26888,7 +27701,7 @@
                 },
                 {
                   "id": "act-06-06-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -26939,22 +27752,20 @@
           "summary": "Defend enough to punish over-bluffing — without frequency theater.",
           "lessons": [
             {
-              "id": "lesson-06-07-01-minimum-defense",
+              "id": "lesson-06-07-01-01-continue-catchers",
               "order": 1,
-              "title": "Defend enough without frequency theater",
-              "summary": "Continue with better bluff-catchers; fold the clear trash.",
+              "title": "Continue with stronger catchers",
+              "summary": "Defend with your best bluff-catchers so over-bluffing fails.",
               "objectives": [
-                "Continue with stronger catchers",
-                "Fold dominated trash",
-                "Ignore fake MDF percentages"
+                "Continue with stronger catchers"
               ],
               "prerequisites": [
-                "lesson-06-06-01-blockers"
+                "lesson-06-06-01-03-no-fake-ev"
               ],
               "remediationLessonIds": [
-                "lesson-06-06-01-blockers"
+                "lesson-06-06-01-03-no-fake-ev"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -27044,8 +27855,115 @@
                   }
                 },
                 {
-                  "id": "act-06-07-01-scaffolded",
+                  "id": "act-06-07-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Punish over-bluffing with sensible continues.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Continue with stronger catchers"
+                  ],
+                  "prompt": "Minimum defense goal?",
+                  "choices": [
+                    {
+                      "id": "punish",
+                      "label": "Punish over-bluffs",
+                      "accessibilityText": "Punish over-bluffs"
+                    },
+                    {
+                      "id": "call-all",
+                      "label": "Never fold",
+                      "accessibilityText": "Never fold"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "punish",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-07-01-02-fold-trash",
+              "order": 2,
+              "title": "Fold dominated trash",
+              "summary": "Let go of weak pairs with no blockers.",
+              "objectives": [
+                "Fold dominated trash"
+              ],
+              "prerequisites": [
+                "lesson-06-07-01-01-continue-catchers"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-07-01-01-continue-catchers"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-07-01-02-explain-trash",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Fold dominated trash"
+                  ],
+                  "accessibilityText": "Defending enough does not mean calling everything. Third pair with no blockers on a scary river is a fold.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-07-01-02-explain-trash-line",
+                      "kind": "dialogue",
+                      "text": "Defending enough does not mean calling everything. Third pair with no blockers on a scary river is a fold."
+                    }
+                  ],
+                  "okFeedback": "Weak catcher — fold.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "THIRD PAIR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SCARY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-06-07-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -27140,10 +28058,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-07-01-03-no-fake-mdf",
+              "order": 3,
+              "title": "No fake MDF math",
+              "summary": "Use defense intuition, not fake percentages.",
+              "objectives": [
+                "Ignore fake MDF percentages"
+              ],
+              "prerequisites": [
+                "lesson-06-07-01-02-fold-trash"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-07-01-02-fold-trash"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-07-01-03-explain-mdf",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Ignore fake MDF percentages"
+                  ],
+                  "accessibilityText": "This course uses defense intuition, not precise MDF percentages. Ignore fake precision.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-07-01-03-explain-mdf-line",
+                      "kind": "dialogue",
+                      "text": "This course uses defense intuition, not precise MDF percentages. Ignore fake precision."
+                    }
+                  ],
+                  "okFeedback": "Intuition, not fake math.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MDF",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "INTUITION",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-07-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -27187,48 +28165,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-07-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Punish over-bluffing with sensible continues.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Continue with stronger catchers"
-                  ],
-                  "prompt": "Minimum defense goal?",
-                  "choices": [
-                    {
-                      "id": "punish",
-                      "label": "Punish over-bluffs",
-                      "accessibilityText": "Punish over-bluffs"
-                    },
-                    {
-                      "id": "call-all",
-                      "label": "Never fold",
-                      "accessibilityText": "Never fold"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "punish",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -27241,22 +28177,20 @@
           "summary": "Mix for balance and unpredictability — not randomness for its own sake.",
           "lessons": [
             {
-              "id": "lesson-06-08-01-mixed-strategy",
+              "id": "lesson-06-08-01-01-mix-strong",
               "order": 1,
-              "title": "Mix with a reason",
-              "summary": "Sometimes check strong; sometimes bet medium — with an exploit purpose.",
+              "title": "Mix strong hands sometimes",
+              "summary": "Check some strong hands to protect your checking range.",
               "objectives": [
-                "Mix strong hands sometimes",
-                "Avoid pure randomness",
-                "Let types reduce mixing needs"
+                "Mix strong hands sometimes"
               ],
               "prerequisites": [
-                "lesson-06-07-01-minimum-defense"
+                "lesson-06-07-01-03-no-fake-mdf"
               ],
               "remediationLessonIds": [
-                "lesson-06-07-01-minimum-defense"
+                "lesson-06-07-01-03-no-fake-mdf"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [
                 "calling_station"
@@ -27391,10 +28325,77 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-08-01-02-types-reduce-mixing",
+              "order": 2,
+              "title": "Types reduce mixing",
+              "summary": "Exploit reads beat balance — mix less versus clear types.",
+              "objectives": [
+                "Let types reduce mixing needs"
+              ],
+              "prerequisites": [
+                "lesson-06-08-01-01-mix-strong"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-08-01-01-mix-strong"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-08-01-02-explain-types",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Let types reduce mixing needs"
+                  ],
+                  "accessibilityText": "Versus a clear type, exploit instead of balancing. A Calling Station does not fold, so bluff-mix less.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-08-01-02-explain-types-line",
+                      "kind": "dialogue",
+                      "text": "Versus a clear type, exploit instead of balancing. A Calling Station does not fold, so bluff-mix less."
+                    }
+                  ],
+                  "okFeedback": "Clear type — mix less.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TYPE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STATION",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "LESS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-08-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -27441,10 +28442,72 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-08-01-03-no-pure-random",
+              "order": 3,
+              "title": "No mixing for its own sake",
+              "summary": "Every mix needs a purpose.",
+              "objectives": [
+                "Avoid pure randomness"
+              ],
+              "prerequisites": [
+                "lesson-06-08-01-02-types-reduce-mixing"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-08-01-02-types-reduce-mixing"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-08-01-03-explain-random",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid pure randomness"
+                  ],
+                  "accessibilityText": "Randomness for its own sake is theater. Mix only with a purpose.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-08-01-03-explain-random-line",
+                      "kind": "dialogue",
+                      "text": "Randomness for its own sake is theater. Mix only with a purpose."
+                    }
+                  ],
+                  "okFeedback": "Mix with a purpose.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RANDOM",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PURPOSE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-08-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -27491,7 +28554,7 @@
                 },
                 {
                   "id": "act-06-08-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -27542,22 +28605,126 @@
           "summary": "Play raised pots across stack depths.",
           "lessons": [
             {
-              "id": "lesson-06-09-01-threebet-fourbet",
+              "id": "lesson-06-09-01-01-careful-4bet-pots",
               "order": 1,
-              "title": "Navigate 3-bet and 4-bet pots by depth",
-              "summary": "Stack depth changes commitment, ranges, and postflop plans.",
+              "title": "Tighten up in 4-bet pots",
+              "summary": "Low SPR in 4-bet pots makes one pair near-committed.",
               "objectives": [
-                "Tighten 4-bet pots appropriately",
-                "Plan 3-bet pots by SPR",
-                "Avoid ego 4-bets"
+                "Tighten 4-bet pots appropriately"
               ],
               "prerequisites": [
-                "lesson-06-08-01-mixed-strategy"
+                "lesson-06-08-01-03-no-pure-random"
               ],
               "remediationLessonIds": [
-                "lesson-06-08-01-mixed-strategy"
+                "lesson-06-08-01-03-no-pure-random"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-09-01-01-explain-fourbet",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Tighten 4-bet pots appropriately"
+                  ],
+                  "accessibilityText": "4-bet pots leave little behind. Ranges are strong, so top pair is often near-committed — play carefully.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-09-01-01-explain-fourbet-line",
+                      "kind": "dialogue",
+                      "text": "4-bet pots leave little behind. Ranges are strong, so top pair is often near-committed — play carefully."
+                    }
+                  ],
+                  "okFeedback": "4-bet pot — careful.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "4BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STRONG",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CAREFUL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-06-09-01-guided",
+                  "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Often committed-ish — careful.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Tighten 4-bet pots appropriately"
+                  ],
+                  "prompt": "100bb 4-bet pot. Flop top pair. Default mindset?",
+                  "choices": [
+                    {
+                      "id": "careful",
+                      "label": "High commit",
+                      "accessibilityText": "High commit"
+                    },
+                    {
+                      "id": "deep",
+                      "label": "300bb deep",
+                      "accessibilityText": "300bb deep"
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "careful",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-09-01-02-plan-3bet-spr",
+              "order": 2,
+              "title": "Plan 3-bet pots by SPR",
+              "summary": "Depth changes commitment in 3-bet pots.",
+              "objectives": [
+                "Plan 3-bet pots by SPR"
+              ],
+              "prerequisites": [
+                "lesson-06-09-01-01-careful-4bet-pots"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-09-01-01-careful-4bet-pots"
+              ],
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -27606,49 +28773,8 @@
                   }
                 },
                 {
-                  "id": "act-06-09-01-guided",
-                  "order": 2,
-                  "stage": "guided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Often committed-ish — careful.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Tighten 4-bet pots appropriately"
-                  ],
-                  "prompt": "100bb 4-bet pot. Flop top pair. Default mindset?",
-                  "choices": [
-                    {
-                      "id": "careful",
-                      "label": "High commit",
-                      "accessibilityText": "High commit"
-                    },
-                    {
-                      "id": "deep",
-                      "label": "300bb deep",
-                      "accessibilityText": "300bb deep"
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "careful",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-06-09-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -27741,8 +28867,115 @@
                   }
                 },
                 {
+                  "id": "act-06-09-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "SPR and commitment thresholds.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Plan 3-bet pots by SPR"
+                  ],
+                  "prompt": "Depth change in 3-bet pots mainly changes?",
+                  "choices": [
+                    {
+                      "id": "spr",
+                      "label": "SPR / commit",
+                      "accessibilityText": "SPR / commit"
+                    },
+                    {
+                      "id": "suits",
+                      "label": "Felt suits",
+                      "accessibilityText": "Felt suits"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "spr",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-09-01-03-no-ego-4bets",
+              "order": 3,
+              "title": "No ego 4-bets",
+              "summary": "Skip light 4-bet bluffs without blockers.",
+              "objectives": [
+                "Avoid ego 4-bets"
+              ],
+              "prerequisites": [
+                "lesson-06-09-01-02-plan-3bet-spr"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-09-01-02-plan-3bet-spr"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-09-01-03-explain-ego",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid ego 4-bets"
+                  ],
+                  "accessibilityText": "A light 4-bet bluff with no blockers is ego, not strategy. Avoid it.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-09-01-03-explain-ego-line",
+                      "kind": "dialogue",
+                      "text": "A light 4-bet bluff with no blockers is ego, not strategy. Avoid it."
+                    }
+                  ],
+                  "okFeedback": "No ego 4-bets.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "4BET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "EGO",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "AVOID",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-06-09-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -27786,48 +29019,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-09-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "SPR and commitment thresholds.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Plan 3-bet pots by SPR"
-                  ],
-                  "prompt": "Depth change in 3-bet pots mainly changes?",
-                  "choices": [
-                    {
-                      "id": "spr",
-                      "label": "SPR / commit",
-                      "accessibilityText": "SPR / commit"
-                    },
-                    {
-                      "id": "suits",
-                      "label": "Felt suits",
-                      "accessibilityText": "Felt suits"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "spr",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -27840,22 +29031,20 @@
           "summary": "Separate coolers from mistakes.",
           "lessons": [
             {
-              "id": "lesson-06-10-01-difficult-folds",
+              "id": "lesson-06-10-01-01-hard-folds",
               "order": 1,
-              "title": "Make difficult folds; review coolers fairly",
-              "summary": "Fold dominated hands; do not call down for ego; review cooler versus mistake.",
+              "title": "Make hard folds",
+              "summary": "Fold dominated one pair under heavy pressure.",
               "objectives": [
-                "Fold dominated one-pair in heat",
-                "Separate coolers from mistakes",
-                "Avoid ego call-downs"
+                "Fold dominated one-pair in heat"
               ],
               "prerequisites": [
-                "lesson-06-09-01-threebet-fourbet"
+                "lesson-06-09-01-03-no-ego-4bets"
               ],
               "remediationLessonIds": [
-                "lesson-06-09-01-threebet-fourbet"
+                "lesson-06-09-01-03-no-ego-4bets"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -28000,10 +29189,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-10-01-02-cooler-or-mistake",
+              "order": 2,
+              "title": "Cooler or mistake?",
+              "summary": "Review big losses fairly.",
+              "objectives": [
+                "Separate coolers from mistakes"
+              ],
+              "prerequisites": [
+                "lesson-06-10-01-01-hard-folds"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-10-01-01-hard-folds"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-10-01-02-explain-cooler",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Separate coolers from mistakes"
+                  ],
+                  "accessibilityText": "After a big loss, ask: cooler or mistake? KK losing to AA all-in preflop is a cooler, not a leak.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-10-01-02-explain-cooler-line",
+                      "kind": "dialogue",
+                      "text": "After a big loss, ask: cooler or mistake? KK losing to AA all-in preflop is a cooler, not a leak."
+                    }
+                  ],
+                  "okFeedback": "Cooler or mistake?",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "COOLER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MISTAKE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "REVIEW",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-06-10-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -28049,8 +29303,115 @@
                   }
                 },
                 {
+                  "id": "act-06-10-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Cooler or mistake?",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Separate coolers from mistakes"
+                  ],
+                  "prompt": "Review question after a big loss?",
+                  "choices": [
+                    {
+                      "id": "ask",
+                      "label": "Cooler / mistake?",
+                      "accessibilityText": "Cooler / mistake?"
+                    },
+                    {
+                      "id": "rtilt",
+                      "label": "Tilt harder",
+                      "accessibilityText": "Tilt harder"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "ask",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-06-10-01-03-no-ego-calls",
+              "order": 3,
+              "title": "No ego call-downs",
+              "summary": "Calling because you feel due is a mistake.",
+              "objectives": [
+                "Avoid ego call-downs"
+              ],
+              "prerequisites": [
+                "lesson-06-10-01-02-cooler-or-mistake"
+              ],
+              "remediationLessonIds": [
+                "lesson-06-10-01-02-cooler-or-mistake"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-06-10-01-03-explain-ego",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid ego call-downs"
+                  ],
+                  "accessibilityText": "You are never due. Calling down to prove a point is an ego mistake.",
+                  "coachMedia": [
+                    {
+                      "id": "act-06-10-01-03-explain-ego-line",
+                      "kind": "dialogue",
+                      "text": "You are never due. Calling down to prove a point is an ego mistake."
+                    }
+                  ],
+                  "okFeedback": "Not due — no ego calls.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "DUE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "EGO",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-06-10-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -28094,48 +29455,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-06-10-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Cooler or mistake?",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Separate coolers from mistakes"
-                  ],
-                  "prompt": "Review question after a big loss?",
-                  "choices": [
-                    {
-                      "id": "ask",
-                      "label": "Cooler / mistake?",
-                      "accessibilityText": "Cooler / mistake?"
-                    },
-                    {
-                      "id": "rtilt",
-                      "label": "Tilt harder",
-                      "accessibilityText": "Tilt harder"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "ask",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -28158,10 +29477,10 @@
                 "Delay the label until samples exist"
               ],
               "prerequisites": [
-                "lesson-06-10-01-difficult-folds"
+                "lesson-06-10-01-03-no-ego-calls"
               ],
               "remediationLessonIds": [
-                "lesson-06-10-01-difficult-folds"
+                "lesson-06-10-01-03-no-ego-calls"
               ],
               "estimatedMinutes": 7,
               "difficultyBand": 5,
@@ -30352,7 +31671,7 @@
                 "lesson-06-13-01-mix-five-types"
               ],
               "remediationLessonIds": [
-                "lesson-06-01-01-range-nut-advantage"
+                "lesson-06-01-01-03-press-both"
               ],
               "estimatedMinutes": 10,
               "difficultyBand": 5,
@@ -33489,7 +34808,7 @@
                 "lesson-07-10-01-capstone-srp"
               ],
               "remediationLessonIds": [
-                "lesson-06-09-01-threebet-fourbet"
+                "lesson-06-09-01-03-no-ego-4bets"
               ],
               "estimatedMinutes": 12,
               "difficultyBand": 5,
@@ -34186,7 +35505,7 @@
                 "lesson-07-10-04-capstone-limped"
               ],
               "remediationLessonIds": [
-                "lesson-06-09-01-threebet-fourbet"
+                "lesson-06-09-01-03-no-ego-4bets"
               ],
               "estimatedMinutes": 12,
               "difficultyBand": 5,
