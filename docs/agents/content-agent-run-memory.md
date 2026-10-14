@@ -2055,3 +2055,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer bullet tightened: next NEVER → `lesson-06-11-01-*` observe-selective children.
 - next: NEVER `lesson-06-11-01-*` / S6 NEVER / Low curriculum.
 - act-06-10-01-*: interactive structural clean on tip aside from LPT-705; SoftPulse explain successors via LPT-669 content-driven; scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; guided stays fixed+variants TPWK honesty.
+
+## Fold 2026-10-14cn (ee4d7f8b observe-selective NEVER)
+
+- Tip-stable `ee4d7f8b` (#2293). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-06-11-01-*` observe-selective children (concurrent filed LPT-706; this agent re-verified):
+  - first-child `act-06-11-01-explain` SoftPulse TIGHT→BARREL→SAMPLE + Dart `SelectiveAggressionDemo.points` / `LessonSelectiveAggressionExplainTable` still pre-split under selective-entry-only → **LPT-706** (needs-human; Relates LPT-288).
+  - guided SoftPulse `sel` densify PRESENT; successors CALLED→GIVES UP / TWO HANDS→NOTE BUNDLE content-driven (do not reopen LPT-669).
+  - scaffolded SoftPulse `disc` + unguided SoftPulse `low` one-per-press densify PRESENT; checkpoint SoftPulse `bundle` kind `none` under wait-for-samples matches — no companion residual.
+- Curriculum **LPT-288** Done — do not clone / do not re-add needs-human. Done-ack LPT-286/287/435/494/647.
+- Meet Nit LPT-198 / LPT-216 Done HAS tip SHA.
+- Prefer next NEVER: `lesson-06-11-02-*` meet-tag / remaining S6 NEVER / Low curriculum.
+
