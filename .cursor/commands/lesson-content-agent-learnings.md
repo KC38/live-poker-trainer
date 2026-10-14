@@ -122,7 +122,8 @@ Lesson-specific pattern notes (full history) live in
   `3ce8732e`/`41d1f091`/`7d928fa9`/`05df1191`/`d7c46bd5`/`b5ebcd9a`) + blockers NEVER children walked (tip `1e5f1189`) +
   min-defense NEVER children walked (tip `c6b4c02e`) +
   mixed-strategy NEVER children walked (tips `05b93ac4`/`1bb7fc60`) +
-  threebet-fourbet NEVER children walked (tip `803ed55f`) —
+  threebet-fourbet NEVER children walked (tip `803ed55f`) +
+  difficult-folds NEVER children walked (tip `885b5b06`) —
   residuals **LPT-676** (polar-under-Nearby) + **LPT-677** (weigh-SPR habit
   under Estimate) + **LPT-680** (rewards checkpoint under Plan-high-SPR) +
   **LPT-681** (Estimate SoftPulse still walks REVERSE/SECOND) + **LPT-682**
@@ -142,12 +143,13 @@ Lesson-specific pattern notes (full history) live in
   (punish checkpoint under Continue catchers) + **LPT-703** (Mix SoftPulse
   still walks PURPOSE/STRONG) + **LPT-704** (Plan-3bet SoftPulse still walks
   4BET/DEPTH under plan-3bet-spr — reused explain is middle-child, not
-  first-child); multiway-ranges + line-reading
+  first-child) + **LPT-705** (Hard-folds SoftPulse still walks COOLER/EGO
+  under hard-folds-only); multiway-ranges + line-reading
   structural clean (first-child ACTION→REWRITE→UPDATE matches
   update-each-street — no residual); Prefer-IP SoftPulse EQUITY→CASH→POS is
   POS-led framing (not a NUT-style successor leak); careful-4bet SoftPulse
   4BET→STRONG→CAREFUL is concept-aligned (not a residual); next NEVER walk:
-  `lesson-06-10-01-*` difficult-folds / remaining S6 NEVER / Low curriculum.
+  `lesson-06-11-01-*` observe-selective / remaining S6 NEVER / Low curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -191,6 +193,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14cm: Tip-stable `885b5b06` (#2291 quarantine). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Rescued unfolder threebet learnings from draft #2292. Discovery NEVER difficult-folds children: first-child `act-06-10-01-explain` SoftPulse HARD→COOLER→EGO + Dart `HardFoldCoolerDemo` still pre-split ladder under hard-folds-only → **LPT-705**; guided SoftPulse `fold` PRESENT (`Ah`/`9d`·`As`/`7c`/`2h`/`Kd`/`3c` + suit variants match Dart); successors `act-06-10-01-02-explain-cooler` (COOLER→MISTAKE→REVIEW) + `act-06-10-01-03-explain-ego` (DUE→EGO→FOLD) content-driven (do not reopen LPT-669); scaffolded SoftPulse `cooler` + unguided SoftPulse `ego` one-per-press densify PRESENT; checkpoint SoftPulse `ask` under cooler-or-mistake matches — no companion residual. Curriculum **LPT-285** Done — do not clone / do not re-add needs-human. Tip-commented LPT-285/705 + Done-ack LPT-283/284/477/502 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…704 + LPT-192. next: NEVER `lesson-06-11-01-*` observe-selective / S6 NEVER / Low curriculum.
 - 2026-10-14cl: Tip-stable `803ed55f` (#2288 S7 plan one-per-concept batch). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER threebet-fourbet children: careful-4bet SoftPulse 4BET→STRONG→CAREFUL content-driven + guided SoftPulse `careful` densify PRESENT; **middle-child** `act-06-09-01-explain` SoftPulse 3BET→4BET→DEPTH + Dart `ThreeBetFourBetSprDemo` still pre-split ladder under plan-3bet-spr → **LPT-704**; scaffolded SoftPulse `small` one-per-press PRESENT (`Ah`/`Qd`·`8c`/`3h`/`2s` + suit variants; stackLabel 360 match Dart); checkpoint SoftPulse `spr` under plan-3bet-spr matches — no companion residual; ego SoftPulse 4BET→EGO→AVOID content-driven + unguided SoftPulse `avoid` one-per-press densify PRESENT (do not reopen LPT-669). Curriculum **LPT-282** Done — do not clone / do not re-add needs-human. Tip-commented LPT-282/704 + Done-ack LPT-280/281/476/501/645 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…703 + parents + LPT-192. next: NEVER `lesson-06-10-01-*` difficult-folds / S6 NEVER / Low curriculum.
 - 2026-10-14ck: Tip-stable `05b93ac4` (#2287 min-defense learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER mixed-strategy children: first-child `act-06-08-01-explain` SoftPulse MIX→PURPOSE→STRONG + Dart `MixedStrategyDemo` still pre-split ladder under mix-strong-only → **LPT-703**; guided SoftPulse `protect` PRESENT (`7h`/`7d`·`7c`/`Kd`/`2s` + suit variants match Dart); successors `act-06-08-01-02-explain-types` (TYPE→STATION→LESS) + `act-06-08-01-03-explain-random` (RANDOM→PURPOSE) content-driven (do not reopen LPT-669); scaffolded SoftPulse `less` + unguided SoftPulse `no` one-per-press densify PRESENT; checkpoint SoftPulse `freq` under no-pure-random matches — no companion residual. Curriculum **LPT-277** Done — do not clone / do not re-add needs-human. Tip-commented LPT-277/703 + Done-ack LPT-275/276/475/500/644 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…702 + parents + LPT-192. next: NEVER `lesson-06-09-01-*` threebet-fourbet / S6 NEVER / Low curriculum.
 - 2026-10-14cj: Tip-stable `c6b4c02e` (#2286 blockers learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER min-defense children: first-child `act-06-07-01-explain` SoftPulse DEFEND→BLUFF→ENOUGH + Dart `DefendEnoughDemo` still pre-split ladder under continue-catchers-only → **LPT-701**; checkpoint SoftPulse `punish` under continue-catchers → **LPT-702**; guided SoftPulse `strong` densify PRESENT; successors `act-06-07-01-02-explain-trash` (THIRD PAIR→SCARY→FOLD) + `act-06-07-01-03-explain-mdf` (MDF→INTUITION) content-driven (do not reopen LPT-669); scaffolded SoftPulse `fold` one-per-press PRESENT (`9h`/`7d`·`Kc`/`Qh`/`9d`/`4c`/`8s` match Dart); unguided SoftPulse `int` one-per-press PRESENT. Curriculum **LPT-273** Done — do not clone / do not re-add needs-human. Tip-commented LPT-273/701/702 + Done-ack LPT-271/272/474/499/640 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…700 + parents. next: NEVER `lesson-06-08-01-*` mixed-strategy / S6 NEVER / Low curriculum.

@@ -2042,3 +2042,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer bullet tightened: next NEVER → `lesson-06-10-01-*` difficult-folds children.
 - next: NEVER `lesson-06-10-01-*` / S6 NEVER / Low curriculum.
 - act-06-09-01-*: interactive structural clean on tip aside from LPT-704; SoftPulse explain successors via LPT-669 content-driven; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants AQo-miss honesty.
+
+## Fold 2026-10-14cm (885b5b06 discovery difficult-folds NEVER)
+
+- Tip-stable `885b5b06` (#2291). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**; open Medium catalog parent **none**. Rescued unfolder threebet learnings from draft #2292 onto this chore branch.
+- Discovery NEVER difficult-folds children (`lesson-06-10-01-01/02/03`):
+  - `lesson-06-10-01-01-hard-folds`: `act-06-10-01-explain` SoftPulse HARD→COOLER→EGO + Dart `HardFoldCoolerDemo` / `LessonHardFoldCoolerExplainTable` still pre-split ladder under hard-folds-only → **LPT-705**; guided SoftPulse `fold` PRESENT (`Ah`/`9d`·`As`/`7c`/`2h`/`Kd`/`3c` +2 suit variants match Dart).
+  - `lesson-06-10-01-02-cooler-or-mistake`: `act-06-10-01-02-explain-cooler` SoftPulse COOLER→MISTAKE→REVIEW content-driven; scaffolded SoftPulse `cooler` one-per-press densify PRESENT (`deal.mode` `none`); checkpoint SoftPulse `ask` kind `none` densify PRESENT under cooler-or-mistake matches — no companion residual.
+  - `lesson-06-10-01-03-no-ego-calls`: `act-06-10-01-03-explain-ego` SoftPulse DUE→EGO→FOLD content-driven; unguided SoftPulse `ego` one-per-press densify PRESENT (`deal.mode` `none`).
+- Do **not** reopen LPT-669. Curriculum **LPT-285** Done — do not clone / do not re-add needs-human. Done-ack LPT-283/284/477/502.
+- Tip-commented LPT-285/705 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…704 + LPT-192.
+- Prefer bullet tightened: next NEVER → `lesson-06-11-01-*` observe-selective children.
+- next: NEVER `lesson-06-11-01-*` / S6 NEVER / Low curriculum.
+- act-06-10-01-*: interactive structural clean on tip aside from LPT-705; SoftPulse explain successors via LPT-669 content-driven; scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; guided stays fixed+variants TPWK honesty.
