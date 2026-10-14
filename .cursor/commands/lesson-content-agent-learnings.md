@@ -109,11 +109,11 @@ Lesson-specific pattern notes (full history) live in
   `isTableRegionTapActivity` + `resolveCoachDialogueVisual` — first-child
   reuses the wired explain id; `*-02-*`/`*-03-*` often author cues only
   (Continue, not SoftPulse walk) → **LPT-669** (Hand-ranks `02/03`
-  tip `01eacc7c`…`2905e103`; Streets + Winning-pots `02/03`
-  successors re-confirmed). Append checklists; Done sibling clones
-  (skip In Progress). Next NEVER walk: oldest unfresh / Low curriculum
-  (S1 SoftPulse explain successors exhausted on **LPT-669** — prefer
-  implementer land OR Low curriculum splits).
+  tip through `77669c63`; checklist **16→32** after S2/S3 rescan —
+  Position-labels `01/02` explains + 14 more). Append checklists; Done
+  sibling clones (skip In Progress). Next NEVER walk: remaining S2
+  NEVER children interactives (acting-order / hand-families / …) while
+  tip-commenting **LPT-669** — or implementer land for the 32-row map).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -157,6 +157,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14bc: Tip-stable `77669c63` (#2232). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Mediums **LPT-669** + **LPT-672**. Discovery NEVER Position-labels children: first-child `act-02-01-01-explain-pos` SoftPulse **wired**; successors `act-02-01-01-01-explain-seats` (EP→HJ→CO→BTN) + `act-02-01-01-02-explain-blinds` (SB→BB) cues+`explainGrading` but Dart ABSENT → **LPT-669**; SI densify/one-per-press OK. Full NEVER SoftPulse explain rescan found **+16** S2/S3 successors — rebuilt **LPT-669** checklist **16→32**. Done-ack LPT-114/112/113 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid; tip-commented **LPT-672**. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-02-01-02-*` acting-order / Low curriculum.
 - 2026-10-14bb: Tip-stable `2905e103` (#2231). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only. Rescued Streets fold draft #2230. Discovery NEVER Winning-pots children: first-child `act-01-05-01-explain-win` SoftPulse FOLD WIN→SHOWDOWN→SIDE POT **wired**; successors `act-01-05-01-02-explain-showdown` (RIVER CALL→SHOWDOWN→BEST FIVE) + `act-01-05-01-03-explain-pots` (MAIN POT→SIDE POT) cues+`explainGrading` but Dart table-tap/visual ABSENT → **LPT-669**; guided-fold-win/scaffolded-showdown/unguided-pot/checkpoint-side structural OK (one-per-press + densify where SI). Tip-commented **LPT-669**; Done-ack LPT-106/104/105 + Streets LPT-103/101/102 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid. S1 `lessonSplitMap` SoftPulse explain successors now all tip-walked on **LPT-669**. next: **LPT-669** SoftPulse explain Dart maps OR oldest unfresh / Low curriculum.
 - 2026-10-14ba: Tip-stable `2bcc97fe` (#2229). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only. Discovery NEVER Streets/acting-order children: first-child `act-01-04-01-explain-streets` SoftPulse PREFLOP→FLOP→TURN→RIVER **wired**; successors `act-01-04-01-02-explain-order` (BIG BLIND→CLOCKWISE→BUTTON) + `act-01-04-01-03-explain-end` (BETS MATCHED→NEXT STREET) cues+`explainGrading` but Dart table-tap/visual ABSENT → **LPT-669**; guided-streets SoftPulse four presses; scaffolded-order one-per-press 1–4; unguided-end one-per-press; checkpoint-postflop hintless densify PRESENT. Tip-commented **LPT-669**; Done-ack LPT-103/101/102 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-01-05-01-*` winning-pots / Low curriculum.
 - 2026-10-14az: Tip-stable `05892395` (#2228). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only. Discovery NEVER Bet/raise/all-in children: first-child `act-01-03-02-explain-aggro` SoftPulse BET→RAISE→ALL-IN **wired**; successors `act-01-03-02-02-explain-raise` (FACING BET→RAISE) + `act-01-03-02-03-explain-allin` (STACK→ALL-IN) cues+`explainGrading` but Dart table-tap/visual ABSENT → **LPT-669**; guided-bet top_pair SoftPulse `bet-half` PRESENT; scaffolded-raise/unguided-allin one-per-press OK; checkpoint-names hintless cue kind `none`. Tip-commented **LPT-669**; Done-ack LPT-100/98/99/591. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-01-04-01-*` streets/order / Low curriculum.
