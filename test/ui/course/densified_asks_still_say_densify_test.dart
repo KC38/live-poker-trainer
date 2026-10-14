@@ -20,7 +20,9 @@ const _lines = <String, String>{
       'Tap the cards that are only yours — pick the two at your seat.',
   'act-01-01-02-guided-suits': 'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
   'act-01-01-02-unguided-suited': 'Tap the suited hole cards — pick Suited.',
-  'act-01-01-02-checkpoint-pair': 'Tap the pocket pair — pick Pocket pair.',
+  // LPT-804: SoftPulse-off densify — no correct-tile spoil.
+  'act-01-01-02-checkpoint-pair':
+      'Same rank in one seat — tap the matching holes.',
   'act-01-01-03-guided-button':
       'Tap the dealer button on the table — pick The seat with the D chip.',
   'act-01-01-03-scaffolded-blinds': 'Blinds are 1/2. Tap who posts the big blind — pick The seat two left of the button, posting 2.',
@@ -48,8 +50,9 @@ const _lines = <String, String>{
   'act-02-01-01-checkpoint-edge':
       'Same hand early versus button — tap the matching edge.',
   'act-02-01-02-unguided-wait': 'Action is on UTG. You are on the button. What do you do — pick Wait — do not act yet.',
+  // LPT-803: SoftPulse-off densify — no correct-tile spoil.
   'act-02-01-02-checkpoint-full':
-      'Six-max flop, everyone in. Who acts last — pick BTN.',
+      'Six-max flop, everyone in — tap who acts last.',
   'act-02-02-01-guided-pair':
       'Tap the family for your holes — pick Pocket pair.',
   'act-02-02-01-scaffolded-broadway':
@@ -91,7 +94,9 @@ const _lines = <String, String>{
       'Board Ks 9d 2c. You hold Kh Qh. Class — pick Made hand — top pair.',
   'act-03-02-01-scaffolded': 'Board Jh 8h 3c. You hold Ah 9h. Class — pick Strong draw — nut flush draw.',
   'act-03-02-01-unguided': 'Board Qc 7d 2s. You hold 5h 4h multiway. Class — pick Air — little equity, no pair.',
-  'act-03-02-01-checkpoint': 'Board Ts 9s 4d. You hold Js 8d. Best label — pick Draw — open-ended straight draw.',
+  // LPT-805: SoftPulse-off densify — no correct-tile / template-card spoil.
+  'act-03-02-01-checkpoint':
+      'Best label for this flop class — tap the matching label.',
   'act-03-05-01-guided': 'Flop As 7d 2c. Turn 3h. For a missed c-bettor, is this a brick — pick Brick — rarely helps the caller.',
   'act-03-05-01-checkpoint': 'You bluffed flop on Kc 8d 3s. Turn Qh completes front-door draws. Plan — pick Often give up — changing card hurts air.',
   // LPT-780: SoftPulse-off densify — no correct-tile spoil.
