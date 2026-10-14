@@ -3471,3 +3471,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-727/336/726/725/802/351/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Capstone `lesson-07-10-0*` (synthesis clean check) / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-09-01-*: interactive structural clean on tip except LPT-727 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive outcome tiles `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-14il tip 6949375d (#2500 Leak Prefer → Capstone/warmup/Final SoftPulse Prefer)
+
+- Tip-stable `6949375d` after #2500 Leak SoftPulse Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Capstone `lesson-07-10-01…05` / `act-07-10-0*`: all five explains SoftPulse + `explainGrading` concept-aligned (PLAN→UPDATE→FINISH / SPR→TURN→CLOSE / NUTS→DEEP→NO-BLUFF / NUTS→VALUE→THIN / SPR→COMMIT→NO HERO) + Dart Capstone*Demo points match; hands `authored_multi_step_hand` `assessmentRole` `transfer` + empty pressHints in `NO_HINT_ACTIVITY_IDS` — **LPT-348** Done (do not reopen LPT-626/667); fixed+2 suit variants; synthesis containers — skip curriculum-split / no SoftPulse residual.
+- Prefer NEVER live-warmup `lesson-07-11-01-live-warmup-prep` / `act-07-11-01-*`: still unsplit — SoftPulse CHECKLIST→DEFAULTS→ONE HAND + Dart `LiveWarmupPrepDemo` matches packed objectives (SoftPulse residual N/A until LPT-351 splits); densify PRESENT; teachSpec **LPT-349** Done; curriculum **LPT-351** still To Do (needs-human) — do not clone.
+- Prefer NEVER Final `lesson-07-12-01-five-type-final` / `act-07-12-01-*`: all seven checkpoint SoftPulse cues kind `none` densify PRESENT — structural **clean** (assessment container; skip curriculum-split; **LPT-352** Done).
+- Tip-commented LPT-348/351/349/352/727/676/198/216; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER oldest SoftPulse residual **LPT-676** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-10-0* / act-07-11-01-* / act-07-12-01-*: Capstone/warmup/Final SoftPulse Prefer clean on tip; Capstone transfer NO_HINT policy LPT-348 Done; warm-up curriculum LPT-351 open; Final assessment clean LPT-352 Done.
