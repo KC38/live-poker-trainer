@@ -44,3 +44,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-14
 
 - Prefer patching `~/.live-poker-trainer/app-cache/<key>/Runner.app/.../assets/course/v2/catalog.json` from the checkout (or `--no-cache` rebuild) when `flutter_run_fast` hits Unknown lesson for an id that exists in source `catalog.json` — the native cache key ignores asset-only catalog updates, so hot-restart alone keeps the stale bundle (LPT-707).
+
+## Fold 2026-10-14
+
+- Prefer SoftPulse-none unguided dock labels (`C-bet 6`, `Call`) over large `Interactive …` accessibility tiles when auto-walking to a checkpoint — the Interactive needle can eat the step budget and never reach SoftPulse-off densify (LPT-764 validate).

@@ -90,16 +90,20 @@ const _lines = <String, String>{
   // LPT-763: SoftPulse-off densify — no correct-tile spoil.
   'act-04-07-01-checkpoint':
       'Evidence bundle for this seat — tap the matching note.',
+  // LPT-765: SoftPulse-off densify — no correct-tile spoil.
   'act-04-07-02-checkpoint':
-      'Nit is best treated as — pick A working model with sample limits.',
+      'Nit is best treated as — tap the matching model stance.',
   'act-04-07-03-checkpoint':
       'Why respect a Nit check-raise — pick Range is strong when they raise.',
   'act-04-08-01-guided': 'Seat raises or 3-bets twelve of fifteen pots. Observation — pick Extreme entry and aggression.',
   'act-04-08-01-scaffolded': 'They bet flop, turn, and river with weak showdowns twice. Note — pick Continues pressure too wide.',
   'act-04-08-01-unguided': 'Best note style versus wild aggression — pick Frequencies and shows — no ego story.',
+  // LPT-770: SoftPulse-off densify — no correct-tile spoil.
   'act-04-08-01-checkpoint':
-      'Evidence bundle — pick Enters constantly; barrels without mercy.',
-  'act-04-08-02-checkpoint': 'Which types are legal to mix now — pick Calling Station, Nit, and Maniac.',
+      'Evidence bundle for this seat — tap the matching note.',
+  // LPT-771: SoftPulse-off densify — no correct-tile spoil.
+  'act-04-08-02-checkpoint':
+      'Which types are legal to mix now — tap the matching set.',
   'act-04-08-03-checkpoint':
       'Why call wider versus a Maniac — pick Their betting range is too wide.',
   'act-04-09-01-guided': 'You saw one huge bluff. What do you know — pick One note — low certainty.',
