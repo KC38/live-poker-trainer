@@ -439,8 +439,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Stack 60bb, pot 15bb. SPR — tap the matching number.',
     'act-05-01-01-guided' =>
       'Four-way flop. Best continue with — pick Nut flush draw.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Nut potential / clean equity in the idle bubble (LPT-723; same
+    // class as LPT-717 / LPT-672 / LPT-653).
     'act-05-01-01-checkpoint' =>
-      'Multiway construction priority — pick Nut potential and clean equity.',
+      'Multiway construction priority — tap the matching priority.',
     'act-05-02-01-guided' =>
       '200bb effective. Best reason to call a raise with 55 BTN — pick Implied odds if they pay sets.',
     'act-05-02-01-unguided' =>

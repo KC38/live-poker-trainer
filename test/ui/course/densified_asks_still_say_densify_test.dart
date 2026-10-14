@@ -109,7 +109,7 @@ const _lines = <String, String>{
   'act-05-01-01-guided':
       'Four-way flop. Best continue with — pick Nut flush draw.',
   'act-05-01-01-checkpoint':
-      'Multiway construction priority — pick Nut potential and clean equity.',
+      'Multiway construction priority — tap the matching priority.',
   'act-05-02-01-guided': '200bb effective. Best reason to call a raise with 55 BTN — pick Implied odds if they pay sets.',
   'act-05-02-01-unguided': 'SPR ~12 on the flop. Your first job — pick Map turn/river plans before committing.',
   'act-05-02-01-checkpoint': '150–300bb cash play rewards — pick Position, implied odds, and disciplined folds.',
