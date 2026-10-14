@@ -44,6 +44,14 @@ void main() {
       'lesson-02-05-01-effective-stack',
       'lesson-02-06-01-live-habits',
       'lesson-03-01-01-reading-live-table',
+      // LPT-143..163: Section 3 postflop splits.
+      'lesson-03-02-01-flop-hand-classes',
+      'lesson-03-03-01-outs-and-price',
+      'lesson-03-04-01-flop-decisions',
+      'lesson-03-05-01-turn-decisions',
+      'lesson-03-06-01-river-decisions',
+      'lesson-03-07-01-multiway-fundamentals',
+      'lesson-03-08-01-leak-repair',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];

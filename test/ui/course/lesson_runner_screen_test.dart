@@ -1555,7 +1555,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-03-02-01-flop-hand-classes',
+          lessonId: 'lesson-03-02-01-01-made-hands', // split from lesson-03-02-01-flop-hand-classes
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_flop_class_frame',
@@ -1598,7 +1598,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-03-03-01-outs-and-price',
+          lessonId: 'lesson-03-03-01-01-clean-outs', // split from lesson-03-03-01-outs-and-price
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_outs_price_frame',
@@ -1640,7 +1640,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-03-04-01-flop-decisions',
+          lessonId: 'lesson-03-04-01-01-value-bet', // split from lesson-03-04-01-flop-decisions
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_flop_line_frame',
@@ -1683,7 +1683,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-03-05-01-turn-decisions',
+          lessonId: 'lesson-03-05-01-01-brick-or-change', // split from lesson-03-05-01-turn-decisions
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_turn_card_frame',
@@ -1726,7 +1726,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-03-06-01-river-decisions',
+          lessonId: 'lesson-03-06-01-01-river-value', // split from lesson-03-06-01-river-decisions
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_river_close_frame',
@@ -1769,7 +1769,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-03-07-01-multiway-fundamentals',
+          lessonId: 'lesson-03-07-01-01-stronger-value', // split from lesson-03-07-01-multiway-fundamentals
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_multiway_tight_frame',
@@ -1811,7 +1811,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-03-08-01-leak-repair',
+          lessonId: 'lesson-03-08-01-01-weak-top-pair', // split from lesson-03-08-01-leak-repair
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_leak_repair_frame',

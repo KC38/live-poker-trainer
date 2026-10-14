@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "5b2cf644cf8ff26b684e7f05dd8dcec0cc66de84fd93b8189e5228c105c4b0cc",
+  "contentChecksum": "90b72a302ce070e3a92216961b7227c207a3dca7bf320a5f5a0cc8d390dae493",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -116,6 +116,41 @@
       "lesson-03-01-01-01-pot-and-stacks",
       "lesson-03-01-01-02-button-and-action",
       "lesson-03-01-01-03-verbal-binds"
+    ],
+    "lesson-03-02-01-flop-hand-classes": [
+      "lesson-03-02-01-01-made-hands",
+      "lesson-03-02-01-02-draws-vs-showdown",
+      "lesson-03-02-01-03-air"
+    ],
+    "lesson-03-03-01-outs-and-price": [
+      "lesson-03-03-01-01-clean-outs",
+      "lesson-03-03-01-02-pot-odds",
+      "lesson-03-03-01-03-implied-odds"
+    ],
+    "lesson-03-04-01-flop-decisions": [
+      "lesson-03-04-01-01-value-bet",
+      "lesson-03-04-01-02-selective-cbet",
+      "lesson-03-04-01-03-flop-plan"
+    ],
+    "lesson-03-05-01-turn-decisions": [
+      "lesson-03-05-01-01-brick-or-change",
+      "lesson-03-05-01-02-second-barrel",
+      "lesson-03-05-01-03-delayed-aggression"
+    ],
+    "lesson-03-06-01-river-decisions": [
+      "lesson-03-06-01-01-river-value",
+      "lesson-03-06-01-02-credible-bluff",
+      "lesson-03-06-01-03-catch-or-fold"
+    ],
+    "lesson-03-07-01-multiway-fundamentals": [
+      "lesson-03-07-01-01-stronger-value",
+      "lesson-03-07-01-02-bluff-less",
+      "lesson-03-07-01-03-nut-potential"
+    ],
+    "lesson-03-08-01-leak-repair": [
+      "lesson-03-08-01-01-weak-top-pair",
+      "lesson-03-08-01-02-bad-prices",
+      "lesson-03-08-01-03-passive-and-crowds"
     ]
   },
   "sections": [
@@ -8910,14 +8945,12 @@
           "summary": "Made hands, draws, showdown value, and air.",
           "lessons": [
             {
-              "id": "lesson-03-02-01-flop-hand-classes",
+              "id": "lesson-03-02-01-01-made-hands",
               "order": 1,
-              "title": "Name your flop class",
-              "summary": "Sort flop holdings into made, draw, showdown, or air.",
+              "title": "Made hands",
+              "summary": "Spot a made hand on the flop.",
               "objectives": [
-                "Identify made hands on the flop",
-                "Separate draws from showdown value",
-                "Recognize air that needs equity or fold equity"
+                "Identify made hands on the flop"
               ],
               "prerequisites": [
                 "lesson-03-01-01-03-verbal-binds"
@@ -8925,7 +8958,7 @@
               "remediationLessonIds": [
                 "lesson-03-01-01-03-verbal-binds"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -9066,10 +9099,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-02-01-02-draws-vs-showdown",
+              "order": 2,
+              "title": "Draws versus showdown value",
+              "summary": "Separate hands that need help from hands that can win now.",
+              "objectives": [
+                "Separate draws from showdown value"
+              ],
+              "prerequisites": [
+                "lesson-03-02-01-01-made-hands"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-02-01-01-made-hands"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-02-01-02-explain-draws",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Separate draws from showdown value"
+                  ],
+                  "accessibilityText": "A draw needs another card to win. Showdown value can win now but rarely improves.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-02-01-02-explain-draws-line",
+                      "kind": "dialogue",
+                      "text": "A draw needs another card to win. Showdown value can win now but rarely improves."
+                    }
+                  ],
+                  "okFeedback": "Draw or showdown value.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "DRAW",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SHOWDOWN VALUE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-02-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -9163,8 +9256,158 @@
                   }
                 },
                 {
+                  "id": "act-03-02-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Open-ender with a spade is a draw class.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Separate draws from showdown value"
+                  ],
+                  "prompt": "Board Ts 9s 4d. You hold Js 8d. Best label?",
+                  "choices": [
+                    {
+                      "id": "oesd",
+                      "label": "Draw — open-ended straight draw",
+                      "accessibilityText": "Draw — open-ended straight draw"
+                    },
+                    {
+                      "id": "made-jt",
+                      "label": "Made top pair",
+                      "accessibilityText": "Made top pair"
+                    },
+                    {
+                      "id": "air-j8",
+                      "label": "Pure air",
+                      "accessibilityText": "Pure air"
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Js",
+                          "8d"
+                        ],
+                        "board": [
+                          "Ts",
+                          "9s",
+                          "4d"
+                        ]
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "Jd",
+                              "8c"
+                            ],
+                            "board": [
+                              "Td",
+                              "9d",
+                              "4c"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Jc",
+                              "8s"
+                            ],
+                            "board": [
+                              "Tc",
+                              "9c",
+                              "4s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "oesd",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-02-01-03-air",
+              "order": 3,
+              "title": "Recognize air",
+              "summary": "No pair and no real draw is air.",
+              "objectives": [
+                "Recognize air that needs equity or fold equity"
+              ],
+              "prerequisites": [
+                "lesson-03-02-01-02-draws-vs-showdown"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-02-01-02-draws-vs-showdown"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-02-01-03-explain-air",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Recognize air that needs equity or fold equity"
+                  ],
+                  "accessibilityText": "No pair and no real draw is air. Air needs fold equity to bet, or it gives up.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-02-01-03-explain-air-line",
+                      "kind": "dialogue",
+                      "text": "No pair and no real draw is air. Air needs fold equity to bet, or it gives up."
+                    }
+                  ],
+                  "okFeedback": "That is air.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "AIR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FOLD EQUITY",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-03-02-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -9256,97 +9499,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-03-02-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Open-ender with a spade is a draw class.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Separate draws from showdown value",
-                    "Identify made hands on the flop"
-                  ],
-                  "prompt": "Board Ts 9s 4d. You hold Js 8d. Best label?",
-                  "choices": [
-                    {
-                      "id": "oesd",
-                      "label": "Draw — open-ended straight draw",
-                      "accessibilityText": "Draw — open-ended straight draw"
-                    },
-                    {
-                      "id": "made-jt",
-                      "label": "Made top pair",
-                      "accessibilityText": "Made top pair"
-                    },
-                    {
-                      "id": "air-j8",
-                      "label": "Pure air",
-                      "accessibilityText": "Pure air"
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "fixed",
-                      "fixedCards": {
-                        "hero": [
-                          "Js",
-                          "8d"
-                        ],
-                        "board": [
-                          "Ts",
-                          "9s",
-                          "4d"
-                        ]
-                      },
-                      "variants": [
-                        {
-                          "id": "var-checkpoint-suits-1",
-                          "fixedCards": {
-                            "hero": [
-                              "Jd",
-                              "8c"
-                            ],
-                            "board": [
-                              "Td",
-                              "9d",
-                              "4c"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (1)"
-                        },
-                        {
-                          "id": "var-checkpoint-suits-2",
-                          "fixedCards": {
-                            "hero": [
-                              "Jc",
-                              "8s"
-                            ],
-                            "board": [
-                              "Tc",
-                              "9c",
-                              "4s"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (2)"
-                        }
-                      ]
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "oesd",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -9359,22 +9511,20 @@
           "summary": "Clean versus dirty outs, pot odds, and implied-odds intuition.",
           "lessons": [
             {
-              "id": "lesson-03-03-01-outs-and-price",
+              "id": "lesson-03-03-01-01-clean-outs",
               "order": 1,
-              "title": "Count outs, pay the right price",
-              "summary": "Estimate outs and decide if the pot pays you to continue.",
+              "title": "Clean versus dirty outs",
+              "summary": "Count only the outs that make the best hand.",
               "objectives": [
-                "Count clean versus dirty outs",
-                "Compare pot odds to draw equity",
-                "Use implied-odds intuition deep-stacked"
+                "Count clean versus dirty outs"
               ],
               "prerequisites": [
-                "lesson-03-02-01-flop-hand-classes"
+                "lesson-03-02-01-03-air"
               ],
               "remediationLessonIds": [
-                "lesson-03-02-01-flop-hand-classes"
+                "lesson-03-02-01-03-air"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -9520,10 +9670,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-03-01-02-pot-odds",
+              "order": 2,
+              "title": "Pot odds versus equity",
+              "summary": "Compare the price to call with your draw's equity.",
+              "objectives": [
+                "Compare pot odds to draw equity"
+              ],
+              "prerequisites": [
+                "lesson-03-03-01-01-clean-outs"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-03-01-01-clean-outs"
+              ],
+              "estimatedMinutes": 4,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-03-01-02-explain-price",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Compare pot odds to draw equity"
+                  ],
+                  "accessibilityText": "Compare what you must call with what the pot will pay. Call when your equity beats the price.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-03-01-02-explain-price-line",
+                      "kind": "dialogue",
+                      "text": "Compare what you must call with what the pot will pay. Call when your equity beats the price."
+                    }
+                  ],
+                  "okFeedback": "Price versus equity.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PRICE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "POT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "EQUITY",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-03-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -9575,7 +9790,7 @@
                 },
                 {
                   "id": "act-03-03-01-unguided",
-                  "order": 4,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -9667,10 +9882,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-03-01-03-implied-odds",
+              "order": 3,
+              "title": "Implied odds when deep",
+              "summary": "Deep stacks can pay off a big draw later.",
+              "objectives": [
+                "Use implied-odds intuition deep-stacked"
+              ],
+              "prerequisites": [
+                "lesson-03-03-01-02-pot-odds"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-03-01-02-pot-odds"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-03-01-03-explain-implied",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Use implied-odds intuition deep-stacked"
+                  ],
+                  "accessibilityText": "Deep stacks can pay you later when a strong draw hits, most of all against sticky callers.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-03-01-03-explain-implied-line",
+                      "kind": "dialogue",
+                      "text": "Deep stacks can pay you later when a strong draw hits, most of all against sticky callers."
+                    }
+                  ],
+                  "okFeedback": "Deep and sticky — implied odds.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "DEEP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "IMPLIED ODDS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-03-01-checkpoint",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -9769,22 +10044,20 @@
           "summary": "Value bet, c-bet, check back, call, fold, raise.",
           "lessons": [
             {
-              "id": "lesson-03-04-01-flop-decisions",
+              "id": "lesson-03-04-01-01-value-bet",
               "order": 1,
-              "title": "Choose a flop line",
-              "summary": "Pick value, protection, pot control, or give-up on the flop.",
+              "title": "Value bet the flop",
+              "summary": "Bet strong made hands for value.",
               "objectives": [
-                "Value bet strong made hands",
-                "C-bet selectively as the preflop aggressor",
-                "Check back, call, fold, or raise with a plan"
+                "Value bet strong made hands"
               ],
               "prerequisites": [
-                "lesson-03-03-01-outs-and-price"
+                "lesson-03-03-01-03-implied-odds"
               ],
               "remediationLessonIds": [
-                "lesson-03-03-01-outs-and-price"
+                "lesson-03-03-01-03-implied-odds"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -9939,10 +10212,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-04-01-02-selective-cbet",
+              "order": 2,
+              "title": "C-bet selectively",
+              "summary": "As the preflop raiser, pick good boards to continue betting.",
+              "objectives": [
+                "C-bet selectively as the preflop aggressor"
+              ],
+              "prerequisites": [
+                "lesson-03-04-01-01-value-bet"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-04-01-01-value-bet"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-04-01-02-explain-cbet",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "C-bet selectively as the preflop aggressor"
+                  ],
+                  "accessibilityText": "As the preflop raiser you may bet again on the flop. Pick boards that favor you, like a dry ace-high flop.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-04-01-02-explain-cbet-line",
+                      "kind": "dialogue",
+                      "text": "As the preflop raiser you may bet again on the flop. Pick boards that favor you, like a dry ace-high flop."
+                    }
+                  ],
+                  "okFeedback": "Good board — c-bet.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PREFLOP RAISER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "C-BET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-04-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -10038,10 +10371,75 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-04-01-03-flop-plan",
+              "order": 3,
+              "title": "Raise, call, or fold with a plan",
+              "summary": "Facing a flop bet, choose with your hand class and the crowd.",
+              "objectives": [
+                "Check back, call, fold, or raise with a plan"
+              ],
+              "prerequisites": [
+                "lesson-03-04-01-02-selective-cbet"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-04-01-02-selective-cbet"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-04-01-03-explain-plan",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Check back, call, fold, or raise with a plan"
+                  ],
+                  "accessibilityText": "Facing a flop bet, choose raise, call, or fold from your hand class and how many players are in.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-04-01-03-explain-plan-line",
+                      "kind": "dialogue",
+                      "text": "Facing a flop bet, choose raise, call, or fold from your hand class and how many players are in."
+                    }
+                  ],
+                  "okFeedback": "One plan for the flop.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RAISE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-04-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -10140,7 +10538,7 @@
                 },
                 {
                   "id": "act-03-04-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -10243,22 +10641,20 @@
           "summary": "Brick versus changing card, second barrel, delayed aggression.",
           "lessons": [
             {
-              "id": "lesson-03-05-01-turn-decisions",
+              "id": "lesson-03-05-01-01-brick-or-change",
               "order": 1,
-              "title": "Plan the turn card",
-              "summary": "React to bricks and scare cards with a second barrel or delay.",
+              "title": "Brick or changing turn",
+              "summary": "Tell a blank turn from one that changes the story.",
               "objectives": [
-                "Recognize brick versus changing turns",
-                "Fire a second barrel with a plan",
-                "Use delayed aggression when checked to"
+                "Recognize brick versus changing turns"
               ],
               "prerequisites": [
-                "lesson-03-04-01-flop-decisions"
+                "lesson-03-04-01-03-flop-plan"
               ],
               "remediationLessonIds": [
-                "lesson-03-04-01-flop-decisions"
+                "lesson-03-04-01-03-flop-plan"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -10402,10 +10798,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-05-01-02-second-barrel",
+              "order": 2,
+              "title": "Second barrel",
+              "summary": "Bet the turn again with a plan.",
+              "objectives": [
+                "Fire a second barrel with a plan"
+              ],
+              "prerequisites": [
+                "lesson-03-05-01-01-brick-or-change"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-05-01-01-brick-or-change"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-05-01-02-explain-barrel",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Fire a second barrel with a plan"
+                  ],
+                  "accessibilityText": "Called on the flop and the turn bricks? Strong hands bet again with a plan for the river.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-05-01-02-explain-barrel-line",
+                      "kind": "dialogue",
+                      "text": "Called on the flop and the turn bricks? Strong hands bet again with a plan for the river."
+                    }
+                  ],
+                  "okFeedback": "Brick turn — barrel with a plan.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BRICK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BARREL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-05-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -10504,10 +10960,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-05-01-03-delayed-aggression",
+              "order": 3,
+              "title": "Delayed aggression",
+              "summary": "Checked back the flop? Bet the turn when it helps you.",
+              "objectives": [
+                "Use delayed aggression when checked to"
+              ],
+              "prerequisites": [
+                "lesson-03-05-01-02-second-barrel"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-05-01-02-second-barrel"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-05-01-03-explain-delay",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Use delayed aggression when checked to"
+                  ],
+                  "accessibilityText": "Checked back the flop? When the turn helps you and it is checked to you, bet now.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-05-01-03-explain-delay-line",
+                      "kind": "dialogue",
+                      "text": "Checked back the flop? When the turn helps you and it is checked to you, bet now."
+                    }
+                  ],
+                  "okFeedback": "Delay, then bet.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CHECKED BACK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BET TURN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-05-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -10609,7 +11125,7 @@
                 },
                 {
                   "id": "act-03-05-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -10711,22 +11227,20 @@
           "summary": "Value, bluff, bluff-catch, fold.",
           "lessons": [
             {
-              "id": "lesson-03-06-01-river-decisions",
+              "id": "lesson-03-06-01-01-river-value",
               "order": 1,
-              "title": "Close the river correctly",
-              "summary": "Pick value, bluff, bluff-catch, or fold on the end.",
+              "title": "River value",
+              "summary": "Bet hands that beat calling ranges.",
               "objectives": [
-                "Value bet hands that beat calling ranges",
-                "Bluff only with a credible story",
-                "Bluff-catch or fold with clarity"
+                "Value bet hands that beat calling ranges"
               ],
               "prerequisites": [
-                "lesson-03-05-01-turn-decisions"
+                "lesson-03-05-01-03-delayed-aggression"
               ],
               "remediationLessonIds": [
-                "lesson-03-05-01-turn-decisions"
+                "lesson-03-05-01-03-delayed-aggression"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -10877,10 +11391,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-06-01-02-credible-bluff",
+              "order": 2,
+              "title": "Credible bluffs",
+              "summary": "Bluff the river only with a believable story.",
+              "objectives": [
+                "Bluff only with a credible story"
+              ],
+              "prerequisites": [
+                "lesson-03-06-01-01-river-value"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-06-01-01-river-value"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-06-01-02-explain-bluff",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Bluff only with a credible story"
+                  ],
+                  "accessibilityText": "Bluff the river only when your earlier bets tell a believable story.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-06-01-02-explain-bluff-line",
+                      "kind": "dialogue",
+                      "text": "Bluff the river only when your earlier bets tell a believable story."
+                    }
+                  ],
+                  "okFeedback": "Story fits — bluff.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STORY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BLUFF",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-06-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -10983,10 +11557,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-06-01-03-catch-or-fold",
+              "order": 3,
+              "title": "Bluff-catch or fold",
+              "summary": "Medium hands facing a river bet catch or fold.",
+              "objectives": [
+                "Bluff-catch or fold with clarity"
+              ],
+              "prerequisites": [
+                "lesson-03-06-01-02-credible-bluff"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-06-01-02-credible-bluff"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-06-01-03-explain-catch",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Bluff-catch or fold with clarity"
+                  ],
+                  "accessibilityText": "Medium hands facing a river bet either bluff-catch or fold. Decide from the line, not from hope.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-06-01-03-explain-catch-line",
+                      "kind": "dialogue",
+                      "text": "Medium hands facing a river bet either bluff-catch or fold. Decide from the line, not from hope."
+                    }
+                  ],
+                  "okFeedback": "Catch or fold — decide.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BLUFF-CATCH",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-06-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -11091,7 +11725,7 @@
                 },
                 {
                   "id": "act-03-06-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -11147,22 +11781,20 @@
           "summary": "Stronger ranges, less bluffing, position and nut potential.",
           "lessons": [
             {
-              "id": "lesson-03-07-01-multiway-fundamentals",
+              "id": "lesson-03-07-01-01-stronger-value",
               "order": 1,
-              "title": "Play tighter multiway",
-              "summary": "Need stronger holdings and nut potential when many players see flops.",
+              "title": "Stronger hands multiway",
+              "summary": "More players means you need a stronger hand.",
               "objectives": [
-                "Demand stronger made hands multiway",
-                "Bluff less with players left to act",
-                "Prefer nut potential and position"
+                "Demand stronger made hands multiway"
               ],
               "prerequisites": [
-                "lesson-03-06-01-river-decisions"
+                "lesson-03-06-01-03-catch-or-fold"
               ],
               "remediationLessonIds": [
-                "lesson-03-06-01-river-decisions"
+                "lesson-03-06-01-03-catch-or-fold"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -11302,10 +11934,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-07-01-02-bluff-less",
+              "order": 2,
+              "title": "Bluff less multiway",
+              "summary": "Players left to act make bluffs fail.",
+              "objectives": [
+                "Bluff less with players left to act"
+              ],
+              "prerequisites": [
+                "lesson-03-07-01-01-stronger-value"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-07-01-01-stronger-value"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-07-01-02-explain-crowd",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Bluff less with players left to act"
+                  ],
+                  "accessibilityText": "Every extra player is another chance someone has it. Bluff far less into a crowd.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-07-01-02-explain-crowd-line",
+                      "kind": "dialogue",
+                      "text": "Every extra player is another chance someone has it. Bluff far less into a crowd."
+                    }
+                  ],
+                  "okFeedback": "Crowd — bluff less.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CROWD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FEWER BLUFFS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-07-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -11402,10 +12094,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-07-01-03-nut-potential",
+              "order": 3,
+              "title": "Nut potential and position",
+              "summary": "Prefer hands that can make the nuts, played in position.",
+              "objectives": [
+                "Prefer nut potential and position"
+              ],
+              "prerequisites": [
+                "lesson-03-07-01-02-bluff-less"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-07-01-02-bluff-less"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-07-01-03-explain-nuts",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Prefer nut potential and position"
+                  ],
+                  "accessibilityText": "In multiway pots, prefer hands that can make the nuts, and play them in position.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-07-01-03-explain-nuts-line",
+                      "kind": "dialogue",
+                      "text": "In multiway pots, prefer hands that can make the nuts, and play them in position."
+                    }
+                  ],
+                  "okFeedback": "Nut potential, in position.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NUTS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "POSITION",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-07-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -11457,7 +12209,7 @@
                 },
                 {
                   "id": "act-03-07-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -11513,22 +12265,20 @@
           "summary": "Top-pair overplay, bad prices, passive calling, bluffing crowds.",
           "lessons": [
             {
-              "id": "lesson-03-08-01-leak-repair",
+              "id": "lesson-03-08-01-01-weak-top-pair",
               "order": 1,
-              "title": "Patch the common leaks",
-              "summary": "Fix overplaying top pair, chasing bad prices, and bluffing crowds.",
+              "title": "Weak top pair",
+              "summary": "Stop stacking off with weak top pair.",
               "objectives": [
-                "Stop overplaying weak top pair",
-                "Fold draws at bad prices",
-                "Avoid passive calling and crowd bluffs"
+                "Stop overplaying weak top pair"
               ],
               "prerequisites": [
-                "lesson-03-07-01-multiway-fundamentals"
+                "lesson-03-07-01-03-nut-potential"
               ],
               "remediationLessonIds": [
-                "lesson-03-04-01-flop-decisions"
+                "lesson-03-04-01-03-flop-plan"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -11672,10 +12422,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-08-01-02-bad-prices",
+              "order": 2,
+              "title": "Fold bad prices",
+              "summary": "Small draws fold to big bets.",
+              "objectives": [
+                "Fold draws at bad prices"
+              ],
+              "prerequisites": [
+                "lesson-03-08-01-01-weak-top-pair"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-08-01-01-weak-top-pair"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-08-01-02-explain-price",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Fold draws at bad prices"
+                  ],
+                  "accessibilityText": "A small draw facing a big bet is a bad price. Fold and keep your chips.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-08-01-02-explain-price-line",
+                      "kind": "dialogue",
+                      "text": "A small draw facing a big bet is a bad price. Fold and keep your chips."
+                    }
+                  ],
+                  "okFeedback": "Bad price — fold.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BAD PRICE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-08-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -11771,10 +12581,70 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-03-08-01-03-passive-and-crowds",
+              "order": 3,
+              "title": "Passive calls and crowd bluffs",
+              "summary": "Do not call along with nothing or bluff many players.",
+              "objectives": [
+                "Avoid passive calling and crowd bluffs"
+              ],
+              "prerequisites": [
+                "lesson-03-08-01-02-bad-prices"
+              ],
+              "remediationLessonIds": [
+                "lesson-03-08-01-02-bad-prices"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-03-08-01-03-explain-passive",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid passive calling and crowd bluffs"
+                  ],
+                  "accessibilityText": "Do not call along with nothing, and do not bluff into many players.",
+                  "coachMedia": [
+                    {
+                      "id": "act-03-08-01-03-explain-passive-line",
+                      "kind": "dialogue",
+                      "text": "Do not call along with nothing, and do not bluff into many players."
+                    }
+                  ],
+                  "okFeedback": "No passive calls, no crowd bluffs.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PASSIVE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CROWD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-03-08-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -11873,7 +12743,7 @@
                 },
                 {
                   "id": "act-03-08-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -11922,7 +12792,7 @@
             },
             {
               "id": "lesson-03-08-02-section-three-jump-test",
-              "order": 2,
+              "order": 4,
               "title": "Section 3 jump check",
               "summary": "Placement-style check on live postflop competence.",
               "objectives": [
@@ -11931,7 +12801,7 @@
                 "Confirm street plans and multiway discipline"
               ],
               "prerequisites": [
-                "lesson-03-08-01-leak-repair"
+                "lesson-03-08-01-03-passive-and-crowds"
               ],
               "remediationLessonIds": [
                 "lesson-03-01-01-03-verbal-binds"
