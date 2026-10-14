@@ -3013,3 +3013,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-692/254/198/216/690; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gg (cf3ba3ee Prefer NEVER Spot-caps SoftPulse residual LPT-694 re-check)
+
+- Tip-stable `cf3ba3ee` (#2428 Range SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Spot-caps SoftPulse residual re-check `lesson-06-03-01-01/02/03`: first-child SoftPulse CAPPED→UNCAPPED→NUTS + Dart `CappedUncappedDemo` still pre-split under spot-caps-only → residual **LPT-694** still To Do (needs-human; Relates LPT-260; race clone LPT-695 Done); successors content-driven; checkpoint SoftPulse `attack` under attack-caps — no companion residual; curriculum **LPT-260** Done.
+- Tip-commented LPT-694/260/198/216/692; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Polar SoftPulse residual **LPT-696** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
