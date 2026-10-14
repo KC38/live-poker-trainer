@@ -3813,3 +3813,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Thin SoftPulse residual **LPT-682** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-03-01-*: interactive structural clean on tip except LPT-681 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); SoftPulse maps PRESENT — do not reopen LPT-625; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15ab tip 2cd50ab6 (#2547 Estimate Prefer → Thin SoftPulse LPT-682 Prefer)
+
+- Tip-stable `2cd50ab6` after #2547 Estimate SoftPulse Prefer Recent fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Thin SoftPulse residual re-check `lesson-05-04-01-01/02/03` / `act-05-04-01-*`: first-child SoftPulse THIN→CATCH→BARRELS + `explainGrading` "Thin → Catch → Barrels." + Dart `ThinValueDemo` / `LessonThinValueExplainTable` (THIN "Extract light" / CATCH "Hero call" / BARRELS "Fire multi-street") + coachMedia "Thin value needs calls. Bluff-catches need wide barrels." still pre-split under thin-value-only → residual **LPT-682** still To Do (needs-human; Relates LPT-233 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `read` kind `none` densify PRESENT ("Same hand, different types — what must change?") under thin-value-only → residual **LPT-683** still To Do; successors SoftPulse MANIAC→BARREL→CALL / NIT→FOLDS→CHECK content-driven (do not reopen LPT-669); guided SoftPulse `tv` PRESENT (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants; SoftPulse map PRESENT); scaffolded SoftPulse `call-m` one-per-press PRESENT; unguided SoftPulse `check-nit` one-per-press PRESENT.
+- Curriculum **LPT-233** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-682/683/233/684/681/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Lines SoftPulse residual **LPT-684** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse + LPT-683 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); poker_action_sizing densify N/A for guided/scaffolded/unguided SoftPulse maps; checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT on checkpoint — do not reopen LPT-628.
+
