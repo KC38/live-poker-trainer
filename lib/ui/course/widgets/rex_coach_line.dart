@@ -427,10 +427,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
     'act-04-09-01-checkpoint' =>
       'Course should show what beside a type label — pick Sample and confidence limits.',
+    // Assessment SoftPulse-off densify (LPT-673): situation + tap verb only —
+    // never name the correct tile/value in the idle bubble (same as LPT-672).
     'act-04-10-02-jump-range' =>
-      'UTG open is best described as — pick Stronger, narrower range.',
+      'UTG open is best described as — tap the matching range.',
     'act-04-10-02-jump-spr' =>
-      'Stack 60bb, pot 15bb. SPR — pick 4.',
+      'Stack 60bb, pot 15bb. SPR — tap the matching number.',
     'act-05-01-01-guided' =>
       'Four-way flop. Best continue with — pick Nut flush draw.',
     'act-05-01-01-checkpoint' =>
@@ -524,12 +526,14 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Seat 3-bets light and never gives up rivers. Label — tap Maniac.',
     'act-04-09-01-unguided' =>
       'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
+    // Section 4 jump densify — SoftPulse off (kind: none); stems must not
+    // spoil the correct exploit/tile (LPT-673; SoftPulse LPT-653).
     'act-04-10-02-jump-station' =>
-      'Sticky caller three streets. Label + exploit direction — tap Calling Station — thicker value, fewer bluffs.',
+      'Sticky caller three streets. Label + exploit direction — tap the matching plan.',
     'act-04-10-02-jump-nit' =>
-      'Tiny range, huge check-raise. Label + line — tap Nit — respect the raise; steal more elsewhere.',
+      'Tiny range, huge check-raise. Label + line — tap the matching plan.',
     'act-04-10-02-jump-maniac' =>
-      'Seat barrels forever. You have top pair. Label + line — tap Maniac — widen bluff-catch; avoid ego raises.',
+      'Seat barrels forever. You have top pair. Label + line — tap the matching plan.',
     // Final five-type checkpoint densify — SoftPulse off (kind: none); stems
     // must not spoil the correct exploit/tile (LPT-672; SoftPulse LPT-653).
     'act-07-12-01-cs' =>
