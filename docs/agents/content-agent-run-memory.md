@@ -2275,3 +2275,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-117** Done — do not clone / do not re-add needs-human. Tip-commented LPT-117/739 + Meet Nit LPT-198 / LPT-216.
 - Prefer next: NEVER `lesson-02-02-01-*` hand-families / Low residuals LPT-676…739.
 
+## Fold 2026-10-14dj (77752ef0 hand-families SoftPulse residual)
+
+- Tip-stable `77752ef0` (#2323). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-02-02-01-01/02/03` under hand-families unit:
+  - first-child `act-02-02-01-explain-families` SoftPulse Pairs→Broadways→Suited aces→Connectors + `explainGrading` under Pocket-pairs-only → filed **LPT-740** (needs-human; Relates LPT-121).
+  - successors `act-02-02-01-02-explain-broadway` (BROADWAY→SUITED ACE) + `act-02-02-01-03-explain-connectors` (CONNECTORS→TRASH) content-driven; guided SoftPulse `hf-pair` + scaffolded SoftPulse `hf-broadway` + unguided SoftPulse `hf-sc` + checkpoint SoftPulse `hf-trash` kind `none` hintless PRESENT.
+- Curriculum **LPT-121** Done — do not clone / do not re-add needs-human. Tip-commented LPT-121/740 + Meet Nit LPT-198 / LPT-216; leave open LPT-739/738/737.
+- Prefer next: NEVER `lesson-02-03-01-*` open-early / Low residuals LPT-676…740.
+
