@@ -3143,3 +3143,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Map SoftPulse residual **LPT-794** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-01-01-*: interactive structural clean on tip except LPT-790 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactives `deal.mode` `none` — do not file handFamily.
 
+## Fold 2026-10-14gw (1be57926 Prefer NEVER Map SoftPulse residual LPT-794 re-check)
+
+- Tip-stable `1be57926` (#2448 preflop-to-flop SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Map SoftPulse residual re-check `lesson-07-02-01-01/02/03`: first-child SoftPulse BARREL→GIVE-UP→MAP + `explainGrading` "Barrel → Give-up → Map." + Dart `TurnMapDemo` / `LessonTurnMapExplainTable` still pre-split under List-turn-continue-cards-only → residual **LPT-794** still To Do (needs-human; Relates LPT-314 — do not re-add needs-human on curriculum); successors BRICK→GIVE UP / CONTINUE→GIVE-UP→MAP content-driven; guided SoftPulse `ok` densify PRESENT; scaffolded SoftPulse `give` one-per-press densify PRESENT; unguided SoftPulse `avoid` one-per-press densify PRESENT; checkpoint SoftPulse `list` kind `none` densify PRESENT under map — no companion residual; curriculum **LPT-314** Done.
+- Tip-commented LPT-794/314/198/216/790/795/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ rule **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactives `deal.mode` `none` — do not file handFamily.
+
