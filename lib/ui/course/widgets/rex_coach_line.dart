@@ -665,8 +665,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // LPT-653; same class as LPT-819 / LPT-818).
     'act-04-08-02-unguided' =>
       'Seat 3-bets light and never gives up rivers — tap which type fits.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Update / Calling Station model
+    // (or Freeze) (LPT-821; SoftPulse LPT-653; same class as LPT-820 /
+    // LPT-819 / LPT-818).
     'act-04-09-01-unguided' =>
-      'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
+      'Former \'station\' starts folding three streets — tap which next step fits.',
     // Section 4 jump densify — SoftPulse off (kind: none); stems must not
     // spoil the correct exploit/tile (LPT-673; SoftPulse LPT-653).
     'act-04-10-02-jump-station' =>
