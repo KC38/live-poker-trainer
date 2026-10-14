@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:live_poker_trainer/core/constants/colors.dart';
 import 'package:live_poker_trainer/models/card_model.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
 import 'package:live_poker_trainer/ui/course/widgets/teach_felt_height.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_card_deal.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_open_pot_deal.dart';
@@ -5318,90 +5319,10 @@ String? mapTableRegionToChoiceId({
 /// Whether this activity is answered by tapping the mini-table.
 bool isTableRegionTapActivity(CourseActivity activity) {
   if (activity.renderer == ActivityRenderer.coachDialogue) {
-    // Interactive explains: tap the demo instead of Continue.
-    return activity.id == 'act-01-01-01-explain-hole-cards' ||
-        activity.id == 'act-01-01-02-explain-suits' ||
-        activity.id == 'act-01-01-03-explain-button' ||
-        activity.id == 'act-02-01-01-explain-pos' ||
-        activity.id == 'act-01-02-01-explain-ladder' ||
-        activity.id == 'act-01-02-02-explain-five' ||
-        activity.id == 'act-01-03-01-explain-passive' ||
-        activity.id == 'act-01-03-02-explain-aggro' ||
-        activity.id == 'act-01-04-01-explain-streets' ||
-        activity.id == 'act-01-05-01-explain-win' ||
-        activity.id == 'act-01-06-01-explain-run' ||
-        activity.id == 'act-02-01-02-explain-order' ||
-        activity.id == 'act-02-02-01-explain-families' ||
-        activity.id == 'act-02-03-01-explain-open' ||
-        activity.id == 'act-02-04-01-explain-vs' ||
-        activity.id == 'act-02-05-01-explain-bb' ||
-        activity.id == 'act-02-06-01-explain-habits' ||
-        activity.id == 'act-02-07-01-explain-full' ||
-        activity.id == 'act-03-01-01-explain' ||
-        activity.id == 'act-03-02-01-explain' ||
-        activity.id == 'act-03-03-01-explain' ||
-        activity.id == 'act-03-04-01-explain' ||
-        activity.id == 'act-03-05-01-explain' ||
-        activity.id == 'act-03-06-01-explain' ||
-        activity.id == 'act-03-07-01-explain' ||
-        activity.id == 'act-03-08-01-explain' ||
-        activity.id == 'act-04-01-01-explain' ||
-        activity.id == 'act-04-02-01-explain' ||
-        activity.id == 'act-04-03-01-explain' ||
-        activity.id == 'act-04-04-01-explain' ||
-        activity.id == 'act-04-05-01-explain' ||
-        activity.id == 'act-04-06-01-explain' ||
-        activity.id == 'act-04-06-02-explain' ||
-        activity.id == 'act-04-06-03-explain' ||
-        activity.id == 'act-04-07-01-explain' ||
-        activity.id == 'act-04-07-02-explain' ||
-        activity.id == 'act-04-07-03-explain' ||
-        activity.id == 'act-04-08-01-explain' ||
-        activity.id == 'act-04-08-02-explain' ||
-        activity.id == 'act-04-08-03-explain' ||
-        activity.id == 'act-04-09-01-explain' ||
-        activity.id == 'act-04-10-01-explain' ||
-        activity.id == 'act-05-01-01-explain' ||
-        activity.id == 'act-05-02-01-explain' ||
-        activity.id == 'act-05-03-01-explain' ||
-        activity.id == 'act-05-04-01-explain' ||
-        activity.id == 'act-05-05-01-explain' ||
-        activity.id == 'act-05-06-01-explain' ||
-        activity.id == 'act-05-07-01-explain' ||
-        activity.id == 'act-05-08-01-explain' ||
-        activity.id == 'act-05-09-01-explain' ||
-        activity.id == 'act-06-01-01-explain' ||
-        activity.id == 'act-06-02-01-explain' ||
-        activity.id == 'act-06-03-01-explain' ||
-        activity.id == 'act-06-04-01-explain' ||
-        activity.id == 'act-06-05-01-explain' ||
-        activity.id == 'act-06-06-01-explain' ||
-        activity.id == 'act-06-07-01-explain' ||
-        activity.id == 'act-06-08-01-explain' ||
-        activity.id == 'act-06-09-01-explain' ||
-        activity.id == 'act-06-10-01-explain' ||
-        activity.id == 'act-06-11-01-explain' ||
-        activity.id == 'act-06-11-02-explain' ||
-        activity.id == 'act-06-11-03-explain' ||
-        activity.id == 'act-06-12-01-explain' ||
-        activity.id == 'act-06-12-02-explain' ||
-        activity.id == 'act-06-12-03-explain' ||
-        activity.id == 'act-06-13-01-explain' ||
-        activity.id == 'act-07-01-01-explain' ||
-        activity.id == 'act-07-02-01-explain' ||
-        activity.id == 'act-07-03-01-explain' ||
-        activity.id == 'act-07-04-01-explain' ||
-        activity.id == 'act-07-05-01-explain' ||
-        activity.id == 'act-07-06-01-explain' ||
-        activity.id == 'act-07-07-01-explain' ||
-        activity.id == 'act-07-08-01-explain' ||
-        activity.id == 'act-07-09-01-explain' ||
-        activity.id == 'act-07-10-01-explain' ||
-        activity.id == 'act-07-10-02-explain' ||
-        activity.id == 'act-07-10-03-explain' ||
-        activity.id == 'act-07-10-04-explain' ||
-        activity.id == 'act-07-10-05-explain' ||
-        activity.id == 'act-07-11-01-explain';
+    // SoftPulse explains: tap the demo instead of Continue. Authored
+    // teachSpec soft_pulse cues are the source of truth so curriculum-split
+    // successors stay wired without a per-id allowlist (LPT-669).
+    return authoredSoftPulseTargets(activity) != null;
   }
   if (activity.renderer != ActivityRenderer.selectIdentify &&
       activity.renderer != ActivityRenderer.playerReadClassify) {

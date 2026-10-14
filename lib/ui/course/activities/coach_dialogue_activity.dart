@@ -9,6 +9,7 @@ import 'package:live_poker_trainer/models/coach_feedback.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/lesson_activity_controller.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
 import 'package:live_poker_trainer/ui/course/widgets/guardrails_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/range_advantage_demo.dart';
 import 'package:live_poker_trainer/ui/course/widgets/equity_realize_demo.dart';
@@ -685,6 +686,14 @@ class CoachDialogueActivity extends StatelessWidget {
         }
         if (framed && visual.kind == CoachDialogueVisualKind.liveWarmupPrep) {
           return LessonLiveWarmupPrepExplainTable(
+            enabled: !locked,
+            showGuidance: showGuidance,
+            onAllPointsTapped: locked ? null : onFeltAcknowledge,
+          );
+        }
+        if (framed && visual.kind == CoachDialogueVisualKind.authoredCues) {
+          return LessonAuthoredCueExplainTable(
+            activity: activity,
             enabled: !locked,
             showGuidance: showGuidance,
             onAllPointsTapped: locked ? null : onFeltAcknowledge,
@@ -1501,6 +1510,12 @@ enum CoachDialogueVisualKind {
 
   /// Live warm-up prep: checklist, carry defaults, execute one hand.
   liveWarmupPrep,
+
+  /// SoftPulse explain tiles from authored teachSpec cue targets (LPT-669).
+  ///
+  /// Used for curriculum-split successors whose cue labels do not match the
+  /// parent demo's hardcoded chips.
+  authoredCues,
 }
 
 /// Resolved demo chrome for one coach-dialogue activity.
@@ -1622,6 +1637,8 @@ class CoachDialogueVisual {
     CoachDialogueVisualKind.capstone4bet => 'Tap SPR, Commit, and No Hero.',
     CoachDialogueVisualKind.liveWarmupPrep =>
       'Tap Checklist, Defaults, and One hand.',
+    CoachDialogueVisualKind.authoredCues =>
+      'Tap each SoftPulse cue in order.',
     CoachDialogueVisualKind.none => 'Tap Continue when you are ready.',
   };
 
@@ -1708,7 +1725,8 @@ class CoachDialogueVisual {
       kind == CoachDialogueVisualKind.capstoneMultiwayDeep ||
       kind == CoachDialogueVisualKind.capstoneLimped ||
       kind == CoachDialogueVisualKind.capstone4bet ||
-      kind == CoachDialogueVisualKind.liveWarmupPrep;
+      kind == CoachDialogueVisualKind.liveWarmupPrep ||
+      kind == CoachDialogueVisualKind.authoredCues;
 
   String get semanticsLabel => switch (kind) {
     CoachDialogueVisualKind.holeCards =>
@@ -1874,6 +1892,8 @@ class CoachDialogueVisual {
       'Capstone 4-bet tiles: short SPR, commit, fold ego',
     CoachDialogueVisualKind.liveWarmupPrep =>
       'Live warm-up tiles: checklist, defaults, one hand',
+    CoachDialogueVisualKind.authoredCues =>
+      'SoftPulse cue tiles in authored press order',
     CoachDialogueVisualKind.none => 'Coach dialogue',
   };
 }
@@ -2175,6 +2195,12 @@ CoachDialogueVisual resolveCoachDialogueVisual(CourseActivity activity) {
       return const CoachDialogueVisual(
         kind: CoachDialogueVisualKind.toyHandRun,
       );
+  }
+
+  // Curriculum-split SoftPulse explain successors (LPT-669): authored cues
+  // without a dedicated parent visual keep a table-tap SoftPulse walk.
+  if (authoredSoftPulseTargets(activity) != null) {
+    return const CoachDialogueVisual(kind: CoachDialogueVisualKind.authoredCues);
   }
 
   final blob =
@@ -3615,6 +3641,9 @@ class _CoachDialogueVisualPane extends StatelessWidget {
           enabled: enabled,
           onAllPointsTapped: onLiveWarmupPrepAcknowledge,
         ),
+        // SoftPulse explains always render under LessonFrameScope; unframed
+        // chrome never hosts authored-cue successors (LPT-669).
+        CoachDialogueVisualKind.authoredCues => const SizedBox.shrink(),
         CoachDialogueVisualKind.none => const SizedBox.shrink(),
       },
     );

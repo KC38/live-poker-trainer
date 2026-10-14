@@ -17,6 +17,7 @@ import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
 
 /// Felt context for a poker-action teaching spot.
 class LessonActionSpot {
@@ -13899,6 +13900,116 @@ class _TablesChangeDemoState extends State<TablesChangeDemo> {
     );
     if (widget.interactive) return child;
     return ExcludeSemantics(child: child);
+  }
+}
+
+
+/// SoftPulse explain tiles driven by authored `teachSpec.cues` targets (LPT-669).
+///
+/// Curriculum-split successors mint new SoftPulse cue labels that do not match
+/// the parent demo's hardcoded chips. This table SoftPulses the authored
+/// targets in press order so every `lessonSplitMap` SoftPulse explain stays a
+/// table-tap walk instead of Continue-only.
+class LessonAuthoredCueExplainTable extends StatefulWidget {
+  /// Creates the cue-tile SoftPulse explain stage.
+  const LessonAuthoredCueExplainTable({
+    super.key,
+    required this.activity,
+    required this.onAllPointsTapped,
+    this.enabled = true,
+    this.showGuidance = true,
+  });
+
+  final CourseActivity activity;
+  final VoidCallback? onAllPointsTapped;
+  final bool enabled;
+  final bool showGuidance;
+
+  @override
+  State<LessonAuthoredCueExplainTable> createState() =>
+      _LessonAuthoredCueExplainTableState();
+}
+
+class _LessonAuthoredCueExplainTableState
+    extends State<LessonAuthoredCueExplainTable> {
+  final Set<String> _tapped = <String>{};
+
+  static const _palette = <Color>[
+    AppColors.gold,
+    AppColors.cream,
+    AppColors.slate,
+    AppColors.danger,
+  ];
+
+  List<String> get _targets =>
+      authoredSoftPulseTargets(widget.activity) ?? const <String>[];
+
+  void _onTap(String label) {
+    if (!widget.enabled || widget.onAllPointsTapped == null) return;
+    final bool wasNext = !_tapped.contains(label);
+    setState(() => _tapped.add(label));
+    if (wasNext) {
+      consumeLessonSequentialSoftPulse(context);
+    }
+    final remaining = _targets.length - _tapped.length;
+    reportLessonSequentialPressProgress(
+      context,
+      remainingPressCount: remaining < 0 ? 0 : remaining,
+    );
+    if (_tapped.length >= _targets.length && _targets.isNotEmpty) {
+      widget.onAllPointsTapped!();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final targets = _targets;
+    final teaching = widget.enabled && widget.onAllPointsTapped != null;
+    return Column(
+      key: ValueKey<String>('authored-cue-explain-${widget.activity.id}'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: LessonTableStage(
+            heroCodes: const ['Ah', 'Kd'],
+            boardCodes: const ['Qs', '7c', '2d'],
+            villainCount: 1,
+            heroFaceUp: true,
+            enabled: false,
+            features: lessonPassiveActionsTableFeatures,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: GlowHighlight.gutter,
+          runSpacing: GlowHighlight.gutter,
+          alignment: WrapAlignment.center,
+          children: [
+            for (var i = 0; i < targets.length; i++)
+              SizedBox(
+                width: targets.length <= 2 ? 160 : 150,
+                child: GlowHighlight(
+                  active:
+                      teaching &&
+                      widget.showGuidance &&
+                      !_tapped.contains(targets[i]) &&
+                      targets.take(i).every(_tapped.contains),
+                  child: _DemoActionCard(
+                    label: targets[i],
+                    caption: 'Tap ${i + 1} of ${targets.length}',
+                    color: _palette[i % _palette.length],
+                    densify: false,
+                    selected: _tapped.contains(targets[i]),
+                    enabled: teaching,
+                    onPressed:
+                        teaching ? () => _onTap(targets[i]) : null,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    );
   }
 }
 
