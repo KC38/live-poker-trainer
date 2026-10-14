@@ -81,8 +81,9 @@ const _lines = <String, String>{
   'act-03-02-01-checkpoint': 'Board Ts 9s 4d. You hold Js 8d. Best label — pick Draw — open-ended straight draw.',
   'act-03-05-01-guided': 'Flop As 7d 2c. Turn 3h. For a missed c-bettor, is this a brick — pick Brick — rarely helps the caller.',
   'act-03-05-01-checkpoint': 'You bluffed flop on Kc 8d 3s. Turn Qh completes front-door draws. Plan — pick Often give up — changing card hurts air.',
+  // LPT-780: SoftPulse-off densify — no correct-tile spoil.
   'act-04-06-03-checkpoint':
-      'Why bluff less versus a Calling Station — pick They fold too rarely.',
+      'Why bluff less versus a Calling Station — tap the matching reason.',
   'act-04-07-01-guided': 'Seat folded 20 of 22 hands. Observation — pick Narrow entry — plays few hands.',
   'act-04-07-01-scaffolded': 'That seat finally raises and then barrels. Observation — pick Strong aggression when they enter.',
   'act-04-07-01-unguided':
@@ -105,8 +106,9 @@ const _lines = <String, String>{
   // LPT-771: SoftPulse-off densify — no correct-tile spoil.
   'act-04-08-02-checkpoint':
       'Which types are legal to mix now — tap the matching set.',
+  // LPT-781: SoftPulse-off densify — no correct-tile spoil.
   'act-04-08-03-checkpoint':
-      'Why call wider versus a Maniac — pick Their betting range is too wide.',
+      'Why call wider versus a Maniac — tap the matching reason.',
   'act-04-09-01-guided': 'You saw one huge bluff. What do you know — pick One note — low certainty.',
   'act-04-09-01-scaffolded': 'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
   // LPT-777: SoftPulse-off densify — no correct-tile spoil.

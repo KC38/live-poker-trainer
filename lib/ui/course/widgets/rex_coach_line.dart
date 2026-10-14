@@ -399,8 +399,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Flop As 7d 2c. Turn 3h. For a missed c-bettor, is this a brick — pick Brick — rarely helps the caller.',
     'act-03-05-01-checkpoint' =>
       'You bluffed flop on Kc 8d 3s. Turn Qh completes front-door draws. Plan — pick Often give up — changing card hurts air.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name They fold too rarely in the idle bubble (LPT-780; same class as
+    // LPT-777 / LPT-778 / LPT-765 / LPT-653).
     'act-04-06-03-checkpoint' =>
-      'Why bluff less versus a Calling Station — pick They fold too rarely.',
+      'Why bluff less versus a Calling Station — tap the matching reason.',
     'act-04-07-01-guided' =>
       'Seat folded 20 of 22 hands. Observation — pick Narrow entry — plays few hands.',
     'act-04-07-01-scaffolded' =>
@@ -438,8 +441,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // same class as LPT-770 / LPT-765 / LPT-764 / LPT-746 / LPT-653).
     'act-04-08-02-checkpoint' =>
       'Which types are legal to mix now — tap the matching set.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Their betting range is too wide in the idle bubble (LPT-781; same
+    // class as LPT-780 / LPT-777 / LPT-778 / LPT-765 / LPT-653).
     'act-04-08-03-checkpoint' =>
-      'Why call wider versus a Maniac — pick Their betting range is too wide.',
+      'Why call wider versus a Maniac — tap the matching reason.',
     'act-04-09-01-guided' =>
       'You saw one huge bluff. What do you know — pick One note — low certainty.',
     'act-04-09-01-scaffolded' =>
