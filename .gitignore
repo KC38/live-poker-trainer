@@ -62,6 +62,12 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Local release binaries dropped in the repo root (e.g. flutter build apk
+# with --build-name) must not dirty PRIMARY for ui/content agent loops.
+*.apk
+*.aab
+*.ipa
+
 # Python tooling
 __pycache__/
 .venv/
