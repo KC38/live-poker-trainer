@@ -3006,3 +3006,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-690/691/250/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone. Rescued after conflicting draft #2426.
 - Prefer next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gf (c5f73f71 Prefer NEVER Range SoftPulse residual LPT-692 re-check)
+
+- Tip-stable `c5f73f71` (#2427 Session SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Range SoftPulse residual re-check `lesson-06-01-01-01/02/03`: first-child SoftPulse RANGE→NUT→ADVANTAGE + Dart `RangeAdvantageDemo` still pre-split under range-advantage-only → residual **LPT-692** still To Do (needs-human; Relates LPT-254); successors content-driven; checkpoint SoftPulse `press` under press-both — no companion residual; curriculum **LPT-254** Done.
+- Tip-commented LPT-692/254/198/216/690; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
