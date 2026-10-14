@@ -2664,3 +2664,25 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-06-05-01-*` overbets-geometric / Low residuals LPT-676…779 (LPT-680…699).
 - act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14fa (e916ff9f Prefer NEVER overbets SoftPulse re-check)
+
+- Tip-stable `e916ff9f` (#2387 polar SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-06-05-01-01/02/03` under overbets-geometric unit:
+  - first-child `act-06-05-01-explain` SoftPulse OVERBET→POLAR→GEO + `explainGrading` + Dart `OverbetGeometryDemo` / `LessonOverbetGeometryExplainTable` still pre-split under polar-overbets-only → residual **LPT-699** still To Do (needs-human).
+  - successors `act-06-05-01-02-explain-geometry` (FLOP→TURN→RIVER) + `act-06-05-01-03-explain-random` (HUGE→MEDIUM→AVOID) content-driven; guided SoftPulse `polar-ob` densify PRESENT; scaffolded SoftPulse `mid` one-per-press PRESENT (`As`/`Kd`·`Ah`/`7c`/`2d`/`9s` +2 suit variants match Dart); unguided SoftPulse `avoid` densify PRESENT; checkpoint SoftPulse `multi` kind `none` densify PRESENT (matches geometric-sizes — no companion residual).
+- Curriculum **LPT-267** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-699/267/198/216/696/694/700; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-06-01-*` blockers / Low residuals LPT-676…779 (LPT-680…700).
+- act-06-05-01-*: interactive structural clean on tip except LPT-699 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants geometric-turn honesty.
+
+## Fold 2026-10-14fb (4a31a129 Prefer NEVER blockers SoftPulse re-check)
+
+- Tip-stable `4a31a129` (#2389 after #2387 polar SoftPulse Prefer re-check; rescues unfolder overbet fold from draft #2388). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-06-06-01-01/02/03` under blockers unit:
+  - first-child `act-06-06-01-explain` SoftPulse BLOCK→USE→NO EV + `explainGrading` "Block → Use → No EV." + Dart `BlockersDemo.points` BLOCK/USE/NO EV / `LessonBlockersExplainTable` still pre-split under bluff-blockers-only → residual **LPT-700** still To Do (needs-human).
+  - successors `act-06-06-01-02-explain-unblock` (CATCH→UNBLOCK→BLUFFS) + `act-06-06-01-03-explain-ev` (TWEAK→NO EV) content-driven; guided SoftPulse `as` densify PRESENT (`blockersGuidedOutcomes`); scaffolded SoftPulse `unblock` one-per-press PRESENT; unguided SoftPulse `tweak` one-per-press PRESENT; checkpoint SoftPulse `no` kind `none` densify PRESENT (matches no-fake-ev — no companion residual).
+- Curriculum **LPT-270** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-700/270/198/216/699/696/701; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-07-01-*` min-defense / Low residuals LPT-676…779 (LPT-680…701).
+- act-06-06-01-*: interactive structural clean on tip except LPT-700 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
+
