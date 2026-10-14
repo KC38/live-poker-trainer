@@ -3199,3 +3199,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-726/333/727/725/351/802/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Leak SoftPulse residual **LPT-727** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); explain/checkpoint `deal.mode` `none` — do not file handFamily; guided/scaffolded/unguided fixed+variants — do not reopen LPT-627.
+
+## Fold 2026-10-14hd (61abd1b6 Prefer NEVER Leak SoftPulse residual LPT-727 re-check)
+
+- Tip-stable `61abd1b6` (#2457 Type-board SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Leak SoftPulse residual re-check `lesson-07-09-01-01/02/03`: first-child SoftPulse LEAK→BOOK→REVIEW + `explainGrading` "Leak → Book → Review." + Dart `LeakReviewBookDemo` / `LessonLeakReviewBookExplainTable` still pre-split under Name-leaks-only → residual **LPT-727** still To Do (needs-human; Relates LPT-336 — do not re-add needs-human on curriculum); successors COMMON SPOT→DEFAULT / AFTER SESSION→REVIEW content-driven; guided SoftPulse `spec` densify PRESENT; scaffolded SoftPulse `book` densify PRESENT; unguided SoftPulse `sched` densify PRESENT; checkpoint SoftPulse `base` kind `none` densify PRESENT under default-lines — no companion residual; curriculum **LPT-336** Done.
+- Tip-commented LPT-727/336/198/216/726/725/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Capstone `lesson-07-10-0*` (synthesis clean) / live-warmup curriculum **LPT-351** / Low residuals LPT-676…802.
+- act-07-09-01-*: interactive structural clean on tip except LPT-727 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactives densify PRESENT — do not reopen LPT-628.
+
