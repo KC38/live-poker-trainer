@@ -3082,3 +3082,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Meet-TAG working-model residual **LPT-708** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-11-01-*: interactive structural clean on tip except LPT-706 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
 
+
+## Fold 2026-10-14gp (b26f0f32 Prefer NEVER Meet-TAG working-model residual LPT-708 re-check)
+
+- Tip-stable `b26f0f32` (#2440 Selective SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Meet-TAG working-model residual re-check `lesson-06-11-02-01/02/03`: SoftPulse TIGHT→AGGRO→MODEL + Dart `TagModelDemo.points` TIGHT/AGGRO/MODEL **concept-aligned** under Introduce TAG / The TAG model (not SoftPulse residual); checkpoint SoftPulse `model` kind `none` densify PRESENT (prompt "TAG is?" / Working model vs Insult) still grades working-model-vs-insult under Introduce TAG-only → residual **LPT-708** still To Do (needs-human; Relates LPT-291 — do not re-add needs-human on curriculum); successors FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE content-driven; guided SoftPulse `tag` densify PRESENT; scaffolded SoftPulse `diff` one-per-press densify PRESENT; unguided SoftPulse `tag2` one-per-press densify PRESENT; curriculum **LPT-291** Done.
+- Tip-commented LPT-708/291/198/216/706/709/710/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Adjust-TAG SoftPulse residual **LPT-709** (+ cite **LPT-710**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily.
