@@ -2913,3 +2913,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-07-08-01-*` type-board / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669).
 
+## Fold 2026-10-14fv (d6f2c68a Prefer NEVER type-board SoftPulse residual LPT-726 re-check)
+
+- Tip-stable `d6f2c68a` (#2413 same-cards SoftPulse Prefer re-check on tip after #2412). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-07-08-01-01/02/03` under Integrate type/board/line/sizing unit:
+  - first-child `act-07-08-01-explain` SoftPulse TYPE→BOARD→LINE→SIZE + `explainGrading` still pre-split under type-and-board-only → residual **LPT-726** still To Do (needs-human; Relates LPT-333; do not clone Duplicate LPT-729).
+  - successors LINE→SIZE / FOUR INPUTS→ONE ACTION content-driven; guided SoftPulse `call` fixed+variants; scaffolded SoftPulse `raise`; unguided SoftPulse `fold`; checkpoint SoftPulse `four` kind `none` under one-coherent-action — no new companion clone.
+- Curriculum **LPT-333** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-726/333/198/216/725; leave open LPT-676…802; leave ui-agent **LPT-797** alone.
+- Prefer next: NEVER `lesson-07-09-01-*` leak-review-book / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669).
+
