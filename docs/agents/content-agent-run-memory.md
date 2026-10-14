@@ -4077,3 +4077,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-798/799/320/795/351/800; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER HU SoftPulse residual **LPT-800** (+ player-count **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-04-01-*: interactive structural clean on tip except LPT-798 SoftPulse + LPT-799 Ranges/SPR companions; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
+## Fold 2026-10-15bb tip 552b5151 (#2585 → HU SoftPulse LPT-800 Prefer)
+
+- Tip-stable `552b5151` (#2585 densify stem on tip after #2583 Pot SoftPulse Prefer). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync.
+- Prefer NEVER HU SoftPulse residual **LPT-800** re-check (`lesson-07-05-01-01/02/03`):
+  - first-child SoftPulse FEWER→THICKER→WIDEN + `explainGrading` "Fewer → Thicker → Widen." + Dart `HuVsMultiwayDemo.points` FEWER/THICKER/WIDEN / `LessonHuVsMultiwayExplainTable` still pre-split under Bluff-less-multiway-only → **LPT-800** still To Do (needs-human; Relates LPT-323).
+  - companion checkpoint SoftPulse `input` kind `none` densify PRESENT under Bluff-less-multiway → **LPT-801** still To Do.
+  - successors SoftPulse MULTIWAY→THICK VALUE / HEADS-UP→STEAL MORE content-driven (do not reopen LPT-669); guided SoftPulse `no` densify PRESENT; scaffolded SoftPulse `higher` one-per-press densify PRESENT; unguided SoftPulse `thick` one-per-press densify PRESENT.
+- Curriculum **LPT-323** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-800/801/323/802/798/829/351/198/216.
+- Prefer next: NEVER Stack SoftPulse residual **LPT-802** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-07-05-01-*: interactive structural clean on tip except LPT-800 SoftPulse + LPT-801 player-count companions; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; outcome-tile `deal.mode` `none` — do not file handFamily.
+
