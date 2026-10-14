@@ -69,7 +69,7 @@ void main() {
   testWidgets('a sticky-caller spot seats a Calling Station', (tester) async {
     await _pump(
       tester,
-      'lesson-04-06-03-adjust-calling-station',
+      'lesson-04-06-03-01-value-wider',
       'act-04-06-03-guided',
     );
     expect(find.text('STATION'), findsOneWidget);

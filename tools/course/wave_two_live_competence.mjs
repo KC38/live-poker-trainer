@@ -1417,7 +1417,7 @@ export function buildSectionFour() {
   const L040501 = "lesson-04-05-01-spr-commitment"; // retired LPT-182: split in course.json (lessonSplitMap)
   const L040601 = "lesson-04-06-01-observe-sticky-caller"; // retired LPT-186: split in course.json (lessonSplitMap)
   const L040602 = MEET_CALLING_STATION;
-  const L040603 = "lesson-04-06-03-adjust-calling-station";
+  const L040603 = "lesson-04-06-03-adjust-calling-station"; // retired LPT-192: split in course.json (lessonSplitMap)
   const L040701 = "lesson-04-07-01-observe-narrow-player"; // retired LPT-195: split in course.json (lessonSplitMap)
   const L040702 = MEET_NIT;
   const L040703 = "lesson-04-07-03-adjust-nit"; // retired LPT-202: split in course.json (lessonSplitMap)

@@ -2197,7 +2197,7 @@ void main() {
       await tester.pumpWidget(
         _app(
           LessonRunnerScreen(
-            lessonId: 'lesson-04-06-03-adjust-calling-station',
+            lessonId: 'lesson-04-06-03-01-value-wider', // split from lesson-04-06-03-adjust-calling-station
             courseService: _PrerequisiteLockedCourseService(catalog)
               ..previousComplete = true,
             startRequestId: 'start_adjust_station_frame',
