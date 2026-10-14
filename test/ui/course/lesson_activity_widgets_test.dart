@@ -15105,18 +15105,22 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    // LPT-390 densify + LPT-674 non-spoil (SoftPulse off) — not catalog + Tap the best answer.
     expect(
       lessonFrameSpeech(activity),
-      'Pot 16, shorter 40bb — tap pot and effective stack first.',
+      'Pot 16, shorter 40bb — tap what you track first.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
-      find.text('Pot 16, shorter 40bb — pick pot and effective stack first.'),
+      lessonFrameSpeech(activity).toLowerCase(),
+      isNot(contains('pot and effective')),
+    );
+    expect(
+      find.text('Pot 16, shorter 40bb — tap what you track first.'),
       findsOneWidget,
     );
     expect(
-      find.text('Pot 16, shorter 40bb — start with pot and effective stack.'),
+      find.text('Pot 16, shorter 40bb — tap pot and effective stack first.'),
       findsNothing,
     );
     expect(find.text('Pot 16 · shorter stack 40bb'), findsNothing);
@@ -15362,18 +15366,22 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    // LPT-390 densify + LPT-674 non-spoil (SoftPulse off) — not catalog + Tap the best answer.
     expect(
       lessonFrameSpeech(activity),
-      'Gutshot vs a 2x pot bet — tap Fold when the price is wrong.',
+      'Gutshot vs a 2x pot bet — tap the matching price plan.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
-      find.text('Gutshot vs a 2x pot bet — pick Fold when the price is wrong.'),
+      lessonFrameSpeech(activity).toLowerCase(),
+      isNot(contains('fold')),
+    );
+    expect(
+      find.text('Gutshot vs a 2x pot bet — tap the matching price plan.'),
       findsOneWidget,
     );
     expect(
-      find.text('Gutshot vs a 2x pot bet — the price is usually too steep.'),
+      find.text('Gutshot vs a 2x pot bet — tap Fold when the price is wrong.'),
       findsNothing,
     );
     expect(find.text('Fold'), findsOneWidget);
@@ -31169,6 +31177,69 @@ await tester.tap(find.text('NIT'));
         _wrap(
           SelectIdentifyActivity(
             activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    's3 jump densify coach does not spoil Fold / Pot·effective (LPT-674)',
+    (tester) async {
+      final leak = CourseActivity(
+        id: 'act-03-08-02-jump-leak',
+        order: 5,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.jumpTest,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Jump: fold bad price.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Gutshot, pot 10, face a 20 bet. Fix the leak?',
+        choices: const [
+          CourseChoice(id: 'j3-foldprice', label: 'Fold — price is wrong'),
+          CourseChoice(
+            id: 'j3-callprice',
+            label: 'Call because any draw is lucky',
+          ),
+        ],
+      );
+      final table = CourseActivity(
+        id: 'act-03-08-02-jump-table',
+        order: 1,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.jumpTest,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Jump: pot and effective stack.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Pot 16, shorter stack 40bb. What do you track first?',
+        choices: const [
+          CourseChoice(id: 'j3-track', label: 'Pot and effective 40bb'),
+          CourseChoice(id: 'j3-ignore', label: 'Only hole cards'),
+          CourseChoice(id: 'j3-chat', label: 'Only table talk'),
+        ],
+      );
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final leakSpeech = lessonFrameSpeech(leak);
+      expect(leakSpeech, contains('tap the matching price plan'));
+      expect(leakSpeech.toLowerCase(), isNot(contains('fold')));
+      expect(leakSpeech, isNot(contains('Tap the best answer')));
+      final tableSpeech = lessonFrameSpeech(table);
+      expect(tableSpeech, contains('tap what you track first'));
+      expect(tableSpeech.toLowerCase(), isNot(contains('pot and effective')));
+      expect(tableSpeech, isNot(contains('Tap the best answer')));
+      final controller = LessonActivityController(activity: leak);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: leak,
             controller: controller,
             showGuidance: true,
           ),

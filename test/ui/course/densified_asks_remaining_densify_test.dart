@@ -17,6 +17,11 @@ const _lines = <String, String>{
   'act-04-08-02-unguided':
       'Seat 3-bets light and never gives up rivers. Label — tap Maniac.',
   'act-04-09-01-unguided': 'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
+  // LPT-674: Section 3 jump densify — no correct tile spoil.
+  'act-03-08-02-jump-table':
+      'Pot 16, shorter 40bb — tap what you track first.',
+  'act-03-08-02-jump-leak':
+      'Gutshot vs a 2x pot bet — tap the matching price plan.',
   // LPT-673: Section 4 jump densify — no correct tile/value/exploit spoil.
   'act-04-10-02-jump-station':
       'Sticky caller three streets. Label + exploit direction — tap the matching plan.',
@@ -50,6 +55,16 @@ const _finalFiveTypeSpoilers = <String, List<String>>{
   'act-07-12-01-lag': ['lag', 'trap more', 'call wider'],
   'act-07-12-01-uncertain': ['low', 'lean baseline'],
   'act-07-12-01-retire': ['retire or update'],
+};
+
+/// Phrases that would spoil Section 3 jump densify answers (LPT-674).
+const _sectionThreeJumpSpoilers = <String, List<String>>{
+  'act-03-08-02-jump-table': [
+    'pot and effective',
+    'pot · effective',
+    'price frame',
+  ],
+  'act-03-08-02-jump-leak': ['fold', 'price is wrong'],
 };
 
 /// Phrases that would spoil Section 4 jump densify answers (LPT-673).
@@ -96,6 +111,27 @@ void main() {
       final lower = (resolved ?? '').toLowerCase();
       for (final spoil in _finalFiveTypeSpoilers[id]!) {
         expect(lower, isNot(contains(spoil)), reason: '$id must not contain "$spoil"');
+      }
+    }
+  });
+
+  test('Section 3 jump densify stems do not spoil correct tiles (LPT-674)', () {
+    const expected = <String, String>{
+      'act-03-08-02-jump-table':
+          'Pot 16, shorter 40bb — tap what you track first.',
+      'act-03-08-02-jump-leak':
+          'Gutshot vs a 2x pot bet — tap the matching price plan.',
+    };
+    for (final MapEntry(key: id, value: line) in expected.entries) {
+      final resolved = selectIdentifyDensifiedCoachLine(id);
+      expect(resolved, line, reason: id);
+      final lower = (resolved ?? '').toLowerCase();
+      for (final spoil in _sectionThreeJumpSpoilers[id]!) {
+        expect(
+          lower,
+          isNot(contains(spoil)),
+          reason: '$id must not contain "$spoil"',
+        );
       }
     }
   });
