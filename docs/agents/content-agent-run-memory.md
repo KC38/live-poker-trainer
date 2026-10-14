@@ -2207,3 +2207,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-93** Done — do not clone / do not reopen LPT-669. Tip-commented Done parents + Low residuals LPT-676…727 still valid; **LPT-192** leave In Progress (no `needs-human` re-add).
 - Prefer next: NEVER `lesson-01-03-01-*` fold/check/call / Low residuals LPT-676…727 / In Progress **LPT-192**.
 
+## Fold 2026-10-14dc (6d3b0fcc fold/check/call SoftPulse residual)
+
+- Tip-stable `6d3b0fcc` (#2312). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-01-03-01-01/02/03` under `unit-01-03-01-fold-check-call`:
+  - first-child `act-01-03-01-explain-passive` SoftPulse FOLD→CHECK→CALL + Dart `PassiveActionsDemo` + `explainGrading` "Fold → Check → Call." under Fold-only → filed **LPT-731** (needs-human; Relates LPT-96).
+  - successors `act-01-03-01-02-explain-check` (NO BET→CHECK) + `act-01-03-01-03-explain-call` (BET→CALL) content-driven (do not reopen LPT-669); guided SoftPulse `fold-72` + scaffolded SoftPulse `check-free` + unguided SoftPulse `call-5` + checkpoint SoftPulse `check-illegal` kind `none` hintless PRESENT.
+- Curriculum **LPT-96** Done — do not clone / do not re-add needs-human. Tip-commented LPT-96/93/731 + Meet Nit LPT-198 / LPT-216; leave In Progress **LPT-192**.
+- Prefer next: NEVER `lesson-01-03-02-*` bet/raise/all-in / Low residuals LPT-676…731 / In Progress **LPT-192**.
+
