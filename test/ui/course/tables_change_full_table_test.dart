@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-05-08-01-table-dynamics',
+            'lesson-05-08-01-01-tilted-opponents',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

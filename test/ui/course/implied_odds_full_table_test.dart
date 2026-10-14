@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-05-03-01-implied-odds',
+            'lesson-05-03-01-01-estimate-implied',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

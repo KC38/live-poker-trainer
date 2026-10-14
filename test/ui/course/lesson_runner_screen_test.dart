@@ -2626,7 +2626,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-01-01-multiway-ranges',
+          lessonId: 'lesson-05-01-01-01-nut-potential', // split from lesson-05-01-01-multiway-ranges
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_multiway_ranges_frame',
@@ -2668,7 +2668,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-02-01-deep-stack-play',
+          lessonId: 'lesson-05-02-01-01-deep-implied-odds', // split from lesson-05-02-01-deep-stack-play
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_deep_stacks_frame',
@@ -2710,7 +2710,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-03-01-implied-odds',
+          lessonId: 'lesson-05-03-01-01-estimate-implied', // split from lesson-05-03-01-implied-odds
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_implied_odds_frame',
@@ -2752,7 +2752,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-04-01-thin-value-bluffcatch',
+          lessonId: 'lesson-05-04-01-01-thin-value', // split from lesson-05-04-01-thin-value-bluffcatch
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_thin_value_frame',
@@ -2794,7 +2794,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-05-01-lines-and-probes',
+          lessonId: 'lesson-05-05-01-01-read-check-raises', // split from lesson-05-05-01-lines-and-probes
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_flop_lines_frame',
@@ -2837,7 +2837,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-06-01-line-reading',
+          lessonId: 'lesson-05-06-01-01-update-each-street', // split from lesson-05-06-01-line-reading
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_street_updates_frame',
@@ -2879,7 +2879,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-07-01-timing-sizing-evidence',
+          lessonId: 'lesson-05-07-01-01-timing-soft', // split from lesson-05-07-01-timing-sizing-evidence
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_timing_clues_frame',
@@ -2921,7 +2921,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-08-01-table-dynamics',
+          lessonId: 'lesson-05-08-01-01-tilted-opponents', // split from lesson-05-08-01-table-dynamics
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_table_dynamics_frame',
@@ -2963,7 +2963,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-05-09-01-session-discipline',
+          lessonId: 'lesson-05-09-01-01-stop-loss', // split from lesson-05-09-01-session-discipline
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_session_guardrails_frame',

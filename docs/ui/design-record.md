@@ -774,6 +774,17 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-224, LPT-227, LPT-230, LPT-233, LPT-236, LPT-239, LPT-244, LPT-247, LPT-250: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-05-01-01-multiway-ranges` → `lesson-05-01-01-01-nut-potential`, `lesson-05-01-01-02-tighten-speculative`, `lesson-05-01-01-03-thick-value` (LPT-224)
+- `lesson-05-02-01-deep-stack-play` → `lesson-05-02-01-01-deep-implied-odds`, `lesson-05-02-01-02-fold-light-deep`, `lesson-05-02-01-03-plan-high-spr` (LPT-227)
+- `lesson-05-03-01-implied-odds` → `lesson-05-03-01-01-estimate-implied`, `lesson-05-03-01-02-reverse-implied`, `lesson-05-03-01-03-skip-dominated-draws` (LPT-230)
+- `lesson-05-04-01-thin-value-bluffcatch` → `lesson-05-04-01-01-thin-value`, `lesson-05-04-01-02-wider-catches`, `lesson-05-04-01-03-skip-thin-overfolders` (LPT-233)
+- `lesson-05-05-01-lines-and-probes` → `lesson-05-05-01-01-read-check-raises`, `lesson-05-05-01-02-probes-and-delays`, `lesson-05-05-01-03-donk-bets` (LPT-236)
+- `lesson-05-06-01-line-reading` → `lesson-05-06-01-01-update-each-street`, `lesson-05-06-01-02-capped-lines`, `lesson-05-06-01-03-drop-stale-stories` (LPT-239)
+- `lesson-05-07-01-timing-sizing-evidence` → `lesson-05-07-01-01-timing-soft`, `lesson-05-07-01-02-sizing-language`, `lesson-05-07-01-03-no-magic-tells` (LPT-244)
+- `lesson-05-08-01-table-dynamics` → `lesson-05-08-01-01-tilted-opponents`, `lesson-05-08-01-02-gear-changes`, `lesson-05-08-01-03-no-emotional-pots` (LPT-247)
+- `lesson-05-09-01-session-discipline` → `lesson-05-09-01-01-stop-loss`, `lesson-05-09-01-02-bankroll-stakes`, `lesson-05-09-01-03-end-sessions` (LPT-250)
+
 Curriculum splits LPT-186, LPT-189, LPT-195, LPT-198, LPT-202, LPT-205, LPT-208, LPT-212: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-04-06-01-observe-sticky-caller` → `lesson-04-06-01-01-high-participation`, `lesson-04-06-01-02-low-folding`, `lesson-04-06-01-03-observation-vs-certainty` (LPT-186)
 - `lesson-04-06-02-meet-calling-station` → `lesson-04-06-02-01-calling-station-model`, `lesson-04-06-02-02-spot-calling-station`, `lesson-04-06-02-03-station-confidence` (LPT-189)
@@ -1842,15 +1853,33 @@ felt.
 | Same hand, different types | Cards, Seats, Evidence; unit `unit-04-10-exploits` (LPT-218 split) | — |
 | Combine type, position, and stack | explain SoftPulse cues TYPE → POSITION → STACK; unit `unit-04-10-exploits` (LPT-218 split) | — |
 | Section 4 jump check | jump-range SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| Build multiway ranges with nut potential | Nutted, Air, Domination | — |
-| Play 150–300bb stacks with a plan | Deep, Realize, Stack | — |
-| Implied and reverse odds | Implied, Reverse, Second; densified SoftPulse one gold (LPT-515) | — |
-| Thin value and bluff-catches | Thin, Catch, Barrels; densified SoftPulse one gold (LPT-516) | — |
-| Advanced flop lines | X/R, Probe, Delay, Donk; densified SoftPulse one gold (LPT-517) | — |
-| Street-by-street updates | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518) | — |
-| Soft timing evidence | Timing, Sizing, Clues | — |
-| Live table dynamics | Stuck, Tilted, Gears; densified SoftPulse one gold (LPT-520) | — |
-| Keep cash session guardrails | Quit, Guard, First; densified SoftPulse one gold (LPT-521) | — |
+| Prefer nut potential multiway | Nutted, Air, Domination; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
+| Tighten speculative hands multiway | explain SoftPulse cues MULTIWAY → OOP → FOLD; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
+| Value thicker when callers stick | explain SoftPulse cues CALLERS → SET → BET; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
+| Depth pays speculative hands | Deep, Realize, Stack; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
+| Don't stack off light deep | explain SoftPulse cues DEEP → ONE PAIR → FOLD; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
+| Plan streets at high SPR | explain SoftPulse cues SPR → TURN → RIVER; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
+| Estimate implied odds | Implied, Reverse, Second; densified SoftPulse one gold (LPT-515); unit `unit-05-03-implied-odds` (LPT-230 split) | — |
+| Spot reverse implied odds | explain SoftPulse cues REVERSE → DOMINATED → FOLD; unit `unit-05-03-implied-odds` (LPT-230 split) | — |
+| Skip dominated draws multiway | explain SoftPulse cues NON-NUT → MULTIWAY → SKIP; unit `unit-05-03-implied-odds` (LPT-230 split) | — |
+| Thin value versus sticky callers | Thin, Catch, Barrels; densified SoftPulse one gold (LPT-516); unit `unit-05-04-thin-value` (LPT-233 split) | — |
+| Catch wider versus aggression | explain SoftPulse cues MANIAC → BARREL → CALL; unit `unit-05-04-thin-value` (LPT-233 split) | — |
+| Skip thin value versus overfolders | explain SoftPulse cues NIT → FOLDS → CHECK; unit `unit-05-04-thin-value` (LPT-233 split) | — |
+| Read check-raises | X/R, Probe, Delay, Donk; densified SoftPulse one gold (LPT-517); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
+| Probes and delayed c-bets | explain SoftPulse cues PROBE → DELAY → PLAN; unit `unit-05-05-lines-probes` (LPT-236 split) | — |
+| Donk bets are polarized | explain SoftPulse cues DONK → STRONG → AIR; unit `unit-05-05-lines-probes` (LPT-236 split) | — |
+| Update each street | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518); unit `unit-05-06-line-reading` (LPT-239 split) | — |
+| Capped versus uncapped lines | explain SoftPulse cues CHECK → CAPPED → UNCAPPED; unit `unit-05-06-line-reading` (LPT-239 split) | — |
+| Drop stale flop stories | explain SoftPulse cues FLOP → TURN → RE-PRICE; unit `unit-05-06-line-reading` (LPT-239 split) | — |
+| Timing is soft evidence | Timing, Sizing, Clues; unit `unit-05-07-timing-sizing` (LPT-244 split) | — |
+| Sizing is range language | explain SoftPulse cues TINY → BIG → RANGE; unit `unit-05-07-timing-sizing` (LPT-244 split) | — |
+| No magic tells | explain SoftPulse cues TELL → MYTH → REJECT; unit `unit-05-07-timing-sizing` (LPT-244 split) | — |
+| Spot tilted or stuck players | Stuck, Tilted, Gears; densified SoftPulse one gold (LPT-520); unit `unit-05-08-table-dynamics` (LPT-247 split) | — |
+| Gear changes mid-session | explain SoftPulse cues GEAR → CHANGE → SAMPLE; unit `unit-05-08-table-dynamics` (LPT-247 split) | — |
+| Skip emotional pots | explain SoftPulse cues COOLER → CHASE → RESET; unit `unit-05-08-table-dynamics` (LPT-247 split) | — |
+| Set a stop-loss | Quit, Guard, First; densified SoftPulse one gold (LPT-521); unit `unit-05-09-discipline` (LPT-250 split) | — |
+| Bankroll fits stakes | explain SoftPulse cues BANKROLL → STAKES → DECLINE; unit `unit-05-09-discipline` (LPT-250 split) | — |
+| End sessions early | explain SoftPulse cues TIRED → WILD → CASH OUT; unit `unit-05-09-discipline` (LPT-250 split) | — |
 | Section 5 checkpoint | — | — |
 | Spot range advantage and nut advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523) | — |
 | Realize equity in and out of position | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524) | — |

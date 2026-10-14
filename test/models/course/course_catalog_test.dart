@@ -69,6 +69,16 @@ void main() {
       'lesson-04-08-01-observe-wild-aggressor',
       'lesson-04-08-02-meet-maniac',
       'lesson-04-08-03-adjust-maniac',
+      // s5 multiway / deep / session
+      'lesson-05-01-01-multiway-ranges',
+      'lesson-05-02-01-deep-stack-play',
+      'lesson-05-03-01-implied-odds',
+      'lesson-05-04-01-thin-value-bluffcatch',
+      'lesson-05-05-01-lines-and-probes',
+      'lesson-05-06-01-line-reading',
+      'lesson-05-07-01-timing-sizing-evidence',
+      'lesson-05-08-01-table-dynamics',
+      'lesson-05-09-01-session-discipline',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];
