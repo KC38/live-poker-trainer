@@ -3116,3 +3116,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Adjust-LAG SoftPulse residual **LPT-718** (+ cite **LPT-719**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits checkpoint residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily.
 
+## Fold 2026-10-14gt (0b2a8264 Prefer NEVER Adjust-LAG SoftPulse residual LPT-718 re-check)
+
+- Tip-stable `0b2a8264` (#2444 Meet-LAG sample-limits Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Adjust-LAG SoftPulse residual re-check `lesson-06-12-03-01/02/03`: first-child SoftPulse CALL→TRAP→FANCY LESS + `explainGrading` "Call → Trap → Fancy less." + Dart `VsLagsDemo` / `LessonVsLagsExplainTable` still pre-split under Call-wider-only → residual **LPT-718** still To Do (needs-human; Relates LPT-303 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `cite` kind `none` densify PRESENT under Call-wider → residual **LPT-719** still To Do; successors STRONG HAND→LET THEM BET / NO BIG BLUFF→LET THEM content-driven; guided SoftPulse `call` PRESENT; scaffolded SoftPulse `trap` one-per-press PRESENT; unguided SoftPulse `avoid` one-per-press densify PRESENT; curriculum **LPT-303** Done.
+- Tip-commented LPT-718/719/303/198/216/716/721/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Mix-five SoftPulse residual **LPT-721** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-12-03-*: interactive structural clean on tip except LPT-718 SoftPulse + LPT-719 cite residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded sizing acts match Dart deal honesty — do not reopen LPT-627.
+
