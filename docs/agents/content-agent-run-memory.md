@@ -2216,3 +2216,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-96** Done — do not clone / do not re-add needs-human. Tip-commented LPT-96/93/731 + Meet Nit LPT-198 / LPT-216; leave In Progress **LPT-192**.
 - Prefer next: NEVER `lesson-01-03-02-*` bet/raise/all-in / Low residuals LPT-676…731 / In Progress **LPT-192**.
 
+## Fold 2026-10-14dd (0384a31f Adjust Station SoftPulse residual post LPT-192)
+
+- Tip-stable `0384a31f` (#2316 after #2315 LPT-192 split). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-04-06-03-01/02/03` under Adjust Station unit:
+  - first-child `act-04-06-03-explain` SoftPulse VALUE→BLUFFS→CITE + `explainGrading` "Value → Bluffs → Cite." under Value-wider-only → filed **LPT-732** (needs-human; Relates LPT-192).
+  - successors `act-04-06-03-02-explain-bluffs` (RARELY FOLDS→GIVE UP) + `act-04-06-03-03-explain-cite` (EVIDENCE→UNKNOWN) content-driven; guided SoftPulse `thin-val` + scaffolded SoftPulse `give-up` + unguided SoftPulse `baseline-check` + checkpoint SoftPulse `cite-fold` kind `none` hintless PRESENT.
+- Curriculum **LPT-192** Done — do not clone / do not re-add needs-human. Tip-commented LPT-192/732.
+- Prefer next: NEVER `lesson-01-03-02-*` bet/raise/all-in / Low residuals LPT-676…732.
+
