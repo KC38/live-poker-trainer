@@ -2619,3 +2619,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-06-01-01-*` range-nut / Low residuals LPT-676…779 (LPT-680…692).
 - act-05-09-01-*: interactive structural clean on tip except LPT-690 SoftPulse + LPT-691 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14ew (76600ad0 Prefer NEVER range-nut SoftPulse re-check)
+
+- Tip-stable `76600ad0` (#2383 SoftPulse-off densify stems; after #2382 session-discipline learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-06-01-01-01/02/03` under range-nut unit:
+  - first-child `act-06-01-01-explain` SoftPulse RANGE→NUT→ADVANTAGE + `explainGrading` "Range → Nut → Advantage." + coachMedia names both + Dart `RangeAdvantageDemo` still pre-split under range-advantage-only → residual **LPT-692** still To Do (needs-human).
+  - successors `act-06-01-01-02-explain-nuts` (NUTS→PAIRED→CALLER) + `act-06-01-01-03-explain-press` (RANGE→NUTS→BET) content-driven; guided SoftPulse `pfr` densify PRESENT; scaffolded SoftPulse `caller-nuts` one-per-press PRESENT; unguided SoftPulse `cbet` map PRESENT (`Ah`/`Kd`·`Kc`/`7s`/`2d` +2 suit variants); checkpoint SoftPulse `press` kind `none` densify PRESENT (matches pressure-when-own-both — no companion residual).
+- Curriculum **LPT-254** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-692/254/198/216/690/691/693; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-02-01-*` equity-realization / Low residuals LPT-676…779 (LPT-680…693).
+- act-06-01-01-*: interactive structural clean on tip except LPT-692 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
