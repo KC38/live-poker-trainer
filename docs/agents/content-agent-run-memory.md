@@ -2977,3 +2977,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Lines SoftPulse residual **LPT-684** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse + LPT-683 checkpoint residuals.
 
+## Fold 2026-10-14gb (e5286022 Prefer NEVER Lines SoftPulse residual LPT-684 re-check)
+
+- Tip-stable `e5286022` (#2422 after #2421 Thin SoftPulse Prefer re-check). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Lines SoftPulse residual re-check `lesson-05-05-01-01/02/03`: first-child SoftPulse X/R→PROBE→DELAY→DONK + Dart `LineStoriesDemo` still pre-split under check-raises-only → residual **LPT-684** still To Do (needs-human; Relates LPT-236); successors content-driven; checkpoint SoftPulse `delay` under probes-and-delays — no companion residual; curriculum **LPT-236** Done.
+- Tip-commented LPT-684/236/198/216/682; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Timing SoftPulse residual **LPT-685** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
