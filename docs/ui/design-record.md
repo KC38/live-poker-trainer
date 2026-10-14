@@ -767,6 +767,11 @@ height for every stage child, and `_feltShell` clamps again.
 
 ### Shipped
 
+Calling Station explain STATION tile caption is **Working label**
+(`CallingStationDemo.points` in `lesson_action_table.dart`, LPT-789) — same
+type-tile caption as Nit/Maniac. The next player-type explain tile copies
+that Working label language; never ship Temp tag learner chrome.
+
 Graded felt answers keep cyan under Nice! / Oops via
 `lessonTableStageSelectionForRegion` and `LessonHoleHandTable.selectedSeatIndexes`
 (`lesson_table_context.dart` / `lesson_table_stage.dart`, LPT-641). The next
