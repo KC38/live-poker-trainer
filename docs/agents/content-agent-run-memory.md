@@ -1534,3 +1534,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: `lesson-06-11-01-observe-selective` / oldest unfresh / Low curriculum.
 - act-06-10-01-*: structural clean on tip — teachSpec/pressHints/densify/SoftPulse companions Done; curriculum via LPT-285 only.
 
+
+## Fold 2026-10-14
+
+- 2026-10-14as: Tip-stable `14d32fb9` (#2223 after #2221). Catalog `--counts` all **0**; softpulseMapArms **92** / helper **232**; **LPT-628** Done; no open Medium content. Discovery oldest-unfresh post-split S1 children `lesson-01-01-02-01-suits` / `02-ranks` / `03-pairs-and-suited` structural clean (one objective each; SoftPulse+`explainGrading`; one-per-press OK; densify PRESENT; checkpoint hintless); tip-commented Done curriculum **LPT-83**; Done-ack LPT-81/82/353/369/370/571 + parents/Meet Nit/**LPT-216**. Prefer oldest NEVER post-`lessonSplitMap` children before re-walking covered S6 lessons. next: `lesson-01-01-03-01-dealer-button` / other NEVER split children / Low curriculum.
