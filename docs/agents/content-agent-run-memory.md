@@ -3134,3 +3134,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - guided SoftPulse `cs` SoftPulse map PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants match Dart); scaffolded SoftPulse `nit` one-per-press SoftPulse map PRESENT; unguided SoftPulse `lag` one-per-press SoftPulse map PRESENT (poker_action_sizing — densify N/A); checkpoint SoftPulse `tag` kind `none` densify PRESENT under cite-tendency — no companion residual.
 - Curriculum **LPT-306** Done — do not clone. Tip-commented LPT-721/306/198/216/718/790/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER preflop-to-flop SoftPulse residual **LPT-790** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
+## Fold 2026-10-14gv (f01c7700 Prefer NEVER preflop-to-flop SoftPulse residual LPT-790 re-check)
+
+- Tip-stable `f01c7700` (#2446 Mix-five SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER preflop-to-flop SoftPulse residual re-check `lesson-07-01-01-01/02/03`: first-child SoftPulse REASON→CONFIRM→CANCEL + `explainGrading` "Reason → Confirm → Cancel." + Dart `PreflopFlopPlanDemo` / `LessonPreflopFlopPlanExplainTable` still pre-split under State-a-preflop-thesis-only → residual **LPT-790** still To Do (needs-human; Relates LPT-310 — do not re-add needs-human on curriculum); successors TEXTURE→CONFIRM OR CANCEL / DEAD PLAN→LET GO content-driven; guided SoftPulse `dead` densify PRESENT; scaffolded SoftPulse `value` densify PRESENT; unguided SoftPulse `thesis` densify PRESENT; checkpoint SoftPulse `abandon` kind `none` densify PRESENT under abandon — no companion residual; curriculum **LPT-310** Done.
+- Tip-commented LPT-790/310/198/216/721/794/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Map SoftPulse residual **LPT-794** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-01-01-*: interactive structural clean on tip except LPT-790 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactives `deal.mode` `none` — do not file handFamily.
+
