@@ -3232,9 +3232,9 @@ export function buildSectionSeven() {
   const L070401 = "lesson-07-04-01-pot-type-plans"; // retired LPT-320: split in course.json (lessonSplitMap)
   const L070501 = "lesson-07-05-01-hu-vs-multiway"; // retired LPT-323: split in course.json (lessonSplitMap)
   const L070601 = "lesson-07-06-01-stack-depth-plans"; // retired LPT-326: split in course.json (lessonSplitMap)
-  const L070701 = "lesson-07-07-01-same-cards-types";
-  const L070801 = "lesson-07-08-01-type-board-line";
-  const L070901 = "lesson-07-09-01-leak-review-book";
+  const L070701 = "lesson-07-07-01-same-cards-types"; // retired LPT-330: split in course.json (lessonSplitMap)
+  const L070801 = "lesson-07-08-01-type-board-line"; // retired LPT-333: split in course.json (lessonSplitMap)
+  const L070901 = "lesson-07-09-01-leak-review-book"; // retired LPT-336: split in course.json (lessonSplitMap)
   const L071001 = "lesson-07-10-01-capstone-srp";
   const L071002 = "lesson-07-10-02-capstone-3bet";
   const L071003 = "lesson-07-10-03-capstone-multiway-deep";

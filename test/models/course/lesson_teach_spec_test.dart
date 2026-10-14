@@ -136,7 +136,7 @@ const _lessons = <String, List<String>>{
     'act-02-06-01-checkpoint-oot',
   ],
   // LPT-135
-  'lesson-02-07-01-baseline-full-hand': [
+  'lesson-02-07-01-01-full-ring-open': [
     'act-02-07-01-guided-ep',
     'act-02-07-01-scaffolded-vs',
     'act-02-07-01-unguided-lab',
@@ -551,7 +551,7 @@ const _lessons = <String, List<String>>{
     'act-07-06-01-checkpoint',
   ],
   // LPT-328
-  'lesson-07-07-01-same-cards-types': [
+  'lesson-07-07-01-01-station-value': [
     'act-07-07-01-explain',
     'act-07-07-01-guided',
     'act-07-07-01-scaffolded',
@@ -559,7 +559,7 @@ const _lessons = <String, List<String>>{
     'act-07-07-01-checkpoint',
   ],
   // LPT-331
-  'lesson-07-08-01-type-board-line': [
+  'lesson-07-08-01-01-type-and-board': [
     'act-07-08-01-explain',
     'act-07-08-01-guided',
     'act-07-08-01-scaffolded',
@@ -687,7 +687,7 @@ const _lessons = <String, List<String>>{
     'act-07-03-01-checkpoint',
   ],
   // LPT-334
-  'lesson-07-09-01-leak-review-book': [
+  'lesson-07-09-01-01-name-leaks': [
     'act-07-09-01-explain',
     'act-07-09-01-guided',
     'act-07-09-01-scaffolded',
