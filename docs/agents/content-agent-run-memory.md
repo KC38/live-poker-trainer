@@ -3822,3 +3822,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Lines SoftPulse residual **LPT-684** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse + LPT-683 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); poker_action_sizing densify N/A for guided/scaffolded/unguided SoftPulse maps; checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT on checkpoint — do not reopen LPT-628.
 
+## Fold 2026-10-15ac tip 9b988c0c (#2548 Thin Prefer → Lines SoftPulse LPT-684 Prefer)
+
+- Tip-stable `9b988c0c` after #2548 Thin SoftPulse Prefer LPT-682 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Lines SoftPulse residual re-check `lesson-05-05-01-01/02/03` / `act-05-05-01-*`: first-child SoftPulse X/R→PROBE→DELAY→DONK + `explainGrading` "Check-raise → Probe → Delay → Donk." + Dart `LineStoriesDemo` / `LessonLineStoriesExplainTable` (X/R "Raise after check" / PROBE "Bet into check" / DELAY / DONK "Lead the raiser") + coachMedia "Lines mean ranges. Check-raise, probe, delay, donk — each updates the story." still pre-split under check-raises-only → residual **LPT-684** still To Do (needs-human; Relates LPT-236 — do not re-add needs-human on curriculum); successors SoftPulse PROBE→DELAY→PLAN / DONK→STRONG→AIR content-driven (do not reopen LPT-669); guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `probe` one-per-press PRESENT (`9h`/`8d`·`Kc`/`9s`/`3h` +2 suit variants); unguided SoftPulse `polar` densify PRESENT; checkpoint SoftPulse `delay` kind `none` densify PRESENT under probes-and-delays — no companion residual.
+- Curriculum **LPT-236** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-684/236/685/682/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Timing SoftPulse residual **LPT-685** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-05-01-*: interactive structural clean on tip except LPT-684 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
