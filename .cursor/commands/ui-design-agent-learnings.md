@@ -180,7 +180,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   checkpoint, jump ranks) — SoftPulse can gold You while a wrong seat still
   appends cyan #1 when strictOrder defaults false (LPT-707). Explain tables
   already strict; interactive must match.
-- Prefer Suits explain Hint copy from Dart / pressHints (`Find a heart on the board.`) — never fall through to completion accessibility `You found all four suits…` on SoftPulse-quiet review (LPT-813). After `fresh` clears completedLessonIds, wait for Home to refresh before judging SoftPulse-off + Hint; a stale hasCompleted snapshot opens review-quiet SoftPulse.
+- Prefer Suits explain Hint copy from Dart / pressHints (`Find a heart on the board.`) — never fall through to completion accessibility `You found all four suits…` on SoftPulse-quiet review (LPT-813). After `fresh` clears completedLessonIds, SoftPulse-quiet review follows live profile ids at lesson start (LPT-828) — still wait for Home refresh before filing SoftPulse-off from a stale hasCompleted snapshot if you are on a build before that fix.
 - Prefer a second open when judging card randomization (screenshot hole/board
   A vs B) and screenshot heart counts before/after a paid miss (and after
   Practice/refill) before claiming cards or hearts work. Read ranks from the
@@ -250,8 +250,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer `fresh --lesson … --open` when the walk must start at activity 0 —
   it nulls `course/main.resume`, clears matching `currentLessonId`, and
   deletes open `courseAttempts` (LPT-76). Do not hand-patch Firestore for
-  resume. On Best five SoftPulse closeout, judge seat glow by the PNG
-  (`You [enabled gold]`); retap picker SoftPulse when the first press
+  resume. After `fresh` clears `completedLessonIds`, SoftPulse-quiet review
+  must follow live profile ids at lesson start (LPT-828) — if you still see
+  SoftPulse-off + Hint on a guided explain, wait for Home refresh then
+  re-open before filing. On Best five SoftPulse closeout, judge seat glow by
+  the PNG (`You [enabled gold]`); retap picker SoftPulse when the first press
   leaves `0/5 selected` (LPT-75).
 - Prefer omitting `--log` on `agent_tap` / `agent_seed` after
   `flutter_run_fast.sh` / `flutter_hot_restart.sh` — they point
