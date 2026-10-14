@@ -32,8 +32,9 @@ const _lines = <String, String>{
   'act-01-02-02-checkpoint-build': 'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
   'act-01-04-01-unguided-end':
       'Flop betting is live. Tap when this street ends — pick Bets matched.',
+  // LPT-808: SoftPulse-off densify — no correct-seat spoil.
   'act-01-04-01-checkpoint-postflop':
-      'Postflop multiway. Tap who acts first — pick SB.',
+      'Postflop multiway — tap who acts first.',
   'act-01-05-01-guided-fold-win':
       'You bet. Everyone folds. Tap how you take the pot — pick Take pot.',
   'act-01-05-01-scaffolded-showdown':
