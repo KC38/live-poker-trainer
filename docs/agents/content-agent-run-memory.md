@@ -2186,3 +2186,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - leak-review `lesson-07-09-01-*`: SoftPulse LEAK→BOOK→REVIEW under name-leaks → filed **LPT-727** (needs-human; Relates LPT-336); prior checkpoint book-vs-schedule mismatch resolved by split home.
 - Curriculum LPT-668/330/333/336 Done — do not clone / do not re-add needs-human.
 - Prefer next: oldest unfresh split children / Low residuals LPT-676…727 / To Do **LPT-192**.
+
+## Fold 2026-10-14da (0d0d6607 Hand-ranks NEVER + duplicate residual close)
+
+- Tip-stable `0d0d6607` (#2311 after #2309). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-01-02-01-01/02/03` under Hand ranks unit:
+  - first-child `act-01-02-01-explain-ladder` SoftPulse you→sam→jo + `explainGrading` "High card, then pair, then flush." **concept-aligned** under Order common hand ranks — no SoftPulse residual (contrast Blinds **LPT-724** / Same-cards **LPT-725**).
+  - successors `act-01-02-01-02-explain-spot` PAIR→STRAIGHT→FLUSH + `act-01-02-01-03-explain-compare` FULL HOUSE→TRIPS→TWO PAIR content-driven (do not reopen LPT-669); guided SoftPulse PRESENT; scaffolded/unguided one-per-press OK; checkpoint cue kind `none` hintless; `random_in_class` + handFamily + variants PRESENT.
+- Curriculum **LPT-90** Done — do not clone / do not re-add needs-human. Done-ack LPT-88/89.
+- Concurrent SoftPulse residual race: closed Duplicate **LPT-728…730** onto **LPT-725…727** (search open residual stems before create).
+- Prefer next: NEVER `lesson-01-02-02-*` kickers / Low residuals LPT-676…727 / To Do **LPT-192**.
