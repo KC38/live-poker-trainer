@@ -70,3 +70,8 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-14
 
 - Prefer waiting for Nice! / counting Continues before treating SoftPulse-none + densify stem as SoftPulse-off checkpoint idle — the window after the last SoftPulse press can still show densify before Nice!, so a too-early `<KEY>-validated.png` captures Nice! instead of the ask (LPT-814).
+
+## Fold 2026-10-15
+
+- Prefer checking `supportsHoleHandSeatDeal` / sibling deal maps when a curriculum split adds a new `act-…` id (e.g. LPT-83 `act-01-01-02-03-guided-suited`) — missing the id falls through to Them/You + text docks, mini overflow (~147px), SoftPulse-off, and densify spoil (LPT-815 / LPT-816).
+- Prefer SoftPulse-quiet densify stems for scaffolded/unguided (`showTargetCue` unlocks guided only until Hint) — idle coach must not name the correct tile while SoftPulse is off (LPT-817 Working model; LPT-818 Station).
