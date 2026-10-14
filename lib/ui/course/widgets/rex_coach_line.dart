@@ -453,8 +453,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // (LPT-735; same class as LPT-723 / LPT-717 / LPT-672 / LPT-653).
     'act-05-02-01-checkpoint' =>
       '150–300bb cash play rewards — tap the matching reward.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Deep stacks / opponents who pay / Depth + pay in the idle bubble
+    // (LPT-734; same class as LPT-735 / LPT-723 / LPT-717 / LPT-672 / LPT-653).
     'act-05-03-01-checkpoint' =>
-      'Implied odds rise most when — pick Deep stacks and opponents who pay.',
+      'Implied odds rise most when — tap the matching condition.',
     'act-05-04-01-checkpoint' =>
       'Same hand, different types — pick The line — only when the authored read justifies it.',
     'act-05-05-01-guided' =>
