@@ -4118,6 +4118,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; explain/checkpoint `deal.mode` `none` — do not file handFamily.
 
+## Fold 2026-10-15bn tip 2bb86192 (#2601 → Session SoftPulse residual LPT-690 Prefer)
+
+- Tip-stable `2bb86192` (#2601 LPT-836 densify on tip after #2600 Dynamics SoftPulse Prefer). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync.
+- Prefer NEVER Session SoftPulse residual **LPT-690** re-check (`lesson-05-09-01-01/02/03` / `act-05-09-01-*`):
+  - first-child SoftPulse QUIT→GUARD→FIRST + `explainGrading` "Quit → Guard → First." + Dart `GuardrailsDemo.points` QUIT/GUARD/FIRST (captions Know when / Guardrails first / Win long-term) / coachMedia "Winning 1/2 includes knowing when to quit. Guardrails first." still pre-split under stop-loss-only → **LPT-690** still To Do (needs-human; Relates LPT-250 — do not re-add needs-human on curriculum).
+  - companion checkpoint SoftPulse `edge` kind `none` densify PRESENT (prompt "Session discipline is part of?" / Your edge) under End sessions → **LPT-691** still To Do (needs-human) — leave open; do not clone.
+  - successors SoftPulse BANKROLL→STAKES→DECLINE / TIRED→WILD→CASH OUT content-driven (do not reopen LPT-669); guided SoftPulse `stop` densify PRESENT; scaffolded SoftPulse `decline` one-per-press densify PRESENT; unguided SoftPulse `cash` one-per-press densify PRESENT.
+- Curriculum **LPT-250** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-690/691/250/686/687/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-05-09-01-*: interactive structural clean on tip except LPT-690 SoftPulse + LPT-691 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided/checkpoint `deal.mode` `none` outcome tiles — do not file handFamily.
+
 ## Fold 2026-10-15bm tip 0933e4ab (#2599 → Dynamics SoftPulse residual LPT-686 Prefer)
 
 - Tip-stable `0933e4ab` (#2599 Timing SoftPulse Prefer LPT-685 on tip after #2597). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
