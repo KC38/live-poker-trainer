@@ -3626,3 +3626,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Selective SoftPulse residual **LPT-706** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-10-01-*: interactive structural clean on tip except LPT-705 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; guided stays fixed+variants hard-fold honesty.
 
+## Fold 2026-10-15h tip 2be3458b (#2521 Hard-folds Prefer → Selective SoftPulse LPT-706 Prefer)
+
+- Tip-stable `2be3458b` after #2521 SoftPulse residual Prefer LPT-705 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-06-11-01-01/02/03` / `act-06-11-01-*`: first-child SoftPulse TIGHT→BARREL→SAMPLE + `explainGrading` "Tight → Barrel → Sample." still pre-split under selective-entry-only → residual **LPT-706** still To Do (Relates LPT-288 — do not re-add needs-human on curriculum); successors SoftPulse CALLED→GIVES UP / TWO HANDS→NOTE BUNDLE content-driven (do not reopen LPT-669); guided SoftPulse `sel` densify PRESENT; scaffolded SoftPulse `disc` densify PRESENT; unguided SoftPulse `low` densify PRESENT; checkpoint SoftPulse `bundle` under wait-for-samples — no companion residual.
+- Curriculum **LPT-288** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-706/288/708/705/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Meet-TAG working-model residual **LPT-708** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-11-01-*: interactive structural clean on tip except LPT-706 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
