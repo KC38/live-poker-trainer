@@ -775,6 +775,14 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-310, LPT-314, LPT-317, LPT-320, LPT-323, LPT-326: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-07-01-01-preflop-to-flop` → `lesson-07-01-01-01-preflop-thesis`, `lesson-07-01-01-02-flop-update`, `lesson-07-01-01-03-abandon-dead-plans` (LPT-310)
+- `lesson-07-02-01-flop-to-turn-map` → `lesson-07-02-01-01-continue-cards`, `lesson-07-02-01-02-give-up-cards`, `lesson-07-02-01-03-bet-with-a-map` (LPT-314)
+- `lesson-07-03-01-river-composition` → `lesson-07-03-01-01-river-value`, `lesson-07-03-01-02-blocker-bluffs`, `lesson-07-03-01-03-check-trash` (LPT-317)
+- `lesson-07-04-01-pot-type-plans` → `lesson-07-04-01-01-limped-pots`, `lesson-07-04-01-02-single-raised-pots`, `lesson-07-04-01-03-threebet-fourbet-pots` (LPT-320)
+- `lesson-07-05-01-hu-vs-multiway` → `lesson-07-05-01-01-bluff-less-multiway`, `lesson-07-05-01-02-value-thicker-multiway`, `lesson-07-05-01-03-widen-hu-bluffs` (LPT-323)
+- `lesson-07-06-01-stack-depth-plans` → `lesson-07-06-01-01-commit-short`, `lesson-07-06-01-02-implied-odds-deep`, `lesson-07-06-01-03-recalc-effective` (LPT-326)
+
 Curriculum splits LPT-288, LPT-291, LPT-294, LPT-297, LPT-300, LPT-303, LPT-306: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-06-11-01-observe-selective` → `lesson-06-11-01-01-selective-entry`, `lesson-06-11-01-02-disciplined-aggression`, `lesson-06-11-01-03-wait-for-samples` (LPT-288)
 - `lesson-06-11-02-meet-tag` → `lesson-06-11-02-01-tag-model`, `lesson-06-11-02-02-spot-tag`, `lesson-06-11-02-03-tag-vs-maniac` (LPT-291)
@@ -1965,12 +1973,24 @@ felt.
 | Same cards: call a LAG barrel | explain SoftPulse cues LAG BARREL → CALL; unit `unit-06-13-mix` (LPT-306 split) | — |
 | Cite the tendency | explain SoftPulse cues TENDENCY → LINE; unit `unit-06-13-mix` (LPT-306 split) | — |
 | Section 6 checkpoint | densified frame asks (LPT-655) | — |
-| Carry a preflop plan onto the flop | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505); densified frame asks (LPT-656) | — |
-| Map turn barrels before you bet flop | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506); densified frame asks (LPT-657) | — |
-| Compose river value and bluffs | Value, Bluff, Hold; densified frame asks (LPT-658) | — |
-| Change plans by pot type | Limped, SRP, 3-4bet | — |
-| Switch gears between HU and multiway | Fewer, Thicker, Widen | — |
-| Rewrite plans when stacks change | Short, Deep, Effective | — |
+| State a preflop thesis | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505); densified frame asks (LPT-656); unit `unit-07-01-preflop-flop` (LPT-310 split) | — |
+| Update on the flop | explain SoftPulse cues TEXTURE → CONFIRM OR CANCEL; unit `unit-07-01-preflop-flop` (LPT-310 split) | — |
+| Abandon dead plans quickly | explain SoftPulse cues DEAD PLAN → LET GO; unit `unit-07-01-preflop-flop` (LPT-310 split) | — |
+| List turn continue cards | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506); densified frame asks (LPT-657); unit `unit-07-02-turn-map` (LPT-314 split) | — |
+| List give-up cards | explain SoftPulse cues BRICK → GIVE UP; unit `unit-07-02-turn-map` (LPT-314 split) | — |
+| Bet flop only with a turn map | explain SoftPulse cues CONTINUE → GIVE-UP → MAP; unit `unit-07-02-turn-map` (LPT-314 split) | — |
+| Choose river value | Value, Bluff, Hold; densified frame asks (LPT-658); unit `unit-07-03-river` (LPT-317 split) | — |
+| Choose bluffs with blockers | explain SoftPulse cues BLOCKER → FEWER CALLS; unit `unit-07-03-river` (LPT-317 split) | — |
+| Check trash without a story | explain SoftPulse cues NO STORY → CHECK; unit `unit-07-03-river` (LPT-317 split) | — |
+| Plan limped pots | Limped, SRP, 3-4bet; unit `unit-07-04-pot-types` (LPT-320 split) | — |
+| Plan single-raised pots | explain SoftPulse cues HEADS-UP → C-BET; unit `unit-07-04-pot-types` (LPT-320 split) | — |
+| Plan 3-bet and 4-bet pots | explain SoftPulse cues LOW SPR → COMMIT; unit `unit-07-04-pot-types` (LPT-320 split) | — |
+| Bluff less multiway | Fewer, Thicker, Widen; unit `unit-07-05-hu-mw` (LPT-323 split) | — |
+| Value thicker multiway | explain SoftPulse cues MULTIWAY → THICK VALUE; unit `unit-07-05-hu-mw` (LPT-323 split) | — |
+| Widen selected heads-up bluffs | explain SoftPulse cues HEADS-UP → STEAL MORE; unit `unit-07-05-hu-mw` (LPT-323 split) | — |
+| Commit earlier when short | Short, Deep, Effective; unit `unit-07-06-stacks` (LPT-326 split) | — |
+| Use implied odds deep | explain SoftPulse cues DEEP → IMPLIED ODDS; unit `unit-07-06-stacks` (LPT-326 split) | — |
+| Recalculate effective stacks | explain SoftPulse cues SHORTER STACK → PLAN; unit `unit-07-06-stacks` (LPT-326 split) | — |
 | Replay the same hand versus each type | Cards, Models, Cite | — |
 | Integrate type, board, line, and sizing | Type, Board, Line, Size | — |
 | Write your default strategy book | Leak, Book, Review | — |

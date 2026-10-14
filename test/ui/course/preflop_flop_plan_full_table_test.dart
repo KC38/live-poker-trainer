@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-07-01-01-preflop-to-flop',
+            'lesson-07-01-01-01-preflop-thesis',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

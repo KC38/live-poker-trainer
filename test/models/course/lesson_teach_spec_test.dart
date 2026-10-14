@@ -519,7 +519,7 @@ const _lessons = <String, List<String>>{
     'act-06-13-02-cp-lag',
   ],
   // LPT-308
-  'lesson-07-01-01-preflop-to-flop': [
+  'lesson-07-01-01-01-preflop-thesis': [
     'act-07-01-01-explain',
     'act-07-01-01-guided',
     'act-07-01-01-scaffolded',
@@ -527,7 +527,7 @@ const _lessons = <String, List<String>>{
     'act-07-01-01-checkpoint',
   ],
   // LPT-318
-  'lesson-07-04-01-pot-type-plans': [
+  'lesson-07-04-01-01-limped-pots': [
     'act-07-04-01-explain',
     'act-07-04-01-guided',
     'act-07-04-01-scaffolded',
@@ -535,7 +535,7 @@ const _lessons = <String, List<String>>{
     'act-07-04-01-checkpoint',
   ],
   // LPT-321
-  'lesson-07-05-01-hu-vs-multiway': [
+  'lesson-07-05-01-01-bluff-less-multiway': [
     'act-07-05-01-explain',
     'act-07-05-01-guided',
     'act-07-05-01-scaffolded',
@@ -543,7 +543,7 @@ const _lessons = <String, List<String>>{
     'act-07-05-01-checkpoint',
   ],
   // LPT-324
-  'lesson-07-06-01-stack-depth-plans': [
+  'lesson-07-06-01-01-commit-short': [
     'act-07-06-01-explain',
     'act-07-06-01-guided',
     'act-07-06-01-scaffolded',
@@ -671,7 +671,7 @@ const _lessons = <String, List<String>>{
     'act-06-12-03-checkpoint',
   ],
   // LPT-312
-  'lesson-07-02-01-flop-to-turn-map': [
+  'lesson-07-02-01-01-continue-cards': [
     'act-07-02-01-explain',
     'act-07-02-01-guided',
     'act-07-02-01-scaffolded',
@@ -679,7 +679,7 @@ const _lessons = <String, List<String>>{
     'act-07-02-01-checkpoint',
   ],
   // LPT-315
-  'lesson-07-03-01-river-composition': [
+  'lesson-07-03-01-01-river-value': [
     'act-07-03-01-explain',
     'act-07-03-01-guided',
     'act-07-03-01-scaffolded',

@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-07-02-01-flop-to-turn-map',
+            'lesson-07-02-01-01-continue-cards',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-07-05-01-hu-vs-multiway',
+            'lesson-07-05-01-01-bluff-less-multiway',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

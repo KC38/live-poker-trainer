@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "3802e59aabf7f7474ed8b28ce443141d4554401d75e9ae8158e28e9d4ec10a07",
+  "contentChecksum": "ee6cb4ae163adaa9b769af68298773e2a8ce4333570f62a2a514b48ca2b3451e",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -353,6 +353,36 @@
       "lesson-06-13-01-02-nit-fold",
       "lesson-06-13-01-03-lag-call",
       "lesson-06-13-01-04-cite-tendency"
+    ],
+    "lesson-07-01-01-preflop-to-flop": [
+      "lesson-07-01-01-01-preflop-thesis",
+      "lesson-07-01-01-02-flop-update",
+      "lesson-07-01-01-03-abandon-dead-plans"
+    ],
+    "lesson-07-02-01-flop-to-turn-map": [
+      "lesson-07-02-01-01-continue-cards",
+      "lesson-07-02-01-02-give-up-cards",
+      "lesson-07-02-01-03-bet-with-a-map"
+    ],
+    "lesson-07-03-01-river-composition": [
+      "lesson-07-03-01-01-river-value",
+      "lesson-07-03-01-02-blocker-bluffs",
+      "lesson-07-03-01-03-check-trash"
+    ],
+    "lesson-07-04-01-pot-type-plans": [
+      "lesson-07-04-01-01-limped-pots",
+      "lesson-07-04-01-02-single-raised-pots",
+      "lesson-07-04-01-03-threebet-fourbet-pots"
+    ],
+    "lesson-07-05-01-hu-vs-multiway": [
+      "lesson-07-05-01-01-bluff-less-multiway",
+      "lesson-07-05-01-02-value-thicker-multiway",
+      "lesson-07-05-01-03-widen-hu-bluffs"
+    ],
+    "lesson-07-06-01-stack-depth-plans": [
+      "lesson-07-06-01-01-commit-short",
+      "lesson-07-06-01-02-implied-odds-deep",
+      "lesson-07-06-01-03-recalc-effective"
     ]
   },
   "sections": [
@@ -37471,14 +37501,12 @@
           "summary": "Start with a preflop thesis; update on the flop.",
           "lessons": [
             {
-              "id": "lesson-07-01-01-preflop-to-flop",
+              "id": "lesson-07-01-01-01-preflop-thesis",
               "order": 1,
-              "title": "Carry a preflop plan onto the flop",
-              "summary": "State why you entered; let the flop confirm or kill the plan.",
+              "title": "State a preflop thesis",
+              "summary": "Enter every pot with a written reason.",
               "objectives": [
-                "State a preflop thesis",
-                "Update on flop texture",
-                "Abandon dead plans quickly"
+                "State a preflop thesis"
               ],
               "prerequisites": [
                 "lesson-06-13-02-section-six-checkpoint"
@@ -37486,7 +37514,7 @@
               "remediationLessonIds": [
                 "lesson-06-13-02-section-six-checkpoint"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -37537,6 +37565,126 @@
                       }
                     ]
                   }
+                },
+                {
+                  "id": "act-07-01-01-unguided",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Write the thesis before flop.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "State a preflop thesis"
+                  ],
+                  "prompt": "Best habit?",
+                  "choices": [
+                    {
+                      "id": "thesis",
+                      "label": "Name the preflop reason before acting flop",
+                      "accessibilityText": "Name the preflop reason before acting flop",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Integration."
+                      }
+                    },
+                    {
+                      "id": "vibes",
+                      "label": "Wing it every street",
+                      "accessibilityText": "Wing it every street",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "No plan.",
+                        "betterChoiceId": "thesis"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Have a plan before the flop comes."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "thesis",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-01-01-02-flop-update",
+              "order": 2,
+              "title": "Update on the flop",
+              "summary": "Let the flop texture confirm or cancel the plan.",
+              "objectives": [
+                "Update on flop texture"
+              ],
+              "prerequisites": [
+                "lesson-07-01-01-01-preflop-thesis"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-01-01-01-preflop-thesis"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-01-01-02-explain-update",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Update on flop texture"
+                  ],
+                  "accessibilityText": "The flop either fits your reason for entering or it does not. Check the texture, then confirm or cancel the plan.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-01-01-02-explain-update-line",
+                      "kind": "dialogue",
+                      "text": "The flop either fits your reason for entering or it does not. Check the texture, then confirm or cancel the plan."
+                    }
+                  ],
+                  "okFeedback": "Texture decides the update.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TEXTURE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CONFIRM OR CANCEL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Texture → Confirm or cancel."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-01-01-guided",
@@ -37643,66 +37791,74 @@
                       }
                     ]
                   }
-                },
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-01-01-03-abandon-dead-plans",
+              "order": 3,
+              "title": "Abandon dead plans quickly",
+              "summary": "When the flop kills the plan, let it go.",
+              "objectives": [
+                "Abandon dead plans quickly"
+              ],
+              "prerequisites": [
+                "lesson-07-01-01-02-flop-update"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-01-01-02-flop-update"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
                 {
-                  "id": "act-07-01-01-unguided",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Write the thesis before flop.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
+                  "id": "act-07-01-01-03-explain-abandon",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
                   "objectives": [
-                    "State a preflop thesis"
+                    "Abandon dead plans quickly"
                   ],
-                  "prompt": "Best habit?",
-                  "choices": [
+                  "accessibilityText": "When the flop kills your plan, let it go now. Do not keep betting a reason that no longer exists.",
+                  "coachMedia": [
                     {
-                      "id": "thesis",
-                      "label": "Name the preflop reason before acting flop",
-                      "accessibilityText": "Name the preflop reason before acting flop",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Integration."
-                      }
-                    },
-                    {
-                      "id": "vibes",
-                      "label": "Wing it every street",
-                      "accessibilityText": "Wing it every street",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No plan.",
-                        "betterChoiceId": "thesis"
-                      }
+                      "id": "act-07-01-01-03-explain-abandon-line",
+                      "kind": "dialogue",
+                      "text": "When the flop kills your plan, let it go now. Do not keep betting a reason that no longer exists."
                     }
                   ],
+                  "okFeedback": "Dead plan — let it go.",
                   "teachSpec": {
                     "deal": {
                       "mode": "none"
                     },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Have a plan before the flop comes."
-                      }
-                    ],
                     "cues": [
                       {
                         "press": 1,
-                        "target": "thesis",
+                        "target": "DEAD PLAN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "LET GO",
                         "kind": "soft_pulse"
                       }
                     ]
-                  }
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Dead plan → Let go."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-01-01-checkpoint",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -37762,22 +37918,20 @@
           "summary": "Pre-decide turn cards to continue or kill.",
           "lessons": [
             {
-              "id": "lesson-07-02-01-flop-to-turn-map",
+              "id": "lesson-07-02-01-01-continue-cards",
               "order": 1,
-              "title": "Map turn barrels before you bet flop",
-              "summary": "List continue cards and give-up cards while choosing the flop bet.",
+              "title": "List turn continue cards",
+              "summary": "Know which turns keep your barrel going.",
               "objectives": [
-                "List turn continue cards",
-                "List give-up cards",
-                "Bet flop only with a turn map"
+                "List turn continue cards"
               ],
               "prerequisites": [
-                "lesson-07-01-01-preflop-to-flop"
+                "lesson-07-01-01-03-abandon-dead-plans"
               ],
               "remediationLessonIds": [
-                "lesson-07-01-01-preflop-to-flop"
+                "lesson-07-01-01-03-abandon-dead-plans"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -37877,10 +38031,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-02-01-02-give-up-cards",
+              "order": 2,
+              "title": "List give-up cards",
+              "summary": "Know which turns end the bluff.",
+              "objectives": [
+                "List give-up cards"
+              ],
+              "prerequisites": [
+                "lesson-07-02-01-01-continue-cards"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-02-01-01-continue-cards"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-02-01-02-explain-giveup",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "List give-up cards"
+                  ],
+                  "accessibilityText": "Some turns kill your story. A brick plus a big raise means the map says give up.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-02-01-02-explain-giveup-line",
+                      "kind": "dialogue",
+                      "text": "Some turns kill your story. A brick plus a big raise means the map says give up."
+                    }
+                  ],
+                  "okFeedback": "The map says give up.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BRICK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "GIVE UP",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Brick + raise → Give up."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-02-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -37933,10 +38151,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-02-01-03-bet-with-a-map",
+              "order": 3,
+              "title": "Bet flop only with a turn map",
+              "summary": "No turn plan, no flop bet.",
+              "objectives": [
+                "Bet flop only with a turn map"
+              ],
+              "prerequisites": [
+                "lesson-07-02-01-02-give-up-cards"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-02-01-02-give-up-cards"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-02-01-03-explain-map",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Bet flop only with a turn map"
+                  ],
+                  "accessibilityText": "Before you bet the flop, list continue cards and give-up cards. No turn map means no flop bet.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-02-01-03-explain-map-line",
+                      "kind": "dialogue",
+                      "text": "Before you bet the flop, list continue cards and give-up cards. No turn map means no flop bet."
+                    }
+                  ],
+                  "okFeedback": "Map first, then bet.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CONTINUE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "GIVE-UP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "MAP",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Continue + Give-up → Map → Bet."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-02-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -37992,7 +38279,7 @@
                 },
                 {
                   "id": "act-07-02-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -38052,22 +38339,20 @@
           "summary": "Finish hands with a coherent river range story.",
           "lessons": [
             {
-              "id": "lesson-07-03-01-river-composition",
+              "id": "lesson-07-03-01-01-river-value",
               "order": 1,
-              "title": "Compose river value and bluffs",
-              "summary": "Value needs calls; bluffs need folds; blockers help choose.",
+              "title": "Choose river value",
+              "summary": "Value bet when worse hands call.",
               "objectives": [
-                "Choose river value candidates",
-                "Choose bluff candidates with blockers",
-                "Check trash without a story"
+                "Choose river value candidates"
               ],
               "prerequisites": [
-                "lesson-07-02-01-flop-to-turn-map"
+                "lesson-07-02-01-03-bet-with-a-map"
               ],
               "remediationLessonIds": [
-                "lesson-07-02-01-flop-to-turn-map"
+                "lesson-07-02-01-03-bet-with-a-map"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -38223,8 +38508,123 @@
                   }
                 },
                 {
-                  "id": "act-07-03-01-scaffolded",
+                  "id": "act-07-03-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Value needs calls; bluffs need folds.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Choose river value candidates"
+                  ],
+                  "prompt": "River composition rule?",
+                  "choices": [
+                    {
+                      "id": "rule",
+                      "label": "Value needs calls; bluffs need folds",
+                      "accessibilityText": "Value needs calls; bluffs need folds",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Core."
+                      }
+                    },
+                    {
+                      "id": "random",
+                      "label": "Bet every river for style",
+                      "accessibilityText": "Bet every river for style",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "No.",
+                        "betterChoiceId": "rule"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "rule",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-03-01-02-blocker-bluffs",
+              "order": 2,
+              "title": "Choose bluffs with blockers",
+              "summary": "Bluff with cards that block their calls.",
+              "objectives": [
+                "Choose bluff candidates with blockers"
+              ],
+              "prerequisites": [
+                "lesson-07-03-01-01-river-value"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-03-01-01-river-value"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-03-01-02-explain-blockers",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Choose bluff candidates with blockers"
+                  ],
+                  "accessibilityText": "Pick river bluffs that hold blockers. The nut flush blocker removes some of their calling flushes.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-03-01-02-explain-blockers-line",
+                      "kind": "dialogue",
+                      "text": "Pick river bluffs that hold blockers. The nut flush blocker removes some of their calling flushes."
+                    }
+                  ],
+                  "okFeedback": "Blockers pick the bluff.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BLOCKER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FEWER CALLS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Blocker → Fewer calls → Bluff."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-07-03-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -38277,10 +38677,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-03-01-03-check-trash",
+              "order": 3,
+              "title": "Check trash without a story",
+              "summary": "No value, no blockers, no folds: check.",
+              "objectives": [
+                "Check trash without a story"
+              ],
+              "prerequisites": [
+                "lesson-07-03-01-02-blocker-bluffs"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-03-01-02-blocker-bluffs"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-03-01-03-explain-check",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Check trash without a story"
+                  ],
+                  "accessibilityText": "No value, no blockers, and no fold equity means no bet. Check it down.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-03-01-03-explain-check-line",
+                      "kind": "dialogue",
+                      "text": "No value, no blockers, and no fold equity means no bet. Check it down."
+                    }
+                  ],
+                  "okFeedback": "No story — check.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NO STORY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHECK",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "No story → Check."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-03-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -38333,57 +38797,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-07-03-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Value needs calls; bluffs need folds.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Choose river value candidates"
-                  ],
-                  "prompt": "River composition rule?",
-                  "choices": [
-                    {
-                      "id": "rule",
-                      "label": "Value needs calls; bluffs need folds",
-                      "accessibilityText": "Value needs calls; bluffs need folds",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Core."
-                      }
-                    },
-                    {
-                      "id": "random",
-                      "label": "Bet every river for style",
-                      "accessibilityText": "Bet every river for style",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No.",
-                        "betterChoiceId": "rule"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "rule",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -38396,22 +38809,20 @@
           "summary": "Limped, SRP, 3-bet, and 4-bet pots.",
           "lessons": [
             {
-              "id": "lesson-07-04-01-pot-type-plans",
+              "id": "lesson-07-04-01-01-limped-pots",
               "order": 1,
-              "title": "Change plans by pot type",
-              "summary": "Limped pots differ from single-raised and 3-/4-bet pots.",
+              "title": "Plan limped pots",
+              "summary": "Multiway limped pots reward nut potential.",
               "objectives": [
-                "Plan limped pots",
-                "Plan single-raised pots",
-                "Plan 3-bet/4-bet pots"
+                "Plan limped pots"
               ],
               "prerequisites": [
-                "lesson-07-03-01-river-composition"
+                "lesson-07-03-01-03-check-trash"
               ],
               "remediationLessonIds": [
-                "lesson-07-03-01-river-composition"
+                "lesson-07-03-01-03-check-trash"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -38434,7 +38845,7 @@
                     }
                   ],
                   "objectives": [
-                    "Plan single-raised pots"
+                    "Plan limped pots"
                   ],
                   "explainGrading": {
                     "grade": "recommended",
@@ -38512,10 +38923,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-04-01-02-single-raised-pots",
+              "order": 2,
+              "title": "Plan single-raised pots",
+              "summary": "Heads-up in position, c-bet with a turn map.",
+              "objectives": [
+                "Plan single-raised pots"
+              ],
+              "prerequisites": [
+                "lesson-07-04-01-01-limped-pots"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-04-01-01-limped-pots"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-04-01-02-explain-srp",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Plan single-raised pots"
+                  ],
+                  "accessibilityText": "In a heads-up single-raised pot in position, your default weapon is a c-bet backed by a turn map.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-04-01-02-explain-srp-line",
+                      "kind": "dialogue",
+                      "text": "In a heads-up single-raised pot in position, your default weapon is a c-bet backed by a turn map."
+                    }
+                  ],
+                  "okFeedback": "C-bet with a map.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "HEADS-UP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "C-BET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Heads-up SRP → C-bet with a map."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-04-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -38568,10 +39043,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-04-01-03-threebet-fourbet-pots",
+              "order": 3,
+              "title": "Plan 3-bet and 4-bet pots",
+              "summary": "Bigger pots mean lower SPR and more commitment.",
+              "objectives": [
+                "Plan 3-bet/4-bet pots"
+              ],
+              "prerequisites": [
+                "lesson-07-04-01-02-single-raised-pots"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-04-01-02-single-raised-pots"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-04-01-03-explain-bigpots",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Plan 3-bet/4-bet pots"
+                  ],
+                  "accessibilityText": "3-bet and 4-bet pots shrink the SPR. Ranges are tighter and commitment comes early.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-04-01-03-explain-bigpots-line",
+                      "kind": "dialogue",
+                      "text": "3-bet and 4-bet pots shrink the SPR. Ranges are tighter and commitment comes early."
+                    }
+                  ],
+                  "okFeedback": "Big pot — commit early.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "LOW SPR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "COMMIT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Low SPR → Commit."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-04-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -38627,7 +39166,7 @@
                 },
                 {
                   "id": "act-07-04-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -38687,22 +39226,20 @@
           "summary": "Player count changes bluff and value frequency.",
           "lessons": [
             {
-              "id": "lesson-07-05-01-hu-vs-multiway",
+              "id": "lesson-07-05-01-01-bluff-less-multiway",
               "order": 1,
-              "title": "Switch gears between HU and multiway",
-              "summary": "Bluff less multiway; value thicker; nut potential rises.",
+              "title": "Bluff less multiway",
+              "summary": "More players means fewer bluffs get through.",
               "objectives": [
-                "Bluff less multiway",
-                "Value thicker multiway",
-                "Widen selected HU bluffs"
+                "Bluff less multiway"
               ],
               "prerequisites": [
-                "lesson-07-04-01-pot-type-plans"
+                "lesson-07-04-01-03-threebet-fourbet-pots"
               ],
               "remediationLessonIds": [
-                "lesson-07-04-01-pot-type-plans"
+                "lesson-07-04-01-03-threebet-fourbet-pots"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -38805,8 +39342,242 @@
                   }
                 },
                 {
-                  "id": "act-07-05-01-scaffolded",
+                  "id": "act-07-05-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "A first-class input.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Bluff less multiway"
+                  ],
+                  "prompt": "Player count is?",
+                  "choices": [
+                    {
+                      "id": "input",
+                      "label": "A first-class planning input",
+                      "accessibilityText": "A first-class planning input",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Yes."
+                      }
+                    },
+                    {
+                      "id": "ignore",
+                      "label": "Noise",
+                      "accessibilityText": "Noise",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "No.",
+                        "betterChoiceId": "input"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "input",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-05-01-02-value-thicker-multiway",
+              "order": 2,
+              "title": "Value thicker multiway",
+              "summary": "Strong hands bet for value and protection.",
+              "objectives": [
+                "Value thicker multiway"
+              ],
+              "prerequisites": [
+                "lesson-07-05-01-01-bluff-less-multiway"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-05-01-01-bluff-less-multiway"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-05-01-02-explain-value",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Value thicker multiway"
+                  ],
+                  "accessibilityText": "Multiway, someone often has a piece. Bet your strong hands thicker for value and protection.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-05-01-02-explain-value-line",
+                      "kind": "dialogue",
+                      "text": "Multiway, someone often has a piece. Bet your strong hands thicker for value and protection."
+                    }
+                  ],
+                  "okFeedback": "Thicker value.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MULTIWAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "THICK VALUE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Multiway → Thick value."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-07-05-01-unguided",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Thicker value / protection.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Value thicker multiway"
+                  ],
+                  "prompt": "Multiway top set. Line lean?",
+                  "choices": [
+                    {
+                      "id": "thick",
+                      "label": "Thicker value and protection",
+                      "accessibilityText": "Thicker value and protection",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Yes."
+                      }
+                    },
+                    {
+                      "id": "slow",
+                      "label": "Ultra-slow every time",
+                      "accessibilityText": "Ultra-slow every time",
+                      "grading": {
+                        "grade": "questionable",
+                        "feedback": "Risk free cards."
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Multiway, strong hands lean toward value and protection."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "thick",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-05-01-03-widen-hu-bluffs",
+              "order": 3,
+              "title": "Widen selected heads-up bluffs",
+              "summary": "Heads-up versus a folder, steal and bluff more.",
+              "objectives": [
+                "Widen selected HU bluffs"
+              ],
+              "prerequisites": [
+                "lesson-07-05-01-02-value-thicker-multiway"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-05-01-02-value-thicker-multiway"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-05-01-03-explain-hu",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Widen selected HU bluffs"
+                  ],
+                  "accessibilityText": "Heads-up against a seat that folds a lot, you can steal and bluff more often than in a multiway pot.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-05-01-03-explain-hu-line",
+                      "kind": "dialogue",
+                      "text": "Heads-up against a seat that folds a lot, you can steal and bluff more often than in a multiway pot."
+                    }
+                  ],
+                  "okFeedback": "Heads-up — steal more.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "HEADS-UP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STEAL MORE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Heads-up → Steal more."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-07-05-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -38862,112 +39633,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-07-05-01-unguided",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Thicker value / protection.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Value thicker multiway"
-                  ],
-                  "prompt": "Multiway top set. Line lean?",
-                  "choices": [
-                    {
-                      "id": "thick",
-                      "label": "Thicker value and protection",
-                      "accessibilityText": "Thicker value and protection",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Yes."
-                      }
-                    },
-                    {
-                      "id": "slow",
-                      "label": "Ultra-slow every time",
-                      "accessibilityText": "Ultra-slow every time",
-                      "grading": {
-                        "grade": "questionable",
-                        "feedback": "Risk free cards."
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Multiway, strong hands lean toward value and protection."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "thick",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "act-07-05-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "A first-class input.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Bluff less multiway"
-                  ],
-                  "prompt": "Player count is?",
-                  "choices": [
-                    {
-                      "id": "input",
-                      "label": "A first-class planning input",
-                      "accessibilityText": "A first-class planning input",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Yes."
-                      }
-                    },
-                    {
-                      "id": "ignore",
-                      "label": "Noise",
-                      "accessibilityText": "Noise",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No.",
-                        "betterChoiceId": "input"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "input",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -38980,22 +39645,20 @@
           "summary": "Rewrite the plan when effective stacks change.",
           "lessons": [
             {
-              "id": "lesson-07-06-01-stack-depth-plans",
+              "id": "lesson-07-06-01-01-commit-short",
               "order": 1,
-              "title": "Rewrite plans when stacks change",
-              "summary": "Short stacks commit earlier; deep stacks delay and use implied odds.",
+              "title": "Commit earlier when short",
+              "summary": "Short stacks reach commitment fast.",
               "objectives": [
-                "Commit earlier short",
-                "Use implied odds deep",
-                "Recalculate effective stacks each hand"
+                "Commit earlier short"
               ],
               "prerequisites": [
-                "lesson-07-05-01-hu-vs-multiway"
+                "lesson-07-05-01-03-widen-hu-bluffs"
               ],
               "remediationLessonIds": [
-                "lesson-07-05-01-hu-vs-multiway"
+                "lesson-07-05-01-03-widen-hu-bluffs"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 3,
               "difficultyBand": 5,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -39018,7 +39681,7 @@
                     }
                   ],
                   "objectives": [
-                    "Recalculate effective stacks each hand"
+                    "Commit earlier short"
                   ],
                   "explainGrading": {
                     "grade": "recommended",
@@ -39096,10 +39759,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-06-01-02-implied-odds-deep",
+              "order": 2,
+              "title": "Use implied odds deep",
+              "summary": "Deep stacks pay off sets and draws.",
+              "objectives": [
+                "Use implied odds deep"
+              ],
+              "prerequisites": [
+                "lesson-07-06-01-01-commit-short"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-06-01-01-commit-short"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-06-01-02-explain-deep",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Use implied odds deep"
+                  ],
+                  "accessibilityText": "With deep stacks, hands like small pairs gain value. When you hit, there is more left to win.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-06-01-02-explain-deep-line",
+                      "kind": "dialogue",
+                      "text": "With deep stacks, hands like small pairs gain value. When you hit, there is more left to win."
+                    }
+                  ],
+                  "okFeedback": "Deep — implied odds.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "DEEP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "IMPLIED ODDS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Deep stacks → Implied odds."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-06-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -39152,10 +39879,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-07-06-01-03-recalc-effective",
+              "order": 3,
+              "title": "Recalculate effective stacks",
+              "summary": "The shorter stack sets the depth, every hand.",
+              "objectives": [
+                "Recalculate effective stacks each hand"
+              ],
+              "prerequisites": [
+                "lesson-07-06-01-02-implied-odds-deep"
+              ],
+              "remediationLessonIds": [
+                "lesson-07-06-01-02-implied-odds-deep"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 5,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-07-06-01-03-explain-effective",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Recalculate effective stacks each hand"
+                  ],
+                  "accessibilityText": "Every hand, find the shorter stack between you and your opponent. That effective stack sets the plan.",
+                  "coachMedia": [
+                    {
+                      "id": "act-07-06-01-03-explain-effective-line",
+                      "kind": "dialogue",
+                      "text": "Every hand, find the shorter stack between you and your opponent. That effective stack sets the plan."
+                    }
+                  ],
+                  "okFeedback": "Shorter stack sets it.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SHORTER STACK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "PLAN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Shorter stack → Effective → Plan."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-07-06-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -39211,7 +40002,7 @@
                 },
                 {
                   "id": "act-07-06-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -39281,7 +40072,7 @@
                 "Practice all five types"
               ],
               "prerequisites": [
-                "lesson-07-06-01-stack-depth-plans"
+                "lesson-07-06-01-03-recalc-effective"
               ],
               "remediationLessonIds": [
                 "lesson-06-13-01-04-cite-tendency"
@@ -40480,7 +41271,7 @@
                 "lesson-07-09-01-leak-review-book"
               ],
               "remediationLessonIds": [
-                "lesson-07-04-01-pot-type-plans"
+                "lesson-07-04-01-03-threebet-fourbet-pots"
               ],
               "estimatedMinutes": 12,
               "difficultyBand": 5,
@@ -41295,7 +42086,7 @@
                 "lesson-07-10-03-capstone-multiway-deep"
               ],
               "remediationLessonIds": [
-                "lesson-07-04-01-pot-type-plans"
+                "lesson-07-04-01-03-threebet-fourbet-pots"
               ],
               "estimatedMinutes": 12,
               "difficultyBand": 5,
@@ -52248,6 +53039,39 @@
         "feedback": "Reason → Confirm → Cancel."
       }
     },
+    "act-07-01-01-unguided": {
+      "activityId": "act-07-01-01-unguided",
+      "stage": "scaffolded",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "choiceGrading": {
+        "thesis": {
+          "grade": "recommended",
+          "feedback": "Integration."
+        },
+        "vibes": {
+          "grade": "clear_mistake",
+          "feedback": "No plan.",
+          "betterChoiceId": "thesis"
+        }
+      }
+    },
+    "act-07-01-01-02-explain-update": {
+      "activityId": "act-07-01-01-02-explain-update",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Texture → Confirm or cancel."
+      }
+    },
     "act-07-01-01-guided": {
       "activityId": "act-07-01-01-guided",
       "stage": "guided",
@@ -52290,25 +53114,16 @@
         }
       }
     },
-    "act-07-01-01-unguided": {
-      "activityId": "act-07-01-01-unguided",
-      "stage": "scaffolded",
-      "renderer": "select_identify",
+    "act-07-01-01-03-explain-abandon": {
+      "activityId": "act-07-01-01-03-explain-abandon",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
       "acceptedGrades": [
-        "recommended",
-        "strong",
-        "reasonable"
+        "recommended"
       ],
-      "choiceGrading": {
-        "thesis": {
-          "grade": "recommended",
-          "feedback": "Integration."
-        },
-        "vibes": {
-          "grade": "clear_mistake",
-          "feedback": "No plan.",
-          "betterChoiceId": "thesis"
-        }
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Dead plan → Let go."
       }
     },
     "act-07-01-01-checkpoint": {
@@ -52365,6 +53180,18 @@
         }
       }
     },
+    "act-07-02-01-02-explain-giveup": {
+      "activityId": "act-07-02-01-02-explain-giveup",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Brick + raise → Give up."
+      }
+    },
     "act-07-02-01-scaffolded": {
       "activityId": "act-07-02-01-scaffolded",
       "stage": "scaffolded",
@@ -52384,6 +53211,18 @@
           "feedback": "Sunk cost.",
           "betterChoiceId": "give"
         }
+      }
+    },
+    "act-07-02-01-03-explain-map": {
+      "activityId": "act-07-02-01-03-explain-map",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Continue + Give-up → Map → Bet."
       }
     },
     "act-07-02-01-unguided": {
@@ -52461,6 +53300,40 @@
         }
       }
     },
+    "act-07-03-01-checkpoint": {
+      "activityId": "act-07-03-01-checkpoint",
+      "stage": "scaffolded",
+      "renderer": "select_identify",
+      "acceptedGrades": [
+        "recommended",
+        "strong",
+        "reasonable"
+      ],
+      "assessmentRole": "checkpoint",
+      "choiceGrading": {
+        "rule": {
+          "grade": "recommended",
+          "feedback": "Core."
+        },
+        "random": {
+          "grade": "clear_mistake",
+          "feedback": "No.",
+          "betterChoiceId": "rule"
+        }
+      }
+    },
+    "act-07-03-01-02-explain-blockers": {
+      "activityId": "act-07-03-01-02-explain-blockers",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Blocker → Fewer calls → Bluff."
+      }
+    },
     "act-07-03-01-scaffolded": {
       "activityId": "act-07-03-01-scaffolded",
       "stage": "scaffolded",
@@ -52482,6 +53355,18 @@
         }
       }
     },
+    "act-07-03-01-03-explain-check": {
+      "activityId": "act-07-03-01-03-explain-check",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "No story → Check."
+      }
+    },
     "act-07-03-01-unguided": {
       "activityId": "act-07-03-01-unguided",
       "stage": "scaffolded",
@@ -52500,28 +53385,6 @@
           "grade": "clear_mistake",
           "feedback": "Leak.",
           "betterChoiceId": "check"
-        }
-      }
-    },
-    "act-07-03-01-checkpoint": {
-      "activityId": "act-07-03-01-checkpoint",
-      "stage": "scaffolded",
-      "renderer": "select_identify",
-      "acceptedGrades": [
-        "recommended",
-        "strong",
-        "reasonable"
-      ],
-      "assessmentRole": "checkpoint",
-      "choiceGrading": {
-        "rule": {
-          "grade": "recommended",
-          "feedback": "Core."
-        },
-        "random": {
-          "grade": "clear_mistake",
-          "feedback": "No.",
-          "betterChoiceId": "rule"
         }
       }
     },
@@ -52558,6 +53421,18 @@
         }
       }
     },
+    "act-07-04-01-02-explain-srp": {
+      "activityId": "act-07-04-01-02-explain-srp",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Heads-up SRP → C-bet with a map."
+      }
+    },
     "act-07-04-01-scaffolded": {
       "activityId": "act-07-04-01-scaffolded",
       "stage": "scaffolded",
@@ -52577,6 +53452,18 @@
           "feedback": "Too passive.",
           "betterChoiceId": "cb"
         }
+      }
+    },
+    "act-07-04-01-03-explain-bigpots": {
+      "activityId": "act-07-04-01-03-explain-bigpots",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Low SPR → Commit."
       }
     },
     "act-07-04-01-unguided": {
@@ -52655,8 +53542,8 @@
         }
       }
     },
-    "act-07-05-01-scaffolded": {
-      "activityId": "act-07-05-01-scaffolded",
+    "act-07-05-01-checkpoint": {
+      "activityId": "act-07-05-01-checkpoint",
       "stage": "scaffolded",
       "renderer": "select_identify",
       "acceptedGrades": [
@@ -52664,16 +53551,29 @@
         "strong",
         "reasonable"
       ],
+      "assessmentRole": "checkpoint",
       "choiceGrading": {
-        "higher": {
+        "input": {
           "grade": "recommended",
-          "feedback": "Exploit + player count."
+          "feedback": "Yes."
         },
-        "same": {
+        "ignore": {
           "grade": "clear_mistake",
           "feedback": "No.",
-          "betterChoiceId": "higher"
+          "betterChoiceId": "input"
         }
+      }
+    },
+    "act-07-05-01-02-explain-value": {
+      "activityId": "act-07-05-01-02-explain-value",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Multiway → Thick value."
       }
     },
     "act-07-05-01-unguided": {
@@ -52696,8 +53596,20 @@
         }
       }
     },
-    "act-07-05-01-checkpoint": {
-      "activityId": "act-07-05-01-checkpoint",
+    "act-07-05-01-03-explain-hu": {
+      "activityId": "act-07-05-01-03-explain-hu",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Heads-up → Steal more."
+      }
+    },
+    "act-07-05-01-scaffolded": {
+      "activityId": "act-07-05-01-scaffolded",
       "stage": "scaffolded",
       "renderer": "select_identify",
       "acceptedGrades": [
@@ -52705,16 +53617,15 @@
         "strong",
         "reasonable"
       ],
-      "assessmentRole": "checkpoint",
       "choiceGrading": {
-        "input": {
+        "higher": {
           "grade": "recommended",
-          "feedback": "Yes."
+          "feedback": "Exploit + player count."
         },
-        "ignore": {
+        "same": {
           "grade": "clear_mistake",
           "feedback": "No.",
-          "betterChoiceId": "input"
+          "betterChoiceId": "higher"
         }
       }
     },
@@ -52751,6 +53662,18 @@
         }
       }
     },
+    "act-07-06-01-02-explain-deep": {
+      "activityId": "act-07-06-01-02-explain-deep",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Deep stacks → Implied odds."
+      }
+    },
     "act-07-06-01-scaffolded": {
       "activityId": "act-07-06-01-scaffolded",
       "stage": "scaffolded",
@@ -52770,6 +53693,18 @@
           "feedback": "Opposite.",
           "betterChoiceId": "yes"
         }
+      }
+    },
+    "act-07-06-01-03-explain-effective": {
+      "activityId": "act-07-06-01-03-explain-effective",
+      "stage": "guided",
+      "renderer": "coach_dialogue",
+      "acceptedGrades": [
+        "recommended"
+      ],
+      "explainGrading": {
+        "grade": "recommended",
+        "feedback": "Shorter stack → Effective → Plan."
       }
     },
     "act-07-06-01-unguided": {
