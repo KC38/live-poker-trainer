@@ -551,8 +551,17 @@ Lesson-specific pattern notes (full history) live in
   ENTRY WIDTH→DISCIPLINE content-driven; guided SoftPulse `tag` densify PRESENT;
   scaffolded SoftPulse `diff` densify PRESENT; unguided SoftPulse `tag2`
   densify PRESENT; curriculum LPT-291 Done — do not clone / do not re-add
-  needs-human; next: NEVER `lesson-06-11-03-*` Adjust TAG /
-  Low residuals LPT-676…779 (LPT-680…710).
+  needs-human; tip `ba2a9867` Prefer NEVER Adjust TAG children: first-child
+  SoftPulse CREDIT→TIGHTER→NO LIGHT + Dart `VsTagsDemo` /
+  `LessonVsTagsExplainTable` still pre-split under Respect-TAG-aggression-only →
+  residual **LPT-709** still To Do (needs-human); checkpoint SoftPulse `cite`
+  kind `none` densify PRESENT under Respect-only → residual **LPT-710** still
+  To Do (needs-human); successors CHECK-RAISE→FOLD / RARELY CALLS→CHECK
+  content-driven; guided SoftPulse `fold` PRESENT; scaffolded SoftPulse
+  `fold-k9` one-per-press PRESENT; unguided SoftPulse `check` one-per-press
+  PRESENT; curriculum LPT-294 Done — do not clone / do not re-add needs-human;
+  next: NEVER `lesson-06-12-01-*` observe-wide /
+  Low residuals LPT-676…779 (LPT-680…715).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
