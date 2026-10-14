@@ -3453,3 +3453,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-725/330/802/726/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-14ij tip 408eab5e (#2498 Same-cards Prefer → Type-board LPT-726 Prefer)
+
+- Tip-stable `408eab5e` after #2498 Same-cards SoftPulse Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Type-board SoftPulse residual re-check `lesson-07-08-01-01/02/03` / `act-07-08-01-*`: first-child SoftPulse TYPE→BOARD→LINE→SIZE + `explainGrading` "Type → Board → Line → Size." + Dart `TypeBoardLineDemo` (TYPE "Player model" / BOARD "Texture" / LINE "History" / SIZE "One action") still pre-split under type-and-board-only → residual **LPT-726** still To Do (needs-human; Relates LPT-333 — do not re-add needs-human on curriculum); successors SoftPulse LINE→SIZE / FOUR INPUTS→ONE ACTION content-driven (do not reopen LPT-669); guided SoftPulse `call` PRESENT (`Jh`/`Td`·`Kh`/`Ts`/`8h`/`2d` +2 suit variants match Dart); scaffolded SoftPulse `raise` one-per-press PRESENT; unguided SoftPulse `fold` one-per-press PRESENT; checkpoint SoftPulse `four` kind `none` densify PRESENT under one-coherent-action matches — no companion residual.
+- Curriculum **LPT-333** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-726/333/727/725/802/351/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Leak SoftPulse residual **LPT-727** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` — do not file handFamily.
