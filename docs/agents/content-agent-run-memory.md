@@ -3090,3 +3090,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-708/291/198/216/706/709/710/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Adjust-TAG SoftPulse residual **LPT-709** (+ cite **LPT-710**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily.
+
+
+## Fold 2026-10-14gq (1c267bb1 Prefer NEVER Adjust-TAG SoftPulse residual LPT-709 re-check)
+
+- Tip-stable `1c267bb1` (#2441 Meet-TAG working-model Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Adjust-TAG SoftPulse residual re-check `lesson-06-11-03-01/02/03`: first-child SoftPulse CREDIT→TIGHTER→NO LIGHT + `explainGrading` "Credit → Tighter → No light." + Dart `VsTagsDemo` / `LessonVsTagsExplainTable` (NO LIGHT "Skip fancy XR") still pre-split under Respect-TAG-aggression-only → residual **LPT-709** still To Do (needs-human; Relates LPT-294 — do not re-add needs-human on curriculum); checkpoint SoftPulse `cite` kind `none` densify PRESENT (`tagRespectCiteOutcomes` / helper "Versus TAG — pick the cite.") still under Respect-only → residual **LPT-710** still To Do (needs-human; Relates LPT-294); successors CHECK-RAISE→FOLD / RARELY CALLS→CHECK content-driven; guided SoftPulse `fold` PRESENT (`Jh`/`9d`·`Qc`/`9s`/`3h` +2 suit variants); scaffolded SoftPulse `fold-k9` one-per-press PRESENT (`Kh`/`9d` +2 suit variants); unguided SoftPulse `check` one-per-press PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants); curriculum **LPT-294** Done.
+- Tip-commented LPT-709/710/294/708/713/351/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Observe-wide SoftPulse residual **LPT-713** (+ **LPT-714** / **LPT-715**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-11-03-*: interactive structural clean on tip except LPT-709 SoftPulse + LPT-710 cite residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive sizing acts are `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily.
