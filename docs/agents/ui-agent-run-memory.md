@@ -48,3 +48,11 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-14
 
 - Prefer SoftPulse-none unguided dock labels (`C-bet 6`, `Call`) over large `Interactive …` accessibility tiles when auto-walking to a checkpoint — the Interactive needle can eat the step budget and never reach SoftPulse-off densify (LPT-764 validate).
+
+## Fold 2026-10-14
+
+- Prefer checking SoftPulse explain widget fixtures for `teachSpec` soft_pulse
+
+## Fold 2026-10-14
+
+- Prefer protecting English count phrases (`Your two cards`, `the two in front`) inside `alignLessonTableCopy` before spoken rank-word remaps — a template board deuce remapped to a trey otherwise turns Hint into "Your three cards" (LPT-791). Prefer stem-only Your two cards densify coach lines over hardcoded Ah Kd / Qs Jh 2c (LPT-792).
