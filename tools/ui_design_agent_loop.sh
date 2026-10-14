@@ -2812,6 +2812,29 @@ sleep_unless_stopped() {
   done
 }
 
+# Empty-queue backoff: same as sleep_unless_stopped, but also wake when an
+# actionable ui-agent ticket appears (Jira lag after filing, or a human /
+# content-agent label during the 900s sleep) so discovery/fix is not
+# stuck waiting out the full EMPTY_QUEUE_SLEEP.
+sleep_unless_stopped_or_queue() {
+  local total="${1:-0}" stepped=0 chunk
+  [[ "$total" =~ ^[0-9]+$ ]] || total=0
+  while (( stepped < total )); do
+    [[ -f "$STOP_FILE" ]] && return 0
+    if ui_queue_has_ticket; then
+      log "ui-queue gained a ticket during empty-queue sleep; waking early"
+      return 0
+    fi
+    chunk=30
+    if (( total - stepped < chunk )); then
+      chunk=$(( total - stepped ))
+    fi
+    (( chunk > 0 )) || break
+    sleep "$chunk"
+    stepped=$(( stepped + chunk ))
+  done
+}
+
 # True when PID_FILE names a live process (active agent/preflight child).
 run_pid_is_alive() {
   local pid
@@ -2899,9 +2922,10 @@ run_loop() {
           sleep_unless_stopped "$GATEWAY_TIMEOUT_SLEEP"
         elif [[ "$code" -eq 0 ]] && ! ui_queue_has_ticket; then
           # Discovery (or clean fix) left the queue empty — back off before
-          # the next walk so we do not burn runs every GAP second.
+          # the next walk so we do not burn runs every GAP second. Wake
+          # early if a ticket appears mid-sleep (do not wait full 900s).
           log "ui-queue still empty after run; sleeping ${EMPTY_QUEUE_SLEEP}s before next discovery walk"
-          sleep_unless_stopped "$EMPTY_QUEUE_SLEEP"
+          sleep_unless_stopped_or_queue "$EMPTY_QUEUE_SLEEP"
         else
           sleep_unless_stopped "$GAP"
         fi

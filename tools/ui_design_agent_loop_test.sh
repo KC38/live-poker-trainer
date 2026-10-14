@@ -1642,6 +1642,10 @@ grep -q 'ui-queue still empty after run; sleeping' "$LOOP" \
 
 # sleep_unless_stopped honors STOP_FILE mid-sleep (soft-stop during empty-queue).
 grep -q 'sleep_unless_stopped' "$LOOP" || fail "loop must define sleep_unless_stopped"
+grep -q 'sleep_unless_stopped_or_queue' "$LOOP" \
+  || fail "loop must define sleep_unless_stopped_or_queue for empty-queue wake"
+grep -q 'sleep_unless_stopped_or_queue' <<<"$(sed -n '/^run_loop()/,/^}/p' "$LOOP")" \
+  || fail "run_loop must use sleep_unless_stopped_or_queue on empty queue"
 (
   STOP_FILE="$tmp/stop-interruptible"
   rm -f "$STOP_FILE"
@@ -1654,6 +1658,24 @@ grep -q 'sleep_unless_stopped' "$LOOP" || fail "loop must define sleep_unless_st
   elapsed=$(( $(date +%s) - start ))
   (( elapsed < 10 )) || fail "sleep_unless_stopped should wake on STOP_FILE within ~10s, took ${elapsed}s"
   echo "sleep_unless_stopped ok"
+)
+(
+  # Empty-queue sleep wakes when ui_queue_has_ticket flips true.
+  STOP_FILE="$tmp/stop-queue-wake"
+  rm -f "$STOP_FILE"
+  ui_queue_has_ticket() { return 1; }
+  (
+    sleep 0.3
+    # Redefine in parent via a flag file the stub reads — use a shared file.
+    : >"$tmp/queue-appeared"
+  ) &
+  ui_queue_has_ticket() { [[ -f "$tmp/queue-appeared" ]]; }
+  start=$(date +%s)
+  sleep_unless_stopped_or_queue 60
+  elapsed=$(( $(date +%s) - start ))
+  (( elapsed < 45 )) \
+    || fail "sleep_unless_stopped_or_queue should wake on ticket within ~45s, took ${elapsed}s"
+  echo "sleep_unless_stopped_or_queue ok"
 )
 rm -f "$tmp/stop-interruptible"
 
