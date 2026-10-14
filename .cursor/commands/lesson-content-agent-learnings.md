@@ -49,7 +49,10 @@ Lesson-specific pattern notes (full history) live in
   `wave_*.mjs` as truth; file wave-sync when helpers lag.
 - Never file a per-lesson clone when an open `(catalog)` parent covers
   that gap type — edit the parent from
-  `scan_content_gaps.mjs --gap … --markdown`.
+  `scan_content_gaps.mjs --gap … --markdown`. Same for SoftPulse
+  residual stems (`Curriculum residual: … SoftPulse still walks`):
+  `search` open matches before create — concurrent loops filed
+  LPT-728…730 as Duplicate of LPT-725…727 the same tip.
 - Never audit renderer ids in camelCase (`selectIdentify`) — catalog uses
   snake_case (`select_identify`); camelCase filters silently report zero gaps.
 - Never file handFamily/suitFamily gaps on `deal.mode` `none` outcome /
@@ -171,12 +174,15 @@ Lesson-specific pattern notes (full history) live in
   tip `0f48df29` Prefer NEVER Suits/Ranks/Pairs children structural clean
   (SoftPulse concept-aligned; LPT-83 Done — do not reopen LPT-669);
   tip `f2af0de4` Prefer NEVER Blinds children: SoftPulse D→SB→BB under
-  Locate-button-only → **LPT-724**; tip `c121da25` (#2309) Prefer NEVER
-  baseline SoftPulse NINE→SAME→POSITION **concept-aligned**; Same-cards
-  CARDS→MODELS→CITE → **LPT-725**; Type-board TYPE→BOARD→LINE→SIZE →
-  **LPT-726**; Leak LEAK→BOOK→REVIEW → **LPT-727**; curriculum
-  LPT-668/330/333/336 Done — do not re-add needs-human; next: oldest
-  unfresh split children / Low residuals LPT-676…727 / To Do **LPT-192**.
+  Locate-button-only → **LPT-724**; tip `c121da25`/`0d0d6607` (#2309/#2311)
+  Prefer NEVER baseline SoftPulse NINE→SAME→POSITION **concept-aligned**;
+  Same-cards CARDS→MODELS→CITE → **LPT-725**; Type-board → **LPT-726**;
+  Leak → **LPT-727** (LPT-728…730 Duplicate Closed); tip `0d0d6607`
+  Prefer NEVER Hand-ranks SoftPulse you→sam→jo / PAIR→STRAIGHT→FLUSH /
+  FULL HOUSE→TRIPS→TWO PAIR **concept-aligned** (LPT-90 Done — no
+  residual); curriculum LPT-668/330/333/336 Done — do not re-add
+  needs-human; next: NEVER `lesson-01-02-02-*` kickers / Low residuals
+  LPT-676…727 / To Do **LPT-192**.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -220,6 +226,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14da: Tip-stable `0d0d6607` (#2311 S7 NEVER learnings after #2309). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0**). Discovery NEVER Hand-ranks children `lesson-01-02-01-01/02/03`: SoftPulse you→sam→jo / PAIR→STRAIGHT→FLUSH / FULL HOUSE→TRIPS→TWO PAIR each **concept-aligned** under child objectives — no SoftPulse residual; guided/scaffolded/unguided one-per-press OK; checkpoint hintless. Curriculum **LPT-90** Done — do not clone. Concurrent race: closed Duplicate **LPT-728…730** → keep **LPT-725…727**. Tip-commented LPT-90/88/89 + LPT-192/724/725. next: NEVER `lesson-01-02-02-*` kickers / Low residuals LPT-676…727 / To Do **LPT-192**.
 - 2026-10-14cz: Tip-stable `c121da25` (#2309 S7 integrate + baseline split). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER post-split children: baseline SoftPulse NINE→SAME→POSITION under full-ring-open **concept-aligned** (successors OPEN→PLAN / COVER→WAIT content-driven; habits checkpoint matches); Same-cards SoftPulse CARDS→MODELS→CITE under Station-value → **LPT-725**; Type-board SoftPulse TYPE→BOARD→LINE→SIZE under type-and-board → **LPT-726**; Leak SoftPulse LEAK→BOOK→REVIEW under name-leaks → **LPT-727**. Curriculum **LPT-668/330/333/336** Done — do not clone / do not re-add needs-human. Tip-commented + Meet Nit LPT-198 / LPT-216 + open LPT-724. next: oldest unfresh split children / Low residuals LPT-676…727 / To Do **LPT-192**.
 - 2026-10-14cy: Tip-stable `f2af0de4` (#2308 Suits learnings tip; #2307 also on main). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Blinds children: first-child `act-01-01-03-explain-button` SoftPulse D→SB→BB + blindsSeats role labels still pre-split ladder under Locate-button-only → **LPT-724**; successors SB→BB / BLINDS→DEAL content-driven (do not reopen LPT-669); guided SoftPulse `D` + scaffolded SoftPulse `BB` + unguided SoftPulse `before-deal` + checkpoint SoftPulse `SB` hintless PRESENT. Curriculum **LPT-87** Done — do not clone / do not re-add needs-human. Tip-commented LPT-87/724 + Done-ack LPT-85/86 + Meet Nit LPT-198 / LPT-216. next: oldest unfresh split children / Low residuals LPT-676…724 / To Do **LPT-192**.
 - 2026-10-14cx: Tip-stable `0f48df29` (#2306 IP curriculum learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Suits/Ranks/Pairs children: SoftPulse hearts→diamonds→clubs→spades / DEUCE→MIDDLE→ACE / PAIR→SUITED each **concept-aligned** under child objectives — no SoftPulse residual; guided/scaffolded/unguided/checkpoint teachSpec + one-per-press OK; checkpoint hintless. Curriculum **LPT-83** Done — do not clone / do not reopen LPT-669 SoftPulse explain successors. Tip-commented LPT-83 + Done-ack LPT-81/82/353/369/370/571 + Meet Nit LPT-198 / LPT-216 + open LPT-192/721. next: NEVER `lesson-01-01-03-01/02/03` blinds / Low residuals LPT-676…721 / To Do **LPT-192**.
