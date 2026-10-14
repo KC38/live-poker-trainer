@@ -1701,6 +1701,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER weigh-SPR residual **LPT-677** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-04-04-01-*: interactive structural clean on tip except LPT-676 curriculum residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
 
+
 ## Fold 2026-10-14
 
 ## Fold 2026-10-14bg (d0901a24 discovery versus-open split children)
@@ -3866,3 +3867,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-692/254/690/694/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-01-01-*: interactive structural clean on tip except LPT-692 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15ah tip f86d40a1 (#2554 Range Prefer → Spot-caps SoftPulse LPT-694 Prefer)
+
+- Tip-stable `f86d40a1` after #2554 SoftPulse residual Prefer LPT-692 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-06-03-01-01/02/03` / `act-06-03-01-*`: first-child SoftPulse CAPPED→UNCAPPED→NUTS + `explainGrading` "Capped → Uncapped → Nuts." + Dart `CappedUncappedDemo.points` (CAPPED/UNCAPPED/NUTS) / layout "Tap Capped, then Uncapped, then Nuts." still pre-split under spot-caps-only → residual **LPT-694** still To Do (Relates LPT-260 — do not re-add needs-human on curriculum; race clone LPT-695 Done — do not reopen); successors SoftPulse RAISE→BET→RESPECT / CAPPED→THIN→BLUFF content-driven (do not reopen LPT-669); guided SoftPulse `cap` densify PRESENT; unguided SoftPulse `uncap` densify PRESENT; scaffolded SoftPulse `bet` map PRESENT (fixed Jh9d/Kc9s4h2d7c + 2 suit variants); checkpoint SoftPulse `attack` kind `none` densify PRESENT under attack-caps — no companion residual.
+- Curriculum **LPT-260** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-694/260/696/692/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Polar SoftPulse residual **LPT-696** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-03-01-*: interactive structural clean on tip except LPT-694 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/unguided/checkpoint outcome-tile `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-14
+
