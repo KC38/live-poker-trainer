@@ -30,9 +30,11 @@ const _lines = <String, String>{
       'Same rank in one seat — tap the matching holes.',
   'act-01-01-03-guided-button':
       'Tap the dealer button on the table — pick The seat with the D chip.',
-  'act-01-01-03-scaffolded-blinds': 'Blinds are 1/2. Tap who posts the big blind — pick The seat two left of the button, posting 2.',
-  'act-01-01-03-unguided-when':
-      'Tap when the blinds go in — pick Before any hole cards are dealt.',
+  // LPT-830: SoftPulse-quiet densify — no BB choice spoil.
+  'act-01-01-03-scaffolded-blinds':
+      'Blinds are 1/2. Tap who posts the big blind.',
+  // LPT-832: SoftPulse-quiet densify — no before-deal choice spoil.
+  'act-01-01-03-unguided-when': 'Tap when the blinds go in.',
   'act-01-02-02-guided-seven': 'Tap the five cards that make your best hand — pick Top pair with best kicker.',
   'act-01-02-02-checkpoint-build': 'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
   'act-01-04-01-unguided-end':
@@ -240,4 +242,44 @@ void main() {
       expect(speech, contains(line.split(' — ').first));
     });
   }
+
+  test(
+    'Blinds SoftPulse-quiet / SoftPulse-off densify stems do not spoil '
+    'choices (LPT-830/831/832)',
+    () {
+      const spoils = <String, List<String>>{
+        'act-01-01-03-scaffolded-blinds': [
+          'two left',
+          'posting 2',
+          'seat two left',
+        ],
+        'act-01-01-03-unguided-when': [
+          'before any hole',
+          'after the flop',
+          'showdown',
+        ],
+        'act-01-01-03-checkpoint-layout': [
+          'one seat to its left',
+          'seat 0',
+          'seat 4',
+        ],
+      };
+      for (final MapEntry(key: id, value: phrases) in spoils.entries) {
+        final resolved = selectIdentifyDensifiedCoachLine(id);
+        expect(resolved, isNotNull, reason: id);
+        final activity = catalog.activityById(id);
+        expect(activity, isNotNull, reason: id);
+        final speech = lessonFrameSpeech(activity!);
+        final lower = speech.toLowerCase();
+        expect(speech, resolved, reason: '$id frame speech matches densify');
+        for (final spoil in phrases) {
+          expect(
+            lower,
+            isNot(contains(spoil)),
+            reason: '$id must not contain "$spoil"',
+          );
+        }
+      }
+    },
+  );
 }
