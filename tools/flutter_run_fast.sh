@@ -6,6 +6,9 @@
 # cached app is installed with --use-application-binary, then hot-restarted
 # so this checkout's Dart (synced by the tool) is what runs. On a cache miss
 # it does a normal Xcode build and saves Runner.app for the next run.
+# Course JSON under assets/course/v2 is overlaid into the cached bundle
+# before launch — the native key ignores asset-only catalog edits, which
+# otherwise leave Unknown lesson / stale Hint copy (LPT-327/707/780/788).
 #
 # Usage:
 #   tools/flutter_run_fast.sh --checkout DIR --log LOG --pid-file PID \
@@ -190,6 +193,26 @@ populate_cache() {
   echo "cache: saved Runner.app for native key $key"
 }
 
+# Overlay checkout course assets into a cached Runner.app so catalog-only
+# tip advances are visible without --no-cache / full Xcode (disk_guard).
+sync_course_assets_into_app() {
+  local app="$1" src dest
+  src="$CHECKOUT/assets/course/v2"
+  dest="$app/Frameworks/App.framework/flutter_assets/assets/course/v2"
+  [[ -d "$src" && -d "$(dirname "$dest")" ]] || return 0
+  mkdir -p "$dest"
+  if [[ -f "$src/catalog.json" && -f "$dest/catalog.json" ]] &&
+    cmp -s "$src/catalog.json" "$dest/catalog.json"; then
+    return 0
+  fi
+  # Prefer cp over macOS openrsync: size-equal catalog.json edits are not
+  # overwritten without --checksum (LPT-788 class stale Unknown lesson).
+  rm -rf "$dest"
+  mkdir -p "$dest"
+  cp -R "$src/." "$dest/"
+  echo "prebuilt: synced assets/course/v2 into cached Runner.app"
+}
+
 if [[ "$MODE" == "populate" ]]; then
   wait_until "$TIMEOUT" log_ready && populate_cache "$KEY"
   exit 0
@@ -209,6 +232,7 @@ prepare_log
 
 if [[ "$USE_CACHE" == "1" && -d "$APP" ]]; then
   echo "prebuilt: native key $KEY cached; skipping Xcode for $CHECKOUT"
+  sync_course_assets_into_app "$APP" || true
   touch "$LOG.prebuilt"
   start_flutter --use-application-binary "$APP"
   code=0
