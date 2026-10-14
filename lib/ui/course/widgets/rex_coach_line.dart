@@ -95,6 +95,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // SPR decides commitment guided densified ask (LPT-412) — same path.
     'act-04-05-01-guided' =>
       'Effective 80 into pot 20 — pick SPR 4.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Weigh SPR first / append the dock footer (LPT-812; SoftPulse
+    // LPT-653; same class as LPT-809 / LPT-808 / LPT-807).
+    'act-04-05-01-checkpoint' =>
+      'About to put stacks in — tap the matching plan.',
     // Observe sticky callers densified asks (LPT-416) — same path.
     'act-04-06-01-guided' =>
       'Seat calls 7 of 9 preflops — pick High part.',
