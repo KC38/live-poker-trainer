@@ -1339,9 +1339,22 @@ Lesson-specific pattern notes (full history) live in
   SoftPulse `soft` densify PRESENT; scaffolded SoftPulse `weakish` one-per-press
   densify PRESENT; unguided SoftPulse `reject` one-per-press densify PRESENT;
   checkpoint SoftPulse `tiny` under timing-soft — no companion residual; curriculum
-  LPT-244 Done — do not clone / do not re-add needs-human; next: NEVER Dynamics
-  SoftPulse residual **LPT-686** (+ **LPT-687**) re-check / Low residuals LPT-676…802 /
-  Low curriculum **LPT-351**.
+  LPT-244 Done — do not clone / do not re-add needs-human; tip `ce7cbd1e` Prefer NEVER SoftPulse
+  residual **LPT-686** still To Do (STUCK→TILTED→GEARS under tilted/stuck-only; Relates
+  LPT-247 — do not re-add needs-human on curriculum) + companion checkpoint SoftPulse
+  `temp` under Gear changes **LPT-687** still To Do; tip `7d58c26a` Prefer NEVER SoftPulse
+  residual **LPT-690** still To Do (QUIT→GUARD→FIRST under stop-loss-only; Relates LPT-250
+  — do not re-add needs-human on curriculum) + companion checkpoint SoftPulse `edge` under
+  End sessions **LPT-691** still To Do; tip `7d58c26a` Prefer NEVER SoftPulse residual
+  **LPT-692** still To Do (RANGE→NUT→ADVANTAGE + Dart `RangeAdvantageDemo` /
+  `LessonRangeAdvantageExplainTable` under range-advantage-only; Relates LPT-254 — do not
+  re-add needs-human on curriculum); successors NUTS→PAIRED→CALLER / RANGE→NUTS→BET
+  content-driven; guided SoftPulse `pfr` densify PRESENT; scaffolded SoftPulse
+  `caller-nuts` one-per-press densify PRESENT; unguided SoftPulse `cbet` SoftPulse map
+  PRESENT; checkpoint SoftPulse `press` under press-both — no companion residual;
+  curriculum LPT-254 Done — do not clone / do not re-add needs-human; next: NEVER Spot-caps
+  SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum
+  **LPT-351**.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -1385,6 +1398,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-15ag: Tip-stable `7d58c26a` (#2553 SoftPulse residual Prefer LPT-690 on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Prefer NEVER SoftPulse residual re-check: first-child SoftPulse RANGE→NUT→ADVANTAGE + `explainGrading` "Range → Nut → Advantage." + Dart `RangeAdvantageDemo.points` RANGE/NUT/ADVANTAGE (captions Strong hands overall / More of the nuts / Own the edge) / `LessonRangeAdvantageExplainTable` / layout "Tap Range, then Nut, then Advantage." still pre-split under range-advantage-only → **LPT-692** still To Do (Relates LPT-254 — do not re-add needs-human on curriculum); SoftPulse Prefer path catch-up Dynamics **LPT-686** (+ **LPT-687**) / Session **LPT-690** (+ **LPT-691**) still To Do on tip; successors NUTS→PAIRED→CALLER / RANGE→NUTS→BET content-driven (do not reopen LPT-669); guided SoftPulse `pfr` densify PRESENT; scaffolded SoftPulse `caller-nuts` densify PRESENT; unguided SoftPulse `cbet` SoftPulse map PRESENT; checkpoint SoftPulse `press` under press-both — no companion residual. Curriculum **LPT-254** Done — do not clone. Tip-commented LPT-692/254/690/694/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum **LPT-351**.
 - 2026-10-15af: Tip-stable `ce7cbd1e` (#2552 Dynamics SoftPulse Prefer LPT-686 on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Prefer NEVER Session SoftPulse residual re-check: first-child SoftPulse QUIT→GUARD→FIRST + `explainGrading` "Quit → Guard → First." + coachMedia "…Guardrails first." + Dart `GuardrailsDemo.points` QUIT/GUARD/FIRST still pre-split under stop-loss-only → **LPT-690** still To Do (Relates LPT-250 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `edge` kind `none` densify PRESENT (prompt "Session discipline is part of?" / Your edge) under End sessions → **LPT-691** still To Do; successors BANKROLL→STAKES→DECLINE / TIRED→WILD→CASH OUT content-driven (do not reopen LPT-669); guided SoftPulse `stop` densify PRESENT; scaffolded SoftPulse `decline` one-per-press densify PRESENT; unguided SoftPulse `cash` one-per-press densify PRESENT. Curriculum **LPT-250** Done — do not clone. Tip-commented LPT-690/691/250/692/686/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum **LPT-351**.
 
 - 2026-10-15ae: Tip-stable `b9f5a676` (#2551 Timing SoftPulse Prefer LPT-685 on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Prefer NEVER Dynamics SoftPulse residual re-check: first-child SoftPulse STUCK→TILTED→GEARS + `explainGrading` "Stuck → Tilted → Gears." + coachMedia "Tables change. Stuck, tilted, tired, or shifting gears — update." + Dart `TablesChangeDemo.points` STUCK/TILTED/GEARS still pre-split under tilted/stuck-only → **LPT-686** still To Do (Relates LPT-247 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `temp` kind `none` densify PRESENT (prompt "Dynamic reads should be?" / Fresh samples) under Gear changes → **LPT-687** still To Do; successors GEAR→CHANGE→SAMPLE / COOLER→CHASE→RESET content-driven (do not reopen LPT-669); guided SoftPulse `stuck` densify PRESENT; scaffolded SoftPulse `gear` one-per-press densify PRESENT; unguided SoftPulse `reset` map PRESENT (`Jh`/`Td`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants). Curriculum **LPT-247** Done — do not clone. Tip-commented LPT-686/687/247/690/685/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Session SoftPulse residual **LPT-690** (+ **LPT-691**) re-check / Low residuals LPT-676…802 / Low curriculum **LPT-351**.
