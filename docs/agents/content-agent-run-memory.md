@@ -2746,3 +2746,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-706/288/705/704/703/198/216/708; leave open LPT-676…779; leave ui-agent alone.
 - Prefer next: NEVER `lesson-06-11-02-*` Meet TAG / Low residuals LPT-676…779 (LPT-680…708).
 - act-06-11-01-*: interactive structural clean on tip except LPT-706 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
+
+## Fold 2026-10-14fh (a087d302 Prefer NEVER Meet TAG SoftPulse re-check)
+
+- Tip-stable `a087d302` (#2397 observe-selective SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-06-11-02-01/02/03` under Meet TAG unit:
+  - first-child `act-06-11-02-explain` SoftPulse TIGHT→AGGRO→MODEL + `explainGrading` "Tight → Aggro → Model." + Dart `TagModelDemo` / `LessonTagModelExplainTable` matches Introduce TAG / The TAG model — **concept-aligned** (not SoftPulse residual; same class as careful-4bet).
+  - checkpoint SoftPulse `model` kind `none` densify PRESENT (prompt "TAG is?" / Working model vs Insult) still under Introduce TAG-only → residual **LPT-708** still To Do (needs-human; Relates LPT-291).
+  - successors `act-06-11-02-02-explain-spot` (FOLDS MOST→PLANNED BARRELS) + `act-06-11-02-03-explain-maniac` (ENTRY WIDTH→DISCIPLINE) content-driven; guided SoftPulse `tag` densify PRESENT (`deal.mode` `none`); scaffolded SoftPulse `diff` one-per-press densify PRESENT; unguided SoftPulse `tag2` one-per-press densify PRESENT.
+- Curriculum **LPT-291** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-708/291/706/709/710/198/216/705; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-11-03-*` Adjust TAG / Low residuals LPT-676…779 (LPT-680…710).
+- act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily.
