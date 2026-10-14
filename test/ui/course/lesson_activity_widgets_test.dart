@@ -31085,6 +31085,54 @@ await tester.tap(find.text('NIT'));
     }
   });
 
+  testWidgets(
+    's7 five type final densify coach does not spoil Station exploit (LPT-672)',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-07-12-01-cs',
+        order: 1,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.checkpoint,
+        renderer: ActivityRenderer.playerReadClassify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Calling Station — value more.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Sticky calls three streets. Label + exploit?',
+        choices: const [
+          CourseChoice(
+            id: 'cs',
+            label: 'Calling Station — thicker value, fewer bluffs',
+          ),
+          CourseChoice(
+            id: 'cs-wrong',
+            label: 'Calling Station — bluff more',
+          ),
+        ],
+      );
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final speech = lessonFrameSpeech(activity);
+      expect(speech, contains('tap the matching plan'));
+      expect(speech.toLowerCase(), isNot(contains('calling station')));
+      expect(speech.toLowerCase(), isNot(contains('thicker value')));
+      expect(speech, isNot(contains('Tap the best answer')));
+      // Overflow lock at mini phone size for densify shell.
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
   testWidgets('s7 five type final cs taps Station value on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-07-12-01-cs',
