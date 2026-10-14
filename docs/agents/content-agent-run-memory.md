@@ -2641,3 +2641,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-693/257/198/216/690/691/692/694; leave open LPT-676…779; leave ui-agent alone.
 - Prefer next: NEVER `lesson-06-03-01-*` capped-uncapped / Low residuals LPT-676…779 (LPT-680…694).
 - act-06-02-01-*: interactive structural clean on tip except LPT-693 Prefer-IP checkpoint residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
+
+## Fold 2026-10-14ey (0f3ab3dd Prefer NEVER capped-uncapped SoftPulse re-check)
+
+- Tip-stable `0f3ab3dd` (#2385 equity-realization SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-06-03-01-01/02/03` under capped-uncapped unit:
+  - first-child `act-06-03-01-explain` SoftPulse CAPPED→UNCAPPED→NUTS + `explainGrading` "Capped → Uncapped → Nuts." + Dart `CappedUncappedDemo.points` still pre-split under spot-caps-only → residual **LPT-694** still To Do (needs-human; race clone LPT-695 Done).
+  - successors `act-06-03-01-02-explain-uncapped` (RAISE→BET→RESPECT) + `act-06-03-01-03-explain-attack` (CAPPED→THIN→BLUFF) content-driven; guided SoftPulse `cap` densify PRESENT; unguided SoftPulse `uncap` one-per-press PRESENT; scaffolded SoftPulse `bet` one-per-press PRESENT (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants match Dart); checkpoint SoftPulse `attack` kind `none` densify PRESENT under Attack caps — matches objective (no companion residual).
+- Curriculum **LPT-260** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-694/260/693/692/198/216/696; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-04-01-*` polar-merged / Low residuals LPT-676…779 (LPT-680…696).
+- act-06-03-01-*: interactive structural clean on tip except LPT-694 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+

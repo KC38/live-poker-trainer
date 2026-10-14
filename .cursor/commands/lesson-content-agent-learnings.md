@@ -460,16 +460,25 @@ Lesson-specific pattern notes (full history) live in
   one-per-press PRESENT; unguided SoftPulse `cbet` map PRESENT
   (fixed AhKd/Kc7s2d + suit variants); checkpoint SoftPulse `press` kind
   `none` densify PRESENT (matches pressure-when-own-both); curriculum
-  LPT-254 Done — do not clone / do not re-add needs-human; tip `d8023786` Prefer NEVER equity-realization children: first-child SoftPulse
+  LPT-254 Done — do not clone / do not re-add needs-human;   tip `d8023786` Prefer NEVER equity-realization children: first-child SoftPulse
   EQUITY→CASH→POS + Dart `EquityRealizeDemo` POS-led Prefer-IP framing OK
   (not a NUT-style successor leak); guided SoftPulse `ip` densify PRESENT;
   successors OOP→BARRELS→DISCOUNT / SEMI-BLUFF→FOLDS→OUTS content-driven;
   scaffolded SoftPulse `discount` + unguided SoftPulse `realize` one-per-press
   PRESENT; checkpoint SoftPulse `pos` Position+initiative under Prefer-IP →
   residual **LPT-693** still To Do (needs-human); curriculum LPT-257 Done —
-  do not clone / do not re-add needs-human; next: NEVER
-  `lesson-06-03-01-*` capped-uncapped / Low residuals LPT-676…779
-  (LPT-680…694).
+  do not clone / do not re-add needs-human; tip `0f3ab3dd` Prefer NEVER
+  capped-uncapped children: first-child SoftPulse CAPPED→UNCAPPED→NUTS + Dart
+  `CappedUncappedDemo` still pre-split under spot-caps-only → residual
+  **LPT-694** still To Do (needs-human; race clone LPT-695 Done); successors
+  RAISE→BET→RESPECT / CAPPED→THIN→BLUFF content-driven; guided SoftPulse `cap`
+  densify PRESENT; unguided SoftPulse `uncap` + scaffolded SoftPulse `bet`
+  one-per-press PRESENT (Jh9d/Kc9s4h2d7c + suit variants match Dart);
+  checkpoint SoftPulse `attack` kind `none` densify PRESENT (matches Attack
+  caps — no companion residual); curriculum LPT-260 Done — do not clone /
+  do not re-add needs-human; next: NEVER
+  `lesson-06-04-01-*` polar-merged / Low residuals LPT-676…779
+  (LPT-680…696).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -512,6 +521,8 @@ Lesson-specific pattern notes (full history) live in
 - Prefer when catalog JSON gaps are all **0** (incl. densify-tap after #2217 **LPT-628** Done): do a discovery walk on the oldest unfresh / fold-next `lesson:` surface instead of re-spamming Done parents. Tip-comment the open curriculum split for that lesson when still valid (e.g. Hand ranks **LPT-90**, best-five **LPT-93**, winning-pots **LPT-106**, facing-raise **LPT-127**, implied-odds **LPT-230**, thin-value **LPT-233**, position-labels **LPT-114**, live-habits **LPT-133**, effective-stacks **LPT-130**, Full-ring baseline **LPT-668**, Observe sticky **LPT-186**, Observe wild **LPT-205**, Meet Nit **LPT-198**, Observe narrow **LPT-195**, Meet Calling Station **LPT-189**, Adjust Station **LPT-192** (human-approved — do **not** re-add `needs-human`), Confidence **LPT-215**, Meet TAG **LPT-291**, overbets **LPT-267** / blockers **LPT-270** / min-defense **LPT-273** / mix **LPT-277** / 3-bet-4-bet **LPT-282** / difficult-folds **LPT-285** (human-approved — do **not** re-add `needs-human`), preflop-to-flop **LPT-310**…); Capstone unit lessons **and** Final five-type `lesson-07-12-01-five-type-final` have **no** curriculum-split ticket (synthesis / assessment containers) — Capstone **LPT-348** Done (#2207 `transfer`); Final is assessment hintless (LPT-352 Done); jump_test / section checkpoints also skip curriculum-split — but Full-ring baseline `lesson-02-07-01-baseline-full-hand` is **not** an assessment container (open / vs-raise / habit objectives) → **LPT-668**; Capstone **LPT-348** Done (#2207) — do not reopen; after #2153 **LPT-667** Done (one-per-press **0**) — do not reopen; tip-comment Done tickets only when SHA missing. After `lesson-06-10-01-difficult-folds` on tip `463fbbb3`, next includes `lesson-06-11-01-observe-selective` / oldest unfresh / Low curriculum. After a learnings-only tip lands, Capstone **LPT-348** / prior curriculum may already **HAS** the new tip SHA — skip re-spam; still tip-comment *this* lesson’s curriculum (if any) + Done siblings that **NEED**. Re-`get` before skip when coverage over-claims. When coverage claims `learnings: updated` for a tip but only a draft chore PR exists — or a sibling walk left `learnings: pending` while another fold merged — rescue that fold onto the next chore branch before walking the next lesson (tip `11b692c0` overbets/blockers/min-defense #2216/#2218 rescued earlier; tip `d41550f0` type-identification was `pending` until earlier fold). Versus-open `random_in_class` without distractor variants stays closed with catalog **LPT-627** (fixed-only) — do not reopen **LPT-380**.
 
 ## Recent fold
+
+- 2026-10-14ey: Tip-stable `0f3ab3dd` (#2385 equity-realization SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER capped-uncapped children `lesson-06-03-01-01/02/03`: first-child SoftPulse CAPPED→UNCAPPED→NUTS + Dart `CappedUncappedDemo` still pre-split under spot-caps-only → residual **LPT-694** still To Do (needs-human; race clone LPT-695 Done); guided SoftPulse `cap` densify PRESENT; successors RAISE→BET→RESPECT / CAPPED→THIN→BLUFF content-driven (do not reopen LPT-669); unguided SoftPulse `uncap` + scaffolded SoftPulse `bet` one-per-press PRESENT (Jh9d/Kc9s4h2d7c + suit variants match Dart); checkpoint SoftPulse `attack` kind `none` densify PRESENT (matches Attack caps — no companion residual). Curriculum **LPT-260** Done — do not clone / do not re-add needs-human. Tip-commented LPT-694/260/693/692/198/216/696; leave open LPT-676…779; leave ui-agent alone. next: NEVER `lesson-06-04-01-*` polar-merged / Low residuals LPT-676…779 (LPT-680…696).
 
 - 2026-10-14ex: Tip-stable `d8023786` (#2384 range-nut SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER equity-realization children `lesson-06-02-01-01/02/03`: first-child SoftPulse EQUITY→CASH→POS + Dart `EquityRealizeDemo` POS-led Prefer-IP framing OK (not a NUT-style successor leak); guided SoftPulse `ip` densify PRESENT; successors OOP→BARRELS→DISCOUNT / SEMI-BLUFF→FOLDS→OUTS content-driven (do not reopen LPT-669); scaffolded SoftPulse `discount` one-per-press PRESENT; unguided SoftPulse `realize` one-per-press PRESENT; checkpoint SoftPulse `pos` kind `none` densify PRESENT grades Position + initiative under Prefer-IP-only → residual **LPT-693** still To Do (needs-human). Curriculum **LPT-257** Done — do not clone / do not re-add needs-human. Tip-commented LPT-693/257/198/216/690/691/692/694; leave open LPT-676…779; leave ui-agent alone. next: NEVER `lesson-06-03-01-*` capped-uncapped / Low residuals LPT-676…779 (LPT-680…694).
 
