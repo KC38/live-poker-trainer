@@ -2331,3 +2331,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - successors `act-02-07-01-02-explain-vsraise` (OPEN→PLAN) + `act-02-07-01-03-explain-habits` (COVER→WAIT) content-driven; guided SoftPulse `open-ajs` + scaffolded SoftPulse `call-22` one-per-press + unguided SoftPulse `lab-3bet` one-per-press + checkpoint SoftPulse `cover-wait` kind `none` densify PRESENT.
 - Curriculum **LPT-668** Done — do not clone / do not re-add needs-human. Tip-commented LPT-668; leave open LPT-749/748/743/741/740….
 - Prefer next: NEVER `lesson-03-01-01-*` table-read / Low residuals LPT-676…749.
+
+## Fold 2026-10-14dp (3704a908 discovery table-read SoftPulse residual)
+
+- Tip-stable `3704a908` (#2334). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-03-01-01-01/02/03` under table-read unit:
+  - first-child `act-03-01-01-explain` SoftPulse POT→STACKS→BUTTON→WHO ACTS + `explainGrading` under Pot-and-stacks-only → filed **LPT-750** (needs-human; Relates LPT-140).
+  - successors `act-03-01-01-02-explain-seat` (BUTTON→WHO ACTS) + `act-03-01-01-03-explain-verbal` (SAY→BINDING) content-driven; guided SoftPulse `pot-21` + checkpoint SoftPulse `eff-55` kind `none` PRESENT.
+- Curriculum **LPT-140** Done — do not clone / do not re-add needs-human. Tip-commented LPT-140/750 + Meet Nit LPT-198 / LPT-216; leave open LPT-750/749/748/743/741/740….
+- Prefer next: NEVER `lesson-03-02-01-*` flop-class / Low residuals LPT-676…750.
