@@ -40,3 +40,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-14
 
 - Prefer wiring `LessonActionDock(identifyUnavailable: spot.identifyUnavailable)` in `AuthoredMultiStepActivity` when Capstone/transfer spots set the flag — setting `identifyUnavailable` on `LessonActionSpot` alone does not reach the dock (LPT-670).
+
+## Fold 2026-10-14
+
+- Prefer patching `~/.live-poker-trainer/app-cache/<key>/Runner.app/.../assets/course/v2/catalog.json` from the checkout (or `--no-cache` rebuild) when `flutter_run_fast` hits Unknown lesson for an id that exists in source `catalog.json` — the native cache key ignores asset-only catalog updates, so hot-restart alone keeps the stale bundle (LPT-707).

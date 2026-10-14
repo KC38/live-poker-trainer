@@ -142,9 +142,11 @@ const _lines = <String, String>{
   'act-05-09-01-unguided':
       'Tired, winning small, table getting wild. Best — pick Cash out.',
   'act-05-09-01-checkpoint': 'Session discipline is part of — pick Your edge.',
-  'act-05-09-02-cp-multi': 'Four-way pot priority — pick Nut potential.',
-  'act-05-09-02-cp-tell': 'Instant shove proves — pick Soft evidence.',
-  'act-05-09-02-cp-stop': 'Hit stop-loss. Do — pick Honor stop.',
+  // LPT-717: SoftPulse-off densify — no correct-tile spoil.
+  'act-05-09-02-cp-multi':
+      'Four-way pot priority — tap the matching priority.',
+  'act-05-09-02-cp-tell': 'Instant shove proves — tap the matching read.',
+  'act-05-09-02-cp-stop': 'Hit stop-loss. Do — tap the matching plan.',
   'act-06-01-01-guided': 'PFR on A-high dry flop. Who often has range advantage — pick Preflop raiser.',
   'act-06-01-01-scaffolded': 'Paired board. Caller defends wide. Who may have nut advantage — pick Wide caller.',
   'act-06-01-01-checkpoint': 'Advantage is a reason to — pick Apply pressure.',
