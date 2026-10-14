@@ -3527,3 +3527,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Dynamics SoftPulse residual **LPT-686** (+ **LPT-687**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-07-01-*: interactive structural clean on tip except LPT-685 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-14ir tip c01b437a (#2506 Timing Prefer → Dynamics SoftPulse LPT-686 Prefer)
+
+- Tip-stable `c01b437a` after #2506 SoftPulse residual Prefer LPT-685 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-05-08-01-01/02/03` / `act-05-08-01-*`: first-child SoftPulse STUCK→TILTED→GEARS + `explainGrading` "Stuck → Tilted → Gears." still pre-split under tilted/stuck-only → residual **LPT-686** still To Do (Relates LPT-247 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `temp` kind `none` densify PRESENT under Gear changes → **LPT-687** still To Do; successors SoftPulse GEAR→CHANGE→SAMPLE / COOLER→CHASE→RESET content-driven (do not reopen LPT-669); guided SoftPulse `stuck` densify PRESENT; scaffolded SoftPulse `gear` densify PRESENT; unguided SoftPulse `reset` map PRESENT.
+- Curriculum **LPT-247** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-686/687/247/690/685/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER Session SoftPulse residual **LPT-690** (+ **LPT-691**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-08-01-*: interactive structural clean on tip except LPT-686/687 SoftPulse residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
