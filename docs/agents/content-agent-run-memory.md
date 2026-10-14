@@ -3803,3 +3803,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-677/182/676/681/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Estimate SoftPulse residual **LPT-681** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-04-05-01-*: interactive structural clean on tip except LPT-677 checkpoint placement residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15aa tip 545ee706 (#2543 weigh-SPR Prefer → Estimate SoftPulse LPT-681 Prefer)
+
+- Tip-stable `545ee706` after #2543 weigh-SPR Prefer LPT-677 fold (tip also advanced #2544 ui-agent). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Estimate SoftPulse residual re-check `lesson-05-03-01-01/02/03` / `act-05-03-01-*`: first-child SoftPulse IMPLIED→REVERSE→SECOND + `explainGrading` "Implied → Reverse → Second." + Dart `ImpliedOddsDemo` / `CoachDialogueVisualKind.impliedOdds` (IMPLIED "They pay later" / REVERSE "You pay later" / SECOND "Trap improves") + coachMedia still defines reverse/second-best still pre-split under estimate-only → residual **LPT-681** still To Do (Relates LPT-230 — do not re-add needs-human on curriculum); successors SoftPulse REVERSE→DOMINATED→FOLD / NON-NUT→MULTIWAY→SKIP content-driven (do not reopen LPT-669); guided SoftPulse `call-io` densify PRESENT (`Jh`/`9d`·`8s`/`7c`/`2d` +2 suit variants); scaffolded SoftPulse `rio` densify PRESENT; unguided SoftPulse `nonut` densify PRESENT; checkpoint SoftPulse `depth-pay` kind `none` densify PRESENT (`ioDepthPay`) under Estimate — no companion residual.
+- Curriculum **LPT-230** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-681/230/682/677/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Thin SoftPulse residual **LPT-682** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-03-01-*: interactive structural clean on tip except LPT-681 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); SoftPulse maps PRESENT — do not reopen LPT-625; densify PRESENT — do not reopen LPT-628.
+

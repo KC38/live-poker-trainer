@@ -1303,8 +1303,16 @@ Lesson-specific pattern notes (full history) live in
   Relates LPT-182 — do not re-add needs-human on curriculum); successors LOW SPR→COMMIT /
   HIGH SPR→FLEXIBLE content-driven; guided SoftPulse `spr-4` densify PRESENT; scaffolded
   SoftPulse `commit` SoftPulse map PRESENT; unguided SoftPulse `flexible` SoftPulse map
-  PRESENT; curriculum LPT-182 Done — do not clone / do not re-add needs-human; next: NEVER
-  Estimate SoftPulse residual **LPT-681** re-check / Low residuals LPT-676…802 / Low
+  PRESENT; curriculum LPT-182 Done — do not clone / do not re-add needs-human; tip `545ee706`
+  Prefer NEVER Estimate SoftPulse residual **LPT-681** still To Do (first-child SoftPulse
+  IMPLIED→REVERSE→SECOND + `explainGrading` "Implied → Reverse → Second." + Dart
+  `ImpliedOddsDemo` / `CoachDialogueVisualKind.impliedOdds` still pre-split under
+  estimate-only; Relates LPT-230 — do not re-add needs-human on curriculum); successors
+  REVERSE→DOMINATED→FOLD / NON-NUT→MULTIWAY→SKIP content-driven; guided SoftPulse
+  `call-io` densify PRESENT; scaffolded SoftPulse `rio` densify PRESENT; unguided SoftPulse
+  `nonut` densify PRESENT; checkpoint SoftPulse `depth-pay` under Estimate — no companion
+  residual; curriculum LPT-230 Done — do not clone / do not re-add needs-human; next: NEVER
+  Thin SoftPulse residual **LPT-682** re-check / Low residuals LPT-676…802 / Low
   curriculum **LPT-351**.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
