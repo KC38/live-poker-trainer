@@ -1638,6 +1638,10 @@ export UI_AGENT_SKIP_SIM_PREFLIGHT=1
 grep -q 'EMPTY_QUEUE_SLEEP' "$LOOP" || fail "loop must define EMPTY_QUEUE_SLEEP"
 grep -q 'ui-queue still empty after run; sleeping' "$LOOP" \
   || fail "run_loop must sleep between discovery walks when queue still empty"
+# Pre-sleep deploy: LPT-813 left marker behind after 409; do not wait 900s.
+sed -n '/\[\[ "\$code" -eq 0 \]\] && ! ui_queue_has_ticket/,/sleep_unless_stopped_or_queue "\$EMPTY_QUEUE_SLEEP"/p' \
+  "$LOOP" | grep -q 'deploy_functions_if_needed' \
+  || fail "run_loop must call deploy_functions_if_needed before empty-queue sleep"
 
 
 # sleep_unless_stopped honors STOP_FILE mid-sleep (soft-stop during empty-queue).

@@ -2921,6 +2921,11 @@ run_loop() {
           log "last run was gateway-timeout; sleeping ${GATEWAY_TIMEOUT_SLEEP}s before retry"
           sleep_unless_stopped "$GATEWAY_TIMEOUT_SLEEP"
         elif [[ "$code" -eq 0 ]] && ! ui_queue_has_ticket; then
+          # Ticket merges can leave functions/ drifted (partial agent deploy /
+          # Firebase 409). Deploy before the empty-queue backoff so course_bank
+          # is not stale for the full EMPTY_QUEUE_SLEEP.
+          advance_functions_deploy_marker_if_unchanged || true
+          deploy_functions_if_needed || true
           # Discovery (or clean fix) left the queue empty — back off before
           # the next walk so we do not burn runs every GAP second. Wake
           # early if a ticket appears mid-sleep (do not wait full 900s).
