@@ -4049,3 +4049,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-794/314/795/790/351/198/216; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ rule **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts are `deal.mode` `none` map tiles — do not file handFamily.
+
+## Fold 2026-10-15ay tip f134ad74 (#2581 Map Prefer → Compose SoftPulse LPT-795 Prefer)
+
+- Tip-stable `f134ad74` (#2581 Map SoftPulse Prefer on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Catalog parents Done — no open-parent sync.
+- Prefer NEVER Compose SoftPulse residual **LPT-795** re-check (`lesson-07-03-01-01/02/03`):
+  - first-child SoftPulse VALUE→BLUFF→HOLD + `explainGrading` "Value → Bluff → Hold." + Dart `RiverCompositionDemo.points` VALUE/BLUFF/HOLD / `LessonRiverCompositionExplainTable` still pre-split under Choose-river-value-candidates-only → **LPT-795** still To Do (needs-human; Relates LPT-317).
+  - companion checkpoint SoftPulse `rule` kind `none` densify PRESENT under Choose-river-value → **LPT-796** still To Do.
+  - successors SoftPulse BLOCKER→FEWER CALLS / NO STORY→CHECK content-driven (do not reopen LPT-669); guided SoftPulse `val` PRESENT; scaffolded SoftPulse `block` one-per-press densify PRESENT; unguided SoftPulse `check` one-per-press densify PRESENT.
+- Curriculum **LPT-317** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-795/796/317/798/794/351/198/216.
+- Prefer next: NEVER Pot SoftPulse residual **LPT-798** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-03-01-*: interactive structural clean on tip except LPT-795 SoftPulse + LPT-796 rule companions; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
