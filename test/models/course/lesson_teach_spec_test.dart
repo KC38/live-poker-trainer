@@ -471,7 +471,7 @@ const _lessons = <String, List<String>>{
     'act-06-10-01-checkpoint',
   ],
   // LPT-286
-  'lesson-06-11-01-observe-selective': [
+  'lesson-06-11-01-01-selective-entry': [
     'act-06-11-01-explain',
     'act-06-11-01-guided',
     'act-06-11-01-scaffolded',
@@ -479,7 +479,7 @@ const _lessons = <String, List<String>>{
     'act-06-11-01-checkpoint',
   ],
   // LPT-289
-  'lesson-06-11-02-meet-tag': [
+  'lesson-06-11-02-01-tag-model': [
     'act-06-11-02-explain',
     'act-06-11-02-guided',
     'act-06-11-02-scaffolded',
@@ -487,7 +487,7 @@ const _lessons = <String, List<String>>{
     'act-06-11-02-checkpoint',
   ],
   // LPT-292
-  'lesson-06-11-03-adjust-tag': [
+  'lesson-06-11-03-01-respect-aggression': [
     'act-06-11-03-explain',
     'act-06-11-03-guided',
     'act-06-11-03-scaffolded',
@@ -495,7 +495,7 @@ const _lessons = <String, List<String>>{
     'act-06-11-03-checkpoint',
   ],
   // LPT-298
-  'lesson-06-12-02-meet-lag': [
+  'lesson-06-12-02-01-lag-model': [
     'act-06-12-02-explain',
     'act-06-12-02-guided',
     'act-06-12-02-scaffolded',
@@ -503,7 +503,7 @@ const _lessons = <String, List<String>>{
     'act-06-12-02-checkpoint',
   ],
   // LPT-304
-  'lesson-06-13-01-mix-five-types': [
+  'lesson-06-13-01-01-station-thin-value': [
     'act-06-13-01-explain',
     'act-06-13-01-guided',
     'act-06-13-01-scaffolded',
@@ -655,7 +655,7 @@ const _lessons = <String, List<String>>{
     'act-06-08-01-checkpoint',
   ],
   // LPT-295
-  'lesson-06-12-01-observe-wide-pressure': [
+  'lesson-06-12-01-01-wide-entry': [
     'act-06-12-01-explain',
     'act-06-12-01-guided',
     'act-06-12-01-scaffolded',
@@ -663,7 +663,7 @@ const _lessons = <String, List<String>>{
     'act-06-12-01-checkpoint',
   ],
   // LPT-301
-  'lesson-06-12-03-adjust-lag': [
+  'lesson-06-12-03-01-call-wider': [
     'act-06-12-03-explain',
     'act-06-12-03-guided',
     'act-06-12-03-scaffolded',

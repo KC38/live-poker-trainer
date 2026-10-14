@@ -41,10 +41,10 @@ describe("course catalog bank", () => {
     expect(courseBank.handLabsById["lab-04-10-01-btn-vs-nit"]).toBeTruthy();
     expect(
       courseBank.playerTypes.find((p) => p.id === "tag")?.introducedByLessonId,
-    ).toBe("lesson-06-11-02-meet-tag");
+    ).toBe("lesson-06-11-02-01-tag-model");
     expect(
       courseBank.playerTypes.find((p) => p.id === "lag")?.introducedByLessonId,
-    ).toBe("lesson-06-12-02-meet-lag");
+    ).toBe("lesson-06-12-02-01-lag-model");
   });
 
   it("matches the generated client catalog checksum and id order", () => {

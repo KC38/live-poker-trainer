@@ -22,7 +22,7 @@ Widget _frame(Widget child) {
       ),
       home: Scaffold(
         body: TableFeaturesScope(
-          features: TableFeatures.forLessonId('lesson-06-12-03-adjust-lag'),
+          features: TableFeatures.forLessonId('lesson-06-12-03-01-call-wider'),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),
       ),

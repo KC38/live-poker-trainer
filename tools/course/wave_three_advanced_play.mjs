@@ -16,8 +16,8 @@ import {
   unit,
 } from "./wave_one_foundations.mjs";
 
-export const MEET_TAG = "lesson-06-11-02-meet-tag";
-export const MEET_LAG = "lesson-06-12-02-meet-lag";
+export const MEET_TAG = "lesson-06-11-02-meet-tag"; // retired LPT-291: split in course.json (lessonSplitMap)
+export const MEET_LAG = "lesson-06-12-02-meet-lag"; // retired LPT-300: split in course.json (lessonSplitMap)
 
 /** @returns {object} Section 5 — Winning 1/2 */
 export function buildSectionFive() {
@@ -1231,13 +1231,13 @@ export function buildSectionSix() {
   const L060801 = "lesson-06-08-01-mixed-strategy"; // retired LPT-277: split in course.json (lessonSplitMap)
   const L060901 = "lesson-06-09-01-threebet-fourbet"; // retired LPT-282: split in course.json (lessonSplitMap)
   const L061001 = "lesson-06-10-01-difficult-folds"; // retired LPT-285: split in course.json (lessonSplitMap)
-  const L061101 = "lesson-06-11-01-observe-selective";
+  const L061101 = "lesson-06-11-01-observe-selective"; // retired LPT-288: split in course.json (lessonSplitMap)
   const L061102 = MEET_TAG;
-  const L061103 = "lesson-06-11-03-adjust-tag";
-  const L061201 = "lesson-06-12-01-observe-wide-pressure";
+  const L061103 = "lesson-06-11-03-adjust-tag"; // retired LPT-294: split in course.json (lessonSplitMap)
+  const L061201 = "lesson-06-12-01-observe-wide-pressure"; // retired LPT-297: split in course.json (lessonSplitMap)
   const L061202 = MEET_LAG;
-  const L061203 = "lesson-06-12-03-adjust-lag";
-  const L061301 = "lesson-06-13-01-mix-five-types";
+  const L061203 = "lesson-06-12-03-adjust-lag"; // retired LPT-303: split in course.json (lessonSplitMap)
+  const L061301 = "lesson-06-13-01-mix-five-types"; // retired LPT-306: split in course.json (lessonSplitMap)
   const L061302 = "lesson-06-13-02-section-six-checkpoint";
 
   return {
