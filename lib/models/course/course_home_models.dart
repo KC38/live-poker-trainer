@@ -9,6 +9,22 @@ import 'package:live_poker_trainer/models/course/course_session_models.dart';
 /// Mastery threshold for the "mastered" node state.
 const kCourseMasteryThreshold = 0.85;
 
+/// Whether SoftPulse-quiet review applies for [lessonId].
+///
+/// Prefer live profile [completedLessonIds] over a stale Home
+/// `node.hasCompleted` snapshot. After `agent_seed.py fresh` clears the
+/// id, a cached Home node can still say completed and would SoftPulse-quiet
+/// a guided teach until Hint (LPT-828).
+bool lessonIsSoftPulseQuietReview({
+  required bool entryIsReview,
+  required Iterable<String> completedLessonIds,
+  required String lessonId,
+}) {
+  if (entryIsReview) return true;
+  if (lessonId.isEmpty) return false;
+  return completedLessonIds.contains(lessonId);
+}
+
 /// Visual / semantic kind of a Home path node.
 enum CourseNodeKind { lesson, practice, checkpoint, reward, jumpTest, handLab }
 
