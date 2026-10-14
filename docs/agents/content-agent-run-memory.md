@@ -4014,3 +4014,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Mix-five SoftPulse residual **LPT-721** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-12-03-*: interactive structural clean on tip except LPT-718 SoftPulse + LPT-719 cite companions; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15av tip 643b2f0d (#2574 Adjust-LAG Prefer → Mix-five SoftPulse LPT-721 Prefer)
+
+- Tip-stable `643b2f0d` (#2574 Adjust-LAG SoftPulse Prefer on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Catalog parents Done — no open-parent sync.
+- Prefer NEVER Mix-five SoftPulse residual **LPT-721** re-check (`lesson-06-13-01-01/02/03/04`):
+  - first-child SoftPulse CARDS→SEATS→EVIDENCE + `explainGrading` "Cards → Seats → Evidence." + Dart `ExploitEvidenceDemo.points` CARDS/SEATS/EVIDENCE / `LessonExploitEvidenceExplainTable` + coachMedia unit framing still pre-split under Station-thin-only → **LPT-721** still To Do (needs-human; Relates LPT-306).
+  - successors SoftPulse NIT CHECK-RAISE→FOLD / LAG BARREL→CALL / TENDENCY→LINE content-driven (do not reopen LPT-669); guided SoftPulse `cs` SoftPulse map PRESENT; scaffolded SoftPulse `nit` one-per-press SoftPulse map PRESENT; unguided SoftPulse `lag` one-per-press SoftPulse map PRESENT; cite checkpoint SoftPulse `tag` densify PRESENT under Cite — matches (no companion residual).
+- Curriculum **LPT-306** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-721/306/790/718/351/198/216.
+- Prefer next: NEVER preflop-to-flop SoftPulse residual **LPT-790** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-13-01-*: interactive structural clean on tip except LPT-721 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
