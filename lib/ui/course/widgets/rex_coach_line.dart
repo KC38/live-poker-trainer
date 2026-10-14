@@ -309,8 +309,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
     'act-01-01-02-unguided-suited' =>
       'Tap the suited hole cards — pick Suited.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Pocket pair in the idle bubble (LPT-804; SoftPulse LPT-653;
+    // same class as LPT-803 / LPT-788 / LPT-672).
     'act-01-01-02-checkpoint-pair' =>
-      'Tap the pocket pair — pick Pocket pair.',
+      'Same rank in one seat — tap the matching holes.',
     // LPT-83 split successors (LPT-628 reopen) — same asks as their source steps.
     'act-01-01-02-01-scaffolded-suits' =>
       'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
@@ -354,8 +357,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Same hand early versus button — tap the matching edge.',
     'act-02-01-02-unguided-wait' =>
       'Action is on UTG. You are on the button. What do you do — pick Wait — do not act yet.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name BTN in the idle bubble (LPT-803; SoftPulse LPT-653; same class
+    // as LPT-788 / LPT-783 / LPT-672).
     'act-02-01-02-checkpoint-full' =>
-      'Six-max flop, everyone in. Who acts last — pick BTN.',
+      'Six-max flop, everyone in — tap who acts last.',
     'act-02-02-01-guided-pair' =>
       'Tap the family for your holes — pick Pocket pair.',
     'act-02-02-01-scaffolded-broadway' =>
@@ -415,8 +421,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Board Jh 8h 3c. You hold Ah 9h. Class — pick Strong draw — nut flush draw.',
     'act-03-02-01-unguided' =>
       'Board Qc 7d 2s. You hold 5h 4h multiway. Class — pick Air — little equity, no pair.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Draw / open-ended straight draw, and never hardcode template
+    // board/holes (LPT-805; SoftPulse LPT-653; remap honesty LPT-806 class;
+    // same as LPT-803 / LPT-788 / LPT-672).
     'act-03-02-01-checkpoint' =>
-      'Board Ts 9s 4d. You hold Js 8d. Best label — pick Draw — open-ended straight draw.',
+      'Best label for this flop class — tap the matching label.',
     'act-03-05-01-guided' =>
       'Flop As 7d 2c. Turn 3h. For a missed c-bettor, is this a brick — pick Brick — rarely helps the caller.',
     'act-03-05-01-checkpoint' =>

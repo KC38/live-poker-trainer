@@ -688,6 +688,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Protect cards wait checkpoint densified coach | Protect cards, wait your turn checkpoint densified coach (`act-02-06-01-checkpoint-oot`) uses a non-spoiling stem (situation + tap verb, no You acted out of turn tile label) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-786; SoftPulse-off intentional per LPT-653; same class as LPT-785 / LPT-784 / LPT-672). |
 | Pot and stacks checkpoint densified coach | Pot and stacks checkpoint densified coach (`act-03-01-01-checkpoint`) uses a non-spoiling stem (situation + tap verb, no Effective 55bb / the 18 pot tile label) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-787; SoftPulse-off intentional per LPT-653; same class as LPT-785 / LPT-786 / LPT-672). |
 | Keep live habits checkpoint densified coach | Keep live habits while deciding checkpoint densified coach (`act-02-07-01-checkpoint-habit`) uses a non-spoiling stem (situation + tap verb, no Cover your cards and wait your turn tile label) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-788; SoftPulse-off intentional per LPT-653; same class as LPT-786 / LPT-787 / LPT-672). |
+| Postflop / pairs / draws SoftPulse-off densify | Postflop order checkpoint (`act-02-01-02-checkpoint-full`), Pairs and suited checkpoint (`act-01-01-02-checkpoint-pair`), and Draws versus showdown checkpoint (`act-03-02-01-checkpoint`) densified coaches use non-spoiling stems (situation + tap verb; no BTN / Pocket pair / Draw tile labels; draws stem omits template board/holes) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-803 / LPT-804 / LPT-805; SoftPulse-off intentional per LPT-653; same class as LPT-788 / LPT-672). |
 | The Maniac model checkpoint densified coach | The Maniac model checkpoint densified coach (`act-04-08-02-checkpoint`) uses a non-spoiling stem (situation + tap verb, no Calling Station, Nit, and Maniac tile label) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-771; SoftPulse-off intentional per LPT-653; same class as LPT-770 / LPT-765 / LPT-764 / LPT-746 / LPT-672). |
 | Pressure when you own both checkpoint densified coach | Pressure when you own both checkpoint densified coach (`act-06-01-01-checkpoint`) uses a non-spoiling stem (situation + tap verb, no Apply pressure tile label) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-764; SoftPulse-off intentional per LPT-653; same class as LPT-763 / LPT-746 / LPT-672). |
 | Position realizes equity checkpoint densified coach | Position realizes equity checkpoint densified coach (`act-06-02-01-checkpoint`) uses a non-spoiling stem (situation + tap verb, no Position + initiative tile labels) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-766; SoftPulse-off intentional per LPT-653; same class as LPT-764 / LPT-763 / LPT-746 / LPT-672). |
@@ -1841,7 +1842,7 @@ felt.
 | Your two cards | Your hole cards on the felt; Hint keeps "two cards" under board deuce remap (LPT-791); Nice! keeps "Those two stay" (LPT-797); densify coach stem-only (LPT-792) | — |
 | Suits | Suit taps on board cards; explain SoftPulse hearts → diamonds → clubs → spades (LPT-353); unit `unit-01-01-02-suits-and-ranks` (LPT-83 split) | — |
 | Ranks | Board ranks low to high; SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
-| Pairs and suited | Suited / pair seats; scaffolded pressHints (LPT-82); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
+| Pairs and suited | Suited / pair seats; scaffolded pressHints (LPT-82); checkpoint SoftPulse-off densify stem non-spoiling (LPT-804); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
 | Dealer button | Dealer button, SB, BB on the seats; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
 | Small and big blinds | explain SoftPulse cues SB → BB; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
 | Blinds post first | explain SoftPulse cues BLINDS → DEAL; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
@@ -1869,7 +1870,7 @@ felt.
 | Blind labels | explain SoftPulse cues SB → BB; unit `unit-02-01-position-power` (LPT-114 split) | — |
 | Later seats play better | explain SoftPulse cues D; checkpoint SoftPulse-off densify stem non-spoiling (LPT-783); unit `unit-02-01-position-power` (LPT-114 split) | — |
 | Preflop order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635); unit `unit-02-01-position-power` (LPT-117 split) | scaffolded pressHints one-per-press (LPT-667) |
-| Postflop order | explain SoftPulse cues SB → BTN; unit `unit-02-01-position-power` (LPT-117 split) | — |
+| Postflop order | explain SoftPulse cues SB → BTN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-803); unit `unit-02-01-position-power` (LPT-117 split) | — |
 | Wait your turn | explain SoftPulse cues EARLIER SEATS → YOUR TURN; unit `unit-02-01-position-power` (LPT-117 split) | — |
 | Pocket pairs | Pairs, Broadways, Suited aces, Connectors; densified SoftPulse one gold via `guideRegion` (LPT-634); explain SoftPulse cues Pairs → Broadways → Suited aces → Connectors (LPT-635); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
 | Broadways and suited aces | explain SoftPulse cues BROADWAY → SUITED ACE; unit `unit-02-02-starting-hands` (LPT-121 split) | — |
@@ -1894,7 +1895,7 @@ felt.
 | Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS; unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Words are binding | explain SoftPulse cues SAY → BINDING; unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Made hands | Made, Draw, SDV, Air; fixed steps author suit-rotated `deal.variants` (LPT-384); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
-| Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE; unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE; checkpoint SoftPulse-off densify stem non-spoiling (no Draw tile / template cards) (LPT-805); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Recognize air | explain SoftPulse cues AIR → FOLD EQUITY; unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Clean versus dirty outs | Clean, Dirty, Price; densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Pot odds versus equity | explain SoftPulse cues PRICE → POT → EQUITY; unit `unit-03-03-outs-price` (LPT-146 split) | — |
