@@ -2653,3 +2653,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-06-04-01-*` polar-merged / Low residuals LPT-676…779 (LPT-680…696).
 - act-06-03-01-*: interactive structural clean on tip except LPT-694 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14ez (a6a2ac09 Prefer NEVER polar-merged SoftPulse re-check)
+
+- Tip-stable `a6a2ac09` (#2386 capped SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-06-04-01-01/02/03` under polar-merged unit:
+  - first-child `act-06-04-01-explain` SoftPulse POLAR→MERGED→SIZE + `explainGrading` "Polar → Merged → Size." + Dart `PolarMergedDemo` still pre-split under polarized-sizing-only → residual **LPT-696** still To Do (needs-human).
+  - successors `act-06-04-01-02-explain-merged` (MERGED→MEDIUM→VALUE) + `act-06-04-01-03-explain-mismatch` (SIZE→SHAPE→MATCH) content-driven; guided SoftPulse `polar` densify PRESENT; scaffolded SoftPulse `mid` one-per-press PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants); unguided SoftPulse `mismatch` densify PRESENT; checkpoint SoftPulse `thin` kind `none` densify PRESENT (matches merged thin value — no companion residual).
+- Curriculum **LPT-264** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-696/264/198/216/694/693/699; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-05-01-*` overbets-geometric / Low residuals LPT-676…779 (LPT-680…699).
+- act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
