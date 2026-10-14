@@ -3535,3 +3535,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-686/687/247/690/685/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
 - Prefer next: NEVER Session SoftPulse residual **LPT-690** (+ **LPT-691**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-08-01-*: interactive structural clean on tip except LPT-686/687 SoftPulse residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-14is tip da62c3cc (#2508 Dynamics Prefer → Session SoftPulse LPT-690 Prefer)
+
+- Tip-stable `da62c3cc` after #2508 SoftPulse residual Prefer LPT-686 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-05-09-01-01/02/03` / `act-05-09-01-*`: first-child SoftPulse QUIT→GUARD→FIRST + `explainGrading` "Quit → Guard → First." still pre-split under stop-loss-only → residual **LPT-690** still To Do (Relates LPT-250 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `edge` kind `none` densify PRESENT under End sessions → **LPT-691** still To Do; successors SoftPulse BANKROLL→STAKES→DECLINE / TIRED→WILD→CASH OUT content-driven (do not reopen LPT-669); guided SoftPulse `stop` densify PRESENT; scaffolded SoftPulse `decline` densify PRESENT; unguided SoftPulse `cash` densify PRESENT.
+- Curriculum **LPT-250** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-690/691/250/692/686/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-09-01-*: interactive structural clean on tip except LPT-690/691 SoftPulse residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
