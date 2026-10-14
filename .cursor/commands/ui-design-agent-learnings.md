@@ -172,6 +172,11 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `Seventy-two offsuit` (decade compound) while `_spokenStartingHand` is
   `seven-two offsuit` — both aliases must rewrite via
   `alignStartingHandCopy` or remapped trash still grades as 72o (LPT-164).
+- Prefer `strictOrder: true` + `onLocalMiss` on framed
+  `RandomizedLessonShowdownOrderTable` (Compare finished hands unguided /
+  checkpoint, jump ranks) — SoftPulse can gold You while a wrong seat still
+  appends cyan #1 when strictOrder defaults false (LPT-707). Explain tables
+  already strict; interactive must match.
 - Prefer a second open when judging card randomization (screenshot hole/board
   A vs B) and screenshot heart counts before/after a paid miss (and after
   Practice/refill) before claiming cards or hearts work. Read ranks from the
