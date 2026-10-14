@@ -3912,3 +3912,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-700/270/699/701/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Defend SoftPulse residual **LPT-701** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-06-01-*: interactive structural clean on tip except LPT-700 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15al tip 8e19f24b (#2559 Blockers Prefer → Defend SoftPulse LPT-701 Prefer)
+
+- Tip-stable `8e19f24b` after #2559 SoftPulse residual Prefer LPT-700 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-06-07-01-01/02/03` / `act-06-07-01-*`: first-child SoftPulse DEFEND→BLUFF→ENOUGH + `explainGrading` "Defend → Bluff → Enough." + Dart `DefendEnoughDemo.points` DEFEND/BLUFF/ENOUGH (captions Continue enough / Over-bluffs fail / No fake %) / `LessonDefendEnoughExplainTable` still pre-split under continue-catchers-only → residual **LPT-701** still To Do (Relates LPT-273 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `punish` kind `none` densify PRESENT (prompt "Minimum defense goal?" / Punish over-bluffs) under Continue with stronger catchers → residual **LPT-702** still To Do; successors SoftPulse THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven (do not reopen LPT-669); guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `fold` one-per-press PRESENT (`9h`/`7d`·`Kc`/`Qh`/`9d`/`4c`/`8s` +2 suit variants match Dart); unguided SoftPulse `int` one-per-press densify PRESENT.
+- Curriculum **LPT-273** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-701/702/273/700/703/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/unguided/checkpoint outcome-tile `deal.mode` `none` — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
+
