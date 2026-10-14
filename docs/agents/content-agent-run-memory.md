@@ -2156,3 +2156,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - `lesson-07-09-01-leak-review-book` / **LPT-336**: explain SoftPulse LEAK→BOOK→REVIEW; SI outcome tiles densify PRESENT one-per-press; checkpoint hintless. Multi-concept + checkpoint book-purpose vs schedule still valid.
 - Tip-commented LPT-668/330/333/336 + LPT-192 (still To Do, no `needs-human` re-add) + residual **LPT-676** still valid + Done parents LPT-624/625/627/628/635/667/669 + Done-ack LPT-135/136/365/383/487/328/331/332/334/335/396/452/453/189/198/216.
 - Prefer next: oldest unfresh split children `lesson-01-01-02-01-suits` / `02-ranks` / `03-pairs-and-suited` (retired parent `lesson-01-01-02-suits-and-ranks` MISSING) / Low residuals LPT-676…721 / To Do **LPT-192**.
+
+## Fold 2026-10-14cx (0f48df29 Suits/Ranks/Pairs NEVER)
+
+- Tip-stable `0f48df29` (#2306). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-01-01-02-01/02/03` under `unit-01-01-02-suits-and-ranks`:
+  - suits SoftPulse hearts→diamonds→clubs→spades + `explainGrading` concept-aligned; guided/scaffolded/checkpoint `random_in_class` four_suits; scaffolded pressHints 4/4; checkpoint hintless.
+  - ranks SoftPulse DEUCE→MIDDLE→ACE concept-aligned; order_sequence SoftPulse rank-2/T/A; scaffolded pressHints 3/3; checkpoint hintless.
+  - pairs-and-suited SoftPulse PAIR→SUITED concept-aligned (intentional combined third child from LPT-83); guided/unguided suited + checkpoint pair; variants PRESENT.
+- Curriculum **LPT-83** Done — do not clone / do not reopen LPT-669. Done-ack LPT-81/82/353/369/370/571.
+- Prefer next: NEVER `lesson-01-01-03-01/02/03` blinds / Low residuals LPT-676…721 / To Do **LPT-192**.
