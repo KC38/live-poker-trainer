@@ -393,8 +393,16 @@ Lesson-specific pattern notes (full history) live in
   unguided SoftPulse `plan` densify PRESENT; checkpoint SoftPulse `pos` kind
   `none` hintless densify PRESENT; curriculum LPT-227 Done — do not clone /
   do not re-add needs-human; residual rewards-synthesis under Plan-high-SPR
-  → **LPT-680** still To Do (needs-human); next: NEVER `lesson-05-03-01-*`
-  implied-odds / Low residuals LPT-676…779 (LPT-680 + LPT-681).
+  → **LPT-680** still To Do (needs-human); tip `4ff7eb4e` Prefer NEVER
+  implied-odds children: first-child SoftPulse IMPLIED→REVERSE→SECOND under
+  Estimate still residual **LPT-681** (needs-human); successors
+  REVERSE→DOMINATED→FOLD / NON-NUT→MULTIWAY→SKIP content-driven; guided
+  SoftPulse `call-io` PRESENT (`Jh`/`9d`·`8s`/`7c`/`2d` +2 suit variants;
+  stackLabel 400); scaffolded SoftPulse `rio` + unguided SoftPulse `nonut`
+  one-per-press PRESENT; checkpoint SoftPulse `depth-pay` kind `none`
+  hintless densify PRESENT; curriculum LPT-230 Done — do not clone / do not
+  re-add needs-human; next: NEVER `lesson-05-04-01-*` thin-value / Low
+  residuals LPT-676…779 (LPT-680 + LPT-681).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
