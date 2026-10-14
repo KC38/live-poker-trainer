@@ -1403,9 +1403,9 @@ export const SECTION_THREE_EXIT_LESSON =
   "lesson-03-08-02-section-three-jump-test";
 
 /** Player-type intro lesson ids (catalog playerTypes.introducedByLessonId). */
-export const MEET_CALLING_STATION = "lesson-04-06-02-meet-calling-station";
-export const MEET_NIT = "lesson-04-07-02-meet-nit";
-export const MEET_MANIAC = "lesson-04-08-02-meet-maniac";
+export const MEET_CALLING_STATION = "lesson-04-06-02-meet-calling-station"; // retired LPT-189: split in course.json (lessonSplitMap)
+export const MEET_NIT = "lesson-04-07-02-meet-nit"; // retired LPT-198: split in course.json (lessonSplitMap)
+export const MEET_MANIAC = "lesson-04-08-02-meet-maniac"; // retired LPT-208: split in course.json (lessonSplitMap)
 
 /** @returns {object} Section 4 — Regular Live Cash Player */
 export function buildSectionFour() {
@@ -1415,15 +1415,15 @@ export function buildSectionFour() {
   const L040301 = "lesson-04-03-01-continuation-plans"; // retired LPT-176: split in course.json (lessonSplitMap)
   const L040401 = "lesson-04-04-01-sizing-communicates"; // retired LPT-179: split in course.json (lessonSplitMap)
   const L040501 = "lesson-04-05-01-spr-commitment"; // retired LPT-182: split in course.json (lessonSplitMap)
-  const L040601 = "lesson-04-06-01-observe-sticky-caller";
+  const L040601 = "lesson-04-06-01-observe-sticky-caller"; // retired LPT-186: split in course.json (lessonSplitMap)
   const L040602 = MEET_CALLING_STATION;
   const L040603 = "lesson-04-06-03-adjust-calling-station";
-  const L040701 = "lesson-04-07-01-observe-narrow-player";
+  const L040701 = "lesson-04-07-01-observe-narrow-player"; // retired LPT-195: split in course.json (lessonSplitMap)
   const L040702 = MEET_NIT;
-  const L040703 = "lesson-04-07-03-adjust-nit";
-  const L040801 = "lesson-04-08-01-observe-wild-aggressor";
+  const L040703 = "lesson-04-07-03-adjust-nit"; // retired LPT-202: split in course.json (lessonSplitMap)
+  const L040801 = "lesson-04-08-01-observe-wild-aggressor"; // retired LPT-205: split in course.json (lessonSplitMap)
   const L040802 = MEET_MANIAC;
-  const L040803 = "lesson-04-08-03-adjust-maniac";
+  const L040803 = "lesson-04-08-03-adjust-maniac"; // retired LPT-212: split in course.json (lessonSplitMap)
   const L040901 = "lesson-04-09-01-type-identification"; // retired LPT-215: split in course.json (lessonSplitMap)
   const L041001 = "lesson-04-10-01-exploit-checkpoints"; // retired LPT-218: split in course.json (lessonSplitMap)
   const L041002 = "lesson-04-10-02-section-four-jump-test";

@@ -7,19 +7,19 @@
     {
       "id": "calling_station",
       "label": "Calling Station",
-      "introducedByLessonId": "lesson-04-06-02-meet-calling-station",
+      "introducedByLessonId": "lesson-04-06-02-01-calling-station-model",
       "summary": "Calls too often and rarely folds to pressure."
     },
     {
       "id": "nit",
       "label": "Nit",
-      "introducedByLessonId": "lesson-04-07-02-meet-nit",
+      "introducedByLessonId": "lesson-04-07-02-01-nit-model",
       "summary": "Plays very few hands and overfolds to aggression."
     },
     {
       "id": "maniac",
       "label": "Maniac",
-      "introducedByLessonId": "lesson-04-08-02-meet-maniac",
+      "introducedByLessonId": "lesson-04-08-02-01-maniac-model",
       "summary": "Raises and barrels far too wide."
     },
     {
@@ -18232,14 +18232,12 @@
           "summary": "Observe sticky calling, then label and exploit carefully.",
           "lessons": [
             {
-              "id": "lesson-04-06-01-observe-sticky-caller",
+              "id": "lesson-04-06-01-01-high-participation",
               "order": 1,
-              "title": "Observe sticky callers",
-              "summary": "Tag high participation and low folding before any label.",
+              "title": "Tag high participation",
+              "summary": "Note seats that enter most pots.",
               "objectives": [
-                "Tag high participation",
-                "Tag low folding to bets",
-                "Separate observation from certainty"
+                "Tag high participation"
               ],
               "prerequisites": [
                 "lesson-04-05-01-03-flexible-high-spr"
@@ -18247,7 +18245,7 @@
               "remediationLessonIds": [
                 "lesson-04-05-01-03-flexible-high-spr"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -18358,10 +18356,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-06-01-02-low-folding",
+              "order": 2,
+              "title": "Tag low folding",
+              "summary": "Note seats that rarely fold to bets.",
+              "objectives": [
+                "Tag low folding to bets"
+              ],
+              "prerequisites": [
+                "lesson-04-06-01-01-high-participation"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-06-01-01-high-participation"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-06-01-02-explain-folding",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Tag low folding to bets"
+                  ],
+                  "accessibilityText": "Count how often a seat folds to bets. Calls on every street mean low folding.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-06-01-02-explain-folding-line",
+                      "kind": "dialogue",
+                      "text": "Count how often a seat folds to bets. Calls on every street mean low folding."
+                    }
+                  ],
+                  "okFeedback": "Rarely folds — sticky.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FOLDS TO BETS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STICKY",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Calls every street → low folding."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-06-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -18416,8 +18478,123 @@
                   }
                 },
                 {
+                  "id": "act-04-06-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "High participation plus low folding.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Tag low folding to bets"
+                  ],
+                  "prompt": "Best pre-label note bundle?",
+                  "choices": [
+                    {
+                      "id": "bundle",
+                      "label": "Many hands · rarely folds",
+                      "accessibilityText": "Many hands · rarely folds",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "That is the evidence bundle."
+                      }
+                    },
+                    {
+                      "id": "insult",
+                      "label": "They are a bad person",
+                      "accessibilityText": "They are a bad person",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Behavior, not judgment.",
+                        "betterChoiceId": "bundle"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bundle",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-06-01-03-observation-vs-certainty",
+              "order": 3,
+              "title": "Observation versus certainty",
+              "summary": "One dramatic hand is not a verdict.",
+              "objectives": [
+                "Separate observation from certainty"
+              ],
+              "prerequisites": [
+                "lesson-04-06-01-02-low-folding"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-06-01-02-low-folding"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-06-01-03-explain-certainty",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Separate observation from certainty"
+                  ],
+                  "accessibilityText": "One dramatic hand is an observation, not a verdict. Confidence needs more samples.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-06-01-03-explain-certainty-line",
+                      "kind": "dialogue",
+                      "text": "One dramatic hand is an observation, not a verdict. Confidence needs more samples."
+                    }
+                  ],
+                  "okFeedback": "One hand — low confidence.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "OBSERVATION",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SAMPLES",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Single hand → observation, not certainty."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-04-06-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -18470,76 +18647,24 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-06-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "High participation plus low folding.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Separate observation from certainty"
-                  ],
-                  "prompt": "Best pre-label note bundle?",
-                  "choices": [
-                    {
-                      "id": "bundle",
-                      "label": "Many hands · rarely folds",
-                      "accessibilityText": "Many hands · rarely folds",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "That is the evidence bundle."
-                      }
-                    },
-                    {
-                      "id": "insult",
-                      "label": "They are a bad person",
-                      "accessibilityText": "They are a bad person",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Behavior, not judgment.",
-                        "betterChoiceId": "bundle"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "bundle",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             },
             {
-              "id": "lesson-04-06-02-meet-calling-station",
-              "order": 2,
-              "title": "Meet the Calling Station",
-              "summary": "Attach the Calling Station label to sticky-call evidence.",
+              "id": "lesson-04-06-02-01-calling-station-model",
+              "order": 4,
+              "title": "The Calling Station model",
+              "summary": "Calling Station is a working model for sticky callers.",
               "objectives": [
-                "Introduce Calling Station",
-                "Identify from evidence"
+                "Introduce Calling Station"
               ],
               "prerequisites": [
-                "lesson-04-06-01-observe-sticky-caller"
+                "lesson-04-06-01-03-observation-vs-certainty"
               ],
               "remediationLessonIds": [
-                "lesson-04-06-01-observe-sticky-caller"
+                "lesson-04-06-01-03-observation-vs-certainty"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [
                 "calling_station"
@@ -18599,6 +18724,128 @@
                   }
                 },
                 {
+                  "id": "act-04-06-02-scaffolded",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Working model, not a personality judgment.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Introduce Calling Station"
+                  ],
+                  "prompt": "A label is…",
+                  "choices": [
+                    {
+                      "id": "model",
+                      "label": "A working model from evidence",
+                      "accessibilityText": "A working model from evidence",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Update or drop it as samples change."
+                      }
+                    },
+                    {
+                      "id": "soul",
+                      "label": "A permanent personality verdict",
+                      "accessibilityText": "A permanent personality verdict",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Too rigid.",
+                        "betterChoiceId": "model"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "A label is a guess you keep updating."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "model",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-06-02-02-spot-calling-station",
+              "order": 5,
+              "title": "Spot a Calling Station",
+              "summary": "Attach the label to sticky-call evidence.",
+              "objectives": [
+                "Identify from evidence"
+              ],
+              "prerequisites": [
+                "lesson-04-06-02-01-calling-station-model"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-06-02-01-calling-station-model"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-06-02-02-explain-spot",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Identify from evidence"
+                  ],
+                  "accessibilityText": "Sticky calls across streets and rare folds point to a Calling Station.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-06-02-02-explain-spot-line",
+                      "kind": "dialogue",
+                      "text": "Sticky calls across streets and rare folds point to a Calling Station."
+                    }
+                  ],
+                  "okFeedback": "Evidence fits — Calling Station.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "STICKY CALLS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "RARE FOLDS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Sticky calls + rare folds → Calling Station."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-04-06-02-guided",
                   "order": 2,
                   "stage": "guided",
@@ -18654,64 +18901,8 @@
                   }
                 },
                 {
-                  "id": "act-04-06-02-scaffolded",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Working model, not a personality judgment.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Introduce Calling Station"
-                  ],
-                  "prompt": "A label is…",
-                  "choices": [
-                    {
-                      "id": "model",
-                      "label": "A working model from evidence",
-                      "accessibilityText": "A working model from evidence",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Update or drop it as samples change."
-                      }
-                    },
-                    {
-                      "id": "soul",
-                      "label": "A permanent personality verdict",
-                      "accessibilityText": "A permanent personality verdict",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Too rigid.",
-                        "betterChoiceId": "model"
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "A label is a guess you keep updating."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "model",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-04-06-02-unguided",
-                  "order": 4,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "player_read_classify",
                   "estimatedSeconds": 45,
@@ -18769,10 +18960,76 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-06-02-03-station-confidence",
+              "order": 6,
+              "title": "Small samples, low confidence",
+              "summary": "Hold a new label loosely until you see more hands.",
+              "objectives": [
+                "Keep confidence low on small samples"
+              ],
+              "prerequisites": [
+                "lesson-04-06-02-02-spot-calling-station"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-06-02-02-spot-calling-station"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-06-02-03-explain-sample",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Keep confidence low on small samples"
+                  ],
+                  "accessibilityText": "Two hands is a tiny sample. Keep confidence in any label low until you see more.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-06-02-03-explain-sample-line",
+                      "kind": "dialogue",
+                      "text": "Two hands is a tiny sample. Keep confidence in any label low until you see more."
+                    }
+                  ],
+                  "okFeedback": "Tiny sample — low confidence.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SAMPLE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CONFIDENCE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Few hands → low confidence."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-06-02-checkpoint",
-                  "order": 5,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -18783,7 +19040,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Identify from evidence"
+                    "Keep confidence low on small samples"
                   ],
                   "prompt": "After 2 hands, confidence in Calling Station should be?",
                   "choices": [
@@ -18825,7 +19082,7 @@
             },
             {
               "id": "lesson-04-06-03-adjust-calling-station",
-              "order": 3,
+              "order": 7,
               "title": "Adjust versus Calling Station",
               "summary": "Widen value and cut unsupported bluffs versus sticky callers.",
               "objectives": [
@@ -18834,10 +19091,10 @@
                 "Cite the sticky-call tendency"
               ],
               "prerequisites": [
-                "lesson-04-06-02-meet-calling-station"
+                "lesson-04-06-02-03-station-confidence"
               ],
               "remediationLessonIds": [
-                "lesson-04-06-02-meet-calling-station"
+                "lesson-04-06-02-03-station-confidence"
               ],
               "estimatedMinutes": 8,
               "difficultyBand": 3,
@@ -19295,22 +19552,20 @@
           "summary": "Observe narrow entry, then label and exploit.",
           "lessons": [
             {
-              "id": "lesson-04-07-01-observe-narrow-player",
+              "id": "lesson-04-07-01-01-narrow-entry",
               "order": 1,
-              "title": "Observe narrow players",
-              "summary": "Tag few hands and strong aggression before labeling.",
+              "title": "Tag narrow entry",
+              "summary": "Note seats that almost never enter pots.",
               "objectives": [
-                "Tag narrow entry",
-                "Tag strong aggression when they play",
-                "Wait for samples before labeling"
+                "Tag narrow entry"
               ],
               "prerequisites": [
                 "lesson-04-06-03-adjust-calling-station"
               ],
               "remediationLessonIds": [
-                "lesson-04-06-01-observe-sticky-caller"
+                "lesson-04-06-01-03-observation-vs-certainty"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -19411,10 +19666,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-07-01-02-strong-aggression",
+              "order": 2,
+              "title": "Tag strong aggression",
+              "summary": "When a narrow seat plays, note how hard it bets.",
+              "objectives": [
+                "Tag strong aggression when they play"
+              ],
+              "prerequisites": [
+                "lesson-04-07-01-01-narrow-entry"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-07-01-01-narrow-entry"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-07-01-02-explain-aggression",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Tag strong aggression when they play"
+                  ],
+                  "accessibilityText": "When a narrow seat finally plays, note how hard it bets. Rare entry plus big aggression is the pattern.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-07-01-02-explain-aggression-line",
+                      "kind": "dialogue",
+                      "text": "When a narrow seat finally plays, note how hard it bets. Rare entry plus big aggression is the pattern."
+                    }
+                  ],
+                  "okFeedback": "Rare and strong.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RARE ENTRY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BIG AGGRESSION",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Rare entry + big aggression → note both."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-07-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -19469,8 +19788,123 @@
                   }
                 },
                 {
+                  "id": "act-04-07-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Narrow entry and strong aggression.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Tag strong aggression when they play"
+                  ],
+                  "prompt": "Evidence bundle for this seat?",
+                  "choices": [
+                    {
+                      "id": "bundle-nit",
+                      "label": "Few hands; heavy action when involved",
+                      "accessibilityText": "Few hands; heavy action when involved",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "That is the pre-label note."
+                      }
+                    },
+                    {
+                      "id": "bundle-station",
+                      "label": "Calls every street",
+                      "accessibilityText": "Calls every street",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Different evidence.",
+                        "betterChoiceId": "bundle-nit"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bundle-nit",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-07-01-03-wait-for-samples",
+              "order": 3,
+              "title": "Wait for samples",
+              "summary": "A couple of folds is not enough to label anyone.",
+              "objectives": [
+                "Wait for samples before labeling"
+              ],
+              "prerequisites": [
+                "lesson-04-07-01-02-strong-aggression"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-07-01-02-strong-aggression"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-07-01-03-explain-wait",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Wait for samples before labeling"
+                  ],
+                  "accessibilityText": "Two folds tell you almost nothing. Wait for more hands before you label anyone.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-07-01-03-explain-wait-line",
+                      "kind": "dialogue",
+                      "text": "Two folds tell you almost nothing. Wait for more hands before you label anyone."
+                    }
+                  ],
+                  "okFeedback": "Not enough yet — wait.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TWO FOLDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MORE HANDS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Few hands → wait before labeling."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-04-07-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -19523,76 +19957,24 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-07-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Narrow entry and strong aggression.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Wait for samples before labeling"
-                  ],
-                  "prompt": "Evidence bundle for this seat?",
-                  "choices": [
-                    {
-                      "id": "bundle-nit",
-                      "label": "Few hands; heavy action when involved",
-                      "accessibilityText": "Few hands; heavy action when involved",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "That is the pre-label note."
-                      }
-                    },
-                    {
-                      "id": "bundle-station",
-                      "label": "Calls every street",
-                      "accessibilityText": "Calls every street",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Different evidence.",
-                        "betterChoiceId": "bundle-nit"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "bundle-nit",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             },
             {
-              "id": "lesson-04-07-02-meet-nit",
-              "order": 2,
-              "title": "Meet the Nit",
-              "summary": "Attach the Nit label to narrow-entry evidence.",
+              "id": "lesson-04-07-02-01-nit-model",
+              "order": 4,
+              "title": "The Nit model",
+              "summary": "Nit is a working model for narrow, value-heavy seats.",
               "objectives": [
-                "Introduce Nit",
-                "Identify from evidence"
+                "Introduce Nit"
               ],
               "prerequisites": [
-                "lesson-04-07-01-observe-narrow-player"
+                "lesson-04-07-01-03-wait-for-samples"
               ],
               "remediationLessonIds": [
-                "lesson-04-07-01-observe-narrow-player"
+                "lesson-04-07-01-03-wait-for-samples"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [
                 "nit"
@@ -19650,6 +20032,123 @@
                       }
                     ]
                   }
+                },
+                {
+                  "id": "act-04-07-02-checkpoint",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Working model.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Introduce Nit"
+                  ],
+                  "prompt": "Nit is best treated as?",
+                  "choices": [
+                    {
+                      "id": "model-n",
+                      "label": "A working model with sample limits",
+                      "accessibilityText": "A working model with sample limits",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Update with new evidence."
+                      }
+                    },
+                    {
+                      "id": "insult-n",
+                      "label": "An insult",
+                      "accessibilityText": "An insult",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Keep it technical.",
+                        "betterChoiceId": "model-n"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "model-n",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-07-02-02-spot-nit",
+              "order": 5,
+              "title": "Spot a Nit",
+              "summary": "Attach the label to narrow-entry evidence.",
+              "objectives": [
+                "Identify from evidence"
+              ],
+              "prerequisites": [
+                "lesson-04-07-02-01-nit-model"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-07-02-01-nit-model"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "nit"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-07-02-02-explain-spot",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Identify from evidence"
+                  ],
+                  "accessibilityText": "Very few hands entered, then big raises when they do play — that points to a Nit.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-07-02-02-explain-spot-line",
+                      "kind": "dialogue",
+                      "text": "Very few hands entered, then big raises when they do play — that points to a Nit."
+                    }
+                  ],
+                  "okFeedback": "Evidence fits — Nit.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FEW HANDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BIG RAISES",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Few hands + big raises → Nit."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-07-02-guided",
@@ -19765,77 +20264,24 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-07-02-checkpoint",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Working model.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Introduce Nit"
-                  ],
-                  "prompt": "Nit is best treated as?",
-                  "choices": [
-                    {
-                      "id": "model-n",
-                      "label": "A working model with sample limits",
-                      "accessibilityText": "A working model with sample limits",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Update with new evidence."
-                      }
-                    },
-                    {
-                      "id": "insult-n",
-                      "label": "An insult",
-                      "accessibilityText": "An insult",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Keep it technical.",
-                        "betterChoiceId": "model-n"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "model-n",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             },
             {
-              "id": "lesson-04-07-03-adjust-nit",
-              "order": 3,
-              "title": "Adjust versus Nit",
-              "summary": "Steal more; respect heavy action from a Nit.",
+              "id": "lesson-04-07-03-01-steal-more",
+              "order": 6,
+              "title": "Steal more versus Nits",
+              "summary": "Open wider when a Nit is in the blinds.",
               "objectives": [
-                "Steal more versus Nits",
-                "Respect their heavy action",
-                "Cite narrow-entry tendency"
+                "Steal more versus Nits"
               ],
               "prerequisites": [
-                "lesson-04-07-02-meet-nit"
+                "lesson-04-07-02-02-spot-nit"
               ],
               "remediationLessonIds": [
-                "lesson-04-07-02-meet-nit"
+                "lesson-04-07-02-02-spot-nit"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [
                 "nit"
@@ -19972,10 +20418,76 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-07-03-02-respect-heavy-action",
+              "order": 7,
+              "title": "Respect their heavy action",
+              "summary": "Give a Nit credit when they raise big.",
+              "objectives": [
+                "Respect their heavy action"
+              ],
+              "prerequisites": [
+                "lesson-04-07-03-01-steal-more"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-07-03-01-steal-more"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "nit"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-07-03-02-explain-respect",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Respect their heavy action"
+                  ],
+                  "accessibilityText": "When a Nit raises big after the flop, give them credit. Medium hands fold.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-07-03-02-explain-respect-line",
+                      "kind": "dialogue",
+                      "text": "When a Nit raises big after the flop, give them credit. Medium hands fold."
+                    }
+                  ],
+                  "okFeedback": "Nit heat — give credit.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NIT RAISES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CREDIT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nit aggression → value-heavy → fold medium hands."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-07-03-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -20076,8 +20588,129 @@
                   }
                 },
                 {
+                  "id": "act-04-07-03-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Because their aggression is value-heavy.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Respect their heavy action"
+                  ],
+                  "prompt": "Why respect a Nit check-raise?",
+                  "choices": [
+                    {
+                      "id": "cite-strong",
+                      "label": "Range is strong when they raise",
+                      "accessibilityText": "Range is strong when they raise",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Cite narrow entry plus aggression.",
+                        "reversalRead": "Shown bluffs reduce that respect."
+                      }
+                    },
+                    {
+                      "id": "cite-fear",
+                      "label": "Nits are scary people",
+                      "accessibilityText": "Nits are scary people",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Cite range, not fear.",
+                        "betterChoiceId": "cite-strong"
+                      }
+                    }
+                  ],
+                  "playerTypeRefs": [
+                    "nit"
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cite-strong",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-07-03-03-cite-narrow-entry",
+              "order": 8,
+              "title": "Cite the narrow-entry read",
+              "summary": "Steal wider only because this seat folds too much.",
+              "objectives": [
+                "Cite narrow-entry tendency"
+              ],
+              "prerequisites": [
+                "lesson-04-07-03-02-respect-heavy-action"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-07-03-02-respect-heavy-action"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "nit"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-07-03-03-explain-cite",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Cite narrow-entry tendency"
+                  ],
+                  "accessibilityText": "Steal wider only because this seat folds too much. Against an unknown big blind, steal thinner.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-07-03-03-explain-cite-line",
+                      "kind": "dialogue",
+                      "text": "Steal wider only because this seat folds too much. Against an unknown big blind, steal thinner."
+                    }
+                  ],
+                  "okFeedback": "Read first, then adjust.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "EVIDENCE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "UNKNOWN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nit evidence → wider steal; unknown → thinner."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-04-07-03-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -20161,61 +20794,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-07-03-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Because their aggression is value-heavy.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Cite narrow-entry tendency"
-                  ],
-                  "prompt": "Why respect a Nit check-raise?",
-                  "choices": [
-                    {
-                      "id": "cite-strong",
-                      "label": "Range is strong when they raise",
-                      "accessibilityText": "Range is strong when they raise",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Cite narrow entry plus aggression.",
-                        "reversalRead": "Shown bluffs reduce that respect."
-                      }
-                    },
-                    {
-                      "id": "cite-fear",
-                      "label": "Nits are scary people",
-                      "accessibilityText": "Nits are scary people",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Cite range, not fear.",
-                        "betterChoiceId": "cite-strong"
-                      }
-                    }
-                  ],
-                  "playerTypeRefs": [
-                    "nit"
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "cite-strong",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -20228,22 +20806,20 @@
           "summary": "Observe extreme aggression, then label and exploit.",
           "lessons": [
             {
-              "id": "lesson-04-08-01-observe-wild-aggressor",
+              "id": "lesson-04-08-01-01-extreme-entry",
               "order": 1,
-              "title": "Observe wild aggressors",
-              "summary": "Tag extreme entry and constant pressure before labeling.",
+              "title": "Tag extreme entry",
+              "summary": "Note seats that raise most pots.",
               "objectives": [
-                "Tag extreme entry",
-                "Tag constant aggression",
-                "Avoid ego battles in notes"
+                "Tag extreme entry"
               ],
               "prerequisites": [
-                "lesson-04-07-03-adjust-nit"
+                "lesson-04-07-03-03-cite-narrow-entry"
               ],
               "remediationLessonIds": [
-                "lesson-04-07-01-observe-narrow-player"
+                "lesson-04-07-01-03-wait-for-samples"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -20344,10 +20920,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-08-01-02-constant-aggression",
+              "order": 2,
+              "title": "Tag constant aggression",
+              "summary": "Note pressure on every street with weak showdowns.",
+              "objectives": [
+                "Tag constant aggression"
+              ],
+              "prerequisites": [
+                "lesson-04-08-01-01-extreme-entry"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-08-01-01-extreme-entry"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-08-01-02-explain-pressure",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Tag constant aggression"
+                  ],
+                  "accessibilityText": "Bets on flop, turn, and river with weak hands at showdown mean constant aggression.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-08-01-02-explain-pressure-line",
+                      "kind": "dialogue",
+                      "text": "Bets on flop, turn, and river with weak hands at showdown mean constant aggression."
+                    }
+                  ],
+                  "okFeedback": "Constant pressure noted.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "EVERY STREET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "WEAK SHOWDOWNS",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Barrels + weak showdowns → constant aggression."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-08-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -20402,8 +21042,123 @@
                   }
                 },
                 {
+                  "id": "act-04-08-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Extreme entry and aggression.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Tag constant aggression"
+                  ],
+                  "prompt": "Evidence bundle?",
+                  "choices": [
+                    {
+                      "id": "bundle-m",
+                      "label": "Enters constantly; barrels without mercy",
+                      "accessibilityText": "Enters constantly; barrels without mercy",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Pre-label evidence."
+                      }
+                    },
+                    {
+                      "id": "bundle-n",
+                      "label": "Almost never plays",
+                      "accessibilityText": "Almost never plays",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "That is nit evidence.",
+                        "betterChoiceId": "bundle-m"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "bundle-m",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-08-01-03-no-ego-notes",
+              "order": 3,
+              "title": "Notes without ego",
+              "summary": "Write frequencies, not feelings.",
+              "objectives": [
+                "Avoid ego battles in notes"
+              ],
+              "prerequisites": [
+                "lesson-04-08-01-02-constant-aggression"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-08-01-02-constant-aggression"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-08-01-03-explain-ego",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid ego battles in notes"
+                  ],
+                  "accessibilityText": "Write frequencies, not feelings. A calm note beats an ego battle.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-08-01-03-explain-ego-line",
+                      "kind": "dialogue",
+                      "text": "Write frequencies, not feelings. A calm note beats an ego battle."
+                    }
+                  ],
+                  "okFeedback": "Calm notes.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FREQUENCIES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "NO EGO",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Frequencies → good notes; ego → leak."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-04-08-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -20456,76 +21211,24 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-08-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Extreme entry and aggression.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Avoid ego battles in notes"
-                  ],
-                  "prompt": "Evidence bundle?",
-                  "choices": [
-                    {
-                      "id": "bundle-m",
-                      "label": "Enters constantly; barrels without mercy",
-                      "accessibilityText": "Enters constantly; barrels without mercy",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Pre-label evidence."
-                      }
-                    },
-                    {
-                      "id": "bundle-n",
-                      "label": "Almost never plays",
-                      "accessibilityText": "Almost never plays",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "That is nit evidence.",
-                        "betterChoiceId": "bundle-m"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "bundle-m",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             },
             {
-              "id": "lesson-04-08-02-meet-maniac",
-              "order": 2,
-              "title": "Meet the Maniac",
-              "summary": "Attach the Maniac label to extreme aggression evidence.",
+              "id": "lesson-04-08-02-01-maniac-model",
+              "order": 4,
+              "title": "The Maniac model",
+              "summary": "Maniac is a working model for extreme aggression.",
               "objectives": [
-                "Introduce Maniac",
-                "Identify from evidence"
+                "Introduce Maniac"
               ],
               "prerequisites": [
-                "lesson-04-08-01-observe-wild-aggressor"
+                "lesson-04-08-01-03-no-ego-notes"
               ],
               "remediationLessonIds": [
-                "lesson-04-08-01-observe-wild-aggressor"
+                "lesson-04-08-01-03-no-ego-notes"
               ],
-              "estimatedMinutes": 7,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [
                 "maniac"
@@ -20583,6 +21286,128 @@
                       }
                     ]
                   }
+                },
+                {
+                  "id": "act-04-08-02-checkpoint",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Station, Nit, and Maniac — already introduced.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Introduce Maniac"
+                  ],
+                  "prompt": "Which types are legal to mix now?",
+                  "choices": [
+                    {
+                      "id": "three",
+                      "label": "Calling Station, Nit, and Maniac",
+                      "accessibilityText": "Calling Station, Nit, and Maniac",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Only mix types already introduced."
+                      }
+                    },
+                    {
+                      "id": "early",
+                      "label": "Add an unlabeled loose seat",
+                      "accessibilityText": "Add an unlabeled loose seat",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Only mix Calling Station, Nit, and Maniac.",
+                        "betterChoiceId": "three"
+                      }
+                    }
+                  ],
+                  "playerTypeRefs": [
+                    "calling_station",
+                    "nit",
+                    "maniac"
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "three",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-08-02-02-spot-maniac",
+              "order": 5,
+              "title": "Spot a Maniac",
+              "summary": "Attach the label to extreme-aggression evidence.",
+              "objectives": [
+                "Identify from evidence"
+              ],
+              "prerequisites": [
+                "lesson-04-08-02-01-maniac-model"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-08-02-01-maniac-model"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "maniac"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-08-02-02-explain-spot",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Identify from evidence"
+                  ],
+                  "accessibilityText": "Constant raises, light 3-bets, and rivers they never give up point to a Maniac.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-08-02-02-explain-spot-line",
+                      "kind": "dialogue",
+                      "text": "Constant raises, light 3-bets, and rivers they never give up point to a Maniac."
+                    }
+                  ],
+                  "okFeedback": "Evidence fits — Maniac.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CONSTANT RAISES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "NEVER GIVES UP",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Constant raises + no give-ups → Maniac."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-08-02-guided",
@@ -20697,82 +21522,25 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-08-02-checkpoint",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Station, Nit, and Maniac — already introduced.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Introduce Maniac"
-                  ],
-                  "prompt": "Which types are legal to mix now?",
-                  "choices": [
-                    {
-                      "id": "three",
-                      "label": "Calling Station, Nit, and Maniac",
-                      "accessibilityText": "Calling Station, Nit, and Maniac",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Only mix types already introduced."
-                      }
-                    },
-                    {
-                      "id": "early",
-                      "label": "Add an unlabeled loose seat",
-                      "accessibilityText": "Add an unlabeled loose seat",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Only mix Calling Station, Nit, and Maniac.",
-                        "betterChoiceId": "three"
-                      }
-                    }
-                  ],
-                  "playerTypeRefs": [
-                    "calling_station",
-                    "nit",
-                    "maniac"
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "three",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             },
             {
-              "id": "lesson-04-08-03-adjust-maniac",
-              "order": 3,
-              "title": "Adjust versus Maniac",
-              "summary": "Widen bluff-catching and value; avoid ego wars.",
+              "id": "lesson-04-08-03-01-widen-value-catch",
+              "order": 6,
+              "title": "Widen value and bluff-catches",
+              "summary": "Call wider and value bet more versus a Maniac — no ego.",
               "objectives": [
                 "Widen value and bluff-catch ranges",
-                "Avoid ego battles",
-                "Cite extreme aggression tendency"
+                "Avoid ego battles"
               ],
               "prerequisites": [
-                "lesson-04-08-02-meet-maniac"
+                "lesson-04-08-02-02-spot-maniac"
               ],
               "remediationLessonIds": [
-                "lesson-04-08-02-meet-maniac"
+                "lesson-04-08-02-02-spot-maniac"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 4,
               "difficultyBand": 3,
               "playerTypeRefs": [
                 "maniac"
@@ -21050,10 +21818,76 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-08-03-02-cite-aggression",
+              "order": 7,
+              "title": "Cite the aggression read",
+              "summary": "Call wider only because this seat bets too many hands.",
+              "objectives": [
+                "Cite extreme aggression tendency"
+              ],
+              "prerequisites": [
+                "lesson-04-08-03-01-widen-value-catch"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-08-03-01-widen-value-catch"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "maniac"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-08-03-02-explain-cite",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Cite extreme aggression tendency"
+                  ],
+                  "accessibilityText": "Call wider only because this seat bets too many hands. Against an unknown, fold more.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-08-03-02-explain-cite-line",
+                      "kind": "dialogue",
+                      "text": "Call wider only because this seat bets too many hands. Against an unknown, fold more."
+                    }
+                  ],
+                  "okFeedback": "Read first, then adjust.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "EVIDENCE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "UNKNOWN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Maniac evidence → call wider; unknown → fold more."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-08-03-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -21160,7 +21994,7 @@
                 },
                 {
                   "id": "act-04-08-03-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -21232,10 +22066,10 @@
                 "Separate observation from certainty"
               ],
               "prerequisites": [
-                "lesson-04-08-03-adjust-maniac"
+                "lesson-04-08-03-02-cite-aggression"
               ],
               "remediationLessonIds": [
-                "lesson-04-06-02-meet-calling-station"
+                "lesson-04-06-02-03-station-confidence"
               ],
               "estimatedMinutes": 2,
               "difficultyBand": 3,
@@ -37963,6 +38797,43 @@
     "lesson-04-10-01-exploit-checkpoints": [
       "lesson-04-10-01-01-same-hand-types",
       "lesson-04-10-01-02-combine-factors"
+    ],
+    "lesson-04-06-01-observe-sticky-caller": [
+      "lesson-04-06-01-01-high-participation",
+      "lesson-04-06-01-02-low-folding",
+      "lesson-04-06-01-03-observation-vs-certainty"
+    ],
+    "lesson-04-06-02-meet-calling-station": [
+      "lesson-04-06-02-01-calling-station-model",
+      "lesson-04-06-02-02-spot-calling-station",
+      "lesson-04-06-02-03-station-confidence"
+    ],
+    "lesson-04-07-01-observe-narrow-player": [
+      "lesson-04-07-01-01-narrow-entry",
+      "lesson-04-07-01-02-strong-aggression",
+      "lesson-04-07-01-03-wait-for-samples"
+    ],
+    "lesson-04-07-02-meet-nit": [
+      "lesson-04-07-02-01-nit-model",
+      "lesson-04-07-02-02-spot-nit"
+    ],
+    "lesson-04-07-03-adjust-nit": [
+      "lesson-04-07-03-01-steal-more",
+      "lesson-04-07-03-02-respect-heavy-action",
+      "lesson-04-07-03-03-cite-narrow-entry"
+    ],
+    "lesson-04-08-01-observe-wild-aggressor": [
+      "lesson-04-08-01-01-extreme-entry",
+      "lesson-04-08-01-02-constant-aggression",
+      "lesson-04-08-01-03-no-ego-notes"
+    ],
+    "lesson-04-08-02-meet-maniac": [
+      "lesson-04-08-02-01-maniac-model",
+      "lesson-04-08-02-02-spot-maniac"
+    ],
+    "lesson-04-08-03-adjust-maniac": [
+      "lesson-04-08-03-01-widen-value-catch",
+      "lesson-04-08-03-02-cite-aggression"
     ]
   }
 }

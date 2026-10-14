@@ -138,9 +138,9 @@ test("wave two sections expose postflop units, types, and jump tests", () => {
     assert.equal(sec3Blob.includes(label), false, `sec3 leaked ${label}`);
   }
   for (const id of [
-    "lesson-04-06-02-meet-calling-station",
-    "lesson-04-07-02-meet-nit",
-    "lesson-04-08-02-meet-maniac",
+    "lesson-04-06-02-01-calling-station-model",
+    "lesson-04-07-02-01-nit-model",
+    "lesson-04-08-02-01-maniac-model",
   ]) {
     assert.ok(clientCatalog.sections.flatMap((s) =>
       s.units.flatMap((u) => u.lessons)).some((l) => l.id === id), id);
@@ -223,7 +223,7 @@ test("wave three sections expose advanced units, TAG/LAG, and capstones", () => 
     if (reachedIntro) break;
   }
   assert.ok(
-    lessonsBeforeTag.some((l) => l.id === "lesson-04-08-02-meet-maniac"),
+    lessonsBeforeTag.some((l) => l.id === "lesson-04-08-02-01-maniac-model"),
   );
   for (const lesson of lessonsBeforeTag) {
     const blob = JSON.stringify(lesson);

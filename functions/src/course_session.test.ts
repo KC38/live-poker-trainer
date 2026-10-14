@@ -391,7 +391,7 @@ describe("soft grading and life loss", () => {
 
   it("uses authored explain Nice! feedback for Observe wild aggressors (LPT-463)", () => {
     const observeWild = findLesson(
-      "lesson-04-08-01-observe-wild-aggressor",
+      "lesson-04-08-01-01-extreme-entry",
     )!.lesson;
     const explain = observeWild.activities.find(
       (activity) => activity.id === "act-04-08-01-explain",
@@ -410,7 +410,7 @@ describe("soft grading and life loss", () => {
 
   it("uses authored explain Nice! feedback for Meet the Maniac (LPT-490)", () => {
     const meetManiac = findLesson(
-      "lesson-04-08-02-meet-maniac",
+      "lesson-04-08-02-01-maniac-model",
     )!.lesson;
     const explain = meetManiac.activities.find(
       (activity) => activity.id === "act-04-08-02-explain",
