@@ -110,9 +110,9 @@ Lesson-specific pattern notes (full history) live in
   `isTableRegionTapActivity` uses `authoredSoftPulseTargets` (authored
   `soft_pulse` cues) so successors stay walks without a per-id
   allowlist; do **not** reopen LPT-669 or re-file Dart map clones when
-  cues + `explainGrading` are present. Pre-Done checklist history (S1
+  cues + `explainGrading` are present.   Pre-Done checklist history (S1
   16 → S2 32 → S3 46 → S4 72) is closed. Next NEVER walk:
-  `lesson-03-08-01-*` leak-repair children / remaining S3 NEVER /
+  `lesson-04-01-01-*` ranges children / remaining S4–S5 NEVER /
   Low curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
@@ -157,6 +157,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14bo: Tip mid-run `50b54367`→`39155796` (#2259)→`a08d105d` (#2260 S6 splits). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium catalog parent **none**. Discovery NEVER Leak-repair children: first-child `act-03-08-01-explain` SoftPulse TOP PAIR→PRICES→PASSIVE→CROWDS + content-driven SoftPulse walk; successors `act-03-08-01-02-explain-price` (BAD PRICE→FOLD) + `act-03-08-01-03-explain-passive` (PASSIVE→CROWD) content-driven (do not reopen LPT-669); guided/scaffolded/unguided `poker_action_sizing` fixed+variants SoftPulse PRESENT one-per-press OK; checkpoint SI densify PRESENT hintless (`deal.mode` `none`). Curriculum **LPT-163** Done — do not clone. Tip-commented LPT-669/163/161/162 + parents on `a08d105d`. S3 `lessonSplitMap` NEVER children clear; S6 curriculum splits Done (#2260). next: NEVER `lesson-04-01-01-*` ranges / S5 NEVER / Low curriculum.
 - 2026-10-14bn: Tip mid-run `4f56674b` (#2256 LPT-669 Done)→`50b54367` (#2257 S5 splits). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium catalog parent **none**. Discovery NEVER Multiway children: first-child `act-03-07-01-explain` SoftPulse STRONGER→FEWER→NUTS + content-driven SoftPulse walk; guided `7h/9d`·`Kc7s2d` SoftPulse `check-2p` PRESENT; successors `act-03-07-01-02-explain-crowd` / `03-explain-nuts` content-driven (do not reopen LPT-669); scaffolded `7s3d`·`AhKh9h` SoftPulse `mw-check` one-per-press OK; unguided/checkpoint densify PRESENT (`deal.mode` `none`). Curriculum **LPT-160** Done — do not clone. Tip-commented LPT-160/158/159/418/552/667/348/669. next: NEVER `lesson-03-08-01-*` leak-repair / Low curriculum.
 - 2026-10-14bm: Tip-stable `4f56674b` (#2256). Catalog gaps all **0**. Discovery NEVER River children: SoftPulse explain successors content-driven SoftPulse walks (LPT-669 Done — do not reopen); interactive `poker_action_sizing` one-per-press OK; checkpoint densify PRESENT; curriculum **LPT-157** Done. Coverage had left `learnings: pending` — rescued onto this chore. next: NEVER `lesson-03-07-01-*` multiway.
 - 2026-10-14bl: Tip-stable `cd522c93` (#2248). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only (checklist still **72** — no rebuild). Discovery NEVER Flop-class children: first-child `act-03-02-01-explain` SoftPulse MADE→DRAW→SDV→AIR **wired**; successors `act-03-02-01-02-explain-draws` (DRAW→SHOWDOWN VALUE) + `act-03-02-01-03-explain-air` (AIR→FOLD EQUITY) already on **LPT-669** (still tap/vis ABSENT); guided/scaffolded/unguided/checkpoint `fixed`+variants densify PRESENT one-per-press OK (checkpoint hintless). Curriculum **LPT-143** Done — do not clone. Tip-commented **LPT-669**; Done-ack LPT-479/577/414/384/143. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-03-03-01-*` outs-price / Low curriculum.
