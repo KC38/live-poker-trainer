@@ -2495,3 +2495,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-04-07-03-*` Adjust Nit / Low residuals LPT-676…769.
 - act-04-07-02-*: interactive structural clean on tip except working-model residual LPT-769; SoftPulse explain concept-aligned / Spot content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` observation tiles — do not file handFamily.
 
+## Fold 2026-10-14eg (197e9137 discovery Adjust Nit SoftPulse residual)
+
+- Tip-stable `197e9137` (#2358 Meet Nit working-model residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-04-07-03-01/02/03` under Adjust Nit unit:
+  - first-child `act-04-07-03-explain` SoftPulse STEAL→CREDIT→EXPLODE + `explainGrading` under Steal-more → **LPT-772** (needs-human; Relates LPT-202).
+  - successors `act-04-07-03-02-explain-respect` (NIT RAISES→CREDIT) + `act-04-07-03-03-explain-cite` (EVIDENCE→UNKNOWN) content-driven; guided SoftPulse `steal` + scaffolded SoftPulse `fold-mid` + unguided SoftPulse `tighter` PRESENT; checkpoint SoftPulse `cite-strong` kind `none` (cite residual note under Respect).
+- Curriculum **LPT-202** Done — do not clone / do not re-add needs-human. Tip-commented LPT-772/202/769 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…772 (leave ui-agent LPT-770/771 alone).
+- Prefer next: NEVER `lesson-04-08-01-*` observe-wild / Low residuals LPT-676…772.
+- act-04-07-03-*: interactive structural clean on tip except SoftPulse residual LPT-772; SoftPulse explain successors content-driven (do not reopen LPT-669).
+
