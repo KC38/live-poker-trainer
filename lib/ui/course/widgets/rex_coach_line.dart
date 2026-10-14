@@ -335,16 +335,22 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'You bet. Everyone folds. Tap how you take the pot — pick Take pot.',
     'act-01-05-01-scaffolded-showdown' =>
       'River bets are called. Tap what happens next — pick Showdown.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Side pot in the idle bubble (LPT-782; SoftPulse LPT-653; same
+    // class as LPT-780 / LPT-672).
     'act-01-05-01-checkpoint-side' =>
-      'You are all-in for less; two big stacks keep betting. Tap what is true — pick Side pot.',
+      'You are all-in for less; two big stacks keep betting — tap the matching pot fact.',
     'act-02-01-01-guided-btn' =>
       'Tap who acts last postflop — pick BTN.',
     'act-02-01-01-scaffolded-blinds' =>
       'Tap a seat that posts a forced bet every hand — pick SB or BB.',
     'act-02-01-01-unguided-co' =>
       'Tap the seat right before the button — pick Cutoff (CO).',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name On the button in the idle bubble (LPT-783; SoftPulse LPT-653;
+    // same class as LPT-782 / LPT-780 / LPT-672).
     'act-02-01-01-checkpoint-edge' =>
-      'Same hand — pick On the button.',
+      'Same hand early versus button — tap the matching edge.',
     'act-02-01-02-unguided-wait' =>
       'Action is on UTG. You are on the button. What do you do — pick Wait — do not act yet.',
     'act-02-01-02-checkpoint-full' =>
@@ -355,8 +361,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap the family for your holes — pick Broadway.',
     'act-02-02-01-unguided-sc' =>
       'Tap the family for your holes — pick Suited connector.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Offsuit trash in the idle bubble (LPT-784; SoftPulse LPT-653;
+    // same class as LPT-783 / LPT-782 / LPT-672).
     'act-02-02-01-checkpoint-trash' =>
-      'Tap the family for your holes — pick Offsuit trash.',
+      'Low unconnected offsuit holes — tap the matching family.',
     'act-02-05-01-guided-convert' =>
       'Blinds 1/2. You have 200 chips. How many big blinds — pick 100bb.',
     'act-02-05-01-scaffolded-eff' =>
