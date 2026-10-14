@@ -267,7 +267,11 @@ void main() {
       for (final MapEntry(key: id, value: phrases) in spoils.entries) {
         final resolved = selectIdentifyDensifiedCoachLine(id);
         expect(resolved, isNotNull, reason: id);
-        final lower = resolved!.toLowerCase();
+        final activity = catalog.activityById(id);
+        expect(activity, isNotNull, reason: id);
+        final speech = lessonFrameSpeech(activity!);
+        final lower = speech.toLowerCase();
+        expect(speech, resolved, reason: '$id frame speech matches densify');
         for (final spoil in phrases) {
           expect(
             lower,
