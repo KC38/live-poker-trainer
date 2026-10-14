@@ -31270,6 +31270,47 @@ await tester.tap(find.text('NIT'));
   );
 
   testWidgets(
+    'prefer nut potential checkpoint densify coach does not spoil (LPT-723)',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-05-01-01-checkpoint',
+        order: 3,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Multiway construction priority.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Multiway construction priority?',
+        choices: const [
+          CourseChoice(id: 'nuts', label: 'Nut potential and clean equity'),
+          CourseChoice(id: 'any', label: 'Any two'),
+        ],
+      );
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final speech = lessonFrameSpeech(activity);
+      expect(speech, contains('tap the matching priority'));
+      expect(speech.toLowerCase(), isNot(contains('nut potential')));
+      expect(speech.toLowerCase(), isNot(contains('clean equity')));
+      expect(speech, isNot(contains('Tap the best answer')));
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
     's5 checkpoint densify coach does not spoil Nut potential (LPT-717)',
     (tester) async {
       final multi = CourseActivity(
