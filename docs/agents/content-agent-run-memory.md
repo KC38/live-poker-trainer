@@ -3738,3 +3738,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-800/801/323/798/802/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Stack SoftPulse residual **LPT-802** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-05-01-*: interactive structural clean on tip except LPT-800 SoftPulse + LPT-801 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; outcome-tile `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-15t tip ca4f734c (#2535 HU Prefer → Stack SoftPulse LPT-802 Prefer)
+
+- Tip-stable `ca4f734c` after #2535 HU SoftPulse Prefer re-check LPT-800 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Stack SoftPulse residual re-check `lesson-07-06-01-01/02/03` / `act-07-06-01-*`: first-child SoftPulse SHORT→DEEP→EFFECTIVE + `explainGrading` "Short → Deep → Effective." + Dart `StackDepthPlansDemo.points` SHORT/DEEP/EFFECTIVE (captions Commit earlier / Implied odds / Recalc each hand) / `LessonStackDepthPlansExplainTable` still pre-split under commit-short-only → residual **LPT-802** still To Do (needs-human; Relates LPT-326 — do not re-add needs-human on curriculum); coachMedia still "Effective stack rewrites the plan every hand."; checkpoint SoftPulse `every` kind `none` densify PRESENT under recalc-effective matches — no companion residual; successors SoftPulse DEEP→IMPLIED ODDS / SHORTER STACK→PLAN content-driven (do not reopen LPT-669); guided SoftPulse `commit` densify PRESENT; scaffolded SoftPulse `yes` one-per-press densify PRESENT; unguided SoftPulse `40` one-per-press densify PRESENT; distinct from S2 **LPT-748**.
+- Curriculum **LPT-326** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-802/326/800/725/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Same-cards SoftPulse residual **LPT-725** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-06-01-*: interactive structural clean on tip except LPT-802 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; outcome-tile `deal.mode` `none` — do not file handFamily.
