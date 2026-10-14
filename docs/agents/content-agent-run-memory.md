@@ -3175,3 +3175,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Stack SoftPulse residual **LPT-802** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-05-01-*: interactive structural clean on tip except LPT-800 SoftPulse + LPT-801 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14ha (5908fbcd Prefer NEVER Stack SoftPulse residual LPT-802 re-check)
+
+- Tip-stable `5908fbcd` (#2453 HU SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Stack SoftPulse residual re-check `lesson-07-06-01-01/02/03`: first-child SoftPulse SHORT→DEEP→EFFECTIVE + `explainGrading` "Short → Deep → Effective." + Dart `StackDepthPlansDemo` / `LessonStackDepthPlansExplainTable` still pre-split under Commit-earlier-short-only → residual **LPT-802** still To Do (needs-human; Relates LPT-326 — do not re-add needs-human on curriculum); successors DEEP→IMPLIED ODDS / SHORTER STACK→PLAN content-driven; guided SoftPulse `commit` densify PRESENT; scaffolded SoftPulse `yes` densify PRESENT; unguided SoftPulse `40` densify PRESENT; checkpoint SoftPulse `every` kind `none` densify PRESENT under recalc — no companion residual; distinct from S2 **LPT-748**; curriculum **LPT-326** Done.
+- Tip-commented LPT-802/326/198/216/800/725/748/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Same-cards SoftPulse residual **LPT-725** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-06-01-*: interactive structural clean on tip except LPT-802 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
+
