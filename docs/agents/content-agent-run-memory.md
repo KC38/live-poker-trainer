@@ -3066,3 +3066,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Hard-folds SoftPulse residual **LPT-705** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-09-01-*: interactive structural clean on tip except LPT-704 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants AQo-miss honesty.
 
+## Fold 2026-10-14gn (4d09e7c2 Prefer NEVER Hard-folds SoftPulse residual LPT-705 re-check)
+
+- Tip-stable `4d09e7c2` (#2438 SoftPulse-off densify after #2437 Plan-3bet Prefer on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Hard-folds SoftPulse residual re-check `lesson-06-10-01-01/02/03`: first-child SoftPulse HARD→COOLER→EGO + Dart `HardFoldCoolerDemo` still pre-split under hard-folds-only → residual **LPT-705** still To Do (needs-human; Relates LPT-285 — do not re-add needs-human on curriculum); successors content-driven; checkpoint SoftPulse `ask` under cooler-or-mistake — no companion residual; curriculum **LPT-285** Done.
+- Tip-commented LPT-705/285/198/216/704; leave open LPT-676…802 + LPT-351; leave ui-agent LPT-803/804/805 alone.
+- Prefer next: NEVER Selective SoftPulse residual **LPT-706** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
