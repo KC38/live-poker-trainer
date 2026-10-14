@@ -1921,7 +1921,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - `lesson-05-09-01-02-bankroll-stakes`: `act-05-09-01-02-explain-bankroll` SoftPulse BANKROLL→STAKES→DECLINE content-driven; scaffolded SoftPulse `decline` one-per-press PRESENT.
   - `lesson-05-09-01-03-end-sessions`: `act-05-09-01-03-explain-quit` SoftPulse TIRED→WILD→CASH OUT content-driven; unguided SoftPulse `cash` one-per-press PRESENT; checkpoint SoftPulse `edge` under end-sessions → **LPT-691**.
 - Do **not** reopen LPT-669. Curriculum **LPT-250** Done — do not clone.
-- Tip-commented LPT-250/690/691 + Done-ack LPT-248/249 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…687 + parents.
-- Prefer bullet tightened: next NEVER → `lesson-06-01-01-*` range-nut children.
-- next: NEVER `lesson-06-01-01-*` / S5–S6 NEVER / Low curriculum.
+- Tip-commented LPT-690/691 + Done-ack LPT-248/249/250/466/521/617 + open residuals LPT-676…687 + parents.
+- Prefer bullet tightened: next NEVER → `lesson-06-01-01-*` range-nut-advantage children.
+- next: NEVER `lesson-06-01-01-*` / S6 NEVER / Low curriculum.
 - act-05-09-01-*: interactive structural clean on tip aside from residuals; SoftPulse explain successors via LPT-669 content-driven; outcome tiles are `deal.mode` `none` — do not file handFamily.
