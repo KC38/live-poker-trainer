@@ -3029,3 +3029,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-696/264/198/216/694; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gi (23915807 Prefer NEVER Overbet SoftPulse residual LPT-699 re-check)
+
+- Tip-stable `23915807` (#2432 Polar SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Overbet SoftPulse residual re-check `lesson-06-05-01-01/02/03`: first-child SoftPulse OVERBET→POLAR→GEO + Dart `OverbetGeometryDemo` still pre-split under polar-overbets-only → residual **LPT-699** still To Do (needs-human; Relates LPT-267; race clone LPT-698 Done); successors content-driven; checkpoint SoftPulse `multi` under geometric-sizes — no companion residual; curriculum **LPT-267** Done.
+- Tip-commented LPT-699/267/198/216/696; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Blockers SoftPulse residual **LPT-700** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
