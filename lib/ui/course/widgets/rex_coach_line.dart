@@ -120,8 +120,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // SoftPulse LPT-653; same class as LPT-814 / LPT-811).
     'act-04-06-02-scaffolded' =>
       'A player-type label is temporary evidence — tap what it is.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Station (LPT-818; SoftPulse
+    // LPT-653; same class as LPT-817 / LPT-814 / LPT-811).
     'act-04-06-02-unguided' =>
-      'Limps, calls, never folds turns — pick Station.',
+      'Limps, calls, never folds turns — tap which type fits.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Low conf in the idle bubble (LPT-811; SoftPulse LPT-653; same
     // class as LPT-810 / LPT-809 / LPT-808).

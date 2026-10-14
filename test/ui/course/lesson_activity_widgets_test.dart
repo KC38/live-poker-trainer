@@ -16976,14 +16976,17 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-818: SoftPulse-quiet idle densify stem must not name Station.
     expect(
-      find.text(
-        'Limps, calls, never folds turns — sticky caller fits better than wild aggression.',
-      ),
+      find.text('Limps, calls, never folds turns — tap which type fits.'),
       findsOneWidget,
     );
     expect(
-      find.text('Limps, calls, never folds turns — tap the label.'),
+      find.text('Limps, calls, never folds turns — tap Station.'),
+      findsNothing,
+    );
+    expect(
+      find.text('Limps, calls, never folds turns — pick Station.'),
       findsNothing,
     );
     expect(find.text('Station'), findsOneWidget);
