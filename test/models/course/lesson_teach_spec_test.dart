@@ -431,7 +431,7 @@ const _lessons = <String, List<String>>{
     'act-05-09-02-cp-stop',
   ],
   // LPT-262
-  'lesson-06-04-01-polar-merged': [
+  'lesson-06-04-01-01-polarized-sizing': [
     'act-06-04-01-explain',
     'act-06-04-01-guided',
     'act-06-04-01-scaffolded',
@@ -439,7 +439,7 @@ const _lessons = <String, List<String>>{
     'act-06-04-01-checkpoint',
   ],
   // LPT-265
-  'lesson-06-05-01-overbets-geometric': [
+  'lesson-06-05-01-01-polar-overbets': [
     'act-06-05-01-explain',
     'act-06-05-01-guided',
     'act-06-05-01-scaffolded',
@@ -447,7 +447,7 @@ const _lessons = <String, List<String>>{
     'act-06-05-01-checkpoint',
   ],
   // LPT-268
-  'lesson-06-06-01-blockers': [
+  'lesson-06-06-01-01-bluff-blockers': [
     'act-06-06-01-explain',
     'act-06-06-01-guided',
     'act-06-06-01-scaffolded',
@@ -455,7 +455,7 @@ const _lessons = <String, List<String>>{
     'act-06-06-01-checkpoint',
   ],
   // LPT-280
-  'lesson-06-09-01-threebet-fourbet': [
+  'lesson-06-09-01-02-plan-3bet-spr': [
     'act-06-09-01-explain',
     'act-06-09-01-guided',
     'act-06-09-01-scaffolded',
@@ -463,7 +463,7 @@ const _lessons = <String, List<String>>{
     'act-06-09-01-checkpoint',
   ],
   // LPT-283
-  'lesson-06-10-01-difficult-folds': [
+  'lesson-06-10-01-01-hard-folds': [
     'act-06-10-01-explain',
     'act-06-10-01-guided',
     'act-06-10-01-scaffolded',
@@ -615,7 +615,7 @@ const _lessons = <String, List<String>>{
     'act-05-07-01-checkpoint',
   ],
   // LPT-252
-  'lesson-06-01-01-range-nut-advantage': [
+  'lesson-06-01-01-01-range-advantage': [
     'act-06-01-01-explain',
     'act-06-01-01-guided',
     'act-06-01-01-scaffolded',
@@ -623,7 +623,7 @@ const _lessons = <String, List<String>>{
     'act-06-01-01-checkpoint',
   ],
   // LPT-255
-  'lesson-06-02-01-equity-realization': [
+  'lesson-06-02-01-01-prefer-ip': [
     'act-06-02-01-explain',
     'act-06-02-01-guided',
     'act-06-02-01-scaffolded',
@@ -631,7 +631,7 @@ const _lessons = <String, List<String>>{
     'act-06-02-01-checkpoint',
   ],
   // LPT-258
-  'lesson-06-03-01-capped-uncapped': [
+  'lesson-06-03-01-01-spot-caps': [
     'act-06-03-01-explain',
     'act-06-03-01-guided',
     'act-06-03-01-scaffolded',
@@ -639,7 +639,7 @@ const _lessons = <String, List<String>>{
     'act-06-03-01-checkpoint',
   ],
   // LPT-271
-  'lesson-06-07-01-minimum-defense': [
+  'lesson-06-07-01-01-continue-catchers': [
     'act-06-07-01-explain',
     'act-06-07-01-guided',
     'act-06-07-01-scaffolded',
@@ -647,7 +647,7 @@ const _lessons = <String, List<String>>{
     'act-06-07-01-checkpoint',
   ],
   // LPT-275
-  'lesson-06-08-01-mixed-strategy': [
+  'lesson-06-08-01-01-mix-strong': [
     'act-06-08-01-explain',
     'act-06-08-01-guided',
     'act-06-08-01-scaffolded',

@@ -1221,16 +1221,16 @@ export const SECTION_FIVE_EXIT_LESSON =
 /** @returns {object} Section 6 — Advanced Live Cash */
 export function buildSectionSix() {
   const prev = SECTION_FIVE_EXIT_LESSON;
-  const L060101 = "lesson-06-01-01-range-nut-advantage";
-  const L060201 = "lesson-06-02-01-equity-realization";
-  const L060301 = "lesson-06-03-01-capped-uncapped";
-  const L060401 = "lesson-06-04-01-polar-merged";
-  const L060501 = "lesson-06-05-01-overbets-geometric";
-  const L060601 = "lesson-06-06-01-blockers";
-  const L060701 = "lesson-06-07-01-minimum-defense";
-  const L060801 = "lesson-06-08-01-mixed-strategy";
-  const L060901 = "lesson-06-09-01-threebet-fourbet";
-  const L061001 = "lesson-06-10-01-difficult-folds";
+  const L060101 = "lesson-06-01-01-range-nut-advantage"; // retired LPT-254: split in course.json (lessonSplitMap)
+  const L060201 = "lesson-06-02-01-equity-realization"; // retired LPT-257: split in course.json (lessonSplitMap)
+  const L060301 = "lesson-06-03-01-capped-uncapped"; // retired LPT-260: split in course.json (lessonSplitMap)
+  const L060401 = "lesson-06-04-01-polar-merged"; // retired LPT-264: split in course.json (lessonSplitMap)
+  const L060501 = "lesson-06-05-01-overbets-geometric"; // retired LPT-267: split in course.json (lessonSplitMap)
+  const L060601 = "lesson-06-06-01-blockers"; // retired LPT-270: split in course.json (lessonSplitMap)
+  const L060701 = "lesson-06-07-01-minimum-defense"; // retired LPT-273: split in course.json (lessonSplitMap)
+  const L060801 = "lesson-06-08-01-mixed-strategy"; // retired LPT-277: split in course.json (lessonSplitMap)
+  const L060901 = "lesson-06-09-01-threebet-fourbet"; // retired LPT-282: split in course.json (lessonSplitMap)
+  const L061001 = "lesson-06-10-01-difficult-folds"; // retired LPT-285: split in course.json (lessonSplitMap)
   const L061101 = "lesson-06-11-01-observe-selective";
   const L061102 = MEET_TAG;
   const L061103 = "lesson-06-11-03-adjust-tag";

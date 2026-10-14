@@ -774,6 +774,18 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-254, LPT-257, LPT-260, LPT-264, LPT-267, LPT-270, LPT-273, LPT-277, LPT-282, LPT-285: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-06-01-01-range-nut-advantage` → `lesson-06-01-01-01-range-advantage`, `lesson-06-01-01-02-nut-advantage`, `lesson-06-01-01-03-press-both` (LPT-254)
+- `lesson-06-02-01-equity-realization` → `lesson-06-02-01-01-prefer-ip`, `lesson-06-02-01-02-discount-oop`, `lesson-06-02-01-03-aggression-realizes` (LPT-257)
+- `lesson-06-03-01-capped-uncapped` → `lesson-06-03-01-01-spot-caps`, `lesson-06-03-01-02-respect-uncapped`, `lesson-06-03-01-03-attack-caps` (LPT-260)
+- `lesson-06-04-01-polar-merged` → `lesson-06-04-01-01-polarized-sizing`, `lesson-06-04-01-02-merged-thin-value`, `lesson-06-04-01-03-matched-shapes` (LPT-264)
+- `lesson-06-05-01-overbets-geometric` → `lesson-06-05-01-01-polar-overbets`, `lesson-06-05-01-02-geometric-sizes`, `lesson-06-05-01-03-no-random-huge` (LPT-267)
+- `lesson-06-06-01-blockers` → `lesson-06-06-01-01-bluff-blockers`, `lesson-06-06-01-02-unblock-bluffs`, `lesson-06-06-01-03-no-fake-ev` (LPT-270)
+- `lesson-06-07-01-minimum-defense` → `lesson-06-07-01-01-continue-catchers`, `lesson-06-07-01-02-fold-trash`, `lesson-06-07-01-03-no-fake-mdf` (LPT-273)
+- `lesson-06-08-01-mixed-strategy` → `lesson-06-08-01-01-mix-strong`, `lesson-06-08-01-02-types-reduce-mixing`, `lesson-06-08-01-03-no-pure-random` (LPT-277)
+- `lesson-06-09-01-threebet-fourbet` → `lesson-06-09-01-01-careful-4bet-pots`, `lesson-06-09-01-02-plan-3bet-spr`, `lesson-06-09-01-03-no-ego-4bets` (LPT-282)
+- `lesson-06-10-01-difficult-folds` → `lesson-06-10-01-01-hard-folds`, `lesson-06-10-01-02-cooler-or-mistake`, `lesson-06-10-01-03-no-ego-calls` (LPT-285)
+
 Curriculum splits LPT-224, LPT-227, LPT-230, LPT-233, LPT-236, LPT-239, LPT-244, LPT-247, LPT-250: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-05-01-01-multiway-ranges` → `lesson-05-01-01-01-nut-potential`, `lesson-05-01-01-02-tighten-speculative`, `lesson-05-01-01-03-thick-value` (LPT-224)
 - `lesson-05-02-01-deep-stack-play` → `lesson-05-02-01-01-deep-implied-odds`, `lesson-05-02-01-02-fold-light-deep`, `lesson-05-02-01-03-plan-high-spr` (LPT-227)
@@ -1881,16 +1893,36 @@ felt.
 | Bankroll fits stakes | explain SoftPulse cues BANKROLL → STAKES → DECLINE; unit `unit-05-09-discipline` (LPT-250 split) | — |
 | End sessions early | explain SoftPulse cues TIRED → WILD → CASH OUT; unit `unit-05-09-discipline` (LPT-250 split) | — |
 | Section 5 checkpoint | — | — |
-| Spot range advantage and nut advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523) | — |
-| Realize equity in and out of position | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524) | — |
-| Recognize capped versus uncapped ranges | Capped, Uncapped, Nuts; densified frame asks (LPT-636) | — |
-| Choose polarized or merged betting | Polar, Merged, Size; densified frame asks (LPT-637) | — |
-| Use overbets and geometric pressure | Overbet, Polar, Geo; densified frame asks (LPT-638); unguided SoftPulse one gold (LPT-497) | — |
-| Use blockers without solver theater | Block, Use, No EV; densified frame asks (LPT-639); unguided SoftPulse one gold (LPT-498) | — |
-| Defend enough without frequency theater | Defend, Bluff, Enough; densified frame asks (LPT-640); unguided SoftPulse one gold (LPT-499) | — |
-| Mix with a reason | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644) | — |
-| Navigate 3-bet and 4-bet pots by depth | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501) | — |
-| Make difficult folds; review coolers fairly | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502) | — |
+| Spot range advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523); unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
+| Spot nut advantage | explain SoftPulse cues NUTS → PAIRED → CALLER; unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
+| Pressure when you own both | explain SoftPulse cues RANGE → NUTS → BET; unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
+| Position realizes equity | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524); unit `unit-06-02-eq-realize` (LPT-257 split) | — |
+| Discount equity out of position | explain SoftPulse cues OOP → BARRELS → DISCOUNT; unit `unit-06-02-eq-realize` (LPT-257 split) | — |
+| Aggression realizes equity | explain SoftPulse cues SEMI-BLUFF → FOLDS → OUTS; unit `unit-06-02-eq-realize` (LPT-257 split) | — |
+| Spot capped ranges | Capped, Uncapped, Nuts; densified frame asks (LPT-636); unit `unit-06-03-capped` (LPT-260 split) | — |
+| Respect uncapped aggression | explain SoftPulse cues RAISE → BET → RESPECT; unit `unit-06-03-capped` (LPT-260 split) | — |
+| Attack capped ranges | explain SoftPulse cues CAPPED → THIN → BLUFF; unit `unit-06-03-capped` (LPT-260 split) | — |
+| Recognize polarized sizing | Polar, Merged, Size; densified frame asks (LPT-637); unit `unit-06-04-polar-merged` (LPT-264 split) | — |
+| Merged sizes for thin value | explain SoftPulse cues MERGED → MEDIUM → VALUE; unit `unit-06-04-polar-merged` (LPT-264 split) | — |
+| Match size to shape | explain SoftPulse cues SIZE → SHAPE → MATCH; unit `unit-06-04-polar-merged` (LPT-264 split) | — |
+| Overbet polar spots | Overbet, Polar, Geo; densified frame asks (LPT-638); unguided SoftPulse one gold (LPT-497); unit `unit-06-05-overbets` (LPT-267 split) | — |
+| Plan geometric sizes | explain SoftPulse cues FLOP → TURN → RIVER; unit `unit-06-05-overbets` (LPT-267 split) | — |
+| No random huge bets | explain SoftPulse cues HUGE → MEDIUM → AVOID; unit `unit-06-05-overbets` (LPT-267 split) | — |
+| Bluff with the right blockers | Block, Use, No EV; densified frame asks (LPT-639); unguided SoftPulse one gold (LPT-498); unit `unit-06-06-blockers` (LPT-270 split) | — |
+| Catch with unblockers | explain SoftPulse cues CATCH → UNBLOCK → BLUFFS; unit `unit-06-06-blockers` (LPT-270 split) | — |
+| Blockers without fake EV | explain SoftPulse cues TWEAK → NO EV; unit `unit-06-06-blockers` (LPT-270 split) | — |
+| Continue with stronger catchers | Defend, Bluff, Enough; densified frame asks (LPT-640); unguided SoftPulse one gold (LPT-499); unit `unit-06-07-min-defense` (LPT-273 split) | — |
+| Fold dominated trash | explain SoftPulse cues THIRD PAIR → SCARY → FOLD; unit `unit-06-07-min-defense` (LPT-273 split) | — |
+| No fake MDF math | explain SoftPulse cues MDF → INTUITION; unit `unit-06-07-min-defense` (LPT-273 split) | — |
+| Mix strong hands sometimes | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644); unit `unit-06-08-mixed` (LPT-277 split) | — |
+| Types reduce mixing | explain SoftPulse cues TYPE → STATION → LESS; unit `unit-06-08-mixed` (LPT-277 split) | — |
+| No mixing for its own sake | explain SoftPulse cues RANDOM → PURPOSE; unit `unit-06-08-mixed` (LPT-277 split) | — |
+| Tighten up in 4-bet pots | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
+| Plan 3-bet pots by SPR | explain SoftPulse cues 3BET → 4BET → DEPTH; unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
+| No ego 4-bets | explain SoftPulse cues 4BET → EGO → AVOID; unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
+| Make hard folds | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502); unit `unit-06-10-folds` (LPT-285 split) | — |
+| Cooler or mistake? | explain SoftPulse cues COOLER → MISTAKE → REVIEW; unit `unit-06-10-folds` (LPT-285 split) | — |
+| No ego call-downs | explain SoftPulse cues DUE → EGO → FOLD; unit `unit-06-10-folds` (LPT-285 split) | — |
 | Observe selective aggression | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494) | entry quizzes |
 | Meet the TAG | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491); densified frame asks (LPT-648) | label quizzes |
 | Adjust versus TAG | Credit, Tighter, No light | respect check |

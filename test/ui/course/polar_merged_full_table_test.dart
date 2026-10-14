@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-06-04-01-polar-merged',
+            'lesson-06-04-01-01-polarized-sizing',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

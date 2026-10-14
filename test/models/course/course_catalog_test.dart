@@ -79,6 +79,17 @@ void main() {
       'lesson-05-07-01-timing-sizing-evidence',
       'lesson-05-08-01-table-dynamics',
       'lesson-05-09-01-session-discipline',
+      // s6a advanced solver concepts
+      'lesson-06-01-01-range-nut-advantage',
+      'lesson-06-02-01-equity-realization',
+      'lesson-06-03-01-capped-uncapped',
+      'lesson-06-04-01-polar-merged',
+      'lesson-06-05-01-overbets-geometric',
+      'lesson-06-06-01-blockers',
+      'lesson-06-07-01-minimum-defense',
+      'lesson-06-08-01-mixed-strategy',
+      'lesson-06-09-01-threebet-fourbet',
+      'lesson-06-10-01-difficult-folds',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];

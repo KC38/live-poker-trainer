@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-06-03-01-capped-uncapped',
+            'lesson-06-03-01-01-spot-caps',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),
