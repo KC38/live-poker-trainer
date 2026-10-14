@@ -604,6 +604,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Identify / naming docks | Action-name quizzes (`identifyUnavailable` on `LessonActionSpot`) keep every dock button looking live until the learner taps — no `CALL (off)` / `RAISE (off)` spoilers. Fold, check, call `checkpoint-legal` and Bet, raise, all-in `checkpoint-names` both set that flag (LPT-78). Capstone authored multi-step hands (`act-07-10-0*-hand`) set the same flag so Jam/Raise mistakes stay live on checked-to streets — never `RAISE (off)` beside a Bet/C-bet choice (LPT-670). Live realism `(off)` chrome stays on guided / scaffolded / short-stack spots that are not identify quizzes or Capstone transfer hands. |
 | Toy-hand authored pot | Authored multi-step toy-hand spots apply labeled `potLabel` and completed call/open street bets on `LessonTableStage` even when `facingBet` is false — BB-calls-your-open shows Pot 13 with matched raise/call chips; flop c-bet keeps Pot 13 (not blinds-only $3 or the $10 street default) (LPT-97). Preflop folds-to-you "Pot 3" does not apply a zero street-bet list — SB/BB chips stay posted in front of those seats. |
 | Section 1 jump ranks | `act-01-06-02-jump-ranks` orders three face-up showdown seats strongest→weakest (Flush → Straight → Two pair) via `LessonShowdownOrderTable` — not under-felt Flush/Straight/Two pair text chips on `LessonMadeHandTable` (LPT-107). |
+| Showdown-order strict seats | Interactive showdown-order SoftPulse asks (`RandomizedLessonShowdownOrderTable` for Compare finished hands unguided / checkpoint, Section 1 jump ranks, and the same framed path) use `strictOrder: true` — a wrong seat is a miss via `onLocalMiss`, never appended as cyan order #1 while SoftPulse marks another seat. Matches `LessonShowdownOrderExplainTable` (LPT-707). |
 | Acting order checkpoint flop | `act-02-01-02-checkpoint-full` deals a three-card flop (`Qs 7c 2d`) on framed `LessonTableStage` so street chrome is FLOP when the ask names a flop — not blinds-only PREFLOP (LPT-148; same board as scaffolded-post). |
 | Effective stacks SoftPulse | BB-convert and effective-stack outcome tiles keep correct-answer `_PotChipDot` chips slate (no permanent gold tip). SoftPulse on densified `_TappableRegion` phases uses `GlowHighlight` so guided / Hint waves report gold SoftPulse in the agent tree (LPT-183). Effective-stack outcome panels (`effectiveStackOutcomes`, `effectiveStack150Outcomes`, `stackDepthOutcomes`) set `villainSeatCount: 0` so the felt never paints a decoy face-down Them seat (LPT-220). |
 | Catalog permanent-gold tips | Densified outcome chips and correct-answer icons across the catalog stay slate/cream (`_PotChipDot(gold: false)`, Icon `AppColors.slate`) — including Call 10 / Villain bet, SPR 4, HI/LO participation, Sticky handshake, Narrow entry, Pot·effective, Take pot, habit / player-type / ranges tiles. SoftPulse `GlowHighlight` is the only gold teach signal (LPT-633). |
@@ -664,6 +665,7 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Adjust versus LAG densified asks | Adjust versus LAG densified asks (`act-06-12-03-unguided` / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-651). |
 | Adjust versus TAG densified asks | Adjust versus TAG densified checkpoint (`act-06-11-03-checkpoint`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-652). |
 | Same cards densified asks | Same cards, five type models densified checkpoint (`act-06-13-01-checkpoint`) routes through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-654). |
+| Prefer nut potential multiway checkpoint densified coach | Prefer nut potential multiway checkpoint densified coach (`act-05-01-01-checkpoint`) uses a non-spoiling stem (situation + tap verb, no Nut potential / clean equity tile labels) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-723; SoftPulse-off intentional per LPT-653; same class as LPT-717 / LPT-672). |
 | Section 6 checkpoint densified asks | Section 6 checkpoint densified asks (`act-06-13-02-cp-adv` / `cp-cap` / `cp-polar` / `cp-tag` / `cp-lag`) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-655). |
 | Carry a preflop plan densified asks | Carry a preflop plan onto the flop densified asks (`act-07-01-01-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-656). |
 | Map turn barrels densified asks | Map turn barrels before you bet flop densified asks (`act-07-02-01-guided` / scaffolded / unguided / checkpoint) route through `selectIdentifyDensifiedCoachLine` into `lessonFrameSpeech` — never catalog quiz copy plus "Tap the best answer." (LPT-657). |
@@ -1211,7 +1213,10 @@ steps use cue kind `none` (no pressHints).
 Section 5 checkpoint `teachSpec` (LPT-251): cp-multi `none` → `nut`; cp-
 value fixed Jh9d/Kc9s4h2d7c → `bet`; cp-catch fixed Jh9d/Kc9s4h2d7c →
 `call`; cp-tell `none` → `soft`; cp-stop `none` → `stop`; assessment steps
-use cue kind `none` (no pressHints).
+use cue kind `none` (no pressHints). SoftPulse-off densify stems for
+cp-multi / cp-tell / cp-stop use non-spoiling matching-priority / matching-
+read / matching-plan copy (LPT-717; same class as LPT-672 / LPT-673 /
+LPT-674).
 
 Choose polarized or merged betting `teachSpec` (LPT-262): explain SoftPulse
 advances POLAR → MERGED → SIZE; guided `none` → `polar`; scaffolded fixed
@@ -1789,7 +1794,7 @@ felt.
 | Blinds post first | explain SoftPulse cues BLINDS → DEAL; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
 | Order hand ranks | Showdown seats weakest to strongest; unit `unit-01-02-what-beats-what` (LPT-90 split) | scaffolded pressHints one-per-press (LPT-667) |
 | Pairs, straights, flushes | explain SoftPulse cues PAIR → STRAIGHT → FLUSH; unit `unit-01-02-what-beats-what` (LPT-90 split) | — |
-| Compare finished hands | explain SoftPulse cues FULL HOUSE → TRIPS → TWO PAIR; unit `unit-01-02-what-beats-what` (LPT-90 split) | — |
+| Compare finished hands | explain SoftPulse cues FULL HOUSE → TRIPS → TWO PAIR; unguided/checkpoint showdown SoftPulse rejects a wrong seat as a miss (`strictOrder`, LPT-707); unit `unit-01-02-what-beats-what` (LPT-90 split) | — |
 | Best five from seven | The five cards that play; You / Them / Board; unit `unit-01-02-what-beats-what` (LPT-93 split) | scaffolded pressHints one-per-press (LPT-667) |
 | Kickers break ties | explain SoftPulse cues SAME PAIR → KICKER; unit `unit-01-02-what-beats-what` (LPT-93 split) | — |
 | When the board plays | explain SoftPulse cues BOARD → CHOP; unit `unit-01-02-what-beats-what` (LPT-93 split) | — |
@@ -1900,7 +1905,7 @@ felt.
 | Same hand, different types | Cards, Seats, Evidence; unit `unit-04-10-exploits` (LPT-218 split) | — |
 | Combine type, position, and stack | explain SoftPulse cues TYPE → POSITION → STACK; unit `unit-04-10-exploits` (LPT-218 split) | — |
 | Section 4 jump check | jump-range SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| Prefer nut potential multiway | Nutted, Air, Domination; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
+| Prefer nut potential multiway | Nutted, Air, Domination; checkpoint SoftPulse-off densify stem non-spoiling (LPT-723); unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
 | Tighten speculative hands multiway | explain SoftPulse cues MULTIWAY → OOP → FOLD; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
 | Value thicker when callers stick | explain SoftPulse cues CALLERS → SET → BET; unit `unit-05-01-multiway-ranges` (LPT-224 split) | — |
 | Depth pays speculative hands | Deep, Realize, Stack; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
@@ -1927,7 +1932,7 @@ felt.
 | Set a stop-loss | Quit, Guard, First; densified SoftPulse one gold (LPT-521); unit `unit-05-09-discipline` (LPT-250 split) | — |
 | Bankroll fits stakes | explain SoftPulse cues BANKROLL → STAKES → DECLINE; unit `unit-05-09-discipline` (LPT-250 split) | — |
 | End sessions early | explain SoftPulse cues TIRED → WILD → CASH OUT; unit `unit-05-09-discipline` (LPT-250 split) | — |
-| Section 5 checkpoint | — | — |
+| Section 5 checkpoint | SoftPulse-off densify stems non-spoiling (LPT-717) | — |
 | Spot range advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523); unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
 | Spot nut advantage | explain SoftPulse cues NUTS → PAIRED → CALLER; unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
 | Pressure when you own both | explain SoftPulse cues RANGE → NUTS → BET; unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |

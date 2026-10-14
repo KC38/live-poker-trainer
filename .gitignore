@@ -68,6 +68,10 @@ app.*.map.json
 *.aab
 *.ipa
 
+# Agent throwaway probe tests (LPT-697 left _probe_*.dart on PRIMARY and
+# wedged the ui-agent loop). Prefer ~/.live-poker-trainer/agent-probes/.
+**/_probe_*.dart
+
 # Python tooling
 __pycache__/
 .venv/

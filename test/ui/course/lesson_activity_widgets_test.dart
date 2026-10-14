@@ -31269,6 +31269,125 @@ await tester.tap(find.text('NIT'));
     },
   );
 
+  testWidgets(
+    'prefer nut potential checkpoint densify coach does not spoil (LPT-723)',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-05-01-01-checkpoint',
+        order: 3,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Multiway construction priority.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Multiway construction priority?',
+        choices: const [
+          CourseChoice(id: 'nuts', label: 'Nut potential and clean equity'),
+          CourseChoice(id: 'any', label: 'Any two'),
+        ],
+      );
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final speech = lessonFrameSpeech(activity);
+      expect(speech, contains('tap the matching priority'));
+      expect(speech.toLowerCase(), isNot(contains('nut potential')));
+      expect(speech.toLowerCase(), isNot(contains('clean equity')));
+      expect(speech, isNot(contains('Tap the best answer')));
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    's5 checkpoint densify coach does not spoil Nut potential (LPT-717)',
+    (tester) async {
+      final multi = CourseActivity(
+        id: 'act-05-09-02-cp-multi',
+        order: 1,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Four-way pot priority.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Four-way pot priority?',
+        choices: const [
+          CourseChoice(id: 'nut', label: 'Nut potential'),
+          CourseChoice(id: 'bluff', label: 'Bluff more'),
+        ],
+      );
+      final tell = CourseActivity(
+        id: 'act-05-09-02-cp-tell',
+        order: 4,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Instant shove soft evidence.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Instant shove proves?',
+        choices: const [
+          CourseChoice(id: 'soft', label: 'Soft evidence'),
+          CourseChoice(id: 'nuts', label: 'Absolute nuts'),
+        ],
+      );
+      final stop = CourseActivity(
+        id: 'act-05-09-02-cp-stop',
+        order: 5,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.checkpoint,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Hit stop-loss.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Hit stop-loss. Do?',
+        choices: const [
+          CourseChoice(id: 'stop', label: 'Honor stop'),
+          CourseChoice(id: 'chase', label: 'Chase'),
+        ],
+      );
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final multiSpeech = lessonFrameSpeech(multi);
+      expect(multiSpeech, contains('tap the matching priority'));
+      expect(multiSpeech.toLowerCase(), isNot(contains('nut potential')));
+      expect(multiSpeech, isNot(contains('Tap the best answer')));
+      final tellSpeech = lessonFrameSpeech(tell);
+      expect(tellSpeech, contains('tap the matching read'));
+      expect(tellSpeech.toLowerCase(), isNot(contains('soft evidence')));
+      expect(tellSpeech, isNot(contains('Tap the best answer')));
+      final stopSpeech = lessonFrameSpeech(stop);
+      expect(stopSpeech, contains('tap the matching plan'));
+      expect(stopSpeech.toLowerCase(), isNot(contains('honor stop')));
+      expect(stopSpeech, isNot(contains('Tap the best answer')));
+      final controller = LessonActivityController(activity: multi);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: multi,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
   testWidgets('s7 five type final cs taps Station value on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-07-12-01-cs',

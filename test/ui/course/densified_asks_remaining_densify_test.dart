@@ -43,6 +43,13 @@ const _lines = <String, String>{
       'Selective entry, disciplined barrels. Label + vs raise — tap the matching plan.',
   'act-07-12-01-lag':
       'Wide entry, sustained pressure, some folds. Label + line — tap the matching plan.',
+  // LPT-717: Section 5 checkpoint densify — no correct tile spoil.
+  'act-05-09-02-cp-multi':
+      'Four-way pot priority — tap the matching priority.',
+  'act-05-09-02-cp-tell':
+      'Instant shove proves — tap the matching read.',
+  'act-05-09-02-cp-stop':
+      'Hit stop-loss. Do — tap the matching plan.',
 };
 
 /// Phrases that would spoil the Final five-type checkpoint answers (LPT-672).
@@ -86,6 +93,13 @@ const _sectionFourJumpSpoilers = <String, List<String>>{
   ],
   'act-04-10-02-jump-nit': ['nit', 'respect the raise', 'steal more'],
   'act-04-10-02-jump-maniac': ['maniac', 'bluff-catch', 'ego raises'],
+};
+
+/// Phrases that would spoil Section 5 checkpoint densify answers (LPT-717).
+const _sectionFiveCheckpointSpoilers = <String, List<String>>{
+  'act-05-09-02-cp-multi': ['nut potential', 'pick nut'],
+  'act-05-09-02-cp-tell': ['soft evidence', 'pick soft'],
+  'act-05-09-02-cp-stop': ['honor stop', 'pick honor'],
 };
 
 void main() {
@@ -189,4 +203,30 @@ void main() {
       }
     }
   });
+
+  test(
+    'Section 5 checkpoint densify stems do not spoil correct tiles (LPT-717)',
+    () {
+      const expected = <String, String>{
+        'act-05-09-02-cp-multi':
+            'Four-way pot priority — tap the matching priority.',
+        'act-05-09-02-cp-tell':
+            'Instant shove proves — tap the matching read.',
+        'act-05-09-02-cp-stop':
+            'Hit stop-loss. Do — tap the matching plan.',
+      };
+      for (final MapEntry(key: id, value: line) in expected.entries) {
+        final resolved = selectIdentifyDensifiedCoachLine(id);
+        expect(resolved, line, reason: id);
+        final lower = (resolved ?? '').toLowerCase();
+        for (final spoil in _sectionFiveCheckpointSpoilers[id]!) {
+          expect(
+            lower,
+            isNot(contains(spoil)),
+            reason: '$id must not contain "$spoil"',
+          );
+        }
+      }
+    },
+  );
 }
