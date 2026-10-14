@@ -4145,6 +4145,21 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Plan-3bet SoftPulse residual **LPT-704** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-06-08-01-*: interactive structural clean on tip except LPT-703 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided sizing `fixed`+variants — do not reopen LPT-627; scaffolded/unguided/checkpoint `deal.mode` `none` — do not file handFamily.
 
+## Fold 2026-10-15bv tip 68983138 (#2611 → Plan-3bet SoftPulse residual LPT-704 Prefer)
+
+- Tip-stable `68983138` (#2611 Mix SoftPulse Prefer LPT-703 on tip after #2610/#2609). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync.
+- Prefer NEVER Plan-3bet SoftPulse residual **LPT-704** re-check (`lesson-06-09-01-01/02/03` / `act-06-09-01-*`):
+  - careful-4bet SoftPulse 4BET→STRONG→CAREFUL content-driven + guided SoftPulse `careful` densify PRESENT (`deal.mode` `none`) — concept-aligned.
+  - **middle-child** SoftPulse 3BET→4BET→DEPTH + `explainGrading` "3-bet → 4-bet → Depth." + Dart `ThreeBetFourBetSprDemo.points` 3BET/4BET/DEPTH (captions Shrink ranges / Lower SPR / Decides commit) / `LessonThreeBetFourBetSprExplainTable` / layout "Tap 3-Bet, then 4-Bet, then Depth." + coachMedia "3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment." still pre-split under plan-3bet-spr → **LPT-704** still To Do (needs-human; Relates LPT-282 — do not re-add needs-human on curriculum; reused explain is middle-child, not first-child).
+  - scaffolded SoftPulse `small` one-per-press PRESENT (`Ah`/`Qd`·`8c`/`3h`/`2s` +2 suit variants; Dart `stackLabel` Stacks left 360 match); checkpoint SoftPulse `spr` kind `none` densify PRESENT under plan-3bet-spr — no companion residual.
+  - ego SoftPulse 4BET→EGO→AVOID content-driven + unguided SoftPulse `avoid` one-per-press densify PRESENT (do not reopen LPT-669).
+- Curriculum **LPT-282** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-704/282/703/705/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Hard-folds SoftPulse residual **LPT-705** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-06-09-01-*: interactive structural clean on tip except LPT-704 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants AQo-miss honesty; densify PRESENT — do not reopen LPT-628.
+
 ## Fold 2026-10-15br tip 50e4dc56 (#2605 → Overbet SoftPulse residual LPT-699 Prefer)
 
 - Tip-stable `50e4dc56` (#2605 Polar SoftPulse Prefer LPT-696 on tip after #2604). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
