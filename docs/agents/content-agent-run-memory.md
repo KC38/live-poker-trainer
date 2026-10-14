@@ -2452,3 +2452,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-182** Done — do not clone / do not re-add needs-human. Tip-commented LPT-677/182/676 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…760.
 - Prefer next: NEVER `lesson-04-06-01-*` observe-sticky / Low residuals LPT-676…760.
 - act-04-05-01-*: interactive structural clean on tip except curriculum residual LPT-677; SoftPulse explain successors content-driven (do not reopen LPT-669); guided is `deal.mode` `none` outcome tiles — do not file handFamily.
+
+## Fold 2026-10-14ec (ddb7c781 discovery observe-sticky SoftPulse residual)
+
+- Tip-stable `ddb7c781` (#2354 SPR SoftPulse residual re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-04-06-01-01/02/03` under Observe sticky unit:
+  - first-child `act-04-06-01-explain` SoftPulse ENTERS→CALLS→FOLDS + `explainGrading` under Tag high participation → **LPT-761** (needs-human; Relates LPT-186).
+  - successors `act-04-06-01-02-explain-folding` (FOLDS TO BETS→STICKY) + `act-04-06-01-03-explain-certainty` (OBSERVATION→SAMPLES) content-driven; guided SoftPulse `high-part` densify PRESENT (`deal.mode` `none`) + scaffolded SoftPulse `sticky` densify PRESENT + unguided SoftPulse `low-conf` densify PRESENT + checkpoint SoftPulse `bundle` kind `none` hintless (evidence-bundle residual note under Tag low folding on LPT-761).
+- Curriculum **LPT-186** Done — do not clone / do not re-add needs-human. Tip-commented LPT-761/186/677 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…761.
+- Prefer next: NEVER `lesson-04-06-02-*` Meet Station / Low residuals LPT-676…761.
+- act-04-06-01-*: interactive structural clean on tip except SoftPulse residual LPT-761; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` observation tiles — do not file handFamily.
