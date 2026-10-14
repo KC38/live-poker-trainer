@@ -770,6 +770,15 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-143, LPT-146, LPT-151, LPT-154, LPT-157, LPT-160, LPT-163: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-03-02-01-flop-hand-classes` → `lesson-03-02-01-01-made-hands`, `lesson-03-02-01-02-draws-vs-showdown`, `lesson-03-02-01-03-air` (LPT-143)
+- `lesson-03-03-01-outs-and-price` → `lesson-03-03-01-01-clean-outs`, `lesson-03-03-01-02-pot-odds`, `lesson-03-03-01-03-implied-odds` (LPT-146)
+- `lesson-03-04-01-flop-decisions` → `lesson-03-04-01-01-value-bet`, `lesson-03-04-01-02-selective-cbet`, `lesson-03-04-01-03-flop-plan` (LPT-151)
+- `lesson-03-05-01-turn-decisions` → `lesson-03-05-01-01-brick-or-change`, `lesson-03-05-01-02-second-barrel`, `lesson-03-05-01-03-delayed-aggression` (LPT-154)
+- `lesson-03-06-01-river-decisions` → `lesson-03-06-01-01-river-value`, `lesson-03-06-01-02-credible-bluff`, `lesson-03-06-01-03-catch-or-fold` (LPT-157)
+- `lesson-03-07-01-multiway-fundamentals` → `lesson-03-07-01-01-stronger-value`, `lesson-03-07-01-02-bluff-less`, `lesson-03-07-01-03-nut-potential` (LPT-160)
+- `lesson-03-08-01-leak-repair` → `lesson-03-08-01-01-weak-top-pair`, `lesson-03-08-01-02-bad-prices`, `lesson-03-08-01-03-passive-and-crowds` (LPT-163)
+
 Curriculum splits LPT-114, LPT-117, LPT-121, LPT-124, LPT-127, LPT-130, LPT-133, LPT-140: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-02-01-01-position-labels` → `lesson-02-01-01-01-seat-labels`, `lesson-02-01-01-02-blind-labels`, `lesson-02-01-01-03-later-seats` (LPT-114)
 - `lesson-02-01-02-acting-order` → `lesson-02-01-02-01-preflop-order`, `lesson-02-01-02-02-postflop-order`, `lesson-02-01-02-03-wait-your-turn` (LPT-117)
@@ -1731,13 +1740,27 @@ felt.
 | Pot and stacks | Pot, Stacks, Button, Who Acts; unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS; unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Words are binding | explain SoftPulse cues SAY → BINDING; unit `unit-03-01-reading-table` (LPT-140 split) | — |
-| Name your flop class | Made, Draw, SDV, Air; fixed steps author suit-rotated `deal.variants` (LPT-384) | — |
-| Count outs, pay the right price | Clean, Dirty, Price; densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634) | — |
-| Choose a flop line | Value, C-bet, Check, Call, Fold, Raise; postflop TPTK/broadway remap fingerprint (LPT-311) | — |
-| Plan the turn card | Brick, Change, Barrel, Delay | — |
-| Close the river correctly | Value, Bluff, Catch, Fold; densified frame ask (LPT-343) | — |
-| Play tighter multiway | Stronger, Fewer, Nuts | — |
-| Patch the common leaks | Top pair, Prices, Passive, Crowds | — |
+| Made hands | Made, Draw, SDV, Air; fixed steps author suit-rotated `deal.variants` (LPT-384); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE; unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Recognize air | explain SoftPulse cues AIR → FOLD EQUITY; unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Clean versus dirty outs | Clean, Dirty, Price; densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-03-03-outs-price` (LPT-146 split) | — |
+| Pot odds versus equity | explain SoftPulse cues PRICE → POT → EQUITY; unit `unit-03-03-outs-price` (LPT-146 split) | — |
+| Implied odds when deep | explain SoftPulse cues DEEP → IMPLIED ODDS; unit `unit-03-03-outs-price` (LPT-146 split) | — |
+| Value bet the flop | Value, C-bet, Check, Call, Fold, Raise; postflop TPTK/broadway remap fingerprint (LPT-311); unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
+| C-bet selectively | explain SoftPulse cues PREFLOP RAISER → C-BET; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
+| Raise, call, or fold with a plan | explain SoftPulse cues RAISE → CALL → FOLD; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
+| Brick or changing turn | Brick, Change, Barrel, Delay; unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
+| Second barrel | explain SoftPulse cues BRICK → BARREL; unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
+| Delayed aggression | explain SoftPulse cues CHECKED BACK → BET TURN; unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
+| River value | Value, Bluff, Catch, Fold; densified frame ask (LPT-343); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
+| Credible bluffs | explain SoftPulse cues STORY → BLUFF; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
+| Bluff-catch or fold | explain SoftPulse cues BLUFF-CATCH → FOLD; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
+| Stronger hands multiway | Stronger, Fewer, Nuts; unit `unit-03-07-multiway` (LPT-160 split) | — |
+| Bluff less multiway | explain SoftPulse cues CROWD → FEWER BLUFFS; unit `unit-03-07-multiway` (LPT-160 split) | — |
+| Nut potential and position | explain SoftPulse cues NUTS → POSITION; unit `unit-03-07-multiway` (LPT-160 split) | — |
+| Weak top pair | Top pair, Prices, Passive, Crowds; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
+| Fold bad prices | explain SoftPulse cues BAD PRICE → FOLD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
+| Passive calls and crowd bluffs | explain SoftPulse cues PASSIVE → CROWD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Section 3 jump check | densified frame asks (LPT-390) | — |
 | Think in ranges | One hand, Range, Update; densified frame asks (LPT-403); unguided/checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | — |
 | Navigate 3-bet pots | 3-bet, Ranges, Squeeze | — |

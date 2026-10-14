@@ -21,13 +21,13 @@ import {
 export function buildSectionThree() {
   const prev = SECTION_TWO_EXIT_LESSON;
   const L030101 = "lesson-03-01-01-reading-live-table"; // retired LPT-140: split in course.json (lessonSplitMap)
-  const L030201 = "lesson-03-02-01-flop-hand-classes";
-  const L030301 = "lesson-03-03-01-outs-and-price";
-  const L030401 = "lesson-03-04-01-flop-decisions";
-  const L030501 = "lesson-03-05-01-turn-decisions";
-  const L030601 = "lesson-03-06-01-river-decisions";
-  const L030701 = "lesson-03-07-01-multiway-fundamentals";
-  const L030801 = "lesson-03-08-01-leak-repair";
+  const L030201 = "lesson-03-02-01-flop-hand-classes"; // retired LPT-143: split in course.json (lessonSplitMap)
+  const L030301 = "lesson-03-03-01-outs-and-price"; // retired LPT-146: split in course.json (lessonSplitMap)
+  const L030401 = "lesson-03-04-01-flop-decisions"; // retired LPT-151: split in course.json (lessonSplitMap)
+  const L030501 = "lesson-03-05-01-turn-decisions"; // retired LPT-154: split in course.json (lessonSplitMap)
+  const L030601 = "lesson-03-06-01-river-decisions"; // retired LPT-157: split in course.json (lessonSplitMap)
+  const L030701 = "lesson-03-07-01-multiway-fundamentals"; // retired LPT-160: split in course.json (lessonSplitMap)
+  const L030801 = "lesson-03-08-01-leak-repair"; // retired LPT-163: split in course.json (lessonSplitMap)
   const L030802 = "lesson-03-08-02-section-three-jump-test";
 
   return {
