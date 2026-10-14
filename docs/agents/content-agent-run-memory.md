@@ -3282,3 +3282,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-696/264/699/694/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing (second-pair honesty).
+
+## Fold 2026-10-14hp tip f381fe92 (#2470 Polar Prefer → Overbet LPT-699 Prefer)
+
+- Tip-stable `f381fe92` after #2471 densify stem + #2470 Polar SoftPulse Prefer LPT-696. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Prefer NEVER Overbet SoftPulse residual **LPT-699** re-check: OVERBET→POLAR→GEO still under polar-overbets-only — still To Do (Relates LPT-267; race LPT-698 Done). Successors content-driven; densify PRESENT; curriculum LPT-267 Done — do not clone.
+- next: NEVER Blockers SoftPulse residual **LPT-700** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
