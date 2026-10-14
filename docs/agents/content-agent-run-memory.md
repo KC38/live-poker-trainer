@@ -2122,3 +2122,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - successors `act-06-12-03-02-explain-trap` (STRONG HAND→LET THEM BET) + `act-06-12-03-03-explain-fancy` (NO BIG BLUFF→LET THEM) content-driven (do not reopen LPT-669); guided SoftPulse `call` + scaffolded SoftPulse `trap` + unguided SoftPulse `avoid` one-per-press densify PRESENT.
 - Curriculum **LPT-303** Done — do not clone / do not re-add needs-human. Done-ack LPT-301/302/441/503/651.
 - Prefer next NEVER: `lesson-06-13-01-*` mix-five / remaining S6 NEVER / Low curriculum.
+
+## Fold 2026-10-14ct (31a5783e Mix five NEVER)
+
+- Tip-stable `31a5783e` (#2301). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-06-13-01-*` Mix five / Same cards children under `unit-06-13-mix`:
+  - first-child `act-06-13-01-explain` SoftPulse CARDS→SEATS→EVIDENCE + Dart `ExploitEvidenceDemo` / `LessonExploitEvidenceExplainTable` still pre-split under Station-thin-only → filed **LPT-721** (needs-human; Relates LPT-306).
+  - successors `act-06-13-01-02-explain-nit` (NIT CHECK-RAISE→FOLD) + `act-06-13-01-03-explain-lag` (LAG BARREL→CALL) + `act-06-13-01-04-explain-cite` (TENDENCY→LINE) content-driven (do not reopen LPT-669); guided SoftPulse `cs` + scaffolded SoftPulse `nit` + unguided SoftPulse `lag` one-per-press PRESENT (same-cards deals + suit variants match Dart).
+  - checkpoint SoftPulse `tag` under `lesson-06-13-01-04-cite-tendency` matches cite objective — no companion residual. Maniac/baseline never-as-correct notes from LPT-306 resolved by child objectives.
+- Curriculum **LPT-306** Done — do not clone / do not re-add needs-human. Done-ack LPT-304/305/442.
+- Prefer next NEVER: `lesson-06-13-02-*` S6 checkpoint / remaining S6 NEVER / Low curriculum.
