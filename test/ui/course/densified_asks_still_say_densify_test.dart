@@ -93,8 +93,9 @@ const _lines = <String, String>{
   // LPT-765: SoftPulse-off densify — no correct-tile spoil.
   'act-04-07-02-checkpoint':
       'Nit is best treated as — tap the matching model stance.',
+  // LPT-778: SoftPulse-off densify — no correct-tile spoil.
   'act-04-07-03-checkpoint':
-      'Why respect a Nit check-raise — pick Range is strong when they raise.',
+      'Why respect a Nit check-raise — tap the matching reason.',
   'act-04-08-01-guided': 'Seat raises or 3-bets twelve of fifteen pots. Observation — pick Extreme entry and aggression.',
   'act-04-08-01-scaffolded': 'They bet flop, turn, and river with weak showdowns twice. Note — pick Continues pressure too wide.',
   'act-04-08-01-unguided': 'Best note style versus wild aggression — pick Frequencies and shows — no ego story.',
@@ -108,7 +109,9 @@ const _lines = <String, String>{
       'Why call wider versus a Maniac — pick Their betting range is too wide.',
   'act-04-09-01-guided': 'You saw one huge bluff. What do you know — pick One note — low certainty.',
   'act-04-09-01-scaffolded': 'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
-  'act-04-09-01-checkpoint': 'Course should show what beside a type label — pick Sample and confidence limits.',
+  // LPT-777: SoftPulse-off densify — no correct-tile spoil.
+  'act-04-09-01-checkpoint':
+      'Course should show what beside a type label — tap the matching note.',
   'act-04-10-02-jump-range':
       'UTG open is best described as — tap the matching range.',
   'act-04-10-02-jump-spr':

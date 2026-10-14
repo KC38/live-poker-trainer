@@ -417,8 +417,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // same class as LPT-764 / LPT-763 / LPT-746 / LPT-653).
     'act-04-07-02-checkpoint' =>
       'Nit is best treated as — tap the matching model stance.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Range is strong when they raise in the idle bubble (LPT-778;
+    // same class as LPT-777 / LPT-765 / LPT-770 / LPT-771 / LPT-653).
     'act-04-07-03-checkpoint' =>
-      'Why respect a Nit check-raise — pick Range is strong when they raise.',
+      'Why respect a Nit check-raise — tap the matching reason.',
     'act-04-08-01-guided' =>
       'Seat raises or 3-bets twelve of fifteen pots. Observation — pick Extreme entry and aggression.',
     'act-04-08-01-scaffolded' =>
@@ -441,8 +444,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'You saw one huge bluff. What do you know — pick One note — low certainty.',
     'act-04-09-01-scaffolded' =>
       'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Sample and confidence limits in the idle bubble (LPT-777; same
+    // class as LPT-778 / LPT-765 / LPT-770 / LPT-771 / LPT-653).
     'act-04-09-01-checkpoint' =>
-      'Course should show what beside a type label — pick Sample and confidence limits.',
+      'Course should show what beside a type label — tap the matching note.',
     // Assessment SoftPulse-off densify (LPT-673): situation + tap verb only —
     // never name the correct tile/value in the idle bubble (same as LPT-672).
     'act-04-10-02-jump-range' =>
