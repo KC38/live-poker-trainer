@@ -2377,3 +2377,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-154** Done — do not clone / do not re-add needs-human; distinct from Advanced lines **LPT-684**. Tip-commented LPT-154/754 + Meet Nit LPT-198 / LPT-216; leave open LPT-754/753/752….
 - Prefer next: NEVER `lesson-03-06-01-*` river-decisions / Low residuals LPT-676…754.
 
+## Fold 2026-10-14du (af941fdf discovery river-decisions SoftPulse residual)
+
+- Tip-stable `af941fdf` (#2343). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-03-06-01-01/02/03` under river-decisions unit:
+  - first-child `act-03-06-01-explain` SoftPulse VALUE→BLUFF→CATCH→FOLD + `explainGrading` under River-value-only → filed **LPT-755** (needs-human; Relates LPT-157).
+  - successors `act-03-06-01-02-explain-bluff` (STORY→BLUFF) + `act-03-06-01-03-explain-catch` (BLUFF-CATCH→FOLD) content-driven; guided SoftPulse `val-bet` + scaffolded SoftPulse `bluff` + unguided SoftPulse `fold-weak` + checkpoint SoftPulse `role-catch` kind `none` PRESENT.
+- Curriculum **LPT-157** Done — do not clone / do not re-add needs-human; distinct from flop **LPT-753**. Tip-commented LPT-157/755 + Meet Nit LPT-198 / LPT-216; leave open LPT-755/754/753….
+- Prefer next: NEVER `lesson-03-07-01-*` multiway / Low residuals LPT-676…755.
+
+
