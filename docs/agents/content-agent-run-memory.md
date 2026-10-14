@@ -2935,3 +2935,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Capstone `lesson-07-10-0*` / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-09-01-*: interactive structural clean on tip except LPT-727 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669).
 
+## Fold 2026-10-14fx (8e376e17 Prefer NEVER Capstone lesson-07-10-0* clean)
+
+- Tip-stable `8e376e17` (#2416 leak SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER Capstone `lesson-07-10-01-capstone-srp` / `02-capstone-3bet` / `03-capstone-multiway-deep` / `04-capstone-limped` / `05-capstone-4bet`:
+  - explains SoftPulse + `explainGrading` concept-aligned (PLAN→UPDATE→FINISH / SPR→TURN→CLOSE / NUTS→DEEP→NO-BLUFF / NUTS→VALUE→THIN / SPR→COMMIT→NO HERO); `deal.mode` `none`.
+  - hands `authored_multi_step_hand` scaffolded + `assessmentRole` `transfer` + empty pressHints in `NO_HINT_ACTIVITY_IDS` — **LPT-348** Done (do not reopen LPT-626/667).
+  - `deal.mode` `fixed` + 2 suit variants match Dart `resolveToyHandStepSpot` (Ah/Qd·Kc7s2h2d9c; Ah/Qd·Qs8h3d2d7c; Ah/Qh·Jh8h2c3d9c; Ah/Kh·Kd9c4h2s8d; Kh/Kd·Qs8h3d2dAd).
+  - Synthesis containers in `unit-07-10-capstones` — skip curriculum-split; no SoftPulse residual (not a post-split child leak).
+- Tip-commented Done-ack LPT-348/337/339/341/345/347 + leave-open LPT-351/727; leave open LPT-676…802; leave ui-agent alone.
+- Prefer next: NEVER `lesson-07-11-01-*` live-warmup / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-10-0*: structural **clean** on tip (transfer policy + deal honesty hold).
+
