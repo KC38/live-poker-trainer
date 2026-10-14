@@ -2607,3 +2607,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-05-09-01-*` session-discipline / Low residuals LPT-676…779 (LPT-680…687 + LPT-690/691).
 - act-05-08-01-*: interactive structural clean on tip except LPT-686 SoftPulse + LPT-687 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14ev (8a40468c Prefer NEVER session-discipline SoftPulse re-check)
+
+- Tip-stable `8a40468c` (#2381 table-dynamics SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-05-09-01-01/02/03` under session-discipline unit:
+  - first-child `act-05-09-01-explain` SoftPulse QUIT→GUARD→FIRST + `explainGrading` "Quit → Guard → First." + coachMedia "Guardrails first." + Dart `GuardrailsDemo` still pre-split under stop-loss-only → residual **LPT-690** still To Do (needs-human).
+  - companion `act-05-09-01-checkpoint` SoftPulse `edge` kind `none` densify PRESENT under End sessions grades Session discipline = Your edge → residual **LPT-691** still To Do (needs-human).
+  - successors `act-05-09-01-02-explain-bankroll` (BANKROLL→STAKES→DECLINE) + `act-05-09-01-03-explain-quit` (TIRED→WILD→CASH OUT) content-driven; guided SoftPulse `stop` densify PRESENT; scaffolded SoftPulse `decline` one-per-press PRESENT; unguided SoftPulse `cash` one-per-press PRESENT.
+- Curriculum **LPT-250** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-690/691/250/198/216/686/687/692; leave open LPT-676…779; leave ui-agent In Progress alone.
+- Prefer next: NEVER `lesson-06-01-01-*` range-nut / Low residuals LPT-676…779 (LPT-680…692).
+- act-05-09-01-*: interactive structural clean on tip except LPT-690 SoftPulse + LPT-691 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
