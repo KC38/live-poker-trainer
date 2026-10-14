@@ -3036,3 +3036,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-699/267/198/216/696; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Blockers SoftPulse residual **LPT-700** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gj (7500cbdc Prefer NEVER Blockers SoftPulse residual LPT-700 re-check)
+
+- Tip-stable `7500cbdc` (#2433 Overbet SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Blockers SoftPulse residual re-check `lesson-06-06-01-01/02/03`: first-child SoftPulse BLOCK→USE→NO EV + Dart `BlockersDemo` still pre-split under bluff-blockers-only → residual **LPT-700** still To Do (needs-human; Relates LPT-270); successors content-driven; checkpoint SoftPulse `no` under no-fake-ev — no companion residual; curriculum **LPT-270** Done.
+- Tip-commented LPT-700/270/198/216/699; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Defend SoftPulse residual **LPT-701** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
