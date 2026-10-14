@@ -2558,3 +2558,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-224/222/680/779/198/216/725/775; leave open LPT-676…779.
 - Prefer next: NEVER `lesson-05-02-01-*` deep-stack / Low residuals LPT-676…779 (residual **LPT-680** still To Do).
 - act-05-01-01-*: interactive structural clean on tip; SoftPulse explain concept-aligned / successors content-driven (do not reopen LPT-669); guided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
+## Fold 2026-10-14eo (31134c82 discovery deep-stack SoftPulse Prefer re-check)
+
+- Tip-stable `31134c82` (#2370 multiway SoftPulse residual clean Prefer NEVER → deep-stack). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-05-02-01-01/02/03` under deep-stack unit:
+  - first-child `act-05-02-01-explain` SoftPulse DEEP→REALIZE→STACK + `explainGrading` under Use-depth-for-speculative-implied-odds **concept-aligned** (no SoftPulse residual).
+  - successors `act-05-02-01-02-explain-stack-off` (DEEP→ONE PAIR→FOLD) + `act-05-02-01-03-explain-plan` (SPR→TURN→RIVER) content-driven; guided SoftPulse `impl` densify PRESENT (`deal.mode` `none`); scaffolded SoftPulse `fold-tp` one-per-press PRESENT (`Ad`/`9c`·`As`/`Th`/`7h` +2 suit variants; Dart `stackLabel` Stacks left 500); unguided SoftPulse `plan` densify PRESENT; checkpoint SoftPulse `pos` kind `none` hintless densify PRESENT.
+- Curriculum **LPT-227** Done — do not clone / do not re-add needs-human; residual rewards-synthesis checkpoint still under Plan-high-SPR → **LPT-680** still To Do (needs-human).
+- Tip-commented LPT-680/227/779/198/216/681/224/725/775/225; leave open LPT-676…779.
+- Prefer next: NEVER `lesson-05-03-01-*` implied-odds / Low residuals LPT-676…779 (LPT-680 + LPT-681).
+- act-05-02-01-*: interactive structural clean on tip except LPT-680 residual; SoftPulse explain concept-aligned / successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
