@@ -2807,3 +2807,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-718/719/303/198/216/716; leave open LPT-676…779; leave ui-agent alone.
 - Prefer next: NEVER `lesson-06-13-01-*` mix-five / Low residuals LPT-676…779 (LPT-680…721).
 - act-06-12-03-*: interactive structural clean on tip except LPT-718 SoftPulse + LPT-719 cite residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded sizing `fixed`+variants — do not reopen LPT-627; unguided/checkpoint `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-14fm (05b341f4 Prefer NEVER Mix five SoftPulse re-check)
+
+- Tip-stable `05b341f4` (#2402 Adjust LAG SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-06-13-01-01/02/03/04` under Mix five / Same cards unit:
+  - first-child `act-06-13-01-explain` SoftPulse CARDS→SEATS→EVIDENCE + `explainGrading` "Cards → Seats → Evidence." + Dart `ExploitEvidenceDemo` / `LessonExploitEvidenceExplainTable` still pre-split under Station-thin-only → residual **LPT-721** still To Do (needs-human; Relates LPT-306).
+  - successors `act-06-13-01-02-explain-nit` (NIT CHECK-RAISE→FOLD) + `act-06-13-01-03-explain-lag` (LAG BARREL→CALL) + `act-06-13-01-04-explain-cite` (TENDENCY→LINE) content-driven; guided SoftPulse `cs` PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` + suit variants); scaffolded SoftPulse `nit` one-per-press PRESENT; unguided SoftPulse `lag` one-per-press PRESENT.
+  - checkpoint SoftPulse `tag` under `lesson-06-13-01-04-cite-tendency` matches cite objective — no companion residual.
+- Curriculum **LPT-306** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-721/306/718/719/716/198/216; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-13-02-*` S6 checkpoint / Low curriculum LPT-192 / Low residuals LPT-676…779 (LPT-680…721).
+- act-06-13-01-*: interactive structural clean on tip except LPT-721 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily.
