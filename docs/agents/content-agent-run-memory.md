@@ -2547,3 +2547,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-04-10-01-*` exploit-checkpoints / Low residuals LPT-676…775.
 - act-04-09-01-*: interactive structural clean on tip except SoftPulse residual LPT-775; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` observation tiles — do not file handFamily.
 
+
+## Fold 2026-10-14en (b324cc71 discovery multiway SoftPulse residual re-check)
+
+- Tip-stable `b324cc71` (#2369 Section 4 jump clean Prefer NEVER → multiway). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-05-01-01-01/02/03` under multiway ranges unit:
+  - first-child `act-05-01-01-explain` SoftPulse NUTTED→AIR→DOMINATION + `explainGrading` under Prefer nut potential **concept-aligned** (not SoftPulse residual).
+  - successors `act-05-01-01-02-explain-speculative` (MULTIWAY→OOP→FOLD) + `act-05-01-01-03-explain-value` (CALLERS→SET→BET) content-driven; guided SoftPulse `nfd` densify PRESENT (`deal.mode` `none`); scaffolded SoftPulse `fold-76` one-per-press PRESENT (`7h/6h` +2 suit variants); unguided SoftPulse `bet-set` one-per-press PRESENT (`9h/9d`·`9s/8c/7h` +2 variants); checkpoint SoftPulse `nuts` kind `none` hintless densify PRESENT.
+- Curriculum **LPT-224** Done — do not clone / do not re-add needs-human; no activity↔objective residual (checkpoint nuts-priority matches Prefer nut potential).
+- Tip-commented LPT-224/222/680/779/198/216/725/775; leave open LPT-676…779.
+- Prefer next: NEVER `lesson-05-02-01-*` deep-stack / Low residuals LPT-676…779 (residual **LPT-680** still To Do).
+- act-05-01-01-*: interactive structural clean on tip; SoftPulse explain concept-aligned / successors content-driven (do not reopen LPT-669); guided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
