@@ -3043,3 +3043,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-700/270/198/216/699; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Defend SoftPulse residual **LPT-701** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gk (64a2e153 Prefer NEVER Defend SoftPulse residual LPT-701 re-check)
+
+- Tip-stable `64a2e153` (#2434 Blockers SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Defend SoftPulse residual re-check `lesson-06-07-01-01/02/03`: first-child SoftPulse DEFEND→BLUFF→ENOUGH + Dart `DefendEnoughDemo` / `LessonDefendEnoughExplainTable` still pre-split under continue-catchers-only → residual **LPT-701** still To Do (needs-human; Relates LPT-273); companion checkpoint SoftPulse `punish` under continue-catchers → **LPT-702** still To Do; successors THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven; guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `fold` one-per-press PRESENT (`9h`/`7d`·`Kc`/`Qh`/`9d`/`4c`/`8s` +2 suit variants match Dart); unguided SoftPulse `int` densify PRESENT; curriculum **LPT-273** Done.
+- Tip-commented LPT-701/702/273/198/216/700/703; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
