@@ -3499,3 +3499,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-681/230/682/676/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
 - Prefer next: NEVER Thin SoftPulse residual **LPT-682** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-03-01-*: interactive structural clean on tip except LPT-681 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-14io tip 925f34bd (#2503 Estimate Prefer → Thin SoftPulse LPT-682 Prefer)
+
+- Tip-stable `925f34bd` after #2503 SoftPulse residual Prefer LPT-681 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-05-04-01-01/02/03` / `act-05-04-01-*`: first-child SoftPulse THIN→CATCH→BARRELS + `explainGrading` "Thin → Catch → Barrels." still pre-split under thin-value-only → residual **LPT-682** still To Do (Relates LPT-233 — do not re-add needs-human on curriculum); successors SoftPulse MANIAC→BARREL→CALL / NIT→FOLDS→CHECK content-driven (do not reopen LPT-669); guided SoftPulse `tv` densify PRESENT; scaffolded SoftPulse `call-m` densify PRESENT; unguided SoftPulse `check-nit` densify PRESENT; checkpoint SoftPulse `read` under Thin — companion residual note stays on LPT-682 body (no new clone).
+- Curriculum **LPT-233** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-682/233/684/681/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER Lines SoftPulse residual **LPT-684** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
