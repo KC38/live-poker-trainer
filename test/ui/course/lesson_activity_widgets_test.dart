@@ -4660,6 +4660,15 @@ await tester.tap(find.text('VALUE'));
       accessibilityText:
           'Calling Station is a working model: high participation, low folding.',
       acceptedGrades: const [SoftGrade.recommended],
+      // SoftPulse cues so isTableRegionTapActivity matches catalog (LPT-789).
+      teachSpec: const {
+        'deal': {'mode': 'none'},
+        'cues': [
+          {'press': 1, 'target': 'STATION', 'kind': 'soft_pulse'},
+          {'press': 2, 'target': 'HIGH', 'kind': 'soft_pulse'},
+          {'press': 3, 'target': 'LOW', 'kind': 'soft_pulse'},
+        ],
+      },
       coachMedia: const [
         CoachMediaRef(
           id: 'm',
