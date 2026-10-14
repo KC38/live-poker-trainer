@@ -9486,11 +9486,19 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-808: SoftPulse-off densify stem must not spoil SB.
+    const densifyStem = 'Postflop multiway — tap who acts first.';
+    expect(find.text(densifyStem), findsOneWidget);
+    expect(
+      find.text('Postflop multiway. Tap who acts first — pick SB.'),
+      findsNothing,
+    );
     expect(
       find.text('Postflop — first action sits left of the button.'),
-      findsOneWidget,
+      findsNothing,
     );
-    expect(find.text('Postflop — tap who acts first.'), findsNothing);
+    expect(lessonFrameSpeech(activity), densifyStem);
+    expect(lessonFrameSpeech(activity), isNot(contains('SB')));
     expect(find.byKey(const ValueKey('blinds-seats-felt')), findsOneWidget);
     // Checkpoint must not SoftPulse the answer.
     expect(find.text('Tap the small blind'), findsNothing);
