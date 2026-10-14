@@ -15,6 +15,7 @@ import {fileURLToPath} from "node:url";
 import {
   DENSIFY_HELPER_IDS,
   GUIDED_PULSE_TARGET_IDS,
+  MIN_LESSON_ACTIVITIES,
   braceMatchedBody,
   gapDealVariants,
   gapExplainCues,
@@ -22,8 +23,10 @@ import {
   gapPressHints,
   gapTeachSpec,
   gapDensifyTap,
+  gapShortLadder,
   gapUnguidedSoftpulseMap,
   hasSoftPulseCue,
+  isShortLadderExempt,
   scanAll,
   switchArmActivityIds,
   toMarkdown,
@@ -465,8 +468,55 @@ test("scanAll walks nested lessons and leaves empty courses empty", () => {
     found["densify-tap"].map((row) => row.activityId),
     ["act-gap-hint"],
   );
+  assert.equal(found["short-ladder"].length, 1);
+  assert.equal(found["short-ladder"][0].lessonId, "lesson-1");
+  assert.match(found["short-ladder"][0].note, /has 1 activities/);
   const md = toMarkdown("pressHints", found.pressHints);
   assert.match(md, /\| lesson-1 \| act-gap-hint \| scaffolded\/— \|/);
+});
+
+test("short-ladder flags under-five lessons and exempts Capstone", () => {
+  assert.equal(MIN_LESSON_ACTIVITIES, 5);
+  const short = {
+    id: "lesson-01-01-03-01-dealer-button",
+    title: "Dealer button",
+    activities: [
+      {id: "act-a", stage: "guided", renderer: "coach_dialogue"},
+      {id: "act-b", stage: "scaffolded", renderer: "select_identify"},
+    ],
+  };
+  const row = gapShortLadder(short.id, short.title, short);
+  assert.ok(row);
+  assert.equal(row.activityId, "—");
+  assert.equal(row.stage, "2");
+  assert.match(row.note, /guided→scaffolded/);
+  assert.equal(isShortLadderExempt(short), false);
+
+  const full = {
+    id: "lesson-full",
+    activities: Array.from({length: 5}, (_, i) => ({
+      id: `act-${i}`,
+      stage: "scaffolded",
+      renderer: "select_identify",
+    })),
+  };
+  assert.equal(gapShortLadder(full.id, "Full", full), null);
+
+  const capstone = {
+    id: "lesson-07-10-01-capstone-srp",
+    title: "Capstone: single-raised pot",
+    activities: [
+      {id: "act-07-10-01-explain", stage: "guided", renderer: "coach_dialogue"},
+      {
+        id: "act-07-10-01-hand",
+        stage: "scaffolded",
+        renderer: "poker_action_sizing",
+        assessmentRole: "transfer",
+      },
+    ],
+  };
+  assert.equal(isShortLadderExempt(capstone), true);
+  assert.equal(gapShortLadder(capstone.id, capstone.title, capstone), null);
 });
 
 test("--counts reports live arm sizes and rejects an unknown gap", () => {
@@ -482,7 +532,10 @@ test("--counts reports live arm sizes and rejects an unknown gap", () => {
   assert.equal(typeof body.counts.pressHints, "number");
   assert.equal(typeof body.counts["unguided-softpulse-map"], "number");
   assert.equal(typeof body.counts["densify-tap"], "number");
+  assert.equal(typeof body.counts["short-ladder"], "number");
+  assert.ok(body.counts["short-ladder"] > 0);
   assert.equal(body.catalogParents["densify-tap"], "LPT-628");
+  assert.equal(body.catalogParents["short-ladder"], "LPT-829");
   // LPT-628 registered every arm, so 0 is a valid live count.
   assert.ok(Number.isInteger(body.counts["densify-tap"]));
   assert.ok(body.counts["densify-tap"] >= 0);
@@ -495,6 +548,15 @@ test("--counts reports live arm sizes and rejects an unknown gap", () => {
   assert.equal(one.status, 0, one.stderr);
   const oneBody = JSON.parse(one.stdout);
   assert.deepEqual(Object.keys(oneBody.counts), ["pressHints"]);
+
+  const short = spawnSync(
+    process.execPath,
+    [SCANNER, "--gap", "short-ladder", "--counts"],
+    {cwd: ROOT, encoding: "utf8"},
+  );
+  assert.equal(short.status, 0, short.stderr);
+  const shortBody = JSON.parse(short.stdout);
+  assert.deepEqual(Object.keys(shortBody.counts), ["short-ladder"]);
 
   const unknown = spawnSync(
     process.execPath,

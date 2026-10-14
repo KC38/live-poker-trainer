@@ -108,7 +108,8 @@ node tools/course/scan_content_gaps.mjs --counts
 # → { counts, catalogParents: { pressHints: "LPT-626", … } }
 # Then for the gap you will sync:
 node tools/course/scan_content_gaps.mjs --gap pressHints --markdown
-# gaps: pressHints | deal-variants | teachSpec | explain-teachSpec
+# gaps: pressHints | deal-variants | teachSpec | explain-teachSpec |
+#       nice-ladder | densify-tap | unguided-softpulse-map | short-ladder
 ```
 
 Use `catalogParents` + the markdown table to **edit that LPT in one shot**
@@ -143,8 +144,8 @@ pressHints lesson-by-lesson when catalog parents already exist.
 `catalog:teachSpec`, `catalog:stages`, `catalog:curriculum-gaps`,
 `catalog:pressHints`, `catalog:deal-variants`, `catalog:nice-ladder`,
 `catalog:densify-tap`, `catalog:unguided-softpulse-map`,
-`catalog:explain-teachSpec`, `catalog:guideRegion`,
-`catalog:permanent-gold`.
+`catalog:explain-teachSpec`, `catalog:short-ladder`,
+`catalog:guideRegion`, `catalog:permanent-gold`.
 
 ## 4. Audit checklist
 
@@ -234,6 +235,7 @@ lesson. The implementer must fix **every listed activity in one change**
 | Densify still “Tap the best answer” | `catalog:densify-tap` — “Densified asks still say Tap the best answer (catalog)” | `grokbot` |
 | Unguided SoftPulse map missing | `catalog:unguided-softpulse-map` — “Unguided SoftPulse maps missing (catalog)” | `grokbot` |
 | SoftPulse explain missing teachSpec/cues | `catalog:explain-teachSpec` — “SoftPulse explain steps missing teachSpec cues (catalog)” | `grokbot` |
+| Lesson shorter than five activities | `catalog:short-ladder` — “Lessons with fewer than five activities (catalog)” | `grokbot` |
 | Densify SoftPulse missing `guideRegion` | `catalog:guideRegion` — “Densified SoftPulse golds every tile / missing guideRegion (catalog)” | `ui-agent` |
 | Permanent gold / icon spoilers | `catalog:permanent-gold` — “Correct SoftPulse tiles permanently gold-tipped (catalog)” | `ui-agent` |
 | Same teachSpec field gap on many steps | `catalog:teachSpec` — name the field (e.g. “interactive steps missing teachSpec deal/cues (catalog)”) | `grokbot` |
@@ -277,8 +279,8 @@ ship lesson-by-lesson PRs for this pattern.
 ## Expected
 Cite two-stage model + teachSpec contract (docs/agents/04-course.md,
 11-lesson-content-agent.md). Gap type: <pressHints | deal.variants |
-nice-ladder | densify-tap | softpulse-map | teachSpec | guideRegion |
-permanent-gold | …>.
+nice-ladder | densify-tap | softpulse-map | teachSpec | short-ladder |
+guideRegion | permanent-gold | …>.
 
 ## Acceptance criteria
 1. Every listed activity (and any remaining catalog matches for this gap)
