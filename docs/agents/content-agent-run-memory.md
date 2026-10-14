@@ -3073,3 +3073,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-705/285/198/216/704; leave open LPT-676…802 + LPT-351; leave ui-agent LPT-803/804/805 alone.
 - Prefer next: NEVER Selective SoftPulse residual **LPT-706** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+
+## Fold 2026-10-14go (46f3e682 Prefer NEVER Selective SoftPulse residual LPT-706 re-check)
+
+- Tip-stable `46f3e682` (#2439 Hard-folds SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Selective SoftPulse residual re-check `lesson-06-11-01-01/02/03`: first-child SoftPulse TIGHT→BARREL→SAMPLE + Dart `SelectiveAggressionDemo.points` TIGHT/BARREL/SAMPLE still pre-split under selective-entry-only → residual **LPT-706** still To Do (needs-human; Relates LPT-288 — do not re-add needs-human on curriculum); successors content-driven; checkpoint SoftPulse `bundle` under wait-for-samples — no companion residual; curriculum **LPT-288** Done.
+- Tip-commented LPT-706/288/198/216/705/708; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Meet-TAG working-model residual **LPT-708** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-11-01-*: interactive structural clean on tip except LPT-706 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
+
