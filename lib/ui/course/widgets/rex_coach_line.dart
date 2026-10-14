@@ -429,8 +429,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Best label for this flop class — tap the matching label.',
     'act-03-05-01-guided' =>
       'Flop As 7d 2c. Turn 3h. For a missed c-bettor, is this a brick — pick Brick — rarely helps the caller.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Often give up, and never hardcode template board/holes (LPT-807;
+    // SoftPulse LPT-653; remap honesty LPT-806 class; same as LPT-803 /
+    // LPT-788 / LPT-805).
     'act-03-05-01-checkpoint' =>
-      'You bluffed flop on Kc 8d 3s. Turn Qh completes front-door draws. Plan — pick Often give up — changing card hurts air.',
+      'Bluffed the flop; turn completes front-door draws — tap the matching plan.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name They fold too rarely in the idle bubble (LPT-780; same class as
     // LPT-777 / LPT-778 / LPT-765 / LPT-653).
