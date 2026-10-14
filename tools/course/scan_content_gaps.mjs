@@ -12,8 +12,10 @@
  *   node tools/course/scan_content_gaps.mjs --markdown --gap deal-variants
  *   node tools/course/scan_content_gaps.mjs --counts
  *     (also softpulseMapArms + densifyHelperArms from Dart;
- *      densify-tap count = SI / player_read_classify missing helper arms)
+ *      densify-tap count = SI / player_read_classify missing helper arms;
+ *      short-ladder count = lessons with fewer than 5 activities)
  *   node tools/course/scan_content_gaps.mjs --gap densify-tap --markdown
+ *   node tools/course/scan_content_gaps.mjs --gap short-ladder --markdown
  *
  * Dart arm counts use brace depth, not a regex that stops at the first `}`.
  * An inner block before the switch arms must not drop those ids (#1964).
@@ -168,10 +170,16 @@ export const NO_HINT_ACTIVITY_IDS = new Set([
  */
 
 /**
- * @param {unknown} course
- * @yields {{lessonId: string, lessonTitle: string, activity: Record<string, unknown>}}
+ * Standard teach ladder length: explain → guided → scaffolded → unguided →
+ * checkpoint. Split one-concept lessons must still ship this full ladder.
  */
-function* walkActivities(course) {
+export const MIN_LESSON_ACTIVITIES = 5;
+
+/**
+ * @param {unknown} course
+ * @yields {{lessonId: string, lessonTitle: string, lesson: Record<string, unknown>}}
+ */
+function* walkLessons(course) {
   const sections = /** @type {Array<Record<string, unknown>>} */ (
     /** @type {Record<string, unknown>} */ (course).sections || []
   );
@@ -185,16 +193,65 @@ function* walkActivities(course) {
       );
       for (const lesson of lessons) {
         const lessonId = String(lesson.id || "");
-        const lessonTitle = String(lesson.title || lessonId);
-        const activities = /** @type {Array<Record<string, unknown>>} */ (
-          lesson.activities || []
-        );
-        for (const activity of activities) {
-          yield {lessonId, lessonTitle, activity};
+        if (!lessonId) {
+          continue;
         }
+        yield {
+          lessonId,
+          lessonTitle: String(lesson.title || lessonId),
+          lesson,
+        };
       }
     }
   }
+}
+
+/**
+ * @param {unknown} course
+ * @yields {{lessonId: string, lessonTitle: string, activity: Record<string, unknown>}}
+ */
+function* walkActivities(course) {
+  for (const {lessonId, lessonTitle, lesson} of walkLessons(course)) {
+    const activities = /** @type {Array<Record<string, unknown>>} */ (
+      lesson.activities || []
+    );
+    for (const activity of activities) {
+      yield {lessonId, lessonTitle, activity};
+    }
+  }
+}
+
+/**
+ * Capstone explain+hand transfer containers are intentionally two nodes
+ * (SoftPulse explain + `assessmentRole: transfer` hand). Do not inflate
+ * short-ladder for those synthesis lessons.
+ *
+ * @param {Record<string, unknown>} lesson
+ * @returns {boolean}
+ */
+export function isShortLadderExempt(lesson) {
+  const lessonId = String(lesson.id || "");
+  if (lessonId.includes("capstone")) {
+    return true;
+  }
+  const activities = /** @type {Array<Record<string, unknown>>} */ (
+    lesson.activities || []
+  );
+  if (activities.length === 0) {
+    return false;
+  }
+  const hasTransfer = activities.some(
+    (activity) => String(activity.assessmentRole || "") === "transfer",
+  );
+  if (!hasTransfer) {
+    return false;
+  }
+  // Capstone-style: every activity is explain coach_dialogue or transfer hand.
+  return activities.every((activity) => {
+    const role = String(activity.assessmentRole || "");
+    const renderer = String(activity.renderer || "");
+    return role === "transfer" || renderer === "coach_dialogue";
+  });
 }
 
 /**
@@ -508,7 +565,46 @@ export function gapDensifyTap(lessonId, lessonTitle, activity) {
   };
 }
 
-const SCANNERS = {
+/**
+ * Lessons with fewer than {@link MIN_LESSON_ACTIVITIES} activities — catalog
+ * short-ladder parent. One row per short lesson (not per missing stage).
+ *
+ * @param {string} lessonId
+ * @param {string} lessonTitle
+ * @param {Record<string, unknown>} lesson
+ * @returns {GapRow|null}
+ */
+export function gapShortLadder(lessonId, lessonTitle, lesson) {
+  if (isShortLadderExempt(lesson)) {
+    return null;
+  }
+  const activities = /** @type {Array<Record<string, unknown>>} */ (
+    lesson.activities || []
+  );
+  const count = activities.length;
+  if (count >= MIN_LESSON_ACTIVITIES) {
+    return null;
+  }
+  const stages = activities
+    .map((activity) => String(activity.stage || "?"))
+    .join("→");
+  return {
+    lessonId,
+    lessonTitle,
+    activityId: "—",
+    stage: String(count),
+    assessmentRole: null,
+    renderer: "lesson",
+    note:
+      `has ${count} activities` +
+      (stages ? ` (${stages})` : "") +
+      `; need ≥${MIN_LESSON_ACTIVITIES} ` +
+      "(explain→guided→scaffolded→unguided→checkpoint)",
+  };
+}
+
+/** Per-activity structural scanners. */
+const ACTIVITY_SCANNERS = {
   pressHints: gapPressHints,
   "deal-variants": gapDealVariants,
   teachSpec: gapTeachSpec,
@@ -516,6 +612,16 @@ const SCANNERS = {
   "nice-ladder": gapNiceLadder,
   "unguided-softpulse-map": gapUnguidedSoftpulseMap,
   "densify-tap": gapDensifyTap,
+};
+
+/** Per-lesson structural scanners. */
+const LESSON_SCANNERS = {
+  "short-ladder": gapShortLadder,
+};
+
+const SCANNERS = {
+  ...ACTIVITY_SCANNERS,
+  ...LESSON_SCANNERS,
 };
 
 /** Open `(catalog)` parents — keep in sync when filing/closing parents. */
@@ -528,6 +634,7 @@ const CATALOG_PARENTS = {
   "nice-ladder": "LPT-624",
   "unguided-softpulse-map": "LPT-625",
   "densify-tap": "LPT-628",
+  "short-ladder": "LPT-829",
 };
 
 /**
@@ -541,8 +648,16 @@ export function scanAll(course) {
     out[key] = [];
   }
   for (const {lessonId, lessonTitle, activity} of walkActivities(course)) {
-    for (const [key, fn] of Object.entries(SCANNERS)) {
+    for (const [key, fn] of Object.entries(ACTIVITY_SCANNERS)) {
       const row = fn(lessonId, lessonTitle, activity);
+      if (row) {
+        out[key].push(row);
+      }
+    }
+  }
+  for (const {lessonId, lessonTitle, lesson} of walkLessons(course)) {
+    for (const [key, fn] of Object.entries(LESSON_SCANNERS)) {
+      const row = fn(lessonId, lessonTitle, lesson);
       if (row) {
         out[key].push(row);
       }
