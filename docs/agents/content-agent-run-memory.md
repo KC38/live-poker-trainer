@@ -1667,7 +1667,7 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 ## Fold 2026-10-14bf (c83ff628 discovery open-fold split + LPT-669 S3 rebuild)
 
-- Tip mid-run `219cf150`→`c83ff628` (#2239 S3 postflop `lessonSplitMap` batch LPT-143/146/151/154/157/160/163). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** rebuilt **32→46** (+14 S3 SoftPulse explain successors: flop-class / outs-price / flop-line / turn / river / multiway / leaks) + ui-agent densify-spoil **LPT-672**.
+- Tip mid-run `219cf150`→`c83ff628` (#2239 S3 postflop `lessonSplitMap` batch LPT-143/146/151/154/157/160/163)→`ff81af2c` (#2240 LPT-671). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** rebuilt **32→46** on `c83ff628` (+14 S3 SoftPulse explain successors: flop-class / outs-price / flop-line / turn / river / multiway / leaks) + ui-agent densify-spoil **LPT-672**.
 - Discovery NEVER Open/fold children:
   - `lesson-02-03-01-01-fold-early-trash`: first-child `act-02-03-01-explain-open` SoftPulse EARLY→BUTTON→LIVE 3x **wired** (table-tap + visual `openRange`); guided-utg `random_in_class` trash/offsuit SoftPulse `fold` PRESENT.
   - `lesson-02-03-01-02-open-strong`: `act-02-03-01-02-explain-strong` SoftPulse STRONG→LIVE SIZE + `explainGrading` **not** in Dart → **LPT-669**; scaffolded-qq pair one-per-press SoftPulse `open-qq` PRESENT; checkpoint-hj broadway/offsuit hintless cue kind `none` (`open-ato`).
