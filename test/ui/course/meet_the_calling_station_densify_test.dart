@@ -15,7 +15,9 @@ const _lines = <String, String>{
   'act-04-06-02-scaffolded':
       'A player-type label is temporary evidence — pick Working model.',
   'act-04-06-02-unguided': 'Limps, calls, never folds turns — pick Station.',
-  'act-04-06-02-checkpoint': 'Only two hands so far — pick Low conf.',
+  // LPT-811: SoftPulse-off densify — no correct-tile spoil.
+  'act-04-06-02-checkpoint':
+      'Only two hands so far — tap how confident you are.',
 };
 
 void main() {
@@ -32,6 +34,9 @@ void main() {
       final speech = lessonFrameSpeech(activity!);
       expect(speech, isNot(contains('Tap the best answer')));
       expect(speech, contains(line.split(' — ').first));
+      if (id == 'act-04-06-02-checkpoint') {
+        expect(speech, isNot(contains('Low conf')));
+      }
     });
   }
 }
