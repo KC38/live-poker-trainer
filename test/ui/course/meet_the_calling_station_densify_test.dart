@@ -15,7 +15,9 @@ const _lines = <String, String>{
   // LPT-817: SoftPulse-quiet scaffolded densify — no Working model spoil.
   'act-04-06-02-scaffolded':
       'A player-type label is temporary evidence — tap what it is.',
-  'act-04-06-02-unguided': 'Limps, calls, never folds turns — pick Station.',
+  // LPT-818: SoftPulse-quiet unguided densify — no Station spoil.
+  'act-04-06-02-unguided':
+      'Limps, calls, never folds turns — tap which type fits.',
   // LPT-811: SoftPulse-off densify — no correct-tile spoil.
   'act-04-06-02-checkpoint':
       'Only two hands so far — tap how confident you are.',
@@ -23,6 +25,7 @@ const _lines = <String, String>{
 
 const _forbidden = <String, String>{
   'act-04-06-02-scaffolded': 'Working model',
+  'act-04-06-02-unguided': 'Station',
   'act-04-06-02-checkpoint': 'Low conf',
 };
 
