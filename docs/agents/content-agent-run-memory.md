@@ -4117,3 +4117,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-725/330/726/802/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; explain/checkpoint `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-15be tip 38b5014d (#2589 → Type-board SoftPulse LPT-726 Prefer)
+
+- Tip-stable `38b5014d` (#2589 Seat labels densify stem on tip after #2588 Same-cards SoftPulse Prefer). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (rebuilt from `--gap short-ladder --markdown`); other parents Done — no open-parent sync.
+- Prefer NEVER Type-board SoftPulse residual **LPT-726** re-check (`lesson-07-08-01-01/02/03` / `act-07-08-01-*`):
+  - first-child SoftPulse TYPE→BOARD→LINE→SIZE + `explainGrading` "Type → Board → Line → Size." + Dart `TypeBoardLineDemo.points` TYPE/BOARD/LINE/SIZE (captions Player model / Texture / History / One action) / `LessonTypeBoardLineExplainTable` / layout "Tap Type, then Board, then Line, then Size." still pre-split under type-and-board-only → **LPT-726** still To Do (needs-human; Relates LPT-333 — do not re-add needs-human on curriculum).
+  - checkpoint SoftPulse `four` kind `none` densify PRESENT (helper "Integrated decision — pick the input set.") under one-coherent-action matches — no companion residual.
+  - successors SoftPulse LINE→SIZE / FOUR INPUTS→ONE ACTION content-driven (do not reopen LPT-669); guided SoftPulse `call` PRESENT (`Jh`/`Td`·`Kh`/`Ts`/`8h`/`2d` +2 suit variants match Dart; poker_action_sizing densify N/A); scaffolded SoftPulse `raise` one-per-press PRESENT; unguided SoftPulse `fold` one-per-press PRESENT.
+- Curriculum **LPT-333** Done — do not clone / do not re-add needs-human; do not clone Duplicate **LPT-729**.
+- Tip-commented LPT-726/333/727/725/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Leak SoftPulse residual **LPT-727** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; explain/checkpoint `deal.mode` `none` — do not file handFamily.
