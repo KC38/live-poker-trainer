@@ -116,8 +116,9 @@ const _lines = <String, String>{
   // LPT-735: SoftPulse-off densify — no correct-tile spoil.
   'act-05-02-01-checkpoint':
       '150–300bb cash play rewards — tap the matching reward.',
+  // LPT-734: SoftPulse-off densify — no correct-tile spoil.
   'act-05-03-01-checkpoint':
-      'Implied odds rise most when — pick Deep stacks and opponents who pay.',
+      'Implied odds rise most when — tap the matching condition.',
   'act-05-04-01-checkpoint': 'Same hand, different types — pick The line — only when the authored read justifies it.',
   'act-05-05-01-guided':
       'Nit check-raises flop. Default read — pick Value-heavy — respect.',
