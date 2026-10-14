@@ -11,13 +11,13 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _lines = <String, String>{
   'act-01-01-01-guided-find-holes':
-      'Tap your hole cards on the table — pick Ah Kd in front of you.',
+      'Tap your hole cards on the table — pick the two in front of you.',
   'act-01-01-01-scaffolded-private':
-      'Tap the cards only you can see — pick Only you.',
+      'Tap the cards only you can see — pick your private holes.',
   'act-01-01-01-unguided-mix':
-      'Tap the community cards — pick Qs Jh 2c in the middle.',
+      'Tap the community cards — pick the shared board in the middle.',
   'act-01-01-01-checkpoint-table':
-      'Tap the cards that are only yours — pick The two cards at your seat.',
+      'Tap the cards that are only yours — pick the two at your seat.',
   'act-01-01-02-guided-suits': 'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
   'act-01-01-02-unguided-suited': 'Tap the suited hole cards — pick Suited.',
   'act-01-01-02-checkpoint-pair': 'Tap the pocket pair — pick Pocket pair.',

@@ -252,33 +252,67 @@ String alignLessonTableCopy({
     return next;
   }
 
-  // Plurals before singulars so "kings" is not left as "aces"+"s".
-  for (final entry in rankMap.entries) {
-    if (entry.key == entry.value) continue;
-    next = _replaceIgnoringCase(
-      next,
-      _pairPluralWord(entry.key),
-      _pairPluralWord(entry.value),
-    );
-  }
-  for (final entry in rankMap.entries) {
-    if (entry.key == entry.value) continue;
-    final fromWord = _rankWords[entry.key];
-    final toWord = _rankWords[entry.value];
-    if (fromWord == null || toWord == null) continue;
-    next = _replaceIgnoringCase(next, fromWord, toWord);
-  }
+  // Protect English count phrases before spoken rank remaps. A template
+  // board deuce remapped to a trey must not turn "Your two cards" into
+  // "Your three cards" on Hint (LPT-791 Your two cards guided find-holes).
+  next = _withProtectedCountPhrases(next, (body) {
+    var out = body;
+    // Plurals before singulars so "kings" is not left as "aces"+"s".
+    for (final entry in rankMap.entries) {
+      if (entry.key == entry.value) continue;
+      out = _replaceIgnoringCase(
+        out,
+        _pairPluralWord(entry.key),
+        _pairPluralWord(entry.value),
+      );
+    }
+    for (final entry in rankMap.entries) {
+      if (entry.key == entry.value) continue;
+      final fromWord = _rankWords[entry.key];
+      final toWord = _rankWords[entry.value];
+      if (fromWord == null || toWord == null) continue;
+      out = _replaceIgnoringCase(out, fromWord, toWord);
+    }
 
-  for (final entry in suitMap.entries) {
-    if (entry.key == entry.value) continue;
-    final from = _suitWords[entry.key];
-    final to = _suitWords[entry.value];
-    if (from == null || to == null) continue;
-    next = _replaceIgnoringCase(next, from.$2, to.$2);
-    next = _replaceIgnoringCase(next, from.$1, to.$1);
-  }
+    for (final entry in suitMap.entries) {
+      if (entry.key == entry.value) continue;
+      final from = _suitWords[entry.key];
+      final to = _suitWords[entry.value];
+      if (from == null || to == null) continue;
+      out = _replaceIgnoringCase(out, from.$2, to.$2);
+      out = _replaceIgnoringCase(out, from.$1, to.$1);
+    }
+    return out;
+  });
 
   return _fixIndefiniteArticles(next);
+}
+
+/// Stashes count phrases like "two cards" / "your two holes" while [rewrite]
+/// runs, then restores them so board rank-word remaps cannot clobber counts.
+String _withProtectedCountPhrases(
+  String text,
+  String Function(String body) rewrite,
+) {
+  final protected = <String>[];
+  final masked = text.replaceAllMapped(
+    RegExp(
+      r'\b((?:your\s+|the\s+)?(?:two|three|four|five|six|seven)'
+      r'(?:\s+cards?|\s+holes?|\s+seats?|\s+presses?'
+      r'|\s+at\s+your|\s+in\s+front))\b',
+      caseSensitive: false,
+    ),
+    (match) {
+      final token = '<<COUNT${protected.length}>>';
+      protected.add(match[0]!);
+      return token;
+    },
+  );
+  var next = rewrite(masked);
+  for (var i = 0; i < protected.length; i++) {
+    next = next.replaceAll('<<COUNT$i>>', protected[i]);
+  }
+  return next;
 }
 
 /// Fixes `an queen` / `a ace` after rank-word remaps.

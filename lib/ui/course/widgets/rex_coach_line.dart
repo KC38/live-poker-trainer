@@ -296,14 +296,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-07-11-01-checkpoint' => 'Warm-up goal — pick the finish line.',
     // Densified asks still say Tap the best answer (catalog) densified asks (LPT-628) — same path.
     // Densified asks still say Tap the best answer (catalog) densified asks (LPT-628) — same path.
+    // Stem-only — never hardcode template Ah Kd / Qs Jh 2c (LPT-792).
     'act-01-01-01-guided-find-holes' =>
-      'Tap your hole cards on the table — pick Ah Kd in front of you.',
+      'Tap your hole cards on the table — pick the two in front of you.',
     'act-01-01-01-scaffolded-private' =>
-      'Tap the cards only you can see — pick Only you.',
+      'Tap the cards only you can see — pick your private holes.',
     'act-01-01-01-unguided-mix' =>
-      'Tap the community cards — pick Qs Jh 2c in the middle.',
+      'Tap the community cards — pick the shared board in the middle.',
     'act-01-01-01-checkpoint-table' =>
-      'Tap the cards that are only yours — pick The two cards at your seat.',
+      'Tap the cards that are only yours — pick the two at your seat.',
     'act-01-01-02-guided-suits' =>
       'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
     'act-01-01-02-unguided-suited' =>
