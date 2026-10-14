@@ -242,10 +242,13 @@ Lesson-specific pattern notes (full history) live in
   not a recommended correct answer); tip `a79e937f` Prefer NEVER
   outs-price: SoftPulse CLEAN→DIRTY→PRICE under Clean-outs → **LPT-752**;
   successors PRICE→POT→EQUITY / DEEP→IMPLIED ODDS content-driven
-  (LPT-146 Done — do not re-add needs-human); curriculum
-  LPT-668/330/333/336/192/100/103/106/114/117/121/124/127/130/133/140/143/146 Done —
-  do not re-add needs-human; next: NEVER `lesson-03-04-01-*` flop-decisions /
-  Low residuals LPT-676…752.
+  (LPT-146 Done — do not re-add needs-human); tip `29a8d685` Prefer NEVER
+  flop-decisions: SoftPulse VALUE→C-BET→CHECK→CALL→FOLD→RAISE under Value-bet →
+  **LPT-753**; successors PREFLOP RAISER→C-BET / RAISE→CALL→FOLD content-driven
+  (LPT-151 Done — do not re-add needs-human; distinct from LPT-684); curriculum
+  LPT-668/330/333/336/192/100/103/106/114/117/121/124/127/130/133/140/143/146/151 Done —
+  do not re-add needs-human; next: NEVER `lesson-03-05-01-*` turn-decisions /
+  Low residuals LPT-676…753.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -289,6 +292,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14ds: Tip-stable `2f2a4a94` (#2340 Soft timing densify; after #2339 outs SoftPulse learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER flop-decisions children `lesson-03-04-01-01/02/03`: SoftPulse VALUE→C-BET→CHECK→CALL→FOLD→RAISE under Value-bet → **LPT-753**; successors PREFLOP RAISER→C-BET / RAISE→CALL→FOLD content-driven; guided SoftPulse `bet-tp` + scaffolded SoftPulse `cbet` + unguided SoftPulse `raise-set` + checkpoint SoftPulse `fold-bp` kind `none` PRESENT. Curriculum **LPT-151** Done — do not clone / do not re-add needs-human; distinct from Advanced lines **LPT-684**. Tip-commented LPT-151/753 + Meet Nit LPT-198 / LPT-216; leave open LPT-753/752/751…. next: NEVER `lesson-03-05-01-*` turn-decisions / Low residuals LPT-676…753.
 - 2026-10-14dr: Tip-stable `a79e937f` (#2337 flop SoftPulse residual learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER outs-price children `lesson-03-03-01-01/02/03`: SoftPulse CLEAN→DIRTY→PRICE under Clean-outs → **LPT-752**; successors PRICE→POT→EQUITY / DEEP→IMPLIED ODDS content-driven; guided SoftPulse As→Ad→Ac + scaffolded SoftPulse `call-10` + unguided SoftPulse `call-draw` + checkpoint SoftPulse `implied-yes` kind `none` PRESENT. Curriculum **LPT-146** Done — do not clone / do not re-add needs-human. Tip-commented LPT-146/752 + Meet Nit LPT-198 / LPT-216; leave open LPT-752/751/750…. next: NEVER `lesson-03-04-01-*` flop-decisions / Low residuals LPT-676…752.
 - 2026-10-14dq: Tip-stable `1388b4bc` (#2336 table-read SoftPulse residual learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER flop-class children `lesson-03-02-01-01/02/03`: SoftPulse MADE→DRAW→SDV→AIR under Made-hands → **LPT-751**; successors DRAW→SHOWDOWN VALUE / AIR→FOLD EQUITY content-driven; guided SoftPulse `made-tp` + scaffolded SoftPulse `nfd` + unguided SoftPulse `air` + checkpoint SoftPulse `oesd` kind `none` PRESENT; SDV still not a recommended correct answer. Curriculum **LPT-143** Done — do not clone / do not re-add needs-human. Tip-commented LPT-143/751 + Meet Nit LPT-198 / LPT-216; leave open LPT-751/750/749…. next: NEVER `lesson-03-03-01-*` outs-price / Low residuals LPT-676…751.
 - 2026-10-14dp: Tip-stable `3704a908` (#2334 baseline SoftPulse concept-aligned learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER table-read children `lesson-03-01-01-01/02/03`: SoftPulse POT→STACKS→BUTTON→WHO ACTS under Pot-and-stacks → **LPT-750**; successors BUTTON→WHO ACTS / SAY→BINDING content-driven; guided SoftPulse `pot-21` + checkpoint SoftPulse `eff-55` kind `none` PRESENT. Curriculum **LPT-140** Done — do not clone / do not re-add needs-human. Tip-commented LPT-140/750 + Meet Nit LPT-198 / LPT-216; leave open LPT-750/749/748/743/741/740…. next: NEVER `lesson-03-02-01-*` flop-class / Low residuals LPT-676…750.
