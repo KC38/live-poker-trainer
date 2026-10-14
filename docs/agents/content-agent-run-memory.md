@@ -2725,3 +2725,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-06-10-01-*` difficult-folds / Low residuals LPT-676…779 (LPT-680…705).
 - act-06-09-01-*: interactive structural clean on tip except LPT-704 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants AQo-miss honesty.
 
+## Fold 2026-10-14ff (d3d5c0bb Prefer NEVER difficult-folds SoftPulse re-check)
+
+- Tip-stable `d3d5c0bb` (#2394 threebet SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-06-10-01-01/02/03` under difficult-folds unit:
+  - first-child `act-06-10-01-explain` SoftPulse HARD→COOLER→EGO + `explainGrading` "Hard → Cooler → Ego." + Dart `HardFoldCoolerDemo` still pre-split under hard-folds-only → residual **LPT-705** still To Do (needs-human).
+  - successors `act-06-10-01-02-explain-cooler` (COOLER→MISTAKE→REVIEW) + `act-06-10-01-03-explain-ego` (DUE→EGO→FOLD) content-driven; guided SoftPulse `fold` PRESENT (`Ah`/`9d`·`As`/`7c`/`2h`/`Kd`/`3c` +2 suit variants); scaffolded SoftPulse `cooler` densify PRESENT; unguided SoftPulse `ego` densify PRESENT; checkpoint SoftPulse `ask` kind `none` densify PRESENT (matches cooler-or-mistake — no companion residual).
+- Curriculum **LPT-285** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-705/285/198/216/704/703/706; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-11-01-*` observe-selective / Low residuals LPT-676…779 (LPT-680…706).
+- act-06-10-01-*: interactive structural clean on tip except LPT-705 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
