@@ -306,7 +306,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   gold (LPT-274, LPT-462 closeout). Prefer `tap --text Continue` over
   `agent_tap next` on a Nice! dock — `next` can report ok while the
   lesson stays on Nice! and burn minutes in a wait-gold loop (LPT-502).
-- Prefer asserting SoftPulse densify fixes via `lessonFrameSpeech(activity)` not only `selectIdentifyDensifiedCoachLine` — `lesson_screen_layout.dart` still hardcodes some activity ids (LPT-831 checkpoint-layout bypassed densify until both were aligned).
 - Prefer extending `selectIdentifyDensifiedCoachLine` (not only
   `_coachText`) when a densified select_identify ask still shows catalog
   + "Tap the best answer." in the frame bubble — framed speech reads that
@@ -315,7 +314,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   capped). Densified lines need a pick/tap verb so
   `withLessonTapInstruction` does not append the generic footer. A local
   `_coachText` string alone leaves framed speech on catalog. Assert densify
-  by absence of "Tap the best answer." plus the densified stem (e.g.
+  via `lessonFrameSpeech(activity)` not only the helper —
+  `lesson_screen_layout.dart` still hardcodes some activity ids (LPT-831
+  checkpoint-layout bypassed densify until both were aligned). Assert by
+  absence of "Tap the best answer." plus the densified stem (e.g.
   `Best leak note —`) — `withLessonTapInstruction` may rewrite authored
   `pick` to `tap`, so exact `pick the …` needles false-fail (LPT-662).
 - Prefer densify tile titles (`Call 10`, `Suited conn`, `Call`) over
