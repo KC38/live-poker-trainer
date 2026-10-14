@@ -2795,3 +2795,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-716/300/198/216/713/714/715; leave open LPT-676…779; leave ui-agent alone.
 - Prefer next: NEVER `lesson-06-12-03-*` adjust-lag / Low residuals LPT-676…779 (LPT-680…719).
 - act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits residual; SoftPulse explain concept-aligned + successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily.
+
+## Fold 2026-10-14fl (8538413e Prefer NEVER Adjust LAG SoftPulse re-check)
+
+- Tip-stable `8538413e` (#2401 Meet LAG SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-06-12-03-01/02/03` under Adjust LAG unit:
+  - first-child `act-06-12-03-explain` SoftPulse CALL→TRAP→FANCY LESS + `explainGrading` "Call → Trap → Fancy less." + Dart `VsLagsDemo` still pre-split under Call-wider-only → residual **LPT-718** still To Do (needs-human; Relates LPT-303).
+  - checkpoint SoftPulse `cite` kind `none` densify PRESENT under Call-wider-only → residual **LPT-719** still To Do (needs-human; Relates LPT-303).
+  - successors `act-06-12-03-02-explain-trap` (STRONG HAND→LET THEM BET) + `act-06-12-03-03-explain-fancy` (NO BIG BLUFF→LET THEM) content-driven; guided SoftPulse `call` PRESENT (`Jh`/`9d`·`Qc`/`9s`/`3h`/`2d`/`7c` + suit variants); scaffolded SoftPulse `trap` PRESENT (`As`/`Ad`·`Ac`/`7s`/`2h` + suit variants); unguided SoftPulse `avoid` densify PRESENT.
+- Curriculum **LPT-303** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-718/719/303/198/216/716; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-13-01-*` mix-five / Low residuals LPT-676…779 (LPT-680…721).
+- act-06-12-03-*: interactive structural clean on tip except LPT-718 SoftPulse + LPT-719 cite residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded sizing `fixed`+variants — do not reopen LPT-627; unguided/checkpoint `deal.mode` `none` — do not file handFamily.
