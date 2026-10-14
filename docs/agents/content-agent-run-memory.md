@@ -2112,3 +2112,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - scaffolded pressure-vs-passive now under `lesson-06-12-02-03-lag-vs-station` — LPT-300 mismatch **resolved** by split.
 - Curriculum **LPT-300** Done — do not clone / do not re-add needs-human. Done-ack LPT-298/439/492.
 - Prefer next NEVER: `lesson-06-12-03-*` adjust-lag / remaining S6 NEVER / Low curriculum.
+
+## Fold 2026-10-14cs (b77b6112 Adjust LAG NEVER)
+
+- Tip-stable `b77b6112` (#2300). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-06-12-03-*` Adjust LAG children under `unit-06-12-lag`:
+  - first-child `act-06-12-03-explain` SoftPulse CALL→TRAP→FANCY LESS + Dart `VsLagsDemo` / `LessonVsLagsExplainTable` still pre-split under Call-wider → filed **LPT-718** (needs-human; Relates LPT-303). TRAP belongs with trap-more; FANCY LESS with fewer-fancy-bluffs.
+  - checkpoint SoftPulse `cite` kind `none` densify PRESENT grades Wide + pressure under Call-wider-only → filed **LPT-719** (needs-human; Relates LPT-303).
+  - successors `act-06-12-03-02-explain-trap` (STRONG HAND→LET THEM BET) + `act-06-12-03-03-explain-fancy` (NO BIG BLUFF→LET THEM) content-driven (do not reopen LPT-669); guided SoftPulse `call` + scaffolded SoftPulse `trap` + unguided SoftPulse `avoid` one-per-press densify PRESENT.
+- Curriculum **LPT-303** Done — do not clone / do not re-add needs-human. Done-ack LPT-301/302/441/503/651.
+- Prefer next NEVER: `lesson-06-13-01-*` mix-five / remaining S6 NEVER / Low curriculum.
