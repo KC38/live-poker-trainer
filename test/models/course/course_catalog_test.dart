@@ -52,6 +52,14 @@ void main() {
       'lesson-03-06-01-river-decisions',
       'lesson-03-07-01-multiway-fundamentals',
       'lesson-03-08-01-leak-repair',
+      // s4a (LPT-169/172/176/179/182/215/218)
+      'lesson-04-01-01-ranges-not-hands',
+      'lesson-04-02-01-threebet-squeeze',
+      'lesson-04-03-01-continuation-plans',
+      'lesson-04-04-01-sizing-communicates',
+      'lesson-04-05-01-spr-commitment',
+      'lesson-04-09-01-type-identification',
+      'lesson-04-10-01-exploit-checkpoints',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];

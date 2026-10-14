@@ -1893,7 +1893,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-01-01-ranges-not-hands',
+          lessonId: 'lesson-04-01-01-01-seat-as-range', // split from lesson-04-01-01-ranges-not-hands
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_think_ranges_frame',
@@ -1935,7 +1935,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-02-01-threebet-squeeze',
+          lessonId: 'lesson-04-02-01-01-value-3bet', // split from lesson-04-02-01-threebet-squeeze
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_threebet_pots_frame',
@@ -1980,7 +1980,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-03-01-continuation-plans',
+          lessonId: 'lesson-04-03-01-01-multi-street-plan', // split from lesson-04-03-01-continuation-plans
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_plan_beyond_flop_frame',
@@ -2025,7 +2025,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-04-01-sizing-communicates',
+          lessonId: 'lesson-04-04-01-01-value-vs-pressure', // split from lesson-04-04-01-sizing-communicates
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_size_message_frame',
@@ -2067,7 +2067,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-04-05-01-spr-commitment',
+          lessonId: 'lesson-04-05-01-01-estimate-spr', // split from lesson-04-05-01-spr-commitment
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_spr_commitment_frame',
@@ -2494,7 +2494,7 @@ void main() {
       await tester.pumpWidget(
         _app(
           LessonRunnerScreen(
-            lessonId: 'lesson-04-09-01-type-identification',
+            lessonId: 'lesson-04-09-01-01-observation-not-certainty', // split from lesson-04-09-01-type-identification
             courseService: _PrerequisiteLockedCourseService(catalog)
               ..previousComplete = true,
             startRequestId: 'start_confidence_samples_frame',
@@ -2540,7 +2540,7 @@ void main() {
       await tester.pumpWidget(
         _app(
           LessonRunnerScreen(
-            lessonId: 'lesson-04-10-01-exploit-checkpoints',
+            lessonId: 'lesson-04-10-01-01-same-hand-types', // split from lesson-04-10-01-exploit-checkpoints
             courseService: _PrerequisiteLockedCourseService(catalog)
               ..previousComplete = true,
             startRequestId: 'start_same_hand_types_frame',

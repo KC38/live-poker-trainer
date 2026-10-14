@@ -1410,11 +1410,11 @@ export const MEET_MANIAC = "lesson-04-08-02-meet-maniac";
 /** @returns {object} Section 4 — Regular Live Cash Player */
 export function buildSectionFour() {
   const prev = SECTION_THREE_EXIT_LESSON;
-  const L040101 = "lesson-04-01-01-ranges-not-hands";
-  const L040201 = "lesson-04-02-01-threebet-squeeze";
-  const L040301 = "lesson-04-03-01-continuation-plans";
-  const L040401 = "lesson-04-04-01-sizing-communicates";
-  const L040501 = "lesson-04-05-01-spr-commitment";
+  const L040101 = "lesson-04-01-01-ranges-not-hands"; // retired LPT-169: split in course.json (lessonSplitMap)
+  const L040201 = "lesson-04-02-01-threebet-squeeze"; // retired LPT-172: split in course.json (lessonSplitMap)
+  const L040301 = "lesson-04-03-01-continuation-plans"; // retired LPT-176: split in course.json (lessonSplitMap)
+  const L040401 = "lesson-04-04-01-sizing-communicates"; // retired LPT-179: split in course.json (lessonSplitMap)
+  const L040501 = "lesson-04-05-01-spr-commitment"; // retired LPT-182: split in course.json (lessonSplitMap)
   const L040601 = "lesson-04-06-01-observe-sticky-caller";
   const L040602 = MEET_CALLING_STATION;
   const L040603 = "lesson-04-06-03-adjust-calling-station";
@@ -1424,8 +1424,8 @@ export function buildSectionFour() {
   const L040801 = "lesson-04-08-01-observe-wild-aggressor";
   const L040802 = MEET_MANIAC;
   const L040803 = "lesson-04-08-03-adjust-maniac";
-  const L040901 = "lesson-04-09-01-type-identification";
-  const L041001 = "lesson-04-10-01-exploit-checkpoints";
+  const L040901 = "lesson-04-09-01-type-identification"; // retired LPT-215: split in course.json (lessonSplitMap)
+  const L041001 = "lesson-04-10-01-exploit-checkpoints"; // retired LPT-218: split in course.json (lessonSplitMap)
   const L041002 = "lesson-04-10-02-section-four-jump-test";
 
   return {

@@ -91,7 +91,7 @@ void main() {
   ) async {
     await _pump(
       tester,
-      'lesson-04-02-01-threebet-squeeze',
+      'lesson-04-02-01-01-value-3bet', // split from lesson-04-02-01-threebet-squeeze
       'act-04-02-01-guided',
     );
     for (final word in _typeWords) {
