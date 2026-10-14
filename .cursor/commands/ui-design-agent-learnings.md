@@ -259,8 +259,12 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   bundle, so catalog-only Hint copy looks unfixed until Xcode rebuilds
   (LPT-327). Same stale bundle shows as `Unknown lesson <id>` after
   `agent_seed` / `openlesson` for an id that `lessons --grep` finds on
-  disk (LPT-780 station open) — rebuild with `--no-cache` before filing
-  unreachable.
+  disk (LPT-780 station open). Before filing unreachable, check
+  `~/.live-poker-trainer/app-cache/<key>/…/catalog.json` vs
+  `assets/course/v2/catalog.json`; when the cache is missing the id,
+  rsync primary `build/ios/iphonesimulator/Runner.app/…/flutter_assets`
+  into that cache key (LPT-788) — prefer that over `--no-cache` when
+  disk is near full (disk_guard may free 0G).
 - Prefer flush/straight showdown remap templates with **five** suited cards
   in the made flush (board + holes) and rank span < 12 so `_remapSpotCards`
   can vary boards; a four-suited flush template always falls back to one
