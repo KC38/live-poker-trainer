@@ -2166,3 +2166,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - pairs-and-suited SoftPulse PAIR→SUITED concept-aligned (intentional combined third child from LPT-83); guided/unguided suited + checkpoint pair; variants PRESENT.
 - Curriculum **LPT-83** Done — do not clone / do not reopen LPT-669. Done-ack LPT-81/82/353/369/370/571.
 - Prefer next: NEVER `lesson-01-01-03-01/02/03` blinds / Low residuals LPT-676…721 / To Do **LPT-192**.
+
+## Fold 2026-10-14cy (f2af0de4 Blinds NEVER)
+
+- Tip-stable `f2af0de4` (#2308). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-01-01-03-01/02/03` under `unit-01-01-03-blinds-and-button`:
+  - first-child `act-01-01-03-explain-button` SoftPulse D→SB→BB + blindsSeats role labels still pre-split under Locate-button-only → filed **LPT-724** (needs-human; Relates LPT-87).
+  - successors `act-01-01-03-02-explain-blinds` (SB→BB) + `act-01-01-03-03-explain-when` (BLINDS→DEAL) content-driven; guided SoftPulse `D` + scaffolded SoftPulse `BB` + unguided SoftPulse `before-deal` + checkpoint SoftPulse `SB` kind `none` hintless PRESENT.
+- Curriculum **LPT-87** Done — do not clone / do not re-add needs-human. Done-ack LPT-85/86.
+- Prefer next: oldest unfresh split children / Low residuals LPT-676…724 / To Do **LPT-192**.
