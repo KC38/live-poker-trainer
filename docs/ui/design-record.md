@@ -1909,7 +1909,7 @@ felt.
 | Tag high participation | Enters, Calls, Folds; densified frame asks (LPT-416); unit `unit-04-06-calling-station` (LPT-186 split) | participation note, observation bundle |
 | Tag low folding | explain SoftPulse cues FOLDS TO BETS → STICKY; unit `unit-04-06-calling-station` (LPT-186 split) | — |
 | Observation versus certainty | explain SoftPulse cues OBSERVATION → SAMPLES; unit `unit-04-06-calling-station` (LPT-186 split) | — |
-| The Calling Station model | Station, High, Low; scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420); unit `unit-04-06-calling-station` (LPT-189 split) | label quizzes |
+| The Calling Station model | Station, High, Low; STATION caption Working label (LPT-789); scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420); unit `unit-04-06-calling-station` (LPT-189 split) | label quizzes |
 | Spot a Calling Station | explain SoftPulse cues STICKY CALLS → RARE FOLDS; unit `unit-04-06-calling-station` (LPT-189 split) | — |
 | Small samples, low confidence | explain SoftPulse cues SAMPLE → CONFIDENCE; unit `unit-04-06-calling-station` (LPT-189 split) | — |
 | Value wider versus Calling Station | Value, Bluffs, Cite; unit `unit-04-06-calling-station` (LPT-192 split) | — |

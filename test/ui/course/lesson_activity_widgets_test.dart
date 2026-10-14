@@ -4688,7 +4688,8 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Working model'), findsNothing);
     expect(find.text('Plays many pots'), findsNothing);
     expect(find.text('Rarely folds'), findsNothing);
-    expect(find.text('Temp tag'), findsOneWidget);
+    expect(find.text('Temp tag'), findsNothing);
+    expect(find.text('Working label'), findsOneWidget);
     expect(find.text('Often in pots'), findsOneWidget);
     expect(find.text('Sticks to heat'), findsOneWidget);
     expect(
