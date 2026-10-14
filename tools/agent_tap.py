@@ -14,7 +14,9 @@ wrong needle is visible without a screenshot.
 Queries answer directly:
   * `tree` — visible labels top-to-bottom with `[enabled]`/`[disabled]`
     tap state and `gold` (SoftPulse cue) / `cyan` (selection) glow.
-    Add `--json` for the raw payload.
+    Add `--json` for the raw payload. Add `--contains NEEDLE` to assert a
+    label is present (case-insensitive); exits 1 if missing — prefer this
+    over `tree | head | grep` (truncated greps false-fail Hint/speech).
   * `whoami` — Firebase uid + anonymous flag (used by tools/agent_seed.py).
   * `wait-gold` — poll `tree` until gold SoftPulse appears (after
     `openlesson` / deal settle). Optional `--text` needle; `--timeout`
@@ -172,13 +174,18 @@ def wait_gold(
     )
 
 
-def format_tree(tree: dict[str, Any]) -> str:
+def format_tree(
+    tree: dict[str, Any],
+    *,
+    entries: list[dict[str, Any]] | None = None,
+) -> str:
     """Render the `tree` payload as one line per visible label."""
+    rows = list(tree.get("entries") or []) if entries is None else entries
     lines = [
         f"screen: {tree.get('screen') or '?'}  size: {tree.get('size')}",
         f"gold SoftPulse: {', '.join(tree.get('gold') or []) or 'none'}",
     ]
-    for entry in tree.get("entries", []):
+    for entry in rows:
         x, y, w, h = entry["rect"]
         tags = []
         if entry.get("tap"):
@@ -190,6 +197,20 @@ def format_tree(tree: dict[str, Any]) -> str:
         tag = f" [{' '.join(tags)}]" if tags else ""
         lines.append(f"  ({x},{y} {w}x{h}) {entry['label']!r}{tag}")
     return "\n".join(lines)
+
+
+def tree_entries_containing(
+    tree: dict[str, Any], needle: str
+) -> list[dict[str, Any]]:
+    """Return entries whose label contains [needle] (case-insensitive)."""
+    needle_cf = needle.casefold()
+    if not needle_cf:
+        return list(tree.get("entries") or [])
+    return [
+        entry
+        for entry in tree.get("entries") or []
+        if needle_cf in str(entry.get("label") or "").casefold()
+    ]
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -228,6 +249,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="Simulator lock run id. Default $SIM_LOCK_RUN_ID.",
     )
     parser.add_argument("--json", action="store_true", help="Raw JSON for queries")
+    parser.add_argument(
+        "--contains",
+        default="",
+        help=(
+            "With tree: keep only labels containing this needle "
+            "(case-insensitive). Exit 1 when none match — use instead of "
+            "piping tree through head/grep (LPT-822 false VALIDATE_FAIL)."
+        ),
+    )
     return parser
 
 
@@ -252,10 +282,27 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if cmd in QUERIES:
         result = query(cmd, log=log)
-        if cmd == "tree" and not args.json:
-            print(format_tree(result or {}))
-        else:
-            print(json.dumps(result, indent=2, ensure_ascii=False))
+        if cmd == "tree":
+            tree = result or {}
+            if args.contains:
+                matched = tree_entries_containing(tree, args.contains)
+                if args.json:
+                    filtered = dict(tree)
+                    filtered["entries"] = matched
+                    print(json.dumps(filtered, indent=2, ensure_ascii=False))
+                else:
+                    print(format_tree(tree, entries=matched))
+                if not matched:
+                    print(
+                        f"tree: no label containing {args.contains!r}",
+                        file=sys.stderr,
+                    )
+                    return EXIT_TIMEOUT
+                return 0
+            if not args.json:
+                print(format_tree(tree))
+                return 0
+        print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
     extra = {"text": args.text} if args.text else {}
     before = int((last_outcome(log=log) or {}).get("seq", 0))

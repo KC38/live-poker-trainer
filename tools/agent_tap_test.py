@@ -106,6 +106,32 @@ class AgentTapTreeTest(unittest.TestCase):
         self.assertIn("'A♠' [gold]", text)
         self.assertIn("'HINT' [disabled key=lesson-hint]", text)
 
+    def test_tree_entries_containing(self) -> None:
+        tree = {
+            "entries": [
+                {"label": "Find a heart on the board.", "rect": [0, 0, 1, 1]},
+                {"label": "HINT", "rect": [0, 0, 1, 1]},
+                {"label": "Continue", "rect": [0, 0, 1, 1]},
+            ]
+        }
+        matched = agent_tap.tree_entries_containing(tree, "heart")
+        self.assertEqual(len(matched), 1)
+        self.assertIn("heart", matched[0]["label"].lower())
+        self.assertEqual(agent_tap.tree_entries_containing(tree, "missing"), [])
+        # Filtered format keeps screen/gold headers even when only one row.
+        text = agent_tap.format_tree(
+            {"screen": "LessonRunnerScreen", "size": [1, 1], "gold": [], "entries": tree["entries"]},
+            entries=matched,
+        )
+        self.assertIn("Find a heart", text)
+        self.assertNotIn("Continue", text)
+
+    def test_contains_flag_on_parser(self) -> None:
+        args = agent_tap.build_parser().parse_args(
+            ["tree", "--contains", "Hint"]
+        )
+        self.assertEqual(args.contains, "Hint")
+
 
 class AgentTapWaitGoldTest(unittest.TestCase):
     """wait-gold polls tree until SoftPulse appears."""
