@@ -2340,3 +2340,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - successors `act-03-01-01-02-explain-seat` (BUTTON→WHO ACTS) + `act-03-01-01-03-explain-verbal` (SAY→BINDING) content-driven; guided SoftPulse `pot-21` + checkpoint SoftPulse `eff-55` kind `none` PRESENT.
 - Curriculum **LPT-140** Done — do not clone / do not re-add needs-human. Tip-commented LPT-140/750 + Meet Nit LPT-198 / LPT-216; leave open LPT-750/749/748/743/741/740….
 - Prefer next: NEVER `lesson-03-02-01-*` flop-class / Low residuals LPT-676…750.
+
+## Fold 2026-10-14dq (1388b4bc discovery flop-class SoftPulse residual)
+
+- Tip-stable `1388b4bc` (#2336). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-03-02-01-01/02/03` under flop-classes unit:
+  - first-child `act-03-02-01-explain` SoftPulse MADE→DRAW→SDV→AIR + `explainGrading` under Made-hands-only → filed **LPT-751** (needs-human; Relates LPT-143).
+  - successors `act-03-02-01-02-explain-draws` (DRAW→SHOWDOWN VALUE) + `act-03-02-01-03-explain-air` (AIR→FOLD EQUITY) content-driven; guided SoftPulse `made-tp` + scaffolded SoftPulse `nfd` + unguided SoftPulse `air` + checkpoint SoftPulse `oesd` kind `none` PRESENT; SDV still not a recommended correct answer (LPT-143 AC residual).
+- Curriculum **LPT-143** Done — do not clone / do not re-add needs-human. Tip-commented LPT-143/751 + Meet Nit LPT-198 / LPT-216; leave open LPT-751/750/749….
+- Prefer next: NEVER `lesson-03-03-01-*` outs-price / Low residuals LPT-676…751.
