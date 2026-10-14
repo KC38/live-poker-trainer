@@ -205,13 +205,11 @@ sync_course_assets_into_app() {
     cmp -s "$src/catalog.json" "$dest/catalog.json"; then
     return 0
   fi
-  if command -v rsync >/dev/null 2>&1; then
-    rsync -a --delete "$src/" "$dest/"
-  else
-    rm -rf "$dest"
-    mkdir -p "$dest"
-    cp -R "$src/." "$dest/"
-  fi
+  # Prefer cp over macOS openrsync: size-equal catalog.json edits are not
+  # overwritten without --checksum (LPT-788 class stale Unknown lesson).
+  rm -rf "$dest"
+  mkdir -p "$dest"
+  cp -R "$src/." "$dest/"
   echo "prebuilt: synced assets/course/v2 into cached Runner.app"
 }
 
