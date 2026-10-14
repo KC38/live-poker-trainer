@@ -3191,3 +3191,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); explain/checkpoint `deal.mode` `none` — do not file handFamily; guided/scaffolded/unguided fixed+variants — do not reopen LPT-627.
 
+
+## Fold 2026-10-14hc (58c02969 Prefer NEVER Type-board SoftPulse residual LPT-726 re-check)
+
+- Tip-stable `58c02969` (#2456 SoftPulse-off densify after #2455 Same-cards Prefer on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Type-board SoftPulse residual re-check `lesson-07-08-01-01/02/03`: first-child SoftPulse TYPE→BOARD→LINE→SIZE + `explainGrading` "Type → Board → Line → Size." + Dart `TypeBoardLineDemo` / `LessonTypeBoardLineExplainTable` still pre-split under type-and-board-only → residual **LPT-726** still To Do (needs-human; Relates LPT-333 — do not re-add needs-human on curriculum); successors LINE→SIZE / FOUR INPUTS→ONE ACTION content-driven; guided SoftPulse `call` fixed Jh/Td·Kh/Ts/8h/2d +2 suit variants match Dart; scaffolded SoftPulse `raise` one-per-press; unguided SoftPulse `fold` one-per-press; checkpoint SoftPulse `four` kind `none` densify PRESENT under one-coherent-action — no companion residual; curriculum **LPT-333** Done.
+- Tip-commented LPT-726/333/727/725/351/802/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Leak SoftPulse residual **LPT-727** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); explain/checkpoint `deal.mode` `none` — do not file handFamily; guided/scaffolded/unguided fixed+variants — do not reopen LPT-627.
