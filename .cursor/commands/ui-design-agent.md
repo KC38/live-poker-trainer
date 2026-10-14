@@ -232,14 +232,19 @@ table in the design record, using the coverage ledger
 `at`, `sha`, `surface`, `result`, `ticket`, `leads`):
 
 1. A surface with `leads` from an earlier run: re-check those leads first.
-2. A surface never walked.
-3. A surface whose code changed since its last walk
+2. A **motion / multi-frame** surface from
+   `python3 tools/ui_motion_targets.py pick` that is never walked or
+   oldest — film it with `tools/sim_record.py` (see Motion check below).
+3. A surface never walked.
+4. A surface whose code changed since its last walk
    (`git diff --name-only <last sha>..HEAD -- <code path>` is not empty).
-4. The surface walked longest ago.
+5. The surface walked longest ago.
 
-Prefer surfaces that the **Known gaps** section names. When walking a
+Prefer surfaces that the **Known gaps** section names, then motion
+targets (`ui_motion_targets.py list` / `classes`). When walking a
 lesson surface, treat broken randomization, Hint, SoftPulse cues, coach
-copy, or heart loss/restore as higher priority than Home chrome polish.
+copy, heart loss/restore, or **motion/multi-frame** failures as higher
+priority than Home chrome polish.
 File every solid finding from the walk (step 5). Choose the primary KEY
 only among **`ui-agent`** tickets (never `grokbot`). If this surface
 produced only GrokBot filings (or nothing Mac-mini can fix), **do not**
@@ -337,7 +342,7 @@ Judge each screen with this lens, in this order:
    actions on the felt)? A text list where the felt could carry the answer
    is a gap. The Lesson ledger's "Still a list" column is the known set.
 2. **Lesson content** (required on every lesson walk). Content bugs that
-   mis-teach or leave the learner stuck beat chrome. Check all six:
+   mis-teach or leave the learner stuck beat chrome. Check all seven:
    1. **Card randomization.** Lesson cards are randomized within the hand
       class each attempt; the coach copy follows the dealt cards (design
       record → Lesson tables). After you finish or leave a step, reopen the
@@ -391,12 +396,29 @@ Judge each screen with this lens, in this order:
       without a valid Practice/refill path is a bug.
    6. **Payoff chrome.** XP, streak, gems, and the daily goal celebrate as
       a beat on the lesson result / Home, not as a silent report.
+   7. **Motion & multi-frame** (required whenever the surface has more than
+      one press/beat, in-place motion, or traveling UI). Use
+      `python3 tools/ui_motion_targets.py classes` for the three classes.
+      Always film with `tools/sim_record.py` (start/stop around the beat or
+      `record --seconds …`); Read extracted frames — a single still is not
+      enough for this check.
+      - **Multi-frame:** every press/beat in sequence (SoftPulse advances
+        correctly; Hint per press; no gold race; no skipped beat).
+      - **Static move:** SoftPulse / empty-hearts / coach-mood motion stays
+        in place — no tile jump, resize, or layout hitch when the cue
+        breathes or toggles (film ≥2s idle on the gold/empty state).
+      - **Dynamic:** deal land, pot/stack travel, lesson-result or
+        section-end ceremony enter/exit — film from before motion until
+        settled; no empty coach mid-deal; no stuck mid-ceremony frame.
+      If the surface is on `ui_motion_targets.py list`, run this check even
+      on a queue pickup. File temporal bugs with MP4 + frames.
 3. **One table.** `LessonActionSpot`, `LessonTableScene`, a mini felt, or a
    loose row of cards where the full table belongs.
 4. **Live realism.** Deal order and pacing, posted blinds, visible folds,
    bets on the felt lane, the pot flying to the winner, stacks that move.
    You cannot hear sound: check the code calls `SoundService` for each
-   table action you watched.
+   table action you watched. Prefer a `sim_record` clip here too when
+   chips/pot move.
 5. **Layout on the mini.** No overflow stripe, clip, overlap, truncated
    text, covered cards, or control under the dock or the home indicator.
    Tap targets at least 44 pt.
