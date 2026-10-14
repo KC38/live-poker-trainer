@@ -12,7 +12,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 - Audit scripts must match catalog renderer ids as snake_case (`select_identify`, not `selectIdentify`); camelCase filters silently report zero teachSpec gaps.
 - Seat/puck lessons (Button and blinds) author `deal.mode` `none` + SoftPulse puck `cues` (`D`/`SB`/`BB`); do not file handFamily/suitFamily gaps for non-card-class steps. Same-concept quiet guided ids still need authored Hint (`pressHints` or existing coachMedia) because SoftPulse waits for Hint. After LPT-87 split: first-child `act-01-01-03-explain-button` stays Dart-wired; successors `act-01-01-03-02-explain-blinds` / `03-explain-when` (and 14 other S1 `lessonSplitMap` SoftPulse explains) need Dart `isTableRegionTapActivity` + `resolveCoachDialogueVisual` → catalog **LPT-669** (tip `14d32fb9`).
-- Hand-ranks / `compare_rank` showdown steps (`act-01-02-01-*`, lesson `lesson-01-02-01-hand-ranks`) deal multi-seat hand-class triples with physical seat shuffle (`dealShowdownOrderCards`); author teachSpec via class variants / role map — never treat static catalog You/Sam/Jo a11y or Dart `showdownOrderHintSpeech` as a passing authored `pressHints` under the recommended bar. Tip `43a1be2d` discovery: explain has activity-level `explainGrading` + SoftPulse cues; guided/scaffolded/unguided/checkpoint all author `random_in_class` + handFamily + variants; scaffolded/unguided one-per-press incomplete → **LPT-667** (not a structural `clean`); checkpoint cue kind `none` / no pressHints — multi-concept split stays on needs-human **LPT-90** (not a new clone).
+- Hand-ranks / `compare_rank` showdown steps (`act-01-02-01-*`, post-split `lesson-01-02-01-01/02/03`) deal multi-seat hand-class triples with physical seat shuffle (`dealShowdownOrderCards`); author teachSpec via class variants / role map — never treat static catalog You/Sam/Jo a11y or Dart `showdownOrderHintSpeech` as a passing authored `pressHints` under the recommended bar. Tip `01eacc7c` discovery: first-child `act-01-02-01-explain-ladder` SoftPulse showdown **wired**; successors `act-01-02-01-02-explain-spot` / `03-explain-compare` cues+`explainGrading` but Dart table-tap/visual missing → catalog **LPT-669**; guided/scaffolded/unguided/checkpoint author `random_in_class` + handFamily + variants matching Dart classes; scaffolded/unguided one-per-press OK (**LPT-667** Done); checkpoint cue kind `none` / no pressHints — curriculum split **LPT-90** Done (do not clone).
+- Kickers / best-five post-split (`lesson-01-02-02-01/02/03`, tip `bd4a6f0b`): first-child `act-01-02-02-explain-five` SoftPulse five-press **wired** (table-tap+visual); successors `act-01-02-02-02-explain-kicker` SAME PAIR→KICKER + `act-01-02-02-03-explain-board` BOARD→CHOP author cues+`explainGrading` but zero Dart occurrences in `isTableRegionTapActivity`/`resolveCoachDialogueVisual` → catalog **LPT-669**; guided-seven SoftPulse five-press + pulse-map/densify PRESENT; checkpoint-build one-per-press 1–5; scaffolded-kicker/unguided-board one-per-press + densify PRESENT; curriculum split **LPT-93** Done (do not clone).
+- Fold/check/call post-split (`lesson-01-03-01-01/02/03`, tip `bd4a6f0b`): first-child `act-01-03-01-explain-passive` SoftPulse FOLD→CHECK→CALL **wired** (table-tap+`passiveActions`); successors `act-01-03-01-02-explain-check` NO BET→CHECK + `act-01-03-01-03-explain-call` BET→CALL author cues+`explainGrading` but zero Dart occurrences in `isTableRegionTapActivity`/`resolveCoachDialogueVisual` → catalog **LPT-669**; guided-fold `random_in_class` trash/offsuit SoftPulse `fold-72` PRESENT; scaffolded-check weak_draw one-per-press SoftPulse `check-free` PRESENT; unguided-call strong_draw one-per-press SoftPulse `call-5` PRESENT; checkpoint-legal assessmentRole checkpoint hintless cue kind `none` (`check-illegal`); densify N/A (`poker_action_sizing`); curriculum split **LPT-96** Done (do not clone).
+- Bet/raise/all-in post-split (`lesson-01-03-02-01/02/03`, tip `05892395`): first-child `act-01-03-02-explain-aggro` SoftPulse BET→RAISE→ALL-IN **wired** (table-tap+visual); successors `act-01-03-02-02-explain-raise` FACING BET→RAISE + `act-01-03-02-03-explain-allin` STACK→ALL-IN author cues+`explainGrading` but zero Dart occurrences in `isTableRegionTapActivity`/`resolveCoachDialogueVisual` → catalog **LPT-669**; guided-bet `random_in_class` top_pair SoftPulse `bet-half` PRESENT; scaffolded-raise one-per-press SoftPulse `raise-15` PRESENT; unguided-allin one-per-press SoftPulse `shove-12` PRESENT; checkpoint-names assessmentRole checkpoint hintless cue kind `none` (`named-bet`); densify N/A (`poker_action_sizing`); curriculum split **LPT-100** Done (do not clone teachSpec/pressHints/variants/map LPT-98/99/373/355/591).
+- Streets/acting-order post-split (`lesson-01-04-01-01/02/03`, tip `2bcc97fe`): first-child `act-01-04-01-explain-streets` SoftPulse PREFLOP→FLOP→TURN→RIVER **wired**; successors `act-01-04-01-02-explain-order` BIG BLIND→CLOCKWISE→BUTTON + `act-01-04-01-03-explain-end` BETS MATCHED→NEXT STREET author cues+`explainGrading` but zero Dart occurrences → catalog **LPT-669**; guided-streets SoftPulse four presses; scaffolded-order one-per-press 1–4; unguided-end one-per-press; checkpoint-postflop densify PRESENT hintless; curriculum split **LPT-103** Done (do not clone).
+- Winning-pots post-split (`lesson-01-05-01-01/02/03`, tip `2905e103`): first-child `act-01-05-01-explain-win` SoftPulse FOLD WIN→SHOWDOWN→SIDE POT **wired**; successors `act-01-05-01-02-explain-showdown` RIVER CALL→SHOWDOWN→BEST FIVE + `act-01-05-01-03-explain-pots` MAIN POT→SIDE POT author cues+`explainGrading` but zero Dart occurrences → catalog **LPT-669**; guided-fold-win fixed+variants densify PRESENT; scaffolded-showdown one-per-press densify PRESENT; unguided-pot chip tiles `deal.mode` `none` one-per-press; checkpoint-side densify PRESENT hintless; curriculum **LPT-106** Done (do not clone).
 - Prefer `content/course/v2/course.json` over `wave_*.mjs` when counting items/sequence; wave helpers can lag (e.g. streets `scaffolded-order` CO). File wave-sync in the teachSpec ticket; never treat wave-only as catalog truth.
 - Pot-math / open-size steps (`act-01-05-01-unguided-pot`) author `deal.mode` `none` + `deal.variants` for open-to sizes (`kLessonOpenToAmounts`); do not file handFamily/suitFamily gaps for chip-total outcome tiles. Tip `528069f0` discovery `lesson-01-05-01-winning-pots`: structural clean — explain SoftPulse FOLD WIN→SHOWDOWN→SIDE POT + `explainGrading`; guided fold-win `fixed`+suit variants cue `no-show`; scaffolded showdown fixed+variants one-per-press; unguided-pot chip tiles one-per-press; checkpoint-side assessmentRole checkpoint hintless cue kind `none`; densify arms PRESENT for all four interactive acts. Multi-concept split stays on needs-human **LPT-106** (fold-win / showdown / main-vs-side); do not clone teachSpec/pressHints/densify (LPT-104/374/485/525 Done).
 - Synthesis / complete-hand lessons (e.g. Play a full toy hand) with process objectives (follow hand, act, finish) are not multi-concept title splits — skip `needs-human` lesson-split when the unit already is the integration container; still file teachSpec/pressHints gaps. Tip `118e4148` discovery `lesson-01-06-01-guided-complete-hand`: structural clean — explain SoftPulse BLINDS→YOU ACT→ENDING + `explainGrading`; guided-steps `random_in_class` suited_ace/suited SoftPulse cues; scaffolded-multi one-per-press OK (cues 1–2 / pressHints 1–2); unguided-lab high_card/offsuit + pressHints press 1; checkpoint-finish assessmentRole checkpoint cue kind `none` hintless; densify N/A (authored_multi_step_hand / full_table_hand_lab, not SI); do not clone teachSpec/pressHints (LPT-108/109/358/375/586 Done).
@@ -1547,3 +1552,76 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer bullet tightened (cap 40): post-split SoftPulse explain Dart check → LPT-669.
 - next: **LPT-669** SoftPulse explain Dart maps OR next NEVER split children (`lesson-01-02-01-02-*` …) / Low curriculum.
 - act-01-01-03-*: interactive SI clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-87 Done.
+
+## Fold 2026-10-14aw (01eacc7c discovery hand-ranks split children)
+
+- Tip-stable `01eacc7c` (#2225 learnings fold on main). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** only (others Done — no checklist rebuild).
+- Discovery NEVER post-split Hand-ranks children:
+  - `lesson-01-02-01-01-order-hand-ranks`: one objective; `act-01-02-01-explain-ladder` SoftPulse you→sam→jo + `explainGrading` **wired** (table-tap); guided-ladder `random_in_class` high_card + pair/flush variants match Dart.
+  - `lesson-01-02-01-02-pairs-straights-flushes`: one objective; scaffolded-spot one-per-press OK (pair/straight/flush) — but `act-01-02-01-02-explain-spot` SoftPulse PAIR→STRAIGHT→FLUSH **not** in Dart table-tap/visual → **LPT-669**.
+  - `lesson-01-02-01-03-compare-finished-hands`: one objective; unguided-compare one-per-press OK (full_house/trips/two_pair); checkpoint hintless cue kind `none` — but `act-01-02-01-03-explain-compare` SoftPulse FULL HOUSE→TRIPS→TWO PAIR **not** in Dart → **LPT-669**.
+- Tip-commented catalog **LPT-669** (still valid; 16 rows unchanged); Done-ack **LPT-90**/88/89. Do not clone curriculum/teachSpec/pressHints.
+- Prefer bullet tightened (cap 40): next NEVER → `lesson-01-02-02-*` kickers children.
+- next: **LPT-669** SoftPulse explain Dart maps OR next NEVER `lesson-01-02-02-01/02/03` / Low curriculum.
+- act-01-02-01-*: interactive compare_rank clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-90 Done.
+
+## Fold 2026-10-14ax (bd4a6f0b discovery kickers split children)
+
+- Tip-stable `bd4a6f0b` (#2226). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** only (SHA audited cleaned).
+- Discovery NEVER Kickers children:
+  - `lesson-01-02-02-01-best-five`: `act-01-02-02-explain-five` SoftPulse hero_pair→…→board_top_kicker + `explainGrading` **wired**; guided-seven SoftPulse five-press + densify/pulse-map; checkpoint-build one-per-press OK.
+  - `lesson-01-02-02-02-kickers`: scaffolded-kicker one-per-press + densify — but `act-01-02-02-02-explain-kicker` SoftPulse SAME PAIR→KICKER **not** in Dart table-tap/visual → **LPT-669**.
+  - `lesson-01-02-02-03-board-plays`: unguided-board one-per-press + densify — but `act-01-02-02-03-explain-board` SoftPulse BOARD→CHOP **not** in Dart → **LPT-669**.
+- Tip-commented catalog **LPT-669** (still valid; 16 rows unchanged); Done-ack **LPT-93**/91/92 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid (do not re-add `needs-human`).
+- Prefer bullet tightened (cap 40): next NEVER → `lesson-01-03-01-*` fold/check/call children.
+- next: **LPT-669** SoftPulse explain Dart maps OR next NEVER `lesson-01-03-01-01/02/03` / Low curriculum.
+- act-01-02-02-*: interactive SI clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-93 Done.
+
+## Fold 2026-10-14ay (bd4a6f0b discovery fold/check/call split children)
+
+- Tip-stable `bd4a6f0b` (#2226). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** only.
+- Discovery NEVER Fold/check/call children:
+  - `lesson-01-03-01-01-fold`: `act-01-03-01-explain-passive` SoftPulse FOLD→CHECK→CALL + `explainGrading` **wired**; guided-fold trash/offsuit SoftPulse `fold-72` PRESENT.
+  - `lesson-01-03-01-02-check`: scaffolded-check weak_draw one-per-press SoftPulse `check-free` PRESENT — but `act-01-03-01-02-explain-check` SoftPulse NO BET→CHECK **not** in Dart table-tap/visual → **LPT-669**.
+  - `lesson-01-03-01-03-call`: unguided-call strong_draw one-per-press SoftPulse `call-5` PRESENT; checkpoint-legal hintless cue kind `none` — but `act-01-03-01-03-explain-call` SoftPulse BET→CALL **not** in Dart → **LPT-669**.
+- Tip-commented catalog **LPT-669** (still valid; 16 rows unchanged); Done-ack **LPT-96**/94/95. Do not clone curriculum/teachSpec/pressHints.
+- Prefer bullet tightened (cap 40): next NEVER → `lesson-01-03-02-*` bet/raise/all-in children.
+- next: **LPT-669** SoftPulse explain Dart maps OR next NEVER `lesson-01-03-02-01/02/03` / Low curriculum.
+- act-01-03-01-*: interactive poker_action_sizing clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-96 Done.
+
+## Fold 2026-10-14az (05892395 discovery bet/raise/all-in split children)
+
+- Tip-stable `05892395` (#2228). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** only.
+- Discovery NEVER Bet/raise/all-in children:
+  - `lesson-01-03-02-01-bet`: `act-01-03-02-explain-aggro` SoftPulse BET→RAISE→ALL-IN + `explainGrading` **wired**; guided-bet top_pair SoftPulse `bet-half` PRESENT; checkpoint-names hintless cue kind `none`.
+  - `lesson-01-03-02-02-raise`: scaffolded-raise one-per-press SoftPulse `raise-15` PRESENT — but `act-01-03-02-02-explain-raise` SoftPulse FACING BET→RAISE **not** in Dart table-tap/visual → **LPT-669**.
+  - `lesson-01-03-02-03-all-in`: unguided-allin one-per-press SoftPulse `shove-12` PRESENT — but `act-01-03-02-03-explain-allin` SoftPulse STACK→ALL-IN **not** in Dart → **LPT-669**.
+- Tip-commented catalog **LPT-669** (still valid; 16 rows unchanged); Done-ack **LPT-100**/98/99/591. Do not clone curriculum/teachSpec/pressHints/variants/map.
+- Prefer bullet tightened (cap 40): next NEVER → `lesson-01-04-01-*` streets/order children.
+- next: **LPT-669** SoftPulse explain Dart maps OR next NEVER `lesson-01-04-01-01/02/03` / Low curriculum.
+- act-01-03-02-*: interactive poker_action_sizing clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-100 Done.
+
+## Fold 2026-10-14ba (2bcc97fe discovery streets/acting-order split children)
+
+- Tip-stable `2bcc97fe` (#2229). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** only.
+- Discovery NEVER Streets/acting-order children:
+  - `lesson-01-04-01-01-four-streets`: `act-01-04-01-explain-streets` SoftPulse PREFLOP→FLOP→TURN→RIVER + `explainGrading` **wired**; guided-streets SoftPulse four presses.
+  - `lesson-01-04-01-02-action-order`: scaffolded-order one-per-press 1–4; checkpoint-postflop densify PRESENT hintless — but `act-01-04-01-02-explain-order` SoftPulse BIG BLIND→CLOCKWISE→BUTTON **not** in Dart → **LPT-669**.
+  - `lesson-01-04-01-03-street-ends`: unguided-end one-per-press densify PRESENT — but `act-01-04-01-03-explain-end` SoftPulse BETS MATCHED→NEXT STREET **not** in Dart → **LPT-669**.
+- Tip-commented catalog **LPT-669**; Done-ack **LPT-103**/101/102 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid.
+- Prefer bullet tightened (cap 40): next NEVER → `lesson-01-05-01-*` winning-pots children.
+- next: **LPT-669** SoftPulse explain Dart maps OR next NEVER `lesson-01-05-01-01/02/03` / Low curriculum.
+- act-01-04-01-*: interactive order_sequence/SI clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-103 Done.
+
+## Fold 2026-10-14bb (2905e103 discovery winning-pots split children + streets rescue)
+
+- Tip-stable `2905e103` (#2231 after #2229). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open catalog parent **LPT-669** only.
+- Rescued Streets fold from draft #2230 (Prefer/Recent/run-memory) onto this tip.
+- Discovery NEVER Winning-pots children:
+  - `lesson-01-05-01-01-win-by-fold`: `act-01-05-01-explain-win` SoftPulse FOLD WIN→SHOWDOWN→SIDE POT + `explainGrading` **wired**; guided-fold-win densify PRESENT.
+  - `lesson-01-05-01-02-showdown`: scaffolded-showdown one-per-press densify PRESENT — but `act-01-05-01-02-explain-showdown` SoftPulse RIVER CALL→SHOWDOWN→BEST FIVE **not** in Dart → **LPT-669**.
+  - `lesson-01-05-01-03-main-and-side-pots`: unguided-pot one-per-press; checkpoint-side densify PRESENT hintless — but `act-01-05-01-03-explain-pots` SoftPulse MAIN POT→SIDE POT **not** in Dart → **LPT-669**.
+- Tip-commented catalog **LPT-669** (Streets successors still valid too); Done-ack **LPT-106**/104/105 + **LPT-103**/101/102 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid.
+- Prefer bullet tightened (cap 40): S1 split SoftPulse explain successors exhausted on LPT-669 — next oldest unfresh / Low curriculum.
+- next: **LPT-669** SoftPulse explain Dart maps OR oldest unfresh / Low curriculum.
+- act-01-05-01-*: interactive SI/chip tiles clean on tip; SoftPulse explain successors via LPT-669; curriculum via LPT-106 Done.

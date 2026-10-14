@@ -246,6 +246,9 @@ class AuthoredMultiStepActivity extends StatelessWidget {
                     enabled: !locked,
                     facingBet: spot.facingBet,
                     heroStackAmount: spot.heroStackAmount,
+                    // Capstone transfer (and other identifyUnavailable spots)
+                    // keep Jam/Raise live — do not grey RAISE (off) (LPT-670).
+                    identifyUnavailable: spot.identifyUnavailable,
                     pulseChoiceId: pulseChoiceId,
                     onSelect:
                         (id) => controller.selectChoice(id, autoSubmit: true),

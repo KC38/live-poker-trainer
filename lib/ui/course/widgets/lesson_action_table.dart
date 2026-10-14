@@ -1462,6 +1462,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'SRP flop — start the map',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-turn':
         return const LessonActionSpot(
@@ -1473,6 +1475,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Paired blank — update the map',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-river':
         return const LessonActionSpot(
@@ -1484,6 +1488,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'No story — finish clean',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
     }
     return null;
@@ -1500,6 +1506,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: '3-bet flop — value with TPTK',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-3b-turn':
         return const LessonActionSpot(
@@ -1511,6 +1519,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Blank — continue value or kill',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-3b-river':
         return const LessonActionSpot(
@@ -1521,6 +1531,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           streetLabel: 'River · Q8327 · TPTK',
           facingBet: true,
           feltStatusLine: 'Huge raise — close without ego',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
     }
     return null;
@@ -1536,6 +1548,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           streetLabel: 'Flop · Jh8h2c · AQs',
           facingBet: true,
           feltStatusLine: 'Nut flush draw — call deep',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-mw-turn':
         return const LessonActionSpot(
@@ -1547,6 +1561,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Still drawing — semi-bluff ok',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-mw-river':
         return const LessonActionSpot(
@@ -1558,6 +1574,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Missed — no light multiway bluff',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
     }
     return null;
@@ -1574,6 +1592,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Top pair limped — bet value',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-limp-turn':
         return const LessonActionSpot(
@@ -1585,6 +1605,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Blank — continue value',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-limp-river':
         return const LessonActionSpot(
@@ -1596,6 +1618,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Thin value — not a blast bluff',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
     }
     return null;
@@ -1612,6 +1636,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Short SPR — start commit',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-4b-turn':
         return const LessonActionSpot(
@@ -1623,6 +1649,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           facingBet: false,
           openPot: true,
           feltStatusLine: 'Blank — continue / commit',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
       case 'step-4b-river':
         return const LessonActionSpot(
@@ -1633,6 +1661,8 @@ LessonActionSpot? resolveToyHandStepSpot({
           streetLabel: 'River · Q832A · KK',
           facingBet: true,
           feltStatusLine: 'Ace jam — fold ego',
+          // Capstone transfer: keep Jam/Raise live (LPT-670 / LPT-78).
+          identifyUnavailable: true,
         );
     }
     return null;
