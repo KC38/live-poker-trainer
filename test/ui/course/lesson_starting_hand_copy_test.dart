@@ -421,6 +421,45 @@ void main() {
     },
   );
 
+  test(
+    'alignLessonTableCopy keeps Those two stay when board deuce remaps',
+    () {
+      // LPT-797: template 2c → dealt 3c/7c must not rewrite the count in
+      // "Those two stay private…" (no cards/holes tail after "two").
+      const feedback = 'Right. Those two stay private until showdown.';
+      expect(
+        alignLessonTableCopy(
+          text: feedback,
+          templateHero: const ['Ah', 'Kd'],
+          dealtHero: const ['Js', 'Td'],
+          templateBoard: const ['Qs', 'Jh', '2c'],
+          dealtBoard: const ['9h', '8s', '3c'],
+        ),
+        feedback,
+      );
+      expect(
+        alignLessonTableCopy(
+          text: feedback,
+          templateHero: const ['Ah', 'Kd'],
+          dealtHero: const ['Qd', 'Jc'],
+          templateBoard: const ['Qs', 'Jh', '2c'],
+          dealtBoard: const ['Th', '9d', '7s'],
+        ),
+        feedback,
+      );
+      expect(
+        alignLessonTableCopy(
+          text: 'These two are your cards alone.',
+          templateHero: const ['Ah', 'Kd'],
+          dealtHero: const ['Js', 'Td'],
+          templateBoard: const ['Qs', 'Jh', '2c'],
+          dealtBoard: const ['9h', '8s', '3c'],
+        ),
+        'These two are your cards alone.',
+      );
+    },
+  );
+
   test('alignLessonTableCopy rewrites board codes and spoken ranks/suits', () {
     const prompt = 'Board Ks 9d 2c. You hold Kh Qh. Class?';
     const feedback = 'Pair of kings is already showdown-ready.';

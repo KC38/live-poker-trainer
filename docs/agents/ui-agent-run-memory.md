@@ -55,4 +55,4 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 
 ## Fold 2026-10-14
 
-- Prefer protecting English count phrases (`Your two cards`, `the two in front`) inside `alignLessonTableCopy` before spoken rank-word remaps — a template board deuce remapped to a trey otherwise turns Hint into "Your three cards" (LPT-791). Prefer stem-only Your two cards densify coach lines over hardcoded Ah Kd / Qs Jh 2c (LPT-792).
+- Prefer protecting English count phrases (`Your two cards`, `the two in front`, `Those/These two` before stay/are) inside `alignLessonTableCopy` before spoken rank-word remaps — a template board deuce remapped to a trey otherwise turns Hint into "Your three cards" (LPT-791) or Nice! into "Those three stay…" (LPT-797). Prefer stem-only Your two cards densify coach lines over hardcoded Ah Kd / Qs Jh 2c (LPT-792). Prefer validating Hint on SoftPulse-off siblings (unguided-mix) when guided SoftPulse keeps Hint disabled by design — do not treat Hint-disabled under gold SoftPulse as a regression (LPT-791 closeout).

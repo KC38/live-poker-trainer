@@ -768,13 +768,14 @@ height for every stage child, and `_feltShell` clamps again.
 ### Shipped
 
 `alignLessonTableCopy` protects English count phrases (`Your two cards`,
-`the two in front`) before spoken rank-word remaps so a template board
-deuce cannot turn Your two cards Hint into "Your three cards"
-(`lesson_starting_hand_copy.dart`, LPT-791). Your two cards densified coach
-lines are stem-only — never hardcode template Ah Kd / Qs Jh 2c
-(`selectIdentifyDensifiedCoachLine`, LPT-792). The next densify Hint that
-says "two cards" copies that protect; the next hole/board densify ask uses
-a stem or aligned felt names.
+`the two in front`, `Those two` / `These two` before stay/are) before spoken
+rank-word remaps so a template board deuce cannot turn Your two cards Hint
+into "Your three cards" (LPT-791) or Nice! "Those two stay…" into "Those
+three stay…" (`lesson_starting_hand_copy.dart`, LPT-797). Your two cards
+densified coach lines are stem-only — never hardcode template Ah Kd / Qs Jh
+2c (`selectIdentifyDensifiedCoachLine`, LPT-792). The next densify Hint that
+says "two cards" or feedback that says "Those two stay" copies that
+protect; the next hole/board densify ask uses a stem or aligned felt names.
 
 Calling Station explain STATION tile caption is **Working label**
 (`CallingStationDemo.points` in `lesson_action_table.dart`, LPT-789) — same
@@ -1828,7 +1829,7 @@ felt.
 
 | Lesson | Explain taps | Still a list |
 | --- | --- | --- |
-| Your two cards | Your hole cards on the felt; Hint keeps "two cards" under board deuce remap (LPT-791); densify coach stem-only (LPT-792) | — |
+| Your two cards | Your hole cards on the felt; Hint keeps "two cards" under board deuce remap (LPT-791); Nice! keeps "Those two stay" (LPT-797); densify coach stem-only (LPT-792) | — |
 | Suits | Suit taps on board cards; explain SoftPulse hearts → diamonds → clubs → spades (LPT-353); unit `unit-01-01-02-suits-and-ranks` (LPT-83 split) | — |
 | Ranks | Board ranks low to high; SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
 | Pairs and suited | Suited / pair seats; scaffolded pressHints (LPT-82); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |

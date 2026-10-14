@@ -254,7 +254,8 @@ String alignLessonTableCopy({
 
   // Protect English count phrases before spoken rank remaps. A template
   // board deuce remapped to a trey must not turn "Your two cards" into
-  // "Your three cards" on Hint (LPT-791 Your two cards guided find-holes).
+  // "Your three cards" on Hint (LPT-791), or "Those two stay…" into
+  // "Those three stay…" on Nice! (LPT-797 Your two cards guided find-holes).
   next = _withProtectedCountPhrases(next, (body) {
     var out = body;
     // Plurals before singulars so "kings" is not left as "aces"+"s".
@@ -288,8 +289,9 @@ String alignLessonTableCopy({
   return _fixIndefiniteArticles(next);
 }
 
-/// Stashes count phrases like "two cards" / "your two holes" while [rewrite]
-/// runs, then restores them so board rank-word remaps cannot clobber counts.
+/// Stashes count phrases like "two cards" / "those two" / "your two holes"
+/// while [rewrite] runs, then restores them so board rank-word remaps cannot
+/// clobber counts.
 String _withProtectedCountPhrases(
   String text,
   String Function(String body) rewrite,
@@ -297,9 +299,12 @@ String _withProtectedCountPhrases(
   final protected = <String>[];
   final masked = text.replaceAllMapped(
     RegExp(
-      r'\b((?:your\s+|the\s+)?(?:two|three|four|five|six|seven)'
+      // "Those/These two" (before stay/are/…) and "your/the two cards|…"
+      r'\b((?:(?:those|these)\s+(?:two|three|four|five|six|seven))'
+      r'|(?:(?:your\s+|the\s+)?(?:two|three|four|five|six|seven)'
       r'(?:\s+cards?|\s+holes?|\s+seats?|\s+presses?'
-      r'|\s+at\s+your|\s+in\s+front))\b',
+      r'|\s+at\s+your|\s+in\s+front'
+      r'|\s+stay|\s+are|\s+keep|\s+remain)))\b',
       caseSensitive: false,
     ),
     (match) {
