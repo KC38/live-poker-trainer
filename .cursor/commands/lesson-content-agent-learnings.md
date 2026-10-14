@@ -113,17 +113,20 @@ Lesson-specific pattern notes (full history) live in
   cues + `explainGrading` are present. Pre-Done checklist history (S1
   16 → S2 32 → S3 46 → S4 72) is closed. S3 leak-repair + S4 ranges +
   3-bet-squeeze + continuation + sizing + SPR + multiway-ranges +
-  deep-stack + implied-odds + thin-value NEVER children walked (tips
+  deep-stack + implied-odds + thin-value + lines-and-probes +
+  line-reading NEVER children walked (tips
   `39155796`/`a08d105d`/`8cb997f9`/`3b13dcb5`/`63ae3ddc`/`0b9f93f7`/
-  `f25ed146`/`5a721bbf`/`a8361500`/`ea625203`) — residuals **LPT-676**
-  (polar-under-Nearby) + **LPT-677** (weigh-SPR habit under Estimate) +
-  **LPT-680** (rewards checkpoint under Plan-high-SPR) + **LPT-681**
-  (Estimate SoftPulse still walks REVERSE/SECOND) + **LPT-682** (Thin
-  SoftPulse still walks CATCH/BARRELS) + **LPT-683** (meta-read checkpoint
-  under Thin sticky) + **LPT-684** (Lines SoftPulse still walks
-  PROBE/DELAY/DONK under check-raises); multiway-ranges structural clean;
-  next NEVER walk: `lesson-05-06-01-*` line-reading / remaining S5–S6
-  NEVER / Low curriculum.
+  `f25ed146`/`5a721bbf`/`a8361500`/`ea625203`/`92c86645`/`29559dd8`) —
+  residuals **LPT-676** (polar-under-Nearby) + **LPT-677** (weigh-SPR habit
+  under Estimate) + **LPT-680** (rewards checkpoint under Plan-high-SPR) +
+  **LPT-681** (Estimate SoftPulse still walks REVERSE/SECOND) + **LPT-682**
+  (Thin SoftPulse still walks CATCH/BARRELS) + **LPT-683** (meta-read
+  checkpoint under Thin sticky) + **LPT-684** (Lines SoftPulse still walks
+  PROBE/DELAY/DONK under check-raises); multiway-ranges + line-reading
+  structural clean (first-child ACTION→REWRITE→UPDATE matches
+  update-each-street — no residual); next NEVER walk:
+  `lesson-05-07-01-*` timing-sizing / remaining S5–S6 NEVER / Low
+  curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -167,6 +170,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14bz: Tip-stable `29559dd8` (#2274 SoftPulse hero holes). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER line-reading children: first-child `act-05-06-01-explain` SoftPulse ACTION→REWRITE→UPDATE + Dart `RangeRewriteDemo` / `rangeRewrite` **matches** update-each-street (not a pre-split multi-concept residual); unguided SoftPulse `update` densify PRESENT (`lineReadRebuildOutcomes`); successors `act-05-06-01-02-explain-capped` (CHECK→CAPPED→UNCAPPED) + `act-05-06-01-03-explain-stale` (FLOP→TURN→RE-PRICE) content-driven (do not reopen LPT-669); guided SoftPulse `capped` densify PRESENT; scaffolded SoftPulse `repr` one-per-press PRESENT (`7h/6h`·`Kh/9h/2c/3d` +2 variants matching Dart); checkpoint SoftPulse `uncap` kind `none` densify PRESENT (approved capped+uncapped grouping). Curriculum **LPT-239** Done — do not clone; **no** new residual. Tip-commented LPT-239 + Done-ack LPT-237/238/461/518/624/625/627/628/635/667/669 + open residuals LPT-676/677/680/681/682/683/684. next: NEVER `lesson-05-07-01-*` timing-sizing / S5–S6 NEVER / Low curriculum.
 - 2026-10-14by: Tip-stable `1babb319` (#2272 thin-value learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER lines-and-probes children: first-child `act-05-05-01-explain` SoftPulse X/R→PROBE→DELAY→DONK + Dart `LineStoriesDemo` still pre-split ladder under check-raises-only → **LPT-684**; guided SoftPulse `strong` densify PRESENT (`linesNitXrOutcomes`); successors `act-05-05-01-02-explain-probe` (PROBE→DELAY→PLAN) + `act-05-05-01-03-explain-donk` (DONK→STRONG→AIR) content-driven (do not reopen LPT-669); scaffolded SoftPulse `probe` one-per-press PRESENT (`9h/8d`·`Kc/9s/3h` +2 variants); checkpoint SoftPulse `delay` kind `none` densify PRESENT (approved probes+delays grouping); unguided SoftPulse `polar` densify PRESENT. Curriculum **LPT-236** Done — do not clone. Tip-commented LPT-236/684 + Done-ack LPT-234/235/460/517/610/624/625/627/628/635/667/669 + open residuals LPT-676/677/680/681/682/683. next: NEVER `lesson-05-06-01-*` line-reading / S5–S6 NEVER / Low curriculum.
 - 2026-10-14bx: Tip-stable `ea625203` (#2271 implied-odds learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER thin-value children: first-child `act-05-04-01-explain` SoftPulse THIN→CATCH→BARRELS + Dart `ThinValueDemo` still pre-split ladder under thin-value-only → **LPT-682**; guided SoftPulse `tv` PRESENT (`Jh/9d`·`Kc/9s/4h/2d/7c` + suit variants); checkpoint SoftPulse `read` meta-read under Thin → **LPT-683**; successors `act-05-04-01-02-explain-catch` (MANIAC→BARREL→CALL) + `act-05-04-01-03-explain-overfold` (NIT→FOLDS→CHECK) content-driven (do not reopen LPT-669); scaffolded SoftPulse `call-m` + unguided SoftPulse `check-nit` one-per-press OK. Curriculum **LPT-233** Done — do not clone. Tip-commented LPT-233/682/683 + Done-ack LPT-231/232/459/516/608/609/614 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-05-05-01-*` lines-and-probes / S5–S6 NEVER / Low curriculum.
 - 2026-10-14bw: Tip-stable `a8361500` (#2270 deep-stack learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER implied-odds children: first-child `act-05-03-01-explain` SoftPulse IMPLIED→REVERSE→SECOND + Dart `impliedOdds` visual still pre-split ladder under Estimate; guided SoftPulse `call-io` PRESENT (`Jh/9d`·`8s/7c/2d` + suit variants; stackLabel 400); checkpoint SoftPulse `depth-pay` hintless densify PRESENT (checkpoint OK); successors `act-05-03-01-02-explain-reverse` (REVERSE→DOMINATED→FOLD) + `act-05-03-01-03-explain-draws` (NON-NUT→MULTIWAY→SKIP) content-driven (do not reopen LPT-669); scaffolded SoftPulse `rio` + unguided SoftPulse `nonut` one-per-press OK. Curriculum **LPT-230** Done — do not clone; residual Estimate SoftPulse REVERSE/SECOND → filed **LPT-681** (needs-human). Tip-commented LPT-230/681 + Done-ack LPT-228/229/393/458/515/605/606/607. next: NEVER `lesson-05-04-01-*` thin-value / S5–S6 NEVER / Low curriculum.
