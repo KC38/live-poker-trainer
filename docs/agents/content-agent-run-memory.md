@@ -3183,3 +3183,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Same-cards SoftPulse residual **LPT-725** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-06-01-*: interactive structural clean on tip except LPT-802 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14hb (eb1b009c Prefer NEVER Same-cards SoftPulse residual LPT-725 re-check)
+
+- Tip-stable `eb1b009c` (#2454 Stack SoftPulse Prefer re-check fold on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Same-cards SoftPulse residual re-check `lesson-07-07-01-01/02/03/04`: first-child SoftPulse CARDS→MODELS→CITE + `explainGrading` "Cards → Models → Cite." + Dart `SameCardsTypesDemo` still pre-split under station-value (objective still unit string "Change lines by type with citations") → residual **LPT-725** still To Do (needs-human; Relates LPT-330 — do not re-add needs-human on curriculum); successors TAG CHECK-RAISE→CAREFUL / LAG BARREL→CALL / NO EVIDENCE→BASELINE content-driven; guided SoftPulse `bet` fixed Ah/Kd·Kc8s3h +2 suit variants match Dart; scaffolded SoftPulse `fold` one-per-press; unguided SoftPulse `call`; checkpoint SoftPulse `base` kind `none` densify PRESENT under baseline-without-evidence — no companion residual; curriculum **LPT-330** Done.
+- Tip-commented LPT-725/330/726/802/351/800/801/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); explain/checkpoint `deal.mode` `none` — do not file handFamily; guided/scaffolded/unguided fixed+variants — do not reopen LPT-627.
+
