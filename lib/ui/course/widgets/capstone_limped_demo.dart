@@ -5,6 +5,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Capstone: limped pot explain: NUTS / VALUE / THIN under the full poker table.
 class LessonCapstoneLimpedExplainTable extends StatefulWidget {
@@ -27,6 +28,14 @@ class LessonCapstoneLimpedExplainTable extends StatefulWidget {
 
 class _LessonCapstoneLimpedExplainTableState
     extends State<LessonCapstoneLimpedExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    CapstoneLimpedDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -38,9 +47,9 @@ class _LessonCapstoneLimpedExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: CapstoneLimpedDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= CapstoneLimpedDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -68,7 +77,7 @@ class _LessonCapstoneLimpedExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < CapstoneLimpedDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -76,24 +85,24 @@ class _LessonCapstoneLimpedExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        CapstoneLimpedDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      CapstoneLimpedDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _CapstoneLimpedTile(
-                    label: CapstoneLimpedDemo.points[i].label,
-                    caption: CapstoneLimpedDemo.points[i].caption,
-                    color: CapstoneLimpedDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      CapstoneLimpedDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  CapstoneLimpedDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),

@@ -5,6 +5,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Map turn barrels before you bet flop explain: BARREL / GIVE-UP / MAP under the full poker table.
 class LessonTurnMapExplainTable extends StatefulWidget {
@@ -27,6 +28,14 @@ class LessonTurnMapExplainTable extends StatefulWidget {
 
 class _LessonTurnMapExplainTableState
     extends State<LessonTurnMapExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    TurnMapDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -38,9 +47,9 @@ class _LessonTurnMapExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: TurnMapDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= TurnMapDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -68,7 +77,7 @@ class _LessonTurnMapExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < TurnMapDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -76,24 +85,24 @@ class _LessonTurnMapExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        TurnMapDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      TurnMapDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _TurnMapTile(
-                    label: TurnMapDemo.points[i].label,
-                    caption: TurnMapDemo.points[i].caption,
-                    color: TurnMapDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      TurnMapDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  TurnMapDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),

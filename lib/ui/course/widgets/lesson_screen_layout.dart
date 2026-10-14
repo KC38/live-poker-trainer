@@ -428,36 +428,28 @@ String _lessonFrameLine(
         'Tap Nine, then Same, then Position.';
   }
   if (activity.id == 'act-03-01-01-explain') {
-    return 'Before cards, read the table. '
-        'Tap Pot, then Stacks, then Button, then Who acts.';
+    return 'Read the pot, then the stacks. Tap Pot, then Stacks.';
   }
   if (activity.id == 'act-03-02-01-explain') {
-    return 'Flop first: made, draw, showdown value, or air. '
-        'Tap Made, then Draw, then SDV, then Air.';
+    return 'A made hand already has a pair or better. Tap Made.';
   }
   if (activity.id == 'act-03-03-01-explain') {
-    return 'Clean outs help. Dirty outs trap you. '
-        'Tap Clean, then Dirty, then Price.';
+    return 'Count only clean outs. Tap Clean, then Dirty.';
   }
   if (activity.id == 'act-03-04-01-explain') {
-    return 'One plan on the flop. '
-        'Tap Value, then C-bet, then Check, then Call, then Fold, then Raise.';
+    return 'Strong made hands bet for value. Tap Value.';
   }
   if (activity.id == 'act-03-05-01-explain') {
-    return 'A turn bricks or changes the story. '
-        'Tap Brick, then Change, then Barrel, then Delay.';
+    return 'Did the turn change the story? Tap Brick, then Change.';
   }
   if (activity.id == 'act-03-06-01-explain') {
-    return 'River is value, bluff, bluff-catch, or fold. '
-        'Tap Value, then Bluff, then Catch, then Fold.';
+    return 'Bet hands that beat calling ranges. Tap Value.';
   }
   if (activity.id == 'act-03-07-01-explain') {
-    return 'More players need stronger hands. '
-        'Tap Stronger, then Fewer, then Nuts.';
+    return 'More players need stronger hands. Tap Stronger.';
   }
   if (activity.id == 'act-03-08-01-explain') {
-    return 'Common leaks: top pair, bad prices, passive calls, crowd bluffs. '
-        'Tap Top pair, then Prices, then Passive, then Crowds.';
+    return 'Weak top pair is not a monster. Tap Top pair.';
   }
   if (activity.id == 'act-04-01-01-explain') {
     return 'You never know one hand. You know a range. '
