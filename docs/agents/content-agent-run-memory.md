@@ -3729,3 +3729,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-798/799/320/795/800/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER HU SoftPulse residual **LPT-800** (+ player-count **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-04-01-*: interactive structural clean on tip except LPT-798 SoftPulse residual + LPT-799 companion; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15s tip 5c2c3e03 (#2534 Pot Prefer → HU SoftPulse LPT-800 Prefer)
+
+- Tip-stable `5c2c3e03` after #2534 SoftPulse residual Prefer LPT-798 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER HU SoftPulse residual re-check `lesson-07-05-01-01/02/03` / `act-07-05-01-*`: first-child SoftPulse FEWER→THICKER→WIDEN + `explainGrading` "Fewer → Thicker → Widen." + Dart `HuVsMultiwayDemo.points` FEWER/THICKER/WIDEN (captions Bluff less MW / Value up MW / HU selected bluffs) / `LessonHuVsMultiwayExplainTable` still pre-split under bluff-less-only → residual **LPT-800** still To Do (needs-human; Relates LPT-323 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `input` kind `none` densify PRESENT ("Player count is?" / tile "A first-class planning input") under bluff-less-only → residual **LPT-801** still To Do; successors SoftPulse MULTIWAY→THICK VALUE / HEADS-UP→STEAL MORE content-driven (do not reopen LPT-669); guided SoftPulse `no` densify PRESENT; unguided SoftPulse `thick` one-per-press densify PRESENT; scaffolded SoftPulse `higher` one-per-press densify PRESENT.
+- Curriculum **LPT-323** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-800/801/323/798/802/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Stack SoftPulse residual **LPT-802** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-05-01-*: interactive structural clean on tip except LPT-800 SoftPulse + LPT-801 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; outcome-tile `deal.mode` `none` — do not file handFamily.
