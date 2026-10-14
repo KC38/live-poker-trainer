@@ -266,6 +266,10 @@ class OrderSequenceActivity extends StatelessWidget {
           );
         }
         if (framed && isShowdownOrderSequenceActivity(activity.id)) {
+          // Match LessonShowdownOrderExplainTable: only the next correct
+          // seat is accepted. SoftPulse / Hint teach that seat — accepting
+          // a wrong seat into the draft left cyan badges on the miss and
+          // no Oops (LPT-707 Compare finished hands unguided).
           return RandomizedLessonShowdownOrderTable(
             key: ValueKey<String>(
               '${activity.id}-${controller.bindGeneration}-showdown-order',
@@ -275,6 +279,13 @@ class OrderSequenceActivity extends StatelessWidget {
             orderedIds: ordered,
             enabled: !locked,
             showGuidance: showGuidance,
+            strictOrder: true,
+            onMiss: () {
+              LessonFrameScope.maybeOf(context)?.onLocalMiss(
+                'Tap seats in hand-strength order — start with the one '
+                'SoftPulse marks.',
+              );
+            },
             onPick: (id) => appendOrderedId(
               controller: controller,
               activity: activity,
