@@ -101,10 +101,15 @@ Lesson-specific pattern notes (full history) live in
 - Prefer one catalog ticket per structural gap type (pressHints empty
   → LPT-626 Done; pressHints **one-per-press** incomplete → **LPT-667**;
   deal.variants, Nice! ladder, densify-tap, SoftPulse maps, guideRegion,
-  permanent-gold). On discovery walks after catalog `--counts` all **0**,
+  permanent-gold; split SoftPulse explain Dart table-tap/visual →
+  **LPT-669**). On discovery walks after catalog `--counts` all **0**,
   still diff scaffolded non-assessment `cues` press sets vs `pressHints`
-  press sets and edit/append **LPT-667** (do not reopen LPT-626). Append
-  checklists; Done sibling clones (skip In Progress).
+  press sets and edit/append **LPT-667** (do not reopen LPT-626). For
+  `lessonSplitMap` successors, also verify SoftPulse explain ids in
+  `isTableRegionTapActivity` + `resolveCoachDialogueVisual` — first-child
+  reuses the wired explain id; `*-02-*`/`*-03-*` often author cues only
+  (Continue, not SoftPulse walk) → **LPT-669**. Append checklists; Done
+  sibling clones (skip In Progress).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
