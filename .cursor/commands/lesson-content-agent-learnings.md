@@ -112,12 +112,13 @@ Lesson-specific pattern notes (full history) live in
   allowlist; do **not** reopen LPT-669 or re-file Dart map clones when
   cues + `explainGrading` are present. Pre-Done checklist history (S1
   16 → S2 32 → S3 46 → S4 72) is closed. S3 leak-repair + S4 ranges +
-  3-bet-squeeze + continuation + sizing + SPR + multiway-ranges NEVER
-  children walked (tips `39155796`/`a08d105d`/`8cb997f9`/`3b13dcb5`/
-  `63ae3ddc`/`0b9f93f7`/`f25ed146`) — residuals **LPT-676**
-  (polar-under-Nearby) + **LPT-677** (weigh-SPR habit under Estimate);
-  multiway-ranges structural clean (no residual); next NEVER walk:
-  `lesson-05-02-01-*` deep-stack / remaining S5–S6 NEVER / Low curriculum.
+  3-bet-squeeze + continuation + sizing + SPR + multiway-ranges +
+  deep-stack NEVER children walked (tips `39155796`/`a08d105d`/
+  `8cb997f9`/`3b13dcb5`/`63ae3ddc`/`0b9f93f7`/`f25ed146`/`5a721bbf`) —
+  residuals **LPT-676** (polar-under-Nearby) + **LPT-677** (weigh-SPR
+  habit under Estimate) + **LPT-680** (rewards checkpoint under
+  Plan-high-SPR); multiway-ranges structural clean; next NEVER walk:
+  `lesson-05-03-01-*` implied-odds / remaining S5–S6 NEVER / Low curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -161,6 +162,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14bv: Tip-stable `5a721bbf` (#2269 multiway learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER deep-stack children: first-child `act-05-02-01-explain` SoftPulse DEEP→REALIZE→STACK content-driven; guided SoftPulse `impl` densify PRESENT (`deal.mode` `none`); successors `act-05-02-01-02-explain-stack-off` (DEEP→ONE PAIR→FOLD) + `act-05-02-01-03-explain-plan` (SPR→TURN→RIVER) content-driven (do not reopen LPT-669); scaffolded `Ad/9c`·`As/Th/7h` SoftPulse `fold-tp` one-per-press OK (+ suit variants; stackLabel 500); unguided SoftPulse `plan` densify PRESENT; checkpoint SoftPulse `pos` hintless densify PRESENT. Curriculum **LPT-227** Done — do not clone; residual rewards-synthesis under Plan-high-SPR → filed **LPT-680** (needs-human). Tip-commented LPT-227/680 + Done-ack LPT-225/226/457/514/404/417/624/625/627/628/635/667/669. next: NEVER `lesson-05-03-01-*` implied-odds / S5–S6 NEVER / Low curriculum.
 - 2026-10-14bu: Tip-stable `f25ed146` (#2268 SPR learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER multiway-ranges children: first-child `act-05-01-01-explain` SoftPulse NUTTED→AIR→DOMINATION content-driven; guided SoftPulse `nfd` densify PRESENT (`deal.mode` `none`); checkpoint SoftPulse `nuts` hintless densify PRESENT; successors `act-05-01-01-02-explain-speculative` (MULTIWAY→OOP→FOLD) + `act-05-01-01-03-explain-value` (CALLERS→SET→BET) content-driven (do not reopen LPT-669); scaffolded `7h/6h` SoftPulse `fold-76` + unguided top-set SoftPulse `bet-set` one-per-press OK (+ suit variants). Curriculum **LPT-224** Done — do not clone; no activity↔objective residual. Tip-commented LPT-224 + Done-ack LPT-222/223/456/595/600/593/513/625/627/628/635/667/669. next: NEVER `lesson-05-02-01-*` deep-stack / S5–S6 NEVER / Low curriculum.
 - 2026-10-14bt: Tip-stable `0b9f93f7` (#2267 sizing learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER SPR children: first-child `act-04-05-01-explain` SoftPulse SPR→LOW→HIGH **wired** (`sprDepth`); successors `act-04-05-01-02-explain-low` (LOW SPR→COMMIT) + `act-04-05-01-03-explain-high` (HIGH SPR→FLEXIBLE) content-driven (do not reopen LPT-669); guided SoftPulse `spr-4` densify PRESENT (`deal.mode` `none`); scaffolded/unguided fixed+variants SoftPulse `commit`/`flexible` one-per-press OK; checkpoint hintless densify PRESENT (Scene turn board matches). Curriculum **LPT-182** Done — do not clone; residual weigh-SPR habit under Estimate → filed **LPT-677** (needs-human). Tip-commented LPT-182/677 + Done-ack LPT-180/181/535/620/568/625/627/628/635/667/669. next: NEVER `lesson-05-01-01-*` multiway ranges / S5–S6 NEVER / Low curriculum.
 - 2026-10-14bs: Tip-stable `63ae3ddc` (#2266 continuation learnings; tip after #2265). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Sizing children: first-child `act-04-04-01-explain` SoftPulse VALUE→PRESSURE→SIZE content-driven; successors `act-04-04-01-02-explain-nearby` (NEARBY→STORY) + `act-04-04-01-03-explain-tiny` (TINY→VALUE) content-driven (do not reopen LPT-669); guided/scaffolded fixed+variants SoftPulse PRESENT one-per-press OK; unguided densify PRESENT SoftPulse `soft`; checkpoint hintless. Curriculum **LPT-179** Done — do not clone; residual polar `act-04-04-01-scaffolded` nested under Nearby → filed **LPT-676** (needs-human). Tip-commented LPT-179/676 + Done-ack LPT-177/178/398/410/504/522/569/625/627/628/635/667/669. next: NEVER `lesson-04-05-01-*` SPR / S5–S6 NEVER / Low curriculum.
