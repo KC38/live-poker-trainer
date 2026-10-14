@@ -363,8 +363,7 @@ String _lessonFrameLine(
         'Tap the seats in the order they act.';
   }
   if (activity.id == 'act-01-01-03-explain-button') {
-    return 'Button marks the dealer. Blinds sit left of it. '
-        'Tap the button, then the small blind, then the big blind.';
+    return 'The D chip marks the dealer button. Tap the dealer button.';
   }
   if (activity.id == 'act-01-01-03-checkpoint-layout') {
     return 'The button has the D chip. Tap the small blind, '
@@ -389,16 +388,16 @@ String _lessonFrameLine(
         "player's cards if you think their holes win.";
   }
   if (activity.id == 'act-01-03-01-explain-passive') {
-    return 'Three quiet buttons. Tap Fold, then Check, then Call.';
+    return 'Fold gives up the hand. Tap Fold.';
   }
   if (activity.id == 'act-01-03-02-explain-aggro') {
-    return 'Three chip-pushing buttons. Tap Bet, then Raise, then All-in.';
+    return 'Nobody has bet yet. Tap Bet to put the first chips in.';
   }
   if (activity.id == 'act-01-04-01-explain-streets') {
     return 'Four streets: preflop, flop, turn, river. Tap each street.';
   }
   if (activity.id == 'act-01-05-01-explain-win') {
-    return 'Folds win pots early. Showdown compares hands. Tap each path.';
+    return 'When everyone else folds, the pot is yours. Tap Fold win.';
   }
   if (activity.id == 'act-01-06-01-explain-run') {
     return 'One short hand. Tap Blinds, then You act, then Ending.';
@@ -410,23 +409,19 @@ String _lessonFrameLine(
     return 'Preflop starts left of the big blind. Tap UTG, then HJ, CO, then BTN.';
   }
   if (activity.id == 'act-02-02-01-explain-families') {
-    return 'Pairs, broadways, suited aces, connectors. Tap each family.';
+    return 'A pocket pair is two cards of the same rank. Tap Pairs.';
   }
   if (activity.id == 'act-02-03-01-explain-open') {
-    return 'Early is tight. The button opens wider. '
-        'Tap Early, then Button, then Live 3x.';
+    return 'Early seats fold trash. Tap Early.';
   }
   if (activity.id == 'act-02-04-01-explain-vs') {
-    return 'Weak hands fold. Playable hands call. '
-        'Tap Fold, then Call, then 3-bet.';
+    return 'Facing a raise, weak hands fold. Tap Fold.';
   }
   if (activity.id == 'act-02-05-01-explain-bb') {
-    return 'The shorter stack sets the ceiling. '
-        'Tap Chips to BB, then Shorter, then Depth.';
+    return 'Divide your chips by the big blind. Tap Chips to BB.';
   }
   if (activity.id == 'act-02-06-01-explain-habits') {
-    return 'Watch the action, say it, cover your cards, and wait. '
-        'Tap Watch, then Say, then Cover, then Wait.';
+    return 'Watch the earlier seats before you act. Tap Watch.';
   }
   if (activity.id == 'act-02-07-01-explain-full') {
     return 'Nine seats. The rules stay the same. '

@@ -5,6 +5,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Write your default strategy book explain: LEAK / BOOK / REVIEW under the full poker table.
 class LessonLeakReviewBookExplainTable extends StatefulWidget {
@@ -27,6 +28,14 @@ class LessonLeakReviewBookExplainTable extends StatefulWidget {
 
 class _LessonLeakReviewBookExplainTableState
     extends State<LessonLeakReviewBookExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    LeakReviewBookDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -38,9 +47,9 @@ class _LessonLeakReviewBookExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: LeakReviewBookDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= LeakReviewBookDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -68,7 +77,7 @@ class _LessonLeakReviewBookExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < LeakReviewBookDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -76,24 +85,24 @@ class _LessonLeakReviewBookExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        LeakReviewBookDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      LeakReviewBookDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _LeakReviewBookTile(
-                    label: LeakReviewBookDemo.points[i].label,
-                    caption: LeakReviewBookDemo.points[i].caption,
-                    color: LeakReviewBookDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      LeakReviewBookDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  LeakReviewBookDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),

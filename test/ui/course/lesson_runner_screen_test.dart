@@ -760,7 +760,7 @@ void main() {
     for (
       var i = 0;
       i < 40 &&
-          find.textContaining('Button marks the dealer').evaluate().isEmpty;
+          find.textContaining('The D chip marks the dealer').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -770,7 +770,7 @@ void main() {
     expect(find.text('Button and blinds'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Button marks the dealer'), findsOneWidget);
+    expect(find.textContaining('The D chip marks the dealer'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Redo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
@@ -903,8 +903,8 @@ void main() {
     expect(find.byKey(const ValueKey('passive-actions-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('FOLD'), findsOneWidget);
-    expect(find.text('CHECK'), findsOneWidget);
-    expect(find.text('CALL'), findsOneWidget);
+    expect(find.text('CHECK'), findsNothing); // curriculum residual
+    expect(find.text('CALL'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -948,8 +948,8 @@ void main() {
     );
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('BET'), findsOneWidget);
-    expect(find.text('RAISE'), findsOneWidget);
-    expect(find.text('ALL-IN'), findsOneWidget);
+    expect(find.text('RAISE'), findsNothing); // curriculum residual
+    expect(find.text('ALL-IN'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -1015,7 +1015,7 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.textContaining('Tap each path').evaluate().isEmpty;
+      i < 40 && find.textContaining('Tap Fold win').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -1025,14 +1025,14 @@ void main() {
     expect(find.text('How pots are won'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap each path'), findsOneWidget);
+    expect(find.textContaining('Tap Fold win'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
     expect(find.byKey(const ValueKey('winning-paths-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('FOLD WIN'), findsOneWidget);
-    expect(find.text('SHOWDOWN'), findsOneWidget);
-    expect(find.text('SIDE POT'), findsOneWidget);
+    expect(find.text('SHOWDOWN'), findsNothing); // curriculum residual
+    expect(find.text('SIDE POT'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -1226,7 +1226,7 @@ void main() {
     await tester.pump();
     for (
       var i = 0;
-      i < 40 && find.textContaining('Tap each family').evaluate().isEmpty;
+      i < 40 && find.textContaining('Tap Pairs').evaluate().isEmpty;
       i++
     ) {
       await tester.pump(const Duration(milliseconds: 50));
@@ -1236,14 +1236,14 @@ void main() {
     expect(find.text('Hand families'), findsNothing);
     expect(find.byTooltip('Close'), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(3));
-    expect(find.textContaining('Tap each family'), findsOneWidget);
+    expect(find.textContaining('Tap Pairs'), findsOneWidget);
     expect(find.byTooltip('Undo'), findsOneWidget);
     expect(find.byTooltip('Hint'), findsOneWidget);
     expect(find.byKey(const ValueKey('hand-families-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('Pairs'), findsOneWidget);
-    expect(find.text('Broadways'), findsOneWidget);
-    expect(find.text('Connectors'), findsOneWidget);
+    expect(find.text('Broadways'), findsNothing); // curriculum residual
+    expect(find.text('Connectors'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -1284,8 +1284,8 @@ void main() {
     expect(find.byKey(const ValueKey('open-range-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('EARLY'), findsOneWidget);
-    expect(find.text('BUTTON'), findsOneWidget);
-    expect(find.text('LIVE 3x'), findsOneWidget);
+    expect(find.text('BUTTON'), findsNothing); // curriculum residual
+    expect(find.text('LIVE 3x'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -1326,8 +1326,8 @@ void main() {
     expect(find.byKey(const ValueKey('vs-open-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('FOLD'), findsOneWidget);
-    expect(find.text('CALL'), findsOneWidget);
-    expect(find.text('3-BET'), findsOneWidget);
+    expect(find.text('CALL'), findsNothing); // curriculum residual
+    expect(find.text('3-BET'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -1368,8 +1368,8 @@ void main() {
     expect(find.byKey(const ValueKey('bb-stack-depth-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('CHIPS→BB'), findsOneWidget);
-    expect(find.text('SHORTER'), findsOneWidget);
-    expect(find.text('DEPTH'), findsOneWidget);
+    expect(find.text('SHORTER'), findsNothing); // curriculum residual
+    expect(find.text('DEPTH'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 
@@ -1410,9 +1410,9 @@ void main() {
     expect(find.byKey(const ValueKey('table-habits-table')), findsOneWidget);
     expect(find.byType(FeltTableView), findsOneWidget);
     expect(find.text('WATCH'), findsOneWidget);
-    expect(find.text('SAY'), findsOneWidget);
-    expect(find.text('COVER'), findsOneWidget);
-    expect(find.text('WAIT'), findsOneWidget);
+    expect(find.text('SAY'), findsNothing); // curriculum residual
+    expect(find.text('COVER'), findsNothing); // curriculum residual
+    expect(find.text('WAIT'), findsNothing); // curriculum residual
     expect(tester.takeException(), isNull);
   });
 

@@ -12,6 +12,7 @@ import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Features for How pots are won explain on the full table.
 TableFeatures get lessonPotsWonTableFeatures => const TableFeatures(
@@ -80,6 +81,14 @@ class LessonWinningPathsExplainTable extends StatefulWidget {
 
 class _LessonWinningPathsExplainTableState
     extends State<LessonWinningPathsExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<(String, String, List<String>, List<String>)> get _points => lessonAuthoredDemoPoints(
+    context,
+    LessonWinningPathsExplainTable.paths,
+    (p) => p.$1,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String title) {
@@ -91,16 +100,16 @@ class _LessonWinningPathsExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: LessonWinningPathsExplainTable.paths.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= LessonWinningPathsExplainTable.paths.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPathsTapped!();
     }
   }
 
   int? get _nextIndex {
-    for (var i = 0; i < LessonWinningPathsExplainTable.paths.length; i++) {
-      if (!_tapped.contains(LessonWinningPathsExplainTable.paths[i].$1)) {
+    for (var i = 0; i < _points.length; i++) {
+      if (!_tapped.contains(_points[i].$1)) {
         return i;
       }
     }
@@ -116,8 +125,8 @@ class _LessonWinningPathsExplainTableState
       remainingPressCount: next == null ? 0 : 1,
     );
     final pathIndex =
-        next ?? LessonWinningPathsExplainTable.paths.length - 1;
-    final path = LessonWinningPathsExplainTable.paths[pathIndex];
+        next ?? _points.length - 1;
+    final path = _points[pathIndex];
     final showdown = path.$1 == 'SHOWDOWN';
     return Column(
       key: const ValueKey<String>('winning-paths-table'),
@@ -140,19 +149,19 @@ class _LessonWinningPathsExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < LessonWinningPathsExplainTable.paths.length; i++)
+            for (var i = 0; i < _points.length; i++)
               GlowHighlight(
                 active: teaching && widget.showGuidance && next == i,
                 child: _UnderFeltPathChip(
-                  label: LessonWinningPathsExplainTable.paths[i].$1,
+                  label: _points[i].$1,
                   selected: _tapped.contains(
-                    LessonWinningPathsExplainTable.paths[i].$1,
+                    _points[i].$1,
                   ),
                   enabled: teaching,
                   onPressed:
                       teaching
                           ? () => _onTap(
-                            LessonWinningPathsExplainTable.paths[i].$1,
+                            _points[i].$1,
                           )
                           : null,
                 ),

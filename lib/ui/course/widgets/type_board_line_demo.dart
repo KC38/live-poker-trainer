@@ -5,6 +5,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Integrate type, board, line, and sizing explain: TYPE / BOARD / LINE / SIZE under the full poker table.
 class LessonTypeBoardLineExplainTable extends StatefulWidget {
@@ -27,6 +28,14 @@ class LessonTypeBoardLineExplainTable extends StatefulWidget {
 
 class _LessonTypeBoardLineExplainTableState
     extends State<LessonTypeBoardLineExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    TypeBoardLineDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -38,9 +47,9 @@ class _LessonTypeBoardLineExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: TypeBoardLineDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= TypeBoardLineDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -68,7 +77,7 @@ class _LessonTypeBoardLineExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < TypeBoardLineDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -76,24 +85,24 @@ class _LessonTypeBoardLineExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        TypeBoardLineDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      TypeBoardLineDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _TypeBoardLineTile(
-                    label: TypeBoardLineDemo.points[i].label,
-                    caption: TypeBoardLineDemo.points[i].caption,
-                    color: TypeBoardLineDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      TypeBoardLineDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  TypeBoardLineDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),

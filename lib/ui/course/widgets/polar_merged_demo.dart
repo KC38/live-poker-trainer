@@ -5,6 +5,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Polar/merged explain: POLAR / MERGED / SIZE under the full poker table.
 class LessonPolarMergedExplainTable extends StatefulWidget {
@@ -27,6 +28,14 @@ class LessonPolarMergedExplainTable extends StatefulWidget {
 
 class _LessonPolarMergedExplainTableState
     extends State<LessonPolarMergedExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    PolarMergedDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -38,9 +47,9 @@ class _LessonPolarMergedExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: PolarMergedDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= PolarMergedDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -68,7 +77,7 @@ class _LessonPolarMergedExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < PolarMergedDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -76,24 +85,24 @@ class _LessonPolarMergedExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        PolarMergedDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      PolarMergedDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _PolarTile(
-                    label: PolarMergedDemo.points[i].label,
-                    caption: PolarMergedDemo.points[i].caption,
-                    color: PolarMergedDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      PolarMergedDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  PolarMergedDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),

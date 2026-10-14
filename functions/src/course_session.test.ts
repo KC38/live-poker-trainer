@@ -382,7 +382,7 @@ describe("soft grading and life loss", () => {
       grade: "recommended",
       accepted: true,
       lifeLost: false,
-      feedback: "Watch → Say → Cover → Wait.",
+      feedback: "Watch the action first.", // LPT-749 residual: Watch only
     });
     expect(graded.feedback).not.toMatch(
       /Say your action|Cover your cards|Tap Watch/i,

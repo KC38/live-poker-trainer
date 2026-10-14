@@ -48,6 +48,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_streets.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_context.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_table_stage.dart';
@@ -75,6 +76,15 @@ class CoachDialogueActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Curriculum residual (LPT-724): reused split explains show only the
+    // tiles this step's authored SoftPulse cues name.
+    return LessonAuthoredDemoScope(
+      targets: authoredSoftPulseTargets(activity) ?? const <String>[],
+      child: _buildVisual(context),
+    );
+  }
+
+  Widget _buildVisual(BuildContext context) {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, _) {
@@ -110,8 +120,9 @@ class CoachDialogueActivity extends StatelessWidget {
             enabled: !locked,
             onComplete: locked ? null : onFeltAcknowledge,
             onMiss: () {
+              // LPT-724: the Dealer button child walks only the D chip.
               LessonFrameScope.maybeOf(context)?.onLocalMiss(
-                'Tap clockwise — button, then small blind, then big blind.',
+                'The dealer button is the seat with the D chip.',
               );
             },
           );
@@ -1546,19 +1557,18 @@ class CoachDialogueVisual {
       'Tap seats from weakest hand to strongest.',
     CoachDialogueVisualKind.bestFive =>
       'Tap each playing card — only five of seven play.',
-    CoachDialogueVisualKind.passiveActions => 'Tap Fold, Check, and Call.',
-    CoachDialogueVisualKind.aggressiveActions => 'Tap Bet, Raise, and All-in.',
+    CoachDialogueVisualKind.passiveActions => 'Tap Fold.',
+    CoachDialogueVisualKind.aggressiveActions => 'Tap Bet.',
     CoachDialogueVisualKind.streetsTimeline =>
       'Tap each street from preflop to river.',
-    CoachDialogueVisualKind.winningPaths =>
-      'Tap Fold win, Showdown, and Side pot.',
+    CoachDialogueVisualKind.winningPaths => 'Tap Fold win.',
     CoachDialogueVisualKind.toyHandRun => 'Tap Blinds, You act, and Ending.',
     CoachDialogueVisualKind.actionOrder => 'Tap each seat in preflop order.',
-    CoachDialogueVisualKind.handFamilies => 'Tap each starting-hand family.',
-    CoachDialogueVisualKind.openRange => 'Tap Early, Button, and Live 3x.',
-    CoachDialogueVisualKind.vsOpenResponse => 'Tap Fold, Call, and 3-Bet.',
-    CoachDialogueVisualKind.bbStackDepth => 'Tap Chips→BB, Shorter, and Depth.',
-    CoachDialogueVisualKind.tableHabits => 'Tap Watch, Say, Cover, and Wait.',
+    CoachDialogueVisualKind.handFamilies => 'Tap Pairs.',
+    CoachDialogueVisualKind.openRange => 'Tap Early.',
+    CoachDialogueVisualKind.vsOpenResponse => 'Tap Fold.',
+    CoachDialogueVisualKind.bbStackDepth => 'Tap Chips→BB.',
+    CoachDialogueVisualKind.tableHabits => 'Tap Watch.',
     CoachDialogueVisualKind.fullRing => 'Tap Nine, Same, and Position.',
     CoachDialogueVisualKind.tableRead =>
       'Tap Pot, Stacks, Button, and Who Acts.',

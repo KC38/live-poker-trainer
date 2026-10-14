@@ -816,6 +816,19 @@ suited and offsuit distractor `variants`, a `none` cue, and no
 `pressHints` or Hint media. The next lesson that moves its deal into
 `teachSpec` names the Dart dealer it mirrors the same way.
 
+Curriculum residuals LPT-724, LPT-731, LPT-733, LPT-737, LPT-738, LPT-739, LPT-740, LPT-741, LPT-743, LPT-748, LPT-749 (Kushal-approved rule, 2026-10-14): leftover SoftPulse presses and checkpoints from a split move to the split sibling whose concept they teach. A reused first-child explain keeps only its own concept's presses; the dedicated felt demo shows only the tiles its authored cues name (`LessonAuthoredDemoScope` / `lessonAuthoredDemoPoints`, full ladder when no teachSpec).
+- `act-01-01-03-explain-button`: SoftPulse was D → SB → BB, now D; SB/BB presses belong to Small and big blinds (LPT-724)
+- `act-01-03-01-explain-passive`: SoftPulse was FOLD → CHECK → CALL, now FOLD; CHECK/CALL presses belong to Check and Call (LPT-731)
+- `act-01-03-02-explain-aggro`: SoftPulse was BET → RAISE → ALL-IN, now BET; RAISE/ALL-IN presses belong to Raise and All-in (LPT-733)
+- `act-01-05-01-explain-win`: SoftPulse was FOLD WIN → SHOWDOWN → SIDE POT, now FOLD WIN; SHOWDOWN/SIDE POT presses belong to Win at showdown and Main and side pots (LPT-738)
+- `act-02-02-01-explain-families`: SoftPulse was Pairs → Broadways → Suited aces → Connectors, now Pairs; Broadways/Suited aces/Connectors presses belong to Broadways and suited aces and Connectors versus trash (LPT-740)
+- `act-02-03-01-explain-open`: SoftPulse was EARLY → BUTTON → LIVE 3x, now EARLY; BUTTON/LIVE 3x presses belong to Widen on the button and Open strong hands (LPT-741)
+- `act-02-04-01-explain-vs`: SoftPulse was FOLD → CALL → 3-BET, now FOLD; CALL/3-BET presses belong to Call in position and Value 3-bet (LPT-743)
+- `act-02-05-01-explain-bb`: SoftPulse was CHIPS→BB → SHORTER → DEPTH, now CHIPS→BB; SHORTER/DEPTH presses belong to Shorter stack is effective and Stack depth (LPT-748)
+- `act-02-06-01-explain-habits`: SoftPulse was WATCH → SAY → COVER → WAIT, now WATCH; SAY/COVER/WAIT presses belong to Say your action and Protect cards, wait your turn (LPT-749)
+- `act-02-01-01-guided-btn`: `lesson-02-01-01-01-seat-labels` → `lesson-02-01-01-03-later-seats`; postflop last-actor guided practice moved from Seat labels to Later seats (LPT-739)
+- `lesson-01-04-01-02-action-order`: objective "Know preflop order starts left of the big blind" → "Know who acts first before and after the flop"; lesson objective now matches its summary, so the postflop first-actor checkpoint grades the lesson's own concept (LPT-737)
+
 Curriculum split LPT-83: old `lesson-01-01-02-suits-and-ranks` becomes unit
 `unit-01-01-02-suits-and-ranks` with one lesson per concept (`…-01-suits`,
 `…-02-ranks`, `…-03-pairs-and-suited`). Catalog `lessonSplitMap` expands
@@ -1848,7 +1861,7 @@ felt.
 | Suits | Suit taps on board cards; explain SoftPulse hearts → diamonds → clubs → spades (LPT-353); explain Hint per-press suit tip not completion a11y (LPT-813); unit `unit-01-01-02-suits-and-ranks` (LPT-83 split) | — |
 | Ranks | Board ranks low to high; SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
 | Pairs and suited | Suited / pair seats; scaffolded pressHints (LPT-82); checkpoint SoftPulse-off densify stem non-spoiling (LPT-804); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
-| Dealer button | Dealer button, SB, BB on the seats; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
+| Dealer button | D chip on the button seat on the felt; explain SoftPulse cue D only — SB/BB presses belong to Small and big blinds (curriculum residual LPT-724); unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
 | Small and big blinds | explain SoftPulse cues SB → BB; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
 | Blinds post first | explain SoftPulse cues BLINDS → DEAL; unit `unit-01-01-03-blinds-and-button` (LPT-87 split) | — |
 | Order hand ranks | Showdown seats weakest to strongest; unit `unit-01-02-what-beats-what` (LPT-90 split) | scaffolded pressHints one-per-press (LPT-667) |
@@ -1857,39 +1870,39 @@ felt.
 | Best five from seven | The five cards that play; You / Them / Board; unit `unit-01-02-what-beats-what` (LPT-93 split) | scaffolded pressHints one-per-press (LPT-667) |
 | Kickers break ties | explain SoftPulse cues SAME PAIR → KICKER; unit `unit-01-02-what-beats-what` (LPT-93 split) | — |
 | When the board plays | explain SoftPulse cues BOARD → CHOP; unit `unit-01-02-what-beats-what` (LPT-93 split) | — |
-| Fold | Fold, Check, Call under a flop; explain SoftPulse cues FOLD → CHECK → CALL (LPT-635); unit `unit-01-03-five-actions` (LPT-96 split) | — |
+| Fold | Fold under a flop on the felt; explain SoftPulse cue FOLD only — CHECK/CALL presses belong to Check and Call (curriculum residual LPT-731); unit `unit-01-03-five-actions` (LPT-96 split) | — |
 | Check | explain SoftPulse cues NO BET → CHECK; unit `unit-01-03-five-actions` (LPT-96 split) | — |
 | Call | explain SoftPulse cues BET → CALL; unit `unit-01-03-five-actions` (LPT-96 split) | — |
-| Bet | Bet, Raise, All-in under a flop; explain SoftPulse cues BET → RAISE → ALL-IN (LPT-635); unit `unit-01-03-five-actions` (LPT-100 split) | — |
+| Bet | Bet under a flop on the felt; explain SoftPulse cue BET only — RAISE/ALL-IN presses belong to Raise and All-in (curriculum residual LPT-733); unit `unit-01-03-five-actions` (LPT-100 split) | — |
 | Raise | explain SoftPulse cues FACING BET → RAISE; unit `unit-01-03-five-actions` (LPT-100 split) | — |
 | All-in | explain SoftPulse cues STACK → ALL-IN; unit `unit-01-03-five-actions` (LPT-100 split) | — |
 | Four streets | Board advances by street; seat order on the table; explain SoftPulse cues PREFLOP → FLOP → TURN → RIVER (LPT-635); unit `unit-01-04-streets` (LPT-103 split) | scaffolded pressHints one-per-press (LPT-667) |
-| Action order | explain SoftPulse cues BIG BLIND → CLOCKWISE → BUTTON; checkpoint SoftPulse-off densify stem non-spoiling (no SB) (LPT-808); unit `unit-01-04-streets` (LPT-103 split) | — |
+| Action order | explain SoftPulse cues BIG BLIND → CLOCKWISE → BUTTON; checkpoint SoftPulse-off densify stem non-spoiling (no SB) (LPT-808); unit `unit-01-04-streets` (LPT-103 split); objective "Know who acts first before and after the flop" so the checkpoint grades this lesson's concept (curriculum residual LPT-737) | — |
 | When a street ends | explain SoftPulse cues BETS MATCHED → NEXT STREET; unit `unit-01-04-streets` (LPT-103 split) | — |
-| Win when everyone folds | Fold win, Showdown, Side pot; densified SoftPulse one gold via `guideRegion` (LPT-525); explain SoftPulse cues FOLD WIN → SHOWDOWN → SIDE POT (LPT-635); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
+| Win when everyone folds | Fold win on the felt; explain SoftPulse cue FOLD WIN only — SHOWDOWN/SIDE POT presses belong to Win at showdown and Main and side pots (curriculum residual LPT-738); densified SoftPulse one gold via `guideRegion` (LPT-525); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Win at showdown | explain SoftPulse cues RIVER CALL → SHOWDOWN → BEST FIVE; unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Main and side pots | explain SoftPulse cues MAIN POT → SIDE POT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-782); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN | — |
 | Seat labels | Six-max seats labeled on the table; explain SoftPulse cues D (LPT-635); unit `unit-02-01-position-power` (LPT-114 split) | — |
 | Blind labels | explain SoftPulse cues SB → BB; unit `unit-02-01-position-power` (LPT-114 split) | — |
-| Later seats play better | explain SoftPulse cues D; checkpoint SoftPulse-off densify stem non-spoiling (LPT-783); unit `unit-02-01-position-power` (LPT-114 split) | — |
+| Later seats play better | explain SoftPulse cues D; checkpoint SoftPulse-off densify stem non-spoiling (LPT-783); unit `unit-02-01-position-power` (LPT-114 split); `act-02-01-01-guided-btn` moved here from Seat labels (curriculum residual LPT-739) | — |
 | Preflop order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635); unit `unit-02-01-position-power` (LPT-117 split) | scaffolded pressHints one-per-press (LPT-667) |
 | Postflop order | explain SoftPulse cues SB → BTN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-803); unit `unit-02-01-position-power` (LPT-117 split) | — |
 | Wait your turn | explain SoftPulse cues EARLIER SEATS → YOUR TURN; unit `unit-02-01-position-power` (LPT-117 split) | — |
-| Pocket pairs | Pairs, Broadways, Suited aces, Connectors; densified SoftPulse one gold via `guideRegion` (LPT-634); explain SoftPulse cues Pairs → Broadways → Suited aces → Connectors (LPT-635); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
+| Pocket pairs | Pairs on the felt; explain SoftPulse cue Pairs only — Broadways/Suited aces/Connectors presses belong to Broadways and suited aces and Connectors versus trash (curriculum residual LPT-740); densified SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
 | Broadways and suited aces | explain SoftPulse cues BROADWAY → SUITED ACE; unit `unit-02-02-starting-hands` (LPT-121 split) | — |
 | Connectors versus trash | explain SoftPulse cues CONNECTORS → TRASH; checkpoint SoftPulse-off densify stem non-spoiling (LPT-784); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
-| Fold trash early | Early, Button, Live 3x; explain SoftPulse cues EARLY → BUTTON → LIVE 3x (LPT-635); unit `unit-02-03-open-fold` (LPT-124 split) | — |
+| Fold trash early | Early on the felt; explain SoftPulse cue EARLY only — BUTTON/LIVE 3x presses belong to Widen on the button and Open strong hands (curriculum residual LPT-741); unit `unit-02-03-open-fold` (LPT-124 split) | — |
 | Open strong hands | explain SoftPulse cues STRONG → LIVE SIZE; scaffolded Hint SoftPulse unlocks on hero holes (LPT-678 / LPT-679); unit `unit-02-03-open-fold` (LPT-124 split) | — |
 | Widen on the button | explain SoftPulse cues BUTTON → WIDER; unit `unit-02-03-open-fold` (LPT-124 split) | — |
-| Fold weak hands | Fold, Call, 3-bet; explain SoftPulse cues FOLD → CALL → 3-BET (LPT-635); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
+| Fold weak hands | Fold on the felt; explain SoftPulse cue FOLD only — CALL/3-BET presses belong to Call in position and Value 3-bet (curriculum residual LPT-743); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Call in position | explain SoftPulse cues PLAYABLE → IN POSITION → CALL; unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Value 3-bet | explain SoftPulse cues STRONG → 3-BET; unit `unit-02-04-facing-raise` (LPT-127 split) | — |
-| Chips to big blinds | Chips→BB, Shorter, Depth; explain SoftPulse cues CHIPS→BB → SHORTER → DEPTH (LPT-635); checkpoint SoftPulse-off densify stem non-spoiling (LPT-785); unit `unit-02-05-stacks` (LPT-130 split) | — |
+| Chips to big blinds | Chips→BB on the felt; explain SoftPulse cue CHIPS→BB only — SHORTER/DEPTH presses belong to Shorter stack is effective and Stack depth (curriculum residual LPT-748); checkpoint SoftPulse-off densify stem non-spoiling (LPT-785); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE; unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unit `unit-02-05-stacks` (LPT-130 split) | — |
-| Follow the action | Watch, Say, Cover, Wait; unit `unit-02-06-table-habits` (LPT-133 split) | — |
+| Follow the action | Watch on the felt; explain SoftPulse cue WATCH only — SAY/COVER/WAIT presses belong to Say your action and Protect cards, wait your turn (curriculum residual LPT-749); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Say your action | explain SoftPulse cues SAY → CHIPS; unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Protect cards, wait your turn | explain SoftPulse cues COVER → WAIT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-786); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Open on a full ring | Nine, Same, Position; explain SoftPulse cues NINE → SAME → POSITION (LPT-635); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |

@@ -13,6 +13,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/mini_card.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Demo cards + short caption for a hand-category teaching token.
 class LessonHandExample {
@@ -1139,6 +1140,14 @@ class LessonHandFamiliesExplainTable extends StatefulWidget {
 
 class _LessonHandFamiliesExplainTableState
     extends State<LessonHandFamiliesExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<LessonHandExample> get _points => lessonAuthoredDemoPoints(
+    context,
+    HandFamiliesDemo.families,
+    (p) => p.title,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(LessonHandExample family) {
@@ -1151,15 +1160,15 @@ class _LessonHandFamiliesExplainTableState
     reportLessonSequentialPressProgress(
       context,
       remainingPressCount:
-          HandFamiliesDemo.families.length - _tapped.length,
+          _points.length - _tapped.length,
     );
-    if (_tapped.length >= HandFamiliesDemo.families.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllFamiliesTapped!();
     }
   }
 
   LessonHandExample? get _nextFamily {
-    for (final family in HandFamiliesDemo.families) {
+    for (final family in _points) {
       if (!_tapped.contains(family.id)) return family;
     }
     return null;
@@ -1173,7 +1182,7 @@ class _LessonHandFamiliesExplainTableState
       context,
       remainingPressCount: next == null ? 0 : 1,
     );
-    final preview = next ?? HandFamiliesDemo.families.last;
+    final preview = next ?? _points.last;
     return Column(
       key: const ValueKey<String>('hand-families-table'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1194,7 +1203,7 @@ class _LessonHandFamiliesExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (final family in HandFamiliesDemo.families)
+            for (final family in _points)
               GlowHighlight(
                 active:
                     teaching &&

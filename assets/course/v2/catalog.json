@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "5ea75e26927d0fd761eb22ab845076485a29906b43bc723d5fc7f75f6491ef7e",
+  "contentChecksum": "4690175cb5dcc26f45bee23f211d879173bb7433ed2ce0d8234c5fcc241207f0",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -1519,7 +1519,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Clockwise from the button: small blind, then big blind.",
+                  "accessibilityText": "The D chip marks the dealer button.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -1527,7 +1527,7 @@
                     {
                       "id": "act-01-01-03-explain-button-media",
                       "kind": "dialogue",
-                      "text": "Button marks the dealer. Blinds sit left of it."
+                      "text": "The D chip marks the dealer button. It moves one seat clockwise each hand."
                     }
                   ],
                   "objectives": [
@@ -1541,16 +1541,6 @@
                       {
                         "press": 1,
                         "target": "D",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "SB",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "BB",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -2903,7 +2893,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Three quiet buttons — each has a different job.",
+                  "accessibilityText": "Fold gives up the hand. You keep the chips you have not bet.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -2911,7 +2901,7 @@
                     {
                       "id": "act-01-03-01-explain-passive-media",
                       "kind": "dialogue",
-                      "text": "Three quiet buttons — each has a different job."
+                      "text": "Fold gives up the hand. You keep the chips you have not bet."
                     }
                   ],
                   "objectives": [
@@ -2925,16 +2915,6 @@
                       {
                         "press": 1,
                         "target": "FOLD",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "CHECK",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "CALL",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -3309,7 +3289,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Three chip-pushing buttons — each has a different job.",
+                  "accessibilityText": "Nobody has bet yet? A bet puts the first chips in the pot.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -3317,7 +3297,7 @@
                     {
                       "id": "act-01-03-02-explain-aggro-media",
                       "kind": "dialogue",
-                      "text": "Three chip-pushing buttons — each has a different job."
+                      "text": "Nobody has bet yet? A bet puts the first chips in the pot."
                     }
                   ],
                   "objectives": [
@@ -3331,16 +3311,6 @@
                       {
                         "press": 1,
                         "target": "BET",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "RAISE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "ALL-IN",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -3839,7 +3809,7 @@
               "title": "Action order",
               "summary": "Know who acts first before and after the flop.",
               "objectives": [
-                "Know preflop order starts left of the big blind"
+                "Know who acts first before and after the flop"
               ],
               "prerequisites": [
                 "lesson-01-04-01-01-four-streets"
@@ -3858,7 +3828,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "objectives": [
-                    "Know preflop order starts left of the big blind"
+                    "Know who acts first before and after the flop"
                   ],
                   "accessibilityText": "Preflop, action starts left of the big blind and moves clockwise. After the flop, the first live seat left of the button acts first.",
                   "coachMedia": [
@@ -3909,7 +3879,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Know preflop order starts left of the big blind"
+                    "Know who acts first before and after the flop"
                   ],
                   "prompt": "Tap seats in the order they act preflop after blinds.",
                   "sequenceItems": [
@@ -3989,7 +3959,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Know preflop order starts left of the big blind"
+                    "Know who acts first before and after the flop"
                   ],
                   "prompt": "Postflop multiway. Tap who acts first.",
                   "choices": [
@@ -4170,7 +4140,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Folds win pots early. Showdown compares hands. Short stacks make side pots.",
+                  "accessibilityText": "Everyone else folds — you win the pot. No cards are shown.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -4178,7 +4148,7 @@
                     {
                       "id": "act-01-05-01-explain-win-media",
                       "kind": "dialogue",
-                      "text": "Folds win pots early. Showdown compares hands. Short stacks make side pots."
+                      "text": "Everyone else folds — you win the pot. No cards are shown."
                     }
                   ],
                   "objectives": [
@@ -4192,16 +4162,6 @@
                       {
                         "press": 1,
                         "target": "FOLD WIN",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "SHOWDOWN",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "SIDE POT",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -5446,61 +5406,8 @@
                   "estimatedSeconds": 30
                 },
                 {
-                  "id": "act-02-01-01-guided-btn",
-                  "order": 2,
-                  "stage": "guided",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Tap the button seat — last to act after the flop.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Label EP, HJ, CO, and BTN"
-                  ],
-                  "prompt": "Tap who acts last postflop.",
-                  "choices": [
-                    {
-                      "id": "pos-btn",
-                      "label": "BTN",
-                      "accessibilityText": "BTN"
-                    },
-                    {
-                      "id": "pos-bb",
-                      "label": "BB",
-                      "accessibilityText": "BB"
-                    },
-                    {
-                      "id": "pos-ep",
-                      "label": "EP",
-                      "accessibilityText": "EP"
-                    }
-                  ],
-                  "coachMedia": [
-                    {
-                      "id": "act-02-01-01-guided-btn-hint",
-                      "kind": "hint",
-                      "text": "Look for the D chip. Button closes postflop action."
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "pos-btn",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
                   "id": "act-02-01-01-unguided-co",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -5717,8 +5624,61 @@
                   }
                 },
                 {
-                  "id": "act-02-01-01-checkpoint-edge",
+                  "id": "act-02-01-01-guided-btn",
                   "order": 2,
+                  "stage": "guided",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Tap the button seat — last to act after the flop.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Prefer later seats when choosing hands"
+                  ],
+                  "prompt": "Tap who acts last postflop.",
+                  "choices": [
+                    {
+                      "id": "pos-btn",
+                      "label": "BTN",
+                      "accessibilityText": "BTN"
+                    },
+                    {
+                      "id": "pos-bb",
+                      "label": "BB",
+                      "accessibilityText": "BB"
+                    },
+                    {
+                      "id": "pos-ep",
+                      "label": "EP",
+                      "accessibilityText": "EP"
+                    }
+                  ],
+                  "coachMedia": [
+                    {
+                      "id": "act-02-01-01-guided-btn-hint",
+                      "kind": "hint",
+                      "text": "Look for the D chip. Button closes postflop action."
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "pos-btn",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "act-02-01-01-checkpoint-edge",
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -6193,7 +6153,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Pairs, broadways, suited aces, connectors — trash is everything else.",
+                  "accessibilityText": "A pocket pair is two hole cards of the same rank, like two eights.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -6201,7 +6161,7 @@
                     {
                       "id": "act-02-02-01-explain-families-media",
                       "kind": "dialogue",
-                      "text": "Pairs, broadways, suited aces, connectors — trash is everything else."
+                      "text": "A pocket pair is two hole cards of the same rank, like two eights."
                     }
                   ],
                   "objectives": [
@@ -6215,21 +6175,6 @@
                       {
                         "press": 1,
                         "target": "Pairs",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "Broadways",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "Suited aces",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "Connectors",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -6601,7 +6546,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Who opens — and how wide. Position shapes the first action.",
+                  "accessibilityText": "Early seats act first with many players behind. Fold trash there.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -6609,7 +6554,7 @@
                     {
                       "id": "act-02-03-01-explain-open-media",
                       "kind": "dialogue",
-                      "text": "Who opens — and how wide. Position shapes the first action."
+                      "text": "Early seats act first with many players behind. Fold trash there."
                     }
                   ],
                   "objectives": [
@@ -6623,16 +6568,6 @@
                       {
                         "press": 1,
                         "target": "EARLY",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "BUTTON",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "LIVE 3x",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -7020,7 +6955,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Weak hands fold. Playable hands call. Strong hands make it more.",
+                  "accessibilityText": "Someone opened with a raise. Weak hands fold.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -7028,7 +6963,7 @@
                     {
                       "id": "act-02-04-01-explain-vs-media",
                       "kind": "dialogue",
-                      "text": "Weak hands fold. Playable hands call. Strong hands make it more."
+                      "text": "Someone opened with a raise. Weak hands fold."
                     }
                   ],
                   "objectives": [
@@ -7042,16 +6977,6 @@
                       {
                         "press": 1,
                         "target": "FOLD",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "CALL",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "3-BET",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -7444,7 +7369,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Count stacks in big blinds. The shorter stack sets the ceiling.",
+                  "accessibilityText": "Count your stack in big blinds: divide your chips by the big blind.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -7452,7 +7377,7 @@
                     {
                       "id": "act-02-05-01-explain-bb-media",
                       "kind": "dialogue",
-                      "text": "Count stacks in big blinds. The shorter stack sets the ceiling."
+                      "text": "Count your stack in big blinds: divide your chips by the big blind."
                     }
                   ],
                   "objectives": [
@@ -7466,16 +7391,6 @@
                       {
                         "press": 1,
                         "target": "CHIPS→BB",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "SHORTER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "DEPTH",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -7838,7 +7753,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Watch the action. Say your action. Cover your cards. Wait your turn.",
+                  "accessibilityText": "Watch what the earlier seats do before you decide.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -7846,7 +7761,7 @@
                     {
                       "id": "act-02-06-01-explain-habits-media",
                       "kind": "dialogue",
-                      "text": "Watch the action. Say your action. Cover your cards. Wait your turn."
+                      "text": "Watch what the earlier seats do before you decide."
                     }
                   ],
                   "objectives": [
@@ -7860,21 +7775,6 @@
                       {
                         "press": 1,
                         "target": "WATCH",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "SAY",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "COVER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "WAIT",
                         "kind": "soft_pulse"
                       }
                     ]

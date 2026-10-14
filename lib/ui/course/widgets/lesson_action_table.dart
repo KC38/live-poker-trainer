@@ -18,6 +18,7 @@ import 'package:live_poker_trainer/ui/widgets/table_features.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
 import 'package:live_poker_trainer/ui/course/activities/order_sequence_activity.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Felt context for a poker-action teaching spot.
 class LessonActionSpot {
@@ -2035,6 +2036,14 @@ class LessonPassiveActionsExplainTable extends StatefulWidget {
 
 class _LessonPassiveActionsExplainTableState
     extends State<LessonPassiveActionsExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<(String, String, Color)> get _points => lessonAuthoredDemoPoints(
+    context,
+    PassiveActionsDemo.actions,
+    (p) => p.$1,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -2046,9 +2055,9 @@ class _LessonPassiveActionsExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: PassiveActionsDemo.actions.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= PassiveActionsDemo.actions.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllActionsTapped!();
     }
   }
@@ -2076,29 +2085,29 @@ class _LessonPassiveActionsExplainTableState
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (var i = 0; i < PassiveActionsDemo.actions.length; i++) ...[
+              for (var i = 0; i < _points.length; i++) ...[
                 if (i > 0) const SizedBox(width: GlowHighlight.gutter),
                 Expanded(
                   child: GlowHighlight(
                     active:
                         teaching &&
                         widget.showGuidance &&
-                        !_tapped.contains(PassiveActionsDemo.actions[i].$1) &&
-                        PassiveActionsDemo.actions
+                        !_tapped.contains(_points[i].$1) &&
+                        _points
                             .take(i)
                             .every((a) => _tapped.contains(a.$1)),
                     child: _DemoActionCard(
-                      label: PassiveActionsDemo.actions[i].$1,
-                      caption: PassiveActionsDemo.actions[i].$2,
-                      color: PassiveActionsDemo.actions[i].$3,
+                      label: _points[i].$1,
+                      caption: _points[i].$2,
+                      color: _points[i].$3,
                       densify: false,
                       expand: true,
                       selected: _tapped.contains(
-                        PassiveActionsDemo.actions[i].$1,
+                        _points[i].$1,
                       ),
                       enabled: teaching,
                       onPressed: teaching
-                          ? () => _onTap(PassiveActionsDemo.actions[i].$1)
+                          ? () => _onTap(_points[i].$1)
                           : null,
                     ),
                   ),
@@ -2139,6 +2148,14 @@ class LessonAggressiveActionsExplainTable extends StatefulWidget {
 
 class _LessonAggressiveActionsExplainTableState
     extends State<LessonAggressiveActionsExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<(String, String, Color)> get _points => lessonAuthoredDemoPoints(
+    context,
+    AggressiveActionsDemo.actions,
+    (p) => p.$1,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -2150,9 +2167,9 @@ class _LessonAggressiveActionsExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: AggressiveActionsDemo.actions.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= AggressiveActionsDemo.actions.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllActionsTapped!();
     }
   }
@@ -2180,7 +2197,7 @@ class _LessonAggressiveActionsExplainTableState
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (var i = 0; i < AggressiveActionsDemo.actions.length; i++) ...[
+              for (var i = 0; i < _points.length; i++) ...[
                 if (i > 0) const SizedBox(width: GlowHighlight.gutter),
                 Expanded(
                   child: GlowHighlight(
@@ -2188,23 +2205,23 @@ class _LessonAggressiveActionsExplainTableState
                         teaching &&
                         widget.showGuidance &&
                         !_tapped.contains(
-                          AggressiveActionsDemo.actions[i].$1,
+                          _points[i].$1,
                         ) &&
-                        AggressiveActionsDemo.actions
+                        _points
                             .take(i)
                             .every((a) => _tapped.contains(a.$1)),
                     child: _DemoActionCard(
-                      label: AggressiveActionsDemo.actions[i].$1,
-                      caption: AggressiveActionsDemo.actions[i].$2,
-                      color: AggressiveActionsDemo.actions[i].$3,
+                      label: _points[i].$1,
+                      caption: _points[i].$2,
+                      color: _points[i].$3,
                       densify: false,
                       expand: true,
                       selected: _tapped.contains(
-                        AggressiveActionsDemo.actions[i].$1,
+                        _points[i].$1,
                       ),
                       enabled: teaching,
                       onPressed: teaching
-                          ? () => _onTap(AggressiveActionsDemo.actions[i].$1)
+                          ? () => _onTap(_points[i].$1)
                           : null,
                     ),
                   ),
@@ -2622,6 +2639,14 @@ class LessonOpenRangeExplainTable extends StatefulWidget {
 
 class _LessonOpenRangeExplainTableState
     extends State<LessonOpenRangeExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    OpenRangeDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -2633,9 +2658,9 @@ class _LessonOpenRangeExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: OpenRangeDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= OpenRangeDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -2668,30 +2693,30 @@ class _LessonOpenRangeExplainTableState
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (var i = 0; i < OpenRangeDemo.points.length; i++) ...[
+              for (var i = 0; i < _points.length; i++) ...[
                 if (i > 0) const SizedBox(width: GlowHighlight.gutter),
                 Expanded(
                   child: GlowHighlight(
                     active:
                         teaching &&
                         widget.showGuidance &&
-                        !_tapped.contains(OpenRangeDemo.points[i].label) &&
-                        OpenRangeDemo.points
+                        !_tapped.contains(_points[i].label) &&
+                        _points
                             .take(i)
                             .every((p) => _tapped.contains(p.label)),
                     child: _DemoActionCard(
-                      label: OpenRangeDemo.points[i].label,
-                      caption: OpenRangeDemo.points[i].caption,
-                      color: OpenRangeDemo.points[i].color,
+                      label: _points[i].label,
+                      caption: _points[i].caption,
+                      color: _points[i].color,
                       densify: false,
                       expand: true,
                       selected: _tapped.contains(
-                        OpenRangeDemo.points[i].label,
+                        _points[i].label,
                       ),
                       enabled: teaching,
                       onPressed:
                           teaching
-                              ? () => _onTap(OpenRangeDemo.points[i].label)
+                              ? () => _onTap(_points[i].label)
                               : null,
                     ),
                   ),
@@ -2911,6 +2936,14 @@ class LessonVsOpenExplainTable extends StatefulWidget {
 }
 
 class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    VsOpenResponseDemo.responses,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -2922,9 +2955,9 @@ class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: VsOpenResponseDemo.responses.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= VsOpenResponseDemo.responses.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllResponsesTapped!();
     }
   }
@@ -2951,7 +2984,7 @@ class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (var i = 0; i < VsOpenResponseDemo.responses.length; i++) ...[
+              for (var i = 0; i < _points.length; i++) ...[
                 if (i > 0) const SizedBox(width: GlowHighlight.gutter),
                 Expanded(
                   child: GlowHighlight(
@@ -2959,25 +2992,25 @@ class _LessonVsOpenExplainTableState extends State<LessonVsOpenExplainTable> {
                         teaching &&
                         widget.showGuidance &&
                         !_tapped.contains(
-                          VsOpenResponseDemo.responses[i].label,
+                          _points[i].label,
                         ) &&
-                        VsOpenResponseDemo.responses
+                        _points
                             .take(i)
                             .every((r) => _tapped.contains(r.label)),
                     child: _DemoActionCard(
-                      label: VsOpenResponseDemo.responses[i].label,
-                      caption: VsOpenResponseDemo.responses[i].caption,
-                      color: VsOpenResponseDemo.responses[i].color,
+                      label: _points[i].label,
+                      caption: _points[i].caption,
+                      color: _points[i].color,
                       densify: false,
                       expand: true,
                       selected: _tapped.contains(
-                        VsOpenResponseDemo.responses[i].label,
+                        _points[i].label,
                       ),
                       enabled: teaching,
                       onPressed:
                           teaching
                               ? () => _onTap(
-                                VsOpenResponseDemo.responses[i].label,
+                                _points[i].label,
                               )
                               : null,
                     ),
@@ -3200,6 +3233,14 @@ class LessonBbStackDepthExplainTable extends StatefulWidget {
 
 class _LessonBbStackDepthExplainTableState
     extends State<LessonBbStackDepthExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    BbStackDepthDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -3211,9 +3252,9 @@ class _LessonBbStackDepthExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: BbStackDepthDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= BbStackDepthDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -3240,30 +3281,30 @@ class _LessonBbStackDepthExplainTableState
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (var i = 0; i < BbStackDepthDemo.points.length; i++) ...[
+              for (var i = 0; i < _points.length; i++) ...[
                 if (i > 0) const SizedBox(width: GlowHighlight.gutter),
                 Expanded(
                   child: GlowHighlight(
                     active:
                         teaching &&
                         widget.showGuidance &&
-                        !_tapped.contains(BbStackDepthDemo.points[i].label) &&
-                        BbStackDepthDemo.points
+                        !_tapped.contains(_points[i].label) &&
+                        _points
                             .take(i)
                             .every((p) => _tapped.contains(p.label)),
                     child: _DemoActionCard(
-                      label: BbStackDepthDemo.points[i].label,
-                      caption: BbStackDepthDemo.points[i].caption,
-                      color: BbStackDepthDemo.points[i].color,
+                      label: _points[i].label,
+                      caption: _points[i].caption,
+                      color: _points[i].color,
                       densify: false,
                       expand: true,
                       selected: _tapped.contains(
-                        BbStackDepthDemo.points[i].label,
+                        _points[i].label,
                       ),
                       enabled: teaching,
                       onPressed:
                           teaching
-                              ? () => _onTap(BbStackDepthDemo.points[i].label)
+                              ? () => _onTap(_points[i].label)
                               : null,
                     ),
                   ),
@@ -3484,6 +3525,14 @@ class LessonTableHabitsExplainTable extends StatefulWidget {
 
 class _LessonTableHabitsExplainTableState
     extends State<LessonTableHabitsExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    TableHabitsDemo.habits,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -3495,9 +3544,9 @@ class _LessonTableHabitsExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: TableHabitsDemo.habits.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= TableHabitsDemo.habits.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllHabitsTapped!();
     }
   }
@@ -3525,28 +3574,28 @@ class _LessonTableHabitsExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < TableHabitsDemo.habits.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
-                      !_tapped.contains(TableHabitsDemo.habits[i].label) &&
-                      TableHabitsDemo.habits
+                      !_tapped.contains(_points[i].label) &&
+                      _points
                           .take(i)
                           .every((h) => _tapped.contains(h.label)),
                   child: _DemoActionCard(
-                    label: TableHabitsDemo.habits[i].label,
-                    caption: TableHabitsDemo.habits[i].caption,
-                    color: TableHabitsDemo.habits[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected:
-                        _tapped.contains(TableHabitsDemo.habits[i].label),
+                        _tapped.contains(_points[i].label),
                     enabled: teaching,
                     onPressed:
                         teaching
-                            ? () => _onTap(TableHabitsDemo.habits[i].label)
+                            ? () => _onTap(_points[i].label)
                             : null,
                   ),
                 ),
@@ -4059,6 +4108,14 @@ class LessonTableReadExplainTable extends StatefulWidget {
 
 class _LessonTableReadExplainTableState
     extends State<LessonTableReadExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    TableReadDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -4070,9 +4127,9 @@ class _LessonTableReadExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: TableReadDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= TableReadDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -4109,28 +4166,28 @@ class _LessonTableReadExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < TableReadDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
-                      !_tapped.contains(TableReadDemo.points[i].label) &&
-                      TableReadDemo.points
+                      !_tapped.contains(_points[i].label) &&
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: TableReadDemo.points[i].label,
-                    caption: TableReadDemo.points[i].caption,
-                    color: TableReadDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected:
-                        _tapped.contains(TableReadDemo.points[i].label),
+                        _tapped.contains(_points[i].label),
                     enabled: teaching,
                     onPressed:
                         teaching
-                            ? () => _onTap(TableReadDemo.points[i].label)
+                            ? () => _onTap(_points[i].label)
                             : null,
                   ),
                 ),
@@ -8457,6 +8514,14 @@ class LessonVsStationExplainTable extends StatefulWidget {
 
 class _LessonVsStationExplainTableState
     extends State<LessonVsStationExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    VsStationDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -8468,9 +8533,9 @@ class _LessonVsStationExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: VsStationDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= VsStationDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -8498,7 +8563,7 @@ class _LessonVsStationExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < VsStationDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -8506,24 +8571,24 @@ class _LessonVsStationExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        VsStationDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      VsStationDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: VsStationDemo.points[i].label,
-                    caption: VsStationDemo.points[i].caption,
-                    color: VsStationDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      VsStationDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  VsStationDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),
@@ -10469,6 +10534,14 @@ class LessonVsTagsExplainTable extends StatefulWidget {
 }
 
 class _LessonVsTagsExplainTableState extends State<LessonVsTagsExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    VsTagsDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -10480,9 +10553,9 @@ class _LessonVsTagsExplainTableState extends State<LessonVsTagsExplainTable> {
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: VsTagsDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= VsTagsDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -10510,27 +10583,27 @@ class _LessonVsTagsExplainTableState extends State<LessonVsTagsExplainTable> {
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < VsTagsDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
-                      !_tapped.contains(VsTagsDemo.points[i].label) &&
-                      VsTagsDemo.points
+                      !_tapped.contains(_points[i].label) &&
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: VsTagsDemo.points[i].label,
-                    caption: VsTagsDemo.points[i].caption,
-                    color: VsTagsDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
-                    selected: _tapped.contains(VsTagsDemo.points[i].label),
+                    selected: _tapped.contains(_points[i].label),
                     enabled: teaching,
                     onPressed:
                         teaching
-                            ? () => _onTap(VsTagsDemo.points[i].label)
+                            ? () => _onTap(_points[i].label)
                             : null,
                   ),
                 ),
@@ -10750,6 +10823,14 @@ class LessonVsLagsExplainTable extends StatefulWidget {
 }
 
 class _LessonVsLagsExplainTableState extends State<LessonVsLagsExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    VsLagsDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -10761,9 +10842,9 @@ class _LessonVsLagsExplainTableState extends State<LessonVsLagsExplainTable> {
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: VsLagsDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= VsLagsDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -10791,27 +10872,27 @@ class _LessonVsLagsExplainTableState extends State<LessonVsLagsExplainTable> {
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < VsLagsDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
                   active:
                       teaching &&
                       widget.showGuidance &&
-                      !_tapped.contains(VsLagsDemo.points[i].label) &&
-                      VsLagsDemo.points
+                      !_tapped.contains(_points[i].label) &&
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: VsLagsDemo.points[i].label,
-                    caption: VsLagsDemo.points[i].caption,
-                    color: VsLagsDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
-                    selected: _tapped.contains(VsLagsDemo.points[i].label),
+                    selected: _tapped.contains(_points[i].label),
                     enabled: teaching,
                     onPressed:
                         teaching
-                            ? () => _onTap(VsLagsDemo.points[i].label)
+                            ? () => _onTap(_points[i].label)
                             : null,
                   ),
                 ),
@@ -11321,6 +11402,14 @@ class LessonExploitEvidenceExplainTable extends StatefulWidget {
 
 class _LessonExploitEvidenceExplainTableState
     extends State<LessonExploitEvidenceExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    ExploitEvidenceDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -11332,9 +11421,9 @@ class _LessonExploitEvidenceExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: ExploitEvidenceDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= ExploitEvidenceDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -11362,7 +11451,7 @@ class _LessonExploitEvidenceExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < ExploitEvidenceDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -11370,24 +11459,24 @@ class _LessonExploitEvidenceExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        ExploitEvidenceDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      ExploitEvidenceDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: ExploitEvidenceDemo.points[i].label,
-                    caption: ExploitEvidenceDemo.points[i].caption,
-                    color: ExploitEvidenceDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      ExploitEvidenceDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  ExploitEvidenceDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),
@@ -12187,6 +12276,14 @@ class LessonImpliedOddsExplainTable extends StatefulWidget {
 
 class _LessonImpliedOddsExplainTableState
     extends State<LessonImpliedOddsExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    ImpliedOddsDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -12198,9 +12295,9 @@ class _LessonImpliedOddsExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: ImpliedOddsDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= ImpliedOddsDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -12228,7 +12325,7 @@ class _LessonImpliedOddsExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < ImpliedOddsDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -12236,24 +12333,24 @@ class _LessonImpliedOddsExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        ImpliedOddsDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      ImpliedOddsDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: ImpliedOddsDemo.points[i].label,
-                    caption: ImpliedOddsDemo.points[i].caption,
-                    color: ImpliedOddsDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      ImpliedOddsDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  ImpliedOddsDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),
@@ -12474,6 +12571,14 @@ class LessonThinValueExplainTable extends StatefulWidget {
 
 class _LessonThinValueExplainTableState
     extends State<LessonThinValueExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    ThinValueDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -12485,9 +12590,9 @@ class _LessonThinValueExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: ThinValueDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= ThinValueDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -12515,7 +12620,7 @@ class _LessonThinValueExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < ThinValueDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -12523,24 +12628,24 @@ class _LessonThinValueExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        ThinValueDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      ThinValueDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: ThinValueDemo.points[i].label,
-                    caption: ThinValueDemo.points[i].caption,
-                    color: ThinValueDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      ThinValueDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  ThinValueDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),
@@ -12762,6 +12867,14 @@ class LessonLineStoriesExplainTable extends StatefulWidget {
 
 class _LessonLineStoriesExplainTableState
     extends State<LessonLineStoriesExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    LineStoriesDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -12773,9 +12886,9 @@ class _LessonLineStoriesExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: LineStoriesDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= LineStoriesDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -12803,7 +12916,7 @@ class _LessonLineStoriesExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < LineStoriesDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -12811,24 +12924,24 @@ class _LessonLineStoriesExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        LineStoriesDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      LineStoriesDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: LineStoriesDemo.points[i].label,
-                    caption: LineStoriesDemo.points[i].caption,
-                    color: LineStoriesDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      LineStoriesDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  LineStoriesDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),
@@ -13351,6 +13464,14 @@ class LessonTimingCluesExplainTable extends StatefulWidget {
 
 class _LessonTimingCluesExplainTableState
     extends State<LessonTimingCluesExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    TimingCluesDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -13362,9 +13483,9 @@ class _LessonTimingCluesExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: TimingCluesDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= TimingCluesDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -13392,7 +13513,7 @@ class _LessonTimingCluesExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < TimingCluesDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -13400,24 +13521,24 @@ class _LessonTimingCluesExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        TimingCluesDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      TimingCluesDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: TimingCluesDemo.points[i].label,
-                    caption: TimingCluesDemo.points[i].caption,
-                    color: TimingCluesDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      TimingCluesDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  TimingCluesDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),
@@ -13638,6 +13759,14 @@ class LessonTablesChangeExplainTable extends StatefulWidget {
 
 class _LessonTablesChangeExplainTableState
     extends State<LessonTablesChangeExplainTable> {
+  // Curriculum residual (LPT-724): only the tiles this step's authored
+  // SoftPulse cues name (see lesson_authored_demo_scope.dart).
+  List<({String label, String caption, Color color})> get _points => lessonAuthoredDemoPoints(
+    context,
+    TablesChangeDemo.points,
+    (p) => p.label,
+  );
+
   final Set<String> _tapped = <String>{};
 
   void _onTap(String label) {
@@ -13649,9 +13778,9 @@ class _LessonTablesChangeExplainTableState
     }
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: TablesChangeDemo.points.length - _tapped.length,
+      remainingPressCount: _points.length - _tapped.length,
     );
-    if (_tapped.length >= TablesChangeDemo.points.length) {
+    if (_tapped.length >= _points.length) {
       widget.onAllPointsTapped!();
     }
   }
@@ -13679,7 +13808,7 @@ class _LessonTablesChangeExplainTableState
           runSpacing: GlowHighlight.gutter,
           alignment: WrapAlignment.center,
           children: [
-            for (var i = 0; i < TablesChangeDemo.points.length; i++)
+            for (var i = 0; i < _points.length; i++)
               SizedBox(
                 width: 150,
                 child: GlowHighlight(
@@ -13687,24 +13816,24 @@ class _LessonTablesChangeExplainTableState
                       teaching &&
                       widget.showGuidance &&
                       !_tapped.contains(
-                        TablesChangeDemo.points[i].label,
+                        _points[i].label,
                       ) &&
-                      TablesChangeDemo.points
+                      _points
                           .take(i)
                           .every((p) => _tapped.contains(p.label)),
                   child: _DemoActionCard(
-                    label: TablesChangeDemo.points[i].label,
-                    caption: TablesChangeDemo.points[i].caption,
-                    color: TablesChangeDemo.points[i].color,
+                    label: _points[i].label,
+                    caption: _points[i].caption,
+                    color: _points[i].color,
                     densify: false,
                     selected: _tapped.contains(
-                      TablesChangeDemo.points[i].label,
+                      _points[i].label,
                     ),
                     enabled: teaching,
                     onPressed:
                         teaching
                             ? () => _onTap(
-                                  TablesChangeDemo.points[i].label,
+                                  _points[i].label,
                                 )
                             : null,
                   ),

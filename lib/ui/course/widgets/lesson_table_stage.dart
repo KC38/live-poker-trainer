@@ -16,6 +16,7 @@ import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dar
 import 'package:live_poker_trainer/ui/widgets/felt_table_view.dart';
 import 'package:live_poker_trainer/ui/widgets/poker_table_bands.dart';
 import 'package:live_poker_trainer/ui/widgets/table_features.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_authored_demo_scope.dart';
 
 /// Six-max ring for Button and blinds. Index 3 is the dealer.
 const int lessonBlindsVillainCount = 5;
@@ -791,21 +792,24 @@ class LessonBlindsClockwiseTable extends StatefulWidget {
 
 class _LessonBlindsClockwiseTableState
     extends State<LessonBlindsClockwiseTable> {
-  static const _order = <int>[
-    lessonBlindsButtonIndex,
-    lessonBlindsSmallBlindIndex,
-    lessonBlindsBigBlindIndex,
+  /// SoftPulse the named puck — not the seat name box (LPT-69).
+  static const _walk = <({int seat, String puck})>[
+    (seat: lessonBlindsButtonIndex, puck: 'D'),
+    (seat: lessonBlindsSmallBlindIndex, puck: 'SB'),
+    (seat: lessonBlindsBigBlindIndex, puck: 'BB'),
   ];
 
-  /// SoftPulse the named puck — not the seat name box (LPT-69).
-  static const _puckLabels = <String>['D', 'SB', 'BB'];
+  /// Curriculum residual (LPT-724): the Dealer button child authors only the
+  /// D press, so the walk stops at the button; SB/BB belong to Blinds.
+  List<({int seat, String puck})> get _steps =>
+      lessonAuthoredDemoPoints(context, _walk, (s) => s.puck);
 
   int _step = 0;
 
   void _tap(int index) {
     if (!widget.enabled || widget.onComplete == null) return;
-    if (_step >= _order.length) return;
-    if (index != _order[_step]) {
+    if (_step >= _steps.length) return;
+    if (index != _steps[_step].seat) {
       widget.onMiss?.call();
       return;
     }
@@ -813,17 +817,17 @@ class _LessonBlindsClockwiseTableState
     setState(() => _step += 1);
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: _order.length - _step,
+      remainingPressCount: _steps.length - _step,
     );
-    if (_step >= _order.length) widget.onComplete!.call();
+    if (_step >= _steps.length) widget.onComplete!.call();
   }
 
   @override
   Widget build(BuildContext context) {
-    final teaching = widget.enabled && _step < _order.length;
+    final teaching = widget.enabled && _step < _steps.length;
     reportLessonSequentialPressProgress(
       context,
-      remainingPressCount: teaching ? _order.length - _step : 0,
+      remainingPressCount: teaching ? _steps.length - _step : 0,
     );
     final showCue = teaching && LessonSoftPulseScope.isAllowed(context);
     // No empty board slot outlines: this explain step has no community cards.
@@ -835,8 +839,8 @@ class _LessonBlindsClockwiseTableState
       dealerIndex: lessonBlindsButtonIndex,
       sbIndex: lessonBlindsSmallBlindIndex,
       bbIndex: lessonBlindsBigBlindIndex,
-      selectedSeatIndexes: {for (var i = 0; i < _step; i++) _order[i]},
-      cuePuckLabel: showCue ? _puckLabels[_step] : null,
+      selectedSeatIndexes: {for (var i = 0; i < _step; i++) _steps[i].seat},
+      cuePuckLabel: showCue ? _steps[_step].puck : null,
       enabled: teaching,
       features: features,
       onSeatIndexTap: _tap,
