@@ -3849,3 +3849,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Dynamics SoftPulse residual **LPT-686** (+ **LPT-687**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-07-01-*: interactive structural clean on tip except LPT-685 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; outcome-tile `deal.mode` `none` — do not file handFamily.
 
+## Fold 2026-10-15af tip ce7cbd1e (#2552 Dynamics Prefer → Session SoftPulse LPT-690 Prefer)
+
+- Tip-stable `ce7cbd1e` after #2552 Dynamics SoftPulse Prefer LPT-686 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Session SoftPulse residual re-check `lesson-05-09-01-01/02/03` / `act-05-09-01-*`: first-child SoftPulse QUIT→GUARD→FIRST + `explainGrading` "Quit → Guard → First." + coachMedia "…Guardrails first." + Dart `GuardrailsDemo.points` QUIT/GUARD/FIRST still pre-split under stop-loss-only → residual **LPT-690** still To Do (Relates LPT-250 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `edge` kind `none` densify PRESENT (prompt "Session discipline is part of?" / Your edge) under End sessions → residual **LPT-691** still To Do; successors SoftPulse BANKROLL→STAKES→DECLINE / TIRED→WILD→CASH OUT content-driven (do not reopen LPT-669); guided SoftPulse `stop` densify PRESENT; scaffolded SoftPulse `decline` one-per-press densify PRESENT; unguided SoftPulse `cash` one-per-press densify PRESENT.
+- Curriculum **LPT-250** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-690/691/250/692/686/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-09-01-*: interactive structural clean on tip except LPT-690 SoftPulse + LPT-691 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided/checkpoint outcome-tile `deal.mode` `none` — do not file handFamily.
+
