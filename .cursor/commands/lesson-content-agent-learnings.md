@@ -114,12 +114,12 @@ Lesson-specific pattern notes (full history) live in
   16 → S2 32 → S3 46 → S4 72) is closed. S3 leak-repair + S4 ranges +
   3-bet-squeeze + continuation + sizing + SPR + multiway-ranges +
   deep-stack + implied-odds + thin-value + lines-and-probes +
-  line-reading + timing-sizing + table-dynamics + session-discipline
-  NEVER children walked (tips `39155796`/`a08d105d`/`8cb997f9`/
+  line-reading + timing-sizing + table-dynamics + session-discipline +
+  range-nut NEVER children walked (tips `39155796`/`a08d105d`/`8cb997f9`/
   `3b13dcb5`/`63ae3ddc`/`0b9f93f7`/`f25ed146`/`5a721bbf`/`a8361500`/
-  `ea625203`/`92c86645`/`29559dd8`/`34ab9999`/`e36af944`/`3ce8732e`) —
-  residuals **LPT-676** (polar-under-Nearby) + **LPT-677** (weigh-SPR
-  habit under Estimate) + **LPT-680** (rewards checkpoint under
+  `ea625203`/`92c86645`/`29559dd8`/`34ab9999`/`e36af944`/`3ce8732e`/
+  `41d1f091`) — residuals **LPT-676** (polar-under-Nearby) + **LPT-677**
+  (weigh-SPR habit under Estimate) + **LPT-680** (rewards checkpoint under
   Plan-high-SPR) + **LPT-681** (Estimate SoftPulse still walks
   REVERSE/SECOND) + **LPT-682** (Thin SoftPulse still walks CATCH/BARRELS)
   + **LPT-683** (meta-read checkpoint under Thin sticky) + **LPT-684**
@@ -128,10 +128,12 @@ Lesson-specific pattern notes (full history) live in
   **LPT-686** (Dynamics SoftPulse still walks GEARS under tilted/stuck) +
   **LPT-687** (fresh-samples checkpoint under Gear changes) +
   **LPT-690** (Stop-loss SoftPulse still walks GUARD/FIRST) +
-  **LPT-691** (edge checkpoint under End sessions); multiway-ranges +
+  **LPT-691** (edge checkpoint under End sessions) + **LPT-692** (Range
+  SoftPulse still walks NUT under range-advantage); multiway-ranges +
   line-reading structural clean (first-child ACTION→REWRITE→UPDATE
   matches update-each-street — no residual); next NEVER walk:
-  `lesson-06-01-01-*` range-nut / remaining S5–S6 NEVER / Low curriculum.
+  `lesson-06-02-01-*` equity-realization / remaining S6 NEVER / Low
+  curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -175,6 +177,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14cd: Tip-stable `41d1f091` (#2279 session-discipline tip-comment tighten). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER range-nut children: first-child `act-06-01-01-explain` SoftPulse RANGE→NUT→ADVANTAGE + Dart `RangeAdvantageDemo` still pre-split ladder under range-advantage-only → **LPT-692**; guided SoftPulse `pfr` densify PRESENT; successors `act-06-01-01-02-explain-nuts` (NUTS→PAIRED→CALLER) + `act-06-01-01-03-explain-press` (RANGE→NUTS→BET) content-driven (do not reopen LPT-669); scaffolded SoftPulse `caller-nuts` + unguided SoftPulse `cbet` map PRESENT one-per-press OK; checkpoint SoftPulse `press` under press-both matches — no companion residual. Curriculum **LPT-254** Done — do not clone. Tip-commented LPT-254/692 + Done-ack LPT-252/253 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…691 + parents. next: NEVER `lesson-06-02-01-*` equity-realization / S6 NEVER / Low curriculum.
 - 2026-10-14cc: Tip-stable `3ce8732e` (#2277 table-dynamics learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER session-discipline children: first-child `act-05-09-01-explain` SoftPulse QUIT→GUARD→FIRST + Dart `GuardrailsDemo` still pre-split ladder under stop-loss-only → **LPT-690**; guided SoftPulse `stop` densify PRESENT; successors `act-05-09-01-02-explain-bankroll` (BANKROLL→STAKES→DECLINE) + `act-05-09-01-03-explain-quit` (TIRED→WILD→CASH OUT) content-driven (do not reopen LPT-669); scaffolded SoftPulse `decline` + unguided SoftPulse `cash` one-per-press OK; checkpoint SoftPulse `edge` under end-sessions → **LPT-691**. Curriculum **LPT-250** Done — do not clone. Tip-commented LPT-690/691 + Done-ack LPT-248/249/250/466/521/617 + open residuals LPT-676…687 + parents. next: NEVER `lesson-06-01-01-*` range-nut-advantage / S6 NEVER / Low curriculum.
 - 2026-10-14cb: Tip-stable `e36af944` (#2276 timing-sizing learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER table-dynamics children: first-child `act-05-08-01-explain` SoftPulse STUCK→TILTED→GEARS + Dart `TablesChangeDemo` still pre-split ladder under tilted/stuck-only → **LPT-686**; guided SoftPulse `stuck` densify PRESENT; successors `act-05-08-01-02-explain-gears` (GEAR→CHANGE→SAMPLE) + `act-05-08-01-03-explain-reset` (COOLER→CHASE→RESET) content-driven (do not reopen LPT-669); scaffolded SoftPulse `gear` one-per-press OK; unguided SoftPulse `reset` map PRESENT (+ suit variants); checkpoint SoftPulse `temp` fresh-samples under gear-changes → **LPT-687**. Curriculum **LPT-247** Done — do not clone. Tip-commented LPT-247/686/687 + Done-ack LPT-245/246/465/520/619 + open residuals LPT-676…685 + parents. next: NEVER `lesson-05-09-01-*` session-discipline / S5–S6 NEVER / Low curriculum.
 - 2026-10-14ca: Tip-stable `34ab9999` (#2275 line-reading learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER timing-sizing children: first-child `act-05-07-01-explain` SoftPulse TIMING→SIZING→CLUES + Dart `TimingCluesDemo` still pre-split ladder under timing-soft-only → **LPT-685**; guided SoftPulse `soft` densify PRESENT; checkpoint SoftPulse `tiny` hintless densify PRESENT (matches soft-evidence); successors `act-05-07-01-02-explain-sizing` (TINY→BIG→RANGE) + `act-05-07-01-03-explain-magic` (TELL→MYTH→REJECT) content-driven (do not reopen LPT-669); scaffolded SoftPulse `weakish` + unguided SoftPulse `reject` one-per-press OK. Curriculum **LPT-244** Done — do not clone. Tip-commented LPT-244/685 + Done-ack LPT-242/243/464/519 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-05-08-01-*` table-dynamics / S5–S6 NEVER / Low curriculum.
