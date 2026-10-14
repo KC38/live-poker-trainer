@@ -778,6 +778,9 @@ existing learners are not stranded. Button and blinds moves to
 `unit-01-01-03-blinds-and-button` for path order (LPT-87 will split that
 unit). Shipped.
 
+Curriculum splits LPT-192: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
+- `lesson-04-06-03-adjust-calling-station` → `lesson-04-06-03-01-value-wider`, `lesson-04-06-03-02-bluff-less`, `lesson-04-06-03-03-cite-sticky-call` (LPT-192)
+
 Curriculum splits LPT-330, LPT-333, LPT-336, LPT-668: each retired multi-concept lesson stays inside its unit as one lesson per concept; catalog `lessonSplitMap` carries completed progress onto every successor. Existing activity ids are reused (Dart SoftPulse / densify arms keep working); only the new per-concept explains are new ids.
 - `lesson-07-07-01-same-cards-types` → `lesson-07-07-01-01-station-value`, `lesson-07-07-01-02-tag-checkraise`, `lesson-07-07-01-03-lag-barrel`, `lesson-07-07-01-04-baseline-without-evidence` (LPT-330)
 - `lesson-07-08-01-type-board-line` → `lesson-07-08-01-01-type-and-board`, `lesson-07-08-01-02-line-and-sizing`, `lesson-07-08-01-03-one-coherent-action` (LPT-333)
@@ -1884,7 +1887,9 @@ felt.
 | The Calling Station model | Station, High, Low; scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420); unit `unit-04-06-calling-station` (LPT-189 split) | label quizzes |
 | Spot a Calling Station | explain SoftPulse cues STICKY CALLS → RARE FOLDS; unit `unit-04-06-calling-station` (LPT-189 split) | — |
 | Small samples, low confidence | explain SoftPulse cues SAMPLE → CONFIDENCE; unit `unit-04-06-calling-station` (LPT-189 split) | — |
-| Adjust versus Calling Station | Value, Bluffs, Cite; checkpoint SoftPulse one gold via `guideRegion` (LPT-634) | bluff-less reason |
+| Value wider versus Calling Station | Value, Bluffs, Cite; unit `unit-04-06-calling-station` (LPT-192 split) | — |
+| Bluff less without equity | explain SoftPulse cues RARELY FOLDS → GIVE UP; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-06-calling-station` (LPT-192 split) | bluff-less reason |
+| Cite the sticky-call tendency | explain SoftPulse cues EVIDENCE → UNKNOWN; unit `unit-04-06-calling-station` (LPT-192 split) | — |
 | Tag narrow entry | Rare, Enter, Mean It; unit `unit-04-07-nit` (LPT-195 split) | entry quizzes |
 | Tag strong aggression | explain SoftPulse cues RARE ENTRY → BIG AGGRESSION; unit `unit-04-07-nit` (LPT-195 split) | — |
 | Wait for samples | explain SoftPulse cues TWO FOLDS → MORE HANDS; unit `unit-04-07-nit` (LPT-195 split) | — |

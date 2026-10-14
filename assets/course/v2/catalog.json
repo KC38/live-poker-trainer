@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "4df3a5f1dab0249890d4477e702d23220690a27973ff0229d278bfb19e2c5903",
+  "contentChecksum": "4ca7e9b69ae0f8d929d2eeb669724cef3067391f3782ae22d6b8eceed0d7e959",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -404,6 +404,11 @@
       "lesson-02-07-01-01-full-ring-open",
       "lesson-02-07-01-02-vs-raise-plan",
       "lesson-02-07-01-03-habits-while-deciding"
+    ],
+    "lesson-04-06-03-adjust-calling-station": [
+      "lesson-04-06-03-01-value-wider",
+      "lesson-04-06-03-02-bluff-less",
+      "lesson-04-06-03-03-cite-sticky-call"
     ]
   },
   "sections": [
@@ -17001,14 +17006,12 @@
               ]
             },
             {
-              "id": "lesson-04-06-03-adjust-calling-station",
+              "id": "lesson-04-06-03-01-value-wider",
               "order": 7,
-              "title": "Adjust versus Calling Station",
-              "summary": "Widen value and cut unsupported bluffs versus sticky callers.",
+              "title": "Value wider versus Calling Station",
+              "summary": "Bet thinner value when a Calling Station calls too wide.",
               "objectives": [
-                "Value wider versus Calling Station",
-                "Bluff less without equity",
-                "Cite the sticky-call tendency"
+                "Value wider versus Calling Station"
               ],
               "prerequisites": [
                 "lesson-04-06-02-03-station-confidence"
@@ -17016,7 +17019,7 @@
               "remediationLessonIds": [
                 "lesson-04-06-02-03-station-confidence"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 2,
               "difficultyBand": 3,
               "playerTypeRefs": [
                 "calling_station"
@@ -17168,10 +17171,72 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-06-03-02-bluff-less",
+              "order": 8,
+              "title": "Bluff less without equity",
+              "summary": "Give up air when a Calling Station rarely folds.",
+              "objectives": [
+                "Bluff less without equity"
+              ],
+              "prerequisites": [
+                "lesson-04-06-03-01-value-wider"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-06-03-01-value-wider"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-06-03-02-explain-bluffs",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Bluff less without equity"
+                  ],
+                  "accessibilityText": "Calling Stations rarely fold. With no equity on the river, give up instead of bluffing.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-06-03-02-explain-bluffs-line",
+                      "kind": "dialogue",
+                      "text": "Calling Stations rarely fold. With no equity on the river, give up instead of bluffing."
+                    }
+                  ],
+                  "okFeedback": "No folds — no bluff.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "RARELY FOLDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "GIVE UP",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-06-03-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -17269,8 +17334,115 @@
                   }
                 },
                 {
+                  "id": "act-04-06-03-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Because they fold too little.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Bluff less without equity"
+                  ],
+                  "prompt": "Why bluff less versus a Calling Station?",
+                  "choices": [
+                    {
+                      "id": "cite-fold",
+                      "label": "They fold too rarely",
+                      "accessibilityText": "They fold too rarely"
+                    },
+                    {
+                      "id": "cite-mean",
+                      "label": "The label sounds mean",
+                      "accessibilityText": "The label sounds mean"
+                    }
+                  ],
+                  "playerTypeRefs": [
+                    "calling_station"
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "cite-fold",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-06-03-03-cite-sticky-call",
+              "order": 9,
+              "title": "Cite the sticky-call tendency",
+              "summary": "Value thinner only because this seat calls too much.",
+              "objectives": [
+                "Cite the sticky-call tendency"
+              ],
+              "prerequisites": [
+                "lesson-04-06-03-02-bluff-less"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-06-03-02-bluff-less"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 3,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-06-03-03-explain-cite",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Cite the sticky-call tendency"
+                  ],
+                  "accessibilityText": "Value thinner only because this seat calls too much. Against an unknown, stay cautious.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-06-03-03-explain-cite-line",
+                      "kind": "dialogue",
+                      "text": "Value thinner only because this seat calls too much. Against an unknown, stay cautious."
+                    }
+                  ],
+                  "okFeedback": "Read first, then adjust.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "EVIDENCE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "UNKNOWN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-04-06-03-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -17366,51 +17538,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-06-03-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Because they fold too little.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Cite the sticky-call tendency"
-                  ],
-                  "prompt": "Why bluff less versus a Calling Station?",
-                  "choices": [
-                    {
-                      "id": "cite-fold",
-                      "label": "They fold too rarely",
-                      "accessibilityText": "They fold too rarely"
-                    },
-                    {
-                      "id": "cite-mean",
-                      "label": "The label sounds mean",
-                      "accessibilityText": "The label sounds mean"
-                    }
-                  ],
-                  "playerTypeRefs": [
-                    "calling_station"
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "cite-fold",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -17431,7 +17558,7 @@
                 "Tag narrow entry"
               ],
               "prerequisites": [
-                "lesson-04-06-03-adjust-calling-station"
+                "lesson-04-06-03-03-cite-sticky-call"
               ],
               "remediationLessonIds": [
                 "lesson-04-06-01-03-observation-vs-certainty"
@@ -20056,7 +20183,7 @@
                 "lesson-04-09-01-03-retire-labels"
               ],
               "remediationLessonIds": [
-                "lesson-04-06-03-adjust-calling-station"
+                "lesson-04-06-03-03-cite-sticky-call"
               ],
               "estimatedMinutes": 6,
               "difficultyBand": 4,

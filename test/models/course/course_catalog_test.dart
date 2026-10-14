@@ -110,6 +110,8 @@ void main() {
       'lesson-07-08-01-type-board-line',
       'lesson-07-09-01-leak-review-book',
       'lesson-02-07-01-baseline-full-hand',
+      // LPT-192 Adjust versus Calling Station
+      'lesson-04-06-03-adjust-calling-station',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];
