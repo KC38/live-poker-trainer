@@ -4306,3 +4306,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-726/333/727/725/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Leak SoftPulse residual **LPT-727** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; explain/checkpoint `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-15bs (7a44af6c Prefer NEVER Blockers SoftPulse residual LPT-700 re-check)
+
+- Tip-stable `7a44af6c` (#2606 Overbet SoftPulse Prefer LPT-699 on tip after #2605). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync.
+- Prefer NEVER Blockers SoftPulse residual re-check `lesson-06-06-01-01/02/03` / `act-06-06-01-*`:
+  - first-child `act-06-06-01-explain` SoftPulse BLOCK→USE→NO EV + `explainGrading` "Block → Use → No EV." + Dart `BlockersDemo.points` BLOCK/USE/NO EV (captions Remove hands / Apply blockers / Skip decimals) / `LessonBlockersExplainTable` / layout "Tap Block, then Use, then No EV." + coachMedia "Blockers remove hands. Use them; do not invent EV decimals." still pre-split under bluff-blockers-only (`lesson-06-06-01-01-bluff-blockers` objective "Choose bluffs that block call-downs") → residual **LPT-700** still To Do (needs-human; Relates LPT-270 — do not re-add needs-human on curriculum).
+  - successors `act-06-06-01-02-explain-unblock` CATCH→UNBLOCK→BLUFFS + `act-06-06-01-03-explain-ev` TWEAK→NO EV content-driven (do not reopen LPT-669); guided SoftPulse `as` densify PRESENT; scaffolded SoftPulse `unblock` one-per-press densify PRESENT; unguided SoftPulse `tweak` one-per-press densify PRESENT; checkpoint SoftPulse `no` kind `none` densify PRESENT under no-fake-ev — no companion residual.
+- Curriculum **LPT-270** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-700/270/701/702/699/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Defend SoftPulse residual **LPT-701** (+ companion **LPT-702**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-06-06-01-*: interactive structural clean on tip except LPT-700 SoftPulse residual; all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
