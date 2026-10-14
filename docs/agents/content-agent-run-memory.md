@@ -2536,3 +2536,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-04-09-01-*` Confidence / Low residuals LPT-676…774.
 - act-04-08-03-*: interactive structural clean on tip; SoftPulse explain packing expected under dual-objective first child; successors content-driven (do not reopen LPT-669).
 
+## Fold 2026-10-14ek (7d9ff87c discovery Confidence SoftPulse residual)
+
+- Tip-stable `7d9ff87c` (#2362 Adjust Maniac SoftPulse re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-04-09-01-01/02/03` under Confidence unit:
+  - first-child `act-04-09-01-explain` SoftPulse OBSERVE→SAMPLES→SHOWDOWNS + `explainGrading` under Observation-not-certainty → **LPT-775** (needs-human; Relates LPT-215).
+  - race clone **LPT-776** Done Duplicate of LPT-775.
+  - successors `act-04-09-01-02-explain-samples` (SAMPLES→SHOWDOWNS) + `act-04-09-01-03-explain-retire` (NEW EVIDENCE→RETIRE) content-driven; guided SoftPulse `one-note` + scaffolded SoftPulse `rise` + unguided SoftPulse `update` densify PRESENT; checkpoint SoftPulse `limits` kind `none` (sample-limits residual note under Raise confidence).
+- Curriculum **LPT-215** Done — do not clone / do not re-add needs-human. Tip-commented LPT-775/215/776/774 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…775.
+- Prefer next: NEVER `lesson-04-10-01-*` exploit-checkpoints / Low residuals LPT-676…775.
+- act-04-09-01-*: interactive structural clean on tip except SoftPulse residual LPT-775; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` observation tiles — do not file handFamily.
+
