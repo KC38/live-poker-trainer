@@ -35,7 +35,9 @@ const _lines = <String, String>{
       'Blinds are 1/2. Tap who posts the big blind.',
   // LPT-832: SoftPulse-quiet densify — no before-deal choice spoil.
   'act-01-01-03-unguided-when': 'Tap when the blinds go in.',
-  'act-01-02-02-guided-seven': 'Tap the five cards that make your best hand — pick Top pair with best kicker.',
+  // LPT-835: SoftPulse-quiet densify — no Top pair / best kicker spoil.
+  'act-01-02-02-guided-seven':
+      'Tap the five cards that make your best hand.',
   'act-01-02-02-checkpoint-build': 'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
   'act-01-04-01-unguided-end':
       'Flop betting is live. Tap when this street ends — pick Bets matched.',
