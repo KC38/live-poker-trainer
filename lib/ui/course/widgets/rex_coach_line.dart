@@ -377,8 +377,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Before any hole cards are dealt (LPT-832; SoftPulse LPT-653).
     'act-01-01-03-unguided-when' =>
       'Tap when the blinds go in.',
+    // SoftPulse-quiet until Hint (same-concept after explain) — situation +
+    // tap verb only; never name Top pair / best kicker in the idle bubble
+    // (LPT-835; SoftPulse LPT-653; same class as LPT-833 / LPT-834 / LPT-814).
     'act-01-02-02-guided-seven' =>
-      'Tap the five cards that make your best hand — pick Top pair with best kicker.',
+      'Tap the five cards that make your best hand.',
     'act-01-02-02-checkpoint-build' =>
       'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
     'act-01-04-01-unguided-end' =>
