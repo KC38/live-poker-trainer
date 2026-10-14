@@ -387,8 +387,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap the five cards that make your best hand.',
     'act-01-02-02-checkpoint-build' =>
       'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Bets matched in the idle bubble (LPT-837; SoftPulse LPT-653; same
+    // class as LPT-833 / LPT-834 / LPT-832).
     'act-01-04-01-unguided-end' =>
-      'Flop betting is live. Tap when this street ends — pick Bets matched.',
+      'Flop betting is live. Tap when this street ends.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name SB in the idle bubble (LPT-808; SoftPulse LPT-653; same class
     // as LPT-807 / LPT-803 / LPT-672).
