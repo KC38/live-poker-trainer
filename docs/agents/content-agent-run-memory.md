@@ -4118,6 +4118,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; explain/checkpoint `deal.mode` `none` — do not file handFamily.
 
+## Fold 2026-10-15bf tip 577126b0 (#2590 → Leak SoftPulse LPT-727 Prefer)
+
+- Tip-stable `577126b0` (#2590 Type-board SoftPulse Prefer LPT-726 on tip after #2589). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync.
+- Prefer NEVER Leak SoftPulse residual **LPT-727** re-check (`lesson-07-09-01-01/02/03` / `act-07-09-01-*`):
+  - first-child SoftPulse LEAK→BOOK→REVIEW + `explainGrading` "Leak → Book → Review." + Dart `LeakReviewBookDemo.points` LEAK/BOOK/REVIEW (captions Specific note / Written defaults / On a schedule) / `LessonLeakReviewBookExplainTable` / layout "Tap Leak, then Book, then Review." still pre-split under name-leaks-only → **LPT-727** still To Do (needs-human; Relates LPT-336 — do not re-add needs-human on curriculum).
+  - successors SoftPulse COMMON SPOT→DEFAULT / AFTER SESSION→REVIEW content-driven (do not reopen LPT-669); guided SoftPulse `spec` densify PRESENT; scaffolded SoftPulse `book` densify PRESENT; unguided SoftPulse `sched` densify PRESENT; checkpoint SoftPulse `base` kind `none` densify PRESENT under default-lines — no companion residual.
+- Curriculum **LPT-336** Done — do not clone / do not re-add needs-human; do not clone Duplicate **LPT-730**.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-727/336/726/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Capstone SoftPulse Prefer / SoftPulse residual **LPT-676** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-07-09-01-*: interactive structural clean on tip except LPT-727 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; explain/checkpoint/guided/scaffolded/unguided `deal.mode` `none` — do not file handFamily.
+
 ## Fold 2026-10-15be tip 38b5014d (#2589 → Type-board SoftPulse LPT-726 Prefer)
 
 - Tip-stable `38b5014d` (#2589 Seat labels densify stem on tip after #2588 Same-cards SoftPulse Prefer). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
