@@ -18,9 +18,21 @@ const kLiveUnrestrictedUnlockLessonId =
 const kLiveUnrestrictedUnlockLessonTitle = 'Section 4 jump check';
 
 /// Locked-tab sentence. Points at the Home lesson that unlocks warm-ups.
+///
+/// Signed-in learners only. Anonymous guests use
+/// [liveTrainingAnonymousLockedMessage] (LPT-697).
 String liveTrainingLockedMessage() {
   return 'Live Training is advanced. Finish $kLiveWarmUpUnlockLessonTitle on '
       'Home to unlock a coached warm-up.';
+}
+
+/// Locked-tab sentence for anonymous guests (LPT-697).
+///
+/// Matches the launch snackbar and `docs/agent-paths.md` → live-training-gate.
+/// Do not point guests at Baseline jump check — they cannot open Live until
+/// they create an account, even when that lesson is already complete.
+String liveTrainingAnonymousLockedMessage() {
+  return 'Create an account before Live Training.';
 }
 
 /// Snackbar when a locked learner tries to start a table.
@@ -79,6 +91,17 @@ class LiveAccessSnapshot {
         unrestrictedAccess: false,
         warmUpAvailable: false,
       );
+
+  /// Anonymous guest — account required before any Live unlock path (LPT-697).
+  factory LiveAccessSnapshot.anonymous() => const LiveAccessSnapshot(
+        tier: LiveAccessTier.locked,
+        source: 'anonymous',
+        unrestrictedAccess: false,
+        warmUpAvailable: false,
+      );
+
+  /// True when the hub must ask for an account instead of a Home lesson.
+  bool get requiresAccount => source == 'anonymous';
 
   factory LiveAccessSnapshot.fromJson(Map<String, dynamic>? json) {
     if (json == null) return LiveAccessSnapshot.locked();

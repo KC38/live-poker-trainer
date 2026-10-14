@@ -13,7 +13,9 @@ import 'package:live_poker_trainer/providers/service_providers.dart';
 final liveAccessProvider = FutureProvider<LiveAccessSnapshot>((ref) async {
   final user = ref.watch(authServiceProvider).currentUser;
   if (user == null || user.isAnonymous) {
-    return LiveAccessSnapshot.locked();
+    // Distinct from signed-in course-locked so the hub does not name
+    // Baseline jump check to guests who cannot start Live anyway (LPT-697).
+    return LiveAccessSnapshot.anonymous();
   }
   try {
     final data = await ref.read(liveHandServiceProvider).getLiveAccess();

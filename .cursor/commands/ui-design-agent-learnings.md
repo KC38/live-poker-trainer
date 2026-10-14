@@ -315,8 +315,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   before filing SoftPulse-dead — Hint disabled mid-deal was the LPT-678
   deadlock; SoftPulse unlocks when hero holes land, not every villain back.
 
-- Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on an untracked primary file (e.g. `test/ui/course/_content_agent_probe_*.dart` from a content-agent) — do not discard that dirt or `needs-human` the ticket; origin/main Dart still hot-restarts (LPT-407).
-- Prefer `rg '<<<<<<<|=======|>>>>>>>'` on conflicted files after a merge resolution **before** `git commit` — an earlier StrReplace can leave markers in HEAD while the working tree looks clean until the next edit (LPT-520).
+- Prefer `tools/flutter_run_fast.sh --checkout PRIMARY` when `refresh-simulator.sh` aborts on untracked primary dirt (e.g. content-agent probe tests) — hot-restart origin/main Dart; do not discard dirt or `needs-human` (LPT-407). After merge resolutions, `rg '<<<<<<<|=======|>>>>>>>'` before commit (LPT-520). Judge Live Training lock copy against auth: anonymous → `LiveAccessSnapshot.anonymous()` / create-account hub text, never Baseline jump check even if `agent_seed` completed it (LPT-697); signed-in course-locked keeps `liveTrainingLockedMessage`.
 
 ## Ops (simulator, CLI, Jira)
 
