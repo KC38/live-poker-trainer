@@ -1904,13 +1904,13 @@ export const SECTION_ONE_EXIT_LESSON = "lesson-01-06-02-section-one-jump";
 /** @returns {object} Section 2 — Rules Known / Home Games */
 export function buildSectionTwo() {
   const prev = SECTION_ONE_EXIT_LESSON;
-  const L020101 = "lesson-02-01-01-position-labels";
-  const L020102 = "lesson-02-01-02-acting-order";
-  const L020201 = "lesson-02-02-01-hand-families";
-  const L020301 = "lesson-02-03-01-open-fold";
-  const L020401 = "lesson-02-04-01-facing-raise";
-  const L020501 = "lesson-02-05-01-effective-stack";
-  const L020601 = "lesson-02-06-01-live-habits";
+  const L020101 = "lesson-02-01-01-position-labels"; // retired LPT-114: split in course.json (lessonSplitMap)
+  const L020102 = "lesson-02-01-02-acting-order"; // retired LPT-117: split in course.json (lessonSplitMap)
+  const L020201 = "lesson-02-02-01-hand-families"; // retired LPT-121: split in course.json (lessonSplitMap)
+  const L020301 = "lesson-02-03-01-open-fold"; // retired LPT-124: split in course.json (lessonSplitMap)
+  const L020401 = "lesson-02-04-01-facing-raise"; // retired LPT-127: split in course.json (lessonSplitMap)
+  const L020501 = "lesson-02-05-01-effective-stack"; // retired LPT-130: split in course.json (lessonSplitMap)
+  const L020601 = "lesson-02-06-01-live-habits"; // retired LPT-133: split in course.json (lessonSplitMap)
   const L020701 = "lesson-02-07-01-baseline-full-hand";
   const L020702 = "lesson-02-07-02-section-two-jump";
 

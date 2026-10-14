@@ -108,7 +108,13 @@ describe("course flags", () => {
 
 describe("soft grading and life loss", () => {
   const lesson = findLesson("lesson-01-01-01-your-two-cards")!.lesson;
-  const openFold = findLesson("lesson-02-03-01-open-fold")!.lesson;
+  // Open or fold baseline was split by LPT-124; the graded steps live in its successors.
+  const openFold = {
+    activities: [
+      "lesson-02-03-01-01-fold-early-trash",
+      "lesson-02-03-01-02-open-strong",
+    ].flatMap((id) => findLesson(id)!.lesson.activities),
+  };
   const streets = findLesson("lesson-01-04-01-02-action-order")!.lesson; // LPT-103 split
   const pots = findLesson("lesson-01-05-01-03-main-and-side-pots")!.lesson; // LPT-106 split
 
@@ -346,7 +352,9 @@ describe("soft grading and life loss", () => {
   });
 
   it("uses authored explain Nice! feedback for Acting order (LPT-147)", () => {
-    const actingOrder = findLesson("lesson-02-01-02-acting-order")!.lesson;
+    const actingOrder = findLesson(
+      "lesson-02-01-02-01-preflop-order", // LPT-117 split
+    )!.lesson;
     const explain = actingOrder.activities.find(
       (activity) => activity.id === "act-02-01-02-explain-order",
     )!;
@@ -363,7 +371,9 @@ describe("soft grading and life loss", () => {
   });
 
   it("uses authored explain Nice! feedback for Live table habits (LPT-199)", () => {
-    const liveHabits = findLesson("lesson-02-06-01-live-habits")!.lesson;
+    const liveHabits = findLesson(
+      "lesson-02-06-01-01-follow-action", // LPT-133 split
+    )!.lesson;
     const explain = liveHabits.activities.find(
       (activity) => activity.id === "act-02-06-01-explain-habits",
     )!;
@@ -638,7 +648,7 @@ describe("placement and live unlock helpers", () => {
     expect(lessonRequiresPlacementFlag(first.lesson)).toBe(false);
     const jump = findLesson("lesson-01-06-02-section-one-jump")!;
     expect(lessonRequiresPlacementFlag(jump.lesson)).toBe(true);
-    const position = findLesson("lesson-02-01-01-position-labels")!;
+    const position = findLesson("lesson-02-01-01-01-seat-labels")!; // LPT-114 split
     expect(lessonRequiresPlacementFlag(position.lesson)).toBe(false);
   });
 

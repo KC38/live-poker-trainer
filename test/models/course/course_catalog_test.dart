@@ -26,7 +26,7 @@ void main() {
     expect(catalog.playerTypes, hasLength(5));
     expect(catalog.sections[0].units, hasLength(8)); // LPT-83 suits+blinds units
     expect(catalog.sections[1].units, hasLength(7));
-    // LPT-87..106: Section 1 splits keep their units; one lesson per concept.
+    // LPT-87+: curriculum splits keep their units; one lesson per concept.
     for (final retired in const [
       'lesson-01-01-03-blinds-and-button',
       'lesson-01-02-01-hand-ranks',
@@ -35,10 +35,19 @@ void main() {
       'lesson-01-03-02-bet-raise-allin',
       'lesson-01-04-01-streets-and-order',
       'lesson-01-05-01-winning-pots',
+      // LPT-114..140: Section 2 + first Section 3 splits.
+      'lesson-02-01-01-position-labels',
+      'lesson-02-01-02-acting-order',
+      'lesson-02-02-01-hand-families',
+      'lesson-02-03-01-open-fold',
+      'lesson-02-04-01-facing-raise',
+      'lesson-02-05-01-effective-stack',
+      'lesson-02-06-01-live-habits',
+      'lesson-03-01-01-reading-live-table',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];
-      expect(successors, hasLength(3), reason: retired);
+      expect(successors, hasLength(greaterThanOrEqualTo(2)), reason: retired);
       for (final id in successors!) {
         expect(catalog.lessonById(id), isNotNull, reason: id);
       }
