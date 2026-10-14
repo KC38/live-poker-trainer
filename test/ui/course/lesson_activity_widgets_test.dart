@@ -31133,6 +31133,53 @@ await tester.tap(find.text('NIT'));
     },
   );
 
+  testWidgets(
+    's4 jump densify coach does not spoil Station exploit (LPT-673)',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-04-10-02-jump-station',
+        order: 5,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.jumpTest,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Calling Station — value more.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Sticky caller three streets. Label + exploit direction?',
+        choices: const [
+          CourseChoice(
+            id: 'j4-cs',
+            label: 'Calling Station — thicker value, fewer bluffs',
+          ),
+          CourseChoice(
+            id: 'j4-cs-wrong',
+            label: 'Calling Station — bluff more',
+          ),
+        ],
+      );
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final speech = lessonFrameSpeech(activity);
+      expect(speech, contains('tap the matching plan'));
+      expect(speech.toLowerCase(), isNot(contains('calling station')));
+      expect(speech.toLowerCase(), isNot(contains('thicker value')));
+      expect(speech, isNot(contains('Tap the best answer')));
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+      controller.dispose();
+    },
+  );
+
   testWidgets('s7 five type final cs taps Station value on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-07-12-01-cs',

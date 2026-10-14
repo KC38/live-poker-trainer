@@ -17,9 +17,13 @@ const _lines = <String, String>{
   'act-04-08-02-unguided':
       'Seat 3-bets light and never gives up rivers. Label — tap Maniac.',
   'act-04-09-01-unguided': 'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
-  'act-04-10-02-jump-station': 'Sticky caller three streets. Label + exploit direction — tap Calling Station — thicker value, fewer bluffs.',
-  'act-04-10-02-jump-nit': 'Tiny range, huge check-raise. Label + line — tap Nit — respect the raise; steal more elsewhere.',
-  'act-04-10-02-jump-maniac': 'Seat barrels forever. You have top pair. Label + line — tap Maniac — widen bluff-catch; avoid ego raises.',
+  // LPT-673: Section 4 jump densify — no correct tile/value/exploit spoil.
+  'act-04-10-02-jump-station':
+      'Sticky caller three streets. Label + exploit direction — tap the matching plan.',
+  'act-04-10-02-jump-nit':
+      'Tiny range, huge check-raise. Label + line — tap the matching plan.',
+  'act-04-10-02-jump-maniac':
+      'Seat barrels forever. You have top pair. Label + line — tap the matching plan.',
   // LPT-672: Final assessment densify stems — no correct tile/exploit spoil.
   'act-07-12-01-cs':
       'Sticky calls three streets. Label + exploit — tap the matching plan.',
@@ -46,6 +50,19 @@ const _finalFiveTypeSpoilers = <String, List<String>>{
   'act-07-12-01-lag': ['lag', 'trap more', 'call wider'],
   'act-07-12-01-uncertain': ['low', 'lean baseline'],
   'act-07-12-01-retire': ['retire or update'],
+};
+
+/// Phrases that would spoil Section 4 jump densify answers (LPT-673).
+const _sectionFourJumpSpoilers = <String, List<String>>{
+  'act-04-10-02-jump-range': ['stronger', 'narrower range'],
+  'act-04-10-02-jump-spr': ['tap 4', 'pick 4', '— 4'],
+  'act-04-10-02-jump-station': [
+    'calling station',
+    'thicker value',
+    'fewer bluffs',
+  ],
+  'act-04-10-02-jump-nit': ['nit', 'respect the raise', 'steal more'],
+  'act-04-10-02-jump-maniac': ['maniac', 'bluff-catch', 'ego raises'],
 };
 
 void main() {
@@ -79,6 +96,33 @@ void main() {
       final lower = (resolved ?? '').toLowerCase();
       for (final spoil in _finalFiveTypeSpoilers[id]!) {
         expect(lower, isNot(contains(spoil)), reason: '$id must not contain "$spoil"');
+      }
+    }
+  });
+
+  test('Section 4 jump densify stems do not spoil correct answers (LPT-673)', () {
+    const expected = <String, String>{
+      'act-04-10-02-jump-range':
+          'UTG open is best described as — tap the matching range.',
+      'act-04-10-02-jump-spr':
+          'Stack 60bb, pot 15bb. SPR — tap the matching number.',
+      'act-04-10-02-jump-station':
+          'Sticky caller three streets. Label + exploit direction — tap the matching plan.',
+      'act-04-10-02-jump-nit':
+          'Tiny range, huge check-raise. Label + line — tap the matching plan.',
+      'act-04-10-02-jump-maniac':
+          'Seat barrels forever. You have top pair. Label + line — tap the matching plan.',
+    };
+    for (final MapEntry(key: id, value: line) in expected.entries) {
+      final resolved = selectIdentifyDensifiedCoachLine(id);
+      expect(resolved, line, reason: id);
+      final lower = (resolved ?? '').toLowerCase();
+      for (final spoil in _sectionFourJumpSpoilers[id]!) {
+        expect(
+          lower,
+          isNot(contains(spoil)),
+          reason: '$id must not contain "$spoil"',
+        );
       }
     }
   });
