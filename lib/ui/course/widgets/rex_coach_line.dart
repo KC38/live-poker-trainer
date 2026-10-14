@@ -485,12 +485,15 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tired, winning small, table getting wild. Best — pick Cash out.',
     'act-05-09-01-checkpoint' =>
       'Session discipline is part of — pick Your edge.',
+    // Section 5 checkpoint densify — SoftPulse off (kind: none); stems must
+    // not spoil the correct tile (LPT-717; SoftPulse LPT-653; same class as
+    // LPT-672 / LPT-673 / LPT-674).
     'act-05-09-02-cp-multi' =>
-      'Four-way pot priority — pick Nut potential.',
+      'Four-way pot priority — tap the matching priority.',
     'act-05-09-02-cp-tell' =>
-      'Instant shove proves — pick Soft evidence.',
+      'Instant shove proves — tap the matching read.',
     'act-05-09-02-cp-stop' =>
-      'Hit stop-loss. Do — pick Honor stop.',
+      'Hit stop-loss. Do — tap the matching plan.',
     'act-06-01-01-guided' =>
       'PFR on A-high dry flop. Who often has range advantage — pick Preflop raiser.',
     'act-06-01-01-scaffolded' =>

@@ -1206,7 +1206,10 @@ steps use cue kind `none` (no pressHints).
 Section 5 checkpoint `teachSpec` (LPT-251): cp-multi `none` → `nut`; cp-
 value fixed Jh9d/Kc9s4h2d7c → `bet`; cp-catch fixed Jh9d/Kc9s4h2d7c →
 `call`; cp-tell `none` → `soft`; cp-stop `none` → `stop`; assessment steps
-use cue kind `none` (no pressHints).
+use cue kind `none` (no pressHints). SoftPulse-off densify stems for
+cp-multi / cp-tell / cp-stop use non-spoiling matching-priority / matching-
+read / matching-plan copy (LPT-717; same class as LPT-672 / LPT-673 /
+LPT-674).
 
 Choose polarized or merged betting `teachSpec` (LPT-262): explain SoftPulse
 advances POLAR → MERGED → SIZE; guided `none` → `polar`; scaffolded fixed
@@ -1920,7 +1923,7 @@ felt.
 | Set a stop-loss | Quit, Guard, First; densified SoftPulse one gold (LPT-521); unit `unit-05-09-discipline` (LPT-250 split) | — |
 | Bankroll fits stakes | explain SoftPulse cues BANKROLL → STAKES → DECLINE; unit `unit-05-09-discipline` (LPT-250 split) | — |
 | End sessions early | explain SoftPulse cues TIRED → WILD → CASH OUT; unit `unit-05-09-discipline` (LPT-250 split) | — |
-| Section 5 checkpoint | — | — |
+| Section 5 checkpoint | SoftPulse-off densify stems non-spoiling (LPT-717) | — |
 | Spot range advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523); unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
 | Spot nut advantage | explain SoftPulse cues NUTS → PAIRED → CALLER; unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
 | Pressure when you own both | explain SoftPulse cues RANGE → NUTS → BET; unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
