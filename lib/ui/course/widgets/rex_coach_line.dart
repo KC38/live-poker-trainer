@@ -407,8 +407,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'That seat finally raises and then barrels. Observation — pick Strong aggression when they enter.',
     'act-04-07-01-unguided' =>
       'They folded two hands. Label them already — pick No — sample too small.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Few hands / heavy action in the idle bubble (LPT-763; same class
+    // as LPT-746 / LPT-653).
     'act-04-07-01-checkpoint' =>
-      'Evidence bundle for this seat — pick Few hands; heavy action when involved.',
+      'Evidence bundle for this seat — tap the matching note.',
     'act-04-07-02-checkpoint' =>
       'Nit is best treated as — pick A working model with sample limits.',
     'act-04-07-03-checkpoint' =>
@@ -530,16 +533,22 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'PFR on A-high dry flop. Who often has range advantage — pick Preflop raiser.',
     'act-06-01-01-scaffolded' =>
       'Paired board. Caller defends wide. Who may have nut advantage — pick Wide caller.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Apply pressure in the idle bubble (LPT-764; same class as LPT-746 /
+    // LPT-653).
     'act-06-01-01-checkpoint' =>
-      'Advantage is a reason to — pick Apply pressure.',
+      'Advantage is a reason to — tap the matching plan.',
     'act-06-02-01-guided' =>
       'Same draw OOP vs IP. Where does it realize better — pick In position.',
     'act-06-02-01-scaffolded' =>
       'Weak showdown value OOP facing dual barrels. Default — pick Discount / fold.',
     'act-06-02-01-unguided' =>
       'Semi-bluff check-raise with nut draw IP-denied. Purpose — pick Fold equity.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Position + initiative in the idle bubble (LPT-766; same class as
+    // LPT-764 / LPT-746 / LPT-653).
     'act-06-02-01-checkpoint' =>
-      'Equity realization rises with — pick Position + initiative.',
+      'Equity realization rises with — tap the matching levers.',
     // Assessment SoftPulse-off densify (LPT-672): situation + tap verb only —
     // never name the correct tile/exploit in the idle bubble.
     'act-07-12-01-uncertain' =>
