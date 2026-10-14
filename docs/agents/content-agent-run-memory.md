@@ -3904,3 +3904,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 ## Fold 2026-10-14
 
+## Fold 2026-10-15ak tip e08ce374 (#2558 Overbet Prefer → Blockers SoftPulse LPT-700 Prefer)
+
+- Tip-stable `e08ce374` after #2558 SoftPulse residual Prefer LPT-699 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-06-06-01-01/02/03` / `act-06-06-01-*`: first-child SoftPulse BLOCK→USE→NO EV + `explainGrading` "Block → Use → No EV." + Dart `BlockersDemo.points` / `LessonBlockersExplainTable` still pre-split under bluff-blockers-only → residual **LPT-700** still To Do (Relates LPT-270 — do not re-add needs-human on curriculum); successors SoftPulse CATCH→UNBLOCK→BLUFFS / TWEAK→NO EV content-driven (do not reopen LPT-669); guided SoftPulse `as` densify PRESENT; scaffolded SoftPulse `unblock` densify PRESENT; unguided SoftPulse `tweak` densify PRESENT; checkpoint SoftPulse `no` under no-fake-ev — no companion residual.
+- Curriculum **LPT-270** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-700/270/699/701/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Defend SoftPulse residual **LPT-701** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-06-01-*: interactive structural clean on tip except LPT-700 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
