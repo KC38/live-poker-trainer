@@ -9,7 +9,8 @@ Put every agent scratch file in `.cursor/tmp/`. Delete it when the task that nee
 
 ## Where
 
-- Screenshots, OCR dumps, logs, and other scratch output go in `.cursor/tmp/`.
+- Screenshots, simulator clips (`.mp4`), extracted frames, OCR dumps, logs,
+  and other scratch output go in `.cursor/tmp/`.
 - Do not write `tmp-*` files at the top of `.cursor` or elsewhere in the repo.
 - Do not commit anything under `.cursor/tmp/` (it is gitignored).
 
@@ -21,4 +22,6 @@ Put every agent scratch file in `.cursor/tmp/`. Delete it when the task that nee
 ## Examples
 
 - Simulator screenshot: `.cursor/tmp/pro-lesson.png`, then delete it after you have read it.
+- Simulator clip + frames: `.cursor/tmp/ui-agent/<surface>-issue.mp4` and
+  `…-frame-*.png` via `tools/sim_record.py`, then delete after attach/Read.
 - A one-off note: `.cursor/tmp/notes.txt`, then delete it when the note is no longer needed.

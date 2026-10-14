@@ -370,12 +370,38 @@ def attach(key: str, paths: List[str]) -> List[str]:
     return names
 
 
+_IMAGE_ATTACH_EXT = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".svg"}
+
+
+def _is_image_attachment(name: str) -> bool:
+    """True when Jira can render ``!name|thumbnail!`` for this file."""
+    return Path(name).suffix.lower() in _IMAGE_ATTACH_EXT
+
+
 def _embed_missing(wiki: str, names: List[str]) -> str:
-    """Append thumbnails for attached files the body does not already show."""
-    missing = [name for name in names if f"!{name}" not in wiki]
-    if not missing:
+    """Append image thumbnails (and plain video filenames) not already shown.
+
+    MP4/MOV clips attach fine but must not use ``!file|thumbnail!`` — Jira
+    shows Preview unavailable for non-images (sim_record video proof).
+    """
+    missing_images = [
+        name
+        for name in names
+        if _is_image_attachment(name) and f"!{name}" not in wiki
+    ]
+    missing_other = [
+        name
+        for name in names
+        if not _is_image_attachment(name) and name not in wiki
+    ]
+    chunks: List[str] = []
+    if missing_images:
+        chunks.extend(f"!{name}|thumbnail!" for name in missing_images)
+    if missing_other:
+        chunks.append("Attached clips: " + ", ".join(missing_other))
+    if not chunks:
         return wiki
-    return wiki + "\n\n" + "\n".join(f"!{name}|thumbnail!" for name in missing)
+    return wiki + "\n\n" + "\n".join(chunks)
 
 
 def create(
