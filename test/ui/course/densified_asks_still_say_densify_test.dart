@@ -28,8 +28,8 @@ const _lines = <String, String>{
   // LPT-804: SoftPulse-off densify — no correct-tile spoil.
   'act-01-01-02-checkpoint-pair':
       'Same rank in one seat — tap the matching holes.',
-  'act-01-01-03-guided-button':
-      'Tap the dealer button on the table — pick The seat with the D chip.',
+  // LPT-836: SoftPulse-quiet densify — no D-chip choice spoil.
+  'act-01-01-03-guided-button': 'Tap the dealer button on the table.',
   // LPT-830: SoftPulse-quiet densify — no BB choice spoil.
   'act-01-01-03-scaffolded-blinds':
       'Blinds are 1/2. Tap who posts the big blind.',
@@ -248,9 +248,14 @@ void main() {
 
   test(
     'Blinds SoftPulse-quiet / SoftPulse-off densify stems do not spoil '
-    'choices (LPT-830/831/832/833/834)',
+    'choices (LPT-830/831/832/833/834/836)',
     () {
       const spoils = <String, List<String>>{
+        'act-01-01-03-guided-button': [
+          'the seat with the d chip',
+          'pick the seat',
+          'posted 2 chips',
+        ],
         'act-01-01-03-scaffolded-blinds': [
           'two left',
           'posting 2',
