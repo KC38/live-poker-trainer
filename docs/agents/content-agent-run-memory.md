@@ -2080,3 +2080,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Meet Nit LPT-198 / LPT-216 tip-commented on tip SHA.
 - Prefer next NEVER: `lesson-06-11-03-*` adjust-tag / remaining S6 NEVER / Low curriculum.
 
+## Fold 2026-10-14cp (76127e14 Adjust TAG NEVER)
+
+- Tip-stable `76127e14` (#2297). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-06-11-03-*` Adjust TAG children under `unit-06-11-tag`:
+  - first-child `act-06-11-03-explain` SoftPulse CREDIT→TIGHTER→NO LIGHT + Dart `VsTagsDemo` / `LessonVsTagsExplainTable` still pre-split under respect-aggression-only → **LPT-709** (needs-human; Relates LPT-294). Race clone LPT-711 Done.
+  - checkpoint SoftPulse `cite` kind `none` densify PRESENT under Respect TAG aggression → **LPT-710** (needs-human; Relates LPT-294). Race clone LPT-712 Done.
+  - successors CHECK-RAISE→FOLD / RARELY CALLS→CHECK content-driven (do not reopen LPT-669); sizing SoftPulse `fold-k9`/`fold`/`check` one-per-press PRESENT (deals match Dart).
+- Curriculum **LPT-294** Done — do not clone / do not re-add needs-human.
+- Prefer next NEVER: `lesson-06-12-01-*` observe-wide / remaining S6 NEVER / Low curriculum.
+
