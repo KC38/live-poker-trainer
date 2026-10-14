@@ -3987,3 +3987,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Meet-LAG sample-limits residual **LPT-716** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-12-01-*: interactive structural clean on tip except LPT-713 SoftPulse + LPT-714/715 companions; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
 
+## Fold 2026-10-15at (ea0a1156 Meet-LAG sample-limits Prefer)
+
+- Tip-stable `ea0a1156` (#2571 ui-agent motion video on tip; non-content). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Catalog parents Done — no open-parent sync.
+- Prefer NEVER Meet-LAG sample-limits residual **LPT-716** re-check (`lesson-06-12-02-01/02/03`):
+  - SoftPulse WIDE→PRESSURE→MODEL + `explainGrading` "Wide → Pressure → Model." + Dart `LagModelDemo.points` WIDE/PRESSURE/MODEL / `LessonLagModelExplainTable` **concept-aligned** under Introduce LAG / The LAG model (not SoftPulse residual).
+  - checkpoint SoftPulse `limits` kind `none` densify PRESENT (prompt "Show beside LAG label?" / Sample limits vs Destiny) still under Introduce LAG-only → **LPT-716** still To Do (needs-human; Relates LPT-300).
+  - successors WIDE OPENS→BARRELS / RAISES→CALLS content-driven (do not reopen LPT-669); guided SoftPulse `lag` densify PRESENT; scaffolded SoftPulse `diff` one-per-press densify PRESENT; unguided SoftPulse `lag2` one-per-press densify PRESENT.
+- Curriculum **LPT-300** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-716/300/718/719/713/351.
+- Prefer next: NEVER Adjust-LAG SoftPulse residual **LPT-718** (+ **LPT-719**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits checkpoint residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
+
