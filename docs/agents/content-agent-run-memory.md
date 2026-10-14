@@ -1977,3 +1977,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer bullet tightened: next NEVER → `lesson-06-05-01-*` overbets-geometric children.
 - next: NEVER `lesson-06-05-01-*` / S6 NEVER / Low curriculum.
 - act-06-04-01-*: interactive structural clean on tip aside from LPT-696; SoftPulse explain successors via LPT-669 content-driven; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants second-pair honesty.
+
+## Fold 2026-10-14ch (b5ebcd9a overbets-geometric NEVER)
+
+- Tip-stable `b5ebcd9a` (#2283). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**; open Medium catalog parent **none**.
+- Discovery NEVER overbets-geometric children (`lesson-06-05-01-01/02/03`):
+  - `lesson-06-05-01-01-polar-overbets`: `act-06-05-01-explain` SoftPulse OVERBET→POLAR→GEO + Dart `OverbetGeometryDemo` / `LessonOverbetGeometryExplainTable` still pre-split ladder under polar-overbets-only → **LPT-699**; guided SoftPulse `polar-ob` densify PRESENT (`overbetGuidedOutcomes`).
+  - `lesson-06-05-01-02-geometric-sizes`: `act-06-05-01-02-explain-geometry` SoftPulse FLOP→TURN→RIVER content-driven; scaffolded SoftPulse `mid` one-per-press PRESENT (As/Kd·Ah/7c/2d/9s +2 suit variants match Dart); checkpoint SoftPulse `multi` kind `none` densify PRESENT under geometric-sizes — matches (no companion residual).
+  - `lesson-06-05-01-03-no-random-huge`: `act-06-05-01-03-explain-random` SoftPulse HUGE→MEDIUM→AVOID content-driven; unguided SoftPulse `avoid` densify PRESENT (`overbetAvoidOutcomes`).
+- Do **not** reopen LPT-669. Curriculum **LPT-267** Done — do not clone.
+- Tip-commented LPT-267/699 + Done-ack LPT-265/266/472/497/638 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-676…696 + parents + LPT-192.
+- Prefer bullet tightened: next NEVER → `lesson-06-06-01-*` blockers children.
+- next: NEVER `lesson-06-06-01-*` / S6 NEVER / Low curriculum.
+- act-06-05-01-*: interactive structural clean on tip aside from LPT-699; SoftPulse explain successors via LPT-669 content-driven; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants geometric-turn honesty.
+
