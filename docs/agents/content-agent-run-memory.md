@@ -2526,3 +2526,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-04-08-03-*` Adjust Maniac / Low residuals LPT-676…774.
 - act-04-08-02-*: interactive structural clean on tip except mix-discipline residual LPT-774; SoftPulse explain concept-aligned / Spot content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` observation tiles — do not file handFamily.
 
+## Fold 2026-10-14ej (554d7f24 discovery Adjust Maniac SoftPulse re-check)
+
+- Tip-stable `554d7f24` (#2361 Meet Maniac mix-discipline residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-04-08-03-01/02` under Adjust Maniac unit:
+  - first-child `act-04-08-03-explain` SoftPulse WIDER→HANG→EGO + `explainGrading` under still-merged Widen + Avoid-ego objectives (*expected packing* — no SoftPulse residual).
+  - successor `act-04-08-03-02-explain-cite` SoftPulse EVIDENCE→UNKNOWN content-driven; guided SoftPulse `call-wider` + scaffolded SoftPulse `val-m` + unguided SoftPulse `baseline-fold` PRESENT; checkpoint SoftPulse `cite-wide` kind `none` under Cite.
+- Curriculum **LPT-212** Done — do not clone / do not re-add needs-human. Tip-commented LPT-212/774 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…774 (leave ui-agent In Progress **LPT-771** alone).
+- Prefer next: NEVER `lesson-04-09-01-*` Confidence / Low residuals LPT-676…774.
+- act-04-08-03-*: interactive structural clean on tip; SoftPulse explain packing expected under dual-objective first child; successors content-driven (do not reopen LPT-669).
+
