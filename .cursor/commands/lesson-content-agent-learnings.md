@@ -111,11 +111,12 @@ Lesson-specific pattern notes (full history) live in
   `*-01-*` when it mints a new explain id) often author cues only
   (Continue, not SoftPulse walk) → **LPT-669** (S1 16 rows tip
   `14d32fb9`…`2905e103`; S2 +16 → **32** on tip `77669c63`; S3
-  postflop batch #2239 +14 → **46** on tip `c83ff628` — catalog
+  postflop batch #2239 +14 → **46** on tip `c83ff628`; S4 ranges /
+  player-type batch #2246 +26 → **72** on tip `a98abf0f` — catalog
   re-scan, not lesson clones). Append checklists; Done sibling clones
   (skip In Progress). Next NEVER walk: `lesson-02-06-01-*` live-habits
-  children (still unwired explains on LPT-669) / remaining S2–S3
-  NEVER / Low curriculum.
+  children (still unwired explains on LPT-669) / remaining S4 NEVER /
+  Low curriculum.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -159,6 +160,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14bi: Tip mid-run `2e42d603`→`1e75347d` (#2246 S4 `lessonSplitMap`)→`a98abf0f` (#2247 Effective-stacks learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**. Rebuilt **LPT-669** *46→72* on `a98abf0f` (+26 S4 SoftPulse explain successors). Effective-stacks NEVER walk retained on prior tip (eff/depth still listed). next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-02-06-01-*` live-habits / S4 NEVER / Low curriculum.
 - 2026-10-14bh: Tip-stable `2e42d603` (#2245 facing-raise learnings; tip after #2244 LPT-672 Done). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Medium **LPT-669** only (checklist still **46** — no rebuild). Discovery NEVER Effective-stacks children: first-child `act-02-05-01-explain-bb` SoftPulse CHIPS→BB→SHORTER→DEPTH **wired** (`bbStackDepth`); successors `act-02-05-01-02-explain-eff` (SHORTER→EFFECTIVE) + `act-02-05-01-03-explain-depth` (50BB→100BB→200BB) already on **LPT-669** (still tap/vis ABSENT); guided-convert SoftPulse `bb-100` densify PRESENT; scaffolded-eff/unguided-depth one-per-press densify PRESENT; checkpoint-200 hintless densify PRESENT (`deal.mode` `none` — no handFamily). Curriculum **LPT-130** Done — do not clone. Tip-commented **LPT-669**; Done-ack LPT-130/128/672 + parents/348/216/667. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-02-06-01-*` live-habits / Low curriculum.
 - 2026-10-14bg: Tip-stable `d0901a24` (#2244 LPT-672). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; open Mediums **LPT-669** (46) + ui-agent **LPT-672** In Progress (leave for Validated; do not Done from content-agent). **LPT-671** Done. Discovery NEVER Versus-open children: first-child `act-02-04-01-explain-vs` SoftPulse FOLD→CALL→3-BET **wired**; successors `act-02-04-01-02-explain-call` (PLAYABLE→IN POSITION→CALL) + `act-02-04-01-03-explain-threebet` (STRONG→3-BET) already on **LPT-669** (still tap/vis ABSENT); guided-fold SoftPulse `fold-j3`; scaffolded-call/unguided-3bet one-per-press; checkpoint-aq hintless; no distractor variants (LPT-627). Tip-commented **LPT-669**/672; Done-ack LPT-127/125/126/671 + parents/348/216/667; Meet Nit **LPT-198** re-verify still valid. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-02-05-01-*` stacks / Low curriculum.
 - 2026-10-14bf: Tip mid-run `219cf150`→`c83ff628` (#2239 S3 postflop `lessonSplitMap`)→`ff81af2c` (#2240 LPT-671 densify). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**. Rebuilt **LPT-669** *32→46* on `c83ff628` (+14 S3 SoftPulse explain successors). Discovery NEVER Open/fold children: first-child `act-02-03-01-explain-open` SoftPulse EARLY→BUTTON→LIVE 3x **wired**; successors `act-02-03-01-02-explain-strong` (STRONG→LIVE SIZE) + `act-02-03-01-03-explain-button` (BUTTON→WIDER) cues+`explainGrading` but Dart ABSENT → **LPT-669**; guided-utg/scaffolded-qq/unguided-btn SoftPulse maps PRESENT one-per-press OK; checkpoint-hj hintless; densify N/A (`poker_action_sizing`). Tip-commented **LPT-669**; Done-ack LPT-124/122/123/362/379/557/592 + S3 splits + parents/348/216; Meet Nit **LPT-198** still valid. next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-02-04-01-*` vs-open / Low curriculum.
