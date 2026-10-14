@@ -2701,14 +2701,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-06-08-01-*` mix / Low residuals LPT-676…779 (LPT-680…703).
 - act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
 
-## Fold 2026-10-14fd (83adc4c9 Prefer NEVER mixed-strategy SoftPulse re-check)
+## Fold 2026-10-14fd (83adc4c9 Prefer NEVER mix SoftPulse re-check)
 
 - Tip-stable `83adc4c9` (#2391 min-defense SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
-- Discovery NEVER `lesson-06-08-01-01/02/03` under mixed-strategy unit:
-  - first-child `act-06-08-01-explain` SoftPulse MIX→PURPOSE→STRONG + `explainGrading` "Mix → Purpose → Strong." + Dart `MixedStrategyDemo` still pre-split under mix-strong-only → residual **LPT-703** still To Do (needs-human).
-  - successors `act-06-08-01-02-explain-types` (TYPE→STATION→LESS) + `act-06-08-01-03-explain-random` (RANDOM→PURPOSE) content-driven; guided SoftPulse `protect` PRESENT (`7h`/`7d`·`7c`/`Kd`/`2s` +2 suit variants); scaffolded SoftPulse `less` densify PRESENT; unguided SoftPulse `no` densify PRESENT; checkpoint SoftPulse `freq` kind `none` densify PRESENT (matches no-pure-random — no companion residual).
+- Prefer NEVER SoftPulse re-check `lesson-06-08-01-01/02/03` under mixed-strategy unit:
+  - first-child `act-06-08-01-explain` SoftPulse MIX→PURPOSE→STRONG + `explainGrading` "Mix → Purpose → Strong." + Dart `MixedStrategyDemo.points` MIX/PURPOSE/STRONG (captions "With a reason" / "Not coin-flip" / "Mix sometimes") / `LessonMixedStrategyExplainTable` still pre-split under mix-strong-only → residual **LPT-703** still To Do (needs-human).
+  - successors `act-06-08-01-02-explain-types` (TYPE→STATION→LESS) + `act-06-08-01-03-explain-random` (RANDOM→PURPOSE) content-driven; guided SoftPulse `protect` PRESENT (`7h`/`7d`·`7c`/`Kd`/`2s` +2 suit variants match Dart); scaffolded SoftPulse `less` one-per-press densify PRESENT; unguided SoftPulse `no` one-per-press densify PRESENT; checkpoint SoftPulse `freq` kind `none` densify PRESENT (matches no-pure-random — no companion residual).
 - Curriculum **LPT-277** Done — do not clone / do not re-add needs-human.
-- Tip-commented LPT-703/277/198/216/701/702/704; leave open LPT-676…779; leave ui-agent alone.
-- Prefer next: NEVER `lesson-06-09-01-*` threebet-fourbet / Low residuals LPT-676…779 (LPT-680…704).
-- act-06-08-01-*: interactive structural clean on tip except LPT-703 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+- Tip-commented LPT-703/277/701/702/198/216/700/699/704; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-09-01-*` threebet SoftPulse Prefer re-check / Low residuals LPT-676…779 (LPT-680…704).
+- act-06-08-01-*: interactive structural clean on tip except LPT-703 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; guided stays fixed+variants set-of-sevens honesty.
 

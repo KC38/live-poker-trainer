@@ -509,16 +509,18 @@ Lesson-specific pattern notes (full history) live in
   MDF→INTUITION content-driven; guided SoftPulse `strong` densify PRESENT;
   scaffolded SoftPulse `fold` one-per-press PRESENT (9h/7d·Kc/Qh/9d/4c/8s
   match Dart); unguided SoftPulse `int` one-per-press PRESENT; curriculum
-  LPT-273 Done — do not clone / do not re-add needs-human; tip `83adc4c9` Prefer NEVER mixed-strategy children: first-child SoftPulse
+  LPT-273 Done — do not clone / do not re-add needs-human; tip `83adc4c9`
+  Prefer NEVER mix SoftPulse re-check: first-child SoftPulse
   MIX→PURPOSE→STRONG + Dart `MixedStrategyDemo` still pre-split under
   mix-strong-only → residual **LPT-703** still To Do (needs-human);
   successors TYPE→STATION→LESS / RANDOM→PURPOSE content-driven; guided
-  SoftPulse `protect` PRESENT (7h/7d·7c/Kd/2s + suit variants); scaffolded
-  SoftPulse `less` densify PRESENT; unguided SoftPulse `no` densify PRESENT;
-  checkpoint SoftPulse `freq` kind `none` densify PRESENT (matches
-  no-pure-random); curriculum LPT-277 Done — do not clone / do not re-add
-  needs-human; next: NEVER `lesson-06-09-01-*` threebet-fourbet / Low
-  residuals LPT-676…779 (LPT-680…704).
+  SoftPulse `protect` PRESENT (7h/7d·7c/Kd/2s + suit variants match Dart);
+  scaffolded SoftPulse `less` + unguided SoftPulse `no` one-per-press
+  densify PRESENT; checkpoint SoftPulse `freq` kind `none` densify PRESENT
+  (matches no-pure-random — no companion residual); curriculum LPT-277 Done
+  — do not clone / do not re-add needs-human; next: NEVER
+  `lesson-06-09-01-*` threebet SoftPulse Prefer re-check / Low residuals
+  LPT-676…779 (LPT-680…704).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -562,7 +564,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
-- 2026-10-14fd: Tip-stable `83adc4c9` (#2391 min-defense SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER mixed-strategy children `lesson-06-08-01-01/02/03`: first-child SoftPulse MIX→PURPOSE→STRONG + Dart `MixedStrategyDemo` still pre-split under mix-strong-only → residual **LPT-703** still To Do (needs-human); successors TYPE→STATION→LESS / RANDOM→PURPOSE content-driven (do not reopen LPT-669); guided SoftPulse `protect` PRESENT (7h/7d·7c/Kd/2s + suit variants); scaffolded SoftPulse `less` densify PRESENT; unguided SoftPulse `no` densify PRESENT; checkpoint SoftPulse `freq` kind `none` densify PRESENT (matches no-pure-random — no companion residual). Curriculum **LPT-277** Done — do not clone / do not re-add needs-human. Tip-commented LPT-703/277/198/216/701/702/704; leave open LPT-676…779; leave ui-agent alone. next: NEVER `lesson-06-09-01-*` threebet-fourbet / Low residuals LPT-676…779 (LPT-680…704).
+- 2026-10-14fd: Tip-stable `83adc4c9` (#2391 min-defense SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Prefer NEVER mix SoftPulse re-check `lesson-06-08-01-01/02/03`: first-child SoftPulse MIX→PURPOSE→STRONG + Dart `MixedStrategyDemo` still pre-split under mix-strong-only → residual **LPT-703** still To Do (needs-human); successors TYPE→STATION→LESS / RANDOM→PURPOSE content-driven (do not reopen LPT-669); guided SoftPulse `protect` PRESENT (7h/7d·7c/Kd/2s match Dart); scaffolded SoftPulse `less` + unguided SoftPulse `no` one-per-press densify PRESENT; checkpoint SoftPulse `freq` kind `none` densify PRESENT (matches no-pure-random — no companion residual). Curriculum **LPT-277** Done — do not clone / do not re-add needs-human. Tip-commented LPT-703/277/701/702/198/216/700/699/704; leave open LPT-676…779; leave ui-agent alone. Prefer next: NEVER `lesson-06-09-01-*` threebet SoftPulse Prefer re-check / Low residuals LPT-676…779 (LPT-680…704).
 
 - 2026-10-14fc: Tip-stable `1c6fcd76` (#2390 blockers SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER min-defense children `lesson-06-07-01-01/02/03`: first-child SoftPulse DEFEND→BLUFF→ENOUGH + Dart `DefendEnoughDemo` still pre-split under continue-catchers-only → residual **LPT-701** still To Do (needs-human); companion checkpoint SoftPulse `punish` under continue-catchers → residual **LPT-702** still To Do (needs-human); successors THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven (do not reopen LPT-669); guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `fold` one-per-press PRESENT (9h/7d·Kc/Qh/9d/4c/8s match Dart); unguided SoftPulse `int` one-per-press PRESENT. Curriculum **LPT-273** Done — do not clone / do not re-add needs-human. Tip-commented LPT-701/702/273/198/216/700/699/703; leave open LPT-676…779; leave ui-agent alone. next: NEVER `lesson-06-08-01-*` mix / Low residuals LPT-676…779 (LPT-680…703).
 
