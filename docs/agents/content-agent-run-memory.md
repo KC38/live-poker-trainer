@@ -3273,3 +3273,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-694/260/692/696/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - next: NEVER Polar SoftPulse residual **LPT-696** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-03-01-*: interactive structural clean on tip except LPT-694 SoftPulse residual; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing.
+
+## Fold 2026-10-14ho tip 4c574cdf (Polar SoftPulse Prefer LPT-696)
+
+- Tip-stable `4c574cdf` after #2469 Spot-caps SoftPulse Prefer on tip. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Polar SoftPulse residual **LPT-696** re-check (`lesson-06-04-01-01/02/03` / `act-06-04-01-*`): first-child SoftPulse POLAR→MERGED→SIZE + `explainGrading` "Polar → Merged → Size." + Dart `PolarMergedDemo.points` still under polarized-sizing-only → still To Do needs-human (Relates LPT-264). Successors MERGED→MEDIUM→VALUE / SIZE→SHAPE→MATCH content-driven (do not reopen LPT-669). Guided SoftPulse `polar` densify PRESENT; scaffolded SoftPulse `mid` one-per-press PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants match Dart LPT-395); unguided SoftPulse `mismatch` densify PRESENT; checkpoint SoftPulse `thin` kind `none` densify PRESENT under merged-thin-value — no companion residual.
+- Curriculum **LPT-264** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-696/264/699/694/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing (second-pair honesty).
