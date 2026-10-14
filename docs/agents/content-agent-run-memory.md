@@ -3721,3 +3721,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 ## Fold 2026-10-14
 
+## Fold 2026-10-15r tip 9f67745a (#2533 Compose Prefer → Pot SoftPulse LPT-798 Prefer)
+
+- Tip-stable `9f67745a` after #2533 SoftPulse residual Prefer LPT-795 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-07-04-01-01/02/03` / `act-07-04-01-*`: first-child SoftPulse LIMPED→SRP→3-4BET + `explainGrading` "Limped → SRP → 3-bet/4-bet." + Dart `PotTypePlansDemo.points` / `LessonPotTypePlansExplainTable` still pre-split under limped-pots-only → residual **LPT-798** still To Do (Relates LPT-320 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `both` under Plan 3-bet/4-bet → **LPT-799** still To Do; successors SoftPulse HEADS-UP→C-BET / LOW SPR→COMMIT content-driven (do not reopen LPT-669); guided SoftPulse `nuts` densify PRESENT; scaffolded SoftPulse `cb` densify PRESENT; unguided SoftPulse `commit` densify PRESENT.
+- Curriculum **LPT-320** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-798/799/320/795/800/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER HU SoftPulse residual **LPT-800** (+ player-count **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-04-01-*: interactive structural clean on tip except LPT-798 SoftPulse residual + LPT-799 companion; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
