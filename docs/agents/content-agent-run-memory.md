@@ -3417,3 +3417,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-795/796/317/794/798/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Pot SoftPulse residual **LPT-798** (+ ranges/SPR **LPT-799**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-03-01-*: interactive structural clean on tip except LPT-795 SoftPulse + LPT-796 rule residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided sizing `fixed`+variants — do not reopen LPT-627; scaffolded/unguided/checkpoint `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-14if tip b2c99142 (#2494 Compose Prefer → Pot LPT-798 Prefer)
+
+- Tip-stable `b2c99142` after #2494 Compose SoftPulse Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Pot SoftPulse residual re-check `lesson-07-04-01-01/02/03` / `act-07-04-01-*`: first-child SoftPulse LIMPED→SRP→3-4BET + `explainGrading` "Limped → SRP → 3-bet/4-bet." + Dart `PotTypePlansDemo` (LIMPED "Nut potential" / SRP "C-bet maps" / 3-4BET "High commit") still pre-split under limped-only → residual **LPT-798** still To Do (needs-human; Relates LPT-320 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `both` kind `none` densify PRESENT under 3-bet/4-bet-only → residual **LPT-799** still To Do; successors SoftPulse HEADS-UP→C-BET / LOW SPR→COMMIT content-driven (do not reopen LPT-669); guided SoftPulse `nuts` densify PRESENT; scaffolded SoftPulse `cb` one-per-press densify PRESENT; unguided SoftPulse `commit` one-per-press densify PRESENT.
+- Curriculum **LPT-320** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-798/799/320/795/800/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER HU SoftPulse residual **LPT-800** (+ player-count **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-04-01-*: interactive structural clean on tip except LPT-798 SoftPulse + LPT-799 Ranges/SPR residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` pot-type tiles — do not file handFamily.
