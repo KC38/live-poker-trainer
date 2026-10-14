@@ -3167,3 +3167,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER HU SoftPulse residual **LPT-800** (+ player-count **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-04-01-*: interactive structural clean on tip except LPT-798 SoftPulse + LPT-799 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14gz (403179b7 Prefer NEVER HU SoftPulse residual LPT-800 re-check)
+
+- Tip-stable `403179b7` (#2451 Pot SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER HU SoftPulse residual re-check `lesson-07-05-01-01/02/03`: first-child SoftPulse FEWER→THICKER→WIDEN + `explainGrading` "Fewer → Thicker → Widen." + Dart `HuVsMultiwayDemo` still pre-split under Bluff-less-multiway-only → residual **LPT-800** still To Do (needs-human; Relates LPT-323 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `input` kind `none` densify PRESENT ("Player count is?") under bluff-less-only → residual **LPT-801** still To Do; successors MULTIWAY→THICK VALUE / HEADS-UP→STEAL MORE content-driven; guided SoftPulse `no` densify PRESENT; unguided SoftPulse `thick` one-per-press densify PRESENT; scaffolded SoftPulse `higher` one-per-press densify PRESENT; curriculum **LPT-323** Done.
+- Tip-commented LPT-800/801/323/198/216/798/802/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Stack SoftPulse residual **LPT-802** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-05-01-*: interactive structural clean on tip except LPT-800 SoftPulse + LPT-801 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
+
