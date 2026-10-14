@@ -372,16 +372,22 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'You have 150bb. Villain has 60bb. Effective stack — pick 60bb.',
     'act-02-05-01-unguided-depth' =>
       'Which depth plays closest to a short-stack shove game — pick 50bb.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name 200bb in the idle bubble (LPT-785; SoftPulse LPT-653; same class
+    // as LPT-784 / LPT-783 / LPT-782 / LPT-672).
     'act-02-05-01-checkpoint-200' =>
-      'Blinds 2/5. You buy in for 1000 chips. Stack in big blinds — pick 200bb.',
+      'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
     'act-02-06-01-guided-follow' =>
       'Two seats act before you. What first — pick Watch what they do, then decide.',
     'act-02-06-01-scaffolded-verbal' =>
       'You want to raise. Clearest live choice — pick Say "raise" and put out the chips.',
     'act-02-06-01-unguided-protect' =>
       'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name You acted out of turn in the idle bubble (LPT-786; SoftPulse
+    // LPT-653; same class as LPT-785 / LPT-784 / LPT-672).
     'act-02-06-01-checkpoint-oot' =>
-      'Action is two seats left. You toss in a raise early. Problem — pick You acted out of turn.',
+      'Action is two seats left. You toss in a raise early — tap the matching problem.',
     'act-02-07-01-checkpoint-habit' =>
       'Full ring. Action two seats left. Your cards are uncovered. Fix — pick Cover your cards and wait your turn.',
     // SoftPulse off (kind: none); stem must not spoil Cutoff (LPT-675;
@@ -394,8 +400,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Nine-handed. Dealer button is on seat 7. Who acts first preflop — pick Seat left of the big blind (UTG).',
     'act-03-01-01-unguided' =>
       'You say "raise" then try to take it back to a call. Result — pick The raise stands — verbal is binding.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Effective 55bb / the 18 pot in the idle bubble (LPT-787;
+    // SoftPulse LPT-653; same class as LPT-785 / LPT-786 / LPT-672).
     'act-03-01-01-checkpoint' =>
-      'Hero 140bb, villain 55bb, pot 18. What matters most next — pick Effective 55bb and the 18 pot.',
+      'Hero 140bb, villain 55bb, pot 18 — tap what matters most next.',
     'act-03-02-01-guided' =>
       'Board Ks 9d 2c. You hold Kh Qh. Class — pick Made hand — top pair.',
     'act-03-02-01-scaffolded' =>
