@@ -1692,6 +1692,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Adjust-TAG SoftPulse residual **LPT-709** (+ cite **LPT-710**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15y tip 12d97b23 (#2541 Capstone Prefer → LPT-676 SoftPulse Prefer)
+
+- Tip-stable `12d97b23` after #2541 Capstone Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-04-04-01-01/02/03` / `act-04-04-01-*`: first-child SoftPulse VALUE→PRESSURE→SIZE + `explainGrading` "Value → Pressure → Size." + Dart `LessonSizingLanguageExplainTable` **concept-aligned**; guided SoftPulse `half` PRESENT (`Ah`/`Kd`·`As`/`7c`/`2d` +2 variants); scaffolded SoftPulse `big` one-per-press (`9h`/`8h`·`Kh`/`7h`/`2c`/`3d`/`As` +2 variants) + pressHint bluff-story + Dart densify "Missed draw on a scare river — sell polar pressure into 40." / felt "Sell polar pressure" still under Nearby → residual **LPT-676** still To Do (needs-human; Relates LPT-179 — do not re-add needs-human on curriculum); unguided SoftPulse `soft` densify PRESENT (`deal.mode` `none`); successors NEARBY→STORY / TINY→VALUE content-driven (do not reopen LPT-669); checkpoint SoftPulse `bad-1` kind `none` hintless under Avoid-tiny — no companion residual.
+- Curriculum **LPT-179** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-676/179/351/198/216/677; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER weigh-SPR residual **LPT-677** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-04-04-01-*: interactive structural clean on tip except LPT-676 curriculum residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
 ## Fold 2026-10-14
 
 ## Fold 2026-10-14bg (d0901a24 discovery versus-open split children)
@@ -3783,3 +3792,6 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-348/351/349/352/676/727/198/216; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER SoftPulse residual **LPT-676** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-10-0*: Capstone structural clean on tip; SoftPulse explains content-driven/wired; transfer hands intentional no-Hint — do not reopen LPT-626/667/348.
+
+## Fold 2026-10-14
+
