@@ -320,8 +320,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tap the community cards — pick the shared board in the middle.',
     'act-01-01-01-checkpoint-table' =>
       'Tap the cards that are only yours — pick the two at your seat.',
+    // SoftPulse-quiet densify (guided same-concept until Hint) — situation +
+    // tap verb only; never name Hearts/diamonds/clubs/spades in the idle
+    // bubble (LPT-814; SoftPulse LPT-653; same class as LPT-808 / LPT-672).
     'act-01-01-02-guided-suits' =>
-      'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
+      'Tap one community card of each suit.',
     'act-01-01-02-unguided-suited' =>
       'Tap the suited hole cards — pick Suited.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
@@ -329,11 +332,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // same class as LPT-803 / LPT-788 / LPT-672).
     'act-01-01-02-checkpoint-pair' =>
       'Same rank in one seat — tap the matching holes.',
-    // LPT-83 split successors (LPT-628 reopen) — same asks as their source steps.
+    // LPT-83 split successors (LPT-628 reopen) — SoftPulse-off densify stems
+    // must not name Hearts/diamonds/clubs/spades (LPT-814; same as guided).
     'act-01-01-02-01-scaffolded-suits' =>
-      'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
+      'Tap one community card of each suit.',
     'act-01-01-02-01-checkpoint-suits' =>
-      'Tap one community card of each suit — pick Hearts, diamonds, clubs, spades.',
+      'Tap one community card of each suit.',
     'act-01-01-02-03-guided-suited' =>
       'Tap the suited hole cards — pick Suited.',
     'act-01-01-03-guided-button' =>
