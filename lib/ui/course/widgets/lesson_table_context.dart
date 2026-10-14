@@ -3536,36 +3536,44 @@ LessonTableScene? resolveLessonTableScene(CourseActivity activity) {
     case 'act-07-12-01-cs':
       return const LessonTableScene(
         layout: LessonTableLayout.fiveTypeCsOutcomes,
+        // Conceptual label+exploit tiles — no decoy Them holes (LPT-671).
+        villainSeatCount: 0,
         caption: 'Sticky calls three streets. Label + exploit?',
       );
     case 'act-07-12-01-nit':
       return const LessonTableScene(
         layout: LessonTableLayout.fiveTypeNitOutcomes,
+        villainSeatCount: 0,
         caption: 'Tiny range, huge check-raise. Label + line?',
       );
     case 'act-07-12-01-maniac':
       return const LessonTableScene(
         layout: LessonTableLayout.fiveTypeManiacOutcomes,
+        villainSeatCount: 0,
         caption: 'Endless barrels, never folds. Label + line?',
       );
     case 'act-07-12-01-tag':
       return const LessonTableScene(
         layout: LessonTableLayout.fiveTypeTagOutcomes,
+        villainSeatCount: 0,
         caption: 'Selective entry, disciplined barrels. Label + vs raise?',
       );
     case 'act-07-12-01-lag':
       return const LessonTableScene(
         layout: LessonTableLayout.fiveTypeLagOutcomes,
+        villainSeatCount: 0,
         caption: 'Wide entry, sustained pressure, some folds. Label + line?',
       );
     case 'act-07-12-01-uncertain':
       return const LessonTableScene(
         layout: LessonTableLayout.fiveTypeUncertainOutcomes,
+        villainSeatCount: 0,
         caption: 'Three mixed samples only. Confidence?',
       );
     case 'act-07-12-01-retire':
       return const LessonTableScene(
         layout: LessonTableLayout.fiveTypeRetireOutcomes,
+        villainSeatCount: 0,
         caption: 'Old Calling Station now folds rivers and 3-bets light. Do?',
       );
     case 'act-01-04-01-unguided-end':

@@ -31057,6 +31057,34 @@ await tester.tap(find.text('NIT'));
   });
 
 
+  testWidgets('s7 five type final densify omits decoy Them holes', (
+    tester,
+  ) async {
+    for (final id in const [
+      'act-07-12-01-cs',
+      'act-07-12-01-nit',
+      'act-07-12-01-maniac',
+      'act-07-12-01-tag',
+      'act-07-12-01-lag',
+      'act-07-12-01-uncertain',
+      'act-07-12-01-retire',
+    ]) {
+      final scene = resolveLessonTableScene(
+        CourseActivity(
+          id: id,
+          order: 1,
+          stage: ActivityStage.scaffolded,
+          assessmentRole: AssessmentRole.checkpoint,
+          renderer: ActivityRenderer.playerReadClassify,
+          estimatedSeconds: 40,
+          accessibilityText: id,
+          acceptedGrades: const [SoftGrade.recommended],
+        ),
+      );
+      expect(scene?.villainSeatCount, 0, reason: id);
+    }
+  });
+
   testWidgets('s7 five type final cs taps Station value on felt', (tester) async {
     final activity = CourseActivity(
       id: 'act-07-12-01-cs',
@@ -31084,7 +31112,11 @@ await tester.tap(find.text('NIT'));
       resolveSelectIdentifyPresentation(activity),
       SelectIdentifyPresentation.tableRegionTap,
     );
+    // LPT-671: conceptual panels must not invent a face-down Them seat.
+    expect(resolveLessonTableScene(activity)?.villainSeatCount, 0);
     final controller = LessonActivityController(activity: activity);
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       _wrap(
         SelectIdentifyActivity(
@@ -31094,7 +31126,10 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.text('Sticky calls — pick the label + exploit.'), findsOneWidget);
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    expect(find.text('Them'), findsNothing);
+    expect(find.text('Station value'), findsOneWidget);
     await tester.tap(find.text('Station value'));
     await tester.pump();
     expect(controller.draft.choiceId, 'cs');
