@@ -3318,3 +3318,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-stable `08567641` after #2476 Suits Hint + #2475 Mix Prefer (Plan-3bet Prefer already on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
 - Prefer NEVER Hard-folds SoftPulse residual **LPT-705** re-check: HARD→COOLER→EGO still under hard-folds-only — still To Do (Relates LPT-285). Successors content-driven; densify PRESENT; curriculum LPT-285 Done — do not clone.
 - next: NEVER Selective SoftPulse residual **LPT-706** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
+## Fold 2026-10-14ht tip 44739c0b→ee7b93ca (Plan-3bet LPT-704 Prefer rescue after #2478)
+
+- Independent Prefer NEVER Plan-3bet SoftPulse residual re-check raced Hard-folds #2478; tip-comments landed on `44739c0b`; fold rescued onto tip `ee7b93ca`. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Plan-3bet SoftPulse residual re-check `lesson-06-09-01-01/02/03` / `act-06-09-01-*`: careful-4bet SoftPulse 4BET→STRONG→CAREFUL content-driven + guided SoftPulse `careful` densify PRESENT (`deal.mode` `none`); **middle-child** SoftPulse 3BET→4BET→DEPTH + `explainGrading` "3-bet → 4-bet → Depth." + Dart `ThreeBetFourBetSprDemo.points` 3BET/4BET/DEPTH still pre-split under plan-3bet-spr → residual **LPT-704** still To Do (needs-human; Relates LPT-282); scaffolded SoftPulse `small` one-per-press PRESENT (`Ah`/`Qd`·`8c`/`3h`/`2s` +2 suit variants; Dart `stackLabel` Stacks left 360 match); checkpoint SoftPulse `spr` kind `none` densify PRESENT under plan-3bet-spr — no companion residual; ego SoftPulse 4BET→EGO→AVOID content-driven + unguided SoftPulse `avoid` one-per-press densify PRESENT (do not reopen LPT-669).
+- Curriculum **LPT-282** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-704/282/705/703/198/216/351 on audit tip; residual re-confirmed on `ee7b93ca`.
+- Prefer next already advanced by #2478 → NEVER Selective SoftPulse residual **LPT-706** / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-09-01-*: interactive structural clean on tip except LPT-704 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants AQo-miss honesty.
+
