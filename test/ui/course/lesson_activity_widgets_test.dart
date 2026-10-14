@@ -4660,6 +4660,15 @@ await tester.tap(find.text('VALUE'));
       accessibilityText:
           'Calling Station is a working model: high participation, low folding.',
       acceptedGrades: const [SoftGrade.recommended],
+      // SoftPulse cues so isTableRegionTapActivity matches catalog (LPT-789).
+      teachSpec: const {
+        'deal': {'mode': 'none'},
+        'cues': [
+          {'press': 1, 'target': 'STATION', 'kind': 'soft_pulse'},
+          {'press': 2, 'target': 'HIGH', 'kind': 'soft_pulse'},
+          {'press': 3, 'target': 'LOW', 'kind': 'soft_pulse'},
+        ],
+      },
       coachMedia: const [
         CoachMediaRef(
           id: 'm',
@@ -4688,7 +4697,8 @@ await tester.tap(find.text('VALUE'));
     expect(find.text('Working model'), findsNothing);
     expect(find.text('Plays many pots'), findsNothing);
     expect(find.text('Rarely folds'), findsNothing);
-    expect(find.text('Temp tag'), findsOneWidget);
+    expect(find.text('Temp tag'), findsNothing);
+    expect(find.text('Working label'), findsOneWidget);
     expect(find.text('Often in pots'), findsOneWidget);
     expect(find.text('Sticks to heat'), findsOneWidget);
     expect(

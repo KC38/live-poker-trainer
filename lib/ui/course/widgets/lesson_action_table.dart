@@ -8270,7 +8270,8 @@ class CallingStationDemo extends StatefulWidget {
 
   static const points = <({String label, String caption, Color color})>[
     // Structural — Rex owns “working model / high participation / low folding.”
-    (label: 'STATION', caption: 'Temp tag', color: AppColors.gold),
+    // Caption matches Nit/Maniac type tiles (LPT-789); never ship Temp tag.
+    (label: 'STATION', caption: 'Working label', color: AppColors.gold),
     (label: 'HIGH', caption: 'Often in pots', color: AppColors.cream),
     (label: 'LOW', caption: 'Sticks to heat', color: AppColors.danger),
   ];
