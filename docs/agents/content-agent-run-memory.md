@@ -3831,6 +3831,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Timing SoftPulse residual **LPT-685** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-05-01-*: interactive structural clean on tip except LPT-684 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15ae tip b9f5a676 (#2551 Timing Prefer → Dynamics SoftPulse LPT-686 Prefer)
+
+- Tip-stable `b9f5a676` after #2551 Timing SoftPulse Prefer LPT-685 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Dynamics SoftPulse residual re-check `lesson-05-08-01-01/02/03` / `act-05-08-01-*`: first-child SoftPulse STUCK→TILTED→GEARS + `explainGrading` "Stuck → Tilted → Gears." + coachMedia "Tables change. Stuck, tilted, tired, or shifting gears — update." + Dart `TablesChangeDemo.points` STUCK/TILTED/GEARS still pre-split under tilted/stuck-only → residual **LPT-686** still To Do (Relates LPT-247 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `temp` kind `none` densify PRESENT (prompt "Dynamic reads should be?" / Fresh samples) under Gear changes → residual **LPT-687** still To Do; successors SoftPulse GEAR→CHANGE→SAMPLE / COOLER→CHASE→RESET content-driven (do not reopen LPT-669); guided SoftPulse `stuck` densify PRESENT; scaffolded SoftPulse `gear` one-per-press densify PRESENT; unguided SoftPulse `reset` map PRESENT (`Jh`/`Td`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants).
+- Curriculum **LPT-247** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-686/687/247/690/685/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Session SoftPulse residual **LPT-690** (+ **LPT-691**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-08-01-*: interactive structural clean on tip except LPT-686 SoftPulse + LPT-687 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/checkpoint outcome-tile `deal.mode` `none` — do not file handFamily.
+
 ## Fold 2026-10-15ad tip 0ed4c6ce (#2548/#2550 Lines Prefer → Timing SoftPulse LPT-685 Prefer)
 
 - Tip-stable `0ed4c6ce` after #2548/#2550 Lines SoftPulse Prefer LPT-684 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
