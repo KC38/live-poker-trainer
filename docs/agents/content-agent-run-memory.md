@@ -3572,3 +3572,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing.
 
+## Fold 2026-10-15b tip 40544d1f (#2512 Polar Prefer → Overbet SoftPulse LPT-699 Prefer)
+
+- Tip-stable `40544d1f` after #2512 SoftPulse residual Prefer LPT-696 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-06-05-01-01/02/03` / `act-06-05-01-*`: first-child SoftPulse OVERBET→POLAR→GEO + `explainGrading` "Overbet → Polar → Geometry." still pre-split under polar-overbets-only → residual **LPT-699** still To Do (Relates LPT-267 — do not re-add needs-human on curriculum; race clone LPT-698 Done — do not reopen); successors SoftPulse FLOP→TURN→RIVER / HUGE→MEDIUM→AVOID content-driven (do not reopen LPT-669); guided SoftPulse `polar-ob` densify PRESENT; scaffolded SoftPulse `mid` densify PRESENT; unguided SoftPulse `avoid` densify PRESENT; checkpoint SoftPulse `multi` under geometric-sizes — no companion residual.
+- Curriculum **LPT-267** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-699/267/700/696/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER Blockers SoftPulse residual **LPT-700** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-05-01-*: interactive structural clean on tip except LPT-699 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
