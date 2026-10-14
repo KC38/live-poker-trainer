@@ -3879,3 +3879,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 ## Fold 2026-10-14
 
+
+## Fold 2026-10-15ai tip c1a82425 (#2555 Spot-caps Prefer → Polar SoftPulse LPT-696 Prefer; mid-run #2556)
+
+- Tip-stable `c1a82425` after #2555 Spot-caps SoftPulse Prefer LPT-694 fold (mid-run #2556 SoftPulse-quiet densify; polar residual unchanged). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-06-04-01-01/02/03` / `act-06-04-01-*`: first-child SoftPulse POLAR→MERGED→SIZE + `explainGrading` "Polar → Merged → Size." + Dart `PolarMergedDemo.points` (POLAR/MERGED/SIZE) / layout "Tap Polar, then Merged, then Size." still pre-split under polarized-sizing-only → residual **LPT-696** still To Do (Relates LPT-264 — do not re-add needs-human on curriculum); successors SoftPulse MERGED→MEDIUM→VALUE / SIZE→SHAPE→MATCH content-driven (do not reopen LPT-669); guided SoftPulse `polar` densify PRESENT; scaffolded SoftPulse `mid` one-per-press PRESENT (fixed JhTd/QcTs3h2d7c + 2 suit variants match Dart LPT-395); unguided SoftPulse `mismatch` densify PRESENT; checkpoint SoftPulse `thin` kind `none` densify PRESENT under merged-thin-value — no companion residual.
+- Curriculum **LPT-264** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-696/264/699/694/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/unguided/checkpoint outcome-tile `deal.mode` `none` — do not file handFamily; scaffolded stays fixed+variants second-pair honesty.
+
+
+## Fold 2026-10-14
+
