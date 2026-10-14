@@ -4118,6 +4118,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; explain/checkpoint `deal.mode` `none` — do not file handFamily.
 
+## Fold 2026-10-15bj tip c20589d3 (#2595 → Thin SoftPulse residual LPT-682 Prefer)
+
+- Tip-stable `c20589d3` (#2595 Estimate SoftPulse Prefer LPT-681 on tip after #2594). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync.
+- Prefer NEVER Thin SoftPulse residual **LPT-682** re-check (`lesson-05-04-01-01/02/03` / `act-05-04-01-*`):
+  - first-child SoftPulse THIN→CATCH→BARRELS + `explainGrading` "Thin → Catch → Barrels." + Dart `ThinValueDemo` / `LessonThinValueExplainTable` (THIN "Extract light" / CATCH "Hero call" / BARRELS "Fire multi-street") / layout "Tap Thin, Catch, and Barrels." + coachMedia "Thin value needs calls. Bluff-catches need wide barrels." still pre-split under thin-value-only → **LPT-682** still To Do (needs-human; Relates LPT-233 — do not re-add needs-human on curriculum).
+  - companion checkpoint SoftPulse `read` kind `none` densify PRESENT ("Same hand, different types — what must change?") under thin-value-only → **LPT-683** still To Do (needs-human) — leave open; do not clone.
+  - successors SoftPulse MANIAC→BARREL→CALL / NIT→FOLDS→CHECK content-driven (do not reopen LPT-669); guided SoftPulse `tv` PRESENT (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants; SoftPulse map PRESENT; poker_action_sizing densify N/A); scaffolded SoftPulse `call-m` one-per-press PRESENT; unguided SoftPulse `check-nit` one-per-press PRESENT.
+- Curriculum **LPT-233** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-682/683/233/681/684/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Lines SoftPulse residual **LPT-684** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse + LPT-683 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; explain/checkpoint `deal.mode` `none` — do not file handFamily.
+
 ## Fold 2026-10-15bi tip eec34032 (#2594 → Estimate SoftPulse residual LPT-681 Prefer)
 
 - Tip-stable `eec34032` (#2594 weigh-SPR SoftPulse Prefer LPT-677 on tip after #2593). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
