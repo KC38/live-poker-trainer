@@ -359,7 +359,7 @@ const _lessons = <String, List<String>>{
     'act-04-10-02-jump-maniac',
   ],
   // LPT-222
-  'lesson-05-01-01-multiway-ranges': [
+  'lesson-05-01-01-01-nut-potential': [
     'act-05-01-01-explain',
     'act-05-01-01-guided',
     'act-05-01-01-scaffolded',
@@ -367,7 +367,7 @@ const _lessons = <String, List<String>>{
     'act-05-01-01-checkpoint',
   ],
   // LPT-225
-  'lesson-05-02-01-deep-stack-play': [
+  'lesson-05-02-01-01-deep-implied-odds': [
     'act-05-02-01-explain',
     'act-05-02-01-guided',
     'act-05-02-01-scaffolded',
@@ -375,7 +375,7 @@ const _lessons = <String, List<String>>{
     'act-05-02-01-checkpoint',
   ],
   // LPT-228
-  'lesson-05-03-01-implied-odds': [
+  'lesson-05-03-01-01-estimate-implied': [
     'act-05-03-01-explain',
     'act-05-03-01-guided',
     'act-05-03-01-scaffolded',
@@ -383,7 +383,7 @@ const _lessons = <String, List<String>>{
     'act-05-03-01-checkpoint',
   ],
   // LPT-231
-  'lesson-05-04-01-thin-value-bluffcatch': [
+  'lesson-05-04-01-01-thin-value': [
     'act-05-04-01-explain',
     'act-05-04-01-guided',
     'act-05-04-01-scaffolded',
@@ -391,7 +391,7 @@ const _lessons = <String, List<String>>{
     'act-05-04-01-checkpoint',
   ],
   // LPT-237
-  'lesson-05-06-01-line-reading': [
+  'lesson-05-06-01-01-update-each-street': [
     'act-05-06-01-explain',
     'act-05-06-01-guided',
     'act-05-06-01-scaffolded',
@@ -399,7 +399,7 @@ const _lessons = <String, List<String>>{
     'act-05-06-01-checkpoint',
   ],
   // LPT-234
-  'lesson-05-05-01-lines-and-probes': [
+  'lesson-05-05-01-01-read-check-raises': [
     'act-05-05-01-explain',
     'act-05-05-01-guided',
     'act-05-05-01-scaffolded',
@@ -407,7 +407,7 @@ const _lessons = <String, List<String>>{
     'act-05-05-01-checkpoint',
   ],
   // LPT-245
-  'lesson-05-08-01-table-dynamics': [
+  'lesson-05-08-01-01-tilted-opponents': [
     'act-05-08-01-explain',
     'act-05-08-01-guided',
     'act-05-08-01-scaffolded',
@@ -415,7 +415,7 @@ const _lessons = <String, List<String>>{
     'act-05-08-01-checkpoint',
   ],
   // LPT-248
-  'lesson-05-09-01-session-discipline': [
+  'lesson-05-09-01-01-stop-loss': [
     'act-05-09-01-explain',
     'act-05-09-01-guided',
     'act-05-09-01-scaffolded',
@@ -607,7 +607,7 @@ const _lessons = <String, List<String>>{
     'act-07-12-01-retire',
   ],
   // LPT-242
-  'lesson-05-07-01-timing-sizing-evidence': [
+  'lesson-05-07-01-01-timing-soft': [
     'act-05-07-01-explain',
     'act-05-07-01-guided',
     'act-05-07-01-scaffolded',

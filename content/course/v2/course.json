@@ -23682,14 +23682,12 @@
           "summary": "Nut potential and tighter multiway construction.",
           "lessons": [
             {
-              "id": "lesson-05-01-01-multiway-ranges",
+              "id": "lesson-05-01-01-01-nut-potential",
               "order": 1,
-              "title": "Build multiway ranges with nut potential",
-              "summary": "Prefer nutted hands and clean draws when many players see the flop.",
+              "title": "Prefer nut potential multiway",
+              "summary": "Continue with nutted hands and clean draws when many players see the flop.",
               "objectives": [
-                "Prefer nut potential multiway",
-                "Tighten speculative hands multiway",
-                "Value thicker when capped opponents call"
+                "Prefer nut potential multiway"
               ],
               "prerequisites": [
                 "lesson-04-10-02-section-four-jump-test"
@@ -23697,7 +23695,7 @@
               "remediationLessonIds": [
                 "lesson-04-10-02-section-four-jump-test"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [
                 "calling_station"
@@ -23811,8 +23809,130 @@
                   }
                 },
                 {
-                  "id": "act-05-01-01-scaffolded",
+                  "id": "act-05-01-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Nut potential and domination avoidance.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Prefer nut potential multiway"
+                  ],
+                  "prompt": "Multiway construction priority?",
+                  "choices": [
+                    {
+                      "id": "nuts",
+                      "label": "Nut potential and clean equity",
+                      "accessibilityText": "Nut potential and clean equity",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Avoid second-best traps."
+                      }
+                    },
+                    {
+                      "id": "any-two",
+                      "label": "Any two for initiative",
+                      "accessibilityText": "Any two for initiative",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Crowds punish air.",
+                        "betterChoiceId": "nuts"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "nuts",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-01-01-02-tighten-speculative",
+              "order": 2,
+              "title": "Tighten speculative hands multiway",
+              "summary": "Fold weak speculative hands out of position when the pot is crowded.",
+              "objectives": [
+                "Tighten speculative hands multiway"
+              ],
+              "prerequisites": [
+                "lesson-05-01-01-01-nut-potential"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-01-01-01-nut-potential"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-01-01-02-explain-speculative",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Tighten speculative hands multiway"
+                  ],
+                  "accessibilityText": "More players means more ways to be dominated. Small suited connectors out of position lose value multiway — fold them more.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-01-01-02-explain-speculative-line",
+                      "kind": "dialogue",
+                      "text": "More players means more ways to be dominated. Small suited connectors out of position lose value multiway — fold them more."
+                    }
+                  ],
+                  "okFeedback": "Crowded pot, out of position — fold more.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MULTIWAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "OOP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Multiway → OOP → Fold."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-05-01-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -23905,10 +24025,81 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-01-01-03-thick-value",
+              "order": 3,
+              "title": "Value thicker when callers stick",
+              "summary": "Bet strong hands for value when several capped players will call.",
+              "objectives": [
+                "Value thicker when capped opponents call"
+              ],
+              "prerequisites": [
+                "lesson-05-01-01-02-tighten-speculative"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-01-01-02-tighten-speculative"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "calling_station"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-01-01-03-explain-value",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Value thicker when capped opponents call"
+                  ],
+                  "accessibilityText": "Several capped callers pay off strong hands. With a set or better, bet for value and build the pot.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-01-01-03-explain-value-line",
+                      "kind": "dialogue",
+                      "text": "Several capped callers pay off strong hands. With a set or better, bet for value and build the pot."
+                    }
+                  ],
+                  "okFeedback": "Strong hand, many callers — bet.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CALLERS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "SET",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "BET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Callers → Set → Bet."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-01-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -24021,57 +24212,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-05-01-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Nut potential and domination avoidance.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Prefer nut potential multiway"
-                  ],
-                  "prompt": "Multiway construction priority?",
-                  "choices": [
-                    {
-                      "id": "nuts",
-                      "label": "Nut potential and clean equity",
-                      "accessibilityText": "Nut potential and clean equity",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Avoid second-best traps."
-                      }
-                    },
-                    {
-                      "id": "any-two",
-                      "label": "Any two for initiative",
-                      "accessibilityText": "Any two for initiative",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Crowds punish air.",
-                        "betterChoiceId": "nuts"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "nuts",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -24084,22 +24224,20 @@
           "summary": "150–300bb decisions and implied-odds geometry.",
           "lessons": [
             {
-              "id": "lesson-05-02-01-deep-stack-play",
+              "id": "lesson-05-02-01-01-deep-implied-odds",
               "order": 1,
-              "title": "Play 150–300bb stacks with a plan",
-              "summary": "Deep stacks reward implied odds, position, and disciplined folds.",
+              "title": "Depth pays speculative hands",
+              "summary": "Deep stacks give small pairs and suited hands implied odds.",
               "objectives": [
-                "Use depth for speculative implied odds",
-                "Avoid stacking off light deep",
-                "Plan future streets when SPR is high"
+                "Use depth for speculative implied odds"
               ],
               "prerequisites": [
-                "lesson-05-01-01-multiway-ranges"
+                "lesson-05-01-01-03-thick-value"
               ],
               "remediationLessonIds": [
-                "lesson-05-01-01-multiway-ranges"
+                "lesson-05-01-01-03-thick-value"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -24210,10 +24348,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-02-01-02-fold-light-deep",
+              "order": 2,
+              "title": "Don't stack off light deep",
+              "summary": "Fold one-pair hands to heavy pressure when stacks are deep.",
+              "objectives": [
+                "Avoid stacking off light deep"
+              ],
+              "prerequisites": [
+                "lesson-05-02-01-01-deep-implied-odds"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-02-01-01-deep-implied-odds"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-02-01-02-explain-stack-off",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid stacking off light deep"
+                  ],
+                  "accessibilityText": "Deep stacks mean big pots. One pair rarely wins a 250bb stack against heavy raises — fold top pair weak kicker.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-02-01-02-explain-stack-off-line",
+                      "kind": "dialogue",
+                      "text": "Deep stacks mean big pots. One pair rarely wins a 250bb stack against heavy raises — fold top pair weak kicker."
+                    }
+                  ],
+                  "okFeedback": "Deep and heavy heat — fold one pair.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "DEEP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "ONE PAIR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Deep → One pair → Fold."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-02-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -24322,10 +24529,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-02-01-03-plan-high-spr",
+              "order": 3,
+              "title": "Plan streets at high SPR",
+              "summary": "When SPR is high, plan turn and river before committing.",
+              "objectives": [
+                "Plan future streets when SPR is high"
+              ],
+              "prerequisites": [
+                "lesson-05-02-01-02-fold-light-deep"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-02-01-02-fold-light-deep"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-02-01-03-explain-plan",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Plan future streets when SPR is high"
+                  ],
+                  "accessibilityText": "High SPR leaves three streets of betting. Plan the turn and river before you put the stack in.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-02-01-03-explain-plan-line",
+                      "kind": "dialogue",
+                      "text": "High SPR leaves three streets of betting. Plan the turn and river before you put the stack in."
+                    }
+                  ],
+                  "okFeedback": "Plan turn and river first.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "SPR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "TURN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "RIVER",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "SPR → Turn → River."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-02-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -24381,7 +24657,7 @@
                 },
                 {
                   "id": "act-05-02-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -24441,22 +24717,20 @@
           "summary": "When depth pays you — and when it taxes you.",
           "lessons": [
             {
-              "id": "lesson-05-03-01-implied-odds",
+              "id": "lesson-05-03-01-01-estimate-implied",
               "order": 1,
-              "title": "Implied and reverse odds",
-              "summary": "Estimate future payoffs and domination risk, not only pot odds.",
+              "title": "Estimate implied odds",
+              "summary": "Depth plus opponents who pay raise implied odds.",
               "objectives": [
-                "Estimate implied odds from depth and tendencies",
-                "Spot reverse implied odds traps",
-                "Skip dominated draws multiway"
+                "Estimate implied odds from depth and tendencies"
               ],
               "prerequisites": [
-                "lesson-05-02-01-deep-stack-play"
+                "lesson-05-02-01-03-plan-high-spr"
               ],
               "remediationLessonIds": [
-                "lesson-05-02-01-deep-stack-play"
+                "lesson-05-02-01-03-plan-high-spr"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [
                 "calling_station",
@@ -24611,8 +24885,131 @@
                   }
                 },
                 {
-                  "id": "act-05-03-01-scaffolded",
+                  "id": "act-05-03-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Depth plus paying tendencies.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Estimate implied odds from depth and tendencies"
+                  ],
+                  "prompt": "Implied odds rise most when?",
+                  "choices": [
+                    {
+                      "id": "depth-pay",
+                      "label": "Deep stacks and opponents who pay",
+                      "accessibilityText": "Deep stacks and opponents who pay",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Both matter."
+                      }
+                    },
+                    {
+                      "id": "short",
+                      "label": "Short stacks always",
+                      "accessibilityText": "Short stacks always",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Short stacks cut implied odds.",
+                        "betterChoiceId": "depth-pay"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "depth-pay",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-03-01-02-reverse-implied",
+              "order": 2,
+              "title": "Spot reverse implied odds",
+              "summary": "Second-best hands lose more on later streets.",
+              "objectives": [
+                "Spot reverse implied odds traps"
+              ],
+              "prerequisites": [
+                "lesson-05-03-01-01-estimate-implied"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-03-01-01-estimate-implied"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-03-01-02-explain-reverse",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Spot reverse implied odds traps"
+                  ],
+                  "accessibilityText": "Reverse implied odds: when you hit second-best, you lose more later. Dominated broadway hands are the classic trap.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-03-01-02-explain-reverse-line",
+                      "kind": "dialogue",
+                      "text": "Reverse implied odds: when you hit second-best, you lose more later. Dominated broadway hands are the classic trap."
+                    }
+                  ],
+                  "okFeedback": "Second-best loses more — fold.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "REVERSE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DOMINATED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "FOLD",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Reverse → Dominated → Fold."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-05-03-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -24713,10 +25110,82 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-03-01-03-skip-dominated-draws",
+              "order": 3,
+              "title": "Skip dominated draws multiway",
+              "summary": "Non-nut draws multiway often make second-best hands.",
+              "objectives": [
+                "Skip dominated draws multiway"
+              ],
+              "prerequisites": [
+                "lesson-05-03-01-02-reverse-implied"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-03-01-02-reverse-implied"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "calling_station",
+                "nit"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-03-01-03-explain-draws",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Skip dominated draws multiway"
+                  ],
+                  "accessibilityText": "Multiway, a non-nut flush draw often loses to a bigger flush. Skip dominated draws.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-03-01-03-explain-draws-line",
+                      "kind": "dialogue",
+                      "text": "Multiway, a non-nut flush draw often loses to a bigger flush. Skip dominated draws."
+                    }
+                  ],
+                  "okFeedback": "Non-nut draw multiway — skip it.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NON-NUT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MULTIWAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SKIP",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Non-nut → Multiway → Skip."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-03-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -24814,57 +25283,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-05-03-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Depth plus paying tendencies.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Estimate implied odds from depth and tendencies"
-                  ],
-                  "prompt": "Implied odds rise most when?",
-                  "choices": [
-                    {
-                      "id": "depth-pay",
-                      "label": "Deep stacks and opponents who pay",
-                      "accessibilityText": "Deep stacks and opponents who pay",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Both matter."
-                      }
-                    },
-                    {
-                      "id": "short",
-                      "label": "Short stacks always",
-                      "accessibilityText": "Short stacks always",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Short stacks cut implied odds.",
-                        "betterChoiceId": "depth-pay"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "depth-pay",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -24877,22 +25295,20 @@
           "summary": "Extract thin value; catch when aggression is wide.",
           "lessons": [
             {
-              "id": "lesson-05-04-01-thin-value-bluffcatch",
+              "id": "lesson-05-04-01-01-thin-value",
               "order": 1,
-              "title": "Thin value and bluff-catches",
-              "summary": "Widen value versus sticky callers; widen catches versus maniacs.",
+              "title": "Thin value versus sticky callers",
+              "summary": "Bet medium hands for value when callers stick.",
               "objectives": [
-                "Choose thin value versus sticky callers",
-                "Widen bluff-catches versus over-aggression",
-                "Skip thin value versus overfolders"
+                "Choose thin value versus sticky callers"
               ],
               "prerequisites": [
-                "lesson-05-03-01-implied-odds"
+                "lesson-05-03-01-03-skip-dominated-draws"
               ],
               "remediationLessonIds": [
-                "lesson-05-03-01-implied-odds"
+                "lesson-05-03-01-03-skip-dominated-draws"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [
                 "calling_station",
@@ -25066,8 +25482,132 @@
                   }
                 },
                 {
-                  "id": "act-05-04-01-scaffolded",
+                  "id": "act-05-04-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "The recommendation only when the read justifies it.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Choose thin value versus sticky callers"
+                  ],
+                  "prompt": "Same hand, different types — what must change?",
+                  "choices": [
+                    {
+                      "id": "read",
+                      "label": "The line — only when the authored read justifies it",
+                      "accessibilityText": "The line — only when the authored read justifies it",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Baseline first; exploit second."
+                      }
+                    },
+                    {
+                      "id": "random",
+                      "label": "Flip a coin every time",
+                      "accessibilityText": "Flip a coin every time",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Not strategy.",
+                        "betterChoiceId": "read"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "read",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-04-01-02-wider-catches",
+              "order": 2,
+              "title": "Catch wider versus aggression",
+              "summary": "Call down wider when the barreler bluffs too often.",
+              "objectives": [
+                "Widen bluff-catches versus over-aggression"
+              ],
+              "prerequisites": [
+                "lesson-05-04-01-01-thin-value"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-04-01-01-thin-value"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "calling_station",
+                "maniac",
+                "nit"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-04-01-02-explain-catch",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Widen bluff-catches versus over-aggression"
+                  ],
+                  "accessibilityText": "Over-aggressive players barrel with air. Versus a Maniac, call down wider with medium pairs.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-04-01-02-explain-catch-line",
+                      "kind": "dialogue",
+                      "text": "Over-aggressive players barrel with air. Versus a Maniac, call down wider with medium pairs."
+                    }
+                  ],
+                  "okFeedback": "Wild barrels — catch wider.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "MANIAC",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BARREL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CALL",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Maniac → Barrel → Call."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-05-04-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -25186,10 +25726,83 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-04-01-03-skip-thin-overfolders",
+              "order": 3,
+              "title": "Skip thin value versus overfolders",
+              "summary": "Check medium hands back when worse hands will not call.",
+              "objectives": [
+                "Skip thin value versus overfolders"
+              ],
+              "prerequisites": [
+                "lesson-05-04-01-02-wider-catches"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-04-01-02-wider-catches"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [
+                "calling_station",
+                "maniac",
+                "nit"
+              ],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-04-01-03-explain-overfold",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Skip thin value versus overfolders"
+                  ],
+                  "accessibilityText": "Thin value needs worse hands to call. Versus a Nit who folds too much, check medium hands back.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-04-01-03-explain-overfold-line",
+                      "kind": "dialogue",
+                      "text": "Thin value needs worse hands to call. Versus a Nit who folds too much, check medium hands back."
+                    }
+                  ],
+                  "okFeedback": "Overfolder — check back.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NIT",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "FOLDS",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CHECK",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Nit → Folds → Check."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-04-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -25309,57 +25922,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-05-04-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "The recommendation only when the read justifies it.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Choose thin value versus sticky callers"
-                  ],
-                  "prompt": "Same hand, different types — what must change?",
-                  "choices": [
-                    {
-                      "id": "read",
-                      "label": "The line — only when the authored read justifies it",
-                      "accessibilityText": "The line — only when the authored read justifies it",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Baseline first; exploit second."
-                      }
-                    },
-                    {
-                      "id": "random",
-                      "label": "Flip a coin every time",
-                      "accessibilityText": "Flip a coin every time",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Not strategy.",
-                        "betterChoiceId": "read"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "read",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -25372,22 +25934,20 @@
           "summary": "Interpret and choose advanced flop/turn lines.",
           "lessons": [
             {
-              "id": "lesson-05-05-01-lines-and-probes",
+              "id": "lesson-05-05-01-01-read-check-raises",
               "order": 1,
-              "title": "Advanced flop lines",
-              "summary": "Interpret check-raises, probes, delayed c-bets, and donk bets in live cash.",
+              "title": "Read check-raises",
+              "summary": "Interpret check-raises by strength and player type.",
               "objectives": [
-                "Interpret check-raises by strength and type",
-                "Use probes and delayed c-bets with a plan",
-                "Treat donks as polarized information"
+                "Interpret check-raises by strength and type"
               ],
               "prerequisites": [
-                "lesson-05-04-01-thin-value-bluffcatch"
+                "lesson-05-04-01-03-skip-thin-overfolders"
               ],
               "remediationLessonIds": [
-                "lesson-05-04-01-thin-value-bluffcatch"
+                "lesson-05-04-01-03-skip-thin-overfolders"
               ],
-              "estimatedMinutes": 9,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -25497,10 +26057,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-05-01-02-probes-and-delays",
+              "order": 2,
+              "title": "Probes and delayed c-bets",
+              "summary": "Bet turns with a plan after the flop checks through.",
+              "objectives": [
+                "Use probes and delayed c-bets with a plan"
+              ],
+              "prerequisites": [
+                "lesson-05-05-01-01-read-check-raises"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-05-01-01-read-check-raises"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-05-01-02-explain-probe",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Use probes and delayed c-bets with a plan"
+                  ],
+                  "accessibilityText": "When the raiser checks the flop, you can probe the turn. If you checked as the raiser, a delayed c-bet works after they show weakness.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-05-01-02-explain-probe-line",
+                      "kind": "dialogue",
+                      "text": "When the raiser checks the flop, you can probe the turn. If you checked as the raiser, a delayed c-bet works after they show weakness."
+                    }
+                  ],
+                  "okFeedback": "Probe or delay — with a plan.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "PROBE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "DELAY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "PLAN",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Probe → Delay → Plan."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-05-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -25612,8 +26241,128 @@
                   }
                 },
                 {
+                  "id": "act-05-05-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Flop check then turn barrel after they show weakness.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Use probes and delayed c-bets with a plan"
+                  ],
+                  "prompt": "Delayed c-bet is best when?",
+                  "choices": [
+                    {
+                      "id": "delay",
+                      "label": "After flop check takes away their range strength",
+                      "accessibilityText": "After flop check takes away their range strength",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Turn barrels punish capped continues."
+                      }
+                    },
+                    {
+                      "id": "always",
+                      "label": "Every hand regardless",
+                      "accessibilityText": "Every hand regardless",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Need a reason.",
+                        "betterChoiceId": "delay"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "delay",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-05-01-03-donk-bets",
+              "order": 3,
+              "title": "Donk bets are polarized",
+              "summary": "Treat large donk bets as strong hands or air.",
+              "objectives": [
+                "Treat donks as polarized information"
+              ],
+              "prerequisites": [
+                "lesson-05-05-01-02-probes-and-delays"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-05-01-02-probes-and-delays"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-05-01-03-explain-donk",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Treat donks as polarized information"
+                  ],
+                  "accessibilityText": "A big lead into the preflop raiser is usually polarized: a strong hand or air, rarely medium.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-05-01-03-explain-donk-line",
+                      "kind": "dialogue",
+                      "text": "A big lead into the preflop raiser is usually polarized: a strong hand or air, rarely medium."
+                    }
+                  ],
+                  "okFeedback": "Strong or air.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "DONK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STRONG",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "AIR",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Donk → Strong → Air."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-05-05-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -25666,57 +26415,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-05-05-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Flop check then turn barrel after they show weakness.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Use probes and delayed c-bets with a plan"
-                  ],
-                  "prompt": "Delayed c-bet is best when?",
-                  "choices": [
-                    {
-                      "id": "delay",
-                      "label": "After flop check takes away their range strength",
-                      "accessibilityText": "After flop check takes away their range strength",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Turn barrels punish capped continues."
-                      }
-                    },
-                    {
-                      "id": "always",
-                      "label": "Every hand regardless",
-                      "accessibilityText": "Every hand regardless",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Need a reason.",
-                        "betterChoiceId": "delay"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "delay",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -25729,22 +26427,20 @@
           "summary": "Update ranges street by street.",
           "lessons": [
             {
-              "id": "lesson-05-06-01-line-reading",
+              "id": "lesson-05-06-01-01-update-each-street",
               "order": 1,
-              "title": "Street-by-street updates",
-              "summary": "Rebuild villain's range after each action; do not freeze on flop reads.",
+              "title": "Update each street",
+              "summary": "Rebuild villain's range after every action.",
               "objectives": [
-                "Update ranges after each street",
-                "Notice capped versus uncapped lines",
-                "Abandon stale flop stories"
+                "Update ranges after each street"
               ],
               "prerequisites": [
-                "lesson-05-05-01-lines-and-probes"
+                "lesson-05-05-01-03-donk-bets"
               ],
               "remediationLessonIds": [
-                "lesson-05-05-01-lines-and-probes"
+                "lesson-05-05-01-03-donk-bets"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -25797,6 +26493,131 @@
                   }
                 },
                 {
+                  "id": "act-05-06-01-unguided",
+                  "order": 2,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "Street-by-street updates.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Update ranges after each street"
+                  ],
+                  "prompt": "Best line-reading habit?",
+                  "choices": [
+                    {
+                      "id": "update",
+                      "label": "Rebuild after every action",
+                      "accessibilityText": "Rebuild after every action",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Stories go stale fast."
+                      }
+                    },
+                    {
+                      "id": "freeze",
+                      "label": "Lock flop forever",
+                      "accessibilityText": "Lock flop forever",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Misses turn/river info.",
+                        "betterChoiceId": "update"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "Update your read on every street."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "update",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-06-01-02-capped-lines",
+              "order": 2,
+              "title": "Capped versus uncapped lines",
+              "summary": "Checks cap a range; continued pressure keeps it uncapped.",
+              "objectives": [
+                "Notice capped versus uncapped lines"
+              ],
+              "prerequisites": [
+                "lesson-05-06-01-01-update-each-street"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-06-01-01-update-each-street"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-06-01-02-explain-capped",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Notice capped versus uncapped lines"
+                  ],
+                  "accessibilityText": "A check after betting usually caps the range — the strongest hands keep betting. Pressure on every street stays uncapped.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-06-01-02-explain-capped-line",
+                      "kind": "dialogue",
+                      "text": "A check after betting usually caps the range — the strongest hands keep betting. Pressure on every street stays uncapped."
+                    }
+                  ],
+                  "okFeedback": "Check caps; pressure stays uncapped.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "CHECK",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CAPPED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "UNCAPPED",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Check → Capped; pressure → Uncapped."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-05-06-01-guided",
                   "order": 2,
                   "stage": "guided",
@@ -25847,8 +26668,128 @@
                   }
                 },
                 {
-                  "id": "act-05-06-01-scaffolded",
+                  "id": "act-05-06-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Strong uncapped pressure — respect without a read.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Notice capped versus uncapped lines"
+                  ],
+                  "prompt": "Check-raise flop, bet turn, shove river usually means?",
+                  "choices": [
+                    {
+                      "id": "uncap",
+                      "label": "Uncapped — respect unless type says otherwise",
+                      "accessibilityText": "Uncapped — respect unless type says otherwise",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Baseline respect; exploit only with evidence."
+                      }
+                    },
+                    {
+                      "id": "bluff",
+                      "label": "Always bluff",
+                      "accessibilityText": "Always bluff",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Too absolute.",
+                        "betterChoiceId": "uncap"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "uncap",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-06-01-03-drop-stale-stories",
+              "order": 3,
+              "title": "Drop stale flop stories",
+              "summary": "Re-price draws and reads when the turn changes the story.",
+              "objectives": [
+                "Abandon stale flop stories"
+              ],
+              "prerequisites": [
+                "lesson-05-06-01-02-capped-lines"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-06-01-02-capped-lines"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-06-01-03-explain-stale",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Abandon stale flop stories"
+                  ],
+                  "accessibilityText": "Your flop plan can expire. When the turn bricks and the bet gets big, re-price — folding a draw is allowed.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-06-01-03-explain-stale-line",
+                      "kind": "dialogue",
+                      "text": "Your flop plan can expire. When the turn bricks and the bet gets big, re-price — folding a draw is allowed."
+                    }
+                  ],
+                  "okFeedback": "New street, new price.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "FLOP",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "TURN",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "RE-PRICE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Flop → Turn → Re-price."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-05-06-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -25949,113 +26890,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-05-06-01-unguided",
-                  "order": 4,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "Street-by-street updates.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Update ranges after each street"
-                  ],
-                  "prompt": "Best line-reading habit?",
-                  "choices": [
-                    {
-                      "id": "update",
-                      "label": "Rebuild after every action",
-                      "accessibilityText": "Rebuild after every action",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Stories go stale fast."
-                      }
-                    },
-                    {
-                      "id": "freeze",
-                      "label": "Lock flop forever",
-                      "accessibilityText": "Lock flop forever",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Misses turn/river info.",
-                        "betterChoiceId": "update"
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "Update your read on every street."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "update",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
-                },
-                {
-                  "id": "act-05-06-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Strong uncapped pressure — respect without a read.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Notice capped versus uncapped lines"
-                  ],
-                  "prompt": "Check-raise flop, bet turn, shove river usually means?",
-                  "choices": [
-                    {
-                      "id": "uncap",
-                      "label": "Uncapped — respect unless type says otherwise",
-                      "accessibilityText": "Uncapped — respect unless type says otherwise",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Baseline respect; exploit only with evidence."
-                      }
-                    },
-                    {
-                      "id": "bluff",
-                      "label": "Always bluff",
-                      "accessibilityText": "Always bluff",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Too absolute.",
-                        "betterChoiceId": "uncap"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "uncap",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -26068,22 +26902,20 @@
           "summary": "Use timing/sizing as soft evidence — never magic tells.",
           "lessons": [
             {
-              "id": "lesson-05-07-01-timing-sizing-evidence",
+              "id": "lesson-05-07-01-01-timing-soft",
               "order": 1,
-              "title": "Soft timing evidence",
-              "summary": "Live timing and sizing update confidence slightly; they never prove a hand.",
+              "title": "Timing is soft evidence",
+              "summary": "Timing nudges confidence; it never proves a hand.",
               "objectives": [
-                "Treat timing as soft evidence only",
-                "Read sizing as range language",
-                "Reject magic-tell claims"
+                "Treat timing as soft evidence only"
               ],
               "prerequisites": [
-                "lesson-05-06-01-line-reading"
+                "lesson-05-06-01-03-drop-stale-stories"
               ],
               "remediationLessonIds": [
-                "lesson-05-06-01-line-reading"
+                "lesson-05-06-01-03-drop-stale-stories"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -26196,8 +27028,128 @@
                   }
                 },
                 {
-                  "id": "act-05-07-01-scaffolded",
+                  "id": "act-05-07-01-checkpoint",
                   "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Tiny confidence update alongside stronger evidence.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Treat timing as soft evidence only"
+                  ],
+                  "prompt": "Best use of live timing?",
+                  "choices": [
+                    {
+                      "id": "tiny",
+                      "label": "Tiny update beside stronger reads",
+                      "accessibilityText": "Tiny update beside stronger reads",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Hierarchy of evidence."
+                      }
+                    },
+                    {
+                      "id": "only",
+                      "label": "Only evidence",
+                      "accessibilityText": "Only evidence",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Too weak alone.",
+                        "betterChoiceId": "tiny"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "tiny",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-07-01-02-sizing-language",
+              "order": 2,
+              "title": "Sizing is range language",
+              "summary": "Bet size hints at range shape, not one exact hand.",
+              "objectives": [
+                "Read sizing as range language"
+              ],
+              "prerequisites": [
+                "lesson-05-07-01-01-timing-soft"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-07-01-01-timing-soft"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-07-01-02-explain-sizing",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Read sizing as range language"
+                  ],
+                  "accessibilityText": "Bet size describes a range. A tiny bet into a big pot is often weak or blocking; a big bet is often polarized.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-07-01-02-explain-sizing-line",
+                      "kind": "dialogue",
+                      "text": "Bet size describes a range. A tiny bet into a big pot is often weak or blocking; a big bet is often polarized."
+                    }
+                  ],
+                  "okFeedback": "Size hints at range.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TINY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "BIG",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "RANGE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Tiny → Big → Range."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
+                  "id": "act-05-07-01-scaffolded",
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26250,10 +27202,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-07-01-03-no-magic-tells",
+              "order": 3,
+              "title": "No magic tells",
+              "summary": "Reject one-tell rules that claim to prove bluffs.",
+              "objectives": [
+                "Reject magic-tell claims"
+              ],
+              "prerequisites": [
+                "lesson-05-07-01-02-sizing-language"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-07-01-02-sizing-language"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-07-01-03-explain-magic",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Reject magic-tell claims"
+                  ],
+                  "accessibilityText": "No single tell proves a bluff. Rules like 'look left means bluff' are myths — reject them.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-07-01-03-explain-magic-line",
+                      "kind": "dialogue",
+                      "text": "No single tell proves a bluff. Rules like 'look left means bluff' are myths — reject them."
+                    }
+                  ],
+                  "okFeedback": "Reject magic tells.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TELL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "MYTH",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "REJECT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Tell → Myth → Reject."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-07-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26306,57 +27327,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-05-07-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Tiny confidence update alongside stronger evidence.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Treat timing as soft evidence only"
-                  ],
-                  "prompt": "Best use of live timing?",
-                  "choices": [
-                    {
-                      "id": "tiny",
-                      "label": "Tiny update beside stronger reads",
-                      "accessibilityText": "Tiny update beside stronger reads",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Hierarchy of evidence."
-                      }
-                    },
-                    {
-                      "id": "only",
-                      "label": "Only evidence",
-                      "accessibilityText": "Only evidence",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Too weak alone.",
-                        "betterChoiceId": "tiny"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "tiny",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -26369,22 +27339,20 @@
           "summary": "Tilt, stuck, tired, and gear changes.",
           "lessons": [
             {
-              "id": "lesson-05-08-01-table-dynamics",
+              "id": "lesson-05-08-01-01-tilted-opponents",
               "order": 1,
-              "title": "Live table dynamics",
-              "summary": "Spot tilted, stuck, tired, or gear-shifting opponents and update plans.",
+              "title": "Spot tilted or stuck players",
+              "summary": "Notice stuck or tilted opponents and widen value.",
               "objectives": [
-                "Identify tilted or stuck opponents",
-                "Recognize gear changes mid-session",
-                "Avoid chasing emotional pots"
+                "Identify tilted or stuck opponents"
               ],
               "prerequisites": [
-                "lesson-05-07-01-timing-sizing-evidence"
+                "lesson-05-07-01-03-no-magic-tells"
               ],
               "remediationLessonIds": [
-                "lesson-05-07-01-timing-sizing-evidence"
+                "lesson-05-07-01-03-no-magic-tells"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -26485,10 +27453,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-08-01-02-gear-changes",
+              "order": 2,
+              "title": "Gear changes mid-session",
+              "summary": "Re-sample when a player suddenly changes style.",
+              "objectives": [
+                "Recognize gear changes mid-session"
+              ],
+              "prerequisites": [
+                "lesson-05-08-01-01-tilted-opponents"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-08-01-01-tilted-opponents"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-08-01-02-explain-gears",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Recognize gear changes mid-session"
+                  ],
+                  "accessibilityText": "Players change gears. When a solid player suddenly plays wild, treat it as a new sample, not a fixed read.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-08-01-02-explain-gears-line",
+                      "kind": "dialogue",
+                      "text": "Players change gears. When a solid player suddenly plays wild, treat it as a new sample, not a fixed read."
+                    }
+                  ],
+                  "okFeedback": "New gear — sample again.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "GEAR",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHANGE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "SAMPLE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Gear → Change → Sample."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-08-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26543,8 +27580,128 @@
                   }
                 },
                 {
+                  "id": "act-05-08-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Temporary working models with samples.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Recognize gear changes mid-session"
+                  ],
+                  "prompt": "Dynamic reads should be?",
+                  "choices": [
+                    {
+                      "id": "temp",
+                      "label": "Fresh samples",
+                      "accessibilityText": "Fresh samples",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Update as the table shifts."
+                      }
+                    },
+                    {
+                      "id": "perm",
+                      "label": "Permanent seats",
+                      "accessibilityText": "Permanent seats",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Too rigid.",
+                        "betterChoiceId": "temp"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "temp",
+                        "kind": "none"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-08-01-03-no-emotional-pots",
+              "order": 3,
+              "title": "Skip emotional pots",
+              "summary": "Reset or step away instead of chasing losses.",
+              "objectives": [
+                "Avoid chasing emotional pots"
+              ],
+              "prerequisites": [
+                "lesson-05-08-01-02-gear-changes"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-08-01-02-gear-changes"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-08-01-03-explain-reset",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Avoid chasing emotional pots"
+                  ],
+                  "accessibilityText": "After a cooler you may want it back. Do not chase — reset or step away.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-08-01-03-explain-reset-line",
+                      "kind": "dialogue",
+                      "text": "After a cooler you may want it back. Do not chase — reset or step away."
+                    }
+                  ],
+                  "okFeedback": "Reset, don't chase.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "COOLER",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "CHASE",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "RESET",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Cooler → Chase → Reset."
+                  },
+                  "estimatedSeconds": 30
+                },
+                {
                   "id": "act-05-08-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -26648,57 +27805,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-05-08-01-checkpoint",
-                  "order": 5,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Temporary working models with samples.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Recognize gear changes mid-session"
-                  ],
-                  "prompt": "Dynamic reads should be?",
-                  "choices": [
-                    {
-                      "id": "temp",
-                      "label": "Fresh samples",
-                      "accessibilityText": "Fresh samples",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Update as the table shifts."
-                      }
-                    },
-                    {
-                      "id": "perm",
-                      "label": "Permanent seats",
-                      "accessibilityText": "Permanent seats",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Too rigid.",
-                        "betterChoiceId": "temp"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "temp",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -26711,22 +27817,20 @@
           "summary": "Cash guardrails and section checkpoint.",
           "lessons": [
             {
-              "id": "lesson-05-09-01-session-discipline",
+              "id": "lesson-05-09-01-01-stop-loss",
               "order": 1,
-              "title": "Keep cash session guardrails",
-              "summary": "Set stop-loss, win-goal awareness, and bankroll rules for 1/2.",
+              "title": "Set a stop-loss",
+              "summary": "Decide your session stop-loss before you sit.",
               "objectives": [
-                "Set session stop-losses",
-                "Respect bankroll for stakes",
-                "End sessions before leaks spiral"
+                "Set session stop-losses"
               ],
               "prerequisites": [
-                "lesson-05-08-01-table-dynamics"
+                "lesson-05-08-01-03-no-emotional-pots"
               ],
               "remediationLessonIds": [
-                "lesson-05-08-01-table-dynamics"
+                "lesson-05-08-01-03-no-emotional-pots"
               ],
-              "estimatedMinutes": 8,
+              "estimatedMinutes": 3,
               "difficultyBand": 4,
               "playerTypeRefs": [],
               "introducesPlayerTypes": [],
@@ -26827,10 +27931,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-09-01-02-bankroll-stakes",
+              "order": 2,
+              "title": "Bankroll fits stakes",
+              "summary": "Play only stakes your bankroll plan covers.",
+              "objectives": [
+                "Respect bankroll for stakes"
+              ],
+              "prerequisites": [
+                "lesson-05-09-01-01-stop-loss"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-09-01-01-stop-loss"
+              ],
+              "estimatedMinutes": 2,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-09-01-02-explain-bankroll",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Respect bankroll for stakes"
+                  ],
+                  "accessibilityText": "Your bankroll decides your stakes. If a bigger game is outside your plan, decline it.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-09-01-02-explain-bankroll-line",
+                      "kind": "dialogue",
+                      "text": "Your bankroll decides your stakes. If a bigger game is outside your plan, decline it."
+                    }
+                  ],
+                  "okFeedback": "Outside the plan — decline.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "BANKROLL",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STAKES",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "DECLINE",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Bankroll → Stakes → Decline."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-09-01-scaffolded",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26883,10 +28056,79 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-05-09-01-03-end-sessions",
+              "order": 3,
+              "title": "End sessions early",
+              "summary": "Quit before fatigue or a wild table turns into leaks.",
+              "objectives": [
+                "End sessions before leaks spiral"
+              ],
+              "prerequisites": [
+                "lesson-05-09-01-02-bankroll-stakes"
+              ],
+              "remediationLessonIds": [
+                "lesson-05-09-01-02-bankroll-stakes"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 4,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-05-09-01-03-explain-quit",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "End sessions before leaks spiral"
+                  ],
+                  "accessibilityText": "Tired at a wild table is a leak waiting to happen. Cash out before it spirals.",
+                  "coachMedia": [
+                    {
+                      "id": "act-05-09-01-03-explain-quit-line",
+                      "kind": "dialogue",
+                      "text": "Tired at a wild table is a leak waiting to happen. Cash out before it spirals."
+                    }
+                  ],
+                  "okFeedback": "Cash out early.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "TIRED",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "WILD",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 3,
+                        "target": "CASH OUT",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Tired → Wild → Cash out."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-05-09-01-unguided",
-                  "order": 4,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -26941,7 +28183,7 @@
                 },
                 {
                   "id": "act-05-09-01-checkpoint",
-                  "order": 5,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 45,
@@ -26994,7 +28236,7 @@
             },
             {
               "id": "lesson-05-09-02-section-five-checkpoint",
-              "order": 2,
+              "order": 4,
               "title": "Section 5 checkpoint",
               "summary": "Confirm multiway, depth, value, lines, and discipline.",
               "objectives": [
@@ -27003,10 +28245,10 @@
                 "Confirm soft evidence and discipline"
               ],
               "prerequisites": [
-                "lesson-05-09-01-session-discipline"
+                "lesson-05-09-01-03-end-sessions"
               ],
               "remediationLessonIds": [
-                "lesson-05-01-01-multiway-ranges"
+                "lesson-05-01-01-03-thick-value"
               ],
               "estimatedMinutes": 10,
               "difficultyBand": 4,
@@ -37141,7 +38383,7 @@
                 "lesson-07-10-02-capstone-3bet"
               ],
               "remediationLessonIds": [
-                "lesson-05-01-01-multiway-ranges"
+                "lesson-05-01-01-03-thick-value"
               ],
               "estimatedMinutes": 12,
               "difficultyBand": 5,
@@ -38834,6 +40076,51 @@
     "lesson-04-08-03-adjust-maniac": [
       "lesson-04-08-03-01-widen-value-catch",
       "lesson-04-08-03-02-cite-aggression"
+    ],
+    "lesson-05-01-01-multiway-ranges": [
+      "lesson-05-01-01-01-nut-potential",
+      "lesson-05-01-01-02-tighten-speculative",
+      "lesson-05-01-01-03-thick-value"
+    ],
+    "lesson-05-02-01-deep-stack-play": [
+      "lesson-05-02-01-01-deep-implied-odds",
+      "lesson-05-02-01-02-fold-light-deep",
+      "lesson-05-02-01-03-plan-high-spr"
+    ],
+    "lesson-05-03-01-implied-odds": [
+      "lesson-05-03-01-01-estimate-implied",
+      "lesson-05-03-01-02-reverse-implied",
+      "lesson-05-03-01-03-skip-dominated-draws"
+    ],
+    "lesson-05-04-01-thin-value-bluffcatch": [
+      "lesson-05-04-01-01-thin-value",
+      "lesson-05-04-01-02-wider-catches",
+      "lesson-05-04-01-03-skip-thin-overfolders"
+    ],
+    "lesson-05-05-01-lines-and-probes": [
+      "lesson-05-05-01-01-read-check-raises",
+      "lesson-05-05-01-02-probes-and-delays",
+      "lesson-05-05-01-03-donk-bets"
+    ],
+    "lesson-05-06-01-line-reading": [
+      "lesson-05-06-01-01-update-each-street",
+      "lesson-05-06-01-02-capped-lines",
+      "lesson-05-06-01-03-drop-stale-stories"
+    ],
+    "lesson-05-07-01-timing-sizing-evidence": [
+      "lesson-05-07-01-01-timing-soft",
+      "lesson-05-07-01-02-sizing-language",
+      "lesson-05-07-01-03-no-magic-tells"
+    ],
+    "lesson-05-08-01-table-dynamics": [
+      "lesson-05-08-01-01-tilted-opponents",
+      "lesson-05-08-01-02-gear-changes",
+      "lesson-05-08-01-03-no-emotional-pots"
+    ],
+    "lesson-05-09-01-session-discipline": [
+      "lesson-05-09-01-01-stop-loss",
+      "lesson-05-09-01-02-bankroll-stakes",
+      "lesson-05-09-01-03-end-sessions"
     ]
   }
 }

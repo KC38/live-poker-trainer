@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-05-04-01-thin-value-bluffcatch',
+            'lesson-05-04-01-01-thin-value',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

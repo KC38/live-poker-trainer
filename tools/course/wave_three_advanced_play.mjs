@@ -22,15 +22,15 @@ export const MEET_LAG = "lesson-06-12-02-meet-lag";
 /** @returns {object} Section 5 — Winning 1/2 */
 export function buildSectionFive() {
   const prev = SECTION_FOUR_EXIT_LESSON;
-  const L050101 = "lesson-05-01-01-multiway-ranges";
-  const L050201 = "lesson-05-02-01-deep-stack-play";
-  const L050301 = "lesson-05-03-01-implied-odds";
-  const L050401 = "lesson-05-04-01-thin-value-bluffcatch";
-  const L050501 = "lesson-05-05-01-lines-and-probes";
-  const L050601 = "lesson-05-06-01-line-reading";
-  const L050701 = "lesson-05-07-01-timing-sizing-evidence";
-  const L050801 = "lesson-05-08-01-table-dynamics";
-  const L050901 = "lesson-05-09-01-session-discipline";
+  const L050101 = "lesson-05-01-01-multiway-ranges"; // retired LPT-224: split in course.json (lessonSplitMap)
+  const L050201 = "lesson-05-02-01-deep-stack-play"; // retired LPT-227: split in course.json (lessonSplitMap)
+  const L050301 = "lesson-05-03-01-implied-odds"; // retired LPT-230: split in course.json (lessonSplitMap)
+  const L050401 = "lesson-05-04-01-thin-value-bluffcatch"; // retired LPT-233: split in course.json (lessonSplitMap)
+  const L050501 = "lesson-05-05-01-lines-and-probes"; // retired LPT-236: split in course.json (lessonSplitMap)
+  const L050601 = "lesson-05-06-01-line-reading"; // retired LPT-239: split in course.json (lessonSplitMap)
+  const L050701 = "lesson-05-07-01-timing-sizing-evidence"; // retired LPT-244: split in course.json (lessonSplitMap)
+  const L050801 = "lesson-05-08-01-table-dynamics"; // retired LPT-247: split in course.json (lessonSplitMap)
+  const L050901 = "lesson-05-09-01-session-discipline"; // retired LPT-250: split in course.json (lessonSplitMap)
   const L050902 = "lesson-05-09-02-section-five-checkpoint";
 
   return {

@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-05-01-01-multiway-ranges',
+            'lesson-05-01-01-01-nut-potential',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

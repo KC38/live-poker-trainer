@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-05-06-01-line-reading',
+            'lesson-05-06-01-01-update-each-street',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),

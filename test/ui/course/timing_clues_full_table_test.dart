@@ -23,7 +23,7 @@ Widget _frame(Widget child) {
       home: Scaffold(
         body: TableFeaturesScope(
           features: TableFeatures.forLessonId(
-            'lesson-05-07-01-timing-sizing-evidence',
+            'lesson-05-07-01-01-timing-soft',
           ),
           child: LessonFrameScope(onLocalMiss: (_) {}, child: child),
         ),
