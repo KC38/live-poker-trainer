@@ -3312,3 +3312,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-703/277/704/701/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Plan-3bet SoftPulse residual **LPT-704** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-08-01-*: interactive structural clean on tip except LPT-703 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); scaffolded/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; guided stays fixed+variants set-of-sevens honesty.
+
+## Fold 2026-10-14hu tip 08567641 (#2475/#2476 → Hard-folds LPT-705 Prefer)
+
+- Tip-stable `08567641` after #2476 Suits Hint + #2475 Mix Prefer (Plan-3bet Prefer already on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Prefer NEVER Hard-folds SoftPulse residual **LPT-705** re-check: HARD→COOLER→EGO still under hard-folds-only — still To Do (Relates LPT-285). Successors content-driven; densify PRESENT; curriculum LPT-285 Done — do not clone.
+- next: NEVER Selective SoftPulse residual **LPT-706** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
