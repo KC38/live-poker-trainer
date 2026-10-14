@@ -2386,4 +2386,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-157** Done — do not clone / do not re-add needs-human; distinct from flop **LPT-753**. Tip-commented LPT-157/755 + Meet Nit LPT-198 / LPT-216; leave open LPT-755/754/753….
 - Prefer next: NEVER `lesson-03-07-01-*` multiway / Low residuals LPT-676…755.
 
+## Fold 2026-10-14dv (240678aa discovery multiway SoftPulse residual)
+
+- Tip-stable `240678aa` (#2344). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-03-07-01-01/02/03` under multiway unit:
+  - first-child `act-03-07-01-explain` SoftPulse STRONGER→FEWER→NUTS + `explainGrading` under Stronger-value-only → filed **LPT-756** (needs-human; Relates LPT-160); also checkpoint SoftPulse `obs-many` still under Nut-potential.
+  - successors `act-03-07-01-02-explain-crowd` (CROWD→FEWER BLUFFS) + `act-03-07-01-03-explain-nuts` (NUTS→POSITION) content-driven; guided SoftPulse `check-2p` + scaffolded SoftPulse `mw-check` one-per-press + unguided SoftPulse `sc` + checkpoint SoftPulse `obs-many` kind `none` densify PRESENT.
+- Curriculum **LPT-160** Done — do not clone / do not re-add needs-human; distinct from river **LPT-755**. Tip-commented LPT-160/756/755 + Meet Nit LPT-198 / LPT-216; leave open LPT-756/755/754….
+- Prefer next: NEVER `lesson-03-08-01-*` leak-repair / Low residuals LPT-676…756.
 

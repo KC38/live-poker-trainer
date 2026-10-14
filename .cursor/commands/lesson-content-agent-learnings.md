@@ -252,10 +252,14 @@ Lesson-specific pattern notes (full history) live in
   tip `af941fdf` Prefer NEVER river-decisions: SoftPulse VALUE→BLUFF→CATCH→FOLD
   under River-value → **LPT-755**; successors STORY→BLUFF / BLUFF-CATCH→FOLD
   content-driven (LPT-157 Done — do not re-add needs-human; distinct from LPT-753);
+  tip `240678aa` Prefer NEVER multiway: SoftPulse STRONGER→FEWER→NUTS under
+  Stronger-value → **LPT-756** (+ checkpoint `obs-many` under Nut-potential);
+  successors CROWD→FEWER BLUFFS / NUTS→POSITION content-driven
+  (LPT-160 Done — do not re-add needs-human; distinct from LPT-755);
   curriculum
-  LPT-668/330/333/336/192/100/103/106/114/117/121/124/127/130/133/140/143/146/151/154/157 Done —
-  do not re-add needs-human; next: NEVER `lesson-03-07-01-*` multiway /
-  Low residuals LPT-676…755.
+  LPT-668/330/333/336/192/100/103/106/114/117/121/124/127/130/133/140/143/146/151/154/157/160 Done —
+  do not re-add needs-human; next: NEVER `lesson-03-08-01-*` leak-repair /
+  Low residuals LPT-676…756.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -299,6 +303,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14dv: Tip-stable `240678aa` (#2344 river SoftPulse residual learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER multiway children `lesson-03-07-01-01/02/03`: SoftPulse STRONGER→FEWER→NUTS under Stronger-value → **LPT-756** (+ checkpoint `obs-many` under Nut-potential); successors CROWD→FEWER BLUFFS / NUTS→POSITION content-driven; guided SoftPulse `check-2p` + scaffolded SoftPulse `mw-check` one-per-press + unguided SoftPulse `sc` + checkpoint SoftPulse `obs-many` kind `none` densify PRESENT. Curriculum **LPT-160** Done — do not clone / do not re-add needs-human; distinct from river **LPT-755**. Tip-commented LPT-160/756/755 + Meet Nit LPT-198 / LPT-216; leave open LPT-756/755/754…. next: NEVER `lesson-03-08-01-*` leak-repair / Low residuals LPT-676…756.
 - 2026-10-14du: Tip-stable `af941fdf` (#2343 turn SoftPulse residual learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER river-decisions children `lesson-03-06-01-01/02/03`: SoftPulse VALUE→BLUFF→CATCH→FOLD under River-value → **LPT-755**; successors STORY→BLUFF / BLUFF-CATCH→FOLD content-driven; guided SoftPulse `val-bet` + scaffolded SoftPulse `bluff` + unguided SoftPulse `fold-weak` + checkpoint SoftPulse `role-catch` kind `none` PRESENT. Curriculum **LPT-157** Done — do not clone / do not re-add needs-human; distinct from flop **LPT-753**. Tip-commented LPT-157/755 + Meet Nit LPT-198 / LPT-216; leave open LPT-755/754/753…. next: NEVER `lesson-03-07-01-*` multiway / Low residuals LPT-676…755.
 - 2026-10-14dt: Tip-stable `6c7948fd` (#2341 Value SoftPulse residual learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER turn-decisions children `lesson-03-05-01-01/02/03`: SoftPulse BRICK→CHANGE→BARREL→DELAY under Brick-or-change → **LPT-754**; successors BRICK→BARREL / CHECKED BACK→BET TURN content-driven; guided SoftPulse `brick` + scaffolded SoftPulse `barrel` + unguided SoftPulse `delay-bet` + checkpoint SoftPulse `give-up` kind `none` densify PRESENT. Curriculum **LPT-154** Done — do not clone / do not re-add needs-human; distinct from Advanced lines **LPT-684**. Tip-commented LPT-154/754 + Meet Nit LPT-198 / LPT-216; leave open LPT-754/753/752…. next: NEVER `lesson-03-06-01-*` river-decisions / Low residuals LPT-676…754.
 - 2026-10-14ds: Tip-stable `2f2a4a94` (#2340 Soft timing densify; after #2339 outs SoftPulse learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER flop-decisions children `lesson-03-04-01-01/02/03`: SoftPulse VALUE→C-BET→CHECK→CALL→FOLD→RAISE under Value-bet → **LPT-753**; successors PREFLOP RAISER→C-BET / RAISE→CALL→FOLD content-driven; guided SoftPulse `bet-tp` + scaffolded SoftPulse `cbet` + unguided SoftPulse `raise-set` + checkpoint SoftPulse `fold-bp` kind `none` PRESENT. Curriculum **LPT-151** Done — do not clone / do not re-add needs-human; distinct from Advanced lines **LPT-684**. Tip-commented LPT-151/753 + Meet Nit LPT-198 / LPT-216; leave open LPT-753/752/751…. next: NEVER `lesson-03-05-01-*` turn-decisions / Low residuals LPT-676…753.
