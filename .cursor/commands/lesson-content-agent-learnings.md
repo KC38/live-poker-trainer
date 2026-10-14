@@ -775,8 +775,15 @@ Lesson-specific pattern notes (full history) live in
   re-add needs-human on curriculum); successors WIDE OPENS→BARRELS / RAISES→CALLS
   content-driven; guided SoftPulse `lag` densify PRESENT; scaffolded SoftPulse `diff`
   densify PRESENT; unguided SoftPulse `lag2` densify PRESENT; curriculum LPT-300 Done —
-  do not clone / do not re-add needs-human; next: NEVER Adjust-LAG SoftPulse residual
-  **LPT-718** (+ cite **LPT-719**) re-check; tip `b26f0f32` Prefer
+  do not clone / do not re-add needs-human; tip `ecfa4090` Prefer NEVER Adjust-LAG SoftPulse
+  residual **LPT-718** still To Do (CALL→TRAP→FANCY LESS + Dart `VsLagsDemo` /
+  `LessonVsLagsExplainTable` under Call-wider-only; Relates LPT-303 — do not re-add
+  needs-human on curriculum) + cite **LPT-719** still To Do; successors STRONG HAND→LET
+  THEM BET / NO BIG BLUFF→LET THEM content-driven; guided SoftPulse `call` PRESENT;
+  scaffolded SoftPulse `trap` one-per-press PRESENT; unguided SoftPulse `avoid`
+  one-per-press densify PRESENT; curriculum LPT-303 Done — do not clone / do not
+  re-add needs-human; next: NEVER Mix-five SoftPulse residual **LPT-721** re-check;
+  tip `b26f0f32` Prefer
   NEVER Meet-TAG working-model residual **LPT-708** still To Do (checkpoint SoftPulse
   `model` working-model-vs-insult under Introduce TAG-only; SoftPulse TIGHT→AGGRO→MODEL
   concept-aligned; Relates LPT-291 — do not re-add needs-human on curriculum); successors FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE
