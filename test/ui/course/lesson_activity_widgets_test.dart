@@ -16903,14 +16903,21 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
+    // LPT-817: SoftPulse-quiet idle densify stem must not name Working model.
     expect(
-      find.text(
-        'A player-type label comes from evidence — temporary, not a soul verdict.',
-      ),
+      find.text('A player-type label is temporary evidence — tap what it is.'),
       findsOneWidget,
     );
     expect(
-      find.text('A player-type label is a working model — tap it.'),
+      find.text(
+        'A player-type label is temporary evidence — tap Working model.',
+      ),
+      findsNothing,
+    );
+    expect(
+      find.text(
+        'A player-type label is temporary evidence — pick Working model.',
+      ),
       findsNothing,
     );
     expect(find.text('Working model'), findsOneWidget);

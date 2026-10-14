@@ -115,8 +115,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Meet the Calling Station densified asks (LPT-420) — same path.
     'act-04-06-02-guided' =>
       'Sticky second pair called three streets — pick Station.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Working model (LPT-817;
+    // SoftPulse LPT-653; same class as LPT-814 / LPT-811).
     'act-04-06-02-scaffolded' =>
-      'A player-type label is temporary evidence — pick Working model.',
+      'A player-type label is temporary evidence — tap what it is.',
     'act-04-06-02-unguided' =>
       'Limps, calls, never folds turns — pick Station.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
