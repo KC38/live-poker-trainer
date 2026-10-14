@@ -361,8 +361,17 @@ Lesson-specific pattern notes (full history) live in
   `rise` + unguided SoftPulse `update` densify PRESENT; checkpoint
   SoftPulse `limits` kind `none` (sample-limits note under Raise
   confidence); curriculum LPT-215 Done — do not clone / do not re-add
-  needs-human; next: NEVER `lesson-04-10-01-*` exploit-checkpoints /
-  Low residuals LPT-676…775.
+  needs-human; tip `2d2ca320` Prefer NEVER Same-hand exploit:
+  SoftPulse CARDS→SEATS→EVIDENCE under Change-lines-by-type
+  **concept-aligned** (no SoftPulse residual); Keep-baseline still
+  never recommended + checkpoint empty-board vs ×board → **LPT-779**
+  (needs-human; Relates LPT-218); successor SoftPulse TYPE→POSITION→STACK
+  content-driven; guided SoftPulse `st-val` + scaffolded SoftPulse
+  `nit-fold` + unguided SoftPulse `m-call` densify PRESENT; curriculum
+  LPT-218 Done — do not clone / do not re-add needs-human; distinct from
+  Same-cards SoftPulse LPT-725 / Mix-five SoftPulse LPT-721 / Confidence
+  SoftPulse LPT-775; next: NEVER `lesson-04-10-02-*` Section 4 jump /
+  Low residuals LPT-676…779.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -406,6 +415,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14el: Tip-stable `2d2ca320` (#2364 SoftPulse-off densify stems). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER Same-hand exploit children `lesson-04-10-01-01/02`: SoftPulse CARDS→SEATS→EVIDENCE under Change-lines-by-type **concept-aligned** (no SoftPulse residual); Keep-baseline still never recommended + checkpoint empty-board vs type×position×stack×board → **LPT-779** (needs-human; Relates LPT-218); successor SoftPulse TYPE→POSITION→STACK content-driven; guided SoftPulse `st-val` + scaffolded SoftPulse `nit-fold` + unguided SoftPulse `m-call` densify PRESENT (`fixed`+variants); checkpoint SoftPulse `lab-steal` kind `none` hintless densify PRESENT. Curriculum **LPT-218** Done — do not clone / do not re-add needs-human; distinct from Same-cards SoftPulse **LPT-725** / Mix-five SoftPulse **LPT-721** / Confidence SoftPulse **LPT-775**. Tip-commented LPT-779/218/216/775/725; leave open LPT-676…779. next: NEVER `lesson-04-10-02-*` Section 4 jump / Low residuals LPT-676…779.
 - 2026-10-14ek: Tip-stable `7d9ff87c` (#2362 Adjust Maniac SoftPulse re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Confidence children `lesson-04-09-01-01/02/03`: SoftPulse OBSERVE→SAMPLES→SHOWDOWNS under Observation-not-certainty → **LPT-775** (needs-human; Relates LPT-215; race clone **LPT-776** Done Duplicate); successors SAMPLES→SHOWDOWNS / NEW EVIDENCE→RETIRE content-driven; guided SoftPulse `one-note` + scaffolded SoftPulse `rise` + unguided SoftPulse `update` densify PRESENT; checkpoint SoftPulse `limits` kind `none` (sample-limits note under Raise confidence). Curriculum **LPT-215** Done — do not clone / do not re-add needs-human; distinct from Sticky **LPT-761** / Narrow **LPT-768** / Wild **LPT-773** / Observe-wide **LPT-713**. Tip-commented LPT-775/215/776/774 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…775. next: NEVER `lesson-04-10-01-*` exploit-checkpoints / Low residuals LPT-676…775.
 - 2026-10-14ej: Tip-stable `554d7f24` (#2361 Meet Maniac mix-discipline residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Adjust Maniac children `lesson-04-08-03-01/02`: SoftPulse WIDER→HANG→EGO under still-merged Widen + Avoid-ego objectives (*expected packing* — no SoftPulse residual); successor Cite SoftPulse EVIDENCE→UNKNOWN content-driven; guided SoftPulse `call-wider` + scaffolded SoftPulse `val-m` + unguided SoftPulse `baseline-fold` PRESENT; checkpoint SoftPulse `cite-wide` kind `none` under Cite. Curriculum **LPT-212** Done — do not clone / do not re-add needs-human. Tip-commented LPT-212/774 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…774 (leave ui-agent In Progress **LPT-771** alone). next: NEVER `lesson-04-09-01-*` Confidence / Low residuals LPT-676…774.
 - 2026-10-14ei: Tip-stable `1e6670fc` (#2360 observe-wild SoftPulse residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Meet Maniac children `lesson-04-08-02-01/02`: SoftPulse MANIAC→ENTRY→AGGRO under Introduce **concept-aligned** (no SoftPulse residual); checkpoint SoftPulse `three` mix-discipline meta under Introduce → **LPT-774** (needs-human; Relates LPT-208; siblings TAG **LPT-708** / Station **LPT-767** / Nit **LPT-769**); Spot SoftPulse CONSTANT RAISES→NEVER GIVES UP content-driven; guided SoftPulse `pt-maniac` + unguided SoftPulse `maniac2` densify PRESENT. Curriculum **LPT-208** Done — do not clone / do not re-add needs-human; distinct from Observe-wild SoftPulse **LPT-773**. Tip-commented LPT-774/208/773/769 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…774 (leave ui-agent In Progress **LPT-771** alone). next: NEVER `lesson-04-08-03-*` Adjust Maniac / Low residuals LPT-676…774.
