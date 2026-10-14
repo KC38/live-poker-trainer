@@ -66,3 +66,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
   seat numbers on a nine-handed ask (LPT-240); densify `blindsSeats`+
   `numberSeats` covers the no-frame path.
 - 2026-10-13 LPT-641: loop rewrote `ui-agent-handoff.json` / reclaimed the mini mid-implement. When heartbeat/guard print not-the-holder, stop driving until `sim_lock.py claim` succeeds again (LPT-637); do not force-release the loop holder.
+
+## Fold 2026-10-14
+
+- Prefer waiting for Nice! / counting Continues before treating SoftPulse-none + densify stem as SoftPulse-off checkpoint idle — the window after the last SoftPulse press can still show densify before Nice!, so a too-early `<KEY>-validated.png` captures Nice! instead of the ask (LPT-814).
