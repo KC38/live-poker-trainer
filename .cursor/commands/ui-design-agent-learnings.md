@@ -257,7 +257,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   when a fix changes `assets/course/v2/catalog.json` — cached `Runner.app`
   via `flutter_run_fast.sh` hot-restarts Dart but can keep a stale asset
   bundle, so catalog-only Hint copy looks unfixed until Xcode rebuilds
-  (LPT-327).
+  (LPT-327). Same stale bundle shows as `Unknown lesson <id>` after
+  `agent_seed` / `openlesson` for an id that `lessons --grep` finds on
+  disk (LPT-780 station open) — rebuild with `--no-cache` before filing
+  unreachable.
 - Prefer flush/straight showdown remap templates with **five** suited cards
   in the made flush (board + holes) and rank span < 12 so `_remapSpotCards`
   can vary boards; a four-suited flush template always falls back to one
