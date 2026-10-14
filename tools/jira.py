@@ -597,7 +597,9 @@ def ui_queue_stats(limit: int = 50) -> Dict[str, object]:
 
     Same fetch as :func:`ui_queue`, but tallies ``needs-human`` / ``grokbot``
     drops (and sample keys) so health ``status`` can show why the queue
-    looks empty — e.g. ``needs-human=1: LPT-44``.
+    looks empty — e.g. ``needs-human=1: LPT-44``. Actionable keys are
+    included too so mid-run health timers see ``2 open: LPT-734,LPT-736``
+    without a second ``ui-queue`` call.
     """
     raw = search(
         f"project = {PROJECT} AND labels = ui-agent AND statusCategory != Done "
@@ -607,6 +609,7 @@ def ui_queue_stats(limit: int = 50) -> Dict[str, object]:
     actionable = 0
     needs_human = 0
     grokbot = 0
+    actionable_keys: List[str] = []
     needs_human_keys: List[str] = []
     grokbot_keys: List[str] = []
     for issue in raw:
@@ -623,10 +626,13 @@ def ui_queue_stats(limit: int = 50) -> Dict[str, object]:
                 grokbot_keys.append(key)
             continue
         actionable += 1
+        if key:
+            actionable_keys.append(key)
     return {
         "actionable": actionable,
         "needs_human": needs_human,
         "grokbot": grokbot,
+        "actionable_keys": actionable_keys,
         "needs_human_keys": needs_human_keys,
         "grokbot_keys": grokbot_keys,
     }
@@ -646,19 +652,37 @@ def _format_filtered_bucket(label: str, count: int, keys: List[str]) -> str:
     return f"{label}={count}"
 
 
+def _format_actionable_keys(count: int, keys: List[str]) -> str:
+    """``LPT-734`` or ``LPT-734,LPT-736,+1`` (no count prefix; open_n owns it)."""
+    if count <= 0 or not keys:
+        return ""
+    shown = keys[:3]
+    extra = count - len(shown)
+    key_part = ",".join(shown)
+    if extra > 0:
+        key_part += f",+{extra}"
+    return key_part
+
+
 def format_ui_queue_stats(stats: Dict[str, object]) -> str:
     """One-line status for ``ui_design_agent_loop.sh status``."""
     open_n = int(stats.get("actionable") or 0)
     nh = int(stats.get("needs_human") or 0)
     gb = int(stats.get("grokbot") or 0)
+    open_keys = [str(k) for k in (stats.get("actionable_keys") or [])]
     nh_keys = [str(k) for k in (stats.get("needs_human_keys") or [])]
     gb_keys = [str(k) for k in (stats.get("grokbot_keys") or [])]
+    keys_part = _format_actionable_keys(open_n, open_keys)
     if open_n == 0:
         line = "ui-queue: empty"
     elif open_n == 1:
         line = "ui-queue: 1 open"
+        if keys_part:
+            line += f": {keys_part}"
     else:
         line = f"ui-queue: {open_n} open"
+        if keys_part:
+            line += f": {keys_part}"
     filtered: List[str] = []
     nh_part = _format_filtered_bucket("needs-human", nh, nh_keys)
     if nh_part:

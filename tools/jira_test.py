@@ -421,6 +421,7 @@ class UiQueueStatsTest(unittest.TestCase):
                 "actionable": 1,
                 "needs_human": 1,
                 "grokbot": 1,
+                "actionable_keys": ["LPT-1"],
                 "needs_human_keys": ["LPT-44"],
                 "grokbot_keys": ["LPT-99"],
             },
@@ -431,6 +432,7 @@ class UiQueueStatsTest(unittest.TestCase):
                     "actionable": 0,
                     "needs_human": 1,
                     "grokbot": 0,
+                    "actionable_keys": [],
                     "needs_human_keys": ["LPT-44"],
                     "grokbot_keys": [],
                 }
@@ -439,7 +441,34 @@ class UiQueueStatsTest(unittest.TestCase):
         )
         self.assertEqual(
             jira.format_ui_queue_stats(stats),
-            "ui-queue: 1 open (filtered needs-human=1: LPT-44 grokbot=1: LPT-99)",
+            "ui-queue: 1 open: LPT-1 "
+            "(filtered needs-human=1: LPT-44 grokbot=1: LPT-99)",
+        )
+        self.assertEqual(
+            jira.format_ui_queue_stats(
+                {
+                    "actionable": 2,
+                    "needs_human": 0,
+                    "grokbot": 0,
+                    "actionable_keys": ["LPT-734", "LPT-736"],
+                    "needs_human_keys": [],
+                    "grokbot_keys": [],
+                }
+            ),
+            "ui-queue: 2 open: LPT-734,LPT-736",
+        )
+        self.assertEqual(
+            jira.format_ui_queue_stats(
+                {
+                    "actionable": 4,
+                    "needs_human": 0,
+                    "grokbot": 0,
+                    "actionable_keys": ["LPT-1", "LPT-2", "LPT-3", "LPT-4"],
+                    "needs_human_keys": [],
+                    "grokbot_keys": [],
+                }
+            ),
+            "ui-queue: 4 open: LPT-1,LPT-2,LPT-3,+1",
         )
         self.assertEqual(
             jira.format_ui_queue_stats(
@@ -447,6 +476,7 @@ class UiQueueStatsTest(unittest.TestCase):
                     "actionable": 0,
                     "needs_human": 4,
                     "grokbot": 0,
+                    "actionable_keys": [],
                     "needs_human_keys": ["LPT-1", "LPT-2", "LPT-3", "LPT-4"],
                     "grokbot_keys": [],
                 }
