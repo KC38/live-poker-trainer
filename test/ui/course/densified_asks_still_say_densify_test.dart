@@ -20,7 +20,11 @@ const _lines = <String, String>{
       'Tap the cards that are only yours — pick the two at your seat.',
   // LPT-814: SoftPulse-quiet densify — no suit-order spoil.
   'act-01-01-02-guided-suits': 'Tap one community card of each suit.',
-  'act-01-01-02-unguided-suited': 'Tap the suited hole cards — pick Suited.',
+  // LPT-815 / LPT-816: seat-deal densify — no Suited tile spoil.
+  'act-01-01-02-unguided-suited':
+      'Tap the seat whose hole cards share a suit.',
+  'act-01-01-02-03-guided-suited':
+      'Tap the seat whose hole cards share a suit.',
   // LPT-804: SoftPulse-off densify — no correct-tile spoil.
   'act-01-01-02-checkpoint-pair':
       'Same rank in one seat — tap the matching holes.',
