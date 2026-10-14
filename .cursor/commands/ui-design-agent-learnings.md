@@ -306,6 +306,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   gold (LPT-274, LPT-462 closeout). Prefer `tap --text Continue` over
   `agent_tap next` on a Nice! dock — `next` can report ok while the
   lesson stays on Nice! and burn minutes in a wait-gold loop (LPT-502).
+- Prefer asserting SoftPulse densify fixes via `lessonFrameSpeech(activity)` not only `selectIdentifyDensifiedCoachLine` — `lesson_screen_layout.dart` still hardcodes some activity ids (LPT-831 checkpoint-layout bypassed densify until both were aligned).
 - Prefer extending `selectIdentifyDensifiedCoachLine` (not only
   `_coachText`) when a densified select_identify ask still shows catalog
   + "Tap the best answer." in the frame bubble — framed speech reads that
