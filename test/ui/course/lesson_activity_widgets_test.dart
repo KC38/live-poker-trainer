@@ -13234,7 +13234,7 @@ await tester.tap(find.text('NIT'));
         id: 'act-01-03-02-checkpoint-names',
         order: 5,
         stage: ActivityStage.scaffolded,
-      assessmentRole: AssessmentRole.checkpoint,
+        assessmentRole: AssessmentRole.checkpoint,
         renderer: ActivityRenderer.pokerActionSizing,
         estimatedSeconds: 55,
         accessibilityText: 'Tap Bet',
@@ -13271,6 +13271,104 @@ await tester.tap(find.text('NIT'));
       await tester.tap(find.text('RAISE'));
       await tester.pump();
       expect(controller.draft.choiceId, 'named-raise');
+      controller.dispose();
+    },
+  );
+
+  testWidgets(
+    'Capstone SRP flop keeps Jam live so RAISE (off) does not spoil (LPT-670)',
+    (tester) async {
+      final flopSpot = resolveToyHandStepSpot(
+        activityId: 'act-07-10-01-hand',
+        stepId: 'step-flop',
+      );
+      expect(flopSpot, isNotNull);
+      expect(flopSpot!.identifyUnavailable, isTrue);
+      expect(flopSpot.facingBet, isFalse);
+      for (final stepId in const [
+        'step-flop',
+        'step-turn',
+        'step-river',
+        'step-3b-flop',
+        'step-mw-turn',
+        'step-limp-flop',
+        'step-4b-flop',
+      ]) {
+        final activityId = switch (stepId) {
+          'step-flop' || 'step-turn' || 'step-river' => 'act-07-10-01-hand',
+          'step-3b-flop' => 'act-07-10-02-hand',
+          'step-mw-turn' => 'act-07-10-03-hand',
+          'step-limp-flop' => 'act-07-10-04-hand',
+          'step-4b-flop' => 'act-07-10-05-hand',
+          _ => throw StateError(stepId),
+        };
+        expect(
+          resolveToyHandStepSpot(
+            activityId: activityId,
+            stepId: stepId,
+          )!.identifyUnavailable,
+          isTrue,
+          reason: '$activityId/$stepId',
+        );
+      }
+
+      final activity = CourseActivity(
+        id: 'act-07-10-01-hand',
+        order: 2,
+        stage: ActivityStage.scaffolded,
+        assessmentRole: AssessmentRole.transfer,
+        renderer: ActivityRenderer.authoredMultiStepHand,
+        estimatedSeconds: 70,
+        accessibilityText: 'BTN open, BB call. Play three streets.',
+        acceptedGrades: const [
+          SoftGrade.recommended,
+          SoftGrade.strong,
+          SoftGrade.reasonable,
+        ],
+        handSteps: const [
+          CourseHandStep(
+            id: 'step-flop',
+            street: 'flop',
+            prompt: 'BTN, SRP, board K72r, you have AQ. Action?',
+            choices: [
+              CourseChoice(
+                id: 'cb',
+                label: 'C-bet',
+                action: 'BET',
+                amountBb: 6,
+              ),
+              CourseChoice(id: 'check', label: 'Check', action: 'CHECK'),
+              CourseChoice(
+                id: 'jam',
+                label: 'Jam 150bb',
+                action: 'RAISE',
+                amountBb: 150,
+              ),
+            ],
+          ),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await tester.pumpWidget(
+        _wrap(
+          AuthoredMultiStepActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: true,
+          ),
+        ),
+      );
+      expect(tester.takeException(), isNull);
+      expect(find.text('RAISE (off)'), findsNothing);
+      expect(find.text('BET'), findsWidgets);
+      expect(find.text('CHECK'), findsOneWidget);
+      // Authored jam label stays teaching chrome, not RAISE (off).
+      expect(find.textContaining('JAM'), findsOneWidget);
+      await tester.tap(find.textContaining('JAM'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'jam');
       controller.dispose();
     },
   );
