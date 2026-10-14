@@ -3390,3 +3390,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-721/306/718/790/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER preflop-to-flop SoftPulse residual **LPT-790** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-13-01-*: interactive structural clean on tip except LPT-721 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily.
+
+## Fold 2026-10-14ic tip 93a4c252 (#2490 Mix-five Prefer → Carry LPT-790 Prefer)
+
+- Tip-stable `93a4c252` after #2490 Mix-five SoftPulse Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER preflop-to-flop SoftPulse residual re-check `lesson-07-01-01-01/02/03` / `act-07-01-01-*`: first-child SoftPulse REASON→CONFIRM→CANCEL + `explainGrading` "Reason → Confirm → Cancel." + Dart `PreflopFlopPlanDemo` / `LessonPreflopFlopPlanExplainTable` still pre-split under thesis-only → residual **LPT-790** still To Do (needs-human; Relates LPT-310 — do not re-add needs-human on curriculum); successors SoftPulse TEXTURE→CONFIRM OR CANCEL / DEAD PLAN→LET GO content-driven (do not reopen LPT-669); guided SoftPulse `dead` densify PRESENT; scaffolded SoftPulse `value` densify PRESENT; unguided SoftPulse `thesis` densify PRESENT; checkpoint SoftPulse `abandon` kind `none` densify PRESENT under abandon matches — no companion residual.
+- Curriculum **LPT-310** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-790/310/721/794/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Map SoftPulse residual **LPT-794** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-01-01-*: interactive structural clean on tip except LPT-790 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily.
