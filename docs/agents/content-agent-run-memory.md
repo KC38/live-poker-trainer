@@ -2594,3 +2594,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-682/683/233/680/681/779/198/216; leave open LPT-676…779.
 - Prefer next: NEVER `lesson-05-05-01-*` lines-and-probes / Low residuals LPT-676…779 (LPT-680 + LPT-681 + LPT-682 + LPT-683).
 - act-05-04-01-*: interactive structural clean on tip except LPT-682 SoftPulse + LPT-683 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); checkpoint is `deal.mode` `none` read tiles — do not file handFamily; poker_action_sizing densify N/A.
+
+## Fold 2026-10-14eu (fe61a7a7 Prefer NEVER table-dynamics SoftPulse re-check)
+
+- Tip-stable `fe61a7a7` (#2379 timing SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-05-08-01-01/02/03` under table-dynamics unit:
+  - first-child `act-05-08-01-explain` SoftPulse STUCK→TILTED→GEARS + `explainGrading` "Stuck → Tilted → Gears." + coachMedia gears teaser + Dart `TablesChangeDemo` still pre-split under tilted/stuck-only → residual **LPT-686** still To Do (needs-human).
+  - companion `act-05-08-01-checkpoint` SoftPulse `temp` kind `none` densify PRESENT under Gear changes grades fresh-samples vs permanent seats → residual **LPT-687** still To Do (needs-human).
+  - successors `act-05-08-01-02-explain-gears` (GEAR→CHANGE→SAMPLE) + `act-05-08-01-03-explain-reset` (COOLER→CHASE→RESET) content-driven; guided SoftPulse `stuck` densify PRESENT; scaffolded SoftPulse `gear` one-per-press PRESENT; unguided SoftPulse `reset` map PRESENT (`Jh`/`Td`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants).
+- Curriculum **LPT-247** Done — do not clone / do not re-add needs-human. Race clones LPT-688/689 Done Duplicate — do not reopen.
+- Tip-commented LPT-686/687/247/198/216/685/779; leave open LPT-676…779; leave ui-agent In Progress **LPT-782**/783/784 alone.
+- Prefer next: NEVER `lesson-05-09-01-*` session-discipline / Low residuals LPT-676…779 (LPT-680…687 + LPT-690/691).
+- act-05-08-01-*: interactive structural clean on tip except LPT-686 SoftPulse + LPT-687 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
