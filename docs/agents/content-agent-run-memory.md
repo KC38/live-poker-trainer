@@ -3021,3 +3021,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-694/260/198/216/696/351/692; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Polar SoftPulse residual **LPT-696** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-03-01-*: interactive structural clean on tip except LPT-694 SoftPulse residual; SoftPulse explain successors content-driven; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
+
+## Fold 2026-10-14gh (0f5075d8 Prefer NEVER Polar SoftPulse residual LPT-696 re-check)
+
+- Tip-stable `0f5075d8` (#2430 Spot-caps SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Polar SoftPulse residual re-check `lesson-06-04-01-01/02/03`: first-child SoftPulse POLAR→MERGED→SIZE + Dart `PolarMergedDemo` still pre-split under polarized-sizing-only → residual **LPT-696** still To Do (needs-human; Relates LPT-264); successors content-driven; checkpoint SoftPulse `thin` under merged-thin-value — no companion residual; curriculum **LPT-264** Done.
+- Tip-commented LPT-696/264/198/216/694; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
