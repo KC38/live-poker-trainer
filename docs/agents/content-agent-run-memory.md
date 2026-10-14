@@ -2422,3 +2422,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - successors `act-04-02-01-02-explain-facing` (3-BET→FOLD→CONTINUE) + `act-04-02-01-03-explain-squeeze` (OPEN→CALLERS→SQUEEZE) content-driven; guided SoftPulse `3bet-qq` + scaffolded SoftPulse `fold-72` one-per-press + unguided SoftPulse `squeeze` + checkpoint SoftPulse `size-18` kind `none` PRESENT (densify N/A `poker_action_sizing`).
 - Curriculum **LPT-172** Done — do not clone / do not re-add needs-human; distinct from Versus **LPT-743** / Ranges **LPT-759**. Tip-commented LPT-172/760/759 + Meet Nit LPT-198 / LPT-216; leave open LPT-760/759/757….
 - Prefer next: NEVER `lesson-04-03-01-*` continuation / Low residuals LPT-676…760.
+
+## Fold 2026-10-14dz (f3a92939 discovery continuation SoftPulse concept-aligned)
+
+- Tip-stable `f3a92939`. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-04-03-01-01/02/03` under continuation unit:
+  - first-child `act-04-03-01-explain` SoftPulse FLOP→TURN→RIVER + `explainGrading` under multi-street-plan **concept-aligned** — no SoftPulse residual (do not clone LPT-760-style).
+  - successors `act-04-03-01-02-explain-abort` (BOARD CHANGES→STOP) + `act-04-03-01-03-explain-pot` (MEDIUM→SMALL POT) content-driven; guided SoftPulse flop-bet→turn-bet + scaffolded SoftPulse `abort` + unguided SoftPulse `small-pot` + checkpoint SoftPulse `branches` kind `none` PRESENT.
+- Curriculum **LPT-176** Done — do not clone / do not re-add needs-human. Tip-commented LPT-176 + Meet Nit LPT-198 / LPT-216; leave open LPT-760/759/757….
+- Prefer next: NEVER `lesson-04-04-01-*` sizing / Low residuals LPT-676…760.
+
