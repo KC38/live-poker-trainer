@@ -3490,3 +3490,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-676/179/681/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
 - Prefer next: NEVER Estimate SoftPulse residual **LPT-681** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-04-04-01-*: interactive structural clean on tip except LPT-676 placement residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-14in tip 41ec1524 (#2502 Sizing Prefer → Estimate SoftPulse LPT-681 Prefer)
+
+- Tip-stable `41ec1524` after #2502 SoftPulse residual Prefer LPT-676 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-05-03-01-01/02/03` / `act-05-03-01-*`: first-child SoftPulse IMPLIED→REVERSE→SECOND + `explainGrading` "Implied → Reverse → Second." still pre-split under estimate-only → residual **LPT-681** still To Do (Relates LPT-230 — do not re-add needs-human on curriculum); successors SoftPulse REVERSE→DOMINATED→FOLD / NON-NUT→MULTIWAY→SKIP content-driven (do not reopen LPT-669); guided SoftPulse `call-io` densify PRESENT; scaffolded SoftPulse `rio` densify PRESENT; unguided SoftPulse `nonut` densify PRESENT; checkpoint SoftPulse `depth-pay` kind `none` under Estimate — no companion residual.
+- Curriculum **LPT-230** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-681/230/682/676/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER Thin SoftPulse residual **LPT-682** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-05-03-01-*: interactive structural clean on tip except LPT-681 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
