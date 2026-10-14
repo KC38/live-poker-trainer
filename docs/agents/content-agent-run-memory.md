@@ -3328,3 +3328,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next already advanced by #2478 → NEVER Selective SoftPulse residual **LPT-706** / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-09-01-*: interactive structural clean on tip except LPT-704 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants AQo-miss honesty.
 
+## Fold 2026-10-14hv tip d345e904 (Prefer NEVER Selective SoftPulse residual LPT-706)
+
+- Tip-stable `d345e904` after #2477 Plan-3bet Prefer fold (#2478 Hard-folds already on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Selective SoftPulse residual re-check `lesson-06-11-01-01/02/03` / `act-06-11-01-*`: first-child SoftPulse TIGHT→BARREL→SAMPLE + `explainGrading` "Tight → Barrel → Sample." + Dart `SelectiveAggressionDemo.points` TIGHT/BARREL/SAMPLE (captions Selective entry / With a plan / Count first) still pre-split under selective-entry-only → residual **LPT-706** still To Do (needs-human; Relates LPT-288 — do not re-add needs-human on curriculum); successors SoftPulse CALLED→GIVES UP / TWO HANDS→NOTE BUNDLE content-driven (do not reopen LPT-669); guided SoftPulse `sel` densify PRESENT (`deal.mode` `none`; guideRegion `selectivePlanOk`); scaffolded SoftPulse `disc` one-per-press densify PRESENT; unguided SoftPulse `low` one-per-press densify PRESENT; checkpoint SoftPulse `bundle` kind `none` densify PRESENT under wait-for-samples — no companion residual.
+- Curriculum **LPT-288** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-706/288/705/704/708/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Meet-TAG working-model residual **LPT-708** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-11-01-*: interactive structural clean on tip except LPT-706 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily.
+
