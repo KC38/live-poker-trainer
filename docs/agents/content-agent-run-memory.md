@@ -3444,3 +3444,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-802/326/800/725/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Same-cards SoftPulse residual **LPT-725** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-06-01-*: interactive structural clean on tip except LPT-802 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` stack-depth tiles — do not file handFamily.
+
+## Fold 2026-10-14ii tip 42b5c1d3 (#2497 Stack Prefer → Same-cards LPT-725 Prefer)
+
+- Tip-stable `42b5c1d3` after #2497 Stack SoftPulse Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Same-cards SoftPulse residual re-check `lesson-07-07-01-01/02/03/04` / `act-07-07-01-*`: first-child SoftPulse CARDS→MODELS→CITE + `explainGrading` "Cards → Models → Cite." + Dart `SameCardsTypesDemo` (CARDS "Same holdings" / MODELS "Five types" / CITE "Tendency or baseline") still pre-split under station-value → residual **LPT-725** still To Do (needs-human; Relates LPT-330 — do not re-add needs-human on curriculum); successors SoftPulse TAG CHECK-RAISE→CAREFUL / LAG BARREL→CALL / NO EVIDENCE→BASELINE content-driven (do not reopen LPT-669); guided SoftPulse `bet` PRESENT (fixed+variants); scaffolded SoftPulse `fold` one-per-press PRESENT; unguided SoftPulse `call` one-per-press PRESENT; checkpoint SoftPulse `base` kind `none` densify PRESENT under baseline matches — no companion residual.
+- Curriculum **LPT-330** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-725/330/802/726/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` — do not file handFamily.
