@@ -104,15 +104,18 @@ const _lines = <String, String>{
   'act-04-09-01-scaffolded': 'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
   'act-04-09-01-checkpoint': 'Course should show what beside a type label — pick Sample and confidence limits.',
   'act-04-10-02-jump-range':
-      'UTG open is best described as — pick Stronger, narrower range.',
-  'act-04-10-02-jump-spr': 'Stack 60bb, pot 15bb. SPR — pick 4.',
+      'UTG open is best described as — tap the matching range.',
+  'act-04-10-02-jump-spr':
+      'Stack 60bb, pot 15bb. SPR — tap the matching number.',
   'act-05-01-01-guided':
       'Four-way flop. Best continue with — pick Nut flush draw.',
   'act-05-01-01-checkpoint':
       'Multiway construction priority — tap the matching priority.',
   'act-05-02-01-guided': '200bb effective. Best reason to call a raise with 55 BTN — pick Implied odds if they pay sets.',
   'act-05-02-01-unguided': 'SPR ~12 on the flop. Your first job — pick Map turn/river plans before committing.',
-  'act-05-02-01-checkpoint': '150–300bb cash play rewards — pick Position, implied odds, and disciplined folds.',
+  // LPT-735: SoftPulse-off densify — no correct-tile spoil.
+  'act-05-02-01-checkpoint':
+      '150–300bb cash play rewards — tap the matching reward.',
   'act-05-03-01-checkpoint':
       'Implied odds rise most when — pick Deep stacks and opponents who pay.',
   'act-05-04-01-checkpoint': 'Same hand, different types — pick The line — only when the authored read justifies it.',
@@ -156,8 +159,10 @@ const _lines = <String, String>{
   'act-06-02-01-unguided': 'Semi-bluff check-raise with nut draw IP-denied. Purpose — pick Fold equity.',
   'act-06-02-01-checkpoint':
       'Equity realization rises with — pick Position + initiative.',
-  'act-07-12-01-uncertain': 'Three mixed samples only. Confidence — pick Low — lean baseline until samples grow.',
-  'act-07-12-01-retire': 'Old Calling Station now folds rivers and 3-bets light. Do — pick Retire or update the model.',
+  'act-07-12-01-uncertain':
+      'Three mixed samples only. Confidence — tap the matching level.',
+  'act-07-12-01-retire':
+      'Old Calling Station now folds rivers and 3-bets light. Do — tap the matching next step.',
 };
 
 void main() {
