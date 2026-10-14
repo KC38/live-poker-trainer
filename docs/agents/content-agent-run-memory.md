@@ -4000,3 +4000,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Adjust-LAG SoftPulse residual **LPT-718** (+ **LPT-719**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits checkpoint residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-15au tip b13f674e (#2572 Meet-LAG Prefer → Adjust-LAG SoftPulse LPT-718 Prefer)
+
+- Tip-stable `b13f674e` (#2572 Meet-LAG sample-limits Prefer on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Catalog parents Done — no open-parent sync.
+- SoftPulse Prefer path catch-up: Observe-wide **LPT-713** (+ **LPT-714** / **LPT-715**) + Meet-LAG sample-limits **LPT-716** still To Do advanced through Prefer SoftPulse path (was lagged at Observe-wide next after #2570/#2572 diaries).
+- Prefer NEVER Adjust-LAG SoftPulse residual **LPT-718** re-check (`lesson-06-12-03-01/02/03`):
+  - first-child SoftPulse CALL→TRAP→FANCY LESS + `explainGrading` "Call → Trap → Fancy less." + Dart `VsLagsDemo.points` CALL/TRAP/FANCY LESS / `LessonVsLagsExplainTable` + coachMedia unit framing still pre-split under Call-wider-only → **LPT-718** still To Do (needs-human; Relates LPT-303).
+  - companion checkpoint SoftPulse `cite` kind `none` densify PRESENT under Call-wider → **LPT-719** still To Do.
+  - successors STRONG HAND→LET THEM BET / NO BIG BLUFF→LET THEM content-driven (do not reopen LPT-669); guided SoftPulse `call` PRESENT; scaffolded SoftPulse `trap` one-per-press PRESENT; unguided SoftPulse `avoid` one-per-press densify PRESENT.
+- Curriculum **LPT-303** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-718/719/303/721/716/713/351/198/216.
+- Prefer next: NEVER Mix-five SoftPulse residual **LPT-721** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-12-03-*: interactive structural clean on tip except LPT-718 SoftPulse + LPT-719 cite companions; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
