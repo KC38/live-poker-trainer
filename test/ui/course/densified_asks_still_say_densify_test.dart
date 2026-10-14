@@ -145,14 +145,18 @@ const _lines = <String, String>{
       'Best use of live timing — tap the matching habit.',
   'act-05-08-01-guided': 'Villain lost two buy-ins, now open-raises every hand. Note — pick Stuck / tilted.',
   'act-05-08-01-scaffolded': 'Solid selective player suddenly flats junk and donks rivers. Best read — pick Gear change.',
-  'act-05-08-01-checkpoint': 'Dynamic reads should be — pick Fresh samples.',
+  // LPT-746: SoftPulse-off densify — no correct-tile spoil.
+  'act-05-08-01-checkpoint':
+      'Dynamic reads should be — tap the matching habit.',
   'act-05-09-01-guided':
       'You hit a planned stop-loss. Next step — pick Stop / move down.',
   'act-05-09-01-scaffolded':
       'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — pick Decline.',
   'act-05-09-01-unguided':
       'Tired, winning small, table getting wild. Best — pick Cash out.',
-  'act-05-09-01-checkpoint': 'Session discipline is part of — pick Your edge.',
+  // LPT-747: SoftPulse-off densify — no correct-tile spoil.
+  'act-05-09-01-checkpoint':
+      'Session discipline is part of — tap the matching practice.',
   // LPT-717: SoftPulse-off densify — no correct-tile spoil.
   'act-05-09-02-cp-multi':
       'Four-way pot priority — tap the matching priority.',

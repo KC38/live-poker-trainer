@@ -499,16 +499,24 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Villain lost two buy-ins, now open-raises every hand. Note — pick Stuck / tilted.',
     'act-05-08-01-scaffolded' =>
       'Solid selective player suddenly flats junk and donks rivers. Best read — pick Gear change.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Fresh samples in the idle bubble (LPT-746; same class as LPT-745 /
+    // LPT-744 / LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 / LPT-717 /
+    // LPT-672 / LPT-653).
     'act-05-08-01-checkpoint' =>
-      'Dynamic reads should be — pick Fresh samples.',
+      'Dynamic reads should be — tap the matching habit.',
     'act-05-09-01-guided' =>
       'You hit a planned stop-loss. Next step — pick Stop / move down.',
     'act-05-09-01-scaffolded' =>
       'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — pick Decline.',
     'act-05-09-01-unguided' =>
       'Tired, winning small, table getting wild. Best — pick Cash out.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Your edge in the idle bubble (LPT-747; same class as LPT-746 /
+    // LPT-745 / LPT-744 / LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 /
+    // LPT-717 / LPT-672 / LPT-653).
     'act-05-09-01-checkpoint' =>
-      'Session discipline is part of — pick Your edge.',
+      'Session discipline is part of — tap the matching practice.',
     // Section 5 checkpoint densify — SoftPulse off (kind: none); stems must
     // not spoil the correct tile (LPT-717; SoftPulse LPT-653; same class as
     // LPT-672 / LPT-673 / LPT-674).
