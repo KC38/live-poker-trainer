@@ -3462,3 +3462,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-726/333/727/725/802/351/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Leak SoftPulse residual **LPT-727** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` — do not file handFamily.
+
+## Fold 2026-10-14ik tip c292c799 (#2499 Type-board Prefer → Leak LPT-727 Prefer)
+
+- Tip-stable `c292c799` after #2499 Type-board SoftPulse Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Leak SoftPulse residual re-check `lesson-07-09-01-01/02/03` / `act-07-09-01-*`: first-child SoftPulse LEAK→BOOK→REVIEW + `explainGrading` "Leak → Book → Review." + Dart `LeakReviewBookDemo` / `LessonLeakReviewBookExplainTable` (LEAK "Specific note" / BOOK "Written defaults" / REVIEW "On a schedule") still pre-split under name-leaks-only → residual **LPT-727** still To Do (needs-human; Relates LPT-336 — do not re-add needs-human on curriculum); successors SoftPulse COMMON SPOT→DEFAULT / AFTER SESSION→REVIEW content-driven (do not reopen LPT-669); guided SoftPulse `spec` densify PRESENT; scaffolded SoftPulse `book` one-per-press densify PRESENT; unguided SoftPulse `sched` one-per-press densify PRESENT; checkpoint SoftPulse `base` kind `none` densify PRESENT under default-lines matches — no companion residual.
+- Curriculum **LPT-336** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-727/336/726/725/802/351/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Capstone `lesson-07-10-0*` (synthesis clean check) / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-09-01-*: interactive structural clean on tip except LPT-727 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive outcome tiles `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
