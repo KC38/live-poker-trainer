@@ -10,12 +10,14 @@ const _lines = <String, String>{
   'act-01-05-01-unguided-pot': 'BTN opens — tap the pot before blinds act.',
   'act-04-07-02-guided':
       'Seat plays ~8% of hands and 3-bets rarely but large. Label — tap Nit.',
+  // LPT-819: SoftPulse-quiet unguided densify — no Nit spoil.
   'act-04-07-02-unguided':
-      'Seat folds forever, then check-raises a triple barrel. Label — tap Nit.',
+      'Seat folds forever, then check-raises a triple barrel — tap which type fits.',
   'act-04-08-02-guided':
       'Seat open-raises 60% and triple-barrels light. Label — tap Maniac.',
+  // LPT-820: SoftPulse-quiet unguided densify — no Maniac spoil.
   'act-04-08-02-unguided':
-      'Seat 3-bets light and never gives up rivers. Label — tap Maniac.',
+      'Seat 3-bets light and never gives up rivers — tap which type fits.',
   'act-04-09-01-unguided': 'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
   // LPT-675: Section 2 jump densify — no Cutoff spoil.
   'act-02-07-02-jump-pos':
@@ -102,6 +104,13 @@ const _sectionFiveCheckpointSpoilers = <String, List<String>>{
   'act-05-09-02-cp-stop': ['honor stop', 'pick honor'],
 };
 
+/// SoftPulse-quiet Spot Nit / Maniac unguided densify must not name the tile
+/// (LPT-819 / LPT-820; same class as LPT-818).
+const _spotTypeUnguidedSpoilers = <String, List<String>>{
+  'act-04-07-02-unguided': ['nit', 'maniac'],
+  'act-04-08-02-unguided': ['maniac', 'station'],
+};
+
 void main() {
   for (final MapEntry(key: id, value: line) in _lines.entries) {
     test('$id densify helper arm (LPT-628 remain)', () {
@@ -109,6 +118,25 @@ void main() {
       expect(line.toLowerCase(), isNot(contains('tap the best answer')));
     });
   }
+
+  test(
+    'Spot Nit/Maniac unguided densify stems do not spoil tiles (LPT-819/820)',
+    () {
+      for (final MapEntry(key: id, value: spoils)
+          in _spotTypeUnguidedSpoilers.entries) {
+        final resolved = selectIdentifyDensifiedCoachLine(id);
+        expect(resolved, _lines[id], reason: id);
+        final lower = (resolved ?? '').toLowerCase();
+        for (final spoil in spoils) {
+          expect(
+            lower,
+            isNot(contains(spoil)),
+            reason: '$id must not contain "$spoil"',
+          );
+        }
+      }
+    },
+  );
 
   test('Final five-type densify stems do not spoil correct tiles (LPT-672)', () {
     const expected = <String, String>{

@@ -653,12 +653,18 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'BTN opens — tap the pot before blinds act.',
     'act-04-07-02-guided' =>
       'Seat plays ~8% of hands and 3-bets rarely but large. Label — tap Nit.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Nit (LPT-819; SoftPulse
+    // LPT-653; same class as LPT-818 / LPT-817 / LPT-814).
     'act-04-07-02-unguided' =>
-      'Seat folds forever, then check-raises a triple barrel. Label — tap Nit.',
+      'Seat folds forever, then check-raises a triple barrel — tap which type fits.',
     'act-04-08-02-guided' =>
       'Seat open-raises 60% and triple-barrels light. Label — tap Maniac.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Maniac (LPT-820; SoftPulse
+    // LPT-653; same class as LPT-819 / LPT-818).
     'act-04-08-02-unguided' =>
-      'Seat 3-bets light and never gives up rivers. Label — tap Maniac.',
+      'Seat 3-bets light and never gives up rivers — tap which type fits.',
     'act-04-09-01-unguided' =>
       'Former \'station\' starts folding three streets. Next step — tap Update/retire the Calling Station model.',
     // Section 4 jump densify — SoftPulse off (kind: none); stems must not
