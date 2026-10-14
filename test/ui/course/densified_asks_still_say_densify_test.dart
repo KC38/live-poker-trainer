@@ -111,9 +111,12 @@ const _lines = <String, String>{
   'act-04-06-03-checkpoint':
       'Why bluff less versus a Calling Station — tap the matching reason.',
   'act-04-07-01-guided': 'Seat folded 20 of 22 hands. Observation — pick Narrow entry — plays few hands.',
-  'act-04-07-01-scaffolded': 'That seat finally raises and then barrels. Observation — pick Strong aggression when they enter.',
+  // LPT-827: SoftPulse-quiet densify — no Strong aggression / Strong heat spoil.
+  'act-04-07-01-scaffolded':
+      'That seat finally raises and then barrels — tap the matching note.',
+  // LPT-826: SoftPulse-quiet densify — no No — sample too small / Wait spoil.
   'act-04-07-01-unguided':
-      'They folded two hands. Label them already — pick No — sample too small.',
+      'They folded two hands — tap whether a type label is ready.',
   // LPT-763: SoftPulse-off densify — no correct-tile spoil.
   'act-04-07-01-checkpoint':
       'Evidence bundle for this seat — tap the matching note.',

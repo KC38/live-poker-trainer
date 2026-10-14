@@ -479,10 +479,16 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Why bluff less versus a Calling Station — tap the matching reason.',
     'act-04-07-01-guided' =>
       'Seat folded 20 of 22 hands. Observation — pick Narrow entry — plays few hands.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Strong aggression / Strong heat
+    // (LPT-827; SoftPulse LPT-653; same class as LPT-826 / LPT-824 / LPT-822).
     'act-04-07-01-scaffolded' =>
-      'That seat finally raises and then barrels. Observation — pick Strong aggression when they enter.',
+      'That seat finally raises and then barrels — tap the matching note.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name No — sample too small / Wait
+    // (LPT-826; SoftPulse LPT-653; same class as LPT-827 / LPT-822 / LPT-818).
     'act-04-07-01-unguided' =>
-      'They folded two hands. Label them already — pick No — sample too small.',
+      'They folded two hands — tap whether a type label is ready.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Few hands / heavy action in the idle bubble (LPT-763; same class
     // as LPT-746 / LPT-653).

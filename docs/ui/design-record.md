@@ -1966,8 +1966,8 @@ felt.
 | Bluff less without equity | explain SoftPulse cues RARELY FOLDS → GIVE UP; checkpoint SoftPulse-off densify stem non-spoiling (LPT-780); unit `unit-04-06-calling-station` (LPT-192 split) | — |
 | Cite the sticky-call tendency | explain SoftPulse cues EVIDENCE → UNKNOWN; unit `unit-04-06-calling-station` (LPT-192 split) | — |
 | Tag narrow entry | Rare, Enter, Mean It; unit `unit-04-07-nit` (LPT-195 split) | entry quizzes |
-| Tag strong aggression | explain SoftPulse cues RARE ENTRY → BIG AGGRESSION; checkpoint SoftPulse-off densify stem non-spoiling (LPT-763); unit `unit-04-07-nit` (LPT-195 split) | — |
-| Wait for samples | explain SoftPulse cues TWO FOLDS → MORE HANDS; unit `unit-04-07-nit` (LPT-195 split) | — |
+| Tag strong aggression | explain SoftPulse cues RARE ENTRY → BIG AGGRESSION; scaffolded SoftPulse-quiet densify stem non-spoiling (no Strong aggression / Strong heat) (LPT-827); checkpoint SoftPulse-off densify stem non-spoiling (LPT-763); unit `unit-04-07-nit` (LPT-195 split) | — |
+| Wait for samples | explain SoftPulse cues TWO FOLDS → MORE HANDS; unguided SoftPulse-quiet densify stem non-spoiling (no No — sample too small / Wait) (LPT-826); unit `unit-04-07-nit` (LPT-195 split) | — |
 | The Nit model | Nit, Narrow, Respect; densified SoftPulse one gold (LPT-440); checkpoint SoftPulse-off densify stem non-spoiling (LPT-765); unit `unit-04-07-nit` (LPT-198 split) | label quizzes |
 | Spot a Nit | explain SoftPulse cues FEW HANDS → BIG RAISES; unguided SoftPulse-quiet densify stem non-spoiling (no Nit) (LPT-819); unit `unit-04-07-nit` (LPT-198 split) | — |
 | Steal more versus Nits | Steal, Credit, Explode; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-07-nit` (LPT-202 split) | respect reason |

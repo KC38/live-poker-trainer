@@ -17373,138 +17373,138 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('s4 observe narrow scaffold SoftPulse Strong heat — no gold tip', (
-    tester,
-  ) async {
-    final activity = CourseActivity(
-      id: 'act-04-07-01-scaffolded',
-      order: 3,
-      stage: ActivityStage.scaffolded,
-      renderer: ActivityRenderer.selectIdentify,
-      estimatedSeconds: 40,
-      accessibilityText: 'Strong aggression when they enter.',
-      acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'That seat finally raises and then barrels. Observation?',
-      choices: const [
-        CourseChoice(id: 'strong-aggr', label: 'Strong aggression when they enter'),
-        CourseChoice(id: 'passive', label: 'They are passive callers'),
-      ],
-    );
-    expect(isTableRegionTapActivity(activity), isTrue);
-    final controller = LessonActivityController(activity: activity);
-    await tester.pumpWidget(
-      _wrap(
-        SelectIdentifyActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
+  testWidgets(
+    's4 observe narrow scaffold SoftPulse-quiet densify — no Strong heat spoil',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-04-07-01-scaffolded',
+        order: 3,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Strong aggression when they enter.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'That seat finally raises and then barrels. Observation?',
+        choices: const [
+          CourseChoice(
+            id: 'strong-aggr',
+            label: 'Strong aggression when they enter',
+          ),
+          CourseChoice(id: 'passive', label: 'They are passive callers'),
+        ],
+      );
+      expect(isTableRegionTapActivity(activity), isTrue);
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            // SoftPulse-quiet densify (LPT-827): idle ask before Hint.
+            showGuidance: false,
+          ),
         ),
-      ),
-    );
-    expect(
-      find.text(
-        'Raises then barrels — when they enter, heat often follows.',
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Raises then barrels — tap the observation.'),
-      findsNothing,
-    );
-    expect(find.text('Strong heat'), findsOneWidget);
-    // LPT-433: guideRegion → one gold SoftPulse (Strong heat), not Passive.
-    final scaffoldCues =
-        tester
-            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
-            .where((g) => g.active && g.kind == GlowKind.cue)
-            .toList(growable: false);
-    expect(scaffoldCues, hasLength(1));
-    expect(
-      find.descendant(
-        of: find.byWidget(scaffoldCues.single),
-        matching: find.text('Strong heat'),
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(
-        of: find.byWidget(scaffoldCues.single),
-        matching: find.text('Passive'),
-      ),
-      findsNothing,
-    );
-    await tester.tap(find.text('Strong heat'));
-    await tester.pump();
-    expect(controller.draft.choiceId, 'strong-aggr');
-    controller.dispose();
-  });
-
-  testWidgets('s4 observe narrow unguided SoftPulse Wait — no gold tip', (
-    tester,
-  ) async {
-    final activity = CourseActivity(
-      id: 'act-04-07-01-unguided',
-      order: 4,
-      stage: ActivityStage.scaffolded,
-      renderer: ActivityRenderer.selectIdentify,
-      estimatedSeconds: 40,
-      accessibilityText: 'Sample too small.',
-      acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'They folded two hands. Label them already?',
-      choices: const [
-        CourseChoice(id: 'wait', label: 'No — sample too small'),
-        CourseChoice(id: 'now', label: 'Yes — two folds is enough forever'),
-      ],
-    );
-    expect(isTableRegionTapActivity(activity), isTrue);
-    final controller = LessonActivityController(activity: activity);
-    await tester.pumpWidget(
-      _wrap(
-        SelectIdentifyActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: true,
+      );
+      // LPT-827: SoftPulse-quiet densify stem must not spoil Strong aggression.
+      expect(
+        lessonFrameSpeech(activity),
+        'That seat finally raises and then barrels — tap the matching note.',
+      );
+      expect(
+        lessonFrameSpeech(activity),
+        isNot(contains('Tap the best answer')),
+      );
+      expect(
+        lessonFrameSpeech(activity),
+        isNot(contains('Strong aggression')),
+      );
+      expect(lessonFrameSpeech(activity), isNot(contains('Strong heat')));
+      expect(
+        find.text(
+          'That seat finally raises and then barrels — tap the matching note.',
         ),
-      ),
-    );
-    expect(
-      find.text(
-        'Only two folds — sample is still too thin to lock a label.',
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Only two folds — tap whether to label.'),
-      findsNothing,
-    );
-    expect(find.text('Wait'), findsOneWidget);
-    // LPT-433: guideRegion → one gold SoftPulse (Wait), not Label now.
-    final unguidedCues =
-        tester
-            .widgetList<GlowHighlight>(find.byType(GlowHighlight))
-            .where((g) => g.active && g.kind == GlowKind.cue)
-            .toList(growable: false);
-    expect(unguidedCues, hasLength(1));
-    expect(
-      find.descendant(
-        of: find.byWidget(unguidedCues.single),
-        matching: find.text('Wait'),
-      ),
-      findsOneWidget,
-    );
-    expect(
-      find.descendant(
-        of: find.byWidget(unguidedCues.single),
-        matching: find.text('Label now'),
-      ),
-      findsNothing,
-    );
-    await tester.tap(find.text('Wait'));
-    await tester.pump();
-    expect(controller.draft.choiceId, 'wait');
-    controller.dispose();
-  });
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'That seat finally raises and then barrels. Observation — '
+          'pick Strong aggression when they enter.',
+        ),
+        findsNothing,
+      );
+      expect(find.text('Strong heat'), findsOneWidget);
+      await tester.tap(find.text('Strong heat'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'strong-aggr');
+      controller.dispose();
+    },
+  );
 
+  testWidgets(
+    's4 observe narrow unguided SoftPulse-quiet densify — no Wait spoil',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-04-07-01-unguided',
+        order: 4,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Sample too small.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'They folded two hands. Label them already?',
+        choices: const [
+          CourseChoice(id: 'wait', label: 'No — sample too small'),
+          CourseChoice(
+            id: 'now',
+            label: 'Yes — two folds is enough forever',
+          ),
+        ],
+      );
+      expect(isTableRegionTapActivity(activity), isTrue);
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            // SoftPulse-quiet densify (LPT-826): idle ask before Hint.
+            showGuidance: false,
+          ),
+        ),
+      );
+      // LPT-826: SoftPulse-quiet densify stem must not spoil Wait / sample too small.
+      expect(
+        lessonFrameSpeech(activity),
+        'They folded two hands — tap whether a type label is ready.',
+      );
+      expect(
+        lessonFrameSpeech(activity),
+        isNot(contains('Tap the best answer')),
+      );
+      expect(
+        lessonFrameSpeech(activity),
+        isNot(contains('sample too small')),
+      );
+      expect(
+        find.text(
+          'They folded two hands — tap whether a type label is ready.',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'They folded two hands. Label them already — '
+          'pick No — sample too small.',
+        ),
+        findsNothing,
+      );
+      expect(find.text('Wait'), findsOneWidget);
+      await tester.tap(find.text('Wait'));
+      await tester.pump();
+      expect(controller.draft.choiceId, 'wait');
+      controller.dispose();
+    },
+  );
   testWidgets('s4 observe narrow checkpoint SoftPulse Few + heat — no gold tip', (
     tester,
   ) async {
