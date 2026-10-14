@@ -3656,3 +3656,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 ## Fold 2026-10-14
 
+## Fold 2026-10-15k tip a4efec2d (#2524 Adjust-TAG Prefer → Observe-wide SoftPulse LPT-713 Prefer)
+
+- Tip-stable `a4efec2d` after #2524 SoftPulse residual Prefer LPT-709 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-06-12-01-01/02/03` / `act-06-12-01-*`: first-child SoftPulse WIDE→PRESSURE→SAMPLE + `explainGrading` "Wide → Pressure → Sample." + Dart `WidePressureDemo.points` / `LessonWidePressureExplainTable` still pre-split under Note-wide-entry-only → residual **LPT-713** still To Do (Relates LPT-297 — do not re-add needs-human on curriculum); companion unguided SoftPulse `wait` Keep-sampling under Note sustained pressure → **LPT-714** still To Do; companion checkpoint SoftPulse `bundle` under Planned-not-maniac → **LPT-715** still To Do; successors SoftPulse BARRELS→MANY HANDS / FOLDS SOMETIMES→PLAN content-driven (do not reopen LPT-669); guided SoftPulse `wide` densify PRESENT; scaffolded SoftPulse `sep` densify PRESENT.
+- Curriculum **LPT-297** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-713/714/715/297/709/716/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Meet-LAG sample-limits residual **LPT-716** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-12-01-*: interactive structural clean on tip except LPT-713 SoftPulse residual + LPT-714/715 companions; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
