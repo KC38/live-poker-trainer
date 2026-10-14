@@ -404,8 +404,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // as LPT-830 / LPT-823 / LPT-808).
     'act-02-01-01-scaffolded-blinds' =>
       'Tap a seat that posts a forced bet every hand.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Cutoff / CO in the idle bubble (LPT-834; SoftPulse LPT-653; same
+    // class as LPT-833 / LPT-675 / LPT-832).
     'act-02-01-01-unguided-co' =>
-      'Tap the seat right before the button — pick Cutoff (CO).',
+      'Tap the seat right before the button.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name On the button in the idle bubble (LPT-783; SoftPulse LPT-653;
     // same class as LPT-782 / LPT-780 / LPT-672).

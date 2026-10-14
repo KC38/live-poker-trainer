@@ -10743,46 +10743,63 @@ await tester.tap(find.text('NIT'));
     controller.dispose();
   });
 
-  testWidgets('SoftPulse-quiet position unguided CO uses pick-on-map cue', (
-    tester,
-  ) async {
-    final activity = CourseActivity(
-      id: 'act-02-01-01-unguided-co',
-      order: 4,
-      stage: ActivityStage.scaffolded,
-      renderer: ActivityRenderer.selectIdentify,
-      estimatedSeconds: 40,
-      accessibilityText: 'Tap the cutoff seat on the six-max table.',
-      acceptedGrades: const [SoftGrade.recommended],
-      prompt: 'Tap the seat right before the button.',
-      choices: const [
-        CourseChoice(id: 'label-co', label: 'Cutoff (CO)'),
-        CourseChoice(id: 'label-hj', label: 'Hijack (HJ)'),
-        CourseChoice(id: 'label-ep', label: 'Early position'),
-      ],
-    );
-    final controller = LessonActivityController(activity: activity);
-    await tester.pumpWidget(
-      _wrap(
-        SelectIdentifyActivity(
-          activity: activity,
-          controller: controller,
-          showGuidance: false,
+  testWidgets(
+    'SoftPulse-quiet seat labels unguided densify — no Cutoff spoil',
+    (tester) async {
+      final activity = CourseActivity(
+        id: 'act-02-01-01-unguided-co',
+        order: 4,
+        stage: ActivityStage.scaffolded,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Tap the cutoff seat on the six-max table.',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap the seat right before the button — pick Cutoff (CO).',
+        choices: const [
+          CourseChoice(id: 'label-co', label: 'Cutoff (CO)'),
+          CourseChoice(id: 'label-hj', label: 'Hijack (HJ)'),
+          CourseChoice(id: 'label-ep', label: 'Early position'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      await tester.pumpWidget(
+        _wrap(
+          SelectIdentifyActivity(
+            activity: activity,
+            controller: controller,
+            showGuidance: false,
+          ),
         ),
-      ),
-    );
-    expect(
-      find.text('Seat just before the button — pick it on the map.'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('The seat just before the button is the cutoff.'),
-      findsNothing,
-    );
-    expect(find.text('Tap the seat right before the button.'), findsNothing);
-    expect(find.text('CO'), findsOneWidget);
-    controller.dispose();
-  });
+      );
+      // LPT-834: SoftPulse-quiet densify stem must not spoil Cutoff / CO.
+      expect(
+        lessonFrameSpeech(activity),
+        'Tap the seat right before the button.',
+      );
+      expect(
+        lessonFrameSpeech(activity),
+        isNot(contains('Tap the best answer')),
+      );
+      expect(lessonFrameSpeech(activity), isNot(contains('Cutoff')));
+      expect(lessonFrameSpeech(activity), isNot(contains('(CO)')));
+      expect(
+        find.text('Tap the seat right before the button.'),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Tap the seat right before the button — pick Cutoff (CO).',
+        ),
+        findsNothing,
+      );
+      expect(
+        find.text('Seat just before the button — pick it on the map.'),
+        findsNothing,
+      );
+      expect(find.text('CO'), findsOneWidget);
+      controller.dispose();
+    },
+  );
 
   testWidgets('acting wait uses the full table and dock, not Them/You tiles', (
     tester,
