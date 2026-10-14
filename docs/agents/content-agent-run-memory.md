@@ -3481,3 +3481,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-348/351/349/352/727/676/198/216; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
 - Prefer next: NEVER oldest SoftPulse residual **LPT-676** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-10-0* / act-07-11-01-* / act-07-12-01-*: Capstone/warmup/Final SoftPulse Prefer clean on tip; Capstone transfer NO_HINT policy LPT-348 Done; warm-up curriculum LPT-351 open; Final assessment clean LPT-352 Done.
+
+## Fold 2026-10-14im tip 9b735ca7 (#2501 Capstone Prefer → Sizing placement LPT-676 Prefer)
+
+- Tip-stable `9b735ca7` after #2501 Capstone/warmup/Final SoftPulse Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-04-04-01-01/02/03` / `act-04-04-01-*`: SoftPulse VALUE→PRESSURE→SIZE under Value **concept-aligned** (no SoftPulse residual); polar-pressure `act-04-04-01-scaffolded` SoftPulse `big` + pressHint bluff-story (`9h`/`8h`·`Kh`/`7h`/`2c`/`3d`/`As` +2 suit variants) still nested under Nearby → residual **LPT-676** still To Do (Relates LPT-179 — do not re-add needs-human on curriculum); successors SoftPulse NEARBY→STORY / TINY→VALUE content-driven (do not reopen LPT-669); guided SoftPulse `half` densify PRESENT; unguided SoftPulse `soft` densify PRESENT; checkpoint SoftPulse `bad-1` kind `none` under Avoid-tiny — no companion residual.
+- Curriculum **LPT-179** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-676/179/681/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER Estimate SoftPulse residual **LPT-681** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-04-04-01-*: interactive structural clean on tip except LPT-676 placement residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
