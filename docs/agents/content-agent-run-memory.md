@@ -4132,6 +4132,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-06-07-01-*: interactive structural clean on tip except LPT-701/702 SoftPulse residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; scaffolded sizing `fixed`+variants — do not reopen LPT-627.
 
+## Fold 2026-10-15bu tip 863eb69c (#2608 → Mix SoftPulse residual LPT-703 Prefer)
+
+- Tip-stable `863eb69c` (#2608 Defend SoftPulse Prefer LPT-701 on tip after #2607). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224**; other parents Done — no open-parent sync.
+- Prefer NEVER Mix SoftPulse residual **LPT-703** re-check (`lesson-06-08-01-01/02/03` / `act-06-08-01-*`):
+  - first-child SoftPulse MIX→PURPOSE→STRONG + Dart `MixedStrategyDemo.points` MIX/PURPOSE/STRONG still pre-split under mix-strong-only → **LPT-703** still To Do (needs-human; Relates LPT-277 — do not re-add needs-human on curriculum).
+  - successors SoftPulse TYPE→STATION→LESS / RANDOM→PURPOSE content-driven; guided SoftPulse `protect` PRESENT (`7h`/`7d`·`7c`/`Kd`/`2s` +2 suit variants); scaffolded SoftPulse `less` one-per-press densify PRESENT; unguided SoftPulse `no` one-per-press densify PRESENT; checkpoint SoftPulse `freq` kind `none` densify PRESENT under no-pure-random — no companion residual.
+- Curriculum **LPT-277** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-703/277/701/702/704/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Plan-3bet SoftPulse residual **LPT-704** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-06-08-01-*: interactive structural clean on tip except LPT-703 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided sizing `fixed`+variants — do not reopen LPT-627; scaffolded/unguided/checkpoint `deal.mode` `none` — do not file handFamily.
+
 ## Fold 2026-10-15br tip 50e4dc56 (#2605 → Overbet SoftPulse residual LPT-699 Prefer)
 
 - Tip-stable `50e4dc56` (#2605 Polar SoftPulse Prefer LPT-696 on tip after #2604). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
