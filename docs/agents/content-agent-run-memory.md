@@ -3288,3 +3288,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-stable `f381fe92` after #2471 densify stem + #2470 Polar SoftPulse Prefer LPT-696. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
 - Prefer NEVER Overbet SoftPulse residual **LPT-699** re-check: OVERBET→POLAR→GEO still under polar-overbets-only — still To Do (Relates LPT-267; race LPT-698 Done). Successors content-driven; densify PRESENT; curriculum LPT-267 Done — do not clone.
 - next: NEVER Blockers SoftPulse residual **LPT-700** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
+## Fold 2026-10-14hq tip 675cc433 (#2472 Overbet Prefer → Blockers LPT-700 Prefer)
+
+- Tip-stable `675cc433` after #2472 Overbet SoftPulse Prefer LPT-699. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Prefer NEVER Blockers SoftPulse residual **LPT-700** re-check: BLOCK→USE→NO EV still under bluff-blockers-only — still To Do (Relates LPT-270). Successors content-driven; densify PRESENT; curriculum LPT-270 Done — do not clone.
+- next: NEVER Defend SoftPulse residual **LPT-701** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
