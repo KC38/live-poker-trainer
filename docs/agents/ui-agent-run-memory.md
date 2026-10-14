@@ -36,3 +36,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-13
 
 - Prefer asserting densified frame speech by absence of "Tap the best answer." plus the densified stem (`Best leak note —`) — `withLessonTapInstruction` may rewrite authored `pick` to `tap`, so exact `pick the …` needles false-fail a fixed bubble (LPT-662).
+
+## Fold 2026-10-14
+
+- Prefer wiring `LessonActionDock(identifyUnavailable: spot.identifyUnavailable)` in `AuthoredMultiStepActivity` when Capstone/transfer spots set the flag — setting `identifyUnavailable` on `LessonActionSpot` alone does not reach the dock (LPT-670).
