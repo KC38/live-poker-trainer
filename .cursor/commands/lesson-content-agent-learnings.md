@@ -153,7 +153,8 @@ Lesson-specific pattern notes (full history) live in
   Planned-not-maniac) + **LPT-716** (sample-limits checkpoint under Introduce
   LAG) + **LPT-718** (Adjust-LAG SoftPulse still walks TRAP/FANCY LESS) +
   **LPT-719** (cite checkpoint under Call-wider vs LAG) + **LPT-721**
-  (Mix-five SoftPulse still walks SEATS/EVIDENCE); multiway-ranges +
+  (Mix-five SoftPulse still walks SEATS/EVIDENCE) + **LPT-724** (Blinds
+  SoftPulse still walks SB/BB under Locate button); multiway-ranges +
   line-reading structural clean (first-child ACTION→REWRITE→UPDATE matches
   update-each-street — no residual); Prefer-IP SoftPulse EQUITY→CASH→POS is
   POS-led framing (not a NUT-style successor leak); careful-4bet SoftPulse
@@ -166,8 +167,10 @@ Lesson-specific pattern notes (full history) live in
   still valid (edited LPT-333 guided board to `Kh/Ts/8h/2d` post LPT-396);
   tip `0f48df29` Prefer NEVER Suits/Ranks/Pairs children structural clean
   (SoftPulse concept-aligned; LPT-83 Done — do not reopen LPT-669);
-  next: oldest unfresh split children `lesson-01-01-03-01/02/03` blinds /
-  Low residuals LPT-676…721 / To Do **LPT-192**.
+  tip `f2af0de4` Prefer NEVER Blinds children: SoftPulse D→SB→BB under
+  Locate-button-only → **LPT-724**; successors SB→BB / BLINDS→DEAL
+  content-driven; next: oldest unfresh split children / Low residuals
+  LPT-676…724 / To Do **LPT-192**.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -211,6 +214,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14cy: Tip-stable `f2af0de4` (#2308 Suits learnings tip; #2307 also on main). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Blinds children: first-child `act-01-01-03-explain-button` SoftPulse D→SB→BB + blindsSeats role labels still pre-split ladder under Locate-button-only → **LPT-724**; successors SB→BB / BLINDS→DEAL content-driven (do not reopen LPT-669); guided SoftPulse `D` + scaffolded SoftPulse `BB` + unguided SoftPulse `before-deal` + checkpoint SoftPulse `SB` hintless PRESENT. Curriculum **LPT-87** Done — do not clone / do not re-add needs-human. Tip-commented LPT-87/724 + Done-ack LPT-85/86 + Meet Nit LPT-198 / LPT-216. next: oldest unfresh split children / Low residuals LPT-676…724 / To Do **LPT-192**.
 - 2026-10-14cx: Tip-stable `0f48df29` (#2306 IP curriculum learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Suits/Ranks/Pairs children: SoftPulse hearts→diamonds→clubs→spades / DEUCE→MIDDLE→ACE / PAIR→SUITED each **concept-aligned** under child objectives — no SoftPulse residual; guided/scaffolded/unguided/checkpoint teachSpec + one-per-press OK; checkpoint hintless. Curriculum **LPT-83** Done — do not clone / do not reopen LPT-669 SoftPulse explain successors. Tip-commented LPT-83 + Done-ack LPT-81/82/353/369/370/571 + Meet Nit LPT-198 / LPT-216 + open LPT-192/721. next: NEVER `lesson-01-01-03-01/02/03` blinds / Low residuals LPT-676…721 / To Do **LPT-192**.
 - 2026-10-14cw: Tip-stable `ccc2b878` (#2305 Adjust Station learnings tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Re-checked In Progress Low curriculum: baseline `lesson-02-07-01-baseline-full-hand` → **LPT-668**; same-cards `lesson-07-07-01-same-cards-types` → **LPT-330**; type-board `lesson-07-08-01-type-board-line` → **LPT-333** (body board corrected `Jh/Td`·`Kh/Ts/8h/2d`); leak-review `lesson-07-09-01-leak-review-book` → **LPT-336** — all structural clean, curriculum still valid, leave In Progress. Tip-commented LPT-192/676 + Done parents/companions. next: oldest unfresh split children `lesson-01-01-02-01/02/03` / Low residuals LPT-676…721 / To Do **LPT-192**.
 - 2026-10-14cv: Tip-stable `9094f561` (#2304 tip; Adjust Station discovery). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery `lesson-04-06-03-adjust-calling-station` structural clean — explain SoftPulse VALUE→BLUFFS→CITE + `explainGrading`; guided/scaffolded/unguided fixed+variants match Dart SoftPulse `thin-val`/`give-up`/`baseline-check` PRESENT; one-per-press OK; checkpoint densify PRESENT hintless. Curriculum **LPT-192** tip-commented + removed stale `needs-human` (human-approved id migration — do not re-add); still To Do unsplit. Done-ack LPT-190/191/399/421/565 + parents/189/198/216. next: oldest unfresh / In Progress Low **LPT-668**/**330**/**333**/**336** / Low residuals LPT-676…721.
