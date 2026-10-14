@@ -3124,3 +3124,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Mix-five SoftPulse residual **LPT-721** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-12-03-*: interactive structural clean on tip except LPT-718 SoftPulse + LPT-719 cite residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded sizing acts match Dart deal honesty — do not reopen LPT-627.
 
+## Fold 2026-10-14gu (2aa5692d Mix-five SoftPulse Prefer re-check)
+
+- Tip-stable `2aa5692d` (#2445 Adjust-LAG SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync.
+- Grep `act-06-13-01-*` / `lesson-06-13-01-*` before file: Mix five / Same cards post **LPT-306** Done; SoftPulse residual **LPT-721**; deal.mode none explain + fixed+variants interactives; checkpoint cite tiles.
+- Discovery Prefer NEVER `lesson-06-13-01-01/02/03/04`:
+  - first-child `act-06-13-01-explain` SoftPulse CARDS→SEATS→EVIDENCE + Dart `ExploitEvidenceDemo` / `LessonExploitEvidenceExplainTable` still under Station-thin-only → **LPT-721** still To Do (needs-human; Relates LPT-306 — do not re-add needs-human on curriculum).
+  - successors `act-06-13-01-02-explain-nit` NIT CHECK-RAISE→FOLD + `act-06-13-01-03-explain-lag` LAG BARREL→CALL + `act-06-13-01-04-explain-cite` TENDENCY→LINE content-driven (do not reopen LPT-669).
+  - guided SoftPulse `cs` SoftPulse map PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants match Dart); scaffolded SoftPulse `nit` one-per-press SoftPulse map PRESENT; unguided SoftPulse `lag` one-per-press SoftPulse map PRESENT (poker_action_sizing — densify N/A); checkpoint SoftPulse `tag` kind `none` densify PRESENT under cite-tendency — no companion residual.
+- Curriculum **LPT-306** Done — do not clone. Tip-commented LPT-721/306/198/216/718/790/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER preflop-to-flop SoftPulse residual **LPT-790** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
