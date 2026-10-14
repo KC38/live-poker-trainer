@@ -784,10 +784,11 @@ void main() {
       }
     });
 
-    test('explain SoftPulse walks the pucks D -> SB -> BB', () {
+    test('explain SoftPulse cues only the D puck (LPT-724 residual)', () {
+      // SB/BB presses belong to the Small and big blinds child.
       final cues = _list(act('act-01-01-03-explain-button'), 'cues');
-      expect([for (final c in cues) c['press']], [1, 2, 3]);
-      expect([for (final c in cues) c['target']], ['D', 'SB', 'BB']);
+      expect([for (final c in cues) c['press']], [1]);
+      expect([for (final c in cues) c['target']], ['D']);
       expect(cues.every((c) => c['kind'] == 'soft_pulse'), isTrue);
     });
 
@@ -1388,7 +1389,7 @@ void main() {
       final explain = act('act-02-06-01-explain-habits');
       expect(
         [for (final c in _list(explain, 'cues')) c['target']],
-        ['WATCH', 'SAY', 'COVER', 'WAIT'],
+        ['WATCH'], // LPT-749: SAY/COVER/WAIT belong to the successors
       );
       expect(explain.teachSpec!['deal'], {'mode': 'none'});
       expect(
