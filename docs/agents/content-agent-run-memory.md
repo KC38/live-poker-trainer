@@ -2924,3 +2924,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-07-09-01-*` leak-review-book / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-08-01-*: interactive structural clean on tip except LPT-726 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669).
 
+## Fold 2026-10-14fw (1636d664 Prefer NEVER leak SoftPulse residual LPT-727 re-check)
+
+- Tip-stable `1636d664` (#2415 after #2414 type-board SoftPulse Prefer re-check). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-07-09-01-01/02/03` under Strategy-book / leak-review unit:
+  - first-child `act-07-09-01-explain` SoftPulse LEAK→BOOK→REVIEW + `explainGrading` still pre-split under name-leaks-only → residual **LPT-727** still To Do (needs-human; Relates LPT-336; do not clone Duplicate LPT-730).
+  - successors COMMON SPOT→DEFAULT / AFTER SESSION→REVIEW content-driven; guided SoftPulse `spec` densify PRESENT; scaffolded SoftPulse `book`; unguided SoftPulse `sched`; checkpoint SoftPulse `base` under default-lines — no new companion clone.
+- Curriculum **LPT-336** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-727/336/198/216/726; leave open LPT-676…802; leave ui-agent alone (LPT-797 #2415).
+- Prefer next: NEVER Capstone `lesson-07-10-0*` / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-09-01-*: interactive structural clean on tip except LPT-727 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669).
+
