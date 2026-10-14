@@ -180,9 +180,11 @@ Lesson-specific pattern notes (full history) live in
   Leak → **LPT-727** (LPT-728…730 Duplicate Closed); tip `0d0d6607`
   Prefer NEVER Hand-ranks SoftPulse you→sam→jo / PAIR→STRAIGHT→FLUSH /
   FULL HOUSE→TRIPS→TWO PAIR **concept-aligned** (LPT-90 Done — no
-  residual); curriculum LPT-668/330/333/336 Done — do not re-add
-  needs-human; next: NEVER `lesson-01-02-02-*` kickers / Low residuals
-  LPT-676…727 / To Do **LPT-192**.
+  residual); tip `21026c57` Prefer NEVER Kickers SoftPulse best-five /
+  SAME PAIR→KICKER / BOARD→CHOP **concept-aligned** (LPT-93 Done — do
+  not reopen LPT-669); curriculum LPT-668/330/333/336 Done — do not
+  re-add needs-human; next: NEVER `lesson-01-03-01-*` fold/check/call /
+  Low residuals LPT-676…727 / In Progress **LPT-192**.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -226,6 +228,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14db: Tip-stable `21026c57` (#2313). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Kickers children: SoftPulse best-five five-press / SAME PAIR→KICKER / BOARD→CHOP each **concept-aligned**; guided-seven + checkpoint-build densify/one-per-press PRESENT; scaffolded-kicker + unguided-board densify PRESENT — no SoftPulse residual. Curriculum **LPT-93** Done — do not clone / do not reopen LPT-669. Tip-commented LPT-90/93/192 + Done parents + Low residuals LPT-676…727. next: NEVER `lesson-01-03-01-*` fold/check/call / Low residuals LPT-676…727 / In Progress **LPT-192**.
 - 2026-10-14da: Tip-stable `0d0d6607` (#2311 S7 NEVER learnings after #2309). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0**). Discovery NEVER Hand-ranks children `lesson-01-02-01-01/02/03`: SoftPulse you→sam→jo / PAIR→STRAIGHT→FLUSH / FULL HOUSE→TRIPS→TWO PAIR each **concept-aligned** under child objectives — no SoftPulse residual; guided/scaffolded/unguided one-per-press OK; checkpoint hintless. Curriculum **LPT-90** Done — do not clone. Concurrent race: closed Duplicate **LPT-728…730** → keep **LPT-725…727**. Tip-commented LPT-90/88/89 + LPT-192/724/725. next: NEVER `lesson-01-02-02-*` kickers / Low residuals LPT-676…727 / To Do **LPT-192**.
 - 2026-10-14cz: Tip-stable `c121da25` (#2309 S7 integrate + baseline split). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER post-split children: baseline SoftPulse NINE→SAME→POSITION under full-ring-open **concept-aligned** (successors OPEN→PLAN / COVER→WAIT content-driven; habits checkpoint matches); Same-cards SoftPulse CARDS→MODELS→CITE under Station-value → **LPT-725**; Type-board SoftPulse TYPE→BOARD→LINE→SIZE under type-and-board → **LPT-726**; Leak SoftPulse LEAK→BOOK→REVIEW under name-leaks → **LPT-727**. Curriculum **LPT-668/330/333/336** Done — do not clone / do not re-add needs-human. Tip-commented + Meet Nit LPT-198 / LPT-216 + open LPT-724. next: oldest unfresh split children / Low residuals LPT-676…727 / To Do **LPT-192**.
 - 2026-10-14cy: Tip-stable `f2af0de4` (#2308 Suits learnings tip; #2307 also on main). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER Blinds children: first-child `act-01-01-03-explain-button` SoftPulse D→SB→BB + blindsSeats role labels still pre-split ladder under Locate-button-only → **LPT-724**; successors SB→BB / BLINDS→DEAL content-driven (do not reopen LPT-669); guided SoftPulse `D` + scaffolded SoftPulse `BB` + unguided SoftPulse `before-deal` + checkpoint SoftPulse `SB` hintless PRESENT. Curriculum **LPT-87** Done — do not clone / do not re-add needs-human. Tip-commented LPT-87/724 + Done-ack LPT-85/86 + Meet Nit LPT-198 / LPT-216. next: oldest unfresh split children / Low residuals LPT-676…724 / To Do **LPT-192**.
