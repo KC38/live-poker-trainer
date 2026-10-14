@@ -2253,3 +2253,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-106** Done — do not clone / do not re-add needs-human. Tip-commented LPT-106/738 + Meet Nit LPT-198 / LPT-216; streets residual **LPT-737** still open.
 - Prefer next: NEVER `lesson-02-01-01-*` position-labels / Low residuals LPT-676…738.
 
+## Fold 2026-10-14dh (121c5995 position-labels guided-btn residual)
+
+- Tip-stable `121c5995` (#2321). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-02-01-01-01/02/03` under `unit-02-01-position-power`:
+  - `act-02-01-01-01-explain-seats` SoftPulse EP→HJ→CO→BTN + `explainGrading` **concept-aligned** under Seat labels; `act-02-01-01-unguided-co` SoftPulse `label-co` one-per-press densify PRESENT.
+  - `act-02-01-01-guided-btn` SoftPulse `pos-btn` densify PRESENT; prompt "Tap who acts last postflop." under Seat labels (label-only objective) → filed **LPT-739** (needs-human; Relates LPT-114).
+  - `act-02-01-01-02-explain-blinds` SoftPulse SB→BB content-driven; scaffolded-blinds SoftPulse `sb-bb` one-per-press densify PRESENT.
+  - `act-02-01-01-explain-pos` SoftPulse `D` + `explainGrading` "The button acts last after the flop."; checkpoint SoftPulse `prefer-btn` kind `none` hintless densify PRESENT under Later seats — OK.
+- Curriculum **LPT-114** Done — do not clone / do not re-add needs-human. Tip-commented LPT-114/739 + Meet Nit LPT-198 / LPT-216 + open residuals LPT-738/737.
+- Prefer next: NEVER `lesson-02-01-02-*` acting-order / Low residuals LPT-676…739.
