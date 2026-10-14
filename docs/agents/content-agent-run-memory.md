@@ -3399,3 +3399,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-790/310/721/794/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Map SoftPulse residual **LPT-794** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-01-01-*: interactive structural clean on tip except LPT-790 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily.
+
+## Fold 2026-10-14id tip 7253a03c (#2491 Carry Prefer → Map LPT-794 Prefer)
+
+- Tip-stable `7253a03c` after #2491 Carry SoftPulse Prefer fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Map SoftPulse residual re-check `lesson-07-02-01-01/02/03` / `act-07-02-01-*`: first-child SoftPulse BARREL→GIVE-UP→MAP + `explainGrading` "Barrel → Give-up → Map." + Dart `TurnMapDemo` (BARREL "Cards to continue" / GIVE-UP "Cards to kill" / MAP "Before flop bet") still pre-split under continue-cards-only → residual **LPT-794** still To Do (needs-human; Relates LPT-314 — do not re-add needs-human on curriculum); successors SoftPulse BRICK→GIVE UP / CONTINUE→GIVE-UP→MAP content-driven (do not reopen LPT-669); guided SoftPulse `ok` densify PRESENT; scaffolded SoftPulse `give` one-per-press densify PRESENT; unguided SoftPulse `avoid` one-per-press densify PRESENT; checkpoint SoftPulse `list` kind `none` densify PRESENT under map-definition matches — no companion residual.
+- Curriculum **LPT-314** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-794/314/790/795/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ rule **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` map tiles — do not file handFamily.
