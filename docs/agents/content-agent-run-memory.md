@@ -3544,3 +3544,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-690/691/250/692/686/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
 - Prefer next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-05-09-01-*: interactive structural clean on tip except LPT-690/691 SoftPulse residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-14it tip e17358dc (#2509 Session Prefer → Range SoftPulse LPT-692 Prefer)
+
+- Tip-stable `e17358dc` after #2509 SoftPulse residual Prefer LPT-690 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER SoftPulse residual re-check `lesson-06-01-01-01/02/03` / `act-06-01-01-*`: first-child SoftPulse RANGE→NUT→ADVANTAGE + `explainGrading` "Range → Nut → Advantage." + Dart `RangeAdvantageDemo` / layout "Tap Range, then Nut, then Advantage." still pre-split under range-advantage-only → residual **LPT-692** still To Do (Relates LPT-254 — do not re-add needs-human on curriculum); successors SoftPulse NUTS→PAIRED→CALLER / RANGE→NUTS→BET content-driven (do not reopen LPT-669); guided SoftPulse `pfr` densify PRESENT; scaffolded SoftPulse `caller-nuts` densify PRESENT; unguided SoftPulse `cbet` map PRESENT (fixed AhKd/Kc7s2d + 2 suit variants); checkpoint SoftPulse `press` kind `none` densify PRESENT under press-both — no companion residual.
+- Curriculum **LPT-254** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-692/254/690/694/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress S1–S2 LPT-724…749 alone; leave ui-agent alone.
+- Prefer next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-01-01-*: interactive structural clean on tip except LPT-692 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify/map PRESENT — do not reopen LPT-628.
+
