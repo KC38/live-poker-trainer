@@ -2984,3 +2984,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-684/236/198/216/682; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Timing SoftPulse residual **LPT-685** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 
+## Fold 2026-10-14gc (964cd956 Prefer NEVER Timing SoftPulse residual LPT-685 re-check)
+
+- Tip-stable `964cd956` (#2423 Lines SoftPulse Prefer re-check). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Timing SoftPulse residual re-check `lesson-05-07-01-01/02/03`: first-child SoftPulse TIMING→SIZING→CLUES + Dart `TimingCluesDemo` still pre-split under timing-soft-only → residual **LPT-685** still To Do (needs-human; Relates LPT-244); successors content-driven; checkpoint SoftPulse `tiny` under timing-soft — no companion residual; curriculum **LPT-244** Done.
+- Tip-commented LPT-685/244/198/216/684; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Dynamics SoftPulse residual **LPT-686** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
