@@ -222,13 +222,16 @@ Lesson-specific pattern notes (full history) live in
   Done — do not re-add needs-human); tip `7e8336c1` Prefer NEVER vs-open:
   SoftPulse FOLD→CALL→3-BET under Fold-weak → **LPT-743**; successors
   PLAYABLE→IN POSITION→CALL / STRONG→3-BET content-driven (LPT-127 Done —
-  do not re-add needs-human); tip `64b08a3b` Prefer NEVER stack:
+  do not re-add needs-human);   tip `64b08a3b` Prefer NEVER stack:
   SoftPulse CHIPS→BB→SHORTER→DEPTH under Convert-chips → **LPT-748**;
   successors SHORTER→EFFECTIVE / 50BB→100BB→200BB content-driven
-  (LPT-130 Done — do not re-add needs-human); curriculum
-  LPT-668/330/333/336/192/100/103/106/114/117/121/124/127/130 Done —
-  do not re-add needs-human; next: NEVER `lesson-02-06-01-*` live-habits /
-  Low residuals LPT-676…748.
+  (LPT-130 Done — do not re-add needs-human); tip `2efbb166` Prefer NEVER
+  live-habits: SoftPulse WATCH→SAY→COVER→WAIT under Follow-action →
+  **LPT-749**; successors SAY→CHIPS / COVER→WAIT content-driven
+  (LPT-133 Done — do not re-add needs-human); curriculum
+  LPT-668/330/333/336/192/100/103/106/114/117/121/124/127/130/133 Done —
+  do not re-add needs-human; next: NEVER `lesson-02-07-01-*` baseline /
+  Low residuals LPT-676…749.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
