@@ -1703,3 +1703,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented catalog **LPT-669** (no checklist rebuild); Done-ack **LPT-130**/128/672 + parents/348/216/667.
 - Prefer bullet tightened (cap 40): next NEVER → `lesson-02-06-01-*` live-habits children.
 - next: **LPT-669** SoftPulse explain Dart maps OR next NEVER `lesson-02-06-01-01/02/03` / Low curriculum.
+
+## Fold 2026-10-14bi (a98abf0f LPT-669 S4 rebuild after #2246)
+
+- Tip mid-run `2e42d603` → `1e75347d` (#2246 S4 `lessonSplitMap` LPT-186/189/195/198/202/205/208/212 + broader S4 splits) → `a98abf0f` (#2247).
+- Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**.
+- Rebuilt catalog **LPT-669** checklist *46→72* (+26 S4 successor SoftPulse explains: ranges / 3-bet-squeeze / c-bet / sizing / SPR / sticky / station / nit / maniac / confidence / exploit-checkpoint).
+- Effective-stacks NEVER walk on `2e42d603` unchanged (eff/depth already listed).
+- next: **LPT-669** SoftPulse explain Dart maps OR NEVER `lesson-02-06-01-*` live-habits / S4 NEVER / Low curriculum.
