@@ -3050,3 +3050,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-701/702/273/198/216/700/703; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
+
+## Fold 2026-10-14gl (fb309084 Prefer NEVER Mix SoftPulse residual LPT-703 re-check)
+
+- Tip-stable `fb309084` (#2435 Defend SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Mix SoftPulse residual re-check `lesson-06-08-01-01/02/03`: first-child SoftPulse MIX→PURPOSE→STRONG + Dart `MixedStrategyDemo` still pre-split under mix-strong-only → residual **LPT-703** still To Do (needs-human; Relates LPT-277); successors content-driven; checkpoint SoftPulse `freq` under no-pure-random — no companion residual; curriculum **LPT-277** Done.
+- Tip-commented LPT-703/277/198/216/701; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Plan-3bet SoftPulse residual **LPT-704** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
