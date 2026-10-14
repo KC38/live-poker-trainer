@@ -283,8 +283,15 @@ Lesson-specific pattern notes (full history) live in
   densify PRESENT + checkpoint SoftPulse `bad-1` kind `none` — residual
   polar scaffolded under Nearby stays **LPT-676** (needs-human; Relates
   LPT-179); curriculum LPT-179 Done — do not clone / do not re-add
-  needs-human; next: NEVER `lesson-04-05-01-*` SPR /
-  Low residuals LPT-676…760.
+  needs-human; tip `43daea2a` Prefer NEVER SPR: SoftPulse SPR→LOW→HIGH
+  packs depth labels under Estimate (expected); successors LOW SPR→COMMIT
+  / HIGH SPR→FLEXIBLE content-driven; guided SoftPulse `spr-4` densify
+  PRESENT (`deal.mode` `none`) + scaffolded SoftPulse `commit` + unguided
+  SoftPulse `flexible` one-per-press + checkpoint SoftPulse `before` kind
+  `none` — residual weigh-SPR habit under Estimate stays **LPT-677**
+  (needs-human; Relates LPT-182); curriculum LPT-182 Done — do not clone /
+  do not re-add needs-human; no new SoftPulse residual; next: NEVER
+  `lesson-04-06-01-*` observe-sticky / Low residuals LPT-676…760.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -328,6 +335,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14eb: Tip-stable `43daea2a` (#2353 sizing SoftPulse residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER SPR children `lesson-04-05-01-01/02/03`: SoftPulse SPR→LOW→HIGH packs depth labels under Estimate (expected); successors LOW SPR→COMMIT / HIGH SPR→FLEXIBLE content-driven; guided SoftPulse `spr-4` densify PRESENT (`deal.mode` `none`) + scaffolded SoftPulse `commit` one-per-press + unguided SoftPulse `flexible` one-per-press + checkpoint SoftPulse `before` kind `none` hintless — residual weigh-SPR habit under Estimate stays **LPT-677** (needs-human; Relates LPT-182). Curriculum **LPT-182** Done — do not clone / do not re-add needs-human; no new SoftPulse residual. Tip-commented LPT-677/182/676 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…760. next: NEVER `lesson-04-06-01-*` observe-sticky / Low residuals LPT-676…760.
 - 2026-10-14ea: Tip-stable `a0032775` (continuation SoftPulse concept-aligned learnings on tip #2352). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER sizing children `lesson-04-04-01-01/02/03`: SoftPulse VALUE→PRESSURE→SIZE under still-merged Value objective (packs both — expected); successors NEARBY→STORY / TINY→VALUE content-driven; guided SoftPulse `half` fixed+2 variants + scaffolded SoftPulse `big` one-per-press + unguided SoftPulse `soft` densify PRESENT + checkpoint SoftPulse `bad-1` kind `none` hintless — residual polar scaffolded under Nearby stays **LPT-676** (needs-human; Relates LPT-179). Curriculum **LPT-179** Done — do not clone / do not re-add needs-human; no new SoftPulse residual. Tip-commented LPT-676/179/760 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…760. next: NEVER `lesson-04-05-01-*` SPR / Low residuals LPT-676…760.
 - 2026-10-14dz: Tip-stable `f3a92939` (threebet SoftPulse residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER continuation children `lesson-04-03-01-01/02/03`: SoftPulse FLOP→TURN→RIVER under multi-street-plan **concept-aligned**; successors BOARD CHANGES→STOP / MEDIUM→SMALL POT content-driven; guided SoftPulse flop-bet→turn-bet + scaffolded SoftPulse `abort` + unguided SoftPulse `small-pot` + checkpoint SoftPulse `branches` kind `none` PRESENT — no SoftPulse residual. Curriculum **LPT-176** Done — do not clone / do not re-add needs-human. Tip-commented LPT-176 + Meet Nit LPT-198 / LPT-216; leave open LPT-760/759/757…. next: NEVER `lesson-04-04-01-*` sizing / Low residuals LPT-676…760.
 - 2026-10-14dy: Tip-stable `59fe21e0` (#2349 ranges SoftPulse residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER threebet children `lesson-04-02-01-01/02/03`: SoftPulse 3-BET→RANGES→SQUEEZE under Value-3bet → **LPT-760** (+ checkpoint `size-18` under Squeeze spots); successors 3-BET→FOLD→CONTINUE / OPEN→CALLERS→SQUEEZE content-driven; guided SoftPulse `3bet-qq` + scaffolded SoftPulse `fold-72` one-per-press + unguided SoftPulse `squeeze` + checkpoint SoftPulse `size-18` kind `none` PRESENT (densify N/A `poker_action_sizing`). Curriculum **LPT-172** Done — do not clone / do not re-add needs-human; distinct from Versus **LPT-743** / Ranges **LPT-759**. Tip-commented LPT-172/760/759 + Meet Nit LPT-198 / LPT-216; leave open LPT-760/759/757…. next: NEVER `lesson-04-03-01-*` continuation / Low residuals LPT-676…760.

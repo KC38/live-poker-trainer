@@ -2441,3 +2441,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - residual polar scaffolded under Nearby stays **LPT-676** (needs-human; Relates LPT-179) — tip-commented; do not reopen Done **LPT-179**.
 - Curriculum **LPT-179** Done — do not clone / do not re-add needs-human. Tip-commented LPT-676/179/760 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…760.
 - Prefer next: NEVER `lesson-04-05-01-*` SPR / Low residuals LPT-676…760.
+
+## Fold 2026-10-14eb (43daea2a discovery SPR SoftPulse residual re-check)
+
+- Tip-stable `43daea2a` (#2353 sizing SoftPulse residual learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-04-05-01-01/02/03` under SPR unit:
+  - first-child `act-04-05-01-explain` SoftPulse SPR→LOW→HIGH + `explainGrading` under Estimate (packs depth labels — expected; not a new SoftPulse residual).
+  - successors `act-04-05-01-02-explain-low` (LOW SPR→COMMIT) + `act-04-05-01-03-explain-high` (HIGH SPR→FLEXIBLE) content-driven; guided SoftPulse `spr-4` densify PRESENT (`deal.mode` `none` chip÷pot — no handFamily) + scaffolded SoftPulse `commit` one-per-press (`Kh/Kd`·`Kc/7s/2d` +2 variants) + unguided SoftPulse `flexible` one-per-press (`Jh/9d`·`Qc/9s/3h` +2 variants) + checkpoint SoftPulse `before` kind `none` hintless (`Ah/Kd`·`Qs/7c/2d/9h` +2 variants).
+  - residual weigh-SPR habit checkpoint under Estimate stays **LPT-677** (needs-human; Relates LPT-182) — tip-commented; do not reopen Done **LPT-182**.
+- Curriculum **LPT-182** Done — do not clone / do not re-add needs-human. Tip-commented LPT-677/182/676 + Meet Nit LPT-198 / LPT-216; leave open LPT-676…760.
+- Prefer next: NEVER `lesson-04-06-01-*` observe-sticky / Low residuals LPT-676…760.
+- act-04-05-01-*: interactive structural clean on tip except curriculum residual LPT-677; SoftPulse explain successors content-driven (do not reopen LPT-669); guided is `deal.mode` `none` outcome tiles — do not file handFamily.
