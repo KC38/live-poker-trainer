@@ -99,6 +99,22 @@ void main() {
     expect(liveTrainingLockedSnack(), isNot(contains('Section 2')));
   });
 
+  test('anonymous locked copy asks for an account (LPT-697)', () {
+    final anon = LiveAccessSnapshot.anonymous();
+    expect(anon.requiresAccount, isTrue);
+    expect(anon.tier, LiveAccessTier.locked);
+    expect(anon.source, 'anonymous');
+    expect(
+      liveTrainingAnonymousLockedMessage(),
+      'Create an account before Live Training.',
+    );
+    expect(
+      liveTrainingAnonymousLockedMessage(),
+      isNot(contains(kLiveWarmUpUnlockLessonTitle)),
+    );
+    expect(LiveAccessSnapshot.locked().requiresAccount, isFalse);
+  });
+
   test('warm-up unrestricted copy names Section 4 jump check on Home', () {
     expect(
       liveTrainingWarmUpHubMessage(),

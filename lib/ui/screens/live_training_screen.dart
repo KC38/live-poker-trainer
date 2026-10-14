@@ -25,6 +25,7 @@ import 'package:live_poker_trainer/providers/live_access_provider.dart';
 import 'package:live_poker_trainer/providers/service_providers.dart';
 import 'package:live_poker_trainer/providers/settings_provider.dart';
 import 'package:live_poker_trainer/services/analytics/analytics_service.dart';
+import 'package:live_poker_trainer/ui/screens/auth_screen.dart';
 import 'package:live_poker_trainer/ui/screens/poker_table_screen.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 import 'package:live_poker_trainer/ui/widgets/brand_logo.dart';
@@ -83,9 +84,7 @@ class _LiveTrainingScreenState extends ConsumerState<LiveTrainingScreen> {
     if (user != null && user.isAnonymous) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Create an account before Live Training.'),
-        ),
+        SnackBar(content: Text(liveTrainingAnonymousLockedMessage())),
       );
       return;
     }
@@ -368,6 +367,12 @@ class _LiveAccessGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final warm = access.tier == LiveAccessTier.warmUp;
+    final needsAccount = access.requiresAccount;
+    final body = needsAccount
+        ? liveTrainingAnonymousLockedMessage()
+        : warm
+            ? liveTrainingWarmUpHubMessage()
+            : liveTrainingLockedMessage();
     return Padding(
       padding: const EdgeInsets.fromLTRB(22, 28, 22, 28),
       child: Column(
@@ -381,9 +386,7 @@ class _LiveAccessGate extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            warm
-                ? liveTrainingWarmUpHubMessage()
-                : liveTrainingLockedMessage(),
+            body,
             style: GoogleFonts.manrope(
               color: AppColors.cream,
               fontSize: 16,
@@ -391,26 +394,44 @@ class _LiveAccessGate extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          if (warm && onWarmUp != null)
+          if (needsAccount) ...[
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: onWarmUp,
-                child: const Text('Start Rex warm-up'),
+                onPressed: () => pushSaveProgressAuth(context),
+                child: const Text('Create an account'),
               ),
             ),
-          if (warm) const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: OutlinedButton(
-              onPressed: onOpenHome,
-              child: Text(
-                access.nextLessonId == null
-                    ? 'Continue on Home'
-                    : 'Next lesson on Home',
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: onOpenHome,
+                child: const Text('Continue on Home'),
               ),
             ),
-          ),
+          ] else ...[
+            if (warm && onWarmUp != null)
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: onWarmUp,
+                  child: const Text('Start Rex warm-up'),
+                ),
+              ),
+            if (warm) const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: onOpenHome,
+                child: Text(
+                  access.nextLessonId == null
+                      ? 'Continue on Home'
+                      : 'Next lesson on Home',
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

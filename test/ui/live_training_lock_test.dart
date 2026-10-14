@@ -43,52 +43,101 @@ void main() {
     );
   });
 
-  testWidgets('a locked guest sees Baseline jump check copy and no table', (
-    tester,
-  ) async {
-    var openedHome = false;
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          analyticsServiceProvider.overrideWithValue(
-            AnalyticsService(enabled: false),
+  testWidgets(
+    'a signed-in course-locked learner sees Baseline jump check copy',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      var openedHome = false;
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
+            liveAccessProvider.overrideWith(
+              (ref) async => LiveAccessSnapshot.locked(),
+            ),
+            courseCatalogProvider.overrideWith((ref) async {
+              final raw = await rootBundle.loadString(kCourseCatalogAssetPath);
+              return CourseCatalog.fromJson(
+                jsonDecode(raw) as Map<String, dynamic>,
+              );
+            }),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: LiveTrainingScreen(onOpenHome: () => openedHome = true),
           ),
-          liveAccessProvider.overrideWith(
-            (ref) async => LiveAccessSnapshot.locked(),
-          ),
-          courseCatalogProvider.overrideWith((ref) async {
-            final raw = await rootBundle.loadString(kCourseCatalogAssetPath);
-            return CourseCatalog.fromJson(
-              jsonDecode(raw) as Map<String, dynamic>,
-            );
-          }),
-        ],
-        child: MaterialApp(
-          theme: buildPokerTheme(),
-          home: LiveTrainingScreen(onOpenHome: () => openedHome = true),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text('Start training'), findsNothing);
-    expect(find.byType(PokerTableScreen), findsNothing);
-    expect(find.text('Start Rex warm-up'), findsNothing);
-    expect(find.byType(BrandLogo), findsOneWidget);
-    expect(
-      find.text(
-        'Live Training is advanced. Finish Baseline jump check on Home '
-        'to unlock a coached warm-up.',
-      ),
-      findsOneWidget,
-    );
-    expect(find.textContaining('Section 2'), findsNothing);
+      expect(find.text('Start training'), findsNothing);
+      expect(find.byType(PokerTableScreen), findsNothing);
+      expect(find.text('Start Rex warm-up'), findsNothing);
+      expect(find.byType(BrandLogo), findsOneWidget);
+      expect(
+        find.text(
+          'Live Training is advanced. Finish Baseline jump check on Home '
+          'to unlock a coached warm-up.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text(liveTrainingAnonymousLockedMessage()), findsNothing);
+      expect(find.textContaining('Section 2'), findsNothing);
 
-    await tester.tap(find.text('Continue on Home'));
-    await tester.pump();
-    expect(openedHome, isTrue);
-    expect(find.byType(PokerTableScreen), findsNothing);
-  });
+      await tester.tap(find.text('Continue on Home'));
+      await tester.pump();
+      expect(openedHome, isTrue);
+      expect(find.byType(PokerTableScreen), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'an anonymous guest sees create-account hub copy (not Baseline jump)',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      var openedHome = false;
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
+            liveAccessProvider.overrideWith(
+              (ref) async => LiveAccessSnapshot.anonymous(),
+            ),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: LiveTrainingScreen(onOpenHome: () => openedHome = true),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('Start training'), findsNothing);
+      expect(find.byType(PokerTableScreen), findsNothing);
+      expect(find.text('Start Rex warm-up'), findsNothing);
+      expect(find.byType(BrandLogo), findsOneWidget);
+      expect(find.text(liveTrainingAnonymousLockedMessage()), findsOneWidget);
+      expect(find.textContaining('Baseline jump check'), findsNothing);
+      expect(find.text('Create an account'), findsOneWidget);
+
+      await tester.tap(find.text('Continue on Home'));
+      await tester.pump();
+      expect(openedHome, isTrue);
+    },
+  );
 
   testWidgets('a finished checkpoint still offers the Rex warm-up', (
     tester,

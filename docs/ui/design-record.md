@@ -1667,7 +1667,11 @@ The lesson result uses `RexMascot` for the ceremony. It does not draw a
 letter R. It shows this lesson’s XP and the daily goal before Home. Review
 lessons award 25% of the XP earned.
 
-The locked Live Training hub names the Home lesson that unlocks it. It does not say Section 2. The warm-up hub names **Section 4 jump check** when random Live is still gated — not “Section 4 jump test”.
+The locked Live Training hub names the Home lesson that unlocks it for
+signed-in learners. It does not say Section 2. Anonymous guests see
+**Create an account before Live Training.** (not Baseline jump check) with
+a Create-an-account CTA (LPT-697). The warm-up hub names **Section 4 jump
+check** when random Live is still gated — not “Section 4 jump test”.
 
 A learning screen that is a form, a wall of text, or a silent pop back to
 Home misses this loop. File one ticket per missing beat.
@@ -1684,13 +1688,18 @@ accepted accuracy. Embedded CONTINUE (`standalone: false`) calls
 `continueLearningAsGuest` when the anonymous draft is still pre-shell so
 AppRoot remounts Home instead of Welcome (LPT-70).
 
-The locked Live Training hub copy is `liveTrainingLockedMessage`
-(`lib/models/live_access.dart`), which names Baseline jump check via
-`kLiveWarmUpUnlockLessonTitle`. The gate is the Home node
-`lesson-02-07-02-section-two-jump`. The snackbar
-`liveTrainingLockedSnack` uses the same title. Warm-up hub copy is
-`liveTrainingWarmUpHubMessage`, naming **Section 4 jump check** via
-`kLiveUnrestrictedUnlockLessonTitle` (`lesson-04-10-02-section-four-jump-test`).
+The locked Live Training hub copy for signed-in course-locked learners is
+`liveTrainingLockedMessage` (`lib/models/live_access.dart`), which names
+Baseline jump check via `kLiveWarmUpUnlockLessonTitle`. The gate is the
+Home node `lesson-02-07-02-section-two-jump`. The snackbar
+`liveTrainingLockedSnack` uses the same title. Anonymous guests use
+`LiveAccessSnapshot.anonymous()` / `liveTrainingAnonymousLockedMessage`
+(**Create an account before Live Training.**) with a Theme elevated
+**Create an account** CTA to `pushSaveProgressAuth` (LPT-697) —
+`liveAccessProvider` must not surface Baseline jump check to guests.
+Warm-up hub copy is `liveTrainingWarmUpHubMessage`, naming **Section 4
+jump check** via `kLiveUnrestrictedUnlockLessonTitle`
+(`lesson-04-10-02-section-four-jump-test`).
 `liveTrainingWarmUpUnrestrictedSnack` uses the same title.
 
 ## Asset inventory
