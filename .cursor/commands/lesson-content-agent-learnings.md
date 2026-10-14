@@ -225,12 +225,16 @@ Lesson-specific pattern notes (full history) live in
   do not re-add needs-human);   tip `64b08a3b` Prefer NEVER stack:
   SoftPulse CHIPS→BB→SHORTER→DEPTH under Convert-chips → **LPT-748**;
   successors SHORTER→EFFECTIVE / 50BB→100BB→200BB content-driven
-  (LPT-130 Done — do not re-add needs-human); tip `2efbb166` Prefer NEVER
+  (LPT-130 Done — do not re-add needs-human);   tip `2efbb166` Prefer NEVER
   live-habits: SoftPulse WATCH→SAY→COVER→WAIT under Follow-action →
   **LPT-749**; successors SAY→CHIPS / COVER→WAIT content-driven
-  (LPT-133 Done — do not re-add needs-human); curriculum
+  (LPT-133 Done — do not re-add needs-human); tip `c32322ec` Prefer
+  NEVER baseline: SoftPulse NINE→SAME→POSITION under full-ring-open
+  **concept-aligned**; successors OPEN→PLAN / COVER→WAIT content-driven
+  (LPT-668 Done — do not re-add needs-human; no SoftPulse residual);
+  curriculum
   LPT-668/330/333/336/192/100/103/106/114/117/121/124/127/130/133 Done —
-  do not re-add needs-human; next: NEVER `lesson-02-07-01-*` baseline /
+  do not re-add needs-human; next: NEVER `lesson-03-01-01-*` table-read /
   Low residuals LPT-676…749.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
@@ -275,6 +279,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14do: Tip-stable `c32322ec` (#2333 live-habits SoftPulse residual learnings). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER baseline children `lesson-02-07-01-01/02/03`: SoftPulse NINE→SAME→POSITION under full-ring-open **concept-aligned**; successors OPEN→PLAN / COVER→WAIT content-driven; guided SoftPulse `open-ajs` + scaffolded SoftPulse `call-22` one-per-press + unguided SoftPulse `lab-3bet` one-per-press + checkpoint SoftPulse `cover-wait` kind `none` densify PRESENT — no SoftPulse residual. Curriculum **LPT-668** Done — do not clone / do not re-add needs-human. Tip-commented LPT-668; leave open LPT-749/748/743/741/740…. next: NEVER `lesson-03-01-01-*` table-read / Low residuals LPT-676…749.
 - 2026-10-14dm: Tip-stable `64b08a3b` (#2330). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER stack children: SoftPulse CHIPS→BB→SHORTER→DEPTH under Convert-chips → **LPT-748**; successors SHORTER→EFFECTIVE / 50BB→100BB→200BB content-driven; guided SoftPulse `bb-100` + scaffolded SoftPulse `eff-60` + unguided SoftPulse `depth-50` + checkpoint SoftPulse `bb-200` kind `none` hintless PRESENT. Curriculum **LPT-130** Done — do not clone / do not re-add needs-human. Tip-commented LPT-130/748 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-02-06-01-*` live-habits / Low residuals LPT-676…748.
 - 2026-10-14dl: Tip-stable `7e8336c1` (#2326). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER vs-open children: SoftPulse FOLD→CALL→3-BET under Fold-weak → **LPT-743**; successors PLAYABLE→IN POSITION→CALL / STRONG→3-BET content-driven; guided SoftPulse `fold-j3` + scaffolded SoftPulse `call-87s` + unguided SoftPulse `3bet-kk` + checkpoint SoftPulse `3bet-aqs` kind `none` hintless PRESENT. Curriculum **LPT-127** Done — do not clone / do not re-add needs-human. Tip-commented LPT-127/743/741/740 + Meet Nit LPT-198 / LPT-216 + Done catalog parents. next: NEVER `lesson-02-05-01-*` stack / Low residuals LPT-676…743.
 - 2026-10-14dk: Tip-stable `0431044f` (#2325). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER open-fold children: SoftPulse EARLY→BUTTON→LIVE 3x under Fold-early → **LPT-741**; successors STRONG→LIVE SIZE / BUTTON→WIDER content-driven; guided SoftPulse `fold` + scaffolded SoftPulse `open-qq` + unguided SoftPulse `open-k9s` + checkpoint SoftPulse `open-ato` kind `none` hintless PRESENT. Curriculum **LPT-124** Done — do not clone / do not re-add needs-human. Tip-commented LPT-124/741/740 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-02-04-01-*` vs-open / Low residuals LPT-676…741.
