@@ -98,6 +98,13 @@ void main() {
       'lesson-06-12-02-meet-lag',
       'lesson-06-12-03-adjust-lag',
       'lesson-06-13-01-mix-five-types',
+      // LPT-batch-split-s7a-plans
+      'lesson-07-01-01-preflop-to-flop',
+      'lesson-07-02-01-flop-to-turn-map',
+      'lesson-07-03-01-river-composition',
+      'lesson-07-04-01-pot-type-plans',
+      'lesson-07-05-01-hu-vs-multiway',
+      'lesson-07-06-01-stack-depth-plans',
     ]) {
       expect(catalog.lessonById(retired), isNull, reason: retired);
       final successors = catalog.lessonSplitMap[retired];

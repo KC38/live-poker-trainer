@@ -3812,7 +3812,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-01-01-preflop-to-flop',
+          lessonId: 'lesson-07-01-01-01-preflop-thesis', // split from lesson-07-01-01-preflop-to-flop
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_preflop_flop_plan_frame',
@@ -3857,7 +3857,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-02-01-flop-to-turn-map',
+          lessonId: 'lesson-07-02-01-01-continue-cards', // split from lesson-07-02-01-flop-to-turn-map
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_turn_map_frame',
@@ -3899,7 +3899,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-03-01-river-composition',
+          lessonId: 'lesson-07-03-01-01-river-value', // split from lesson-07-03-01-river-composition
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_river_composition_frame',
@@ -3944,7 +3944,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-04-01-pot-type-plans',
+          lessonId: 'lesson-07-04-01-01-limped-pots', // split from lesson-07-04-01-pot-type-plans
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_pot_type_plans_frame',
@@ -3986,7 +3986,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-05-01-hu-vs-multiway',
+          lessonId: 'lesson-07-05-01-01-bluff-less-multiway', // split from lesson-07-05-01-hu-vs-multiway
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_hu_multiway_frame',
@@ -4028,7 +4028,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-07-06-01-stack-depth-plans',
+          lessonId: 'lesson-07-06-01-01-commit-short', // split from lesson-07-06-01-stack-depth-plans
           courseService: _PrerequisiteLockedCourseService(catalog)
             ..previousComplete = true,
           startRequestId: 'start_stack_depth_plans_frame',

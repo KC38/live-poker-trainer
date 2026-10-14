@@ -3226,12 +3226,12 @@ export const SECTION_SIX_EXIT_LESSON =
 /** @returns {object} Section 7 — Full-Hand Integration */
 export function buildSectionSeven() {
   const prev = SECTION_SIX_EXIT_LESSON;
-  const L070101 = "lesson-07-01-01-preflop-to-flop";
-  const L070201 = "lesson-07-02-01-flop-to-turn-map";
-  const L070301 = "lesson-07-03-01-river-composition";
-  const L070401 = "lesson-07-04-01-pot-type-plans";
-  const L070501 = "lesson-07-05-01-hu-vs-multiway";
-  const L070601 = "lesson-07-06-01-stack-depth-plans";
+  const L070101 = "lesson-07-01-01-preflop-to-flop"; // retired LPT-310: split in course.json (lessonSplitMap)
+  const L070201 = "lesson-07-02-01-flop-to-turn-map"; // retired LPT-314: split in course.json (lessonSplitMap)
+  const L070301 = "lesson-07-03-01-river-composition"; // retired LPT-317: split in course.json (lessonSplitMap)
+  const L070401 = "lesson-07-04-01-pot-type-plans"; // retired LPT-320: split in course.json (lessonSplitMap)
+  const L070501 = "lesson-07-05-01-hu-vs-multiway"; // retired LPT-323: split in course.json (lessonSplitMap)
+  const L070601 = "lesson-07-06-01-stack-depth-plans"; // retired LPT-326: split in course.json (lessonSplitMap)
   const L070701 = "lesson-07-07-01-same-cards-types";
   const L070801 = "lesson-07-08-01-type-board-line";
   const L070901 = "lesson-07-09-01-leak-review-book";
