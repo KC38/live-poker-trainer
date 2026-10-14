@@ -3245,3 +3245,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-stable `90c78cb2` after #2463 Lines SoftPulse Prefer LPT-684. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
 - Prefer NEVER Timing SoftPulse residual **LPT-685** re-check: TIMING→SIZING→CLUES still under timing-soft-only — still To Do needs-human (Relates LPT-244). Successors content-driven; densify PRESENT; curriculum LPT-244 Done — do not clone.
 - next: NEVER Dynamics SoftPulse residual **LPT-686** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
+## Fold 2026-10-14hk tip 86fce9be (#2464 Timing Prefer → Dynamics LPT-686 Prefer)
+
+- Tip-stable `86fce9be` after #2464 Timing SoftPulse Prefer LPT-685. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Dynamics SoftPulse residual **LPT-686** re-check (`lesson-05-08-01-01/02/03` / `act-05-08-01-*`): first-child SoftPulse STUCK→TILTED→GEARS + Dart `TablesChangeDemo` + coachMedia gears teaser + `explainGrading` "Stuck → Tilted → Gears." still under tilted/stuck-only → still To Do needs-human (Relates LPT-247). Companion `act-05-08-01-checkpoint` SoftPulse `temp` kind `none` densify PRESENT under Gear changes grades Fresh samples → **LPT-687** still To Do. Successors GEAR→CHANGE→SAMPLE / COOLER→CHASE→RESET content-driven (do not reopen LPT-669). Guided SoftPulse `stuck` densify PRESENT; scaffolded SoftPulse `gear` densify PRESENT; unguided SoftPulse `reset` map PRESENT (`Jh`/`Td`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants match Dart). Curriculum **LPT-247** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-686/687/247/685/690/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- next: NEVER Session SoftPulse residual **LPT-690** (+LPT-691) / Low residuals LPT-676…802 / Low curriculum LPT-351.
