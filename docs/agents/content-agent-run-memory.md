@@ -3264,3 +3264,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-stable `79225d4f` after #2467 Session SoftPulse Prefer LPT-690. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
 - Prefer NEVER Range SoftPulse residual **LPT-692** re-check: RANGE→NUT→ADVANTAGE still under range-advantage-only — still To Do needs-human (Relates LPT-254). Successors content-driven; densify PRESENT; curriculum LPT-254 Done — do not clone.
 - next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
+## Fold 2026-10-14hn tip 17eeda21 (Spot-caps SoftPulse Prefer LPT-694)
+
+- Tip-stable `17eeda21` after #2468 Range SoftPulse Prefer on tip. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Spot-caps SoftPulse residual **LPT-694** re-check (`lesson-06-03-01-01/02/03` / `act-06-03-01-*`): first-child SoftPulse CAPPED→UNCAPPED→NUTS + Dart `CappedUncappedDemo` + layout "Tap Capped, Uncapped, and Nuts." still under spot-caps-only → still To Do needs-human (Relates LPT-260). Race clone LPT-695 Done — do not reopen. Successors RAISE→BET→RESPECT / CAPPED→THIN→BLUFF content-driven (do not reopen LPT-669). Guided SoftPulse `cap` densify PRESENT; unguided SoftPulse `uncap` densify PRESENT; scaffolded SoftPulse `bet` map PRESENT (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants); checkpoint SoftPulse `attack` kind `none` densify PRESENT.
+- Curriculum **LPT-260** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-694/260/692/696/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- next: NEVER Polar SoftPulse residual **LPT-696** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-03-01-*: interactive structural clean on tip except LPT-694 SoftPulse residual; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing.
