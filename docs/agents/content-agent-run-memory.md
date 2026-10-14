@@ -3208,3 +3208,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Capstone `lesson-07-10-0*` (synthesis clean) / live-warmup curriculum **LPT-351** / Low residuals LPT-676…802.
 - act-07-09-01-*: interactive structural clean on tip except LPT-727 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactives densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-14he tip 7fd3a515 (#2458 Leak Prefer → Capstone/warmup/Final Prefer)
+
+- Tip-stable `7fd3a515` after #2458 Leak SoftPulse Prefer re-check. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Prefer NEVER Capstone `lesson-07-10-01…05` re-check: SoftPulse walks concept-aligned under synthesis containers; hands transfer + noHintIds — **LPT-348** Done; no SoftPulse residual; skip curriculum-split.
+- Prefer NEVER live-warmup: SoftPulse CHECKLIST→DEFAULTS→ONE HAND matches packed objectives (residual N/A until **LPT-351**); densify PRESENT; LPT-349 Done; **LPT-351** still To Do needs-human.
+- Prefer NEVER Final: seven checkpoint cues kind `none` densify PRESENT — clean (LPT-352 Done).
+- S7 Prefer NEVER SoftPulse residual re-check path complete through Capstone + warm-up + Final. next: oldest open SoftPulse residual re-check (LPT-676…802) / Low curriculum LPT-351.
