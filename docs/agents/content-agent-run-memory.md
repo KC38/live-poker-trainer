@@ -2630,3 +2630,14 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-06-02-01-*` equity-realization / Low residuals LPT-676…779 (LPT-680…693).
 - act-06-01-01-*: interactive structural clean on tip except LPT-692 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14ex (d8023786 Prefer NEVER equity-realization SoftPulse re-check)
+
+- Tip-stable `d8023786` (#2384 range-nut SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-06-02-01-01/02/03` under equity-realization unit:
+  - first-child `act-06-02-01-explain` SoftPulse EQUITY→CASH→POS + `explainGrading` "Equity → Cash → Position." + coachMedia "Position decides realization." + Dart `EquityRealizeDemo` POS-led Prefer-IP framing OK (not a NUT-style successor leak).
+  - companion `act-06-02-01-checkpoint` SoftPulse `pos` kind `none` densify PRESENT under Prefer-IP grades Position + initiative → residual **LPT-693** still To Do (needs-human).
+  - successors `act-06-02-01-02-explain-oop` (OOP→BARRELS→DISCOUNT) + `act-06-02-01-03-explain-aggro` (SEMI-BLUFF→FOLDS→OUTS) content-driven; guided SoftPulse `ip` densify PRESENT; scaffolded SoftPulse `discount` one-per-press PRESENT; unguided SoftPulse `realize` one-per-press PRESENT.
+- Curriculum **LPT-257** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-693/257/198/216/690/691/692/694; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-03-01-*` capped-uncapped / Low residuals LPT-676…779 (LPT-680…694).
+- act-06-02-01-*: interactive structural clean on tip except LPT-693 Prefer-IP checkpoint residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
