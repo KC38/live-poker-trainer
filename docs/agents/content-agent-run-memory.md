@@ -2132,3 +2132,9 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - checkpoint SoftPulse `tag` under `lesson-06-13-01-04-cite-tendency` matches cite objective — no companion residual. Maniac/baseline never-as-correct notes from LPT-306 resolved by child objectives.
 - Curriculum **LPT-306** Done — do not clone / do not re-add needs-human. Done-ack LPT-304/305/442.
 - Prefer next NEVER: `lesson-06-13-02-*` S6 checkpoint / remaining S6 NEVER / Low curriculum.
+
+## Fold 2026-10-14cu (594827d8 S6 checkpoint structural)
+
+- Tip-stable `594827d8` (#2303). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery `lesson-06-13-02-section-six-checkpoint`: all five activities scaffolded + `assessmentRole` checkpoint; teachSpec `deal.mode` `none` + cue kind `none` (`ra`/`cap`/`polar`/`tag`/`lag`); no pressHints/hints; densify PRESENT in `selectIdentifyDensifiedCoachLine` + rex. Assessment container — skip curriculum-split. Tip-commented Done LPT-307/444.
+- S6 Prefer NEVER path complete (residuals open needs-human through LPT-721). Prefer next: Low curriculum **LPT-192** Adjust Station (still unsplit `lesson-04-06-03-adjust-calling-station`) / oldest unfresh / Low residuals LPT-676…721.
