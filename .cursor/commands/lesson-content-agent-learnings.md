@@ -163,7 +163,8 @@ Lesson-specific pattern notes (full history) live in
   BOOK/REVIEW) + **LPT-731** (Fold SoftPulse still walks CHECK/CALL under
   Fold-only) + **LPT-732** (Adjust Station SoftPulse still walks
   BLUFFS/CITE under Value-wider) + **LPT-733** (Bet SoftPulse still walks
-  RAISE/ALL-IN under Bet-only); multiway-ranges +
+  RAISE/ALL-IN under Bet-only) + **LPT-737** (postflop-first checkpoint
+  still under Action order); multiway-ranges +
   line-reading structural clean (first-child ACTION→REWRITE→UPDATE matches
   update-each-street — no residual); Prefer-IP SoftPulse EQUITY→CASH→POS is
   POS-led framing (not a NUT-style successor leak); careful-4bet SoftPulse
@@ -191,12 +192,16 @@ Lesson-specific pattern notes (full history) live in
   needs-human);   tip `0384a31f` (#2315) Prefer NEVER Adjust Station:
   SoftPulse VALUE→BLUFFS→CITE under Value-wider → **LPT-732**; successors
   RARELY FOLDS→GIVE UP / EVIDENCE→UNKNOWN content-driven (LPT-192 Done —
-  do not re-add needs-human); tip `78bd63ca` Prefer NEVER bet/raise/all-in:
+  do not re-add needs-human);   tip `78bd63ca` Prefer NEVER bet/raise/all-in:
   SoftPulse BET→RAISE→ALL-IN under Bet-only → **LPT-733**; successors
   FACING BET→RAISE / STACK→ALL-IN content-driven (LPT-100 Done — do not
-  re-add needs-human); curriculum LPT-668/330/333/336/192/100 Done —
-  do not re-add needs-human; next: NEVER `lesson-01-04-01-*`
-  streets/acting-order / Low residuals LPT-676…733.
+  re-add needs-human); tip `ff0b8002` Prefer NEVER streets/acting-order:
+  SoftPulse PREFLOP→FLOP→TURN→RIVER / BIG BLIND→CLOCKWISE→BUTTON /
+  BETS MATCHED→NEXT STREET **concept-aligned** or content-driven (no
+  SoftPulse residual); postflop-first checkpoint under Action order →
+  **LPT-737**; curriculum LPT-668/330/333/336/192/100/103 Done —
+  do not re-add needs-human; next: NEVER `lesson-01-05-01-*`
+  winning-pots / Low residuals LPT-676…737.
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -240,6 +245,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14df: Tip-stable `ff0b8002` (#2318 bet/raise SoftPulse learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER streets/acting-order children: SoftPulse PREFLOP→FLOP→TURN→RIVER / BIG BLIND→CLOCKWISE→BUTTON / BETS MATCHED→NEXT STREET concept-aligned or content-driven; guided-streets SoftPulse four presses; scaffolded-order one-per-press OK; unguided-end densify PRESENT; postflop-first checkpoint under Action order → **LPT-737**. Curriculum **LPT-103** Done — do not clone / do not re-add needs-human. Tip-commented LPT-103/737 + Meet Nit LPT-198 / LPT-216 + LPT-733. next: NEVER `lesson-01-05-01-*` winning-pots / Low residuals LPT-676…737.
 - 2026-10-14de: Tip-stable `78bd63ca` (#2317). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER bet/raise/all-in children: SoftPulse BET→RAISE→ALL-IN under Bet-only → **LPT-733**; successors FACING BET→RAISE / STACK→ALL-IN content-driven; guided-bet / scaffolded-raise / unguided-allin / checkpoint-names structural OK. Curriculum **LPT-100** Done — do not clone / do not re-add needs-human. Tip-commented LPT-100/733 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-01-04-01-*` streets/acting-order / Low residuals LPT-676…733.
 - 2026-10-14dd: Tip-stable `0384a31f` (#2316 after #2315 LPT-192). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0**). Discovery NEVER Adjust Station children post-split: SoftPulse VALUE→BLUFFS→CITE under Value-wider → **LPT-732**; successors RARELY FOLDS→GIVE UP / EVIDENCE→UNKNOWN content-driven; guided/scaffolded/unguided/checkpoint structural OK. Curriculum **LPT-192** Done — do not clone / do not re-add needs-human. Tip-commented LPT-192/732. next: NEVER `lesson-01-03-02-*` bet/raise/all-in / Low residuals LPT-676…732.
 - 2026-10-14dc: Tip-stable `6d3b0fcc` (#2312). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Discovery NEVER fold/check/call children: first-child SoftPulse FOLD→CHECK→CALL + PassiveActionsDemo under Fold-only → **LPT-731**; successors NO BET→CHECK / BET→CALL content-driven; guided-fold / scaffolded-check / unguided-call / checkpoint-legal structural OK. Curriculum **LPT-96** Done — do not clone / do not re-add needs-human. Tip-commented LPT-96/93/731 + Meet Nit LPT-198 / LPT-216. next: NEVER `lesson-01-03-02-*` bet/raise/all-in / Low residuals LPT-676…731 / In Progress **LPT-192**.
