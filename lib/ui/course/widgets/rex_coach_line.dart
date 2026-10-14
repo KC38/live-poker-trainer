@@ -388,8 +388,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // LPT-653; same class as LPT-785 / LPT-784 / LPT-672).
     'act-02-06-01-checkpoint-oot' =>
       'Action is two seats left. You toss in a raise early — tap the matching problem.',
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Cover your cards and wait your turn in the idle bubble (LPT-788;
+    // SoftPulse LPT-653; same class as LPT-786 / LPT-787 / LPT-672).
     'act-02-07-01-checkpoint-habit' =>
-      'Full ring. Action two seats left. Your cards are uncovered. Fix — pick Cover your cards and wait your turn.',
+      'Full ring. Action two seats left. Your cards are uncovered — tap the matching fix.',
     // SoftPulse off (kind: none); stem must not spoil Cutoff (LPT-675;
     // SoftPulse LPT-653; same class as LPT-672 / LPT-673 / LPT-674).
     'act-02-07-02-jump-pos' =>

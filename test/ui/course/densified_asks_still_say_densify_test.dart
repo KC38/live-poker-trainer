@@ -74,7 +74,9 @@ const _lines = <String, String>{
   // LPT-786: SoftPulse-off densify — no correct-tile spoil.
   'act-02-06-01-checkpoint-oot':
       'Action is two seats left. You toss in a raise early — tap the matching problem.',
-  'act-02-07-01-checkpoint-habit': 'Full ring. Action two seats left. Your cards are uncovered. Fix — pick Cover your cards and wait your turn.',
+  // LPT-788: SoftPulse-off densify — no correct-tile spoil.
+  'act-02-07-01-checkpoint-habit':
+      'Full ring. Action two seats left. Your cards are uncovered — tap the matching fix.',
   // LPT-675: SoftPulse-off jump — stem must not name Cutoff.
   'act-02-07-02-jump-pos':
       'Seat right before the button — pick it on the map.',
