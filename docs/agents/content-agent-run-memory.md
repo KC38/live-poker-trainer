@@ -3795,3 +3795,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 
 ## Fold 2026-10-14
 
+## Fold 2026-10-15z tip f6d561d6 (#2542 SoftPulse LPT-676 Prefer → weigh-SPR residual LPT-677 Prefer)
+
+- Tip-stable `f6d561d6` after #2542 SoftPulse residual Prefer LPT-676 fold. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER residual re-check `lesson-04-05-01-01/02/03` / `act-04-05-01-*`: SoftPulse SPR→LOW→HIGH under Estimate SPR **concept-aligned**; weigh-SPR habit checkpoint SoftPulse `before` still under Estimate SPR-only → residual **LPT-677** still To Do (Relates LPT-182 — do not re-add needs-human on curriculum); successors SoftPulse LOW SPR→COMMIT / HIGH SPR→FLEXIBLE content-driven (do not reopen LPT-669); guided SoftPulse `spr-4` densify PRESENT; scaffolded SoftPulse `commit` SoftPulse map PRESENT; unguided SoftPulse `flexible` SoftPulse map PRESENT.
+- Curriculum **LPT-182** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-677/182/676/681/198/216/351; leave open LPT-676…802 + LPT-351; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Estimate SoftPulse residual **LPT-681** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-04-05-01-*: interactive structural clean on tip except LPT-677 checkpoint placement residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628.
