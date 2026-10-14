@@ -2947,3 +2947,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-07-11-01-*` live-warmup / Low residuals LPT-676…802 / Low curriculum LPT-351.
 - act-07-10-0*: structural **clean** on tip (transfer policy + deal honesty hold).
 
+## Fold 2026-10-14fy (9d5adca8 Prefer NEVER live-warmup + Final clean; S7 SoftPulse path complete)
+
+- Tip-stable `9d5adca8` (#2418 after #2417 Capstone Prefer NEVER clean). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-07-11-01-live-warmup-prep`: still one lesson id (not split) — SoftPulse CHECKLIST→DEFAULTS→ONE HAND + `explainGrading` matches packed three objectives; *SoftPulse residual N/A* until curriculum **LPT-351** lands children; guided/scaffolded/unguided/checkpoint densify PRESENT; teachSpec **LPT-349** Done.
+- Curriculum **LPT-351** still To Do (needs-human) — tip-commented; do not clone SoftPulse residual stem pre-split.
+- Discovery Prefer NEVER `lesson-07-12-01-five-type-final`: all seven acts scaffolded + `assessmentRole` checkpoint; SoftPulse cues kind `none`; densify PRESENT; hintless — structural **clean** (assessment container; skip curriculum-split; **LPT-352** Done).
+- Tip-commented LPT-351/349/352/348/198/216/727; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER oldest open SoftPulse residual re-check (LPT-676…802) / Low curriculum LPT-351.
+- S7 Prefer NEVER SoftPulse residual path complete through Capstone + warm-up + Final.
+
