@@ -543,8 +543,16 @@ Lesson-specific pattern notes (full history) live in
   PRESENT; scaffolded SoftPulse `disc` densify PRESENT; unguided SoftPulse
   `low` densify PRESENT; checkpoint SoftPulse `bundle` kind `none` densify
   PRESENT (matches wait-for-samples); curriculum LPT-288 Done — do not clone /
-  do not re-add needs-human; next: NEVER `lesson-06-11-02-*` Meet TAG /
-  Low residuals LPT-676…779 (LPT-680…708).
+  do not re-add needs-human; tip `a087d302` Prefer NEVER Meet TAG children:
+  SoftPulse TIGHT→AGGRO→MODEL + Dart `TagModelDemo` **concept-aligned** under
+  Introduce TAG / The TAG model (not SoftPulse residual); checkpoint SoftPulse
+  `model` working-model-vs-insult under Introduce TAG-only → residual
+  **LPT-708** still To Do (needs-human); successors FOLDS MOST→PLANNED BARRELS /
+  ENTRY WIDTH→DISCIPLINE content-driven; guided SoftPulse `tag` densify PRESENT;
+  scaffolded SoftPulse `diff` densify PRESENT; unguided SoftPulse `tag2`
+  densify PRESENT; curriculum LPT-291 Done — do not clone / do not re-add
+  needs-human; next: NEVER `lesson-06-11-03-*` Adjust TAG /
+  Low residuals LPT-676…779 (LPT-680…710).
 - Prefer per-lesson tickets only for deal honesty / wrong cards /
   curriculum splits / true one-offs.
 - Prefer `poker_action_sizing` / fixed interactive: `deal.mode` `fixed` +
@@ -588,6 +596,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-14fh: Tip-stable `a087d302` (#2397 observe-selective SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery Prefer NEVER Meet TAG children `lesson-06-11-02-01/02/03`: SoftPulse TIGHT→AGGRO→MODEL + Dart `TagModelDemo` **concept-aligned** under Introduce TAG / The TAG model (not SoftPulse residual); checkpoint SoftPulse `model` kind `none` densify PRESENT grades working-model-vs-insult under Introduce TAG-only → residual **LPT-708** still To Do (needs-human); successors FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE content-driven (do not reopen LPT-669); guided SoftPulse `tag` densify PRESENT; scaffolded SoftPulse `diff` densify PRESENT; unguided SoftPulse `tag2` densify PRESENT. Curriculum **LPT-291** Done — do not clone / do not re-add needs-human. Tip-commented LPT-708/291/706/709/710/198/216/705; leave open LPT-676…779; leave ui-agent alone. next: NEVER `lesson-06-11-03-*` Adjust TAG / Low residuals LPT-676…779 (LPT-680…710).
 - 2026-10-14fg: Tip-stable `d3d5c0bb` (#2394 threebet SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery Prefer NEVER observe-selective children `lesson-06-11-01-01/02/03`: first-child SoftPulse TIGHT→BARREL→SAMPLE + Dart `SelectiveAggressionDemo` still pre-split under selective-entry-only → residual **LPT-706** still To Do (needs-human); successors CALLED→GIVES UP / TWO HANDS→NOTE BUNDLE content-driven (do not reopen LPT-669); guided SoftPulse `sel` densify PRESENT; scaffolded SoftPulse `disc` densify PRESENT; unguided SoftPulse `low` densify PRESENT; checkpoint SoftPulse `bundle` kind `none` densify PRESENT (matches wait-for-samples — no companion residual). Curriculum **LPT-288** Done — do not clone / do not re-add needs-human. Tip-commented LPT-706/288/705/704/703/198/216/708; leave open LPT-676…779; leave ui-agent alone. next: NEVER `lesson-06-11-02-*` Meet TAG / Low residuals LPT-676…779 (LPT-680…708).
 - 2026-10-14ff: Tip-stable `d3d5c0bb` (#2394 threebet SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232** flat (densify-tap still **0** — no LPT-628 reopen). Catalog parents Done — no open-parent sync. Discovery NEVER difficult-folds children `lesson-06-10-01-01/02/03`: first-child SoftPulse HARD→COOLER→EGO + Dart `HardFoldCoolerDemo` still pre-split under hard-folds-only → residual **LPT-705** still To Do (needs-human); successors COOLER→MISTAKE→REVIEW / DUE→EGO→FOLD content-driven (do not reopen LPT-669); guided SoftPulse `fold` PRESENT (Ah/9d·As/7c/2h/Kd/3c + suit variants); scaffolded SoftPulse `cooler` densify PRESENT; unguided SoftPulse `ego` densify PRESENT; checkpoint SoftPulse `ask` kind `none` densify PRESENT (matches cooler-or-mistake — no companion residual). Curriculum **LPT-285** Done — do not clone / do not re-add needs-human. Tip-commented LPT-705/285/198/216/704/703/706; leave open LPT-676…779; leave ui-agent alone. next: NEVER `lesson-06-11-01-*` observe-selective / Low residuals LPT-676…779 (LPT-680…706).
 
