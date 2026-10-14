@@ -727,7 +727,7 @@ Lesson-specific pattern notes (full history) live in
   Blockers SoftPulse residual **LPT-700** still To Do (BLOCK→USE→NO EV under bluff-blockers-only;
   Relates LPT-270); successors CATCH→UNBLOCK→BLUFFS / TWEAK→NO EV content-driven; checkpoint SoftPulse
   `no` under no-fake-ev matches — no companion residual; curriculum LPT-270 Done — do not clone /
-  do not re-add needs-human; tip `64a2e153` Prefer NEVER Defend SoftPulse residual **LPT-701**
+  do not re-add needs-human; tip `b630f923` Prefer NEVER Defend SoftPulse residual **LPT-701**
   still To Do (DEFEND→BLUFF→ENOUGH under continue-catchers-only; Relates LPT-273); companion
   checkpoint SoftPulse `punish` under continue-catchers → **LPT-702** still To Do; successors
   THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven; curriculum LPT-273 Done — do not clone /

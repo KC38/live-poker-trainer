@@ -3294,3 +3294,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-stable `675cc433` after #2472 Overbet SoftPulse Prefer LPT-699. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
 - Prefer NEVER Blockers SoftPulse residual **LPT-700** re-check: BLOCK→USE→NO EV still under bluff-blockers-only — still To Do (Relates LPT-270). Successors content-driven; densify PRESENT; curriculum LPT-270 Done — do not clone.
 - next: NEVER Defend SoftPulse residual **LPT-701** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
+## Fold 2026-10-14hr tip b630f923 (#2473 Blockers Prefer → Defend LPT-701 Prefer)
+
+- Tip-stable `b630f923` after #2473 Blockers SoftPulse Prefer LPT-700. Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Defend SoftPulse residual re-check `lesson-06-07-01-01/02/03`: first-child SoftPulse DEFEND→BLUFF→ENOUGH + Dart `DefendEnoughDemo` / `LessonDefendEnoughExplainTable` still pre-split under continue-catchers-only → residual **LPT-701** still To Do (needs-human; Relates LPT-273); companion checkpoint SoftPulse `punish` under continue-catchers → **LPT-702** still To Do; successors THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven; guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `fold` one-per-press PRESENT (`9h`/`7d`·`Kc`/`Qh`/`9d`/`4c`/`8s` +2 suit variants match Dart); unguided SoftPulse `int` densify PRESENT; curriculum **LPT-273** Done.
+- Tip-commented LPT-701/702/273/700/703/198/216/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
+
