@@ -136,7 +136,9 @@ const _lines = <String, String>{
   'act-04-08-03-checkpoint':
       'Why call wider versus a Maniac — tap the matching reason.',
   'act-04-09-01-guided': 'You saw one huge bluff. What do you know — pick One note — low certainty.',
-  'act-04-09-01-scaffolded': 'After 30 hands of sticky calls, confidence should — pick Rise — still revisable.',
+  // LPT-823: SoftPulse-quiet densify — no Rise / Stay zero spoil.
+  'act-04-09-01-scaffolded':
+      'After 30 hands of sticky calls — tap how confidence should move.',
   // LPT-777: SoftPulse-off densify — no correct-tile spoil.
   'act-04-09-01-checkpoint':
       'Course should show what beside a type label — tap the matching note.',
@@ -181,7 +183,9 @@ const _lines = <String, String>{
   'act-05-07-01-checkpoint':
       'Best use of live timing — tap the matching habit.',
   'act-05-08-01-guided': 'Villain lost two buy-ins, now open-raises every hand. Note — pick Stuck / tilted.',
-  'act-05-08-01-scaffolded': 'Solid selective player suddenly flats junk and donks rivers. Best read — pick Gear change.',
+  // LPT-825: SoftPulse-quiet densify — no Gear change / Old label spoil.
+  'act-05-08-01-scaffolded':
+      'Solid selective player suddenly flats junk and donks rivers — tap the matching read.',
   // LPT-746: SoftPulse-off densify — no correct-tile spoil.
   'act-05-08-01-checkpoint':
       'Dynamic reads should be — tap the matching habit.',
