@@ -2998,3 +2998,11 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer NEVER Dynamics SoftPulse residual re-check `lesson-05-08-01-01/02/03`: first-child SoftPulse STUCK→TILTED→GEARS + Dart `TablesChangeDemo` still pre-split under tilted/stuck-only → residual **LPT-686** still To Do (needs-human; Relates LPT-247); companion checkpoint SoftPulse `temp` kind `none` densify PRESENT under Gear changes → residual **LPT-687** still To Do; successors GEAR→CHANGE→SAMPLE / COOLER→CHASE→RESET content-driven (do not reopen LPT-669); guided SoftPulse `stuck` densify PRESENT; scaffolded SoftPulse `gear` densify PRESENT; unguided SoftPulse `reset` one-per-press PRESENT (`Jh`/`Td`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants match Dart; SoftPulse map PRESENT); curriculum **LPT-247** Done.
 - Tip-commented LPT-686/687/247/198/216/685/351; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
 - Prefer next: NEVER Session SoftPulse residual **LPT-690** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
+## Fold 2026-10-14ge (64190441 Prefer NEVER Session SoftPulse residual LPT-690 re-check)
+
+- Tip-stable `64190441` (#2425 Dynamics SoftPulse Prefer re-check on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER Session SoftPulse residual re-check `lesson-05-09-01-01/02/03`: first-child SoftPulse QUIT→GUARD→FIRST + Dart `GuardrailsDemo` still pre-split under stop-loss-only → residual **LPT-690** still To Do (needs-human; Relates LPT-250); companion checkpoint SoftPulse `edge` under end-sessions → residual **LPT-691** still To Do; successors content-driven; curriculum **LPT-250** Done.
+- Tip-commented LPT-690/691/250/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone. Rescued after conflicting draft #2426.
+- Prefer next: NEVER Range SoftPulse residual **LPT-692** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
