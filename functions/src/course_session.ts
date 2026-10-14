@@ -32,7 +32,10 @@ import {
   type CourseLesson,
   type SoftGrade,
 } from "./course_catalog";
-import {expandCompletedLessonIds} from "./lesson_split_map";
+import {
+  expandCompletedLessonIds,
+  resolveLiveLessonId,
+} from "./lesson_split_map";
 import {resolveLiveAccessForUser} from "./live_access";
 import {
   adHeartAvailability,
@@ -726,19 +729,13 @@ export async function startCourseLessonForUser(options: {
   const timezone = sanitizeTimezone(optionalString(input.timezone) ?? "UTC");
   const restoreHeartOnComplete = input.restoreHeartOnComplete === true;
   // Curriculum splits retire multi-concept lesson ids; map to first live successor.
-  let lessonId = requestedLessonId;
-  let located = findLesson(lessonId);
-  if (!located && courseBank.lessonSplitMap?.[requestedLessonId]) {
-    for (const successor of courseBank.lessonSplitMap[requestedLessonId]) {
-      const candidate = findLesson(successor);
-      if (candidate) {
-        lessonId = successor;
-        located = candidate;
-        break;
-      }
-    }
-  }
-  if (!located) {
+  const lessonId = resolveLiveLessonId(
+    requestedLessonId,
+    (id) => findLesson(id) != null,
+    courseBank.lessonSplitMap,
+  );
+  const located = lessonId ? findLesson(lessonId) : undefined;
+  if (!lessonId || !located) {
     throw new HttpsError("not-found", "Unknown lessonId.");
   }
   const requiresPlacement = lessonRequiresPlacementFlag(located.lesson);

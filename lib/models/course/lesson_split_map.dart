@@ -2,9 +2,11 @@ import 'package:live_poker_trainer/models/course/course_catalog.dart';
 
 /// Expands [completed] with successors from [CourseCatalog.lessonSplitMap].
 ///
-/// When a retired multi-concept lesson id is present, every successor lesson
-/// id counts as completed so unlocks and Home nodes do not strand learners
-/// after a curriculum split (LPT-83+).
+/// When a retired multi-concept lesson id is present, every listed successor
+/// counts as completed so unlocks and Home nodes do not strand learners
+/// after a curriculum split (LPT-83+). One pass over the map: a successor is
+/// expanded further only if that id is already completed when its key is
+/// visited. The published map has no such chains.
 Set<String> expandCompletedLessonIds(
   Iterable<String> completed, {
   required Map<String, List<String>> lessonSplitMap,
