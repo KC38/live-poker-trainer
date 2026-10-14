@@ -2889,3 +2889,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-07-06-01-*` stack-depth-plans / Low residuals LPT-676…801 / Low curriculum LPT-351.
 - act-07-05-01-*: interactive structural clean on tip except LPT-800 SoftPulse + LPT-801 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-14ft (459a7565 Prefer NEVER stack SoftPulse residual LPT-802)
+
+- Tip-stable `459a7565` (#2411 HU SoftPulse Prefer residuals on tip after #2410). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery Prefer NEVER `lesson-07-06-01-01/02/03` under Rewrite plans when stacks change unit:
+  - first-child `act-07-06-01-explain` SoftPulse SHORT→DEEP→EFFECTIVE + `explainGrading` "Short → Deep → Effective." + Dart `StackDepthPlansDemo` / `LessonStackDepthPlansExplainTable` still pre-split under commit-short-only → residual **LPT-802** filed (needs-human; Relates LPT-326).
+  - checkpoint `act-07-06-01-checkpoint` SoftPulse `every` kind `none` densify PRESENT ("Stack depth is?" / "Recalculated every hand") under recalc-effective matches — *no companion residual*.
+  - successors `act-07-06-01-02-explain-deep` (DEEP→IMPLIED ODDS) + `act-07-06-01-03-explain-effective` (SHORTER STACK→PLAN) content-driven; guided SoftPulse `commit` densify PRESENT; scaffolded SoftPulse `yes` one-per-press densify PRESENT; unguided SoftPulse `40` one-per-press densify PRESENT.
+- Curriculum **LPT-326** Done — do not clone / do not re-add needs-human. Distinct from S2 residual **LPT-748** (BbStackDepthDemo).
+- Tip-commented LPT-802/326/198/216/800/801/748/351; leave open LPT-676…802; leave ui-agent **LPT-797** alone.
+- Prefer next: NEVER `lesson-07-07-01-*` same-cards-types / Low residuals LPT-676…802 / Low curriculum LPT-351.
+- act-07-06-01-*: interactive structural clean on tip except LPT-802 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
+
