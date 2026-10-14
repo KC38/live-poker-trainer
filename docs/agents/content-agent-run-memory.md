@@ -2225,3 +2225,12 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Curriculum **LPT-192** Done — do not clone / do not re-add needs-human. Tip-commented LPT-192/732.
 - Prefer next: NEVER `lesson-01-03-02-*` bet/raise/all-in / Low residuals LPT-676…732.
 
+## Fold 2026-10-14de (78bd63ca bet/raise/all-in SoftPulse residual)
+
+- Tip-stable `78bd63ca` (#2317). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-01-03-02-01/02/03` under `unit-01-03-02-bet-raise-allin`:
+  - first-child `act-01-03-02-explain-aggro` SoftPulse BET→RAISE→ALL-IN + `explainGrading` "Bet → Raise → All-in." under Bet-only → filed **LPT-733** (needs-human; Relates LPT-100).
+  - successors `act-01-03-02-02-explain-raise` (FACING BET→RAISE) + `act-01-03-02-03-explain-allin` (STACK→ALL-IN) content-driven; guided SoftPulse `bet-half` + scaffolded SoftPulse `raise-15` + unguided SoftPulse `shove-12` + checkpoint SoftPulse `named-bet` kind `none` hintless PRESENT.
+- Curriculum **LPT-100** Done — do not clone / do not re-add needs-human. Tip-commented LPT-100/733 + Meet Nit LPT-198 / LPT-216.
+- Prefer next: NEVER `lesson-01-04-01-*` streets/acting-order / Low residuals LPT-676…733.
+
