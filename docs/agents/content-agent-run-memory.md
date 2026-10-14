@@ -2957,3 +2957,10 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER oldest open SoftPulse residual re-check (LPT-676…802) / Low curriculum LPT-351.
 - S7 Prefer NEVER SoftPulse residual path complete through Capstone + warm-up + Final.
 
+## Fold 2026-10-14fz (a7f410bd Prefer NEVER Estimate SoftPulse residual LPT-681 re-check)
+
+- Tip-stable `a7f410bd` (#2419 after S7 Prefer NEVER SoftPulse path complete). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Prefer NEVER oldest SoftPulse residual re-check `lesson-05-03-01-01/02/03`: first-child SoftPulse IMPLIED→REVERSE→SECOND still pre-split under estimate-only → residual **LPT-681** still To Do (needs-human; Relates LPT-230); successors content-driven; curriculum **LPT-230** Done.
+- Tip-commented LPT-681/230/198/216; leave open LPT-676…802 + LPT-351; leave ui-agent alone.
+- Prefer next: NEVER Thin SoftPulse residual **LPT-682** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351.
+
