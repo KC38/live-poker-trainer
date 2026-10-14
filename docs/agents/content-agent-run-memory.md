@@ -2303,3 +2303,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - successors `act-02-04-01-02-explain-call` (PLAYABLE→IN POSITION→CALL) + `act-02-04-01-03-explain-threebet` (STRONG→3-BET) content-driven; guided SoftPulse `fold-j3` + scaffolded SoftPulse `call-87s` + unguided SoftPulse `3bet-kk` + checkpoint SoftPulse `3bet-aqs` kind `none` hintless PRESENT.
 - Curriculum **LPT-127** Done — do not clone / do not re-add needs-human. Tip-commented LPT-127/743/741/740 + Meet Nit LPT-198 / LPT-216 + Done catalog parents (pressHints/deal-variants/explain/nice/map/densify).
 - Prefer next: NEVER `lesson-02-05-01-*` stack / Low residuals LPT-676…743.
+
+## Fold 2026-10-14dm (64b08a3b stack SoftPulse residual)
+
+- Tip-stable `64b08a3b` (#2330). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-02-05-01-01/02/03` under effective-stacks unit:
+  - first-child `act-02-05-01-explain-bb` SoftPulse CHIPS→BB→SHORTER→DEPTH + `explainGrading` under Convert-chips-only → filed **LPT-748** (needs-human; Relates LPT-130).
+  - successors `act-02-05-01-02-explain-eff` (SHORTER→EFFECTIVE) + `act-02-05-01-03-explain-depth` (50BB→100BB→200BB) content-driven; guided SoftPulse `bb-100` + scaffolded SoftPulse `eff-60` + unguided SoftPulse `depth-50` + checkpoint SoftPulse `bb-200` kind `none` hintless PRESENT.
+- Curriculum **LPT-130** Done — do not clone / do not re-add needs-human. Tip-commented LPT-130/748 + Meet Nit LPT-198 / LPT-216; leave open LPT-743/741/740….
+- Prefer next: NEVER `lesson-02-06-01-*` live-habits / Low residuals LPT-676…748.
+
