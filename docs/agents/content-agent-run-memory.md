@@ -1991,3 +1991,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - next: NEVER `lesson-06-06-01-*` / S6 NEVER / Low curriculum.
 - act-06-05-01-*: interactive structural clean on tip aside from LPT-699; SoftPulse explain successors via LPT-669 content-driven; guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants geometric-turn honesty.
 
+## Fold 2026-10-14ci (1e5f1189 blockers NEVER)
+
+- Tip-stable `1e5f1189` (#2285). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**.
+- Discovery NEVER `lesson-06-06-01-*` blockers children under `unit-06-06-blockers`:
+  - first-child `act-06-06-01-explain` SoftPulse BLOCK→USE→NO EV + Dart `BlockersDemo.points` / `LessonBlockersExplainTable` still pre-split under bluff-blockers-only → filed **LPT-700** (needs-human; Relates LPT-270).
+  - guided SoftPulse `as` densify PRESENT (`blockersGuidedOutcomes`); Fake-+EV distractor-only OK.
+  - successors `act-06-06-01-02-explain-unblock` CATCH→UNBLOCK→BLUFFS + `act-06-06-01-03-explain-ev` TWEAK→NO EV content-driven (do not reopen LPT-669).
+  - scaffolded SoftPulse `unblock` + unguided SoftPulse `tweak` one-per-press PRESENT; checkpoint SoftPulse `no` kind `none` under no-fake-ev matches — no companion residual.
+- Curriculum **LPT-270** Done — do not clone / do not re-add needs-human. Done-ack LPT-268/269/473/498/639.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK. Open residuals LPT-676…699 tip-commented.
+- Prefer next NEVER: `lesson-06-07-01-*` min-defense / remaining S6 NEVER / Low curriculum.
+
