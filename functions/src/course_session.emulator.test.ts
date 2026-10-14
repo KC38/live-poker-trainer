@@ -914,6 +914,100 @@ describe("course session integration", () => {
     expect(state.openAttempt?.attemptId).toBe("frontier-att");
   });
 
+  test("retired parent completion reviews a successor without moving resume", async () => {
+    await seedFlags();
+    await initializeCourseProfileForUser({
+      uid: "split-review-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    const frontierLessonId = "lesson-02-01-01-01-seat-labels";
+    const successorLessonId = "lesson-01-01-02-01-suits";
+    const refillAt = Date.now() + 6 * 60 * 60 * 1000;
+    await db.doc("users/split-review-user/course/main").set({
+      // Pre-split progress: the retired parent, not the successor id.
+      completedLessonIds: [
+        "lesson-01-01-01-your-two-cards",
+        "lesson-01-01-02-suits-and-ranks",
+      ],
+      livesRemaining: 0,
+      livesMax: 5,
+      livesNextRefillAtMs: refillAt,
+      lifetimeXp: 40,
+      currentLessonId: frontierLessonId,
+      resume: {
+        attemptId: "frontier-att",
+        lessonId: frontierLessonId,
+        activityId: "act-02-01-01-01-explain-seats",
+        activityIndex: 0,
+      },
+    }, {merge: true});
+    await db.doc("users/split-review-user/courseAttempts/frontier-att").set({
+      attemptId: "frontier-att",
+      uid: "split-review-user",
+      lessonId: frontierLessonId,
+      catalogVersion: "2.0.0",
+      status: "in_progress",
+      activityIndex: 0,
+      currentActivityId: "act-02-01-01-01-explain-seats",
+      livesRemaining: 0,
+      livesMax: 5,
+      startRequestId: "start_frontier_split",
+      acceptedCount: 0,
+      scoredCount: 0,
+      acceptedScoredCount: 0,
+      masteryPoints: 0,
+      masteryWeight: 0,
+      jumpTestPassed: false,
+      stepCount: 0,
+      xpEarned: 0,
+      createdAtMs: Date.now(),
+      updatedAtMs: Date.now(),
+      completedAtMs: null,
+    });
+
+    const reviewed = await startCourseLessonForUser({
+      uid: "split-review-user",
+      raw: {
+        clientVersion: "2.0.0",
+        lessonId: successorLessonId,
+        startRequestId: "start_split_review_01",
+      },
+      db,
+    });
+    expect(reviewed.attempt.lessonId).toBe(successorLessonId);
+    expect(reviewed.attempt.livesRemaining).toBe(0);
+
+    const submitted = await submitCourseStepForUser({
+      uid: "split-review-user",
+      raw: {
+        clientVersion: "2.0.0",
+        attemptId: reviewed.attempt.attemptId,
+        activityId: "act-01-01-02-explain-suits",
+        idempotencyKey: "split_review_step_01",
+      },
+      db,
+    });
+    expect(submitted.accepted).toBe(true);
+    expect(submitted.xpAwarded).toBe(0);
+    expect(submitted.lifeLost).toBe(false);
+
+    const profileAfterSubmit = (
+      await db.doc("users/split-review-user/course/main").get()
+    ).data();
+    expect(profileAfterSubmit?.currentLessonId).toBe(frontierLessonId);
+    expect(profileAfterSubmit?.resume?.attemptId).toBe("frontier-att");
+    expect(profileAfterSubmit?.lifetimeXp).toBe(40);
+
+    const state = await getCourseStateForUser({
+      uid: "split-review-user",
+      raw: {clientVersion: "2.0.0"},
+      db,
+    });
+    expect(state.openAttempt?.lessonId).toBe(frontierLessonId);
+    expect(state.openAttempt?.attemptId).toBe("frontier-att");
+  });
+
   test("getCourseState persists one due passive heart", async () => {
     await seedFlags();
     const now = Date.now();
