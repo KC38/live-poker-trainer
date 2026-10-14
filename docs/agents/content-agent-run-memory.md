@@ -2686,3 +2686,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-06-07-01-*` min-defense / Low residuals LPT-676…779 (LPT-680…701).
 - act-06-06-01-*: interactive structural clean on tip except LPT-700 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+
+## Fold 2026-10-14
+
+## Fold 2026-10-14fc (1c6fcd76 Prefer NEVER min-defense SoftPulse re-check)
+
+- Tip-stable `1c6fcd76` (#2390 blockers SoftPulse Prefer re-check learnings on tip). Catalog `--counts` all **0**; softpulseMapArms **92** / densifyHelperArms **232**; densify-tap **0**. Catalog parents Done — no open-parent sync.
+- Discovery NEVER `lesson-06-07-01-01/02/03` under min-defense unit:
+  - first-child `act-06-07-01-explain` SoftPulse DEFEND→BLUFF→ENOUGH + `explainGrading` "Defend → Bluff → Enough." + Dart `DefendEnoughDemo` / `LessonDefendEnoughExplainTable` still pre-split under continue-catchers-only → residual **LPT-701** still To Do (needs-human).
+  - companion `act-06-07-01-checkpoint` SoftPulse `punish` kind `none` densify PRESENT under Continue with stronger catchers → residual **LPT-702** still To Do (needs-human).
+  - successors `act-06-07-01-02-explain-trash` (THIRD PAIR→SCARY→FOLD) + `act-06-07-01-03-explain-mdf` (MDF→INTUITION) content-driven; guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `fold` one-per-press PRESENT (`9h`/`7d`·`Kc`/`Qh`/`9d`/`4c`/`8s` +2 suit variants match Dart); unguided SoftPulse `int` one-per-press PRESENT.
+- Curriculum **LPT-273** Done — do not clone / do not re-add needs-human.
+- Tip-commented LPT-701/702/273/198/216/700/699/703; leave open LPT-676…779; leave ui-agent alone.
+- Prefer next: NEVER `lesson-06-08-01-*` mix / Low residuals LPT-676…779 (LPT-680…703).
+- act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
