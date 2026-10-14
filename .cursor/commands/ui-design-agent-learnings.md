@@ -177,6 +177,7 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   checkpoint, jump ranks) — SoftPulse can gold You while a wrong seat still
   appends cyan #1 when strictOrder defaults false (LPT-707). Explain tables
   already strict; interactive must match.
+- Prefer Suits explain Hint copy from Dart / pressHints (`Find a heart on the board.`) — never fall through to completion accessibility `You found all four suits…` on SoftPulse-quiet review (LPT-813). After `fresh` clears completedLessonIds, wait for Home to refresh before judging SoftPulse-off + Hint; a stale hasCompleted snapshot opens review-quiet SoftPulse.
 - Prefer a second open when judging card randomization (screenshot hole/board
   A vs B) and screenshot heart counts before/after a paid miss (and after
   Practice/refill) before claiming cards or hearts work. Read ranks from the
@@ -287,12 +288,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `assets/course/v2/catalog.json` (or other concurrent-main files) as a
   required origin/main re-walk, not a failed fix — LPT-173 squash matched
   the worktree lib change while catalog moved on main.
-- Prefer `villainSeatCount: 0` on conceptual outcome scenes that do not
-  deal holes (effective-stack / depth tiles; default `1` paints a decoy
-  Them pair — LPT-220). Prefer framed `LessonTableStage` with
-  `lessonNineMaxVillainCount` + `seatNames: Seat N` when coach copy names
-  seat numbers on a nine-handed ask (LPT-240); densify `blindsSeats`+
-  `numberSeats` covers the no-frame path.
 - Prefer extending `alignLessonTableCopy` (board+hole card tokens and
   spoken rank/suit words) when densified isomorphic remap leaves catalog
   prompts / Nice! / Oops naming the template flop — frame speech alone is
@@ -393,8 +388,6 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   reopen rather than accepting the screen as intentional chrome.
 
 ## Recent run notes
-
-- 2026-10-13 LPT-641: loop rewrote `ui-agent-handoff.json` / reclaimed the mini while this agent was mid-implement (`purpose: agent starting`). When `heartbeat`/`guard` print not-the-holder, stop driving the mini until `sim_lock.py claim` succeeds again (LPT-637); do not force-release the loop holder. Keep implementing offline tests in the worktree meanwhile.
 
 Short dated notes for context. Drop notes older than ~14 days when
 trimming. Durable rules belong in the sections above, not only here.
