@@ -499,10 +499,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Semi-bluff check-raise with nut draw IP-denied. Purpose — pick Fold equity.',
     'act-06-02-01-checkpoint' =>
       'Equity realization rises with — pick Position + initiative.',
+    // Assessment SoftPulse-off densify (LPT-672): situation + tap verb only —
+    // never name the correct tile/exploit in the idle bubble.
     'act-07-12-01-uncertain' =>
-      'Three mixed samples only. Confidence — pick Low — lean baseline until samples grow.',
+      'Three mixed samples only. Confidence — tap the matching level.',
     'act-07-12-01-retire' =>
-      'Old Calling Station now folds rivers and 3-bets light. Do — pick Retire or update the model.',
+      'Old Calling Station now folds rivers and 3-bets light. Do — tap the matching next step.',
     // Densified asks still say Tap the best answer (catalog) remaining densified asks (LPT-628) — same path.
     'act-01-01-03-checkpoint-layout' =>
       'The button has the D chip. Tap the small blind, one seat to its left.',
@@ -528,16 +530,18 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Tiny range, huge check-raise. Label + line — tap Nit — respect the raise; steal more elsewhere.',
     'act-04-10-02-jump-maniac' =>
       'Seat barrels forever. You have top pair. Label + line — tap Maniac — widen bluff-catch; avoid ego raises.',
+    // Final five-type checkpoint densify — SoftPulse off (kind: none); stems
+    // must not spoil the correct exploit/tile (LPT-672; SoftPulse LPT-653).
     'act-07-12-01-cs' =>
-      'Sticky calls three streets. Label + exploit — tap Calling Station — thicker value, fewer bluffs.',
+      'Sticky calls three streets. Label + exploit — tap the matching plan.',
     'act-07-12-01-nit' =>
-      'Tiny range, huge check-raise. Label + line — tap Nit — respect heat; steal elsewhere.',
+      'Tiny range, huge check-raise. Label + line — tap the matching plan.',
     'act-07-12-01-maniac' =>
-      'Endless barrels, never folds. Label + line — tap Maniac — widen catches; avoid ego raises.',
+      'Endless barrels, never folds. Label + line — tap the matching plan.',
     'act-07-12-01-tag' =>
-      'Selective entry, disciplined barrels. Label + vs raise — tap TAG — respect raises; steal less than vs nits.',
+      'Selective entry, disciplined barrels. Label + vs raise — tap the matching plan.',
     'act-07-12-01-lag' =>
-      'Wide entry, sustained pressure, some folds. Label + line — tap LAG — trap more; call wider; fancy less.',
+      'Wide entry, sustained pressure, some folds. Label + line — tap the matching plan.',
     _ => null,
   };
 }
