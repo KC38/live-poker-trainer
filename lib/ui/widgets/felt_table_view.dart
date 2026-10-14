@@ -324,18 +324,44 @@ class _FeltTableViewState extends State<FeltTableView> {
     }
   }
 
-  /// Snapshot with folds / raises held back until that seat's action lands.
+  /// Snapshot with folds / raises / street bets held until they should show.
+  ///
+  /// While holes are still dealing, every [PlayerModel.currentBet] stays
+  /// hidden (including blinds) so chips do not appear before the deal
+  /// finishes. After holes land, each seat's bet and last-action badge
+  /// wait on [FeltActionRevealController.isRevealed] — blinds (not in the
+  /// action order) show immediately; raises/calls/folds wait their turn.
   GameState _displayGame(GameState game) {
     if (!_actions.isSequencing || _actions.openingBatchComplete) {
       return game;
     }
+    final holesDone = _deal.holesComplete;
     return game.copyWith(
       players: [
         for (var i = 0; i < game.players.length; i++)
-          _actions.isRevealed(i)
-              ? game.players[i]
-              : game.players[i].copyWith(folded: false, clearLastAction: true),
+          _displayPlayer(game.players[i], i, holesDone: holesDone),
       ],
+    );
+  }
+
+  /// Masks fold / action / bet chrome until the seat may show it.
+  PlayerModel _displayPlayer(
+    PlayerModel player,
+    int seatIndex, {
+    required bool holesDone,
+  }) {
+    if (!holesDone) {
+      return player.copyWith(
+        folded: false,
+        clearLastAction: true,
+        currentBet: 0,
+      );
+    }
+    if (_actions.isRevealed(seatIndex)) return player;
+    return player.copyWith(
+      folded: false,
+      clearLastAction: true,
+      currentBet: 0,
     );
   }
 
