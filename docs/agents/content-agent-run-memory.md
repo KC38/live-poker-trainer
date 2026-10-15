@@ -5124,3 +5124,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
 - Prefer next: NEVER oldest unfresh `lesson-01-01-02-03-pairs-and-suited` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-01-01-02-02-*: interactive structural clean on tip; `random_in_class` high_card/rainbow without distractor variants — do not reopen LPT-627.
+
+## 2026-10-15ea — Prefer-next pairs discovery (`52f5c7e8`)
+
+- Tip-stable `52f5c7e8` (#2701 Prefer-next ranks fold; this run Prefer-next pairs).
+- Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 description limit; do not claim body rebuilt); other parents Done.
+- Only open content tickets: **LPT-829** + Low curriculum **LPT-351**.
+- Prefer NEVER discovery `lesson-01-01-02-03-pairs-and-suited` / `act-01-01-02-03-*` (+ legacy ids `act-01-01-02-unguided-suited` / `act-01-01-02-checkpoint-pair`):
+  - Explain SoftPulse PAIR→SUITED + `explainGrading` concept-aligned under Spot pairs and suited cards (intentional combined third child from LPT-83; content-driven `authoredCues`; LPT-669 Done — do not reopen).
+  - Guided SoftPulse `suited_seat` PRESENT (`select_identify` `random_in_class` suited + offsuit/pair distractor variants).
+  - Scaffolded SoftPulse one-per-press pressHints 1/1 densify PRESENT (`selectIdentifyDensifiedCoachLine`).
+  - Checkpoint SoftPulse `pair_seat` cue kind `none` hintless densify PRESENT (`random_in_class` pair + suited/offsuit distractors).
+  - Short-ladder 4/5 already on **LPT-829**; curriculum **LPT-83** Done — do not clone / no SoftPulse residual.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh `lesson-01-01-03-01-dealer-button` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-01-01-02-03-* / act-01-01-02-unguided-suited / act-01-01-02-checkpoint-pair: interactive structural clean on tip; densify PRESENT on SI arms — do not reopen LPT-628; distractor `deal.variants` already authored — do not reopen LPT-627.
+
