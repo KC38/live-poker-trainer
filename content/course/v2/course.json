@@ -34750,6 +34750,62 @@
                       }
                     ]
                   }
+                },
+                {
+                  "id": "act-06-12-01-unguided",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 40,
+                  "accessibilityText": "No.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Note wide entry"
+                  ],
+                  "prompt": "Label after one wide open?",
+                  "choices": [
+                    {
+                      "id": "wait",
+                      "label": "Keep sampling",
+                      "accessibilityText": "Keep sampling",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "One hand is a note."
+                      }
+                    },
+                    {
+                      "id": "now",
+                      "label": "Label now",
+                      "accessibilityText": "Label now",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Too soon.",
+                        "betterChoiceId": "wait"
+                      }
+                    }
+                  ],
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "pressHints": [
+                      {
+                        "press": 1,
+                        "text": "One wide open is not enough to label anyone."
+                      }
+                    ],
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "wait",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -34814,62 +34870,6 @@
                     "feedback": "Barrels + many hands → then label."
                   },
                   "estimatedSeconds": 30
-                },
-                {
-                  "id": "act-06-12-01-unguided",
-                  "order": 2,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 40,
-                  "accessibilityText": "No.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Note sustained pressure"
-                  ],
-                  "prompt": "Label after one wide open?",
-                  "choices": [
-                    {
-                      "id": "wait",
-                      "label": "Keep sampling",
-                      "accessibilityText": "Keep sampling",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "One hand is a note."
-                      }
-                    },
-                    {
-                      "id": "now",
-                      "label": "Label now",
-                      "accessibilityText": "Label now",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Too soon.",
-                        "betterChoiceId": "wait"
-                      }
-                    }
-                  ],
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "pressHints": [
-                      {
-                        "press": 1,
-                        "text": "One wide open is not enough to label anyone."
-                      }
-                    ],
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "wait",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  }
                 }
               ]
             },
@@ -34879,7 +34879,7 @@
               "title": "Planned pressure, not a Maniac",
               "summary": "This seat still folds sometimes; a Maniac rarely does.",
               "objectives": [
-                "Separate planned pressure from maniac samples"
+                "Separate planned pressure from maniac samples with a note bundle"
               ],
               "prerequisites": [
                 "lesson-06-12-01-02-sustained-pressure"
@@ -34898,7 +34898,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "objectives": [
-                    "Separate planned pressure from maniac samples"
+                    "Separate planned pressure from maniac samples with a note bundle"
                   ],
                   "accessibilityText": "This seat still folds to some raises. A Maniac almost never folds. That fold shows the pressure has a plan.",
                   "coachMedia": [
@@ -34948,7 +34948,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Separate planned pressure from maniac samples"
+                    "Separate planned pressure from maniac samples with a note bundle"
                   ],
                   "prompt": "Difference brewing vs maniac?",
                   "choices": [
@@ -35004,7 +35004,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Separate planned pressure from maniac samples"
+                    "Separate planned pressure from maniac samples with a note bundle"
                   ],
                   "prompt": "Best pre-label note bundle?",
                   "choices": [
@@ -35050,7 +35050,7 @@
               "title": "The LAG model",
               "summary": "LAG is a working model for wide entry with sustained pressure.",
               "objectives": [
-                "Introduce LAG"
+                "Introduce LAG as a working model with sample limits"
               ],
               "prerequisites": [
                 "lesson-06-12-01-03-planned-not-maniac"
@@ -35085,7 +35085,7 @@
                     }
                   ],
                   "objectives": [
-                    "Introduce LAG"
+                    "Introduce LAG as a working model with sample limits"
                   ],
                   "playerTypeRefs": [
                     "lag"
@@ -35130,7 +35130,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Introduce LAG"
+                    "Introduce LAG as a working model with sample limits"
                   ],
                   "prompt": "Show beside LAG label?",
                   "choices": [
@@ -35478,7 +35478,7 @@
               "title": "Call down wider versus a LAG",
               "summary": "Their barrels are wide, so bluff-catch more.",
               "objectives": [
-                "Widen bluff-catches versus LAG"
+                "Widen bluff-catches versus LAG and cite the tendency"
               ],
               "prerequisites": [
                 "lesson-06-12-02-03-lag-vs-station"
@@ -35511,7 +35511,7 @@
                     }
                   ],
                   "objectives": [
-                    "Widen bluff-catches versus LAG"
+                    "Widen bluff-catches versus LAG and cite the tendency"
                   ],
                   "playerTypeRefs": [
                     "lag"
@@ -35546,7 +35546,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Widen bluff-catches versus LAG"
+                    "Widen bluff-catches versus LAG and cite the tendency"
                   ],
                   "prompt": "LAG barrels river. You have second pair good kicker. Action?",
                   "choices": [
@@ -35662,7 +35662,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Widen bluff-catches versus LAG"
+                    "Widen bluff-catches versus LAG and cite the tendency"
                   ],
                   "prompt": "LAG exploit cites?",
                   "choices": [
@@ -37948,57 +37948,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-07-03-01-checkpoint",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "select_identify",
-                  "estimatedSeconds": 45,
-                  "accessibilityText": "Value needs calls; bluffs need folds.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Choose river value candidates"
-                  ],
-                  "prompt": "River composition rule?",
-                  "choices": [
-                    {
-                      "id": "rule",
-                      "label": "Value needs calls; bluffs need folds",
-                      "accessibilityText": "Value needs calls; bluffs need folds",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Core."
-                      }
-                    },
-                    {
-                      "id": "random",
-                      "label": "Bet every river for style",
-                      "accessibilityText": "Bet every river for style",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "No.",
-                        "betterChoiceId": "rule"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "rule",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             },
@@ -38116,6 +38065,57 @@
                         "press": 1,
                         "target": "block",
                         "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "act-07-03-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "select_identify",
+                  "estimatedSeconds": 45,
+                  "accessibilityText": "Value needs calls; bluffs need folds.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Choose bluff candidates with blockers"
+                  ],
+                  "prompt": "River composition rule?",
+                  "choices": [
+                    {
+                      "id": "rule",
+                      "label": "Value needs calls; bluffs need folds",
+                      "accessibilityText": "Value needs calls; bluffs need folds",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Core."
+                      }
+                    },
+                    {
+                      "id": "random",
+                      "label": "Bet every river for style",
+                      "accessibilityText": "Bet every river for style",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "No.",
+                        "betterChoiceId": "rule"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "rule",
+                        "kind": "none"
                       }
                     ]
                   }
@@ -38484,7 +38484,7 @@
               "title": "Plan 3-bet and 4-bet pots",
               "summary": "Bigger pots mean lower SPR and more commitment.",
               "objectives": [
-                "Plan 3-bet/4-bet pots"
+                "Plan 3-bet/4-bet pots from their ranges and SPR"
               ],
               "prerequisites": [
                 "lesson-07-04-01-02-single-raised-pots"
@@ -38503,7 +38503,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "objectives": [
-                    "Plan 3-bet/4-bet pots"
+                    "Plan 3-bet/4-bet pots from their ranges and SPR"
                   ],
                   "accessibilityText": "3-bet and 4-bet pots shrink the SPR. Ranges are tighter and commitment comes early.",
                   "coachMedia": [
@@ -38553,7 +38553,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Plan 3-bet/4-bet pots"
+                    "Plan 3-bet/4-bet pots from their ranges and SPR"
                   ],
                   "prompt": "4-bet pot 100bb. Mindset?",
                   "choices": [
@@ -38609,7 +38609,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Plan 3-bet/4-bet pots"
+                    "Plan 3-bet/4-bet pots from their ranges and SPR"
                   ],
                   "prompt": "Pot type changes?",
                   "choices": [
@@ -38663,7 +38663,7 @@
               "title": "Bluff less multiway",
               "summary": "More players means fewer bluffs get through.",
               "objectives": [
-                "Bluff less multiway"
+                "Bluff less multiway because player count changes the plan"
               ],
               "prerequisites": [
                 "lesson-07-04-01-03-threebet-fourbet-pots"
@@ -38694,7 +38694,7 @@
                     }
                   ],
                   "objectives": [
-                    "Bluff less multiway"
+                    "Bluff less multiway because player count changes the plan"
                   ],
                   "explainGrading": {
                     "grade": "recommended",
@@ -38726,7 +38726,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Bluff less multiway"
+                    "Bluff less multiway because player count changes the plan"
                   ],
                   "prompt": "Four-way river. Naked air bluff?",
                   "choices": [
@@ -38776,7 +38776,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Bluff less multiway"
+                    "Bluff less multiway because player count changes the plan"
                   ],
                   "prompt": "Player count is?",
                   "choices": [
