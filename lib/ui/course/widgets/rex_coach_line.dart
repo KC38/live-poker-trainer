@@ -511,8 +511,13 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Hero 140bb, villain 55bb, pot 18 — tap what matters most next.',
     'act-03-02-01-guided' =>
       'Board Ks 9d 2c. You hold Kh Qh. Class — pick Made hand — top pair.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; keep template board/holes for
+    // alignLessonTableCopy; never name Strong draw / nut flush draw
+    // (LPT-847; SoftPulse LPT-653; same class as LPT-846 / LPT-845 /
+    // LPT-844).
     'act-03-02-01-scaffolded' =>
-      'Board Jh 8h 3c. You hold Ah 9h. Class — pick Strong draw — nut flush draw.',
+      'Board Jh 8h 3c. You hold Ah 9h. Class — tap the matching label.',
     'act-03-02-01-unguided' =>
       'Board Qc 7d 2s. You hold 5h 4h multiway. Class — pick Air — little equity, no pair.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
