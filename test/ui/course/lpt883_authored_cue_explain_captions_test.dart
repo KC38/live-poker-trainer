@@ -1,6 +1,6 @@
 /// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
 /// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895 / LPT-896 /
-/// LPT-897:
+/// LPT-897 / LPT-898 / LPT-899:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -66,6 +66,9 @@ void main() {
     expect(authoredSoftPulseExplainCaption('EP'), 'Early seat');
     expect(authoredSoftPulseExplainCaption('COVER'), 'Protect hole cards');
     expect(authoredSoftPulseExplainCaption('WAIT'), 'Act in turn');
+    expect(authoredSoftPulseExplainCaption('WIDER'), 'Open more hands');
+    expect(authoredSoftPulseExplainCaption('SHORTER'), 'Min of the two');
+    expect(authoredSoftPulseExplainCaption('EFFECTIVE'), 'Playable stack');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -752,6 +755,96 @@ void main() {
       expect(find.text('WAIT'), findsWidgets);
       expect(find.text('Protect hole cards'), findsOneWidget);
       expect(find.text('Act in turn'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Widen SoftPulse explain captions BUTTON + WIDER (LPT-898)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-02-03-01-03-explain-button',
+        targets: const ['BUTTON', 'WIDER'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('BUTTON'), findsWidgets);
+      expect(find.text('WIDER'), findsWidgets);
+      expect(find.text('Acts last'), findsOneWidget);
+      expect(find.text('Open more hands'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Shorter stack SoftPulse explain captions SHORTER + EFFECTIVE (LPT-899)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-02-05-01-02-explain-eff',
+        targets: const ['SHORTER', 'EFFECTIVE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('SHORTER'), findsWidgets);
+      expect(find.text('EFFECTIVE'), findsWidgets);
+      expect(find.text('Min of the two'), findsOneWidget);
+      expect(find.text('Playable stack'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

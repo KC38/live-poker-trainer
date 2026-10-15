@@ -14346,6 +14346,13 @@ String authoredSoftPulseExplainCaption(String target) {
     // AuthoredCue tiles label-only.
     'COVER': 'Protect hole cards',
     'WAIT': 'Act in turn',
+    // Widen on the button SoftPulse explain (BUTTON → WIDER; LPT-898).
+    // BUTTON already Acts last; WIDER glosses opening more hands on the button.
+    'WIDER': 'Open more hands',
+    // Shorter stack SoftPulse explain (SHORTER → EFFECTIVE; LPT-899).
+    // SHORTER matches BbStackDepthDemo; EFFECTIVE glosses the playable stack.
+    'SHORTER': 'Min of the two',
+    'EFFECTIVE': 'Playable stack',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
