@@ -105,7 +105,7 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // nearby soft-grade (LPT-866; SoftPulse LPT-653; same class as LPT-865 /
     // LPT-858 / LPT-857 / LPT-853).
     'act-04-04-01-unguided' =>
-      'Two value sizes both get calls — tap the matching grading idea.',
+      'Value sizes that both get calls — tap the matching grading idea.',
     // SPR decides commitment guided densified ask (LPT-412) — same path.
     'act-04-05-01-guided' =>
       'Effective 80 into pot 20 — pick SPR 4.',

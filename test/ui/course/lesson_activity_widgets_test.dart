@@ -16188,7 +16188,7 @@ await tester.tap(find.text('NIT'));
     // Numeral rewrite may turn "Two" → "three" in frame speech; lock the
     // non-spoiling stem body, not a hard-coded leading numeral.
     final speech = lessonFrameSpeech(activity);
-    expect(speech, contains('value sizes both get calls — tap the matching grading idea.'));
+    expect(speech, contains('Value sizes that both get calls — tap the matching grading idea.'));
     expect(speech, isNot(contains('Tap the best answer')));
     expect(speech, isNot(contains('nearby soft-grade')));
     expect(speech, isNot(contains('Nearby sizes both soft-grade')));

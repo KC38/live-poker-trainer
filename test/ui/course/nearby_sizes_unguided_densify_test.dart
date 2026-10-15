@@ -11,7 +11,7 @@ import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
 const _id = 'act-04-04-01-unguided';
 const _line =
-    'Two value sizes both get calls — tap the matching grading idea.';
+    'Value sizes that both get calls — tap the matching grading idea.';
 
 void main() {
   final catalog = CourseCatalog.fromJson(
