@@ -155,15 +155,12 @@ Lesson-specific pattern notes (full history) live in
   SoftPulse still walks PRESSURE/SAMPLE) + **LPT-714** (Keep-sampling unguided
   under Note sustained pressure) + **LPT-715** (evidence-bundle checkpoint under
   Planned-not-maniac) + **LPT-716** (sample-limits checkpoint under Introduce
-  LAG) + **LPT-718** (Adjust-LAG SoftPulse still walks TRAP/FANCY LESS) +
+  LAG) + **LPT-718** Done (#2661 CALL-only) +
   **LPT-719** (cite checkpoint under Call-wider vs LAG) + **LPT-721**
-  (Mix-five SoftPulse still walks SEATS/EVIDENCE) + **LPT-724** (Blinds
-  SoftPulse still walks SB/BB under Locate button) + **LPT-725** (Same-cards
-  SoftPulse still walks MODELS/CITE) + **LPT-726** (Type-board SoftPulse
-  still walks LINE/SIZE) + **LPT-727** (Leak SoftPulse still walks
-  BOOK/REVIEW) + **LPT-731** (Fold SoftPulse still walks CHECK/CALL under
-  Fold-only) + **LPT-732** (Adjust Station SoftPulse still walks
-  BLUFFS/CITE under Value-wider) + **LPT-733** (Bet SoftPulse still walks
+  Done (#2662) + **LPT-724** (Blinds
+  SoftPulse still walks SB/BB under Locate button) + **LPT-725** Done (#2662) +
+  **LPT-726** Done (#2662) + **LPT-727** Done (#2662) + **LPT-731** (Fold SoftPulse still walks CHECK/CALL under
+  Fold-only) + **LPT-732** Done (#2655) + **LPT-733** (Bet SoftPulse still walks
   RAISE/ALL-IN under Bet-only) + **LPT-737** (postflop-first checkpoint
   under Action order) + **LPT-738** (Win SoftPulse still walks
   SHOWDOWN/SIDE POT under Win-by-fold) + **LPT-739** (postflop last-actor
@@ -578,17 +575,14 @@ Lesson-specific pattern notes (full history) live in
   WIDE OPENS→BARRELS / RAISES→CALLS content-driven; guided SoftPulse `lag`
   densify PRESENT; unguided SoftPulse `lag2` densify PRESENT; scaffolded
   SoftPulse `diff` one-per-press densify PRESENT; curriculum LPT-300 Done —
-  do not clone / do not re-add needs-human; tip `b13f674e` Prefer NEVER Adjust LAG children: first-child SoftPulse
-  CALL→TRAP→FANCY LESS + Dart `VsLagsDemo` still pre-split under Call-wider-only →
-  residual **LPT-718** still To Do (needs-human); checkpoint SoftPulse `cite`
+  do not clone / do not re-add needs-human; tip `98a93e35` Prefer NEVER Adjust LAG children: SoftPulse
+  **LPT-718** Done (#2661 CALL-only + `explainGrading` "LAG pressure → Call wider."); checkpoint SoftPulse `cite`
   kind `none` densify PRESENT under Call-wider-only → residual **LPT-719** still
   To Do (needs-human); successors STRONG HAND→LET THEM BET / NO BIG BLUFF→LET THEM
   content-driven; guided SoftPulse `call` PRESENT; scaffolded SoftPulse `trap`
   PRESENT; unguided SoftPulse `avoid` densify PRESENT; curriculum LPT-303 Done —
-  do not clone / do not re-add needs-human; tip `05b341f4` Prefer NEVER Mix five
-  children: first-child SoftPulse CARDS→SEATS→EVIDENCE + Dart `ExploitEvidenceDemo`
-  / `LessonExploitEvidenceExplainTable` still pre-split under Station-thin-only →
-  residual **LPT-721** still To Do (needs-human); successors NIT CHECK-RAISE→FOLD /
+  do not clone / do not re-add needs-human; tip `7b92bfd4` Prefer NEVER Mix five
+  children: SoftPulse **LPT-721** Done (#2662); successors NIT CHECK-RAISE→FOLD /
   LAG BARREL→CALL / TENDENCY→LINE content-driven; guided SoftPulse `cs` PRESENT;
   scaffolded SoftPulse `nit` one-per-press PRESENT; unguided SoftPulse `lag`
   one-per-press PRESENT; cite checkpoint SoftPulse `tag` under cite-tendency
@@ -768,16 +762,12 @@ Lesson-specific pattern notes (full history) live in
   re-add needs-human on curriculum); successors WIDE OPENS→BARRELS / RAISES→CALLS
   content-driven; guided SoftPulse `lag` densify PRESENT; scaffolded SoftPulse `diff`
   densify PRESENT; unguided SoftPulse `lag2` densify PRESENT; curriculum LPT-300 Done —
-  do not clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Adjust-LAG SoftPulse residual **LPT-718** Done (#2661 CALL-only) (CALL→TRAP→FANCY LESS + Dart `VsLagsDemo` /
-  `LessonVsLagsExplainTable` under Call-wider-only; Relates LPT-303 — do not re-add
-  needs-human on curriculum) + cite **LPT-719** still To Do; successors STRONG HAND→LET
-  THEM BET / NO BIG BLUFF→LET THEM content-driven; guided SoftPulse `call` PRESENT;
+  do not clone / do not re-add needs-human; tip `98a93e35` Prefer NEVER Adjust-LAG SoftPulse residual **LPT-718** Done (#2661 CALL-only confirmed on tip; `explainGrading` "LAG pressure → Call wider.") + cite **LPT-719** still To Do (Relates LPT-303 — do not re-add
+  needs-human on curriculum); successors STRONG HAND→LET THEM BET / NO BIG BLUFF→LET THEM content-driven; guided SoftPulse `call` PRESENT;
   scaffolded SoftPulse `trap` one-per-press PRESENT; unguided SoftPulse `avoid`
   one-per-press densify PRESENT; curriculum LPT-303 Done — do not clone / do not
-  re-add needs-human; tip `643b2f0d` Prefer NEVER Mix-five SoftPulse residual
-  **LPT-721** still To Do (CARDS→SEATS→EVIDENCE + Dart `ExploitEvidenceDemo` /
-  `LessonExploitEvidenceExplainTable` under Station-thin-only; Relates LPT-306 — do not
-  re-add needs-human on curriculum); successors NIT CHECK-RAISE→FOLD / LAG BARREL→CALL /
+  re-add needs-human; tip `7b92bfd4` Prefer NEVER Mix-five SoftPulse residual
+  **LPT-721** Done (#2662); successors NIT CHECK-RAISE→FOLD / LAG BARREL→CALL /
   TENDENCY→LINE content-driven; guided SoftPulse `cs` SoftPulse map PRESENT; scaffolded
   SoftPulse `nit` one-per-press SoftPulse map PRESENT; unguided SoftPulse `lag`
   one-per-press SoftPulse map PRESENT; cite checkpoint SoftPulse `tag` under cite-tendency
@@ -1927,6 +1917,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-15dg: Tip-stable `98a93e35` / learnings tip `32dd336f` (#2673 Meet-LAG Prefer on tip after #2671). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 description limit; do not claim body rebuilt); other parents Done — no open-parent sync. Prefer NEVER Adjust-LAG cite residual re-check `lesson-06-12-03-01/02/03` / `act-06-12-03-*`: SoftPulse explain `act-06-12-03-explain` CALL-only + `explainGrading` "LAG pressure → Call wider." — **LPT-718** Done (#2661) confirmed on tip; do not reopen; checkpoint SoftPulse `cite` kind `none` hintless densify PRESENT (prompt "LAG exploit cites?" / Wide + pressure vs Vibes) still under Call-wider-only → **LPT-719** still To Do (needs-human; Relates LPT-303 — do not re-add needs-human on curriculum); successors SoftPulse STRONG HAND→LET THEM BET / NO BIG BLUFF→LET THEM content-driven (do not reopen LPT-669); guided SoftPulse `call` PRESENT (fixed+variants); scaffolded SoftPulse `trap` one-per-press PRESENT; unguided SoftPulse `avoid` one-per-press densify PRESENT; curriculum **LPT-303** Done. Meet-LAG sample-limits **LPT-716** still To Do (Prefer fold #2673). Tip-commented LPT-719/718/829/716; leave open companions LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave ui-agent alone. Prefer next: NEVER punish checkpoint **LPT-702** / Meet-TAG **LPT-708** / Adjust-TAG cite **LPT-710** / open catalog **LPT-829**.
 - 2026-10-15df: Tip-stable `98a93e35` (#2671 densify after #2666 S7 SoftPulse Done-acks + #2664 S6a/S6b SoftPulse Done-acks). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync. SoftPulse Prefer path catch-up: SoftPulse SoftPulse residuals Done via #2659/#2661/#2662 (incl. LPT-701/703/709/713/718/721…) — leave Done. Prefer NEVER Meet-LAG sample-limits residual re-check: SoftPulse WIDE→PRESSURE→MODEL + `explainGrading` "Wide → Pressure → Model." **concept-aligned** under The LAG model; checkpoint SoftPulse `limits` kind `none` densify PRESENT (prompt "Show beside LAG label?" / Sample limits vs Destiny) still under Introduce LAG framing → **LPT-716** still To Do (needs-human; Relates LPT-300 — do not re-add needs-human on curriculum); successors SoftPulse WIDE OPENS→BARRELS / RAISES→CALLS content-driven (do not reopen LPT-669); guided SoftPulse `lag` densify PRESENT; scaffolded SoftPulse `diff` one-per-press densify PRESENT; unguided SoftPulse `lag2` densify PRESENT. Curriculum **LPT-300** Done — do not clone. Meet Nit LPT-198 / LPT-216 Done re-verify OK. Tip-commented LPT-716/300/719/829/351/198/216; leave open LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Adjust-LAG cite companion **LPT-719** re-check / open catalog **LPT-829**.
 - 2026-10-15de: Tip `98a93e35` (densify tip after #2668 Adjust-TAG cite Prefer). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat. Open catalog **LPT-829** tip-synced flat **224** (tip-comment only). Prefer NEVER Observe-wide companions: SoftPulse **LPT-713** Done (WIDE-only); Keep-sampling **LPT-714** + evidence-bundle **LPT-715** still To Do (needs-human; Relates LPT-297 — do not re-add needs-human). Structural clean otherwise (`deal.mode` `none` observation tiles). Rescued pending folds Meet-TAG `1c28d15b` + Adjust-TAG cite `741585fd`. Tip-commented LPT-714/715/829/297/716/719/710/708; leave ui-agent alone. next: NEVER Meet-LAG sample-limits **LPT-716** / Adjust-LAG cite **LPT-719** / open catalog **LPT-829**.
 - 2026-10-15dd: Tip-stable `741585fd` (#2668 Adjust-TAG cite Prefer LPT-710). Catalog short-ladder **224**; SoftPulse **LPT-709** Done; cite checkpoint SoftPulse `cite` under Respect → **LPT-710** still To Do (needs-human; Relates LPT-294). Tip-commented LPT-710/829/709/294/708. next: NEVER Observe-wide **LPT-714/715**.
