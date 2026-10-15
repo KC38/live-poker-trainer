@@ -89,7 +89,9 @@ const _lines = <String, String>{
   'act-02-05-01-checkpoint-200':
       'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
   'act-02-06-01-guided-follow': 'Two seats act before you. What first — pick Watch what they do, then decide.',
-  'act-02-06-01-scaffolded-verbal': 'You want to raise. Clearest live choice — pick Say "raise" and put out the chips.',
+  // LPT-843: SoftPulse-quiet densify — no Say "raise" spoil.
+  'act-02-06-01-scaffolded-verbal':
+      'You want to raise. Clearest live choice — tap how you announce it and put out chips.',
   'act-02-06-01-unguided-protect': 'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
   // LPT-786: SoftPulse-off densify — no correct-tile spoil.
   'act-02-06-01-checkpoint-oot':
