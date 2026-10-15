@@ -106,7 +106,9 @@ const _lines = <String, String>{
       'Seat right before the button — pick it on the map.',
   'act-03-01-01-guided':
       'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
-  'act-03-01-01-scaffolded': 'Nine-handed. Dealer button is on seat 7. Who acts first preflop — pick Seat left of the big blind (UTG).',
+  // LPT-845: SoftPulse-quiet densify — no UTG / Seat left of the big blind spoil.
+  'act-03-01-01-scaffolded':
+      'Nine-handed. Dealer button is on seat 7 — tap who acts first preflop.',
   'act-03-01-01-unguided': 'You say "raise" then try to take it back to a call. Result — pick The raise stands — verbal is binding.',
   // LPT-787: SoftPulse-off densify — no correct-tile spoil.
   'act-03-01-01-checkpoint':
