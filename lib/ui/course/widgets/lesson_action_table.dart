@@ -14291,6 +14291,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // Gloss the act-order ask — never leave AuthoredCue tiles label-only.
     'EARLIER SEATS': 'Act before you',
     'YOUR TURN': 'Then you decide',
+    // Broadways and suited aces SoftPulse explain (BROADWAY → SUITED ACE;
+    // LPT-892). Gloss the starting-hand ask — never leave AuthoredCue tiles
+    // label-only.
+    'BROADWAY': 'Ten or higher',
+    'SUITED ACE': 'Ace same suit',
     'NO BET': 'Free to check',
     'CHECK': 'Pass the street',
     'BET': 'Put chips in',
