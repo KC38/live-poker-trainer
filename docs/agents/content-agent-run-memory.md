@@ -5141,3 +5141,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER oldest unfresh `lesson-01-01-03-01-dealer-button` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-01-01-02-03-* / act-01-01-02-unguided-suited / act-01-01-02-checkpoint-pair: interactive structural clean on tip; densify PRESENT on SI arms — do not reopen LPT-628; distractor `deal.variants` already authored — do not reopen LPT-627.
 
+
+## 2026-10-15eb — Prefer-next dealer-button discovery (`4e10474b`)
+
+- Tip-stable `4e10474b` (#2702 Prefer-next pairs fold; this run Prefer-next dealer-button).
+- Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 description limit; do not claim body rebuilt); other parents Done.
+- Only open content tickets: **LPT-829** + Low curriculum **LPT-351**.
+- Prefer NEVER discovery `lesson-01-01-03-01-dealer-button` / `act-01-01-03-explain-button` + `act-01-01-03-guided-button`:
+  - Explain SoftPulse `D` + `explainGrading` "D marks the dealer button." concept-aligned under Locate the dealer button (**LPT-724** Done — do not reopen D→SB→BB SoftPulse residual).
+  - Guided SoftPulse `D` densify PRESENT (`selectIdentifyDensifiedCoachLine` → "Tap the dealer button on the table.").
+  - `deal.mode` `none` seat/puck — do not file handFamily/suitFamily.
+  - Short-ladder 2/5 already on **LPT-829**; curriculum **LPT-87** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh `lesson-01-01-03-02-small-and-big-blind` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-01-01-03-explain-button / act-01-01-03-guided-button: interactive structural clean on tip; densify PRESENT — do not reopen LPT-628; Dart `CoachDialogueVisualKind.dealerButton` wired — do not reopen LPT-669.
