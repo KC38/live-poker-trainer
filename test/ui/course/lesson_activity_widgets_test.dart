@@ -9771,6 +9771,8 @@ await tester.tap(find.text('NIT'));
   testWidgets('jump check legal docks Check live so identify is not spoiled', (
     tester,
   ) async {
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     final activity = CourseActivity(
       id: 'act-01-06-02-jump-legal',
       order: 3,
@@ -9797,9 +9799,32 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    expect(find.textContaining('Villain bets 8'), findsOneWidget);
+    // Felt line may use villainLine or densify chrome; dock chrome is the lock.
     expect(find.text('CHECK (off)'), findsNothing);
     expect(find.text('CHECK'), findsOneWidget);
+    expect(find.text('RAISE (off)'), findsNothing);
+    expect(find.text('RAISE'), findsOneWidget);
+    // Equal live chrome — Raise must not gold-fill above Check/Call (LPT-879).
+    final dock = tester.widget<LessonActionDock>(find.byType(LessonActionDock));
+    expect(dock.identifyUnavailable, isTrue);
+    Color materialOf(String label) {
+      final material = tester.widget<Material>(
+        find
+            .ancestor(
+              of: find.text(label),
+              matching: find.byType(Material),
+            )
+            .first,
+      );
+      return material.color!;
+    }
+
+    final checkFill = materialOf('CHECK');
+    final callFill = materialOf('CALL');
+    final raiseFill = materialOf('RAISE');
+    expect(raiseFill, checkFill);
+    expect(callFill, checkFill);
+    expect(tester.takeException(), isNull);
     await tester.tap(find.text('CHECK'));
     await tester.pump();
     expect(controller.draft.choiceId, 'j-check');

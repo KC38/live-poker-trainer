@@ -14884,6 +14884,7 @@ class LessonActionDock extends StatelessWidget {
                     selected: selectedId == choice.id,
                     enabled: enabled,
                     unavailableLook: unavailableLook,
+                    identifyUnavailable: identifyUnavailable,
                     onPressed: () => onSelect(choice.id),
                   ),
                 );
@@ -14903,6 +14904,7 @@ class _DockButton extends StatelessWidget {
     required this.enabled,
     required this.onPressed,
     this.unavailableLook = false,
+    this.identifyUnavailable = false,
   });
 
   final CourseChoice choice;
@@ -14911,10 +14913,18 @@ class _DockButton extends StatelessWidget {
   final VoidCallback onPressed;
   final bool unavailableLook;
 
+  /// Identify quizzes keep equal live chrome — no Raise/Bet gold or Fold
+  /// danger tint that outranks Check/Call before the learner taps (LPT-879).
+  final bool identifyUnavailable;
+
   Color get _fill {
     final action = (choice.action ?? choice.label).toUpperCase();
     if (unavailableLook) {
       return AppColors.slateDark.withValues(alpha: 0.55);
+    }
+    // Equal muted live fill for every action on identify docks.
+    if (identifyUnavailable) {
+      return AppColors.surfaceMuted.withValues(alpha: 0.55);
     }
     if (action.startsWith('FOLD'))
       return AppColors.danger.withValues(alpha: 0.4);
@@ -14930,6 +14940,7 @@ class _DockButton extends StatelessWidget {
   Color get _border {
     if (selected) return AppColors.selectionGlow;
     if (unavailableLook) return AppColors.slate;
+    if (identifyUnavailable) return AppColors.feltBorder;
     final action = (choice.action ?? choice.label).toUpperCase();
     if (action.startsWith('FOLD') || action.startsWith('ALL')) {
       return AppColors.danger;
