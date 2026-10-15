@@ -4415,3 +4415,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-708/291/829/709/710/706/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Adjust-TAG SoftPulse residual **LPT-709** (+ cite **LPT-710**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15ca tip 714e21cd (#2619 Adjust-TAG Prefer → Observe-wide SoftPulse LPT-713 Prefer)
+
+- Tip-stable `714e21cd` (#2619 Adjust-TAG SoftPulse Prefer LPT-709 on tip after #2618). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (body rebuilt from `--gap short-ladder --markdown`); other parents Done — no open-parent sync.
+- Prefer NEVER Observe-wide SoftPulse residual re-check `lesson-06-12-01-01/02/03` / `act-06-12-01-*`:
+  - first-child SoftPulse WIDE→PRESSURE→SAMPLE + `explainGrading` "Wide → Pressure → Sample." + Dart `WidePressureDemo.points` WIDE/PRESSURE/SAMPLE (captions Many opens / Barrels with a plan / Count first) / `LessonWidePressureExplainTable` / layout "Tap Wide, then Pressure, then Sample." still pre-split under Note-wide-entry-only (`lesson-06-12-01-01-wide-entry` objective "Note wide entry") → residual **LPT-713** still To Do (needs-human; Relates LPT-297 — do not re-add needs-human on curriculum).
+  - companion unguided SoftPulse `wait` Keep sampling (prompt "Label after one wide open?"; densify helper "One wide open — pick the confidence."; `lagObserveSampleOutcomes`) under Note sustained pressure → residual **LPT-714** still To Do (needs-human; Relates LPT-297).
+  - companion checkpoint SoftPulse `bundle` kind `none` densify PRESENT (helper "Best pre-label notes — pick the evidence pack."; `lagObserveBundleOutcomes`) under Planned-not-maniac → residual **LPT-715** still To Do (needs-human; Relates LPT-297).
+  - successors SoftPulse BARRELS→MANY HANDS / FOLDS SOMETIMES→PLAN content-driven (do not reopen LPT-669); guided SoftPulse `wide` densify PRESENT; scaffolded SoftPulse `sep` one-per-press densify PRESENT.
+- Curriculum **LPT-297** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-713/714/715/297/829/716/351/198/216/709; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Meet-LAG sample-limits residual **LPT-716** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-06-12-01-*: interactive structural clean on tip except LPT-713 SoftPulse + LPT-714 unguided + LPT-715 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
