@@ -41,6 +41,13 @@ const _residuals = <String, (List<String>, List<String>)>{
   'act-03-06-01-explain': (['VALUE'], ['BLUFF', 'CATCH', 'FOLD']),
   'act-03-07-01-explain': (['STRONGER'], ['FEWER', 'NUTS']),
   'act-03-08-01-explain': (['TOP PAIR'], ['PRICES', 'PASSIVE', 'CROWDS']),
+  'act-04-06-03-explain': (['VALUE'], ['BLUFFS', 'CITE']),
+  'act-05-03-01-explain': (['IMPLIED'], ['REVERSE', 'SECOND']),
+  'act-05-04-01-explain': (['THIN'], ['CATCH', 'BARRELS']),
+  'act-05-05-01-explain': (['X/R'], ['PROBE', 'DELAY', 'DONK']),
+  'act-05-07-01-explain': (['TIMING', 'CLUES'], ['SIZING']),
+  'act-05-08-01-explain': (['STUCK', 'TILTED'], ['GEARS']),
+  'act-05-09-01-explain': (['QUIT'], ['GUARD', 'FIRST']),
 };
 
 Widget _frame(String lessonId, Widget child) {

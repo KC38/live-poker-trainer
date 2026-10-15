@@ -2120,7 +2120,7 @@ void main() {
           act('act-04-06-03-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['VALUE', 'BLUFFS', 'CITE'],
+        ['VALUE'],
       );
     });
 
@@ -2945,7 +2945,7 @@ void main() {
           act('act-05-03-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['IMPLIED', 'REVERSE', 'SECOND'],
+        ['IMPLIED'],
       );
     });
 
@@ -3019,7 +3019,7 @@ void main() {
           act('act-05-04-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['THIN', 'CATCH', 'BARRELS'],
+        ['THIN'],
       );
     });
 
@@ -3150,7 +3150,7 @@ void main() {
           act('act-05-05-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['X/R', 'PROBE', 'DELAY', 'DONK'],
+        ['X/R'],
       );
     });
 
@@ -3210,7 +3210,7 @@ void main() {
           act('act-05-08-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['STUCK', 'TILTED', 'GEARS'],
+        ['STUCK', 'TILTED'],
       );
     });
 
@@ -3271,7 +3271,7 @@ void main() {
           act('act-05-09-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['QUIT', 'GUARD', 'FIRST'],
+        ['QUIT'],
       );
     });
 
@@ -4827,7 +4827,7 @@ void main() {
           act('act-05-07-01-explain'),
           'cues',
         ).map((c) => c['target']).toList(),
-        ['TIMING', 'SIZING', 'CLUES'],
+        ['TIMING', 'CLUES'],
       );
     });
 

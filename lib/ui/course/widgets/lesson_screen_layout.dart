@@ -481,8 +481,7 @@ String _lessonFrameLine(
         'Tap Station, then High, then Low.';
   }
   if (activity.id == 'act-04-06-03-explain') {
-    return 'Versus stations: thicker value, fewer pure bluffs. '
-        'Tap Value, then Bluffs, then Cite.';
+    return 'Calling Stations call too wide. Tap Value.';
   }
   if (activity.id == 'act-04-07-01-explain') {
     return 'Some seats almost never enter. When they do, they mean it. '
@@ -525,32 +524,26 @@ String _lessonFrameLine(
         'Tap Deep, then Realize, then Stack.';
   }
   if (activity.id == 'act-05-03-01-explain') {
-    return 'Implied odds: future money. Reverse implied: future losses when second-best. '
-        'Tap Implied, then Reverse, then Second.';
+    return 'Implied odds are the money you win later. Tap Implied.';
   }
   if (activity.id == 'act-05-04-01-explain') {
-    return 'Thin value needs calls. Bluff-catches need wide barrels. '
-        'Tap Thin, then Catch, then Barrels.';
+    return 'Thin value needs callers who stick. Tap Thin.';
   }
   if (activity.id == 'act-05-05-01-explain') {
-    return 'Lines mean ranges. Check-raise, probe, delay, and donk each update the story. '
-        'Tap X/R, then Probe, then Delay, then Donk.';
+    return 'Read the check-raise by player type. Tap X/R.';
   }
   if (activity.id == 'act-05-06-01-explain') {
     return 'Each action rewrites the range. Keep updating. '
         'Tap Action, then Rewrite, then Update.';
   }
   if (activity.id == 'act-05-07-01-explain') {
-    return 'Timing and sizing are clues, not mind-reading. Small updates only. '
-        'Tap Timing, then Sizing, then Clues.';
+    return 'Timing is soft evidence. Tap Timing, then Clues.';
   }
   if (activity.id == 'act-05-08-01-explain') {
-    return 'Tables change. Stuck, tilted, or shifting gears — update. '
-        'Tap Stuck, then Tilted, then Gears.';
+    return 'Spot stuck or tilted players. Tap Stuck, then Tilted.';
   }
   if (activity.id == 'act-05-09-01-explain') {
-    return 'Winning 1/2 includes knowing when to quit. Guardrails first. '
-        'Tap Quit, then Guard, then First.';
+    return 'Pick your stop-loss before you sit. Tap Quit.';
   }
   if (activity.id == 'act-06-01-01-explain') {
     return 'Range advantage: more strong hands overall. Nut advantage: more of the nuts. '
