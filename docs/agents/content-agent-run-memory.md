@@ -4502,6 +4502,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15cj tip cab77102 (#2632 HU Prefer → Stack SoftPulse LPT-802 Prefer)
+
+- Tip-stable `cab77102` (#2632 HU SoftPulse Prefer LPT-800 on tip after #2630). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Stack SoftPulse residual re-check `lesson-07-06-01-01/02/03` / `act-07-06-01-*`:
+  - first-child SoftPulse SHORT→DEEP→EFFECTIVE + `explainGrading` "Short → Deep → Effective." + Dart `StackDepthPlansDemo.points` SHORT/DEEP/EFFECTIVE (captions Commit earlier / Implied odds / Recalc each hand) / `LessonStackDepthPlansExplainTable` / layout "Tap Short, then Deep, then Effective." + coachMedia "Effective stack rewrites the plan every hand." still pre-split under Commit-earlier-short-only (`lesson-07-06-01-01-commit-short` objective "Commit earlier short") → residual **LPT-802** still To Do (needs-human; Relates LPT-326 — do not re-add needs-human on curriculum).
+  - successors SoftPulse DEEP→IMPLIED ODDS / SHORTER STACK→PLAN content-driven (do not reopen LPT-669); guided SoftPulse `commit` densify PRESENT; scaffolded SoftPulse `yes` one-per-press densify PRESENT; unguided SoftPulse `40` one-per-press densify PRESENT; checkpoint SoftPulse `every` kind `none` densify PRESENT under recalc-effective — concept-aligned (no companion residual).
+- Curriculum **LPT-326** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-802/326/829/800/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829 (SoftPulse Prefer NEVER residual walk through Stack complete this pass).
+- act-07-06-01-*: interactive structural clean on tip except LPT-802 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided/checkpoint densify PRESENT; `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
 ## Fold 2026-10-15ci tip c4dccacd (#2630 Pot Prefer → HU SoftPulse LPT-800 Prefer)
 
 - Tip-stable `c4dccacd` (#2630 Pot SoftPulse Prefer LPT-798 on tip after #2629). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
