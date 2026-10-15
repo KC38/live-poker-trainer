@@ -236,7 +236,7 @@ table in the design record, using the coverage ledger
    `python3 tools/ui_motion_targets.py pick` that is never walked or
    oldest — film it with `tools/sim_record.py` (see Motion check below).
 3. SoftPulse-quiet **choice-label densify spoils** from
-   `python3 tools/ui_densify_spoil_scan.py list` (or `check`; catches numeric tap/pick tiles and em-dash fragments, LPT-877/878). Idle coach
+   `python3 tools/ui_densify_spoil_scan.py list` (or `check`; catches numeric tap/pick tiles, em-dash fragments, and -unguided/-scaffolded ids without quiet comments — LPT-877/878/880). Idle coach
    naming a tile answer while SoftPulse is off / after Hint only is a
    `ui-agent` KEY — do not hunt these only by eye (LPT-849 class).
 4. A densify stem with template **card codes** from
