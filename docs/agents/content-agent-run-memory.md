@@ -5108,3 +5108,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
 - Prefer next: NEVER oldest unfresh `lesson-01-01-02-02-ranks` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-01-01-02-*: interactive structural clean on tip; densify PRESENT on SI arms — do not reopen LPT-628; four_suits `random_in_class` without distractor variants — do not reopen LPT-627.
+
+## 2026-10-15dz — Prefer-next ranks discovery (`88df3b9f`)
+
+- Tip-stable `88df3b9f` (#2700 Prefer-next suits fold; this run Prefer-next ranks).
+- Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 description limit; do not claim body rebuilt); other parents Done.
+- Only open content tickets: **LPT-829** + Low curriculum **LPT-351**.
+- Prefer NEVER discovery `lesson-01-01-02-02-ranks` / `act-01-01-02-02-*`:
+  - Explain SoftPulse DEUCE→MIDDLE→ACE + `explainGrading` concept-aligned under Order ranks from deuce to ace (content-driven `authoredCues`; LPT-669 Done — do not reopen).
+  - Guided SoftPulse rank-2→rank-T→rank-A PRESENT (`order_sequence` `random_in_class` high_card/rainbow).
+  - Scaffolded SoftPulse one-per-press pressHints 3/3.
+  - Checkpoint SoftPulse cue kind `none` hintless (no pressHints).
+  - Densify N/A (`order_sequence`); short-ladder 4/5 already on **LPT-829**; curriculum **LPT-83** Done — do not clone / no SoftPulse residual.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh `lesson-01-01-02-03-pairs-and-suited` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-01-01-02-02-*: interactive structural clean on tip; `random_in_class` high_card/rainbow without distractor variants — do not reopen LPT-627.
