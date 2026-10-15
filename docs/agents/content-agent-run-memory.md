@@ -4430,3 +4430,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-713/714/715/297/829/716/351/198/216/709; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Meet-LAG sample-limits residual **LPT-716** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-06-12-01-*: interactive structural clean on tip except LPT-713 SoftPulse + LPT-714 unguided + LPT-715 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` observation tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15cb tip c1ae38f7 (#2620 Observe-wide Prefer → Meet-LAG sample-limits LPT-716 Prefer)
+
+- Tip-stable `c1ae38f7` (#2620 Observe-wide SoftPulse Prefer LPT-713 on tip after #2619). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (body rebuilt from `--gap short-ladder --markdown`); other parents Done — no open-parent sync.
+- SoftPulse Prefer path catch-up: Selective SoftPulse residual **LPT-706** still To Do + Meet-TAG working-model residual **LPT-708** still To Do + Adjust-TAG SoftPulse residual **LPT-709** (+ **LPT-710**) still To Do + Observe-wide SoftPulse residual **LPT-713** (+ **LPT-714** / **LPT-715**) still To Do advanced through Prefer SoftPulse path this fold.
+- Prefer NEVER Meet-LAG sample-limits residual re-check `lesson-06-12-02-01/02/03` / `act-06-12-02-*`:
+  - SoftPulse WIDE→PRESSURE→MODEL + `explainGrading` "Wide → Pressure → Model." + Dart `LagModelDemo.points` WIDE/PRESSURE/MODEL (captions Wide in / Pressure on / Working model) / layout "Tap Wide, then Pressure, then Model." under Introduce LAG / The LAG model — **concept-aligned** (not SoftPulse residual).
+  - companion checkpoint SoftPulse `limits` kind `none` densify PRESENT (prompt "Show beside LAG label?" / Sample limits vs Destiny; helper "Beside LAG label — pick what to show.") still under Introduce LAG-only (`lesson-06-12-02-01-lag-model` objective "Introduce LAG") → residual **LPT-716** still To Do (needs-human; Relates LPT-300 — do not re-add needs-human on curriculum).
+  - successors SoftPulse WIDE OPENS→BARRELS / RAISES→CALLS content-driven (do not reopen LPT-669); guided SoftPulse `lag` densify PRESENT; scaffolded SoftPulse `diff` one-per-press densify PRESENT; unguided SoftPulse `lag2` one-per-press densify PRESENT.
+- Curriculum **LPT-300** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-716/300/829/718/713/351/198/216/709; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Adjust-LAG SoftPulse residual **LPT-718** (+ cite **LPT-719**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits residual; SoftPulse explain concept-aligned + successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
