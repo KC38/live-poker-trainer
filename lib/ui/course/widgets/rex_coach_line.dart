@@ -93,8 +93,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'UTG opens at 1/2 — pick the stronger, narrower range.',
     'act-04-01-01-scaffolded' =>
       'BTN open, BB 3-bet, BTN calls — pick whose range is stronger.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Too exact / Exactly AK is too
+    // precise (LPT-867; SoftPulse LPT-653; same class as LPT-866 / LPT-865 /
+    // LPT-858 / LPT-857 / LPT-853).
     'act-04-01-01-unguided' =>
-      'They bet twice — pick why Exactly AK is too precise.',
+      'They bet twice — tap the matching range idea.',
     'act-04-01-01-checkpoint' =>
       'Same board, different villain lines — pick how advice should change.',
     // Plan beyond the flop checkpoint densified ask (LPT-407) — same path.
