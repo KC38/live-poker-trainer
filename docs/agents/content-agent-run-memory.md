@@ -5541,3 +5541,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next NEVER: `lesson-04-08-03-01-widen-value-catch` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-08-02-*: Spot Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-774 on first-child; Meet Maniac children Prefer NEVER path complete.
 
+## Fold 2026-10-15fq (85ed4250 Prefer NEVER widen-value-catch)
+
+- Tip-stable `85ed4250` (#2761 Prefer NEVER spot-maniac learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-08-03-01-widen-value-catch` / `act-04-08-03-explain` + `act-04-08-03-guided` + `act-04-08-03-scaffolded`:
+  - dual lesson objectives Widen value and bluff-catch ranges + Avoid ego battles; explain SoftPulse WIDER→HANG→EGO under first child (*expected packing* — no SoftPulse residual / LPT-212 Done — do not reopen).
+  - activity objectives Widen-only; guided SoftPulse `call-wider` PRESENT (`poker_action_sizing` `deal.mode` `fixed` Ah9d·As7c2dTh3c +2 suit variants); scaffolded SoftPulse `val-m` one-per-press pressHints 1/1 (`poker_action_sizing` `deal.mode` `fixed` AhKd·AsKc2d9h3c +2 suit variants — do not file handFamily).
+  - short-ladder 3/5 already on catalog **LPT-829**; curriculum **LPT-212** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-08-03-02-cite-aggression` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-08-03-*: Widen Prefer NEVER structural clean on tip — SoftPulse packing expected under dual-objective first child; Adjust Maniac path continues with Cite sibling.
+
