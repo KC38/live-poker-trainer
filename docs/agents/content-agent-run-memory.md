@@ -4502,6 +4502,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15ck tip 20069b98 (#2633 Stack Prefer → Same-cards SoftPulse LPT-725 Prefer)
+
+- Tip-stable `20069b98` (#2633 Stack SoftPulse Prefer LPT-802 on tip after #2632). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Same-cards SoftPulse residual re-check `lesson-07-07-01-01/02/03/04` / `act-07-07-01-*`:
+  - first-child SoftPulse CARDS→MODELS→CITE + `explainGrading` "Cards → Models → Cite." + Dart `SameCardsTypesDemo.points` CARDS/MODELS/CITE (captions Same holdings / Five types / Tendency or baseline) / `LessonSameCardsTypesExplainTable` / layout "Tap Cards, Models, and Cite." + coachMedia "Same cards. Five models. Cite the tendency." still pre-split under station-value (`lesson-07-07-01-01-station-value` title Station value; objective still unit string "Change lines by type with citations") → residual **LPT-725** still To Do (needs-human; Relates LPT-330 — do not re-add needs-human on curriculum).
+  - checkpoint SoftPulse `base` kind `none` densify PRESENT under baseline-without-evidence — concept-aligned (no companion residual).
+  - successors SoftPulse TAG CHECK-RAISE→CAREFUL / LAG BARREL→CALL / NO EVIDENCE→BASELINE content-driven (do not reopen LPT-669); guided SoftPulse `bet` SoftPulse map PRESENT (`Ah`/`Kd`·`Kc`/`8s`/`3h` +2 suit variants; poker_action_sizing densify N/A); scaffolded SoftPulse `fold` one-per-press SoftPulse map PRESENT; unguided SoftPulse `call` one-per-press SoftPulse map PRESENT.
+- Curriculum **LPT-330** Done — do not clone / do not re-add needs-human; do not clone Duplicate **LPT-728**.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-725/330/829/726/351/802/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Type-board SoftPulse residual **LPT-726** re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-07-07-01-*: interactive structural clean on tip except LPT-725 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/unguided SoftPulse maps PRESENT — do not reopen LPT-625; sizing `fixed`+variants — do not reopen LPT-627; checkpoint densify PRESENT — do not reopen LPT-628; explain/checkpoint `deal.mode` `none` — do not file handFamily.
+
 ## Fold 2026-10-15cj tip cab77102 (#2632 HU Prefer → Stack SoftPulse LPT-802 Prefer)
 
 - Tip-stable `cab77102` (#2632 HU SoftPulse Prefer LPT-800 on tip after #2630). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
