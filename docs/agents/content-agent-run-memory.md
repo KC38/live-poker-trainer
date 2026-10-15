@@ -4910,3 +4910,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Meet-LAG sample-limits **LPT-716** / Adjust-LAG cite **LPT-719** / open catalog **LPT-829**.
 - act-06-12-01-*: interactive structural clean on tip except LPT-714 unguided + LPT-715 checkpoint residuals; SoftPulse explain successors content-driven; all interactive acts `deal.mode` `none` observation tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+
+## Fold 2026-10-15dl tip 9a66acee (Meet-LAG sample-limits Prefer LPT-716)
+
+- Tip-stable `9a66acee` (#2679). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32k description limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Meet-LAG sample-limits residual re-check `lesson-06-12-02-01/02/03` / `act-06-12-02-*`:
+  - SoftPulse explain `act-06-12-02-explain` SoftPulse WIDE→PRESSURE→MODEL + `explainGrading` "Wide → Pressure → Model." + Dart `LagModelDemo` / layout "Tap Wide, Pressure, and Model." **concept-aligned** under Introduce LAG / The LAG model (not SoftPulse residual; same class as Meet TAG).
+  - Checkpoint SoftPulse `limits` kind `none` densify PRESENT (prompt "Show beside LAG label?" / Sample limits vs Destiny; helper "Beside LAG label — pick what to show."; `meetLagLimitsOutcomes`) still under Introduce LAG-only (`lesson-06-12-02-01-lag-model` objective "Introduce LAG") → residual **LPT-716** still To Do (needs-human; Relates LPT-300 — do not re-add needs-human on curriculum).
+  - Successors SoftPulse WIDE OPENS→BARRELS (`act-06-12-02-02-explain-spot`) / RAISES→CALLS (`act-06-12-02-03-explain-station`) content-driven (do not reopen LPT-669).
+  - Guided SoftPulse `lag` densify PRESENT (`meetLagVsTagOutcomes`); scaffolded SoftPulse `diff` one-per-press densify PRESENT (`meetLagDiffOutcomes`); unguided SoftPulse `lag2` one-per-press densify PRESENT (`meetLagVsNitOutcomes`).
+- Curriculum **LPT-300** Done — do not clone.
+- Tip-commented LPT-716/829/300/719; leave open LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER Adjust-LAG cite **LPT-719** / open catalog **LPT-829**.
+- act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits checkpoint residual; SoftPulse explain successors content-driven; all interactive acts `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
