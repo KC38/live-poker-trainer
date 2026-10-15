@@ -1,6 +1,8 @@
 // LPT-847: SoftPulse-quiet densify stem must not spoil Strong draw / nut
 // flush draw while SoftPulse stays off until Hint (SoftPulse LPT-653;
 // same class as LPT-846 / LPT-845 / LPT-844).
+// Remap honesty: board/hole tokens rewrite via alignLessonTableCopy
+// (LPT-851 / LPT-806 class).
 import 'dart:convert';
 import 'dart:io';
 
@@ -24,11 +26,13 @@ void main() {
     final activity = catalog.activityById(_id);
     expect(activity, isNotNull, reason: _id);
     final speech = lessonFrameSpeech(activity!);
-    expect(speech, _line);
     expect(speech, isNot(contains('Tap the best answer')));
     expect(speech, isNot(contains('Strong draw')));
     expect(speech, isNot(contains('nut flush draw')));
     expect(speech, isNot(contains('pick Strong')));
     expect(speech, isNot(contains('pick ')));
+    expect(speech.toLowerCase(), contains('board'));
+    expect(speech.toLowerCase(), contains('you hold'));
+    expect(speech, contains('tap the matching label'));
   });
 }

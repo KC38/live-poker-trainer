@@ -675,8 +675,16 @@ String _lessonFrameLine(
   }
   // Densified select_identify asks (Baseline jump; Count outs) must beat
   // catalog quiz prompts before resolveLessonCoachPrompt (LPT-221, LPT-279).
+  // Flop-class densify stems keep alignLessonTableCopy-ready board/hole
+  // tokens — rewrite onto the isomorphic remapped deal (LPT-851 / LPT-806).
   final densifiedSelect = selectIdentifyDensifiedCoachLine(activity.id);
-  if (densifiedSelect != null) return densifiedSelect;
+  if (densifiedSelect != null) {
+    return alignLessonActionCopy(
+      activity,
+      densifiedSelect,
+      generation: bindGeneration,
+    );
+  }
   final resolved = resolveLessonCoachPrompt(
     activity: activity,
     fallback: activity.accessibilityText,

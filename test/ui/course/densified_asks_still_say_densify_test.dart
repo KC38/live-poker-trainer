@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_screen_layout.dart';
 import 'package:live_poker_trainer/ui/course/widgets/rex_coach_line.dart';
 
@@ -261,7 +262,10 @@ void main() {
       expect(activity, isNotNull, reason: id);
       final speech = lessonFrameSpeech(activity!);
       expect(speech, isNot(contains('Tap the best answer')));
-      expect(speech, contains(line.split(' — ').first));
+      // Card-token densify stems rewrite onto the remapped deal (LPT-851).
+      // withLessonTapInstruction may rewrite authored pick→tap (LPT-662).
+      final aligned = alignLessonActionCopy(activity, line);
+      expect(speech, contains(aligned.split(' — ').first));
     });
   }
 
@@ -308,7 +312,11 @@ void main() {
         expect(activity, isNotNull, reason: id);
         final speech = lessonFrameSpeech(activity!);
         final lower = speech.toLowerCase();
-        expect(speech, resolved, reason: '$id frame speech matches densify');
+        expect(
+          speech,
+          alignLessonActionCopy(activity, resolved!),
+          reason: '$id frame speech matches densify',
+        );
         for (final spoil in phrases) {
           expect(
             lower,
