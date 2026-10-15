@@ -4516,3 +4516,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Pot SoftPulse residual **LPT-798** (+ cite **LPT-799**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-03-01-*: interactive structural clean on tip except LPT-795 SoftPulse + LPT-796 rule residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided sizing `fixed`+variants — do not reopen LPT-627; scaffolded/unguided/checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15ch tip d51206a6 (#2629 Compose Prefer → Pot SoftPulse LPT-798 Prefer)
+
+- Tip-stable `d51206a6` (#2629 Compose SoftPulse Prefer LPT-795 fold on tip after #2628). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Pot SoftPulse residual re-check `lesson-07-04-01-01/02/03` / `act-07-04-01-*`:
+  - first-child SoftPulse LIMPED→SRP→3-4BET + `explainGrading` "Limped → SRP → 3-bet/4-bet." + Dart `PotTypePlansDemo.points` LIMPED/SRP/3-4BET (captions Nut potential / C-bet maps / High commit) / `LessonPotTypePlansExplainTable` / layout "Tap Limped, then SRP, then 3-4bet." + coachMedia "Pot type sets ranges and SPR. Plan accordingly." still pre-split under Plan-limped-pots-only (`lesson-07-04-01-01-limped-pots` objective "Plan limped pots") → residual **LPT-798** still To Do (needs-human; Relates LPT-320 — do not re-add needs-human on curriculum).
+  - companion checkpoint SoftPulse `both` kind `none` densify PRESENT (prompt "Pot type changes?"; densify "Pot type — pick what changes."; tile "Ranges and SPR") under Plan 3-bet/4-bet-only (`lesson-07-04-01-03-threebet-fourbet-pots`) → **LPT-799** still To Do.
+  - successors SoftPulse HEADS-UP→C-BET / LOW SPR→COMMIT content-driven (do not reopen LPT-669); guided SoftPulse `nuts` densify PRESENT; scaffolded SoftPulse `cb` one-per-press densify PRESENT; unguided SoftPulse `commit` one-per-press densify PRESENT.
+- Curriculum **LPT-320** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-798/799/320/829/795/351/800/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER HU SoftPulse residual **LPT-800** (+ cite **LPT-801**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-07-04-01-*: interactive structural clean on tip except LPT-798 SoftPulse + LPT-799 Ranges-SPR residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
