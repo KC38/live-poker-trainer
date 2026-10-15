@@ -868,6 +868,18 @@ Curriculum residuals LPT-750, LPT-751, LPT-752, LPT-753, LPT-754, LPT-755, LPT-7
 - `act-03-07-01-explain`: SoftPulse was STRONGER → FEWER → NUTS, now STRONGER; FEWER/NUTS presses belong to Bluff less multiway and Nut potential and position (LPT-756)
 - `act-03-08-01-explain`: SoftPulse was TOP PAIR → PRICES → PASSIVE → CROWDS, now TOP PAIR; PRICES/PASSIVE/CROWDS presses belong to Fold bad prices and Passive calls and crowd bluffs (LPT-757)
 
+Curriculum residuals LPT-676, LPT-677, LPT-681, LPT-682, LPT-684, LPT-685, LPT-686, LPT-687, LPT-690, LPT-732 (Kushal-approved rule, 2026-10-14): leftover SoftPulse presses and checkpoints from a split move to the split sibling whose concept they teach. A reused first-child explain keeps only its own concept's presses; the dedicated felt demo shows only the tiles its authored cues name (`LessonAuthoredDemoScope` / `lessonAuthoredDemoPoints`, full ladder when no teachSpec).
+- `act-04-06-03-explain`: SoftPulse was VALUE → BLUFFS → CITE, now VALUE; BLUFFS/CITE presses belong to Bluff less without equity and Cite the sticky-call tendency (LPT-732)
+- `act-05-03-01-explain`: SoftPulse was IMPLIED → REVERSE → SECOND, now IMPLIED; REVERSE/SECOND presses belong to Spot reverse implied odds and Skip dominated draws multiway (LPT-681)
+- `act-05-04-01-explain`: SoftPulse was THIN → CATCH → BARRELS, now THIN; CATCH/BARRELS presses belong to Catch wider versus aggression (LPT-682)
+- `act-05-05-01-explain`: SoftPulse was X/R → PROBE → DELAY → DONK, now X/R; PROBE/DELAY/DONK presses belong to Probes and delayed c-bets and Donk bets are polarized (LPT-684)
+- `act-05-07-01-explain`: SoftPulse was TIMING → SIZING → CLUES, now TIMING → CLUES; SIZING press belongs to Sizing is range language (LPT-685)
+- `act-05-08-01-explain`: SoftPulse was STUCK → TILTED → GEARS, now STUCK → TILTED; GEARS press belongs to Gear changes mid-session (LPT-686)
+- `act-05-09-01-explain`: SoftPulse was QUIT → GUARD → FIRST, now QUIT; GUARD/FIRST presses belong to Bankroll fits stakes and End sessions early (LPT-690)
+- `act-04-04-01-scaffolded`: `lesson-04-04-01-02-nearby-sizes` → `lesson-04-04-01-01-value-vs-pressure`; polar-pressure sizing practice moved off Nearby live sizes onto the value-versus-pressure lesson (LPT-676)
+- `act-04-05-01-checkpoint`: `lesson-04-05-01-01-estimate-spr` → `lesson-04-05-01-02-commit-low-spr`; weigh-SPR-before-stacks checkpoint moved off Estimate SPR onto the commit lesson (LPT-677)
+- `lesson-05-08-01-02-gear-changes`: objective "Recognize gear changes mid-session" → "Recognize gear changes and re-sample reads"; objective now owns the re-sample habit in its summary, so the fresh-samples checkpoint grades this lesson's concept (LPT-687)
+
 Curriculum split LPT-83: old `lesson-01-01-02-suits-and-ranks` becomes unit
 `unit-01-01-02-suits-and-ranks` with one lesson per concept (`…-01-suits`,
 `…-02-ranks`, `…-03-pairs-and-suited`). Catalog `lessonSplitMap` expands
@@ -1982,11 +1994,11 @@ felt.
 | Build a multi-street plan | Flop, Turn, River; densified frame ask (LPT-407); checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-03-continuation` (LPT-176 split) | — |
 | Abort when the board changes | explain SoftPulse cues BOARD CHANGES → STOP; unit `unit-04-03-continuation` (LPT-176 split) | — |
 | Match pot size to strength | explain SoftPulse cues MEDIUM → SMALL POT; unit `unit-04-03-continuation` (LPT-176 split) | — |
-| Value or pressure size | Value, Pressure, Size; densified frame ask (LPT-410); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-04-sizing` (LPT-179 split) | — |
+| Value or pressure size | Value, Pressure, Size; densified frame ask (LPT-410); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-04-sizing` (LPT-179 split); `act-04-04-01-scaffolded` moved here from Nearby live sizes (curriculum residual LPT-676) | — |
 | Nearby live sizes | explain SoftPulse cues NEARBY → STORY; unit `unit-04-04-sizing` (LPT-179 split) | — |
 | Avoid tiny sizes | explain SoftPulse cues TINY → VALUE; unit `unit-04-04-sizing` (LPT-179 split) | — |
 | Estimate SPR | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413); checkpoint SoftPulse-off densify stem non-spoiling (LPT-812); unit `unit-04-05-spr` (LPT-182 split) | — |
-| Commit at low SPR | explain SoftPulse cues LOW SPR → COMMIT; unit `unit-04-05-spr` (LPT-182 split) | — |
+| Commit at low SPR | explain SoftPulse cues LOW SPR → COMMIT; unit `unit-04-05-spr` (LPT-182 split); `act-04-05-01-checkpoint` moved here from Estimate SPR (curriculum residual LPT-677) | — |
 | Stay flexible at high SPR | explain SoftPulse cues HIGH SPR → FLEXIBLE; unit `unit-04-05-spr` (LPT-182 split) | — |
 | Tag high participation | Enters, Calls, Folds; densified frame asks (LPT-416); unit `unit-04-06-calling-station` (LPT-186 split) | participation note, observation bundle |
 | Tag low folding | explain SoftPulse cues FOLDS TO BETS → STICKY; scaffolded SoftPulse-quiet densify stem non-spoiling (no Sticky) (LPT-824); checkpoint SoftPulse-off densify stem non-spoiling (no Bundle) (LPT-810); unit `unit-04-06-calling-station` (LPT-186 split) | — |
@@ -1994,7 +2006,7 @@ felt.
 | The Calling Station model | Station, High, Low; STATION caption Working label (LPT-789); scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420); scaffolded SoftPulse-quiet densify stem non-spoiling (no Working model) (LPT-817); unguided SoftPulse-quiet densify stem non-spoiling (no Station) (LPT-818); unit `unit-04-06-calling-station` (LPT-189 split) | label quizzes |
 | Spot a Calling Station | explain SoftPulse cues STICKY CALLS → RARE FOLDS; unguided SoftPulse-quiet densify stem non-spoiling (no Station) (LPT-818); unit `unit-04-06-calling-station` (LPT-189 split) | — |
 | Small samples, low confidence | explain SoftPulse cues SAMPLE → CONFIDENCE; checkpoint SoftPulse-off densify stem non-spoiling (no Low conf) (LPT-811); unit `unit-04-06-calling-station` (LPT-189 split) | — |
-| Value wider versus Calling Station | Value, Bluffs, Cite; unit `unit-04-06-calling-station` (LPT-192 split) | — |
+| Value wider versus Calling Station | Value on the felt; explain SoftPulse cue VALUE only — BLUFFS/CITE presses belong to Bluff less without equity and Cite the sticky-call tendency (curriculum residual LPT-732); unit `unit-04-06-calling-station` (LPT-192 split) | — |
 | Bluff less without equity | explain SoftPulse cues RARELY FOLDS → GIVE UP; checkpoint SoftPulse-off densify stem non-spoiling (LPT-780); unit `unit-04-06-calling-station` (LPT-192 split) | — |
 | Cite the sticky-call tendency | explain SoftPulse cues EVIDENCE → UNKNOWN; unit `unit-04-06-calling-station` (LPT-192 split) | — |
 | Tag narrow entry | Rare, Enter, Mean It; unit `unit-04-07-nit` (LPT-195 split) | entry quizzes |
@@ -2024,25 +2036,25 @@ felt.
 | Depth pays speculative hands | Deep, Realize, Stack; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
 | Don't stack off light deep | explain SoftPulse cues DEEP → ONE PAIR → FOLD; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
 | Plan streets at high SPR | explain SoftPulse cues SPR → TURN → RIVER; unit `unit-05-02-deep-stacks` (LPT-227 split) | — |
-| Estimate implied odds | Implied, Reverse, Second; densified SoftPulse one gold (LPT-515); checkpoint SoftPulse-off densify stem non-spoiling (LPT-734); unit `unit-05-03-implied-odds` (LPT-230 split) | — |
+| Estimate implied odds | Implied on the felt; explain SoftPulse cue IMPLIED only — REVERSE/SECOND presses belong to Spot reverse implied odds and Skip dominated draws multiway (curriculum residual LPT-681); densified SoftPulse one gold (LPT-515); checkpoint SoftPulse-off densify stem non-spoiling (LPT-734); unit `unit-05-03-implied-odds` (LPT-230 split) | — |
 | Spot reverse implied odds | explain SoftPulse cues REVERSE → DOMINATED → FOLD; unit `unit-05-03-implied-odds` (LPT-230 split) | — |
 | Skip dominated draws multiway | explain SoftPulse cues NON-NUT → MULTIWAY → SKIP; unit `unit-05-03-implied-odds` (LPT-230 split) | — |
-| Thin value versus sticky callers | Thin, Catch, Barrels; densified SoftPulse one gold (LPT-516); checkpoint SoftPulse-off densify stem non-spoiling (LPT-736); unit `unit-05-04-thin-value` (LPT-233 split) | — |
+| Thin value versus sticky callers | Thin on the felt; explain SoftPulse cue THIN only — CATCH/BARRELS presses belong to Catch wider versus aggression (curriculum residual LPT-682); densified SoftPulse one gold (LPT-516); checkpoint SoftPulse-off densify stem non-spoiling (LPT-736); unit `unit-05-04-thin-value` (LPT-233 split) | — |
 | Catch wider versus aggression | explain SoftPulse cues MANIAC → BARREL → CALL; unit `unit-05-04-thin-value` (LPT-233 split) | — |
 | Skip thin value versus overfolders | explain SoftPulse cues NIT → FOLDS → CHECK; unit `unit-05-04-thin-value` (LPT-233 split) | — |
-| Read check-raises | X/R, Probe, Delay, Donk; densified SoftPulse one gold (LPT-517); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
+| Read check-raises | X/R on the felt; explain SoftPulse cue X/R only — PROBE/DELAY/DONK presses belong to Probes and delayed c-bets and Donk bets are polarized (curriculum residual LPT-684); densified SoftPulse one gold (LPT-517); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
 | Probes and delayed c-bets | explain SoftPulse cues PROBE → DELAY → PLAN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-742); unit `unit-05-05-lines-probes` (LPT-236 split) | — |
 | Donk bets are polarized | explain SoftPulse cues DONK → STRONG → AIR; unit `unit-05-05-lines-probes` (LPT-236 split) | — |
 | Update each street | Action, Rewrite, Update; densified SoftPulse one gold (LPT-518); unit `unit-05-06-line-reading` (LPT-239 split) | — |
 | Capped versus uncapped lines | explain SoftPulse cues CHECK → CAPPED → UNCAPPED; checkpoint SoftPulse-off densify stem non-spoiling (LPT-745); unit `unit-05-06-line-reading` (LPT-239 split) | — |
 | Drop stale flop stories | explain SoftPulse cues FLOP → TURN → RE-PRICE; unit `unit-05-06-line-reading` (LPT-239 split) | — |
-| Timing is soft evidence | Timing, Sizing, Clues; checkpoint SoftPulse-off densify stem non-spoiling (LPT-744); unit `unit-05-07-timing-sizing` (LPT-244 split) | — |
+| Timing is soft evidence | Timing, Clues on the felt; explain SoftPulse cue TIMING → CLUES only — SIZING press belongs to Sizing is range language (curriculum residual LPT-685); checkpoint SoftPulse-off densify stem non-spoiling (LPT-744); unit `unit-05-07-timing-sizing` (LPT-244 split) | — |
 | Sizing is range language | explain SoftPulse cues TINY → BIG → RANGE; unit `unit-05-07-timing-sizing` (LPT-244 split) | — |
 | No magic tells | explain SoftPulse cues TELL → MYTH → REJECT; unit `unit-05-07-timing-sizing` (LPT-244 split) | — |
-| Spot tilted or stuck players | Stuck, Tilted, Gears; densified SoftPulse one gold (LPT-520); unit `unit-05-08-table-dynamics` (LPT-247 split) | — |
-| Gear changes mid-session | explain SoftPulse cues GEAR → CHANGE → SAMPLE; scaffolded SoftPulse-quiet densify stem non-spoiling (no Gear change) (LPT-825); checkpoint SoftPulse-off densify stem non-spoiling (LPT-746); unit `unit-05-08-table-dynamics` (LPT-247 split) | — |
+| Spot tilted or stuck players | Stuck, Tilted on the felt; explain SoftPulse cue STUCK → TILTED only — GEARS press belongs to Gear changes mid-session (curriculum residual LPT-686); densified SoftPulse one gold (LPT-520); unit `unit-05-08-table-dynamics` (LPT-247 split) | — |
+| Gear changes mid-session | explain SoftPulse cues GEAR → CHANGE → SAMPLE; scaffolded SoftPulse-quiet densify stem non-spoiling (no Gear change) (LPT-825); checkpoint SoftPulse-off densify stem non-spoiling (LPT-746); unit `unit-05-08-table-dynamics` (LPT-247 split); objective "Recognize gear changes and re-sample reads" so the checkpoint grades this lesson's concept (curriculum residual LPT-687) | — |
 | Skip emotional pots | explain SoftPulse cues COOLER → CHASE → RESET; unit `unit-05-08-table-dynamics` (LPT-247 split) | — |
-| Set a stop-loss | Quit, Guard, First; densified SoftPulse one gold (LPT-521); unit `unit-05-09-discipline` (LPT-250 split) | — |
+| Set a stop-loss | Quit on the felt; explain SoftPulse cue QUIT only — GUARD/FIRST presses belong to Bankroll fits stakes and End sessions early (curriculum residual LPT-690); densified SoftPulse one gold (LPT-521); unit `unit-05-09-discipline` (LPT-250 split) | — |
 | Bankroll fits stakes | explain SoftPulse cues BANKROLL → STAKES → DECLINE; unit `unit-05-09-discipline` (LPT-250 split) | — |
 | End sessions early | explain SoftPulse cues TIRED → WILD → CASH OUT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-747); unit `unit-05-09-discipline` (LPT-250 split) | — |
 | Section 5 checkpoint | SoftPulse-off densify stems non-spoiling (LPT-717) | — |

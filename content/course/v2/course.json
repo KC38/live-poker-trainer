@@ -17160,74 +17160,10 @@
                       }
                     ]
                   }
-                }
-              ]
-            },
-            {
-              "id": "lesson-04-04-01-02-nearby-sizes",
-              "order": 2,
-              "title": "Nearby live sizes",
-              "summary": "Several nearby sizes can all be reasonable.",
-              "objectives": [
-                "Accept nearby reasonable live sizes"
-              ],
-              "prerequisites": [
-                "lesson-04-04-01-01-value-vs-pressure"
-              ],
-              "remediationLessonIds": [
-                "lesson-04-04-01-01-value-vs-pressure"
-              ],
-              "estimatedMinutes": 3,
-              "difficultyBand": 3,
-              "playerTypeRefs": [],
-              "introducesPlayerTypes": [],
-              "activities": [
-                {
-                  "id": "act-04-04-01-02-explain-nearby",
-                  "order": 1,
-                  "stage": "guided",
-                  "renderer": "coach_dialogue",
-                  "objectives": [
-                    "Accept nearby reasonable live sizes"
-                  ],
-                  "accessibilityText": "Several nearby sizes can all be fine. Pick one that tells the story you want.",
-                  "coachMedia": [
-                    {
-                      "id": "act-04-04-01-02-explain-nearby-line",
-                      "kind": "dialogue",
-                      "text": "Several nearby sizes can all be fine. Pick one that tells the story you want."
-                    }
-                  ],
-                  "okFeedback": "Nearby sizes are fine.",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "none"
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "NEARBY",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "STORY",
-                        "kind": "soft_pulse"
-                      }
-                    ]
-                  },
-                  "acceptedGrades": [
-                    "recommended"
-                  ],
-                  "explainGrading": {
-                    "grade": "recommended",
-                    "feedback": "Reasonable range of sizes → soft grade."
-                  },
-                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-04-01-scaffolded",
-                  "order": 2,
+                  "order": 3,
                   "stage": "scaffolded",
                   "renderer": "poker_action_sizing",
                   "estimatedSeconds": 55,
@@ -17238,7 +17174,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Accept nearby reasonable live sizes"
+                    "Match size to value versus polar pressure"
                   ],
                   "prompt": "Missed draw, credible river scare card. Choose pressure size into 40.",
                   "choices": [
@@ -17343,10 +17279,74 @@
                       }
                     ]
                   }
+                }
+              ]
+            },
+            {
+              "id": "lesson-04-04-01-02-nearby-sizes",
+              "order": 2,
+              "title": "Nearby live sizes",
+              "summary": "Several nearby sizes can all be reasonable.",
+              "objectives": [
+                "Accept nearby reasonable live sizes"
+              ],
+              "prerequisites": [
+                "lesson-04-04-01-01-value-vs-pressure"
+              ],
+              "remediationLessonIds": [
+                "lesson-04-04-01-01-value-vs-pressure"
+              ],
+              "estimatedMinutes": 3,
+              "difficultyBand": 3,
+              "playerTypeRefs": [],
+              "introducesPlayerTypes": [],
+              "activities": [
+                {
+                  "id": "act-04-04-01-02-explain-nearby",
+                  "order": 1,
+                  "stage": "guided",
+                  "renderer": "coach_dialogue",
+                  "objectives": [
+                    "Accept nearby reasonable live sizes"
+                  ],
+                  "accessibilityText": "Several nearby sizes can all be fine. Pick one that tells the story you want.",
+                  "coachMedia": [
+                    {
+                      "id": "act-04-04-01-02-explain-nearby-line",
+                      "kind": "dialogue",
+                      "text": "Several nearby sizes can all be fine. Pick one that tells the story you want."
+                    }
+                  ],
+                  "okFeedback": "Nearby sizes are fine.",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "none"
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "NEARBY",
+                        "kind": "soft_pulse"
+                      },
+                      {
+                        "press": 2,
+                        "target": "STORY",
+                        "kind": "soft_pulse"
+                      }
+                    ]
+                  },
+                  "acceptedGrades": [
+                    "recommended"
+                  ],
+                  "explainGrading": {
+                    "grade": "recommended",
+                    "feedback": "Reasonable range of sizes → soft grade."
+                  },
+                  "estimatedSeconds": 30
                 },
                 {
                   "id": "act-04-04-01-unguided",
-                  "order": 3,
+                  "order": 2,
                   "stage": "scaffolded",
                   "renderer": "select_identify",
                   "estimatedSeconds": 40,
@@ -17719,114 +17719,6 @@
                       }
                     ]
                   }
-                },
-                {
-                  "id": "act-04-05-01-checkpoint",
-                  "order": 3,
-                  "stage": "scaffolded",
-                  "renderer": "poker_action_sizing",
-                  "estimatedSeconds": 55,
-                  "accessibilityText": "Check SPR before committing the rest.",
-                  "acceptedGrades": [
-                    "recommended",
-                    "strong",
-                    "reasonable"
-                  ],
-                  "objectives": [
-                    "Estimate stack-to-pot ratio"
-                  ],
-                  "prompt": "About to put stacks in. First?",
-                  "choices": [
-                    {
-                      "id": "before",
-                      "label": "Weigh SPR first",
-                      "accessibilityText": "Weigh SPR first",
-                      "grading": {
-                        "grade": "recommended",
-                        "feedback": "Commitment is an SPR decision."
-                      }
-                    },
-                    {
-                      "id": "never",
-                      "label": "Jam on cards alone",
-                      "accessibilityText": "Jam on cards alone",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Depth changes correct plays.",
-                        "betterChoiceId": "before"
-                      },
-                      "action": "ALL_IN"
-                    },
-                    {
-                      "id": "showdown-only",
-                      "label": "Wait for showdown",
-                      "accessibilityText": "Wait for showdown",
-                      "grading": {
-                        "grade": "clear_mistake",
-                        "feedback": "Decide earlier.",
-                        "betterChoiceId": "before"
-                      }
-                    }
-                  ],
-                  "assessmentRole": "checkpoint",
-                  "teachSpec": {
-                    "deal": {
-                      "mode": "fixed",
-                      "fixedCards": {
-                        "hero": [
-                          "Ah",
-                          "Kd"
-                        ],
-                        "board": [
-                          "Qs",
-                          "7c",
-                          "2d",
-                          "9h"
-                        ]
-                      },
-                      "variants": [
-                        {
-                          "id": "var-checkpoint-suits-1",
-                          "fixedCards": {
-                            "hero": [
-                              "As",
-                              "Kc"
-                            ],
-                            "board": [
-                              "Qd",
-                              "7h",
-                              "2c",
-                              "9s"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (1)"
-                        },
-                        {
-                          "id": "var-checkpoint-suits-2",
-                          "fixedCards": {
-                            "hero": [
-                              "Ad",
-                              "Ks"
-                            ],
-                            "board": [
-                              "Qc",
-                              "7h",
-                              "2s",
-                              "9d"
-                            ]
-                          },
-                          "label": "Same spot, suits rotated (2)"
-                        }
-                      ]
-                    },
-                    "cues": [
-                      {
-                        "press": 1,
-                        "target": "before",
-                        "kind": "none"
-                      }
-                    ]
-                  }
                 }
               ]
             },
@@ -17990,6 +17882,114 @@
                         "press": 1,
                         "target": "commit",
                         "kind": "soft_pulse"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "act-04-05-01-checkpoint",
+                  "order": 3,
+                  "stage": "scaffolded",
+                  "renderer": "poker_action_sizing",
+                  "estimatedSeconds": 55,
+                  "accessibilityText": "Check SPR before committing the rest.",
+                  "acceptedGrades": [
+                    "recommended",
+                    "strong",
+                    "reasonable"
+                  ],
+                  "objectives": [
+                    "Commit correctly at low SPR"
+                  ],
+                  "prompt": "About to put stacks in. First?",
+                  "choices": [
+                    {
+                      "id": "before",
+                      "label": "Weigh SPR first",
+                      "accessibilityText": "Weigh SPR first",
+                      "grading": {
+                        "grade": "recommended",
+                        "feedback": "Commitment is an SPR decision."
+                      }
+                    },
+                    {
+                      "id": "never",
+                      "label": "Jam on cards alone",
+                      "accessibilityText": "Jam on cards alone",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Depth changes correct plays.",
+                        "betterChoiceId": "before"
+                      },
+                      "action": "ALL_IN"
+                    },
+                    {
+                      "id": "showdown-only",
+                      "label": "Wait for showdown",
+                      "accessibilityText": "Wait for showdown",
+                      "grading": {
+                        "grade": "clear_mistake",
+                        "feedback": "Decide earlier.",
+                        "betterChoiceId": "before"
+                      }
+                    }
+                  ],
+                  "assessmentRole": "checkpoint",
+                  "teachSpec": {
+                    "deal": {
+                      "mode": "fixed",
+                      "fixedCards": {
+                        "hero": [
+                          "Ah",
+                          "Kd"
+                        ],
+                        "board": [
+                          "Qs",
+                          "7c",
+                          "2d",
+                          "9h"
+                        ]
+                      },
+                      "variants": [
+                        {
+                          "id": "var-checkpoint-suits-1",
+                          "fixedCards": {
+                            "hero": [
+                              "As",
+                              "Kc"
+                            ],
+                            "board": [
+                              "Qd",
+                              "7h",
+                              "2c",
+                              "9s"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (1)"
+                        },
+                        {
+                          "id": "var-checkpoint-suits-2",
+                          "fixedCards": {
+                            "hero": [
+                              "Ad",
+                              "Ks"
+                            ],
+                            "board": [
+                              "Qc",
+                              "7h",
+                              "2s",
+                              "9d"
+                            ]
+                          },
+                          "label": "Same spot, suits rotated (2)"
+                        }
+                      ]
+                    },
+                    "cues": [
+                      {
+                        "press": 1,
+                        "target": "before",
+                        "kind": "none"
                       }
                     ]
                   }
@@ -19045,7 +19045,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Versus stations: thicker value, fewer pure bluffs. Cite their calling.",
+                  "accessibilityText": "Versus a Calling Station, bet thinner hands for value — they call too wide.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -19053,7 +19053,7 @@
                     {
                       "id": "act-04-06-03-explain-media",
                       "kind": "dialogue",
-                      "text": "Versus stations: thicker value, fewer pure bluffs. Cite their calling."
+                      "text": "Versus a Calling Station, bet thinner hands for value — they call too wide."
                     }
                   ],
                   "objectives": [
@@ -19064,7 +19064,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Value → Bluffs → Cite."
+                    "feedback": "Station calls wide → value wider."
                   },
                   "teachSpec": {
                     "deal": {
@@ -19074,16 +19074,6 @@
                       {
                         "press": 1,
                         "target": "VALUE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "BLUFFS",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "CITE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -24812,7 +24802,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Implied odds: future money. Reverse implied: future losses when second-best.",
+                  "accessibilityText": "Implied odds are the money you can win later. Deep stacks and callers who pay raise them.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -24820,7 +24810,7 @@
                     {
                       "id": "act-05-03-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Implied odds: future money. Reverse implied: future losses when second-best."
+                      "text": "Implied odds are the money you can win later. Deep stacks and callers who pay raise them."
                     }
                   ],
                   "objectives": [
@@ -24828,7 +24818,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Implied → Reverse → Second."
+                    "feedback": "Depth + payers = implied odds."
                   },
                   "teachSpec": {
                     "deal": {
@@ -24838,16 +24828,6 @@
                       {
                         "press": 1,
                         "target": "IMPLIED",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "REVERSE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "SECOND",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -25391,7 +25371,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Thin value needs calls. Bluff-catches need wide barrels.",
+                  "accessibilityText": "Thin value needs calls. Bet medium hands when callers stick.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -25399,7 +25379,7 @@
                     {
                       "id": "act-05-04-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Thin value needs calls. Bluff-catches need wide barrels."
+                      "text": "Thin value needs calls. Bet medium hands when callers stick."
                     }
                   ],
                   "objectives": [
@@ -25407,7 +25387,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Thin → Catch → Barrels."
+                    "feedback": "Sticky callers → thin value."
                   },
                   "teachSpec": {
                     "deal": {
@@ -25417,16 +25397,6 @@
                       {
                         "press": 1,
                         "target": "THIN",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "CATCH",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "BARRELS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -26026,7 +25996,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Lines mean ranges. Check-raise, probe, delay, donk — each updates the story.",
+                  "accessibilityText": "A check-raise is strong or a bluff. Read it by player type.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -26034,7 +26004,7 @@
                     {
                       "id": "act-05-05-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Lines mean ranges. Check-raise, probe, delay, donk — each updates the story."
+                      "text": "A check-raise is strong or a bluff. Read it by player type."
                     }
                   ],
                   "objectives": [
@@ -26042,7 +26012,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Check-raise → Probe → Delay → Donk."
+                    "feedback": "Check-raise: read strength and type."
                   },
                   "teachSpec": {
                     "deal": {
@@ -26052,21 +26022,6 @@
                       {
                         "press": 1,
                         "target": "X/R",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "PROBE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "DELAY",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "DONK",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -26994,7 +26949,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Timing and sizing are clues, not mind-reading. Small updates only.",
+                  "accessibilityText": "Timing is a clue, not mind-reading. Make small updates only.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -27002,7 +26957,7 @@
                     {
                       "id": "act-05-07-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Timing and sizing are clues, not mind-reading. Small updates only."
+                      "text": "Timing is a clue, not mind-reading. Make small updates only."
                     }
                   ],
                   "objectives": [
@@ -27010,7 +26965,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Timing → Sizing → Clues."
+                    "feedback": "Timing → Clues: small updates."
                   },
                   "teachSpec": {
                     "deal": {
@@ -27024,11 +26979,6 @@
                       },
                       {
                         "press": 2,
-                        "target": "SIZING",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
                         "target": "CLUES",
                         "kind": "soft_pulse"
                       }
@@ -27431,7 +27381,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Tables change. Stuck, tilted, tired, or shifting gears — update.",
+                  "accessibilityText": "A stuck or tilted player plays more hands. Widen your value.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -27439,7 +27389,7 @@
                     {
                       "id": "act-05-08-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Tables change. Stuck, tilted, tired, or shifting gears — update."
+                      "text": "A stuck or tilted player plays more hands. Widen your value."
                     }
                   ],
                   "objectives": [
@@ -27447,7 +27397,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Stuck → Tilted → Gears."
+                    "feedback": "Stuck → Tilted: widen value."
                   },
                   "teachSpec": {
                     "deal": {
@@ -27462,11 +27412,6 @@
                       {
                         "press": 2,
                         "target": "TILTED",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "GEARS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -27530,7 +27475,7 @@
               "title": "Gear changes mid-session",
               "summary": "Re-sample when a player suddenly changes style.",
               "objectives": [
-                "Recognize gear changes mid-session"
+                "Recognize gear changes and re-sample reads"
               ],
               "prerequisites": [
                 "lesson-05-08-01-01-tilted-opponents"
@@ -27549,7 +27494,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "objectives": [
-                    "Recognize gear changes mid-session"
+                    "Recognize gear changes and re-sample reads"
                   ],
                   "accessibilityText": "Players change gears. When a solid player suddenly plays wild, treat it as a new sample, not a fixed read.",
                   "coachMedia": [
@@ -27604,7 +27549,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Recognize gear changes mid-session"
+                    "Recognize gear changes and re-sample reads"
                   ],
                   "prompt": "Solid selective player suddenly flats junk and donks rivers. Best read?",
                   "choices": [
@@ -27660,7 +27605,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Recognize gear changes mid-session"
+                    "Recognize gear changes and re-sample reads"
                   ],
                   "prompt": "Dynamic reads should be?",
                   "choices": [
@@ -27909,7 +27854,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Winning 1/2 includes knowing when to quit. Guardrails first.",
+                  "accessibilityText": "Set your stop-loss before you sit. Quit when you hit it.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -27917,7 +27862,7 @@
                     {
                       "id": "act-05-09-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Winning 1/2 includes knowing when to quit. Guardrails first."
+                      "text": "Set your stop-loss before you sit. Quit when you hit it."
                     }
                   ],
                   "objectives": [
@@ -27925,7 +27870,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Quit → Guard → First."
+                    "feedback": "Stop-loss set → quit at it."
                   },
                   "teachSpec": {
                     "deal": {
@@ -27935,16 +27880,6 @@
                       {
                         "press": 1,
                         "target": "QUIT",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "GUARD",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "FIRST",
                         "kind": "soft_pulse"
                       }
                     ]
