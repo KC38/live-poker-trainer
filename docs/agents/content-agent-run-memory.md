@@ -4721,6 +4721,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / open catalog LPT-829.
 - act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing (LPT-395); densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15cx tip e2971d1b (#2654 Overbet Prefer → Blockers SoftPulse LPT-700 Prefer)
+
+- Tip-stable `e2971d1b` (#2654 Overbet SoftPulse Prefer LPT-699 on tip after #2652 Polar SoftPulse Prefer LPT-696). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- SoftPulse Prefer path catch-up: Polar SoftPulse residual **LPT-696** still To Do + Overbet SoftPulse residual **LPT-699** still To Do advanced through Prefer SoftPulse path this fold.
+- Prefer NEVER Blockers SoftPulse residual re-check `lesson-06-06-01-01/02/03` / `act-06-06-01-*`:
+  - first-child SoftPulse BLOCK→USE→NO EV + `explainGrading` "Block → Use → No EV." + Dart `BlockersDemo.points` BLOCK/USE/NO EV (captions Remove hands / Apply blockers / Skip decimals) / `LessonBlockersExplainTable` / layout "Tap Block, then Use, then No EV." + coachMedia "Blockers remove hands. Use them; do not invent EV decimals." still pre-split under bluff-blockers-only (`lesson-06-06-01-01-bluff-blockers` objective "Choose bluffs that block call-downs") → residual **LPT-700** still To Do (needs-human; Relates LPT-270 — do not re-add needs-human on curriculum).
+  - successors SoftPulse CATCH→UNBLOCK→BLUFFS / TWEAK→NO EV content-driven (do not reopen LPT-669); guided SoftPulse `as` densify PRESENT; scaffolded SoftPulse `unblock` densify PRESENT; unguided SoftPulse `tweak` densify PRESENT; checkpoint SoftPulse `no` kind `none` densify PRESENT under no-fake-ev — no companion residual.
+- Curriculum **LPT-270** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-700/270/829/701/699/696/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Defend SoftPulse residual **LPT-701** (+ cite **LPT-702**) re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-06-06-01-*: interactive structural clean on tip except LPT-700 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts `deal.mode` `none` — do not file handFamily.
+
 ## Fold 2026-10-15cw tip 9bbc092c (#2653 Polar Prefer → Overbet SoftPulse LPT-699 Prefer)
 
 - Tip-stable `9bbc092c` (#2653 Words-are-binding densify after #2651 Polar SoftPulse Prefer LPT-696). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
