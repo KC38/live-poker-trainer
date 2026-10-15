@@ -5063,3 +5063,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
 - Prefer next: NEVER oldest unfresh `lesson-03-08-02-section-three-jump-test` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-02-07-02-*: interactive structural clean on tip; jump assessment container skips curriculum-split clones; densify PRESENT on SI arms — do not reopen LPT-628; primary-family open without distractor variants matches LPT-627 closed pattern — do not reopen.
+
+## Fold 2026-10-15dw tip f81e5987 (Prefer-next S3 jump discovery)
+
+- Tip-stable `f81e5987` (#2695). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (tip-comment only — no body rebuild). SoftPulse Prefer queue empty except needs-human. Only open content: LPT-829 + LPT-351.
+- Prefer NEVER discovery: `lesson-03-08-02-section-three-jump-test` / `act-03-08-02-*`:
+  - All five scaffolded+`assessmentRole` `jump_test` (hintless; cue kind `none`).
+  - jump-table SoftPulse `j3-track` densify PRESENT (`deal.mode` `none` — do not file handFamily).
+  - jump-class fixed `Jd`/`Td`·`Qd`/`9d`/`3c` + suit variants SoftPulse `j3-draw` densify PRESENT.
+  - jump-mw fixed air `7s`/`3d`·`Ah`/`Kh`/`9h` matches Dart SoftPulse `j3-fold`; jump-river fixed `Ah`/`Kd` brick SoftPulse `j3-val`; SoftPulse maps PRESENT.
+  - jump-leak gutshot `Jh`/`9d`·`Ks`/`Tc`/`2d` matches Dart SoftPulse `j3-foldprice` densify PRESENT.
+  - jump_test assessment — no curriculum-split. LPT-165/389/425/426/391/554/555 Done — do not clone.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh `lesson-04-10-02-section-four-jump-test` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-03-08-02-*: interactive structural clean on tip; jump assessment container skips curriculum-split clones; densify PRESENT on SI arms — do not reopen LPT-628.
+
