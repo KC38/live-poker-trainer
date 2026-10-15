@@ -10,26 +10,54 @@ import 'package:live_poker_trainer/core/debug/agent_ui_driver.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_soft_pulse_scope.dart';
 import 'package:live_poker_trainer/ui/widgets/glow_highlight.dart';
 
-/// Glow a [GlowHighlight] ancestor is painting right now, if any.
+/// Whether [element]'s [GlowHighlight] is painting under SoftPulse rules.
+bool _agentGlowHighlightActive(Element element, GlowHighlight w) {
+  final waveOpen =
+      element.getInheritedWidgetOfExactType<LessonSoftPulseScope>()?.allowed ??
+      true;
+  return w.active && (w.ignoreSoftPulse || waveOpen);
+}
+
+/// Glow kind string for an active [GlowHighlight], if any.
+String? _agentGlowKind(GlowHighlight w) {
+  return w.kind == GlowKind.cue ? 'gold' : 'cyan';
+}
+
+/// Glow a [GlowHighlight] ancestor **or descendant** is painting right now.
 ///
 /// Mirrors [GlowHighlight]'s own paint rule: cue rings also need the
 /// enclosing [LessonSoftPulseScope] wave to be open.
+///
+/// Ancestors cover board / tile SoftPulse whose [Text] labels sit inside
+/// the ring. Descendants cover hero hole SoftPulse: face-down backs wrap
+/// [GlowHighlight] **under** seat Semantics (`Your hole cards`) so an
+/// ancestor-only walk reported `gold SoftPulse: none` while the ring
+/// painted (LPT-840). Prefer gold SoftPulse over cyan when both exist.
 String? agentGlowOf(Element element) {
   String? glow;
   element.visitAncestorElements((ancestor) {
     final w = ancestor.widget;
     if (w is! GlowHighlight) return true;
-    final waveOpen =
-        ancestor
-            .getInheritedWidgetOfExactType<LessonSoftPulseScope>()
-            ?.allowed ??
-        true;
-    if (w.active && (w.ignoreSoftPulse || waveOpen)) {
-      glow = w.kind == GlowKind.cue ? 'gold' : 'cyan';
+    if (_agentGlowHighlightActive(ancestor, w)) {
+      glow = _agentGlowKind(w);
       return false;
     }
     return true;
   });
+  if (glow != null) return glow;
+
+  void visitDescendant(Element child) {
+    final w = child.widget;
+    if (w is GlowHighlight && _agentGlowHighlightActive(child, w)) {
+      final next = _agentGlowKind(w);
+      // Prefer gold SoftPulse over cyan selection under the same label.
+      if (glow != 'gold') glow = next;
+    }
+    if (glow == 'gold') return;
+    child.visitChildren(visitDescendant);
+  }
+
+  element.visitChildren(visitDescendant);
   return glow;
 }
 

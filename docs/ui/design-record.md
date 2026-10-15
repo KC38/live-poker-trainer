@@ -464,6 +464,11 @@ SoftPulse rules:
   Position labels SoftPulse (`act-02-01-01-*` on `LessonTableStage`) prefers
   the same D / SB / BB puck via `cuePuckLabel`, with seat-ring fallback only
   when that puck is not posted yet (LPT-118).
+- Agent `tree` / `wait-gold` report gold SoftPulse for hero hole SoftPulse
+  too: seat Semantics (`Your hole cards`) sits above face-down
+  `GlowHighlight` backs, so `agentGlowOf` walks descendants as well as
+  ancestors (LPT-840). Board SoftPulse still reports via Text labels inside
+  the ring.
 
 ### 4. Tools
 
@@ -500,8 +505,10 @@ answer, Continue advances.
 
 `LessonScreenLayout` (`lib/ui/course/widgets/lesson_screen_layout.dart`)
 is the frame. `LessonTableStage` (`lib/ui/course/widgets/lesson_table_stage.dart`)
-is the stage. `LessonPeekTable` turns `boardSlots` off so the first Your
-two cards step has no empty board outlines. Framed `act-01-01-01-*`
+is the stage. Agent `tree` gold SoftPulse walks `GlowHighlight` descendants
+under seat Semantics so hero hole SoftPulse is visible to `wait-gold`
+(`agent_screen_tree.dart`, LPT-840). `LessonPeekTable` turns `boardSlots`
+off so the first Your two cards step has no empty board outlines. Framed `act-01-01-01-*`
 `LessonTableStage` copies the same gate for three-card flop teach steps
 (LPT-66). Board-group SoftPulse on `CommunityCardsView` wraps only the
 dealt flop/turn/river cards so empty street width stays outside the gold
@@ -1873,7 +1880,7 @@ felt.
 
 | Lesson | Explain taps | Still a list |
 | --- | --- | --- |
-| Your two cards | Your hole cards on the felt; Hint keeps "two cards" under board deuce remap (LPT-791); Nice! keeps "Those two stay" (LPT-797); densify coach stem-only (LPT-792) | — |
+| Your two cards | Your hole cards on the felt; Hint keeps "two cards" under board deuce remap (LPT-791); Nice! keeps "Those two stay" (LPT-797); densify coach stem-only (LPT-792); agent `tree` / `wait-gold` report gold SoftPulse on hero hole SoftPulse under seat Semantics (LPT-840) | — |
 | Suits | Suit taps on board cards; explain SoftPulse hearts → diamonds → clubs → spades (LPT-353); explain Hint per-press suit tip not completion a11y (LPT-813); SoftPulse-off densify stem non-spoiling (no Hearts/diamonds/clubs/spades order) on guided idle / scaffolded / checkpoint (LPT-814); unit `unit-01-01-02-suits-and-ranks` (LPT-83 split) | — |
 | Ranks | Board ranks low to high; SoftPulse cues rank-2 → rank-T → rank-A (LPT-370); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
 | Pairs and suited | Suited / pair seats; scaffolded pressHints (LPT-82); checkpoint SoftPulse-off densify stem non-spoiling (LPT-804); guided densify uses seat-deal full table (no Them/You overflow; SoftPulse on suited seat; densify stem non-spoiling) (LPT-815 / LPT-816); unit `unit-01-01-02-suits-and-ranks` (LPT-83) | — |
