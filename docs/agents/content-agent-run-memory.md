@@ -5447,3 +5447,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next NEVER: `lesson-04-07-03-02-respect-heavy-action` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-07-03-*: first-child Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-772.
 
+
+
+## Fold 2026-10-15fj (bb80f7f5 Prefer NEVER respect-heavy-action)
+
+- Tip-stable `bb80f7f5` (#2753 Prefer NEVER steal-more learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-07-03-02-respect-heavy-action` / `act-04-07-03-02-explain-respect` + `act-04-07-03-scaffolded` + `act-04-07-03-checkpoint`:
+  - one objective Respect their heavy action; explain SoftPulse NIT RAISES→CREDIT + `explainGrading` "Nit aggression → value-heavy → fold medium hands." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-772).
+  - scaffolded SoftPulse `fold-mid` one-per-press pressHints 1/1 (`poker_action_sizing` `fixed` Jh9d·Qc9s3h +2 suit variants; densify N/A).
+  - checkpoint SoftPulse `cite-strong` cue kind `none` hintless densify PRESENT SoftPulse-off after LPT-778 (`select_identify` `deal.mode` `none` — do not file handFamily; cite-under-Respect placement closed with LPT-772 Done — do not reopen).
+  - short-ladder 3/5 already on catalog **LPT-829**; curriculum **LPT-202** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-07-03-03-cite-narrow-entry` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-07-03-*: Respect Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-772 on first-child; cite checkpoint placement closed with LPT-772 Done.
