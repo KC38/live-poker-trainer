@@ -5049,3 +5049,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
 - Prefer next: NEVER oldest unfresh `lesson-02-07-02-section-two-jump` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-05-09-02-* / act-01-06-02-* / act-01-06-01-*: interactive structural clean on tip; jump/section assessment containers skip curriculum-split clones; densify PRESENT on SI S5 arms — do not reopen LPT-628; S1 jump remains short-ladder row on LPT-829.
+
+## Fold 2026-10-15dv tip 4bd3cb3e (Prefer-next S2 jump discovery)
+
+- Tip-stable `4bd3cb3e` (#2694). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (tip-comment only — no body rebuild). SoftPulse Prefer queue empty except needs-human. Only open content: LPT-829 + LPT-351.
+- Prefer NEVER discovery: `lesson-02-07-02-section-two-jump` / `act-02-07-02-*`:
+  - All five scaffolded+`assessmentRole` `jump_test` (hintless; cue kind `none`).
+  - jump-pos SoftPulse `j2-co` densify PRESENT; jump-stack SoftPulse `j2-55` densify PRESENT (`deal.mode` `none` — do not file handFamily).
+  - jump-family `random_in_class` suited_ace/suited + distractor variants SoftPulse `j2-sa` densify PRESENT.
+  - jump-open `random_in_class` trash/offsuit SoftPulse `j2-fold`; jump-vs `fixed` Ah/Ad + suit variants SoftPulse `j2-3bet` — densify helper arms PRESENT.
+  - SoftPulse maps PRESENT (`lesson_table_context` / `lesson_action_table`); jump_test assessment — no curriculum-split. LPT-137/377/488/221 Done — do not clone.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh `lesson-03-08-02-section-three-jump-test` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-02-07-02-*: interactive structural clean on tip; jump assessment container skips curriculum-split clones; densify PRESENT on SI arms — do not reopen LPT-628; primary-family open without distractor variants matches LPT-627 closed pattern — do not reopen.
