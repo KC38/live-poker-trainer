@@ -1,5 +1,5 @@
 /// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
-/// LPT-890: SoftPulse explain teaching captions (not Tap N of M).
+/// LPT-890 / LPT-891: SoftPulse explain teaching captions (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
@@ -53,6 +53,8 @@ void main() {
     expect(authoredSoftPulseExplainCaption('WHO ACTS'), 'Whose turn');
     expect(authoredSoftPulseExplainCaption('SAY'), 'Announce clearly');
     expect(authoredSoftPulseExplainCaption('BINDING'), 'Must follow through');
+    expect(authoredSoftPulseExplainCaption('EARLIER SEATS'), 'Act before you');
+    expect(authoredSoftPulseExplainCaption('YOUR TURN'), 'Then you decide');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
     expect(authoredSoftPulseExplainCaption('BLINDS'), 'Forced bets first');
@@ -333,6 +335,50 @@ void main() {
       expect(find.text('BINDING'), findsWidgets);
       expect(find.text('Announce clearly'), findsOneWidget);
       expect(find.text('Must follow through'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Wait your turn AuthoredCueExplain captions EARLIER SEATS + YOUR TURN (LPT-891)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-02-01-02-03-explain-wait',
+        targets: const ['EARLIER SEATS', 'YOUR TURN'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('EARLIER SEATS'), findsWidgets);
+      expect(find.text('YOUR TURN'), findsWidgets);
+      expect(find.text('Act before you'), findsOneWidget);
+      expect(find.text('Then you decide'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
