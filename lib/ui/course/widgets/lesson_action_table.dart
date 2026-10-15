@@ -14383,6 +14383,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // story — never leave AuthoredCue tiles label-only.
     'PREFLOP RAISER': 'You opened',
     'C-BET': 'Continue story',
+    // Credible bluffs SoftPulse explain (STORY → BLUFF; LPT-906).
+    // STORY glosses a believable line; BLUFF matches RiverBinaryDemo Make
+    // them fold — never leave AuthoredCue tiles label-only.
+    'STORY': 'Believable line',
+    'BLUFF': 'Make them fold',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

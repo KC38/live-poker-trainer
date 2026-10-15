@@ -1745,7 +1745,8 @@ raiser — LPT-900, 3-BET → Re-raise open — LPT-901, 50BB → Short /
 simple / 100BB → Standard / 200BB → Deep / room — LPT-902, OPEN →
 Someone raised / PLAN → Fold, call, or 3-bet — LPT-903, DEEP → Wider
 trees / IMPLIED ODDS → They pay later — LPT-904, PREFLOP RAISER → You
-opened / C-BET → Continue story — LPT-905). Play a full
+opened / C-BET → Continue story — LPT-905, STORY → Believable line /
+BLUFF → Make them fold — LPT-906). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2104,7 +2105,7 @@ felt.
 | Second barrel | explain SoftPulse cues BRICK → BARREL with teaching captions (Blank runout / Fire again — never an empty gloss; LPT-885); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | Delayed aggression | explain SoftPulse cues CHECKED BACK → BET TURN with teaching captions (No bet flop / Bet when helped — never an empty gloss; LPT-886); checkpoint SoftPulse-off densify stem non-spoiling (no Often give up / template cards) (LPT-807); unit `unit-03-05-turn-decisions` (LPT-154 split) | — |
 | River value | Value on the felt; explain SoftPulse cue VALUE only — BLUFF/CATCH/FOLD presses belong to Credible bluffs and Bluff-catch or fold (curriculum residual LPT-755); densified frame ask (LPT-343); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
-| Credible bluffs | explain SoftPulse cues STORY → BLUFF; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
+| Credible bluffs | explain SoftPulse cues STORY → BLUFF with teaching captions (Believable line / Make them fold — never empty glosses; LPT-906); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Bluff-catch or fold | explain SoftPulse cues BLUFF-CATCH → FOLD; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Stronger hands multiway | Stronger on the felt; explain SoftPulse cue STRONGER only — FEWER/NUTS presses belong to Bluff less multiway and Nut potential and position (curriculum residual LPT-756); unit `unit-03-07-multiway` (LPT-160 split) | — |
 | Bluff less multiway | Fewer on the felt; explain SoftPulse cue FEWER only — THICKER/WIDEN presses belong to Value thicker multiway and Widen selected heads-up bluffs (curriculum residual LPT-800); unit `unit-03-07-multiway` (LPT-160 split); objective "Bluff less multiway because player count changes the plan" so the checkpoint grades this lesson's concept (curriculum residual LPT-801) | — |
