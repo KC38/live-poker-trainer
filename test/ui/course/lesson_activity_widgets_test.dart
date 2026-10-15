@@ -16271,14 +16271,20 @@ await tester.tap(find.text('NIT'));
       ),
     );
     // LPT-407: densified ask (and frame speech) — not catalog + Tap the best answer.
+    // LPT-868: SoftPulse-off densify stem must not spoil Brick → barrel / flush → abort.
     expect(
       lessonFrameSpeech(activity),
-      'You have a flop plan — tap brick→barrel vs flush→abort.',
+      'You have a flop plan — tap the matching street branch.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('brick→barrel')));
+    expect(
+      find.text('You have a flop plan — tap the matching street branch.'),
+      findsOneWidget,
+    );
     expect(
       find.text('You have a flop plan — pick brick→barrel vs flush→abort.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       find.text('You have a flop plan — map brick vs flush turns.'),

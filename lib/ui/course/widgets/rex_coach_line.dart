@@ -102,8 +102,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     'act-04-01-01-checkpoint' =>
       'Same board, different villain lines — pick how advice should change.',
     // Plan beyond the flop checkpoint densified ask (LPT-407) — same path.
+    // SoftPulse-off densify (kind: none) — situation + tap verb only; never
+    // name Brick → barrel · flush → abort / brick→barrel (LPT-868; SoftPulse
+    // LPT-653; same class as LPT-867 / LPT-866 / LPT-812).
     'act-04-03-01-checkpoint' =>
-      'You have a flop plan — pick brick→barrel vs flush→abort.',
+      'You have a flop plan — tap the matching street branch.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; never name Nearby sizes both soft-grade /
     // nearby soft-grade (LPT-866; SoftPulse LPT-653; same class as LPT-865 /
