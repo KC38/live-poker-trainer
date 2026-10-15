@@ -4774,3 +4774,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals still open / open catalog LPT-829.
 - act-06-07-01-*: interactive structural clean on tip except LPT-701 SoftPulse + LPT-702 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded stays fixed+variants third-pair honesty.
 
+## Fold 2026-10-15da tip a0ea6ed9 (#2661 S6b + S6a SoftPulse Done-acks → Meet-TAG/Mix-five Prefer)
+
+- Tip-stable `a0ea6ed9` (#2661 after #2660/#2659). Catalog `--counts` short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog **LPT-829** tip-comment flat **224** only (Jira 32k limit).
+- Done-acked SoftPulse residuals on tip (cues + residual demo-tiles keep/drop):
+  - S6a #2659: LPT-692/694/696/699/700/701/703/704/705/706
+  - S6b #2661: LPT-709/713/718/759/760/761/768/772/773/775
+- Still To Do companions/checkpoints: LPT-702/708/710/714/715/716/719 + SoftPulse Mix-five **LPT-721**.
+- Prefer NEVER Meet-TAG **LPT-708** still To Do (model checkpoint under Introduce TAG); Prefer NEVER Mix-five **LPT-721** still To Do.
+- Tip-commented LPT-708/702/829; leave ui-agent alone.
+- Prefer next: NEVER Meet-TAG **LPT-708** / Mix-five SoftPulse **LPT-721** / open catalog **LPT-829**.
+- act-06-08-01-*: Mix SoftPulse residual cleared (MIX→STRONG); PURPOSE owned by no-pure-random; scaffolded/unguided/checkpoint outcome-tile `deal.mode` `none` — do not file handFamily.

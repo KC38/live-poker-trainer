@@ -708,46 +708,41 @@ Lesson-specific pattern notes (full history) live in
   (QUIT→GUARD→FIRST under stop-loss-only; Relates LPT-250) + companion checkpoint
   **LPT-691** still To Do; successors BANKROLL→STAKES→DECLINE / TIRED→WILD→CASH OUT
   content-driven; curriculum LPT-250 Done — do not clone / do not re-add needs-human;
-  tip `c5f73f71` Prefer NEVER Range SoftPulse residual **LPT-692** still To Do
-  (RANGE→NUT→ADVANTAGE under range-advantage-only; Relates LPT-254); successors
+  tip `a0ea6ed9` Prefer NEVER Range SoftPulse residual **LPT-692** Done (#2659 RANGE→ADVANTAGE;
+  Relates LPT-254); successors
   NUTS→PAIRED→CALLER / RANGE→NUTS→BET content-driven; checkpoint SoftPulse `press`
   under press-both matches — no companion residual; curriculum LPT-254 Done — do not
-  clone / do not re-add needs-human; tip `729c439f` Prefer NEVER Spot-caps SoftPulse residual **LPT-694** still To Do
-  (CAPPED→UNCAPPED→NUTS under spot-caps-only; Relates LPT-260; race clone LPT-695 Done);
+  clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Spot-caps SoftPulse residual **LPT-694** Done (#2659 CAPPED-only;
+  Relates LPT-260; race clone LPT-695 Done);
   successors RAISE→BET→RESPECT / CAPPED→THIN→BLUFF content-driven; checkpoint SoftPulse
   `attack` under attack-caps matches — no companion residual; curriculum LPT-260 Done —
-  do not clone / do not re-add needs-human; tip `72685a3f` Prefer NEVER Polar SoftPulse residual **LPT-696** still To Do
-  (POLAR→MERGED→SIZE under polarized-sizing-only; Relates LPT-264); successors
+  do not clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Polar SoftPulse residual **LPT-696** Done (#2659 POLAR-only;
+  Relates LPT-264); successors
   MERGED→MEDIUM→VALUE / SIZE→SHAPE→MATCH content-driven; checkpoint SoftPulse `thin`
   under merged-thin-value matches — no companion residual; curriculum LPT-264 Done — do not
-  clone / do not re-add needs-human; tip `23915807` Prefer NEVER Overbet SoftPulse residual
-  **LPT-699** still To Do (OVERBET→POLAR→GEO under polar-overbets-only; Relates LPT-267;
-  race clone LPT-698 Done); successors FLOP→TURN→RIVER / HUGE→MEDIUM→AVOID content-driven;
+  clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Overbet SoftPulse residual **LPT-699** Done (#2659 OVERBET→POLAR;
+  Relates LPT-267; race clone LPT-698 Done); successors FLOP→TURN→RIVER / HUGE→MEDIUM→AVOID content-driven;
   checkpoint SoftPulse `multi` under geometric-sizes matches — no companion residual;
-    curriculum LPT-267 Done — do not clone / do not re-add needs-human; tip `7500cbdc` Prefer NEVER
-  Blockers SoftPulse residual **LPT-700** still To Do (BLOCK→USE→NO EV under bluff-blockers-only;
+    curriculum LPT-267 Done — do not clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Blockers SoftPulse residual **LPT-700** Done (#2659 BLOCK-only;
   Relates LPT-270); successors CATCH→UNBLOCK→BLUFFS / TWEAK→NO EV content-driven; checkpoint SoftPulse
   `no` under no-fake-ev matches — no companion residual; curriculum LPT-270 Done — do not clone /
-  do not re-add needs-human; tip `b630f923` Prefer NEVER Defend SoftPulse residual **LPT-701**
-  still To Do (DEFEND→BLUFF→ENOUGH under continue-catchers-only; Relates LPT-273); companion
-  checkpoint SoftPulse `punish` under continue-catchers → **LPT-702** still To Do; successors
+  do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Defend SoftPulse residual **LPT-701** Done (#2659 DEFEND-only);
+  companion checkpoint SoftPulse `punish` under continue-catchers → **LPT-702** still To Do; successors
   THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven; curriculum LPT-273 Done — do not clone /
-  do not re-add needs-human; tip `50c98ec0` Prefer NEVER Mix SoftPulse residual **LPT-703** still To Do
-  (MIX→PURPOSE→STRONG under mix-strong-only; Relates LPT-277); successors TYPE→STATION→LESS /
+  do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Mix SoftPulse residual **LPT-703** Done (#2659 MIX→STRONG;
+  PURPOSE owned by no-pure-random; Relates LPT-277); successors TYPE→STATION→LESS /
   RANDOM→PURPOSE content-driven; checkpoint SoftPulse `freq` under no-pure-random matches — no
-  companion residual; curriculum LPT-277 Done — do not clone / do not re-add needs-human; tip
-  `ee7b93ca` Prefer NEVER Plan-3bet SoftPulse residual **LPT-704** still To Do (3BET→4BET→DEPTH
-  under plan-3bet-spr — reused explain is middle-child; Relates LPT-282); careful-4bet SoftPulse
+  companion residual; curriculum LPT-277 Done — do not clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Plan-3bet SoftPulse residual **LPT-704** Done (#2659 3BET→DEPTH;
+  Relates LPT-282); careful-4bet SoftPulse
   4BET→STRONG→CAREFUL + ego SoftPulse 4BET→EGO→AVOID content-driven; checkpoint SoftPulse `spr`
   under plan-3bet-spr matches — no companion residual; curriculum LPT-282 Done — do not clone /
-  do not re-add needs-human; tip `438b1746` Prefer NEVER Hard-folds SoftPulse residual **LPT-705** still To Do
-  (HARD→COOLER→EGO under hard-folds-only; Relates LPT-285 — do not re-add needs-human on curriculum);
+  do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Hard-folds SoftPulse residual **LPT-705** Done (#2659 HARD-only;
+  Relates LPT-285 — do not re-add needs-human on curriculum);
   successors COOLER→MISTAKE→REVIEW / DUE→EGO→FOLD content-driven; guided SoftPulse `fold` densify
   PRESENT; scaffolded SoftPulse `cooler` densify PRESENT; unguided SoftPulse `ego` densify PRESENT;
   checkpoint SoftPulse `ask` under cooler-or-mistake matches — no companion residual; curriculum
-  LPT-285 Done — do not clone / do not re-add needs-human; tip `d345e904` Prefer NEVER Selective SoftPulse residual
-  **LPT-706** still To Do (TIGHT→BARREL→SAMPLE + Dart `SelectiveAggressionDemo.points` under
-  selective-entry-only; Relates LPT-288 — do not re-add needs-human on curriculum); successors
+  LPT-285 Done — do not clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Selective SoftPulse residual **LPT-706** Done (#2659 TIGHT-only;
+  Relates LPT-288 — do not re-add needs-human on curriculum); successors
   CALLED→GIVES UP / TWO HANDS→NOTE BUNDLE content-driven; checkpoint SoftPulse `bundle` under
   wait-for-samples matches — no companion residual; curriculum LPT-288 Done — do not clone / do not
   re-add needs-human; tip `e4192ff3` Prefer NEVER Meet-TAG working-model residual **LPT-708** still
@@ -755,17 +750,13 @@ Lesson-specific pattern notes (full history) live in
   TIGHT→AGGRO→MODEL concept-aligned; Relates LPT-291 — do not re-add needs-human on curriculum);
   successors FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE content-driven; guided SoftPulse
   `tag` densify PRESENT; scaffolded SoftPulse `diff` densify PRESENT; unguided SoftPulse `tag2`
-  densify PRESENT; curriculum LPT-291 Done — do not clone / do not re-add needs-human; tip
-  `1367e19d` Prefer NEVER Adjust-TAG SoftPulse residual **LPT-709** still To Do
-  (CREDIT→TIGHTER→NO LIGHT + Dart `VsTagsDemo` / `LessonVsTagsExplainTable` under
-  Respect-TAG-aggression-only; Relates LPT-294 — do not re-add needs-human on curriculum) +
+  densify PRESENT; curriculum LPT-291 Done — do not clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Adjust-TAG SoftPulse residual **LPT-709** Done
+  (#2661 CREDIT→TIGHTER; Relates LPT-294 — do not re-add needs-human on curriculum) +
   cite **LPT-710** still To Do; successors CHECK-RAISE→FOLD / RARELY CALLS→CHECK
   content-driven; guided SoftPulse `fold` PRESENT; scaffolded SoftPulse `fold-k9`
   one-per-press PRESENT; unguided SoftPulse `check` one-per-press PRESENT; curriculum
-  LPT-294 Done — do not clone / do not re-add needs-human; tip `ae098436` Prefer
-  NEVER Observe-wide SoftPulse residual **LPT-713** still To Do
-  (WIDE→PRESSURE→SAMPLE + Dart `WidePressureDemo` / `LessonWidePressureExplainTable` under
-  Note-wide-entry-only; Relates LPT-297 — do not re-add needs-human on curriculum) +
+  LPT-294 Done — do not clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Observe-wide SoftPulse residual **LPT-713** Done (#2661 WIDE-only;
+  Relates LPT-297 — do not re-add needs-human on curriculum) +
   Keep-sampling **LPT-714** + evidence-bundle **LPT-715** still To Do; successors
   BARRELS→MANY HANDS / FOLDS SOMETIMES→PLAN content-driven; guided SoftPulse `wide` densify
   PRESENT; scaffolded SoftPulse `sep` one-per-press densify PRESENT; unguided SoftPulse
@@ -776,8 +767,7 @@ Lesson-specific pattern notes (full history) live in
   re-add needs-human on curriculum); successors WIDE OPENS→BARRELS / RAISES→CALLS
   content-driven; guided SoftPulse `lag` densify PRESENT; scaffolded SoftPulse `diff`
   densify PRESENT; unguided SoftPulse `lag2` densify PRESENT; curriculum LPT-300 Done —
-  do not clone / do not re-add needs-human; tip `b13f674e` Prefer NEVER Adjust-LAG SoftPulse
-  residual **LPT-718** still To Do (CALL→TRAP→FANCY LESS + Dart `VsLagsDemo` /
+  do not clone / do not re-add needs-human; tip `a0ea6ed9` Prefer NEVER Adjust-LAG SoftPulse residual **LPT-718** Done (#2661 CALL-only) (CALL→TRAP→FANCY LESS + Dart `VsLagsDemo` /
   `LessonVsLagsExplainTable` under Call-wider-only; Relates LPT-303 — do not re-add
   needs-human on curriculum) + cite **LPT-719** still To Do; successors STRONG HAND→LET
   THEM BET / NO BIG BLUFF→LET THEM content-driven; guided SoftPulse `call` PRESENT;
@@ -1937,6 +1927,7 @@ Lesson-specific pattern notes (full history) live in
 
 ## Recent fold
 
+- 2026-10-15da: Tip-stable `a0ea6ed9` (#2661 S6b SoftPulse shrinks after #2660/#2659 S6a). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32k description limit; do not claim body rebuilt); other parents Done — no open-parent sync. SoftPulse Prefer path catch-up Done-acks on tip: S6a **LPT-692/694/696/699/700/701/703/704/705/706** (#2659) + S6b **LPT-709/713/718/759/760/761/768/772/773/775** (#2661) — authored cues/explainGrading/coach lines + residual demo-tiles keep/drop match; leave Done. Companion checkpoints still To Do: **LPT-702** (punish under continue-catchers) / **LPT-708** (Meet-TAG working-model under Introduce TAG) / **LPT-710** (cite under Respect TAG) / **LPT-714/715** (Observe-wide companions) / **LPT-716** (Meet-LAG sample-limits) / **LPT-719** (Adjust-LAG cite). Prefer NEVER Meet-TAG working-model residual re-check: SoftPulse TIGHT→AGGRO→MODEL concept-aligned; checkpoint SoftPulse `model` still under Introduce TAG → **LPT-708** still To Do (needs-human; Relates LPT-291 — do not re-add needs-human). Prefer NEVER Mix-five SoftPulse residual **LPT-721** still To Do (CARDS→SEATS→EVIDENCE under Station-thin-only; Relates LPT-306). Curriculum LPT-291/306 Done — do not clone. Meet Nit LPT-198 / LPT-216 Done re-verify OK. Tip-commented LPT-708/702/829 + Done-ack S6a/S6b sets; leave open LPT-702/708/710/714/715/716/719/721/683/691… + LPT-351 + LPT-829; leave ui-agent alone. next: NEVER Meet-TAG **LPT-708** / Mix-five SoftPulse **LPT-721** / open catalog **LPT-829**.
 - 2026-10-15cy: Tip-stable `276cf765` (#2657 SoftPulse-quiet densify after #2655 S4–S5 SoftPulse residual shrinks + #2656 Blockers SoftPulse Prefer LPT-700). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync. Mid-run tip `5356721d`/#2655: Done-acked SoftPulse residuals **LPT-732** (VALUE-only) / **LPT-681** (IMPLIED-only) / **LPT-682** (THIN-only) / **LPT-684** (X/R-only) / **LPT-685** (TIMING→CLUES) / **LPT-686** (STUCK→TILTED) / **LPT-690** (QUIT-only) / **LPT-676** (scaffolded under value-vs-pressure) / **LPT-677** (checkpoint under commit-low-spr) / **LPT-687** (checkpoint under gear-changes re-sample) — tip already satisfied; leave Done. Prefer NEVER Defend SoftPulse residual re-check: first-child SoftPulse DEFEND→BLUFF→ENOUGH + `explainGrading` "Defend → Bluff → Enough." + Dart `DefendEnoughDemo.points` DEFEND/BLUFF/ENOUGH (captions Continue enough / Over-bluffs fail / No fake %) / layout "Tap Defend, then Bluff, then Enough." + coachMedia "Defend enough that over-bluffing fails. No fake percentages." still pre-split under continue-catchers-only (`lesson-06-07-01-01-continue-catchers` objective "Continue with stronger catchers") → **LPT-701** still To Do (needs-human; Relates LPT-273 — do not re-add needs-human on curriculum); companion checkpoint SoftPulse `punish` kind `none` densify PRESENT (prompt "Minimum defense goal?" / Punish over-bluffs) under Continue with stronger catchers → **LPT-702** still To Do; successors SoftPulse THIRD PAIR→SCARY→FOLD / MDF→INTUITION content-driven (do not reopen LPT-669); guided SoftPulse `strong` densify PRESENT; scaffolded SoftPulse `fold` one-per-press PRESENT (`9h`/`7d`·`Kc`/`Qh`/`9d`/`4c`/`8s` +2 suit variants match Dart); unguided SoftPulse `int` densify PRESENT. Curriculum **LPT-273** Done — do not clone. Meet Nit LPT-198 / LPT-216 Done re-verify OK. Tip-commented LPT-701/702/273/829/703/198/216/351/683/691 + Done-ack LPT-732/681/682/684/685/686/690/676/677/687; leave open LPT-701/702/683/691/692…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Mix SoftPulse residual **LPT-703** re-check / Low residuals still open / open catalog **LPT-829**.
 - 2026-10-15cx: Tip-stable `e2971d1b` (#2654 Overbet SoftPulse Prefer LPT-699 on tip after #2652 Polar SoftPulse Prefer LPT-696). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync. SoftPulse Prefer path catch-up: Polar SoftPulse residual **LPT-696** still To Do + Overbet SoftPulse residual **LPT-699** still To Do advanced through Prefer SoftPulse path this fold. Prefer NEVER Blockers SoftPulse residual re-check: first-child SoftPulse BLOCK→USE→NO EV + `explainGrading` "Block → Use → No EV." + Dart `BlockersDemo.points` BLOCK/USE/NO EV (captions Remove hands / Apply blockers / Skip decimals) / `LessonBlockersExplainTable` / layout "Tap Block, then Use, then No EV." + coachMedia "Blockers remove hands. Use them; do not invent EV decimals." still pre-split under bluff-blockers-only (`lesson-06-06-01-01-bluff-blockers` objective "Choose bluffs that block call-downs") → **LPT-700** still To Do (needs-human; Relates LPT-270 — do not re-add needs-human on curriculum); successors SoftPulse CATCH→UNBLOCK→BLUFFS / TWEAK→NO EV content-driven (do not reopen LPT-669); guided SoftPulse `as` densify PRESENT; scaffolded SoftPulse `unblock` densify PRESENT; unguided SoftPulse `tweak` densify PRESENT; checkpoint SoftPulse `no` kind `none` densify PRESENT under no-fake-ev — no companion residual. Curriculum **LPT-270** Done — do not clone. Meet Nit LPT-198 / LPT-216 Done re-verify OK. Tip-commented LPT-700/270/829/701/699/696/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Defend SoftPulse residual **LPT-701** (+ cite **LPT-702**) re-check / Low residuals LPT-676…802 / open catalog **LPT-829**.
 - 2026-10-15cw: Tip-stable `9bbc092c` (#2653 Words-are-binding densify after #2651 Polar SoftPulse Prefer LPT-696). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen). Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync. Prefer NEVER Overbet SoftPulse residual re-check: first-child SoftPulse OVERBET→POLAR→GEO + `explainGrading` "Overbet → Polar → Geometry." + Dart `OverbetGeometryDemo.points` OVERBET/POLAR/GEO (captions Needs a story / Nuts or air / Flop→turn→river) / `LessonOverbetGeometryExplainTable` / layout "Tap Overbet, then Polar, then Geo." + coachMedia "Overbets need a polar story. Geometry links flop-turn-river sizes." still pre-split under polar-overbets-only (`lesson-06-05-01-01-polar-overbets` objective "Select overbets for polar spots") → **LPT-699** still To Do (needs-human; Relates LPT-267 — do not re-add needs-human on curriculum); successors SoftPulse FLOP→TURN→RIVER / HUGE→MEDIUM→AVOID content-driven (do not reopen LPT-669); guided SoftPulse `polar-ob` densify PRESENT; scaffolded SoftPulse `mid` one-per-press PRESENT (`As`/`Kd`·`Ah`/`7c`/`2d`/`9s` +2 suit variants match Dart); unguided SoftPulse `avoid` densify PRESENT; checkpoint SoftPulse `multi` kind `none` densify PRESENT under geometric-sizes — no companion residual. Curriculum **LPT-267** Done — do not clone. Meet Nit LPT-198 / LPT-216 Done re-verify OK. Tip-commented LPT-699/267/829/700/696/694/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone. next: NEVER Blockers SoftPulse residual **LPT-700** re-check / Low residuals LPT-676…802 / open catalog **LPT-829**.
