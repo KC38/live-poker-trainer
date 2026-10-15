@@ -5384,3 +5384,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next NEVER: `lesson-04-07-01-02-strong-aggression` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-07-01-*: first-child Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-768.
 
+## Fold 2026-10-15fe (eec47beb Prefer NEVER strong-aggression)
+
+- Tip-stable `eec47beb` (#2748 Best five checkpoint densify on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-07-01-02-strong-aggression` / `act-04-07-01-02-explain-aggression` + `act-04-07-01-scaffolded` + `act-04-07-01-checkpoint`:
+  - one objective Tag strong aggression when they play; explain SoftPulse RARE ENTRY→BIG AGGRESSION + `explainGrading` "Rare entry + big aggression → note both." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-768).
+  - scaffolded SoftPulse `strong-aggr` one-per-press pressHints 1/1 densify PRESENT SoftPulse-quiet after LPT-827 (`select_identify` `deal.mode` `none` observeNarrowAggressionOutcomes — do not file handFamily).
+  - checkpoint SoftPulse `bundle-nit` cue kind `none` hintless densify PRESENT SoftPulse-off after LPT-763 (evidence-bundle residual note under strong-aggression closed with **LPT-768** Done — do not re-file).
+  - short-ladder 3/5 already on catalog **LPT-829**; curriculum **LPT-195** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-07-01-03-wait-for-samples` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-07-01-*: strong-aggression Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-768.
