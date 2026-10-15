@@ -16184,17 +16184,15 @@ await tester.tap(find.text('NIT'));
       ),
     );
     // LPT-410: densified ask (and frame speech) — not catalog + Tap the best answer.
-    expect(
-      lessonFrameSpeech(activity),
-      'Two value sizes both get calls — tap nearby soft-grade over one exact chip.',
-    );
-    expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
-    expect(
-      find.text(
-        'Two value sizes both get calls — pick nearby soft-grade over one exact chip.',
-      ),
-      findsOneWidget,
-    );
+    // LPT-866: SoftPulse-quiet densify stem — never name nearby soft-grade.
+    // Numeral rewrite may turn "Two" → "three" in frame speech; lock the
+    // non-spoiling stem body, not a hard-coded leading numeral.
+    final speech = lessonFrameSpeech(activity);
+    expect(speech, contains('value sizes both get calls — tap the matching grading idea.'));
+    expect(speech, isNot(contains('Tap the best answer')));
+    expect(speech, isNot(contains('nearby soft-grade')));
+    expect(speech, isNot(contains('Nearby sizes both soft-grade')));
+    expect(find.textContaining('tap the matching grading idea.'), findsOneWidget);
     expect(
       find.text(
         'Two value sizes both get calls — nearby sizes can both grade soft.',
