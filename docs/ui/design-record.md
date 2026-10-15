@@ -1737,7 +1737,7 @@ odds / POT → What it pays / EQUITY → Win chance — LPT-887, WHO ACTS →
 Whose turn — LPT-888, SAY → Announce clearly / BINDING → Must follow
 through — LPT-889, EARLIER SEATS → Act before you / YOUR TURN → Then you
 decide — LPT-891, BROADWAY → Ten or higher / SUITED ACE → Ace same suit —
-LPT-892, CHIPS → Then move chips — LPT-893). Play a full toy hand framed SoftPulse chips
+LPT-892, CHIPS → Then move chips — LPT-893, EP → Early seat — LPT-896). Play a full toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
 YOU ACT → Open, call, or fold, ENDING → Folds win or continue (aligned
@@ -2054,7 +2054,7 @@ felt.
 | Main and side pots | explain SoftPulse cues MAIN POT → SIDE POT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-782); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING with teaching captions (Forced bets first / Open, call, or fold / Folds win or continue — never Tap N of M; LPT-890); SoftPulse order (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN; jump-legal identify dock equal live chrome — no Raise gold fill while SoftPulse off (LPT-879) | — |
-| Seat labels | Six-max seats labeled on the table; explain SoftPulse cues D (LPT-635); unguided SoftPulse-quiet densify stem non-spoiling (no Cutoff / CO) (LPT-834); unit `unit-02-01-position-power` (LPT-114 split) | — |
+| Seat labels | Six-max seats labeled on the table; explain SoftPulse cues EP → HJ → CO → BTN with teaching captions (Early seat / Hijack seat / Cutoff seat / Button seat — never empty EP gloss; LPT-896); explain SoftPulse cues D (LPT-635); unguided SoftPulse-quiet densify stem non-spoiling (no Cutoff / CO) (LPT-834); unit `unit-02-01-position-power` (LPT-114 split) | — |
 | Blind labels | explain SoftPulse cues SB → BB; scaffolded SoftPulse-quiet densify stem non-spoiling (no SB or BB) (LPT-833); unit `unit-02-01-position-power` (LPT-114 split) | — |
 | Later seats play better | explain SoftPulse cues D; checkpoint SoftPulse-off densify stem non-spoiling (LPT-783); unit `unit-02-01-position-power` (LPT-114 split); `act-02-01-01-guided-btn` moved here from Seat labels (curriculum residual LPT-739) | — |
 | Preflop order | UTG, HJ, CO, BTN on the table; explain SoftPulse cues UTG → HJ → CO → BTN (LPT-635); unit `unit-02-01-position-power` (LPT-117 split) | scaffolded pressHints one-per-press (LPT-667) |

@@ -1,6 +1,6 @@
 /// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
-/// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895: SoftPulse
-/// explain teaching captions (not Tap N of M).
+/// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895 / LPT-896:
+/// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
@@ -62,6 +62,7 @@ void main() {
     expect(authoredSoftPulseExplainCaption('TRASH'), 'Low unconnected');
     expect(authoredSoftPulseExplainCaption('STRONG'), 'Premium hands');
     expect(authoredSoftPulseExplainCaption('LIVE SIZE'), 'Bigger than min');
+    expect(authoredSoftPulseExplainCaption('EP'), 'Early seat');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -653,6 +654,56 @@ void main() {
       expect(find.text('LIVE SIZE'), findsWidgets);
       expect(find.text('Premium hands'), findsOneWidget);
       expect(find.text('Bigger than min'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+
+  testWidgets(
+    'Seat labels SoftPulse explain captions EP + HJ + CO + BTN (LPT-896)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-02-01-01-01-explain-seats',
+        targets: const ['EP', 'HJ', 'CO', 'BTN'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('EP'), findsWidgets);
+      expect(find.text('HJ'), findsWidgets);
+      expect(find.text('CO'), findsWidgets);
+      expect(find.text('BTN'), findsWidgets);
+      expect(find.text('Early seat'), findsOneWidget);
+      expect(find.text('Hijack seat'), findsOneWidget);
+      expect(find.text('Cutoff seat'), findsOneWidget);
+      expect(find.text('Button seat'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
