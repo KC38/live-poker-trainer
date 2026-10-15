@@ -630,8 +630,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Multiway construction priority — tap the matching priority.',
     'act-05-02-01-guided' =>
       '200bb effective. Best reason to call a raise with 55 BTN — pick Implied odds if they pay sets.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Map turn/river plans before
+    // committing (LPT-859; SoftPulse LPT-653; same class as LPT-858 /
+    // LPT-857 / LPT-853).
     'act-05-02-01-unguided' =>
-      'SPR ~12 on the flop. Your first job — pick Map turn/river plans before committing.',
+      'SPR ~12 on the flop. Your first job — tap the matching plan.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Position / implied odds / disciplined folds in the idle bubble
     // (LPT-735; same class as LPT-723 / LPT-717 / LPT-672 / LPT-653).
