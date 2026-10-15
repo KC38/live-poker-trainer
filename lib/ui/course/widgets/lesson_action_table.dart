@@ -14248,6 +14248,8 @@ String authoredSoftPulseExplainCaption(String target) {
     'SHOWDOWN VALUE': 'Weak made',
     'SHOWDOWN': 'Weak made',
     'AIR': 'Nothing yet',
+    // Recognize air SoftPulse explain (AIR → FOLD EQUITY; LPT-884).
+    'FOLD EQUITY': 'Bluff needs folds',
     // Streets / table flow.
     'PREFLOP': 'Before the flop',
     'FLOP': 'Three cards',

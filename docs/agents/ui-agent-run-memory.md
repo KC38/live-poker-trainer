@@ -96,3 +96,12 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-15
 
 - Prefer SoftPulse-off densify stems that avoid distinctive *fragments* of the correct tile (e.g. “straight and flush” inside “Draw — straight and flush potential”), not only exact full labels — LPT-674 left jump-class as stem-only then the fragment spoil returned (LPT-878). Extend spoil scans beyond exact choice-label substring matches when judging SoftPulse-off jump/checkpoint asks.
+
+## Fold 2026-10-15 (LPT-883 / LPT-884)
+
+- Prefer `flutter pub get` in the ticket worktree before `dart analyze` /
+  `flutter test` — without `.dart_tool/package_config.json` package
+  imports resolve to primary and new worktree symbols look undefined (LPT-883).
+- Prefer `tester.pump` (not `pumpAndSettle`) when pumping SoftPulse /
+  `LessonAuthoredCueExplainTable` — gold SoftPulse breathes forever and
+  times out settle (LPT-883).
