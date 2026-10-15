@@ -14341,6 +14341,10 @@ String authoredSoftPulseExplainCaption(String target) {
     'BB': 'Big blind',
     'D': 'Dealer button',
     'UTG': 'First to act',
+    // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
+    // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
+    // never leave the first SoftPulse tile label-only.
+    'EP': 'Early seat',
     'HJ': 'Hijack seat',
     'CO': 'Cutoff seat',
     'BTN': 'Button seat',
