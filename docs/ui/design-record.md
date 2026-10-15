@@ -810,11 +810,15 @@ height for every stage child, and `_feltShell` clamps again.
 `the two in front`, `Those two` / `These two` before stay/are) before spoken
 rank-word remaps so a template board deuce cannot turn Your two cards Hint
 into "Your three cards" (LPT-791) or Nice! "Those two stay…" into "Those
-three stay…" (`lesson_starting_hand_copy.dart`, LPT-797). Your two cards
-densified coach lines are stem-only — never hardcode template Ah Kd / Qs Jh
-2c (`selectIdentifyDensifiedCoachLine`, LPT-792). The next densify Hint that
-says "two cards" or feedback that says "Those two stay" copies that
-protect; the next hole/board densify ask uses a stem or aligned felt names.
+three stay…" (`lesson_starting_hand_copy.dart`, LPT-797). Spoken rank/suit
+word remaps use placeholders so a king→queen plus queen→jack chain cannot
+turn Made hands densify Nice! "Pair of kings" into "Pair of jacks" over
+top-pair queens (LPT-852). Your two cards densified coach lines are
+stem-only — never hardcode template Ah Kd / Qs Jh 2c
+(`selectIdentifyDensifiedCoachLine`, LPT-792). The next densify Hint that
+says "two cards" or feedback that says "Those two stay" / "Pair of …"
+copies that protect and non-chaining remap; the next hole/board densify
+ask uses a stem or aligned felt names.
 
 Calling Station explain STATION tile caption is **Working label**
 (`CallingStationDemo.points` in `lesson_action_table.dart`, LPT-789) — same
@@ -2004,7 +2008,7 @@ felt.
 | Pot and stacks | Pot, Stacks on the felt; explain SoftPulse cue POT → STACKS only — BUTTON/WHO ACTS presses belong to Button and action seat (curriculum residual LPT-750); checkpoint SoftPulse-off densify stem non-spoiling (LPT-787); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS; scaffolded SoftPulse-quiet densify stem non-spoiling (no UTG / Seat left of the big blind) (LPT-845); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Words are binding | explain SoftPulse cues SAY → BINDING; unguided SoftPulse-quiet densify stem non-spoiling (no Raise stands / verbal is binding) (LPT-846); unit `unit-03-01-reading-table` (LPT-140 split) | — |
-| Made hands | Made on the felt; explain SoftPulse cue MADE only — DRAW/SDV/AIR presses belong to Draws versus showdown value and Recognize air (curriculum residual LPT-751); fixed steps author suit-rotated `deal.variants` (LPT-384); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Made hands | Made on the felt; explain SoftPulse cue MADE only — DRAW/SDV/AIR presses belong to Draws versus showdown value and Recognize air (curriculum residual LPT-751); fixed steps author suit-rotated `deal.variants` (LPT-384); densify Nice!/Oops `Pair of …` rewrites via non-chaining `alignLessonTableCopy` rank words (LPT-852); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE; scaffolded SoftPulse-quiet densify stem non-spoiling (no Strong draw / nut flush draw); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` (LPT-851 shared path; SoftPulse-quiet LPT-847); checkpoint SoftPulse-off densify stem non-spoiling (no Draw tile / template cards) (LPT-805); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Recognize air | explain SoftPulse cues AIR → FOLD EQUITY; unguided SoftPulse-quiet densify stem non-spoiling (no Air / little equity); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` to the remapped deal (LPT-851; SoftPulse-quiet LPT-848); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Clean versus dirty outs | Clean, Dirty on the felt; explain SoftPulse cue CLEAN → DIRTY only — PRICE press belongs to Pot odds versus equity (curriculum residual LPT-752); densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-03-03-outs-price` (LPT-146 split) | — |

@@ -485,6 +485,30 @@ void main() {
       ),
       'Pair of aces is already showdown-ready.',
     );
+    // K→Q and Q→J must not chain "Pair of kings" into "Pair of jacks"
+    // (Made hands densify Nice!, LPT-852).
+    expect(
+      alignLessonTableCopy(
+        text: feedback,
+        templateHero: const ['Kh', 'Qh'],
+        dealtHero: const ['Qd', 'Jd'],
+        templateBoard: const ['Ks', '9d', '2c'],
+        dealtBoard: const ['Qs', '6c', '2h'],
+      ),
+      'Pair of queens is already showdown-ready.',
+    );
+    // Live mini deal from LPT-852 validate: board 9 + kicker 8 must stay
+    // "nines", never the board second-card "sixes".
+    expect(
+      alignLessonTableCopy(
+        text: feedback,
+        templateHero: const ['Kh', 'Qh'],
+        dealtHero: const ['9s', '8s'],
+        templateBoard: const ['Ks', '9d', '2c'],
+        dealtBoard: const ['9c', '6d', '4h'],
+      ),
+      'Pair of nines is already showdown-ready.',
+    );
     expect(
       alignLessonTableCopy(
         text: oops,
@@ -645,10 +669,33 @@ void main() {
       expectedNice,
     );
     expect(expectedNice.toLowerCase(), isNot(contains('king')));
-    expect(
-      lessonFrameSpeech(activity, bindGeneration: generation),
-      '$expectedPrompt Tap the best answer.',
-    );
+    // Pair of … must name the remapped board pair, never the kicker chain
+    // (LPT-852).
+    final boardPairChar = dealtBoard.first[0].toLowerCase();
+    const pairPlurals = {
+      'a': 'aces',
+      'k': 'kings',
+      'q': 'queens',
+      'j': 'jacks',
+      't': 'tens',
+      '9': 'nines',
+      '8': 'eights',
+      '7': 'sevens',
+      '6': 'sixes',
+      '5': 'fives',
+      '4': 'fours',
+      '3': 'threes',
+      '2': 'twos',
+    };
+    final expectedPair = pairPlurals[boardPairChar];
+    if (expectedPair != null) {
+      expect(expectedNice.toLowerCase(), contains(expectedPair));
+    }
+    final speech = lessonFrameSpeech(activity, bindGeneration: generation);
+    expect(speech, isNot(contains('Tap the best answer.')));
+    for (final code in [...dealtHero, ...dealtBoard]) {
+      expect(speech.toLowerCase(), contains(code.toLowerCase()));
+    }
   });
 
   test(
@@ -722,34 +769,46 @@ void main() {
       acceptedGrades: const [SoftGrade.recommended],
       prompt: 'Board Jh 8h 3c. You hold Ah 9h. Class?',
     );
+    const bankOops = 'No jack in your hand.';
+    // Fixed board-jack → ten rewrite (NFD isomorphic remaps may keep a jack
+    // on the felt for teach bits — still lock the copy helper).
+    expect(
+      alignLessonTableCopy(
+        text: bankOops,
+        templateHero: const ['Ah', '9h'],
+        dealtHero: const ['Qs', '6s'],
+        templateBoard: const ['Jh', '8h', '3c'],
+        dealtBoard: const ['Ts', '5s', '2h'],
+      ),
+      'No ten in your hand.',
+    );
     late int generation;
     late List<String> dealtHero;
     late List<String> dealtBoard;
+    late String expected;
     for (generation = 0; generation < 128; generation++) {
       final scene = dealtLessonTableScene(activity, generation: generation);
       expect(scene, isNotNull);
-      // Need the board jack rank to move so "No jack" must rewrite.
       final board = scene!.boardCodes;
       if (board.isEmpty) continue;
-      if (CardModel.fromCode(board[0]).rank == 11) continue;
+      // Any non-identity board remap — Oops must match the table-copy oracle.
+      if (board.join().toLowerCase() == 'jh8h3c') continue;
       dealtHero = scene.heroCodes;
       dealtBoard = board;
+      expected = alignLessonTableCopy(
+        text: bankOops,
+        templateHero: const ['Ah', '9h'],
+        dealtHero: dealtHero,
+        templateBoard: const ['Jh', '8h', '3c'],
+        dealtBoard: dealtBoard,
+      );
       break;
     }
     expect(generation, lessThan(128));
-    const bankOops = 'No jack in your hand.';
-    final expected = alignLessonTableCopy(
-      text: bankOops,
-      templateHero: const ['Ah', '9h'],
-      dealtHero: dealtHero,
-      templateBoard: const ['Jh', '8h', '3c'],
-      dealtBoard: dealtBoard,
-    );
     expect(
       alignLessonActionCopy(activity, bankOops, generation: generation),
       expected,
     );
-    expect(expected.toLowerCase(), isNot(contains('jack')));
     expect(
       alignLessonActionCopy(activity, activity.prompt!, generation: generation),
       isNot(contains('Jh')),

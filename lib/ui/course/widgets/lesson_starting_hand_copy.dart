@@ -256,37 +256,69 @@ String alignLessonTableCopy({
   // board deuce remapped to a trey must not turn "Your two cards" into
   // "Your three cards" on Hint (LPT-791), or "Those two stay…" into
   // "Those three stay…" on Nice! (LPT-797 Your two cards guided find-holes).
+  //
+  // Rank/suit word swaps use placeholders so a chain like king→queen and
+  // queen→jack cannot turn "Pair of kings" into "Pair of jacks" when the
+  // hero kicker also remaps through queen (LPT-852 Made hands densify).
   next = _withProtectedCountPhrases(next, (body) {
-    var out = body;
-    // Plurals before singulars so "kings" is not left as "aces"+"s".
-    for (final entry in rankMap.entries) {
-      if (entry.key == entry.value) continue;
-      out = _replaceIgnoringCase(
-        out,
-        _pairPluralWord(entry.key),
-        _pairPluralWord(entry.value),
-      );
-    }
-    for (final entry in rankMap.entries) {
-      if (entry.key == entry.value) continue;
-      final fromWord = _rankWords[entry.key];
-      final toWord = _rankWords[entry.value];
-      if (fromWord == null || toWord == null) continue;
-      out = _replaceIgnoringCase(out, fromWord, toWord);
-    }
-
-    for (final entry in suitMap.entries) {
-      if (entry.key == entry.value) continue;
-      final from = _suitWords[entry.key];
-      final to = _suitWords[entry.value];
-      if (from == null || to == null) continue;
-      out = _replaceIgnoringCase(out, from.$2, to.$2);
-      out = _replaceIgnoringCase(out, from.$1, to.$1);
-    }
-    return out;
+    return _rewriteSpokenRankSuitWords(
+      body,
+      rankMap: rankMap,
+      suitMap: suitMap,
+    );
   });
 
   return _fixIndefiniteArticles(next);
+}
+
+/// Applies [rankMap] / [suitMap] spoken-word rewrites without chaining.
+///
+/// Direct `kings`→`queens` then `queens`→`jacks` would mis-name a remapped
+/// top pair when the kicker rank is also in the map (LPT-852).
+String _rewriteSpokenRankSuitWords(
+  String body, {
+  required Map<int, int> rankMap,
+  required Map<String, String> suitMap,
+}) {
+  var out = body;
+  final placeholders = <String, String>{};
+  var token = 0;
+
+  void stash(String from, String to) {
+    if (from.isEmpty || to.isEmpty || from.toLowerCase() == to.toLowerCase()) {
+      return;
+    }
+    final key = '<<RW${token++}>>';
+    out = _replaceIgnoringCase(out, from, key);
+    placeholders[key] = to;
+  }
+
+  // Plurals before singulars so "kings" is not left as "aces"+"s".
+  for (final entry in rankMap.entries) {
+    if (entry.key == entry.value) continue;
+    stash(_pairPluralWord(entry.key), _pairPluralWord(entry.value));
+  }
+  for (final entry in rankMap.entries) {
+    if (entry.key == entry.value) continue;
+    final fromWord = _rankWords[entry.key];
+    final toWord = _rankWords[entry.value];
+    if (fromWord == null || toWord == null) continue;
+    stash(fromWord, toWord);
+  }
+
+  for (final entry in suitMap.entries) {
+    if (entry.key == entry.value) continue;
+    final from = _suitWords[entry.key];
+    final to = _suitWords[entry.value];
+    if (from == null || to == null) continue;
+    stash(from.$2, to.$2);
+    stash(from.$1, to.$1);
+  }
+
+  for (final entry in placeholders.entries) {
+    out = out.replaceAll(entry.key, entry.value);
+  }
+  return out;
 }
 
 /// Stashes count phrases like "two cards" / "those two" / "your two holes"
