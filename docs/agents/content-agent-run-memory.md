@@ -4388,6 +4388,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Defend SoftPulse residual **LPT-701** (+ companion **LPT-702**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-06-06-01-*: interactive structural clean on tip except LPT-700 SoftPulse residual; all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
 
+## Fold 2026-10-15bz tip 06406225 (#2618 Meet-TAG Prefer → Adjust-TAG SoftPulse LPT-709 Prefer)
+
+- Tip-stable `06406225` (#2618 Meet-TAG Prefer LPT-708 on tip after #2616). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (body rebuilt from `--gap short-ladder --markdown`); other parents Done — no open-parent sync.
+- Prefer NEVER Adjust-TAG SoftPulse residual re-check `lesson-06-11-03-01/02/03` / `act-06-11-03-*`:
+  - first-child SoftPulse CREDIT→TIGHTER→NO LIGHT + `explainGrading` "Credit → Tighter → No light." + Dart `VsTagsDemo.points` CREDIT/TIGHTER/NO LIGHT (captions Believe their heat / Narrow steals / Skip fancy XR) / `LessonVsTagsExplainTable` / layout "Tap Credit, then Tighter, then No light." still pre-split under Respect-TAG-aggression-only (`lesson-06-11-03-01-respect-aggression` objective "Respect TAG aggression") → residual **LPT-709** still To Do (needs-human; Relates LPT-294 — do not re-add needs-human on curriculum).
+  - companion checkpoint SoftPulse `cite` kind `none` densify PRESENT (`tagRespectCiteOutcomes` / helper "Versus TAG — pick the cite.") still under Respect-only → residual **LPT-710** still To Do (needs-human; Relates LPT-294).
+  - successors SoftPulse CHECK-RAISE→FOLD / RARELY CALLS→CHECK content-driven (do not reopen LPT-669); guided SoftPulse `fold` PRESENT (`Jh`/`9d`·`Qc`/`9s`/`3h` +2 suit variants); scaffolded SoftPulse `fold-k9` one-per-press PRESENT (`Kh`/`9d` +2 suit variants); unguided SoftPulse `check` one-per-press PRESENT (`Jh`/`Td`·`Qc`/`Ts`/`3h`/`2d`/`7c` +2 suit variants).
+- Curriculum **LPT-294** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-709/710/294/829/713/708/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Observe-wide SoftPulse residual **LPT-713** (+ cite **LPT-714** / **LPT-715**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-06-11-03-*: interactive structural clean on tip except LPT-709 SoftPulse + LPT-710 cite residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive sizing acts are `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
 ## Fold 2026-10-15by tip 2c015455 (#2616 Selective Prefer → Meet-TAG working-model LPT-708 Prefer)
 
 - Tip-stable `2c015455` (#2616 Selective SoftPulse Prefer LPT-706 on tip after #2614/#2615). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
