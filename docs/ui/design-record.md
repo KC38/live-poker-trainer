@@ -1748,7 +1748,9 @@ trees / IMPLIED ODDS → They pay later — LPT-904, PREFLOP RAISER → You
 opened / C-BET → Continue story — LPT-905, STORY → Believable line /
 BLUFF → Make them fold — LPT-906, BLUFF-CATCH → Call to catch —
 LPT-907, NUTS → Chase the top / POSITION → Seat edge — LPT-908,
-BAD PRICE → Poor pot odds — LPT-909). Play a full
+BAD PRICE → Poor pot odds — LPT-909, PASSIVE → Never raise /
+CROWD → Spew multiway — LPT-910, FEWER BLUFFS → Cut air —
+LPT-911, NARROWER → Fewer hands — LPT-912). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2110,14 +2112,14 @@ felt.
 | Credible bluffs | explain SoftPulse cues STORY → BLUFF with teaching captions (Believable line / Make them fold — never empty glosses; LPT-906); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Bluff-catch or fold | explain SoftPulse cues BLUFF-CATCH → FOLD with teaching captions (Call to catch / Give up — never empty BLUFF-CATCH gloss; LPT-907); unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Stronger hands multiway | Stronger on the felt; explain SoftPulse cue STRONGER only — FEWER/NUTS presses belong to Bluff less multiway and Nut potential and position (curriculum residual LPT-756); unit `unit-03-07-multiway` (LPT-160 split) | — |
-| Bluff less multiway | Fewer on the felt; explain SoftPulse cue FEWER only — THICKER/WIDEN presses belong to Value thicker multiway and Widen selected heads-up bluffs (curriculum residual LPT-800); unit `unit-03-07-multiway` (LPT-160 split); objective "Bluff less multiway because player count changes the plan" so the checkpoint grades this lesson's concept (curriculum residual LPT-801) | — |
+| Bluff less multiway | Fewer on the felt; explain SoftPulse cues CROWD → FEWER BLUFFS with teaching captions (Spew multiway / Cut air — never empty glosses; LPT-911); THICKER/WIDEN presses belong to Value thicker multiway and Widen selected heads-up bluffs (curriculum residual LPT-800); unit `unit-03-07-multiway` (LPT-160 split); objective "Bluff less multiway because player count changes the plan" so the checkpoint grades this lesson's concept (curriculum residual LPT-801) | — |
 | Nut potential and position | explain SoftPulse cues NUTS → POSITION with teaching captions (Chase the top / Seat edge — never empty glosses; LPT-908); unit `unit-03-07-multiway` (LPT-160 split) | — |
 | Weak top pair | Top pair on the felt; explain SoftPulse cue TOP PAIR only — PRICES/PASSIVE/CROWDS presses belong to Fold bad prices and Passive calls and crowd bluffs (curriculum residual LPT-757); unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Fold bad prices | explain SoftPulse cues BAD PRICE → FOLD with teaching captions (Poor pot odds / Give up — never empty BAD PRICE gloss; LPT-909); unit `unit-03-08-leak-repair` (LPT-163 split) | — |
-| Passive calls and crowd bluffs | explain SoftPulse cues PASSIVE → CROWD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
+| Passive calls and crowd bluffs | explain SoftPulse cues PASSIVE → CROWD with teaching captions (Never raise / Spew multiway — never empty glosses; LPT-910); unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Section 3 jump check | densified frame asks (LPT-390) | — |
 | A seat is a range | One hand, Range on the felt; explain SoftPulse cue ONE HAND → RANGE only — UPDATE press belongs to Action moves ranges (curriculum residual LPT-759); densified frame asks (LPT-403); unguided/checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-01-ranges` (LPT-169 split) | — |
-| Action moves ranges | explain SoftPulse cues RAISE → NARROWER → CALL; scaffolded SoftPulse-quiet densify stem non-spoiling (no Stronger / BB stronger) (LPT-880); unit `unit-04-01-ranges` (LPT-169 split) | — |
+| Action moves ranges | explain SoftPulse cues RAISE → NARROWER → CALL with teaching captions (Make it more / Fewer hands / Match the bet — never empty NARROWER gloss; LPT-912); scaffolded SoftPulse-quiet densify stem non-spoiling (no Stronger / BB stronger) (LPT-880); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | No exact hand too early | explain SoftPulse cues ONE HAND → RANGE; unguided SoftPulse-quiet densify stem non-spoiling (no Too exact / Exactly AK) (LPT-867); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | Value 3-bet | 3-bet, Ranges, Squeeze; unit `unit-04-02-threebet` (LPT-172 split) | — |
 | Facing a 3-bet | explain SoftPulse cues 3-BET → FOLD → CONTINUE; unit `unit-04-02-threebet` (LPT-172 split) | — |
