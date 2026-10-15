@@ -14373,6 +14373,11 @@ String authoredSoftPulseExplainCaption(String target) {
     // Gloss the facing-open ask — never leave AuthoredCue tiles label-only.
     'OPEN': 'Someone raised',
     'PLAN': 'Fold, call, or 3-bet',
+    // Implied odds when deep SoftPulse explain (DEEP → IMPLIED ODDS; LPT-904).
+    // DEEP matches DeepStacksDemo Wider trees; IMPLIED ODDS matches
+    // ImpliedOddsDemo They pay later — never leave AuthoredCue tiles label-only.
+    'DEEP': 'Wider trees',
+    'IMPLIED ODDS': 'They pay later',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

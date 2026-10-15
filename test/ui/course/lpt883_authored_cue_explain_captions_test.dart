@@ -1,6 +1,7 @@
 /// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
 /// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895 / LPT-896 /
-/// LPT-897 / LPT-898 / LPT-899 / LPT-900 / LPT-901 / LPT-902 / LPT-903:
+/// LPT-897 / LPT-898 / LPT-899 / LPT-900 / LPT-901 / LPT-902 / LPT-903 /
+/// LPT-904:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -79,6 +80,11 @@ void main() {
     expect(
       authoredSoftPulseExplainCaption('PLAN'),
       'Fold, call, or 3-bet',
+    );
+    expect(authoredSoftPulseExplainCaption('DEEP'), 'Wider trees');
+    expect(
+      authoredSoftPulseExplainCaption('IMPLIED ODDS'),
+      'They pay later',
     );
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
@@ -1040,6 +1046,51 @@ void main() {
       expect(find.text('PLAN'), findsWidgets);
       expect(find.text('Someone raised'), findsOneWidget);
       expect(find.text('Fold, call, or 3-bet'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Implied odds SoftPulse explain captions DEEP + IMPLIED ODDS (LPT-904)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-03-03-01-03-explain-implied',
+        targets: const ['DEEP', 'IMPLIED ODDS'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('DEEP'), findsWidgets);
+      expect(find.text('IMPLIED ODDS'), findsWidgets);
+      expect(find.text('Wider trees'), findsOneWidget);
+      expect(find.text('They pay later'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
