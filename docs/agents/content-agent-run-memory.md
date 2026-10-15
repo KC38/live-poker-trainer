@@ -5024,3 +5024,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-06-12-03-*: interactive structural clean on tip after #2689 objective rewrite; SoftPulse explain CALL-only concept-aligned; SoftPulse explain successors content-driven; guided/scaffolded sizing `fixed`+variants — do not reopen LPT-627; unguided/checkpoint `deal.mode` `none` — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15dt tip 9cbc583a (LPT-351 Prefer + pilot discovery)
+
+- Tip-stable `9cbc583a` (#2691). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (tip-comment only — no body rebuild). SoftPulse Prefer queue empty except needs-human.
+- Prefer NEVER Live warm-up `lesson-07-11-01-live-warmup-prep` / `act-07-11-01-*`:
+  - Explain SoftPulse CHECKLIST→DEFAULTS→ONE HAND + `explainGrading` "Checklist → Defaults → One hand." + Dart `LiveWarmupPrepDemo` / `LessonLiveWarmupPrepExplainTable` wired.
+  - Guided SoftPulse `list` densify PRESENT (`deal.mode` `none`); scaffolded SoftPulse `defaults` one-per-press OK; unguided SoftPulse `scope` one-per-press densify PRESENT; checkpoint SoftPulse `one` kind `none` hintless densify PRESENT (prompt "Warm-up goal?").
+  - Lesson objectives still checklist / defaults / scope; checkpoint activity objectives still "Carry defaults into Live" vs graded one-hand finish-line → **LPT-351** still To Do (needs-human; Relates warm-up gate — do not re-add needs-human / do not clone LPT-349).
+  - SoftPulse residual N/A until split (multi-concept owned by LPT-351).
+- Discovery oldest unfresh current `lesson-01-01-01-your-two-cards` / `act-01-01-01-*`: structural clean — 5-act ladder; explain SoftPulse `hero_holes` + `explainGrading`; guided/scaffolded/unguided/checkpoint `random_in_class` any/any SoftPulse maps PRESENT; scaffolded/unguided one-per-press OK; checkpoint hintless cue kind `none`; densify PRESENT. Packed hole/community/hidden-seat objectives are intentional pilot literacy — **no** new curriculum-split ticket. LPT-366/576/558 Done — do not reopen deal.variants / Nice! / wave clones.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh after pilot (`lesson-05-09-02-section-five-checkpoint` / `lesson-01-06-02-section-one-jump` / `lesson-01-06-01-guided-complete-hand`) / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-07-11-01-* / act-01-01-01-*: interactive structural clean on tip; warm-up multi-concept stays on LPT-351; pilot hole literacy stays unsplit; densify PRESENT — do not reopen LPT-628; primary-family `random_in_class` without distractor variants on some pilot steps matches LPT-627 closed pattern — do not reopen LPT-366.
+
