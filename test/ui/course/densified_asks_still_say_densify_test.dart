@@ -152,7 +152,9 @@ const _lines = <String, String>{
   'act-04-07-03-checkpoint':
       'Why respect a Nit check-raise — tap the matching reason.',
   'act-04-08-01-guided': 'Seat raises or 3-bets twelve of fifteen pots. Observation — pick Extreme entry and aggression.',
-  'act-04-08-01-scaffolded': 'They bet flop, turn, and river with weak showdowns twice. Note — pick Continues pressure too wide.',
+  // LPT-858: SoftPulse-quiet densify — no Continues pressure too wide spoil.
+  'act-04-08-01-scaffolded':
+      'They bet flop, turn, and river with weak showdowns twice. Note — tap the matching observation.',
   'act-04-08-01-unguided': 'Best note style versus wild aggression — pick Frequencies and shows — no ego story.',
   // LPT-770: SoftPulse-off densify — no correct-tile spoil.
   'act-04-08-01-checkpoint':
