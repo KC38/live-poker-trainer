@@ -712,9 +712,10 @@ demo text. `/ui-design-agent` checks these on every lesson walk:
 | Protect cards SoftPulse-quiet densify | Protect cards SoftPulse-quiet densify (`act-02-06-01-unguided-protect`) uses a non-spoiling stem (situation + tap verb, no Keep a chip / Chip on cards tile label) while SoftPulse stays off until Hint (LPT-844; SoftPulse LPT-653; same class as LPT-843 / LPT-842 / LPT-841). |
 | Button and action SoftPulse-quiet densify | Button and action SoftPulse-quiet densify (`act-03-01-01-scaffolded`) uses a non-spoiling stem (situation + tap verb, no UTG / Seat left of the big blind) while SoftPulse stays off until Hint (LPT-845; SoftPulse LPT-653; same class as LPT-844 / LPT-843 / LPT-842). |
 | Words are binding SoftPulse-quiet densify | Words are binding SoftPulse-quiet densify (`act-03-01-01-unguided`) uses a non-spoiling stem (situation + tap verb, no Raise stands / verbal is binding) while SoftPulse stays off until Hint (LPT-846; SoftPulse LPT-653; same class as LPT-845 / LPT-844 / LPT-843). |
-| Draws versus showdown SoftPulse-quiet densify | Draws versus showdown value scaffolded SoftPulse-quiet densify (`act-03-02-01-scaffolded`) uses a non-spoiling stem (board + holes + tap verb; no Strong draw / nut flush draw) while SoftPulse stays off until Hint; card tokens stay alignLessonTableCopy-ready (LPT-847; SoftPulse LPT-653; same class as LPT-846 / LPT-845 / LPT-844). |
-| Recognize air SoftPulse-quiet densify | Recognize air unguided SoftPulse-quiet densify (`act-03-02-01-unguided`) uses a non-spoiling stem (board + holes + tap verb; no Air / little equity) while SoftPulse stays off until Hint; card tokens stay alignLessonTableCopy-ready (LPT-848; SoftPulse LPT-653; same class as LPT-847 / LPT-846 / LPT-845). |
+| Draws versus showdown SoftPulse-quiet densify | Draws versus showdown value scaffolded SoftPulse-quiet densify (`act-03-02-01-scaffolded`) uses a non-spoiling stem (board + holes + tap verb; no Strong draw / nut flush draw) while SoftPulse stays off until Hint; idle coach rewrites board/hole tokens via `alignLessonTableCopy` (LPT-851 shared densify path; SoftPulse-quiet LPT-847; SoftPulse LPT-653). |
+| Recognize air SoftPulse-quiet densify | Recognize air unguided SoftPulse-quiet densify (`act-03-02-01-unguided`) uses a non-spoiling stem (board + holes + tap verb; no Air / little equity) while SoftPulse stays off until Hint; idle coach rewrites board/hole tokens via `alignLessonTableCopy` onto the remapped deal (LPT-851; SoftPulse-quiet LPT-848; SoftPulse LPT-653; same class as LPT-847 / LPT-806). |
 | Shorter stack scaffolded SoftPulse-quiet densify | Shorter stack is effective scaffolded SoftPulse-quiet densify (`act-02-05-01-scaffolded-eff`) uses a non-spoiling stem (situation + tap verb, no 60bb tile label) while SoftPulse stays off until Hint (LPT-849; SoftPulse LPT-653; same class as LPT-845 / LPT-844 / LPT-843). |
+| Stack depth unguided SoftPulse-quiet densify | Stack depth unguided SoftPulse-quiet densify (`act-02-05-01-unguided-depth`) uses a non-spoiling stem (situation + tap verb, no 50bb / 100bb / 200bb tile labels) while SoftPulse stays off until Hint (LPT-850; SoftPulse LPT-653; same class as LPT-849 / LPT-845 / LPT-844). |
 | Chips to big blinds checkpoint densified coach | Chips to big blinds checkpoint densified coach (`act-02-05-01-checkpoint-200`) uses a non-spoiling stem (situation + tap verb, no 200bb tile label) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-785; SoftPulse-off intentional per LPT-653; same class as LPT-784 / LPT-783 / LPT-782 / LPT-672). |
 | Protect cards wait checkpoint densified coach | Protect cards, wait your turn checkpoint densified coach (`act-02-06-01-checkpoint-oot`) uses a non-spoiling stem (situation + tap verb, no You acted out of turn tile label) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-786; SoftPulse-off intentional per LPT-653; same class as LPT-785 / LPT-784 / LPT-672). |
 | Pot and stacks checkpoint densified coach | Pot and stacks checkpoint densified coach (`act-03-01-01-checkpoint`) uses a non-spoiling stem (situation + tap verb, no Effective 55bb / the 18 pot tile label) while SoftPulse stays off for `teachSpec.cues.kind: none` (LPT-787; SoftPulse-off intentional per LPT-653; same class as LPT-785 / LPT-786 / LPT-672). |
@@ -809,11 +810,15 @@ height for every stage child, and `_feltShell` clamps again.
 `the two in front`, `Those two` / `These two` before stay/are) before spoken
 rank-word remaps so a template board deuce cannot turn Your two cards Hint
 into "Your three cards" (LPT-791) or Nice! "Those two stay…" into "Those
-three stay…" (`lesson_starting_hand_copy.dart`, LPT-797). Your two cards
-densified coach lines are stem-only — never hardcode template Ah Kd / Qs Jh
-2c (`selectIdentifyDensifiedCoachLine`, LPT-792). The next densify Hint that
-says "two cards" or feedback that says "Those two stay" copies that
-protect; the next hole/board densify ask uses a stem or aligned felt names.
+three stay…" (`lesson_starting_hand_copy.dart`, LPT-797). Spoken rank/suit
+word remaps use placeholders so a king→queen plus queen→jack chain cannot
+turn Made hands densify Nice! "Pair of kings" into "Pair of jacks" over
+top-pair queens (LPT-852). Your two cards densified coach lines are
+stem-only — never hardcode template Ah Kd / Qs Jh 2c
+(`selectIdentifyDensifiedCoachLine`, LPT-792). The next densify Hint that
+says "two cards" or feedback that says "Those two stay" / "Pair of …"
+copies that protect and non-chaining remap; the next hole/board densify
+ask uses a stem or aligned felt names.
 
 Calling Station explain STATION tile caption is **Working label**
 (`CallingStationDemo.points` in `lesson_action_table.dart`, LPT-789) — same
@@ -920,6 +925,19 @@ Curriculum residuals LPT-680, LPT-683, LPT-691, LPT-693, LPT-702, LPT-708, LPT-7
 - `lesson-06-11-03-01-respect-aggression`: objective "Respect TAG aggression" → "Respect TAG aggression and cite the tendency"; objective now owns the cite-the-tendency checkpoint it grades (LPT-710)
 - `lesson-04-10-01-01-same-hand-types`: objective "Change lines by type with justification" → "Change lines by type with justification"; dropped the unpracticed "Keep baseline when evidence is missing" objective on purpose: no step here recommends the baseline, and section 7's No evidence, baseline line teaches it (LPT-779)
 - `lesson-04-10-01-02-combine-factors`: objective "Combine type × position × stack × board" → "Combine type × position × stack"; objective now matches the title and the preflop (empty-board) checkpoint it grades; board texture is combined later in Combine type with board (LPT-779)
+
+Curriculum residuals LPT-721, LPT-725, LPT-726, LPT-727, LPT-790, LPT-794, LPT-795, LPT-798, LPT-800, LPT-802 (Kushal-approved rule, 2026-10-14): leftover SoftPulse presses and checkpoints from a split move to the split sibling whose concept they teach. A reused first-child explain keeps only its own concept's presses; the dedicated felt demo shows only the tiles its authored cues name (`LessonAuthoredDemoScope` / `lessonAuthoredDemoPoints`, full ladder when no teachSpec).
+- `act-07-07-01-explain`: SoftPulse was CARDS → MODELS → CITE, now CARDS; MODELS/CITE presses belong to Same hand: respect a TAG check-raise, Same hand: call a LAG barrel and No evidence, baseline line; lesson objective now "Bet value versus a Calling Station" (LPT-725)
+- `act-07-08-01-explain`: SoftPulse was TYPE → BOARD → LINE → SIZE, now TYPE → BOARD; LINE/SIZE presses belong to Combine line with sizing (LPT-726)
+- `act-07-09-01-explain`: SoftPulse was LEAK → BOOK → REVIEW, now LEAK; BOOK/REVIEW presses belong to Write default lines and Schedule your review (LPT-727)
+- `act-07-01-01-explain`: SoftPulse was REASON → CONFIRM → CANCEL, now REASON; CONFIRM/CANCEL presses belong to Update on the flop and Abandon dead plans quickly (LPT-790)
+- `act-07-02-01-explain`: SoftPulse was BARREL → GIVE-UP → MAP, now BARREL; GIVE-UP/MAP presses belong to List give-up cards and Bet flop only with a turn map (LPT-794)
+- `act-07-03-01-explain`: SoftPulse was VALUE → BLUFF → HOLD, now VALUE; BLUFF/HOLD presses belong to Choose bluffs with blockers and Check trash without a story (LPT-795)
+- `act-07-04-01-explain`: SoftPulse was LIMPED → SRP → 3-4BET, now LIMPED; SRP/3-4BET presses belong to Plan single-raised pots and Plan 3-bet and 4-bet pots (LPT-798)
+- `act-07-05-01-explain`: SoftPulse was FEWER → THICKER → WIDEN, now FEWER; THICKER/WIDEN presses belong to Value thicker multiway and Widen selected heads-up bluffs (LPT-800)
+- `act-07-06-01-explain`: SoftPulse was SHORT → DEEP → EFFECTIVE, now SHORT; DEEP/EFFECTIVE presses belong to Use implied odds deep and Recalculate effective stacks (LPT-802)
+- `act-06-13-01-explain`: SoftPulse was CARDS → SEATS → EVIDENCE, now CARDS; SEATS/EVIDENCE presses belong to Same cards: fold to Nit heat, Same cards: call a LAG barrel and Cite the tendency (LPT-721)
+- `lesson-07-07-01-01-station-value`: objective "Change lines by type with citations" → "Bet value versus a Calling Station"; objective now matches the Station-value title (LPT-725) (LPT-725)
 
 Curriculum split LPT-83: old `lesson-01-01-02-suits-and-ranks` becomes unit
 `unit-01-01-02-suits-and-ranks` with one lesson per concept (`…-01-suits`,
@@ -1993,7 +2011,7 @@ felt.
 | Value 3-bet | 3-bet on the felt; explain SoftPulse cue 3-BET only — RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (curriculum residual LPT-760); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Chips to big blinds | Chips→BB on the felt; explain SoftPulse cue CHIPS→BB only — SHORTER/DEPTH presses belong to Shorter stack is effective and Stack depth (curriculum residual LPT-748); checkpoint SoftPulse-off densify stem non-spoiling (LPT-785); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE; scaffolded SoftPulse-quiet densify stem non-spoiling (no 60bb tile) (LPT-849); unit `unit-02-05-stacks` (LPT-130 split) | — |
-| Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unit `unit-02-05-stacks` (LPT-130 split) | — |
+| Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unguided SoftPulse-quiet densify stem non-spoiling (no 50bb) (LPT-850); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Follow the action | Watch on the felt; explain SoftPulse cue WATCH only — SAY/COVER/WAIT presses belong to Say your action and Protect cards, wait your turn (curriculum residual LPT-749); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Say your action | explain SoftPulse cues SAY → CHIPS; scaffolded SoftPulse-quiet densify stem non-spoiling (no Say "raise") (LPT-843); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Protect cards, wait your turn | explain SoftPulse cues COVER → WAIT; unguided SoftPulse-quiet densify stem non-spoiling (no Keep a chip) (LPT-844); checkpoint SoftPulse-off densify stem non-spoiling (LPT-786); unit `unit-02-06-table-habits` (LPT-133 split) | — |
@@ -2004,9 +2022,9 @@ felt.
 | Pot and stacks | Pot, Stacks on the felt; explain SoftPulse cue POT → STACKS only — BUTTON/WHO ACTS presses belong to Button and action seat (curriculum residual LPT-750); checkpoint SoftPulse-off densify stem non-spoiling (LPT-787); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Button and action seat | explain SoftPulse cues BUTTON → WHO ACTS; scaffolded SoftPulse-quiet densify stem non-spoiling (no UTG / Seat left of the big blind) (LPT-845); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Words are binding | explain SoftPulse cues SAY → BINDING; unguided SoftPulse-quiet densify stem non-spoiling (no Raise stands / verbal is binding) (LPT-846); unit `unit-03-01-reading-table` (LPT-140 split) | — |
-| Made hands | Made on the felt; explain SoftPulse cue MADE only — DRAW/SDV/AIR presses belong to Draws versus showdown value and Recognize air (curriculum residual LPT-751); fixed steps author suit-rotated `deal.variants` (LPT-384); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
-| Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE; scaffolded SoftPulse-quiet densify stem non-spoiling (no Strong draw / nut flush draw; board+holes for alignLessonTableCopy) (LPT-847); checkpoint SoftPulse-off densify stem non-spoiling (no Draw tile / template cards) (LPT-805); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
-| Recognize air | explain SoftPulse cues AIR → FOLD EQUITY; unguided SoftPulse-quiet densify stem non-spoiling (no Air / little equity; board+holes for alignLessonTableCopy) (LPT-848); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Made hands | Made on the felt; explain SoftPulse cue MADE only — DRAW/SDV/AIR presses belong to Draws versus showdown value and Recognize air (curriculum residual LPT-751); fixed steps author suit-rotated `deal.variants` (LPT-384); densify Nice!/Oops `Pair of …` rewrites via non-chaining `alignLessonTableCopy` rank words (LPT-852); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE; scaffolded SoftPulse-quiet densify stem non-spoiling (no Strong draw / nut flush draw); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` (LPT-851 shared path; SoftPulse-quiet LPT-847); checkpoint SoftPulse-off densify stem non-spoiling (no Draw tile / template cards) (LPT-805); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Recognize air | explain SoftPulse cues AIR → FOLD EQUITY; unguided SoftPulse-quiet densify stem non-spoiling (no Air / little equity); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` to the remapped deal (LPT-851; SoftPulse-quiet LPT-848); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Clean versus dirty outs | Clean, Dirty on the felt; explain SoftPulse cue CLEAN → DIRTY only — PRICE press belongs to Pot odds versus equity (curriculum residual LPT-752); densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Pot odds versus equity | explain SoftPulse cues PRICE → POT → EQUITY; unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Implied odds when deep | explain SoftPulse cues DEEP → IMPLIED ODDS; unit `unit-03-03-outs-price` (LPT-146 split) | — |
@@ -2020,7 +2038,7 @@ felt.
 | Credible bluffs | explain SoftPulse cues STORY → BLUFF; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Bluff-catch or fold | explain SoftPulse cues BLUFF-CATCH → FOLD; unit `unit-03-06-river-decisions` (LPT-157 split) | — |
 | Stronger hands multiway | Stronger on the felt; explain SoftPulse cue STRONGER only — FEWER/NUTS presses belong to Bluff less multiway and Nut potential and position (curriculum residual LPT-756); unit `unit-03-07-multiway` (LPT-160 split) | — |
-| Bluff less multiway | explain SoftPulse cues CROWD → FEWER BLUFFS; unit `unit-03-07-multiway` (LPT-160 split) | — |
+| Bluff less multiway | Fewer on the felt; explain SoftPulse cue FEWER only — THICKER/WIDEN presses belong to Value thicker multiway and Widen selected heads-up bluffs (curriculum residual LPT-800); unit `unit-03-07-multiway` (LPT-160 split) | — |
 | Nut potential and position | explain SoftPulse cues NUTS → POSITION; unit `unit-03-07-multiway` (LPT-160 split) | — |
 | Weak top pair | Top pair on the felt; explain SoftPulse cue TOP PAIR only — PRICES/PASSIVE/CROWDS presses belong to Fold bad prices and Passive calls and crowd bluffs (curriculum residual LPT-757); unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Fold bad prices | explain SoftPulse cues BAD PRICE → FOLD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
@@ -2147,37 +2165,37 @@ felt.
 | Call down wider versus a LAG | Call on the felt; explain SoftPulse cue CALL only — TRAP/FANCY LESS presses belong to Trap strong hands more and Fewer fancy bluffs (curriculum residual LPT-718); unguided SoftPulse one gold Usually avoid (LPT-503); densified frame asks (LPT-651); unit `unit-06-12-lag` (LPT-303 split) | avoid and cite checks |
 | Trap strong hands more | explain SoftPulse cues STRONG HAND → LET THEM BET; unit `unit-06-12-lag` (LPT-303 split) | — |
 | Fewer fancy bluffs | explain SoftPulse cues NO BIG BLUFF → LET THEM; unit `unit-06-12-lag` (LPT-303 split) | — |
-| Same cards: thin value versus a Station | Cards, seats, and evidence in the stage; unit `unit-06-13-mix` (LPT-306 split) | — |
+| Same cards: thin value versus a Station | Cards on the felt; explain SoftPulse cue CARDS only — SEATS/EVIDENCE presses belong to Same cards: fold to Nit heat, Same cards: call a LAG barrel and Cite the tendency (curriculum residual LPT-721); unit `unit-06-13-mix` (LPT-306 split) | — |
 | Same cards: fold to Nit heat | explain SoftPulse cues NIT CHECK-RAISE → FOLD; unit `unit-06-13-mix` (LPT-306 split) | — |
 | Same cards: call a LAG barrel | explain SoftPulse cues LAG BARREL → CALL; unit `unit-06-13-mix` (LPT-306 split) | — |
 | Cite the tendency | explain SoftPulse cues TENDENCY → LINE; unit `unit-06-13-mix` (LPT-306 split) | — |
 | Section 6 checkpoint | densified frame asks (LPT-655) | — |
-| State a preflop thesis | Reason, Confirm, Cancel; unguided SoftPulse one gold Name the thesis (LPT-505); densified frame asks (LPT-656); unit `unit-07-01-preflop-flop` (LPT-310 split) | — |
+| State a preflop thesis | Reason on the felt; explain SoftPulse cue REASON only — CONFIRM/CANCEL presses belong to Update on the flop and Abandon dead plans quickly (curriculum residual LPT-790); unguided SoftPulse one gold Name the thesis (LPT-505); densified frame asks (LPT-656); unit `unit-07-01-preflop-flop` (LPT-310 split) | — |
 | Update on the flop | explain SoftPulse cues TEXTURE → CONFIRM OR CANCEL; unit `unit-07-01-preflop-flop` (LPT-310 split) | — |
 | Abandon dead plans quickly | explain SoftPulse cues DEAD PLAN → LET GO; unit `unit-07-01-preflop-flop` (LPT-310 split) | — |
-| List turn continue cards | Barrel, Give-up, Map; unguided SoftPulse one gold Map first (LPT-506); densified frame asks (LPT-657); unit `unit-07-02-turn-map` (LPT-314 split) | — |
+| List turn continue cards | Barrel on the felt; explain SoftPulse cue BARREL only — GIVE-UP/MAP presses belong to List give-up cards and Bet flop only with a turn map (curriculum residual LPT-794); unguided SoftPulse one gold Map first (LPT-506); densified frame asks (LPT-657); unit `unit-07-02-turn-map` (LPT-314 split) | — |
 | List give-up cards | explain SoftPulse cues BRICK → GIVE UP; unit `unit-07-02-turn-map` (LPT-314 split) | — |
 | Bet flop only with a turn map | explain SoftPulse cues CONTINUE → GIVE-UP → MAP; unit `unit-07-02-turn-map` (LPT-314 split) | — |
-| Choose river value | Value, Bluff, Hold; densified frame asks (LPT-658); unit `unit-07-03-river` (LPT-317 split) | — |
+| Choose river value | Value on the felt; explain SoftPulse cue VALUE only — BLUFF/HOLD presses belong to Choose bluffs with blockers and Check trash without a story (curriculum residual LPT-795); densified frame asks (LPT-658); unit `unit-07-03-river` (LPT-317 split) | — |
 | Choose bluffs with blockers | explain SoftPulse cues BLOCKER → FEWER CALLS; unit `unit-07-03-river` (LPT-317 split) | — |
 | Check trash without a story | explain SoftPulse cues NO STORY → CHECK; unit `unit-07-03-river` (LPT-317 split) | — |
-| Plan limped pots | Limped, SRP, 3-4bet; unit `unit-07-04-pot-types` (LPT-320 split) | — |
+| Plan limped pots | Limped on the felt; explain SoftPulse cue LIMPED only — SRP/3-4BET presses belong to Plan single-raised pots and Plan 3-bet and 4-bet pots (curriculum residual LPT-798); unit `unit-07-04-pot-types` (LPT-320 split) | — |
 | Plan single-raised pots | explain SoftPulse cues HEADS-UP → C-BET; unit `unit-07-04-pot-types` (LPT-320 split) | — |
 | Plan 3-bet and 4-bet pots | explain SoftPulse cues LOW SPR → COMMIT; unit `unit-07-04-pot-types` (LPT-320 split) | — |
 | Bluff less multiway | Fewer, Thicker, Widen; unit `unit-07-05-hu-mw` (LPT-323 split) | — |
 | Value thicker multiway | explain SoftPulse cues MULTIWAY → THICK VALUE; unit `unit-07-05-hu-mw` (LPT-323 split) | — |
 | Widen selected heads-up bluffs | explain SoftPulse cues HEADS-UP → STEAL MORE; unit `unit-07-05-hu-mw` (LPT-323 split) | — |
-| Commit earlier when short | Short, Deep, Effective; unit `unit-07-06-stacks` (LPT-326 split) | — |
+| Commit earlier when short | Short on the felt; explain SoftPulse cue SHORT only — DEEP/EFFECTIVE presses belong to Use implied odds deep and Recalculate effective stacks (curriculum residual LPT-802); unit `unit-07-06-stacks` (LPT-326 split) | — |
 | Use implied odds deep | explain SoftPulse cues DEEP → IMPLIED ODDS; unit `unit-07-06-stacks` (LPT-326 split) | — |
 | Recalculate effective stacks | explain SoftPulse cues SHORTER STACK → PLAN; unit `unit-07-06-stacks` (LPT-326 split) | — |
-| Same hand: bet value versus a Station | Cards, Models, Cite; unit `unit-07-07-same-cards` (LPT-330 split) | — |
+| Same hand: bet value versus a Station | Cards on the felt; explain SoftPulse cue CARDS only — MODELS/CITE presses belong to Same hand: respect a TAG check-raise, Same hand: call a LAG barrel and No evidence, baseline line; lesson objective now "Bet value versus a Calling Station" (curriculum residual LPT-725); unit `unit-07-07-same-cards` (LPT-330 split); objective "Bet value versus a Calling Station" so the checkpoint grades this lesson's concept (curriculum residual LPT-725) | — |
 | Same hand: respect a TAG check-raise | explain SoftPulse cues TAG CHECK-RAISE → CAREFUL; unit `unit-07-07-same-cards` (LPT-330 split) | — |
 | Same hand: call a LAG barrel | explain SoftPulse cues LAG BARREL → CALL; unit `unit-07-07-same-cards` (LPT-330 split) | — |
 | No evidence, baseline line | explain SoftPulse cues NO EVIDENCE → BASELINE; unit `unit-07-07-same-cards` (LPT-330 split) | — |
-| Combine type with board | Type, Board, Line, Size; unit `unit-07-08-checkpoints` (LPT-333 split) | — |
+| Combine type with board | Type, Board on the felt; explain SoftPulse cue TYPE → BOARD only — LINE/SIZE presses belong to Combine line with sizing (curriculum residual LPT-726); unit `unit-07-08-checkpoints` (LPT-333 split) | — |
 | Combine line with sizing | explain SoftPulse cues LINE → SIZE; unit `unit-07-08-checkpoints` (LPT-333 split) | — |
 | Produce one coherent action | explain SoftPulse cues FOUR INPUTS → ONE ACTION; unit `unit-07-08-checkpoints` (LPT-333 split) | — |
-| Name your leaks | Leak, Book, Review; unit `unit-07-09-leaks` (LPT-336 split) | — |
+| Name your leaks | Leak on the felt; explain SoftPulse cue LEAK only — BOOK/REVIEW presses belong to Write default lines and Schedule your review (curriculum residual LPT-727); unit `unit-07-09-leaks` (LPT-336 split) | — |
 | Write default lines | explain SoftPulse cues COMMON SPOT → DEFAULT; unit `unit-07-09-leaks` (LPT-336 split) | — |
 | Schedule your review | explain SoftPulse cues AFTER SESSION → REVIEW; unit `unit-07-09-leaks` (LPT-336 split) | — |
 | Capstone: single-raised pot | Plan, Update, Finish | — |

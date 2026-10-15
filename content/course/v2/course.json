@@ -36040,7 +36040,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Five models. Same cards. Change only with evidence.",
+                  "accessibilityText": "Same cards versus a Calling Station: value bet thinner. They call with worse.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -36048,7 +36048,7 @@
                     {
                       "id": "act-06-13-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Five models. Same cards. Change only with evidence."
+                      "text": "Same cards versus a Calling Station: value bet thinner. They call with worse."
                     }
                   ],
                   "objectives": [
@@ -36056,7 +36056,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Cards → Seats → Evidence."
+                    "feedback": "Same cards + Station → thin value."
                   },
                   "teachSpec": {
                     "deal": {
@@ -36066,16 +36066,6 @@
                       {
                         "press": 1,
                         "target": "CARDS",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "SEATS",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "EVIDENCE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -37007,7 +36997,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Enter with a reason. Flop confirms or cancels.",
+                  "accessibilityText": "Enter every pot with a reason. Say your preflop thesis.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -37015,7 +37005,7 @@
                     {
                       "id": "act-07-01-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Enter with a reason. Flop confirms or cancels."
+                      "text": "Enter every pot with a reason. Say your preflop thesis."
                     }
                   ],
                   "objectives": [
@@ -37023,7 +37013,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Reason → Confirm → Cancel."
+                    "feedback": "Reason first."
                   },
                   "teachSpec": {
                     "deal": {
@@ -37033,16 +37023,6 @@
                       {
                         "press": 1,
                         "target": "REASON",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "CONFIRM",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "CANCEL",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -37424,7 +37404,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Flop bet needs a turn map. Continue or kill.",
+                  "accessibilityText": "Before you bet flop, list the turn cards you will keep betting.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -37432,7 +37412,7 @@
                     {
                       "id": "act-07-02-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Flop bet needs a turn map. Continue or kill."
+                      "text": "Before you bet flop, list the turn cards you will keep betting."
                     }
                   ],
                   "objectives": [
@@ -37440,7 +37420,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Barrel → Give-up → Map."
+                    "feedback": "Continue cards → Barrel."
                   },
                   "teachSpec": {
                     "deal": {
@@ -37450,16 +37430,6 @@
                       {
                         "press": 1,
                         "target": "BARREL",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "GIVE-UP",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "MAP",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -37845,7 +37815,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "River: value if they call worse; bluff if they fold better.",
+                  "accessibilityText": "River value: bet when worse hands call.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -37853,7 +37823,7 @@
                     {
                       "id": "act-07-03-01-explain-media",
                       "kind": "dialogue",
-                      "text": "River: value if they call worse; bluff if they fold better."
+                      "text": "River value: bet when worse hands call."
                     }
                   ],
                   "objectives": [
@@ -37861,7 +37831,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Value → Bluff → Hold."
+                    "feedback": "Worse calls → Value."
                   },
                   "teachSpec": {
                     "deal": {
@@ -37871,16 +37841,6 @@
                       {
                         "press": 1,
                         "target": "VALUE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "BLUFF",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "HOLD",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -38315,7 +38275,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Pot type sets ranges and SPR. Plan accordingly.",
+                  "accessibilityText": "Limped pots are deep with wide ranges. Plan for that.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -38323,7 +38283,7 @@
                     {
                       "id": "act-07-04-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Pot type sets ranges and SPR. Plan accordingly."
+                      "text": "Limped pots are deep with wide ranges. Plan for that."
                     }
                   ],
                   "objectives": [
@@ -38331,7 +38291,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Limped → SRP → 3-bet/4-bet."
+                    "feedback": "Limped → deep, wide."
                   },
                   "teachSpec": {
                     "deal": {
@@ -38341,16 +38301,6 @@
                       {
                         "press": 1,
                         "target": "LIMPED",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "SRP",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "3-4BET",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -38732,7 +38682,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "More players: fewer bluffs, thicker value.",
+                  "accessibilityText": "More players means fewer bluffs. Someone usually has it.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -38740,7 +38690,7 @@
                     {
                       "id": "act-07-05-01-explain-media",
                       "kind": "dialogue",
-                      "text": "More players: fewer bluffs, thicker value."
+                      "text": "More players means fewer bluffs. Someone usually has it."
                     }
                   ],
                   "objectives": [
@@ -38748,7 +38698,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Fewer → Thicker → Widen."
+                    "feedback": "Multiway → Fewer bluffs."
                   },
                   "teachSpec": {
                     "deal": {
@@ -38758,16 +38708,6 @@
                       {
                         "press": 1,
                         "target": "FEWER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "THICKER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "WIDEN",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -39151,7 +39091,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Effective stack rewrites the plan every hand.",
+                  "accessibilityText": "Short stacks commit earlier. Plan to get it in sooner.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -39159,7 +39099,7 @@
                     {
                       "id": "act-07-06-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Effective stack rewrites the plan every hand."
+                      "text": "Short stacks commit earlier. Plan to get it in sooner."
                     }
                   ],
                   "objectives": [
@@ -39167,7 +39107,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Short → Deep → Effective."
+                    "feedback": "Short → commit earlier."
                   },
                   "teachSpec": {
                     "deal": {
@@ -39177,16 +39117,6 @@
                       {
                         "press": 1,
                         "target": "SHORT",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "DEEP",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "EFFECTIVE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -39549,7 +39479,7 @@
               "title": "Same hand: bet value versus a Station",
               "summary": "Top pair bets when a Calling Station checks.",
               "objectives": [
-                "Change lines by type with citations"
+                "Bet value versus a Calling Station"
               ],
               "prerequisites": [
                 "lesson-07-06-01-03-recalc-effective"
@@ -39574,7 +39504,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Same cards. Five models. Cite the tendency.",
+                  "accessibilityText": "Same cards versus a Calling Station: bet for value. They call worse.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -39582,15 +39512,15 @@
                     {
                       "id": "act-07-07-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Same cards. Five models. Cite the tendency."
+                      "text": "Same cards versus a Calling Station: bet for value. They call worse."
                     }
                   ],
                   "objectives": [
-                    "Change lines by type with citations"
+                    "Bet value versus a Calling Station"
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Cards → Models → Cite."
+                    "feedback": "Same cards + Station → value bet."
                   },
                   "teachSpec": {
                     "deal": {
@@ -39600,16 +39530,6 @@
                       {
                         "press": 1,
                         "target": "CARDS",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "MODELS",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "CITE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -39628,7 +39548,7 @@
                     "reasonable"
                   ],
                   "objectives": [
-                    "Change lines by type with citations"
+                    "Bet value versus a Calling Station"
                   ],
                   "prompt": "Flop top pair. Station check. Action?",
                   "choices": [
@@ -40226,7 +40146,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Type × board × line × size. One answer.",
+                  "accessibilityText": "Combine the player type with the board texture.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -40234,7 +40154,7 @@
                     {
                       "id": "act-07-08-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Type × board × line × size. One answer."
+                      "text": "Combine the player type with the board texture."
                     }
                   ],
                   "objectives": [
@@ -40242,7 +40162,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Type → Board → Line → Size."
+                    "feedback": "Type → Board."
                   },
                   "teachSpec": {
                     "deal": {
@@ -40257,16 +40177,6 @@
                       {
                         "press": 2,
                         "target": "BOARD",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "LINE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 4,
-                        "target": "SIZE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -40815,7 +40725,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Defaults beat vibes. Write the book; review leaks.",
+                  "accessibilityText": "Name your leaks. Write each one down plainly.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -40823,7 +40733,7 @@
                     {
                       "id": "act-07-09-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Defaults beat vibes. Write the book; review leaks."
+                      "text": "Name your leaks. Write each one down plainly."
                     }
                   ],
                   "objectives": [
@@ -40831,7 +40741,7 @@
                   ],
                   "explainGrading": {
                     "grade": "recommended",
-                    "feedback": "Leak → Book → Review."
+                    "feedback": "Name the leak."
                   },
                   "teachSpec": {
                     "deal": {
@@ -40841,16 +40751,6 @@
                       {
                         "press": 1,
                         "target": "LEAK",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "BOOK",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "REVIEW",
                         "kind": "soft_pulse"
                       }
                     ]

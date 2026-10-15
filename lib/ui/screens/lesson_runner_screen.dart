@@ -1035,15 +1035,15 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   String _frameSpeech(LessonActivityController controller) {
     // Graded beat: bubble carries the short why line beside celebrate/think
     // (LPT-64). Never keep the idle ask — or Hint (LPT-60) — under the dock.
+    // Feedback is already aligned in [alignLessonActionSubmitResult] before
+    // [finishSubmit] / [presentLocalMiss] — do not align again or a second
+    // pass remaps "Pair of queens" through the kicker map into "Pair of
+    // jacks" (LPT-852).
     final result = controller.lastResult;
     if (result != null) {
       final feedback = result.feedback.trim();
       if (feedback.isNotEmpty) {
-        return alignLessonActionCopy(
-          controller.activity,
-          feedback,
-          generation: controller.bindGeneration,
-        );
+        return feedback;
       }
     }
     if (controller.hintVisible && result == null) {
