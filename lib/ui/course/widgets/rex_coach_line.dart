@@ -668,8 +668,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Instant river shove after you bet. Correct framing — pick Soft evidence.',
     'act-05-07-01-scaffolded' =>
       'Tiny flop bet into a huge pot often says — pick Weaker / blocking.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Reject magic tells (LPT-855;
+    // SoftPulse LPT-653; same class as LPT-854 / LPT-853 / LPT-850 / LPT-849).
     'act-05-07-01-unguided' =>
-      'Coach says "look left means bluff." Response — pick Reject magic tells.',
+      'Coach says "look left means bluff." Response — tap the matching plan.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Tiny update / stronger reads in the idle bubble (LPT-744; same
     // class as LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 / LPT-717 /

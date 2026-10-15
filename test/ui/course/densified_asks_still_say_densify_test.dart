@@ -205,8 +205,9 @@ const _lines = <String, String>{
   'act-05-07-01-guided': 'Instant river shove after you bet. Correct framing — pick Soft evidence.',
   'act-05-07-01-scaffolded':
       'Tiny flop bet into a huge pot often says — pick Weaker / blocking.',
+  // LPT-855: SoftPulse-quiet densify — no Reject magic tells spoil.
   'act-05-07-01-unguided':
-      'Coach says "look left means bluff." Response — pick Reject magic tells.',
+      'Coach says "look left means bluff." Response — tap the matching plan.',
   // LPT-744: SoftPulse-off densify — no correct-tile spoil.
   'act-05-07-01-checkpoint':
       'Best use of live timing — tap the matching habit.',
