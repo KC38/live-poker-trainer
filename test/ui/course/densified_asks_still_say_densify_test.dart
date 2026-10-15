@@ -40,7 +40,9 @@ const _lines = <String, String>{
   // LPT-835: SoftPulse-quiet densify — no Top pair / best kicker spoil.
   'act-01-02-02-guided-seven':
       'Tap the five cards that make your best hand.',
-  'act-01-02-02-checkpoint-build': 'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
+  // LPT-871: SoftPulse-quiet densify — no Full house / trips spoil.
+  'act-01-02-02-checkpoint-build':
+      'Tap the five cards that make your strongest hand.',
   // LPT-837: SoftPulse-quiet densify — no Bets matched spoil.
   'act-01-04-01-unguided-end':
       'Flop betting is live. Tap when this street ends.',

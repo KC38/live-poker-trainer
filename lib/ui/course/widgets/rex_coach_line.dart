@@ -401,8 +401,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // (LPT-835; SoftPulse LPT-653; same class as LPT-833 / LPT-834 / LPT-814).
     'act-01-02-02-guided-seven' =>
       'Tap the five cards that make your best hand.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Full house / trips-over tiles
+    // in the idle bubble (LPT-871; SoftPulse LPT-653; same class as LPT-835 /
+    // LPT-867 / LPT-866).
     'act-01-02-02-checkpoint-build' =>
-      'Tap the five cards for your strongest hand — pick Full house — trips over the higher pair.',
+      'Tap the five cards that make your strongest hand.',
     // SoftPulse-quiet until Hint — situation + tap verb only; never name
     // Bets matched in the idle bubble (LPT-837; SoftPulse LPT-653; same
     // class as LPT-833 / LPT-834 / LPT-832).
