@@ -70,8 +70,9 @@ const _lines = <String, String>{
       'Six-max flop, everyone in — tap who acts last.',
   'act-02-02-01-guided-pair':
       'Tap the family for your holes — pick Pocket pair.',
+  // LPT-841: SoftPulse-quiet densify — no Broadway spoil.
   'act-02-02-01-scaffolded-broadway':
-      'Tap the family for your holes — pick Broadway.',
+      'Both cards ten or higher — tap the matching family.',
   'act-02-02-01-unguided-sc':
       'Tap the family for your holes — pick Suited connector.',
   // LPT-784: SoftPulse-off densify — no correct-tile spoil.

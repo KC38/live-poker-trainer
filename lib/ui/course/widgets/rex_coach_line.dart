@@ -438,8 +438,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Six-max flop, everyone in — tap who acts last.',
     'act-02-02-01-guided-pair' =>
       'Tap the family for your holes — pick Pocket pair.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Broadway (LPT-841; SoftPulse
+    // LPT-653; same class as LPT-839 / LPT-838 / LPT-833).
     'act-02-02-01-scaffolded-broadway' =>
-      'Tap the family for your holes — pick Broadway.',
+      'Both cards ten or higher — tap the matching family.',
     'act-02-02-01-unguided-sc' =>
       'Tap the family for your holes — pick Suited connector.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
