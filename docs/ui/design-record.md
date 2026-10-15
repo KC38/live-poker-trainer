@@ -893,6 +893,18 @@ Curriculum residuals LPT-692, LPT-694, LPT-696, LPT-699, LPT-700, LPT-701, LPT-7
 - `act-06-10-01-explain`: SoftPulse was HARD → COOLER → EGO, now HARD; COOLER/EGO presses belong to Cooler or mistake? and No ego call-downs (LPT-705)
 - `act-06-11-01-explain`: SoftPulse was TIGHT → BARREL → SAMPLE, now TIGHT; BARREL/SAMPLE presses belong to Note disciplined aggression and Wait for samples (LPT-706)
 
+Curriculum residuals LPT-709, LPT-713, LPT-718, LPT-759, LPT-760, LPT-761, LPT-768, LPT-772, LPT-773, LPT-775 (Kushal-approved rule, 2026-10-14): leftover SoftPulse presses and checkpoints from a split move to the split sibling whose concept they teach. A reused first-child explain keeps only its own concept's presses; the dedicated felt demo shows only the tiles its authored cues name (`LessonAuthoredDemoScope` / `lessonAuthoredDemoPoints`, full ladder when no teachSpec).
+- `act-06-11-03-explain`: SoftPulse was CREDIT → TIGHTER → NO LIGHT, now CREDIT → TIGHTER; NO LIGHT press belongs to No light bluffs into a TAG check-raise (LPT-709)
+- `act-06-12-01-explain`: SoftPulse was WIDE → PRESSURE → SAMPLE, now WIDE; PRESSURE/SAMPLE presses belong to Note sustained pressure and Planned pressure, not a Maniac (LPT-713)
+- `act-06-12-03-explain`: SoftPulse was CALL → TRAP → FANCY LESS, now CALL; TRAP/FANCY LESS presses belong to Trap strong hands more and Fewer fancy bluffs (LPT-718)
+- `act-04-01-01-explain`: SoftPulse was ONE HAND → RANGE → UPDATE, now ONE HAND → RANGE; UPDATE press belongs to Action moves ranges (LPT-759)
+- `act-04-02-01-explain`: SoftPulse was 3-BET → RANGES → SQUEEZE, now 3-BET; RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (LPT-760)
+- `act-04-06-01-explain`: SoftPulse was ENTERS → CALLS → FOLDS, now ENTERS; CALLS/FOLDS presses belong to Tag low folding (LPT-761)
+- `act-04-07-01-explain`: SoftPulse was RARE → ENTER → MEAN IT, now RARE; ENTER/MEAN IT presses belong to Tag strong aggression (LPT-768)
+- `act-04-07-03-explain`: SoftPulse was STEAL → CREDIT → EXPLODE, now STEAL; CREDIT/EXPLODE presses belong to Respect their heavy action (LPT-772)
+- `act-04-08-01-explain`: SoftPulse was RAISE → BARREL → COUNT, now RAISE; BARREL/COUNT presses belong to Tag constant aggression and Notes without ego (LPT-773)
+- `act-04-09-01-explain`: SoftPulse was OBSERVE → SAMPLES → SHOWDOWNS, now OBSERVE; SAMPLES/SHOWDOWNS presses belong to Confidence grows with samples (LPT-775)
+
 Curriculum split LPT-83: old `lesson-01-01-02-suits-and-ranks` becomes unit
 `unit-01-01-02-suits-and-ranks` with one lesson per concept (`…-01-suits`,
 `…-02-ranks`, `…-03-pairs-and-suited`). Catalog `lessonSplitMap` expands
@@ -1962,7 +1974,7 @@ felt.
 | Widen on the button | explain SoftPulse cues BUTTON → WIDER; unit `unit-02-03-open-fold` (LPT-124 split) | — |
 | Fold weak hands | Fold on the felt; explain SoftPulse cue FOLD only — CALL/3-BET presses belong to Call in position and Value 3-bet (curriculum residual LPT-743); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Call in position | explain SoftPulse cues PLAYABLE → IN POSITION → CALL; unit `unit-02-04-facing-raise` (LPT-127 split) | — |
-| Value 3-bet | explain SoftPulse cues STRONG → 3-BET; unit `unit-02-04-facing-raise` (LPT-127 split) | — |
+| Value 3-bet | 3-bet on the felt; explain SoftPulse cue 3-BET only — RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (curriculum residual LPT-760); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Chips to big blinds | Chips→BB on the felt; explain SoftPulse cue CHIPS→BB only — SHORTER/DEPTH presses belong to Shorter stack is effective and Stack depth (curriculum residual LPT-748); checkpoint SoftPulse-off densify stem non-spoiling (LPT-785); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE; unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unit `unit-02-05-stacks` (LPT-130 split) | — |
@@ -1998,7 +2010,7 @@ felt.
 | Fold bad prices | explain SoftPulse cues BAD PRICE → FOLD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Passive calls and crowd bluffs | explain SoftPulse cues PASSIVE → CROWD; unit `unit-03-08-leak-repair` (LPT-163 split) | — |
 | Section 3 jump check | densified frame asks (LPT-390) | — |
-| A seat is a range | One hand, Range, Update; densified frame asks (LPT-403); unguided/checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-01-ranges` (LPT-169 split) | — |
+| A seat is a range | One hand, Range on the felt; explain SoftPulse cue ONE HAND → RANGE only — UPDATE press belongs to Action moves ranges (curriculum residual LPT-759); densified frame asks (LPT-403); unguided/checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-01-ranges` (LPT-169 split) | — |
 | Action moves ranges | explain SoftPulse cues RAISE → NARROWER → CALL; unit `unit-04-01-ranges` (LPT-169 split) | — |
 | No exact hand too early | explain SoftPulse cues ONE HAND → RANGE; unit `unit-04-01-ranges` (LPT-169 split) | — |
 | Value 3-bet | 3-bet, Ranges, Squeeze; unit `unit-04-02-threebet` (LPT-172 split) | — |
@@ -2013,7 +2025,7 @@ felt.
 | Estimate SPR | SPR, Low, High; densified frame ask (LPT-412); scaffolded stacks match SPR ~1 (LPT-413); checkpoint SoftPulse-off densify stem non-spoiling (LPT-812); unit `unit-04-05-spr` (LPT-182 split) | — |
 | Commit at low SPR | explain SoftPulse cues LOW SPR → COMMIT; unit `unit-04-05-spr` (LPT-182 split); `act-04-05-01-checkpoint` moved here from Estimate SPR (curriculum residual LPT-677) | — |
 | Stay flexible at high SPR | explain SoftPulse cues HIGH SPR → FLEXIBLE; unit `unit-04-05-spr` (LPT-182 split) | — |
-| Tag high participation | Enters, Calls, Folds; densified frame asks (LPT-416); unit `unit-04-06-calling-station` (LPT-186 split) | participation note, observation bundle |
+| Tag high participation | Enters on the felt; explain SoftPulse cue ENTERS only — CALLS/FOLDS presses belong to Tag low folding (curriculum residual LPT-761); densified frame asks (LPT-416); unit `unit-04-06-calling-station` (LPT-186 split) | participation note, observation bundle |
 | Tag low folding | explain SoftPulse cues FOLDS TO BETS → STICKY; scaffolded SoftPulse-quiet densify stem non-spoiling (no Sticky) (LPT-824); checkpoint SoftPulse-off densify stem non-spoiling (no Bundle) (LPT-810); unit `unit-04-06-calling-station` (LPT-186 split) | — |
 | Observation versus certainty | explain SoftPulse cues OBSERVATION → SAMPLES; unguided SoftPulse-quiet densify stem non-spoiling (no Low conf) (LPT-822); unit `unit-04-06-calling-station` (LPT-186 split) | — |
 | The Calling Station model | Station, High, Low; STATION caption Working label (LPT-789); scaffolded/unguided SoftPulse one gold (LPT-424); densified frame asks (LPT-420); scaffolded SoftPulse-quiet densify stem non-spoiling (no Working model) (LPT-817); unguided SoftPulse-quiet densify stem non-spoiling (no Station) (LPT-818); unit `unit-04-06-calling-station` (LPT-189 split) | label quizzes |
@@ -2022,22 +2034,22 @@ felt.
 | Value wider versus Calling Station | Value on the felt; explain SoftPulse cue VALUE only — BLUFFS/CITE presses belong to Bluff less without equity and Cite the sticky-call tendency (curriculum residual LPT-732); unit `unit-04-06-calling-station` (LPT-192 split) | — |
 | Bluff less without equity | explain SoftPulse cues RARELY FOLDS → GIVE UP; checkpoint SoftPulse-off densify stem non-spoiling (LPT-780); unit `unit-04-06-calling-station` (LPT-192 split) | — |
 | Cite the sticky-call tendency | explain SoftPulse cues EVIDENCE → UNKNOWN; unit `unit-04-06-calling-station` (LPT-192 split) | — |
-| Tag narrow entry | Rare, Enter, Mean It; unit `unit-04-07-nit` (LPT-195 split) | entry quizzes |
+| Tag narrow entry | Rare on the felt; explain SoftPulse cue RARE only — ENTER/MEAN IT presses belong to Tag strong aggression (curriculum residual LPT-768); unit `unit-04-07-nit` (LPT-195 split) | entry quizzes |
 | Tag strong aggression | explain SoftPulse cues RARE ENTRY → BIG AGGRESSION; scaffolded SoftPulse-quiet densify stem non-spoiling (no Strong aggression / Strong heat) (LPT-827); checkpoint SoftPulse-off densify stem non-spoiling (LPT-763); unit `unit-04-07-nit` (LPT-195 split) | — |
 | Wait for samples | explain SoftPulse cues TWO FOLDS → MORE HANDS; unguided SoftPulse-quiet densify stem non-spoiling (no No — sample too small / Wait) (LPT-826); unit `unit-04-07-nit` (LPT-195 split) | — |
 | The Nit model | Nit, Narrow, Respect; densified SoftPulse one gold (LPT-440); checkpoint SoftPulse-off densify stem non-spoiling (LPT-765); unit `unit-04-07-nit` (LPT-198 split) | label quizzes |
 | Spot a Nit | explain SoftPulse cues FEW HANDS → BIG RAISES; unguided SoftPulse-quiet densify stem non-spoiling (no Nit) (LPT-819); unit `unit-04-07-nit` (LPT-198 split) | — |
-| Steal more versus Nits | Steal, Credit, Explode; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-07-nit` (LPT-202 split) | respect reason |
+| Steal more versus Nits | Steal on the felt; explain SoftPulse cue STEAL only — CREDIT/EXPLODE presses belong to Respect their heavy action (curriculum residual LPT-772); checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-07-nit` (LPT-202 split) | respect reason |
 | Respect their heavy action | explain SoftPulse cues NIT RAISES → CREDIT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-778); unit `unit-04-07-nit` (LPT-202 split) | — |
 | Cite the narrow-entry read | explain SoftPulse cues EVIDENCE → UNKNOWN; unit `unit-04-07-nit` (LPT-202 split) | — |
-| Tag extreme entry | Raise, Barrel, Count; densified SoftPulse one gold (LPT-462); unit `unit-04-08-maniac` (LPT-205 split) | entry quizzes |
+| Tag extreme entry | Raise on the felt; explain SoftPulse cue RAISE only — BARREL/COUNT presses belong to Tag constant aggression and Notes without ego (curriculum residual LPT-773); densified SoftPulse one gold (LPT-462); unit `unit-04-08-maniac` (LPT-205 split) | entry quizzes |
 | Tag constant aggression | explain SoftPulse cues EVERY STREET → WEAK SHOWDOWNS; checkpoint SoftPulse-off densify stem non-spoiling (LPT-770); unit `unit-04-08-maniac` (LPT-205 split) | — |
 | Notes without ego | explain SoftPulse cues FREQUENCIES → NO EGO; unit `unit-04-08-maniac` (LPT-205 split) | — |
 | The Maniac model | Maniac, Entry, Aggro; densified SoftPulse one gold (LPT-489); explain Nice! short ladder (LPT-490); checkpoint SoftPulse-off densify stem non-spoiling (LPT-771); unit `unit-04-08-maniac` (LPT-208 split) | label quizzes |
 | Spot a Maniac | explain SoftPulse cues CONSTANT RAISES → NEVER GIVES UP; unguided SoftPulse-quiet densify stem non-spoiling (no Maniac) (LPT-820); unit `unit-04-08-maniac` (LPT-208 split) | — |
 | Widen value and bluff-catches | Wider, Hang, Ego; checkpoint SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-04-08-maniac` (LPT-212 split) | call-wider reason |
 | Cite the aggression read | explain SoftPulse cues EVIDENCE → UNKNOWN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-781); unit `unit-04-08-maniac` (LPT-212 split) | — |
-| Observation is not certainty | Observe, Samples, Showdowns; densified SoftPulse one gold (LPT-495); unit `unit-04-09-type-id` (LPT-215 split) | confidence quizzes |
+| Observation is not certainty | Observe on the felt; explain SoftPulse cue OBSERVE only — SAMPLES/SHOWDOWNS presses belong to Confidence grows with samples (curriculum residual LPT-775); densified SoftPulse one gold (LPT-495); unit `unit-04-09-type-id` (LPT-215 split) | confidence quizzes |
 | Confidence grows with samples | explain SoftPulse cues SAMPLES → SHOWDOWNS; scaffolded SoftPulse-quiet densify stem non-spoiling (no Rise) (LPT-823); checkpoint SoftPulse-off densify stem non-spoiling (LPT-777); unit `unit-04-09-type-id` (LPT-215 split) | — |
 | Retire labels when evidence flips | explain SoftPulse cues NEW EVIDENCE → RETIRE; unguided SoftPulse-quiet densify stem non-spoiling (no Update / Calling Station model) (LPT-821); unit `unit-04-09-type-id` (LPT-215 split) | — |
 | Same hand, different types | Cards, Seats, Evidence; unit `unit-04-10-exploits` (LPT-218 split) | — |
@@ -2107,16 +2119,16 @@ felt.
 | The TAG model | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491); densified frame asks (LPT-648); unit `unit-06-11-tag` (LPT-291 split) | label quizzes |
 | Spot a TAG | explain SoftPulse cues FOLDS MOST → PLANNED BARRELS; unit `unit-06-11-tag` (LPT-291 split) | — |
 | TAG or Maniac? | explain SoftPulse cues ENTRY WIDTH → DISCIPLINE; unit `unit-06-11-tag` (LPT-291 split) | — |
-| Respect TAG aggression | Credit, Tighter, No light; unit `unit-06-11-tag` (LPT-294 split) | respect check |
+| Respect TAG aggression | Credit, Tighter on the felt; explain SoftPulse cue CREDIT → TIGHTER only — NO LIGHT press belongs to No light bluffs into a TAG check-raise (curriculum residual LPT-709); unit `unit-06-11-tag` (LPT-294 split) | respect check |
 | No light bluffs into a TAG check-raise | explain SoftPulse cues CHECK-RAISE → FOLD; unit `unit-06-11-tag` (LPT-294 split) | — |
 | Bet thin only into callers | explain SoftPulse cues RARELY CALLS → CHECK; unit `unit-06-11-tag` (LPT-294 split) | — |
-| Note wide entry | Wide, Pressure, Sample; unguided SoftPulse one gold (LPT-493); densified frame asks (LPT-649); unit `unit-06-12-lag` (LPT-297 split) | entry quizzes |
+| Note wide entry | Wide on the felt; explain SoftPulse cue WIDE only — PRESSURE/SAMPLE presses belong to Note sustained pressure and Planned pressure, not a Maniac (curriculum residual LPT-713); unguided SoftPulse one gold (LPT-493); densified frame asks (LPT-649); unit `unit-06-12-lag` (LPT-297 split) | entry quizzes |
 | Note sustained pressure | explain SoftPulse cues BARRELS → MANY HANDS; unit `unit-06-12-lag` (LPT-297 split) | — |
 | Planned pressure, not a Maniac | explain SoftPulse cues FOLDS SOMETIMES → PLAN; unit `unit-06-12-lag` (LPT-297 split) | — |
 | The LAG model | Wide, Pressure, Model; unguided SoftPulse one gold (LPT-492); unit `unit-06-12-lag` (LPT-300 split) | label quizzes |
 | Spot a LAG | explain SoftPulse cues WIDE OPENS → BARRELS; unit `unit-06-12-lag` (LPT-300 split) | — |
 | LAG or Calling Station? | explain SoftPulse cues RAISES → CALLS; unit `unit-06-12-lag` (LPT-300 split) | — |
-| Call down wider versus a LAG | Call, Trap, Fancy less; unguided SoftPulse one gold Usually avoid (LPT-503); densified frame asks (LPT-651); unit `unit-06-12-lag` (LPT-303 split) | avoid and cite checks |
+| Call down wider versus a LAG | Call on the felt; explain SoftPulse cue CALL only — TRAP/FANCY LESS presses belong to Trap strong hands more and Fewer fancy bluffs (curriculum residual LPT-718); unguided SoftPulse one gold Usually avoid (LPT-503); densified frame asks (LPT-651); unit `unit-06-12-lag` (LPT-303 split) | avoid and cite checks |
 | Trap strong hands more | explain SoftPulse cues STRONG HAND → LET THEM BET; unit `unit-06-12-lag` (LPT-303 split) | — |
 | Fewer fancy bluffs | explain SoftPulse cues NO BIG BLUFF → LET THEM; unit `unit-06-12-lag` (LPT-303 split) | — |
 | Same cards: thin value versus a Station | Cards, seats, and evidence in the stage; unit `unit-06-13-mix` (LPT-306 split) | — |
