@@ -1,5 +1,5 @@
-/// LPT-883 / LPT-884 / LPT-885 / LPT-886: Authored SoftPulse explain teaching
-/// captions (not Tap N of M).
+/// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887: Authored SoftPulse explain
+/// teaching captions (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
@@ -44,6 +44,9 @@ void main() {
     expect(authoredSoftPulseExplainCaption('BARREL'), 'Fire again');
     expect(authoredSoftPulseExplainCaption('CHECKED BACK'), 'No bet flop');
     expect(authoredSoftPulseExplainCaption('BET TURN'), 'Bet when helped');
+    expect(authoredSoftPulseExplainCaption('PRICE'), 'Pot odds');
+    expect(authoredSoftPulseExplainCaption('POT'), 'What it pays');
+    expect(authoredSoftPulseExplainCaption('EQUITY'), 'Win chance');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
     expect(authoredSoftPulseExplainCaption('UNKNOWN-TARGET-XYZ'), isEmpty);
@@ -230,6 +233,52 @@ void main() {
       expect(find.text('BET TURN'), findsWidgets);
       expect(find.text('No bet flop'), findsOneWidget);
       expect(find.text('Bet when helped'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Pot odds AuthoredCueExplain captions PRICE + POT + EQUITY (LPT-887)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-03-03-01-02-explain-price',
+        targets: const ['PRICE', 'POT', 'EQUITY'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('PRICE'), findsWidgets);
+      expect(find.text('POT'), findsWidgets);
+      expect(find.text('EQUITY'), findsWidgets);
+      expect(find.text('Pot odds'), findsOneWidget);
+      expect(find.text('What it pays'), findsOneWidget);
+      expect(find.text('Win chance'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
