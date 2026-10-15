@@ -1738,7 +1738,9 @@ Whose turn — LPT-888, SAY → Announce clearly / BINDING → Must follow
 through — LPT-889, EARLIER SEATS → Act before you / YOUR TURN → Then you
 decide — LPT-891, BROADWAY → Ten or higher / SUITED ACE → Ace same suit —
 LPT-892, CHIPS → Then move chips — LPT-893, EP → Early seat — LPT-896,
-COVER → Protect hole cards / WAIT → Act in turn — LPT-897). Play a full
+COVER → Protect hole cards / WAIT → Act in turn — LPT-897, WIDER → Open
+more hands — LPT-898, SHORTER → Min of the two / EFFECTIVE → Playable
+stack — LPT-899). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2067,12 +2069,12 @@ felt.
 | Connectors versus trash | explain SoftPulse cues CONNECTORS → TRASH with teaching captions (Suited, adjacent / Low unconnected — never empty glosses; LPT-894); unguided SoftPulse-quiet densify stem non-spoiling (no Suited connector) (LPT-842); checkpoint SoftPulse-off densify stem non-spoiling (LPT-784); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
 | Fold trash early | Early on the felt; explain SoftPulse cue EARLY only — BUTTON/LIVE 3x presses belong to Widen on the button and Open strong hands (curriculum residual LPT-741); unit `unit-02-03-open-fold` (LPT-124 split) | — |
 | Open strong hands | explain SoftPulse cues STRONG → LIVE SIZE with teaching captions (Premium hands / Bigger than min — never empty glosses; LPT-895); scaffolded Hint SoftPulse unlocks on hero holes (LPT-678 / LPT-679); unit `unit-02-03-open-fold` (LPT-124 split) | — |
-| Widen on the button | explain SoftPulse cues BUTTON → WIDER; unit `unit-02-03-open-fold` (LPT-124 split) | — |
+| Widen on the button | explain SoftPulse cues BUTTON → WIDER with teaching captions (Acts last / Open more hands — never empty WIDER gloss; LPT-898); unit `unit-02-03-open-fold` (LPT-124 split) | — |
 | Fold weak hands | Fold on the felt; explain SoftPulse cue FOLD only — CALL/3-BET presses belong to Call in position and Value 3-bet (curriculum residual LPT-743); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Call in position | explain SoftPulse cues PLAYABLE → IN POSITION → CALL; unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Value 3-bet | 3-bet on the felt; explain SoftPulse cue 3-BET only — RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (curriculum residual LPT-760); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Chips to big blinds | Chips→BB on the felt; explain SoftPulse cue CHIPS→BB only — SHORTER/DEPTH presses belong to Shorter stack is effective and Stack depth (curriculum residual LPT-748); checkpoint SoftPulse-off densify stem non-spoiling (LPT-785); unit `unit-02-05-stacks` (LPT-130 split) | — |
-| Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE; scaffolded SoftPulse-quiet densify stem non-spoiling (no 60bb tile) (LPT-849); unit `unit-02-05-stacks` (LPT-130 split) | — |
+| Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE with teaching captions (Min of the two / Playable stack — never empty glosses; LPT-899); scaffolded SoftPulse-quiet densify stem non-spoiling (no 60bb tile) (LPT-849); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unguided SoftPulse-quiet densify stem non-spoiling (no 50bb) (LPT-850); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Follow the action | Watch on the felt; explain SoftPulse cue WATCH only — SAY/COVER/WAIT presses belong to Say your action and Protect cards, wait your turn (curriculum residual LPT-749); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Say your action | explain SoftPulse cues SAY → CHIPS with teaching captions (Announce clearly / Then move chips — LPT-893); scaffolded SoftPulse-quiet densify stem non-spoiling (no Say "raise") (LPT-843); unit `unit-02-06-table-habits` (LPT-133 split) | — |
