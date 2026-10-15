@@ -466,8 +466,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
     'act-02-06-01-guided-follow' =>
       'Two seats act before you. What first — pick Watch what they do, then decide.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Say "raise" (LPT-843;
+    // SoftPulse LPT-653; same class as LPT-842 / LPT-841 / LPT-839).
     'act-02-06-01-scaffolded-verbal' =>
-      'You want to raise. Clearest live choice — pick Say "raise" and put out the chips.',
+      'You want to raise. Clearest live choice — tap how you announce it and put out chips.',
     'act-02-06-01-unguided-protect' =>
       'Your cards sit near the muck. Best habit — pick Keep a chip or hand on your cards.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
