@@ -235,10 +235,14 @@ table in the design record, using the coverage ledger
 2. A **motion / multi-frame** surface from
    `python3 tools/ui_motion_targets.py pick` that is never walked or
    oldest — film it with `tools/sim_record.py` (see Motion check below).
-3. A surface never walked.
-4. A surface whose code changed since its last walk
+3. A densify stem with template **card codes** from
+   `python3 tools/ui_densify_card_scan.py list` — proof that idle coach
+   names the remapped felt (run through `alignLessonTableCopy`; LPT-851 /
+   LPT-806 class), not only SoftPulse-quiet spoil wording.
+4. A surface never walked.
+5. A surface whose code changed since its last walk
    (`git diff --name-only <last sha>..HEAD -- <code path>` is not empty).
-5. The surface walked longest ago.
+6. The surface walked longest ago.
 
 Prefer surfaces that the **Known gaps** section names, then motion
 targets (`ui_motion_targets.py list` / `classes`). When walking a
