@@ -6,6 +6,7 @@
 #   tools/fold_agent_learnings.sh content      # content agent only
 #   tools/fold_agent_learnings.sh ui           # ui-design agent only
 #   tools/fold_agent_learnings.sh --dry-run
+#   tools/fold_agent_learnings.sh --check      # fail if content learnings > 40 bullets
 #
 # Content: appends pending bullets into docs/agents/content-agent-run-memory.md
 # and prints a reminder to distill Never/Prefer into
@@ -22,10 +23,25 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 STATE="${HOME}/.live-poker-trainer"
 DRY=0
 TARGET="both"
+CHECK=0
+CONTENT_LEARNINGS_CAP="${CONTENT_LEARNINGS_CAP:-40}"
+CONTENT_LEARNINGS="$ROOT/.cursor/commands/lesson-content-agent-learnings.md"
+
+# Exit 1 when the content learnings file exceeds the bullet cap.
+check_content_cap() {
+  local n
+  n="$(grep -c '^- ' "$CONTENT_LEARNINGS" || true)"
+  if (( n > CONTENT_LEARNINGS_CAP )); then
+    echo "content learnings: $n bullets > cap $CONTENT_LEARNINGS_CAP in $CONTENT_LEARNINGS — trim before shipping" >&2
+    return 1
+  fi
+  echo "content learnings: $n/$CONTENT_LEARNINGS_CAP bullets"
+}
 
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY=1 ;;
+    --check) CHECK=1 ;;
     content|ui|both) TARGET="$arg" ;;
     -h|--help)
       sed -n '2,20p' "$0"
@@ -128,8 +144,13 @@ EOF
 EOF
 }
 
+if [[ "$CHECK" -eq 1 ]]; then
+  check_content_cap
+  exit $?
+fi
+
 case "$TARGET" in
-  content) fold_content ;;
+  content) fold_content; check_content_cap ;;
   ui) fold_ui ;;
-  both) fold_content; fold_ui ;;
+  both) fold_content; fold_ui; check_content_cap ;;
 esac

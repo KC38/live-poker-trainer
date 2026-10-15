@@ -31,6 +31,10 @@ PID_FILE="$STATE_DIR/content-agent.pid"
 LOOP_PID_FILE="$STATE_DIR/content-agent-loop.pid"
 SECRETS_FILE="$STATE_DIR/secrets.env"
 GAP="${CONTENT_AGENT_GAP:-60}"
+# After a run ends with IDLE_NO_GAPS, sleep this long (default 6h) or until
+# origin/main's content/ tree hash changes (polled every IDLE_POLL seconds).
+IDLE_SLEEP="${CONTENT_AGENT_IDLE_SLEEP:-21600}"
+IDLE_POLL="${CONTENT_AGENT_IDLE_POLL:-900}"
 MAX_RUN="${CONTENT_AGENT_MAX_RUN_SECONDS:-7200}"
 USAGE_LIMIT_SLEEP="${CONTENT_AGENT_USAGE_LIMIT_SLEEP:-}"
 # Seconds after machine-SDK 504 Gateway Time-out (exit 15). Match ui-agent
@@ -100,9 +104,9 @@ prompt() {
   primary_dir="$(primary)"
   worktree_dir="${CONTENT_AGENT_WORKTREE:-$primary_dir/.worktrees/content-agent}"
   if [[ -s "$STATE_DIR/content-agent-learnings-pending.md" ]] && grep -q '^- ' "$STATE_DIR/content-agent-learnings-pending.md" 2>/dev/null; then
-    pending=" Pending learnings in $STATE_DIR/content-agent-learnings-pending.md — run tools/fold_agent_learnings.sh content, distill into lesson-content-agent-learnings.md + content-agent-run-memory.md, and ship chore/content-agent-learnings-YYYYMMDD before or after the audit."
+    pending=" Pending learnings in $STATE_DIR/content-agent-learnings-pending.md — run tools/fold_agent_learnings.sh content, distill into lesson-content-agent-learnings.md + content-agent-run-memory.md, and ship chore/content-agent-learnings-YYYYMMDD only if it is a genuinely new rule (max one learnings PR per day)."
   fi
-  printf '%s' "READY: lesson content agent (audit + file only). No simulator — do not claim sim_lock, refresh-simulator, agent_tap, or agent_seed. WORKTREE: ${worktree_dir} (all git edits + learnings chore PRs here; cwd is already this tree). Never checkout, commit, or edit PRIMARY (${primary_dir}) — reserved for ui-design-agent on clean main. Scratch bodies under ${worktree_dir}/.cursor/tmp/content-agent/. Read .cursor/commands/lesson-content-agent.md, lesson-content-agent-learnings.md, and grep docs/agents/content-agent-run-memory.md for the target act-/lesson- id. Every run: node tools/course/scan_content_gaps.mjs --counts then sync open (catalog) parents from --gap … --markdown. Store durable loop learnings in git (learnings + run-memory chore PR) — never leave them only in the home pending file. Prefer catalog-bundled tickets; never implement product fixes. Default Jira labels content,grokbot,lesson; use content,ui-agent,lesson only when Chrome cannot validate. Use python3 tools/jira.py only.${pending} Unattended: do not ask questions."
+  printf '%s' "READY: lesson content agent (audit + file only). No simulator — do not claim sim_lock, refresh-simulator, agent_tap, or agent_seed. WORKTREE: ${worktree_dir} (all git edits + learnings chore PRs here; cwd is already this tree). Never checkout, commit, or edit PRIMARY (${primary_dir}) — reserved for ui-design-agent on clean main. Scratch bodies under ${worktree_dir}/.cursor/tmp/content-agent/. Read .cursor/commands/lesson-content-agent.md, lesson-content-agent-learnings.md, and grep docs/agents/content-agent-run-memory.md for the target act-/lesson- id. Every run: node tools/course/scan_content_gaps.mjs --counts then sync open (catalog) parents from --gap … --markdown. If --counts is unchanged since the last coverage line and only needs-human parents remain, log coverage clean, open no PR, post no Jira comments, and end with IDLE_NO_GAPS. Open a learnings chore PR only for a genuinely new Never/Prefer rule (max one per UTC day; never rescue or chain other chore PRs); clean re-checks and Prefer-next notes go to the coverage jsonl, not git. Prefer catalog-bundled tickets; never implement product fixes. Default Jira labels content,grokbot,lesson; use content,ui-agent,lesson only when Chrome cannot validate. Use python3 tools/jira.py only.${pending} Unattended: do not ask questions."
 }
 
 ensure_sdk_deps() {
@@ -233,6 +237,7 @@ one_run() {
   local stamp run_log pid code start text sha
   stamp="$(date '+%Y%m%d-%H%M%S')"
   run_log="$LOG_DIR/run-$stamp.log"
+  LAST_RUN_LOG="$run_log"
   start="$(date +%s)"
   sha="$(git -C "$worktree_dir" rev-parse HEAD 2>/dev/null || echo unknown)"
 
@@ -381,6 +386,32 @@ sleep_unless_stopped() {
   done
 }
 
+# Tree hash of origin/main:content (empty on failure).
+origin_content_hash() {
+  git -C "$(primary)" fetch -q origin main 2>/dev/null || true
+  git -C "$(primary)" rev-parse -q --verify origin/main:content 2>/dev/null || true
+}
+
+# Sleep IDLE_SLEEP seconds, waking early on STOP_FILE or when
+# origin/main's content/ tree changes.
+idle_sleep_until_content_changes() {
+  local base now waited=0 chunk
+  base="$(origin_content_hash)"
+  log "IDLE_NO_GAPS; sleeping up to ${IDLE_SLEEP}s or until origin/main content/ changes (base ${base:-unknown})"
+  while (( waited < IDLE_SLEEP )); do
+    [[ -f "$STOP_FILE" ]] && return 0
+    chunk=$IDLE_POLL
+    (( IDLE_SLEEP - waited < chunk )) && chunk=$(( IDLE_SLEEP - waited ))
+    sleep_unless_stopped "$chunk"
+    waited=$(( waited + chunk ))
+    now="$(origin_content_hash)"
+    if [[ -n "$base" && -n "$now" && "$now" != "$base" ]]; then
+      log "origin/main content/ changed ($base -> $now); waking"
+      return 0
+    fi
+  done
+}
+
 run_loop() {
   echo $$ >"$LOOP_PID_FILE"
   trap 'rm -f "$LOOP_PID_FILE"' EXIT
@@ -402,7 +433,13 @@ run_loop() {
         log "sdk gateway timeout (exit 15); sleeping ${GATEWAY_TIMEOUT_SLEEP}s before retry"
         sleep_unless_stopped "$GATEWAY_TIMEOUT_SLEEP"
         ;;
-      *) sleep_unless_stopped "$GAP" ;;
+      *)
+        if [[ -n "${LAST_RUN_LOG:-}" ]] && grep -q 'IDLE_NO_GAPS' "$LAST_RUN_LOG" 2>/dev/null; then
+          idle_sleep_until_content_changes
+        else
+          sleep_unless_stopped "$GAP"
+        fi
+        ;;
     esac
     # STOP_FILE during gap sleep exits the while without a second one_run.
     if [[ -f "$STOP_FILE" ]]; then
