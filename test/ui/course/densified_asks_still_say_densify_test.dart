@@ -212,8 +212,9 @@ const _lines = <String, String>{
   'act-05-06-01-checkpoint':
       'Check-raise flop, bet turn, shove river usually means — tap the matching range.',
   'act-05-07-01-guided': 'Instant river shove after you bet. Correct framing — pick Soft evidence.',
+  // LPT-863: SoftPulse-quiet densify — no Weaker / blocking spoil.
   'act-05-07-01-scaffolded':
-      'Tiny flop bet into a huge pot often says — pick Weaker / blocking.',
+      'Tiny flop bet into a huge pot often says — tap the matching read.',
   // LPT-855: SoftPulse-quiet densify — no Reject magic tells spoil.
   'act-05-07-01-unguided':
       'Coach says "look left means bluff." Response — tap the matching plan.',
