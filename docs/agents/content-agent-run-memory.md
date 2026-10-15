@@ -5408,3 +5408,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
 - Prefer next NEVER: `lesson-04-07-02-01-nit-model` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-07-01-*: Observe narrow children Prefer NEVER path complete on tip — SoftPulse residual closed by LPT-768 on first-child.
+
+## Fold 2026-10-15fg (ca3d4177 Prefer NEVER nit-model)
+
+- Tip-stable `ca3d4177` (#2750 Prefer NEVER wait-for-samples learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-07-02-01-nit-model` / `act-04-07-02-explain` + `act-04-07-02-checkpoint`:
+  - one objective Introduce Nit as a working model with sample limits; explain SoftPulse NIT→NARROW→RESPECT + `explainGrading` "Nit → Narrow → Respect." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual; **LPT-769** Done — objective owns working-model checkpoint `model-n`).
+  - checkpoint SoftPulse `model-n` cue kind `none` hintless densify PRESENT SoftPulse-off after LPT-765 (`select_identify` `deal.mode` `none` meetNitModelOutcomes — do not file handFamily).
+  - short-ladder 2/5 already on catalog **LPT-829**; curriculum **LPT-198** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-07-02-02-spot-nit` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-07-02-*: first-child Prefer NEVER structural clean on tip — SoftPulse residual / working-model residual closed by LPT-769.
+
