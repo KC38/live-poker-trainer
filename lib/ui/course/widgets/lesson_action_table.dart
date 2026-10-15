@@ -14250,6 +14250,12 @@ String authoredSoftPulseExplainCaption(String target) {
     'AIR': 'Nothing yet',
     // Recognize air SoftPulse explain (AIR → FOLD EQUITY; LPT-884).
     'FOLD EQUITY': 'Bluff needs folds',
+    // Second barrel SoftPulse explain (BRICK → BARREL; LPT-885).
+    // Aligned with TurnStoryDemo structural captions.
+    'BRICK': 'Blank runout',
+    'BARREL': 'Fire again',
+    'CHANGE': 'Board shifts',
+    'DELAY': 'Hold fire',
     // Streets / table flow.
     'PREFLOP': 'Before the flop',
     'FLOP': 'Three cards',
