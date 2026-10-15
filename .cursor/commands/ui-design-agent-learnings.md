@@ -354,7 +354,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `auth.refresh.persistFailed` cannot burn the run);
   `ATLASSIAN_EMAIL` + `ATLASSIAN_API_TOKEN` for Jira — `jira.py check`
   failure → `JIRA_UNAVAILABLE`; `create` prints `KEY<TAB>URL` (column 1
-  only for `edit` / `get` / `comment`).
+  only for `edit` / `get` / `comment`). Prefer sequential `jira.py create`
+  (one at a time in the agent shell) over parallel tmux creates —
+  concurrent POSTs hit intermittent `SSL: CERTIFICATE_VERIFY_FAILED` on
+  this Mac mini while `jira.py check` still passes (LPT-858 filing).
 - Heartbeat during long worktree `flutter run`, validates, `flutter test` /
   analyze, and Cloud Functions deploy — including immediately before and
   after long `test-LPT-*` / `analyze-LPT-*` tmux sessions (LPT-240: lock

@@ -181,7 +181,9 @@ const _lines = <String, String>{
   'act-05-01-01-checkpoint':
       'Multiway construction priority — tap the matching priority.',
   'act-05-02-01-guided': '200bb effective. Best reason to call a raise with 55 BTN — pick Implied odds if they pay sets.',
-  'act-05-02-01-unguided': 'SPR ~12 on the flop. Your first job — pick Map turn/river plans before committing.',
+  // LPT-859: SoftPulse-quiet densify — no Map turn/river plans spoil.
+  'act-05-02-01-unguided':
+      'SPR ~12 on the flop. Your first job — tap the matching plan.',
   // LPT-735: SoftPulse-off densify — no correct-tile spoil.
   'act-05-02-01-checkpoint':
       '150–300bb cash play rewards — tap the matching reward.',
