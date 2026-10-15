@@ -2,16 +2,21 @@
 """Scan SoftPulse densify stems for template card tokens (remap honesty).
 
 ``selectIdentifyDensifiedCoachLine`` often keeps template codes
-(``Board Qc 7d 2s. You hold 5h 4h``) so ``alignLessonTableCopy`` can rewrite
-them onto the remapped felt. When ``lessonFrameSpeech`` returns the stem
-raw, idle coach names template cards while the felt shows isomorphic cards
-(LPT-851 / LPT-806 class).
+(``Board Qc 7d 2s. You hold 5h 4h``) so ``alignLessonTableCopy`` (via
+``alignLessonActionCopy``) can rewrite them onto the remapped felt.
+Tokens in the stem map are **expected** after LPT-851 — not a ticket by
+themselves. File a remap bug only when idle coach on the mini still names
+template cards while the felt shows isomorphic ranks (``check`` exit 1 =
+speech path returns densify raw without align).
 
 Commands:
 
-  list                 Print densify activity ids whose stem embeds card codes.
-  check [--id ID]      Exit 1 when any (or the given) stem still has codes —
-                       discovery uses this before filing remap-honesty bugs.
+  list                 Print densify activity ids whose stem embeds card codes
+                       (walk candidates; not an open-bug list).
+  check [--id ID]      Exit 0 when densify speech is wired through
+                       ``alignLessonActionCopy`` / ``alignLessonTableCopy``.
+                       Exit 1 when densifiedSelect is returned raw (LPT-851
+                       class regression) or --id is unknown.
 
 Card token: rank ``2-9TJQKA`` + suit ``cdhs`` (case-insensitive), word-boundary.
 """
@@ -25,11 +30,14 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = REPO / "lib" / "ui" / "course" / "widgets" / "rex_coach_line.dart"
+DEFAULT_LAYOUT = (
+    REPO / "lib" / "ui" / "course" / "widgets" / "lesson_screen_layout.dart"
+)
 
 # Board Ks 9d / You hold Kh Qh / Flop As 7d
 _CARD_TOKEN = re.compile(r"\b([2-9TJQKA][cdhs])\b", re.IGNORECASE)
 # Lone "as"/"ah" in English ("treated as") is not a deal — require deal context
-# or ≥2 card codes before flagging (LPT-851 remap class).
+# or ≥2 card codes before flagging.
 _DEAL_CONTEXT = re.compile(
     r"(?i)\b(board|flop|turn|river|hold|holes|hero|you hold)\b",
 )
@@ -93,10 +101,38 @@ def stems_with_cards(stems: dict[str, str]) -> list[tuple[str, list[str], str]]:
     return rows
 
 
+def densify_align_wired(layout: Path) -> bool:
+    """True when densifiedSelect is passed through alignLesson*Copy (LPT-851)."""
+    if not layout.is_file():
+        return False
+    text = layout.read_text(encoding="utf-8")
+    # Prefer the assignment site — earlier call sites are comments / other arms.
+    for needle in (
+        "final densifiedSelect = selectIdentifyDensifiedCoachLine",
+        "densifiedSelect = selectIdentifyDensifiedCoachLine",
+        "selectIdentifyDensifiedCoachLine(activity.id)",
+    ):
+        idx = text.find(needle)
+        if idx >= 0:
+            break
+    else:
+        return False
+    window = text[idx : idx + 900]
+    if re.search(r"return\s+densifiedSelect\s*;", window):
+        return False
+    return (
+        "alignLessonActionCopy" in window or "alignLessonTableCopy" in window
+    )
+
+
 def cmd_list(args: argparse.Namespace) -> int:
-    """Print densify stems that embed template card codes."""
+    """Print densify stems that embed template card codes (not open bugs)."""
     source = Path(args.source).expanduser()
+    layout = Path(args.layout).expanduser()
     rows = stems_with_cards(parse_densify_stems(source))
+    wired = densify_align_wired(layout)
+    status = "align_wired" if wired else "ALIGN_RAW_REGRESSION"
+    print(f"# speech_path={status} (tokens in stems are expected for rewrite)")
     print("id\ttokens\tstem")
     for activity_id, tokens, stem in rows:
         compact = stem.replace("\n", " ")
@@ -105,22 +141,35 @@ def cmd_list(args: argparse.Namespace) -> int:
 
 
 def cmd_check(args: argparse.Namespace) -> int:
-    """Exit 1 when densify stems still embed card tokens (remap risk)."""
+    """Exit 1 only when densify speech returns raw (align wiring missing)."""
     source = Path(args.source).expanduser()
-    rows = stems_with_cards(parse_densify_stems(source))
+    layout = Path(args.layout).expanduser()
+    stems = parse_densify_stems(source)
+    rows = stems_with_cards(stems)
     if args.id:
-        rows = [r for r in rows if r[0] == args.id]
-        if not rows and args.id not in parse_densify_stems(source):
+        if args.id not in stems:
             print(f"unknown densify id: {args.id}", file=sys.stderr)
             return 2
+        rows = [r for r in rows if r[0] == args.id]
+    wired = densify_align_wired(layout)
+    if not wired:
+        print(
+            "FAIL: densifiedSelect speech path returns raw / missing align "
+            "(LPT-851 / LPT-806 class — wire through alignLessonActionCopy)"
+        )
+        for activity_id, tokens, stem in rows[:8]:
+            print(f"  {activity_id}: {', '.join(tokens)}")
+            print(f"    {stem[:120]}")
+        return 1
     if not rows:
-        print("ok: no densify stems with card tokens" + (f" for {args.id}" if args.id else ""))
+        print("ok: align wired; no densify stems with card tokens")
         return 0
-    print("densify stems with template card tokens (need alignLessonTableCopy on speech):")
-    for activity_id, tokens, stem in rows:
+    print(
+        f"ok: align wired ({len(rows)} stem(s) keep template tokens for rewrite)"
+    )
+    for activity_id, tokens, _stem in rows:
         print(f"  {activity_id}: {', '.join(tokens)}")
-        print(f"    {stem[:120]}")
-    return 1
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -134,11 +183,22 @@ def build_parser() -> argparse.ArgumentParser:
         default=str(DEFAULT_SOURCE),
         help="path to rex_coach_line.dart",
     )
+    parser.add_argument(
+        "--layout",
+        default=str(DEFAULT_LAYOUT),
+        help="path to lesson_screen_layout.dart (align wiring)",
+    )
     sub = parser.add_subparsers(dest="cmd", required=True)
-    p_list = sub.add_parser("list", help="list densify stems with card tokens")
+    p_list = sub.add_parser(
+        "list",
+        help="list densify stems with card tokens (walk candidates)",
+    )
     p_list.set_defaults(func=cmd_list)
-    p_check = sub.add_parser("check", help="exit 1 if any stem still has card tokens")
-    p_check.add_argument("--id", help="check a single activity id")
+    p_check = sub.add_parser(
+        "check",
+        help="exit 1 only if densify speech path skips align (regression)",
+    )
+    p_check.add_argument("--id", help="limit listing to one activity id")
     p_check.set_defaults(func=cmd_check)
     return parser
 

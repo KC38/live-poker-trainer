@@ -236,9 +236,12 @@ table in the design record, using the coverage ledger
    `python3 tools/ui_motion_targets.py pick` that is never walked or
    oldest — film it with `tools/sim_record.py` (see Motion check below).
 3. A densify stem with template **card codes** from
-   `python3 tools/ui_densify_card_scan.py list` — proof that idle coach
-   names the remapped felt (run through `alignLessonTableCopy`; LPT-851 /
-   LPT-806 class), not only SoftPulse-quiet spoil wording.
+   `python3 tools/ui_densify_card_scan.py list` — **walk proof only**.
+   Tokens in the stem map are expected for `alignLessonActionCopy`
+   rewrite (LPT-851 Done). Run `… check` (exit 0 = align wired). File a
+   remap ticket only when mini idle coach still names template cards
+   while the felt shows isomorphic ranks — never because `list` is
+   non-empty.
 4. A surface never walked.
 5. A surface whose code changed since its last walk
    (`git diff --name-only <last sha>..HEAD -- <code path>` is not empty).
