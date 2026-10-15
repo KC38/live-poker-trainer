@@ -228,7 +228,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (and wait for Nice! after the last explain tap) before taps or validated
   shots — early taps nomatch Home (LPT-79/97). Acting order explain can take
   ~7s before `gold SoftPulse:` names UTG; do not file SoftPulse-off from a
-  1–2s tree (LPT-147).
+  1–2s tree (LPT-147). Hero hole SoftPulse under seat Semantics needs
+  `agentGlowOf` descendant walk — paint-without-tree-gold was LPT-840, not
+  SoftPulse-off.
 - Prefer adopting `sim_lock_run_id` from
   `~/.live-poker-trainer/ui-agent-handoff.json` (then
   `simulator-lock.json`) when `$SIM_LOCK_RUN_ID` is unset in a

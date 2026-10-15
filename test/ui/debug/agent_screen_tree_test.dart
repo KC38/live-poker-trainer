@@ -75,6 +75,55 @@ void main() {
     expect(tree['gold'], isEmpty);
   });
 
+  testWidgets(
+    'seat Semantics above hero SoftPulse reports gold (LPT-840)',
+    (tester) async {
+      // Face-down hero SoftPulse wraps GlowHighlight under seat Semantics —
+      // the same nesting as PlayerSeatWidget hole backs.
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Semantics(
+                button: true,
+                label: 'Your hole cards',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GlowHighlight(
+                      active: true,
+                      animated: true,
+                      child: SizedBox(
+                        width: 40,
+                        height: 56,
+                        child: ColoredBox(color: Colors.red.shade900),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    GlowHighlight(
+                      active: true,
+                      animated: true,
+                      child: SizedBox(
+                        width: 40,
+                        height: 56,
+                        child: ColoredBox(color: Colors.red.shade900),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      final tree = describeAgentScreen();
+      expect(_entry(tree, 'Your hole cards')['glow'], 'gold');
+      expect(tree['gold'], contains('Your hole cards'));
+    },
+  );
+
   testWidgets('only the current route is described', (tester) async {
     final nav = GlobalKey<NavigatorState>();
     await tester.pumpWidget(
