@@ -4387,3 +4387,17 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-700/270/701/702/699/829/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
 - Prefer next: NEVER Defend SoftPulse residual **LPT-701** (+ companion **LPT-702**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-06-06-01-*: interactive structural clean on tip except LPT-700 SoftPulse residual; all interactive acts are `deal.mode` `none` outcome tiles — do not file handFamily.
+
+## Fold 2026-10-15by tip 2c015455 (#2616 Selective Prefer → Meet-TAG working-model LPT-708 Prefer)
+
+- Tip-stable `2c015455` (#2616 Selective SoftPulse Prefer LPT-706 on tip after #2614/#2615). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (body rebuilt from `--gap short-ladder --markdown`); other parents Done — no open-parent sync.
+- Prefer NEVER Meet-TAG working-model residual re-check `lesson-06-11-02-01/02/03` / `act-06-11-02-*`:
+  - SoftPulse TIGHT→AGGRO→MODEL + `explainGrading` "Tight → Aggro → Model." + Dart `TagModelDemo.points` TIGHT/AGGRO/MODEL (captions Tight in / Aggressive after / Working model) under Introduce TAG / The TAG model — **concept-aligned** (not a SoftPulse residual).
+  - companion checkpoint SoftPulse `model` kind `none` densify PRESENT (prompt "TAG is?" / Working model vs Insult; `meetTagModelOutcomes`) still under Introduce TAG-only (`lesson-06-11-02-01-tag-model` objective "Introduce TAG") → residual **LPT-708** still To Do (needs-human; Relates LPT-291 — do not re-add needs-human on curriculum).
+  - successors SoftPulse FOLDS MOST→PLANNED BARRELS / ENTRY WIDTH→DISCIPLINE content-driven (do not reopen LPT-669); guided SoftPulse `tag` densify PRESENT; scaffolded SoftPulse `diff` one-per-press densify PRESENT; unguided SoftPulse `tag2` one-per-press densify PRESENT.
+- Curriculum **LPT-291** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-708/291/829/709/710/706/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Adjust-TAG SoftPulse residual **LPT-709** (+ cite **LPT-710**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
+- act-06-11-02-*: interactive structural clean on tip except LPT-708 working-model residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
