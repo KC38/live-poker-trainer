@@ -1,11 +1,13 @@
-/// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889: Authored
-/// SoftPulse explain teaching captions (not Tap N of M).
+/// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
+/// LPT-890: SoftPulse explain teaching captions (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:live_poker_trainer/models/course/course_catalog.dart';
 import 'package:live_poker_trainer/ui/course/widgets/lesson_action_table.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_frame_scope.dart';
+import 'package:live_poker_trainer/ui/course/widgets/lesson_toy_hand.dart';
 import 'package:live_poker_trainer/ui/theme/app_theme.dart';
 
 CourseActivity _authoredExplain({
@@ -53,6 +55,12 @@ void main() {
     expect(authoredSoftPulseExplainCaption('BINDING'), 'Must follow through');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
+    expect(authoredSoftPulseExplainCaption('BLINDS'), 'Forced bets first');
+    expect(authoredSoftPulseExplainCaption('YOU ACT'), 'Open, call, or fold');
+    expect(
+      authoredSoftPulseExplainCaption('ENDING'),
+      'Folds win or continue',
+    );
     expect(authoredSoftPulseExplainCaption('UNKNOWN-TARGET-XYZ'), isEmpty);
     expect(
       authoredSoftPulseExplainCaption('DRAW'),
@@ -412,6 +420,58 @@ void main() {
       expect(find.text('All caught up'), findsOneWidget);
       expect(find.text('Deal continues'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'toy-hand SoftPulse explain chips show teaching captions (LPT-890)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      var ack = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: LessonFrameScope(
+              onLocalMiss: (_) {},
+              child: SizedBox(
+                width: 375,
+                height: 500,
+                child: LessonToyHandExplainTable(
+                  onAllStepsTapped: () => ack += 1,
+                  enabled: true,
+                  showGuidance: true,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('BLINDS'), findsWidgets);
+      expect(find.text('YOU ACT'), findsWidgets);
+      expect(find.text('ENDING'), findsWidgets);
+      expect(find.text('Forced bets first'), findsOneWidget);
+      expect(find.text('Open, call, or fold'), findsOneWidget);
+      expect(find.text('Folds win or continue'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+
+      for (final title in const ['BLINDS', 'YOU ACT', 'ENDING']) {
+        await tester.tap(find.text(title).first);
+        await tester.pump();
+      }
+      expect(ack, 1);
+      expect(tester.takeException(), isNull);
     },
   );
 }

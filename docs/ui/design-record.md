@@ -1735,9 +1735,13 @@ LPT-884, BRICK → Blank runout / BARREL → Fire again — LPT-885, CHECKED
 BACK → No bet flop / BET TURN → Bet when helped — LPT-886, PRICE → Pot
 odds / POT → What it pays / EQUITY → Win chance — LPT-887, WHO ACTS →
 Whose turn — LPT-888, SAY → Announce clearly / BINDING → Must follow
-through — LPT-889). They never show Tap N of M press-order meta chrome
-— SoftPulse alone owns the next press. Unknown targets omit the caption
-rather than inventing a numbered checklist.
+through — LPT-889). Play a full toy hand framed SoftPulse chips
+(`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
+`authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
+YOU ACT → Open, call, or fold, ENDING → Folds win or continue (aligned
+with `ToyHandRunDemo` lane details). They never show Tap N of M
+press-order meta chrome — SoftPulse alone owns the next press. Unknown
+targets omit the caption rather than inventing a numbered checklist.
 
 Best five kicker showdown SoftPulse (LPT-75) is the framed
 `LessonTableStage` for `act-01-02-02-scaffolded-kicker`: `cueSeatIndex: 0`
@@ -2046,7 +2050,7 @@ felt.
 | Win when everyone folds | Fold win on the felt; explain SoftPulse cue FOLD WIN only — SHOWDOWN/SIDE POT presses belong to Win at showdown and Main and side pots (curriculum residual LPT-738); densified SoftPulse one gold via `guideRegion` (LPT-525); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Win at showdown | explain SoftPulse cues RIVER CALL → SHOWDOWN → BEST FIVE; densify SoftPulse-quiet stem non-spoiling (no Showdown) (LPT-839); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
 | Main and side pots | explain SoftPulse cues MAIN POT → SIDE POT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-782); unit `unit-01-05-winning-pots` (LPT-106 split) | — |
-| Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
+| Play a full toy hand | Blinds, You act, Ending; explain SoftPulse cues BLINDS → YOU ACT → ENDING with teaching captions (Forced bets first / Open, call, or fold / Folds win or continue — never Tap N of M; LPT-890); SoftPulse order (LPT-635) | scaffolded pressHints one-per-press (LPT-667) |
 | Section 1 jump check | Ranks: showdown seats Flush → Straight → Two pair; seats UTG → BTN; jump-legal identify dock equal live chrome — no Raise gold fill while SoftPulse off (LPT-879) | — |
 | Seat labels | Six-max seats labeled on the table; explain SoftPulse cues D (LPT-635); unguided SoftPulse-quiet densify stem non-spoiling (no Cutoff / CO) (LPT-834); unit `unit-02-01-position-power` (LPT-114 split) | — |
 | Blind labels | explain SoftPulse cues SB → BB; scaffolded SoftPulse-quiet densify stem non-spoiling (no SB or BB) (LPT-833); unit `unit-02-01-position-power` (LPT-114 split) | — |
