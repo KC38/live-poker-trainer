@@ -4502,6 +4502,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15cu tip 924eddbb (#2650 densify → Spot-caps SoftPulse LPT-694 Prefer)
+
+- Tip-stable `924eddbb` (#2650 SoftPulse-quiet densify after #2649 Range SoftPulse Prefer LPT-692). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Spot-caps SoftPulse residual re-check `lesson-06-03-01-01/02/03` / `act-06-03-01-*`:
+  - first-child SoftPulse CAPPED→UNCAPPED→NUTS + `explainGrading` "Capped → Uncapped → Nuts." + Dart `CappedUncappedDemo.points` CAPPED/UNCAPPED/NUTS (captions Nuts unlikely / Nuts still live / Know which) / `LessonCappedUncappedExplainTable` / `CoachDialogueVisualKind.cappedUncapped` / layout "Tap Capped, then Uncapped, then Nuts." + coachMedia "Capped = nuts unlikely. Uncapped = nuts still live." still pre-split under spot-caps-only (`lesson-06-03-01-01-spot-caps` objective "Spot capped ranges from passive lines") → residual **LPT-694** still To Do (needs-human; Relates LPT-260 — do not re-add needs-human on curriculum).
+  - successors SoftPulse RAISE→BET→RESPECT / CAPPED→THIN→BLUFF content-driven (do not reopen LPT-669); guided SoftPulse `cap` densify PRESENT; unguided SoftPulse `uncap` densify PRESENT; scaffolded SoftPulse `bet` one-per-press SoftPulse map PRESENT (`Jh`/`9d`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants); checkpoint SoftPulse `attack` kind `none` densify PRESENT under Attack-caps — no companion residual.
+- Curriculum **LPT-260** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-694/260/829/696/692/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Polar SoftPulse residual **LPT-696** re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-06-03-01-*: interactive structural clean on tip except LPT-694 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify / SoftPulse maps PRESENT — do not reopen LPT-628/625.
+
 ## Fold 2026-10-15ct tip 76e8d35c (#2648 Session Prefer → Range SoftPulse LPT-692 Prefer)
 
 - Tip-stable `76e8d35c` (#2648 Session SoftPulse Prefer LPT-690 on tip after #2647). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
