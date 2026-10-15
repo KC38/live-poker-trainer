@@ -15262,15 +15262,24 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    // LPT-390: densified ask (and frame speech) — not catalog + Tap the best answer.
+    // LPT-390 / LPT-878: densified ask — not catalog + Tap the best answer,
+    // and SoftPulse-off stem must not name Draw / straight and flush.
     expect(
       lessonFrameSpeech(activity),
-      'Straight and flush both need runout — tap the hand class.',
+      'Your holes on this flop — tap the hand class.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
     expect(
-      find.text('Straight and flush both need runout — pick the hand class.'),
+      lessonFrameSpeech(activity).toLowerCase(),
+      isNot(contains('straight and flush')),
+    );
+    expect(
+      find.text('Your holes on this flop — pick the hand class.'),
       findsOneWidget,
+    );
+    expect(
+      find.text('Straight and flush both need runout — pick the hand class.'),
+      findsNothing,
     );
     expect(
       find.text('Qd9d3c with JdTd — you need runout for both straight and flush.'),
