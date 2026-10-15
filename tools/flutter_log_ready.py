@@ -24,6 +24,7 @@ _LAUNCHING = re.compile(
 )
 _RESTARTED = re.compile(r"Restarted application in")
 _VM_URI = re.compile(r"http://127\.0\.0\.1:[0-9]+/[A-Za-z0-9_=-]+/")
+_XCODE_DONE = re.compile(r"Xcode build done\.")
 
 
 def _last(pattern: re.Pattern[str], text: str) -> int:
@@ -44,6 +45,24 @@ def log_is_ready(text: str, *, require_restart: bool = False) -> bool:
     return _last(_VM_URI, text) > last_launch
 
 
+def log_stuck_post_xcode(text: str) -> bool:
+    """True when Xcode finished but no Dart VM / restart followed.
+
+    ui-agent walks hit this after ``prebuilt launch failed`` → full build:
+    ``Xcode build done`` then silence (no VM URI). Callers should fail
+    SIM_NOT_READY after a short grace instead of waiting the full timeout.
+    """
+    last_xcode = _last(_XCODE_DONE, text)
+    if last_xcode < 0:
+        return False
+    if log_is_ready(text):
+        return False
+    # Ready signals must appear *after* this Xcode completion.
+    return (
+        _last(_VM_URI, text) < last_xcode
+        and _last(_RESTARTED, text) < last_xcode
+    )
+
 def prebuilt_marker(log: Path) -> Path:
     """Sidecar that marks a prebuilt launch still waiting on hot restart."""
     return log.with_name(log.name + ".prebuilt")
@@ -58,12 +77,19 @@ def main(argv: list[str]) -> int:
         action="store_true",
         help="Ignore the .prebuilt sidecar (a fresh VM URI is enough).",
     )
+    parser.add_argument(
+        "--stuck-post-xcode",
+        action="store_true",
+        help="Exit 0 when Xcode build done with no following Dart VM URI.",
+    )
     args = parser.parse_args(argv)
     try:
         text = args.log.read_text(encoding="utf-8", errors="replace")
     except OSError as exc:
         print(f"flutter_log_ready: {exc}", file=sys.stderr)
         return 2
+    if args.stuck_post_xcode:
+        return 0 if log_stuck_post_xcode(text) else 1
     require_restart = (
         not args.vm_only and prebuilt_marker(args.log).exists()
     )

@@ -105,3 +105,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 - Prefer `tester.pump` (not `pumpAndSettle`) when pumping SoftPulse /
   `LessonAuthoredCueExplainTable` — gold SoftPulse breathes forever and
   times out settle (LPT-883).
+
+## Fold 2026-10-15
+
+- Prefer treating repeated `Xcode build done` with no post-Launching Dart VM URI (prebuilt launch code 1 → full build → timeout) as SIM_NOT_READY after one refresh + one `flutter_run_fast` retry — do not keep relaunching the same stuck Launching log; openlesson may print ok while the isolate dies (`Lost connection to device`) and screenshots stay on Home (2026-10-16 Wait your turn walk).
