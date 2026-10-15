@@ -5434,3 +5434,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
 - Prefer next NEVER: `lesson-04-07-03-01-steal-more` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-07-02-*: Spot Prefer NEVER structural clean on tip — SoftPulse residual / working-model residual closed by LPT-769 on first-child; Meet Nit children Prefer NEVER path complete.
+
+## Fold 2026-10-15fi (ca5d0018 Prefer NEVER steal-more)
+
+- Tip-stable `ca5d0018` (#2752 Prefer NEVER spot-nit learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-07-03-01-steal-more` / `act-04-07-03-explain` + `act-04-07-03-guided`:
+  - one objective Steal more versus Nits; explain SoftPulse STEAL-only + `explainGrading` "Nit folds → Steal more." **concept-aligned** (LPT-772 Done STEAL-only — was STEAL→CREDIT→EXPLODE; do not reopen SoftPulse residual / LPT-202).
+  - guided SoftPulse `steal` PRESENT (`poker_action_sizing` `fixed` Kh9d +2 suit variants; densify N/A).
+  - short-ladder 2/5 already on catalog **LPT-829**; curriculum **LPT-202** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-07-03-02-respect-heavy-action` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-07-03-*: first-child Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-772.
+
