@@ -5095,3 +5095,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER oldest unfresh `lesson-01-01-02-01-suits` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-10-02-*: interactive structural clean on tip; jump assessment container skips curriculum-split clones; densify PRESENT on SI arms — do not reopen LPT-628; fixed docks with suit variants — do not reopen LPT-627.
 
+## Fold 2026-10-15dy tip 9ce25bc4 (Prefer-next suits discovery)
+
+- Tip-stable `9ce25bc4` (#2699). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (tip-comment only — no body rebuild). SoftPulse Prefer queue empty except needs-human. Only open content: LPT-829 + LPT-351.
+- Prefer NEVER discovery: `lesson-01-01-02-01-suits` / `act-01-01-02-*`:
+  - Explain SoftPulse hearts→diamonds→clubs→spades + `explainGrading` concept-aligned under Name the four suits; Dart coach_dialogue + lesson_screen_layout wired.
+  - Guided SoftPulse `board_hearts`…`board_spades` PRESENT (`random_in_class` four_suits); Hint off while SoftPulse walks (no pressHints required).
+  - Scaffolded SoftPulse one-per-press pressHints 4/4 densify PRESENT (`selectIdentifyDensifiedCoachLine`).
+  - Checkpoint SoftPulse cue kind `none` hintless densify PRESENT.
+  - Short-ladder 4/5 already on **LPT-829**; curriculum **LPT-83** Done — do not clone / no SoftPulse residual.
+- Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER oldest unfresh `lesson-01-01-02-02-ranks` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-01-01-02-*: interactive structural clean on tip; densify PRESENT on SI arms — do not reopen LPT-628; four_suits `random_in_class` without distractor variants — do not reopen LPT-627.
