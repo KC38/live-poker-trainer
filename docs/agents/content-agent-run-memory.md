@@ -4502,6 +4502,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15ck tip 20069b98 (#2633 Stack Prefer → Low curriculum LPT-351 Prefer)
+
+- Tip-stable `20069b98` (#2633 Stack SoftPulse Prefer LPT-802 on tip after #2632). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- SoftPulse Prefer NEVER residual walk through Stack complete this pass.
+- Prefer NEVER Low curriculum warm-up split re-check `lesson-07-11-01-live-warmup-prep` / `act-07-11-01-*`:
+  - still packs three objectives (List warm-up checklist items / Carry defaults into Live / Stay inside live cash NLH scope) + SoftPulse CHECKLIST→DEFAULTS→ONE HAND + `explainGrading` "Checklist → Defaults → One hand." + coachMedia "Live warm-up: short checklist, then play. Plan 10 wires the bridge."
+  - guided SoftPulse `list` densify PRESENT; scaffolded SoftPulse `defaults` one-per-press densify PRESENT; unguided SoftPulse `scope` one-per-press densify PRESENT; checkpoint SoftPulse `one` kind `none` densify PRESENT (prompt "Warm-up goal?") still under "Carry defaults into Live" — objective mismatch.
+  - residual **LPT-351** still To Do (needs-human; gates `lesson-07-12-01-five-type-final` — do not remove needs-human / do not clone).
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-351/829/802/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Capstone SoftPulse Prefer / SoftPulse residual **LPT-676** re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-07-11-01-*: interactive structural clean on tip except multi-concept curriculum LPT-351; densify PRESENT — do not reopen LPT-628; pressHints PRESENT on scaffolded/unguided — do not reopen LPT-667; checkpoint hintless OK.
+
 ## Fold 2026-10-15cj tip cab77102 (#2632 HU Prefer → Stack SoftPulse LPT-802 Prefer)
 
 - Tip-stable `cab77102` (#2632 HU SoftPulse Prefer LPT-800 on tip after #2630). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
