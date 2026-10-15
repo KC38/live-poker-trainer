@@ -1,4 +1,4 @@
-/// LPT-883: Authored SoftPulse explain tiles use teaching captions, not Tap N of M.
+/// LPT-883 / LPT-884: Authored SoftPulse explain teaching captions (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
@@ -37,11 +37,17 @@ void main() {
   test('authoredSoftPulseExplainCaption teaches, never Tap N of M', () {
     expect(authoredSoftPulseExplainCaption('DRAW'), 'Need a card');
     expect(authoredSoftPulseExplainCaption('SHOWDOWN VALUE'), 'Weak made');
+    expect(authoredSoftPulseExplainCaption('AIR'), 'Nothing yet');
+    expect(authoredSoftPulseExplainCaption('FOLD EQUITY'), 'Bluff needs folds');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
     expect(authoredSoftPulseExplainCaption('UNKNOWN-TARGET-XYZ'), isEmpty);
     expect(
       authoredSoftPulseExplainCaption('DRAW'),
+      isNot(matches(RegExp(r'^Tap \d+ of \d+$'))),
+    );
+    expect(
+      authoredSoftPulseExplainCaption('FOLD EQUITY'),
       isNot(matches(RegExp(r'^Tap \d+ of \d+$'))),
     );
   });
@@ -87,6 +93,50 @@ void main() {
       expect(find.text('SHOWDOWN VALUE'), findsWidgets);
       expect(find.text('Need a card'), findsOneWidget);
       expect(find.text('Weak made'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Recognize air AuthoredCueExplain captions AIR + FOLD EQUITY (LPT-884)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-03-02-01-03-explain-air',
+        targets: const ['AIR', 'FOLD EQUITY'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('AIR'), findsWidgets);
+      expect(find.text('FOLD EQUITY'), findsWidgets);
+      expect(find.text('Nothing yet'), findsOneWidget);
+      expect(find.text('Bluff needs folds'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

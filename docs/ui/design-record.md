@@ -1730,9 +1730,10 @@ catalog rule so later `lessonSplitMap` batches cannot reintroduce the gap.
 
 Authored SoftPulse explain tiles (`LessonAuthoredCueExplainTable`, LPT-883)
 use short teaching captions under each cue label (for example DRAW → Need
-a card, BETS MATCHED → All caught up). They never show Tap N of M
-press-order meta chrome — SoftPulse alone owns the next press. Unknown
-targets omit the caption rather than inventing a numbered checklist.
+a card, BETS MATCHED → All caught up, FOLD EQUITY → Bluff needs folds —
+LPT-884). They never show Tap N of M press-order meta chrome — SoftPulse
+alone owns the next press. Unknown targets omit the caption rather than
+inventing a numbered checklist.
 
 Best five kicker showdown SoftPulse (LPT-75) is the framed
 `LessonTableStage` for `act-01-02-02-scaffolded-kicker`: `cueSeatIndex: 0`
@@ -2073,7 +2074,7 @@ felt.
 | Words are binding | explain SoftPulse cues SAY → BINDING; unguided SoftPulse-quiet densify stem non-spoiling (no Raise stands / verbal is binding) (LPT-846); unit `unit-03-01-reading-table` (LPT-140 split) | — |
 | Made hands | Made on the felt; explain SoftPulse cue MADE only — DRAW/SDV/AIR presses belong to Draws versus showdown value and Recognize air (curriculum residual LPT-751); fixed steps author suit-rotated `deal.variants` (LPT-384); densify Nice!/Oops `Pair of …` rewrites via non-chaining `alignLessonTableCopy` rank words (LPT-852); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Draws versus showdown value | explain SoftPulse cues DRAW → SHOWDOWN VALUE with teaching captions (Need a card / Weak made — never Tap N of M; LPT-883); scaffolded SoftPulse-quiet densify stem non-spoiling (no Strong draw / nut flush draw); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` (LPT-851 shared path; SoftPulse-quiet LPT-847); checkpoint SoftPulse-off densify stem non-spoiling (no Draw tile / template cards) (LPT-805); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
-| Recognize air | explain SoftPulse cues AIR → FOLD EQUITY; unguided SoftPulse-quiet densify stem non-spoiling (no Air / little equity); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` to the remapped deal (LPT-851; SoftPulse-quiet LPT-848); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
+| Recognize air | explain SoftPulse cues AIR → FOLD EQUITY with teaching captions (Nothing yet / Bluff needs folds — never an empty FOLD EQUITY gloss; LPT-884); unguided SoftPulse-quiet densify stem non-spoiling (no Air / little equity); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` to the remapped deal (LPT-851; SoftPulse-quiet LPT-848); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Clean versus dirty outs | Clean, Dirty on the felt; explain SoftPulse cue CLEAN → DIRTY only — PRICE press belongs to Pot odds versus equity (curriculum residual LPT-752); densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Pot odds versus equity | explain SoftPulse cues PRICE → POT → EQUITY; unit `unit-03-03-outs-price` (LPT-146 split); scaffolded SoftPulse-quiet densify stem non-spoiling (no equals-the-bet → Call 10) (LPT-882); unguided SoftPulse-quiet densify stem non-spoiling (no Call / Fold / Raise tile verbs) (LPT-881) | — |
 | Implied odds when deep | explain SoftPulse cues DEEP → IMPLIED ODDS; unit `unit-03-03-outs-price` (LPT-146 split) | — |
