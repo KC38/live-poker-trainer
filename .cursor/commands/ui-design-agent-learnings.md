@@ -114,7 +114,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   (`lesson-01-02-02-best-five-kickers`), not the Home title and not a
   guessed `01-01-0N` from ledger order — both yield "Unknown lesson".
   Button and blinds is `lesson-01-01-03-blinds-and-button` (not
-  `…-button-and-blinds`).
+  `…-button-and-blinds`). Prefer post-split ids in runner tests too
+  (`lesson-01-01-02-01-suits`, not retired `…-suits-and-ranks`) or
+  Unknown lesson masks start-gate assertions (LPT-872).
 - Prefer copying gitignored `lib/firebase_options.dart` (and iOS/Android
   Google services files) into the ticket worktree before `flutter run`;
   without them the worktree build fails even when primary runs fine. When a

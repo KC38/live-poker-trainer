@@ -362,7 +362,7 @@ One row, height 36.
 | --- | --- |
 | Close | `X` on the left. Leaves the lesson. It is not a back chevron. |
 | Progress | The lesson bar fills the space between close and the hearts. It advances by activity. |
-| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. At zero, the empty hearts breathe slowly, the refill sheet opens, a blocked stage tap nudges, and the Oops CTA becomes Restore hearts (not Continue). |
+| Hearts | One heart per life, filled while that life remains. A miss that costs a life empties one heart. At zero, the empty hearts breathe slowly, the refill sheet opens, a blocked stage tap nudges, and the Oops CTA becomes Restore hearts (not Continue). When start fails with out of hearts, chrome shows zero lives (not a stale full bar) and Rex names Restore hearts — Open previous stays for prerequisite locks only (LPT-872). |
 
 ### 2. Coach band
 
@@ -1834,6 +1834,11 @@ heart on finishing a weak, already-played lesson) and a full refill for
 gems. Hearts update in place on Home without blanking it. The sheet uses
 Theme Manrope for titles and option copy and JetBrains Mono for the next-
 heart countdown; it does not use Nunito.
+
+When `startCourseLesson` fails with out of hearts, the start-error stage
+shows empty chrome hearts and Rex says Tap Restore hearts. It does not keep
+a stale full heart bar from Home, and it does not offer Open previous (that
+CTA is for prerequisite locks only — LPT-872).
 
 ## Profile
 
