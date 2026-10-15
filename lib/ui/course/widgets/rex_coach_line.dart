@@ -460,8 +460,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // SoftPulse LPT-653; same class as LPT-845 / LPT-844 / LPT-843).
     'act-02-05-01-scaffolded-eff' =>
       'You have 150bb. Villain has 60bb — tap the effective stack.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name 50bb / 100bb / 200bb (LPT-850;
+    // SoftPulse LPT-653; same class as LPT-849 / LPT-845 / LPT-844).
     'act-02-05-01-unguided-depth' =>
-      'Which depth plays closest to a short-stack shove game — pick 50bb.',
+      'Which depth plays closest to a short-stack shove game — tap the matching depth.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name 200bb in the idle bubble (LPT-785; SoftPulse LPT-653; same class
     // as LPT-784 / LPT-783 / LPT-782 / LPT-672).

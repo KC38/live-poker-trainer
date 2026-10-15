@@ -85,7 +85,7 @@ const _lines = <String, String>{
   'act-02-05-01-scaffolded-eff':
       'You have 150bb. Villain has 60bb — tap the effective stack.',
   'act-02-05-01-unguided-depth':
-      'Which depth plays closest to a short-stack shove game — pick 50bb.',
+      'Which depth plays closest to a short-stack shove game — tap the matching depth.',
   // LPT-785: SoftPulse-off densify — no correct-tile spoil.
   'act-02-05-01-checkpoint-200':
       'Blinds 2/5. You buy in for 1000 chips — tap the matching stack in big blinds.',
