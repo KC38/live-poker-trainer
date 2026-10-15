@@ -492,8 +492,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Seat right before the button — pick it on the map.',
     'act-03-01-01-guided' =>
       'Blinds 1/2. UTG opens to 6, BTN calls, BB calls. Pot now — pick 21.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name UTG / Seat left of the big
+    // blind (LPT-845; SoftPulse LPT-653; same class as LPT-844 / LPT-843 /
+    // LPT-842).
     'act-03-01-01-scaffolded' =>
-      'Nine-handed. Dealer button is on seat 7. Who acts first preflop — pick Seat left of the big blind (UTG).',
+      'Nine-handed. Dealer button is on seat 7 — tap who acts first preflop.',
     'act-03-01-01-unguided' =>
       'You say "raise" then try to take it back to a call. Result — pick The raise stands — verbal is binding.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
