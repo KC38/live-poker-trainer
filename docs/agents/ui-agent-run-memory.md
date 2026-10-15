@@ -85,3 +85,10 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 ## Fold 2026-10-15
 
 - Prefer SoftPulse-quiet densify stems without leading numerals like "Two …" — `lessonFrameSpeech` / align can rewrite Two→three and false-fail exact string locks (LPT-866 Nearby live sizes).
+
+## Fold 2026-10-15
+
+- Prefer `python3 tools/ui_densify_spoil_scan.py list` / `check` on empty-queue discovery before hand-walking SoftPulse-quiet densify stems — exit 0 means no choice-label spoils remain (scanner landed with LPT-875-era main). Live SoftPulse:none + Hint + naming-a-tile still beats a quiet comment miss.
+- Profile Course place follows path frontier (LPT-875); Home sticky banner can lag one unit behind while scrolled. Judge SECTION mismatch vs Home next lesson, not sticky UNIT N vs Profile UNIT N+1 alone.
+
+- Prefer skipping IndexedStack inactive-tab ancestors (`_VisibilityScope(isVisible: false)`, `Offstage`, `ExcludeSemantics`) in agent `tree` and taps — AppShell keeps buried Home labels/onPressed alive otherwise (LPT-876 Live Training walks).
