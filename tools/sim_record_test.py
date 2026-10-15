@@ -90,6 +90,25 @@ class SimRecordCmdTest(unittest.TestCase):
                 sim_record.cmd_record(args)
         self.assertIn("lock is not yours", str(ctx.exception))
 
+    def test_wait_stable_video_accepts_settled_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "clip.mp4"
+            path.write_bytes(b"x" * (sim_record.MIN_VIDEO_BYTES + 10))
+            size = sim_record.wait_stable_video(
+                path, timeout=2.0, settle=0.05, poll=0.02
+            )
+            self.assertGreaterEqual(size, sim_record.MIN_VIDEO_BYTES)
+
+    def test_wait_stable_video_rejects_tiny_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "clip.mp4"
+            path.write_bytes(b"tiny")
+            with self.assertRaises(SystemExit) as ctx:
+                sim_record.wait_stable_video(
+                    path, timeout=0.35, settle=0.05, poll=0.05
+                )
+            self.assertIn("not ready", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -56,6 +56,9 @@ DEFAULT_SECONDS = 10.0
 DEFAULT_CODEC = "h264"
 DEFAULT_FRAME_EVERY = 1.0
 DEFAULT_FRAME_MAX = 8
+# simctl can leave a 0-byte (or header-only) path until finalize flushes;
+# agents then attach empty MP4s (LPT-868 lead). Require a real clip.
+MIN_VIDEO_BYTES = 2048
 STATE_DIR = Path.home() / ".live-poker-trainer"
 PID_FILE = STATE_DIR / "sim-record.pid"
 OUT_FILE = STATE_DIR / "sim-record.out"
@@ -153,6 +156,47 @@ def finalize_recording(proc: subprocess.Popen[str], *, wait: float = 60.0) -> in
         raise SystemExit("sim_record: timed out finalizing recording")
 
 
+def wait_stable_video(
+    path: Path,
+    *,
+    min_bytes: int = MIN_VIDEO_BYTES,
+    timeout: float = 45.0,
+    settle: float = 0.4,
+    poll: float = 0.15,
+) -> int:
+    """Block until [path] is a non-trivial MP4 whose size has stopped growing.
+
+    ``simctl recordVideo`` often creates the output path immediately and only
+    flushes media on SIGINT finalize. Checking ``st_size > 0`` too early yields
+    empty clips that fail ``frames`` and Jira attaches (ui-agent LPT-868).
+    """
+    deadline = time.monotonic() + timeout
+    last_size = -1
+    stable_since: float | None = None
+    while time.monotonic() < deadline:
+        if path.is_file():
+            size = path.stat().st_size
+            if size >= min_bytes:
+                if size == last_size:
+                    now = time.monotonic()
+                    if stable_since is None:
+                        stable_since = now
+                    elif now - stable_since >= settle:
+                        return size
+                else:
+                    last_size = size
+                    stable_since = None
+            else:
+                last_size = size
+                stable_since = None
+        time.sleep(poll)
+    size = path.stat().st_size if path.is_file() else 0
+    raise SystemExit(
+        f"sim_record: video not ready at {path} "
+        f"(size={size}, need>={min_bytes} stable)"
+    )
+
+
 def cmd_record(args: argparse.Namespace) -> int:
     """Record for a fixed duration, then finalize."""
     guard_lock(args.run_id)
@@ -188,8 +232,10 @@ def cmd_record(args: argparse.Namespace) -> int:
                 proc.kill()
         raise
     code = finalize_recording(proc)
-    if not out.is_file() or out.stat().st_size <= 0:
-        raise SystemExit(f"sim_record: no video written to {out} (exit {code})")
+    try:
+        wait_stable_video(out)
+    except SystemExit as exc:
+        raise SystemExit(f"{exc} (recordVideo exit {code})") from exc
     print(out)
     return EXIT_OK
 
@@ -270,8 +316,9 @@ def cmd_stop(args: argparse.Namespace) -> int:
             os.kill(pid, signal.SIGKILL)
             raise SystemExit("sim_record: had to SIGKILL recorder; video may be truncated")
     PID_FILE.unlink(missing_ok=True)
-    if out is None or not out.is_file() or out.stat().st_size <= 0:
-        raise SystemExit(f"sim_record: no video after stop ({out})")
+    if out is None:
+        raise SystemExit("sim_record: no video after stop (missing out path)")
+    wait_stable_video(out)
     print(out)
     return EXIT_OK
 
