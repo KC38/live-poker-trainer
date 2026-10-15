@@ -1743,7 +1743,8 @@ more hands — LPT-898, SHORTER → Min of the two / EFFECTIVE → Playable
 stack — LPT-899, PLAYABLE → Can call open / IN POSITION → Act after
 raiser — LPT-900, 3-BET → Re-raise open — LPT-901, 50BB → Short /
 simple / 100BB → Standard / 200BB → Deep / room — LPT-902, OPEN →
-Someone raised / PLAN → Fold, call, or 3-bet — LPT-903). Play a full
+Someone raised / PLAN → Fold, call, or 3-bet — LPT-903, DEEP → Wider
+trees / IMPLIED ODDS → They pay later — LPT-904). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2094,7 +2095,7 @@ felt.
 | Recognize air | explain SoftPulse cues AIR → FOLD EQUITY with teaching captions (Nothing yet / Bluff needs folds — never an empty FOLD EQUITY gloss; LPT-884); unguided SoftPulse-quiet densify stem non-spoiling (no Air / little equity); idle densify coach rewrites board/hole tokens via `alignLessonTableCopy` to the remapped deal (LPT-851; SoftPulse-quiet LPT-848); unit `unit-03-02-flop-classes` (LPT-143 split) | — |
 | Clean versus dirty outs | Clean, Dirty on the felt; explain SoftPulse cue CLEAN → DIRTY only — PRICE press belongs to Pot odds versus equity (curriculum residual LPT-752); densified frame asks (LPT-279); unguided SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Pot odds versus equity | explain SoftPulse cues PRICE → POT → EQUITY with teaching captions (Pot odds / What it pays / Win chance — never an empty gloss; LPT-887); unit `unit-03-03-outs-price` (LPT-146 split); scaffolded SoftPulse-quiet densify stem non-spoiling (no equals-the-bet → Call 10) (LPT-882); unguided SoftPulse-quiet densify stem non-spoiling (no Call / Fold / Raise tile verbs) (LPT-881) | — |
-| Implied odds when deep | explain SoftPulse cues DEEP → IMPLIED ODDS; unit `unit-03-03-outs-price` (LPT-146 split) | — |
+| Implied odds when deep | explain SoftPulse cues DEEP → IMPLIED ODDS with teaching captions (Wider trees / They pay later — never empty glosses; LPT-904); unit `unit-03-03-outs-price` (LPT-146 split) | — |
 | Value bet the flop | Value on the felt; explain SoftPulse cue VALUE only — C-BET/CHECK/CALL/FOLD/RAISE presses belong to C-bet selectively and Raise, call, or fold with a plan (curriculum residual LPT-753); postflop TPTK/broadway remap fingerprint (LPT-311); unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
 | C-bet selectively | explain SoftPulse cues PREFLOP RAISER → C-BET; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
 | Raise, call, or fold with a plan | explain SoftPulse cues RAISE → CALL → FOLD; unit `unit-03-04-flop-decisions` (LPT-151 split) | — |
