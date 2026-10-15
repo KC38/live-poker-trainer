@@ -5156,3 +5156,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-829/351; leave open LPT-351 + LPT-829; leave ui-agent alone.
 - Prefer next: NEVER oldest unfresh `lesson-01-01-03-02-small-and-big-blind` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-01-01-03-explain-button / act-01-01-03-guided-button: interactive structural clean on tip; densify PRESENT — do not reopen LPT-628; Dart `CoachDialogueVisualKind.dealerButton` wired — do not reopen LPT-669.
+
+## Fold 2026-10-15ec (54a89d32 Prefer-next small-and-big-blind discovery)
+
+- Tip `54a89d32` (#2704 SoftPulse-quiet densify landed; prior Prefer-next dealer-button fold #2703).
+- Catalog `--counts`: short-ladder **224** (other gaps **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog **LPT-829** tip-commented flat 224 (no description rebuild — Jira 32,767).
+- Only open content: **LPT-829** + Low curriculum **LPT-351** (tip-commented leave-open).
+- Discovery `lesson-01-01-03-02-small-and-big-blind` / `act-01-01-03-02-explain-blinds` + `act-01-01-03-scaffolded-blinds` + `act-01-01-03-checkpoint-layout`:
+  - explain SoftPulse SB→BB + `explainGrading` "Button → small blind → big blind." concept-aligned under Identify the small and big blinds; content-driven `authoredCues` (LPT-669 Done — do not reopen).
+  - scaffolded SoftPulse `BB` pressHints 1/1 densify PRESENT; checkpoint SoftPulse `SB` kind `none` hintless densify PRESENT.
+  - `deal.mode` `none` seat/puck — do not file handFamily/suitFamily.
+  - short-ladder 3/5 already on **LPT-829**; curriculum **LPT-87** Done — do not clone; SoftPulse residual N/A (not LPT-724 child residual).
+- Prefer next: NEVER `lesson-01-01-03-03-blinds-post-first` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-01-01-03-02-*: structural clean on tip; no new tickets.
+
