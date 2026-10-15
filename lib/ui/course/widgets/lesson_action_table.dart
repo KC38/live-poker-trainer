@@ -14287,6 +14287,10 @@ String authoredSoftPulseExplainCaption(String target) {
     // SAY caption matches TableHabitsDemo; BINDING glosses the verbal-stands rule.
     'SAY': 'Announce clearly',
     'BINDING': 'Must follow through',
+    // Wait your turn SoftPulse explain (EARLIER SEATS → YOUR TURN; LPT-891).
+    // Gloss the act-order ask — never leave AuthoredCue tiles label-only.
+    'EARLIER SEATS': 'Act before you',
+    'YOUR TURN': 'Then you decide',
     'NO BET': 'Free to check',
     'CHECK': 'Pass the street',
     'BET': 'Put chips in',
