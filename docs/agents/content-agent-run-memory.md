@@ -4502,6 +4502,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15ct tip 76e8d35c (#2648 Session Prefer → Range SoftPulse LPT-692 Prefer)
+
+- Tip-stable `76e8d35c` (#2648 Session SoftPulse Prefer LPT-690 on tip after #2647). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Range SoftPulse residual re-check `lesson-06-01-01-01/02/03` / `act-06-01-01-*`:
+  - first-child SoftPulse RANGE→NUT→ADVANTAGE + `explainGrading` "Range → Nut → Advantage." + Dart `RangeAdvantageDemo.points` RANGE/NUT/ADVANTAGE (captions Strong hands overall / More of the nuts / Own the edge) / `LessonRangeAdvantageExplainTable` / `CoachDialogueVisualKind.rangeAdvantage` / layout "Tap Range, then Nut, then Advantage." + coachMedia "Range advantage: more strong hands overall. Nut advantage: more of the nuts." still pre-split under range-advantage-only (`lesson-06-01-01-01-range-advantage` objective "Identify range advantage") → residual **LPT-692** still To Do (needs-human; Relates LPT-254 — do not re-add needs-human on curriculum).
+  - successors SoftPulse NUTS→PAIRED→CALLER / RANGE→NUTS→BET content-driven (do not reopen LPT-669); guided SoftPulse `pfr` densify PRESENT; scaffolded SoftPulse `caller-nuts` densify PRESENT; unguided SoftPulse `cbet` SoftPulse map PRESENT (fixed AhKd/Kc7s2d + 2 suit variants; poker_action_sizing densify N/A); checkpoint SoftPulse `press` kind `none` densify PRESENT under press-both — no companion residual.
+- Curriculum **LPT-254** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-692/254/829/694/351/198/216/690; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Spot-caps SoftPulse residual **LPT-694** re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-06-01-01-*: interactive structural clean on tip except LPT-692 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; guided/scaffolded/checkpoint `deal.mode` `none` — do not file handFamily; unguided fixed+variants SoftPulse map PRESENT.
+
 ## Fold 2026-10-15cs tip 5b9ecf82 (#2647 Dynamics Prefer → Session SoftPulse LPT-690 Prefer)
 
 - Tip-stable `5b9ecf82` (#2647 Dynamics SoftPulse Prefer LPT-686 on tip after #2646). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
