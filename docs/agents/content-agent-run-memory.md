@@ -5184,3 +5184,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-01-02-01-01-order-hand-ranks` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-01-01-03-03-*: structural clean on tip — teachSpec/pressHints/densify/SoftPulse companions Done; curriculum via LPT-87 only.
 
+## Fold 2026-10-15ee (79a98120 Prefer-next order-hand-ranks)
+
+- Tip-stable `79a98120` (#2707 Prefer-next blinds-post-first fold). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767; do not claim body rebuilt); other parents Done.
+- Only open content tickets: **LPT-829** + Low curriculum **LPT-351** (tip-commented both; leave open; do not re-add needs-human on LPT-351).
+- Prefer NEVER discovery `lesson-01-02-01-01-order-hand-ranks` / `act-01-02-01-explain-ladder` + `act-01-02-01-guided-ladder`:
+  - one objective; explain SoftPulse you→sam→jo + `explainGrading` "High card, then pair, then flush." **concept-aligned** under Order common hand ranks (Dart `handRanksShowdownSpot` / `dealShowdownOrderCards` wired; LPT-669 Done — do not reopen).
+  - guided SoftPulse you→sam→jo PRESENT (`compare_rank` `random_in_class` high_card + pair/flush variants match Dart `_dealHighPairFlushWeakToStrong`).
+  - densify N/A (`compare_rank`, not SI); pressHints N/A (both guided).
+  - short-ladder 2/5 already on **LPT-829**; curriculum **LPT-90** Done — do not clone; SoftPulse residual N/A (first-child wired).
+- Prefer next: NEVER `lesson-01-02-01-02-pairs-straights-flushes` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-01-02-01-explain-ladder / act-01-02-01-guided-ladder: structural clean on tip — teachSpec/cues/variants/SoftPulse companions Done; curriculum via LPT-90 only.
