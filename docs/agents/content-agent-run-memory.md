@@ -5171,3 +5171,16 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER `lesson-01-01-03-03-blinds-post-first` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-01-01-03-02-*: structural clean on tip; no new tickets.
 
+## Fold 2026-10-15ed (02f78d64 Prefer-next blinds-post-first)
+
+- Tip-stable `02f78d64` (#2706 SoftPulse-quiet densify; #2705 Prefer-next small-and-big-blind fold). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767; do not claim body rebuilt); other parents Done.
+- Only open content tickets: **LPT-829** + Low curriculum **LPT-351** (tip-commented both; leave open; do not re-add needs-human on LPT-351).
+- Prefer NEVER discovery `lesson-01-01-03-03-blinds-post-first` / `act-01-01-03-03-explain-when` + `act-01-01-03-unguided-when`:
+  - one objective; explain SoftPulse BLINDS→DEAL + `explainGrading` "Blinds post → cards are dealt." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen Dart map).
+  - unguided SoftPulse `before-deal` one-per-press pressHints 1/1 densify PRESENT (LPT-832 SoftPulse-quiet stem).
+  - `deal.mode` `none` seat/timing — do not file handFamily.
+  - short-ladder 2/5 already on **LPT-829**; curriculum **LPT-87** Done — do not clone; SoftPulse residual N/A.
+- Prefer next: NEVER `lesson-01-02-01-01-order-hand-ranks` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-01-01-03-03-*: structural clean on tip — teachSpec/pressHints/densify/SoftPulse companions Done; curriculum via LPT-87 only.
+
