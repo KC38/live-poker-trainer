@@ -755,8 +755,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Advantage is a reason to — tap the matching plan.',
     'act-06-02-01-guided' =>
       'Same draw OOP vs IP. Where does it realize better — pick In position.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Discount / fold (LPT-865;
+    // SoftPulse LPT-653; same class as LPT-864 / LPT-857 / LPT-853).
     'act-06-02-01-scaffolded' =>
-      'Weak showdown value OOP facing dual barrels. Default — pick Discount / fold.',
+      'Weak showdown value OOP facing dual barrels. Default — tap the matching plan.',
     // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
     // situation + tap verb only; never name Fold equity (LPT-856; SoftPulse
     // LPT-653; same class as LPT-855 / LPT-854 / LPT-853 / LPT-850).

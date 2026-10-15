@@ -253,7 +253,9 @@ const _lines = <String, String>{
       'Advantage is a reason to — tap the matching plan.',
   'act-06-02-01-guided':
       'Same draw OOP vs IP. Where does it realize better — pick In position.',
-  'act-06-02-01-scaffolded': 'Weak showdown value OOP facing dual barrels. Default — pick Discount / fold.',
+  // LPT-865: SoftPulse-quiet densify — no Discount / fold spoil.
+  'act-06-02-01-scaffolded':
+      'Weak showdown value OOP facing dual barrels. Default — tap the matching plan.',
   // LPT-856: SoftPulse-quiet densify — no Fold equity spoil.
   'act-06-02-01-unguided':
       'Semi-bluff check-raise with nut draw IP-denied. Purpose — tap the matching reason.',
