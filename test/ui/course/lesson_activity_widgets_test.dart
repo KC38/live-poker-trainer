@@ -15741,15 +15741,23 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    // LPT-403: densified ask (and frame speech) — not catalog + Tap the best answer.
+    // LPT-403 / LPT-867: densified SoftPulse-quiet stem — not catalog + Tap
+    // the best answer, and never spoil Too exact / Exactly AK.
     expect(
       lessonFrameSpeech(activity),
-      'They bet twice — tap why Exactly AK is too precise.',
+      'They bet twice — tap the matching range idea.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Exactly AK')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Too exact')));
+    expect(lessonFrameSpeech(activity), isNot(contains('too precise')));
+    expect(
+      find.text('They bet twice — tap the matching range idea.'),
+      findsOneWidget,
+    );
     expect(
       find.text('They bet twice — pick why Exactly AK is too precise.'),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       find.text('They bet twice — pinning Exactly AK collapses the range.'),

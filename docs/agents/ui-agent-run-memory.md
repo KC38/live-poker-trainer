@@ -81,3 +81,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 - Never use bare `Rise` (or other short tile stems) in case-insensitive `grep -E` spoil checks against coach speech — explain copy like "confidence rises" false-matches and can race `Done` without a validated PNG (LPT-823 closeout). Prefer an exact densify-stem needle (`tap how confidence should move`) or word-boundary spoil phrases (`— tap Rise`, `Stay zero`).
 
 - Prefer deleting stale `LPT-*` / `live-poker-trainer*` Flutter asset extract dirs under the mini app `Containers/.../tmp` when disk is near full (`du` can show ~160MB × hundreds ≈ tens of GB) before Xcode builds (LPT-826 disk preflight). Keep the newest extract; do not wipe Library/Preferences.
+
+## Fold 2026-10-15
+
+- Prefer SoftPulse-quiet densify stems without leading numerals like "Two …" — `lessonFrameSpeech` / align can rewrite Two→three and false-fail exact string locks (LPT-866 Nearby live sizes).
