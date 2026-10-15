@@ -51,6 +51,31 @@ class UiMotionTargetsTest(unittest.TestCase):
             self.assertTrue(picked)
             self.assertNotEqual(picked[0].surface, walked)
 
+    def test_pick_counts_coverage_aliases(self) -> None:
+        """Sibling lesson/runner surfaces count as a walk for the motion id."""
+        with tempfile.TemporaryDirectory() as tmp:
+            cov = Path(tmp) / "coverage.jsonl"
+            # Exact canonical never logged — only the densify ticket surface.
+            row = {
+                "at": datetime(2026, 10, 15, tzinfo=timezone.utc).isoformat(),
+                "surface": "lesson-01-02-02-01-best-five",
+                "result": "closed",
+                "ticket": "LPT-835",
+            }
+            cov.write_text(json.dumps(row) + "\n", encoding="utf-8")
+            picked = mod.pick_targets(coverage_path=cov, limit=10)
+            surfaces = [t.surface for t in picked]
+            self.assertNotIn(
+                "lesson-01-02-02-best-five-kickers",
+                surfaces[:3],
+                "alias walk should demote best-five below never-walked picks",
+            )
+            walked_at = mod.last_walk_for_surface(
+                mod.last_walk_by_surface(mod.load_coverage(cov)),
+                "lesson-01-02-02-best-five-kickers",
+            )
+            self.assertIsNotNone(walked_at)
+
     def test_cli_list(self) -> None:
         code = mod.main(["list"])
         self.assertEqual(code, 0)

@@ -112,6 +112,58 @@ TARGETS: tuple[MotionTarget, ...] = (
 
 DEFAULT_COVERAGE = Path.home() / ".live-poker-trainer" / "ui-agent-coverage.jsonl"
 
+# Coverage ``surface`` strings often differ from the curated motion id
+# (lesson slug vs ``lesson-runner:…``, densify ticket surfaces, ceremony
+# aliases). Without these, ``pick`` forever ranks already-walked motion
+# targets as never-walked and starves the rest of the catalog.
+SURFACE_ALIASES: dict[str, tuple[str, ...]] = {
+    "lesson-01-01-01-your-two-cards": (
+        "lesson-01-01-01-your-two-cards",
+        "lesson-runner:your-two-cards",
+    ),
+    "lesson-01-01-03-blinds-and-button": (
+        "lesson-01-01-03-blinds-and-button",
+        "lesson-01-01-03-01-dealer-button",
+        "lesson-01-01-03-02-small-and-big-blind",
+        "lesson-blind-labels",
+        "lesson-button-and-blinds",
+        "lesson-runner:blinds-and-button",
+    ),
+    "lesson-01-01-02-01-suits": (
+        "lesson-01-01-02-01-suits",
+        "lesson-runner:suits",
+    ),
+    "lesson-01-02-02-best-five-kickers": (
+        "lesson-01-02-02-best-five-kickers",
+        "lesson-01-02-02-01-best-five",
+        "lesson-best-five-checkpoint-build",
+        "lesson-runner:best-five-kickers",
+    ),
+    "lesson-runner:softpulse-breathe": (
+        "lesson-runner:softpulse-breathe",
+        "lesson-runner:open-strong-softpulse",
+    ),
+    "home:hearts-zero-breathe": (
+        "home:hearts-zero-breathe",
+        "home:hearts",
+    ),
+    "lesson-result:ceremony": (
+        "lesson-result:ceremony",
+        "lesson-complete",
+        "lesson-result:openlesson-continue-home",
+    ),
+    "home:section-end-ceremony": ("home:section-end-ceremony",),
+    "lesson-runner:felt-pot-stacks": (
+        "lesson-runner:felt-pot-stacks",
+        "lesson-how-pots-open-pot",
+        "lesson-winning-pots-open-pot",
+    ),
+    "lesson-runner:coach-mood-transition": (
+        "lesson-runner:coach-mood-transition",
+        "lesson-runner:coach-transition",
+    ),
+}
+
 CLASSES = {
     "multi_frame": (
         "Several presses or authored beats on one step (SoftPulse advances, "
@@ -166,6 +218,27 @@ def last_walk_by_surface(rows: Iterable[dict]) -> dict[str, datetime]:
     return latest
 
 
+def coverage_keys_for(surface: str) -> frozenset[str]:
+    """Canonical motion surface plus known coverage aliases."""
+    aliases = SURFACE_ALIASES.get(surface, ())
+    return frozenset((surface, *aliases))
+
+
+def last_walk_for_surface(
+    latest: dict[str, datetime],
+    surface: str,
+) -> datetime | None:
+    """Latest coverage walk matching [surface] or its aliases."""
+    best: datetime | None = None
+    for key in coverage_keys_for(surface):
+        at = latest.get(key)
+        if at is None:
+            continue
+        if best is None or at > best:
+            best = at
+    return best
+
+
 def pick_targets(
     targets: tuple[MotionTarget, ...] = TARGETS,
     coverage_path: Path = DEFAULT_COVERAGE,
@@ -174,14 +247,16 @@ def pick_targets(
 ) -> list[MotionTarget]:
     """Prefer never-walked motion surfaces, then oldest walks."""
     latest = last_walk_by_surface(load_coverage(coverage_path))
-    ranked = sorted(
-        targets,
-        key=lambda t: (
-            0 if t.surface not in latest else 1,
-            latest.get(t.surface, datetime.min),
+
+    def rank_key(t: MotionTarget) -> tuple[int, datetime, str]:
+        walked_at = last_walk_for_surface(latest, t.surface)
+        return (
+            0 if walked_at is None else 1,
+            walked_at or datetime.min,
             t.id,
-        ),
-    )
+        )
+
+    ranked = sorted(targets, key=rank_key)
     return ranked[: max(1, limit)]
 
 
