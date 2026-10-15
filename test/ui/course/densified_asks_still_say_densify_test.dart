@@ -241,7 +241,9 @@ const _lines = <String, String>{
   'act-06-02-01-guided':
       'Same draw OOP vs IP. Where does it realize better — pick In position.',
   'act-06-02-01-scaffolded': 'Weak showdown value OOP facing dual barrels. Default — pick Discount / fold.',
-  'act-06-02-01-unguided': 'Semi-bluff check-raise with nut draw IP-denied. Purpose — pick Fold equity.',
+  // LPT-856: SoftPulse-quiet densify — no Fold equity spoil.
+  'act-06-02-01-unguided':
+      'Semi-bluff check-raise with nut draw IP-denied. Purpose — tap the matching reason.',
   // LPT-766: SoftPulse-off densify — no correct-tile spoil.
   'act-06-02-01-checkpoint':
       'Equity realization rises with — tap the matching levers.',

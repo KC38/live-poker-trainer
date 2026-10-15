@@ -729,8 +729,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Same draw OOP vs IP. Where does it realize better — pick In position.',
     'act-06-02-01-scaffolded' =>
       'Weak showdown value OOP facing dual barrels. Default — pick Discount / fold.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Fold equity (LPT-856; SoftPulse
+    // LPT-653; same class as LPT-855 / LPT-854 / LPT-853 / LPT-850).
     'act-06-02-01-unguided' =>
-      'Semi-bluff check-raise with nut draw IP-denied. Purpose — pick Fold equity.',
+      'Semi-bluff check-raise with nut draw IP-denied. Purpose — tap the matching reason.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Position + initiative in the idle bubble (LPT-766; same class as
     // LPT-764 / LPT-746 / LPT-653).
