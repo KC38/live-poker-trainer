@@ -116,6 +116,44 @@ class UiDensifySpoilScanTest(unittest.TestCase):
             ["Call 10"],
         )
 
+    def test_numeric_tile_labels(self) -> None:
+        self.assertEqual(
+            mod.spoil_labels("Pick 120bb as effective.", ["55bb", "120bb", "175bb"]),
+            ["120bb"],
+        )
+        # Situation numbers that match tile labels are accepted (LPT-849).
+        self.assertEqual(
+            mod.spoil_labels(
+                "You have 150bb. Villain has 60bb — tap the effective stack.",
+                ["60bb", "150bb"],
+            ),
+            [],
+        )
+        self.assertEqual(
+            mod.spoil_labels(
+                "Two stacks face each other — pick the effective stack.",
+                ["55bb", "120bb"],
+            ),
+            [],
+        )
+
+    def test_distinctive_label_fragments(self) -> None:
+        label = "Draw — straight and flush potential"
+        self.assertEqual(
+            mod.spoil_labels(
+                "Gutshot vs a 2x pot bet — tap straight and flush when pricing.",
+                [label, "Fold — price is wrong"],
+            ),
+            [label],
+        )
+        self.assertEqual(
+            mod.spoil_labels(
+                "Gutshot vs a 2x pot bet — tap the matching price plan.",
+                [label],
+            ),
+            [],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

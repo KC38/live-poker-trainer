@@ -4,7 +4,9 @@
 Discovery keeps re-walking SoftPulse-quiet densify by hand. This CLI compares
 ``selectIdentifyDensifiedCoachLine`` stems to catalog choice labels and lists
 likely spoils (idle coach names a tile answer while SoftPulse is off / after
-Hint only).
+Hint only). Matches full labels, short numeric tiles (``55bb``), and
+distinctive em-dash fragments (``straight and flush`` inside
+``Draw — straight and flush potential``; LPT-877 / LPT-878).
 
 Commands:
 
@@ -133,21 +135,81 @@ def _normalize(text: str) -> str:
     return re.sub(r"\s+", " ", text.strip().lower())
 
 
+# Stack / chip tiles are short ("55bb") but distinctive SoftPulse-off spoils
+# (LPT-877 jump-stack named 120bb while scan required len>=6).
+_NUMERIC_TILE = re.compile(
+    r"^\d+(\.\d+)?\s*(bb|chips?|big blinds?)?$",
+    re.IGNORECASE,
+)
+
+
+def _label_significant(norm: str) -> bool:
+    """True when [norm] is specific enough to count as a spoil needle."""
+    if len(norm) < 4 or norm in _STOP_LABELS:
+        return False
+    if _NUMERIC_TILE.match(norm):
+        return True
+    if " " in norm or len(norm) >= 6:
+        return True
+    return False
+
+
+def _distinctive_fragments(label: str) -> list[str]:
+    """Subphrases of [label] that SoftPulse-off stems must not echo (LPT-878).
+
+    Exact full-label match misses ``straight and flush`` inside
+    ``Draw — straight and flush potential``.
+    """
+    frags: list[str] = []
+    seen: set[str] = set()
+    # Split em-dash / slash / pipe subtitles.
+    for part in re.split(r"\s*[—|/]\s*", label):
+        words = _normalize(part).split()
+        # Sliding windows of 2+ words, length ≥12 (skip lone "draw").
+        for start in range(len(words)):
+            for end in range(start + 2, len(words) + 1):
+                phrase = " ".join(words[start:end])
+                if len(phrase) >= 12 and phrase not in seen:
+                    seen.add(phrase)
+                    frags.append(phrase)
+    return frags
+
+
+def _numeric_answer_cue(hay: str, tile: str) -> bool:
+    """True when [tile] is cued as the answer, not only situation setup.
+
+    SoftPulse-quiet stems may say ``You have 150bb. Villain has 60bb`` while
+    tiles are those sizes (LPT-849 / LPT-787 accepted). Spoil when the stem
+    tells the learner to tap/pick that tile (LPT-877 jump-stack).
+    """
+    return bool(
+        re.search(
+            rf"\b(?:tap|pick|choose|select)\s+{re.escape(tile)}\b",
+            hay,
+        )
+    )
+
+
 def spoil_labels(stem: str, choices: list[str]) -> list[str]:
-    """Choice labels that appear inside [stem] (case-insensitive)."""
+    """Choice labels (or distinctive fragments) echoed inside [stem]."""
     hay = _normalize(stem)
     hits: list[str] = []
     seen: set[str] = set()
     for label in choices:
         norm = _normalize(label)
-        if len(norm) < 4:
+        if not _label_significant(norm):
             continue
-        if norm in _STOP_LABELS:
-            continue
-        # Prefer multi-word / specific tiles (Call 10, Full house, …).
-        if " " not in norm and len(norm) < 6:
-            continue
-        if norm in hay and norm not in seen:
+        matched = False
+        if _NUMERIC_TILE.match(norm):
+            matched = _numeric_answer_cue(hay, norm)
+        elif norm in hay:
+            matched = True
+        else:
+            for frag in _distinctive_fragments(label):
+                if frag in hay:
+                    matched = True
+                    break
+        if matched and norm not in seen:
             seen.add(norm)
             hits.append(label)
     return hits
