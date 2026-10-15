@@ -1742,7 +1742,8 @@ COVER → Protect hole cards / WAIT → Act in turn — LPT-897, WIDER → Open
 more hands — LPT-898, SHORTER → Min of the two / EFFECTIVE → Playable
 stack — LPT-899, PLAYABLE → Can call open / IN POSITION → Act after
 raiser — LPT-900, 3-BET → Re-raise open — LPT-901, 50BB → Short /
-simple / 100BB → Standard / 200BB → Deep / room — LPT-902). Play a full
+simple / 100BB → Standard / 200BB → Deep / room — LPT-902, OPEN →
+Someone raised / PLAN → Fold, call, or 3-bet — LPT-903). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2082,7 +2083,7 @@ felt.
 | Say your action | explain SoftPulse cues SAY → CHIPS with teaching captions (Announce clearly / Then move chips — LPT-893); scaffolded SoftPulse-quiet densify stem non-spoiling (no Say "raise") (LPT-843); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Protect cards, wait your turn | explain SoftPulse cues COVER → WAIT with teaching captions Protect hole cards / Act in turn (LPT-897); unguided SoftPulse-quiet densify stem non-spoiling (no Keep a chip) (LPT-844); checkpoint SoftPulse-off densify stem non-spoiling (LPT-786); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Open on a full ring | Nine, Same, Position; explain SoftPulse cues NINE → SAME → POSITION (LPT-635); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
-| Face a raise with a plan | explain SoftPulse cues OPEN → PLAN; unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
+| Face a raise with a plan | explain SoftPulse cues OPEN → PLAN with teaching captions (Someone raised / Fold, call, or 3-bet — never empty glosses; LPT-903); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
 | Keep live habits while deciding | explain SoftPulse cues COVER → WAIT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-788); unit `unit-02-07-baseline-checkpoint` (LPT-668 split) | — |
 | Baseline jump check | Family / stack densified felt asks in the frame bubble (LPT-221); jump-family SoftPulse one gold via `guideRegion` (LPT-634); jump-stack SoftPulse-off densify stem non-spoiling (no 55bb / 120bb / 175bb) (LPT-877) | — |
 | Pot and stacks | Pot, Stacks on the felt; explain SoftPulse cue POT → STACKS only — BUTTON/WHO ACTS presses belong to Button and action seat (curriculum residual LPT-750); checkpoint SoftPulse-off densify stem non-spoiling (LPT-787); unit `unit-03-01-reading-table` (LPT-140 split) | — |

@@ -14369,6 +14369,10 @@ String authoredSoftPulseExplainCaption(String target) {
     '50BB': 'Short / simple',
     '100BB': 'Standard',
     '200BB': 'Deep / room',
+    // Face a raise with a plan SoftPulse explain (OPEN → PLAN; LPT-903).
+    // Gloss the facing-open ask — never leave AuthoredCue tiles label-only.
+    'OPEN': 'Someone raised',
+    'PLAN': 'Fold, call, or 3-bet',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
