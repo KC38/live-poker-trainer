@@ -22257,18 +22257,24 @@ await tester.tap(find.text('NIT'));
         ),
       ),
     );
-    // LPT-636: densified ask (and frame speech) — not catalog + Tap the best answer.
+    // LPT-636 / LPT-853: densified SoftPulse-quiet ask — not catalog footer,
+    // and never name Uncapped while SoftPulse stays off until Hint.
     expect(
       lessonFrameSpeech(activity),
-      'XR flop / bet turn / bomb — tap Uncapped.',
+      'XR flop / bet turn / bomb — tap the matching range label.',
     );
     expect(lessonFrameSpeech(activity), isNot(contains('Tap the best answer')));
+    expect(lessonFrameSpeech(activity), isNot(contains('Uncapped')));
     expect(
-      find.text('XR flop / bet turn / bomb — pick Uncapped.'),
+      find.text('XR flop / bet turn / bomb — tap the matching range label.'),
       findsOneWidget,
     );
     expect(
-      find.text('XR flop / bet turn / bomb — read their range shape.'),
+      find.text('XR flop / bet turn / bomb — pick Uncapped.'),
+      findsNothing,
+    );
+    expect(
+      find.text('XR flop / bet turn / bomb — tap Uncapped.'),
       findsNothing,
     );
     expect(

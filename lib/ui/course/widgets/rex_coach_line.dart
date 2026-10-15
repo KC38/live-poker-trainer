@@ -152,8 +152,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // Use pick/tap so withLessonTapInstruction does not append the footer.
     'act-06-03-01-guided' =>
       'Checks turn after flop bet — pick Capped.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Uncapped (LPT-853; SoftPulse
+    // LPT-653; same class as LPT-850 / LPT-849 / LPT-846).
     'act-06-03-01-unguided' =>
-      'XR flop / bet turn / bomb — pick Uncapped.',
+      'XR flop / bet turn / bomb — tap the matching range label.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Attack in the idle bubble (LPT-809; SoftPulse LPT-653; same class
     // as LPT-810 / LPT-811 / LPT-808).
