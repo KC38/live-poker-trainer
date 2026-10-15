@@ -1741,7 +1741,8 @@ LPT-892, CHIPS → Then move chips — LPT-893, EP → Early seat — LPT-896,
 COVER → Protect hole cards / WAIT → Act in turn — LPT-897, WIDER → Open
 more hands — LPT-898, SHORTER → Min of the two / EFFECTIVE → Playable
 stack — LPT-899, PLAYABLE → Can call open / IN POSITION → Act after
-raiser — LPT-900, 3-BET → Re-raise open — LPT-901). Play a full
+raiser — LPT-900, 3-BET → Re-raise open — LPT-901, 50BB → Short /
+simple / 100BB → Standard / 200BB → Deep / room — LPT-902). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2076,7 +2077,7 @@ felt.
 | Value 3-bet | explain SoftPulse cues STRONG → 3-BET with teaching captions (Premium hands / Re-raise open — never empty 3-BET gloss; LPT-901); 3-bet on the felt; RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (curriculum residual LPT-760); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Chips to big blinds | Chips→BB on the felt; explain SoftPulse cue CHIPS→BB only — SHORTER/DEPTH presses belong to Shorter stack is effective and Stack depth (curriculum residual LPT-748); checkpoint SoftPulse-off densify stem non-spoiling (LPT-785); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE with teaching captions (Min of the two / Playable stack — never empty glosses; LPT-899); scaffolded SoftPulse-quiet densify stem non-spoiling (no 60bb tile) (LPT-849); unit `unit-02-05-stacks` (LPT-130 split) | — |
-| Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unguided SoftPulse-quiet densify stem non-spoiling (no 50bb) (LPT-850); unit `unit-02-05-stacks` (LPT-130 split) | — |
+| Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB with teaching captions (Short / simple / Standard / Deep / room — never empty glosses; LPT-902); unguided SoftPulse-quiet densify stem non-spoiling (no 50bb) (LPT-850); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Follow the action | Watch on the felt; explain SoftPulse cue WATCH only — SAY/COVER/WAIT presses belong to Say your action and Protect cards, wait your turn (curriculum residual LPT-749); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Say your action | explain SoftPulse cues SAY → CHIPS with teaching captions (Announce clearly / Then move chips — LPT-893); scaffolded SoftPulse-quiet densify stem non-spoiling (no Say "raise") (LPT-843); unit `unit-02-06-table-habits` (LPT-133 split) | — |
 | Protect cards, wait your turn | explain SoftPulse cues COVER → WAIT with teaching captions Protect hole cards / Act in turn (LPT-897); unguided SoftPulse-quiet densify stem non-spoiling (no Keep a chip) (LPT-844); checkpoint SoftPulse-off densify stem non-spoiling (LPT-786); unit `unit-02-06-table-habits` (LPT-133 split) | — |

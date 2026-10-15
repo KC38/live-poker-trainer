@@ -14363,6 +14363,12 @@ String authoredSoftPulseExplainCaption(String target) {
     // Premium hands; 3-BET glosses the re-raise-over-open beat so the second
     // SoftPulse tile is not label-only.
     '3-BET': 'Re-raise open',
+    // Stack depth SoftPulse explain (50BB → 100BB → 200BB; LPT-902). Gloss
+    // short / standard / deep from the coach ask — never leave AuthoredCue
+    // tiles label-only.
+    '50BB': 'Short / simple',
+    '100BB': 'Standard',
+    '200BB': 'Deep / room',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
