@@ -175,11 +175,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   `Seventy-two offsuit` (decade compound) while `_spokenStartingHand` is
   `seven-two offsuit` — both aliases must rewrite via
   `alignStartingHandCopy` or remapped trash still grades as 72o (LPT-164).
-- Prefer `strictOrder: true` + `onLocalMiss` on framed
+-   Prefer `strictOrder: true` + `onLocalMiss` on framed
   `RandomizedLessonShowdownOrderTable` (Compare finished hands unguided /
   checkpoint, jump ranks) — SoftPulse can gold You while a wrong seat still
   appends cyan #1 when strictOrder defaults false (LPT-707). Explain tables
-  already strict; interactive must match.
+  already strict; interactive must match. Prefer committing Best five
+  picker `orderedIds` / choice draft **before** `consumeSequentialSoftPulse`
+  — SoftPulse notify clears local cyan when draft is still empty (SoftPulse-quiet
+  Hint gold tap left 0/5; LPT-870).
 - Prefer Suits explain Hint copy from Dart / pressHints (`Find a heart on the board.`) — never fall through to completion accessibility `You found all four suits…` on SoftPulse-quiet review (LPT-813). After `fresh` clears completedLessonIds, SoftPulse-quiet review follows live profile ids at lesson start (LPT-828) — still wait for Home refresh before filing SoftPulse-off from a stale hasCompleted snapshot if you are on a build before that fix.
 - Prefer a second open when judging card randomization (screenshot hole/board
   A vs B) and screenshot heart counts before/after a paid miss (and after

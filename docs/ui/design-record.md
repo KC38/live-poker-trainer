@@ -1659,8 +1659,10 @@ five are tapped (LPT-56) so the ask does not grey out the answer. Best five
 guided picker SoftPulse (`LessonBestFivePickerTable`, LPT-57) highlights
 only the next untapped card in the recommended `choiceSets` list the same
 way — never every remaining recommended card, never the You name box.
-Hint reopens that card cue when the SoftPulse wave closes. After Nice! or
-Oops, that picker keeps SoftPulse off and dims cards outside the coach
+Hint reopens that card cue when the SoftPulse wave closes. SoftPulse-quiet
+Hint gold taps commit `orderedIds` before `consumeSequentialSoftPulse` so
+the pick stays at N/5 — SoftPulse must not clear cyan (LPT-870). After Nice!
+or Oops, that picker keeps SoftPulse off and dims cards outside the coach
 five while cyan stays on the learner's picks (LPT-61) — it does not gold
 every correct card at once. The next multi-press felt explain or picker
 that cues cards copies that single-target advance, the no-early-dim rule,
@@ -2001,7 +2003,7 @@ felt.
 | Order hand ranks | Showdown seats weakest to strongest; unit `unit-01-02-what-beats-what` (LPT-90 split) | scaffolded pressHints one-per-press (LPT-667) |
 | Pairs, straights, flushes | explain SoftPulse cues PAIR → STRAIGHT → FLUSH; unit `unit-01-02-what-beats-what` (LPT-90 split) | — |
 | Compare finished hands | explain SoftPulse cues FULL HOUSE → TRIPS → TWO PAIR; unguided/checkpoint showdown SoftPulse rejects a wrong seat as a miss (`strictOrder`, LPT-707); unit `unit-01-02-what-beats-what` (LPT-90 split) | — |
-| Best five from seven | The five cards that play; You / Them / Board; unit `unit-01-02-what-beats-what` (LPT-93 split); guided SoftPulse-quiet densify stem non-spoiling (no Top pair / best kicker) (LPT-835) | scaffolded pressHints one-per-press (LPT-667) |
+| Best five from seven | The five cards that play; You / Them / Board; unit `unit-01-02-what-beats-what` (LPT-93 split); guided SoftPulse-quiet densify stem non-spoiling (no Top pair / best kicker) (LPT-835); SoftPulse-quiet Hint gold card tap selects into N/5 (SoftPulse consume after draft commit, LPT-870) | scaffolded pressHints one-per-press (LPT-667) |
 | Kickers break ties | explain SoftPulse cues SAME PAIR → KICKER; unit `unit-01-02-what-beats-what` (LPT-93 split) | — |
 | When the board plays | explain SoftPulse cues BOARD → CHOP; unit `unit-01-02-what-beats-what` (LPT-93 split) | — |
 | Fold | Fold under a flop on the felt; explain SoftPulse cue FOLD only — CHECK/CALL presses belong to Check and Call (curriculum residual LPT-731); unit `unit-01-03-five-actions` (LPT-96 split) | — |

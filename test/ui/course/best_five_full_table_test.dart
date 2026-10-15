@@ -676,4 +676,77 @@ void main() {
     expect(find.byKey(const ValueKey<String>('glow-highlight')), findsNothing);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'SoftPulse-quiet Hint gold card tap selects (LPT-870)',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      // Same-concept quiet id — SoftPulse stays off until Hint.
+      final activity = CourseActivity(
+        id: 'act-01-02-02-guided-seven',
+        order: 2,
+        stage: ActivityStage.guided,
+        renderer: ActivityRenderer.selectIdentify,
+        estimatedSeconds: 40,
+        accessibilityText: 'Tap five',
+        acceptedGrades: const [SoftGrade.recommended],
+        prompt: 'Tap your best five.',
+        choices: const [
+          CourseChoice(id: 'best-pair-k', label: 'Aces with king'),
+          CourseChoice(id: 'weak-kickers', label: 'Aces with nine'),
+          CourseChoice(id: 'ignore-ace', label: 'King high'),
+        ],
+      );
+      final controller = LessonActivityController(activity: activity);
+      addTearDown(controller.dispose);
+      controller.notifyFeltDealReady(true);
+
+      await tester.pumpWidget(
+        _frame(
+          AnimatedBuilder(
+            animation: controller,
+            builder: (context, _) {
+              return SelectIdentifyActivity(
+                activity: activity,
+                controller: controller,
+                showGuidance: controller.showTargetCue,
+              );
+            },
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(controller.showTargetCue, isFalse);
+      expect(find.text('0/5 selected'), findsOneWidget);
+
+      controller.revealHint();
+      await tester.pump();
+      expect(controller.showTargetCue, isTrue);
+
+      final spot = resolveBestFiveSpot(activity)!;
+      final next = spot.choiceSets['best-pair-k']!.first;
+      final heroIdx = spot.heroCodes.indexOf(next);
+      if (heroIdx >= 0) {
+        await tester.tap(
+          find.byKey(ValueKey<String>('lesson-hero-card-$heroIdx')),
+        );
+      } else {
+        final boardIdx = spot.boardCodes.indexOf(next);
+        await tester.tap(
+          find.byKey(ValueKey<String>('lesson-board-card-$boardIdx')),
+        );
+      }
+      await tester.pump();
+      // SoftPulse consume must not wipe the pick (race with orderedIds).
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(controller.draft.orderedIds, contains(next));
+      expect(find.text('1/5 selected'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }
