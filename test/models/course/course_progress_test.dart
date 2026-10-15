@@ -151,4 +151,101 @@ void main() {
     expect(course.available, isFalse);
     expect(course.legacyLifetimeXp, isNull);
   });
+
+  test(
+    'place follows path frontier when currentLessonId lags on an early unit',
+    () {
+      final midCourseCatalog = CourseCatalog(
+        catalogVersion: '2.0.0',
+        minClientVersion: '2.0.0',
+        scope: 'live_cash_nlh',
+        coachId: 'rex',
+        contentChecksum: 'test',
+        playerTypes: const [],
+        sections: [
+          CourseSection(
+            id: 'section-1',
+            order: 1,
+            title: 'Never Played',
+            summary: 'Basics',
+            experienceBand: 'never_played',
+            units: [
+              CourseUnit(
+                id: 'unit-1',
+                order: 1,
+                title: 'Cards and the table',
+                summary: 'Cards',
+                lessons: [
+                  CourseLesson(
+                    id: 'lesson-a',
+                    order: 1,
+                    title: 'Two cards',
+                    summary: 'Start',
+                    objectives: const [],
+                    prerequisites: const [],
+                    remediationLessonIds: const [],
+                    estimatedMinutes: 4,
+                    difficultyBand: 1,
+                    playerTypeRefs: const [],
+                    introducesPlayerTypes: const [],
+                    activities: const [],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          CourseSection(
+            id: 'section-3',
+            order: 3,
+            title: 'Flop and turn',
+            summary: 'Later',
+            experienceBand: 'some_live',
+            units: [
+              CourseUnit(
+                id: 'unit-3-4',
+                order: 4,
+                title: 'Flop decisions',
+                summary: 'Flop',
+                lessons: [
+                  CourseLesson(
+                    id: 'lesson-brick',
+                    order: 1,
+                    title: 'Brick or changing turn',
+                    summary: 'Brick',
+                    objectives: const [],
+                    prerequisites: const ['lesson-a'],
+                    remediationLessonIds: const [],
+                    estimatedMinutes: 5,
+                    difficultyBand: 2,
+                    playerTypeRefs: const [],
+                    introducesPlayerTypes: const [],
+                    activities: const [],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+
+      final course = CourseProgress.fromState({
+        'available': true,
+        'profile': {
+          'lifetimeXp': 21954,
+          'currentStreak': 5,
+          'acceptedAccuracy': 0.91,
+          // Stale pointer still names the first lesson (LPT-875).
+          'currentLessonId': 'lesson-a',
+          'recommendedLessonId': 'lesson-a',
+          'completedLessonIds': ['lesson-a'],
+          'masteryByLessonId': {'lesson-a': 1.0},
+        },
+        'reviewsDue': const [],
+      }, midCourseCatalog);
+
+      expect(course.coursePlaceEyebrow, 'SECTION 3, UNIT 4');
+      expect(course.coursePlaceTitle, 'Flop decisions');
+      expect(course.currentSectionTitle, 'Flop and turn');
+    },
+  );
 }
