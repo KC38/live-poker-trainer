@@ -586,8 +586,12 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
     // (LPT-858; SoftPulse LPT-653; same class as LPT-857 / LPT-853 / LPT-823).
     'act-04-08-01-scaffolded' =>
       'They bet flop, turn, and river with weak showdowns twice. Note — tap the matching observation.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Frequencies and shows — no ego
+    // story (LPT-860; SoftPulse LPT-653; same class as LPT-859 / LPT-858 /
+    // LPT-857 / LPT-853).
     'act-04-08-01-unguided' =>
-      'Best note style versus wild aggression — pick Frequencies and shows — no ego story.',
+      'Best note style versus wild aggression — tap the matching note.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Enters constantly; barrels without mercy in the idle bubble
     // (LPT-770; same class as LPT-765 / LPT-764 / LPT-746 / LPT-653).
