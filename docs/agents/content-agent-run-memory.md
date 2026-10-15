@@ -5333,6 +5333,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
   - cs–lag `player_read_classify`; uncertain/retire `select_identify`; `deal.mode` `none` — do not file handFamily; densify helper arms PRESENT in `selectIdentifyDensifiedCoachLine`.
   - short-ladder 7/5 (not on **LPT-829**); teachSpec **LPT-352** / densify **LPT-443** Done — do not clone; SoftPulse residual N/A.
 - Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
-- Prefer next NEVER: `lesson-04-06-03-01-value-wider` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- Prefer next NEVER: `lesson-04-06-03-02-bluff-less` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-07-12-01-*: structural clean on tip — assessment container only.
+
+## Fold 2026-10-15fa (d4f4153f Prefer NEVER value-wider)
+
+- Tip-stable `d4f4153f` (#2740 Prefer NEVER five-type-final learnings). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-06-03-01-value-wider` / `act-04-06-03-*`:
+  - one objective Value wider versus Calling Station; explain SoftPulse VALUE-only **concept-aligned** (LPT-732 Done — was VALUE→BLUFFS→CITE; do not reopen SoftPulse residual).
+  - guided SoftPulse `thin-val` PRESENT (`poker_action_sizing` `fixed` JhTd·QcTs3h2d7c +2 suit variants; densify N/A); `deal.mode` `none` on explain — do not file handFamily.
+  - short-ladder 2/5 already on catalog **LPT-829**; curriculum **LPT-192** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-06-03-02-bluff-less` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-06-03-*: structural clean on tip — SoftPulse residual closed by LPT-732.
 
