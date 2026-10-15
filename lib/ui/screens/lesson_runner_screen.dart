@@ -1390,12 +1390,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
           stage: LessonFrameScope(
             onLocalMiss: _reportLocalMiss,
             activityController: controller,
+            // SoftPulse off while out of hearts — AbsorbPointer blocks taps,
+            // but gold cues must not invite the next press (LPT-874).
             child: LessonSoftPulseScope(
-              allowed: controller.showTargetCue,
+              allowed: !_heartsGateActive && controller.showTargetCue,
               child: activityRegistry.build(
                 activity: activity,
                 controller: controller,
-                showGuidance: controller.showTargetCue,
+                showGuidance: !_heartsGateActive && controller.showTargetCue,
                 onFeltAcknowledge:
                     isTableRegionTapActivity(activity) &&
                         activity.renderer == ActivityRenderer.coachDialogue
@@ -1656,7 +1658,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
                           activity: activity,
                           controller: controller,
                           // Re-read inside AnimatedBuilder so Hint toggles SoftPulse.
-                          showGuidance: controller.showTargetCue,
+                          // SoftPulse off under the hearts gate (LPT-874).
+                          showGuidance:
+                              !_heartsGateActive && controller.showTargetCue,
                           onFeltAcknowledge: feltAck,
                         ),
                       ),
