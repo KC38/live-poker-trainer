@@ -4895,3 +4895,18 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Observe-wide companions **LPT-714/715** / Meet-LAG sample-limits **LPT-716** / Adjust-LAG cite **LPT-719** / open catalog **LPT-829**.
 - act-06-11-03-*: interactive structural clean on tip except LPT-710 cite residual; SoftPulse explain CREDIT→TIGHTER concept-aligned; SoftPulse explain successors content-driven; guided/scaffolded/unguided sizing `fixed`+variants — do not reopen LPT-627; checkpoint `deal.mode` `none` cite tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15dk tip c9ab0bc5 (Observe-wide companions Prefer LPT-714/715)
+
+- Tip-stable `c9ab0bc5` (#2678). Catalog short-ladder **224** (other JSON **0**); softpulseMapArms **92** / densifyHelperArms **233**; densify-tap **0**.
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32k description limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Observe-wide companions residual re-check `lesson-06-12-01-01/02/03` / `act-06-12-01-*`:
+  - SoftPulse explain `act-06-12-01-explain` SoftPulse **WIDE-only** under Note wide entry — **LPT-713** Done (#2661); do not reopen.
+  - Successors SoftPulse BARRELS→MANY HANDS / FOLDS SOMETIMES→PLAN content-driven (do not reopen LPT-669).
+  - Guided SoftPulse `wide` densify PRESENT (`lagObserveGuidedOutcomes`); scaffolded SoftPulse `sep` one-per-press densify PRESENT (`lagObserveDiscOutcomes`).
+  - Unguided SoftPulse `wait` Keep sampling (prompt "Label after one wide open?"; densify "One wide open — pick the confidence."; `lagObserveSampleOutcomes`) still under Note sustained pressure → residual **LPT-714** still To Do (needs-human; Relates LPT-297 — do not re-add needs-human on curriculum).
+  - Checkpoint SoftPulse `bundle` kind `none` densify PRESENT (prompt "Best pre-label note bundle?"; `lagObserveBundleOutcomes`) still under Planned-not-maniac → residual **LPT-715** still To Do (needs-human; Relates LPT-297).
+- Curriculum **LPT-297** Done — do not clone.
+- Tip-commented LPT-714/715/829/297/713; leave open LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave ui-agent alone.
+- Prefer next: NEVER Meet-LAG sample-limits **LPT-716** / Adjust-LAG cite **LPT-719** / open catalog **LPT-829**.
+- act-06-12-01-*: interactive structural clean on tip except LPT-714 unguided + LPT-715 checkpoint residuals; SoftPulse explain successors content-driven; all interactive acts `deal.mode` `none` observation tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
