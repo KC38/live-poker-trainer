@@ -4828,3 +4828,13 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented LPT-714/715/829/297/716/719/710/708; leave open LPT-702/708/710/714/715/716/719/683/691… + LPT-829; leave ui-agent alone.
 - Prefer next: NEVER Meet-LAG sample-limits **LPT-716** / Adjust-LAG cite **LPT-719** / open catalog **LPT-829**.
 - act-06-12-01-*: interactive structural clean on tip except LPT-714 unguided + LPT-715 checkpoint residuals; SoftPulse explain successors content-driven; all interactive acts `deal.mode` `none` observation tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
+## Fold 2026-10-15df tip 98a93e35 (Meet-LAG sample-limits Prefer LPT-716)
+
+- Tip-stable `98a93e35` (#2671). Catalog short-ladder **224** (other JSON **0**).
+- SoftPulse Prefer path catch-up: SoftPulse SoftPulse residuals Done via #2659/#2661/#2662 — leave Done.
+- Prefer NEVER Meet-LAG sample-limits residual re-check `lesson-06-12-02-01/02/03`: SoftPulse WIDE→PRESSURE→MODEL concept-aligned; checkpoint SoftPulse `limits` Sample limits vs Destiny under Introduce LAG → **LPT-716** still To Do (needs-human; Relates LPT-300); successors content-driven; guided SoftPulse `lag` / scaffolded SoftPulse `diff` / unguided SoftPulse `lag2` densify PRESENT.
+- Tip-commented LPT-716/300/719/829/351/198/216; leave open LPT-702/708/710/714/715/716/719/683/691 + LPT-351 + LPT-829; leave ui-agent alone.
+- next: NEVER Adjust-LAG cite companion **LPT-719** / open catalog **LPT-829**.
+- act-06-12-02-*: interactive structural clean on tip except LPT-716 sample-limits residual; SoftPulse explain successors content-driven (do not reopen LPT-669); interactive is `deal.mode` `none` player-type tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
+
