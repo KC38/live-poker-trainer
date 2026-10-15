@@ -72,6 +72,22 @@ Use `python3 tools/jira.py` only (no Atlassian MCP). Bodies live under
 | Comment | `python3 tools/jira.py comment LPT-NN --body-file note.md` |
 | Edit | `python3 tools/jira.py edit LPT-NN [--body-file body.md] [--add-label needs-human]` |
 
+## 0. Idle exit (check first)
+
+Run `node tools/course/scan_content_gaps.mjs --counts` and compare it with
+the `counts` of the last line in
+`~/.live-poker-trainer/content-agent-coverage.jsonl`. If the counts are
+**unchanged** and every open catalog/curriculum parent is labeled
+`needs-human` (today: LPT-829, LPT-351):
+
+- append `{"at": …, "sha": …, "surface": "idle", "result": "clean", "counts": {…}, "learnings": "unchanged"}` to the coverage jsonl;
+- open **no** PR, post **no** Jira comments (do not tip-comment
+  needs-human tickets unless their counts changed), do not walk a lesson;
+- end the reply with the literal token `IDLE_NO_GAPS` on its own line.
+
+The loop sleeps ~6h (or until `content/` changes on `origin/main`) after
+`IDLE_NO_GAPS`.
+
 ## 1. Read the contract
 
 **Every run:**
@@ -85,9 +101,8 @@ Use `python3 tools/jira.py` only (no Atlassian MCP). Bodies live under
    [content-agent-run-memory.md](../../docs/agents/content-agent-run-memory.md)
    for the surface’s lesson/activity ids.
 4. If `~/.live-poker-trainer/content-agent-learnings-pending.md` has
-   bullets, run `tools/fold_agent_learnings.sh content` and ship a
-   learnings-only chore PR before or after the audit (do not leave
-   pending unfolder).
+   bullets, run `tools/fold_agent_learnings.sh content` locally; ship it
+   only under the §6 learnings-PR rule (new rule, ≤1/day).
 5. [content/course/v2/README.md](../../content/course/v2/README.md) and
    schemas under `content/course/v2/schemas/` (especially `activity`,
    `teach_spec`, `common`).
@@ -340,23 +355,29 @@ Update learnings per
 [lesson-content-agent-learnings.md](lesson-content-agent-learnings.md)
 **How to update**:
 
-1. Distill a Never/Prefer bullet into
-   `.cursor/commands/lesson-content-agent-learnings.md` (cap 40).
-2. Append the full note to
-   `docs/agents/content-agent-run-memory.md` (no cap).
-3. **Ship a learnings-only chore PR from this WORKTREE**
-   (`cursor/chore-content-agent-learnings-<slug>` or
-   `chore/content-agent-learnings-<YYYYMMDD>`) in the same turn when
-   either file changed. Branch/PR from the worktree only — never from
-   PRIMARY. This is the only product-repo write this agent may open a
-   PR for.
-4. Only if git/PR is unavailable: append to
+1. Only for a genuinely new rule: distill a Never/Prefer bullet into
+   `.cursor/commands/lesson-content-agent-learnings.md` (hard cap 40).
+2. Optionally add a short note under "Recent entries" in
+   `docs/agents/content-agent-run-memory.md` (keep it a summary — no
+   per-lesson clean re-check logs).
+3. **Learnings PR rule.** Open a learnings-only chore PR from this
+   WORKTREE (`chore/content-agent-learnings-<YYYYMMDD>`; never from
+   PRIMARY) **only** when step 1 added or tightened a genuinely new
+   Never/Prefer rule. Clean re-checks, tip-SHA bumps and "Prefer next"
+   notes go to the coverage jsonl, **not git**. At most **one** learnings
+   PR per UTC day (check `gh pr list --search 'chore(content-agent)'`
+   and today's merges first); never rescue, chain, rebase or fold other
+   open chore PRs into yours. This is the only product-repo write this
+   agent may open a PR for.
+4. If no PR is allowed today, append the new rule to
    `~/.live-poker-trainer/content-agent-learnings-pending.md` and set
-   coverage `learnings: pending`. The next run (or monitor) must run
-   `tools/fold_agent_learnings.sh content` and ship.
+   coverage `learnings: pending`.
+5. Keep the learnings file ≤40 bullets:
+   `tools/fold_agent_learnings.sh --check` must pass before any PR.
 
 Delete `.cursor/tmp/content-agent/` scratch bodies if desired.
 
 Reply short: SHA, surface, tickets filed, leads, learnings status
-(`updated` = shipped to git; `pending` = home file only).
+(`updated` = shipped to git; `pending` = home file only). Idle runs (§0)
+end with `IDLE_NO_GAPS`.
 Never claim a simulator lock. Never start `/ui-design-agent` work.
