@@ -126,6 +126,23 @@ void main() {
     expect(lessonAuthoredDemoSubset(const ['c', 'a'], tiles, id), ['A', 'C']);
   });
 
+  test('subset helper trims cues and fails closed on a blank target', () {
+    const tiles = ['A', 'B', 'C'];
+    String id(String s) => s;
+    expect(lessonAuthoredDemoSubset(const [' a ', 'b'], tiles, id), ['A', 'B']);
+    const empty = <String>[];
+    expect(
+      identical(lessonAuthoredDemoSubset(const ['A'], empty, id), empty),
+      isTrue,
+    );
+    // A blank cue is not a tile. Dropping the ladder would hide the lesson.
+    expect(lessonAuthoredDemoSubset(const ['', 'A'], tiles, id), tiles);
+    expect(lessonAuthoredDemoSubset(const ['A'], const ['A', 'A', 'B'], id), [
+      'A',
+      'A',
+    ]);
+  });
+
   for (final entry in _residuals.entries) {
     testWidgets('${entry.key} shows only ${entry.value.$1.join(', ')}', (
       tester,

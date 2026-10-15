@@ -109,6 +109,61 @@ class SimRecordCmdTest(unittest.TestCase):
                 )
             self.assertIn("not ready", str(ctx.exception))
 
+    def test_wait_stable_video_rejects_missing_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "missing.mp4"
+            with self.assertRaises(SystemExit) as ctx:
+                sim_record.wait_stable_video(
+                    path, timeout=0.25, settle=0.05, poll=0.05
+                )
+            self.assertIn("size=0", str(ctx.exception))
+
+    def test_wait_stable_video_resets_settle_when_size_grows(self) -> None:
+        """A clip that passes the byte floor and then grows is not ready yet."""
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "clip.mp4"
+            path.write_bytes(b"x")
+            clock = {"t": 0.0}
+            floor = sim_record.MIN_VIDEO_BYTES
+            plan = [floor, floor, floor + 400, floor + 400, floor + 400]
+            seen = {"i": 0}
+            big_at = {"t": -1.0}
+
+            def monotonic() -> float:
+                return clock["t"]
+
+            def sleep(dt: float) -> None:
+                clock["t"] += dt
+
+            real_stat = path.stat
+
+            def stat(*_args: object, **_kwargs: object) -> object:
+                index = min(seen["i"], len(plan) - 1)
+                size = plan[index]
+                seen["i"] += 1
+                if size > floor and big_at["t"] < 0:
+                    big_at["t"] = clock["t"]
+                path.write_bytes(b"x" * size)
+                return real_stat()
+
+            with (
+                mock.patch.object(sim_record.time, "monotonic", monotonic),
+                mock.patch.object(sim_record.time, "sleep", sleep),
+                mock.patch.object(Path, "is_file", lambda _self: True),
+                mock.patch.object(Path, "stat", stat),
+            ):
+                size = sim_record.wait_stable_video(
+                    path,
+                    timeout=5.0,
+                    settle=0.3,
+                    poll=0.1,
+                )
+            self.assertEqual(size, floor + 400)
+            # Growth must restart the settle window. Returning on the first
+            # plateau, or keeping its timer across the jump, finishes sooner
+            # than `settle` after the larger size first appears.
+            self.assertGreaterEqual(clock["t"] - big_at["t"], 0.3)
+
 
 if __name__ == "__main__":
     unittest.main()

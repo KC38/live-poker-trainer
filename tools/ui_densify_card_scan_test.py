@@ -112,6 +112,55 @@ class UiDensifyCardScanTest(unittest.TestCase):
             ["as", "7d", "2c", "3h"],
         )
 
+    def test_single_card_requires_deal_context(self) -> None:
+        self.assertEqual(mod.card_tokens("You hold Kh."), ["kh"])
+        self.assertEqual(mod.card_tokens("Board Kh."), ["kh"])
+        self.assertEqual(mod.card_tokens("Kh"), [])
+        # Two copies of one code are still a single token, so English-style
+        # lookalikes are not promoted without a deal word.
+        self.assertEqual(mod.card_tokens("Kh Kh"), [])
+        self.assertEqual(mod.card_tokens("Kh Qh"), ["kh", "qh"])
+
+    def test_check_unknown_id_and_missing_layout(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "rex_coach_line.dart"
+            layout = Path(tmp) / "lesson_screen_layout.dart"
+            missing = Path(tmp) / "missing_layout.dart"
+            source.write_text(_SAMPLE, encoding="utf-8")
+            layout.write_text(
+                _LAYOUT_WIRED.replace(
+                    "alignLessonActionCopy",
+                    "alignLessonTableCopy",
+                ),
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                mod.main(
+                    [
+                        "--source",
+                        str(source),
+                        "--layout",
+                        str(layout),
+                        "check",
+                        "--id",
+                        "act-missing",
+                    ]
+                ),
+                2,
+            )
+            self.assertEqual(
+                mod.main(
+                    ["--source", str(source), "--layout", str(missing), "check"]
+                ),
+                1,
+            )
+            self.assertEqual(
+                mod.main(
+                    ["--source", str(source), "--layout", str(layout), "check"]
+                ),
+                0,
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
