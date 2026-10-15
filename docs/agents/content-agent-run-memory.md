@@ -5514,3 +5514,30 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
 - Prefer next NEVER: `lesson-04-08-02-01-maniac-model` / Low curriculum **LPT-351** / open catalog **LPT-829**.
 - act-04-08-01-*: Notes Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-773 on first-child; Observe wild children Prefer NEVER path complete.
+
+## Fold 2026-10-15fo (e57c0219 Prefer NEVER maniac-model)
+
+- Tip-stable `e57c0219` (#2759 Prefer NEVER no-ego-notes learnings on tip). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-08-02-01-maniac-model` / `act-04-08-02-explain` + `act-04-08-02-checkpoint`:
+  - one objective Introduce Maniac and unlock mixing all three types; explain SoftPulse MANIAC→ENTRY→AGGRO + `explainGrading` "Maniac → Entry → Aggro." **concept-aligned** (LPT-208/LPT-774 Done — do not reopen SoftPulse residual / mix-discipline checkpoint placement).
+  - checkpoint SoftPulse `three` cue kind `none` hintless densify PRESENT SoftPulse-off (`select_identify` `deal.mode` `none` meetManiacMixOutcomes — do not file handFamily; mix-discipline residual closed with LPT-774 Done — do not reopen).
+  - short-ladder 2/5 already on catalog **LPT-829**; curriculum **LPT-208** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-08-02-02-spot-maniac` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-08-02-*: Maniac-model Prefer NEVER structural clean on tip — SoftPulse residual / mix-discipline closed by LPT-208/LPT-774; coverage had `learnings: pending` — rescued onto this chore.
+
+
+## Fold 2026-10-15fp (e57c0219 Prefer NEVER spot-maniac)
+
+- Tip-stable `e57c0219` (#2759 Prefer NEVER no-ego-notes learnings on tip — this fold ships Prefer NEVER maniac-model rescue + Prefer NEVER spot-maniac). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — Jira 32,767 limit); other parents Done.
+- Prefer NEVER discovery `lesson-04-08-02-02-spot-maniac` / `act-04-08-02-02-explain-spot` + `act-04-08-02-guided` + `act-04-08-02-unguided`:
+  - one objective Identify from evidence; explain SoftPulse CONSTANT RAISES→NEVER GIVES UP + `explainGrading` "Constant raises + no give-ups → Maniac." **concept-aligned** (content-driven `authoredCues` / LPT-669 Done — do not reopen SoftPulse residual / LPT-774).
+  - guided SoftPulse `pt-maniac` densify PRESENT (`player_read_classify` `deal.mode` `none` meetManiacVsNitOutcomes — do not file handFamily).
+  - unguided SoftPulse `maniac2` one-per-press pressHints 1/1 densify PRESENT SoftPulse-quiet after LPT-820 SoftPulse map PRESENT (`player_read_classify` `deal.mode` `none` meetManiacVsStationOutcomes — do not file handFamily).
+  - short-ladder 3/5 already on catalog **LPT-829**; curriculum **LPT-208** Done — do not clone / SoftPulse residual N/A.
+- Tip-commented **LPT-829**/**LPT-351**; leave open; leave ui-agent alone.
+- Prefer next NEVER: `lesson-04-08-03-01-widen-value-catch` / Low curriculum **LPT-351** / open catalog **LPT-829**.
+- act-04-08-02-*: Spot Prefer NEVER structural clean on tip — SoftPulse residual closed by LPT-774 on first-child; Meet Maniac children Prefer NEVER path complete.
+
