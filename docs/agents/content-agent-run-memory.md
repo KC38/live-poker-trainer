@@ -4721,3 +4721,15 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Overbet SoftPulse residual **LPT-699** re-check / Low residuals LPT-676…802 / open catalog LPT-829.
 - act-06-04-01-*: interactive structural clean on tip except LPT-696 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing (LPT-395); densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15cw tip 9bbc092c (#2653 Polar Prefer → Overbet SoftPulse LPT-699 Prefer)
+
+- Tip-stable `9bbc092c` (#2653 Words-are-binding densify after #2651 Polar SoftPulse Prefer LPT-696). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Overbet SoftPulse residual re-check `lesson-06-05-01-01/02/03` / `act-06-05-01-*`:
+  - first-child SoftPulse OVERBET→POLAR→GEO + `explainGrading` "Overbet → Polar → Geometry." + Dart `OverbetGeometryDemo.points` OVERBET/POLAR/GEO (captions Needs a story / Nuts or air / Flop→turn→river) / `LessonOverbetGeometryExplainTable` / layout "Tap Overbet, then Polar, then Geo." + coachMedia "Overbets need a polar story. Geometry links flop-turn-river sizes." still pre-split under polar-overbets-only (`lesson-06-05-01-01-polar-overbets` objective "Select overbets for polar spots") → residual **LPT-699** still To Do (needs-human; Relates LPT-267 — do not re-add needs-human on curriculum).
+  - successors SoftPulse FLOP→TURN→RIVER / HUGE→MEDIUM→AVOID content-driven (do not reopen LPT-669); guided SoftPulse `polar-ob` densify PRESENT; scaffolded SoftPulse `mid` one-per-press PRESENT (`As`/`Kd`·`Ah`/`7c`/`2d`/`9s` +2 suit variants match Dart); unguided SoftPulse `avoid` densify PRESENT; checkpoint SoftPulse `multi` kind `none` densify PRESENT under geometric-sizes — concept-aligned (no companion residual).
+- Curriculum **LPT-267** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-699/267/829/700/696/694/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Blockers SoftPulse residual **LPT-700** re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-06-05-01-*: interactive structural clean on tip except LPT-699 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/unguided/checkpoint are `deal.mode` `none` outcome tiles — do not file handFamily; scaffolded is fixed+variants poker_action_sizing; densify PRESENT — do not reopen LPT-628.
