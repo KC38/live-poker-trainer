@@ -344,8 +344,9 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
   and Hint stays off on purpose (SoftPulse would spoil the answer); close
   as intentional (LPT-653). Hunt SoftPulse-quiet densify spoils with live
   SoftPulse:none + Hint enabled + coach naming a choice tile — not only
-  `kind: none` (unguided SoftPulse-after-Hint stems are invisible to
-  kind:none-only scans; LPT-853 / LPT-854). SoftPulse-off `kind: none`
+  `kind: none` / `ui_densify_spoil_scan list` (scaffolded SoftPulse-after-Hint
+  stems missing a SoftPulse-quiet comment are invisible to quiet-only scans;
+  LPT-853 / LPT-854 / LPT-880). SoftPulse-off `kind: none`
   stems that embed an exact choice label (e.g. **55bb** among 55bb /
   120bb / 175bb) are still spoils — LPT-787-style situation numbers are
   OK only when they are not the tile text itself (LPT-877 jump-stack).

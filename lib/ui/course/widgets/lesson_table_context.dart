@@ -8522,7 +8522,7 @@ class LessonTableContext extends StatelessWidget {
   Widget _buildRangesScaffoldedOutcomes() {
     return _buildOutcomePhases(
       semanticsInteractive:
-          'Interactive 3-bet ranges — tap BB stronger, BTN call, or identical',
+          'Interactive 3-bet ranges — tap one range column',
       semanticsStatic: 'Ranges scaffolded outcomes',
       caption: scene.caption ?? 'BTN open · BB 3-bet · BTN calls',
       // SoftPulse + Rex own the cue — no Tap footer.
