@@ -1,5 +1,6 @@
 /// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
-/// LPT-890 / LPT-891: SoftPulse explain teaching captions (not Tap N of M).
+/// LPT-890 / LPT-891 / LPT-892: SoftPulse explain teaching captions
+/// (not Tap N of M).
 library;
 
 import 'package:flutter/material.dart';
@@ -55,6 +56,8 @@ void main() {
     expect(authoredSoftPulseExplainCaption('BINDING'), 'Must follow through');
     expect(authoredSoftPulseExplainCaption('EARLIER SEATS'), 'Act before you');
     expect(authoredSoftPulseExplainCaption('YOUR TURN'), 'Then you decide');
+    expect(authoredSoftPulseExplainCaption('BROADWAY'), 'Ten or higher');
+    expect(authoredSoftPulseExplainCaption('SUITED ACE'), 'Ace same suit');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
     expect(authoredSoftPulseExplainCaption('BLINDS'), 'Forced bets first');
@@ -465,6 +468,51 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(find.text('All caught up'), findsOneWidget);
       expect(find.text('Deal continues'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Broadways SoftPulse explain captions BROADWAY + SUITED ACE (LPT-892)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-02-02-01-02-explain-broadway',
+        targets: const ['BROADWAY', 'SUITED ACE'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('BROADWAY'), findsWidgets);
+      expect(find.text('SUITED ACE'), findsWidgets);
+      expect(find.text('Ten or higher'), findsOneWidget);
+      expect(find.text('Ace same suit'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

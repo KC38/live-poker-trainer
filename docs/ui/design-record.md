@@ -1736,7 +1736,8 @@ BACK → No bet flop / BET TURN → Bet when helped — LPT-886, PRICE → Pot
 odds / POT → What it pays / EQUITY → Win chance — LPT-887, WHO ACTS →
 Whose turn — LPT-888, SAY → Announce clearly / BINDING → Must follow
 through — LPT-889, EARLIER SEATS → Act before you / YOUR TURN → Then you
-decide — LPT-891). Play a full toy hand framed SoftPulse chips
+decide — LPT-891, BROADWAY → Ten or higher / SUITED ACE → Ace same suit —
+LPT-892). Play a full toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
 YOU ACT → Open, call, or fold, ENDING → Folds win or continue (aligned
@@ -2060,7 +2061,7 @@ felt.
 | Postflop order | explain SoftPulse cues SB → BTN; checkpoint SoftPulse-off densify stem non-spoiling (LPT-803); unit `unit-02-01-position-power` (LPT-117 split) | — |
 | Wait your turn | explain SoftPulse cues EARLIER SEATS → YOUR TURN with teaching captions (Act before you / Then you decide — never empty glosses; LPT-891); densify SoftPulse-quiet stem non-spoiling (no Wait) (LPT-838); unit `unit-02-01-position-power` (LPT-117 split) | — |
 | Pocket pairs | Pairs on the felt; explain SoftPulse cue Pairs only — Broadways/Suited aces/Connectors presses belong to Broadways and suited aces and Connectors versus trash (curriculum residual LPT-740); densified SoftPulse one gold via `guideRegion` (LPT-634); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
-| Broadways and suited aces | explain SoftPulse cues BROADWAY → SUITED ACE; scaffolded SoftPulse-quiet densify stem non-spoiling (no Broadway) (LPT-841); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
+| Broadways and suited aces | explain SoftPulse cues BROADWAY → SUITED ACE with teaching captions (Ten or higher / Ace same suit — never empty glosses; LPT-892); scaffolded SoftPulse-quiet densify stem non-spoiling (no Broadway) (LPT-841); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
 | Connectors versus trash | explain SoftPulse cues CONNECTORS → TRASH; unguided SoftPulse-quiet densify stem non-spoiling (no Suited connector) (LPT-842); checkpoint SoftPulse-off densify stem non-spoiling (LPT-784); unit `unit-02-02-starting-hands` (LPT-121 split) | — |
 | Fold trash early | Early on the felt; explain SoftPulse cue EARLY only — BUTTON/LIVE 3x presses belong to Widen on the button and Open strong hands (curriculum residual LPT-741); unit `unit-02-03-open-fold` (LPT-124 split) | — |
 | Open strong hands | explain SoftPulse cues STRONG → LIVE SIZE; scaffolded Hint SoftPulse unlocks on hero holes (LPT-678 / LPT-679); unit `unit-02-03-open-fold` (LPT-124 split) | — |
