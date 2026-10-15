@@ -743,8 +743,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Hit stop-loss. Do — tap the matching plan.',
     'act-06-01-01-guided' =>
       'PFR on A-high dry flop. Who often has range advantage — pick Preflop raiser.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Wide caller (LPT-864; SoftPulse
+    // LPT-653; same class as LPT-857 / LPT-853).
     'act-06-01-01-scaffolded' =>
-      'Paired board. Caller defends wide. Who may have nut advantage — pick Wide caller.',
+      'Paired board. Caller defends wide. Who may have nut advantage — tap the matching seat.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Apply pressure in the idle bubble (LPT-764; same class as LPT-746 /
     // LPT-653).
