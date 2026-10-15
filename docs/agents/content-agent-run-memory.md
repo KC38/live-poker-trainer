@@ -4502,6 +4502,19 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15cq tip 6b6f71b6 (#2645 Lines Prefer sync → Timing SoftPulse LPT-685 Prefer)
+
+- Tip-stable `6b6f71b6` (#2645 Lines SoftPulse Prefer sync after #2643 Lines Prefer LPT-684). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Timing SoftPulse residual re-check `lesson-05-07-01-01/02/03` / `act-05-07-01-*`:
+  - first-child SoftPulse TIMING→SIZING→CLUES + `explainGrading` "Timing → Sizing → Clues." + Dart `TimingCluesDemo.points` TIMING/SIZING/CLUES (captions How fast they act / How much they bet / Nudge the model) / `LessonTimingCluesExplainTable` / chrome "Timing · sizing · clues" + coachMedia "Timing and sizing are clues, not mind-reading. Small updates only." still pre-split under timing-soft-only (`lesson-05-07-01-01-timing-soft` objective "Treat timing as soft evidence only") → residual **LPT-685** still To Do (needs-human; Relates LPT-244 — do not re-add needs-human on curriculum).
+  - successors SoftPulse TINY→BIG→RANGE / TELL→MYTH→REJECT content-driven (do not reopen LPT-669); guided SoftPulse `soft` densify PRESENT; scaffolded SoftPulse `weakish` densify PRESENT; unguided SoftPulse `reject` densify PRESENT; checkpoint SoftPulse `tiny` kind `none` densify PRESENT under timing-soft — no companion residual.
+- Curriculum **LPT-244** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-685/244/829/686/684/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Dynamics SoftPulse residual **LPT-686** (+ cite **LPT-687**) re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-05-07-01-*: interactive structural clean on tip except LPT-685 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); densify PRESENT — do not reopen LPT-628; all interactive acts `deal.mode` `none` — do not file handFamily.
+
 ## Fold 2026-10-15cp tip 1dc2a1bf (#2642 densify → Lines SoftPulse LPT-684 Prefer)
 
 - Tip-stable `1dc2a1bf` (#2642 SoftPulse-quiet densify after #2641 Thin SoftPulse Prefer LPT-682). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
