@@ -546,48 +546,40 @@ String _lessonFrameLine(
     return 'Pick your stop-loss before you sit. Tap Quit.';
   }
   if (activity.id == 'act-06-01-01-explain') {
-    return 'Range advantage: more strong hands overall. Nut advantage: more of the nuts. '
-        'Tap Range, then Nut, then Advantage.';
+    return 'Range advantage means more strong hands overall. Tap Range, then '
+        'Advantage.';
   }
   if (activity.id == 'act-06-02-01-explain') {
     return 'Equity on a chart is not cash. Position decides realization. '
         'Tap Equity, then Cash, then Pos.';
   }
   if (activity.id == 'act-06-03-01-explain') {
-    return 'Capped means the nuts are unlikely. Uncapped means the nuts are still live. '
-        'Tap Capped, then Uncapped, then Nuts.';
+    return 'Passive lines cap a range: the nuts are unlikely. Tap Capped.';
   }
   if (activity.id == 'act-06-04-01-explain') {
-    return 'Polar: nuts or air. Merged: many medium-strong hands. Size accordingly. '
-        'Tap Polar, then Merged, then Size.';
+    return 'Polar means nuts or air. Tap Polar.';
   }
   if (activity.id == 'act-06-05-01-explain') {
-    return 'Overbets need a polar story. Geometry links flop, turn, and river sizes. '
-        'Tap Overbet, then Polar, then Geo.';
+    return 'Overbets need a polar story. Tap Overbet, then Polar.';
   }
   if (activity.id == 'act-06-06-01-explain') {
-    return 'Blockers remove hands. Use them; do not invent EV decimals. '
-        'Tap Block, then Use, then No EV.';
+    return 'Pick bluffs that block their calling hands. Tap Block.';
   }
   if (activity.id == 'act-06-07-01-explain') {
-    return 'Defend enough that over-bluffing fails. No fake percentages. '
-        'Tap Defend, then Bluff, then Enough.';
+    return 'Keep your stronger catchers. Tap Defend.';
   }
   if (activity.id == 'act-06-08-01-explain') {
-    return 'Mixing is frequency with a purpose, not coin-flip theater. '
-        'Tap Mix, then Purpose, then Strong.';
+    return 'Sometimes play strong hands the quiet way. Tap Mix, then Strong.';
   }
   if (activity.id == 'act-06-09-01-explain') {
-    return '3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment. '
-        'Tap 3-Bet, then 4-Bet, then Depth.';
+    return '3-bet pots shrink SPR. Depth decides commitment. Tap 3-Bet, then '
+        'Depth.';
   }
   if (activity.id == 'act-06-10-01-explain') {
-    return 'Hard folds save buy-ins. Coolers happen; ego call-downs are mistakes. '
-        'Tap Hard, then Cooler, then Ego.';
+    return 'Hard folds save buy-ins. Tap Hard.';
   }
   if (activity.id == 'act-06-11-01-explain') {
-    return 'Before labels: who enters tight, then barrels with a plan? Count samples. '
-        'Tap Tight, then Barrel, then Sample.';
+    return 'Note who enters tight. Tap Tight.';
   }
   if (activity.id == 'act-06-11-02-explain') {
     return 'TAG: tight in, aggressive after — a working model. '

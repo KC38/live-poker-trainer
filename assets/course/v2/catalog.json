@@ -3,7 +3,7 @@
   "minClientVersion": "2.0.0",
   "scope": "live_cash_nlh",
   "coachId": "rex",
-  "contentChecksum": "c0f13f8ee53d2d0e08beb38a411950b67fac23aebf0661d0659a0950aa8420d6",
+  "contentChecksum": "882025799cbcfacdca9194738462b35434db53feb38ed7a78f00cb91ba37f182",
   "playerTypes": [
     {
       "id": "calling_station",
@@ -25351,7 +25351,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Range advantage: more strong hands overall. Nut advantage: more of the nuts.",
+                  "accessibilityText": "Range advantage: your range holds more strong hands overall.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -25359,7 +25359,7 @@
                     {
                       "id": "act-06-01-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Range advantage: more strong hands overall. Nut advantage: more of the nuts."
+                      "text": "Range advantage: your range holds more strong hands overall."
                     }
                   ],
                   "objectives": [
@@ -25377,11 +25377,6 @@
                       },
                       {
                         "press": 2,
-                        "target": "NUT",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
                         "target": "ADVANTAGE",
                         "kind": "soft_pulse"
                       }
@@ -26162,7 +26157,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Capped = nuts unlikely. Uncapped = nuts still live.",
+                  "accessibilityText": "Passive lines cap a range. Capped means the nuts are unlikely.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -26170,7 +26165,7 @@
                     {
                       "id": "act-06-03-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Capped = nuts unlikely. Uncapped = nuts still live."
+                      "text": "Passive lines cap a range. Capped means the nuts are unlikely."
                     }
                   ],
                   "objectives": [
@@ -26184,16 +26179,6 @@
                       {
                         "press": 1,
                         "target": "CAPPED",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "UNCAPPED",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "NUTS",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -26599,7 +26584,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Polar: nuts or air. Merged: many medium-strong hands. Size accordingly.",
+                  "accessibilityText": "Polar sizing means nuts or air. Big bets often tell a polar story.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -26607,7 +26592,7 @@
                     {
                       "id": "act-06-04-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Polar: nuts or air. Merged: many medium-strong hands. Size accordingly."
+                      "text": "Polar sizing means nuts or air. Big bets often tell a polar story."
                     }
                   ],
                   "objectives": [
@@ -26621,16 +26606,6 @@
                       {
                         "press": 1,
                         "target": "POLAR",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "MERGED",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "SIZE",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -27040,7 +27015,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Overbets need a polar story. Geometry links flop-turn-river sizes.",
+                  "accessibilityText": "Overbet only with a polar story: nuts or air, nothing in between.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -27048,7 +27023,7 @@
                     {
                       "id": "act-06-05-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Overbets need a polar story. Geometry links flop-turn-river sizes."
+                      "text": "Overbet only with a polar story: nuts or air, nothing in between."
                     }
                   ],
                   "objectives": [
@@ -27067,11 +27042,6 @@
                       {
                         "press": 2,
                         "target": "POLAR",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "GEO",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -27476,7 +27446,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Blockers remove hands. Use them; do not invent EV decimals.",
+                  "accessibilityText": "Bluff with hands that block their calls. Blockers remove hands they call with.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -27484,7 +27454,7 @@
                     {
                       "id": "act-06-06-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Blockers remove hands. Use them; do not invent EV decimals."
+                      "text": "Bluff with hands that block their calls. Blockers remove hands they call with."
                     }
                   ],
                   "objectives": [
@@ -27498,16 +27468,6 @@
                       {
                         "press": 1,
                         "target": "BLOCK",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "USE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "NO EV",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -27855,7 +27815,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Defend enough that over-bluffing fails. No fake percentages.",
+                  "accessibilityText": "Continue with your stronger catchers so over-bluffing fails.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -27863,7 +27823,7 @@
                     {
                       "id": "act-06-07-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Defend enough that over-bluffing fails. No fake percentages."
+                      "text": "Continue with your stronger catchers so over-bluffing fails."
                     }
                   ],
                   "objectives": [
@@ -27877,16 +27837,6 @@
                       {
                         "press": 1,
                         "target": "DEFEND",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "BLUFF",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "ENOUGH",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -28282,7 +28232,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Mixing is frequency with a purpose — not coin-flip theater.",
+                  "accessibilityText": "Mix your strong hands sometimes, so a check is not always weak.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -28290,7 +28240,7 @@
                     {
                       "id": "act-06-08-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Mixing is frequency with a purpose — not coin-flip theater."
+                      "text": "Mix your strong hands sometimes, so a check is not always weak."
                     }
                   ],
                   "objectives": [
@@ -28308,11 +28258,6 @@
                       },
                       {
                         "press": 2,
-                        "target": "PURPOSE",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
                         "target": "STRONG",
                         "kind": "soft_pulse"
                       }
@@ -28814,7 +28759,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment.",
+                  "accessibilityText": "3-bet pots shrink SPR. Plan by depth before the flop.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -28822,7 +28767,7 @@
                     {
                       "id": "act-06-09-01-explain-media",
                       "kind": "dialogue",
-                      "text": "3-bet and 4-bet pots shrink ranges and SPR. Depth decides commitment."
+                      "text": "3-bet pots shrink SPR. Plan by depth before the flop."
                     }
                   ],
                   "objectives": [
@@ -28840,11 +28785,6 @@
                       },
                       {
                         "press": 2,
-                        "target": "4BET",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
                         "target": "DEPTH",
                         "kind": "soft_pulse"
                       }
@@ -29134,7 +29074,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Hard folds save buy-ins. Coolers happen; ego call-downs are mistakes.",
+                  "accessibilityText": "Hard folds save buy-ins. Fold dominated one-pair when the heat says strong.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -29142,7 +29082,7 @@
                     {
                       "id": "act-06-10-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Hard folds save buy-ins. Coolers happen; ego call-downs are mistakes."
+                      "text": "Hard folds save buy-ins. Fold dominated one-pair when the heat says strong."
                     }
                   ],
                   "objectives": [
@@ -29156,16 +29096,6 @@
                       {
                         "press": 1,
                         "target": "HARD",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "COOLER",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "EGO",
                         "kind": "soft_pulse"
                       }
                     ]
@@ -29570,7 +29500,7 @@
                   "stage": "guided",
                   "renderer": "coach_dialogue",
                   "estimatedSeconds": 30,
-                  "accessibilityText": "Before labels: who enters tight, then barrels with a plan? Count samples.",
+                  "accessibilityText": "Before labels: note who enters tight and folds most hands.",
                   "acceptedGrades": [
                     "recommended"
                   ],
@@ -29578,7 +29508,7 @@
                     {
                       "id": "act-06-11-01-explain-media",
                       "kind": "dialogue",
-                      "text": "Before labels: who enters tight, then barrels with a plan? Count samples."
+                      "text": "Before labels: note who enters tight and folds most hands."
                     }
                   ],
                   "objectives": [
@@ -29592,16 +29522,6 @@
                       {
                         "press": 1,
                         "target": "TIGHT",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 2,
-                        "target": "BARREL",
-                        "kind": "soft_pulse"
-                      },
-                      {
-                        "press": 3,
-                        "target": "SAMPLE",
                         "kind": "soft_pulse"
                       }
                     ]

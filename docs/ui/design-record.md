@@ -881,6 +881,18 @@ Curriculum residuals LPT-676, LPT-677, LPT-681, LPT-682, LPT-684, LPT-685, LPT-6
 - `act-04-05-01-checkpoint`: `lesson-04-05-01-01-estimate-spr` → `lesson-04-05-01-02-commit-low-spr`; weigh-SPR-before-stacks checkpoint moved off Estimate SPR onto the commit lesson (LPT-677)
 - `lesson-05-08-01-02-gear-changes`: objective "Recognize gear changes mid-session" → "Recognize gear changes and re-sample reads"; objective now owns the re-sample habit in its summary, so the fresh-samples checkpoint grades this lesson's concept (LPT-687)
 
+Curriculum residuals LPT-692, LPT-694, LPT-696, LPT-699, LPT-700, LPT-701, LPT-703, LPT-704, LPT-705, LPT-706 (Kushal-approved rule, 2026-10-14): leftover SoftPulse presses and checkpoints from a split move to the split sibling whose concept they teach. A reused first-child explain keeps only its own concept's presses; the dedicated felt demo shows only the tiles its authored cues name (`LessonAuthoredDemoScope` / `lessonAuthoredDemoPoints`, full ladder when no teachSpec).
+- `act-06-01-01-explain`: SoftPulse was RANGE → NUT → ADVANTAGE, now RANGE → ADVANTAGE; NUT press belongs to Spot nut advantage (LPT-692)
+- `act-06-03-01-explain`: SoftPulse was CAPPED → UNCAPPED → NUTS, now CAPPED; UNCAPPED/NUTS presses belong to Respect uncapped aggression and Attack capped ranges (LPT-694)
+- `act-06-04-01-explain`: SoftPulse was POLAR → MERGED → SIZE, now POLAR; MERGED/SIZE presses belong to Merged sizes for thin value and Match size to shape (LPT-696)
+- `act-06-05-01-explain`: SoftPulse was OVERBET → POLAR → GEO, now OVERBET → POLAR; GEO press belongs to Plan geometric sizes (LPT-699)
+- `act-06-06-01-explain`: SoftPulse was BLOCK → USE → NO EV, now BLOCK; USE/NO EV presses belong to Catch with unblockers and Blockers without fake EV (LPT-700)
+- `act-06-07-01-explain`: SoftPulse was DEFEND → BLUFF → ENOUGH, now DEFEND; BLUFF/ENOUGH presses belong to Fold dominated trash and No fake MDF math (LPT-701)
+- `act-06-08-01-explain`: SoftPulse was MIX → PURPOSE → STRONG, now MIX → STRONG; PURPOSE press belongs to No mixing for its own sake (LPT-703)
+- `act-06-09-01-explain`: SoftPulse was 3BET → 4BET → DEPTH, now 3BET → DEPTH; 4BET press belongs to Tighten up in 4-bet pots and No ego 4-bets (LPT-704)
+- `act-06-10-01-explain`: SoftPulse was HARD → COOLER → EGO, now HARD; COOLER/EGO presses belong to Cooler or mistake? and No ego call-downs (LPT-705)
+- `act-06-11-01-explain`: SoftPulse was TIGHT → BARREL → SAMPLE, now TIGHT; BARREL/SAMPLE presses belong to Note disciplined aggression and Wait for samples (LPT-706)
+
 Curriculum split LPT-83: old `lesson-01-01-02-suits-and-ranks` becomes unit
 `unit-01-01-02-suits-and-ranks` with one lesson per concept (`…-01-suits`,
 `…-02-ranks`, `…-03-pairs-and-suited`). Catalog `lessonSplitMap` expands
@@ -2059,37 +2071,37 @@ felt.
 | Bankroll fits stakes | explain SoftPulse cues BANKROLL → STAKES → DECLINE; unit `unit-05-09-discipline` (LPT-250 split) | — |
 | End sessions early | explain SoftPulse cues TIRED → WILD → CASH OUT; checkpoint SoftPulse-off densify stem non-spoiling (LPT-747); unit `unit-05-09-discipline` (LPT-250 split) | — |
 | Section 5 checkpoint | SoftPulse-off densify stems non-spoiling (LPT-717) | — |
-| Spot range advantage | Range, Nut, Advantage; densified SoftPulse one gold (LPT-523); unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
+| Spot range advantage | Range, Advantage on the felt; explain SoftPulse cue RANGE → ADVANTAGE only — NUT press belongs to Spot nut advantage (curriculum residual LPT-692); densified SoftPulse one gold (LPT-523); unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
 | Spot nut advantage | explain SoftPulse cues NUTS → PAIRED → CALLER; unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
 | Pressure when you own both | explain SoftPulse cues RANGE → NUTS → BET; checkpoint SoftPulse-off densify stem non-spoiling (LPT-764); unit `unit-06-01-range-nut-adv` (LPT-254 split) | — |
 | Position realizes equity | Equity, Cash, Pos; densified SoftPulse one gold (LPT-524); checkpoint SoftPulse-off densify stem non-spoiling (LPT-766); unit `unit-06-02-eq-realize` (LPT-257 split) | — |
 | Discount equity out of position | explain SoftPulse cues OOP → BARRELS → DISCOUNT; unit `unit-06-02-eq-realize` (LPT-257 split) | — |
 | Aggression realizes equity | explain SoftPulse cues SEMI-BLUFF → FOLDS → OUTS; unit `unit-06-02-eq-realize` (LPT-257 split) | — |
-| Spot capped ranges | Capped, Uncapped, Nuts; densified frame asks (LPT-636); unit `unit-06-03-capped` (LPT-260 split) | — |
+| Spot capped ranges | Capped on the felt; explain SoftPulse cue CAPPED only — UNCAPPED/NUTS presses belong to Respect uncapped aggression and Attack capped ranges (curriculum residual LPT-694); densified frame asks (LPT-636); unit `unit-06-03-capped` (LPT-260 split) | — |
 | Respect uncapped aggression | explain SoftPulse cues RAISE → BET → RESPECT; unit `unit-06-03-capped` (LPT-260 split) | — |
 | Attack capped ranges | explain SoftPulse cues CAPPED → THIN → BLUFF; checkpoint SoftPulse-off densify stem non-spoiling (no Attack) (LPT-809); unit `unit-06-03-capped` (LPT-260 split) | — |
-| Recognize polarized sizing | Polar, Merged, Size; densified frame asks (LPT-637); unit `unit-06-04-polar-merged` (LPT-264 split) | — |
+| Recognize polarized sizing | Polar on the felt; explain SoftPulse cue POLAR only — MERGED/SIZE presses belong to Merged sizes for thin value and Match size to shape (curriculum residual LPT-696); densified frame asks (LPT-637); unit `unit-06-04-polar-merged` (LPT-264 split) | — |
 | Merged sizes for thin value | explain SoftPulse cues MERGED → MEDIUM → VALUE; unit `unit-06-04-polar-merged` (LPT-264 split) | — |
 | Match size to shape | explain SoftPulse cues SIZE → SHAPE → MATCH; unit `unit-06-04-polar-merged` (LPT-264 split) | — |
-| Overbet polar spots | Overbet, Polar, Geo; densified frame asks (LPT-638); unguided SoftPulse one gold (LPT-497); unit `unit-06-05-overbets` (LPT-267 split) | — |
+| Overbet polar spots | Overbet, Polar on the felt; explain SoftPulse cue OVERBET → POLAR only — GEO press belongs to Plan geometric sizes (curriculum residual LPT-699); densified frame asks (LPT-638); unguided SoftPulse one gold (LPT-497); unit `unit-06-05-overbets` (LPT-267 split) | — |
 | Plan geometric sizes | explain SoftPulse cues FLOP → TURN → RIVER; unit `unit-06-05-overbets` (LPT-267 split) | — |
 | No random huge bets | explain SoftPulse cues HUGE → MEDIUM → AVOID; unit `unit-06-05-overbets` (LPT-267 split) | — |
-| Bluff with the right blockers | Block, Use, No EV; densified frame asks (LPT-639); unguided SoftPulse one gold (LPT-498); unit `unit-06-06-blockers` (LPT-270 split) | — |
+| Bluff with the right blockers | Block on the felt; explain SoftPulse cue BLOCK only — USE/NO EV presses belong to Catch with unblockers and Blockers without fake EV (curriculum residual LPT-700); densified frame asks (LPT-639); unguided SoftPulse one gold (LPT-498); unit `unit-06-06-blockers` (LPT-270 split) | — |
 | Catch with unblockers | explain SoftPulse cues CATCH → UNBLOCK → BLUFFS; unit `unit-06-06-blockers` (LPT-270 split) | — |
 | Blockers without fake EV | explain SoftPulse cues TWEAK → NO EV; unit `unit-06-06-blockers` (LPT-270 split) | — |
-| Continue with stronger catchers | Defend, Bluff, Enough; densified frame asks (LPT-640); unguided SoftPulse one gold (LPT-499); unit `unit-06-07-min-defense` (LPT-273 split) | — |
+| Continue with stronger catchers | Defend on the felt; explain SoftPulse cue DEFEND only — BLUFF/ENOUGH presses belong to Fold dominated trash and No fake MDF math (curriculum residual LPT-701); densified frame asks (LPT-640); unguided SoftPulse one gold (LPT-499); unit `unit-06-07-min-defense` (LPT-273 split) | — |
 | Fold dominated trash | explain SoftPulse cues THIRD PAIR → SCARY → FOLD; unit `unit-06-07-min-defense` (LPT-273 split) | — |
 | No fake MDF math | explain SoftPulse cues MDF → INTUITION; unit `unit-06-07-min-defense` (LPT-273 split) | — |
-| Mix strong hands sometimes | Mix, Purpose, Strong; unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644); unit `unit-06-08-mixed` (LPT-277 split) | — |
+| Mix strong hands sometimes | Mix, Strong on the felt; explain SoftPulse cue MIX → STRONG only — PURPOSE press belongs to No mixing for its own sake (curriculum residual LPT-703); unguided SoftPulse one gold Need a reason (LPT-500); densified frame asks (LPT-644); unit `unit-06-08-mixed` (LPT-277 split) | — |
 | Types reduce mixing | explain SoftPulse cues TYPE → STATION → LESS; unit `unit-06-08-mixed` (LPT-277 split) | — |
 | No mixing for its own sake | explain SoftPulse cues RANDOM → PURPOSE; unit `unit-06-08-mixed` (LPT-277 split) | — |
 | Tighten up in 4-bet pots | 3-Bet, 4-Bet, Depth; unguided SoftPulse one gold Avoid ego (LPT-501); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
-| Plan 3-bet pots by SPR | explain SoftPulse cues 3BET → 4BET → DEPTH; unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
+| Plan 3-bet pots by SPR | 3-Bet, Depth on the felt; explain SoftPulse cue 3BET → DEPTH only — 4BET press belongs to Tighten up in 4-bet pots and No ego 4-bets (curriculum residual LPT-704); unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
 | No ego 4-bets | explain SoftPulse cues 4BET → EGO → AVOID; unit `unit-06-09-3bet4bet` (LPT-282 split) | — |
-| Make hard folds | Hard, Cooler, Ego; unguided SoftPulse one gold Ego call (LPT-502); unit `unit-06-10-folds` (LPT-285 split) | — |
+| Make hard folds | Hard on the felt; explain SoftPulse cue HARD only — COOLER/EGO presses belong to Cooler or mistake? and No ego call-downs (curriculum residual LPT-705); unguided SoftPulse one gold Ego call (LPT-502); unit `unit-06-10-folds` (LPT-285 split) | — |
 | Cooler or mistake? | explain SoftPulse cues COOLER → MISTAKE → REVIEW; unit `unit-06-10-folds` (LPT-285 split) | — |
 | No ego call-downs | explain SoftPulse cues DUE → EGO → FOLD; unit `unit-06-10-folds` (LPT-285 split) | — |
-| Note selective entry | Tight, Barrel, Sample; unguided SoftPulse one gold (LPT-494); unit `unit-06-11-tag` (LPT-288 split) | entry quizzes |
+| Note selective entry | Tight on the felt; explain SoftPulse cue TIGHT only — BARREL/SAMPLE presses belong to Note disciplined aggression and Wait for samples (curriculum residual LPT-706); unguided SoftPulse one gold (LPT-494); unit `unit-06-11-tag` (LPT-288 split) | entry quizzes |
 | Note disciplined aggression | explain SoftPulse cues CALLED → GIVES UP; unit `unit-06-11-tag` (LPT-288 split) | — |
 | Wait for samples | explain SoftPulse cues TWO HANDS → NOTE BUNDLE; unit `unit-06-11-tag` (LPT-288 split) | — |
 | The TAG model | Tight, Aggro, Model; unguided SoftPulse one gold (LPT-491); densified frame asks (LPT-648); unit `unit-06-11-tag` (LPT-291 split) | label quizzes |
