@@ -399,8 +399,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Postflop multiway — tap who acts first.',
     'act-01-05-01-guided-fold-win' =>
       'You bet. Everyone folds. Tap how you take the pot — pick Take pot.',
+    // SoftPulse-quiet until Hint — situation + tap verb only; never name
+    // Showdown in the idle bubble (LPT-839; SoftPulse LPT-653; same class
+    // as LPT-837 / LPT-833 / LPT-838).
     'act-01-05-01-scaffolded-showdown' =>
-      'River bets are called. Tap what happens next — pick Showdown.',
+      'River bets are called. Tap what happens next.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Side pot in the idle bubble (LPT-782; SoftPulse LPT-653; same
     // class as LPT-780 / LPT-672).
