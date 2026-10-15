@@ -4502,6 +4502,20 @@ filing deal.mode / Still-a-list / handFamily gaps.
 - Prefer next: NEVER Compose SoftPulse residual **LPT-795** (+ cite **LPT-796**) re-check / Low residuals LPT-676…802 / Low curriculum LPT-351 / open catalog LPT-829.
 - act-07-02-01-*: interactive structural clean on tip except LPT-794 SoftPulse residual; SoftPulse explain successors content-driven (do not reopen LPT-669); all interactive acts are `deal.mode` `none` plan tiles — do not file handFamily; densify PRESENT — do not reopen LPT-628.
 
+## Fold 2026-10-15cr tip 24aac93a (#2646 Timing Prefer → Dynamics SoftPulse LPT-686 Prefer)
+
+- Tip-stable `24aac93a` (#2646 Timing SoftPulse Prefer LPT-685 on tip after #2645). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
+- Open catalog parent **LPT-829** tip-synced flat **224** (checklist tip-comment only — description PUT hits Jira 32,767 limit; do not claim body rebuilt); other parents Done — no open-parent sync.
+- Prefer NEVER Dynamics SoftPulse residual re-check `lesson-05-08-01-01/02/03` / `act-05-08-01-*`:
+  - first-child SoftPulse STUCK→TILTED→GEARS + `explainGrading` "Stuck → Tilted → Gears." + Dart `TablesChangeDemo.points` STUCK/TILTED/GEARS (captions Same old gear / Emotion leak / Shifting play) / `CoachDialogueVisualKind.tablesChange` / layout "Tap Stuck, Tilted, and Gears." + coachMedia "Tables change. Stuck, tilted, tired, or shifting gears — update." still pre-split under tilted/stuck-only (`lesson-05-08-01-01-tilted-opponents` objective "Identify tilted or stuck opponents") → residual **LPT-686** still To Do (needs-human; Relates LPT-247 — do not re-add needs-human on curriculum).
+  - companion checkpoint SoftPulse `temp` kind `none` densify PRESENT (prompt "Dynamic reads should be?"; choice "Fresh samples") still under Gear changes (`lesson-05-08-01-02-gear-changes`) → residual **LPT-687** still To Do.
+  - successors SoftPulse GEAR→CHANGE→SAMPLE / COOLER→CHASE→RESET content-driven (do not reopen LPT-669); guided SoftPulse `stuck` densify PRESENT; scaffolded SoftPulse `gear` one-per-press densify PRESENT; unguided SoftPulse `reset` one-per-press SoftPulse map PRESENT (`Jh`/`Td`·`Kc`/`9s`/`4h`/`2d`/`7c` +2 suit variants; poker_action_sizing densify N/A).
+- Curriculum **LPT-247** Done — do not clone / do not re-add needs-human.
+- Meet Nit LPT-198 / LPT-216 Done re-verify OK.
+- Tip-commented LPT-686/687/247/829/685/690/351/198/216; leave open LPT-676…802 + LPT-351 + LPT-829; leave In Progress SoftPulse residuals alone; leave ui-agent alone.
+- Prefer next: NEVER Session SoftPulse residual **LPT-690** (+ cite **LPT-691**) re-check / Low residuals LPT-676…802 / open catalog LPT-829.
+- act-05-08-01-*: interactive structural clean on tip except LPT-686 SoftPulse + LPT-687 checkpoint residuals; SoftPulse explain successors content-driven (do not reopen LPT-669); guided/scaffolded/checkpoint densify PRESENT; unguided SoftPulse map PRESENT — do not reopen LPT-628/625; guided/scaffolded/checkpoint `deal.mode` `none` — do not file handFamily.
+
 ## Fold 2026-10-15cq tip 6b6f71b6 (#2645 Lines Prefer sync → Timing SoftPulse LPT-685 Prefer)
 
 - Tip-stable `6b6f71b6` (#2645 Lines SoftPulse Prefer sync after #2643 Lines Prefer LPT-684). Catalog `--counts` short-ladder **224** (other JSON gaps **0**); softpulseMapArms **92** / densifyHelperArms **233** flat (densify-tap still **0** — no LPT-628 reopen).
