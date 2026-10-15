@@ -250,7 +250,14 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   }
 
   /// The catalog lesson that must be finished before this start can succeed.
+  ///
+  /// Out-of-hearts also uses `failed-precondition` — never treat that as a
+  /// prerequisite lock (LPT-872).
   CourseLesson? _previousLesson() {
+    if (lessonStartErrorIsOutOfHearts(_error) ||
+        lessonStartErrorIsOutOfHearts(_errorDetail)) {
+      return null;
+    }
     final detail = _errorDetail?.toLowerCase() ?? '';
     if (!detail.contains('failed-precondition')) return null;
     final catalog = ref.read(courseCatalogProvider).asData?.value;
@@ -1253,7 +1260,9 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
   /// Hearts for the lesson chrome while bootstrapping or after an error.
   ///
   /// Prefer the open attempt, then Home profile — never invent a full bar of
-  /// five while the real count (e.g. 4) is already known on Home.
+  /// five while the real count (e.g. 4) is already known on Home. When start
+  /// failed with out of hearts, show zero even if Home still caches a full
+  /// bar (LPT-872).
   (int remaining, int max) _frameLivesWhilePending() {
     final attempt = _attempt;
     if (attempt != null) {
@@ -1261,8 +1270,12 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
     }
     final homeAsync = ref.watch(courseHomeProvider);
     final home = homeAsync.asData?.value ?? homeAsync.valueOrNull;
+    final max = home != null && home.livesMax > 0 ? home.livesMax : 5;
+    if (lessonStartErrorIsOutOfHearts(_error) ||
+        lessonStartErrorIsOutOfHearts(_errorDetail)) {
+      return (0, max);
+    }
     if (home != null) {
-      final max = home.livesMax > 0 ? home.livesMax : 5;
       return (home.hearts.clamp(0, max), max);
     }
     return (5, 5);
@@ -1282,6 +1295,8 @@ class _LessonRunnerScreenState extends ConsumerState<LessonRunnerScreen> {
         speech: _error != null
             ? lessonStartErrorSpeech(
                 previousLessonTitle: _previousLesson()?.title,
+                outOfHearts: lessonStartErrorIsOutOfHearts(_error) ||
+                    lessonStartErrorIsOutOfHearts(_errorDetail),
               )
             : kLessonBootstrapSpeech,
         expression: LessonMascotExpression.thinking,

@@ -573,6 +573,78 @@ void main() {
   });
 
   testWidgets(
+    'out-of-hearts start shows empty chrome and Restore hearts speech (LPT-872)',
+    (tester) async {
+      tester.view.physicalSize = const Size(375, 812);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+
+      // Stale Home still says 5 hearts — chrome must follow the start error.
+      // Suits has a prerequisite so Open previous would appear without LPT-872.
+      const home = CourseHomeSnapshot(
+        status: CourseHomeLoadStatus.ready,
+        nodes: [],
+        sections: [],
+        hearts: 5,
+        livesMax: 5,
+      );
+      final blocked = _OutOfHeartsStartCourseService(catalog);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            soundServiceProvider.overrideWithValue(SoundService.silent()),
+            courseCatalogProvider.overrideWith((ref) async => catalog),
+            courseHomeProvider.overrideWith(() => _FixedHomeHearts(home)),
+            analyticsServiceProvider.overrideWithValue(
+              AnalyticsService(enabled: false),
+            ),
+            onboardingControllerProvider.overrideWith(
+              (ref) => OnboardingController(null),
+            ),
+            heroIdentityProvider.overrideWithValue(const HeroIdentity()),
+          ],
+          child: MaterialApp(
+            theme: buildPokerTheme(),
+            home: LessonRunnerScreen(
+              lessonId: 'lesson-01-01-02-01-suits',
+              courseService: blocked,
+              startRequestId: 'start_out_of_hearts',
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      for (
+        var i = 0;
+        i < 40 &&
+            find
+                .text('Out of hearts. Refill before starting a lesson.')
+                .evaluate()
+                .isEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 50));
+      }
+      expect(
+        find.text('Out of hearts. Refill before starting a lesson.'),
+        findsOneWidget,
+      );
+      expect(find.text('Restore hearts'), findsOneWidget);
+      expect(find.text('Open Your two cards'), findsNothing);
+      expect(find.text(kLessonStartOutOfHeartsSpeech), findsOneWidget);
+      expect(find.text(kLessonStartErrorSpeech), findsNothing);
+      final layout = tester.widget<LessonScreenLayout>(
+        find.byType(LessonScreenLayout),
+      );
+      expect(layout.livesRemaining, 0);
+      expect(layout.livesMax, 5);
+      expect(layout.speech, kLessonStartOutOfHeartsSpeech);
+      expect(layout.showToolRow, isFalse);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
     'missing previous lesson offers that lesson, not the raw exception',
     (tester) async {
       tester.view.physicalSize = const Size(375, 812);
@@ -583,7 +655,7 @@ void main() {
       await tester.pumpWidget(
         _app(
           LessonRunnerScreen(
-            lessonId: 'lesson-01-01-02-suits-and-ranks',
+            lessonId: 'lesson-01-01-02-01-suits',
             courseService: locked,
             startRequestId: 'start_prereq',
           ),
@@ -656,7 +728,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-01-02-suits-and-ranks',
+          lessonId: 'lesson-01-01-02-01-suits',
           courseService: locked,
           startRequestId: 'start_prereq_retry',
         ),
@@ -682,7 +754,7 @@ void main() {
     expect(find.text('Could not start the lesson'), findsNothing);
   });
 
-  testWidgets('suits and ranks uses the lesson frame, not a title bar', (
+  testWidgets('suits uses the lesson frame, not a title bar', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -694,7 +766,7 @@ void main() {
     await tester.pumpWidget(
       _app(
         LessonRunnerScreen(
-          lessonId: 'lesson-01-01-02-suits-and-ranks',
+          lessonId: 'lesson-01-01-02-01-suits',
           courseService: locked,
           startRequestId: 'start_suits_frame',
         ),
@@ -5762,13 +5834,44 @@ class _PrerequisiteLockedCourseService extends CourseService {
     String timezone = 'UTC',
     bool restoreHeartOnComplete = false,
   }) async {
-    if (lessonId == 'lesson-01-01-02-suits-and-ranks' && !previousComplete) {
+    if (lessonId == 'lesson-01-01-02-01-suits' && !previousComplete) {
       throw const CourseServiceException(
         'Complete the previous lesson before starting this one.',
         code: 'failed-precondition',
       );
     }
     return _startedFirst(catalog, lessonId);
+  }
+}
+
+/// Start fails with out of hearts (same `failed-precondition` code as locks).
+class _OutOfHeartsStartCourseService extends CourseService {
+  _OutOfHeartsStartCourseService(this.catalog) : super();
+
+  final CourseCatalog catalog;
+
+  @override
+  Future<void> initializeProfile({
+    required String catalogVersion,
+    String timezone = 'UTC',
+    String? experienceBand,
+    int? dailyGoalMinutes,
+    int? streakGoalDays,
+    String? recommendedLessonId,
+  }) async {}
+
+  @override
+  Future<StartCourseLessonResult> startLesson({
+    required String lessonId,
+    required String catalogVersion,
+    required String startRequestId,
+    String timezone = 'UTC',
+    bool restoreHeartOnComplete = false,
+  }) async {
+    throw const CourseServiceException(
+      'Out of hearts. Refill before starting a lesson.',
+      code: 'failed-precondition',
+    );
   }
 }
 

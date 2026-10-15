@@ -223,11 +223,27 @@ const kLessonBootstrapSpeech = 'Getting your next step ready…';
 const kLessonStartErrorSpeech =
     'Could not start this lesson. Tap Retry when you are ready.';
 
+/// Calm coach line when start failed because the learner is out of hearts.
+const kLessonStartOutOfHeartsSpeech =
+    'Could not start this lesson. Tap Restore hearts.';
+
+/// Whether a start-error message is the out-of-hearts gate.
+bool lessonStartErrorIsOutOfHearts(String? error) {
+  final lower = error?.toLowerCase() ?? '';
+  return lower.contains('out of hearts');
+}
+
 /// Start-error speech that names the primary recovery control.
 ///
 /// Prefer: when Open `<previous lesson>` is the gold CTA, the bubble must
-/// name that tap — never a Retry-only line beside it (LPT-51).
-String lessonStartErrorSpeech({String? previousLessonTitle}) {
+/// name that tap — never a Retry-only line beside it (LPT-51). Out of hearts
+/// names Restore hearts instead (LPT-872) — even though the server code is
+/// also `failed-precondition`.
+String lessonStartErrorSpeech({
+  String? previousLessonTitle,
+  bool outOfHearts = false,
+}) {
+  if (outOfHearts) return kLessonStartOutOfHeartsSpeech;
   final title = previousLessonTitle?.trim() ?? '';
   if (title.isEmpty) return kLessonStartErrorSpeech;
   return 'Could not start this lesson. Tap Open $title.';

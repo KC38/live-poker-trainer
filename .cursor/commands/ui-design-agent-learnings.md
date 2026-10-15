@@ -103,6 +103,10 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 
 ## Prefer
 
+- Prefer post-split lesson ids in runner tests (`lesson-01-01-02-01-suits`, not
+  retired `lesson-01-01-02-suits-and-ranks`) — Unknown lesson masks start-gate
+  assertions (LPT-872).
+
 - Prefer exact `agent_tap` labels from the screen (card Semantics `A♣`, not
   ASCII `Ac`). Broad needles like `Continue` can hit Home chrome; short
   codes can miss the card or open Hearts. Prefer
