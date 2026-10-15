@@ -92,3 +92,7 @@ Overflow operational notes when ui-design-agent-learnings.md is at the
 - Profile Course place follows path frontier (LPT-875); Home sticky banner can lag one unit behind while scrolled. Judge SECTION mismatch vs Home next lesson, not sticky UNIT N vs Profile UNIT N+1 alone.
 
 - Prefer skipping IndexedStack inactive-tab ancestors (`_VisibilityScope(isVisible: false)`, `Offstage`, `ExcludeSemantics`) in agent `tree` and taps — AppShell keeps buried Home labels/onPressed alive otherwise (LPT-876 Live Training walks).
+
+## Fold 2026-10-15
+
+- Prefer SoftPulse-off densify stems that avoid distinctive *fragments* of the correct tile (e.g. “straight and flush” inside “Draw — straight and flush potential”), not only exact full labels — LPT-674 left jump-class as stem-only then the fragment spoil returned (LPT-878). Extend spoil scans beyond exact choice-label substring matches when judging SoftPulse-off jump/checkpoint asks.
