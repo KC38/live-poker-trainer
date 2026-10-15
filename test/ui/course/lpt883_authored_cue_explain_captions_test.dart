@@ -1,5 +1,6 @@
 /// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
-/// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895 / LPT-896:
+/// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895 / LPT-896 /
+/// LPT-897:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -63,6 +64,8 @@ void main() {
     expect(authoredSoftPulseExplainCaption('STRONG'), 'Premium hands');
     expect(authoredSoftPulseExplainCaption('LIVE SIZE'), 'Bigger than min');
     expect(authoredSoftPulseExplainCaption('EP'), 'Early seat');
+    expect(authoredSoftPulseExplainCaption('COVER'), 'Protect hole cards');
+    expect(authoredSoftPulseExplainCaption('WAIT'), 'Act in turn');
     expect(authoredSoftPulseExplainCaption('CHIPS'), 'Then move chips');
     expect(authoredSoftPulseExplainCaption('BETS MATCHED'), 'All caught up');
     expect(authoredSoftPulseExplainCaption('NEXT STREET'), 'Deal continues');
@@ -704,6 +707,51 @@ void main() {
       expect(find.text('Hijack seat'), findsOneWidget);
       expect(find.text('Cutoff seat'), findsOneWidget);
       expect(find.text('Button seat'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Protect SoftPulse explain captions COVER + WAIT (LPT-897)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-02-06-01-03-explain-protect',
+        targets: const ['COVER', 'WAIT'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('COVER'), findsWidgets);
+      expect(find.text('WAIT'), findsWidgets);
+      expect(find.text('Protect hole cards'), findsOneWidget);
+      expect(find.text('Act in turn'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );

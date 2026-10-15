@@ -14341,6 +14341,11 @@ String authoredSoftPulseExplainCaption(String target) {
     'BB': 'Big blind',
     'D': 'Dealer button',
     'UTG': 'First to act',
+    // Protect cards SoftPulse explain (COVER → WAIT; LPT-897).
+    // Captions match TableHabitsDemo Cover / Wait glosses — never leave
+    // AuthoredCue tiles label-only.
+    'COVER': 'Protect hole cards',
+    'WAIT': 'Act in turn',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.
