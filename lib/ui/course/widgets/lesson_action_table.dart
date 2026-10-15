@@ -14359,6 +14359,10 @@ String authoredSoftPulseExplainCaption(String target) {
     // label-only.
     'PLAYABLE': 'Can call open',
     'IN POSITION': 'Act after raiser',
+    // Value 3-bet SoftPulse explain (STRONG → 3-BET; LPT-901). STRONG already
+    // Premium hands; 3-BET glosses the re-raise-over-open beat so the second
+    // SoftPulse tile is not label-only.
+    '3-BET': 'Re-raise open',
     // Seat labels SoftPulse explain (EP → HJ → CO → BTN; LPT-896).
     // EP is the early-position synonym beside Hijack/Cutoff/Button seat glosses —
     // never leave the first SoftPulse tile label-only.

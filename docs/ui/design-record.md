@@ -1741,7 +1741,7 @@ LPT-892, CHIPS → Then move chips — LPT-893, EP → Early seat — LPT-896,
 COVER → Protect hole cards / WAIT → Act in turn — LPT-897, WIDER → Open
 more hands — LPT-898, SHORTER → Min of the two / EFFECTIVE → Playable
 stack — LPT-899, PLAYABLE → Can call open / IN POSITION → Act after
-raiser — LPT-900). Play a full
+raiser — LPT-900, 3-BET → Re-raise open — LPT-901). Play a full
 toy hand framed SoftPulse chips
 (`LessonToyHandExplainTable` / `_UnderFeltBeatChip`, LPT-890) use the same
 `authoredSoftPulseExplainCaption` helper: BLINDS → Forced bets first,
@@ -2073,7 +2073,7 @@ felt.
 | Widen on the button | explain SoftPulse cues BUTTON → WIDER with teaching captions (Acts last / Open more hands — never empty WIDER gloss; LPT-898); unit `unit-02-03-open-fold` (LPT-124 split) | — |
 | Fold weak hands | Fold on the felt; explain SoftPulse cue FOLD only — CALL/3-BET presses belong to Call in position and Value 3-bet (curriculum residual LPT-743); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Call in position | explain SoftPulse cues PLAYABLE → IN POSITION → CALL with teaching captions (Can call open / Act after raiser / Match the bet — never empty PLAYABLE or IN POSITION glosses; LPT-900); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
-| Value 3-bet | 3-bet on the felt; explain SoftPulse cue 3-BET only — RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (curriculum residual LPT-760); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
+| Value 3-bet | explain SoftPulse cues STRONG → 3-BET with teaching captions (Premium hands / Re-raise open — never empty 3-BET gloss; LPT-901); 3-bet on the felt; RANGES/SQUEEZE presses belong to Facing a 3-bet and Squeeze spots (curriculum residual LPT-760); unit `unit-02-04-facing-raise` (LPT-127 split) | — |
 | Chips to big blinds | Chips→BB on the felt; explain SoftPulse cue CHIPS→BB only — SHORTER/DEPTH presses belong to Shorter stack is effective and Stack depth (curriculum residual LPT-748); checkpoint SoftPulse-off densify stem non-spoiling (LPT-785); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Shorter stack is effective | explain SoftPulse cues SHORTER → EFFECTIVE with teaching captions (Min of the two / Playable stack — never empty glosses; LPT-899); scaffolded SoftPulse-quiet densify stem non-spoiling (no 60bb tile) (LPT-849); unit `unit-02-05-stacks` (LPT-130 split) | — |
 | Stack depth | explain SoftPulse cues 50BB → 100BB → 200BB; unguided SoftPulse-quiet densify stem non-spoiling (no 50bb) (LPT-850); unit `unit-02-05-stacks` (LPT-130 split) | — |

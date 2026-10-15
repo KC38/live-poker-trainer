@@ -1,6 +1,6 @@
 /// LPT-883 / LPT-884 / LPT-885 / LPT-886 / LPT-887 / LPT-888 / LPT-889 /
 /// LPT-890 / LPT-891 / LPT-892 / LPT-893 / LPT-894 / LPT-895 / LPT-896 /
-/// LPT-897 / LPT-898 / LPT-899:
+/// LPT-897 / LPT-898 / LPT-899 / LPT-900 / LPT-901:
 /// SoftPulse explain teaching captions (not Tap N of M).
 library;
 
@@ -63,6 +63,9 @@ void main() {
     expect(authoredSoftPulseExplainCaption('TRASH'), 'Low unconnected');
     expect(authoredSoftPulseExplainCaption('STRONG'), 'Premium hands');
     expect(authoredSoftPulseExplainCaption('LIVE SIZE'), 'Bigger than min');
+    expect(authoredSoftPulseExplainCaption('3-BET'), 'Re-raise open');
+    expect(authoredSoftPulseExplainCaption('PLAYABLE'), 'Can call open');
+    expect(authoredSoftPulseExplainCaption('IN POSITION'), 'Act after raiser');
     expect(authoredSoftPulseExplainCaption('EP'), 'Early seat');
     expect(authoredSoftPulseExplainCaption('COVER'), 'Protect hole cards');
     expect(authoredSoftPulseExplainCaption('WAIT'), 'Act in turn');
@@ -892,6 +895,51 @@ void main() {
       expect(find.text('Can call open'), findsOneWidget);
       expect(find.text('Act after raiser'), findsOneWidget);
       expect(find.text('Match the bet'), findsOneWidget);
+      expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Value 3-bet SoftPulse explain caption 3-BET (LPT-901)',
+    (tester) async {
+      final binding = TestWidgetsFlutterBinding.ensureInitialized();
+      await binding.setSurfaceSize(const Size(375, 812));
+      addTearDown(() => binding.setSurfaceSize(null));
+
+      final activity = _authoredExplain(
+        id: 'act-02-04-01-03-explain-threebet',
+        targets: const ['STRONG', '3-BET'],
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildPokerTheme().copyWith(
+            splashFactory: NoSplash.splashFactory,
+            highlightColor: Colors.transparent,
+          ),
+          home: Scaffold(
+            body: SizedBox(
+              width: 375,
+              height: 500,
+              child: LessonAuthoredCueExplainTable(
+                activity: activity,
+                onAllPointsTapped: () {},
+                enabled: true,
+                showGuidance: true,
+              ),
+            ),
+          ),
+        ),
+      );
+      // SoftPulse breathes forever — do not pumpAndSettle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('STRONG'), findsWidgets);
+      expect(find.text('3-BET'), findsWidgets);
+      expect(find.text('Premium hands'), findsOneWidget);
+      expect(find.text('Re-raise open'), findsOneWidget);
       expect(find.textContaining(RegExp(r'Tap \d+ of \d+')), findsNothing);
     },
   );
