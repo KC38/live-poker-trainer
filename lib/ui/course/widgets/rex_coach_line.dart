@@ -581,8 +581,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'Why respect a Nit check-raise — tap the matching reason.',
     'act-04-08-01-guided' =>
       'Seat raises or 3-bets twelve of fifteen pots. Observation — pick Extreme entry and aggression.',
+    // SoftPulse-quiet densify (scaffolded SoftPulse only after Hint) —
+    // situation + tap verb only; never name Continues pressure too wide
+    // (LPT-858; SoftPulse LPT-653; same class as LPT-857 / LPT-853 / LPT-823).
     'act-04-08-01-scaffolded' =>
-      'They bet flop, turn, and river with weak showdowns twice. Note — pick Continues pressure too wide.',
+      'They bet flop, turn, and river with weak showdowns twice. Note — tap the matching observation.',
     'act-04-08-01-unguided' =>
       'Best note style versus wild aggression — pick Frequencies and shows — no ego story.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
