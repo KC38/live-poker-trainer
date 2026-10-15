@@ -693,8 +693,11 @@ String? selectIdentifyDensifiedCoachLine(String activityId) {
       'You hit a planned stop-loss. Next step — pick Stop / move down.',
     'act-05-09-01-scaffolded' =>
       'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — pick Decline.',
+    // SoftPulse-quiet densify (unguided SoftPulse only after Hint) —
+    // situation + tap verb only; never name Cash out (LPT-854; SoftPulse
+    // LPT-653; same class as LPT-853 / LPT-850 / LPT-849 / LPT-846).
     'act-05-09-01-unguided' =>
-      'Tired, winning small, table getting wild. Best — pick Cash out.',
+      'Tired, winning small, table getting wild — tap the matching plan.',
     // SoftPulse-off densify (kind: none) — situation + tap verb only; never
     // name Your edge in the idle bubble (LPT-747; same class as LPT-746 /
     // LPT-745 / LPT-744 / LPT-742 / LPT-736 / LPT-734 / LPT-735 / LPT-723 /

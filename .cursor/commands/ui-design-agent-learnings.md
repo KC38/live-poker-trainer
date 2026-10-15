@@ -331,11 +331,14 @@ stays in `docs/ui/design-record.md`. Do not paste ticket prose here.
 - Prefer densify tile titles (`Call 10`, `Suited conn`, `Call`) over
   shared gold fragments like `chips` / suit-only glyphs when advancing
   SoftPulse asks — a `chips` needle can hit the wrong Call-price column
-  and burn hearts (LPT-634). Never file SoftPulse-off + Hint-disabled on
+  and burn hearts (LPT-634).   Never file SoftPulse-off + Hint-disabled on
   `assessmentRole` checkpoint / jump_test densify asks as a SoftPulse paint
   bug when `teachSpec.cues` use `kind: none` — assessments never SoftPulse
   and Hint stays off on purpose (SoftPulse would spoil the answer); close
-  as intentional (LPT-653). On scaffolded `poker_action_sizing` after Hint,
+  as intentional (LPT-653). Hunt SoftPulse-quiet densify spoils with live
+  SoftPulse:none + Hint enabled + coach naming a choice tile — not only
+  `kind: none` (unguided SoftPulse-after-Hint stems are invisible to
+  kind:none-only scans; LPT-853 / LPT-854). On scaffolded `poker_action_sizing` after Hint,
   wait for SoftPulse with `wait-gold` (hero holes can take a few seconds)
   before filing SoftPulse-dead — Hint disabled mid-deal was the LPT-678
   deadlock; SoftPulse unlocks when hero holes land, not every villain back.

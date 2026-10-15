@@ -221,8 +221,9 @@ const _lines = <String, String>{
       'You hit a planned stop-loss. Next step — pick Stop / move down.',
   'act-05-09-01-scaffolded':
       'Bankroll 40 buy-ins for 1/2. Spot opens at 2/5. Action — pick Decline.',
+  // LPT-854: SoftPulse-quiet densify — no Cash out spoil.
   'act-05-09-01-unguided':
-      'Tired, winning small, table getting wild. Best — pick Cash out.',
+      'Tired, winning small, table getting wild — tap the matching plan.',
   // LPT-747: SoftPulse-off densify — no correct-tile spoil.
   'act-05-09-01-checkpoint':
       'Session discipline is part of — tap the matching practice.',
